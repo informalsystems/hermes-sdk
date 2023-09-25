@@ -25,7 +25,11 @@ where
     ) -> Result<(Context::AnyClientState, Context::AnyConsensusState), Context::Error> {
         let client_type = Context::client_state_type(client_state);
 
-        if client_type != Context::client_type() {}
+        let expected_client_type = Context::client_type();
+
+        if client_type != expected_client_type {
+            return Err(Context::client_type_mismatch_error(&expected_client_type));
+        }
 
         let client_state = Context::try_from_any_client_state_ref(client_state)?;
 
