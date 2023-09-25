@@ -1,0 +1,23 @@
+[package]
+name         = "cgp-macros"
+version      = "0.1.0"
+edition      = "2021"
+license      = "Apache-2.0"
+readme       = "README.md"
+keywords     = ["context-generic programming"]
+repository   = "https://github.com/informalsystems/hermes-sdk"
+authors      = ["Informal Systems <hello@informal.systems>"]
+rust-version = "1.72"
+description  = """
+    Context-generic programming core macros
+"""
+
+[package.metadata.docs.rs]
+all-features = true
+
+[lib]
+proc-macro = true
+
+[features]
+
+[dependencies]

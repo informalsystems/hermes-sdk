@@ -4,6 +4,7 @@ resolver = "2"
 
 members = [
     "crates/cgp-core",
+    "crates/cgp-macros",
     "crates/relayer-components",
     "crates/relayer-components-extra",
     "crates/relayer-all-in-one",
