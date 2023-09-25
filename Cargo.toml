@@ -9,7 +9,6 @@ members = [
     "crates/relayer-mock",
     "crates/relayer-runtime",
     "crates/relayer-cosmos",
-    "crates/telemetry",
     "tools/integration-test",
     "tools/test-framework",
 ]
@@ -25,6 +24,7 @@ overflow-checks = true
 [patch.crates-io]
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-proto                        = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "main" }
 # tendermint                       = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
 # tendermint-rpc                   = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }

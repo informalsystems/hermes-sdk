@@ -1,1 +1,0 @@
-gaiad --node [[#node]] query bank balances $(gaiad --home [[#home]] keys --keyring-backend="test" show [[#wallet]] -a)
