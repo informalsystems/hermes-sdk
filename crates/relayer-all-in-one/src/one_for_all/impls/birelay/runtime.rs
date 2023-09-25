@@ -1,4 +1,4 @@
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::one_for_all::traits::birelay::OfaBiRelay;

@@ -6,8 +6,7 @@ use alloc::sync::Arc;
 use core::fmt::{Debug, Display};
 
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::{Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
 use ibc_relayer_components::runtime::traits::subscription::Subscription;
@@ -20,7 +19,7 @@ use crate::std_prelude::*;
 pub trait OfaChainTypes: Async {
     /**
        Corresponds to
-       [`HasErrorType::Error`](cgp_core::traits::error::HasErrorType::Error).
+       [`HasErrorType::Error`](cgp_core::traits::HasErrorType::Error).
     */
     type Error: Async + Debug;
 

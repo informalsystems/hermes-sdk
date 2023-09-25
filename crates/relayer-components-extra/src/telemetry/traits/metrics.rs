@@ -1,4 +1,4 @@
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 pub trait HasLabel: Async {
     type Label: Async;

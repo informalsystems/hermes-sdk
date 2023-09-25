@@ -1,4 +1,4 @@
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 use crate::chain::traits::types::chain::HasChainTypes;
 

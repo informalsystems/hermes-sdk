@@ -1,4 +1,5 @@
-use std::{collections::HashMap, fmt::Display};
+use std::collections::HashMap;
+use std::fmt::Display;
 
 use super::aliases::MockTimestamp;
 use crate::relayer_mock::base::types::aliases::PacketUID;

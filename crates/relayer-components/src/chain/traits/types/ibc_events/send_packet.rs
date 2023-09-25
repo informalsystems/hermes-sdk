@@ -2,7 +2,7 @@
    Trait definitions for [`HasSendPacketEvent`].
 */
 
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

@@ -1,8 +1,7 @@
 use core::time::Duration;
-use std::fs;
 use std::process::{Command, Stdio};
-use std::str;
 use std::thread::sleep;
+use std::{fs, str};
 
 use eyre::eyre;
 

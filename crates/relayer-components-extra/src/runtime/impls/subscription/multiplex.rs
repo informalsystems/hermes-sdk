@@ -3,7 +3,7 @@ use core::ops::DerefMut;
 use core::pin::Pin;
 
 use async_trait::async_trait;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;

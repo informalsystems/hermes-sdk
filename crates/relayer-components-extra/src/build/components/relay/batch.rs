@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilder;
 use ibc_relayer_components::build::traits::target::chain::ChainBuildTarget;

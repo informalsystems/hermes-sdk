@@ -1,6 +1,7 @@
 use eyre::eyre;
 use http::Uri;
-use ibc_proto::cosmos::gov::v1beta1::{query_client::QueryClient, QueryProposalRequest};
+use ibc_proto::cosmos::gov::v1beta1::query_client::QueryClient;
+use ibc_proto::cosmos::gov::v1beta1::QueryProposalRequest;
 use ibc_proto::ibc::core::client::v1::UpgradeProposal;
 use ibc_relayer::config::default::max_grpc_decoding_size;
 use ibc_relayer::error::Error as RelayerError;

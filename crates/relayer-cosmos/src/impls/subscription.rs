@@ -3,7 +3,7 @@ use core::pin::Pin;
 use core::time::Duration;
 
 use async_trait::async_trait;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 use futures::lock::Mutex;
 use futures::stream::{self, Stream, StreamExt, TryStreamExt};
 use ibc_relayer_components::runtime::impls::subscription::closure::CanCreateClosureSubscription;

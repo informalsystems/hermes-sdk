@@ -1,4 +1,4 @@
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 
 use crate::types::error::Error;
 use crate::types::runtime::TokioRuntimeContext;

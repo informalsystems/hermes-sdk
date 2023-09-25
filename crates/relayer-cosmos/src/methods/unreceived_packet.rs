@@ -9,8 +9,7 @@ use ibc_relayer::chain::requests::{
     QueryUnreceivedPacketsRequest,
 };
 use ibc_relayer_all_in_one::one_for_all::traits::chain::OfaChain;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
+use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::events::WithBlockDataType;
 use ibc_relayer_types::Height;

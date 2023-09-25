@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 use futures::lock::{Mutex, MutexGuard};
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 

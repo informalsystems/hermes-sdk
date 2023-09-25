@@ -8,11 +8,9 @@ use core::time::Duration;
 
 use eyre::eyre;
 use ibc_proto::google::protobuf::Any;
-use ibc_relayer::chain::cosmos::tx::batched_send_tx;
-use ibc_relayer::chain::cosmos::tx::simple_send_tx;
+use ibc_relayer::chain::cosmos::tx::{batched_send_tx, simple_send_tx};
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
-use ibc_relayer::transfer::build_transfer_message as raw_build_transfer_message;
-use ibc_relayer::transfer::TransferError;
+use ibc_relayer::transfer::{build_transfer_message as raw_build_transfer_message, TransferError};
 use ibc_relayer_types::applications::transfer::error::Error as Ics20Error;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;

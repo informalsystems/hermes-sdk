@@ -1,7 +1,7 @@
 use core::future::Future;
 use core::pin::Pin;
 
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 use futures_util::stream::{self, StreamExt};
 
 use crate::std_prelude::*;

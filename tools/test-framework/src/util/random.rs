@@ -2,11 +2,9 @@
    Utilities for random value generation.
 */
 
-use std::{
-    collections::HashSet,
-    net::{Ipv4Addr, SocketAddrV4, TcpListener},
-    sync::Mutex,
-};
+use std::collections::HashSet;
+use std::net::{Ipv4Addr, SocketAddrV4, TcpListener};
+use std::sync::Mutex;
 
 use ibc_relayer_types::applications::transfer::amount::Amount;
 use once_cell::sync::Lazy;

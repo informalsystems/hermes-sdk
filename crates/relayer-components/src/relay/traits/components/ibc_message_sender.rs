@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use async_trait::async_trait;
 use cgp_core::traits::delegate_component::DelegateComponent;
 use cgp_core::traits::has_components::HasComponents;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 use crate::chain::traits::components::message_sender::InjectMismatchIbcEventsCountError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

@@ -1,5 +1,5 @@
 use cgp_core::traits::has_components::HasComponents;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;

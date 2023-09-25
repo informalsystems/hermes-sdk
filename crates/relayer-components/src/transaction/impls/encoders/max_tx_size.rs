@@ -8,7 +8,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
-use cgp_core::traits::error::CanRaiseError;
+use cgp_core::traits::CanRaiseError;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::components::tx_encoder::TxEncoder;

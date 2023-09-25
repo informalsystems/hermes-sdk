@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 
 use crate::build::traits::cache::HasRelayCache;
 use crate::build::traits::components::relay_builder::RelayBuilder;

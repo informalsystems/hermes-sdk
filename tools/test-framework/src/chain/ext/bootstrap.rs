@@ -1,14 +1,12 @@
 use core::str::FromStr;
-use std::fs;
 use std::path::PathBuf;
-use std::str;
+use std::{fs, str};
 
 use eyre::eyre;
 use hdpath::StandardHDPath;
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
-use serde_json as json;
-use toml;
 use tracing::debug;
+use {serde_json as json, toml};
 
 use crate::chain::cli::bootstrap::{
     add_genesis_account, add_genesis_validator, add_wallet, collect_gen_txs, initialize,

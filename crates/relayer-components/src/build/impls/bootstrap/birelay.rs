@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
 use crate::build::traits::birelay::HasBiRelayType;

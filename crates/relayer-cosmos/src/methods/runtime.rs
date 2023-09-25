@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 use ibc_relayer::chain::handle::ChainHandle;
 
 use crate::contexts::chain::CosmosChain;

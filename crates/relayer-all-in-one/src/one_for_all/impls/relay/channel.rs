@@ -25,7 +25,8 @@ use ibc_relayer_components::relay::traits::channel::open_try::{
 };
 
 use crate::one_for_all::traits::chain::OfaChainTypes;
-use crate::one_for_all::{traits::relay::OfaRelay, types::relay::OfaRelayWrapper};
+use crate::one_for_all::traits::relay::OfaRelay;
+use crate::one_for_all::types::relay::OfaRelayWrapper;
 use crate::std_prelude::*;
 
 impl<Relay> InjectMissingChannelInitEventError for OfaRelayWrapper<Relay>

@@ -1,4 +1,4 @@
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::chain::{ChainATarget, ChainBTarget, ChainBuildTarget};

@@ -3,22 +3,18 @@ use std::collections::HashMap;
 
 use eyre::eyre;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
-use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer::chain::handle::ChainHandle;
+use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::Config;
-use ibc_relayer::keyring::AnySigningKeyPair;
-use ibc_relayer::keyring::Secp256k1KeyPair;
+use ibc_relayer::keyring::{AnySigningKeyPair, Secp256k1KeyPair};
 use ibc_relayer::spawn::spawn_chain_runtime;
 use ibc_relayer_all_in_one::one_for_all::types::builder::OfaBuilderWrapper;
 use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components_extra::batch::types::config::BatchConfig;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
-use tendermint_rpc::Client;
-use tendermint_rpc::HttpClient;
+use tendermint_rpc::{Client, HttpClient};
 use tokio::runtime::Runtime as TokioRuntime;
 use tokio::task;
 

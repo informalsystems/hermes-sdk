@@ -1,4 +1,4 @@
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::event::HasEventType;

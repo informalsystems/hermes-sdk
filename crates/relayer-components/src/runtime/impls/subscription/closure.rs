@@ -3,7 +3,7 @@ use core::future::Future;
 use core::pin::Pin;
 
 use async_trait::async_trait;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 
 use crate::runtime::traits::mutex::HasMutex;

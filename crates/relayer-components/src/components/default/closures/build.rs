@@ -1,5 +1,5 @@
-use cgp_core::traits::error::HasErrorType;
 use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::HasErrorType;
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};

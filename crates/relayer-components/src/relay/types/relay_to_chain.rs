@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainIdType;

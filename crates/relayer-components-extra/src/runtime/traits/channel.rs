@@ -10,8 +10,7 @@
 use core::pin::Pin;
 
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::{Async, HasErrorType};
 use futures_core::stream::Stream;
 
 use crate::std_prelude::*;

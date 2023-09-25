@@ -2,8 +2,7 @@
    Trait definitions for [`HasMessageType`] and [`CanEstimateMessageSize`].
 */
 
-use cgp_core::traits::error::HasErrorType;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::{Async, HasErrorType};
 
 use crate::std_prelude::*;
 

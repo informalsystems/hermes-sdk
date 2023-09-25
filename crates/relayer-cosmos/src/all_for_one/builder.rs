@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_all_in_one::all_for_one::builder::CanBuildAfoBiRelay;
 use ibc_relayer_all_in_one::one_for_all::types::birelay::OfaBiRelayWrapper;

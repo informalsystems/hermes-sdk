@@ -2,10 +2,8 @@ use alloc::sync::Arc;
 use std::collections::HashMap;
 use std::sync::Mutex;
 
-use opentelemetry::{
-    global,
-    metrics::{Counter, Meter, UpDownCounter, ValueRecorder},
-};
+use opentelemetry::global;
+use opentelemetry::metrics::{Counter, Meter, UpDownCounter, ValueRecorder};
 
 #[derive(Clone)]
 pub struct CosmosTelemetry {

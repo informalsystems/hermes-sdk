@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::error::HasErrorType;
 use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::HasErrorType;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::nonce::guard::HasNonceGuard;

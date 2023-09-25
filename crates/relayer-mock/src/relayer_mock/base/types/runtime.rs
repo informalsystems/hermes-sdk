@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use core::time::Duration;
 
 use async_trait::async_trait;
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc_relayer_components::runtime::traits::time::HasTime;
 use ibc_relayer_runtime::types::error::Error as TokioError;

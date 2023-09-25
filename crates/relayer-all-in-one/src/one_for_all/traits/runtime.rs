@@ -4,7 +4,7 @@ use core::pin::Pin;
 use core::time::Duration;
 
 use async_trait::async_trait;
-use cgp_core::traits::sync::Async;
+use cgp_core::traits::Async;
 use futures_core::{Future, Stream};
 use ibc_relayer_components_extra::runtime::traits::spawn::TaskHandle;
 

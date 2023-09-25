@@ -1,4 +1,4 @@
-use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::HasErrorType;
 
 use crate::relay::traits::chains::HasRelayChains;
 
