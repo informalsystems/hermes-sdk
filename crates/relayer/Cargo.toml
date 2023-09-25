@@ -22,7 +22,7 @@ telemetry = ["ibc-telemetry"]
 [dependencies]
 ibc-proto         = { version = "0.34.0", features = ["serde"] }
 ibc-telemetry     = { version = "0.25.0", path = "../telemetry", optional = true }
-ibc-relayer-types = { version = "0.25.0", path = "../relayer-types", features = ["mocks"] }
+ibc-relayer-types = { version = "0.25.0", features = ["mocks"] }
 
 subtle-encoding = "0.5"
 humantime-serde = "1.1.1"
@@ -101,7 +101,7 @@ version = "0.33.0"
 default-features = false
 
 [dev-dependencies]
-ibc-relayer-types = { version = "0.25.0", path = "../relayer-types", features = ["mocks"] }
+ibc-relayer-types = { version = "0.25.0", features = ["mocks"] }
 serial_test = "2.0.0"
 env_logger = "0.10.0"
 tracing-subscriber = { version = "0.3.14", features = ["fmt", "env-filter", "json"] }

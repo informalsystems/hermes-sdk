@@ -13,7 +13,7 @@ description  = "Integration tests for Hermes"
 publish      = false
 
 [dependencies]
-ibc-relayer-types  = { path = "../../crates/relayer-types" }
+ibc-relayer-types  = { version = "0.25.0" }
 ibc-relayer        = { path = "../../crates/relayer" }
 ibc-relayer-all-in-one = { path = "../../crates/relayer-all-in-one" }
 ibc-relayer-components = { version = "0.1.0", path = "../../crates/relayer-components" }
