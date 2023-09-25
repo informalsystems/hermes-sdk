@@ -1,5 +1,6 @@
-use cgp_core::delegate_component;
 use core::marker::PhantomData;
+
+use cgp_core::delegate_component;
 
 use crate::relay::components::auto_relayers::concurrent_bidirectional::ConcurrentBidirectionalRelayer;
 use crate::relay::components::auto_relayers::concurrent_event::ConcurrentEventSubscriptionRelayer;

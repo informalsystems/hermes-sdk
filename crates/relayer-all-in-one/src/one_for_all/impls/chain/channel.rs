@@ -1,5 +1,4 @@
 use async_trait::async_trait;
-
 use ibc_relayer_components::chain::traits::message_builders::channel::{
     CanBuildChannelHandshakeMessages, CanBuildChannelHandshakePayloads,
 };

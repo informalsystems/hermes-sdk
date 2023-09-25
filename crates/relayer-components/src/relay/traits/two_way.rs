@@ -1,5 +1,6 @@
-use crate::relay::traits::chains::HasRelayChains;
 use cgp_core::traits::error::HasErrorType;
+
+use crate::relay::traits::chains::HasRelayChains;
 
 /// Trait for types that have a two-way relay context, i.e.,
 /// those that can relay in both directions between two connected

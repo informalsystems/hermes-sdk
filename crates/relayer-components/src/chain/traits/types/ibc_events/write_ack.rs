@@ -2,10 +2,11 @@
    Trait definitions for [`HasWriteAcknowledgementEvent`].
 */
 
+use cgp_core::traits::sync::Async;
+
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use cgp_core::traits::sync::Async;
 
 /**
    Indicates that a chain context's

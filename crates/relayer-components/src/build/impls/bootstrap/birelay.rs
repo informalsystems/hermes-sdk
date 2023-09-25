@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
 use crate::build::traits::birelay::HasBiRelayType;
@@ -9,7 +10,6 @@ use crate::chain::traits::client::create::HasCreateClientOptions;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;
-use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanBootstrapBiRelay: HasBiRelayType + HasErrorType

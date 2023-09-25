@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
@@ -7,7 +8,6 @@ use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use crate::std_prelude::*;
-use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanBuildReceivePacketPayload<Counterparty>:

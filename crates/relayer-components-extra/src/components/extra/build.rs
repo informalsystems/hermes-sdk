@@ -1,6 +1,6 @@
-use cgp_core::{delegate_component, delegate_components};
 use core::marker::PhantomData;
 
+use cgp_core::{delegate_component, delegate_components};
 use ibc_relayer_components::build::traits::components::birelay_builder::BiRelayBuilderComponent;
 use ibc_relayer_components::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilderComponent;
 use ibc_relayer_components::build::traits::components::chain_builder::ChainBuilderComponent;

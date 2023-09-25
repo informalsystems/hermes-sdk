@@ -1,8 +1,9 @@
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::sync::Async;
+
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::types::aliases::ClientId;
-use cgp_core::traits::error::HasErrorType;
-use cgp_core::traits::sync::Async;
 
 /**
     This covers the minimal abstract types that are used inside a relay context.

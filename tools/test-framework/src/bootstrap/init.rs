@@ -3,10 +3,11 @@
    session.
 */
 
-use eyre::Report as Error;
 use std::env;
 use std::fs;
 use std::sync::Once;
+
+use eyre::Report as Error;
 use tracing_subscriber::{
     self as ts,
     filter::{EnvFilter, LevelFilter},

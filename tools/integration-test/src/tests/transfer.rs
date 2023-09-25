@@ -1,10 +1,11 @@
+use std::thread::sleep;
+
 use ibc_relayer::config::PacketFilter;
 use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
 use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
 use ibc_test_framework::ibc::denom::derive_ibc_denom;
 use ibc_test_framework::prelude::*;
 use ibc_test_framework::util::random::random_u64_range;
-use std::thread::sleep;
 
 use crate::tests::context::build_cosmos_relay_context;
 

@@ -1,6 +1,7 @@
+use cgp_core::traits::error::CanRaiseError;
+
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;
-use cgp_core::traits::error::CanRaiseError;
 
 pub struct NonceMistmatchError<Nonce> {
     pub expected_nonce: Nonce,

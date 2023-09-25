@@ -1,4 +1,7 @@
 use async_trait::async_trait;
+use cgp_core::traits::delegate_component::DelegateComponent;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::has_components::HasComponents;
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::relay::RelayBuildTarget;
@@ -6,9 +9,6 @@ use crate::build::types::aliases::{
     TargetDstChain, TargetDstClientId, TargetRelay, TargetSrcChain, TargetSrcClientId,
 };
 use crate::std_prelude::*;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::error::HasErrorType;
-use cgp_core::traits::has_components::HasComponents;
 
 pub struct RelayFromChainsBuilderComponent;
 

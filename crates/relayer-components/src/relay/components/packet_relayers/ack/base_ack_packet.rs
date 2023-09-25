@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use cgp_core::traits::sync::Async;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::message_builders::ack_packet::{
@@ -11,7 +12,6 @@ use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessa
 use crate::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayer;
 use crate::relay::traits::target::SourceTarget;
 use crate::std_prelude::*;
-use cgp_core::traits::sync::Async;
 
 /// The minimal component that can send an acknowledgement packet.
 /// Ack packet relayers with more capabilities can be implemented

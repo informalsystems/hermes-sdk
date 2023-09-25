@@ -1,5 +1,6 @@
-use crate::logger::traits::logger::BaseLogger;
 use cgp_core::traits::sync::Async;
+
+use crate::logger::traits::logger::BaseLogger;
 
 pub trait HasLoggerType: Async {
     type Logger: BaseLogger;

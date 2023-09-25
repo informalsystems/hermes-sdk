@@ -21,8 +21,6 @@
 */
 
 use crossbeam_channel as channel;
-use tracing::Span;
-
 use ibc_proto::ibc::apps::fee::v1::{
     QueryIncentivizedPacketRequest, QueryIncentivizedPacketResponse,
 };
@@ -58,6 +56,7 @@ use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId, Po
 use ibc_relayer_types::proofs::Proofs;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
+use tracing::Span;
 
 use crate::types::tagged::*;
 

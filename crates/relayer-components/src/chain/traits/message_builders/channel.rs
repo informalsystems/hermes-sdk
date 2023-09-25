@@ -1,11 +1,11 @@
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::std_prelude::*;
-use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanBuildChannelHandshakePayloads<Counterparty>:

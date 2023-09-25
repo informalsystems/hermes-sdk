@@ -1,12 +1,12 @@
 use async_trait::async_trait;
+use cgp_core::traits::delegate_component::DelegateComponent;
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::sync::Async;
 
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
 use crate::chain::types::aliases::{Height, WriteAcknowledgementEvent};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::std_prelude::*;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
-use cgp_core::traits::sync::Async;
 
 pub struct ReceivePacketRelayerComponnent;
 

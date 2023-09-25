@@ -1,3 +1,6 @@
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::has_components::HasComponents;
+
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::components::default::transaction::DefaultTxComponents;
@@ -24,8 +27,6 @@ use crate::transaction::traits::nonce::guard::HasNonceGuard;
 use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::signer::HasSigner;
 use crate::transaction::traits::types::HasTxTypes;
-use cgp_core::traits::error::HasErrorType;
-use cgp_core::traits::has_components::HasComponents;
 
 pub trait UseDefaultTxComponents:
     CanSendMessages

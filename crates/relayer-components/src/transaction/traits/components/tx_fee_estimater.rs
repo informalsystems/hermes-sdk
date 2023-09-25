@@ -1,9 +1,9 @@
 use async_trait::async_trait;
+use cgp_core::traits::delegate_component::DelegateComponent;
+use cgp_core::traits::has_components::HasComponents;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
 
 pub struct TxFeeEstimatorComponent;
 

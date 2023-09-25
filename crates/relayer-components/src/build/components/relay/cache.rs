@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::build::traits::cache::HasRelayCache;
 use crate::build::traits::components::relay_builder::RelayBuilder;
@@ -10,7 +11,6 @@ use crate::build::types::aliases::{
 };
 use crate::runtime::traits::mutex::HasMutex;
 use crate::std_prelude::*;
-use cgp_core::traits::error::HasErrorType;
 
 pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
 

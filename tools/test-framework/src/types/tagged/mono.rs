@@ -21,6 +21,7 @@ use core::cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd};
 use core::fmt::{self, Debug, Display};
 use core::iter::{IntoIterator, Iterator};
 use core::marker::PhantomData;
+
 use serde::{Serialize, Serializer};
 
 use super::dual::Tagged as DualTagged;

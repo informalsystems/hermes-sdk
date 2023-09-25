@@ -1,5 +1,4 @@
 use async_trait::async_trait;
-
 use ibc_relayer_components::relay::impls::connection::open_ack::RelayConnectionOpenAck;
 use ibc_relayer_components::relay::impls::connection::open_confirm::RelayConnectionOpenConfirm;
 use ibc_relayer_components::relay::impls::connection::open_handshake::RelayConnectionOpenHandshake;

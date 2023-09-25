@@ -1,9 +1,10 @@
 use core::time::Duration;
-use eyre::eyre;
 use std::fs;
 use std::process::{Command, Stdio};
 use std::str;
 use std::thread::sleep;
+
+use eyre::eyre;
 
 use crate::chain::exec::simple_exec;
 use crate::error::Error;

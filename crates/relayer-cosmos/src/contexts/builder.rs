@@ -1,9 +1,5 @@
 use alloc::sync::Arc;
 use std::collections::HashMap;
-use tendermint_rpc::client::CompatMode;
-use tendermint_rpc::Client;
-use tendermint_rpc::HttpClient;
-use tokio::task;
 
 use eyre::eyre;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
@@ -20,7 +16,11 @@ use ibc_relayer_components_extra::batch::types::config::BatchConfig;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use tendermint_rpc::client::CompatMode;
+use tendermint_rpc::Client;
+use tendermint_rpc::HttpClient;
 use tokio::runtime::Runtime as TokioRuntime;
+use tokio::task;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;

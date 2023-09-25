@@ -1,5 +1,6 @@
-use cgp_core::{delegate_component, delegate_components};
 use core::marker::PhantomData;
+
+use cgp_core::{delegate_component, delegate_components};
 
 use crate::build::components::birelay::BuildBiRelayFromRelays;
 use crate::build::components::chain::cache::BuildChainWithCache;

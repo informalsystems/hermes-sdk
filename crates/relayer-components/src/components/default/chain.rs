@@ -1,5 +1,6 @@
-use cgp_core::delegate_components;
 use core::marker::PhantomData;
+
+use cgp_core::delegate_components;
 
 use crate::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use crate::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;

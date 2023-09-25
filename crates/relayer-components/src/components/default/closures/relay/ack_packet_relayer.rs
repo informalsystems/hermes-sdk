@@ -1,3 +1,7 @@
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::sync::Async;
+
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use crate::chain::traits::client::update::{
@@ -23,9 +27,6 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
-use cgp_core::traits::error::HasErrorType;
-use cgp_core::traits::has_components::HasComponents;
-use cgp_core::traits::sync::Async;
 
 pub trait CanUseDefaultAckPacketRelayer: UseDefaultAckPacketRelayer
 where

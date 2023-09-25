@@ -3,6 +3,8 @@
 */
 
 pub use core::time::Duration;
+pub use std::thread::sleep;
+
 pub use eyre::eyre;
 pub use ibc_relayer::chain::handle::ChainHandle;
 pub use ibc_relayer::config::Config;
@@ -13,7 +15,6 @@ pub use ibc_relayer_types::core::ics04_channel::channel::Ordering;
 pub use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
-pub use std::thread::sleep;
 pub use tracing::{debug, error, info, warn};
 
 pub use crate::chain::driver::ChainDriver;

@@ -1,5 +1,6 @@
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use cgp_core::traits::sync::Async;
+
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub enum ConnectionBaseState {
     Init,

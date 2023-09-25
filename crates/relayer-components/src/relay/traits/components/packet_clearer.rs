@@ -1,10 +1,9 @@
 use async_trait::async_trait;
-
-use crate::chain::types::aliases::{ChannelId, PortId};
 use cgp_core::traits::delegate_component::DelegateComponent;
 use cgp_core::traits::has_components::HasComponents;
 use cgp_core::traits::sync::Async;
 
+use crate::chain::types::aliases::{ChannelId, PortId};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::std_prelude::*;
 

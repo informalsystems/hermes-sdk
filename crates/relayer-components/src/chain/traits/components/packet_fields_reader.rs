@@ -1,7 +1,8 @@
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use cgp_core::traits::delegate_component::DelegateComponent;
 use cgp_core::traits::has_components::HasComponents;
+
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::traits::types::packet::HasIbcPacketTypes;
 
 pub struct PacketFieldsReaderComponent;
 

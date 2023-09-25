@@ -1,12 +1,12 @@
 use async_trait::async_trait;
-
-use crate::build::traits::birelay::HasBiRelayType;
-use crate::build::types::aliases::{RelayAToB, RelayBToA};
-use crate::std_prelude::*;
 use cgp_core::traits::delegate_component::DelegateComponent;
 use cgp_core::traits::error::HasErrorType;
 use cgp_core::traits::has_components::HasComponents;
 use cgp_core::traits::sync::Async;
+
+use crate::build::traits::birelay::HasBiRelayType;
+use crate::build::types::aliases::{RelayAToB, RelayBToA};
+use crate::std_prelude::*;
 
 pub struct BiRelayFromRelayBuilderComponent;
 

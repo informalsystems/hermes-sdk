@@ -1,5 +1,6 @@
-use cgp_core::{delegate_component, delegate_components};
 use core::marker::PhantomData;
+
+use cgp_core::{delegate_component, delegate_components};
 
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::transaction::components::message_as_tx::EstimateFeesAndSendTx;

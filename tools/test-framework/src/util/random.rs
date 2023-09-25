@@ -2,14 +2,15 @@
    Utilities for random value generation.
 */
 
-use ibc_relayer_types::applications::transfer::amount::Amount;
-use once_cell::sync::Lazy;
-use rand::Rng;
 use std::{
     collections::HashSet,
     net::{Ipv4Addr, SocketAddrV4, TcpListener},
     sync::Mutex,
 };
+
+use ibc_relayer_types::applications::transfer::amount::Amount;
+use once_cell::sync::Lazy;
+use rand::Rng;
 
 /// Generates a random `u32` value.
 pub fn random_u32() -> u32 {

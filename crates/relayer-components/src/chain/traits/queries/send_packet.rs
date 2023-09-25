@@ -1,9 +1,9 @@
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::std_prelude::*;
-use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanQuerySendPacketsFromSequences<Counterparty>:

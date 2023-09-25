@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::build::traits::cache::HasChainCache;
 use crate::build::traits::components::chain_builder::ChainBuilder;
@@ -8,7 +9,6 @@ use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::types::aliases::{TargetChain, TargetChainId};
 use crate::runtime::traits::mutex::HasMutex;
 use crate::std_prelude::*;
-use cgp_core::traits::error::HasErrorType;
 
 pub struct BuildChainWithCache<InBuilder>(pub PhantomData<InBuilder>);
 

@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainIdType;
@@ -11,7 +12,6 @@ use crate::chain::traits::types::timestamp::HasTimestampType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;
-use cgp_core::traits::error::HasErrorType;
 
 /**
    A wrapper type that wraps a relay context with a target into a chain context.

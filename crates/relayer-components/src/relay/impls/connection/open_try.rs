@@ -1,5 +1,6 @@
-use async_trait::async_trait;
 use core::iter::Iterator;
+
+use async_trait::async_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::components::chain_status_querier::CanQueryChainHeight;

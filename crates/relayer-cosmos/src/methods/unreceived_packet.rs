@@ -1,7 +1,6 @@
 use alloc::sync::Arc;
-use futures::stream::{self, StreamExt, TryStreamExt};
-use tonic::Request;
 
+use futures::stream::{self, StreamExt, TryStreamExt};
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
 use ibc_relayer::chain::cosmos::query::packet_query;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -16,6 +15,7 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::events::WithBlockDataType;
 use ibc_relayer_types::Height;
 use tendermint_rpc::{Client, Order};
+use tonic::Request;
 
 use crate::contexts::chain::CosmosChain;
 use crate::methods::event::try_extract_send_packet_event;

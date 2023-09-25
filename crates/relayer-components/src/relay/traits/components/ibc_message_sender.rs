@@ -1,6 +1,9 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::delegate_component::DelegateComponent;
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::sync::Async;
 
 use crate::chain::traits::components::message_sender::InjectMismatchIbcEventsCountError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -8,9 +11,6 @@ use crate::chain::types::aliases::{Event, Message};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
-use cgp_core::traits::sync::Async;
 
 pub struct MainSink;
 

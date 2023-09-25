@@ -8,11 +8,11 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::error::CanRaiseError;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::components::tx_encoder::TxEncoder;
 use crate::transaction::traits::types::HasTxTypes;
-use cgp_core::traits::error::CanRaiseError;
 
 pub struct MaxTxSizeExceededError {
     pub max_tx_size: usize,

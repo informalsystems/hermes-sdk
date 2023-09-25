@@ -2,7 +2,6 @@ use core::str::FromStr;
 use core::time::Duration;
 
 use http::uri::Uri;
-
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::gas::calculate_fee;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
