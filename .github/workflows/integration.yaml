@@ -63,8 +63,4 @@ jobs:
         run: |
             nix shell .#python .#${{ matrix.chain.package }} -c cargo \
               test -p ibc-integration-test --features=${{ matrix.chain.features }} --no-fail-fast -- \
-<<<<<<< HEAD
               --nocapture --test-threads=2
-=======
-              --nocapture --test-threads=2
->>>>>>> main
