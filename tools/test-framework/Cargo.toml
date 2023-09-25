@@ -15,7 +15,7 @@ description = """
 
 [dependencies]
 ibc-relayer-types  = { version = "=0.25.0" }
-ibc-relayer        = { version = "=0.25.0", path = "../../crates/relayer" }
+ibc-relayer        = { version = "=0.25.0" }
 ibc-relayer-cosmos = { version = "=0.25.0", path = "../../crates/relayer-cosmos" }
 ibc-relayer-all-in-one = { version = "=0.1.0", path = "../../crates/relayer-all-in-one" }
 ibc-relayer-components = { version = "=0.1.0", path = "../../crates/relayer-components" }
