@@ -3,10 +3,6 @@
 resolver = "2"
 
 members = [
-    "crates/relayer",
-    "crates/relayer-types",
-    "crates/relayer-cli",
-    "crates/relayer-rest",
     "crates/relayer-components",
     "crates/relayer-components-extra",
     "crates/relayer-all-in-one",
@@ -14,8 +10,6 @@ members = [
     "crates/relayer-runtime",
     "crates/relayer-cosmos",
     "crates/relayer-solomachine",
-    "crates/telemetry",
-    "crates/chain-registry",
     "tools/integration-test",
     "tools/test-framework",
 ]
@@ -29,7 +23,10 @@ exclude = [
 overflow-checks = true
 
 [patch.crates-io]
-ibc-proto                        = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "luca_joss/solomachine-lightclient-v3-from-v0.32" }
+ibc-proto           = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "luca_joss/solomachine-lightclient-v3-from-v0.32" }
+ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-proto                        = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "main" }
 # tendermint                       = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
 # tendermint-rpc                   = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }

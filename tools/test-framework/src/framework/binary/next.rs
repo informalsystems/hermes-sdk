@@ -1,4 +1,6 @@
 use eyre::eyre;
+use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use std::thread;
 use std::time::Duration;
 
@@ -10,7 +12,7 @@ use ibc_relayer_all_in_one::one_for_all::traits::birelay::OfaBiRelay;
 use ibc_relayer_all_in_one::one_for_all::types::birelay::OfaBiRelayWrapper;
 use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
 use ibc_relayer_cosmos::contexts::birelay::CosmosBiRelay;
-use ibc_relayer_types::core::ics04_channel::channel::IdentifiedChannelEnd;
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, IdentifiedChannelEnd};
 use tokio::task::JoinHandle;
 
 use crate::error::Error;
@@ -146,12 +148,12 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> CanWaitForAck for TestContextV1<C
         let dst_chain = self.chain_b();
         let channel = self.channel();
 
-        let channel_end_a = match channel.channel.a_channel(Some(&channel.channel_id_a.0)) {
-            Ok(channel_end) => channel_end,
-            Err(e) => {
-                return Err(e.into());
-            }
-        };
+        let channel_end_a = query_channel(
+            src_chain,
+            channel.channel_id_a.value(),
+            channel.port_a.value(),
+        )?;
+
         let identified_channel_end_a = IdentifiedChannelEnd::new(
             channel.port_a.0.clone(),
             channel.channel_id_a.0.clone(),
@@ -177,12 +179,12 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> CanWaitForAck for TestContextV1<C
         let src_chain = self.chain_a();
         let dst_chain = self.chain_b();
         let channel = self.channel();
-        let channel_end_b = match channel.channel.b_channel(Some(&channel.channel_id_b.0)) {
-            Ok(channel_end) => channel_end,
-            Err(e) => {
-                return Err(e.into());
-            }
-        };
+        let channel_end_b = query_channel(
+            dst_chain,
+            channel.channel_id_b.value(),
+            channel.port_b.value(),
+        )?;
+
         let identified_channel_end_b = IdentifiedChannelEnd::new(
             channel.port_b.0.clone(),
             channel.channel_id_b.0.clone(),
@@ -301,13 +303,12 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> CanWaitForAck for TestContextV2<C
         let src_chain = self.chain_a();
         let dst_chain = self.chain_b();
         let channel = self.channel();
+        let channel_end_a = query_channel(
+            src_chain,
+            channel.channel_id_a.value(),
+            channel.port_a.value(),
+        )?;
 
-        let channel_end_a = match channel.channel.a_channel(Some(&channel.channel_id_a.0)) {
-            Ok(channel_end) => channel_end,
-            Err(e) => {
-                return Err(e.into());
-            }
-        };
         let identified_channel_end_a = IdentifiedChannelEnd::new(
             channel.port_a.0.clone(),
             channel.channel_id_a.0.clone(),
@@ -333,12 +334,12 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> CanWaitForAck for TestContextV2<C
         let src_chain = self.chain_a();
         let dst_chain = self.chain_b();
         let channel = self.channel();
-        let channel_end_b = match channel.channel.b_channel(Some(&channel.channel_id_b.0)) {
-            Ok(channel_end) => channel_end,
-            Err(e) => {
-                return Err(e.into());
-            }
-        };
+        let channel_end_b = query_channel(
+            dst_chain,
+            channel.channel_id_b.value(),
+            channel.port_b.value(),
+        )?;
+
         let identified_channel_end_b = IdentifiedChannelEnd::new(
             channel.port_b.0.clone(),
             channel.channel_id_b.0.clone(),
@@ -385,4 +386,23 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> HasContextId for TestContextV2<Ch
     fn context_id(&self) -> String {
         self.context_id.clone()
     }
+}
+
+fn query_channel<Chain: ChainHandle>(
+    chain: &Chain,
+    channel_id: &ChannelId,
+    port_id: &PortId,
+) -> Result<ChannelEnd, Error> {
+    let channel = chain
+        .query_channel(
+            QueryChannelRequest {
+                port_id: port_id.clone(),
+                channel_id: channel_id.clone(),
+                height: QueryHeight::Latest,
+            },
+            IncludeProof::No,
+        )
+        .map(|(channel_end, _)| channel_end)?;
+
+    Ok(channel)
 }

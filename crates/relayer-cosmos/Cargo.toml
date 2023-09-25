@@ -20,9 +20,9 @@ default   = ["flex-error/std", "flex-error/eyre_tracer"]
 
 [dependencies]
 ibc-proto         = { version = "0.34.0" }
-ibc-relayer       = { version = "0.25.0", path = "../relayer" }
-ibc-relayer-types = { version = "0.25.0", path = "../relayer-types" }
-ibc-telemetry     = { version = "0.25.0", path = "../telemetry" }
+ibc-relayer       = { version = "0.25.0" }
+ibc-relayer-types = { version = "0.25.0" }
+ibc-telemetry     = { version = "0.25.0" }
 ibc-relayer-runtime = { version = "0.1.0", path = "../relayer-runtime" }
 ibc-relayer-all-in-one = { version = "0.1.0", path = "../relayer-all-in-one" }
 ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }

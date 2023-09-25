@@ -30,9 +30,6 @@ pub async fn build_create_client_payload<Chain: ChainHandle>(
 
             let client_state = match &any_client_state {
                 AnyClientState::Tendermint(client_state) => client_state.clone(),
-                _ => {
-                    return Err(BaseError::generic(eyre!("expect Tendermint client state")).into());
-                }
             };
 
             let any_consensus_state = chain_handle

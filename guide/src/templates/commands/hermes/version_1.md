@@ -1,1 +1,0 @@
-[[#BINARY hermes]][[#GLOBALOPTIONS]] version
