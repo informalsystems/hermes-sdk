@@ -1,24 +1,8 @@
 name: Rust
 on:
-  pull_request:
-    paths:
-      - .github/workflows/rust.yml
-      - Cargo.toml
-      - Cargo.lock
-      - ci/**
-      - e2e/**
-      - crates/**
-      - tools/**
+  pull_request: {}
   push:
-    branches: master
-    paths:
-      - .github/workflows/rust.yml
-      - Cargo.toml
-      - Cargo.lock
-      - ci/**
-      - e2e/**
-      - crates/**
-      - tools/**
+    branches: main
 
 env:
   CARGO_INCREMENTAL: 0
@@ -37,7 +21,7 @@ jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -50,13 +34,13 @@ jobs:
   clippy-all-features:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           components: clippy
           override: true
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
       - uses: actions-rs/clippy-check@v1
         with:
           name: clippy-all-features
@@ -66,13 +50,13 @@ jobs:
   clippy-no-default-features:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           components: clippy
           override: true
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
       - uses: actions-rs/clippy-check@v1
         with:
           name: clippy-no-default-features
@@ -83,47 +67,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-nextest
+        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
       - uses: actions-rs/cargo@v1
         with:
           command: test
           args: --all-features --no-fail-fast --no-run
       - uses: actions-rs/cargo@v1
         with:
-          command: test
-          args: --all-features --no-fail-fast --workspace --exclude ibc-integration-test -- --nocapture
-
-  # test-coverage:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: stable
-  #         override: true
-  #     - uses: actions-rs/cargo@v1
-  #       with:
-  #         command: clean
-  #     - name: Run cargo-tarpaulin
-  #       uses: actions-rs/tarpaulin@v0.1
-  #       with:
-  #         version: '0.16.0'
-  #         args: '-- --test-threads 1'
-  #         timeout: 600
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v1
-  #       with:
-  #         token: ${{ secrets.CODECOV_TOKEN }}
-  #         fail_ci_if_error: true
-  #     - name: Archive code coverage results
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: code-coverage-report
-  #         path: cobertura.xml
+          command: nextest
+          args: run --all-features --no-fail-fast --workspace --exclude ibc-integration-test --no-capture

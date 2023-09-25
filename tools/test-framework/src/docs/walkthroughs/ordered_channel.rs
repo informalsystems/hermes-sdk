@@ -13,6 +13,7 @@
 //! The test in most of its entirety (some parts omitted for brevity) looks like this:
 //!
 //! ```no_run
+//! # use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
 //! # use ibc_test_framework::ibc::denom::derive_ibc_denom;
 //! # use ibc_test_framework::prelude::*;
 //! # use ibc_test_framework::util::random::random_u128_range;
@@ -34,19 +35,18 @@
 //!         false
 //!     }
 //!
-//!     fn channel_order(&self) -> Order {
-//!         Order::Ordered
+//!     fn channel_order(&self) -> Ordering {
+//!         Ordering::Ordered
 //!     }
 //! }
 //!
 //! impl BinaryChannelTest for OrderedChannelTest {
-//!     fn run<ChainA: ChainHandle, ChainB: ChainHandle>(
-//!         &self,
-//!         _config: &TestConfig,
-//!         relayer: RelayerDriver,
-//!         chains: ConnectedChains<ChainA, ChainB>,
-//!         channel: ConnectedChannel<ChainA, ChainB>,
-//!     ) -> Result<(), Error> {
+//!     fn run<Context>(&self, relayer: RelayerDriver, context: &Context) -> Result<(), Error>
+//!     where
+//!         Context: HasTwoChains + HasTwoChannels,
+//!     {
+//!         let chains = context.chains();
+//!         let channel = context.channel();
 //!         let denom_a = chains.node_a.denom();
 //!
 //!         let wallet_a = chains.node_a.wallets().user1().cloned();
@@ -70,7 +70,6 @@
 //!             &wallet_a.as_ref(),
 //!             &wallet_b.address(),
 //!             &denom_a.with_amount(amount1).as_ref(),
-//!             None,
 //!         )?;
 //!
 //!         sleep(Duration::from_secs(1));
@@ -91,7 +90,6 @@
 //!                 &wallet_a.as_ref(),
 //!                 &wallet_b.address(),
 //!                 &denom_a.with_amount(amount2).as_ref(),
-//!                 None,
 //!             )?;
 //!
 //!             sleep(Duration::from_secs(1));

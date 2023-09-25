@@ -1,37 +1,35 @@
 [package]
-name       = "ibc-integration-test"
-version    = "0.21.0"
-edition    = "2021"
-license    = "Apache-2.0"
-readme     = "README.md"
-keywords   = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-homepage   = "https://hermes.informal.systems/"
-repository = "https://github.com/informalsystems/hermes"
-authors    = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.65"
-description = """
-  Integration tests for IBC Relayer
-"""
+name         = "ibc-integration-test"
+version      = "0.25.0"
+edition      = "2021"
+rust-version = "1.70"
+license      = "Apache-2.0"
+readme       = "README.md"
+keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
+homepage     = "https://hermes.informal.systems/"
+repository   = "https://github.com/informalsystems/hermes"
+authors      = ["Informal Systems <hello@informal.systems>"]
+description  = "Integration tests for Hermes"
+publish      = false
 
 [dependencies]
-ibc-relayer-types  = { path = "../../crates/relayer-types" }
-ibc-relayer        = { path = "../../crates/relayer" }
-ibc-relayer-cli    = { path = "../../crates/relayer-cli" }
-ibc-relayer-framework     = { path = "../../crates/relayer-framework" }
-ibc-relayer-runtime     = { path = "../../crates/relayer-runtime" }
+ibc-relayer-types  = { version = "0.25.0" }
+ibc-relayer        = { version = "0.25.0" }
+ibc-relayer-all-in-one = { path = "../../crates/relayer-all-in-one" }
+ibc-relayer-components = { version = "0.1.0", path = "../../crates/relayer-components" }
+ibc-relayer-components-extra = { version = "0.1.0", path = "../../crates/relayer-components-extra" }
+ibc-relayer-runtime    = { path = "../../crates/relayer-runtime" }
 ibc-relayer-cosmos     = { path = "../../crates/relayer-cosmos" }
-ibc-proto          = { version = "0.22.0" }
 ibc-test-framework = { path = "../test-framework" }
 
-http = "0.2.8"
+http = "0.2.9"
 prost = { version = "0.11" }
 serde_json = "1"
 time = "0.3"
-tokio = "1.19.2"
-toml = "0.5"
-tonic = { version = "0.8", features = ["tls", "tls-roots"] }
-serde = "1.0.149"
-opentelemetry = { version = "0.17.0", features = ["metrics"] }
+tokio = { version = "1.0", features = ["rt"] }
+toml = "0.7"
+tonic = { version = "0.9", features = ["tls", "tls-roots"] }
+serde = "1.0.166"
 
 [features]
 default = []
@@ -44,10 +42,9 @@ experimental = []
 mbt = []
 forward-packet = []
 ics31 = []
-
-[[bin]]
-name = "test_setup_with_binary_channel"
-doc = true
+clean-workers = []
+fee-grant = []
+interchain-security = []
 
 [dev-dependencies]
-tempfile = "3.3.0"
+tempfile = "3.6.0"

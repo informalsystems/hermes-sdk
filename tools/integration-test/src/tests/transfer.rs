@@ -1,53 +1,43 @@
+use ibc_relayer::config::PacketFilter;
+use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
+use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
+use ibc_test_framework::ibc::denom::derive_ibc_denom;
 use ibc_test_framework::prelude::*;
-use ibc_test_framework::util::random::random_u128_range;
+use ibc_test_framework::util::random::random_u64_range;
+use std::thread::sleep;
+
+use crate::tests::context::build_cosmos_relay_context;
 
 #[test]
-fn test_ibc_transfer() -> Result<(), Error> {
+fn test_ibc_transfer_next() -> Result<(), Error> {
     run_binary_channel_test(&IbcTransferTest)
-}
-
-/**
-   Test that IBC token transfer can still work with a single
-   chain that is connected to itself.
-*/
-#[test]
-fn test_self_connected_ibc_transfer() -> Result<(), Error> {
-    run_self_connected_binary_chain_test(&RunBinaryConnectionTest::new(&RunBinaryChannelTest::new(
-        &RunWithSupervisor::new(&IbcTransferTest),
-    )))
-}
-
-/**
-   Run the IBC transfer test as an N-ary chain test case with SIZE=2.
-
-   The work on N-ary chain is currently still work in progress, so we put
-   this behind the "experimental" feature flag so that normal developers
-   are not obligated to understand how this test works yet.
-*/
-#[test]
-fn test_nary_ibc_transfer() -> Result<(), Error> {
-    run_binary_as_nary_channel_test(&IbcTransferTest)
-}
-
-#[test]
-fn test_self_connected_nary_ibc_transfer() -> Result<(), Error> {
-    run_self_connected_nary_chain_test(&RunNaryConnectionTest::new(&RunNaryChannelTest::new(
-        &RunBinaryAsNaryChannelTest::new(&IbcTransferTest),
-    )))
 }
 
 pub struct IbcTransferTest;
 
-impl TestOverrides for IbcTransferTest {}
+impl TestOverrides for IbcTransferTest {
+    fn should_spawn_supervisor(&self) -> bool {
+        false
+    }
+}
 
 impl BinaryChannelTest for IbcTransferTest {
-    fn run<ChainA: ChainHandle, ChainB: ChainHandle>(
-        &self,
-        _config: &TestConfig,
-        _relayer: RelayerDriver,
-        chains: ConnectedChains<ChainA, ChainB>,
-        channel: ConnectedChannel<ChainA, ChainB>,
-    ) -> Result<(), Error> {
+    fn run<Context>(&self, relayer: RelayerDriver, context: &Context) -> Result<(), Error>
+    where
+        Context: HasTwoChains + HasTwoChannels,
+    {
+        let chains = context.chains();
+        let channel = context.channel();
+        let pf: PacketFilter = PacketFilter::default();
+
+        let relay_context = build_cosmos_relay_context(&relayer.config, chains, pf)?;
+
+        let runtime = chains.node_a.value().chain_driver.runtime.as_ref();
+
+        runtime.spawn(async move {
+            let _ = relay_context.auto_relay().await;
+        });
+
         let denom_a = chains.node_a.denom();
 
         let wallet_a = chains.node_a.wallets().user1().cloned();
@@ -59,7 +49,7 @@ impl BinaryChannelTest for IbcTransferTest {
             .chain_driver()
             .query_balance(&wallet_a.address(), &denom_a)?;
 
-        let a_to_b_amount = random_u128_range(1000, 5000);
+        let a_to_b_amount = random_u64_range(1000, 5000);
 
         info!(
             "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
@@ -75,7 +65,6 @@ impl BinaryChannelTest for IbcTransferTest {
             &wallet_a.as_ref(),
             &wallet_b.address(),
             &denom_a.with_amount(a_to_b_amount).as_ref(),
-            None,
         )?;
 
         let denom_b = derive_ibc_denom(
@@ -85,8 +74,8 @@ impl BinaryChannelTest for IbcTransferTest {
         )?;
 
         info!(
-            "Waiting for user on chain B to receive IBC transferred amount of {}",
-            a_to_b_amount
+            "Waiting for user on chain B to receive IBC transferred amount of {} {}",
+            a_to_b_amount, denom_b
         );
 
         chains.node_a.chain_driver().assert_eventual_wallet_amount(
@@ -110,7 +99,7 @@ impl BinaryChannelTest for IbcTransferTest {
             .chain_driver()
             .query_balance(&wallet_c.address(), &denom_a)?;
 
-        let b_to_a_amount = random_u128_range(500, a_to_b_amount);
+        let b_to_a_amount = random_u64_range(500, a_to_b_amount);
 
         info!(
             "Sending IBC transfer from chain {} to chain {} with amount of {}",
@@ -125,8 +114,12 @@ impl BinaryChannelTest for IbcTransferTest {
             &wallet_b.as_ref(),
             &wallet_c.address(),
             &denom_b.with_amount(b_to_a_amount).as_ref(),
-            None,
         )?;
+
+        info!(
+            "Waiting for user on chain A to receive IBC transferred amount of {} {}",
+            b_to_a_amount, denom_a
+        );
 
         chains.node_b.chain_driver().assert_eventual_wallet_amount(
             &wallet_b.address(),
@@ -143,6 +136,8 @@ impl BinaryChannelTest for IbcTransferTest {
             chains.chain_id_b(),
             chains.chain_id_a(),
         );
+
+        sleep(Duration::from_secs(2));
 
         Ok(())
     }

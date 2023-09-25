@@ -3,15 +3,14 @@
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::let_and_return)]
+#![allow(clippy::needless_lifetimes)]
+#![allow(clippy::infallible_destructuring_match)]
 
 extern crate alloc;
 
-pub mod base;
+pub mod all_for_one;
 pub mod contexts;
-pub mod full;
-pub mod transaction;
-
-#[cfg(test)]
-pub mod tests;
-
-pub mod docs;
+pub mod impls;
+pub mod methods;
+pub mod traits;
+pub mod types;

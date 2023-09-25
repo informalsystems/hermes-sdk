@@ -7,7 +7,7 @@ readme       = "README.md"
 keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
 repository   = "https://github.com/informalsystems/ibc-rs"
 authors      = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.64"
+rust-version = "1.68"
 description  = """
     Implementation of an IBC Relayer in Rust, as a library
 """
@@ -24,4 +24,6 @@ tokio = "1.24"
 tokio-stream = "0.1"
 tracing = "0.1.36"
 flex-error = { version = "0.4.4", default-features = false }
-ibc-relayer-framework = { version = "0.1.0", path = "../relayer-framework" }
+ibc-relayer-all-in-one = { version = "0.1.0", path = "../relayer-all-in-one" }
+ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
+ibc-relayer-components-extra = { version = "0.1.0", path = "../relayer-components-extra" }

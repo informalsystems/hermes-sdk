@@ -5,4 +5,6 @@
 pub mod chain;
 pub mod channel;
 pub mod connection;
+pub mod ics;
+pub mod next;
 pub mod node;
