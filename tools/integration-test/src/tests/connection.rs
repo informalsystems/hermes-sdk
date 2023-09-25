@@ -10,7 +10,7 @@ use ibc_relayer_cosmos::types::channel::CosmosInitChannelOptions;
 use ibc_relayer_cosmos::types::error::Error as CosmosError;
 use ibc_test_framework::prelude::*;
 
-use crate::tests::next::context::new_cosmos_builder;
+use crate::tests::context::new_cosmos_builder;
 
 #[test]
 fn test_connection_and_channel_handshake_next() -> Result<(), Error> {

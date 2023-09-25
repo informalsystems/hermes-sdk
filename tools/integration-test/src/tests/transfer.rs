@@ -6,7 +6,7 @@ use ibc_test_framework::prelude::*;
 use ibc_test_framework::util::random::random_u64_range;
 use std::thread::sleep;
 
-use crate::tests::next::context::build_cosmos_relay_context;
+use crate::tests::context::build_cosmos_relay_context;
 
 #[test]
 fn test_ibc_transfer_next() -> Result<(), Error> {

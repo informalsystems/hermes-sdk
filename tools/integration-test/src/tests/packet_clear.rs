@@ -11,7 +11,7 @@ use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
 use ibc_test_framework::prelude::*;
 use ibc_test_framework::util::random::random_u64_range;
 
-use crate::tests::next::context::build_cosmos_relay_context;
+use crate::tests::context::build_cosmos_relay_context;
 
 #[test]
 fn test_ibc_clear_packet_next() -> Result<(), Error> {
