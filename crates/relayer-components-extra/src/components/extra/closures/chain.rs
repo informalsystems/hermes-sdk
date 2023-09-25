@@ -1,3 +1,4 @@
+use cgp_core::traits::{HasComponents, HasErrorType};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::{
     CanQueryChainStatus, ChainStatusQuerier,
 };
@@ -11,8 +12,6 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
-use ibc_relayer_components::core::traits::component::HasComponents;
-use ibc_relayer_components::core::traits::error::HasErrorType;
 
 use crate::components::extra::chain::ExtraChainComponents;
 use crate::telemetry::traits::metrics::HasBasicMetrics;

@@ -1,4 +1,4 @@
-use ibc_relayer_components::core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 pub trait HasTelemetry {
     type Telemetry: Async;

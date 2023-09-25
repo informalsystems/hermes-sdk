@@ -2,8 +2,9 @@
    Helper functions for bootstrapping a single full node.
 */
 use core::time::Duration;
-use eyre::eyre;
 use std::sync::{Arc, RwLock};
+
+use eyre::eyre;
 use toml;
 use tracing::info;
 

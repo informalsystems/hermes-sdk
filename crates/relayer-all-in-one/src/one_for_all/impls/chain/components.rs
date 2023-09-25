@@ -1,5 +1,4 @@
-use ibc_relayer_components::core::traits::component::HasComponents;
-use ibc_relayer_components::core::traits::sync::Async;
+use cgp_core::traits::{Async, HasComponents};
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 
 use crate::one_for_all::types::chain::OfaChainWrapper;

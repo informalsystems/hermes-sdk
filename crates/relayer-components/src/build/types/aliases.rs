@@ -1,11 +1,12 @@
 use alloc::collections::BTreeMap;
 
+use cgp_core::traits::HasErrorType;
+
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::core::traits::error::HasErrorType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::runtime::traits::runtime::HasRuntime;

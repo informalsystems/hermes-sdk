@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::delegate_component;
+
 use crate::relay::components::auto_relayers::concurrent_bidirectional::ConcurrentBidirectionalRelayer;
 use crate::relay::components::auto_relayers::concurrent_event::ConcurrentEventSubscriptionRelayer;
 use crate::relay::components::create_client::CreateClientWithChains;
@@ -32,67 +34,67 @@ use crate::relay::traits::components::update_client_message_builder::UpdateClien
 
 pub struct DefaultRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-crate::delegate_component!(
+delegate_component!(
     IbcMessageSenderComponent<MainSink>,
     DefaultRelayComponents<BaseComponents>,
     SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
 );
 
-crate::delegate_component!(
+delegate_component!(
     UpdateClientMessageBuilderComponent,
     DefaultRelayComponents<BaseComponents>,
     SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
 );
 
-crate::delegate_component!(
+delegate_component!(
     PacketRelayerComponent,
     DefaultRelayComponents<BaseComponents>,
     LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
 );
 
-crate::delegate_component!(
+delegate_component!(
     PacketFilterComponent,
     DefaultRelayComponents<BaseComponents>,
     BaseComponents,
 );
 
-crate::delegate_component!(
+delegate_component!(
     ReceivePacketRelayerComponnent,
     DefaultRelayComponents<BaseComponents>,
     SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
 );
 
-crate::delegate_component!(
+delegate_component!(
     AckPacketRelayerComponent,
     DefaultRelayComponents<BaseComponents>,
     BaseAckPacketRelayer,
 );
 
-crate::delegate_component!(
+delegate_component!(
     TimeoutUnorderedPacketRelayerComponent,
     DefaultRelayComponents<BaseComponents>,
     BaseTimeoutUnorderedPacketRelayer,
 );
 
-crate::delegate_component!(
+delegate_component!(
     EventRelayerComponent,
     DefaultRelayComponents<BaseComponents>,
     PacketEventRelayer,
 );
 
-crate::delegate_component!(
+delegate_component!(
     AutoRelayerComponent,
     DefaultRelayComponents<BaseComponents>,
     ConcurrentBidirectionalRelayer<ConcurrentEventSubscriptionRelayer>,
 );
 
-crate::delegate_component!(
+delegate_component!(
     ClientCreatorComponent,
     DefaultRelayComponents<BaseComponents>,
     CreateClientWithChains,
 );
 
-crate::delegate_component!(
+delegate_component!(
     PacketClearerComponent,
     DefaultRelayComponents<BaseComponents>,
     ClearReceivePackets,

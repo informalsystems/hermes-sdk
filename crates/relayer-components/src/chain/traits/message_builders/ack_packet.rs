@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
@@ -7,7 +8,6 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementE
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
-use crate::core::traits::error::HasErrorType;
 use crate::std_prelude::*;
 
 #[async_trait]

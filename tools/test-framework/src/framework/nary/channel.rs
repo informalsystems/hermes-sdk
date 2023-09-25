@@ -3,10 +3,9 @@
    together with the relayer setup with chain handles and foreign clients,
    as well as connected IBC channels with completed handshakes.
 */
-use tracing::info;
-
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use tracing::info;
 
 use crate::bootstrap::nary::channel::bootstrap_channels_with_connections;
 use crate::error::Error;

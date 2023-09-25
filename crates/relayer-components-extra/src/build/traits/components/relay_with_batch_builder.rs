@@ -1,11 +1,10 @@
 use async_trait::async_trait;
+use cgp_core::traits::{DelegateComponent, HasComponents, HasErrorType};
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::build::traits::target::relay::RelayBuildTarget;
 use ibc_relayer_components::build::types::aliases::{
     TargetDstChain, TargetDstClientId, TargetRelay, TargetSrcChain, TargetSrcClientId,
 };
-use ibc_relayer_components::core::traits::component::{DelegateComponent, HasComponents};
-use ibc_relayer_components::core::traits::error::HasErrorType;
 use ibc_relayer_components::runtime::traits::mutex::HasRuntimeWithMutex;
 
 use crate::batch::traits::channel::HasMessageBatchSenderTypes;

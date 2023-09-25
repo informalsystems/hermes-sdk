@@ -1,9 +1,10 @@
 use async_trait::async_trait;
+use cgp_core::traits::delegate_component::DelegateComponent;
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::status::HasChainStatusType;
-use crate::core::traits::component::{DelegateComponent, HasComponents};
-use crate::core::traits::error::HasErrorType;
 use crate::std_prelude::*;
 
 pub struct ChainStatusQuerierComponent;

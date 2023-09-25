@@ -1,8 +1,8 @@
 use core::future::Future;
 use core::pin::Pin;
 
+use cgp_core::traits::Async;
 use futures_util::stream::{self, StreamExt};
-use ibc_relayer_components::core::traits::sync::Async;
 
 use crate::std_prelude::*;
 

@@ -2,15 +2,14 @@
    Implementation of [`ChainDriver`].
 */
 
+use alloc::sync::Arc;
 use core::time::Duration;
 
-use alloc::sync::Arc;
 use eyre::eyre;
-use tokio::runtime::Runtime;
-
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer_types::applications::transfer::amount::Amount;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use tokio::runtime::Runtime;
 
 use crate::chain::chain_type::ChainType;
 use crate::chain::cli::query::query_balance;

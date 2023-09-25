@@ -4,16 +4,15 @@
 
 use core::str::FromStr;
 use core::time::Duration;
-use eyre::eyre;
-use eyre::Report as Error;
+use std::sync::{Arc, RwLock};
+
+use eyre::{eyre, Report as Error};
 use ibc_relayer::chain::ChainType;
 use ibc_relayer::config;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::keyring::Store;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use std::sync::{Arc, RwLock};
-use tendermint_rpc::Url;
-use tendermint_rpc::WebSocketClientUrl;
+use tendermint_rpc::{Url, WebSocketClientUrl};
 
 use crate::chain::chain_type::ChainType as TestedChainType;
 use crate::chain::driver::ChainDriver;

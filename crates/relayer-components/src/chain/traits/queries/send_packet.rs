@@ -1,8 +1,8 @@
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::core::traits::error::HasErrorType;
 use crate::std_prelude::*;
 
 #[async_trait]

@@ -3,10 +3,11 @@
 */
 
 use core::convert::AsRef;
-use itertools::Itertools;
 use std::collections::BTreeMap;
 use std::fs::write;
 use std::path::Path;
+
+use itertools::Itertools;
 
 use crate::error::Error;
 use crate::types::tagged::*;

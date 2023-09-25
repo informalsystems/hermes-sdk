@@ -1,4 +1,5 @@
 use core::fmt::{Debug, Display};
+
 use ibc_relayer_components::logger::traits::level::{
     HasLogLevel, LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };

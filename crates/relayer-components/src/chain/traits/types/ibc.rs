@@ -5,10 +5,11 @@
 
 use core::fmt::Display;
 
+use cgp_core::traits::Async;
+
 use crate::chain::traits::types::chain::HasChainTypes;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::message::HasMessageType;
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
 
 /**

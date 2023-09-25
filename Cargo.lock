@@ -135,9 +135,9 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "axum"
-version = "0.6.19"
+version = "0.6.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6a1de45611fdb535bfde7b7de4fd54f4fd2b17b1737c0a59b69bf9b92074b8c"
+checksum = "3b829e4e32b91e643de6eafe82b1d90675f5874230191a4ffbc1b336dec4d6bf"
 dependencies = [
  "async-trait",
  "axum-core",
@@ -444,6 +444,10 @@ name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "cgp-core"
+version = "0.1.0"
 
 [[package]]
 name = "color-eyre"
@@ -894,9 +898,9 @@ checksum = "5443807d6dff69373d433ab9ef5378ad8df50ca6298caf15de6e52e24aaf54d5"
 
 [[package]]
 name = "erased-serde"
-version = "0.3.28"
+version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da96524cc884f6558f1769b6c46686af2fe8e8b4cd253bd5a3cdba8181b8e070"
+checksum = "6c138974f9d5e7fe373eb04df7cae98833802ae4b11c24ac7039a21d5af4b26c"
 dependencies = [
  "serde",
 ]
@@ -1566,7 +1570,7 @@ dependencies = [
  "ibc-proto 0.34.0",
  "ibc-relayer-types",
  "itertools",
- "moka 0.11.3",
+ "moka",
  "num-bigint",
  "num-rational",
  "once_cell",
@@ -1603,6 +1607,7 @@ name = "ibc-relayer-all-in-one"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "futures-core",
  "futures-util",
  "ibc-relayer-components",
@@ -1614,6 +1619,7 @@ name = "ibc-relayer-components"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "futures-core",
  "futures-util",
 ]
@@ -1623,6 +1629,7 @@ name = "ibc-relayer-components-extra"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "futures-core",
  "futures-util",
  "ibc-relayer-components",
@@ -1633,6 +1640,7 @@ name = "ibc-relayer-cosmos"
 version = "0.25.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "eyre",
  "flex-error",
  "futures",
@@ -1645,7 +1653,7 @@ dependencies = [
  "ibc-relayer-types",
  "ibc-telemetry",
  "itertools",
- "moka 0.10.3",
+ "moka",
  "opentelemetry 0.17.0",
  "prost",
  "serde",
@@ -1662,6 +1670,7 @@ name = "ibc-relayer-mock"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "eyre",
  "flex-error",
  "ibc-relayer-components",
@@ -1675,6 +1684,7 @@ name = "ibc-relayer-runtime"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "flex-error",
  "futures",
  "ibc-relayer-all-in-one",
@@ -1722,7 +1732,7 @@ dependencies = [
  "axum",
  "dashmap 5.5.0",
  "ibc-relayer-types",
- "moka 0.11.3",
+ "moka",
  "once_cell",
  "opentelemetry 0.19.0",
  "opentelemetry-prometheus",
@@ -2055,9 +2065,9 @@ dependencies = [
 
 [[package]]
 name = "moka"
-version = "0.10.3"
+version = "0.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "713518e40360e799c7a0b991b63fcd59814b00901ad3acbe8ecfb5daa23723be"
+checksum = "fa6e72583bf6830c956235bff0d5afec8cf2952f579ebad18ae7821a917d950f"
 dependencies = [
  "async-io",
  "async-lock",
@@ -2065,29 +2075,6 @@ dependencies = [
  "crossbeam-epoch",
  "crossbeam-utils 0.8.16",
  "futures-util",
- "num_cpus",
- "once_cell",
- "parking_lot",
- "quanta",
- "rustc_version",
- "scheduled-thread-pool",
- "skeptic",
- "smallvec",
- "tagptr",
- "thiserror",
- "triomphe",
- "uuid 1.4.1",
-]
-
-[[package]]
-name = "moka"
-version = "0.11.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa6e72583bf6830c956235bff0d5afec8cf2952f579ebad18ae7821a917d950f"
-dependencies = [
- "crossbeam-channel 0.5.8",
- "crossbeam-epoch",
- "crossbeam-utils 0.8.16",
  "once_cell",
  "parking_lot",
  "quanta",
@@ -3098,9 +3085,9 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.179"
+version = "1.0.188"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a5bf42b8d227d4abf38a1ddb08602e229108a517cd4e5bb28f9c7eaafdce5c0"
+checksum = "cf9e0fcba69a370eed61bcf2b728575f726b50b55cba78064753d708ddc7549e"
 dependencies = [
  "serde_derive",
 ]
@@ -3126,9 +3113,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.179"
+version = "1.0.188"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "741e124f5485c7e60c03b043f79f320bff3527f4bbf12cf3831750dc46a0ec2c"
+checksum = "4eca7ac642d82aa35b60049a6eccb4be6be75e599bd2e9adb5f875a737654af2"
 dependencies = [
  "proc-macro2",
  "quote",

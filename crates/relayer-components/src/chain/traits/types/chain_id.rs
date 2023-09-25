@@ -4,7 +4,7 @@
 
 use core::fmt::Display;
 
-use crate::core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 /**
    This is implemented by a chain context to provide a

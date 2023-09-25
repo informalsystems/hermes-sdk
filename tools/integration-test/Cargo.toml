@@ -2,7 +2,6 @@
 name         = "ibc-integration-test"
 version      = "0.25.0"
 edition      = "2021"
-rust-version = "1.70"
 license      = "Apache-2.0"
 readme       = "README.md"
 keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
@@ -10,6 +9,7 @@ homepage     = "https://hermes.informal.systems/"
 repository   = "https://github.com/informalsystems/hermes"
 authors      = ["Informal Systems <hello@informal.systems>"]
 description  = "Integration tests for Hermes"
+rust-version = "1.72"
 publish      = false
 
 [dependencies]

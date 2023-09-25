@@ -1,4 +1,4 @@
-use ibc_relayer_components::core::traits::component::HasComponents;
+use cgp_core::traits::HasComponents;
 use ibc_relayer_components_extra::components::extra::transaction::ExtraTxComponents;
 
 use crate::contexts::transaction::CosmosTxContext;
