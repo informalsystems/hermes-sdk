@@ -2,6 +2,7 @@ use async_trait::async_trait;
 use cgp_core::traits::delegate_component::DelegateComponent;
 use cgp_core::traits::has_components::HasComponents;
 use cgp_core::traits::HasErrorType;
+use cgp_macros::derive_component;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::status::HasChainStatusType;
@@ -36,6 +37,7 @@ where
    Implemented by a chain context to provide method for querying the
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
+#[derive_component(ChainStatusQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     /**
