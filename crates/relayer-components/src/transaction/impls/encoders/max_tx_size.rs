@@ -8,8 +8,8 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::CanRaiseError;
 
-use crate::core::traits::error::InjectError;
 use crate::std_prelude::*;
 use crate::transaction::traits::components::tx_encoder::TxEncoder;
 use crate::transaction::traits::types::HasTxTypes;
@@ -19,7 +19,7 @@ pub struct MaxTxSizeExceededError {
     pub given_tx_size: usize,
 }
 
-pub trait HasMaxTxSizeExceededError: InjectError<MaxTxSizeExceededError> {
+pub trait HasMaxTxSizeExceededError: CanRaiseError<MaxTxSizeExceededError> {
     fn try_extract_max_tx_size_exceeded_error(e: Self::Error) -> Option<MaxTxSizeExceededError>;
 }
 
@@ -48,7 +48,7 @@ where
         let max_tx_size = context.max_tx_size();
 
         if given_tx_size > max_tx_size {
-            Err(Context::inject_error(MaxTxSizeExceededError {
+            Err(Context::raise_error(MaxTxSizeExceededError {
                 given_tx_size,
                 max_tx_size,
             }))

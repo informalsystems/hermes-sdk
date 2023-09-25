@@ -1,8 +1,7 @@
 use async_trait::async_trait;
+use cgp_core::traits::{Async, HasErrorType};
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::core::traits::error::HasErrorType;
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
 
 pub trait HasCreateClientOptions<Counterparty>: HasIbcChainTypes<Counterparty> {

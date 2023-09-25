@@ -12,8 +12,8 @@ use ibc::{Any, Height};
 
 use ibc_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
-use ibc_relayer_components::core::traits::component::{DelegateComponent, HasComponents};
-use ibc_relayer_components::core::traits::error::HasErrorType;
+use cgp_core::traits::{DelegateComponent, HasComponents};
+use cgp_core::traits::HasErrorType;
 use ibc_relayer_components::logger::traits::has_logger::HasLogger;
 use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;

@@ -2,17 +2,16 @@
    Builder construct that spawn new chains with some common parameters.
 */
 
+use alloc::sync::Arc;
 use std::str::FromStr;
 
-use alloc::sync::Arc;
 use tokio::runtime::Runtime;
 
+use super::chain_type::ChainType;
 use crate::chain::driver::ChainDriver;
 use crate::error::Error;
 use crate::types::config::TestConfig;
 use crate::util::random::random_unused_tcp_port;
-
-use super::chain_type::ChainType;
 
 /**
    Used for holding common configuration needed to create new `ChainDriver`s.

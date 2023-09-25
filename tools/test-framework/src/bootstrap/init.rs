@@ -3,16 +3,14 @@
    session.
 */
 
-use eyre::Report as Error;
-use std::env;
-use std::fs;
 use std::sync::Once;
-use tracing_subscriber::{
-    self as ts,
-    filter::{EnvFilter, LevelFilter},
-    layer::SubscriberExt,
-    util::SubscriberInitExt,
-};
+use std::{env, fs};
+
+use eyre::Report as Error;
+use tracing_subscriber::filter::{EnvFilter, LevelFilter};
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
+use tracing_subscriber::{self as ts};
 
 use crate::types::config::TestConfig;
 use crate::util::random::random_u32;

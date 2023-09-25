@@ -1,8 +1,8 @@
 use alloc::string::String;
-use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use std::time::Duration;
 
+use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
+use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::packet_relayer::CanRelayPacket;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use tracing::info;

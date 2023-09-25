@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp_core::{delegate_component, delegate_components};
 use ibc_relayer_components::build::traits::components::birelay_builder::BiRelayBuilderComponent;
 use ibc_relayer_components::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilderComponent;
 use ibc_relayer_components::build::traits::components::chain_builder::ChainBuilderComponent;
@@ -12,19 +13,19 @@ use crate::build::traits::components::relay_with_batch_builder::RelayWithBatchBu
 
 pub struct ExtraBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     RelayFromChainsBuilderComponent,
     ExtraBuildComponents<BaseComponents>,
     BuildRelayWithBatchWorker,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     RelayWithBatchBuilderComponent,
     ExtraBuildComponents<BaseComponents>,
     BaseComponents,
 );
 
-ibc_relayer_components::delegate_components!(
+delegate_components!(
     [
         ChainBuilderComponent,
         RelayBuilderComponent,

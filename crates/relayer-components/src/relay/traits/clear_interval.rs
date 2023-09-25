@@ -1,4 +1,4 @@
-use crate::core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 pub trait HasClearInterval {
     type ClearInterval: Async + Clone + Into<u64>;

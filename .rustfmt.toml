@@ -8,3 +8,4 @@ reorder_imports = true
 # comment_width = 100
 # wrap_comments = true
 # group_imports = "StdExternalCrate"
+# imports_granularity = "Module"

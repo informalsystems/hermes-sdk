@@ -3,6 +3,7 @@
 */
 
 use core::time::Duration;
+
 use eyre::{eyre, Report as Error};
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::default::connection_delay as default_connection_delay;

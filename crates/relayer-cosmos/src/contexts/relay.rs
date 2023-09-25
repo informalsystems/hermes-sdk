@@ -1,6 +1,6 @@
+use alloc::sync::Arc;
 use std::collections::HashSet;
 
-use alloc::sync::Arc;
 use futures::lock::Mutex;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::filter::PacketFilter;

@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainIdType;
@@ -8,7 +9,6 @@ use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::message::{CanEstimateMessageSize, HasMessageType};
 use crate::chain::traits::types::timestamp::HasTimestampType;
-use crate::core::traits::error::HasErrorType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;

@@ -15,45 +15,46 @@ use ibc_relayer_components::relay::traits::components::packet_relayers::ack_pack
 use ibc_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
+use cgp_core::delegate_component;
 
 use crate::impls::relay::MockCosmosBuildUpdateClientMessage;
 
 pub struct MockCosmosComponents;
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     PacketRelayerComponent,
     MockCosmosComponents,
     FullCycleRelayer,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     UpdateClientMessageBuilderComponent,
     MockCosmosComponents,
     SkipUpdateClient<WaitUpdateClient<MockCosmosBuildUpdateClientMessage>>,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     IbcMessageSenderComponent<MainSink>,
     MockCosmosComponents,
     SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     ReceivePacketRelayerComponnent,
     MockCosmosComponents,
     SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     AckPacketRelayerComponent,
     MockCosmosComponents,
     BaseAckPacketRelayer,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     TimeoutUnorderedPacketRelayerComponent,
     MockCosmosComponents,
     BaseTimeoutUnorderedPacketRelayer,
 );
 
-ibc_relayer_components::delegate_component!(PacketFilterComponent, MockCosmosComponents, AllowAll);
+delegate_component!(PacketFilterComponent, MockCosmosComponents, AllowAll);

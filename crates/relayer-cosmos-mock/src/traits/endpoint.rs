@@ -6,7 +6,7 @@ use ibc::core::ics24_host::identifier::ChainId;
 use ibc::core::ics24_host::path::Path;
 use ibc::core::timestamp::Timestamp;
 use ibc::Height;
-use ibc_relayer_components::core::traits::sync::Async;
+use cgp_core::traits::Async;
 use tendermint_testgen::light_block::TmLightBlock;
 
 use async_trait::async_trait;

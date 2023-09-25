@@ -1,3 +1,5 @@
+use cgp_core::traits::has_components::HasComponents;
+
 use crate::chain::traits::logs::packet::CanLogChainPacket;
 use crate::chain::traits::queries::channel::CanQueryCounterpartyChainIdFromChannel;
 use crate::chain::traits::types::chain_id::HasChainId;
@@ -6,7 +8,6 @@ use crate::chain::traits::types::ibc_events::write_ack::CanBuildPacketFromWriteA
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;
 use crate::components::default::closures::relay::packet_relayer::UseDefaultPacketRelayer;
 use crate::components::default::relay::DefaultRelayComponents;
-use crate::core::traits::component::HasComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;

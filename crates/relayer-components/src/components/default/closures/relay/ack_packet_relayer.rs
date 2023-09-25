@@ -1,3 +1,6 @@
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::{Async, HasErrorType};
+
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use crate::chain::traits::client::update::{
@@ -17,9 +20,6 @@ use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
 use crate::components::default::relay::DefaultRelayComponents;
-use crate::core::traits::component::HasComponents;
-use crate::core::traits::error::HasErrorType;
-use crate::core::traits::sync::Async;
 use crate::logger::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
