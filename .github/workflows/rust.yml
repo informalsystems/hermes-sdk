@@ -1,24 +1,8 @@
 name: Rust
 on:
-  pull_request:
-    paths:
-      - .github/workflows/rust.yml
-      - Cargo.toml
-      - Cargo.lock
-      - ci/**
-      - e2e/**
-      - crates/**
-      - tools/**
+  pull_request: {}
   push:
-    branches: master
-    paths:
-      - .github/workflows/rust.yml
-      - Cargo.toml
-      - Cargo.lock
-      - ci/**
-      - e2e/**
-      - crates/**
-      - tools/**
+    branches: main
 
 env:
   CARGO_INCREMENTAL: 0
@@ -99,33 +83,3 @@ jobs:
         with:
           command: nextest
           args: run --all-features --no-fail-fast --workspace --exclude ibc-integration-test --no-capture
-
-  # test-coverage:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: stable
-  #         override: true
-  #     - uses: actions-rs/cargo@v1
-  #       with:
-  #         command: clean
-  #     - name: Run cargo-tarpaulin
-  #       uses: actions-rs/tarpaulin@v0.1
-  #       with:
-  #         version: '0.16.0'
-  #         args: '-- --test-threads 1'
-  #         timeout: 600
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v1
-  #       with:
-  #         token: ${{ secrets.CODECOV_TOKEN }}
-  #         fail_ci_if_error: true
-  #     - name: Archive code coverage results
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: code-coverage-report
-  #         path: cobertura.xml
