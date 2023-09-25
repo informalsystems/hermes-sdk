@@ -37,7 +37,7 @@ where
    Implemented by a chain context to provide method for querying the
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
-#[derive_component(ChainStatusQuerier<Chain>)]
+#[derive_component(ChainStatusQuerier2<Chain>)]
 #[async_trait]
 pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     /**
