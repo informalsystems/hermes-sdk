@@ -2,9 +2,9 @@ use async_trait::async_trait;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::core::traits::error::HasErrorType;
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::sync::Async;
 
 pub trait HasUpdateClientPayload<Counterparty>: HasIbcChainTypes<Counterparty> {
     type UpdateClientPayload: Async;

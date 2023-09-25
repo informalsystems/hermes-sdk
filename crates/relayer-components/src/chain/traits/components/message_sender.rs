@@ -6,10 +6,11 @@ use async_trait::async_trait;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
-use crate::core::traits::component::{DelegateComponent, HasComponents};
-use crate::core::traits::error::HasErrorType;
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
+use cgp_core::traits::delegate_component::DelegateComponent;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::sync::Async;
 
 pub struct MessageSenderComponent;
 
@@ -108,7 +109,7 @@ pub trait CanSendMessages: HasMessageType + HasEventType + HasErrorType {
         at the same position in the input message list.
 
         On failure, the method returns an
-        [error](crate::core::traits::error::HasErrorType::Error).
+        [error](cgp_core::traits::error::HasErrorType::Error).
         Note that since the message sending must be atomic, the sending of
         messages must either all succeed or all failed. i.e. partial failure
         is forbidden.

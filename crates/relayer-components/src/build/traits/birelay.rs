@@ -1,5 +1,5 @@
-use crate::core::traits::error::HasErrorType;
 use crate::relay::traits::two_way::HasTwoWayRelay;
+use cgp_core::traits::error::HasErrorType;
 
 /// Trait for types that have access to a bi-directional relayer
 /// that can relay between two connected chains in both directions.

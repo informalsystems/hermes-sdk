@@ -4,8 +4,8 @@ use core::pin::Pin;
 use core::time::Duration;
 
 use async_trait::async_trait;
+use cgp_core::traits::sync::Async;
 use futures_core::{Future, Stream};
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components_extra::runtime::traits::spawn::TaskHandle;
 
 use crate::std_prelude::*;

@@ -7,8 +7,8 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementE
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
-use crate::core::traits::error::HasErrorType;
 use crate::std_prelude::*;
+use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanBuildAckPacketPayload<Counterparty>:

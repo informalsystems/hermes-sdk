@@ -5,7 +5,7 @@
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::core::traits::sync::Async;
+use cgp_core::traits::sync::Async;
 
 /**
    Indicates that a chain context's

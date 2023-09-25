@@ -6,8 +6,8 @@ use tendermint_rpc::client::CompatMode;
 use tracing::error;
 
 use async_trait::async_trait;
+use cgp_core::traits::sync::Async;
 use futures::stream::{self, Stream, StreamExt, TryStreamExt};
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::runtime::impls::subscription::closure::CanCreateClosureSubscription;
 use ibc_relayer_components::runtime::traits::subscription::Subscription;
 use ibc_relayer_components_extra::runtime::impls::subscription::multiplex::CanMultiplexSubscription;

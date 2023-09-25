@@ -5,8 +5,8 @@
 use core::fmt::Debug;
 
 use async_trait::async_trait;
-use ibc_relayer_components::core::traits::error::HasErrorType;
-use ibc_relayer_components::core::traits::sync::Async;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::sync::Async;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 
 use crate::all_for_one::runtime::AfoRuntime;
@@ -18,7 +18,7 @@ use crate::std_prelude::*;
 #[async_trait]
 pub trait OfaRelay: Async {
     /**
-       Corresponds to [`HasErrorType::Error`](ibc_relayer_components::core::traits::error::HasErrorType).
+       Corresponds to [`HasErrorType::Error`](cgp_core::traits::error::HasErrorType).
     */
     type Error: Debug + Clone + Async;
 

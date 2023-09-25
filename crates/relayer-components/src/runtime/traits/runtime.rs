@@ -1,4 +1,4 @@
-use crate::core::traits::error::HasErrorType;
+use cgp_core::traits::error::HasErrorType;
 
 pub trait HasRuntime: HasErrorType {
     type Runtime: HasErrorType;

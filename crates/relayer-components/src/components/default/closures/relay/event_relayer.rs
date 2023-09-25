@@ -6,7 +6,6 @@ use crate::chain::traits::types::ibc_events::write_ack::CanBuildPacketFromWriteA
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;
 use crate::components::default::closures::relay::packet_relayer::UseDefaultPacketRelayer;
 use crate::components::default::relay::DefaultRelayComponents;
-use crate::core::traits::component::HasComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
@@ -15,6 +14,7 @@ use crate::relay::traits::components::packet_filter::PacketFilter;
 use crate::relay::traits::packet::HasRelayPacketFields;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
+use cgp_core::traits::has_components::HasComponents;
 
 pub trait CanUseDefaultEventRelayer: UseDefaultEventRelayer {}
 

@@ -2,9 +2,9 @@
    Trait definitions for [`HasMessageType`] and [`CanEstimateMessageSize`].
 */
 
-use crate::core::traits::error::HasErrorType;
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::sync::Async;
 
 /**
    This is used for the chain context and the transaction context to declare

@@ -4,8 +4,8 @@ use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
-use crate::core::traits::error::HasErrorType;
 use crate::std_prelude::*;
+use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanBuildConnectionHandshakePayloads<Counterparty>:

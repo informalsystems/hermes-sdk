@@ -366,6 +366,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "cgp-core"
+version = "0.1.0"
+
+[[package]]
 name = "color-eyre"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1398,6 +1402,7 @@ name = "ibc-relayer-all-in-one"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "futures-core",
  "futures-util",
  "ibc-relayer-components",
@@ -1409,6 +1414,7 @@ name = "ibc-relayer-components"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "futures-core",
  "futures-util",
 ]
@@ -1418,6 +1424,7 @@ name = "ibc-relayer-components-extra"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "futures-core",
  "futures-util",
  "ibc-relayer-components",
@@ -1428,6 +1435,7 @@ name = "ibc-relayer-cosmos"
 version = "0.25.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "eyre",
  "flex-error",
  "futures",
@@ -1457,6 +1465,7 @@ name = "ibc-relayer-mock"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "eyre",
  "flex-error",
  "ibc-relayer-components",
@@ -1470,6 +1479,7 @@ name = "ibc-relayer-runtime"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-core",
  "flex-error",
  "futures",
  "ibc-relayer-all-in-one",

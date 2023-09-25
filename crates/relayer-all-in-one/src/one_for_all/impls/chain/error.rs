@@ -1,4 +1,4 @@
-use ibc_relayer_components::core::traits::error::HasErrorType;
+use cgp_core::traits::error::HasErrorType;
 
 use crate::one_for_all::traits::chain::OfaChain;
 use crate::one_for_all::types::chain::OfaChainWrapper;

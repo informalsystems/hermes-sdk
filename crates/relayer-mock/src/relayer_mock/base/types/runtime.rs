@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 use alloc::sync::Arc;
+use cgp_core::traits::error::HasErrorType;
 use core::time::Duration;
-use ibc_relayer_components::core::traits::error::HasErrorType;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc_relayer_components::runtime::traits::time::HasTime;
 

@@ -10,9 +10,9 @@
 use core::pin::Pin;
 
 use async_trait::async_trait;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::sync::Async;
 use futures_core::stream::Stream;
-use ibc_relayer_components::core::traits::error::HasErrorType;
-use ibc_relayer_components::core::traits::sync::Async;
 
 use crate::std_prelude::*;
 

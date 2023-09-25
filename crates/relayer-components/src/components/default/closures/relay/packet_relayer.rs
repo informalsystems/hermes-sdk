@@ -25,8 +25,6 @@ use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
 use crate::components::default::relay::DefaultRelayComponents;
-use crate::core::traits::component::HasComponents;
-use crate::core::traits::error::HasErrorType;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
@@ -35,6 +33,8 @@ use crate::relay::traits::components::packet_relayer::CanRelayPacket;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::has_components::HasComponents;
 
 pub trait CanUseDefaultPacketRelayer: UseDefaultPacketRelayer {}
 

@@ -1,3 +1,4 @@
+use cgp_core::{delegate_component, delegate_components};
 use core::marker::PhantomData;
 
 use crate::build::components::birelay::BuildBiRelayFromRelays;
@@ -11,25 +12,25 @@ use crate::build::traits::components::relay_builder::RelayBuilderComponent;
 use crate::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilderComponent;
 pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-crate::delegate_component!(
+delegate_component!(
     ChainBuilderComponent,
     DefaultBuildComponents<BaseComponents>,
     BuildChainWithCache<BaseComponents>,
 );
 
-crate::delegate_component!(
+delegate_component!(
     RelayBuilderComponent,
     DefaultBuildComponents<BaseComponents>,
     BuildRelayWithCache<BuildRelayFromChains>,
 );
 
-crate::delegate_component!(
+delegate_component!(
     BiRelayBuilderComponent,
     DefaultBuildComponents<BaseComponents>,
     BuildBiRelayFromRelays,
 );
 
-crate::delegate_components!(
+delegate_components!(
     [
         RelayFromChainsBuilderComponent,
         BiRelayFromRelayBuilderComponent,

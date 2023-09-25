@@ -8,8 +8,8 @@ use core::fmt::Display;
 use crate::chain::traits::types::chain::HasChainTypes;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::message::HasMessageType;
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
+use cgp_core::traits::sync::Async;
 
 /**
    The abstract types for a chain context when it is used for IBC

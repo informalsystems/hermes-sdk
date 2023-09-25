@@ -1,5 +1,5 @@
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::core::traits::sync::Async;
+use cgp_core::traits::sync::Async;
 
 pub trait HasClientStateType<Counterparty>: HasIbcChainTypes<Counterparty> {
     /**

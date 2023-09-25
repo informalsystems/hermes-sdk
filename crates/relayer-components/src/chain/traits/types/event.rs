@@ -2,7 +2,7 @@
    Trait definition for [`HasEventType`].
 */
 
-use crate::core::traits::sync::Async;
+use cgp_core::traits::sync::Async;
 
 /**
    This is used for the chain context and the transaction context to declare

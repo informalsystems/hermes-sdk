@@ -1,3 +1,4 @@
+use cgp_core::traits::error::HasErrorType;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
@@ -14,7 +15,6 @@ use ibc_relayer_components::chain::traits::types::message::{
 };
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
-use ibc_relayer_components::core::traits::error::HasErrorType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};

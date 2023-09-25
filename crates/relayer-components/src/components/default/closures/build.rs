@@ -8,10 +8,10 @@ use crate::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::components::default::build::DefaultBuildComponents;
-use crate::core::traits::component::HasComponents;
-use crate::core::traits::error::HasErrorType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::HasTwoWayRelay;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::has_components::HasComponents;
 
 pub trait UseDefaultBuilderComponents: CanBuildBiRelay {}
 

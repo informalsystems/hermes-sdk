@@ -1,5 +1,5 @@
 use crate::chain::traits::types::chain::HasChainTypes;
-use crate::core::traits::sync::Async;
+use cgp_core::traits::sync::Async;
 
 /**
    A chain context that offers a [`ChainStatus`](Self::ChainStatus) type to

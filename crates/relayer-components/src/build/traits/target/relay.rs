@@ -1,8 +1,8 @@
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::chain::{ChainATarget, ChainBTarget, ChainBuildTarget};
 use crate::build::types::aliases::{RelayAToB, RelayBToA, RelayError};
-use crate::core::traits::sync::Async;
 use crate::relay::traits::chains::HasRelayChains;
+use cgp_core::traits::sync::Async;
 
 #[derive(Default)]
 pub struct RelayAToBTarget;

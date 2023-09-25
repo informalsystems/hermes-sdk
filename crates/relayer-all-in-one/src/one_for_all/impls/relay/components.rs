@@ -1,5 +1,5 @@
-use ibc_relayer_components::core::traits::component::HasComponents;
-use ibc_relayer_components::core::traits::sync::Async;
+use cgp_core::traits::sync::Async;
+use cgp_core::traits::HasComponents;
 use ibc_relayer_components_extra::components::extra::closures::relay::components::CanUseExtraRelayComponents;
 use ibc_relayer_components_extra::components::extra::relay::ExtraRelayComponents;
 

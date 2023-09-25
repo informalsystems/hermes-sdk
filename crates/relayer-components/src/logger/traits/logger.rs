@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display};
 
-use crate::core::traits::sync::Async;
+use cgp_core::traits::sync::Async;
 
 pub trait BaseLogger: Async {
     type Log<'a, 'r>;

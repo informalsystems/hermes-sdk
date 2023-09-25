@@ -8,9 +8,9 @@ use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     TargetDstChainId, TargetDstClientId, TargetRelay, TargetSrcChainId, TargetSrcClientId,
 };
-use crate::core::traits::error::HasErrorType;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::std_prelude::*;
+use cgp_core::traits::error::HasErrorType;
 
 pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
 

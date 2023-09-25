@@ -4,11 +4,11 @@ use ibc_relayer_components::relay::traits::components::ibc_message_sender::CanSe
 use ibc_relayer_components::relay::traits::logs::logger::CanLogRelayTarget;
 
 use async_trait::async_trait;
+use cgp_core::traits::sync::Async;
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::target::ChainTarget;

@@ -6,10 +6,10 @@ use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
 use crate::build::traits::target::relay::RelayAToBTarget;
 use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB};
 use crate::chain::traits::client::create::HasCreateClientOptions;
-use crate::core::traits::error::HasErrorType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;
+use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanBootstrapBiRelay: HasBiRelayType + HasErrorType

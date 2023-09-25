@@ -1,4 +1,4 @@
-use ibc_relayer_components::core::traits::error::HasErrorType;
+use cgp_core::traits::error::HasErrorType;
 use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
 
 use crate::one_for_all::traits::birelay::OfaBiRelay;

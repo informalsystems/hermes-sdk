@@ -1,4 +1,4 @@
-use ibc_relayer_components::core::traits::error::HasErrorType;
+use cgp_core::traits::error::HasErrorType;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 

@@ -4,8 +4,8 @@
 
 use core::fmt::Display;
 
-use crate::core::traits::error::HasErrorType;
-use crate::core::traits::sync::Async;
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::sync::Async;
 
 pub trait HasHeightType: Async {
     /**

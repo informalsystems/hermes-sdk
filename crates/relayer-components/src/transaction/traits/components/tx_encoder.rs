@@ -1,9 +1,10 @@
 use async_trait::async_trait;
 
-use crate::core::traits::component::{DelegateComponent, HasComponents};
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;
+use cgp_core::traits::delegate_component::DelegateComponent;
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::sync::Async;
 
 pub struct TxEncoderComponent;
 

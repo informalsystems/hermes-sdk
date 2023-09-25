@@ -2,8 +2,8 @@ use core::time::Duration;
 
 use async_trait::async_trait;
 
-use crate::core::traits::sync::Async;
 use crate::std_prelude::*;
+use cgp_core::traits::sync::Async;
 
 #[async_trait]
 pub trait CanSleep: Async {

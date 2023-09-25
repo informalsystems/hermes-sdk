@@ -5,10 +5,10 @@ use core::pin::Pin;
 use async_trait::async_trait;
 use futures_core::stream::Stream;
 
-use crate::core::traits::sync::Async;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::subscription::Subscription;
 use crate::std_prelude::*;
+use cgp_core::traits::sync::Async;
 
 /**
    An auto trait that is implemented by all runtime contexts that implement

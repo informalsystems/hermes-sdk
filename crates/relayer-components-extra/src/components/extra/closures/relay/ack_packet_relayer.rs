@@ -1,3 +1,6 @@
+use cgp_core::traits::error::HasErrorType;
+use cgp_core::traits::sync::Async;
+use cgp_core::traits::HasComponents;
 use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use ibc_relayer_components::chain::traits::client::update::{
@@ -16,9 +19,6 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
-use ibc_relayer_components::core::traits::component::HasComponents;
-use ibc_relayer_components::core::traits::error::HasErrorType;
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::logger::traits::has_logger::HasLogger;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;

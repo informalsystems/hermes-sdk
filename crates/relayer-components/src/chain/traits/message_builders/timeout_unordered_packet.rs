@@ -6,8 +6,8 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use crate::core::traits::error::HasErrorType;
 use crate::std_prelude::*;
+use cgp_core::traits::error::HasErrorType;
 
 #[async_trait]
 pub trait CanBuildTimeoutUnorderedPacketPayload<Counterparty>:
