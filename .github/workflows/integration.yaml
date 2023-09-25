@@ -28,12 +28,11 @@ jobs:
           - package: gaia11
             command: gaiad
             account_prefix: cosmos
+            features: ''
           - package: ibc-go-v7-simapp
             command: simd
             account_prefix: cosmos
-          - package: wasmd
-            command: wasmd
-            account_prefix: wasm
+            features: ''
     steps:
       - uses: actions/checkout@v2
       - uses: cachix/install-nix-action@v18
@@ -53,7 +52,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: -p ibc-integration-test --no-fail-fast --no-run
+          args: -p ibc-integration-test --no-fail-fast --no-run --features=${{ matrix.chain.features }}
       - name: run integration tests
         env:
           RUST_LOG: info,ibc_relayer_runtime=trace
@@ -63,5 +62,5 @@ jobs:
           ACCOUNT_PREFIXES: ${{ matrix.chain.account_prefix }}
         run: |
             nix shell .#python .#${{ matrix.chain.package }} -c cargo \
-              test -p ibc-integration-test --no-fail-fast -- \
+              test -p ibc-integration-test --features=${{ matrix.chain.features }} --no-fail-fast -- \
               --nocapture --test-threads=2
