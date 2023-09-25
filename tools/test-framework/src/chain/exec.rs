@@ -1,6 +1,7 @@
-use eyre::eyre;
 use std::process::Command;
 use std::str;
+
+use eyre::eyre;
 use tracing::{debug, trace};
 
 use crate::error::{handle_exec_error, handle_generic_error, Error};

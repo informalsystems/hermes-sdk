@@ -7,7 +7,7 @@ readme       = "README.md"
 keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
 repository   = "https://github.com/informalsystems/ibc-rs"
 authors      = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.68"
+rust-version = "1.72"
 description  = """
     TBD
 """
@@ -18,6 +18,7 @@ description  = """
 async-trait = "0.1.56"
 eyre = "0.6.8"
 flex-error = "0.4.4"
+cgp-core = { version = "0.1.0", path = "../cgp-core" }
 ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
 ibc-relayer-runtime = { path = "../relayer-runtime" }
 tokio = { version = "1.0", features = ["full"] }

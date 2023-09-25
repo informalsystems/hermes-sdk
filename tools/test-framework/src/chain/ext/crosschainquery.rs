@@ -1,6 +1,7 @@
+use std::time::Duration;
+
 use eyre::eyre;
 use serde_json as json;
-use std::time::Duration;
 
 use crate::chain::cli::query::query_cross_chain_query;
 use crate::error::Error;

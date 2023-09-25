@@ -1,8 +1,8 @@
 use async_trait::async_trait;
+use cgp_core::traits::Async;
+use cgp_core::traits::HasErrorType;
 use core::fmt::{Debug, Display};
 use ibc_relayer_all_in_one::all_for_one::runtime::AfoRuntime;
-use ibc_relayer_components::core::traits::error::HasErrorType;
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_cosmos::types::tendermint::{TendermintClientState, TendermintConsensusState};

@@ -1,3 +1,4 @@
+use cgp_core::delegate_component;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::update_client::skip::SkipUpdateClient;
@@ -18,37 +19,33 @@ use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
 
 pub struct MockComponents;
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     IbcMessageSenderComponent<MainSink>,
     MockComponents,
     SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
 );
 
-ibc_relayer_components::delegate_component!(
-    PacketRelayerComponent,
-    MockComponents,
-    FullCycleRelayer,
-);
+delegate_component!(PacketRelayerComponent, MockComponents, FullCycleRelayer,);
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     ReceivePacketRelayerComponnent,
     MockComponents,
     SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     AckPacketRelayerComponent,
     MockComponents,
     BaseAckPacketRelayer,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     TimeoutUnorderedPacketRelayerComponent,
     MockComponents,
     BaseTimeoutUnorderedPacketRelayer,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     UpdateClientMessageBuilderComponent,
     MockComponents,
     SkipUpdateClient<WaitUpdateClient<MockBuildUpdateClientMessage>>,

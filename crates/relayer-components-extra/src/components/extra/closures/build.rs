@@ -1,3 +1,4 @@
+use cgp_core::traits::{Async, HasComponents, HasErrorType};
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
 use ibc_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
@@ -7,9 +8,6 @@ use ibc_relayer_components::build::traits::target::chain::{ChainATarget, ChainBT
 use ibc_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::core::traits::component::HasComponents;
-use ibc_relayer_components::core::traits::error::HasErrorType;
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;

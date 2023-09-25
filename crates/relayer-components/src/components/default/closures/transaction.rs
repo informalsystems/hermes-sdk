@@ -1,8 +1,9 @@
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::HasErrorType;
+
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::components::default::transaction::DefaultTxComponents;
-use crate::core::traits::component::HasComponents;
-use crate::core::traits::error::HasErrorType;
 use crate::logger::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;

@@ -1,4 +1,6 @@
 use core::marker::PhantomData;
+
+use cgp_core::{delegate_component, delegate_components};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
@@ -10,19 +12,19 @@ use crate::telemetry::components::status::ChainStatusTelemetryQuerier;
 
 pub struct ExtraChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     ChainStatusQuerierComponent,
     ExtraChainComponents<BaseComponents>,
     ChainStatusTelemetryQuerier<BaseComponents>,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     ConsensusStateQuerierComponent,
     ExtraChainComponents<BaseComponents>,
     ConsensusStateTelemetryQuerier<BaseComponents>,
 );
 
-ibc_relayer_components::delegate_components!(
+delegate_components!(
     [MessageSenderComponent, PacketFieldsReaderComponent,],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

@@ -34,8 +34,8 @@ jobs:
             account_prefix: cosmos
             features: solomachine
     steps:
-      - uses: actions/checkout@v2
-      - uses: cachix/install-nix-action@v18
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v23
         with:
           install_url: https://nixos-nix-install-tests.cachix.org/serve/vij683ly7sl95nnhb67bdjjfabclr85m/install
           install_options: '--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve'
@@ -48,7 +48,7 @@ jobs:
         with:
           toolchain: stable
           override: true
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
       - uses: actions-rs/cargo@v1
         with:
           command: test
@@ -63,4 +63,8 @@ jobs:
         run: |
             nix shell .#python .#${{ matrix.chain.package }} -c cargo \
               test -p ibc-integration-test --features=${{ matrix.chain.features }} --no-fail-fast -- \
+<<<<<<< HEAD
               --nocapture --test-threads=2
+=======
+              --nocapture --test-threads=2
+>>>>>>> main

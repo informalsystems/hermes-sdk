@@ -1,7 +1,7 @@
+use cgp_core::traits::{Async, HasErrorType};
+
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientId;
-use crate::core::traits::error::HasErrorType;
-use crate::core::traits::sync::Async;
 use crate::relay::traits::chains::HasRelayChains;
 
 #[derive(Default, Clone, Copy)]

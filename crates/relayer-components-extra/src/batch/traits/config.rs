@@ -1,4 +1,4 @@
-use ibc_relayer_components::core::traits::sync::Async;
+use cgp_core::traits::Async;
 
 use crate::batch::types::config::BatchConfig;
 

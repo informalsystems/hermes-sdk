@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::components::chain_builder::CanBuildChain;
@@ -8,7 +9,6 @@ use crate::build::types::aliases::{
     RelayError, TargetDstChain, TargetDstChainId, TargetRelay, TargetSrcChain, TargetSrcChainId,
 };
 use crate::chain::traits::client::create::HasCreateClientOptions;
-use crate::core::traits::error::HasErrorType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};

@@ -1,9 +1,9 @@
 use alloc::sync::Arc;
 use core::ops::DerefMut;
 
+use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::runtime::traits::subscription::Subscription;
 

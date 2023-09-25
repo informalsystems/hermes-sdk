@@ -1,11 +1,10 @@
-use eyre::eyre;
-use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use std::thread;
 use std::time::Duration;
 
+use eyre::eyre;
 use ibc_relayer::chain::counterparty::unreceived_acknowledgements;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
+use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
 use ibc_relayer::foreign_client::ForeignClient;
 use ibc_relayer::path::PathIdentifiers;
 use ibc_relayer_all_in_one::one_for_all::traits::birelay::OfaBiRelay;
@@ -13,6 +12,7 @@ use ibc_relayer_all_in_one::one_for_all::types::birelay::OfaBiRelayWrapper;
 use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
 use ibc_relayer_cosmos::contexts::birelay::CosmosBiRelay;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, IdentifiedChannelEnd};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use tokio::task::JoinHandle;
 
 use crate::error::Error;

@@ -5,7 +5,6 @@ use std::io::{Error as IoError, ErrorKind as IoErrorKind};
 
 use eyre::Report;
 use flex_error::{define_error, TraceError};
-
 use ibc_relayer::channel::error::ChannelError;
 use ibc_relayer::connection::ConnectionError;
 use ibc_relayer::error::Error as RelayerError;

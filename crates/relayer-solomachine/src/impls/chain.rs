@@ -2,12 +2,12 @@ use std::str::FromStr;
 
 use alloc::sync::Arc;
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 use ibc_proto::ibc::lightclients::solomachine::v2::PacketCommitmentData;
 use ibc_relayer::chain::cosmos::query::abci_query;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
-use ibc_relayer_components::core::traits::error::HasErrorType;
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
 use ibc_relayer_components::runtime::traits::subscription::Subscription;
 use ibc_relayer_cosmos::contexts::chain::CosmosChain;
