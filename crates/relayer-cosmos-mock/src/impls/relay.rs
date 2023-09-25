@@ -1,7 +1,8 @@
 use alloc::boxed::Box;
 use alloc::vec::Vec;
-use async_trait::async_trait;
 
+use async_trait::async_trait;
+use cgp_core::traits::{DelegateComponent, HasComponents, HasErrorType};
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::clients::ics07_tendermint::header::Header;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
@@ -9,13 +10,9 @@ use ibc::core::ics04_channel::packet::Packet;
 use ibc::core::ics24_host::identifier::ClientId;
 use ibc::core::{Msg, ValidationContext};
 use ibc::{Any, Height};
-
 use ibc_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
-use cgp_core::traits::{DelegateComponent, HasComponents};
-use cgp_core::traits::HasErrorType;
-use ibc_relayer_components::logger::traits::has_logger::HasLogger;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
+use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;

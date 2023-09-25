@@ -1,28 +1,20 @@
 use std::fmt::Debug;
-use std::sync::Arc;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use basecoin_app::modules::auth::Auth;
 use basecoin_app::modules::bank::Bank;
-use basecoin_app::modules::context::prefix;
-use basecoin_app::modules::context::Identifiable;
+use basecoin_app::modules::context::{prefix, Identifiable};
 use basecoin_app::modules::ibc::Ibc;
-use basecoin_app::BaseCoinApp;
-use basecoin_app::Builder;
+use basecoin_app::{BaseCoinApp, Builder};
 use basecoin_store::context::ProvableStore;
 use ibc::core::ics24_host::identifier::ChainId;
 use ibc::Height;
-use ibc_relayer_components_extra::runtime::traits::spawn::Spawner;
-use ibc_relayer_components_extra::runtime::traits::spawn::TaskHandle;
+use ibc_relayer_components_extra::runtime::traits::spawn::{Spawner, TaskHandle};
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use tendermint::AppHash;
-use tendermint::Time;
+use tendermint::{AppHash, Time};
 use tendermint_testgen::light_block::TmLightBlock;
-use tendermint_testgen::Generator;
-use tendermint_testgen::Header;
-use tendermint_testgen::LightBlock;
-use tendermint_testgen::Validator;
+use tendermint_testgen::{Generator, Header, LightBlock, Validator};
 
 use crate::traits::runner::BasecoinRunner;
 use crate::types::status::ChainStatus;

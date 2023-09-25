@@ -1,8 +1,3 @@
-use crate::contexts::basecoin::MockBasecoin;
-use crate::contexts::chain::MockCosmosContext;
-use crate::tests::init::binary_setup;
-use crate::types::error::Error;
-
 use basecoin_store::impls::InMemoryStore;
 use ibc::core::ics24_host::identifier::ClientId;
 use ibc::core::ValidationContext;
@@ -13,6 +8,11 @@ use ibc_relayer_components::chain::traits::components::message_sender::CanSendMe
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use ibc_relayer_components::relay::traits::target::DestinationTarget;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
+
+use crate::contexts::basecoin::MockBasecoin;
+use crate::contexts::chain::MockCosmosContext;
+use crate::tests::init::binary_setup;
+use crate::types::error::Error;
 
 #[tokio::test]
 async fn test_create_client() -> Result<(), Error> {

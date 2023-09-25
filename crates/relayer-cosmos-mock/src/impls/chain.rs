@@ -2,8 +2,8 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use async_trait::async_trait;
-
 use basecoin_app::modules::ibc::AnyConsensusState;
+use cgp_core::traits::HasErrorType;
 use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};
 use ibc::clients::ics07_tendermint::consensus_state::ConsensusState as TmConsensusState;
 use ibc::clients::ics07_tendermint::header::Header;
@@ -13,23 +13,19 @@ use ibc::core::ics02_client::msgs::create_client::MsgCreateClient;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
 use ibc::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
 use ibc::core::ics04_channel::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
-use ibc::core::ics04_channel::packet::Packet;
-use ibc::core::ics04_channel::packet::Sequence;
+use ibc::core::ics04_channel::packet::{Packet, Sequence};
 use ibc::core::ics04_channel::timeout::TimeoutHeight;
 use ibc::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
 use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath};
 use ibc::core::timestamp::Timestamp;
 use ibc::core::{Msg, ValidationContext};
-use ibc::Any;
-use ibc::Height;
-
+use ibc::{Any, Height};
 use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
-use ibc_relayer_components::chain::traits::client::create::CanBuildCreateClientMessage;
-use ibc_relayer_components::chain::traits::client::create::CanBuildCreateClientPayload;
-use ibc_relayer_components::chain::traits::client::create::HasCreateClientEvent;
-use ibc_relayer_components::chain::traits::client::create::HasCreateClientOptions;
-use ibc_relayer_components::chain::traits::client::create::HasCreateClientPayload;
+use ibc_relayer_components::chain::traits::client::create::{
+    CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
+    HasCreateClientOptions, HasCreateClientPayload,
+};
 use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
 };
@@ -39,40 +35,40 @@ use ibc_relayer_components::chain::traits::components::message_sender::CanSendMe
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
-use ibc_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketPayload;
-use ibc_relayer_components::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
-use ibc_relayer_components::chain::traits::message_builders::receive_packet::CanBuildReceivePacketPayload;
-use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
-use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
+use ibc_relayer_components::chain::traits::message_builders::ack_packet::{
+    CanBuildAckPacketMessage, CanBuildAckPacketPayload,
+};
+use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
+    CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
+};
+use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
+};
 use ibc_relayer_components::chain::traits::queries::received_packet::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use ibc_relayer_components::chain::traits::types::ibc::{
+    HasCounterpartyMessageHeight, HasIbcChainTypes,
+};
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
-use ibc_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
+use ibc_relayer_components::chain::traits::types::message::{
+    CanEstimateMessageSize, HasMessageType,
+};
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
-use cgp_core::traits::HasErrorType;
-use ibc_relayer_components::logger::traits::has_logger::HasLogger;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
+use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::log::value::LogValue;

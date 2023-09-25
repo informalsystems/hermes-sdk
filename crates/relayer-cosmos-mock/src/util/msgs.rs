@@ -1,16 +1,14 @@
+use std::ops::Add;
+use std::time::Duration;
+
 use ibc::applications::transfer::msgs::transfer::MsgTransfer;
 use ibc::applications::transfer::packet::PacketData;
 use ibc::applications::transfer::BaseCoin;
-use ibc::core::ics04_channel::packet::Packet;
-use ibc::core::ics04_channel::packet::Sequence;
-use ibc::core::ics24_host::identifier::ChannelId;
-use ibc::core::ics24_host::identifier::PortId;
+use ibc::core::ics04_channel::packet::{Packet, Sequence};
+use ibc::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc::core::timestamp::Timestamp;
 use ibc::Height;
-
 use primitive_types::U256;
-use std::ops::Add;
-use std::time::Duration;
 
 use super::dummy::dummy_signer;
 

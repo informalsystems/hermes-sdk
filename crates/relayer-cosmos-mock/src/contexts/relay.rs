@@ -1,13 +1,13 @@
+use std::sync::Arc;
+
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::core::ics24_host::identifier::ClientId;
 use ibc::core::ValidationContext;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use std::sync::Arc;
-
-use crate::traits::endpoint::BasecoinEndpoint;
-use crate::types::error::Error;
 
 use super::chain::MockCosmosContext;
+use crate::traits::endpoint::BasecoinEndpoint;
+use crate::types::error::Error;
 
 /// The relay context for relaying between `BasecoinEndpoint`s.
 ///

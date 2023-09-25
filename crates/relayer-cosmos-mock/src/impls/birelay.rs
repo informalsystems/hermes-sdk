@@ -3,7 +3,8 @@ use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
-use crate::contexts::{birelay::MockCosmosBiRelay, relay::MockCosmosRelay};
+use crate::contexts::birelay::MockCosmosBiRelay;
+use crate::contexts::relay::MockCosmosRelay;
 use crate::traits::endpoint::BasecoinEndpoint;
 use crate::types::error::Error;
 
