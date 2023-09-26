@@ -34,7 +34,7 @@ jobs:
             account_prefix: cosmos
             features: ''
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v23
         with:
           install_url: https://nixos-nix-install-tests.cachix.org/serve/vij683ly7sl95nnhb67bdjjfabclr85m/install
