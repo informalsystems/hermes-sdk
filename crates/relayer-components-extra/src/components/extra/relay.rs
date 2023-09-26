@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp_core::{delegate_component, delegate_components};
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
@@ -29,31 +30,31 @@ use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
 pub struct ExtraRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     IbcMessageSenderComponent<MainSink>,
     ExtraRelayComponents<BaseComponents>,
     SendMessagesToBatchWorker,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     IbcMessageSenderComponent<BatchWorkerSink>,
     ExtraRelayComponents<BaseComponents>,
     SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     PacketRelayerComponent,
     ExtraRelayComponents<BaseComponents>,
     LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
 );
 
-ibc_relayer_components::delegate_component!(
+delegate_component!(
     AutoRelayerComponent,
     ExtraRelayComponents<BaseComponents>,
     ParallelBidirectionalRelayer<ParallelEventSubscriptionRelayer>,
 );
 
-ibc_relayer_components::delegate_components!(
+delegate_components!(
     [
         UpdateClientMessageBuilderComponent,
         PacketFilterComponent,

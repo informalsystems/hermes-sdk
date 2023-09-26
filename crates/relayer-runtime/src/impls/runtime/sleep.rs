@@ -1,5 +1,6 @@
-use async_trait::async_trait;
 use core::time::Duration;
+
+use async_trait::async_trait;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use tokio::time::sleep;
 

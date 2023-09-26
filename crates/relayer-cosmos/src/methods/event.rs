@@ -1,10 +1,9 @@
 use alloc::sync::Arc;
 
 use ibc_relayer::event::extract_packet_and_write_ack_from_tx;
-use tendermint::abci::Event as AbciEvent;
-
 use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
 use ibc_relayer_types::events::IbcEventType;
+use tendermint::abci::Event as AbciEvent;
 
 pub fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacket> {
     let event_type = event.kind.parse().ok()?;

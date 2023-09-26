@@ -11,9 +11,9 @@
 
 use alloc::string::String;
 use std::collections::hash_map::Entry;
-use std::sync::Mutex;
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 use std::vec;
-use std::{collections::HashMap, sync::Arc};
 
 use eyre::eyre;
 
@@ -22,12 +22,11 @@ use crate::relayer_mock::base::types::aliases::{
     ChainState, ChannelId, ClientId, MockTimestamp, PortId, Sequence, StateStore,
 };
 use crate::relayer_mock::base::types::events::Event;
-use crate::relayer_mock::base::types::height::Height;
+use crate::relayer_mock::base::types::height::{Height, Height as MockHeight};
 use crate::relayer_mock::base::types::message::Message as MockMessage;
+use crate::relayer_mock::base::types::packet::PacketKey;
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
-use crate::relayer_mock::base::types::{
-    height::Height as MockHeight, packet::PacketKey, state::State,
-};
+use crate::relayer_mock::base::types::state::State;
 use crate::relayer_mock::util::clock::MockClock;
 use crate::relayer_mock::util::mutex::MutexUtil;
 

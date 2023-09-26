@@ -1,6 +1,6 @@
 use async_trait::async_trait;
+use cgp_core::traits::Async;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::core::traits::sync::Async;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};

@@ -1,9 +1,9 @@
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_all_in_one::all_for_one::builder::CanBuildAfoBiRelay;
 use ibc_relayer_all_in_one::one_for_all::types::birelay::OfaBiRelayWrapper;
 use ibc_relayer_all_in_one::one_for_all::types::builder::OfaBuilderWrapper;
-use ibc_relayer_components::core::traits::error::HasErrorType;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 
 use crate::all_for_one::birelay::AfoCosmosBiRelay;

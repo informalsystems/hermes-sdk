@@ -1,16 +1,16 @@
 use alloc::collections::VecDeque;
 use core::mem;
-use ibc_relayer_components::relay::traits::components::ibc_message_sender::CanSendIbcMessages;
-use ibc_relayer_components::relay::traits::logs::logger::CanLogRelayTarget;
 
 use async_trait::async_trait;
+use cgp_core::traits::Async;
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
+use ibc_relayer_components::relay::traits::components::ibc_message_sender::CanSendIbcMessages;
+use ibc_relayer_components::relay::traits::logs::logger::CanLogRelayTarget;
 use ibc_relayer_components::relay::traits::target::ChainTarget;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;

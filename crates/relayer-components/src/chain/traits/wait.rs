@@ -1,10 +1,10 @@
 use core::time::Duration;
 
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::components::chain_status_querier::CanQueryChainHeight;
 use crate::chain::traits::types::height::HasHeightType;
-use crate::core::traits::error::HasErrorType;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::std_prelude::*;

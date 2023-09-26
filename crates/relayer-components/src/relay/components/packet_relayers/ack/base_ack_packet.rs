@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use cgp_core::traits::Async;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::message_builders::ack_packet::{
@@ -6,7 +7,6 @@ use crate::chain::traits::message_builders::ack_packet::{
 };
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::core::traits::sync::Async;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayer;

@@ -1,10 +1,11 @@
 /*!
 Helper functions for bootstrapping a consumer full node.
 */
-use eyre::eyre;
 use std::sync::{Arc, RwLock};
 use std::thread;
 use std::time::Duration;
+
+use eyre::eyre;
 use toml;
 use tracing::info;
 

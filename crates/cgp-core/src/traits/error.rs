@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use crate::core::traits::sync::Async;
+use crate::traits::sync::Async;
 
 /**
    This is used for contexts to declare that they have a _unique_ `Self::Error` type.
@@ -26,11 +26,11 @@ pub trait HasErrorType: Async {
 /**
    Used for injecting external error types into [`Self::Error`](HasErrorType::Error).
 
-   As an example, if `Context: InjectError<ParseIntError>`, then we would be
-   able to call `Context::inject_error(err)` for an error value
+   As an example, if `Context: CanRaiseError<ParseIntError>`, then we would be
+   able to call `Context::raise_error(err)` for an error value
    [`err: ParseIntError`](core::num::ParseIntError) and get back
    a [`Context::Error`](HasErrorType::Error) value.
 */
-pub trait InjectError<E>: HasErrorType {
-    fn inject_error(err: E) -> Self::Error;
+pub trait CanRaiseError<E>: HasErrorType {
+    fn raise_error(err: E) -> Self::Error;
 }

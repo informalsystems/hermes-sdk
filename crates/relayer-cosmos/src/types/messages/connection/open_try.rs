@@ -2,11 +2,13 @@ use core::time::Duration;
 
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::commitment::v1::MerklePrefix;
-use ibc_proto::ibc::core::connection::v1::Counterparty;
-use ibc_proto::ibc::core::connection::v1::MsgConnectionOpenTry as ProtoMsgConnectionOpenTry;
+use ibc_proto::ibc::core::connection::v1::{
+    Counterparty, MsgConnectionOpenTry as ProtoMsgConnectionOpenTry,
+};
 use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentPrefix;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
+use ibc_relayer_types::core::ics23_commitment::commitment::{
+    CommitmentPrefix, CommitmentProofBytes,
+};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::signer::Signer;

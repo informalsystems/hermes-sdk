@@ -1,4 +1,5 @@
-use crate::core::traits::error::InjectError;
+use cgp_core::traits::CanRaiseError;
+
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;
 
@@ -8,7 +9,7 @@ pub struct NonceMistmatchError<Nonce> {
 }
 
 pub trait HasNonceMismatchError:
-    HasTxTypes + InjectError<NonceMistmatchError<Self::Nonce>>
+    HasTxTypes + CanRaiseError<NonceMistmatchError<Self::Nonce>>
 {
     fn try_extract_nonce_mismatch_error(
         e: &Self::Error,

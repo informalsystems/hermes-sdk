@@ -3,9 +3,9 @@ use core::future::Future;
 use core::pin::Pin;
 
 use async_trait::async_trait;
+use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 
-use crate::core::traits::sync::Async;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::subscription::Subscription;
 use crate::std_prelude::*;

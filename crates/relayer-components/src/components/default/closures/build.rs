@@ -1,3 +1,6 @@
+use cgp_core::traits::has_components::HasComponents;
+use cgp_core::traits::HasErrorType;
+
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
@@ -8,8 +11,6 @@ use crate::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::components::default::build::DefaultBuildComponents;
-use crate::core::traits::component::HasComponents;
-use crate::core::traits::error::HasErrorType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::HasTwoWayRelay;
 

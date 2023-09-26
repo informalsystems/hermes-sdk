@@ -5,13 +5,13 @@
 */
 
 use core::time::Duration;
+
 use ibc_relayer::chain::handle::ChainHandle;
 use tracing::info;
 
 use crate::bootstrap::binary::connection::{bootstrap_connection, BootstrapConnectionOptions};
 use crate::error::Error;
-use crate::framework::base::HasOverrides;
-use crate::framework::base::TestConfigOverride;
+use crate::framework::base::{HasOverrides, TestConfigOverride};
 use crate::framework::binary::chain::{
     BinaryChainTest, ClientOptionsOverride, RelayerConfigOverride, RunBinaryChainTest,
 };

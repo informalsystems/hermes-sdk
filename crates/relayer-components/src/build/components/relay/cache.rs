@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 
 use crate::build::traits::cache::HasRelayCache;
 use crate::build::traits::components::relay_builder::RelayBuilder;
@@ -8,7 +9,6 @@ use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     TargetDstChainId, TargetDstClientId, TargetRelay, TargetSrcChainId, TargetSrcClientId,
 };
-use crate::core::traits::error::HasErrorType;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::std_prelude::*;
 

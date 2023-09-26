@@ -1,5 +1,5 @@
+use cgp_core::traits::Async;
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::target::ChainTarget;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;

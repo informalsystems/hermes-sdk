@@ -1,8 +1,8 @@
 use async_trait::async_trait;
+use cgp_core::traits::HasErrorType;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use ibc_relayer_components::build::types::aliases::{ChainIdA, ChainIdB, ClientIdA, ClientIdB};
-use ibc_relayer_components::core::traits::error::HasErrorType;
 
 use crate::all_for_one::birelay::AfoBiRelay;
 use crate::one_for_all::traits::builder::OfaBuilder;

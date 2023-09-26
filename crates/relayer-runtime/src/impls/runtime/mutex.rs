@@ -1,6 +1,6 @@
 use async_trait::async_trait;
+use cgp_core::traits::Async;
 use futures::lock::{Mutex, MutexGuard};
-use ibc_relayer_components::core::traits::sync::Async;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 
 use crate::types::runtime::TokioRuntimeContext;
