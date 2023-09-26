@@ -7,7 +7,7 @@ readme       = "README.md"
 keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
 repository   = "https://github.com/informalsystems/ibc-rs"
 authors      = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.68"
+rust-version = "1.72"
 description  = """
     Implementation of an IBC Relayer in Rust, as a library
 """
@@ -40,7 +40,7 @@ futures = "0.3"
 tracing = "0.1.36"
 opentelemetry = { version = "0.17.0", features = ["metrics"] }
 tonic = { version = "0.9", features = ["tls", "tls-roots"] }
-moka = { version = "0.10", features = ["future"] }
+moka = { version = "0.11", features = ["future"] }
 
 [dependencies.tendermint]
 version = "=0.33.0"
