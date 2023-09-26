@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 use core::iter;
-use eyre::eyre;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::light_client::AnyHeader;
@@ -39,7 +38,6 @@ pub async fn build_update_client_payload<Chain: ChainHandle>(
                 .chain(support.into_iter())
                 .map(|header| match header {
                     AnyHeader::Tendermint(header) => Ok(header),
-                    _ => Err(BaseError::generic(eyre!("expect tendermint header")).into()),
                 })
                 .collect::<Result<Vec<TendermintHeader>, Error>>()?;
 
