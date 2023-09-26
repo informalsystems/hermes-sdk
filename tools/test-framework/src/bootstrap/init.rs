@@ -4,7 +4,6 @@
 */
 
 use eyre::Report as Error;
-use ibc_relayer_cli::components::enable_ansi;
 use std::env;
 use std::fs;
 use std::sync::Once;
@@ -89,4 +88,9 @@ pub fn install_logger(with_color: bool) {
     let layer = ts::fmt::layer().with_ansi(with_color);
 
     ts::registry().with(env_filter).with(layer).init();
+}
+
+pub fn enable_ansi() -> bool {
+    use std::io::IsTerminal;
+    std::io::stdout().is_terminal() && std::io::stderr().is_terminal()
 }

@@ -1,4 +1,4 @@
-# Hermes IBC relayer
+# Hermes IBC relayer V2
 
 [![Cosmos ecosystem][cosmos-shield]][cosmos-link]
 

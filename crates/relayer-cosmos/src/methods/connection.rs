@@ -78,7 +78,6 @@ pub async fn build_connection_open_try_payload<Chain: ChainHandle>(
 
             let client_state = match any_client_state {
                 AnyClientState::Tendermint(client_state) => client_state,
-                _ => return Err(BaseError::generic(eyre!("expect tendermint client state")).into()),
             };
 
             let proof_client = proofs
@@ -150,7 +149,6 @@ pub async fn build_connection_open_ack_payload<Chain: ChainHandle>(
 
             let client_state = match any_client_state {
                 AnyClientState::Tendermint(client_state) => client_state,
-                _ => return Err(BaseError::generic(eyre!("expect tendermint client state")).into()),
             };
 
             let proof_client = proofs

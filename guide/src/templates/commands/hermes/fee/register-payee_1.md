@@ -1,1 +1,0 @@
-[[#BINARY hermes]][[#GLOBALOPTIONS]] fee register-payee --chain [[#CHAIN_ID]] --channel [[#CHANNEL_ID]] --port [[#PORT_ID]] --payee [[#PAYEE_ADDRESS]]

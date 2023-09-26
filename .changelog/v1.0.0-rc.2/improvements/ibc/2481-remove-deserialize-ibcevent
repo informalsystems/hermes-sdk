@@ -1,3 +1,0 @@
-- Remove Deserialize from IbcEvent and variants ([#2481])
-
-[#2481]: https://github.com/informalsystems/ibc-rs/issues/2481

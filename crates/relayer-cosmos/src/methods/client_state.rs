@@ -1,4 +1,3 @@
-use eyre::eyre;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryClientStateRequest, QueryHeight};
 use ibc_relayer::client_state::AnyClientState;
@@ -29,7 +28,6 @@ pub async fn query_client_state<Chain: ChainHandle>(
 
             match client_state {
                 AnyClientState::Tendermint(client_state) => Ok(client_state),
-                _ => Err(BaseError::generic(eyre!("expected tendermint client state")).into()),
             }
         })
         .await
