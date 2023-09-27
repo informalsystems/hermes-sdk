@@ -1,9 +1,6 @@
-use core::marker::PhantomData;
-
 use async_trait::async_trait;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
 use cgp_core::traits::Async;
+use cgp_macros::derive_component;
 
 use crate::chain::traits::components::message_sender::InjectMismatchIbcEventsCountError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -14,36 +11,7 @@ use crate::std_prelude::*;
 
 pub struct MainSink;
 
-pub struct IbcMessageSenderComponent<Sink>(pub PhantomData<Sink>);
-
-#[async_trait]
-pub trait IbcMessageSender<Relay, Sink, Target>: Async
-where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-{
-    async fn send_messages(
-        relay: &Relay,
-        messages: Vec<Message<Target::TargetChain>>,
-    ) -> Result<Vec<Vec<Event<Target::TargetChain>>>, Relay::Error>;
-}
-
-#[async_trait]
-impl<Component, Relay, Sink, Target> IbcMessageSender<Relay, Sink, Target> for Component
-where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-    Component: DelegateComponent<IbcMessageSenderComponent<Sink>>,
-    Component::Delegate: IbcMessageSender<Relay, Sink, Target>,
-{
-    async fn send_messages(
-        relay: &Relay,
-        messages: Vec<Message<Target::TargetChain>>,
-    ) -> Result<Vec<Vec<Event<Target::TargetChain>>>, Relay::Error> {
-        Component::Delegate::send_messages(relay, messages).await
-    }
-}
-
+#[derive_component(IbcMessageSenderComponent<Sink>, IbcMessageSender<Relay>)]
 #[async_trait]
 pub trait CanSendIbcMessages<Sink, Target>: HasRelayChains
 where
@@ -54,22 +22,6 @@ where
         target: Target,
         messages: Vec<Message<Target::TargetChain>>,
     ) -> Result<Vec<Vec<Event<Target::TargetChain>>>, Self::Error>;
-}
-
-#[async_trait]
-impl<Relay, Sink, Target> CanSendIbcMessages<Sink, Target> for Relay
-where
-    Relay: HasRelayChains + HasComponents,
-    Target: ChainTarget<Relay>,
-    Relay::Components: IbcMessageSender<Relay, Sink, Target>,
-{
-    async fn send_messages(
-        &self,
-        _target: Target,
-        messages: Vec<Message<Target::TargetChain>>,
-    ) -> Result<Vec<Vec<Event<Target::TargetChain>>>, Self::Error> {
-        Relay::Components::send_messages(self, messages).await
-    }
 }
 
 #[async_trait]

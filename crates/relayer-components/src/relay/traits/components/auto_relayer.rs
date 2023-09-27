@@ -1,35 +1,10 @@
 use async_trait::async_trait;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
 use cgp_core::traits::{Async, HasErrorType};
+use cgp_macros::derive_component;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;
-
-pub struct AutoRelayerComponent;
-
-/// Provider trait for the `CanAutoRelay` trait.
-#[async_trait]
-pub trait AutoRelayer<Relay>: Async
-where
-    Relay: HasErrorType,
-{
-    /// Starts the auto-relaying process for the given `Relay`.
-    async fn auto_relay(relay: &Relay) -> Result<(), Relay::Error>;
-}
-
-#[async_trait]
-impl<Relay, Component> AutoRelayer<Relay> for Component
-where
-    Relay: HasErrorType,
-    Component: DelegateComponent<AutoRelayerComponent>,
-    Component::Delegate: AutoRelayer<Relay>,
-{
-    async fn auto_relay(relay: &Relay) -> Result<(), Relay::Error> {
-        Component::Delegate::auto_relay(relay).await
-    }
-}
 
 /// Trait that encodes the capability of a relayer to relay
 /// in a "set it and forget it" manner. This trait is agnostic
@@ -42,21 +17,11 @@ where
 /// instead implemented for a one-way relay context, then starting the
 /// auto-relay process will relay in one direction as appropriate for
 /// the implementing context.
+#[derive_component(AutoRelayerComponent, AutoRelayer<Relay>)]
 #[async_trait]
 pub trait CanAutoRelay: HasErrorType {
     /// Starts the auto-relaying process.
     async fn auto_relay(&self) -> Result<(), Self::Error>;
-}
-
-#[async_trait]
-impl<Relay> CanAutoRelay for Relay
-where
-    Relay: HasErrorType + HasComponents,
-    Relay::Components: AutoRelayer<Relay>,
-{
-    async fn auto_relay(&self) -> Result<(), Self::Error> {
-        Relay::Components::auto_relay(self).await
-    }
 }
 
 /// Similar to the `CanAutoRelay` trait, the main differences are that this

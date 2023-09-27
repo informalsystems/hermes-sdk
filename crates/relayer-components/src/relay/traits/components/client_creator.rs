@@ -1,6 +1,5 @@
 use async_trait::async_trait;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
+use cgp_macros::derive_component;
 
 use crate::chain::traits::client::create::HasCreateClientOptions;
 use crate::chain::types::aliases::ClientId;
@@ -8,45 +7,7 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;
 
-pub struct ClientCreatorComponent;
-
-#[async_trait]
-pub trait ClientCreator<Relay, Target>
-where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-    Target::CounterpartyChain: HasCreateClientOptions<Target::TargetChain>,
-{
-    async fn create_client(
-        target_chain: &Target::TargetChain,
-        counterparty_chain: &Target::CounterpartyChain,
-        create_client_options: &<Target::CounterpartyChain as HasCreateClientOptions<
-            Target::TargetChain,
-        >>::CreateClientPayloadOptions,
-    ) -> Result<ClientId<Target::TargetChain, Target::CounterpartyChain>, Relay::Error>;
-}
-
-#[async_trait]
-impl<Relay, Target, Component> ClientCreator<Relay, Target> for Component
-where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-    Target::CounterpartyChain: HasCreateClientOptions<Target::TargetChain>,
-    Component: DelegateComponent<ClientCreatorComponent>,
-    Component::Delegate: ClientCreator<Relay, Target>,
-{
-    async fn create_client(
-        target_chain: &Target::TargetChain,
-        counterparty_chain: &Target::CounterpartyChain,
-        create_client_options: &<Target::CounterpartyChain as HasCreateClientOptions<
-            Target::TargetChain,
-        >>::CreateClientPayloadOptions,
-    ) -> Result<ClientId<Target::TargetChain, Target::CounterpartyChain>, Relay::Error> {
-        Component::Delegate::create_client(target_chain, counterparty_chain, create_client_options)
-            .await
-    }
-}
-
+#[derive_component(ClientCreatorComponent, ClientCreator<Relay>)]
 #[async_trait]
 pub trait CanCreateClient<Target>: HasRelayChains
 where
@@ -73,25 +34,4 @@ where
             Target::TargetChain,
         >>::CreateClientPayloadOptions,
     ) -> Result<ClientId<Target::TargetChain, Target::CounterpartyChain>, Self::Error>;
-}
-
-#[async_trait]
-impl<Relay, Target> CanCreateClient<Target> for Relay
-where
-    Relay: HasRelayChains + HasComponents,
-    Target: ChainTarget<Relay>,
-    Target::CounterpartyChain: HasCreateClientOptions<Target::TargetChain>,
-    Relay::Components: ClientCreator<Relay, Target>,
-{
-    async fn create_client(
-        _target: Target,
-        target_chain: &Target::TargetChain,
-        counterparty_chain: &Target::CounterpartyChain,
-        create_client_options: &<Target::CounterpartyChain as HasCreateClientOptions<
-            Target::TargetChain,
-        >>::CreateClientPayloadOptions,
-    ) -> Result<ClientId<Target::TargetChain, Target::CounterpartyChain>, Relay::Error> {
-        Relay::Components::create_client(target_chain, counterparty_chain, create_client_options)
-            .await
-    }
 }

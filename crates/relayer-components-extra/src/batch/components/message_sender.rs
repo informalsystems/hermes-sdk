@@ -29,6 +29,7 @@ where
 {
     async fn send_messages(
         context: &Relay,
+        _target: Target,
         messages: Vec<TargetChain::Message>,
     ) -> Result<Vec<Vec<TargetChain::Event>>, Relay::Error> {
         let (result_sender, result_receiver) = Runtime::new_channel_once();
