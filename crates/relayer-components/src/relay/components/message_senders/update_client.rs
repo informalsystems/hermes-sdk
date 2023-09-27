@@ -27,6 +27,7 @@ where
 {
     async fn send_messages(
         relay: &Relay,
+        target: Target,
         messages: Vec<TargetChain::Message>,
     ) -> Result<Vec<Vec<TargetChain::Event>>, Relay::Error> {
         let update_heights: BTreeSet<CounterpartyChain::Height> = messages
@@ -61,7 +62,7 @@ where
 
         in_messages.extend(messages);
 
-        let in_events = InSender::send_messages(relay, in_messages).await?;
+        let in_events = InSender::send_messages(relay, target, in_messages).await?;
 
         let events = in_events.into_iter().skip(update_messages_count).collect();
 

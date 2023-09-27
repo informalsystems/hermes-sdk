@@ -36,6 +36,7 @@ where
     TargetChain::ClientId: Clone,
 {
     async fn create_client(
+        _target: Target,
         target_chain: &TargetChain,
         counterparty_chain: &CounterpartyChain,
         create_client_options: &CounterpartyChain::CreateClientPayloadOptions,

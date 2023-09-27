@@ -1,50 +1,11 @@
 use async_trait::async_trait;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
+use cgp_macros::derive_component;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;
 
-pub struct TxSubmitterComponent;
-
-#[async_trait]
-pub trait TxSubmitter<TxContext>
-where
-    TxContext: HasTxTypes,
-{
-    async fn submit_tx(
-        context: &TxContext,
-        tx: &TxContext::Transaction,
-    ) -> Result<TxContext::TxHash, TxContext::Error>;
-}
-
+#[derive_component(TxSubmitterComponent, TxSubmitter<TxContext>)]
 #[async_trait]
 pub trait CanSubmitTx: HasTxTypes {
     async fn submit_tx(&self, tx: &Self::Transaction) -> Result<Self::TxHash, Self::Error>;
-}
-
-#[async_trait]
-impl<TxContext, Component> TxSubmitter<TxContext> for Component
-where
-    TxContext: HasTxTypes,
-    Component: DelegateComponent<TxSubmitterComponent>,
-    Component::Delegate: TxSubmitter<TxContext>,
-{
-    async fn submit_tx(
-        context: &TxContext,
-        tx: &TxContext::Transaction,
-    ) -> Result<TxContext::TxHash, TxContext::Error> {
-        Component::Delegate::submit_tx(context, tx).await
-    }
-}
-
-#[async_trait]
-impl<TxContext> CanSubmitTx for TxContext
-where
-    TxContext: HasTxTypes + HasComponents,
-    TxContext::Components: TxSubmitter<TxContext>,
-{
-    async fn submit_tx(&self, tx: &Self::Transaction) -> Result<Self::TxHash, Self::Error> {
-        TxContext::Components::submit_tx(self, tx).await
-    }
 }
