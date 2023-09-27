@@ -20,6 +20,7 @@ where
 {
     async fn send_messages(
         relay: &Relay,
+        _target: Target,
         messages: Vec<TargetChain::Message>,
     ) -> Result<Vec<Vec<TargetChain::Event>>, Relay::Error> {
         let events = Target::target_chain(relay)

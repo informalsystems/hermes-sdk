@@ -3,47 +3,12 @@
 */
 
 use async_trait::async_trait;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::traits::HasErrorType;
+use cgp_macros::derive_component;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::std_prelude::*;
-
-pub struct MessageSenderComponent;
-
-/**
-   The provider trait for [`CanSendMessages`].
-*/
-#[async_trait]
-pub trait MessageSender<Chain>: Async
-where
-    Chain: HasMessageType + HasEventType + HasErrorType,
-{
-    /**
-       Corresponds to [`CanSendMessages::send_messages`]
-    */
-    async fn send_messages(
-        chain: &Chain,
-        messages: Vec<Chain::Message>,
-    ) -> Result<Vec<Vec<Chain::Event>>, Chain::Error>;
-}
-
-#[async_trait]
-impl<Chain, Component> MessageSender<Chain> for Component
-where
-    Chain: HasMessageType + HasEventType + HasErrorType,
-    Component: DelegateComponent<MessageSenderComponent>,
-    Component::Delegate: MessageSender<Chain>,
-{
-    async fn send_messages(
-        chain: &Chain,
-        messages: Vec<Chain::Message>,
-    ) -> Result<Vec<Vec<Chain::Event>>, Chain::Error> {
-        Component::Delegate::send_messages(chain, messages).await
-    }
-}
 
 /**
    This is a simplified interface offered by a chain context or a transaction
@@ -95,6 +60,7 @@ where
    context. In other words, both the chain context and the transaction context
    provides the same interface for sending messages using this trait.
 */
+#[derive_component(MessageSenderComponent, MessageSender<Chain>)]
 #[async_trait]
 pub trait CanSendMessages: HasMessageType + HasEventType + HasErrorType {
     /**
@@ -117,20 +83,6 @@ pub trait CanSendMessages: HasMessageType + HasEventType + HasErrorType {
         &self,
         messages: Vec<Self::Message>,
     ) -> Result<Vec<Vec<Self::Event>>, Self::Error>;
-}
-
-#[async_trait]
-impl<Chain> CanSendMessages for Chain
-where
-    Chain: HasMessageType + HasEventType + HasErrorType + HasComponents,
-    Chain::Components: MessageSender<Chain>,
-{
-    async fn send_messages(
-        &self,
-        messages: Vec<Self::Message>,
-    ) -> Result<Vec<Vec<Self::Event>>, Self::Error> {
-        Chain::Components::send_messages(self, messages).await
-    }
 }
 
 pub trait InjectMismatchIbcEventsCountError: HasErrorType {
