@@ -27,7 +27,7 @@ pub fn derive_provider_trait(
         let context_constraints =
             iter_parse_and_replace_self_type(provider_trait.supertraits.clone(), context_type)?;
 
-        provider_trait.supertraits.clear();
+        provider_trait.supertraits = parse_quote!(cgp_core::traits::Async);
 
         if !context_constraints.is_empty() {
             if let Some(where_clause) = &mut provider_trait.generics.where_clause {

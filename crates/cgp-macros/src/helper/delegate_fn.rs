@@ -10,7 +10,7 @@ pub fn derive_delegated_fn_impl(sig: &Signature, delegator: &TypePath) -> ImplIt
     let mut fn_generics = sig.generics.clone();
     fn_generics.where_clause = None;
 
-    let args = signature_to_args(&sig);
+    let args = signature_to_args(sig);
 
     let await_expr: TokenStream = if sig.asyncness.is_some() {
         quote!( .await )
