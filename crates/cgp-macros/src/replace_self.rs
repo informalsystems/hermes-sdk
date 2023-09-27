@@ -2,6 +2,16 @@ use proc_macro2::{Group, Ident, TokenStream, TokenTree};
 use quote::{format_ident, ToTokens};
 use syn::parse::Parse;
 
+pub fn iter_parse_and_replace_self_type<I, T>(vals: I, replaced_ident: &Ident) -> syn::Result<I>
+where
+    I: IntoIterator<Item = T> + FromIterator<T>,
+    T: ToTokens + Parse,
+{
+    vals.into_iter()
+        .map(|val| parse_and_replace_self_type(&val, replaced_ident))
+        .collect()
+}
+
 pub fn parse_and_replace_self_type<T>(val: &T, replaced_ident: &Ident) -> syn::Result<T>
 where
     T: ToTokens + Parse,

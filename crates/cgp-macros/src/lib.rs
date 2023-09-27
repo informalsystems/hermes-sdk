@@ -5,13 +5,10 @@ mod replace_self;
 use proc_macro::TokenStream;
 use quote::ToTokens;
 use syn::parse::{Parse, ParseStream};
-use syn::punctuated::Punctuated;
-use syn::token::{Gt, Lt, Where};
-use syn::{
-    parse_macro_input, parse_quote, GenericParam, Ident, ItemTrait, WhereClause, WherePredicate,
-};
+use syn::token::{Gt, Lt};
+use syn::{parse_macro_input, parse_quote, Ident, ItemTrait};
 
-use crate::replace_self::parse_and_replace_self_type;
+use crate::replace_self::{iter_parse_and_replace_self_type, parse_and_replace_self_type};
 
 #[proc_macro_attribute]
 pub fn derive_component(attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -64,30 +61,28 @@ fn to_provider_trait(
         provider_trait
             .generics
             .params
-            .insert(0, GenericParam::Type(context_type.clone().into()));
+            .insert(0, parse_quote!(#context_type));
     }
 
     // Turn the supertrait constraints into `Context` constraints in the `where` clause
     {
-        let context_constraints = provider_trait.supertraits.clone();
+        let context_constraints =
+            iter_parse_and_replace_self_type(provider_trait.supertraits.clone(), context_type)?;
 
         provider_trait.supertraits.clear();
 
-        let context_predicate: WherePredicate = parse_quote! {
-            #context_type : #context_constraints
-        };
-
         if let Some(where_clause) = &mut provider_trait.generics.where_clause {
-            where_clause
-                .predicates
-                .extend(core::iter::once(context_predicate))
-        } else {
-            let mut predicates = Punctuated::new();
-            predicates.push(context_predicate);
+            let mut predicates =
+                iter_parse_and_replace_self_type(where_clause.predicates.clone(), context_type)?;
 
-            provider_trait.generics.where_clause = Some(WhereClause {
-                where_token: Where::default(),
-                predicates,
+            predicates.push(parse_quote! {
+                #context_type : #context_constraints
+            });
+
+            where_clause.predicates = predicates;
+        } else {
+            provider_trait.generics.where_clause = Some(parse_quote! {
+                where #context_type : #context_constraints
             });
         }
     }
@@ -95,7 +90,7 @@ fn to_provider_trait(
     // Replace self type and argument into context type argument
     {
         for item in provider_trait.items.iter_mut() {
-            let replaced_item = parse_and_replace_self_type(item, &context_type)?;
+            let replaced_item = parse_and_replace_self_type(item, context_type)?;
 
             *item = replaced_item;
         }
