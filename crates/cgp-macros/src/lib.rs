@@ -6,9 +6,11 @@ use proc_macro::TokenStream;
 use quote::ToTokens;
 use syn::parse::{Parse, ParseStream};
 use syn::token::{Gt, Lt};
-use syn::{parse_macro_input, parse_quote, Ident, ItemTrait};
+use syn::{parse_macro_input, parse_quote, Ident, ItemTrait, TraitItem};
 
-use crate::replace_self::{iter_parse_and_replace_self_type, parse_and_replace_self_type};
+use crate::replace_self::{
+    iter_parse_and_replace_self_type, parse_and_replace_self_type, replace_self_receiver,
+};
 
 #[proc_macro_attribute]
 pub fn derive_component(attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -90,7 +92,11 @@ fn to_provider_trait(
     // Replace self type and argument into context type argument
     {
         for item in provider_trait.items.iter_mut() {
-            let replaced_item = parse_and_replace_self_type(item, context_type)?;
+            let mut replaced_item = parse_and_replace_self_type(item, context_type)?;
+
+            if let TraitItem::Fn(func) = &mut replaced_item {
+                replace_self_receiver(func, context_type);
+            }
 
             *item = replaced_item;
         }

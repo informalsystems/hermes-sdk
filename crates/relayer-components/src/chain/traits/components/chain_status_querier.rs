@@ -10,17 +10,6 @@ use crate::std_prelude::*;
 
 pub struct ChainStatusQuerierComponent;
 
-/**
-   The provider trait for [`ChainStatusQuerier`].
-*/
-#[async_trait]
-pub trait ChainStatusQuerier<Chain>
-where
-    Chain: HasChainStatusType + HasErrorType,
-{
-    async fn query_chain_status(chain: &Chain) -> Result<Chain::ChainStatus, Chain::Error>;
-}
-
 #[async_trait]
 impl<Chain, Component> ChainStatusQuerier<Chain> for Component
 where
@@ -37,7 +26,7 @@ where
    Implemented by a chain context to provide method for querying the
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
-#[derive_component(ChainStatusQuerier2<Chain>)]
+#[derive_component(ChainStatusQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     /**
