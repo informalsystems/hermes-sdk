@@ -1,7 +1,17 @@
-use proc_macro2::{Group, Ident, Span, TokenStream, TokenTree};
+use proc_macro2::{Group, Ident, TokenStream, TokenTree};
+use quote::{format_ident, ToTokens};
+use syn::parse::Parse;
 
-pub fn replace_self(stream: TokenStream, replaced_ident: &Ident) -> TokenStream {
-    let self_type = Ident::new("Self", Span::mixed_site());
+pub fn parse_and_replace_self_type<T>(val: &T, replaced_ident: &Ident) -> syn::Result<T>
+where
+    T: ToTokens + Parse,
+{
+    let stream = replace_self_type(val.to_token_stream(), replaced_ident);
+    syn::parse2(stream)
+}
+
+pub fn replace_self_type(stream: TokenStream, replaced_ident: &Ident) -> TokenStream {
+    let self_type = format_ident!("Self");
 
     stream
         .into_iter()
@@ -14,7 +24,7 @@ pub fn replace_self(stream: TokenStream, replaced_ident: &Ident) -> TokenStream 
                 }
             }
             TokenTree::Group(group) => {
-                let replaced_stream = replace_self(group.stream(), replaced_ident);
+                let replaced_stream = replace_self_type(group.stream(), replaced_ident);
                 let replace_group = Group::new(group.delimiter(), replaced_stream);
 
                 TokenTree::Group(replace_group)
