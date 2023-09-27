@@ -10,7 +10,7 @@ use crate::std_prelude::*;
    Implemented by a chain context to provide method for querying the
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
-#[derive_component(ChainStatusQuerier<Chain>)]
+#[derive_component(ChainStatusQuerierComponent, ChainStatusQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     /**
