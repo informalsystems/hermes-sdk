@@ -7,9 +7,6 @@ use crate::helper::signature_args::signature_to_args;
 pub fn derive_delegated_fn_impl(sig: &Signature, delegator: &TypePath) -> ImplItemFn {
     let fn_name = &sig.ident;
 
-    let mut fn_generics = sig.generics.clone();
-    fn_generics.where_clause = None;
-
     let args = signature_to_args(sig);
 
     let await_expr: TokenStream = if sig.asyncness.is_some() {
@@ -19,7 +16,7 @@ pub fn derive_delegated_fn_impl(sig: &Signature, delegator: &TypePath) -> ImplIt
     };
 
     let body = parse_quote!({
-        #delegator :: #fn_name #fn_generics (
+        #delegator :: #fn_name (
             #args
         ) #await_expr
     });

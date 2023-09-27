@@ -1,6 +1,6 @@
-use proc_macro::TokenStream;
+use proc_macro2::TokenStream;
 use quote::ToTokens;
-use syn::{parse_macro_input, ItemTrait};
+use syn::ItemTrait;
 
 use crate::helper::component_name::derive_component_name_struct;
 use crate::helper::component_spec::ComponentSpec;
@@ -9,9 +9,9 @@ use crate::helper::provider_impl::derive_provider_impl;
 use crate::helper::provider_trait::derive_provider_trait;
 
 pub fn derive_component(attr: TokenStream, item: TokenStream) -> TokenStream {
-    let spec = parse_macro_input!(attr as ComponentSpec);
+    let spec: ComponentSpec = syn::parse2(attr).unwrap();
 
-    let consumer_trait = parse_macro_input!(item as ItemTrait);
+    let consumer_trait: ItemTrait = syn::parse2(item).unwrap();
 
     let provider_name = &spec.provider_name;
     let context_type = &spec.context_type;
