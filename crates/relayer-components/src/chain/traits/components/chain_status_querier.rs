@@ -1,23 +1,10 @@
 use async_trait::async_trait;
-use cgp_core::traits::delegate_component::DelegateComponent;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::status::HasChainStatusType;
 use crate::std_prelude::*;
-
-#[async_trait]
-impl<Chain, Component> ChainStatusQuerier<Chain> for Component
-where
-    Chain: HasChainStatusType + HasErrorType,
-    Component: DelegateComponent<ChainStatusQuerierComponent>,
-    Component::Delegate: ChainStatusQuerier<Chain>,
-{
-    async fn query_chain_status(chain: &Chain) -> Result<Chain::ChainStatus, Chain::Error> {
-        Component::Delegate::query_chain_status(chain).await
-    }
-}
 
 /**
    Implemented by a chain context to provide method for querying the
