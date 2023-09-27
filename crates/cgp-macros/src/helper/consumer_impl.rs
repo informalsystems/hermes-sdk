@@ -1,11 +1,13 @@
-use proc_macro2::{Span, TokenStream};
+use proc_macro2::TokenStream;
 use quote::quote;
 use syn::punctuated::Punctuated;
-use syn::token::{Brace, Comma, For, Impl, Plus};
+use syn::token::{Brace, For, Impl, Plus};
 use syn::{
-    parse_quote, FnArg, Ident, ImplItem, ImplItemFn, ItemImpl, ItemTrait, Path, Signature,
-    TraitItem, TraitItemFn, TypeParamBound, Visibility,
+    parse_quote, Ident, ImplItem, ImplItemFn, ItemImpl, ItemTrait, Path, TraitItem, TraitItemFn,
+    TypeParamBound, Visibility,
 };
+
+use crate::helper::signature_args::signature_to_args;
 
 pub fn derive_consumer_impl(
     consumer_trait: &ItemTrait,
@@ -124,22 +126,4 @@ pub fn derive_consumer_impl_fn(func: &TraitItemFn, context_type: &Ident) -> Impl
         sig: func.sig.clone(),
         block: body,
     }
-}
-
-pub fn signature_to_args(sig: &Signature) -> Punctuated<Ident, Comma> {
-    let args = sig
-        .inputs
-        .iter()
-        .map(|arg| -> Ident {
-            match arg {
-                FnArg::Receiver(_) => Ident::new("self", Span::call_site()),
-                FnArg::Typed(pat) => {
-                    let ident_pat = &pat.pat;
-                    parse_quote!( #ident_pat )
-                }
-            }
-        })
-        .collect();
-
-    args
 }

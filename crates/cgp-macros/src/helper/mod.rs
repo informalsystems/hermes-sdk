@@ -6,4 +6,5 @@ pub mod provider_spec;
 pub mod provider_trait;
 pub mod replace_self_receiver;
 pub mod replace_self_type;
+pub mod signature_args;
 pub mod snake_case;
