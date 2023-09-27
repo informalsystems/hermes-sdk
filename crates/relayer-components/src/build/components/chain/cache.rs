@@ -23,6 +23,7 @@ where
 {
     async fn build_chain(
         build: &Build,
+        target: Target,
         chain_id: &TargetChainId<Build, Target>,
     ) -> Result<TargetChain<Build, Target>, Build::Error> {
         let mut cache = Build::Runtime::acquire_mutex(build.chain_cache()).await;
@@ -30,7 +31,7 @@ where
         if let Some(chain) = cache.get(chain_id) {
             Ok(chain.clone())
         } else {
-            let chain = InBuilder::build_chain(build, chain_id).await?;
+            let chain = InBuilder::build_chain(build, target, chain_id).await?;
             cache.insert(chain_id.clone(), chain.clone());
 
             Ok(chain)
