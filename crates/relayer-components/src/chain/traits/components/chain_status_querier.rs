@@ -1,6 +1,5 @@
 use async_trait::async_trait;
 use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 
@@ -46,17 +45,6 @@ pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
         from the chain query.
     */
     async fn query_chain_status(&self) -> Result<Self::ChainStatus, Self::Error>;
-}
-
-#[async_trait]
-impl<Chain> CanQueryChainStatus for Chain
-where
-    Chain: HasChainStatusType + HasErrorType + HasComponents,
-    Chain::Components: ChainStatusQuerier<Chain>,
-{
-    async fn query_chain_status(&self) -> Result<Chain::ChainStatus, Chain::Error> {
-        Chain::Components::query_chain_status(self).await
-    }
 }
 
 #[async_trait]

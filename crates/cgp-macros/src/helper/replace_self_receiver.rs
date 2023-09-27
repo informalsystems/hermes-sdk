@@ -1,4 +1,4 @@
-use proc_macro2::{Ident, Span};
+use proc_macro2::Ident;
 use syn::{parse_quote, FnArg, Receiver, TraitItemFn};
 
 use crate::helper::snake_case::to_snake_case;

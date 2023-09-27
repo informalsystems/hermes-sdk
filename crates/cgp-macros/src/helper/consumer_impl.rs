@@ -1,11 +1,11 @@
+use proc_macro2::{Span, TokenStream};
+use quote::quote;
 use syn::punctuated::Punctuated;
-use syn::token::{Brace, For, Impl, Plus};
+use syn::token::{Brace, Comma, For, Impl, Plus};
 use syn::{
-    parse_quote, Ident, ImplItemFn, ItemImpl, ItemTrait, Path, Signature, TraitItemFn,
-    TypeParamBound, WherePredicate,
+    parse_quote, FnArg, Ident, ImplItem, ImplItemFn, ItemImpl, ItemTrait, Path, Signature,
+    TraitItem, TraitItemFn, TypeParamBound, Visibility,
 };
-
-use crate::helper::component_name::provider_to_component_name;
 
 pub fn derive_consumer_impl(
     consumer_trait: &ItemTrait,
@@ -22,51 +22,67 @@ pub fn derive_consumer_impl(
         let mut provider_generics = impl_generics.clone();
         provider_generics.where_clause = None;
 
-        let supertrait_constraints = consumer_trait.supertraits.clone();
+        {
+            let supertrait_constraints = consumer_trait.supertraits.clone();
 
-        if !supertrait_constraints.is_empty() {
-            if let Some(where_clause) = &mut impl_generics.where_clause {
-                where_clause.predicates.push(parse_quote! {
-                    #context_type : #supertrait_constraints
-                });
-            } else {
-                impl_generics.where_clause = Some(parse_quote! {
-                    where #context_type : #supertrait_constraints
-                });
+            if !supertrait_constraints.is_empty() {
+                if let Some(where_clause) = &mut impl_generics.where_clause {
+                    where_clause.predicates.push(parse_quote! {
+                        #context_type : #supertrait_constraints
+                    });
+                } else {
+                    impl_generics.where_clause = Some(parse_quote! {
+                        where #context_type : #supertrait_constraints
+                    });
+                }
             }
         }
 
-        let has_component_constraint: Punctuated<TypeParamBound, Plus> = parse_quote! {
-            cgp_core::traits::HasComponents
-        };
+        {
+            let has_component_constraint: Punctuated<TypeParamBound, Plus> = parse_quote! {
+                cgp_core::traits::HasComponents
+            };
 
-        let provider_constraint: Punctuated<TypeParamBound, Plus> = parse_quote! {
-            #provider_name #provider_generics
-        };
+            let provider_constraint: Punctuated<TypeParamBound, Plus> = parse_quote! {
+                #provider_name #provider_generics
+            };
 
-        if let Some(where_clause) = &mut impl_generics.where_clause {
-            where_clause.predicates.push(parse_quote! {
-                #context_type : #has_component_constraint
-            });
+            if let Some(where_clause) = &mut impl_generics.where_clause {
+                where_clause.predicates.push(parse_quote! {
+                    #context_type : #has_component_constraint
+                });
 
-            where_clause.predicates.push(parse_quote! {
-                #context_type :: Components : #provider_constraint
-            });
-        } else {
-            impl_generics.where_clause = Some(parse_quote! {
-                where
-                    #context_type : #has_component_constraint,
+                where_clause.predicates.push(parse_quote! {
                     #context_type :: Components : #provider_constraint
-            });
+                });
+            } else {
+                impl_generics.where_clause = Some(parse_quote! {
+                    where
+                        #context_type : #has_component_constraint,
+                        #context_type :: Components : #provider_constraint
+                });
+            }
         }
 
         impl_generics
     };
 
-    let mut trait_generics = consumer_trait.generics.clone();
-    trait_generics.where_clause = None;
+    let mut impl_fns: Vec<ImplItem> = Vec::new();
 
-    let trait_path: Path = parse_quote!( #consumer_name #trait_generics );
+    for trait_item in consumer_trait.items.iter() {
+        if let TraitItem::Fn(trait_fn) = trait_item {
+            let impl_fn = derive_consumer_impl_fn(trait_fn, context_type);
+
+            impl_fns.push(ImplItem::Fn(impl_fn))
+        }
+    }
+
+    let trait_path: Path = {
+        let mut trait_generics = consumer_trait.generics.clone();
+        trait_generics.where_clause = None;
+
+        parse_quote!( #consumer_name #trait_generics )
+    };
 
     let impl_block = ItemImpl {
         attrs: consumer_trait.attrs.clone(),
@@ -77,24 +93,57 @@ pub fn derive_consumer_impl(
         trait_: Some((None, trait_path, For::default())),
         self_ty: Box::new(parse_quote!(#context_type)),
         brace_token: Brace::default(),
-        items: Vec::new(),
+        items: impl_fns,
     };
 
     Ok(impl_block)
 }
 
-pub fn derive_consumer_impl_fn(
-    func: &TraitItemFn,
-    consumer_name: &Ident,
-    context_type: &Ident,
-) -> ImplItemFn {
-    todo!()
+pub fn derive_consumer_impl_fn(func: &TraitItemFn, context_type: &Ident) -> ImplItemFn {
+    let fn_name = &func.sig.ident;
+
+    let mut fn_generics = func.sig.generics.clone();
+    fn_generics.where_clause = None;
+
+    let args = signature_to_args(&func.sig);
+
+    let await_expr: TokenStream = if func.sig.asyncness.is_some() {
+        quote!( .await )
+    } else {
+        TokenStream::new()
+    };
+
+    let body = parse_quote!({
+        #context_type :: Components :: #fn_name #fn_generics (
+            #args
+        ) #await_expr
+    });
+
+    let impl_fn = ImplItemFn {
+        attrs: func.attrs.clone(),
+        vis: Visibility::Inherited,
+        defaultness: None,
+        sig: func.sig.clone(),
+        block: body,
+    };
+
+    impl_fn
 }
 
-pub fn signature_to_method_call(
-    sig: Signature,
-    consumer_name: &Ident,
-    context_type: &Ident,
-) -> ImplItemFn {
-    todo!()
+pub fn signature_to_args(sig: &Signature) -> Punctuated<Ident, Comma> {
+    let args = sig
+        .inputs
+        .iter()
+        .map(|arg| -> Ident {
+            match arg {
+                FnArg::Receiver(_) => Ident::new("self", Span::call_site()),
+                FnArg::Typed(pat) => {
+                    let ident_pat = &pat.pat;
+                    parse_quote!( #ident_pat )
+                }
+            }
+        })
+        .collect();
+
+    args
 }
