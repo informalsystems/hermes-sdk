@@ -1,13 +1,8 @@
-use proc_macro2::TokenStream;
-use quote::quote;
 use syn::punctuated::Punctuated;
 use syn::token::{Brace, For, Impl, Plus};
-use syn::{
-    parse_quote, Ident, ImplItem, ImplItemFn, ItemImpl, ItemTrait, Path, TraitItem, TraitItemFn,
-    TypeParamBound, Visibility,
-};
+use syn::{parse_quote, Ident, ImplItem, ItemImpl, ItemTrait, Path, TraitItem, TypeParamBound};
 
-use crate::helper::signature_args::signature_to_args;
+use crate::helper::delegate_fn::derive_delegated_fn_impl;
 
 pub fn derive_consumer_impl(
     consumer_trait: &ItemTrait,
@@ -73,7 +68,8 @@ pub fn derive_consumer_impl(
 
     for trait_item in consumer_trait.items.iter() {
         if let TraitItem::Fn(trait_fn) = trait_item {
-            let impl_fn = derive_consumer_impl_fn(trait_fn, context_type);
+            let impl_fn =
+                derive_delegated_fn_impl(&trait_fn.sig, &parse_quote!(#context_type :: Components));
 
             impl_fns.push(ImplItem::Fn(impl_fn))
         }
@@ -96,34 +92,5 @@ pub fn derive_consumer_impl(
         self_ty: Box::new(parse_quote!(#context_type)),
         brace_token: Brace::default(),
         items: impl_fns,
-    }
-}
-
-pub fn derive_consumer_impl_fn(func: &TraitItemFn, context_type: &Ident) -> ImplItemFn {
-    let fn_name = &func.sig.ident;
-
-    let mut fn_generics = func.sig.generics.clone();
-    fn_generics.where_clause = None;
-
-    let args = signature_to_args(&func.sig);
-
-    let await_expr: TokenStream = if func.sig.asyncness.is_some() {
-        quote!( .await )
-    } else {
-        TokenStream::new()
-    };
-
-    let body = parse_quote!({
-        #context_type :: Components :: #fn_name #fn_generics (
-            #args
-        ) #await_expr
-    });
-
-    ImplItemFn {
-        attrs: func.attrs.clone(),
-        vis: Visibility::Inherited,
-        defaultness: None,
-        sig: func.sig.clone(),
-        block: body,
     }
 }

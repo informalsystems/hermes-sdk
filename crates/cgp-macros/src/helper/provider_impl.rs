@@ -1,14 +1,10 @@
-use proc_macro2::{Span, TokenStream};
-use quote::quote;
+use proc_macro2::Span;
 use syn::punctuated::Punctuated;
 use syn::token::{Brace, For, Impl, Plus};
-use syn::{
-    parse_quote, Ident, ImplItem, ImplItemFn, ItemImpl, ItemTrait, Path, TraitItem, TraitItemFn,
-    TypeParamBound, Visibility,
-};
+use syn::{parse_quote, Ident, ImplItem, ItemImpl, ItemTrait, Path, TraitItem, TypeParamBound};
 
 use crate::helper::component_name::provider_to_component_name;
-use crate::helper::signature_args::signature_to_args;
+use crate::helper::delegate_fn::derive_delegated_fn_impl;
 
 pub fn derive_provider_impl(provider_trait: &ItemTrait) -> ItemImpl {
     let provider_name = &provider_trait.ident;
@@ -60,7 +56,8 @@ pub fn derive_provider_impl(provider_trait: &ItemTrait) -> ItemImpl {
 
     for trait_item in provider_trait.items.iter() {
         if let TraitItem::Fn(trait_fn) = trait_item {
-            let impl_fn = derive_provider_impl_fn(trait_fn, &component_type);
+            let impl_fn =
+                derive_delegated_fn_impl(&trait_fn.sig, &parse_quote!(#component_type :: Delegate));
 
             impl_fns.push(ImplItem::Fn(impl_fn))
         }
@@ -83,34 +80,5 @@ pub fn derive_provider_impl(provider_trait: &ItemTrait) -> ItemImpl {
         self_ty: Box::new(parse_quote!(#component_type)),
         brace_token: Brace::default(),
         items: impl_fns,
-    }
-}
-
-pub fn derive_provider_impl_fn(func: &TraitItemFn, component_type: &Ident) -> ImplItemFn {
-    let fn_name = &func.sig.ident;
-
-    let mut fn_generics = func.sig.generics.clone();
-    fn_generics.where_clause = None;
-
-    let args = signature_to_args(&func.sig);
-
-    let await_expr: TokenStream = if func.sig.asyncness.is_some() {
-        quote!( .await )
-    } else {
-        TokenStream::new()
-    };
-
-    let body = parse_quote!({
-        #component_type :: Delegate :: #fn_name #fn_generics (
-            #args
-        ) #await_expr
-    });
-
-    ImplItemFn {
-        attrs: func.attrs.clone(),
-        vis: Visibility::Inherited,
-        defaultness: None,
-        sig: func.sig.clone(),
-        block: body,
     }
 }

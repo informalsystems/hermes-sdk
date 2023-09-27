@@ -1,5 +1,6 @@
 pub mod component_name;
 pub mod consumer_impl;
+pub mod delegate_fn;
 pub mod derive;
 pub mod provider_impl;
 pub mod provider_spec;
