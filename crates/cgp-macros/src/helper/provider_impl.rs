@@ -1,17 +1,18 @@
 use proc_macro2::Span;
 use syn::punctuated::Punctuated;
-use syn::token::{Brace, For, Impl, Plus};
+use syn::token::{Brace, Comma, For, Impl, Plus};
 use syn::{parse_quote, Ident, ImplItem, ItemImpl, ItemTrait, Path, TraitItem, TypeParamBound};
 
-use crate::helper::component_name::provider_to_component_name;
 use crate::helper::delegate_fn::derive_delegated_fn_impl;
 
-pub fn derive_provider_impl(provider_trait: &ItemTrait) -> ItemImpl {
+pub fn derive_provider_impl(
+    provider_trait: &ItemTrait,
+    component_name: &Ident,
+    component_params: &Punctuated<Ident, Comma>,
+) -> ItemImpl {
     let provider_name = &provider_trait.ident;
 
     let component_type = Ident::new("Component", Span::call_site());
-
-    let component_name = provider_to_component_name(provider_name);
 
     let impl_generics = {
         let mut impl_generics = provider_trait.generics.clone();
@@ -22,7 +23,7 @@ pub fn derive_provider_impl(provider_trait: &ItemTrait) -> ItemImpl {
 
         {
             let delegate_constraint: Punctuated<TypeParamBound, Plus> = parse_quote! {
-                cgp_core::traits::DelegateComponent< #component_name >
+                cgp_core::traits::DelegateComponent< #component_name < #component_params > >
             };
 
             let mut provider_generics = provider_trait.generics.clone();

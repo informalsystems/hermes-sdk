@@ -7,7 +7,7 @@ pub struct ComponentSpec {
     pub provider_name: Ident,
     pub context_type: Ident,
     pub component_name: Ident,
-    pub component_params: Vec<Ident>,
+    pub component_params: Punctuated<Ident, Comma>,
 }
 
 impl Parse for ComponentSpec {
@@ -22,9 +22,9 @@ impl Parse for ComponentSpec {
 
             let _: Gt = input.parse()?;
 
-            component_params.into_iter().collect()
+            component_params
         } else {
-            Vec::new()
+            Punctuated::default()
         };
 
         let _: Comma = input.parse()?;

@@ -9,21 +9,26 @@ use crate::helper::provider_impl::derive_provider_impl;
 use crate::helper::provider_trait::derive_provider_trait;
 
 pub fn derive_component(attr: TokenStream, item: TokenStream) -> TokenStream {
-    let provider_spec = parse_macro_input!(attr as ComponentSpec);
+    let spec = parse_macro_input!(attr as ComponentSpec);
 
     let consumer_trait = parse_macro_input!(item as ItemTrait);
 
-    let provider_name = &provider_spec.provider_name;
-    let context_type = &provider_spec.context_type;
+    let provider_name = &spec.provider_name;
+    let context_type = &spec.context_type;
 
-    let component_struct = derive_component_name_struct(provider_name);
+    let component_struct =
+        derive_component_name_struct(&spec.component_name, &spec.component_params);
 
     let provider_trait =
         derive_provider_trait(&consumer_trait, provider_name, context_type).unwrap();
 
     let consumer_impl = derive_consumer_impl(&consumer_trait, provider_name, context_type);
 
-    let provider_impl = derive_provider_impl(&provider_trait);
+    let provider_impl = derive_provider_impl(
+        &provider_trait,
+        &spec.component_name,
+        &spec.component_params,
+    );
 
     let mut output = consumer_trait.to_token_stream();
 
