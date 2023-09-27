@@ -18,8 +18,8 @@ all-features = true
 [features]
 
 [dependencies]
-cgp-core = { version = "0.1.0", path = "../cgp-core" }
-cgp-macros = { version = "0.1.0", path = "../cgp-macros" }
+cgp-core = { version = "0.1.0" }
+cgp-macros = { version = "0.1.0" }
 async-trait = "0.1.56"
 futures-core = { version = "0.3", default-features = false, features = ["alloc"] }
 futures-util = { version = "0.3", default-features = false, features = ["alloc"] }

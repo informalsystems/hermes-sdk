@@ -368,10 +368,12 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#799b8add570a9c6b5ff4f48bdcd499ee2c1d4bae"
 
 [[package]]
 name = "cgp-macros"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#799b8add570a9c6b5ff4f48bdcd499ee2c1d4bae"
 dependencies = [
  "proc-macro2",
  "quote",
