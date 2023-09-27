@@ -29,19 +29,23 @@ pub fn derive_provider_trait(
 
         provider_trait.supertraits.clear();
 
-        if let Some(where_clause) = &mut provider_trait.generics.where_clause {
-            let mut predicates =
-                iter_parse_and_replace_self_type(where_clause.predicates.clone(), context_type)?;
+        if !context_constraints.is_empty() {
+            if let Some(where_clause) = &mut provider_trait.generics.where_clause {
+                let mut predicates = iter_parse_and_replace_self_type(
+                    where_clause.predicates.clone(),
+                    context_type,
+                )?;
 
-            predicates.push(parse_quote! {
-                #context_type : #context_constraints
-            });
+                predicates.push(parse_quote! {
+                    #context_type : #context_constraints
+                });
 
-            where_clause.predicates = predicates;
-        } else {
-            provider_trait.generics.where_clause = Some(parse_quote! {
-                where #context_type : #context_constraints
-            });
+                where_clause.predicates = predicates;
+            } else {
+                provider_trait.generics.where_clause = Some(parse_quote! {
+                    where #context_type : #context_constraints
+                });
+            }
         }
     }
 
