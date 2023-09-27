@@ -20,7 +20,7 @@ basecoin-app = { git = "https://github.com/informalsystems/basecoin-rs.git" }
 basecoin-store = { git = "https://github.com/informalsystems/basecoin-rs.git" }
 ibc = { version = "0.45", features = ["mocks"] }
 ibc-proto = "0.35.0"
-cgp-core = { version = "0.1.0", path = "../cgp-core" }
+cgp-core = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
 ibc-relayer-components-extra = { version = "0.1.0", path = "../relayer-components-extra" }
 ibc-relayer-runtime = { version = "0.1.0", path = "../relayer-runtime" }
