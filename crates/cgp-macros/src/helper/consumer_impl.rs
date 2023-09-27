@@ -11,7 +11,7 @@ pub fn derive_consumer_impl(
     consumer_trait: &ItemTrait,
     provider_name: &Ident,
     context_type: &Ident,
-) -> syn::Result<ItemImpl> {
+) -> ItemImpl {
     let consumer_name = &consumer_trait.ident;
 
     let impl_generics = {
@@ -84,19 +84,17 @@ pub fn derive_consumer_impl(
         parse_quote!( #consumer_name #trait_generics )
     };
 
-    let impl_block = ItemImpl {
+    ItemImpl {
         attrs: consumer_trait.attrs.clone(),
         defaultness: None,
-        unsafety: consumer_trait.unsafety.clone(),
+        unsafety: consumer_trait.unsafety,
         impl_token: Impl::default(),
         generics: impl_generics,
         trait_: Some((None, trait_path, For::default())),
         self_ty: Box::new(parse_quote!(#context_type)),
         brace_token: Brace::default(),
         items: impl_fns,
-    };
-
-    Ok(impl_block)
+    }
 }
 
 pub fn derive_consumer_impl_fn(func: &TraitItemFn, context_type: &Ident) -> ImplItemFn {
@@ -119,15 +117,13 @@ pub fn derive_consumer_impl_fn(func: &TraitItemFn, context_type: &Ident) -> Impl
         ) #await_expr
     });
 
-    let impl_fn = ImplItemFn {
+    ImplItemFn {
         attrs: func.attrs.clone(),
         vis: Visibility::Inherited,
         defaultness: None,
         sig: func.sig.clone(),
         block: body,
-    };
-
-    impl_fn
+    }
 }
 
 pub fn signature_to_args(sig: &Signature) -> Punctuated<Ident, Comma> {

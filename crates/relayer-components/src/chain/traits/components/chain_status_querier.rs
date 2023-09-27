@@ -7,8 +7,6 @@ use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::status::HasChainStatusType;
 use crate::std_prelude::*;
 
-pub struct ChainStatusQuerierComponent;
-
 #[async_trait]
 impl<Chain, Component> ChainStatusQuerier<Chain> for Component
 where
