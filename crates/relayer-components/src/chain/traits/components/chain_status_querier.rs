@@ -1,41 +1,16 @@
 use async_trait::async_trait;
-use cgp_core::traits::delegate_component::DelegateComponent;
-use cgp_core::traits::has_components::HasComponents;
 use cgp_core::traits::HasErrorType;
+use cgp_macros::derive_component;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::status::HasChainStatusType;
 use crate::std_prelude::*;
 
-pub struct ChainStatusQuerierComponent;
-
-/**
-   The provider trait for [`ChainStatusQuerier`].
-*/
-#[async_trait]
-pub trait ChainStatusQuerier<Chain>
-where
-    Chain: HasChainStatusType + HasErrorType,
-{
-    async fn query_chain_status(chain: &Chain) -> Result<Chain::ChainStatus, Chain::Error>;
-}
-
-#[async_trait]
-impl<Chain, Component> ChainStatusQuerier<Chain> for Component
-where
-    Chain: HasChainStatusType + HasErrorType,
-    Component: DelegateComponent<ChainStatusQuerierComponent>,
-    Component::Delegate: ChainStatusQuerier<Chain>,
-{
-    async fn query_chain_status(chain: &Chain) -> Result<Chain::ChainStatus, Chain::Error> {
-        Component::Delegate::query_chain_status(chain).await
-    }
-}
-
 /**
    Implemented by a chain context to provide method for querying the
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
+#[derive_component(ChainStatusQuerierComponent, ChainStatusQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     /**
@@ -55,17 +30,6 @@ pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
         from the chain query.
     */
     async fn query_chain_status(&self) -> Result<Self::ChainStatus, Self::Error>;
-}
-
-#[async_trait]
-impl<Chain> CanQueryChainStatus for Chain
-where
-    Chain: HasChainStatusType + HasErrorType + HasComponents,
-    Chain::Components: ChainStatusQuerier<Chain>,
-{
-    async fn query_chain_status(&self) -> Result<Chain::ChainStatus, Chain::Error> {
-        Chain::Components::query_chain_status(self).await
-    }
 }
 
 #[async_trait]

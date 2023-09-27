@@ -3,7 +3,6 @@
 resolver = "2"
 
 members = [
-    "crates/cgp-core",
     "crates/relayer-components",
     "crates/relayer-components-extra",
     "crates/relayer-all-in-one",
@@ -23,6 +22,8 @@ exclude = [
 overflow-checks = true
 
 [patch.crates-io]
+cgp-core    = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-macros  = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
