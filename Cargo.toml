@@ -9,6 +9,7 @@ members = [
     "crates/relayer-mock",
     "crates/relayer-runtime",
     "crates/relayer-cosmos",
+    "crates/relayer-cosmos-mock",
     "tools/integration-test",
     "tools/test-framework",
 ]
