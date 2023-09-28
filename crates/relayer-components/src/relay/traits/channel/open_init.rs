@@ -1,10 +1,12 @@
 use async_trait::async_trait;
+use cgp_macros::derive_component;
 
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::{DstPortId, SrcChannelId, SrcPortId};
 use crate::std_prelude::*;
 
+#[derive_component(ChannelInitializerComponent, ChannelInitializer<Relay>)]
 #[async_trait]
 pub trait CanInitChannel: HasRelayChains
 where
@@ -18,20 +20,4 @@ where
             Self::DstChain,
         >>::InitChannelOptions,
     ) -> Result<SrcChannelId<Self>, Self::Error>;
-}
-
-#[async_trait]
-pub trait ChannelInitializer<Relay>
-where
-    Relay: HasRelayChains,
-    Relay::SrcChain: HasInitChannelOptionsType<Relay::DstChain>,
-{
-    async fn init_channel(
-        relay: &Relay,
-        src_port_id: &SrcPortId<Relay>,
-        dst_port_id: &DstPortId<Relay>,
-        init_channel_options: &<Relay::SrcChain as HasInitChannelOptionsType<
-        Relay::DstChain,
-    >>::InitChannelOptions,
-    ) -> Result<SrcChannelId<Relay>, Relay::Error>;
 }

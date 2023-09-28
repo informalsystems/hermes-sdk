@@ -21,3 +21,14 @@ where
     DstChain: ChainHandle,
 {
 }
+
+// use ibc_relayer_all_in_one::all_for_one::relay::AfoRelay;
+
+// pub trait IsAfoRelay: AfoRelay {}
+
+// impl<SrcChain, DstChain> IsAfoRelay for CosmosRelay<SrcChain, DstChain>
+// where
+//     SrcChain: ChainHandle,
+//     DstChain: ChainHandle,
+// {
+// }
