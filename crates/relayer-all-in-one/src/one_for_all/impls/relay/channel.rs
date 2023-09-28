@@ -3,10 +3,10 @@ use ibc_relayer_components::relay::impls::channel::open_ack::RelayChannelOpenAck
 use ibc_relayer_components::relay::impls::channel::open_confirm::RelayChannelOpenConfirm;
 use ibc_relayer_components::relay::impls::channel::open_handshake::RelayChannelOpenHandshake;
 use ibc_relayer_components::relay::impls::channel::open_init::{
-    InitializeChannel, InjectMissingChannelInitEventError,
+    CanRaiseMissingChannelInitEventError, InitializeChannel,
 };
 use ibc_relayer_components::relay::impls::channel::open_try::{
-    InjectMissingChannelTryEventError, RelayChannelOpenTry,
+    CanRaiseMissingChannelTryEventError, RelayChannelOpenTry,
 };
 use ibc_relayer_components::relay::traits::channel::open_ack::{
     CanRelayChannelOpenAck, ChannelOpenAckRelayer,
@@ -29,7 +29,7 @@ use crate::one_for_all::traits::relay::OfaRelay;
 use crate::one_for_all::types::relay::OfaRelayWrapper;
 use crate::std_prelude::*;
 
-impl<Relay> InjectMissingChannelInitEventError for OfaRelayWrapper<Relay>
+impl<Relay> CanRaiseMissingChannelInitEventError for OfaRelayWrapper<Relay>
 where
     Relay: OfaRelay,
 {
@@ -38,7 +38,7 @@ where
     }
 }
 
-impl<Relay> InjectMissingChannelTryEventError for OfaRelayWrapper<Relay>
+impl<Relay> CanRaiseMissingChannelTryEventError for OfaRelayWrapper<Relay>
 where
     Relay: OfaRelay,
 {

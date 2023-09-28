@@ -13,7 +13,7 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
 use crate::std_prelude::*;
 
-pub trait InjectMissingConnectionInitEventError: HasRelayChains {
+pub trait CanRaiseMissingConnectionInitEventError: HasRelayChains {
     fn missing_connection_init_event_error(&self) -> Self::Error;
 }
 
@@ -29,7 +29,7 @@ pub struct InitializeConnection;
 impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConnection
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + InjectMissingConnectionInitEventError,
+        + CanRaiseMissingConnectionInitEventError,
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>
         + CanBuildConnectionHandshakeMessages<DstChain>

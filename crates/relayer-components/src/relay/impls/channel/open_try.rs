@@ -14,7 +14,7 @@ use crate::relay::traits::target::DestinationTarget;
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
 use crate::std_prelude::*;
 
-pub trait InjectMissingChannelTryEventError: HasRelayChains {
+pub trait CanRaiseMissingChannelTryEventError: HasRelayChains {
     fn missing_channel_try_event_error(
         &self,
         src_channel_id: &<Self::SrcChain as HasIbcChainTypes<Self::DstChain>>::ChannelId,
@@ -41,7 +41,7 @@ impl<Relay, SrcChain, DstChain> ChannelOpenTryRelayer<Relay> for RelayChannelOpe
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + InjectMissingChannelTryEventError,
+        + CanRaiseMissingChannelTryEventError,
     SrcChain: CanQueryChainHeight + CanBuildChannelHandshakePayloads<DstChain>,
     DstChain: CanQueryClientState<SrcChain>
         + CanBuildChannelHandshakeMessages<SrcChain>

@@ -3,10 +3,10 @@ use ibc_relayer_components::relay::impls::connection::open_ack::RelayConnectionO
 use ibc_relayer_components::relay::impls::connection::open_confirm::RelayConnectionOpenConfirm;
 use ibc_relayer_components::relay::impls::connection::open_handshake::RelayConnectionOpenHandshake;
 use ibc_relayer_components::relay::impls::connection::open_init::{
-    InitializeConnection, InjectMissingConnectionInitEventError,
+    CanRaiseMissingConnectionInitEventError, InitializeConnection,
 };
 use ibc_relayer_components::relay::impls::connection::open_try::{
-    InjectMissingConnectionTryEventError, RelayConnectionOpenTry,
+    CanRaiseMissingConnectionTryEventError, RelayConnectionOpenTry,
 };
 use ibc_relayer_components::relay::traits::connection::open_ack::{
     CanRelayConnectionOpenAck, ConnectionOpenAckRelayer,
@@ -29,7 +29,7 @@ use crate::one_for_all::traits::relay::OfaRelay;
 use crate::one_for_all::types::relay::OfaRelayWrapper;
 use crate::std_prelude::*;
 
-impl<Relay> InjectMissingConnectionInitEventError for OfaRelayWrapper<Relay>
+impl<Relay> CanRaiseMissingConnectionInitEventError for OfaRelayWrapper<Relay>
 where
     Relay: OfaRelay,
 {
@@ -38,7 +38,7 @@ where
     }
 }
 
-impl<Relay> InjectMissingConnectionTryEventError for OfaRelayWrapper<Relay>
+impl<Relay> CanRaiseMissingConnectionTryEventError for OfaRelayWrapper<Relay>
 where
     Relay: OfaRelay,
 {

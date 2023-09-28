@@ -12,11 +12,8 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortI
 use crate::contexts::chain::CosmosChain;
 use crate::types::batch::CosmosBatchSender;
 
-pub struct CosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: ChainHandle,
-    DstChain: ChainHandle,
-{
+#[derive(Clone)]
+pub struct CosmosRelay<SrcChain, DstChain> {
     pub runtime: TokioRuntimeContext,
     pub src_chain: OfaChainWrapper<CosmosChain<SrcChain>>,
     pub dst_chain: OfaChainWrapper<CosmosChain<DstChain>>,

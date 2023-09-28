@@ -12,7 +12,7 @@ use crate::std_prelude::*;
 
 pub struct CreateClientWithChains;
 
-pub trait InjectMissingCreateClientEventError<Target>: HasRelayChains
+pub trait CanRaiseMissingCreateClientEventError<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
 {
@@ -26,7 +26,7 @@ where
 impl<Relay, Target, TargetChain, CounterpartyChain> ClientCreator<Relay, Target>
     for CreateClientWithChains
 where
-    Relay: InjectMissingCreateClientEventError<Target>,
+    Relay: CanRaiseMissingCreateClientEventError<Target>,
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
     TargetChain: CanSendSingleMessage
         + CanBuildCreateClientMessage<CounterpartyChain>

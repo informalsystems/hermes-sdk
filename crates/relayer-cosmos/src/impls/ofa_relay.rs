@@ -1,6 +1,5 @@
 use async_trait::async_trait;
 use eyre::eyre;
-use futures::channel::oneshot::{channel, Sender};
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::OfaChain;
 use ibc_relayer_all_in_one::one_for_all::traits::relay::OfaRelay;
@@ -13,20 +12,10 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, Conne
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
+use crate::methods::packet_lock::try_acquire_packet_lock;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::error::{BaseError, Error};
-
-pub struct PacketLock {
-    pub release_sender: Option<Sender<()>>,
-}
-
-impl Drop for PacketLock {
-    fn drop(&mut self) {
-        if let Some(sender) = self.release_sender.take() {
-            let _ = sender.send(());
-        }
-    }
-}
+use crate::types::packet_lock::PacketLock;
 
 #[async_trait]
 impl<SrcChain, DstChain> OfaRelay for CosmosRelay<SrcChain, DstChain>
@@ -85,39 +74,7 @@ where
     }
 
     async fn try_acquire_packet_lock<'a>(&'a self, packet: &'a Packet) -> Option<PacketLock> {
-        let packet_key = (
-            packet.source_channel.clone(),
-            packet.source_port.clone(),
-            packet.destination_channel.clone(),
-            packet.destination_port.clone(),
-            packet.sequence,
-        );
-
-        let mutex = &self.packet_lock_mutex;
-
-        let mut lock_table = mutex.lock().await;
-
-        if lock_table.contains(&packet_key) {
-            None
-        } else {
-            lock_table.insert(packet_key.clone());
-
-            let runtime = &self.runtime().runtime;
-
-            let (sender, receiver) = channel();
-
-            let mutex = mutex.clone();
-
-            runtime.spawn(async move {
-                let _ = receiver.await;
-                let mut lock_table = mutex.lock().await;
-                lock_table.remove(&packet_key);
-            });
-
-            Some(PacketLock {
-                release_sender: Some(sender),
-            })
-        }
+        try_acquire_packet_lock(self, packet).await
     }
 
     fn is_retryable_error(_: &Error) -> bool {
