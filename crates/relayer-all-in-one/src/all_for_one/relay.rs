@@ -1,9 +1,9 @@
 use ibc_relayer_components::chain::types::aliases::{IncomingPacket, OutgoingPacket};
+use ibc_relayer_components::core::traits::run::CanRun;
 use ibc_relayer_components::logger::traits::level::HasLoggerWithBaseLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
 use ibc_relayer_components::relay::traits::channel::open_init::CanInitChannel;
-use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
 use ibc_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use ibc_relayer_components::relay::traits::components::event_relayer::CanRelayEvent;
 use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
@@ -37,7 +37,7 @@ pub trait AfoRelay:
     + CanSendIbcMessages<MainSink, DestinationTarget>
     + CanRelayEvent<SourceTarget>
     + CanRelayEvent<DestinationTarget>
-    + CanAutoRelay
+    + CanRun
     + CanFilterPackets
     + CanRelayReceivePacket
     + CanRelayPacket
@@ -75,7 +75,7 @@ where
         + CanSendIbcMessages<MainSink, DestinationTarget>
         + CanRelayEvent<SourceTarget>
         + CanRelayEvent<DestinationTarget>
-        + CanAutoRelay
+        + CanRun
         + CanFilterPackets
         + CanRelayReceivePacket
         + CanRelayPacket

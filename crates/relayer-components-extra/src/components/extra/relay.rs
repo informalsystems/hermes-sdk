@@ -2,13 +2,13 @@ use core::marker::PhantomData;
 
 use cgp_core::{delegate_component, delegate_components};
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
+use ibc_relayer_components::core::traits::run::RunnerComponent;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::packet_relayers::general::filter_relayer::FilterRelayer;
 use ibc_relayer_components::relay::components::packet_relayers::general::full_relay::FullCycleRelayer;
 use ibc_relayer_components::relay::components::packet_relayers::general::lock::LockPacketRelayer;
 use ibc_relayer_components::relay::components::packet_relayers::general::log::LoggerRelayer;
-use ibc_relayer_components::relay::traits::components::auto_relayer::AutoRelayerComponent;
 use ibc_relayer_components::relay::traits::components::client_creator::ClientCreatorComponent;
 use ibc_relayer_components::relay::traits::components::event_relayer::EventRelayerComponent;
 use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
@@ -49,7 +49,7 @@ delegate_component!(
 );
 
 delegate_component!(
-    AutoRelayerComponent,
+    RunnerComponent,
     ExtraRelayComponents<BaseComponents>,
     ParallelBidirectionalRelayer<ParallelEventSubscriptionRelayer>,
 );
