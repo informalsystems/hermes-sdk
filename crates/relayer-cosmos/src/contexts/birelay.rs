@@ -4,6 +4,7 @@ use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::relay::CosmosRelay;
 
+#[derive(Clone)]
 pub struct CosmosBiRelay<ChainA, ChainB> {
     pub runtime: TokioRuntimeContext,
     pub relay_a_to_b: OfaRelayWrapper<CosmosRelay<ChainA, ChainB>>,

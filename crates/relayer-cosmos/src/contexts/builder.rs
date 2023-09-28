@@ -1,4 +1,6 @@
+use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
+use futures::lock::Mutex;
 use std::collections::HashMap;
 
 use eyre::eyre;
@@ -31,6 +33,17 @@ pub struct CosmosBuilder {
     pub runtime: TokioRuntimeContext,
     pub batch_config: BatchConfig,
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
+    pub chain_cache: Arc<Mutex<BTreeMap<ChainId, OfaChainWrapper<CosmosChain<BaseChainHandle>>>>>,
+    pub relay_cache: Arc<
+        Mutex<
+            BTreeMap<
+                (ChainId, ChainId, ClientId, ClientId),
+                CosmosRelay<BaseChainHandle, BaseChainHandle>,
+            >,
+        >,
+    >,
+    pub batch_senders:
+        Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>>>,
 }
 
 impl CosmosBuilder {
@@ -51,6 +64,9 @@ impl CosmosBuilder {
             runtime,
             batch_config,
             key_map,
+            chain_cache: Default::default(),
+            relay_cache: Default::default(),
+            batch_senders: Default::default(),
         }
     }
 
