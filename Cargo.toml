@@ -10,6 +10,8 @@ members = [
     "crates/relayer-runtime",
     "crates/relayer-cosmos",
     "crates/relayer-cosmos-mock",
+    "crates/ibc-framework",
+    "crates/ibc-cosmos",
     "tools/integration-test",
     "tools/test-framework",
 ]
@@ -23,6 +25,7 @@ exclude = [
 overflow-checks = true
 
 [patch.crates-io]
+ibc = { version = "0.27.0", git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/relayer-next" }
 cgp-core    = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-macros  = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
