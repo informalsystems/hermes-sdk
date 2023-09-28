@@ -1,10 +1,9 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use ibc_relayer_components::core::traits::run::Runner;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::auto_relayer::{
-    AutoRelayer, AutoRelayerWithTarget,
-};
+use ibc_relayer_components::relay::traits::components::auto_relayer::AutoRelayer;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
@@ -19,31 +18,32 @@ use crate::std_prelude::*;
 pub struct ParallelBidirectionalRelayer<InRelayer>(pub PhantomData<InRelayer>);
 
 #[async_trait]
-impl<Relay, InRelayer, Runtime> AutoRelayer<Relay> for ParallelBidirectionalRelayer<InRelayer>
+impl<Relay, InRelayer, Runtime> Runner<Relay> for ParallelBidirectionalRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasRuntime<Runtime = Runtime> + Clone,
-    InRelayer: AutoRelayerWithTarget<Relay, SourceTarget>,
-    InRelayer: AutoRelayerWithTarget<Relay, DestinationTarget>,
+    InRelayer: AutoRelayer<Relay, SourceTarget>,
+    InRelayer: AutoRelayer<Relay, DestinationTarget>,
     Runtime: HasSpawner,
 {
-    async fn auto_relay(relay: &Relay) -> Result<(), Relay::Error> {
+    async fn run(relay: &Relay) -> Result<(), Relay::Error> {
         let src_relay = relay.clone();
         let dst_relay = relay.clone();
         let spawner = src_relay.runtime().spawner();
 
         let handle1 = spawner.spawn(async move {
-            let _ = <InRelayer as AutoRelayerWithTarget<Relay, DestinationTarget>>::auto_relay_with_target(
+            let _ = <InRelayer as AutoRelayer<Relay, DestinationTarget>>::auto_relay(
                 &dst_relay,
+                DestinationTarget,
             )
             .await;
         });
 
         let handle2 = spawner.spawn(async move {
-            let _ =
-                <InRelayer as AutoRelayerWithTarget<Relay, SourceTarget>>::auto_relay_with_target(
-                    &src_relay,
-                )
-                .await;
+            let _ = <InRelayer as AutoRelayer<Relay, SourceTarget>>::auto_relay(
+                &src_relay,
+                SourceTarget,
+            )
+            .await;
         });
 
         // Wait for handle1 and handle2 to finish.
