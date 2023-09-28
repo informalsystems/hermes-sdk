@@ -7,9 +7,8 @@ use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
 use ibc_relayer::foreign_client::ForeignClient;
 use ibc_relayer::path::PathIdentifiers;
-use ibc_relayer_all_in_one::one_for_all::traits::birelay::OfaBiRelay;
-use ibc_relayer_all_in_one::one_for_all::types::birelay::OfaBiRelayWrapper;
 use ibc_relayer_components::core::traits::run::CanRun;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_cosmos::contexts::birelay::CosmosBiRelay;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, IdentifiedChannelEnd};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
@@ -226,7 +225,7 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> HasContextId for TestContextV1<Ch
 pub struct TestContextV2<ChainA: ChainHandle, ChainB: ChainHandle> {
     pub context_id: String,
     pub config: TestConfig,
-    pub relayer: OfaBiRelayWrapper<CosmosBiRelay<BaseChainHandle, BaseChainHandle>>,
+    pub relayer: CosmosBiRelay<BaseChainHandle, BaseChainHandle>,
     pub chains: ConnectedChains<ChainA, ChainB>,
     pub channel: ConnectedChannel<ChainA, ChainB>,
 }
@@ -281,7 +280,7 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> HasTwoChannels for TestContextV2<
 
 impl<ChainA: ChainHandle, ChainB: ChainHandle> CanSpawnRelayer for TestContextV2<ChainA, ChainB> {
     fn spawn_relayer(&self) -> Result<Option<JoinHandle<()>>, Error> {
-        let runtime = self.relayer.birelay.runtime();
+        let runtime = self.relayer.runtime();
         let birelay = self.relayer.clone();
 
         let handle = runtime.runtime.spawn(async move {

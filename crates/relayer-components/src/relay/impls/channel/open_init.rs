@@ -10,7 +10,7 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_init::ChannelInitializer;
 use crate::std_prelude::*;
 
-pub trait InjectMissingChannelInitEventError: HasRelayChains {
+pub trait CanRaiseMissingChannelInitEventError: HasRelayChains {
     fn missing_channel_init_event_error(&self) -> Self::Error;
 }
 
@@ -27,7 +27,7 @@ pub struct InitializeChannel;
 impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + InjectMissingChannelInitEventError,
+        + CanRaiseMissingChannelInitEventError,
     SrcChain: CanSendSingleMessage
         + HasInitChannelOptionsType<DstChain>
         + CanBuildChannelHandshakeMessages<DstChain>

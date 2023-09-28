@@ -19,7 +19,7 @@ use crate::impls::subscription::CanCreateAbciEventSubscription;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
-pub struct CosmosChain<Handle: ChainHandle> {
+pub struct CosmosChain<Handle> {
     pub handle: Handle,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,

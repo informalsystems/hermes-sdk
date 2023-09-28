@@ -1,11 +1,11 @@
-use ibc_relayer_components::relay::components::create_client::InjectMissingCreateClientEventError;
+use ibc_relayer_components::relay::components::create_client::CanRaiseMissingCreateClientEventError;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
 use crate::one_for_all::traits::relay::OfaRelay;
 use crate::one_for_all::types::chain::OfaChainWrapper;
 use crate::one_for_all::types::relay::OfaRelayWrapper;
 
-impl<Relay> InjectMissingCreateClientEventError<SourceTarget> for OfaRelayWrapper<Relay>
+impl<Relay> CanRaiseMissingCreateClientEventError<SourceTarget> for OfaRelayWrapper<Relay>
 where
     Relay: OfaRelay,
 {
@@ -17,7 +17,7 @@ where
     }
 }
 
-impl<Relay> InjectMissingCreateClientEventError<DestinationTarget> for OfaRelayWrapper<Relay>
+impl<Relay> CanRaiseMissingCreateClientEventError<DestinationTarget> for OfaRelayWrapper<Relay>
 where
     Relay: OfaRelay,
 {

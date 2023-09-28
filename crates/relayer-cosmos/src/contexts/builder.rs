@@ -1,4 +1,6 @@
+use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
+use futures::lock::Mutex;
 use std::collections::HashMap;
 
 use eyre::eyre;
@@ -8,7 +10,6 @@ use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::Config;
 use ibc_relayer::keyring::{AnySigningKeyPair, Secp256k1KeyPair};
 use ibc_relayer::spawn::spawn_chain_runtime;
-use ibc_relayer_all_in_one::one_for_all::types::builder::OfaBuilderWrapper;
 use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components_extra::batch::types::config::BatchConfig;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
@@ -31,6 +32,17 @@ pub struct CosmosBuilder {
     pub runtime: TokioRuntimeContext,
     pub batch_config: BatchConfig,
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
+    pub chain_cache: Arc<Mutex<BTreeMap<ChainId, OfaChainWrapper<CosmosChain<BaseChainHandle>>>>>,
+    pub relay_cache: Arc<
+        Mutex<
+            BTreeMap<
+                (ChainId, ChainId, ClientId, ClientId),
+                CosmosRelay<BaseChainHandle, BaseChainHandle>,
+            >,
+        >,
+    >,
+    pub batch_senders:
+        Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>>>,
 }
 
 impl CosmosBuilder {
@@ -51,25 +63,10 @@ impl CosmosBuilder {
             runtime,
             batch_config,
             key_map,
+            chain_cache: Default::default(),
+            relay_cache: Default::default(),
+            batch_senders: Default::default(),
         }
-    }
-
-    pub fn new_wrapped(
-        config: Config,
-        runtime: Arc<TokioRuntime>,
-        telemetry: CosmosTelemetry,
-        packet_filter: PacketFilter,
-        batch_config: BatchConfig,
-        key_map: HashMap<ChainId, Secp256k1KeyPair>,
-    ) -> OfaBuilderWrapper<Self> {
-        OfaBuilderWrapper::new_with_homogenous_cache(Self::new(
-            config,
-            runtime,
-            telemetry,
-            packet_filter,
-            batch_config,
-            key_map,
-        ))
     }
 
     pub async fn build_chain(

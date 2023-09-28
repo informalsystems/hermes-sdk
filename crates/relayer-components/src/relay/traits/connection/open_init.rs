@@ -1,10 +1,12 @@
 use async_trait::async_trait;
+use cgp_macros::derive_component;
 
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::SrcConnectionId;
 use crate::std_prelude::*;
 
+#[derive_component(ConnectionInitializerComponent, ConnectionInitializer<Relay>)]
 #[async_trait]
 pub trait CanInitConnection: HasRelayChains
 where
@@ -16,18 +18,4 @@ where
             Self::DstChain,
         >>::InitConnectionOptions,
     ) -> Result<SrcConnectionId<Self>, Self::Error>;
-}
-
-#[async_trait]
-pub trait ConnectionInitializer<Relay>
-where
-    Relay: HasRelayChains,
-    Relay::SrcChain: HasInitConnectionOptionsType<Relay::DstChain>,
-{
-    async fn init_connection(
-        relay: &Relay,
-        init_connection_options: &<Relay::SrcChain as HasInitConnectionOptionsType<
-            Relay::DstChain,
-        >>::InitConnectionOptions,
-    ) -> Result<SrcConnectionId<Relay>, Relay::Error>;
 }

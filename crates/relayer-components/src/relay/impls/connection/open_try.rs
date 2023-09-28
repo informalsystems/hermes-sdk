@@ -16,7 +16,7 @@ use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayer;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 use crate::std_prelude::*;
 
-pub trait InjectMissingConnectionTryEventError: HasRelayChains {
+pub trait CanRaiseMissingConnectionTryEventError: HasRelayChains {
     fn missing_connection_try_event_error(
         &self,
         src_connection_id: &<Self::SrcChain as HasIbcChainTypes<Self::DstChain>>::ConnectionId,
@@ -42,7 +42,7 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanSendUpdateClientMessage<SourceTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + InjectMissingConnectionTryEventError,
+        + CanRaiseMissingConnectionTryEventError,
     SrcChain: CanQueryChainHeight + CanBuildConnectionHandshakePayloads<DstChain>,
     DstChain: CanQueryClientState<SrcChain>
         + CanBuildConnectionHandshakeMessages<SrcChain>

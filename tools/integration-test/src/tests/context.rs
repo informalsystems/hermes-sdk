@@ -4,7 +4,6 @@ use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::Config;
 use ibc_relayer_all_in_one::all_for_one::builder::CanBuildAfoBiRelay;
-use ibc_relayer_all_in_one::one_for_all::types::builder::OfaBuilderWrapper;
 use ibc_relayer_cosmos::all_for_one::birelay::AfoCosmosBiRelay;
 use ibc_relayer_cosmos::contexts::builder::CosmosBuilder;
 use ibc_test_framework::error::{handle_generic_error, Error};
@@ -15,7 +14,7 @@ pub fn new_cosmos_builder<ChainA, ChainB>(
     config: &Config,
     chains: &ConnectedChains<ChainA, ChainB>,
     packet_filter: PacketFilter,
-) -> Result<OfaBuilderWrapper<CosmosBuilder>, Error>
+) -> Result<CosmosBuilder, Error>
 where
     ChainA: ChainHandle,
     ChainB: ChainHandle,
@@ -31,7 +30,7 @@ where
         (chains.chain_id_b().cloned_value(), key_b),
     ]);
 
-    let builder = CosmosBuilder::new_wrapped(
+    let builder = CosmosBuilder::new(
         config.clone(),
         runtime,
         Default::default(),

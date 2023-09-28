@@ -9,6 +9,11 @@ use ibc_relayer_components::relay::components::packet_relayers::general::filter_
 use ibc_relayer_components::relay::components::packet_relayers::general::full_relay::FullCycleRelayer;
 use ibc_relayer_components::relay::components::packet_relayers::general::lock::LockPacketRelayer;
 use ibc_relayer_components::relay::components::packet_relayers::general::log::LoggerRelayer;
+use ibc_relayer_components::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
+use ibc_relayer_components::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
+use ibc_relayer_components::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
+use ibc_relayer_components::relay::traits::channel::open_init::ChannelInitializerComponent;
+use ibc_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
 use ibc_relayer_components::relay::traits::components::client_creator::ClientCreatorComponent;
 use ibc_relayer_components::relay::traits::components::event_relayer::EventRelayerComponent;
 use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
@@ -21,6 +26,11 @@ use ibc_relayer_components::relay::traits::components::packet_relayers::ack_pack
 use ibc_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
+use ibc_relayer_components::relay::traits::connection::open_ack::ConnectionOpenAckRelayerComponent;
+use ibc_relayer_components::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayerComponent;
+use ibc_relayer_components::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
+use ibc_relayer_components::relay::traits::connection::open_init::ConnectionInitializerComponent;
+use ibc_relayer_components::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
 use crate::batch::types::sink::BatchWorkerSink;
@@ -64,6 +74,16 @@ delegate_components!(
         EventRelayerComponent,
         ClientCreatorComponent,
         PacketClearerComponent,
+        ChannelInitializerComponent,
+        ChannelOpenTryRelayerComponent,
+        ChannelOpenAckRelayerComponent,
+        ChannelOpenConfirmRelayerComponent,
+        ChannelOpenHandshakeRelayerComponent,
+        ConnectionOpenAckRelayerComponent,
+        ConnectionOpenConfirmRelayerComponent,
+        ConnectionInitializerComponent,
+        ConnectionOpenTryRelayerComponent,
+        ConnectionOpenHandshakeRelayerComponent,
     ],
     ExtraRelayComponents<BaseComponents>,
     DefaultRelayComponents<BaseComponents>,
