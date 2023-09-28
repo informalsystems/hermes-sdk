@@ -3,7 +3,6 @@
 */
 
 use cgp_core::traits::{Async, HasErrorType};
-use core::fmt::Debug;
 
 use crate::std_prelude::*;
 
@@ -53,7 +52,7 @@ pub trait HasMessageType: Async {
        framework to know about specific message variants, such as
        `UpdateCientMesssage`.
     */
-    type Message: Async + Debug;
+    type Message: Async;
 }
 
 pub trait CanEstimateMessageSize: HasMessageType + HasErrorType {
