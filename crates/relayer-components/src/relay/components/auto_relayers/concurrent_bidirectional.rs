@@ -5,8 +5,9 @@ use core::pin::Pin;
 use async_trait::async_trait;
 use futures_util::stream::{self, StreamExt};
 
+use crate::core::traits::run::Runner;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::auto_relayer::{AutoRelayer, AutoRelayerWithTarget};
+use crate::relay::traits::components::auto_relayer::AutoRelayer;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 use crate::std_prelude::*;
 
@@ -25,24 +26,23 @@ use crate::std_prelude::*;
 pub struct ConcurrentBidirectionalRelayer<InRelayer>(pub PhantomData<InRelayer>);
 
 #[async_trait]
-impl<Relay, InRelayer> AutoRelayer<Relay> for ConcurrentBidirectionalRelayer<InRelayer>
+impl<Relay, InRelayer> Runner<Relay> for ConcurrentBidirectionalRelayer<InRelayer>
 where
     Relay: HasRelayChains,
-    InRelayer: AutoRelayerWithTarget<Relay, SourceTarget>,
-    InRelayer: AutoRelayerWithTarget<Relay, DestinationTarget>,
+    InRelayer: AutoRelayer<Relay, SourceTarget>,
+    InRelayer: AutoRelayer<Relay, DestinationTarget>,
 {
-    async fn auto_relay(relay: &Relay) -> Result<(), Relay::Error> {
+    async fn run(relay: &Relay) -> Result<(), Relay::Error> {
         let src_task: Pin<Box<dyn Future<Output = ()> + Send>> = Box::pin(async move {
             let _ =
-                <InRelayer as AutoRelayerWithTarget<Relay, SourceTarget>>::auto_relay_with_target(
-                    relay,
-                )
-                .await;
+                <InRelayer as AutoRelayer<Relay, SourceTarget>>::auto_relay(relay, SourceTarget)
+                    .await;
         });
 
         let dst_task: Pin<Box<dyn Future<Output = ()> + Send>> = Box::pin(async move {
-            let _ = <InRelayer as AutoRelayerWithTarget<Relay, DestinationTarget>>::auto_relay_with_target(
+            let _ = <InRelayer as AutoRelayer<Relay, DestinationTarget>>::auto_relay(
                 relay,
+                DestinationTarget,
             )
             .await;
         });

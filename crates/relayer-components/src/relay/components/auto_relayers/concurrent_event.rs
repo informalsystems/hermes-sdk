@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use futures_util::stream::StreamExt;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
-use crate::relay::traits::components::auto_relayer::AutoRelayerWithTarget;
+use crate::relay::traits::components::auto_relayer::AutoRelayer;
 use crate::relay::traits::components::event_relayer::CanRelayEvent;
 use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;
@@ -13,13 +13,13 @@ use crate::std_prelude::*;
 pub struct ConcurrentEventSubscriptionRelayer;
 
 #[async_trait]
-impl<Relay, Target> AutoRelayerWithTarget<Relay, Target> for ConcurrentEventSubscriptionRelayer
+impl<Relay, Target> AutoRelayer<Relay, Target> for ConcurrentEventSubscriptionRelayer
 where
     Relay: CanRelayEvent<Target>,
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasEventSubscription,
 {
-    async fn auto_relay_with_target(relay: &Relay) -> Result<(), Relay::Error> {
+    async fn auto_relay(relay: &Relay, _target: Target) -> Result<(), Relay::Error> {
         let subscription = Target::target_chain(relay).event_subscription();
 
         loop {

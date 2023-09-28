@@ -15,6 +15,7 @@ where
 {
     async fn build_chain(
         builder: &OfaBuilderWrapper<Builder>,
+        _target: ChainATarget,
         chain_id: &ChainIdA<Builder>,
     ) -> Result<OfaChainWrapper<ChainA<Builder>>, Builder::Error> {
         let chain = builder.builder.build_chain_a(chain_id).await?;
@@ -30,6 +31,7 @@ where
 {
     async fn build_chain(
         builder: &OfaBuilderWrapper<Builder>,
+        _target: ChainBTarget,
         chain_id: &ChainIdB<Builder>,
     ) -> Result<OfaChainWrapper<ChainB<Builder>>, Builder::Error> {
         let chain = builder.builder.build_chain_b(chain_id).await?;

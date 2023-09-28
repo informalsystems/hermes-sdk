@@ -3,13 +3,13 @@
 resolver = "2"
 
 members = [
-    "crates/cgp-core",
     "crates/relayer-components",
     "crates/relayer-components-extra",
     "crates/relayer-all-in-one",
     "crates/relayer-mock",
     "crates/relayer-runtime",
     "crates/relayer-cosmos",
+    "crates/relayer-cosmos-mock",
     "crates/ibc-framework",
     "crates/ibc-cosmos",
     "tools/integration-test",
@@ -26,6 +26,8 @@ overflow-checks = true
 
 [patch.crates-io]
 ibc = { version = "0.27.0", git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/relayer-next" }
+cgp-core    = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-macros  = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }

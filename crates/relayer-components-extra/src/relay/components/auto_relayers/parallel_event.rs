@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
-use ibc_relayer_components::relay::traits::components::auto_relayer::AutoRelayerWithTarget;
+use ibc_relayer_components::relay::traits::components::auto_relayer::AutoRelayer;
 use ibc_relayer_components::relay::traits::components::event_relayer::CanRelayEvent;
 use ibc_relayer_components::relay::traits::logs::event::CanLogTargetEvent;
 use ibc_relayer_components::relay::traits::logs::logger::CanLogRelay;
@@ -15,15 +15,14 @@ use crate::std_prelude::*;
 pub struct ParallelEventSubscriptionRelayer;
 
 #[async_trait]
-impl<Relay, Target, Runtime> AutoRelayerWithTarget<Relay, Target>
-    for ParallelEventSubscriptionRelayer
+impl<Relay, Target, Runtime> AutoRelayer<Relay, Target> for ParallelEventSubscriptionRelayer
 where
     Relay: Clone + CanRelayEvent<Target> + CanLogRelay + CanLogTargetEvent<Target>,
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasRuntime<Runtime = Runtime> + HasEventSubscription,
     Runtime: HasSpawner,
 {
-    async fn auto_relay_with_target(relay: &Relay) -> Result<(), Relay::Error> {
+    async fn auto_relay(relay: &Relay, _target: Target) -> Result<(), Relay::Error> {
         let chain = Target::target_chain(relay);
         let runtime = chain.runtime();
         let subscription = chain.event_subscription();

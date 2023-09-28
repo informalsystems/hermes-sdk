@@ -23,7 +23,7 @@ ibc-proto         = { version = "0.34.0" }
 ibc-relayer       = { version = "0.25.0" }
 ibc-relayer-types = { version = "0.25.0" }
 ibc-telemetry     = { version = "0.25.0" }
-cgp-core = { version = "0.1.0", path = "../cgp-core" }
+cgp-core = { version = "0.1.0" }
 ibc-relayer-runtime = { version = "0.1.0", path = "../relayer-runtime" }
 ibc-relayer-all-in-one = { version = "0.1.0", path = "../relayer-all-in-one" }
 ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
@@ -44,10 +44,10 @@ tonic = { version = "0.9", features = ["tls", "tls-roots"] }
 moka = { version = "0.11", features = ["future"] }
 
 [dependencies.tendermint]
-version = "=0.33.0"
+version = "0.33.0"
 features = ["secp256k1"]
 
 [dependencies.tendermint-rpc]
-version = "=0.33.0"
+version = "0.33.0"
 features = ["http-client", "websocket-client"]
 

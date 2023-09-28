@@ -1,5 +1,5 @@
+use ibc_relayer_components::core::traits::run::CanRun;
 use ibc_relayer_components::logger::traits::level::HasLoggerWithBaseLevels;
-use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
 use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
 
 use crate::all_for_one::relay::AfoRelay;
@@ -9,7 +9,7 @@ pub trait AfoBiRelay:
     Clone
     + HasAfoRuntime
     + HasLoggerWithBaseLevels
-    + CanAutoRelay
+    + CanRun
     + HasTwoWayRelay<RelayAToB = Self::AfoRelayAToB, RelayBToA = Self::AfoRelayBToA>
 {
     type AfoRelayAToB: AfoRelay;
@@ -27,7 +27,7 @@ where
     BiRelay: Clone
         + HasAfoRuntime
         + HasLoggerWithBaseLevels
-        + CanAutoRelay
+        + CanRun
         + HasTwoWayRelay<RelayAToB = RelayAToB, RelayBToA = RelayBToA>,
 {
     type AfoRelayAToB = RelayAToB;

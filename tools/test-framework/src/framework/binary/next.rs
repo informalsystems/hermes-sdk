@@ -9,7 +9,7 @@ use ibc_relayer::foreign_client::ForeignClient;
 use ibc_relayer::path::PathIdentifiers;
 use ibc_relayer_all_in_one::one_for_all::traits::birelay::OfaBiRelay;
 use ibc_relayer_all_in_one::one_for_all::types::birelay::OfaBiRelayWrapper;
-use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
+use ibc_relayer_components::core::traits::run::CanRun;
 use ibc_relayer_cosmos::contexts::birelay::CosmosBiRelay;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, IdentifiedChannelEnd};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
@@ -285,7 +285,7 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> CanSpawnRelayer for TestContextV2
         let birelay = self.relayer.clone();
 
         let handle = runtime.runtime.spawn(async move {
-            let _ = birelay.auto_relay().await;
+            let _ = birelay.run().await;
         });
 
         Ok(Some(handle))
