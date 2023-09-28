@@ -1,20 +1,15 @@
 use async_trait::async_trait;
-use cgp_core::traits::Async;
+use cgp_macros::derive_component;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;
 
-/// Similar to the `CanAutoRelay` trait, the main differences are that this
-/// trait only relays to a specific target, i.e., in one direction, as well
-/// as the fact that it is specific to the `Relay` context.
+#[derive_component(AutoRelayerComponent, AutoRelayer<Relay>)]
 #[async_trait]
-pub trait AutoRelayerWithTarget<Relay, Target>: Async
+pub trait CanAutoRelay<Target>: HasRelayChains
 where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
+    Target: ChainTarget<Self>,
 {
-    /// Starts the auto-relaying process of relaying to the given `Relay` context's
-    /// target.
-    async fn auto_relay_with_target(relay: &Relay) -> Result<(), Relay::Error>;
+    async fn auto_relay(&self, target: Target) -> Result<(), Self::Error>;
 }
