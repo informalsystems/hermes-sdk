@@ -3,7 +3,6 @@ use std::thread;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::PacketFilter;
-use ibc_relayer_all_in_one::one_for_all::traits::builder::OfaBuilder;
 use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_all_in_one::one_for_all::types::relay::OfaRelayWrapper;
 use ibc_relayer_components::relay::traits::components::client_creator::CanCreateClient;
@@ -63,7 +62,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
 
         runtime
             .block_on(async move {
-                let cosmos_chain = builder.build_chain_a(&chain_id_a).await?;
+                let cosmos_chain = builder.build_chain(&chain_id_a).await?;
                 let wrapped_solomachine_chain = OfaChainWrapper::new(solomachine_chain.clone());
                 let wrapped_cosmos_chain = OfaChainWrapper::new(cosmos_chain.clone());
 
