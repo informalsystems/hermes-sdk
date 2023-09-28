@@ -9,6 +9,7 @@ members = [
     "crates/relayer-mock",
     "crates/relayer-runtime",
     "crates/relayer-cosmos",
+    "crates/relayer-solomachine",
     "crates/relayer-cosmos-mock",
     "tools/integration-test",
     "tools/test-framework",
@@ -25,6 +26,7 @@ overflow-checks = true
 [patch.crates-io]
 cgp-core    = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-macros  = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+ibc-proto           = { git = "https://github.com/cosmos/ibc-proto-rs.git",    branch = "luca_joss/solomachine-lightclient-v3-from-v0.32" }
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }

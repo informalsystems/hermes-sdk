@@ -4,3 +4,6 @@ pub mod filter;
 pub mod packet_clear;
 pub mod timeout_transfer;
 pub mod transfer;
+
+#[cfg(feature = "solomachine")]
+pub mod solomachine;
