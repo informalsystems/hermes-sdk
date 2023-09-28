@@ -1,10 +1,9 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
+use ibc_relayer_components::core::traits::run::Runner;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::auto_relayer::{
-    AutoRelayer, AutoRelayerWithTarget,
-};
+use ibc_relayer_components::relay::traits::components::auto_relayer::AutoRelayerWithTarget;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
@@ -19,14 +18,14 @@ use crate::std_prelude::*;
 pub struct ParallelBidirectionalRelayer<InRelayer>(pub PhantomData<InRelayer>);
 
 #[async_trait]
-impl<Relay, InRelayer, Runtime> AutoRelayer<Relay> for ParallelBidirectionalRelayer<InRelayer>
+impl<Relay, InRelayer, Runtime> Runner<Relay> for ParallelBidirectionalRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasRuntime<Runtime = Runtime> + Clone,
     InRelayer: AutoRelayerWithTarget<Relay, SourceTarget>,
     InRelayer: AutoRelayerWithTarget<Relay, DestinationTarget>,
     Runtime: HasSpawner,
 {
-    async fn auto_relay(relay: &Relay) -> Result<(), Relay::Error> {
+    async fn run(relay: &Relay) -> Result<(), Relay::Error> {
         let src_relay = relay.clone();
         let dst_relay = relay.clone();
         let spawner = src_relay.runtime().spawner();

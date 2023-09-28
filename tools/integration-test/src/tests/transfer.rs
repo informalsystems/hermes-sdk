@@ -1,7 +1,7 @@
 use std::thread::sleep;
 
 use ibc_relayer::config::PacketFilter;
-use ibc_relayer_components::relay::traits::components::auto_relayer::CanAutoRelay;
+use ibc_relayer_components::core::traits::run::CanRun;
 use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
 use ibc_test_framework::ibc::denom::derive_ibc_denom;
 use ibc_test_framework::prelude::*;
@@ -36,7 +36,7 @@ impl BinaryChannelTest for IbcTransferTest {
         let runtime = chains.node_a.value().chain_driver.runtime.as_ref();
 
         runtime.spawn(async move {
-            let _ = relay_context.auto_relay().await;
+            let _ = relay_context.run().await;
         });
 
         let denom_a = chains.node_a.denom();

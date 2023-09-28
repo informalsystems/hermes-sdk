@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use cgp_core::delegate_component;
 
+use crate::core::traits::run::RunnerComponent;
 use crate::relay::components::auto_relayers::concurrent_bidirectional::ConcurrentBidirectionalRelayer;
 use crate::relay::components::auto_relayers::concurrent_event::ConcurrentEventSubscriptionRelayer;
 use crate::relay::components::create_client::CreateClientWithChains;
@@ -20,7 +21,6 @@ use crate::relay::components::packet_relayers::timeout_unordered::timeout_unorde
 use crate::relay::components::update_client::build::BuildUpdateClientMessages;
 use crate::relay::components::update_client::skip::SkipUpdateClient;
 use crate::relay::components::update_client::wait::WaitUpdateClient;
-use crate::relay::traits::components::auto_relayer::AutoRelayerComponent;
 use crate::relay::traits::components::client_creator::ClientCreatorComponent;
 use crate::relay::traits::components::event_relayer::EventRelayerComponent;
 use crate::relay::traits::components::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
@@ -83,7 +83,7 @@ delegate_component!(
 );
 
 delegate_component!(
-    AutoRelayerComponent,
+    RunnerComponent,
     DefaultRelayComponents<BaseComponents>,
     ConcurrentBidirectionalRelayer<ConcurrentEventSubscriptionRelayer>,
 );
