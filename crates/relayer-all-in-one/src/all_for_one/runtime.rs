@@ -1,6 +1,7 @@
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
+use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 use ibc_relayer_components::runtime::traits::time::HasTime;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     CanCloneSender, CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
@@ -24,6 +25,7 @@ pub trait AfoRuntime:
     + CanCloneSender
     + CanUseChannels
     + CanUseChannelsOnce
+    + CanRunConcurrentTasks
 {
 }
 
@@ -41,6 +43,7 @@ impl<Runtime> AfoRuntime for Runtime where
         + CanCloneSender
         + CanUseChannels
         + CanUseChannelsOnce
+        + CanRunConcurrentTasks
 {
 }
 

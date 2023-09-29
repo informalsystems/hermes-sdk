@@ -46,8 +46,8 @@ where
         + HasRelayChains
         + HasRuntime
         + CanAutoRelay<SourceTarget>
-        + CanAutoRelay<SourceTarget>,
-    Relay::Runtime: CanRunConcurrentTasks<RunAutoRelayerWithTarget<Relay>>,
+        + CanAutoRelay<DestinationTarget>,
+    Relay::Runtime: CanRunConcurrentTasks,
 {
     async fn run(relay: &Relay) -> Result<(), Relay::Error> {
         let tasks = vec![

@@ -10,6 +10,9 @@ pub trait Task: Async {
 }
 
 #[async_trait]
-pub trait CanRunConcurrentTasks<Task> {
-    async fn run_concurrent_tasks(&self, tasks: impl Stream<Item = Task> + Async);
+pub trait CanRunConcurrentTasks {
+    async fn run_concurrent_tasks<S, T>(&self, tasks: S)
+    where
+        S: Stream<Item = T> + Async,
+        T: Task;
 }
