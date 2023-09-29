@@ -7,11 +7,14 @@ use core::fmt::Debug;
 use async_trait::async_trait;
 use cgp_core::traits::{Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
+use ibc_relayer_components::relay::components::auto_relayers::bidirectional::RunAutoRelayerWithTarget;
+use ibc_relayer_components::relay::traits::task::CanRunConcurrentTasks;
 
 use crate::all_for_one::runtime::AfoRuntime;
 use crate::one_for_all::traits::chain::{OfaChainTypes, OfaIbcChain};
 use crate::one_for_all::types::batch::aliases::MessageBatchSender;
 use crate::one_for_all::types::chain::OfaChainWrapper;
+use crate::one_for_all::types::relay::OfaRelayWrapper;
 use crate::std_prelude::*;
 
 #[async_trait]
@@ -21,7 +24,8 @@ pub trait OfaRelay: Async {
     */
     type Error: Debug + Clone + Async;
 
-    type Runtime: AfoRuntime;
+    type Runtime: AfoRuntime
+        + CanRunConcurrentTasks<RunAutoRelayerWithTarget<OfaRelayWrapper<Self>>>;
 
     type Logger: HasBaseLogLevels;
 

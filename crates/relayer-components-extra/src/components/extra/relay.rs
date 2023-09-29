@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use cgp_core::{delegate_component, delegate_components};
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
 use ibc_relayer_components::core::traits::run::RunnerComponent;
+use ibc_relayer_components::relay::components::auto_relayers::bidirectional::BidirectionalRelayer;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::packet_relayers::general::filter_relayer::FilterRelayer;
@@ -35,7 +36,6 @@ use ibc_relayer_components::relay::traits::connection::open_try::ConnectionOpenT
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
 use crate::batch::types::sink::BatchWorkerSink;
-use crate::relay::components::auto_relayers::parallel_bidirectional::ParallelBidirectionalRelayer;
 use crate::relay::components::auto_relayers::parallel_event::ParallelEventSubscriptionRelayer;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
@@ -62,7 +62,7 @@ delegate_component!(
 delegate_component!(
     RunnerComponent,
     ExtraRelayComponents<BaseComponents>,
-    ParallelBidirectionalRelayer,
+    BidirectionalRelayer,
 );
 
 delegate_component!(
