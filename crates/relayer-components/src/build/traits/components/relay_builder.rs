@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 
@@ -10,7 +10,7 @@ use crate::build::types::aliases::{
 use crate::std_prelude::*;
 
 #[derive_component(RelayBuilderComponent, RelayBuilder<Build>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildRelay<Target>: HasBiRelayType + HasErrorType
 where
     Target: RelayBuildTarget<Self>,

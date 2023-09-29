@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::client::create::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
@@ -22,7 +22,7 @@ where
     ) -> Self::Error;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Target, TargetChain, CounterpartyChain> ClientCreator<Relay, Target>
     for CreateClientWithChains
 where

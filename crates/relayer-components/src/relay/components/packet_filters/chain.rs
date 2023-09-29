@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::queries::channel::CanQueryCounterpartyChainIdFromChannel;
 use crate::chain::traits::types::chain_id::HasChainId;
@@ -10,7 +10,7 @@ pub struct MatchPacketSourceChain;
 
 pub struct MatchPacketDestinationChain;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay> PacketFilter<Relay> for MatchPacketSourceChain
 where
     Relay: HasRelayPacketFields,
@@ -36,7 +36,7 @@ where
     }
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay> PacketFilter<Relay> for MatchPacketDestinationChain
 where
     Relay: HasRelayPacketFields,

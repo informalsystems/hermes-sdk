@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::message_builders::timeout_unordered_packet::{
@@ -17,7 +17,7 @@ use crate::std_prelude::*;
 /// implemented on top of this base type.
 pub struct BaseTimeoutUnorderedPacketRelayer;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay> TimeoutUnorderedPacketRelayer<Relay> for BaseTimeoutUnorderedPacketRelayer
 where
     Relay: HasRelayChains,

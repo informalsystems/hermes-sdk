@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
 use crate::chain::traits::message_builders::channel::{
@@ -23,7 +23,7 @@ pub trait CanRaiseMissingChannelInitEventError: HasRelayChains {
 
 pub struct InitializeChannel;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

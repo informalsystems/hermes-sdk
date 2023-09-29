@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::message_builders::receive_packet::{
@@ -15,7 +15,7 @@ use crate::std_prelude::*;
 
 pub struct BaseReceivePacketRelayer;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, AckEvent> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
 where
     Relay: HasRelayChains + CanSendSingleIbcMessage<MainSink, DestinationTarget>,

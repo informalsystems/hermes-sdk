@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::chain::types::aliases::Height;
@@ -16,7 +16,7 @@ use crate::std_prelude::*;
 /// receive back a `WriteAcknowledgementEvent` in response to the receive
 /// packet.
 #[derive_component(TimeoutUnorderedPacketRelayerComponent, TimeoutUnorderedPacketRelayer<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanRelayTimeoutUnorderedPacket: HasRelayChains {
     async fn relay_timeout_unordered_packet(
         &self,

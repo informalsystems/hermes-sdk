@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::build::traits::components::birelay_builder::BiRelayBuilder;
 use crate::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
@@ -9,7 +9,7 @@ use crate::std_prelude::*;
 
 pub struct BuildBiRelayFromRelays;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Builder> BiRelayBuilder<Builder> for BuildBiRelayFromRelays
 where
     Builder:

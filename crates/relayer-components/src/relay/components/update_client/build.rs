@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
@@ -13,7 +13,7 @@ use crate::std_prelude::*;
 
 pub struct BuildUpdateClientMessages;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Target, TargetChain, CounterpartyChain> UpdateClientMessageBuilder<Relay, Target>
     for BuildUpdateClientMessages
 where

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::wait::CanWaitChainReachHeight;
@@ -17,7 +17,7 @@ use crate::std_prelude::*;
 */
 pub struct WaitUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     UpdateClientMessageBuilder<Relay, Target> for WaitUpdateClient<InUpdateClient>
 where

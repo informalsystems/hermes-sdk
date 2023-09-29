@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
@@ -7,7 +7,7 @@ use crate::relay::types::aliases::SrcConnectionId;
 use crate::std_prelude::*;
 
 #[derive_component(ConnectionInitializerComponent, ConnectionInitializer<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanInitConnection: HasRelayChains
 where
     Self::SrcChain: HasInitConnectionOptionsType<Self::DstChain>,

@@ -1,11 +1,11 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::chain::HasChainTypes;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanQueryCounterpartyChainIdFromChannel<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where

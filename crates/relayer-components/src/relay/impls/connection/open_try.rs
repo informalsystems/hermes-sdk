@@ -1,6 +1,6 @@
 use core::iter::Iterator;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::components::chain_status_querier::CanQueryChainHeight;
@@ -36,7 +36,7 @@ pub trait CanRaiseMissingConnectionTryEventError: HasRelayChains {
 */
 pub struct RelayConnectionOpenTry;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain> ConnectionOpenTryRelayer<Relay> for RelayConnectionOpenTry
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

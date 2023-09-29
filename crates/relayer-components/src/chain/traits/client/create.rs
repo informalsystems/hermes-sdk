@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::{Async, HasErrorType};
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -20,7 +20,7 @@ pub trait HasCreateClientEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &Self::ClientId;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildCreateClientPayload<Counterparty>:
     HasCreateClientOptions<Counterparty> + HasCreateClientPayload<Counterparty> + HasErrorType
 {
@@ -30,7 +30,7 @@ pub trait CanBuildCreateClientPayload<Counterparty>:
     ) -> Result<Self::CreateClientPayload, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildCreateClientMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where

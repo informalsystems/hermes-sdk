@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::build::traits::cache::HasRelayCache;
@@ -14,7 +14,7 @@ use crate::std_prelude::*;
 
 pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
 
-#[async_trait]
+#[async_generic_trait]
 impl<InBuilder, Build, Target> RelayBuilder<Build, Target> for BuildRelayWithCache<InBuilder>
 where
     TargetSrcChainId<Build, Target>: Ord + Clone,

@@ -1,10 +1,10 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait ReceivedPacketQuerier<Chain, Counterparty>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
@@ -18,7 +18,7 @@ where
     ) -> Result<bool, Chain::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanQueryReceivedPacket<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::relay::traits::chains::HasRelayChains;
@@ -6,7 +6,7 @@ use crate::relay::types::aliases::{DstConnectionId, SrcConnectionId};
 use crate::std_prelude::*;
 
 #[derive_component(ConnectionOpenAckRelayerComponent, ConnectionOpenAckRelayer<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanRelayConnectionOpenAck: HasRelayChains {
     async fn relay_connection_open_ack(
         &self,

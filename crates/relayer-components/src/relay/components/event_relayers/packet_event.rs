@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::{
@@ -38,7 +38,7 @@ use crate::std_prelude::*;
 */
 pub struct PacketEventRelayer;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: CanRelayPacket,
@@ -62,7 +62,7 @@ where
     }
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
     Relay: CanRelayAckPacket + CanFilterPackets + HasPacketLock + CanLogRelay + CanLogRelayPacket,

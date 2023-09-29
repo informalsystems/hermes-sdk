@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
@@ -22,7 +22,7 @@ use crate::std_prelude::*;
 */
 pub struct RelayChannelOpenHandshake;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain> ChannelOpenHandshakeRelayer<Relay> for RelayChannelOpenHandshake
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 
@@ -11,7 +11,7 @@ use crate::std_prelude::*;
    [current status](HasChainStatusType::ChainStatus) of the blockchain.
 */
 #[derive_component(ChainStatusQuerierComponent, ChainStatusQuerier<Chain>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     /**
         Query the current status of the blockchain. The returned
@@ -32,12 +32,12 @@ pub trait CanQueryChainStatus: HasChainStatusType + HasErrorType {
     async fn query_chain_status(&self) -> Result<Self::ChainStatus, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanQueryChainHeight: HasHeightType + HasErrorType {
     async fn query_chain_height(&self) -> Result<Self::Height, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Chain> CanQueryChainHeight for Chain
 where
     Chain: CanQueryChainStatus,

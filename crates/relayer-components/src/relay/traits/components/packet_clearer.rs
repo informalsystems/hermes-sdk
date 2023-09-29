@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::chain::types::aliases::{ChannelId, PortId};
@@ -6,7 +6,7 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::std_prelude::*;
 
 #[derive_component(PacketClearerComponent, PacketClearer<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanClearPackets: HasRelayChains {
     async fn clear_packets(
         &self,

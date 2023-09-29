@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::components::message_sender::MessageSender;
 use crate::std_prelude::*;
@@ -10,7 +10,7 @@ use crate::transaction::traits::types::HasTxTypes;
 
 pub struct SendMessagesAsTx;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Chain> MessageSender<Chain> for SendMessagesAsTx
 where
     Chain: HasTxTypes

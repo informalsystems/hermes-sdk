@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
@@ -7,7 +7,7 @@ use crate::relay::types::aliases::{DstPortId, SrcChannelId, SrcPortId};
 use crate::std_prelude::*;
 
 #[derive_component(ChannelInitializerComponent, ChannelInitializer<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanInitChannel: HasRelayChains
 where
     Self::SrcChain: HasInitChannelOptionsType<Self::DstChain>,

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 
@@ -8,7 +8,7 @@ use crate::build::types::aliases::{TargetChain, TargetChainId};
 use crate::std_prelude::*;
 
 #[derive_component(ChainBuilderComponent, ChainBuilder<Build>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildChain<Target>: HasBiRelayType + HasErrorType
 where
     Target: ChainBuildTarget<Self>,

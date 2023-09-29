@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::components::chain_status_querier::CanQueryChainHeight;
@@ -25,7 +25,7 @@ use crate::std_prelude::*;
 */
 pub struct RelayConnectionOpenConfirm;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain> ConnectionOpenConfirmRelayer<Relay> for RelayConnectionOpenConfirm
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

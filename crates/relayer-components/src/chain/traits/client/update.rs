@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::{Async, HasErrorType};
 
 use crate::chain::traits::types::client_state::HasClientStateType;
@@ -9,7 +9,7 @@ pub trait HasUpdateClientPayload<Counterparty>: HasIbcChainTypes<Counterparty> {
     type UpdateClientPayload: Async;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildUpdateClientPayload<Counterparty>:
     HasUpdateClientPayload<Counterparty> + HasClientStateType<Counterparty> + HasErrorType
 {
@@ -21,7 +21,7 @@ pub trait CanBuildUpdateClientPayload<Counterparty>:
     ) -> Result<Self::UpdateClientPayload, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildUpdateClientMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where

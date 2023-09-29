@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::chain::traits::client::create::HasCreateClientOptions;
@@ -8,7 +8,7 @@ use crate::relay::traits::target::ChainTarget;
 use crate::std_prelude::*;
 
 #[derive_component(ClientCreatorComponent, ClientCreator<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanCreateClient<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,

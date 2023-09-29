@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -20,7 +20,7 @@ use crate::std_prelude::*;
    [`RelayConnectionOpenHandshake`](crate::relay::impls::connection::open_handshake::RelayConnectionOpenHandshake),
    which would reuse the given connection ID instead of creating new ones.
 */
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBootstrapConnection: HasRelayChains
 where
     Self::SrcChain: HasInitConnectionOptionsType<Self::DstChain>,
@@ -33,7 +33,7 @@ where
     ) -> Result<(SrcConnectionId<Self>, DstConnectionId<Self>), Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain> CanBootstrapConnection for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

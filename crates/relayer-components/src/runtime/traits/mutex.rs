@@ -1,12 +1,12 @@
 use core::ops::DerefMut;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::Async;
 
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait HasMutex: Async {
     type Mutex<T: Async>: Async;
 

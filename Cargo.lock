@@ -139,9 +139,9 @@ dependencies = [
 
 [[package]]
 name = "async-trait"
-version = "0.1.72"
+version = "0.1.73"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc6dde6e4ed435a4c1ee4e73592f5ba9da2151af10076cc04858746af9352d09"
+checksum = "bc00ceb34980c03614e35a3a4e218276a0a824e911d07651cd0d858a51e8c0f0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -509,14 +509,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "cgp-async"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#5fe70389082e89ed83b4f4b1f57e203ae699d4c0"
+dependencies = [
+ "async-trait",
+ "cgp-macros",
+]
+
+[[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#799b8add570a9c6b5ff4f48bdcd499ee2c1d4bae"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#5fe70389082e89ed83b4f4b1f57e203ae699d4c0"
 
 [[package]]
 name = "cgp-macros"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#799b8add570a9c6b5ff4f48bdcd499ee2c1d4bae"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#5fe70389082e89ed83b4f4b1f57e203ae699d4c0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1822,6 +1831,7 @@ name = "ibc-relayer-components"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cgp-async",
  "cgp-core",
  "cgp-macros",
  "futures-core",

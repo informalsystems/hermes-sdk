@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
@@ -10,7 +10,7 @@ use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildAckPacketPayload<Counterparty>:
     HasAckPacketPayload<Counterparty>
     + HasWriteAcknowledgementEvent<Counterparty>
@@ -30,7 +30,7 @@ where
     ) -> Result<Self::AckPacketPayload, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildAckPacketMessage<Counterparty>:
     HasMessageType + HasErrorType + HasIbcPacketTypes<Counterparty>
 where

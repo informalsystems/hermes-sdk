@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 use core::pin::Pin;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 
@@ -53,7 +53,7 @@ use crate::std_prelude::*;
     [`Stream`]s, so that the running consumers would receive the termination
     signal.
 */
-#[async_trait]
+#[async_generic_trait]
 pub trait Subscription: Send + Sync + 'static {
     /**
        The item that is yielded in the [`Stream`]s returned from
@@ -79,7 +79,7 @@ pub trait Subscription: Send + Sync + 'static {
     async fn subscribe(&self) -> Option<Pin<Box<dyn Stream<Item = Self::Item> + Send + 'static>>>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<T: Async> Subscription for Box<dyn Subscription<Item = T>> {
     type Item = T;
 
@@ -88,7 +88,7 @@ impl<T: Async> Subscription for Box<dyn Subscription<Item = T>> {
     }
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<T: Async> Subscription for Arc<dyn Subscription<Item = T>> {
     type Item = T;
 

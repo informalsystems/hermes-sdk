@@ -2,7 +2,7 @@
    Trait definitions for [`CanSendMessages`] and [`MessageSender`].
 */
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 
@@ -61,7 +61,7 @@ use crate::std_prelude::*;
    provides the same interface for sending messages using this trait.
 */
 #[derive_component(MessageSenderComponent, MessageSender<Chain>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanSendMessages: HasMessageType + HasEventType + HasErrorType {
     /**
         Given a list of [messages](HasMessageType::Message), submit the messages
@@ -89,7 +89,7 @@ pub trait InjectMismatchIbcEventsCountError: HasErrorType {
     fn mismatch_ibc_events_count_error(expected: usize, actual: usize) -> Self::Error;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanSendFixSizedMessages: HasMessageType + HasEventType + HasErrorType {
     async fn send_messages_fixed<const COUNT: usize>(
         &self,
@@ -97,12 +97,12 @@ pub trait CanSendFixSizedMessages: HasMessageType + HasEventType + HasErrorType 
     ) -> Result<[Vec<Self::Event>; COUNT], Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanSendSingleMessage: HasMessageType + HasEventType + HasErrorType {
     async fn send_message(&self, message: Self::Message) -> Result<Vec<Self::Event>, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Chain> CanSendFixSizedMessages for Chain
 where
     Chain: CanSendMessages + InjectMismatchIbcEventsCountError,
@@ -121,7 +121,7 @@ where
     }
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Chain> CanSendSingleMessage for Chain
 where
     Chain: CanSendMessages,

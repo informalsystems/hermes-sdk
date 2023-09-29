@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
@@ -15,7 +15,7 @@ use crate::std_prelude::*;
 
 pub struct FullCycleRelayer;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay> PacketRelayer<Relay> for FullCycleRelayer
 where
     Relay: CanLogRelay

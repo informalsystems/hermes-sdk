@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::std_prelude::*;
@@ -14,7 +14,7 @@ use crate::std_prelude::*;
    and this would signal to other packet relayers to skip relaying the given
    packet.
 */
-#[async_trait]
+#[async_generic_trait]
 pub trait HasPacketLock: HasRelayChains {
     /**
        The mutex guard for a locked packet. This should be kept alive while

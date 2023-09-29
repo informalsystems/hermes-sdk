@@ -1,4 +1,6 @@
+#[cfg(feature = "async")]
 pub mod auto_relayers;
+
 pub mod create_client;
 pub mod event_relayers;
 pub mod message_senders;

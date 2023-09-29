@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::build::traits::components::chain_builder::CanBuildChain;
 use crate::build::traits::components::relay_builder::RelayBuilder;
@@ -12,7 +12,7 @@ use crate::std_prelude::*;
 
 pub struct BuildRelayFromChains;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Build, Target> RelayBuilder<Build, Target> for BuildRelayFromChains
 where
     Build: CanBuildChain<SrcChainTarget<Build, Target>>

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::chain::traits::types::event::HasEventType;
@@ -17,7 +17,7 @@ use crate::std_prelude::*;
    but also future relayers such as connection and channel handshake relayers.
 */
 #[derive_component(EventRelayerComponent, EventRelayer<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanRelayEvent<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,

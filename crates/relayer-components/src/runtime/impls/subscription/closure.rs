@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use core::future::Future;
 use core::pin::Pin;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 
@@ -75,7 +75,7 @@ where
     >,
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Runtime, T: Async> Subscription for SubscriptionClosure<Runtime, T>
 where
     Runtime: HasMutex,

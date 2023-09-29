@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::runtime::HasRuntime;
@@ -24,7 +24,7 @@ pub trait HasPollTimeout {
 
 pub struct PollTxResponse;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Context> TxResponsePoller<Context> for PollTxResponse
 where
     Context:

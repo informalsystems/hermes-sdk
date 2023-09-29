@@ -1,6 +1,6 @@
 use core::iter::Iterator;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
@@ -25,7 +25,7 @@ pub trait CanRaiseMissingConnectionInitEventError: HasRelayChains {
 */
 pub struct InitializeConnection;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConnection
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::relay::traits::chains::HasRelayChains;
@@ -6,7 +6,7 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
 use crate::std_prelude::*;
 
 #[derive_component(ChannelOpenHandshakeRelayerComponent, ChannelOpenHandshakeRelayer<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanRelayChannelOpenHandshake: HasRelayChains {
     async fn relay_channel_open_handshake(
         &self,

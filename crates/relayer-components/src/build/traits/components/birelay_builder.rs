@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 
@@ -7,7 +7,7 @@ use crate::build::types::aliases::{ChainIdA, ChainIdB, ClientIdA, ClientIdB};
 use crate::std_prelude::*;
 
 #[derive_component(BiRelayBuilderComponent, BiRelayBuilder<Build>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildBiRelay: HasBiRelayType + HasErrorType {
     async fn build_birelay(
         &self,

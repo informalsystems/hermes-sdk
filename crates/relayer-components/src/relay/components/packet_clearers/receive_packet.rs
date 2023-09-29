@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use futures_util::{stream, StreamExt};
 
 use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
@@ -11,7 +11,7 @@ use crate::std_prelude::*;
 
 pub struct ClearReceivePackets;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
     Relay: CanRelayPacket,

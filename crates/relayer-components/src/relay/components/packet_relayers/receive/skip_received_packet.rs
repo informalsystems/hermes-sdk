@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::queries::received_packet::CanQueryReceivedPacket;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
@@ -13,7 +13,7 @@ pub struct SkipReceivedPacketRelayer<Relayer> {
     pub phantom: PhantomData<Relayer>,
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Relayer> ReceivePacketRelayer<Relay> for SkipReceivedPacketRelayer<Relayer>
 where
     Relay: HasRelayPacketFields,

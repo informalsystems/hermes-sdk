@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;
@@ -101,7 +101,7 @@ where
     type Timestamp = <Target::TargetChain as HasTimestampType>::Timestamp;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Target> CanSendMessages for RelayToChain<Relay, Target>
 where
     Relay: HasRelayChains,

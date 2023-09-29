@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
@@ -7,7 +7,7 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildCreateClientMessage<Counterparty>: HasMessageType + HasErrorType
 where
     Counterparty: HasIbcChainTypes<Self> + HasClientStateType<Self> + HasConsensusStateType<Self>,

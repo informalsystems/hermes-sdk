@@ -7,7 +7,7 @@
 
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::CanRaiseError;
 
 use crate::std_prelude::*;
@@ -29,7 +29,7 @@ pub trait HasMaxTxSize {
 
 pub struct CheckEncodedTxSize<InEncoder>(PhantomData<InEncoder>);
 
-#[async_trait]
+#[async_generic_trait]
 impl<Context, InEncoder> TxEncoder<Context> for CheckEncodedTxSize<InEncoder>
 where
     Context: HasTxTypes + HasMaxTxSize + HasMaxTxSizeExceededError,

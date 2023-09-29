@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -9,7 +9,7 @@ use crate::std_prelude::*;
 
 pub struct SendIbcMessagesToChain;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Sink, Target, TargetChain> IbcMessageSender<Relay, Sink, Target>
     for SendIbcMessagesToChain
 where

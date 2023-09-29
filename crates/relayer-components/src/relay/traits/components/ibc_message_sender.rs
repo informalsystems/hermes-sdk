@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::Async;
 use cgp_macros::derive_component;
 
@@ -12,7 +12,7 @@ use crate::std_prelude::*;
 pub struct MainSink;
 
 #[derive_component(IbcMessageSenderComponent<Sink>, IbcMessageSender<Relay>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanSendIbcMessages<Sink, Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
@@ -24,7 +24,7 @@ where
     ) -> Result<Vec<Vec<Event<Target::TargetChain>>>, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanSendFixSizedIbcMessages<Sink, Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
@@ -36,7 +36,7 @@ where
     ) -> Result<[Vec<Event<Target::TargetChain>>; COUNT], Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanSendSingleIbcMessage<Sink, Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
@@ -48,7 +48,7 @@ where
     ) -> Result<Vec<Event<Target::TargetChain>>, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Sink, Target, TargetChain, Event, Message> CanSendFixSizedIbcMessages<Sink, Target>
     for Relay
 where
@@ -72,7 +72,7 @@ where
     }
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Sink, Target, TargetChain, Event, Message> CanSendSingleIbcMessage<Sink, Target>
     for Relay
 where

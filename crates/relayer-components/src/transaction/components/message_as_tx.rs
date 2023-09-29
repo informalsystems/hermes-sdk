@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::std_prelude::*;
@@ -14,7 +14,7 @@ use crate::transaction::traits::types::HasTxTypes;
 
 pub struct EstimateFeesAndSendTx;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Context> MessageAsTxSender<Context> for EstimateFeesAndSendTx
 where
     Context: HasTxTypes

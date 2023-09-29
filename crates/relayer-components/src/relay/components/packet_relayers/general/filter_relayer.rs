@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::relay::traits::components::packet_filter::CanFilterPackets;
 use crate::relay::traits::components::packet_relayer::PacketRelayer;
@@ -10,7 +10,7 @@ pub struct FilterRelayer<InRelayer> {
     pub phantom: PhantomData<InRelayer>,
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for FilterRelayer<InRelayer>
 where
     Relay: CanFilterPackets,

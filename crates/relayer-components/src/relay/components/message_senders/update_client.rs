@@ -1,6 +1,6 @@
 use alloc::collections::BTreeSet;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::{HasCounterpartyMessageHeight, HasIbcChainTypes};
@@ -13,7 +13,7 @@ use crate::std_prelude::*;
 
 pub struct SendIbcMessagesWithUpdateClient<Sender>(pub Sender);
 
-#[async_trait]
+#[async_generic_trait]
 impl<InSender, Relay, Sink, Target, TargetChain, CounterpartyChain>
     IbcMessageSender<Relay, Sink, Target> for SendIbcMessagesWithUpdateClient<InSender>
 where

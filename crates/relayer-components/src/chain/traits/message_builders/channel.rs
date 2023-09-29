@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::types::channel::{
@@ -7,7 +7,7 @@ use crate::chain::traits::types::channel::{
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildChannelHandshakePayloads<Counterparty>:
     HasChannelHandshakePayloads<Counterparty> + HasClientStateType<Counterparty> + HasErrorType
 {
@@ -36,7 +36,7 @@ pub trait CanBuildChannelHandshakePayloads<Counterparty>:
     ) -> Result<Self::ChannelOpenConfirmPayload, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBuildChannelHandshakeMessages<Counterparty>:
     HasInitChannelOptionsType<Counterparty> + HasErrorType
 where

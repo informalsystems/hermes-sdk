@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -15,7 +15,7 @@ use crate::std_prelude::*;
 
 pub struct SkipUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     UpdateClientMessageBuilder<Relay, Target> for SkipUpdateClient<InUpdateClient>
 where

@@ -2,7 +2,7 @@ use core::future::Future;
 use core::marker::PhantomData;
 use core::pin::Pin;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use futures_util::stream::{self, StreamExt};
 
 use crate::core::traits::run::Runner;
@@ -25,7 +25,7 @@ use crate::std_prelude::*;
 /// concurrency.
 pub struct ConcurrentBidirectionalRelayer<InRelayer>(pub PhantomData<InRelayer>);
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, InRelayer> Runner<Relay> for ConcurrentBidirectionalRelayer<InRelayer>
 where
     Relay: HasRelayChains,

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::Async;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
@@ -18,7 +18,7 @@ use crate::std_prelude::*;
 /// on top of this base type.
 pub struct BaseAckPacketRelayer;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain, Packet> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>,

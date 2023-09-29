@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::build::traits::birelay::HasBiRelayType;
@@ -15,7 +15,7 @@ use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBootstrapRelay<Target>: HasBiRelayType + HasErrorType
 where
     Target: RelayBuildTarget<Self>,
@@ -36,7 +36,7 @@ where
     ) -> Result<TargetRelay<Self, Target>, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Build, Target, Relay, SrcChain, DstChain> CanBootstrapRelay<Target> for Build
 where
     Build: CanBuildRelay<Target>

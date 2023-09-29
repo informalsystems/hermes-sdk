@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
@@ -19,7 +19,7 @@ use crate::std_prelude::*;
 */
 pub struct LockPacketRelayer<InRelayer>(pub PhantomData<InRelayer>);
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LockPacketRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasPacketLock + CanLogRelay + CanLogRelayPacket,

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::build::traits::cache::HasChainCache;
@@ -12,7 +12,7 @@ use crate::std_prelude::*;
 
 pub struct BuildChainWithCache<InBuilder>(pub PhantomData<InBuilder>);
 
-#[async_trait]
+#[async_generic_trait]
 impl<InBuilder, Build, Target> ChainBuilder<Build, Target> for BuildChainWithCache<InBuilder>
 where
     TargetChain<Build, Target>: Clone,

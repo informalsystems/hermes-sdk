@@ -1,11 +1,11 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_macros::derive_component;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;
 
 #[derive_component(TxResponsePollerComponent, TxResponsePoller<TxContext>)]
-#[async_trait]
+#[async_generic_trait]
 pub trait CanPollTxResponse: HasTxTypes {
     async fn poll_tx_response(
         &self,

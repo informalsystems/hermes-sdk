@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use futures_util::stream::StreamExt;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
@@ -9,7 +9,7 @@ use crate::std_prelude::*;
 
 pub struct SequentialEventSubscriptionRelayer;
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, Target> AutoRelayer<Relay, Target> for SequentialEventSubscriptionRelayer
 where
     Relay: CanRelayEvent<Target>,

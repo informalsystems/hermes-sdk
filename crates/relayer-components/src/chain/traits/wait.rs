@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::HasErrorType;
 
 use crate::chain::traits::components::chain_status_querier::CanQueryChainHeight;
@@ -9,7 +9,7 @@ use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::std_prelude::*;
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanWaitChainReachHeight: HasHeightType + HasErrorType {
     async fn wait_chain_reach_height(
         &self,
@@ -17,7 +17,7 @@ pub trait CanWaitChainReachHeight: HasHeightType + HasErrorType {
     ) -> Result<Self::Height, Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Chain> CanWaitChainReachHeight for Chain
 where
     Chain: CanQueryChainHeight + HasRuntime,

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -21,7 +21,7 @@ use crate::std_prelude::*;
    which would reuse the given channel ID instead of creating new ones.
 */
 
-#[async_trait]
+#[async_generic_trait]
 pub trait CanBootstrapChannel: HasRelayChains
 where
     Self::SrcChain: HasInitChannelOptionsType<Self::DstChain>,
@@ -36,7 +36,7 @@ where
     ) -> Result<(SrcChannelId<Self>, DstChannelId<Self>), Self::Error>;
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<Relay, SrcChain, DstChain> CanBootstrapChannel for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

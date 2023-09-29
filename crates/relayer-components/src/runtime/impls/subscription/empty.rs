@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 use core::pin::Pin;
 
-use async_trait::async_trait;
+use cgp_async::async_generic_trait;
 use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 
@@ -22,7 +22,7 @@ impl<T> EmptySubscription<T> {
     }
 }
 
-#[async_trait]
+#[async_generic_trait]
 impl<T: Async> Subscription for EmptySubscription<T> {
     type Item = T;
 
