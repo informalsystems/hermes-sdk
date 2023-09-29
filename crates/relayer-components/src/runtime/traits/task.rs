@@ -1,5 +1,6 @@
 use async_trait::async_trait;
 use cgp_core::traits::Async;
+use futures_core::Stream;
 
 use crate::std_prelude::*;
 
@@ -10,5 +11,5 @@ pub trait Task: Async {
 
 #[async_trait]
 pub trait CanRunConcurrentTasks<Task> {
-    async fn run_concurrent_tasks(&self, tasks: Vec<Task>);
+    async fn run_concurrent_tasks(&self, tasks: impl Stream<Item = Task> + Async);
 }

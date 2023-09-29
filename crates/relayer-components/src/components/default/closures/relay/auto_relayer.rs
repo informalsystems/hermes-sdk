@@ -7,8 +7,8 @@ use crate::components::default::relay::DefaultRelayComponents;
 use crate::core::traits::run::CanRun;
 use crate::relay::components::auto_relayers::bidirectional::RunAutoRelayerWithTarget;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::task::CanRunConcurrentTasks;
 use crate::runtime::traits::runtime::HasRuntime;
+use crate::runtime::traits::task::CanRunConcurrentTasks;
 
 pub trait CanUseDefaultAutoRelayer: UseDefaultAutoRelayer {}
 

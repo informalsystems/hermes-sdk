@@ -7,8 +7,8 @@ use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerTyp
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::components::auto_relayers::bidirectional::RunAutoRelayerWithTarget;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::task::CanRunConcurrentTasks;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
 use crate::components::extra::relay::ExtraRelayComponents;

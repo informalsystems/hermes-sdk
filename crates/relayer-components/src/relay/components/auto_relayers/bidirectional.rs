@@ -1,11 +1,12 @@
 use async_trait::async_trait;
+use futures_util::stream;
 
 use crate::core::traits::run::Runner;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::auto_relayer::CanAutoRelay;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use crate::relay::traits::task::{CanRunConcurrentTasks, Task};
 use crate::runtime::traits::runtime::HasRuntime;
+use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 use crate::std_prelude::*;
 
 pub struct BidirectionalRelayer;
@@ -60,7 +61,10 @@ where
             },
         ];
 
-        relay.runtime().run_concurrent_tasks(tasks).await;
+        relay
+            .runtime()
+            .run_concurrent_tasks(stream::iter(tasks))
+            .await;
 
         Ok(())
     }
