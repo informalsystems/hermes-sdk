@@ -62,7 +62,7 @@ delegate_component!(
 delegate_component!(
     RunnerComponent,
     ExtraRelayComponents<BaseComponents>,
-    ParallelBidirectionalRelayer<ParallelEventSubscriptionRelayer>,
+    ParallelBidirectionalRelayer,
 );
 
 delegate_component!(

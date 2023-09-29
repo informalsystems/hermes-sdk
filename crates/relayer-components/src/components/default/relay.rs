@@ -106,7 +106,7 @@ delegate_component!(
 delegate_component!(
     RunnerComponent,
     DefaultRelayComponents<BaseComponents>,
-    ConcurrentBidirectionalRelayer<ConcurrentEventSubscriptionRelayer>,
+    ConcurrentBidirectionalRelayer,
 );
 
 delegate_component!(
