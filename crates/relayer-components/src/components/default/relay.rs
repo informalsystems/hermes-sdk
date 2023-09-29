@@ -36,6 +36,7 @@ use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerCompon
 use crate::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
 use crate::relay::traits::channel::open_init::ChannelInitializerComponent;
 use crate::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
+use crate::relay::traits::components::auto_relayer::AutoRelayerComponent;
 use crate::relay::traits::components::client_creator::ClientCreatorComponent;
 use crate::relay::traits::components::event_relayer::EventRelayerComponent;
 use crate::relay::traits::components::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
@@ -106,6 +107,12 @@ delegate_component!(
     RunnerComponent,
     DefaultRelayComponents<BaseComponents>,
     ConcurrentBidirectionalRelayer<ConcurrentEventSubscriptionRelayer>,
+);
+
+delegate_component!(
+    AutoRelayerComponent,
+    DefaultRelayComponents<BaseComponents>,
+    ConcurrentEventSubscriptionRelayer,
 );
 
 delegate_component!(

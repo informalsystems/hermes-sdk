@@ -14,6 +14,7 @@ use ibc_relayer_components::relay::traits::channel::open_confirm::ChannelOpenCon
 use ibc_relayer_components::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
 use ibc_relayer_components::relay::traits::channel::open_init::ChannelInitializerComponent;
 use ibc_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
+use ibc_relayer_components::relay::traits::components::auto_relayer::AutoRelayerComponent;
 use ibc_relayer_components::relay::traits::components::client_creator::ClientCreatorComponent;
 use ibc_relayer_components::relay::traits::components::event_relayer::EventRelayerComponent;
 use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
@@ -62,6 +63,12 @@ delegate_component!(
     RunnerComponent,
     ExtraRelayComponents<BaseComponents>,
     ParallelBidirectionalRelayer<ParallelEventSubscriptionRelayer>,
+);
+
+delegate_component!(
+    AutoRelayerComponent,
+    ExtraRelayComponents<BaseComponents>,
+    ParallelEventSubscriptionRelayer,
 );
 
 delegate_components!(

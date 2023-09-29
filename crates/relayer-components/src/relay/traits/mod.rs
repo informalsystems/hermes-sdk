@@ -7,4 +7,5 @@ pub mod logs;
 pub mod packet;
 pub mod packet_lock;
 pub mod target;
+pub mod task;
 pub mod two_way;
