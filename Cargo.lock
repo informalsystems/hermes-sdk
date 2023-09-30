@@ -511,7 +511,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#5fe70389082e89ed83b4f4b1f57e203ae699d4c0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#65d8f95f67d42ecbb97787f127a97fe31645771b"
 dependencies = [
  "async-trait",
  "cgp-macros",
@@ -520,16 +520,25 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#5fe70389082e89ed83b4f4b1f57e203ae699d4c0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#65d8f95f67d42ecbb97787f127a97fe31645771b"
 
 [[package]]
 name = "cgp-macros"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#5fe70389082e89ed83b4f4b1f57e203ae699d4c0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#65d8f95f67d42ecbb97787f127a97fe31645771b"
 dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.37",
+]
+
+[[package]]
+name = "cgp-sync"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#65d8f95f67d42ecbb97787f127a97fe31645771b"
+dependencies = [
+ "async-trait",
+ "cgp-macros",
 ]
 
 [[package]]
@@ -1847,6 +1856,18 @@ dependencies = [
  "futures-core",
  "futures-util",
  "ibc-relayer-components",
+]
+
+[[package]]
+name = "ibc-relayer-components-sync"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "cgp-macros",
+ "cgp-sync",
+ "futures-core",
+ "futures-util",
 ]
 
 [[package]]

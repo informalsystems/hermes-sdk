@@ -1,5 +1,5 @@
 [package]
-name         = "ibc-relayer-components"
+name         = "ibc-relayer-components-sync"
 version      = "0.1.0"
 edition      = "2021"
 license      = "Apache-2.0"
@@ -15,14 +15,10 @@ description  = """
 [package.metadata.docs.rs]
 all-features = true
 
-[features]
-default = ["async"]
-async = []
-
 [dependencies]
 cgp-core = { version = "0.1.0" }
 cgp-macros = { version = "0.1.0" }
-cgp-async = { version = "0.1.0" }
+cgp-async = { version = "0.1.0", package = "cgp-sync" }
 async-trait = "0.1.56"
 futures-core = { version = "0.3", default-features = false, features = ["alloc"] }
 futures-util = { version = "0.3", default-features = false, features = ["alloc"] }

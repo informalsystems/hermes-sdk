@@ -4,6 +4,7 @@ resolver = "2"
 
 members = [
     "crates/relayer-components",
+    "crates/relayer-components-sync",
     "crates/relayer-components-extra",
     "crates/relayer-all-in-one",
     "crates/relayer-mock",
@@ -27,6 +28,7 @@ overflow-checks = true
 cgp-core    = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
 cgp-macros  = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
 cgp-async  = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
+cgp-sync  = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
 ibc-proto           = { git = "https://github.com/cosmos/ibc-proto-rs.git",    branch = "luca_joss/solomachine-lightclient-v3-from-v0.32" }
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
