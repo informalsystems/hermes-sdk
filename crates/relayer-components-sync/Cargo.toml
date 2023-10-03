@@ -1,5 +1,5 @@
 [package]
-name         = "ibc-relayer-components"
+name         = "ibc-relayer-components-sync"
 version      = "0.1.0"
 edition      = "2021"
 license      = "Apache-2.0"
@@ -16,4 +16,4 @@ description  = """
 all-features = true
 
 [dependencies]
-cgp-core = { version = "0.1.0" }
+cgp-core = { version = "0.1.0", package = "cgp-core-sync" }

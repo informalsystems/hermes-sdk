@@ -15,8 +15,6 @@ description  = """
 [package.metadata.docs.rs]
 all-features = true
 
-[features]
-
 [dependencies]
 cgp-core = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
