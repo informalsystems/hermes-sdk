@@ -27,4 +27,4 @@ flex-error = { version = "0.4.4", default-features = false }
 cgp-core = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
 ibc-relayer-components-extra = { version = "0.1.0", path = "../relayer-components-extra" }
-ibc-async-components = { version = "0.1.0", path = "../async-components" }
+ibc-relayer-subscription = { version = "0.1.0", path = "../relayer-subscription" }

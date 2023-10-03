@@ -3,8 +3,8 @@ use core::pin::Pin;
 use cgp_core::traits::Async;
 use futures::stream::Stream;
 use futures::StreamExt;
-use ibc_async_components::traits::stream::HasAsyncStreamType;
 use ibc_relayer_components::runtime::traits::stream::{CanMapStream, HasStreamType};
+use ibc_relayer_subscription::traits::stream::HasAsyncStreamType;
 
 use crate::types::runtime::TokioRuntimeContext;
 

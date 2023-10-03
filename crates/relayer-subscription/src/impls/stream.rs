@@ -11,7 +11,7 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 };
 use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
 
-use crate::impls::subscription::multiplex::MultiplexingSubscription;
+use crate::impls::multiplex::MultiplexingSubscription;
 use crate::std_prelude::*;
 use crate::traits::stream::HasAsyncStreamType;
 use crate::traits::subscription::Subscription;

@@ -1,9 +1,9 @@
 use alloc::sync::Arc;
 use core::pin::Pin;
 use core::time::Duration;
-use ibc_async_components::impls::subscription::closure::CanCreateClosureSubscription;
-use ibc_async_components::impls::subscription::multiplex::CanMultiplexSubscription;
-use ibc_async_components::traits::subscription::Subscription;
+use ibc_relayer_subscription::impls::closure::CanCreateClosureSubscription;
+use ibc_relayer_subscription::impls::multiplex::CanMultiplexSubscription;
+use ibc_relayer_subscription::traits::subscription::Subscription;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
