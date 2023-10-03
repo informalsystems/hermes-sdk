@@ -1,5 +1,4 @@
 use async_trait::async_trait;
-use futures_util::stream;
 
 use crate::core::traits::run::Runner;
 use crate::relay::traits::chains::HasRelayChains;
@@ -61,10 +60,7 @@ where
             },
         ];
 
-        relay
-            .runtime()
-            .run_concurrent_tasks(stream::iter(tasks))
-            .await;
+        relay.runtime().run_concurrent_tasks(tasks).await;
 
         Ok(())
     }
