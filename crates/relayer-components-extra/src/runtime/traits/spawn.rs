@@ -1,8 +1,15 @@
 use core::future::Future;
 
 use cgp_core::traits::Async;
+use ibc_relayer_components::runtime::traits::task::Task;
 
 use crate::std_prelude::*;
+
+pub trait CanSpawnTask: Async {
+    fn spawn<T>(&self, task: T)
+    where
+        T: Task;
+}
 
 pub trait HasSpawner: Async {
     type Spawner: Spawner;
