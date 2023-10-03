@@ -7,11 +7,9 @@
    [`std::sync::mpsc::channel`](https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html).
 */
 
-use core::pin::Pin;
-
 use async_trait::async_trait;
 use cgp_core::traits::{Async, HasErrorType};
-use futures_core::stream::Stream;
+use ibc_relayer_components::runtime::traits::stream::HasStreamType;
 
 use crate::std_prelude::*;
 
@@ -143,10 +141,8 @@ pub trait CanUseChannels: HasChannelTypes {
         T: Async;
 }
 
-pub trait CanStreamReceiver: HasChannelTypes {
-    fn receiver_to_stream<T>(
-        receiver: Self::Receiver<T>,
-    ) -> Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>
+pub trait CanStreamReceiver: HasChannelTypes + HasStreamType {
+    fn receiver_to_stream<T>(receiver: Self::Receiver<T>) -> Self::Stream<T>
     where
         T: Async;
 }

@@ -23,7 +23,7 @@ use crate::batch::types::config::BatchConfig;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::runtime::traits::channel::{CanUseChannels, HasChannelTypes};
 use crate::runtime::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
-use crate::runtime::traits::spawn::{HasSpawner, Spawner, TaskHandle};
+use crate::runtime::traits::spawn::{HasSpawner, Spawner};
 use crate::std_prelude::*;
 
 #[async_trait]
@@ -38,7 +38,7 @@ where
         target: Target,
         config: BatchConfig,
         receiver: MessageBatchReceiver<Target::TargetChain, Self::Error>,
-    ) -> Box<dyn TaskHandle>;
+    );
 }
 
 impl<Relay, Target, Runtime> CanSpawnBatchMessageWorker<Target> for Relay
@@ -53,7 +53,7 @@ where
         _target: Target,
         config: BatchConfig,
         receiver: MessageBatchReceiver<Target::TargetChain, Self::Error>,
-    ) -> Box<dyn TaskHandle> {
+    ) {
         let spawner = Target::target_chain(&self).runtime().spawner();
 
         spawner.spawn(async move {

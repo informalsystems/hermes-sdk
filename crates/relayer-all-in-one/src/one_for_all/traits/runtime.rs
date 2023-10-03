@@ -6,7 +6,6 @@ use core::time::Duration;
 use async_trait::async_trait;
 use cgp_core::traits::Async;
 use futures_core::{Future, Stream};
-use ibc_relayer_components_extra::runtime::traits::spawn::TaskHandle;
 
 use crate::std_prelude::*;
 
@@ -46,7 +45,7 @@ pub trait OfaRuntime: Async {
 
     async fn acquire_mutex<'a, T: Async>(mutex: &'a Self::Mutex<T>) -> Self::MutexGuard<'a, T>;
 
-    fn spawn<F>(&self, task: F) -> Box<dyn TaskHandle>
+    fn spawn<F>(&self, task: F)
     where
         F: Future + Send + 'static,
         F::Output: Send + 'static;

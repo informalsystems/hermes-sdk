@@ -5,6 +5,7 @@ use futures::stream::Stream;
 use futures::StreamExt;
 use ibc_relayer_components::runtime::traits::stream::{CanMapStream, HasStreamType};
 
+use crate::traits::stream::HasAsyncStreamType;
 use crate::types::runtime::TokioRuntimeContext;
 
 impl HasStreamType for TokioRuntimeContext {
@@ -21,5 +22,25 @@ impl CanMapStream for TokioRuntimeContext {
         let mapped = stream.map(mapper);
 
         Box::pin(mapped)
+    }
+}
+
+impl HasAsyncStreamType for TokioRuntimeContext {
+    fn from_async_stream<T>(
+        stream: Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>,
+    ) -> Self::Stream<T>
+    where
+        T: Async,
+    {
+        stream
+    }
+
+    fn to_async_stream<T>(
+        stream: Self::Stream<T>,
+    ) -> Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>
+    where
+        T: Async,
+    {
+        stream
     }
 }

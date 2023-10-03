@@ -8,7 +8,7 @@ use ibc_relayer_components::relay::traits::components::packet_clearer::CanClearP
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 
-use crate::runtime::traits::spawn::{HasSpawner, Spawner, TaskHandle};
+use crate::runtime::traits::spawn::{HasSpawner, Spawner};
 use crate::std_prelude::*;
 
 #[async_trait]
@@ -19,7 +19,7 @@ pub trait CanSpawnPacketClearWorker: HasRelayChains {
         src_counterparty_port_id: PortId<Self::SrcChain, Self::DstChain>,
         dst_channel_id: ChannelId<Self::DstChain, Self::SrcChain>,
         dst_port_id: PortId<Self::DstChain, Self::SrcChain>,
-    ) -> Box<dyn TaskHandle>;
+    );
 }
 
 impl<Relay> CanSpawnPacketClearWorker for Relay
@@ -33,7 +33,7 @@ where
         src_port_id: PortId<Relay::SrcChain, Relay::DstChain>,
         dst_channel_id: ChannelId<Relay::DstChain, Relay::SrcChain>,
         dst_port_id: PortId<Relay::DstChain, Relay::SrcChain>,
-    ) -> Box<dyn TaskHandle> {
+    ) {
         let spawner = self.runtime().spawner();
 
         spawner.spawn(async move {

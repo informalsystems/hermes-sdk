@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 use core::ops::DerefMut;
 use core::pin::Pin;
+use ibc_relayer_components::runtime::traits::stream::HasStreamType;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
@@ -11,6 +12,7 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 };
 use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
 
+use crate::traits::stream::HasAsyncStreamType;
 use crate::traits::subscription::Subscription;
 
 /**
@@ -60,7 +62,12 @@ pub trait CanMultiplexSubscription {
 
 impl<Runtime> CanMultiplexSubscription for Runtime
 where
-    Runtime: HasSpawner + HasMutex + CanCreateChannels + CanUseChannels + CanStreamReceiver,
+    Runtime: HasSpawner
+        + HasMutex
+        + CanCreateChannels
+        + CanUseChannels
+        + CanStreamReceiver
+        + HasAsyncStreamType,
 {
     fn multiplex_subscription<T, U>(
         &self,
@@ -134,7 +141,9 @@ where
 impl<Runtime, T> Clone for MultiplexingSubscription<Runtime, T>
 where
     T: Async,
-    Runtime: HasChannelTypes + HasMutex,
+    Runtime: HasChannelTypes
+        + HasMutex
+        + HasStreamType<Stream<T> = Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>>,
 {
     fn clone(&self) -> Self {
         Self {
@@ -147,7 +156,7 @@ where
 impl<Runtime, T> Subscription for MultiplexingSubscription<Runtime, T>
 where
     T: Async,
-    Runtime: HasMutex + CanCreateChannels + CanStreamReceiver,
+    Runtime: HasMutex + CanCreateChannels + CanStreamReceiver + HasAsyncStreamType,
 {
     type Item = T;
 
@@ -163,7 +172,8 @@ where
                 senders.push(sender);
 
                 let stream = Runtime::receiver_to_stream(receiver);
-                Some(stream)
+
+                Some(Runtime::to_async_stream(stream))
             }
             None => None,
         }

@@ -12,6 +12,7 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
 
 use crate::impls::subscription::multiplex::MultiplexingSubscription;
+use crate::traits::stream::HasAsyncStreamType;
 use crate::traits::subscription::Subscription;
 
 /**
@@ -33,7 +34,12 @@ pub trait CanStreamSubscription {
 
 impl<Runtime> CanStreamSubscription for Runtime
 where
-    Runtime: HasSpawner + HasMutex + CanCreateChannels + CanUseChannels + CanStreamReceiver,
+    Runtime: HasSpawner
+        + HasMutex
+        + CanCreateChannels
+        + CanUseChannels
+        + CanStreamReceiver
+        + HasAsyncStreamType,
 {
     fn stream_subscription<T>(
         &self,
