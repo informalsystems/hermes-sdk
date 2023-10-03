@@ -1,7 +1,6 @@
 use alloc::sync::Arc;
 
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
 
 use crate::one_for_all::traits::chain::OfaChain;
 use crate::one_for_all::types::chain::OfaChainWrapper;

@@ -11,7 +11,6 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementE
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::timestamp::HasTimestampType;
-use crate::runtime::traits::subscription::Subscription;
 use crate::std_prelude::*;
 
 pub type IncomingPacket<Chain, Counterparty> =
@@ -46,5 +45,3 @@ pub type WriteAcknowledgementEvent<Chain, Counterparty> =
 
 pub type EventStream<Chain> =
     Pin<Box<dyn Stream<Item = Arc<(Height<Chain>, Event<Chain>)>> + Send + 'static>>;
-
-pub type EventSubscription<Chain> = Arc<dyn Subscription<Item = (Height<Chain>, Event<Chain>)>>;

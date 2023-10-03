@@ -36,7 +36,6 @@ use ibc_relayer_components::relay::traits::connection::open_try::ConnectionOpenT
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
 use crate::batch::types::sink::BatchWorkerSink;
-use crate::relay::components::auto_relayers::parallel_event::ParallelEventSubscriptionRelayer;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
 pub struct ExtraRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
@@ -65,12 +64,6 @@ delegate_component!(
     BidirectionalRelayer,
 );
 
-delegate_component!(
-    AutoRelayerComponent,
-    ExtraRelayComponents<BaseComponents>,
-    ParallelEventSubscriptionRelayer,
-);
-
 delegate_components!(
     [
         UpdateClientMessageBuilderComponent,
@@ -91,6 +84,7 @@ delegate_components!(
         ConnectionInitializerComponent,
         ConnectionOpenTryRelayerComponent,
         ConnectionOpenHandshakeRelayerComponent,
+        AutoRelayerComponent,
     ],
     ExtraRelayComponents<BaseComponents>,
     DefaultRelayComponents<BaseComponents>,

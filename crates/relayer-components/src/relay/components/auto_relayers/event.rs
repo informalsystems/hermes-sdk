@@ -1,10 +1,19 @@
+use core::marker::PhantomData;
+
 use async_trait::async_trait;
 use futures_util::stream::StreamExt;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
+use crate::chain::traits::types::event::HasEventType;
+use crate::chain::traits::types::height::HasHeightType;
+use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::auto_relayer::AutoRelayer;
 use crate::relay::traits::components::event_relayer::CanRelayEvent;
 use crate::relay::traits::target::ChainTarget;
+use crate::runtime::traits::runtime::HasRuntime;
+use crate::runtime::traits::stream::CanMapStream;
+use crate::runtime::traits::subscription::HasSubscriptionType;
+use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 use crate::std_prelude::*;
 
 /// A one-way auto-relayer type that is responsible for listening for a
@@ -12,27 +21,55 @@ use crate::std_prelude::*;
 /// chain in response to those events in a concurrent fashion.
 pub struct RelayEvents;
 
+pub struct EventRelayerTask<Relay, Target>
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasHeightType + HasEventType,
+{
+    pub relay: Relay,
+    pub height: <Target::TargetChain as HasHeightType>::Height,
+    pub event: <Target::TargetChain as HasEventType>::Event,
+    pub phantom: PhantomData<Target>,
+}
+
 #[async_trait]
-impl<Relay, Target> AutoRelayer<Relay, Target> for RelayEvents
+impl<Relay, Target> Task for EventRelayerTask<Relay, Target>
 where
     Relay: CanRelayEvent<Target>,
     Target: ChainTarget<Relay>,
-    Target::TargetChain: HasEventSubscription,
+{
+    async fn run(&self) {
+        let _ = self
+            .relay
+            .relay_chain_event(&self.height, &self.event)
+            .await;
+    }
+}
+
+#[async_trait]
+impl<Relay, Target, Runtime> AutoRelayer<Relay, Target> for RelayEvents
+where
+    Relay: CanRelayEvent<Target> + HasRuntime + Clone,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasEventSubscription<Runtime = Runtime>,
+    Runtime: HasSubscriptionType + CanMapStream + CanRunConcurrentTasks,
 {
     async fn auto_relay(relay: &Relay, _target: Target) -> Result<(), Relay::Error> {
         let subscription = Target::target_chain(relay).event_subscription();
 
         loop {
-            if let Some(event_stream) = subscription.subscribe().await {
-                event_stream
-                    .for_each_concurrent(None, |item| async move {
-                        let (height, event) = item;
+            if let Some(event_stream) = Runtime::subscribe(subscription).await {
+                let tasks = Runtime::map_stream(event_stream, |(height, event)| EventRelayerTask {
+                    relay: relay.clone(),
+                    height,
+                    event,
+                    phantom: PhantomData,
+                });
 
-                        // Ignore any relaying errors, as the relayer still needs to proceed
-                        // relaying the next event regardless.
-                        let _ = relay.relay_chain_event(&height, &event).await;
-                    })
-                    .await;
+                Target::target_chain(relay)
+                    .runtime()
+                    .run_concurrent_task_stream(tasks);
             } else {
                 return Ok(());
             }
