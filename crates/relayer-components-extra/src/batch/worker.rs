@@ -63,7 +63,7 @@ where
             phantom: PhantomData,
         };
 
-        Target::target_chain(&self).runtime().spawn_task(task);
+        Target::target_chain(self).runtime().spawn_task(task);
     }
 }
 

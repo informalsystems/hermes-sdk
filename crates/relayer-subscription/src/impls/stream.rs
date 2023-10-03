@@ -55,7 +55,7 @@ where
 
         self.stream
             .for_each(|item| async move {
-                let mut m_senders = Runtime::acquire_mutex(&task_senders).await;
+                let mut m_senders = Runtime::acquire_mutex(task_senders).await;
 
                 if let Some(senders) = m_senders.deref_mut() {
                     // Remove senders where the receiver side has been dropped
