@@ -5,7 +5,7 @@
 use core::fmt::{Debug, Display};
 use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 
-use async_trait::async_trait;
+use cgp_async::async_trait;
 use cgp_core::traits::{Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::logger::traits::logger::BaseLogger;

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_trait;
 use ibc_relayer_components::chain::traits::message_builders::connection::{
     CanBuildConnectionHandshakeMessages, CanBuildConnectionHandshakePayloads,
 };

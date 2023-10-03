@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_trait;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;

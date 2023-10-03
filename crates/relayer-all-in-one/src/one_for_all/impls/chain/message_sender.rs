@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_trait;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 
 use crate::one_for_all::traits::chain::OfaChain;

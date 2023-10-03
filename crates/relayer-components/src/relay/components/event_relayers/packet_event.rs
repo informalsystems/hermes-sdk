@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_trait;
 
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::{

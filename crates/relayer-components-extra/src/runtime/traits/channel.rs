@@ -7,7 +7,7 @@
    [`std::sync::mpsc::channel`](https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html).
 */
 
-use async_trait::async_trait;
+use cgp_async::async_trait;
 use cgp_core::traits::{Async, HasErrorType};
 use ibc_relayer_components::runtime::traits::stream::HasStreamType;
 

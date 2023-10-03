@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use core::mem;
 use ibc_relayer_components::runtime::traits::task::Task;
 
-use async_trait::async_trait;
+use cgp_async::async_trait;
 use cgp_core::traits::Async;
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::chain::traits::types::message::{

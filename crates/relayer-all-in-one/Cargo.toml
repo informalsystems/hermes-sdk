@@ -18,8 +18,8 @@ all-features = true
 [features]
 
 [dependencies]
-async-trait = "0.1.56"
 cgp-core = { version = "0.1.0" }
+cgp-async = { version = "0.1.0" }
 futures-core = { version = "0.3", default-features = false, features = ["alloc"] }
 futures-util = { version = "0.3", default-features = false, features = ["alloc"] }
 ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }

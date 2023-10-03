@@ -4,7 +4,7 @@
 
 use core::fmt::Debug;
 
-use async_trait::async_trait;
+use cgp_async::async_trait;
 use cgp_core::traits::{Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 

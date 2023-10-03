@@ -2,7 +2,7 @@
    Trait definitions for [`CanSendMessages`] and [`MessageSender`].
 */
 
-use async_trait::async_trait;
+use cgp_async::async_trait;
 use cgp_core::traits::HasErrorType;
 use cgp_macros::derive_component;
 

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_async::async_trait;
 
 use crate::relay::traits::components::packet_filter::CanFilterPackets;
 use crate::relay::traits::components::packet_relayer::PacketRelayer;

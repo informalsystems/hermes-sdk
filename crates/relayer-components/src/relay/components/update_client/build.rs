@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_trait;
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::client::consensus_state::CanFindConsensusStateHeight;

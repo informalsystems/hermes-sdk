@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_async::async_trait;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::std_prelude::*;
