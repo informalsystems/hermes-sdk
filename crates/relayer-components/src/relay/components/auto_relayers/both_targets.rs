@@ -8,20 +8,20 @@ use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 use crate::std_prelude::*;
 
-pub struct BidirectionalRelayer;
+pub struct RelayBothTargets;
 
 pub enum EitherTarget {
     Source,
     Destination,
 }
 
-pub struct RunAutoRelayerWithTarget<Relay> {
+pub struct TargetRelayerTask<Relay> {
     pub relay: Relay,
     pub target: EitherTarget,
 }
 
 #[async_trait]
-impl<Relay> Task for RunAutoRelayerWithTarget<Relay>
+impl<Relay> Task for TargetRelayerTask<Relay>
 where
     Relay:
         HasRelayChains + HasRuntime + CanAutoRelay<SourceTarget> + CanAutoRelay<DestinationTarget>,
@@ -39,7 +39,7 @@ where
 }
 
 #[async_trait]
-impl<Relay> Runner<Relay> for BidirectionalRelayer
+impl<Relay> Runner<Relay> for RelayBothTargets
 where
     Relay: Clone
         + HasRelayChains
@@ -50,11 +50,11 @@ where
 {
     async fn run(relay: &Relay) -> Result<(), Relay::Error> {
         let tasks = vec![
-            RunAutoRelayerWithTarget {
+            TargetRelayerTask {
                 relay: relay.clone(),
                 target: EitherTarget::Source,
             },
-            RunAutoRelayerWithTarget {
+            TargetRelayerTask {
                 relay: relay.clone(),
                 target: EitherTarget::Destination,
             },

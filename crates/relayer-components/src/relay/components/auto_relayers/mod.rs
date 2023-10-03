@@ -1,3 +1,3 @@
-pub mod bidirectional;
-pub mod concurrent_two_way;
+pub mod both_targets;
+pub mod both_ways;
 pub mod event;
