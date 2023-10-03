@@ -1,4 +1,4 @@
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilter;
 
 use crate::one_for_all::traits::relay::OfaRelay;

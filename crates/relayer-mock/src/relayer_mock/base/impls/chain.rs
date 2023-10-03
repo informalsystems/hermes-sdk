@@ -9,7 +9,7 @@
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
 use async_trait::async_trait;
-use cgp_core::traits::{HasComponents, HasErrorType};
+use cgp_core::{HasComponents, HasErrorType};
 use eyre::eyre;
 use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;

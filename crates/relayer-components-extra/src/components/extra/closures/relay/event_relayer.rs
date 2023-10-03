@@ -1,4 +1,4 @@
-use cgp_core::traits::HasComponents;
+use cgp_core::HasComponents;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::queries::channel::CanQueryCounterpartyChainIdFromChannel;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;

@@ -1,4 +1,4 @@
-use cgp_core::traits::{Async, HasComponents};
+use cgp_core::{Async, HasComponents};
 use ibc_relayer_components_extra::components::extra::closures::relay::components::CanUseExtraRelayComponents;
 use ibc_relayer_components_extra::components::extra::relay::ExtraRelayComponents;
 

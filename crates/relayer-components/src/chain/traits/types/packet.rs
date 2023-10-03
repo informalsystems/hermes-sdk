@@ -2,7 +2,7 @@
    Trait definition for [`HasIbcPacketTypes`].
 */
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 /**
     Contains the abstract packet types for a chain context to send and receive

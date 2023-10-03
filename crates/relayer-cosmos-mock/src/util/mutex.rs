@@ -3,7 +3,7 @@
 
 use std::sync::{Arc, Mutex, MutexGuard};
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 pub trait MutexUtil<T: Async> {
     fn acquire_mutex(&self) -> MutexGuard<T>;

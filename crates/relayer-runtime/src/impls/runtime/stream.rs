@@ -1,6 +1,6 @@
 use core::pin::Pin;
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 use futures::stream::Stream;
 use futures::StreamExt;
 use ibc_relayer_components::runtime::traits::stream::{CanMapStream, HasStreamType};

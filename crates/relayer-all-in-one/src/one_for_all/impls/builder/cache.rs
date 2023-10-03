@@ -1,4 +1,4 @@
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 use ibc_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
 use ibc_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use ibc_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};

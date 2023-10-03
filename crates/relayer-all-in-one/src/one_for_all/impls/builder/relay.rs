@@ -1,4 +1,4 @@
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 use ibc_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use ibc_relayer_components_extra::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 

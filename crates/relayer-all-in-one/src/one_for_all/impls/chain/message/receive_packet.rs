@@ -1,4 +1,4 @@
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
     CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
 };

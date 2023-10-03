@@ -1,5 +1,4 @@
-use cgp_async::async_trait;
-use cgp_macros::derive_component;
+use cgp_core::{async_trait, derive_component};
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;

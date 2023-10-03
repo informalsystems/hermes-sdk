@@ -1,6 +1,4 @@
-use cgp_async::async_trait;
-use cgp_core::traits::HasErrorType;
-use cgp_macros::derive_component;
+use cgp_core::{async_trait, derive_component, HasErrorType};
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::relay::RelayBuildTarget;

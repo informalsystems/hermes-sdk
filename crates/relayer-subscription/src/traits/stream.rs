@@ -1,6 +1,6 @@
 use core::pin::Pin;
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 use futures_core::stream::Stream;
 use ibc_relayer_components::runtime::traits::stream::HasStreamType;
 

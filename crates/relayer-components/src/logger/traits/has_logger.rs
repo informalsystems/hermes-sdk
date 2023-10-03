@@ -1,4 +1,4 @@
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 use crate::logger::traits::logger::BaseLogger;
 

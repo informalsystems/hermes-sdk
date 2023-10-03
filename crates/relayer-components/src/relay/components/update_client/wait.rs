@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::wait::CanWaitChainReachHeight;

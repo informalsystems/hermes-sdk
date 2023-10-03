@@ -1,4 +1,4 @@
-use cgp_core::traits::{HasComponents, HasErrorType};
+use cgp_core::{HasComponents, HasErrorType};
 use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use ibc_relayer_components::chain::traits::client::update::{

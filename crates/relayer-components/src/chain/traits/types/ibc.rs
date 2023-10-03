@@ -5,7 +5,7 @@
 
 use core::fmt::Display;
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 use crate::chain::traits::types::chain::HasChainTypes;
 use crate::chain::traits::types::height::HasHeightType;

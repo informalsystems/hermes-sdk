@@ -4,7 +4,7 @@
 
 use core::fmt::Display;
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 pub trait HasTimestampType: Async {
     /**

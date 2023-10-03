@@ -1,7 +1,6 @@
 use core::ops::DerefMut;
 
-use cgp_async::async_trait;
-use cgp_core::traits::Async;
+use cgp_core::{async_trait, Async};
 
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::std_prelude::*;

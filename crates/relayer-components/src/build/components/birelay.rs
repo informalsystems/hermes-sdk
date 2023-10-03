@@ -1,4 +1,4 @@
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 
 use crate::build::traits::components::birelay_builder::BiRelayBuilder;
 use crate::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;

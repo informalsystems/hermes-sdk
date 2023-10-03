@@ -1,4 +1,4 @@
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 

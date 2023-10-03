@@ -1,4 +1,4 @@
-use cgp_core::traits::has_components::HasComponents;
+use cgp_core::HasComponents;
 
 use crate::chain::traits::logs::packet::CanLogChainPacket;
 use crate::chain::traits::queries::channel::CanQueryCounterpartyChainIdFromChannel;

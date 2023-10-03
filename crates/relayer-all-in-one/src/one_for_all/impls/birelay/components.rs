@@ -1,4 +1,4 @@
-use cgp_core::traits::{Async, DelegateComponent, HasComponents};
+use cgp_core::{Async, DelegateComponent, HasComponents};
 use ibc_relayer_components_extra::components::extra::birelay::ExtraBiRelayComponents;
 
 use crate::one_for_all::types::birelay::OfaBiRelayWrapper;

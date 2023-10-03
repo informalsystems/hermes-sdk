@@ -1,5 +1,4 @@
-use cgp_async::async_trait;
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{async_trait, Async, HasErrorType};
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

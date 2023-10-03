@@ -1,7 +1,6 @@
 use core::time::Duration;
 
-use cgp_async::async_trait;
-use cgp_core::traits::Async;
+use cgp_core::{async_trait, Async};
 
 use crate::std_prelude::*;
 

@@ -1,13 +1,12 @@
 use alloc::sync::Arc;
-use async_trait::async_trait;
 use core::ops::DerefMut;
-use ibc_relayer_components::runtime::traits::task::Task;
 
-use cgp_core::traits::Async;
+use async_trait::async_trait;
+use cgp_core::Async;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-
+use ibc_relayer_components::runtime::traits::task::Task;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };

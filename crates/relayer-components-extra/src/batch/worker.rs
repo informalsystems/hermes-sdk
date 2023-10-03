@@ -1,10 +1,8 @@
 use alloc::collections::VecDeque;
 use core::marker::PhantomData;
 use core::mem;
-use ibc_relayer_components::runtime::traits::task::Task;
 
-use cgp_async::async_trait;
-use cgp_core::traits::Async;
+use cgp_core::{async_trait, Async};
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
@@ -17,6 +15,7 @@ use ibc_relayer_components::relay::traits::target::ChainTarget;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
+use ibc_relayer_components::runtime::traits::task::Task;
 use ibc_relayer_components::runtime::traits::time::HasTime;
 use ibc_relayer_components::runtime::types::aliases::Runtime;
 

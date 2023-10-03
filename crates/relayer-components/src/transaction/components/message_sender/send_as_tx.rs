@@ -1,4 +1,4 @@
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::components::message_sender::MessageSender;
 use crate::std_prelude::*;

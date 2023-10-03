@@ -1,4 +1,4 @@
-use cgp_core::traits::HasComponents;
+use cgp_core::HasComponents;
 use ibc_relayer_components_extra::components::extra::build::ExtraBuildComponents;
 use ibc_relayer_components_extra::components::extra::closures::build::CanUseExtraBuilderComponents;
 

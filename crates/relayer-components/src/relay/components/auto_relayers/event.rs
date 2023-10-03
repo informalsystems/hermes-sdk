@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::chain::traits::types::event::HasEventType;

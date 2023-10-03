@@ -1,4 +1,4 @@
-use cgp_core::traits::{HasComponents, HasErrorType};
+use cgp_core::{HasComponents, HasErrorType};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::{
     CanQueryChainStatus, ChainStatusQuerier,
 };

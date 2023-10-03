@@ -1,4 +1,4 @@
-use cgp_macros::derive_component;
+use cgp_core::derive_component;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;

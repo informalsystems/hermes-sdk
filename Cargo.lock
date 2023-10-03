@@ -511,25 +511,46 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#c1c8e761999549eb1782de6fed69f6c4397971bd"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
 dependencies = [
  "async-trait",
- "cgp-macros",
+]
+
+[[package]]
+name = "cgp-component"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
+dependencies = [
+ "cgp-async",
+ "cgp-component-macro",
+]
+
+[[package]]
+name = "cgp-component-macro"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.37",
 ]
 
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#c1c8e761999549eb1782de6fed69f6c4397971bd"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
+dependencies = [
+ "cgp-async",
+ "cgp-component",
+ "cgp-error",
+]
 
 [[package]]
-name = "cgp-macros"
+name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#c1c8e761999549eb1782de6fed69f6c4397971bd"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
 dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.37",
+ "cgp-async",
 ]
 
 [[package]]
@@ -1818,7 +1839,6 @@ dependencies = [
 name = "ibc-relayer-all-in-one"
 version = "0.1.0"
 dependencies = [
- "cgp-async",
  "cgp-core",
  "futures-core",
  "futures-util",
@@ -1830,16 +1850,13 @@ dependencies = [
 name = "ibc-relayer-components"
 version = "0.1.0"
 dependencies = [
- "cgp-async",
  "cgp-core",
- "cgp-macros",
 ]
 
 [[package]]
 name = "ibc-relayer-components-extra"
 version = "0.1.0"
 dependencies = [
- "cgp-async",
  "cgp-core",
  "ibc-relayer-components",
 ]
@@ -1971,7 +1988,6 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "cgp-core",
- "cgp-macros",
  "futures-core",
  "futures-util",
  "ibc-relayer-components",
@@ -4829,6 +4845,26 @@ dependencies = [
 ]
 
 [[patch.unused]]
+name = "cgp-component-sync"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
+
+[[patch.unused]]
+name = "cgp-core-sync"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
+
+[[patch.unused]]
+name = "cgp-error-sync"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
+
+[[patch.unused]]
+name = "cgp-strip-async"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"
+
+[[patch.unused]]
 name = "cgp-sync"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#c1c8e761999549eb1782de6fed69f6c4397971bd"
+source = "git+https://github.com/informalsystems/cgp.git?branch=async-generic#e7d8d467123a946291cf323b394fc5e1f4c6f03a"

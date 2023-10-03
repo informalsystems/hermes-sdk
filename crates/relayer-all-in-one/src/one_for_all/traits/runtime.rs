@@ -3,8 +3,7 @@ use core::ops::DerefMut;
 use core::pin::Pin;
 use core::time::Duration;
 
-use cgp_async::async_trait;
-use cgp_core::traits::Async;
+use cgp_core::{async_trait, Async};
 use futures_core::{Future, Stream};
 
 use crate::std_prelude::*;

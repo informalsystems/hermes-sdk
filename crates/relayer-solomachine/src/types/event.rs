@@ -1,7 +1,5 @@
-use ibc_relayer_types::{
-    clients::ics07_tendermint::client_state::ClientState,
-    core::ics24_host::identifier::{ClientId, ConnectionId},
-};
+use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState;
+use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 pub enum SolomachineEvent {
     ConnectionInit(SolomachineConnectionInitEvent),

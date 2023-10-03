@@ -1,14 +1,13 @@
 use alloc::sync::Arc;
-use eyre::Report;
-use flex_error::define_error;
-use flex_error::TraceError;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use prost::EncodeError;
 
+use eyre::Report;
+use flex_error::{define_error, TraceError};
 use ibc_relayer_cosmos::types::error::Error as CosmosError;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
 use ibc_relayer_types::core::ics04_channel::channel::State as ChannelState;
+use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use prost::EncodeError;
 
 pub type Error = Arc<BaseError>;
 

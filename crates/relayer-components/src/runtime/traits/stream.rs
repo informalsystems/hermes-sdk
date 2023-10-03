@@ -1,4 +1,4 @@
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 pub trait HasStreamType: Async {
     type Stream<Item: Async>: Async;

@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use async_trait::async_trait;
 use basecoin_app::modules::ibc::AnyConsensusState;
-use cgp_core::traits::HasErrorType;
+use cgp_core::HasErrorType;
 use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};
 use ibc::clients::ics07_tendermint::consensus_state::ConsensusState as TmConsensusState;
 use ibc::clients::ics07_tendermint::header::Header;

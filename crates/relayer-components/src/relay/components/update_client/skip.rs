@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_async::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;

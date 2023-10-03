@@ -1,4 +1,4 @@
-use cgp_core::traits::HasErrorType;
+use cgp_core::HasErrorType;
 
 use crate::one_for_all::traits::birelay::OfaBiRelay;
 use crate::one_for_all::types::birelay::OfaBiRelayWrapper;

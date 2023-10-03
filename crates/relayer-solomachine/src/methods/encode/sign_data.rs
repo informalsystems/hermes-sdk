@@ -8,10 +8,9 @@ use prost::{EncodeError, Message};
 use secp256k1::ecdsa::Signature;
 use secp256k1::SecretKey;
 
+use super::public_key::PublicKey;
 use crate::methods::encode::sign::sign_sha256;
 use crate::types::sign_data::{SolomachineSignData, SolomachineTimestampedSignData};
-
-use super::public_key::PublicKey;
 
 const TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.SignBytes";
 

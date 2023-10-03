@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::traits::HasErrorType;
+use cgp_core::HasErrorType;
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::chain::ChainBuildTarget;
