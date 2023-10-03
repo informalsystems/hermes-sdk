@@ -1824,8 +1824,6 @@ dependencies = [
  "async-trait",
  "cgp-core",
  "cgp-macros",
- "futures-core",
- "futures-util",
 ]
 
 [[package]]

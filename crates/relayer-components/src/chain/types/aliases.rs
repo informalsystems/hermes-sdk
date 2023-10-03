@@ -1,8 +1,3 @@
-use alloc::sync::Arc;
-use core::pin::Pin;
-
-use futures_core::stream::Stream;
-
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::height::HasHeightType;
@@ -11,7 +6,6 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementE
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::timestamp::HasTimestampType;
-use crate::std_prelude::*;
 
 pub type IncomingPacket<Chain, Counterparty> =
     <Chain as HasIbcPacketTypes<Counterparty>>::IncomingPacket;
@@ -42,6 +36,3 @@ pub type Timestamp<Chain> = <Chain as HasTimestampType>::Timestamp;
 
 pub type WriteAcknowledgementEvent<Chain, Counterparty> =
     <Chain as HasWriteAcknowledgementEvent<Counterparty>>::WriteAcknowledgementEvent;
-
-pub type EventStream<Chain> =
-    Pin<Box<dyn Stream<Item = Arc<(Height<Chain>, Event<Chain>)>> + Send + 'static>>;
