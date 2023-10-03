@@ -16,7 +16,7 @@ impl CanMapStream for TokioRuntimeContext {
     where
         T: Async,
         U: Async,
-        M: Fn(T) -> U,
+        M: Fn(T) -> U + Async,
     {
         let mapped = stream.map(mapper);
 

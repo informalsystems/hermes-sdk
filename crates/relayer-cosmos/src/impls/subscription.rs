@@ -1,14 +1,14 @@
 use alloc::sync::Arc;
 use core::pin::Pin;
 use core::time::Duration;
+use ibc_relayer_runtime::impls::subscription::closure::CanCreateClosureSubscription;
+use ibc_relayer_runtime::impls::subscription::multiplex::CanMultiplexSubscription;
+use ibc_relayer_runtime::traits::subscription::Subscription;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
 use futures::lock::Mutex;
 use futures::stream::{self, Stream, StreamExt, TryStreamExt};
-use ibc_relayer_components::runtime::impls::subscription::closure::CanCreateClosureSubscription;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
-use ibc_relayer_components_extra::runtime::impls::subscription::multiplex::CanMultiplexSubscription;
 use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
 use ibc_relayer_types::core::ics02_client::height::Height;
 use moka::future::Cache;
@@ -94,7 +94,7 @@ pub trait CanCreateAbciEventStream: Async {
         websocket_url: &WebSocketClientUrl,
         compat_mode: &CompatMode,
         queries: &[Query],
-    ) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + 'static>>, Error>;
+    ) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + Sync + 'static>>, Error>;
 }
 
 #[async_trait]
@@ -108,7 +108,8 @@ where
         websocket_url: &WebSocketClientUrl,
         compat_mode: &CompatMode,
         queries: &[Query],
-    ) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + 'static>>, Error> {
+    ) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + Sync + 'static>>, Error>
+    {
         let builder = WebSocketClient::builder(websocket_url.clone()).compat_mode(*compat_mode);
 
         let (client, driver) = builder.build().await.map_err(BaseError::tendermint_rpc)?;
@@ -152,7 +153,7 @@ async fn new_abci_event_stream_with_queries(
     chain_version: u64,
     websocket_client: &WebSocketClient,
     queries: &[Query],
-) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + 'static>>, Error> {
+) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + Sync + 'static>>, Error> {
     let cache = Cache::builder()
         .time_to_live(Duration::from_secs(5 * 60))
         .build();
@@ -174,7 +175,7 @@ async fn new_abci_event_stream_with_query(
     chain_version: u64,
     websocket_client: &WebSocketClient,
     query: &Query,
-) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + 'static>>, Error> {
+) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + Sync + 'static>>, Error> {
     let rpc_stream = new_rpc_event_stream(websocket_client, query).await?;
 
     let abci_stream = rpc_stream
@@ -242,7 +243,7 @@ async fn new_abci_event_stream_with_query(
 async fn new_rpc_event_stream(
     websocket_client: &WebSocketClient,
     query: &Query,
-) -> Result<Pin<Box<dyn Stream<Item = RpcEvent> + Send + 'static>>, Error> {
+) -> Result<Pin<Box<dyn Stream<Item = RpcEvent> + Send + Sync + 'static>>, Error> {
     let subscription = websocket_client
         .subscribe(query.clone())
         .await

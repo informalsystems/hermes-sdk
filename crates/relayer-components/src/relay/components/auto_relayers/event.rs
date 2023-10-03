@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use async_trait::async_trait;
-use futures_util::stream::StreamExt;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::chain::traits::types::event::HasEventType;
@@ -60,16 +59,21 @@ where
 
         loop {
             if let Some(event_stream) = Runtime::subscribe(subscription).await {
-                let tasks = Runtime::map_stream(event_stream, |(height, event)| EventRelayerTask {
-                    relay: relay.clone(),
-                    height,
-                    event,
-                    phantom: PhantomData,
-                });
+                let tasks = {
+                    let relay = relay.clone();
+
+                    Runtime::map_stream(event_stream, move |(height, event)| EventRelayerTask {
+                        relay: relay.clone(),
+                        height,
+                        event,
+                        phantom: PhantomData,
+                    })
+                };
 
                 Target::target_chain(relay)
                     .runtime()
-                    .run_concurrent_task_stream(tasks);
+                    .run_concurrent_task_stream(tasks)
+                    .await;
             } else {
                 return Ok(());
             }

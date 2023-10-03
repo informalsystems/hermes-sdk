@@ -146,7 +146,7 @@ pub trait CanUseChannels: HasChannelTypes {
 pub trait CanStreamReceiver: HasChannelTypes {
     fn receiver_to_stream<T>(
         receiver: Self::Receiver<T>,
-    ) -> Pin<Box<dyn Stream<Item = T> + Send + 'static>>
+    ) -> Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>
     where
         T: Async;
 }

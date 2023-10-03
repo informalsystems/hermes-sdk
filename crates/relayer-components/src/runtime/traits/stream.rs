@@ -9,5 +9,5 @@ pub trait CanMapStream: HasStreamType {
     where
         T: Async,
         U: Async,
-        M: Fn(T) -> U;
+        M: Fn(T) -> U + Async;
 }

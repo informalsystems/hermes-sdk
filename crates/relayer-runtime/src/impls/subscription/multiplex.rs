@@ -4,16 +4,14 @@ use core::pin::Pin;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
-use futures_core::stream::Stream;
-use futures_util::stream::StreamExt;
+use futures::stream::{Stream, StreamExt};
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
-
-use crate::runtime::traits::channel::{
+use ibc_relayer_components_extra::runtime::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };
-use crate::runtime::traits::spawn::{HasSpawner, Spawner};
-use crate::std_prelude::*;
+use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
+
+use crate::traits::subscription::Subscription;
 
 /**
    Multiplex the incoming [`Stream`] provided by an underlying [`Subscription`]
@@ -153,7 +151,7 @@ where
 {
     type Item = T;
 
-    async fn subscribe(&self) -> Option<Pin<Box<dyn Stream<Item = T> + Send + 'static>>>
+    async fn subscribe(&self) -> Option<Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>>
     where
         T: Async,
     {

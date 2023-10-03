@@ -10,7 +10,7 @@ use ibc_relayer::event::{
 };
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::message_sender::CanSendMessages;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
+use ibc_relayer_runtime::traits::subscription::Subscription;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::log::value::LogValue;

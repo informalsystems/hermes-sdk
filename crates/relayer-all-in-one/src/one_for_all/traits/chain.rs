@@ -2,14 +2,13 @@
 //! in order to gain access to the APIs provided by the `AfoBaseChain`
 //! trait.
 
-use alloc::sync::Arc;
 use core::fmt::{Debug, Display};
+use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 
 use async_trait::async_trait;
 use cgp_core::traits::{Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
 use ibc_relayer_components_extra::telemetry::traits::metrics::HasBasicMetrics;
 
 use crate::all_for_one::runtime::AfoRuntime;
@@ -254,7 +253,9 @@ pub trait OfaChain: OfaChainTypes {
 
     async fn query_chain_status(&self) -> Result<Self::ChainStatus, Self::Error>;
 
-    fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Self::Height, Self::Event)>>;
+    fn event_subscription(
+        &self,
+    ) -> &<Self::Runtime as HasSubscriptionType>::Subscription<(Self::Height, Self::Event)>;
 
     async fn query_write_acknowledgement_event(
         &self,

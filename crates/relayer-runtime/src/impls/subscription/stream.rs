@@ -2,15 +2,17 @@ use alloc::sync::Arc;
 use core::ops::DerefMut;
 
 use cgp_core::traits::Async;
-use futures_core::stream::Stream;
-use futures_util::stream::StreamExt;
+use futures::stream::Stream;
+use futures::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
 
-use crate::runtime::impls::subscription::multiplex::MultiplexingSubscription;
-use crate::runtime::traits::channel::{CanCreateChannels, CanStreamReceiver, CanUseChannels};
-use crate::runtime::traits::spawn::{HasSpawner, Spawner};
-use crate::std_prelude::*;
+use ibc_relayer_components_extra::runtime::traits::channel::{
+    CanCreateChannels, CanStreamReceiver, CanUseChannels,
+};
+use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
+
+use crate::impls::subscription::multiplex::MultiplexingSubscription;
+use crate::traits::subscription::Subscription;
 
 /**
    Allows multiplexing of a single [`Stream`] into a subscription.

@@ -1,6 +1,8 @@
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
+use ibc_relayer_components::runtime::traits::stream::CanMapStream;
+use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 use ibc_relayer_components::runtime::traits::time::HasTime;
 use ibc_relayer_components_extra::runtime::traits::channel::{
@@ -26,6 +28,8 @@ pub trait AfoRuntime:
     + CanUseChannels
     + CanUseChannelsOnce
     + CanRunConcurrentTasks
+    + HasSubscriptionType
+    + CanMapStream
 {
 }
 
@@ -44,6 +48,8 @@ impl<Runtime> AfoRuntime for Runtime where
         + CanUseChannels
         + CanUseChannelsOnce
         + CanRunConcurrentTasks
+        + HasSubscriptionType
+        + CanMapStream
 {
 }
 
