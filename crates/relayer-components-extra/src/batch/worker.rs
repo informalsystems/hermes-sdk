@@ -1,5 +1,7 @@
 use alloc::collections::VecDeque;
+use core::marker::PhantomData;
 use core::mem;
+use ibc_relayer_components::runtime::traits::task::Task;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
@@ -23,7 +25,7 @@ use crate::batch::types::config::BatchConfig;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::runtime::traits::channel::{CanUseChannels, HasChannelTypes};
 use crate::runtime::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
-use crate::runtime::traits::spawn::{HasSpawner, Spawner};
+use crate::runtime::traits::spawn::CanSpawnTask;
 use crate::std_prelude::*;
 
 #[async_trait]
@@ -34,7 +36,7 @@ where
     Runtime<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
 {
     fn spawn_batch_message_worker(
-        self,
+        &self,
         target: Target,
         config: BatchConfig,
         receiver: MessageBatchReceiver<Target::TargetChain, Self::Error>,
@@ -43,22 +45,51 @@ where
 
 impl<Relay, Target, Runtime> CanSpawnBatchMessageWorker<Target> for Relay
 where
-    Relay: CanRunLoop<Target>,
+    Relay: Clone + CanRunLoop<Target>,
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasRuntime<Runtime = Runtime>,
-    Runtime: HasSpawner + HasChannelTypes + HasChannelOnceTypes,
+    Runtime: CanSpawnTask + HasChannelTypes + HasChannelOnceTypes,
 {
     fn spawn_batch_message_worker(
-        self,
+        &self,
         _target: Target,
         config: BatchConfig,
         receiver: MessageBatchReceiver<Target::TargetChain, Self::Error>,
     ) {
-        let spawner = Target::target_chain(&self).runtime().spawner();
+        let task = BatchMessageTask {
+            relay: self.clone(),
+            config,
+            receiver,
+            phantom: PhantomData,
+        };
 
-        spawner.spawn(async move {
-            self.run_loop(&config, receiver).await;
-        })
+        Target::target_chain(&self).runtime().spawn_task(task);
+    }
+}
+
+pub struct BatchMessageTask<Relay, Target>
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasRuntime,
+    Runtime<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
+{
+    pub relay: Relay,
+    pub config: BatchConfig,
+    pub receiver: MessageBatchReceiver<Target::TargetChain, Relay::Error>,
+    pub phantom: PhantomData<Target>,
+}
+
+#[async_trait]
+impl<Relay, Target, Runtime> Task for BatchMessageTask<Relay, Target>
+where
+    Relay: CanRunLoop<Target>,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasRuntime<Runtime = Runtime>,
+    Runtime: HasChannelTypes + HasChannelOnceTypes,
+{
+    async fn run(self) {
+        self.relay.run_loop(&self.config, self.receiver).await;
     }
 }
 
@@ -167,7 +198,7 @@ where
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasRuntime<Runtime = Runtime>,
     Target::TargetChain: CanPartitionMessageBatches<Relay::Error>,
-    Runtime: HasTime + HasSpawner + HasChannelTypes + HasChannelOnceTypes,
+    Runtime: HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes,
 {
     async fn process_message_batches(
         &self,
@@ -192,12 +223,12 @@ where
                 log.display("batch_size", &batch_size);
             });
 
-            let spawner = Target::target_chain(self).runtime().spawner();
-            let relay = self.clone();
+            let task = SendReadyBatchTask {
+                relay: self.clone(),
+                ready_batches,
+            };
 
-            spawner.spawn(async move {
-                relay.send_ready_batches(ready_batches).await;
-            });
+            Target::target_chain(self).runtime().spawn_task(task);
 
             *last_sent_time = now;
         }
@@ -267,6 +298,30 @@ where
         *pending_batches = remaining_batches;
 
         ready_batches
+    }
+}
+
+pub struct SendReadyBatchTask<Relay, Target>
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasRuntime,
+    Runtime<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
+{
+    pub relay: Relay,
+    pub ready_batches: VecDeque<BatchSubmission<Target::TargetChain, Relay::Error>>,
+}
+
+#[async_trait]
+impl<Relay, Target> Task for SendReadyBatchTask<Relay, Target>
+where
+    Relay: CanSendReadyBatches<Target>,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasRuntime,
+    Runtime<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
+{
+    async fn run(self) {
+        self.relay.send_ready_batches(self.ready_batches).await
     }
 }
 

@@ -15,7 +15,7 @@ use crate::batch::types::sink::BatchWorkerSink;
 use crate::batch::worker::CanSpawnBatchMessageWorker;
 use crate::runtime::traits::channel::{CanCloneSender, CanUseChannels, HasChannelTypes};
 use crate::runtime::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
-use crate::runtime::traits::spawn::HasSpawner;
+use crate::runtime::traits::spawn::CanSpawnTask;
 
 pub trait CanUseBatchMessageWorkerSpawner: UseBatchMessageWorkerSpawner
 where
@@ -48,14 +48,14 @@ where
     SrcChain::Runtime: HasTime
         + HasMutex
         + CanSleep
-        + HasSpawner
+        + CanSpawnTask
         + CanUseChannels
         + CanUseChannelsOnce
         + CanCloneSender,
     DstChain::Runtime: HasTime
         + HasMutex
         + CanSleep
-        + HasSpawner
+        + CanSpawnTask
         + CanUseChannels
         + CanUseChannelsOnce
         + CanCloneSender,

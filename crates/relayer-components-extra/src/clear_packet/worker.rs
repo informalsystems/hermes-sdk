@@ -39,7 +39,7 @@ impl<Relay> Task for ClearPacketTask<Relay>
 where
     Relay: CanRunLoop,
 {
-    async fn run(&self) {
+    async fn run(self) {
         self.relay
             .run_loop(
                 &self.src_channel_id,
@@ -71,7 +71,7 @@ where
             dst_port_id,
         };
 
-        self.runtime().spawn(task);
+        self.runtime().spawn_task(task);
     }
 }
 

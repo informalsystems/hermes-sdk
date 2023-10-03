@@ -6,7 +6,7 @@ use crate::std_prelude::*;
 
 #[async_trait]
 pub trait Task: Async {
-    async fn run(&self);
+    async fn run(self);
 }
 
 #[async_trait]

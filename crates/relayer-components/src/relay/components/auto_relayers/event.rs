@@ -38,7 +38,7 @@ where
     Relay: CanRelayEvent<Target>,
     Target: ChainTarget<Relay>,
 {
-    async fn run(&self) {
+    async fn run(self) {
         let _ = self
             .relay
             .relay_chain_event(&self.height, &self.event)

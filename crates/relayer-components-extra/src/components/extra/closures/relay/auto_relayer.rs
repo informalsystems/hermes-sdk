@@ -13,7 +13,7 @@ use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
 use crate::components::extra::relay::ExtraRelayComponents;
-use crate::runtime::traits::spawn::HasSpawner;
+use crate::runtime::traits::spawn::CanSpawnTask;
 
 pub trait CanUseExtraAutoRelayer: UseExtraAutoRelayer {}
 
@@ -37,7 +37,7 @@ where
         + HasLoggerType<Logger = Relay::Logger>
         + CanLogChainEvent
         + HasEventSubscription,
-    Relay::Runtime: HasSpawner + CanRunConcurrentTasks,
+    Relay::Runtime: CanSpawnTask + CanRunConcurrentTasks,
     Relay::Logger: HasBaseLogLevels,
     <Relay::SrcChain as HasRuntime>::Runtime:
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,

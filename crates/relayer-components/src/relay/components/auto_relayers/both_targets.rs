@@ -26,7 +26,7 @@ where
     Relay:
         HasRelayChains + HasRuntime + CanAutoRelay<SourceTarget> + CanAutoRelay<DestinationTarget>,
 {
-    async fn run(&self) {
+    async fn run(self) {
         match self.target {
             EitherTarget::Source => {
                 let _ = self.relay.auto_relay(SourceTarget).await;

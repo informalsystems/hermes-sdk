@@ -28,7 +28,7 @@ where
     BiRelay::RelayAToB: CanRun,
     BiRelay::RelayBToA: CanRun,
 {
-    async fn run(&self) {
+    async fn run(self) {
         match self {
             Self::AToB(relay) => {
                 let _ = relay.run().await;

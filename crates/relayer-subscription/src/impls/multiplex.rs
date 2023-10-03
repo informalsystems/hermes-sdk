@@ -11,7 +11,7 @@ use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };
-use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
+use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 
 use crate::std_prelude::*;
 use crate::traits::stream::HasAsyncStreamType;
@@ -64,7 +64,7 @@ pub trait CanMultiplexSubscription {
 
 impl<Runtime> CanMultiplexSubscription for Runtime
 where
-    Runtime: HasSpawner
+    Runtime: CanSpawnTask
         + HasMutex
         + CanCreateChannels
         + CanUseChannels

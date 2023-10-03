@@ -26,7 +26,7 @@ impl<Relay> Task for RelayPacketTask<Relay>
 where
     Relay: CanRelayPacket,
 {
-    async fn run(&self) {
+    async fn run(self) {
         let _ = self.relay.relay_packet(&self.packet).await;
     }
 }
