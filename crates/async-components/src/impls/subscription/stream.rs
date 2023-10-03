@@ -2,8 +2,8 @@ use alloc::sync::Arc;
 use core::ops::DerefMut;
 
 use cgp_core::traits::Async;
-use futures::stream::Stream;
-use futures::stream::StreamExt;
+use futures_core::stream::Stream;
+use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 
 use ibc_relayer_components_extra::runtime::traits::channel::{
@@ -12,6 +12,7 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
 
 use crate::impls::subscription::multiplex::MultiplexingSubscription;
+use crate::std_prelude::*;
 use crate::traits::stream::HasAsyncStreamType;
 use crate::traits::subscription::Subscription;
 

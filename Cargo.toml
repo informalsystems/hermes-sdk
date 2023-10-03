@@ -3,6 +3,7 @@
 resolver = "2"
 
 members = [
+    "crates/async-components",
     "crates/relayer-components",
     "crates/relayer-components-extra",
     "crates/relayer-all-in-one",

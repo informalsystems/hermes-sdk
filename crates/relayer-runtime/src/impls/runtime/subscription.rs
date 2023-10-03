@@ -4,9 +4,9 @@ use alloc::sync::Arc;
 use async_trait::async_trait;
 use cgp_core::traits::Async;
 use futures::stream::Stream;
+use ibc_async_components::traits::subscription::Subscription;
 use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 
-use crate::traits::subscription::Subscription;
 use crate::types::runtime::TokioRuntimeContext;
 
 #[async_trait]

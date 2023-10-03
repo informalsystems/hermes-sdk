@@ -1,12 +1,12 @@
 use alloc::sync::Arc;
 
+use ibc_async_components::impls::subscription::empty::EmptySubscription;
+use ibc_async_components::traits::subscription::Subscription;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_runtime::impls::subscription::empty::EmptySubscription;
-use ibc_relayer_runtime::traits::subscription::Subscription;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;

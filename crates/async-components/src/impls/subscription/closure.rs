@@ -4,9 +4,10 @@ use core::pin::Pin;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
-use futures::stream::Stream;
+use futures_core::stream::Stream;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 
+use crate::std_prelude::*;
 use crate::traits::subscription::Subscription;
 
 /**

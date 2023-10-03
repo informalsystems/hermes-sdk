@@ -1,8 +1,10 @@
 use core::pin::Pin;
 
 use cgp_core::traits::Async;
-use futures::stream::Stream;
+use futures_core::stream::Stream;
 use ibc_relayer_components::runtime::traits::stream::HasStreamType;
+
+use crate::std_prelude::*;
 
 pub trait HasAsyncStreamType: HasStreamType {
     fn from_async_stream<T>(

@@ -1677,6 +1677,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "ibc-async-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "cgp-macros",
+ "futures-core",
+ "futures-util",
+ "ibc-relayer-components",
+ "ibc-relayer-components-extra",
+]
+
+[[package]]
 name = "ibc-derive"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1844,6 +1857,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
+ "ibc-async-components",
  "ibc-proto 0.34.0",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
@@ -1915,7 +1929,7 @@ dependencies = [
  "cgp-core",
  "flex-error",
  "futures",
- "ibc-relayer-all-in-one",
+ "ibc-async-components",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "tokio",

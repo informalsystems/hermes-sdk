@@ -3,7 +3,9 @@ use core::pin::Pin;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
-use futures::stream::Stream;
+use futures_core::stream::Stream;
+
+use crate::std_prelude::*;
 
 /**
     A [`Subscription`] is a multi-consumer abstraction over a single-consumer
