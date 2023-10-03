@@ -1907,6 +1907,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "ibc-relayer-components-extra-sync"
+version = "0.1.0"
+dependencies = [
+ "cgp-core-sync",
+ "ibc-relayer-components-sync",
+]
+
+[[package]]
 name = "ibc-relayer-components-sync"
 version = "0.1.0"
 dependencies = [

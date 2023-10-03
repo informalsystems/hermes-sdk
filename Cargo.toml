@@ -6,6 +6,7 @@ members = [
     "crates/relayer-components",
     "crates/relayer-components-sync",
     "crates/relayer-components-extra",
+    "crates/relayer-components-extra-sync",
     "crates/relayer-subscription",
     "crates/relayer-all-in-one",
     "crates/relayer-mock",
@@ -26,6 +27,11 @@ exclude = [
 overflow-checks = true
 
 [patch.crates-io]
+ibc-relayer-components          = { path = "./crates/relayer-components" }
+ibc-relayer-components-sync     = { path = "./crates/relayer-components-sync" }
+ibc-relayer-components-extra    = { path = "./crates/relayer-components-extra" }
+ibc-relayer-runtime             = { path = "./crates/relayer-runtime" }
+
 cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
 cgp-core-sync       = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
 cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
