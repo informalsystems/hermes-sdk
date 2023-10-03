@@ -10,7 +10,6 @@ use basecoin_app::{BaseCoinApp, Builder};
 use basecoin_store::context::ProvableStore;
 use ibc::core::ics24_host::identifier::ChainId;
 use ibc::Height;
-use ibc_relayer_components_extra::runtime::traits::spawn::Spawner;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use tendermint::{AppHash, Time};
 use tendermint_testgen::light_block::TmLightBlock;
@@ -178,7 +177,7 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
     pub fn run(&self) {
         let chain = self.clone();
 
-        self.runtime().spawn(async move {
+        self.runtime().runtime.spawn(async move {
             chain.init().await;
 
             loop {
@@ -188,6 +187,6 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
 
                 chain.commit().await;
             }
-        })
+        });
     }
 }

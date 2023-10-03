@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 use core::pin::Pin;
 use core::time::Duration;
+use ibc_relayer_components::runtime::traits::task::Task;
 use ibc_relayer_subscription::impls::closure::CanCreateClosureSubscription;
 use ibc_relayer_subscription::impls::multiplex::CanMultiplexSubscription;
 use ibc_relayer_subscription::traits::subscription::Subscription;
@@ -9,14 +10,16 @@ use async_trait::async_trait;
 use cgp_core::traits::Async;
 use futures::lock::Mutex;
 use futures::stream::{self, Stream, StreamExt, TryStreamExt};
-use ibc_relayer_components_extra::runtime::traits::spawn::{HasSpawner, Spawner};
+use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use moka::future::Cache;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::event::{Event as RpcEvent, EventData as RpcEventData};
 use tendermint_rpc::query::Query;
-use tendermint_rpc::{SubscriptionClient, WebSocketClient, WebSocketClientUrl};
+use tendermint_rpc::{
+    SubscriptionClient, WebSocketClient, WebSocketClientDriver, WebSocketClientUrl,
+};
 use tracing::error;
 
 use crate::types::error::{BaseError, Error};
@@ -97,10 +100,21 @@ pub trait CanCreateAbciEventStream: Async {
     ) -> Result<Pin<Box<dyn Stream<Item = (Height, Arc<AbciEvent>)> + Send + Sync + 'static>>, Error>;
 }
 
+pub struct RunWebSocketDriverTask {
+    pub driver: WebSocketClientDriver,
+}
+
+#[async_trait]
+impl Task for RunWebSocketDriverTask {
+    async fn run(self) {
+        let _ = self.driver.run().await;
+    }
+}
+
 #[async_trait]
 impl<Runtime> CanCreateAbciEventStream for Runtime
 where
-    Runtime: HasSpawner,
+    Runtime: CanSpawnTask,
 {
     async fn new_abci_event_stream(
         &self,
@@ -114,10 +128,7 @@ where
 
         let (client, driver) = builder.build().await.map_err(BaseError::tendermint_rpc)?;
 
-        let spawner = self.spawner();
-        spawner.spawn(async move {
-            let _ = driver.run().await;
-        });
+        self.spawn_task(RunWebSocketDriverTask { driver });
 
         let event_stream =
             new_abci_event_stream_with_queries(chain_version, &client, queries).await?;
