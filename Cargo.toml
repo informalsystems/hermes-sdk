@@ -32,16 +32,16 @@ ibc-relayer-components-sync     = { path = "./crates/relayer-components-sync" }
 ibc-relayer-components-extra    = { path = "./crates/relayer-components-extra" }
 ibc-relayer-runtime             = { path = "./crates/relayer-runtime" }
 
-cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-core-sync       = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-component-sync  = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-error-sync      = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-sync            = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
-cgp-strip-async     = { git = "https://github.com/informalsystems/cgp.git", branch = "async-generic" }
+cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-core-sync       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-component-sync  = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-error-sync      = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-sync            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-strip-async     = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 ibc-proto           = { git = "https://github.com/cosmos/ibc-proto-rs.git",    branch = "luca_joss/solomachine-lightclient-v3-from-v0.32" }
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
