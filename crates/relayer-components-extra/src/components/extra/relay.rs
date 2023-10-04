@@ -1,8 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp_core::{delegate_component, delegate_components};
+use cgp_core::{delegate_component, delegate_components, RunnerComponent};
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
-use ibc_relayer_components::core::traits::run::RunnerComponent;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::packet_relayers::general::filter_relayer::FilterRelayer;

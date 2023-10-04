@@ -2130,6 +2130,7 @@ name = "ibc-test-framework"
 version = "0.25.0"
 dependencies = [
  "cfg-if 1.0.0",
+ "cgp-core",
  "color-eyre",
  "crossbeam-channel 0.5.8",
  "eyre",

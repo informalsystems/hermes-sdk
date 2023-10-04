@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp_core::delegate_component;
+use cgp_core::RunnerComponent;
 
-use crate::core::traits::run::RunnerComponent;
 use crate::relay::components::auto_relayers::both_targets::RelayBothTargets;
 use crate::relay::components::auto_relayers::event::RelayEvents;
 use crate::relay::components::create_client::CreateClientWithChains;

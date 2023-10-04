@@ -1,6 +1,5 @@
-use cgp_core::async_trait;
+use cgp_core::{async_trait, CanRun, Runner};
 
-use crate::core::traits::run::{CanRun, Runner};
 use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};

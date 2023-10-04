@@ -1,5 +1,5 @@
+use cgp_core::CanRun;
 use ibc_relayer_components::chain::types::aliases::{IncomingPacket, OutgoingPacket};
-use ibc_relayer_components::core::traits::run::CanRun;
 use ibc_relayer_components::logger::traits::level::HasLoggerWithBaseLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
