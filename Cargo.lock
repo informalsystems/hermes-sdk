@@ -1733,6 +1733,7 @@ dependencies = [
 name = "ibc-integration-test"
 version = "0.25.0"
 dependencies = [
+ "cgp-core",
  "http",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
