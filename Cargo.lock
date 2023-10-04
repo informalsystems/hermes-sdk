@@ -536,15 +536,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cgp-component-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
-dependencies = [
- "cgp-component-macro",
- "cgp-sync",
-]
-
-[[package]]
 name = "cgp-core"
 version = "0.1.0"
 source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
@@ -556,30 +547,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "cgp-core-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
-dependencies = [
- "cgp-component-sync",
- "cgp-error-sync",
- "cgp-run-sync",
- "cgp-sync",
-]
-
-[[package]]
 name = "cgp-error"
 version = "0.1.0"
 source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
 dependencies = [
  "cgp-async",
-]
-
-[[package]]
-name = "cgp-error-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
-dependencies = [
- "cgp-sync",
 ]
 
 [[package]]
@@ -590,34 +562,6 @@ dependencies = [
  "cgp-async",
  "cgp-component",
  "cgp-error",
-]
-
-[[package]]
-name = "cgp-run-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
-dependencies = [
- "cgp-component-sync",
- "cgp-error-sync",
- "cgp-sync",
-]
-
-[[package]]
-name = "cgp-strip-async"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.37",
-]
-
-[[package]]
-name = "cgp-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=cgp-run#11a00fbad203c1f0ac747abcc20d37695b229f3c"
-dependencies = [
- "cgp-strip-async",
 ]
 
 [[package]]
@@ -1926,21 +1870,6 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "ibc-relayer-components",
-]
-
-[[package]]
-name = "ibc-relayer-components-extra-sync"
-version = "0.1.0"
-dependencies = [
- "cgp-core-sync",
- "ibc-relayer-components-sync",
-]
-
-[[package]]
-name = "ibc-relayer-components-sync"
-version = "0.1.0"
-dependencies = [
- "cgp-core-sync",
 ]
 
 [[package]]
