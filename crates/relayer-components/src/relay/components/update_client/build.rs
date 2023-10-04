@@ -1,10 +1,9 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::client::update::{
-    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload,
-};
 use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::components::consensus_state_height_querier::CanQueryConsensusStateHeight;
+use crate::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
+use crate::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;

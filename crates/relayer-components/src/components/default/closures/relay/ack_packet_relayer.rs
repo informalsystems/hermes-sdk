@@ -1,8 +1,5 @@
 use cgp_core::{Async, HasComponents, HasErrorType};
 
-use crate::chain::traits::client::update::{
-    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload,
-};
 use crate::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
@@ -11,6 +8,8 @@ use crate::chain::traits::components::consensus_state_height_querier::CanQueryCo
 use crate::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
+use crate::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
+use crate::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;

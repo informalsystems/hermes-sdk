@@ -21,3 +21,4 @@ pub mod packet;
 pub mod packets;
 pub mod status;
 pub mod timestamp;
+pub mod update_client;

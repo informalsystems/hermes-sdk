@@ -25,6 +25,8 @@ use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_
     TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
 };
 use ibc_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerierComponent;
+use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
@@ -69,6 +71,8 @@ delegate_components!(
         ConsensusStateHeightQuerierComponent,
         CreateClientMessageBuilderComponent,
         CreateClientPayloadBuilderComponent,
+        UpdateClientMessageBuilderComponent,
+        UpdateClientPayloadBuilderComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

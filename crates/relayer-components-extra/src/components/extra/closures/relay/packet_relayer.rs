@@ -1,7 +1,4 @@
 use cgp_core::{HasComponents, HasErrorType};
-use ibc_relayer_components::chain::traits::client::update::{
-    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload,
-};
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use ibc_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
@@ -13,6 +10,8 @@ use ibc_relayer_components::chain::traits::components::received_packet_querier::
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
+use ibc_relayer_components::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFields;

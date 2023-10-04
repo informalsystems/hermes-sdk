@@ -1,17 +1,17 @@
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::traits::client::update::{
-    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
-};
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
+use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
 use crate::one_for_all::traits::chain::{OfaChainTypes, OfaIbcChain};
 use crate::one_for_all::types::chain::OfaChainWrapper;
@@ -112,37 +112,41 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildUpdateClientPayload<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    UpdateClientPayloadBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_update_client_payload(
-        &self,
-        trusted_height: &Self::Height,
-        target_height: &Self::Height,
-        client_state: Self::ClientState,
-    ) -> Result<Self::UpdateClientPayload, Self::Error> {
-        self.chain
+        chain: &OfaChainWrapper<Chain>,
+        trusted_height: &Chain::Height,
+        target_height: &Chain::Height,
+        client_state: Chain::ClientState,
+    ) -> Result<Chain::UpdateClientPayload, Chain::Error> {
+        chain
+            .chain
             .build_update_client_payload(trusted_height, target_height, client_state)
             .await
     }
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildUpdateClientMessage<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    UpdateClientMessageBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_update_client_message(
-        &self,
-        client_id: &Self::ClientId,
+        chain: &OfaChainWrapper<Chain>,
+        client_id: &Chain::ClientId,
         payload: Counterparty::UpdateClientPayload,
-    ) -> Result<Vec<Self::Message>, Self::Error> {
-        self.chain
+    ) -> Result<Vec<Chain::Message>, Chain::Error> {
+        chain
+            .chain
             .build_update_client_message(client_id, payload)
             .await
     }

@@ -20,9 +20,6 @@ use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath
 use ibc::core::timestamp::Timestamp;
 use ibc::core::{Msg, ValidationContext};
 use ibc::{Any, Height};
-use ibc_relayer_components::chain::traits::client::update::{
-    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
-};
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
@@ -39,6 +36,8 @@ use ibc_relayer_components::chain::traits::components::received_packet_querier::
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
+use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
@@ -66,6 +65,8 @@ use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePa
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
@@ -81,7 +82,7 @@ use crate::types::status::ChainStatus;
 use crate::util::dummy::dummy_signer;
 
 impl<Chain: BasecoinEndpoint> HasComponents for MockCosmosContext<Chain> {
-    type Components = MockCosmosChainComponents;
+    type Components = DefaultChainComponents<MockCosmosChainComponents>;
 }
 
 impl<Chain: BasecoinEndpoint> HasErrorType for MockCosmosContext<Chain> {
@@ -451,19 +452,20 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildUpdateClientPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    UpdateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     async fn build_update_client_payload(
-        &self,
+        chain: &MockCosmosContext<Chain>,
         trusted_height: &Height,
         target_height: &Height,
         _client_state: TmClientState,
-    ) -> Result<MsgUpdateClient, Self::Error> {
-        let light_block = self.get_light_block(target_height)?;
+    ) -> Result<MsgUpdateClient, Error> {
+        let light_block = chain.get_light_block(target_height)?;
 
         let header = Header {
             signed_header: light_block.signed_header,
@@ -485,17 +487,18 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildUpdateClientMessage<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    UpdateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     async fn build_update_client_message(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
         payload: MsgUpdateClient,
-    ) -> Result<Vec<Any>, Self::Error> {
+    ) -> Result<Vec<Any>, Error> {
         let mut message = payload;
         message.client_id = client_id.clone();
 
