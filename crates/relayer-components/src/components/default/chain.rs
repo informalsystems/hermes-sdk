@@ -11,6 +11,7 @@ use crate::chain::traits::components::connection_handshake_message_builder::Conn
 use crate::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
 use crate::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use crate::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
+use crate::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use crate::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
@@ -38,6 +39,7 @@ delegate_components!(
         ChannelHandshakePayloadBuilderComponent,
         ConnectionHandshakeMessageBuilderComponent,
         ConnectionHandshakePayloadBuilderComponent,
+        CreateClientMessageBuilderComponent,
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

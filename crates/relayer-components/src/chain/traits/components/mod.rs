@@ -7,6 +7,7 @@ pub mod connection_handshake_message_builder;
 pub mod connection_handshake_payload_builder;
 pub mod consensus_state_querier;
 pub mod counterparty_chain_id_querier;
+pub mod create_client_message_builder;
 pub mod message_sender;
 pub mod packet_commitments_querier;
 pub mod packet_fields_reader;
