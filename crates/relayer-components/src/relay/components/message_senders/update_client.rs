@@ -1,6 +1,6 @@
 use alloc::collections::BTreeSet;
 
-use async_trait::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::{HasCounterpartyMessageHeight, HasIbcChainTypes};

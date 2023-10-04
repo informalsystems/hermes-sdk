@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
 use crate::chain::traits::message_builders::channel::{

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::async_trait;
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };

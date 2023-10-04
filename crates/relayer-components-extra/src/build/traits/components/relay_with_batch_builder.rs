@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-use cgp_core::traits::{DelegateComponent, HasComponents, HasErrorType};
+use cgp_core::{async_trait, DelegateComponent, HasComponents, HasErrorType};
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::build::traits::target::relay::RelayBuildTarget;
 use ibc_relayer_components::build::types::aliases::{

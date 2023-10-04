@@ -1,4 +1,4 @@
-use cgp_core::traits::CanRaiseError;
+use cgp_core::CanRaiseError;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;

@@ -1,5 +1,4 @@
-use cgp_core::traits::has_components::HasComponents;
-use cgp_core::traits::HasErrorType;
+use cgp_core::{HasComponents, HasErrorType};
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::client::consensus_state::CanFindConsensusStateHeight;

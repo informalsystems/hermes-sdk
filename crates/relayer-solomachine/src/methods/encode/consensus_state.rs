@@ -4,9 +4,8 @@ use ibc_proto::google::protobuf::Any;
 use ibc_relayer_cosmos::methods::encode::encode_to_any;
 use prost::{EncodeError, Message};
 
-use crate::types::consensus_state::SolomachineConsensusState;
-
 use super::public_key::encode_public_key;
+use crate::types::consensus_state::SolomachineConsensusState;
 
 const TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.ConsensusState";
 

@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use crate::chain::traits::queries::send_packet::CanQuerySendPacketsFromSequences;

@@ -1,4 +1,4 @@
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{Async, HasErrorType};
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;

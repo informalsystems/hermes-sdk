@@ -1,6 +1,4 @@
-use async_trait::async_trait;
-use cgp_core::traits::Async;
-use cgp_macros::derive_component;
+use cgp_core::{async_trait, derive_component, Async};
 
 use crate::chain::traits::components::message_sender::InjectMismatchIbcEventsCountError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

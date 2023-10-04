@@ -1,10 +1,9 @@
 #![allow(non_snake_case)]
+use ibc_proto::google::protobuf::Any;
+use ibc_proto::protobuf::Protobuf;
 use ibc_relayer_cosmos::methods::encode::encode_to_any;
 use prost::Message;
 use secp256k1::PublicKey as SecpPublicKey;
-
-use ibc_proto::google::protobuf::Any;
-use ibc_proto::protobuf::Protobuf;
 
 use crate::types::error::Error;
 

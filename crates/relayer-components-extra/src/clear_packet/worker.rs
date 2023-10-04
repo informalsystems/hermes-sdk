@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use async_trait::async_trait;
+use cgp_core::async_trait;
 use ibc_relayer_components::chain::types::aliases::{ChannelId, PortId};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::clear_interval::HasClearInterval;

@@ -1,7 +1,7 @@
 use core::pin::Pin;
 
 use async_trait::async_trait;
-use cgp_core::traits::Async;
+use cgp_core::Async;
 use futures::Stream;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     CanCloneSender, CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,

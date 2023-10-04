@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

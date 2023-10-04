@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-use cgp_core::traits::HasErrorType;
+use cgp_core::{async_trait, HasErrorType};
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;

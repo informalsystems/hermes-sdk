@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
-use cgp_core::traits::HasErrorType;
+use cgp_core::{async_trait, HasErrorType};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::packet_relayer::PacketRelayer;
 use ibc_relayer_components::relay::types::aliases::Packet;

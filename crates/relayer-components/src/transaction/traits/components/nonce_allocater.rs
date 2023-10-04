@@ -1,6 +1,4 @@
-use async_trait::async_trait;
-use cgp_core::traits::HasErrorType;
-use cgp_macros::derive_component;
+use cgp_core::{async_trait, derive_component, HasErrorType};
 
 use crate::std_prelude::*;
 use crate::transaction::traits::nonce::guard::HasNonceGuard;

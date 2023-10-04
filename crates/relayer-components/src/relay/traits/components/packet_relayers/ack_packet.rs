@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-use cgp_macros::derive_component;
+use cgp_core::{async_trait, derive_component};
 
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
 use crate::chain::types::aliases::{Height, WriteAcknowledgementEvent};

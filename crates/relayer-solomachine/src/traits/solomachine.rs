@@ -1,20 +1,19 @@
-use async_trait::async_trait;
-use cgp_core::traits::Async;
-use cgp_core::traits::HasErrorType;
 use core::fmt::{Debug, Display};
+
+use async_trait::async_trait;
+use cgp_core::{Async, HasErrorType};
 use ibc_relayer_all_in_one::all_for_one::runtime::AfoRuntime;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_cosmos::types::tendermint::{TendermintClientState, TendermintConsensusState};
-use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
-use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
-use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
-use ibc_relayer_types::core::ics04_channel::channel::State as ChannelState;
+use ibc_relayer_types::core::ics03_connection::connection::{
+    ConnectionEnd, State as ConnectionState,
+};
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State as ChannelState};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc_relayer_types::core::ics24_host::identifier::{
+    ChainId, ChannelId, ClientId, ConnectionId, PortId,
+};
 use ibc_relayer_types::Height;
 use prost::EncodeError;
 use secp256k1::SecretKey;

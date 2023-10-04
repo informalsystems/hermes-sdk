@@ -1,4 +1,4 @@
-use cgp_core::traits::{Async, HasComponents};
+use cgp_core::{Async, HasComponents};
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;

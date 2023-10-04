@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-use cgp_core::traits::HasErrorType;
+use cgp_core::{async_trait, HasErrorType};
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::height::HasHeightType;

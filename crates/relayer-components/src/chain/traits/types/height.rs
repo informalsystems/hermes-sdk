@@ -4,7 +4,7 @@
 
 use core::fmt::Display;
 
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{Async, HasErrorType};
 
 pub trait HasHeightType: Async {
     /**

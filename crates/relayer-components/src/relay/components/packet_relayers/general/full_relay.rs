@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::async_trait;
 
 use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;

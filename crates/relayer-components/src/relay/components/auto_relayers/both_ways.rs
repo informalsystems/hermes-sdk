@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::async_trait;
 
 use crate::core::traits::run::{CanRun, Runner};
 use crate::relay::traits::two_way::HasTwoWayRelay;

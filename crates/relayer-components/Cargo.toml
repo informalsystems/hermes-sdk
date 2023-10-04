@@ -15,9 +15,5 @@ description  = """
 [package.metadata.docs.rs]
 all-features = true
 
-[features]
-
 [dependencies]
 cgp-core = { version = "0.1.0" }
-cgp-macros = { version = "0.1.0" }
-async-trait = "0.1.56"

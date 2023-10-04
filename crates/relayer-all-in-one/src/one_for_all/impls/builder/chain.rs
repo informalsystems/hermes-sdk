@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::async_trait;
 use ibc_relayer_components::build::traits::components::chain_builder::ChainBuilder;
 use ibc_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 

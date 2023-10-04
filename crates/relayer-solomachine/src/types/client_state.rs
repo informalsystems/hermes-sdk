@@ -1,5 +1,4 @@
 use eyre::eyre;
-
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoClientState;
 use ibc_proto::protobuf::Protobuf;
@@ -23,8 +22,9 @@ impl TryFrom<Any> for SolomachineClientState {
     type Error = Error;
 
     fn try_from(raw: Any) -> Result<Self, Error> {
-        use bytes::Buf;
         use core::ops::Deref;
+
+        use bytes::Buf;
 
         fn decode_client_state<B: Buf>(buf: B) -> Result<SolomachineClientState, Error> {
             ProtoClientState::decode(buf)

@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 
 pub trait HasTime: Async {
     type Time: Async;

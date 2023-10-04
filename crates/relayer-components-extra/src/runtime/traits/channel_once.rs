@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{async_trait, Async, HasErrorType};
 
 use crate::std_prelude::*;
 

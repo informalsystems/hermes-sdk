@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 
 use crate::all_for_one::runtime::AfoRuntime;

@@ -1,8 +1,8 @@
 use core::time::Duration;
 
-use async_trait::async_trait;
-use cgp_core::traits::Async;
+use cgp_core::{async_trait, Async};
 
+#[allow(unused_imports)]
 use crate::std_prelude::*;
 
 #[async_trait]

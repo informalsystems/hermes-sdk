@@ -1,4 +1,4 @@
-use cgp_core::traits::{Async, HasComponents, HasErrorType};
+use cgp_core::{Async, HasComponents, HasErrorType};
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
 use ibc_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;

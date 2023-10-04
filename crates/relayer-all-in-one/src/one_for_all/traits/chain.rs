@@ -3,12 +3,11 @@
 //! trait.
 
 use core::fmt::{Debug, Display};
-use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 
-use async_trait::async_trait;
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{async_trait, Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
+use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 use ibc_relayer_components_extra::telemetry::traits::metrics::HasBasicMetrics;
 
 use crate::all_for_one::runtime::AfoRuntime;
@@ -18,7 +17,7 @@ use crate::std_prelude::*;
 pub trait OfaChainTypes: Async {
     /**
        Corresponds to
-       [`HasErrorType::Error`](cgp_core::traits::HasErrorType::Error).
+       [`HasErrorType::Error`](cgp_core::HasErrorType::Error).
     */
     type Error: Async + Debug;
 

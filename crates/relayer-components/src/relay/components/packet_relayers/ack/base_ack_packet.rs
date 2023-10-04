@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-use cgp_core::traits::Async;
+use cgp_core::{async_trait, Async};
 
 use crate::chain::traits::client::client_state::CanQueryClientState;
 use crate::chain::traits::message_builders::ack_packet::{

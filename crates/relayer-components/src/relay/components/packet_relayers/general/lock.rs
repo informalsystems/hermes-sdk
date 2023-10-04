@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use async_trait::async_trait;
+use cgp_core::async_trait;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;

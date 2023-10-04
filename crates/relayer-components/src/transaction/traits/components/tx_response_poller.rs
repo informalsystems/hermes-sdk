@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-use cgp_macros::derive_component;
+use cgp_core::{async_trait, derive_component};
 
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;

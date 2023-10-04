@@ -2,8 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use core::fmt::Debug;
 
-use async_trait::async_trait;
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{async_trait, Async, HasErrorType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components_extra::batch::types::config::BatchConfig;

@@ -1,4 +1,4 @@
-use cgp_core::traits::{Async, HasErrorType};
+use cgp_core::{Async, HasErrorType};
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;

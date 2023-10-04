@@ -4,7 +4,7 @@ use alloc::vec::Vec;
 use std::vec;
 
 use async_trait::async_trait;
-use cgp_core::traits::{HasComponents, HasErrorType};
+use cgp_core::{HasComponents, HasErrorType};
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;

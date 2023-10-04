@@ -1,9 +1,8 @@
-use secp256k1::ecdsa::Signature;
-
 use ibc_relayer_types::core::ics04_channel::channel::Ordering;
 use ibc_relayer_types::core::ics04_channel::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::Height;
+use secp256k1::ecdsa::Signature;
 
 pub struct SolomachineChannelOpenTryPayload {
     pub ordering: Ordering,

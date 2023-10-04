@@ -1,4 +1,4 @@
-use cgp_core::traits::HasErrorType;
+use cgp_core::HasErrorType;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};

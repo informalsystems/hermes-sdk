@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 
 use async_trait::async_trait;
-use cgp_core::traits::{DelegateComponent, HasComponents, HasErrorType};
+use cgp_core::{DelegateComponent, HasComponents, HasErrorType};
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::clients::ics07_tendermint::header::Header;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;

@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::traits::Async;
+use cgp_core::Async;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::build::traits::target::chain::ChainBuildTarget;
 use ibc_relayer_components::build::types::aliases::{

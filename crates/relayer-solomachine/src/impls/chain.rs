@@ -1,8 +1,8 @@
+use alloc::sync::Arc;
 use std::str::FromStr;
 
-use alloc::sync::Arc;
 use async_trait::async_trait;
-use cgp_core::traits::HasErrorType;
+use cgp_core::HasErrorType;
 use ibc_proto::ibc::lightclients::solomachine::v2::PacketCommitmentData;
 use ibc_relayer::chain::cosmos::query::abci_query;
 use ibc_relayer::chain::endpoint::ChainStatus;
@@ -43,8 +43,7 @@ use ibc_relayer_types::core::ics03_connection::connection::{
 use ibc_relayer_types::core::ics04_channel::channel::{
     ChannelEnd, Counterparty as ChannelCounterparty, State,
 };
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
+use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
