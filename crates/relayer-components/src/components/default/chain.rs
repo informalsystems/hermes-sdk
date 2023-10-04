@@ -5,6 +5,8 @@ use cgp_core::delegate_components;
 use crate::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use crate::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use crate::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
+use crate::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
+use crate::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
 use crate::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use crate::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
@@ -29,7 +31,9 @@ delegate_components!(
         UnreceivedPacketSequencesQuerierComponent,
         WriteAckQuerierComponent,
         AckPacketMessageBuilderComponent,
-        AckPacketPayloadBuilderComponent
+        AckPacketPayloadBuilderComponent,
+        ChannelHandshakeMessageBuilderComponent,
+        ChannelHandshakePayloadBuilderComponent,
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

@@ -1,6 +1,8 @@
 pub mod ack_packet_message_builder;
 pub mod ack_packet_payload_builder;
 pub mod chain_status_querier;
+pub mod channel_handshake_message_builder;
+pub mod channel_handshake_payload_builder;
 pub mod consensus_state_querier;
 pub mod counterparty_chain_id_querier;
 pub mod message_sender;
