@@ -1,4 +1,3 @@
-pub mod channel;
 pub mod packet_commitments;
 pub mod received_packet;
 pub mod send_packet;

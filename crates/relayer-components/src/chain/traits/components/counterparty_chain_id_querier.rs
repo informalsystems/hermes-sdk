@@ -1,11 +1,13 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::chain::HasChainTypes;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
+#[derive_component(CounterpartyChainIdQuerierComponent, CounterpartyChainIdQuerier<Chain>)]
 #[async_trait]
-pub trait CanQueryCounterpartyChainIdFromChannel<Counterparty>:
+pub trait CanQueryCounterpartyChainId<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasChainTypes,

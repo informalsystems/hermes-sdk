@@ -1,6 +1,6 @@
 use cgp_core::HasComponents;
+use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CanQueryCounterpartyChainId;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::queries::channel::CanQueryCounterpartyChainIdFromChannel;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::CanBuildPacketFromWriteAckEvent;
@@ -37,9 +37,9 @@ where
         + HasLoggerType<Logger = Relay::Logger>
         + CanLogChainPacket<Relay::DstChain>
         + HasSendPacketEvent<Relay::DstChain>
-        + CanQueryCounterpartyChainIdFromChannel<Relay::DstChain>,
+        + CanQueryCounterpartyChainId<Relay::DstChain>,
     Relay::DstChain: HasChainId
-        + CanQueryCounterpartyChainIdFromChannel<Relay::SrcChain>
+        + CanQueryCounterpartyChainId<Relay::SrcChain>
         + CanBuildPacketFromWriteAckEvent<Relay::SrcChain>,
     Relay::Logger: HasBaseLogLevels,
     BaseRelayComponents: PacketFilter<Relay>,
