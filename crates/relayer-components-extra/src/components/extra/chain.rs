@@ -5,6 +5,7 @@ use ibc_relayer_components::chain::traits::components::chain_status_querier::Cha
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
+use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
@@ -30,6 +31,7 @@ delegate_components!(
         MessageSenderComponent,
         PacketFieldsReaderComponent,
         CounterpartyChainIdQuerierComponent,
+        PacketCommitmentsQuerierComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

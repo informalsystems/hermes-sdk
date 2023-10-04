@@ -1,13 +1,15 @@
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
+use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerier;
 
 use crate::one_for_all::traits::chain::OfaIbcChain;
 use crate::one_for_all::types::chain::OfaChainWrapper;
+use crate::one_for_all::types::component::OfaComponents;
 use crate::std_prelude::*;
 
 #[async_trait]
-impl<Chain, Counterparty> CanQueryPacketCommitments<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    PacketCommitmentsQuerier<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaIbcChain<Chain>,
@@ -17,14 +19,15 @@ where
     /// yet completed. Once the chain receives the ack from the counterparty
     /// chain, a given sequence should be removed from the packet commitment list.
     async fn query_packet_commitments(
-        &self,
-        channel_id: &Self::ChannelId,
-        port_id: &Self::PortId,
-    ) -> Result<(Vec<Self::Sequence>, Self::Height), Self::Error> {
-        let (sequences, height) = self
+        chain: &OfaChainWrapper<Chain>,
+        channel_id: &Chain::ChannelId,
+        port_id: &Chain::PortId,
+    ) -> Result<(Vec<Chain::Sequence>, Chain::Height), Chain::Error> {
+        let commitments = chain
             .chain
             .query_packet_commitments(channel_id, port_id)
             .await?;
-        Ok((sequences, height))
+
+        Ok(commitments)
     }
 }

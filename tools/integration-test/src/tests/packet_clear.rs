@@ -1,5 +1,5 @@
 use ibc_relayer::config::PacketFilter;
-use ibc_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
+use ibc_relayer_components::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
 use ibc_relayer_components::chain::traits::queries::send_packet::CanQuerySendPacketsFromSequences;
 use ibc_relayer_components::chain::traits::queries::unreceived_packets::CanQueryUnreceivedPacketSequences;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
