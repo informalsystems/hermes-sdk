@@ -1,8 +1,7 @@
 use async_trait::async_trait;
-use cgp_core::{CanRaiseError, HasErrorType};
+use cgp_core::HasErrorType;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
 
@@ -13,10 +12,7 @@ pub struct QueryChainStatusWithChainHandle;
 #[async_trait]
 impl<Chain> ChainStatusQuerier<Chain> for QueryChainStatusWithChainHandle
 where
-    Chain: HasErrorType
-        + HasChainStatusType<ChainStatus = ChainStatus>
-        + HasBlockingChainHandle
-        + CanRaiseError<RelayerError>,
+    Chain: HasErrorType + HasChainStatusType<ChainStatus = ChainStatus> + HasBlockingChainHandle,
 {
     async fn query_chain_status(chain: &Chain) -> Result<Chain::ChainStatus, Chain::Error> {
         chain

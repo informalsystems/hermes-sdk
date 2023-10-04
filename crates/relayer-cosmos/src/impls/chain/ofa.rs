@@ -7,6 +7,7 @@ use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
+use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::log::value::LogValue;
@@ -26,6 +27,7 @@ use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
 use crate::methods::channel::{
     build_channel_open_ack_message, build_channel_open_ack_payload,
@@ -50,7 +52,7 @@ use crate::methods::event::{
 use crate::methods::packet::{
     build_ack_packet_message, build_ack_packet_payload, build_receive_packet_message,
     build_receive_packet_payload, build_timeout_unordered_packet_message,
-    build_timeout_unordered_packet_payload, query_is_packet_received, query_write_ack_event,
+    build_timeout_unordered_packet_payload, query_is_packet_received,
 };
 use crate::methods::unreceived_packet::{
     query_packet_commitments, query_send_packets_from_sequences, query_unreceived_packet_sequences,
@@ -315,7 +317,10 @@ where
         &self,
         packet: &Packet,
     ) -> Result<Option<WriteAcknowledgement>, Error> {
-        query_write_ack_event(self, packet).await
+        <QueryWriteAckEventFromChainHandle as WriteAckQuerier<_, ()>>::query_write_ack_event(
+            self, packet,
+        )
+        .await
     }
 
     async fn build_create_client_payload(

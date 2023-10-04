@@ -1,12 +1,13 @@
 use async_trait::async_trait;
-use cgp_core::HasErrorType;
+use cgp_core::CanRaiseError;
 use ibc_relayer::chain::handle::ChainHandle;
+use ibc_relayer::error::Error as RelayerError;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};
 
 #[async_trait]
-pub trait HasBlockingChainHandle: HasErrorType {
+pub trait HasBlockingChainHandle: CanRaiseError<RelayerError> {
     type ChainHandle: ChainHandle;
 
     async fn with_blocking_chain_handle<R>(
