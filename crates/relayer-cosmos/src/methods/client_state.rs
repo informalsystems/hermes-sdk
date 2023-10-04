@@ -5,7 +5,7 @@ use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::chain::CosmosChain;
-use crate::methods::runtime::HasBlockingChainHandle;
+use crate::traits::chain_handle::HasBlockingChainHandle;
 use crate::types::error::{BaseError, Error};
 
 pub async fn query_client_state<Chain: ChainHandle>(

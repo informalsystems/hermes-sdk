@@ -10,7 +10,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 
 use crate::contexts::chain::CosmosChain;
-use crate::methods::runtime::HasBlockingChainHandle;
+use crate::traits::chain_handle::HasBlockingChainHandle;
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
 use crate::types::error::{BaseError, Error};
 use crate::types::messages::client::update::CosmosUpdateClientMessage;

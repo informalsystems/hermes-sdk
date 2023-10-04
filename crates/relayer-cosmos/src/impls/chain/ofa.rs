@@ -5,7 +5,8 @@ use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
-use ibc_relayer_components::chain::traits::components::message_sender::CanSendMessages;
+use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::log::value::LogValue;
@@ -24,7 +25,8 @@ use prost::Message as _;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
-use crate::methods::chain::query_chain_status;
+use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
 use crate::methods::channel::{
     build_channel_open_ack_message, build_channel_open_ack_payload,
     build_channel_open_confirm_message, build_channel_open_confirm_payload,
@@ -298,13 +300,11 @@ where
         &self,
         messages: Vec<Arc<dyn CosmosMessage>>,
     ) -> Result<Vec<Vec<Arc<AbciEvent>>>, Error> {
-        let events = self.tx_context.send_messages(messages).await?;
-
-        Ok(events)
+        SendMessagesToTxContext::send_messages(self, messages).await
     }
 
     async fn query_chain_status(&self) -> Result<ChainStatus, Error> {
-        query_chain_status(self).await
+        QueryChainStatusWithChainHandle::query_chain_status(self).await
     }
 
     fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
