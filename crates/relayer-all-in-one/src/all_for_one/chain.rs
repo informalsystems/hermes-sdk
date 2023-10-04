@@ -5,7 +5,7 @@ use ibc_relayer_components::chain::traits::components::packet_commitments_querie
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::components::send_packets_querier::CanQuerySendPackets;
-use ibc_relayer_components::chain::traits::queries::unreceived_packets::CanQueryUnreceivedPacketSequences;
+use ibc_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::CanQueryUnreceivedPacketSequences;
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,

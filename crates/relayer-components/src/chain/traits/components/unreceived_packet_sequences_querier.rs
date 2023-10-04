@@ -1,9 +1,11 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::std_prelude::*;
 
+#[derive_component(UnreceivedPacketSequencesQuerierComponent, UnreceivedPacketSequencesQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryUnreceivedPacketSequences<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasIbcPacketTypes<Counterparty> + HasErrorType
