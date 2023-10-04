@@ -7,6 +7,8 @@ use crate::chain::traits::components::ack_packet_payload_builder::AckPacketPaylo
 use crate::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use crate::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use crate::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
+use crate::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
+use crate::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
 use crate::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use crate::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
@@ -34,6 +36,8 @@ delegate_components!(
         AckPacketPayloadBuilderComponent,
         ChannelHandshakeMessageBuilderComponent,
         ChannelHandshakePayloadBuilderComponent,
+        ConnectionHandshakeMessageBuilderComponent,
+        ConnectionHandshakePayloadBuilderComponent,
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

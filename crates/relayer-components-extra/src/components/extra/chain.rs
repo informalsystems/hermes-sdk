@@ -6,6 +6,8 @@ use ibc_relayer_components::chain::traits::components::ack_packet_payload_builde
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
+use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
+use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
@@ -48,6 +50,8 @@ delegate_components!(
         AckPacketPayloadBuilderComponent,
         ChannelHandshakeMessageBuilderComponent,
         ChannelHandshakePayloadBuilderComponent,
+        ConnectionHandshakeMessageBuilderComponent,
+        ConnectionHandshakePayloadBuilderComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

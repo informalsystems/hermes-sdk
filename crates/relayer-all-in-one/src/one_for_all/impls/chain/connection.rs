@@ -1,7 +1,6 @@
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::traits::message_builders::connection::{
-    CanBuildConnectionHandshakeMessages, CanBuildConnectionHandshakePayloads,
-};
+use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
+use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
@@ -11,6 +10,7 @@ use ibc_relayer_components::chain::traits::types::ibc_events::connection::{
 
 use crate::one_for_all::traits::chain::{OfaChainTypes, OfaIbcChain};
 use crate::one_for_all::types::chain::OfaChainWrapper;
+use crate::one_for_all::types::component::OfaComponents;
 use crate::std_prelude::*;
 
 impl<Chain, Counterparty> HasConnectionHandshakePayloads<OfaChainWrapper<Counterparty>>
@@ -80,73 +80,80 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildConnectionHandshakePayloads<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    ConnectionHandshakePayloadBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_connection_open_init_payload(
-        &self,
-        client_state: &Self::ClientState,
-    ) -> Result<Self::ConnectionOpenInitPayload, Self::Error> {
-        self.chain
+        chain: &OfaChainWrapper<Chain>,
+        client_state: &Chain::ClientState,
+    ) -> Result<Chain::ConnectionOpenInitPayload, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_init_payload(client_state)
             .await
     }
 
     async fn build_connection_open_try_payload(
-        &self,
-        client_state: &Self::ClientState,
-        height: &Self::Height,
-        client_id: &Self::ClientId,
-        connection_id: &Self::ConnectionId,
-    ) -> Result<Self::ConnectionOpenTryPayload, Self::Error> {
-        self.chain
+        chain: &OfaChainWrapper<Chain>,
+        client_state: &Chain::ClientState,
+        height: &Chain::Height,
+        client_id: &Chain::ClientId,
+        connection_id: &Chain::ConnectionId,
+    ) -> Result<Chain::ConnectionOpenTryPayload, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_try_payload(client_state, height, client_id, connection_id)
             .await
     }
 
     async fn build_connection_open_ack_payload(
-        &self,
-        client_state: &Self::ClientState,
-        height: &Self::Height,
-        client_id: &Self::ClientId,
-        connection_id: &Self::ConnectionId,
-    ) -> Result<Self::ConnectionOpenAckPayload, Self::Error> {
-        self.chain
+        chain: &OfaChainWrapper<Chain>,
+        client_state: &Chain::ClientState,
+        height: &Chain::Height,
+        client_id: &Chain::ClientId,
+        connection_id: &Chain::ConnectionId,
+    ) -> Result<Chain::ConnectionOpenAckPayload, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_ack_payload(client_state, height, client_id, connection_id)
             .await
     }
 
     async fn build_connection_open_confirm_payload(
-        &self,
-        client_state: &Self::ClientState,
-        height: &Self::Height,
-        client_id: &Self::ClientId,
-        connection_id: &Self::ConnectionId,
-    ) -> Result<Self::ConnectionOpenConfirmPayload, Self::Error> {
-        self.chain
+        chain: &OfaChainWrapper<Chain>,
+        client_state: &Chain::ClientState,
+        height: &Chain::Height,
+        client_id: &Chain::ClientId,
+        connection_id: &Chain::ConnectionId,
+    ) -> Result<Chain::ConnectionOpenConfirmPayload, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_confirm_payload(client_state, height, client_id, connection_id)
             .await
     }
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildConnectionHandshakeMessages<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    ConnectionHandshakeMessageBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_connection_open_init_message(
-        &self,
-        client_id: &Self::ClientId,
+        chain: &OfaChainWrapper<Chain>,
+        client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
-        init_connection_options: &Self::InitConnectionOptions,
+        init_connection_options: &Chain::InitConnectionOptions,
         counterparty_payload: Counterparty::ConnectionOpenInitPayload,
-    ) -> Result<Self::Message, Self::Error> {
-        self.chain
+    ) -> Result<Chain::Message, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_init_message(
                 client_id,
                 counterparty_client_id,
@@ -157,13 +164,14 @@ where
     }
 
     async fn build_connection_open_try_message(
-        &self,
-        client_id: &Self::ClientId,
+        chain: &OfaChainWrapper<Chain>,
+        client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenTryPayload,
-    ) -> Result<Self::Message, Self::Error> {
-        self.chain
+    ) -> Result<Chain::Message, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_try_message(
                 client_id,
                 counterparty_client_id,
@@ -174,12 +182,13 @@ where
     }
 
     async fn build_connection_open_ack_message(
-        &self,
-        connection_id: &Self::ConnectionId,
+        chain: &OfaChainWrapper<Chain>,
+        connection_id: &Chain::ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenAckPayload,
-    ) -> Result<Self::Message, Self::Error> {
-        self.chain
+    ) -> Result<Chain::Message, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_ack_message(
                 connection_id,
                 counterparty_connection_id,
@@ -189,11 +198,12 @@ where
     }
 
     async fn build_connection_open_confirm_message(
-        &self,
-        connection_id: &Self::ConnectionId,
+        chain: &OfaChainWrapper<Chain>,
+        connection_id: &Chain::ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenConfirmPayload,
-    ) -> Result<Self::Message, Self::Error> {
-        self.chain
+    ) -> Result<Chain::Message, Chain::Error> {
+        chain
+            .chain
             .build_connection_open_confirm_message(connection_id, counterparty_payload)
             .await
     }
