@@ -9,6 +9,7 @@ use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use crate::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
 use crate::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
+use crate::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
@@ -20,6 +21,7 @@ delegate_components!(
         CounterpartyChainIdQuerierComponent,
         PacketCommitmentsQuerierComponent,
         ReceivedPacketQuerierComponent,
+        SendPacketsQuerierComponent,
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

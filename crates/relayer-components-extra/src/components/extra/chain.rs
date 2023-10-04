@@ -8,6 +8,7 @@ use ibc_relayer_components::chain::traits::components::message_sender::MessageSe
 use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
+use ibc_relayer_components::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
@@ -34,6 +35,7 @@ delegate_components!(
         CounterpartyChainIdQuerierComponent,
         PacketCommitmentsQuerierComponent,
         ReceivedPacketQuerierComponent,
+        SendPacketsQuerierComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,
