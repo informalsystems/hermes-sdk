@@ -14,6 +14,8 @@ use ibc_relayer_components::chain::traits::components::create_client_message_bui
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
 use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
+use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
+use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
 use ibc_relayer_components::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerierComponent;
@@ -54,6 +56,8 @@ delegate_components!(
         ConnectionHandshakeMessageBuilderComponent,
         ConnectionHandshakePayloadBuilderComponent,
         CreateClientMessageBuilderComponent,
+        ReceivePacketMessageBuilderComponent,
+        ReceivePacketPayloadBuilderComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

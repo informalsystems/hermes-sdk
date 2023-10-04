@@ -11,11 +11,10 @@ use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use crate::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
+use crate::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
+use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use crate::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
 use crate::chain::traits::logs::packet::CanLogChainPacket;
-use crate::chain::traits::message_builders::receive_packet::{
-    CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
-};
 use crate::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };

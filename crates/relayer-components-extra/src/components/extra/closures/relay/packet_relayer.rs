@@ -7,11 +7,10 @@ use ibc_relayer_components::chain::traits::client::update::{
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
+use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
+use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
-    CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
-};
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };

@@ -15,6 +15,8 @@ use crate::chain::traits::components::create_client_message_builder::CreateClien
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use crate::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
+use crate::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
+use crate::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use crate::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
 use crate::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
 use crate::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerierComponent;
@@ -40,6 +42,8 @@ delegate_components!(
         ConnectionHandshakeMessageBuilderComponent,
         ConnectionHandshakePayloadBuilderComponent,
         CreateClientMessageBuilderComponent,
+        ReceivePacketMessageBuilderComponent,
+        ReceivePacketPayloadBuilderComponent,
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

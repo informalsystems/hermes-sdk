@@ -11,6 +11,8 @@ pub mod create_client_message_builder;
 pub mod message_sender;
 pub mod packet_commitments_querier;
 pub mod packet_fields_reader;
+pub mod receive_packet_message_builder;
+pub mod receive_packet_payload_builder;
 pub mod received_packet_querier;
 pub mod send_packets_querier;
 pub mod unreceived_packet_sequences_querier;

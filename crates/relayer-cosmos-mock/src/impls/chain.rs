@@ -35,13 +35,12 @@ use ibc_relayer_components::chain::traits::components::chain_status_querier::Cha
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
+use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
+use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
-    CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
-};
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
@@ -618,22 +617,23 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildReceivePacketPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ReceivePacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     async fn build_receive_packet_payload(
-        &self,
-        _client_state: &Self::ClientState,
-        height: &Self::Height,
-        packet: &Self::IncomingPacket,
-    ) -> Result<Self::ReceivePacketPayload, Error> {
+        chain: &MockCosmosContext<Chain>,
+        _client_state: &TmClientState,
+        height: &Height,
+        packet: &Packet,
+    ) -> Result<Any, Error> {
         let receipt_path =
             ReceiptPath::new(&packet.port_id_on_a, &packet.chan_id_on_a, packet.seq_on_a);
 
-        let (_, proof_commitment_on_a) = self.query(receipt_path, height).await?;
+        let (_, proof_commitment_on_a) = chain.query(receipt_path, height).await?;
 
         let recv_packet_payload = MsgRecvPacket {
             packet: packet.clone(),
@@ -647,14 +647,15 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildReceivePacketMessage<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ReceivePacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     async fn build_receive_packet_message(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         _packet: &Packet,
         payload: Any,
     ) -> Result<Any, Error> {
