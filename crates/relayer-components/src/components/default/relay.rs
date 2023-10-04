@@ -3,8 +3,8 @@ use core::marker::PhantomData;
 use cgp_core::delegate_component;
 
 use crate::core::traits::run::RunnerComponent;
-use crate::relay::components::auto_relayers::concurrent_bidirectional::ConcurrentBidirectionalRelayer;
-use crate::relay::components::auto_relayers::concurrent_event::ConcurrentEventSubscriptionRelayer;
+use crate::relay::components::auto_relayers::both_targets::RelayBothTargets;
+use crate::relay::components::auto_relayers::event::RelayEvents;
 use crate::relay::components::create_client::CreateClientWithChains;
 use crate::relay::components::event_relayers::packet_event::PacketEventRelayer;
 use crate::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
@@ -36,6 +36,7 @@ use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerCompon
 use crate::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
 use crate::relay::traits::channel::open_init::ChannelInitializerComponent;
 use crate::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
+use crate::relay::traits::components::auto_relayer::AutoRelayerComponent;
 use crate::relay::traits::components::client_creator::ClientCreatorComponent;
 use crate::relay::traits::components::event_relayer::EventRelayerComponent;
 use crate::relay::traits::components::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
@@ -105,7 +106,13 @@ delegate_component!(
 delegate_component!(
     RunnerComponent,
     DefaultRelayComponents<BaseComponents>,
-    ConcurrentBidirectionalRelayer<ConcurrentEventSubscriptionRelayer>,
+    RelayBothTargets,
+);
+
+delegate_component!(
+    AutoRelayerComponent,
+    DefaultRelayComponents<BaseComponents>,
+    RelayEvents,
 );
 
 delegate_component!(

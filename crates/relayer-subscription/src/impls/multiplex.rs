@@ -1,19 +1,23 @@
 use alloc::sync::Arc;
+use core::marker::PhantomData;
 use core::ops::DerefMut;
 use core::pin::Pin;
+use ibc_relayer_components::runtime::traits::stream::HasStreamType;
+use ibc_relayer_components::runtime::traits::task::Task;
 
 use async_trait::async_trait;
 use cgp_core::traits::Async;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
-
-use crate::runtime::traits::channel::{
+use ibc_relayer_components_extra::runtime::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };
-use crate::runtime::traits::spawn::{HasSpawner, Spawner};
+use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+
 use crate::std_prelude::*;
+use crate::traits::stream::HasAsyncStreamType;
+use crate::traits::subscription::Subscription;
 
 /**
    Multiplex the incoming [`Stream`] provided by an underlying [`Subscription`]
@@ -53,21 +57,84 @@ pub trait CanMultiplexSubscription {
     fn multiplex_subscription<T, U>(
         &self,
         subscription: impl Subscription<Item = T>,
-        map_item: impl Fn(T) -> U + Send + Sync + 'static,
+        map_item: impl Fn(T) -> U + Async,
     ) -> Arc<dyn Subscription<Item = U>>
     where
         T: Async + Clone,
         U: Async + Clone;
 }
 
+pub struct MultiplexSubscriptionTask<Runtime, S, M, T, U>
+where
+    Runtime: HasMutex + HasChannelTypes,
+    S: Subscription<Item = T>,
+    M: Fn(T) -> U + Async,
+    T: Async,
+    U: Async,
+{
+    pub subscription: S,
+    pub mapper: M,
+    pub task_senders: Arc<Runtime::Mutex<Option<Vec<Runtime::Sender<U>>>>>,
+    pub phantom: PhantomData<Runtime>,
+}
+
+#[async_trait]
+impl<Runtime, S, M, T, U> Task for MultiplexSubscriptionTask<Runtime, S, M, T, U>
+where
+    Runtime: HasMutex + CanUseChannels,
+    S: Subscription<Item = T>,
+    M: Fn(T) -> U + Async,
+    T: Async,
+    U: Async + Clone,
+{
+    async fn run(self) {
+        loop {
+            let m_stream = self.subscription.subscribe().await;
+
+            match m_stream {
+                Some(stream) => {
+                    let task_senders = &self.task_senders;
+                    let map_item = &self.mapper;
+
+                    stream
+                        .for_each(|item| async move {
+                            let mapped = map_item(item);
+                            let mut m_senders = Runtime::acquire_mutex(task_senders).await;
+
+                            if let Some(senders) = m_senders.deref_mut() {
+                                // Remove senders where the receiver side has been dropped
+                                senders
+                                    .retain(|sender| Runtime::send(sender, mapped.clone()).is_ok());
+                            }
+                        })
+                        .await;
+                }
+                None => {
+                    // If the underlying subscription returns `None` from `subscribe`, clears the senders
+                    // queue inside the mutex and set it to `None` and return. This will cause subsequent
+                    // calls to `subscribe` for the multiplexed subscription to also return `None`.
+                    let mut senders = Runtime::acquire_mutex(&self.task_senders).await;
+                    *senders = None;
+                    return;
+                }
+            }
+        }
+    }
+}
+
 impl<Runtime> CanMultiplexSubscription for Runtime
 where
-    Runtime: HasSpawner + HasMutex + CanCreateChannels + CanUseChannels + CanStreamReceiver,
+    Runtime: CanSpawnTask
+        + HasMutex
+        + CanCreateChannels
+        + CanUseChannels
+        + CanStreamReceiver
+        + HasAsyncStreamType,
 {
     fn multiplex_subscription<T, U>(
         &self,
-        in_subscription: impl Subscription<Item = T>,
-        map_item: impl Fn(T) -> U + Send + Sync + 'static,
+        subscription: impl Subscription<Item = T>,
+        mapper: impl Fn(T) -> U + Async,
     ) -> Arc<dyn Subscription<Item = U>>
     where
         T: Async + Clone,
@@ -75,43 +142,14 @@ where
     {
         let stream_senders = Arc::new(Runtime::new_mutex(Some(Vec::new())));
 
-        let spawner = self.spawner();
-        let task_senders = stream_senders.clone();
+        let task = MultiplexSubscriptionTask {
+            subscription,
+            mapper,
+            task_senders: stream_senders.clone(),
+            phantom: PhantomData::<Runtime>,
+        };
 
-        spawner.spawn(async move {
-            loop {
-                let m_stream = in_subscription.subscribe().await;
-
-                match m_stream {
-                    Some(stream) => {
-                        let task_senders = &task_senders;
-                        let map_item = &map_item;
-
-                        stream
-                            .for_each(|item| async move {
-                                let mapped = map_item(item);
-                                let mut m_senders = Runtime::acquire_mutex(task_senders).await;
-
-                                if let Some(senders) = m_senders.deref_mut() {
-                                    // Remove senders where the receiver side has been dropped
-                                    senders.retain(|sender| {
-                                        Runtime::send(sender, mapped.clone()).is_ok()
-                                    });
-                                }
-                            })
-                            .await;
-                    }
-                    None => {
-                        // If the underlying subscription returns `None` from `subscribe`, clears the senders
-                        // queue inside the mutex and set it to `None` and return. This will cause subsequent
-                        // calls to `subscribe` for the multiplexed subscription to also return `None`.
-                        let mut senders = Runtime::acquire_mutex(&task_senders).await;
-                        *senders = None;
-                        return;
-                    }
-                }
-            }
-        });
+        self.spawn_task(task);
 
         let subscription: MultiplexingSubscription<Runtime, U> =
             MultiplexingSubscription { stream_senders };
@@ -136,7 +174,9 @@ where
 impl<Runtime, T> Clone for MultiplexingSubscription<Runtime, T>
 where
     T: Async,
-    Runtime: HasChannelTypes + HasMutex,
+    Runtime: HasChannelTypes
+        + HasMutex
+        + HasStreamType<Stream<T> = Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>>,
 {
     fn clone(&self) -> Self {
         Self {
@@ -149,11 +189,11 @@ where
 impl<Runtime, T> Subscription for MultiplexingSubscription<Runtime, T>
 where
     T: Async,
-    Runtime: HasMutex + CanCreateChannels + CanStreamReceiver,
+    Runtime: HasMutex + CanCreateChannels + CanStreamReceiver + HasAsyncStreamType,
 {
     type Item = T;
 
-    async fn subscribe(&self) -> Option<Pin<Box<dyn Stream<Item = T> + Send + 'static>>>
+    async fn subscribe(&self) -> Option<Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>>
     where
         T: Async,
     {
@@ -165,7 +205,8 @@ where
                 senders.push(sender);
 
                 let stream = Runtime::receiver_to_stream(receiver);
-                Some(stream)
+
+                Some(Runtime::to_async_stream(stream))
             }
             None => None,
         }

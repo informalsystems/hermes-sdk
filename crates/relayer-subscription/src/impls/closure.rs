@@ -5,10 +5,10 @@ use core::pin::Pin;
 use async_trait::async_trait;
 use cgp_core::traits::Async;
 use futures_core::stream::Stream;
+use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 
-use crate::runtime::traits::mutex::HasMutex;
-use crate::runtime::traits::subscription::Subscription;
 use crate::std_prelude::*;
+use crate::traits::subscription::Subscription;
 
 /**
    An auto trait that is implemented by all runtime contexts that implement
@@ -23,8 +23,9 @@ pub trait CanCreateClosureSubscription {
     fn new_closure_subscription<T: Async>(
         subscribe: impl Fn() -> Pin<
                 Box<
-                    dyn Future<Output = Option<Pin<Box<dyn Stream<Item = T> + Send + 'static>>>>
-                        + Send
+                    dyn Future<
+                            Output = Option<Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>>,
+                        > + Send
                         + 'static,
                 >,
             > + Send
@@ -40,8 +41,9 @@ where
     fn new_closure_subscription<T: Async>(
         subscribe: impl Fn() -> Pin<
                 Box<
-                    dyn Future<Output = Option<Pin<Box<dyn Stream<Item = T> + Send + 'static>>>>
-                        + Send
+                    dyn Future<
+                            Output = Option<Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>>,
+                        > + Send
                         + 'static,
                 >,
             > + Send
@@ -65,8 +67,9 @@ where
     subscribe: Box<
         dyn Fn() -> Pin<
                 Box<
-                    dyn Future<Output = Option<Pin<Box<dyn Stream<Item = T> + Send + 'static>>>>
-                        + Send
+                    dyn Future<
+                            Output = Option<Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>>,
+                        > + Send
                         + 'static,
                 >,
             > + Send
@@ -82,7 +85,9 @@ where
 {
     type Item = T;
 
-    async fn subscribe(&self) -> Option<Pin<Box<dyn Stream<Item = Self::Item> + Send + 'static>>> {
+    async fn subscribe(
+        &self,
+    ) -> Option<Pin<Box<dyn Stream<Item = Self::Item> + Send + Sync + 'static>>> {
         let mut terminated = Runtime::acquire_mutex(&self.terminated).await;
 
         if *terminated {

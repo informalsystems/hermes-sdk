@@ -9,7 +9,7 @@ use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
-use ibc_relayer_components::runtime::traits::subscription::Subscription;
+use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 use ibc_relayer_cosmos::contexts::chain::CosmosChain;
 use ibc_relayer_cosmos::methods::encode::encode_protobuf;
 use ibc_relayer_cosmos::traits::message::{CosmosMessage, ToCosmosMessage};
@@ -374,7 +374,9 @@ where
         Ok(status)
     }
 
-    fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Self::Event)>> {
+    fn event_subscription(
+        &self,
+    ) -> &<Self::Runtime as HasSubscriptionType>::Subscription<(Self::Height, Self::Event)> {
         todo!()
     }
 

@@ -1,23 +1,44 @@
 use async_trait::async_trait;
-use futures_util::{stream, StreamExt};
 
 use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use crate::chain::traits::queries::send_packet::CanQuerySendPacketsFromSequences;
 use crate::chain::traits::queries::unreceived_packets::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelId, PortId};
+use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::packet_clearer::PacketClearer;
 use crate::relay::traits::components::packet_relayer::CanRelayPacket;
+use crate::runtime::traits::runtime::HasRuntime;
+use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 use crate::std_prelude::*;
 
 pub struct ClearReceivePackets;
 
+pub struct RelayPacketTask<Relay>
+where
+    Relay: HasRelayChains,
+{
+    pub relay: Relay,
+    pub packet: Relay::Packet,
+}
+
+#[async_trait]
+impl<Relay> Task for RelayPacketTask<Relay>
+where
+    Relay: CanRelayPacket,
+{
+    async fn run(self) {
+        let _ = self.relay.relay_packet(&self.packet).await;
+    }
+}
+
 #[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
-    Relay: CanRelayPacket,
+    Relay: Clone + CanRelayPacket + HasRuntime,
     Relay::DstChain: CanQueryUnreceivedPacketSequences<Relay::SrcChain>,
     Relay::SrcChain: CanQueryPacketCommitments<Relay::DstChain>
         + CanQuerySendPacketsFromSequences<Relay::DstChain>,
+    Relay::Runtime: CanRunConcurrentTasks,
 {
     async fn clear_packets(
         relay: &Relay,
@@ -51,13 +72,15 @@ where
             .await
             .map_err(Relay::src_chain_error)?;
 
-        stream::iter(send_packets)
-            .for_each_concurrent(None, |t| async move {
-                // Ignore any relaying errors, as the relayer still needs to proceed
-                // relaying the next event regardless.
-                let _ = relay.relay_packet(&t).await;
+        let tasks = send_packets
+            .into_iter()
+            .map(|packet| RelayPacketTask {
+                relay: relay.clone(),
+                packet,
             })
-            .await;
+            .collect();
+
+        relay.runtime().run_concurrent_tasks(tasks).await;
 
         Ok(())
     }

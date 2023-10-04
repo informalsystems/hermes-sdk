@@ -7,10 +7,13 @@ use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerTyp
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::stream::CanMapStream;
+use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
+use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
 use crate::components::extra::relay::ExtraRelayComponents;
-use crate::runtime::traits::spawn::HasSpawner;
+use crate::runtime::traits::spawn::CanSpawnTask;
 
 pub trait CanUseExtraAutoRelayer: UseExtraAutoRelayer {}
 
@@ -26,18 +29,20 @@ where
         + HasComponents<Components = ExtraRelayComponents<BaseRelayComponents>>,
     Relay::SrcChain: HasRuntime
         + HasChainId
-        + HasEventSubscription
         + HasLoggerType<Logger = Relay::Logger>
-        + CanLogChainEvent,
+        + CanLogChainEvent
+        + HasEventSubscription,
     Relay::DstChain: HasRuntime
         + HasChainId
-        + HasEventSubscription
         + HasLoggerType<Logger = Relay::Logger>
-        + CanLogChainEvent,
-    Relay::Runtime: HasSpawner,
+        + CanLogChainEvent
+        + HasEventSubscription,
+    Relay::Runtime: CanSpawnTask + CanRunConcurrentTasks,
     Relay::Logger: HasBaseLogLevels,
-    <Relay::SrcChain as HasRuntime>::Runtime: HasSpawner,
-    <Relay::DstChain as HasRuntime>::Runtime: HasSpawner,
+    <Relay::SrcChain as HasRuntime>::Runtime:
+        HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
+    <Relay::DstChain as HasRuntime>::Runtime:
+        HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
     BaseRelayComponents: Async,
 {
 }

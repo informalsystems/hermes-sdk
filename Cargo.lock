@@ -1824,8 +1824,6 @@ dependencies = [
  "async-trait",
  "cgp-core",
  "cgp-macros",
- "futures-core",
- "futures-util",
 ]
 
 [[package]]
@@ -1834,8 +1832,6 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "cgp-core",
- "futures-core",
- "futures-util",
  "ibc-relayer-components",
 ]
 
@@ -1854,6 +1850,7 @@ dependencies = [
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "ibc-relayer-runtime",
+ "ibc-relayer-subscription",
  "ibc-relayer-types",
  "ibc-telemetry",
  "itertools",
@@ -1919,9 +1916,9 @@ dependencies = [
  "cgp-core",
  "flex-error",
  "futures",
- "ibc-relayer-all-in-one",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
+ "ibc-relayer-subscription",
  "tokio",
  "tokio-stream",
  "tracing",
@@ -1957,6 +1954,19 @@ dependencies = [
  "tendermint-rpc",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "ibc-relayer-subscription"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "cgp-macros",
+ "futures-core",
+ "futures-util",
+ "ibc-relayer-components",
+ "ibc-relayer-components-extra",
 ]
 
 [[package]]

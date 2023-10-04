@@ -14,6 +14,7 @@ use ibc_relayer_components::relay::traits::channel::open_confirm::ChannelOpenCon
 use ibc_relayer_components::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
 use ibc_relayer_components::relay::traits::channel::open_init::ChannelInitializerComponent;
 use ibc_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
+use ibc_relayer_components::relay::traits::components::auto_relayer::AutoRelayerComponent;
 use ibc_relayer_components::relay::traits::components::client_creator::ClientCreatorComponent;
 use ibc_relayer_components::relay::traits::components::event_relayer::EventRelayerComponent;
 use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
@@ -34,8 +35,6 @@ use ibc_relayer_components::relay::traits::connection::open_try::ConnectionOpenT
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
 use crate::batch::types::sink::BatchWorkerSink;
-use crate::relay::components::auto_relayers::parallel_bidirectional::ParallelBidirectionalRelayer;
-use crate::relay::components::auto_relayers::parallel_event::ParallelEventSubscriptionRelayer;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
 pub struct ExtraRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
@@ -58,12 +57,6 @@ delegate_component!(
     LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
 );
 
-delegate_component!(
-    RunnerComponent,
-    ExtraRelayComponents<BaseComponents>,
-    ParallelBidirectionalRelayer<ParallelEventSubscriptionRelayer>,
-);
-
 delegate_components!(
     [
         UpdateClientMessageBuilderComponent,
@@ -84,6 +77,8 @@ delegate_components!(
         ConnectionInitializerComponent,
         ConnectionOpenTryRelayerComponent,
         ConnectionOpenHandshakeRelayerComponent,
+        AutoRelayerComponent,
+        RunnerComponent,
     ],
     ExtraRelayComponents<BaseComponents>,
     DefaultRelayComponents<BaseComponents>,
