@@ -1,5 +1,4 @@
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use ibc_relayer_components::chain::traits::client::create::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
@@ -8,12 +7,14 @@ use ibc_relayer_components::chain::traits::client::create::{
 use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
 };
+use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
 
 use crate::one_for_all::traits::chain::{OfaChainTypes, OfaIbcChain};
 use crate::one_for_all::types::chain::OfaChainWrapper;
+use crate::one_for_all::types::component::OfaComponents;
 use crate::std_prelude::*;
 
 impl<Chain, Counterparty> HasCreateClientOptions<OfaChainWrapper<Counterparty>>
@@ -172,16 +173,16 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanQueryClientState<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty> ClientStateQuerier<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn query_client_state(
-        &self,
-        client_id: &Self::ClientId,
-    ) -> Result<Counterparty::ClientState, Self::Error> {
-        self.chain.query_client_state(client_id).await
+        chain: &OfaChainWrapper<Chain>,
+        client_id: &Chain::ClientId,
+    ) -> Result<Counterparty::ClientState, Chain::Error> {
+        chain.chain.query_client_state(client_id).await
     }
 }

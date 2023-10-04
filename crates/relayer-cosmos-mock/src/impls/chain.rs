@@ -20,7 +20,6 @@ use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath
 use ibc::core::timestamp::Timestamp;
 use ibc::core::{Msg, ValidationContext};
 use ibc::{Any, Height};
-use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use ibc_relayer_components::chain::traits::client::create::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
@@ -32,6 +31,7 @@ use ibc_relayer_components::chain::traits::client::update::{
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
@@ -275,14 +275,19 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanQueryClientState<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ClientStateQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    async fn query_client_state(&self, client_id: &ClientId) -> Result<TmClientState, Error> {
-        self.ibc_context()
+    async fn query_client_state(
+        chain: &MockCosmosContext<Chain>,
+        client_id: &ClientId,
+    ) -> Result<TmClientState, Error> {
+        chain
+            .ibc_context()
             .client_state(client_id)
             .map_err(Error::source)
     }

@@ -1,6 +1,6 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::client::client_state::CanQueryClientState;
+use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
 use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;

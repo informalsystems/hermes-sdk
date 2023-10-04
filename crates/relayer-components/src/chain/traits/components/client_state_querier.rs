@@ -4,6 +4,7 @@ use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
+#[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryClientState<Counterparty>: HasIbcChainTypes<Counterparty> + HasErrorType
 where

@@ -6,6 +6,7 @@ use ibc_relayer_components::chain::traits::components::ack_packet_payload_builde
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
+use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
@@ -63,6 +64,7 @@ delegate_components!(
         ReceivePacketPayloadBuilderComponent,
         TimeoutUnorderedPacketMessageBuilderComponent,
         TimeoutUnorderedPacketPayloadBuilderComponent,
+        ClientStateQuerierComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

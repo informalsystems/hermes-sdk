@@ -11,10 +11,10 @@
 use async_trait::async_trait;
 use cgp_core::{HasComponents, HasErrorType};
 use eyre::eyre;
-use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
@@ -323,8 +323,11 @@ impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockComponent
 }
 
 #[async_trait]
-impl CanQueryClientState<MockChainContext> for MockChainContext {
-    async fn query_client_state(&self, _client_id: &Self::ClientId) -> Result<(), Self::Error> {
+impl ClientStateQuerier<MockChainContext, MockChainContext> for MockComponents {
+    async fn query_client_state(
+        _chain: &MockChainContext,
+        _client_id: &ClientId,
+    ) -> Result<(), Error> {
         Ok(())
     }
 }

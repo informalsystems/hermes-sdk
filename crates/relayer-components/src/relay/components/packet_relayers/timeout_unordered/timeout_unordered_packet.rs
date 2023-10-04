@@ -1,6 +1,6 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::client::client_state::CanQueryClientState;
+use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };

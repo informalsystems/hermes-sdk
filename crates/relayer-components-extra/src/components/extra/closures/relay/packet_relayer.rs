@@ -1,11 +1,11 @@
 use cgp_core::{HasComponents, HasErrorType};
-use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
 use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload,
 };
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
+use ibc_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
