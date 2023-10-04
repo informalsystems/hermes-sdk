@@ -1,11 +1,12 @@
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
+use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
+    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 
 use crate::one_for_all::traits::chain::{OfaChainTypes, OfaIbcChain};
 use crate::one_for_all::types::chain::OfaChainWrapper;
+use crate::one_for_all::types::component::OfaComponents;
 use crate::std_prelude::*;
 
 impl<Chain, Counterparty> HasTimeoutUnorderedPacketPayload<OfaChainWrapper<Counterparty>>
@@ -18,37 +19,41 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildTimeoutUnorderedPacketPayload<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    TimeoutUnorderedPacketPayloadBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_timeout_unordered_packet_payload(
-        &self,
-        client_state: &Self::ClientState,
-        height: &Self::Height,
-        packet: &Self::IncomingPacket,
-    ) -> Result<Self::TimeoutUnorderedPacketPayload, Self::Error> {
-        self.chain
+        chain: &OfaChainWrapper<Chain>,
+        client_state: &Chain::ClientState,
+        height: &Chain::Height,
+        packet: &Chain::IncomingPacket,
+    ) -> Result<Chain::TimeoutUnorderedPacketPayload, Chain::Error> {
+        chain
+            .chain
             .build_timeout_unordered_packet_payload(client_state, height, packet)
             .await
     }
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildTimeoutUnorderedPacketMessage<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    TimeoutUnorderedPacketMessageBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_timeout_unordered_packet_message(
-        &self,
+        chain: &OfaChainWrapper<Chain>,
         packet: &Chain::OutgoingPacket,
         payload: Counterparty::TimeoutUnorderedPacketPayload,
-    ) -> Result<Self::Message, Self::Error> {
-        self.chain
+    ) -> Result<Chain::Message, Chain::Error> {
+        chain
+            .chain
             .build_timeout_unordered_packet_message(packet, payload)
             .await
     }

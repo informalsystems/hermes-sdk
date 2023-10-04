@@ -1,4 +1,5 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
@@ -8,6 +9,7 @@ use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use crate::std_prelude::*;
 
+#[derive_component(TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildTimeoutUnorderedPacketPayload<Counterparty>:
     HasTimeoutUnorderedPacketPayload<Counterparty>
@@ -26,6 +28,7 @@ where
     ) -> Result<Self::TimeoutUnorderedPacketPayload, Self::Error>;
 }
 
+#[derive_component(TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildTimeoutUnorderedPacketMessage<Counterparty>:
     HasMessageType + HasErrorType + HasIbcPacketTypes<Counterparty>

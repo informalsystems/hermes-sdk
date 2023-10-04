@@ -21,12 +21,12 @@ use ibc_relayer_components::chain::traits::components::packet_fields_reader::Pac
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
+    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
+};
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-};
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -459,19 +459,19 @@ impl HasTimeoutUnorderedPacketPayload<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl CanBuildTimeoutUnorderedPacketPayload<MockChainContext> for MockChainContext {
+impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext> for MockComponents {
     async fn build_timeout_unordered_packet_payload(
-        &self,
-        _client_state: &Self::ClientState,
+        chain: &MockChainContext,
+        _client_state: &(),
         height: &MockHeight,
         packet: &PacketKey,
     ) -> Result<MockMessage, Error> {
-        let state = self.get_current_state();
-        let current_timestamp = self.runtime.get_time();
+        let state = chain.get_current_state();
+        let current_timestamp = chain.runtime.get_time();
 
         if !state.check_timeout(packet.clone(), *height, current_timestamp) {
             return Err(BaseError::timeout_without_sent(
-                self.name().to_string(),
+                chain.name().to_string(),
                 packet.src_channel_id.to_string(),
             )
             .into());
@@ -482,9 +482,9 @@ impl CanBuildTimeoutUnorderedPacketPayload<MockChainContext> for MockChainContex
 }
 
 #[async_trait]
-impl CanBuildTimeoutUnorderedPacketMessage<MockChainContext> for MockChainContext {
+impl TimeoutUnorderedPacketMessageBuilder<MockChainContext, MockChainContext> for MockComponents {
     async fn build_timeout_unordered_packet_message(
-        &self,
+        _chain: &MockChainContext,
         _packet: &PacketKey,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {

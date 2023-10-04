@@ -10,10 +10,10 @@ use ibc_relayer_components::chain::traits::components::packet_fields_reader::Can
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
-use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
+use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;

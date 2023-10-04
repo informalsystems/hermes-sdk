@@ -19,6 +19,9 @@ use crate::chain::traits::components::receive_packet_message_builder::ReceivePac
 use crate::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use crate::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
 use crate::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
+use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
+    TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
+};
 use crate::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerierComponent;
 use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
@@ -44,6 +47,8 @@ delegate_components!(
         CreateClientMessageBuilderComponent,
         ReceivePacketMessageBuilderComponent,
         ReceivePacketPayloadBuilderComponent,
+        TimeoutUnorderedPacketMessageBuilderComponent,
+        TimeoutUnorderedPacketPayloadBuilderComponent,
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

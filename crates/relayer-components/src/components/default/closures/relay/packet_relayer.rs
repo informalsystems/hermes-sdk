@@ -14,10 +14,10 @@ use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
 use crate::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
 use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use crate::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
-use crate::chain::traits::logs::packet::CanLogChainPacket;
-use crate::chain::traits::message_builders::timeout_unordered_packet::{
+use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
+use crate::chain::traits::logs::packet::CanLogChainPacket;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;

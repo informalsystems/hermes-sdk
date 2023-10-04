@@ -15,5 +15,7 @@ pub mod receive_packet_message_builder;
 pub mod receive_packet_payload_builder;
 pub mod received_packet_querier;
 pub mod send_packets_querier;
+pub mod timeout_unordered_packet_message_builder;
+pub mod timeout_unordered_packet_payload_builder;
 pub mod unreceived_packet_sequences_querier;
 pub mod write_ack_querier;
