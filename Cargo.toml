@@ -28,13 +28,16 @@ overflow-checks = true
 ibc-relayer-components          = { path = "./crates/relayer-components" }
 ibc-relayer-components-extra    = { path = "./crates/relayer-components-extra" }
 ibc-relayer-runtime             = { path = "./crates/relayer-runtime" }
+ibc-relayer-all-in-one          = { path = "./crates/relayer-all-in-one" }
+ibc-relayer-subscription        = { path = "./crates/relayer-subscription" }
+ibc-relayer-cosmos              = { path = "./crates/relayer-cosmos" }
 
-cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-run" }
-cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-run" }
-cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-run" }
-cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-run" }
-cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-run" }
-cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-run" }
+cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }

@@ -19,7 +19,7 @@ async-trait = "0.1.56"
 eyre = "0.6.8"
 flex-error = "0.4.4"
 cgp-core = { version = "0.1.0" }
-ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
-ibc-relayer-runtime = { path = "../relayer-runtime" }
+ibc-relayer-components = { version = "0.1.0" }
+ibc-relayer-runtime = { version = "0.1.0" }
 tokio = { version = "1.0", features = ["full"] }
 tracing = "0.1.36"

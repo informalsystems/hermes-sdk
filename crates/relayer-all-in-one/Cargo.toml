@@ -21,5 +21,5 @@ all-features = true
 cgp-core = { version = "0.1.0" }
 futures-core = { version = "0.3", default-features = false, features = ["alloc"] }
 futures-util = { version = "0.3", default-features = false, features = ["alloc"] }
-ibc-relayer-components = { version = "0.1.0", path = "../relayer-components" }
-ibc-relayer-components-extra = { version = "0.1.0", path = "../relayer-components-extra" }
+ibc-relayer-components = { version = "0.1.0" }
+ibc-relayer-components-extra = { version = "0.1.0" }
