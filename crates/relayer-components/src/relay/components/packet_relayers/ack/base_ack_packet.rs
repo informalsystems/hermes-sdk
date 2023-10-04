@@ -34,7 +34,7 @@ where
         relay: &Relay,
         destination_height: &DstChain::Height,
         packet: &Packet,
-        ack: &DstChain::WriteAcknowledgementEvent,
+        ack: &DstChain::WriteAckEvent,
     ) -> Result<(), Relay::Error> {
         let src_client_state = relay
             .src_chain()

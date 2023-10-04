@@ -9,11 +9,11 @@ pub enum Event {
 }
 
 #[derive(Debug)]
-pub struct WriteAcknowledgementEvent(pub Height);
+pub struct WriteAckEvent(pub Height);
 
-impl WriteAcknowledgementEvent {
+impl WriteAckEvent {
     pub fn new(h: Height) -> Self {
-        WriteAcknowledgementEvent(h)
+        WriteAckEvent(h)
     }
 }
 

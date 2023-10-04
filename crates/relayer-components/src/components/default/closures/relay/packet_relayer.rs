@@ -25,7 +25,7 @@ use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::DefaultRelayComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
@@ -75,7 +75,7 @@ where
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
         + HasCounterpartyMessageHeight<SrcChain>
-        + HasWriteAcknowledgementEvent<SrcChain>
+        + HasWriteAckEvent<SrcChain>
         + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanQueryClientState<SrcChain>
         + CanQueryReceivedPacket<SrcChain>

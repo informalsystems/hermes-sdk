@@ -15,7 +15,7 @@ use ibc_relayer_components::chain::traits::types::connection::{
 };
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::logger::traits::level::HasLoggerWithBaseLevels;
 use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
@@ -31,7 +31,7 @@ pub trait AfoChain<Counterparty>:
     + CanQueryChainStatus
     + HasIbcChainTypes<Counterparty>
     + CanReadPacketFields<Counterparty>
-    + HasWriteAcknowledgementEvent<Counterparty>
+    + HasWriteAckEvent<Counterparty>
     + HasConsensusStateType<Counterparty>
     + CanQueryConsensusState<Counterparty>
     + CanQueryReceivedPacket<Counterparty>
@@ -71,7 +71,7 @@ where
         + HasChainTypes
         + CanQueryChainStatus
         + CanReadPacketFields<Counterparty>
-        + HasWriteAcknowledgementEvent<Counterparty>
+        + HasWriteAckEvent<Counterparty>
         + HasConsensusStateType<Counterparty>
         + CanQueryConsensusState<Counterparty>
         + CanQueryReceivedPacket<Counterparty>

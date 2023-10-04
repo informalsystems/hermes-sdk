@@ -45,7 +45,7 @@ use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
-use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
+use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAck;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
@@ -57,7 +57,7 @@ use ibc_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
@@ -652,13 +652,13 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanQueryWriteAcknowledgement<MockCosmosContext<DstChain>>
+impl<SrcChain, DstChain> CanQueryWriteAck<MockCosmosContext<DstChain>>
     for MockCosmosContext<SrcChain>
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    async fn query_write_acknowledgement_event(
+    async fn query_write_ack_event(
         &self,
         packet: &Packet,
     ) -> Result<Option<WriteAcknowledgement>, Error> {
@@ -689,17 +689,15 @@ where
     }
 }
 
-impl<SrcChain, DstChain> HasWriteAcknowledgementEvent<MockCosmosContext<DstChain>>
+impl<SrcChain, DstChain> HasWriteAckEvent<MockCosmosContext<DstChain>>
     for MockCosmosContext<SrcChain>
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type WriteAcknowledgementEvent = WriteAcknowledgement;
+    type WriteAckEvent = WriteAcknowledgement;
 
-    fn try_extract_write_acknowledgement_event(
-        event: &Self::Event,
-    ) -> Option<Self::WriteAcknowledgementEvent> {
+    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
         match event {
             IbcEvent::WriteAcknowledgement(e) => Some(e.clone()),
             _ => None,
@@ -728,7 +726,7 @@ where
         _client_state: &Self::ClientState,
         height: &Self::Height,
         packet: &Self::IncomingPacket,
-        ack: &Self::WriteAcknowledgementEvent,
+        ack: &Self::WriteAckEvent,
     ) -> Result<Self::AckPacketPayload, Error> {
         let ack_path = AckPath::new(&packet.port_id_on_a, &packet.chan_id_on_a, packet.seq_on_a);
 

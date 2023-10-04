@@ -16,7 +16,7 @@ use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFi
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::logger::traits::has_logger::HasLogger;
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
@@ -32,13 +32,13 @@ use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannels
 
 pub trait CanUseExtraAckPacketRelayer: UseExtraAckPacketRelayer
 where
-    Self::DstChain: HasWriteAcknowledgementEvent<Self::SrcChain>,
+    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
 {
 }
 
 pub trait UseExtraAckPacketRelayer: CanRelayAckPacket
 where
-    Self::DstChain: HasWriteAcknowledgementEvent<Self::SrcChain>,
+    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
 {
 }
 

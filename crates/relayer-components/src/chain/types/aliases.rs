@@ -2,7 +2,7 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::timestamp::HasTimestampType;
@@ -34,5 +34,5 @@ pub type Height<Chain> = <Chain as HasHeightType>::Height;
 
 pub type Timestamp<Chain> = <Chain as HasTimestampType>::Timestamp;
 
-pub type WriteAcknowledgementEvent<Chain, Counterparty> =
-    <Chain as HasWriteAcknowledgementEvent<Counterparty>>::WriteAcknowledgementEvent;
+pub type WriteAckEvent<Chain, Counterparty> =
+    <Chain as HasWriteAckEvent<Counterparty>>::WriteAckEvent;

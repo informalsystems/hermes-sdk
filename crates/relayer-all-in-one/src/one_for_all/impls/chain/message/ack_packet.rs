@@ -30,7 +30,7 @@ where
         client_state: &Self::ClientState,
         height: &Self::Height,
         packet: &Self::IncomingPacket,
-        ack: &Self::WriteAcknowledgementEvent,
+        ack: &Self::WriteAckEvent,
     ) -> Result<Self::AckPacketPayload, Self::Error> {
         self.chain
             .build_ack_packet_payload(client_state, height, packet, ack)

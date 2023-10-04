@@ -21,7 +21,7 @@ use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFi
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
@@ -77,7 +77,7 @@ where
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
         + HasCounterpartyMessageHeight<SrcChain>
-        + HasWriteAcknowledgementEvent<SrcChain>
+        + HasWriteAckEvent<SrcChain>
         + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanQueryClientState<SrcChain>
         + CanQueryReceivedPacket<SrcChain>

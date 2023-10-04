@@ -28,7 +28,7 @@ use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
-use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
+use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAck;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -38,7 +38,7 @@ use ibc_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
@@ -59,7 +59,7 @@ use crate::relayer_mock::base::types::aliases::{
     ChainStatus, ChannelId, ClientId, ConsensusState, MockTimestamp, PortId, Sequence,
 };
 use crate::relayer_mock::base::types::chain::MockChainStatus;
-use crate::relayer_mock::base::types::events::{Event, SendPacketEvent, WriteAcknowledgementEvent};
+use crate::relayer_mock::base::types::events::{Event, SendPacketEvent, WriteAckEvent};
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
 use crate::relayer_mock::base::types::packet::PacketKey;
@@ -187,14 +187,12 @@ impl PacketFieldsReader<MockChainContext, MockChainContext> for MockComponents {
     }
 }
 
-impl HasWriteAcknowledgementEvent<MockChainContext> for MockChainContext {
-    type WriteAcknowledgementEvent = WriteAcknowledgementEvent;
+impl HasWriteAckEvent<MockChainContext> for MockChainContext {
+    type WriteAckEvent = WriteAckEvent;
 
-    fn try_extract_write_acknowledgement_event(
-        event: &Self::Event,
-    ) -> Option<Self::WriteAcknowledgementEvent> {
+    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
         match event {
-            Event::WriteAcknowledgment(h) => Some(WriteAcknowledgementEvent::new(*h)),
+            Event::WriteAcknowledgment(h) => Some(WriteAckEvent::new(*h)),
             _ => None,
         }
     }
@@ -347,11 +345,11 @@ impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockComponent
 }
 
 #[async_trait]
-impl CanQueryWriteAcknowledgement<MockChainContext> for MockChainContext {
-    async fn query_write_acknowledgement_event(
+impl CanQueryWriteAck<MockChainContext> for MockChainContext {
+    async fn query_write_ack_event(
         &self,
         packet: &PacketKey,
-    ) -> Result<Option<WriteAcknowledgementEvent>, Error> {
+    ) -> Result<Option<WriteAckEvent>, Error> {
         let received = self.get_received_packet_information(
             packet.dst_port_id.clone(),
             packet.dst_channel_id.clone(),
@@ -360,7 +358,7 @@ impl CanQueryWriteAcknowledgement<MockChainContext> for MockChainContext {
 
         if let Some((packet2, height)) = received {
             if &packet2 == packet {
-                Ok(Some(WriteAcknowledgementEvent::new(height)))
+                Ok(Some(WriteAckEvent::new(height)))
             } else {
                 Err(BaseError::generic(eyre!(
                     "mismatch between packet in state {} and packet: {}",
@@ -426,7 +424,7 @@ impl CanBuildAckPacketPayload<MockChainContext> for MockChainContext {
         _client_state: &Self::ClientState,
         height: &MockHeight,
         packet: &PacketKey,
-        _ack: &WriteAcknowledgementEvent,
+        _ack: &WriteAckEvent,
     ) -> Result<MockMessage, Error> {
         // If the latest state of the destination chain doesn't have the packet as received, return an error.
         let state = self.get_current_state();

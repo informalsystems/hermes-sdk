@@ -161,9 +161,9 @@ pub trait OfaChainTypes: Async {
 
     /**
        Corresponds to
-       [`HasWriteAcknowledgementEvent::WriteAcknowledgementEvent`](ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent::WriteAcknowledgementEvent).
+       [`HasWriteAckEvent::WriteAckEvent`](ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent::WriteAckEvent).
     */
-    type WriteAcknowledgementEvent: Async;
+    type WriteAckEvent: Async;
 }
 
 #[async_trait]
@@ -194,18 +194,14 @@ pub trait OfaChain: OfaChainTypes {
 
     fn chain_status_timestamp(status: &Self::ChainStatus) -> &Self::Timestamp;
 
-    fn try_extract_write_acknowledgement_event(
-        event: &Self::Event,
-    ) -> Option<Self::WriteAcknowledgementEvent>;
+    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent>;
 
     fn try_extract_send_packet_event(event: &Self::Event) -> Option<Self::SendPacketEvent>;
 
     fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent)
         -> Self::OutgoingPacket;
 
-    fn extract_packet_from_write_acknowledgement_event(
-        ack: &Self::WriteAcknowledgementEvent,
-    ) -> &Self::IncomingPacket;
+    fn extract_packet_from_write_ack_event(ack: &Self::WriteAckEvent) -> &Self::IncomingPacket;
 
     fn try_extract_create_client_event(event: Self::Event) -> Option<Self::CreateClientEvent>;
 
@@ -256,10 +252,10 @@ pub trait OfaChain: OfaChainTypes {
         &self,
     ) -> &<Self::Runtime as HasSubscriptionType>::Subscription<(Self::Height, Self::Event)>;
 
-    async fn query_write_acknowledgement_event(
+    async fn query_write_ack_event(
         &self,
         packet: &Self::IncomingPacket,
-    ) -> Result<Option<Self::WriteAcknowledgementEvent>, Self::Error>;
+    ) -> Result<Option<Self::WriteAckEvent>, Self::Error>;
 
     async fn build_create_client_payload(
         &self,
@@ -338,7 +334,7 @@ pub trait OfaChain: OfaChainTypes {
         client_state: &Self::ClientState,
         height: &Self::Height,
         packet: &Self::IncomingPacket,
-        ack: &Self::WriteAcknowledgementEvent,
+        ack: &Self::WriteAckEvent,
     ) -> Result<Self::AckPacketPayload, Self::Error>;
 
     async fn build_timeout_unordered_packet_payload(

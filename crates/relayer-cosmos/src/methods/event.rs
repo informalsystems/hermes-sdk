@@ -19,9 +19,7 @@ pub fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacke
     }
 }
 
-pub fn try_extract_write_acknowledgement_event(
-    event: &Arc<AbciEvent>,
-) -> Option<WriteAcknowledgement> {
+pub fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAcknowledgement> {
     if let IbcEventType::WriteAck = event.kind.parse().ok()? {
         let (packet, write_ack) = extract_packet_and_write_ack_from_tx(event).ok()?;
 

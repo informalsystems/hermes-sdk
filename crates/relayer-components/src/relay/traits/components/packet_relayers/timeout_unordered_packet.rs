@@ -12,7 +12,7 @@ use crate::std_prelude::*;
 ///
 /// When a timeout packet is sent, a response is not expected to be received.
 /// This is in contrast when sending e.g. receive packets, which expect to
-/// receive back a `WriteAcknowledgementEvent` in response to the receive
+/// receive back a `WriteAckEvent` in response to the receive
 /// packet.
 #[derive_component(TimeoutUnorderedPacketRelayerComponent, TimeoutUnorderedPacketRelayer<Relay>)]
 #[async_trait]
