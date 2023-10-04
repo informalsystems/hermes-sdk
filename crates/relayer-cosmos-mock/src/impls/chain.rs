@@ -33,6 +33,7 @@ use ibc_relayer_components::chain::traits::components::chain_status_querier::Can
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use ibc_relayer_components::chain::traits::components::message_sender::CanSendMessages;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
+use ibc_relayer_components::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::message_builders::ack_packet::{
@@ -44,7 +45,6 @@ use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
-use ibc_relayer_components::chain::traits::queries::received_packet::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::{

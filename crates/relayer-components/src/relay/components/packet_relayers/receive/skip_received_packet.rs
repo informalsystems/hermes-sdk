@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp_core::async_trait;
 
-use crate::chain::traits::queries::received_packet::CanQueryReceivedPacket;
+use crate::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
 use crate::chain::types::aliases::{Height, WriteAcknowledgementEvent};
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayer;

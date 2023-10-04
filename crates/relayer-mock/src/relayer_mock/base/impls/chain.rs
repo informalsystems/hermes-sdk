@@ -16,6 +16,7 @@ use ibc_relayer_components::chain::traits::components::chain_status_querier::Cha
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
+use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::message_builders::ack_packet::{
@@ -27,7 +28,6 @@ use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
-use ibc_relayer_components::chain::traits::queries::received_packet::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
@@ -334,14 +334,14 @@ impl CanQueryClientState<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl CanQueryReceivedPacket<MockChainContext> for MockChainContext {
+impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockComponents {
     async fn query_is_packet_received(
-        &self,
-        port_id: &Self::PortId,
-        channel_id: &Self::ChannelId,
-        sequence: &Self::Sequence,
-    ) -> Result<bool, Self::Error> {
-        let state = self.get_current_state();
+        chain: &MockChainContext,
+        port_id: &PortId,
+        channel_id: &ChannelId,
+        sequence: &Sequence,
+    ) -> Result<bool, Error> {
+        let state = chain.get_current_state();
         Ok(state.check_received((port_id.clone(), channel_id.clone(), *sequence)))
     }
 }

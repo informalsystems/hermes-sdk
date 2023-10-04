@@ -5,6 +5,7 @@ use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload,
 };
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
+use ibc_relayer_components::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::message_builders::ack_packet::{
     CanBuildAckPacketMessage, CanBuildAckPacketPayload,
@@ -15,7 +16,6 @@ use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
-use ibc_relayer_components::chain::traits::queries::received_packet::CanQueryReceivedPacket;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
