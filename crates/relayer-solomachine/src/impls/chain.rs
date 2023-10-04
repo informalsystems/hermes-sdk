@@ -3,7 +3,6 @@ use std::str::FromStr;
 
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use ibc_proto::ibc::lightclients::solomachine::v2::PacketCommitmentData;
 use ibc_relayer::chain::cosmos::query::abci_query;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -65,6 +64,7 @@ use crate::methods::proofs::channel::channel_proof_data;
 use crate::methods::proofs::client_state::client_state_proof_data;
 use crate::methods::proofs::connection::connection_proof_data;
 use crate::methods::proofs::consensus_state::consensus_state_proof_data;
+use crate::protobuf::solomachine_v2::PacketCommitmentData;
 use crate::traits::solomachine::SolomachineChain;
 use crate::types::chain::SolomachineChainWrapper;
 use crate::types::client_state::{decode_client_state, SolomachineClientState};
