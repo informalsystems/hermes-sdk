@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,

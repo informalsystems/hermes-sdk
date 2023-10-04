@@ -511,7 +511,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#c4cf65b09c4d38be2e6fdcdb1b0f806a2c9bb02a"
 dependencies = [
  "async-trait",
 ]
@@ -519,7 +519,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#c4cf65b09c4d38be2e6fdcdb1b0f806a2c9bb02a"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -528,7 +528,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#c4cf65b09c4d38be2e6fdcdb1b0f806a2c9bb02a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -538,7 +538,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#c4cf65b09c4d38be2e6fdcdb1b0f806a2c9bb02a"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -549,7 +549,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#c4cf65b09c4d38be2e6fdcdb1b0f806a2c9bb02a"
 dependencies = [
  "cgp-async",
 ]
@@ -557,7 +557,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#c4cf65b09c4d38be2e6fdcdb1b0f806a2c9bb02a"
 dependencies = [
  "cgp-async",
  "cgp-component",

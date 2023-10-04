@@ -3,7 +3,6 @@
 */
 
 use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;

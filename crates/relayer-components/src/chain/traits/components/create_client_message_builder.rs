@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
