@@ -6,6 +6,7 @@ use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
 use crate::build::traits::target::relay::RelayAToBTarget;
 use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB};
 use crate::chain::traits::types::create_client::HasCreateClientOptions;
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;
@@ -34,8 +35,8 @@ where
         + CanBootstrapRelay<RelayAToBTarget>,
     BiRelay: HasTwoWayRelay<RelayAToB = RelayAToB>,
     RelayAToB: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>,
-    ChainA: HasCreateClientOptions<ChainB>,
-    ChainB: HasCreateClientOptions<ChainA>,
+    ChainA: HasCreateClientOptions<ChainB> + HasIbcChainTypes<ChainB>,
+    ChainB: HasCreateClientOptions<ChainA> + HasIbcChainTypes<ChainA>,
 {
     async fn bootstrap_birelay(
         &self,

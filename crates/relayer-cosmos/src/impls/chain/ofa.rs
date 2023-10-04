@@ -6,6 +6,8 @@ use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_runtime::types::error::Error as TokioError;
@@ -26,6 +28,8 @@ use prost::Message as _;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
+use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
@@ -43,7 +47,6 @@ use crate::methods::connection::{
     build_connection_open_try_message, build_connection_open_try_payload,
 };
 use crate::methods::consensus_state::{find_consensus_state_height_before, query_consensus_state};
-use crate::methods::create_client::{build_create_client_message, build_create_client_payload};
 use crate::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
@@ -327,7 +330,7 @@ where
         &self,
         client_settings: &ClientSettings,
     ) -> Result<CosmosCreateClientPayload, Error> {
-        build_create_client_payload(self, client_settings).await
+        <BuildCreateClientPayloadWithChainHandle as CreateClientPayloadBuilder<_, ()>>::build_create_client_payload(self, client_settings).await
     }
 
     async fn build_update_client_payload(
@@ -627,7 +630,11 @@ where
         &self,
         payload: CosmosCreateClientPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_create_client_message(payload)
+        <BuildCosmosCreateClientMessage as CreateClientMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_create_client_message(self, payload)
+        .await
     }
 
     async fn build_update_client_message(

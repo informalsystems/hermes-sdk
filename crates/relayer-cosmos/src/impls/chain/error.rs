@@ -12,3 +12,12 @@ where
         BaseError::relayer(err).into()
     }
 }
+
+impl<Chain> CanRaiseError<eyre::Report> for CosmosChain<Chain>
+where
+    Chain: Async,
+{
+    fn raise_error(err: eyre::Report) -> Error {
+        BaseError::generic(err).into()
+    }
+}

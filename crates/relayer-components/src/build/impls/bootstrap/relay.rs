@@ -8,6 +8,7 @@ use crate::build::types::aliases::{
     RelayError, TargetDstChain, TargetDstChainId, TargetRelay, TargetSrcChain, TargetSrcChainId,
 };
 use crate::chain::traits::types::create_client::HasCreateClientOptions;
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -45,8 +46,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>,
-    SrcChain: HasCreateClientOptions<DstChain>,
-    DstChain: HasCreateClientOptions<SrcChain>,
+    SrcChain: HasCreateClientOptions<DstChain> + HasIbcChainTypes<DstChain>,
+    DstChain: HasCreateClientOptions<SrcChain> + HasIbcChainTypes<SrcChain>,
 {
     async fn bootstrap_relay(
         &self,

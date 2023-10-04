@@ -1,12 +1,15 @@
 use alloc::sync::Arc;
 use cgp_core::Async;
+use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use ibc_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
+use ibc_relayer_subscription::traits::subscription::Subscription;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 use prost::Message;
+use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
 use crate::traits::message::CosmosMessage;
@@ -40,5 +43,14 @@ where
 {
     fn chain_id(&self) -> &ChainId {
         &self.chain_id
+    }
+}
+
+impl<Chain> HasEventSubscription for CosmosChain<Chain>
+where
+    Chain: Async,
+{
+    fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
+        &self.subscription
     }
 }
