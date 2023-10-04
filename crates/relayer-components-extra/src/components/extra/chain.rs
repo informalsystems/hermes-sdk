@@ -10,6 +10,7 @@ use ibc_relayer_components::chain::traits::components::packet_fields_reader::Pac
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
 use ibc_relayer_components::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerierComponent;
+use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
@@ -38,6 +39,7 @@ delegate_components!(
         ReceivedPacketQuerierComponent,
         SendPacketsQuerierComponent,
         UnreceivedPacketSequencesQuerierComponent,
+        WriteAckQuerierComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

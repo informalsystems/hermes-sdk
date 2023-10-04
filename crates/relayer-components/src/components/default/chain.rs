@@ -11,6 +11,7 @@ use crate::chain::traits::components::packet_fields_reader::PacketFieldsReaderCo
 use crate::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
 use crate::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
 use crate::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerierComponent;
+use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
@@ -24,6 +25,7 @@ delegate_components!(
         ReceivedPacketQuerierComponent,
         SendPacketsQuerierComponent,
         UnreceivedPacketSequencesQuerierComponent,
+        WriteAckQuerierComponent,
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

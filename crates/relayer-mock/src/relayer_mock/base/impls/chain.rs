@@ -17,6 +17,7 @@ use ibc_relayer_components::chain::traits::components::consensus_state_querier::
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::message_builders::ack_packet::{
@@ -28,7 +29,6 @@ use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
 use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
-use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAck;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -345,12 +345,12 @@ impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockComponent
 }
 
 #[async_trait]
-impl CanQueryWriteAck<MockChainContext> for MockChainContext {
+impl WriteAckQuerier<MockChainContext, MockChainContext> for MockComponents {
     async fn query_write_ack_event(
-        &self,
+        chain: &MockChainContext,
         packet: &PacketKey,
     ) -> Result<Option<WriteAckEvent>, Error> {
-        let received = self.get_received_packet_information(
+        let received = chain.get_received_packet_information(
             packet.dst_port_id.clone(),
             packet.dst_channel_id.clone(),
             packet.sequence,
