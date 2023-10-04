@@ -1,11 +1,12 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
+#[derive_component(ConsensusStateHeightQuerierComponent, ConsensusStateHeightQuerier<Chain>)]
 #[async_trait]
-pub trait CanFindConsensusStateHeight<Counterparty>:
+pub trait CanQueryConsensusStateHeight<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasHeightType,

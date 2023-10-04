@@ -1,5 +1,4 @@
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use ibc_relayer_components::chain::traits::client::create::{
     CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
     HasCreateClientOptions, HasCreateClientPayload,
@@ -8,6 +7,7 @@ use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
 };
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
+use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
@@ -144,18 +144,20 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanFindConsensusStateHeight<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    ConsensusStateHeightQuerier<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn find_consensus_state_height_before(
-        &self,
-        client_id: &Self::ClientId,
+        chain: &OfaChainWrapper<Chain>,
+        client_id: &Chain::ClientId,
         target_height: &Counterparty::Height,
-    ) -> Result<Counterparty::Height, Self::Error> {
-        self.chain
+    ) -> Result<Counterparty::Height, Chain::Error> {
+        chain
+            .chain
             .find_consensus_state_height_before(client_id, target_height)
             .await
     }

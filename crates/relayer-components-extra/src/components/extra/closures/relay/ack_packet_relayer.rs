@@ -1,5 +1,4 @@
 use cgp_core::{Async, HasComponents, HasErrorType};
-use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
 use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload,
 };
@@ -7,6 +6,7 @@ use ibc_relayer_components::chain::traits::components::ack_packet_message_builde
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use ibc_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
+use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::CanQueryConsensusStateHeight;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use ibc_relayer_components::chain::traits::components::message_sender::CanSendMessages;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
@@ -56,7 +56,7 @@ where
         + CanReadPacketFields<DstChain, OutgoingPacket = Relay::Packet>
         + CanQueryClientState<DstChain>
         + CanQueryConsensusState<DstChain>
-        + CanFindConsensusStateHeight<DstChain>
+        + CanQueryConsensusStateHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + CanBuildUpdateClientMessage<DstChain>,
     DstChain: HasErrorType
