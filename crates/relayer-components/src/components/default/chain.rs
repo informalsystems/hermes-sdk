@@ -2,6 +2,8 @@ use core::marker::PhantomData;
 
 use cgp_core::delegate_components;
 
+use crate::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
+use crate::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use crate::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use crate::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use crate::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
@@ -26,6 +28,8 @@ delegate_components!(
         SendPacketsQuerierComponent,
         UnreceivedPacketSequencesQuerierComponent,
         WriteAckQuerierComponent,
+        AckPacketMessageBuilderComponent,
+        AckPacketPayloadBuilderComponent
     ],
     DefaultChainComponents<BaseComponents>,
     BaseComponents,

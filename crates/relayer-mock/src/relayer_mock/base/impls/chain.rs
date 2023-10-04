@@ -12,6 +12,8 @@ use async_trait::async_trait;
 use cgp_core::{HasComponents, HasErrorType};
 use eyre::eyre;
 use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
+use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
+use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
@@ -20,9 +22,6 @@ use ibc_relayer_components::chain::traits::components::received_packet_querier::
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::message_builders::ack_packet::{
-    CanBuildAckPacketMessage, CanBuildAckPacketPayload,
-};
 use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
     CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
 };
@@ -418,16 +417,16 @@ impl HasAckPacketPayload<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl CanBuildAckPacketPayload<MockChainContext> for MockChainContext {
+impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockComponents {
     async fn build_ack_packet_payload(
-        &self,
-        _client_state: &Self::ClientState,
+        chain: &MockChainContext,
+        _client_state: &(),
         height: &MockHeight,
         packet: &PacketKey,
         _ack: &WriteAckEvent,
     ) -> Result<MockMessage, Error> {
         // If the latest state of the destination chain doesn't have the packet as received, return an error.
-        let state = self.get_current_state();
+        let state = chain.get_current_state();
 
         if !state.check_received((
             packet.dst_port_id.clone(),
@@ -435,7 +434,7 @@ impl CanBuildAckPacketPayload<MockChainContext> for MockChainContext {
             packet.sequence,
         )) {
             return Err(BaseError::acknowledgment_without_received(
-                self.name().to_string(),
+                chain.name().to_string(),
                 packet.dst_channel_id.to_string(),
             )
             .into());
@@ -446,9 +445,9 @@ impl CanBuildAckPacketPayload<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl CanBuildAckPacketMessage<MockChainContext> for MockChainContext {
+impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockComponents {
     async fn build_ack_packet_message(
-        &self,
+        _chain: &MockChainContext,
         _packet: &PacketKey,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {

@@ -22,9 +22,9 @@ use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
+use crate::components::relay::MockCosmosRelayComponents;
 use crate::contexts::chain::MockCosmosContext;
 use crate::contexts::relay::MockCosmosRelay;
-use crate::impls::components::MockCosmosComponents;
 use crate::traits::endpoint::BasecoinEndpoint;
 use crate::types::error::Error;
 use crate::util::dummy::dummy_signer;
@@ -34,7 +34,7 @@ where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type Delegate = DefaultRelayComponents<MockCosmosComponents>;
+    type Delegate = DefaultRelayComponents<MockCosmosRelayComponents>;
 }
 
 impl<SrcChain, DstChain> HasComponents for MockCosmosRelay<SrcChain, DstChain>
@@ -42,7 +42,7 @@ where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type Components = DefaultRelayComponents<MockCosmosComponents>;
+    type Components = DefaultRelayComponents<MockCosmosRelayComponents>;
 }
 
 impl<SrcChain, DstChain> CanUseDefaultPacketRelayer for MockCosmosRelay<SrcChain, DstChain>

@@ -1,14 +1,15 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
 use crate::std_prelude::*;
 
+#[derive_component(AckPacketPayloadBuilderComponent, AckPacketPayloadBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildAckPacketPayload<Counterparty>:
     HasAckPacketPayload<Counterparty>
@@ -27,17 +28,4 @@ where
         packet: &Self::IncomingPacket,
         ack: &Self::WriteAckEvent,
     ) -> Result<Self::AckPacketPayload, Self::Error>;
-}
-
-#[async_trait]
-pub trait CanBuildAckPacketMessage<Counterparty>:
-    HasMessageType + HasErrorType + HasIbcPacketTypes<Counterparty>
-where
-    Counterparty: HasAckPacketPayload<Self>,
-{
-    async fn build_ack_packet_message(
-        &self,
-        packet: &Self::OutgoingPacket,
-        payload: Counterparty::AckPacketPayload,
-    ) -> Result<Self::Message, Self::Error>;
 }

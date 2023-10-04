@@ -19,42 +19,42 @@ use cgp_core::delegate_component;
 
 use crate::impls::relay::MockCosmosBuildUpdateClientMessage;
 
-pub struct MockCosmosComponents;
+pub struct MockCosmosRelayComponents;
 
 delegate_component!(
     PacketRelayerComponent,
-    MockCosmosComponents,
+    MockCosmosRelayComponents,
     FullCycleRelayer,
 );
 
 delegate_component!(
     UpdateClientMessageBuilderComponent,
-    MockCosmosComponents,
+    MockCosmosRelayComponents,
     SkipUpdateClient<WaitUpdateClient<MockCosmosBuildUpdateClientMessage>>,
 );
 
 delegate_component!(
     IbcMessageSenderComponent<MainSink>,
-    MockCosmosComponents,
+    MockCosmosRelayComponents,
     SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
 );
 
 delegate_component!(
     ReceivePacketRelayerComponnent,
-    MockCosmosComponents,
+    MockCosmosRelayComponents,
     SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
 );
 
 delegate_component!(
     AckPacketRelayerComponent,
-    MockCosmosComponents,
+    MockCosmosRelayComponents,
     BaseAckPacketRelayer,
 );
 
 delegate_component!(
     TimeoutUnorderedPacketRelayerComponent,
-    MockCosmosComponents,
+    MockCosmosRelayComponents,
     BaseTimeoutUnorderedPacketRelayer,
 );
 
-delegate_component!(PacketFilterComponent, MockCosmosComponents, AllowAll);
+delegate_component!(PacketFilterComponent, MockCosmosRelayComponents, AllowAll);

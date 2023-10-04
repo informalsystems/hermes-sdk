@@ -1,6 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp_core::{delegate_component, delegate_components};
+use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
+use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
@@ -40,6 +42,8 @@ delegate_components!(
         SendPacketsQuerierComponent,
         UnreceivedPacketSequencesQuerierComponent,
         WriteAckQuerierComponent,
+        AckPacketMessageBuilderComponent,
+        AckPacketPayloadBuilderComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,
