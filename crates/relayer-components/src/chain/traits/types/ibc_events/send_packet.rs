@@ -5,7 +5,6 @@
 use cgp_core::Async;
 
 use crate::chain::traits::types::event::HasEventType;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 
 /**
@@ -13,10 +12,7 @@ use crate::chain::traits::types::packet::HasIbcPacketTypes;
    [`Event`](crate::chain::traits::types::event::HasEventType::Event)
    type contains a [`SendPacketEvent`](Self::SendPacketEvent) variant.
 */
-pub trait HasSendPacketEvent<Counterparty>: HasIbcPacketTypes<Counterparty> + HasEventType
-where
-    Counterparty: HasIbcChainTypes<Self>,
-{
+pub trait HasSendPacketEvent<Counterparty>: HasIbcPacketTypes<Counterparty> + HasEventType {
     type SendPacketEvent: Async;
 
     fn try_extract_send_packet_event(event: &Self::Event) -> Option<Self::SendPacketEvent>;

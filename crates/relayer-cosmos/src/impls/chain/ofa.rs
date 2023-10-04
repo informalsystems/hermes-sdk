@@ -4,10 +4,6 @@ use async_trait::async_trait;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::event::{
-    channel_open_init_try_from_abci_event, channel_open_try_try_from_abci_event,
-    connection_open_ack_try_from_abci_event, connection_open_try_try_from_abci_event,
-};
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::message_sender::CanSendMessages;
 use ibc_relayer_runtime::types::error::Error as TokioError;
@@ -15,14 +11,12 @@ use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::log::value::LogValue;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_subscription::traits::subscription::Subscription;
-use ibc_relayer_types::core::ics02_client::events::CLIENT_ID_ATTRIBUTE_KEY;
 use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
-use ibc_relayer_types::events::IbcEventType;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
@@ -46,7 +40,11 @@ use crate::methods::connection::{
 };
 use crate::methods::consensus_state::{find_consensus_state_height_before, query_consensus_state};
 use crate::methods::create_client::{build_create_client_message, build_create_client_payload};
-use crate::methods::event::{try_extract_send_packet_event, try_extract_write_ack_event};
+use crate::methods::event::{
+    try_extract_channel_open_init_event, try_extract_channel_open_try_event,
+    try_extract_connection_open_init_event, try_extract_connection_open_try_event,
+    try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
+};
 use crate::methods::packet::{
     build_ack_packet_message, build_ack_packet_payload, build_receive_packet_message,
     build_receive_packet_payload, build_timeout_unordered_packet_message,
@@ -237,23 +235,7 @@ where
     }
 
     fn try_extract_create_client_event(event: Arc<AbciEvent>) -> Option<CosmosCreateClientEvent> {
-        let event_type = event.kind.parse().ok()?;
-
-        if let IbcEventType::CreateClient = event_type {
-            for tag in &event.attributes {
-                let key = tag.key.as_str();
-                let value = tag.value.as_str();
-                if key == CLIENT_ID_ATTRIBUTE_KEY {
-                    let client_id = value.parse().ok()?;
-
-                    return Some(CosmosCreateClientEvent { client_id });
-                }
-            }
-
-            None
-        } else {
-            None
-        }
+        try_extract_create_client_event(event)
     }
 
     fn create_client_event_client_id(event: &CosmosCreateClientEvent) -> &ClientId {
@@ -267,17 +249,7 @@ where
     fn try_extract_connection_open_init_event(
         event: Arc<AbciEvent>,
     ) -> Option<CosmosConnectionOpenInitEvent> {
-        let event_type = event.kind.parse().ok()?;
-
-        if let IbcEventType::OpenInitConnection = event_type {
-            let open_ack_event = connection_open_ack_try_from_abci_event(&event).ok()?;
-
-            let connection_id = open_ack_event.connection_id()?.clone();
-
-            Some(CosmosConnectionOpenInitEvent { connection_id })
-        } else {
-            None
-        }
+        try_extract_connection_open_init_event(event)
     }
 
     fn connection_open_init_event_connection_id(
@@ -289,17 +261,7 @@ where
     fn try_extract_connection_open_try_event(
         event: Arc<AbciEvent>,
     ) -> Option<CosmosConnectionOpenTryEvent> {
-        let event_type = event.kind.parse().ok()?;
-
-        if let IbcEventType::OpenTryConnection = event_type {
-            let open_try_event = connection_open_try_try_from_abci_event(&event).ok()?;
-
-            let connection_id = open_try_event.connection_id()?.clone();
-
-            Some(CosmosConnectionOpenTryEvent { connection_id })
-        } else {
-            None
-        }
+        try_extract_connection_open_try_event(event)
     }
 
     fn connection_open_try_event_connection_id(
@@ -311,17 +273,7 @@ where
     fn try_extract_channel_open_init_event(
         event: Arc<AbciEvent>,
     ) -> Option<CosmosChannelOpenInitEvent> {
-        let event_type = event.kind.parse().ok()?;
-
-        if let IbcEventType::OpenInitChannel = event_type {
-            let open_init_event = channel_open_init_try_from_abci_event(&event).ok()?;
-
-            let channel_id = open_init_event.channel_id()?.clone();
-
-            Some(CosmosChannelOpenInitEvent { channel_id })
-        } else {
-            None
-        }
+        try_extract_channel_open_init_event(event)
     }
 
     fn channel_open_try_event_channel_id(event: &CosmosChannelOpenTryEvent) -> &ChannelId {
@@ -331,17 +283,7 @@ where
     fn try_extract_channel_open_try_event(
         event: Arc<AbciEvent>,
     ) -> Option<CosmosChannelOpenTryEvent> {
-        let event_type = event.kind.parse().ok()?;
-
-        if let IbcEventType::OpenTryChannel = event_type {
-            let open_try_event = channel_open_try_try_from_abci_event(&event).ok()?;
-
-            let channel_id = open_try_event.channel_id()?.clone();
-
-            Some(CosmosChannelOpenTryEvent { channel_id })
-        } else {
-            None
-        }
+        try_extract_channel_open_try_event(event)
     }
 
     fn channel_open_init_event_channel_id(event: &CosmosChannelOpenInitEvent) -> &ChannelId {
