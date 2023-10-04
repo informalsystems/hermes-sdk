@@ -5,7 +5,7 @@ use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
 use crate::build::traits::target::relay::RelayAToBTarget;
 use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB};
-use crate::chain::traits::client::create::HasCreateClientOptions;
+use crate::chain::traits::types::create_client::HasCreateClientOptions;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;

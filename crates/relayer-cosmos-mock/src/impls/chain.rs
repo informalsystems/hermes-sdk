@@ -20,10 +20,6 @@ use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath
 use ibc::core::timestamp::Timestamp;
 use ibc::core::{Msg, ValidationContext};
 use ibc::{Any, Height};
-use ibc_relayer_components::chain::traits::client::create::{
-    CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
-    HasCreateClientOptions, HasCreateClientPayload,
-};
 use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
 };
@@ -33,6 +29,8 @@ use ibc_relayer_components::chain::traits::components::chain_status_querier::Cha
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
@@ -49,6 +47,9 @@ use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use ibc_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
+};
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
 use ibc_relayer_components::chain::traits::types::ibc::{
@@ -382,23 +383,24 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildCreateClientPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    CreateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     async fn build_create_client_payload(
-        &self,
-        _create_client_options: &Self::CreateClientPayloadOptions,
-    ) -> Result<Self::CreateClientPayload, Self::Error> {
+        chain: &MockCosmosContext<Chain>,
+        _create_client_options: &(),
+    ) -> Result<Any, Error> {
         let tm_client_state = TmClientState::new(
-            self.get_chain_id().clone(),
+            chain.get_chain_id().clone(),
             Default::default(),
             Duration::from_secs(64000),
             Duration::from_secs(128000),
             Duration::from_millis(3000),
-            self.get_current_height(),
+            chain.get_current_height(),
             Default::default(),
             Default::default(),
             AllowUpdate {
@@ -407,9 +409,9 @@ where
             },
         )?;
 
-        let current_height = self.get_current_height();
+        let current_height = chain.get_current_height();
 
-        let any_consensus_state = self.ibc_context().host_consensus_state(&current_height)?;
+        let any_consensus_state = chain.ibc_context().host_consensus_state(&current_height)?;
 
         let AnyConsensusState::Tendermint(tm_consensus_state) = any_consensus_state;
 
@@ -424,16 +426,17 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildCreateClientMessage<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    CreateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     async fn build_create_client_message(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         counterparty_payload: Any,
-    ) -> Result<Any, Self::Error> {
+    ) -> Result<Any, Error> {
         Ok(counterparty_payload)
     }
 }

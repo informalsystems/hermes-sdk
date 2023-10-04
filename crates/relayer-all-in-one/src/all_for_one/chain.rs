@@ -1,4 +1,3 @@
-use ibc_relayer_components::chain::traits::client::create::HasCreateClientOptions;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use ibc_relayer_components::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
@@ -14,6 +13,7 @@ use ibc_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientOptions;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;

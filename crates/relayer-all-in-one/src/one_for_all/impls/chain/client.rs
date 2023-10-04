@@ -1,15 +1,16 @@
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::traits::client::create::{
-    CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
-    HasCreateClientOptions, HasCreateClientPayload,
-};
 use ibc_relayer_components::chain::traits::client::update::{
     CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
 };
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
+use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
+};
+use ibc_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
 
 use crate::one_for_all::traits::chain::{OfaChainTypes, OfaIbcChain};
@@ -53,34 +54,38 @@ where
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildCreateClientPayload<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    CreateClientPayloadBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_create_client_payload(
-        &self,
-        create_client_options: &Self::CreateClientPayloadOptions,
-    ) -> Result<Self::CreateClientPayload, Self::Error> {
-        self.chain
+        chain: &OfaChainWrapper<Chain>,
+        create_client_options: &Chain::CreateClientPayloadOptions,
+    ) -> Result<Chain::CreateClientPayload, Chain::Error> {
+        chain
+            .chain
             .build_create_client_payload(create_client_options)
             .await
     }
 }
 
 #[async_trait]
-impl<Chain, Counterparty> CanBuildCreateClientMessage<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    CreateClientMessageBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
     async fn build_create_client_message(
-        &self,
+        chain: &OfaChainWrapper<Chain>,
         counterparty_payload: Counterparty::CreateClientPayload,
-    ) -> Result<Self::Message, Self::Error> {
-        self.chain
+    ) -> Result<Chain::Message, Chain::Error> {
+        chain
+            .chain
             .build_create_client_message(counterparty_payload)
             .await
     }

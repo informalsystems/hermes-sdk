@@ -1,9 +1,9 @@
 use basecoin_store::impls::InMemoryStore;
 use ibc::core::ics24_host::identifier::ClientId;
 use ibc::core::ValidationContext;
-use ibc_relayer_components::chain::traits::client::create::CanBuildCreateClientPayload;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use ibc_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
+use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CanBuildCreateClientPayload;
 use ibc_relayer_components::chain::traits::components::message_sender::CanSendMessages;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use ibc_relayer_components::relay::traits::target::DestinationTarget;

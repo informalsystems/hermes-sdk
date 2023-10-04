@@ -1,19 +1,19 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::client_state::HasClientStateType;
-use crate::chain::traits::types::consensus_state::HasConsensusStateType;
+use crate::chain::traits::types::create_client::HasCreateClientPayload;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::message::HasMessageType;
 use crate::std_prelude::*;
 
 #[derive_component(CreateClientMessageBuilderComponent, CreateClientMessageBuilder<Chain>)]
 #[async_trait]
-pub trait CanBuildCreateClientMessage<Counterparty>: HasMessageType + HasErrorType
+#[async_trait]
+pub trait CanBuildCreateClientMessage<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
 where
-    Counterparty: HasIbcChainTypes<Self> + HasClientStateType<Self> + HasConsensusStateType<Self>,
+    Counterparty: HasCreateClientPayload<Self>,
 {
     async fn build_create_client_message(
-        client_state: &Counterparty::ClientState,
-        consensus_state: &Counterparty::ConsensusState,
+        &self,
+        counterparty_payload: Counterparty::CreateClientPayload,
     ) -> Result<Self::Message, Self::Error>;
 }

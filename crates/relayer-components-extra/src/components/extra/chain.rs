@@ -13,6 +13,7 @@ use ibc_relayer_components::chain::traits::components::consensus_state_height_qu
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
+use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
 use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
@@ -60,13 +61,14 @@ delegate_components!(
         ChannelHandshakePayloadBuilderComponent,
         ConnectionHandshakeMessageBuilderComponent,
         ConnectionHandshakePayloadBuilderComponent,
-        CreateClientMessageBuilderComponent,
         ReceivePacketMessageBuilderComponent,
         ReceivePacketPayloadBuilderComponent,
         TimeoutUnorderedPacketMessageBuilderComponent,
         TimeoutUnorderedPacketPayloadBuilderComponent,
         ClientStateQuerierComponent,
         ConsensusStateHeightQuerierComponent,
+        CreateClientMessageBuilderComponent,
+        CreateClientPayloadBuilderComponent,
     ],
     ExtraChainComponents<BaseComponents>,
     DefaultChainComponents<BaseComponents>,

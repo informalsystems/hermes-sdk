@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::client::create::HasCreateClientOptions;
+use crate::chain::traits::types::create_client::HasCreateClientOptions;
 use crate::chain::types::aliases::ClientId;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
