@@ -21,5 +21,5 @@ flex-error = "0.4.4"
 cgp-core = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0" }
 ibc-relayer-runtime = { version = "0.1.0" }
-tokio = { version = "1.0", features = ["full"] }
+tokio = { version = "1.32", features = ["full"] }
 tracing = "0.1.36"

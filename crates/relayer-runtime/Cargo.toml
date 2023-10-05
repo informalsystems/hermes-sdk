@@ -20,7 +20,7 @@ all-features = true
 [dependencies]
 async-trait = "0.1.56"
 futures = "0.3"
-tokio = "1.24"
+tokio = "1.32"
 tokio-stream = "0.1"
 tracing = "0.1.36"
 flex-error = { version = "0.4.4", default-features = false }
