@@ -7,5 +7,6 @@ pub mod query_chain_id;
 pub mod query_chain_status;
 pub mod query_client_state;
 pub mod query_consensus_state;
+pub mod query_received_packet;
 pub mod query_write_ack_event;
 pub mod send_messages_as_tx;

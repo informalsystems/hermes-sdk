@@ -1,10 +1,8 @@
 use alloc::sync::Arc;
 
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::QueryUnreceivedPacketsRequest;
 use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
+use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType};
 use ibc_relayer_types::Height;
 
 use crate::contexts::chain::CosmosChain;
@@ -146,31 +144,4 @@ pub fn build_timeout_unordered_packet_message(
     };
 
     Ok(message.to_cosmos_message())
-}
-
-pub async fn query_is_packet_received<Chain: ChainHandle>(
-    chain: &CosmosChain<Chain>,
-    port_id: &PortId,
-    channel_id: &ChannelId,
-    sequence: &Sequence,
-) -> Result<bool, Error> {
-    let port_id = port_id.clone();
-    let channel_id = channel_id.clone();
-    let sequence = *sequence;
-
-    chain
-        .with_blocking_chain_handle(move |chain_handle| {
-            let unreceived_packet = chain_handle
-                .query_unreceived_packets(QueryUnreceivedPacketsRequest {
-                    port_id: port_id.clone(),
-                    channel_id: channel_id.clone(),
-                    packet_commitment_sequences: vec![sequence],
-                })
-                .map_err(BaseError::relayer)?;
-
-            let is_packet_received = unreceived_packet.is_empty();
-
-            Ok(is_packet_received)
-        })
-        .await
 }
