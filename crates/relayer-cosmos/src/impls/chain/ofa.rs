@@ -9,6 +9,7 @@ use ibc_relayer_components::chain::traits::components::chain_status_querier::Cha
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
+use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerier;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
@@ -42,6 +43,7 @@ use crate::impls::chain::components::query_chain_id::QueryChainIdWithChainHandle
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
+use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
@@ -51,7 +53,6 @@ use crate::methods::channel::{
     build_channel_open_init_message, build_channel_open_try_message,
     build_channel_open_try_payload,
 };
-use crate::methods::consensus_state::find_consensus_state_height_before;
 use crate::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
@@ -671,7 +672,11 @@ where
         client_id: &ClientId,
         target_height: &Height,
     ) -> Result<Height, Error> {
-        find_consensus_state_height_before(self, client_id, target_height).await
+        <QueryConsensusStateHeightFromChainHandle as ConsensusStateHeightQuerier<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::find_consensus_state_height_before(self, client_id, target_height)
+        .await
     }
 
     async fn build_connection_open_init_message(
