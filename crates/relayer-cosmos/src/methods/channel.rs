@@ -1,12 +1,11 @@
 use alloc::sync::Arc;
 
-use ibc_relayer::chain::counterparty::counterparty_chain_from_channel;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
 use ibc_relayer_types::core::ics04_channel::channel::{
     ChannelEnd, Counterparty as ChannelCounterparty, State,
 };
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::Height;
 
 use crate::contexts::chain::CosmosChain;
@@ -21,24 +20,6 @@ use crate::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
 use crate::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-
-pub async fn query_chain_id_from_channel_id<Chain: ChainHandle>(
-    chain: &CosmosChain<Chain>,
-    channel_id: &ChannelId,
-    port_id: &PortId,
-) -> Result<ChainId, Error> {
-    let port_id = port_id.clone();
-    let channel_id = channel_id.clone();
-
-    chain
-        .with_blocking_chain_handle(move |chain_handle| {
-            let channel_id = counterparty_chain_from_channel(&chain_handle, &channel_id, &port_id)
-                .map_err(BaseError::supervisor)?;
-
-            Ok(channel_id)
-        })
-        .await
-}
 
 pub async fn build_channel_open_try_payload<Chain: ChainHandle>(
     chain: &CosmosChain<Chain>,

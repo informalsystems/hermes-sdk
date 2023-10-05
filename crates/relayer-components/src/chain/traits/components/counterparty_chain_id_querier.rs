@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::chain::HasChainTypes;
+use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
@@ -9,7 +9,7 @@ use crate::std_prelude::*;
 pub trait CanQueryCounterpartyChainId<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where
-    Counterparty: HasChainTypes,
+    Counterparty: HasChainIdType,
 {
     async fn query_chain_id_from_channel_id(
         &self,

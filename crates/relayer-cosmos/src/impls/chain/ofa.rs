@@ -8,6 +8,7 @@ use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerier;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
@@ -32,6 +33,7 @@ use tendermint::abci::Event as AbciEvent;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
+use crate::impls::chain::components::query_chain_id::QueryChainIdWithChainHandle;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
@@ -41,7 +43,7 @@ use crate::methods::channel::{
     build_channel_open_ack_message, build_channel_open_ack_payload,
     build_channel_open_confirm_message, build_channel_open_confirm_payload,
     build_channel_open_init_message, build_channel_open_try_message,
-    build_channel_open_try_payload, query_chain_id_from_channel_id,
+    build_channel_open_try_payload,
 };
 use crate::methods::connection::{
     build_connection_open_ack_message, build_connection_open_ack_payload,
@@ -528,7 +530,11 @@ where
         channel_id: &ChannelId,
         port_id: &PortId,
     ) -> Result<ChainId, Error> {
-        query_chain_id_from_channel_id(self, channel_id, port_id).await
+        <QueryChainIdWithChainHandle as CounterpartyChainIdQuerier<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::query_chain_id_from_channel_id(self, channel_id, port_id)
+        .await
     }
 
     async fn query_client_state(

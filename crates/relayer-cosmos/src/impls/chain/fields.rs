@@ -2,7 +2,8 @@ use alloc::sync::Arc;
 use cgp_core::Async;
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
+use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use ibc_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
 use ibc_relayer_subscription::traits::subscription::Subscription;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -52,5 +53,17 @@ where
 {
     fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
         &self.subscription
+    }
+}
+
+impl<Chain, Counterparty> HasCounterpartyMessageHeight<Counterparty> for CosmosChain<Chain>
+where
+    Chain: Async,
+    Counterparty: HasHeightType<Height = Height>,
+{
+    fn counterparty_message_height_for_update_client(
+        message: &Arc<dyn CosmosMessage>,
+    ) -> Option<Height> {
+        message.counterparty_message_height_for_update_client()
     }
 }
