@@ -3,12 +3,14 @@ use ibc_relayer_components::chain::traits::components::chain_status_querier::Cha
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
+use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerierComponent;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 
@@ -22,8 +24,10 @@ use crate::impls::chain::components::query_chain_id::QueryChainIdWithChainHandle
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
+use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
+use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 
 pub struct CosmosChainComponents;
 
@@ -65,6 +69,12 @@ delegate_component!(
 );
 
 delegate_component!(
+    ConsensusStateHeightQuerierComponent,
+    CosmosChainComponents,
+    QueryConsensusStateHeightFromChainHandle,
+);
+
+delegate_component!(
     WriteAckQuerierComponent,
     CosmosChainComponents,
     QueryWriteAckEventFromChainHandle,
@@ -80,6 +90,12 @@ delegate_component!(
     CreateClientPayloadBuilderComponent,
     CosmosChainComponents,
     BuildCreateClientPayloadWithChainHandle,
+);
+
+delegate_component!(
+    UpdateClientPayloadBuilderComponent,
+    CosmosChainComponents,
+    BuildUpdateClientPayloadWithChainHandle,
 );
 
 delegate_component!(

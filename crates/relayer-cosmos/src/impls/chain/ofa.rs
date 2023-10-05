@@ -16,6 +16,7 @@ use ibc_relayer_components::chain::traits::components::create_client_message_bui
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
@@ -47,6 +48,7 @@ use crate::impls::chain::components::query_consensus_state_height::QueryConsensu
 use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
+use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::methods::channel::{
     build_channel_open_ack_message, build_channel_open_ack_payload,
     build_channel_open_confirm_message, build_channel_open_confirm_payload,
@@ -66,7 +68,7 @@ use crate::methods::packet::{
 use crate::methods::unreceived_packet::{
     query_packet_commitments, query_send_packets_from_sequences, query_unreceived_packet_sequences,
 };
-use crate::methods::update_client::{build_update_client_message, build_update_client_payload};
+use crate::methods::update_client::build_update_client_message;
 use crate::traits::message::CosmosMessage;
 use crate::types::channel::CosmosInitChannelOptions;
 use crate::types::connection::CosmosInitConnectionOptions;
@@ -345,7 +347,7 @@ where
         target_height: &Height,
         client_state: TendermintClientState,
     ) -> Result<CosmosUpdateClientPayload, Error> {
-        build_update_client_payload(self, trusted_height, target_height, client_state).await
+        <BuildUpdateClientPayloadWithChainHandle as UpdateClientPayloadBuilder<_, ()>>::build_update_client_payload(self, trusted_height, target_height, client_state).await
     }
 
     async fn build_connection_open_init_payload(
