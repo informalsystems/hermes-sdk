@@ -16,6 +16,7 @@ use ibc_relayer_components::chain::traits::components::create_client_message_bui
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_runtime::types::error::Error as TokioError;
@@ -48,6 +49,7 @@ use crate::impls::chain::components::query_consensus_state_height::QueryConsensu
 use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
+use crate::impls::chain::components::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::methods::channel::{
     build_channel_open_ack_message, build_channel_open_ack_payload,
@@ -68,7 +70,6 @@ use crate::methods::packet::{
 use crate::methods::unreceived_packet::{
     query_packet_commitments, query_send_packets_from_sequences, query_unreceived_packet_sequences,
 };
-use crate::methods::update_client::build_update_client_message;
 use crate::traits::message::CosmosMessage;
 use crate::types::channel::CosmosInitChannelOptions;
 use crate::types::connection::CosmosInitConnectionOptions;
@@ -666,7 +667,11 @@ where
         client_id: &ClientId,
         payload: CosmosUpdateClientPayload,
     ) -> Result<Vec<Arc<dyn CosmosMessage>>, Error> {
-        build_update_client_message(client_id, payload)
+        <BuildCosmosUpdateClientMessage as UpdateClientMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_update_client_message(self, client_id, payload)
+        .await
     }
 
     async fn find_consensus_state_height_before(
