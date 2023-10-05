@@ -6,6 +6,7 @@ use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
@@ -31,6 +32,7 @@ use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
 use crate::methods::channel::{
@@ -39,7 +41,6 @@ use crate::methods::channel::{
     build_channel_open_init_message, build_channel_open_try_message,
     build_channel_open_try_payload, query_chain_id_from_channel_id,
 };
-use crate::methods::client_state::query_client_state;
 use crate::methods::connection::{
     build_connection_open_ack_message, build_connection_open_ack_payload,
     build_connection_open_confirm_message, build_connection_open_confirm_payload,
@@ -532,7 +533,11 @@ where
         &self,
         client_id: &ClientId,
     ) -> Result<TendermintClientState, Error> {
-        query_client_state(self, client_id).await
+        <QueryCosmosClientStateFromChainHandle as ClientStateQuerier<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::query_client_state(self, client_id)
+        .await
     }
 
     async fn query_consensus_state(

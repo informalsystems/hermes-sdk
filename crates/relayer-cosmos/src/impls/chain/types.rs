@@ -6,9 +6,11 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
+use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
+use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptions, HasCreateClientPayload,
 };
@@ -54,6 +56,8 @@ use crate::types::payloads::packet::{
     CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
 };
 use crate::types::telemetry::CosmosTelemetry;
+use crate::types::tendermint::TendermintClientState;
+use crate::types::tendermint::TendermintConsensusState;
 
 impl<Chain> HasErrorType for CosmosChain<Chain>
 where
@@ -158,6 +162,20 @@ where
     type PortId = PortId;
 
     type Sequence = Sequence;
+}
+
+impl<Chain, Counterparty> HasClientStateType<Counterparty> for CosmosChain<Chain>
+where
+    Chain: Async,
+{
+    type ClientState = TendermintClientState;
+}
+
+impl<Chain, Counterparty> HasConsensusStateType<Counterparty> for CosmosChain<Chain>
+where
+    Chain: Async,
+{
+    type ConsensusState = TendermintConsensusState;
 }
 
 impl<Chain, Counterparty> HasIbcPacketTypes<Counterparty> for CosmosChain<Chain>
