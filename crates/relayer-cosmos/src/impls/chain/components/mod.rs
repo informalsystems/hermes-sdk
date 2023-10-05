@@ -1,5 +1,6 @@
 pub mod create_client_message;
 pub mod create_client_payload;
+pub mod packet_fields;
 pub mod query_chain_status;
 pub mod query_client_state;
 pub mod query_consensus_state;

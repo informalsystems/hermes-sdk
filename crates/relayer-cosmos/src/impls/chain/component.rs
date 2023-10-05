@@ -5,12 +5,14 @@ use ibc_relayer_components::chain::traits::components::consensus_state_querier::
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
+use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
+use crate::impls::chain::components::packet_fields::CosmosPacketFieldReader;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
@@ -36,6 +38,12 @@ delegate_component!(
     ChainStatusQuerierComponent,
     CosmosChainComponents,
     QueryChainStatusWithChainHandle,
+);
+
+delegate_component!(
+    PacketFieldsReaderComponent,
+    CosmosChainComponents,
+    CosmosPacketFieldReader,
 );
 
 delegate_component!(
