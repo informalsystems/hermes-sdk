@@ -1,11 +1,10 @@
-use ibc_relayer_components::chain::traits::client::create::HasCreateClientOptions;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
+use ibc_relayer_components::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
-use ibc_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
-use ibc_relayer_components::chain::traits::queries::received_packet::CanQueryReceivedPacket;
-use ibc_relayer_components::chain::traits::queries::send_packet::CanQuerySendPacketsFromSequences;
-use ibc_relayer_components::chain::traits::queries::unreceived_packets::CanQueryUnreceivedPacketSequences;
+use ibc_relayer_components::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
+use ibc_relayer_components::chain::traits::components::send_packets_querier::CanQuerySendPackets;
+use ibc_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::CanQueryUnreceivedPacketSequences;
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
@@ -14,8 +13,9 @@ use ibc_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientOptions;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::logger::traits::level::HasLoggerWithBaseLevels;
 use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
@@ -31,13 +31,13 @@ pub trait AfoChain<Counterparty>:
     + CanQueryChainStatus
     + HasIbcChainTypes<Counterparty>
     + CanReadPacketFields<Counterparty>
-    + HasWriteAcknowledgementEvent<Counterparty>
+    + HasWriteAckEvent<Counterparty>
     + HasConsensusStateType<Counterparty>
     + CanQueryConsensusState<Counterparty>
     + CanQueryReceivedPacket<Counterparty>
     + CanQueryPacketCommitments<Counterparty>
     + CanQueryUnreceivedPacketSequences<Counterparty>
-    + CanQuerySendPacketsFromSequences<Counterparty>
+    + CanQuerySendPackets<Counterparty>
     + HasCreateClientOptions<Counterparty>
     + HasInitConnectionOptionsType<Counterparty>
     + HasConnectionHandshakePayloads<Counterparty>
@@ -71,13 +71,13 @@ where
         + HasChainTypes
         + CanQueryChainStatus
         + CanReadPacketFields<Counterparty>
-        + HasWriteAcknowledgementEvent<Counterparty>
+        + HasWriteAckEvent<Counterparty>
         + HasConsensusStateType<Counterparty>
         + CanQueryConsensusState<Counterparty>
         + CanQueryReceivedPacket<Counterparty>
         + CanQueryPacketCommitments<Counterparty>
         + CanQueryUnreceivedPacketSequences<Counterparty>
-        + CanQuerySendPacketsFromSequences<Counterparty>
+        + CanQuerySendPackets<Counterparty>
         + HasCreateClientOptions<Counterparty>
         + HasInitConnectionOptionsType<Counterparty>
         + HasConnectionHandshakePayloads<Counterparty>

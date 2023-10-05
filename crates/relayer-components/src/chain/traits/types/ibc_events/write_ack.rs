@@ -1,5 +1,5 @@
 /*!
-   Trait definitions for [`HasWriteAcknowledgementEvent`].
+   Trait definitions for [`HasWriteAckEvent`].
 */
 
 use cgp_core::Async;
@@ -11,9 +11,9 @@ use crate::chain::traits::types::packet::HasIbcPacketTypes;
 /**
    Indicates that a chain context's
    [`Event`](crate::chain::traits::types::event::HasEventType::Event)
-   type contains a [`WriteAcknowledgementEvent`](Self::WriteAcknowledgementEvent) variant.
+   type contains a [`WriteAckEvent`](Self::WriteAckEvent) variant.
 */
-pub trait HasWriteAcknowledgementEvent<Counterparty>: HasEventType {
+pub trait HasWriteAckEvent<Counterparty>: HasEventType {
     /**
        The write acknowledgement event that is emitted when a `RecvPacket`
        message is committed to a chain.
@@ -27,13 +27,13 @@ pub trait HasWriteAcknowledgementEvent<Counterparty>: HasEventType {
        the write acknowledgement event, such as the ack payload,
        we can add new methods to this trait to do the extraction.
     */
-    type WriteAcknowledgementEvent: Async;
+    type WriteAckEvent: Async;
 
     /**
        Try to extract an abstract
        [`Event`](crate::chain::traits::types::event::HasEventType::Event)
        type into a
-       [`WriteAcknowledgementEvent`](Self::WriteAcknowledgementEvent).
+       [`WriteAckEvent`](Self::WriteAckEvent).
        If the extraction fails, return `None`.
 
        Since an event type may contain many variants, it is not guaranteed
@@ -41,13 +41,11 @@ pub trait HasWriteAcknowledgementEvent<Counterparty>: HasEventType {
        `Event` is dynamic-typed, then the extraction may also fail due to
        parse errors.
     */
-    fn try_extract_write_acknowledgement_event(
-        event: &Self::Event,
-    ) -> Option<Self::WriteAcknowledgementEvent>;
+    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent>;
 }
 
 pub trait CanBuildPacketFromWriteAckEvent<Counterparty>:
-    HasWriteAcknowledgementEvent<Counterparty> + HasIbcPacketTypes<Counterparty>
+    HasWriteAckEvent<Counterparty> + HasIbcPacketTypes<Counterparty>
 where
     Counterparty: HasIbcChainTypes<Self>,
 {
@@ -63,9 +61,7 @@ where
        the packet data. This is currently true for Cosmos chains. However
        in case additional queries are required, then this method should be
        refactored into a method like
-       `query_packet_from_write_acknowledgement_event`.
+       `query_packet_from_write_ack_event`.
     */
-    fn build_packet_from_write_acknowledgement_event(
-        ack: &Self::WriteAcknowledgementEvent,
-    ) -> &Self::IncomingPacket;
+    fn build_packet_from_write_ack_event(ack: &Self::WriteAckEvent) -> &Self::IncomingPacket;
 }

@@ -1,6 +1,6 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::queries::channel::CanQueryCounterpartyChainIdFromChannel;
+use crate::chain::traits::components::counterparty_chain_id_querier::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::relay::traits::components::packet_filter::PacketFilter;
 use crate::relay::traits::packet::HasRelayPacketFields;
@@ -14,7 +14,7 @@ pub struct MatchPacketDestinationChain;
 impl<Relay> PacketFilter<Relay> for MatchPacketSourceChain
 where
     Relay: HasRelayPacketFields,
-    Relay::DstChain: CanQueryCounterpartyChainIdFromChannel<Relay::SrcChain>,
+    Relay::DstChain: CanQueryCounterpartyChainId<Relay::SrcChain>,
     Relay::SrcChain: HasChainId,
 {
     async fn should_relay_packet(
@@ -40,7 +40,7 @@ where
 impl<Relay> PacketFilter<Relay> for MatchPacketDestinationChain
 where
     Relay: HasRelayPacketFields,
-    Relay::SrcChain: CanQueryCounterpartyChainIdFromChannel<Relay::DstChain>,
+    Relay::SrcChain: CanQueryCounterpartyChainId<Relay::DstChain>,
     Relay::DstChain: HasChainId,
 {
     async fn should_relay_packet(

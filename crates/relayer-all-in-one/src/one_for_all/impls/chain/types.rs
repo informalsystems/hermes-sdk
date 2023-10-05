@@ -8,7 +8,7 @@ use ibc_relayer_components::chain::traits::types::ibc::{
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::{
-    CanBuildPacketFromWriteAckEvent, HasWriteAcknowledgementEvent,
+    CanBuildPacketFromWriteAckEvent, HasWriteAckEvent,
 };
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
@@ -179,18 +179,15 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasWriteAcknowledgementEvent<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty> HasWriteAckEvent<OfaChainWrapper<Counterparty>> for OfaChainWrapper<Chain>
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
-    type WriteAcknowledgementEvent = Chain::WriteAcknowledgementEvent;
+    type WriteAckEvent = Chain::WriteAckEvent;
 
-    fn try_extract_write_acknowledgement_event(
-        event: &Self::Event,
-    ) -> Option<Self::WriteAcknowledgementEvent> {
-        Chain::try_extract_write_acknowledgement_event(event)
+    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
+        Chain::try_extract_write_ack_event(event)
     }
 }
 
@@ -200,10 +197,8 @@ where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
-    fn build_packet_from_write_acknowledgement_event(
-        ack: &Self::WriteAcknowledgementEvent,
-    ) -> &Self::IncomingPacket {
-        Chain::extract_packet_from_write_acknowledgement_event(ack)
+    fn build_packet_from_write_ack_event(ack: &Self::WriteAckEvent) -> &Self::IncomingPacket {
+        Chain::extract_packet_from_write_ack_event(ack)
     }
 }
 

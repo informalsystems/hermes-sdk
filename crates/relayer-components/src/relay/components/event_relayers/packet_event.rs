@@ -2,7 +2,7 @@ use cgp_core::async_trait;
 
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::{
-    CanBuildPacketFromWriteAckEvent, HasWriteAcknowledgementEvent,
+    CanBuildPacketFromWriteAckEvent, HasWriteAckEvent,
 };
 use crate::chain::types::aliases::{Event, Height};
 use crate::logger::traits::level::HasBaseLogLevels;
@@ -33,7 +33,7 @@ use crate::std_prelude::*;
    to the source chain.
 
    When relaying events from the destination chain, the packet event relayer
-   is mostly interested in the `WriteAcknowledgement` event, so that it can
+   is mostly interested in the `WriteAck` event, so that it can
    relay a `AckPacket` message to the source chain.
 */
 pub struct PacketEventRelayer;
@@ -74,10 +74,10 @@ where
         height: &Height<Relay::DstChain>,
         event: &Event<Relay::DstChain>,
     ) -> Result<(), Relay::Error> {
-        let m_ack_event = Relay::DstChain::try_extract_write_acknowledgement_event(event);
+        let m_ack_event = Relay::DstChain::try_extract_write_ack_event(event);
 
         if let Some(ack_event) = m_ack_event {
-            let packet = Relay::DstChain::build_packet_from_write_acknowledgement_event(&ack_event);
+            let packet = Relay::DstChain::build_packet_from_write_ack_event(&ack_event);
 
             /*
                First check whether the packet is targetted for the destination chain,

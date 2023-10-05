@@ -1,18 +1,17 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
+use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use crate::std_prelude::*;
 
+#[derive_component(TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadBuilder<Chain>)]
 #[async_trait]
-pub trait CanBuildAckPacketPayload<Counterparty>:
-    HasAckPacketPayload<Counterparty>
-    + HasWriteAcknowledgementEvent<Counterparty>
+pub trait CanBuildTimeoutUnorderedPacketPayload<Counterparty>:
+    HasTimeoutUnorderedPacketPayload<Counterparty>
     + HasIbcPacketTypes<Counterparty>
     + HasClientStateType<Counterparty>
     + HasHeightType
@@ -20,24 +19,24 @@ pub trait CanBuildAckPacketPayload<Counterparty>:
 where
     Counterparty: HasIbcChainTypes<Self>,
 {
-    async fn build_ack_packet_payload(
+    async fn build_timeout_unordered_packet_payload(
         &self,
         client_state: &Self::ClientState,
         height: &Self::Height,
         packet: &Self::IncomingPacket,
-        ack: &Self::WriteAcknowledgementEvent,
-    ) -> Result<Self::AckPacketPayload, Self::Error>;
+    ) -> Result<Self::TimeoutUnorderedPacketPayload, Self::Error>;
 }
 
+#[derive_component(TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketMessageBuilder<Chain>)]
 #[async_trait]
-pub trait CanBuildAckPacketMessage<Counterparty>:
+pub trait CanBuildTimeoutUnorderedPacketMessage<Counterparty>:
     HasMessageType + HasErrorType + HasIbcPacketTypes<Counterparty>
 where
-    Counterparty: HasAckPacketPayload<Self>,
+    Counterparty: HasTimeoutUnorderedPacketPayload<Self>,
 {
-    async fn build_ack_packet_message(
+    async fn build_timeout_unordered_packet_message(
         &self,
         packet: &Self::OutgoingPacket,
-        payload: Counterparty::AckPacketPayload,
+        payload: Counterparty::TimeoutUnorderedPacketPayload,
     ) -> Result<Self::Message, Self::Error>;
 }

@@ -1,6 +1,7 @@
 extern crate alloc;
 extern crate std;
 
+pub mod components;
 pub mod contexts;
 pub mod impls;
 pub mod traits;

@@ -1,11 +1,12 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::std_prelude::*;
 
+#[derive_component(SendPacketsQuerierComponent, SendPacketsQuerier<Chain>)]
 #[async_trait]
-pub trait CanQuerySendPacketsFromSequences<Counterparty>:
+pub trait CanQuerySendPackets<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasIbcPacketTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasIbcChainTypes<Self>,

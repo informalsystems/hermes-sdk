@@ -1,22 +1,9 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
-#[async_trait]
-pub trait ReceivedPacketQuerier<Chain, Counterparty>
-where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain>,
-{
-    async fn query_is_packet_received(
-        chain: &Chain,
-        port_id: &Chain::PortId,
-        channel_id: &Chain::ChannelId,
-        sequence: &Counterparty::Sequence,
-    ) -> Result<bool, Chain::Error>;
-}
-
+#[derive_component(ReceivedPacketQuerierComponent, ReceivedPacketQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryReceivedPacket<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType

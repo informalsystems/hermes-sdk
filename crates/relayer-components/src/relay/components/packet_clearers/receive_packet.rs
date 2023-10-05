@@ -1,8 +1,8 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
-use crate::chain::traits::queries::send_packet::CanQuerySendPacketsFromSequences;
-use crate::chain::traits::queries::unreceived_packets::CanQueryUnreceivedPacketSequences;
+use crate::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
+use crate::chain::traits::components::send_packets_querier::CanQuerySendPackets;
+use crate::chain::traits::components::unreceived_packet_sequences_querier::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelId, PortId};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::packet_clearer::PacketClearer;
@@ -36,8 +36,8 @@ impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
     Relay: Clone + CanRelayPacket + HasRuntime,
     Relay::DstChain: CanQueryUnreceivedPacketSequences<Relay::SrcChain>,
-    Relay::SrcChain: CanQueryPacketCommitments<Relay::DstChain>
-        + CanQuerySendPacketsFromSequences<Relay::DstChain>,
+    Relay::SrcChain:
+        CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
 {
     async fn clear_packets(

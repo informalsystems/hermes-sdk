@@ -35,7 +35,7 @@
       - [`HasIbcChainTypes`](traits::types::ibc::HasIbcChainTypes)
       - [`HasIbcPacketTypes`](traits::types::packet::HasIbcPacketTypes)
    - IBC events:
-      - [`HasWriteAcknowledgementEvent`](traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent)
+      - [`HasWriteAckEvent`](traits::types::ibc_events::write_ack::HasWriteAckEvent)
       - [`HasSendPacketEvent`](traits::types::ibc_events::send_packet::HasSendPacketEvent)
 
    ### Consumer Traits
@@ -54,7 +54,7 @@
       - [`CanQueryConsensusState`](traits::queries::consensus_state::CanQueryConsensusState)
       - [`CanQueryReceivedPacket`](traits::queries::received_packet::CanQueryReceivedPacket)
       - [`CanQueryCounterpartyChainIdFromChannel`](traits::queries::channel::CanQueryCounterpartyChainIdFromChannel)
-      - [`CanQueryWriteAcknowledgement`](traits::queries::write_ack::CanQueryWriteAcknowledgement)
+      - [`CanQueryWriteAck`](traits::queries::write_ack::CanQueryWriteAck)
 
    ### Provider Traits
 
@@ -64,5 +64,6 @@
    - [`ReceivedPacketQuerier`](traits::queries::received_packet::ReceivedPacketQuerier)
 */
 
+pub mod impls;
 pub mod traits;
 pub mod types;

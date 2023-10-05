@@ -46,14 +46,11 @@ use crate::methods::connection::{
 };
 use crate::methods::consensus_state::{find_consensus_state_height_before, query_consensus_state};
 use crate::methods::create_client::{build_create_client_message, build_create_client_payload};
-use crate::methods::event::{
-    try_extract_send_packet_event, try_extract_write_acknowledgement_event,
-};
+use crate::methods::event::{try_extract_send_packet_event, try_extract_write_ack_event};
 use crate::methods::packet::{
     build_ack_packet_message, build_ack_packet_payload, build_receive_packet_message,
     build_receive_packet_payload, build_timeout_unordered_packet_message,
-    build_timeout_unordered_packet_payload, query_is_packet_received,
-    query_write_acknowledgement_event,
+    build_timeout_unordered_packet_payload, query_is_packet_received, query_write_ack_event,
 };
 use crate::methods::unreceived_packet::{
     query_packet_commitments, query_send_packets_from_sequences, query_unreceived_packet_sequences,
@@ -159,7 +156,7 @@ where
 
     type SendPacketEvent = SendPacket;
 
-    type WriteAcknowledgementEvent = WriteAcknowledgement;
+    type WriteAckEvent = WriteAcknowledgement;
 
     type ConnectionOpenInitEvent = CosmosConnectionOpenInitEvent;
 
@@ -223,10 +220,8 @@ where
         &status.timestamp
     }
 
-    fn try_extract_write_acknowledgement_event(
-        event: &Arc<AbciEvent>,
-    ) -> Option<WriteAcknowledgement> {
-        try_extract_write_acknowledgement_event(event)
+    fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAcknowledgement> {
+        try_extract_write_ack_event(event)
     }
 
     fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacket> {
@@ -237,7 +232,7 @@ where
         event.packet.clone()
     }
 
-    fn extract_packet_from_write_acknowledgement_event(ack: &WriteAcknowledgement) -> &Packet {
+    fn extract_packet_from_write_ack_event(ack: &WriteAcknowledgement) -> &Packet {
         &ack.packet
     }
 
@@ -374,11 +369,11 @@ where
         &self.subscription
     }
 
-    async fn query_write_acknowledgement_event(
+    async fn query_write_ack_event(
         &self,
         packet: &Packet,
     ) -> Result<Option<WriteAcknowledgement>, Error> {
-        query_write_acknowledgement_event(self, packet).await
+        query_write_ack_event(self, packet).await
     }
 
     async fn build_create_client_payload(

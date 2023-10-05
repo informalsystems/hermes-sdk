@@ -1,7 +1,7 @@
 /*!
    Trait definitions for IBC event types such as
    [`HasSendPacketEvent`](send_packet::HasSendPacketEvent) and
-   [`HasWriteAcknowledgementEvent`](write_ack::HasWriteAcknowledgementEvent).
+   [`HasWriteAckEvent`](write_ack::HasWriteAckEvent).
 */
 
 pub mod channel;

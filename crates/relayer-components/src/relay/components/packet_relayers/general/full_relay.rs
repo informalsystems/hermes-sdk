@@ -1,7 +1,7 @@
 use cgp_core::async_trait;
 
 use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::status::HasChainStatusType;
 use crate::relay::traits::components::packet_relayer::PacketRelayer;
 use crate::relay::traits::components::packet_relayers::ack_packet::CanRelayAckPacket;
@@ -25,7 +25,7 @@ where
         + CanRelayTimeoutUnorderedPacket
         + HasRelayPacketFields,
     Relay::SrcChain: CanQueryChainStatus,
-    Relay::DstChain: CanQueryChainStatus + HasWriteAcknowledgementEvent<Relay::SrcChain>,
+    Relay::DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain>,
 {
     async fn relay_packet(relay: &Relay, packet: &Packet<Relay>) -> Result<(), Relay::Error> {
         let destination_status = relay

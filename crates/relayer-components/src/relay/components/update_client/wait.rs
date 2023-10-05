@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 
 use cgp_core::async_trait;
 
+use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::wait::CanWaitChainReachHeight;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;

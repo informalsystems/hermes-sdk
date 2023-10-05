@@ -1,10 +1,9 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::client::client_state::CanQueryClientState;
-use crate::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
-use crate::chain::traits::client::update::{
-    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload,
-};
+use crate::chain::traits::components::client_state_querier::CanQueryClientState;
+use crate::chain::traits::components::consensus_state_height_querier::CanQueryConsensusStateHeight;
+use crate::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
+use crate::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
@@ -21,7 +20,7 @@ where
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
     TargetChain: CanQueryClientState<CounterpartyChain>
         + CanBuildUpdateClientMessage<CounterpartyChain>
-        + CanFindConsensusStateHeight<CounterpartyChain>,
+        + CanQueryConsensusStateHeight<CounterpartyChain>,
     CounterpartyChain: CanBuildUpdateClientPayload<TargetChain> + HasClientStateFields<TargetChain>,
     CounterpartyChain::Height: Clone,
 {

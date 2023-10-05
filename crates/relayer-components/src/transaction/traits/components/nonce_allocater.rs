@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
 
 use crate::std_prelude::*;
 use crate::transaction::traits::nonce::guard::HasNonceGuard;

@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
-use crate::chain::types::aliases::{Height, WriteAcknowledgementEvent};
+use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use crate::chain::types::aliases::{Height, WriteAckEvent};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::std_prelude::*;
 
@@ -9,11 +9,11 @@ use crate::std_prelude::*;
 #[async_trait]
 pub trait CanRelayReceivePacket: HasRelayChains
 where
-    Self::DstChain: HasWriteAcknowledgementEvent<Self::SrcChain>,
+    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
 {
     async fn relay_receive_packet(
         &self,
         source_height: &Height<Self::SrcChain>,
         packet: &Self::Packet,
-    ) -> Result<Option<WriteAcknowledgementEvent<Self::DstChain, Self::SrcChain>>, Self::Error>;
+    ) -> Result<Option<WriteAckEvent<Self::DstChain, Self::SrcChain>>, Self::Error>;
 }

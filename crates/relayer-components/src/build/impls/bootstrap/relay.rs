@@ -7,7 +7,7 @@ use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     RelayError, TargetDstChain, TargetDstChainId, TargetRelay, TargetSrcChain, TargetSrcChainId,
 };
-use crate::chain::traits::client::create::HasCreateClientOptions;
+use crate::chain::traits::types::create_client::HasCreateClientOptions;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};

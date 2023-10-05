@@ -176,7 +176,7 @@ where
 
     type SendPacketEvent = ();
 
-    type WriteAcknowledgementEvent = ();
+    type WriteAckEvent = ();
 }
 
 #[allow(unused_variables)]
@@ -229,9 +229,7 @@ where
         todo!()
     }
 
-    fn try_extract_write_acknowledgement_event(
-        event: &Self::Event,
-    ) -> Option<Self::WriteAcknowledgementEvent> {
+    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
         todo!()
     }
 
@@ -243,9 +241,7 @@ where
         todo!()
     }
 
-    fn extract_packet_from_write_acknowledgement_event(
-        ack: &Self::WriteAcknowledgementEvent,
-    ) -> &Packet {
+    fn extract_packet_from_write_ack_event(ack: &Self::WriteAckEvent) -> &Packet {
         todo!()
     }
 
@@ -379,10 +375,10 @@ where
         todo!()
     }
 
-    async fn query_write_acknowledgement_event(
+    async fn query_write_ack_event(
         &self,
         packet: &Packet,
-    ) -> Result<Option<Self::WriteAcknowledgementEvent>, Chain::Error> {
+    ) -> Result<Option<Self::WriteAckEvent>, Chain::Error> {
         todo!()
     }
 
@@ -438,7 +434,7 @@ where
         client_state: &SolomachineClientState,
         height: &Height,
         packet: &Packet,
-        ack: &Self::WriteAcknowledgementEvent,
+        ack: &Self::WriteAckEvent,
     ) -> Result<SolomachineAckPacketPayload, Chain::Error> {
         todo!()
     }

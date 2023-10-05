@@ -2,11 +2,10 @@ use core::iter::Iterator;
 
 use cgp_core::async_trait;
 
-use crate::chain::traits::client::client_state::CanQueryClientState;
+use crate::chain::traits::components::client_state_querier::CanQueryClientState;
+use crate::chain::traits::components::connection_handshake_message_builder::CanBuildConnectionHandshakeMessages;
+use crate::chain::traits::components::connection_handshake_payload_builder::CanBuildConnectionHandshakePayloads;
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
-use crate::chain::traits::message_builders::connection::{
-    CanBuildConnectionHandshakeMessages, CanBuildConnectionHandshakePayloads,
-};
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use crate::relay::traits::chains::HasRelayChains;

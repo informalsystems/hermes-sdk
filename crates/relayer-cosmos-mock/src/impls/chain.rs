@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use async_trait::async_trait;
 use basecoin_app::modules::ibc::AnyConsensusState;
-use cgp_core::HasErrorType;
+use cgp_core::{HasComponents, HasErrorType};
 use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};
 use ibc::clients::ics07_tendermint::consensus_state::ConsensusState as TmConsensusState;
 use ibc::clients::ics07_tendermint::header::Header;
@@ -20,44 +20,42 @@ use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath
 use ibc::core::timestamp::Timestamp;
 use ibc::core::{Msg, ValidationContext};
 use ibc::{Any, Height};
-use ibc_relayer_components::chain::traits::client::client_state::CanQueryClientState;
-use ibc_relayer_components::chain::traits::client::consensus_state::CanFindConsensusStateHeight;
-use ibc_relayer_components::chain::traits::client::create::{
-    CanBuildCreateClientMessage, CanBuildCreateClientPayload, HasCreateClientEvent,
-    HasCreateClientOptions, HasCreateClientPayload,
+use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
+use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
+use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
+use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
+use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
+use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
+use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
+    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
-use ibc_relayer_components::chain::traits::client::update::{
-    CanBuildUpdateClientMessage, CanBuildUpdateClientPayload, HasUpdateClientPayload,
-};
-use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
-use ibc_relayer_components::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
-use ibc_relayer_components::chain::traits::components::message_sender::CanSendMessages;
-use ibc_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
+use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::message_builders::ack_packet::{
-    CanBuildAckPacketMessage, CanBuildAckPacketPayload,
-};
-use ibc_relayer_components::chain::traits::message_builders::receive_packet::{
-    CanBuildReceivePacketMessage, CanBuildReceivePacketPayload,
-};
-use ibc_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-};
-use ibc_relayer_components::chain::traits::queries::received_packet::CanQueryReceivedPacket;
-use ibc_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAcknowledgement;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use ibc_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
+};
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
 use ibc_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAcknowledgementEvent;
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
@@ -67,6 +65,8 @@ use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePa
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
@@ -74,11 +74,16 @@ use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::log::value::LogValue;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
+use crate::components::chain::MockCosmosChainComponents;
 use crate::contexts::chain::MockCosmosContext;
 use crate::traits::endpoint::{BasecoinEndpoint, QueryService};
 use crate::types::error::Error;
 use crate::types::status::ChainStatus;
 use crate::util::dummy::dummy_signer;
+
+impl<Chain: BasecoinEndpoint> HasComponents for MockCosmosContext<Chain> {
+    type Components = DefaultChainComponents<MockCosmosChainComponents>;
+}
 
 impl<Chain: BasecoinEndpoint> HasErrorType for MockCosmosContext<Chain> {
     type Error = Error;
@@ -138,11 +143,11 @@ impl<Chain: BasecoinEndpoint> HasMessageType for MockCosmosContext<Chain> {
     type Message = Any;
 }
 
-impl<SrcChain, DstChain> HasIbcChainTypes<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasIbcChainTypes<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type ClientId = ClientId;
 
@@ -155,22 +160,23 @@ where
     type Sequence = Sequence;
 }
 
-impl<SrcChain, DstChain> HasIbcPacketTypes<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasIbcPacketTypes<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type IncomingPacket = Packet;
 
     type OutgoingPacket = Packet;
 }
 
-impl<SrcChain, DstChain> CanReadPacketFields<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    PacketFieldsReader<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     fn incoming_packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.chan_id_on_a
@@ -235,11 +241,11 @@ where
     }
 }
 
-impl<SrcChain, DstChain> CanLogChainPacket<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> CanLogChainPacket<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     fn log_incoming_packet(packet: &Packet) -> LogValue<'_> {
         LogValue::Display(packet)
@@ -250,20 +256,20 @@ where
     }
 }
 
-impl<SrcChain, DstChain> HasClientStateType<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasClientStateType<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type ClientState = TmClientState;
 }
 
-impl<SrcChain, DstChain> HasClientStateFields<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasClientStateFields<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     fn client_state_latest_height(client_state: &TmClientState) -> &Self::Height {
         &client_state.latest_height
@@ -271,40 +277,46 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanQueryClientState<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    ClientStateQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
-    async fn query_client_state(&self, client_id: &ClientId) -> Result<TmClientState, Error> {
-        self.ibc_context()
+    async fn query_client_state(
+        chain: &MockCosmosContext<Chain>,
+        client_id: &ClientId,
+    ) -> Result<TmClientState, Error> {
+        chain
+            .ibc_context()
             .client_state(client_id)
             .map_err(Error::source)
     }
 }
 
-impl<SrcChain, DstChain> HasConsensusStateType<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasConsensusStateType<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type ConsensusState = TmConsensusState;
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanFindConsensusStateHeight<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    ConsensusStateHeightQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn find_consensus_state_height_before(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         _client_id: &ClientId,
         target_height: &Height,
-    ) -> Result<Height, Self::Error> {
+    ) -> Result<Height, Error> {
         target_height.decrement().map_err(Error::source)
     }
 }
@@ -322,38 +334,40 @@ impl<Chain: BasecoinEndpoint> HasChainStatusType for MockCosmosContext<Chain> {
 }
 
 #[async_trait]
-impl<Chain: BasecoinEndpoint> CanQueryChainStatus for MockCosmosContext<Chain> {
-    async fn query_chain_status(&self) -> Result<Self::ChainStatus, Self::Error> {
+impl<Chain: BasecoinEndpoint> ChainStatusQuerier<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
+    async fn query_chain_status(chain: &MockCosmosContext<Chain>) -> Result<ChainStatus, Error> {
         Ok(ChainStatus::new(
-            self.get_current_height(),
-            self.get_current_timestamp(),
+            chain.get_current_height(),
+            chain.get_current_timestamp(),
         ))
     }
 }
 
-impl<SrcChain, DstChain> HasCreateClientOptions<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasCreateClientOptions<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type CreateClientPayloadOptions = ();
 }
 
-impl<SrcChain, DstChain> HasCreateClientPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasCreateClientPayload<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type CreateClientPayload = Any;
 }
 
-impl<SrcChain, DstChain> HasCreateClientEvent<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasCreateClientEvent<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type CreateClientEvent = CreateClient;
 
@@ -370,23 +384,24 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildCreateClientPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    CreateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_create_client_payload(
-        &self,
-        _create_client_options: &Self::CreateClientPayloadOptions,
-    ) -> Result<Self::CreateClientPayload, Self::Error> {
+        chain: &MockCosmosContext<Chain>,
+        _create_client_options: &(),
+    ) -> Result<Any, Error> {
         let tm_client_state = TmClientState::new(
-            self.get_chain_id().clone(),
+            chain.get_chain_id().clone(),
             Default::default(),
             Duration::from_secs(64000),
             Duration::from_secs(128000),
             Duration::from_millis(3000),
-            self.get_current_height(),
+            chain.get_current_height(),
             Default::default(),
             Default::default(),
             AllowUpdate {
@@ -395,9 +410,9 @@ where
             },
         )?;
 
-        let current_height = self.get_current_height();
+        let current_height = chain.get_current_height();
 
-        let any_consensus_state = self.ibc_context().host_consensus_state(&current_height)?;
+        let any_consensus_state = chain.ibc_context().host_consensus_state(&current_height)?;
 
         let AnyConsensusState::Tendermint(tm_consensus_state) = any_consensus_state;
 
@@ -412,43 +427,45 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildCreateClientMessage<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    CreateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_create_client_message(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         counterparty_payload: Any,
-    ) -> Result<Any, Self::Error> {
+    ) -> Result<Any, Error> {
         Ok(counterparty_payload)
     }
 }
 
-impl<SrcChain, DstChain> HasUpdateClientPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasUpdateClientPayload<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type UpdateClientPayload = MsgUpdateClient;
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildUpdateClientPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    UpdateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_update_client_payload(
-        &self,
+        chain: &MockCosmosContext<Chain>,
         trusted_height: &Height,
         target_height: &Height,
         _client_state: TmClientState,
-    ) -> Result<MsgUpdateClient, Self::Error> {
-        let light_block = self.get_light_block(target_height)?;
+    ) -> Result<MsgUpdateClient, Error> {
+        let light_block = chain.get_light_block(target_height)?;
 
         let header = Header {
             signed_header: light_block.signed_header,
@@ -470,17 +487,18 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildUpdateClientMessage<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    UpdateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_update_client_message(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
         payload: MsgUpdateClient,
-    ) -> Result<Vec<Any>, Self::Error> {
+    ) -> Result<Vec<Any>, Error> {
         let mut message = payload;
         message.client_id = client_id.clone();
 
@@ -488,11 +506,11 @@ where
     }
 }
 
-impl<SrcChain, DstChain> HasSendPacketEvent<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasSendPacketEvent<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type SendPacketEvent = SendPacket;
 
@@ -533,20 +551,22 @@ impl<Chain: BasecoinEndpoint> CanEstimateMessageSize for MockCosmosContext<Chain
 }
 
 #[async_trait]
-impl<Chain: BasecoinEndpoint> CanSendMessages for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> MessageSender<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     async fn send_messages(
-        &self,
-        messages: Vec<Self::Message>,
-    ) -> Result<Vec<Vec<Self::Event>>, Error> {
-        self.submit_messages(messages)
+        chain: &MockCosmosContext<Chain>,
+        messages: Vec<Any>,
+    ) -> Result<Vec<Vec<IbcEvent>>, Error> {
+        chain.submit_messages(messages)
     }
 }
 
-impl<SrcChain, DstChain> HasCounterpartyMessageHeight<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasCounterpartyMessageHeight<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     fn counterparty_message_height_for_update_client(_message: &Any) -> Option<Height> {
         None
@@ -554,20 +574,21 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanQueryConsensusState<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    ConsensusStateQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn query_consensus_state(
-        &self,
+        chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
         height: &Height,
     ) -> Result<TmConsensusState, Error> {
         let path = ClientConsensusStatePath::new(client_id, height);
 
-        let any_cons_state: AnyConsensusState = self.ibc_context().consensus_state(&path)?;
+        let any_cons_state: AnyConsensusState = chain.ibc_context().consensus_state(&path)?;
 
         let tm_consensus_state =
             TmConsensusState::try_from(any_cons_state).map_err(Error::source)?;
@@ -577,52 +598,54 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanQueryReceivedPacket<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    ReceivedPacketQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn query_is_packet_received(
-        &self,
-        port_id: &Self::PortId,
-        channel_id: &Self::ChannelId,
-        sequence: &Self::Sequence,
-    ) -> Result<bool, Self::Error> {
+        chain: &MockCosmosContext<Chain>,
+        port_id: &PortId,
+        channel_id: &ChannelId,
+        sequence: &Sequence,
+    ) -> Result<bool, Error> {
         let path = ReceiptPath::new(port_id, channel_id, *sequence);
 
-        let receipt = self.ibc_context().get_packet_receipt(&path);
+        let receipt = chain.ibc_context().get_packet_receipt(&path);
 
         Ok(receipt.is_ok())
     }
 }
 
-impl<SrcChain, DstChain> HasReceivePacketPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasReceivePacketPayload<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type ReceivePacketPayload = Any;
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildReceivePacketPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    ReceivePacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_receive_packet_payload(
-        &self,
-        _client_state: &Self::ClientState,
-        height: &Self::Height,
-        packet: &Self::IncomingPacket,
-    ) -> Result<Self::ReceivePacketPayload, Error> {
+        chain: &MockCosmosContext<Chain>,
+        _client_state: &TmClientState,
+        height: &Height,
+        packet: &Packet,
+    ) -> Result<Any, Error> {
         let receipt_path =
             ReceiptPath::new(&packet.port_id_on_a, &packet.chan_id_on_a, packet.seq_on_a);
 
-        let (_, proof_commitment_on_a) = self.query(receipt_path, height).await?;
+        let (_, proof_commitment_on_a) = chain.query(receipt_path, height).await?;
 
         let recv_packet_payload = MsgRecvPacket {
             packet: packet.clone(),
@@ -636,14 +659,15 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildReceivePacketMessage<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    ReceivePacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_receive_packet_message(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         _packet: &Packet,
         payload: Any,
     ) -> Result<Any, Error> {
@@ -652,17 +676,17 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanQueryWriteAcknowledgement<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> WriteAckQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
-    async fn query_write_acknowledgement_event(
-        &self,
+    async fn query_write_ack_event(
+        chain: &MockCosmosContext<Chain>,
         packet: &Packet,
     ) -> Result<Option<WriteAcknowledgement>, Error> {
-        let chan_counter = self.ibc_context().channel_counter()?;
+        let chan_counter = chain.ibc_context().channel_counter()?;
 
         let chan_id = ChannelId::new(chan_counter);
 
@@ -670,9 +694,9 @@ where
 
         let ack_path = AckPath::new(&port_id, &chan_id, packet.seq_on_a);
 
-        self.ibc_context().get_packet_acknowledgement(&ack_path)?;
+        chain.ibc_context().get_packet_acknowledgement(&ack_path)?;
 
-        let events = self.ibc_context().events();
+        let events = chain.ibc_context().events();
 
         for e in events {
             if let IbcEvent::WriteAcknowledgement(e) = e {
@@ -689,17 +713,15 @@ where
     }
 }
 
-impl<SrcChain, DstChain> HasWriteAcknowledgementEvent<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasWriteAckEvent<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
-    type WriteAcknowledgementEvent = WriteAcknowledgement;
+    type WriteAckEvent = WriteAcknowledgement;
 
-    fn try_extract_write_acknowledgement_event(
-        event: &Self::Event,
-    ) -> Option<Self::WriteAcknowledgementEvent> {
+    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
         match event {
             IbcEvent::WriteAcknowledgement(e) => Some(e.clone()),
             _ => None,
@@ -707,38 +729,39 @@ where
     }
 }
 
-impl<SrcChain, DstChain> HasAckPacketPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasAckPacketPayload<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type AckPacketPayload = Any;
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildAckPacketPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    AckPacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_ack_packet_payload(
-        &self,
-        _client_state: &Self::ClientState,
-        height: &Self::Height,
-        packet: &Self::IncomingPacket,
-        ack: &Self::WriteAcknowledgementEvent,
-    ) -> Result<Self::AckPacketPayload, Error> {
+        chain: &MockCosmosContext<Chain>,
+        _client_state: &TmClientState,
+        height: &Height,
+        packet: &Packet,
+        ack: &WriteAcknowledgement,
+    ) -> Result<Any, Error> {
         let ack_path = AckPath::new(&packet.port_id_on_a, &packet.chan_id_on_a, packet.seq_on_a);
 
-        let (_, proof_acked_on_b) = self.query(ack_path, height).await?;
+        let (_, proof_acked_on_b) = chain.query(ack_path, height).await?;
 
         let ack_packet_payload = MsgAcknowledgement {
             packet: packet.clone(),
             acknowledgement: ack.acknowledgement().clone(),
             proof_acked_on_b,
-            proof_height_on_b: self.get_current_height(),
+            proof_height_on_b: chain.get_current_height(),
             signer: dummy_signer(),
         };
 
@@ -747,49 +770,55 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildAckPacketMessage<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    AckPacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
-    async fn build_ack_packet_message(&self, _packet: &Packet, payload: Any) -> Result<Any, Error> {
+    async fn build_ack_packet_message(
+        _chain: &MockCosmosContext<Chain>,
+        _packet: &Packet,
+        payload: Any,
+    ) -> Result<Any, Error> {
         Ok(payload)
     }
 }
 
-impl<SrcChain, DstChain> HasTimeoutUnorderedPacketPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty> HasTimeoutUnorderedPacketPayload<MockCosmosContext<Counterparty>>
+    for MockCosmosContext<Chain>
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     type TimeoutUnorderedPacketPayload = Any;
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildTimeoutUnorderedPacketPayload<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    TimeoutUnorderedPacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_timeout_unordered_packet_payload(
-        &self,
-        _client_state: &Self::ClientState,
-        height: &Self::Height,
-        packet: &Self::IncomingPacket,
-    ) -> Result<Self::TimeoutUnorderedPacketPayload, Error> {
+        chain: &MockCosmosContext<Chain>,
+        _client_state: &TmClientState,
+        height: &Height,
+        packet: &Packet,
+    ) -> Result<Any, Error> {
         let receipt_path =
             ReceiptPath::new(&packet.port_id_on_a, &packet.chan_id_on_a, packet.seq_on_a);
 
-        let (_, proof_acked_on_b) = self.query(receipt_path, height).await?;
+        let (_, proof_acked_on_b) = chain.query(receipt_path, height).await?;
 
         let ack_packet_payload = MsgTimeout {
             packet: packet.clone(),
             next_seq_recv_on_b: packet.seq_on_a.increment(),
             proof_unreceived_on_b: proof_acked_on_b,
-            proof_height_on_b: self.get_current_height(),
+            proof_height_on_b: chain.get_current_height(),
             signer: dummy_signer(),
         };
 
@@ -798,14 +827,15 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> CanBuildTimeoutUnorderedPacketMessage<MockCosmosContext<DstChain>>
-    for MockCosmosContext<SrcChain>
+impl<Chain, Counterparty>
+    TimeoutUnorderedPacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
 {
     async fn build_timeout_unordered_packet_message(
-        &self,
+        _chain: &MockCosmosContext<Chain>,
         _packet: &Packet,
         payload: Any,
     ) -> Result<Any, Error> {

@@ -178,7 +178,7 @@ pub async fn query_is_packet_received<Chain: ChainHandle>(
         .await
 }
 
-pub async fn query_write_acknowledgement_event<Chain: ChainHandle>(
+pub async fn query_write_ack_event<Chain: ChainHandle>(
     chain: &CosmosChain<Chain>,
     packet: &Packet,
 ) -> Result<Option<WriteAcknowledgement>, Error> {
