@@ -39,7 +39,7 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanInitConnection
         + CanRelayConnectionOpenHandshake,
-    SrcChain: HasInitConnectionOptionsType<DstChain>,
+    SrcChain: HasInitConnectionOptionsType<DstChain> + HasIbcChainTypes<DstChain>,
     DstChain: HasIbcChainTypes<SrcChain>,
 {
     async fn bootstrap_connection(

@@ -3,14 +3,15 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
 #[derive_component(ConnectionHandshakeMessageBuilderComponent, ConnectionHandshakeMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildConnectionHandshakeMessages<Counterparty>:
-    HasInitConnectionOptionsType<Counterparty> + HasErrorType
+    HasInitConnectionOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
 where
-    Counterparty: HasConnectionHandshakePayloads<Self>,
+    Counterparty: HasConnectionHandshakePayloads<Self> + HasIbcChainTypes<Self>,
 {
     async fn build_connection_open_init_message(
         &self,

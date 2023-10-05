@@ -1,6 +1,7 @@
 use cgp_core::{delegate_component, Async, HasComponents};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
+use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
@@ -12,6 +13,7 @@ use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteA
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
@@ -90,4 +92,10 @@ delegate_component!(
     ConnectionHandshakePayloadBuilderComponent,
     CosmosChainComponents,
     BuildCosmosConnectionHandshakePayload,
+);
+
+delegate_component!(
+    ConnectionHandshakeMessageBuilderComponent,
+    CosmosChainComponents,
+    BuildCosmosConnectionHandshakeMessage,
 );

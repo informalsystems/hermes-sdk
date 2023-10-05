@@ -7,6 +7,7 @@ use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
+use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerier;
@@ -32,6 +33,7 @@ use prost::Message as _;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
@@ -46,10 +48,6 @@ use crate::methods::channel::{
     build_channel_open_confirm_message, build_channel_open_confirm_payload,
     build_channel_open_init_message, build_channel_open_try_message,
     build_channel_open_try_payload,
-};
-use crate::methods::connection::{
-    build_connection_open_ack_message, build_connection_open_confirm_message,
-    build_connection_open_init_message, build_connection_open_try_message,
 };
 use crate::methods::consensus_state::find_consensus_state_height_before;
 use crate::methods::event::{
@@ -677,7 +675,10 @@ where
         init_connection_options: &CosmosInitConnectionOptions,
         counterparty_payload: CosmosConnectionOpenInitPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_connection_open_init_message(
+        <BuildCosmosConnectionHandshakeMessage as ConnectionHandshakeMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_connection_open_init_message(
             self,
             client_id,
             counterparty_client_id,
@@ -694,12 +695,17 @@ where
         counterparty_connection_id: &ConnectionId,
         counterparty_payload: CosmosConnectionOpenTryPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_connection_open_try_message(
+        <BuildCosmosConnectionHandshakeMessage as ConnectionHandshakeMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_connection_open_try_message(
+            self,
             client_id,
             counterparty_client_id,
             counterparty_connection_id,
             counterparty_payload,
         )
+        .await
     }
 
     async fn build_connection_open_ack_message(
@@ -708,11 +714,16 @@ where
         counterparty_connection_id: &ConnectionId,
         counterparty_payload: CosmosConnectionOpenAckPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_connection_open_ack_message(
+        <BuildCosmosConnectionHandshakeMessage as ConnectionHandshakeMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_connection_open_ack_message(
+            self,
             connection_id,
             counterparty_connection_id,
             counterparty_payload,
         )
+        .await
     }
 
     async fn build_connection_open_confirm_message(
@@ -720,7 +731,11 @@ where
         connection_id: &ConnectionId,
         counterparty_payload: CosmosConnectionOpenConfirmPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_connection_open_confirm_message(connection_id, counterparty_payload)
+        <BuildCosmosConnectionHandshakeMessage as ConnectionHandshakeMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_connection_open_confirm_message(self, connection_id, counterparty_payload)
+        .await
     }
 
     async fn build_channel_open_init_message(
