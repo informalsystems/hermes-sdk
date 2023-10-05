@@ -511,7 +511,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
 dependencies = [
  "async-trait",
 ]
@@ -519,7 +519,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -528,74 +528,40 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
 dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.37",
-]
-
-[[package]]
-name = "cgp-component-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
-dependencies = [
- "cgp-component-macro",
- "cgp-sync",
 ]
 
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
 dependencies = [
  "cgp-async",
  "cgp-component",
  "cgp-error",
-]
-
-[[package]]
-name = "cgp-core-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
-dependencies = [
- "cgp-component-sync",
- "cgp-error-sync",
- "cgp-sync",
+ "cgp-run",
 ]
 
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
 dependencies = [
  "cgp-async",
 ]
 
 [[package]]
-name = "cgp-error-sync"
+name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#8e48cc0c9abe6b83f03bd40756626ac6cbe5dbb4"
 dependencies = [
- "cgp-sync",
-]
-
-[[package]]
-name = "cgp-strip-async"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.37",
-]
-
-[[package]]
-name = "cgp-sync"
-version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#ff711d673e08b481616589242866915db37e3f9e"
-dependencies = [
- "cgp-strip-async",
+ "cgp-async",
+ "cgp-component",
+ "cgp-error",
 ]
 
 [[package]]
@@ -1767,6 +1733,7 @@ dependencies = [
 name = "ibc-integration-test"
 version = "0.25.0"
 dependencies = [
+ "cgp-core",
  "http",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
@@ -1788,8 +1755,9 @@ dependencies = [
 
 [[package]]
 name = "ibc-proto"
-version = "0.34.0"
-source = "git+https://github.com/cosmos/ibc-proto-rs.git?branch=luca_joss/solomachine-lightclient-v3-from-v0.32#f0bd7b4e5ebc7b6f76fedc0d03d8640196c50108"
+version = "0.34.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46349dc9a3baa6c72c4c9e7e137bb3f679ccef2e25d84261624bbebc982be184"
 dependencies = [
  "base64 0.21.2",
  "bytes",
@@ -1845,7 +1813,7 @@ dependencies = [
  "http",
  "humantime",
  "humantime-serde",
- "ibc-proto 0.34.0",
+ "ibc-proto 0.34.1",
  "ibc-relayer-types",
  "itertools",
  "moka",
@@ -1907,21 +1875,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-relayer-components-extra-sync"
-version = "0.1.0"
-dependencies = [
- "cgp-core-sync",
- "ibc-relayer-components-sync",
-]
-
-[[package]]
-name = "ibc-relayer-components-sync"
-version = "0.1.0"
-dependencies = [
- "cgp-core-sync",
-]
-
-[[package]]
 name = "ibc-relayer-cosmos"
 version = "0.25.0"
 dependencies = [
@@ -1930,7 +1883,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
- "ibc-proto 0.34.0",
+ "ibc-proto 0.34.1",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
  "ibc-relayer-components",
@@ -2021,7 +1974,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
- "ibc-proto 0.34.0",
+ "ibc-proto 0.34.1",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
  "ibc-relayer-components",
@@ -2064,7 +2017,7 @@ dependencies = [
  "dyn-clone",
  "erased-serde",
  "flex-error",
- "ibc-proto 0.34.0",
+ "ibc-proto 0.34.1",
  "ics23",
  "itertools",
  "num-rational",
@@ -2108,6 +2061,7 @@ name = "ibc-test-framework"
 version = "0.25.0"
 dependencies = [
  "cfg-if 1.0.0",
+ "cgp-core",
  "color-eyre",
  "crossbeam-channel 0.5.8",
  "eyre",
@@ -2115,7 +2069,7 @@ dependencies = [
  "hdpath",
  "hex 0.4.3",
  "http",
- "ibc-proto 0.34.0",
+ "ibc-proto 0.34.1",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
  "ibc-relayer-components",

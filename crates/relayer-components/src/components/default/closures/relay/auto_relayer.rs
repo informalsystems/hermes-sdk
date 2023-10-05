@@ -1,9 +1,8 @@
-use cgp_core::{Async, HasComponents};
+use cgp_core::{Async, CanRun, HasComponents};
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
 use crate::components::default::relay::DefaultRelayComponents;
-use crate::core::traits::run::CanRun;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::stream::CanMapStream;

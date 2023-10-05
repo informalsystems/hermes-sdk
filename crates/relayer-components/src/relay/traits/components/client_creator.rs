@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, derive_component};
+use cgp_core::prelude::*;
 
 use crate::chain::traits::client::create::HasCreateClientOptions;
 use crate::chain::types::aliases::ClientId;

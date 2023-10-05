@@ -1,4 +1,4 @@
-use ibc_relayer_components::core::traits::run::CanRun;
+use cgp_core::CanRun;
 use ibc_relayer_components::logger::traits::level::HasLoggerWithBaseLevels;
 use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
 

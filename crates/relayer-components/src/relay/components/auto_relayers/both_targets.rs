@@ -1,6 +1,6 @@
 use cgp_core::async_trait;
+use cgp_core::Runner;
 
-use crate::core::traits::run::Runner;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::auto_relayer::CanAutoRelay;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};

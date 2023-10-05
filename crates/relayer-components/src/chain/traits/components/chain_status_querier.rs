@@ -1,4 +1,5 @@
-use cgp_core::{async_trait, derive_component, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::status::HasChainStatusType;

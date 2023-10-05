@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, derive_component};
+use cgp_core::prelude::*;
 
 use crate::chain::types::aliases::{ChannelId, PortId};
 use crate::relay::traits::chains::HasRelayChains;

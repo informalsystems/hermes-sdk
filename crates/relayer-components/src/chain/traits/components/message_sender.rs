@@ -2,7 +2,8 @@
    Trait definitions for [`CanSendMessages`] and [`MessageSender`].
 */
 
-use cgp_core::{async_trait, derive_component, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;

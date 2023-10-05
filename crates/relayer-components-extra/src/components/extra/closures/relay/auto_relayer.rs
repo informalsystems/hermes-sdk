@@ -1,8 +1,7 @@
-use cgp_core::{Async, HasComponents};
+use cgp_core::{Async, CanRun, HasComponents};
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::core::traits::run::CanRun;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
