@@ -7,6 +7,7 @@ use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
+use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerier;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
@@ -31,6 +32,7 @@ use prost::Message as _;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::chain::components::query_chain_id::QueryChainIdWithChainHandle;
@@ -46,10 +48,8 @@ use crate::methods::channel::{
     build_channel_open_try_payload,
 };
 use crate::methods::connection::{
-    build_connection_open_ack_message, build_connection_open_ack_payload,
-    build_connection_open_confirm_message, build_connection_open_confirm_payload,
-    build_connection_open_init_message, build_connection_open_init_payload,
-    build_connection_open_try_message, build_connection_open_try_payload,
+    build_connection_open_ack_message, build_connection_open_confirm_message,
+    build_connection_open_init_message, build_connection_open_try_message,
 };
 use crate::methods::consensus_state::find_consensus_state_height_before;
 use crate::methods::event::{
@@ -349,39 +349,39 @@ where
 
     async fn build_connection_open_init_payload(
         &self,
-        _client_state: &Self::ClientState,
+        client_state: &TendermintClientState,
     ) -> Result<CosmosConnectionOpenInitPayload, Error> {
-        build_connection_open_init_payload(self).await
+        <BuildCosmosConnectionHandshakePayload as ConnectionHandshakePayloadBuilder<Self, ()>>::build_connection_open_init_payload(self, client_state).await
     }
 
     async fn build_connection_open_try_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         client_id: &ClientId,
         connection_id: &ConnectionId,
     ) -> Result<CosmosConnectionOpenTryPayload, Error> {
-        build_connection_open_try_payload(self, height, client_id, connection_id).await
+        <BuildCosmosConnectionHandshakePayload as ConnectionHandshakePayloadBuilder<Self, ()>>::build_connection_open_try_payload(self, client_state, height, client_id, connection_id).await
     }
 
     async fn build_connection_open_ack_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         client_id: &ClientId,
         connection_id: &ConnectionId,
     ) -> Result<CosmosConnectionOpenAckPayload, Error> {
-        build_connection_open_ack_payload(self, height, client_id, connection_id).await
+        <BuildCosmosConnectionHandshakePayload as ConnectionHandshakePayloadBuilder<Self, ()>>::build_connection_open_ack_payload(self, client_state,height, client_id, connection_id).await
     }
 
     async fn build_connection_open_confirm_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         client_id: &ClientId,
         connection_id: &ConnectionId,
     ) -> Result<CosmosConnectionOpenConfirmPayload, Error> {
-        build_connection_open_confirm_payload(self, height, client_id, connection_id).await
+        <BuildCosmosConnectionHandshakePayload as ConnectionHandshakePayloadBuilder<Self, ()>>::build_connection_open_confirm_payload(self, client_state,height, client_id, connection_id).await
     }
 
     async fn build_channel_open_try_payload(
