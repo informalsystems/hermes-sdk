@@ -7,6 +7,7 @@ use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
+use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
@@ -33,6 +34,7 @@ use crate::impls::chain::components::create_client_message::BuildCosmosCreateCli
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
+use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
 use crate::methods::channel::{
@@ -47,7 +49,7 @@ use crate::methods::connection::{
     build_connection_open_init_message, build_connection_open_init_payload,
     build_connection_open_try_message, build_connection_open_try_payload,
 };
-use crate::methods::consensus_state::{find_consensus_state_height_before, query_consensus_state};
+use crate::methods::consensus_state::find_consensus_state_height_before;
 use crate::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
@@ -545,7 +547,11 @@ where
         client_id: &ClientId,
         height: &Height,
     ) -> Result<TendermintConsensusState, Error> {
-        query_consensus_state(self, client_id, height).await
+        <QueryCosmosConsensusStateFromChainHandle as ConsensusStateQuerier<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::query_consensus_state(self, client_id, height)
+        .await
     }
 
     async fn query_is_packet_received(

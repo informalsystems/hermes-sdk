@@ -1,5 +1,4 @@
 use async_trait::async_trait;
-use cgp_core::HasErrorType;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryClientStateRequest, QueryHeight};
 use ibc_relayer::client_state::AnyClientState;
@@ -17,14 +16,13 @@ pub struct QueryCosmosClientStateFromChainHandle;
 impl<Chain, Counterparty> ClientStateQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromChainHandle
 where
-    Chain:
-        HasIbcChainTypes<Counterparty, ClientId = ClientId> + HasErrorType + HasBlockingChainHandle,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + HasBlockingChainHandle,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
 {
     async fn query_client_state(
         chain: &Chain,
-        client_id: &Chain::ClientId,
-    ) -> Result<Counterparty::ClientState, Chain::Error> {
+        client_id: &ClientId,
+    ) -> Result<TendermintClientState, Chain::Error> {
         let client_id = client_id.clone();
 
         chain
