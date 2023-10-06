@@ -55,9 +55,9 @@ where
                 let consensus_state = match any_consensus_state {
                     AnyConsensusState::Tendermint(consensus_state) => consensus_state,
                     _ => {
-                        return Err(
-                            Chain::raise_error(eyre!("expect Tendermint consensus state")).into(),
-                        );
+                        return Err(Chain::raise_error(eyre!(
+                            "expect Tendermint consensus state"
+                        )));
                     }
                 };
 
