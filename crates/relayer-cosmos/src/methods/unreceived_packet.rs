@@ -5,8 +5,7 @@ use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQuery
 use ibc_relayer::chain::cosmos::query::packet_query;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{
-    Qualified, QueryHeight, QueryPacketCommitmentsRequest, QueryPacketEventDataRequest,
-    QueryUnreceivedPacketsRequest,
+    Qualified, QueryHeight, QueryPacketEventDataRequest, QueryUnreceivedPacketsRequest,
 };
 use ibc_relayer_all_in_one::one_for_all::traits::chain::OfaChain;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
@@ -19,43 +18,6 @@ use tonic::Request;
 use crate::contexts::chain::CosmosChain;
 use crate::methods::event::try_extract_send_packet_event;
 use crate::types::error::{BaseError, Error};
-
-pub async fn query_packet_commitments<Chain: ChainHandle>(
-    chain: &CosmosChain<Chain>,
-    channel_id: &ChannelId,
-    port_id: &PortId,
-) -> Result<(Vec<Sequence>, Height), Error> {
-    let mut client = ChannelQueryClient::connect(chain.tx_context.tx_config.grpc_address.clone())
-        .await
-        .map_err(BaseError::grpc_transport)?;
-
-    let raw_request = QueryPacketCommitmentsRequest {
-        port_id: port_id.clone(),
-        channel_id: channel_id.clone(),
-        pagination: None,
-    };
-
-    let request = Request::new(raw_request.into());
-
-    let response = client
-        .packet_commitments(request)
-        .await
-        .map_err(|e| BaseError::grpc_status(e, "query_packet_commitments".to_owned()))?
-        .into_inner();
-
-    let commitment_sequences: Vec<Sequence> = response
-        .commitments
-        .into_iter()
-        .map(|packet_state| packet_state.sequence.into())
-        .collect();
-
-    let raw_height = response
-        .height
-        .ok_or_else(|| BaseError::missing_height("query_packet_commitments".to_owned()))?;
-    let height = raw_height.try_into().map_err(BaseError::ics02)?;
-
-    Ok((commitment_sequences, height))
-}
 
 /// Given a list of counterparty commitment sequences,
 /// return a filtered list of sequences which the chain

@@ -15,6 +15,7 @@ use ibc_relayer_components::chain::traits::components::counterparty_chain_id_que
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
+use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerier;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
@@ -46,6 +47,7 @@ use crate::impls::chain::components::query_chain_status::QueryChainStatusWithCha
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
+use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
@@ -68,7 +70,7 @@ use crate::methods::packet::{
     build_timeout_unordered_packet_payload,
 };
 use crate::methods::unreceived_packet::{
-    query_packet_commitments, query_send_packets_from_sequences, query_unreceived_packet_sequences,
+    query_send_packets_from_sequences, query_unreceived_packet_sequences,
 };
 use crate::traits::message::CosmosMessage;
 use crate::types::channel::CosmosInitChannelOptions;
@@ -586,7 +588,11 @@ where
         channel_id: &ChannelId,
         port_id: &PortId,
     ) -> Result<(Vec<Sequence>, Height), Error> {
-        query_packet_commitments(self, channel_id, port_id).await
+        <QueryCosmosPacketCommitments as PacketCommitmentsQuerier<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::query_packet_commitments(self, channel_id, port_id)
+        .await
     }
 
     /// Given a list of counterparty commitment sequences,

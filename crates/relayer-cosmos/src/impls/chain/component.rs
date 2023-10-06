@@ -9,6 +9,7 @@ use ibc_relayer_components::chain::traits::components::counterparty_chain_id_que
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
+use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
@@ -25,6 +26,7 @@ use crate::impls::chain::components::query_chain_status::QueryChainStatusWithCha
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
+use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
@@ -114,4 +116,10 @@ delegate_component!(
     ConnectionHandshakeMessageBuilderComponent,
     CosmosChainComponents,
     BuildCosmosConnectionHandshakeMessage,
+);
+
+delegate_component!(
+    PacketCommitmentsQuerierComponent,
+    CosmosChainComponents,
+    QueryCosmosPacketCommitments,
 );
