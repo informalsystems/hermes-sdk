@@ -1,8 +1,6 @@
 use cgp_core::Async;
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-
-pub trait HasInitChannelOptionsType<Counterparty>: HasIbcChainTypes<Counterparty> {
+pub trait HasInitChannelOptionsType<Counterparty> {
     type InitChannelOptions: Async;
 }
 
@@ -10,7 +8,7 @@ pub trait HasInitChannelOptionsType<Counterparty>: HasIbcChainTypes<Counterparty
     Payload that contains necessary counterparty information such as proofs and parameters
     in order for a self chain to build a channel handshake message.
 */
-pub trait HasChannelHandshakePayloads<Counterparty>: HasIbcChainTypes<Counterparty> {
+pub trait HasChannelHandshakePayloads<Counterparty> {
     type ChannelOpenTryPayload: Async;
 
     type ChannelOpenAckPayload: Async;

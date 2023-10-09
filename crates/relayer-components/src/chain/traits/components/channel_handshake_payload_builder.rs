@@ -2,12 +2,16 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::channel::HasChannelHandshakePayloads;
 use crate::chain::traits::types::client_state::HasClientStateType;
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
 #[derive_component(ChannelHandshakePayloadBuilderComponent, ChannelHandshakePayloadBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildChannelHandshakePayloads<Counterparty>:
-    HasChannelHandshakePayloads<Counterparty> + HasClientStateType<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty>
+    + HasChannelHandshakePayloads<Counterparty>
+    + HasClientStateType<Counterparty>
+    + HasErrorType
 {
     async fn build_channel_open_try_payload(
         &self,

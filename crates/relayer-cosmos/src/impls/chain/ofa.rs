@@ -8,6 +8,7 @@ use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
@@ -48,6 +49,7 @@ use tendermint::abci::Event as AbciEvent;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::chain::components::ack_packet_payload::BuildCosmosAckPacketPayload;
+use crate::impls::chain::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::chain::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
 use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
@@ -68,10 +70,6 @@ use crate::impls::chain::components::timeout_packet_message::BuildCosmosTimeoutP
 use crate::impls::chain::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::chain::components::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
-use crate::methods::channel::{
-    build_channel_open_ack_message, build_channel_open_confirm_message,
-    build_channel_open_init_message, build_channel_open_try_message,
-};
 use crate::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
@@ -784,7 +782,7 @@ where
         counterparty_port_id: &PortId,
         init_channel_options: &CosmosInitChannelOptions,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_channel_open_init_message(port_id, counterparty_port_id, init_channel_options)
+        <BuildCosmosChannelHandshakeMessage as ChannelHandshakeMessageBuilder<Self, Self>>::build_channel_open_init_message(self, port_id, counterparty_port_id, init_channel_options).await
     }
 
     async fn build_channel_open_try_message(
@@ -794,12 +792,13 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: CosmosChannelOpenTryPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_channel_open_try_message(
+        <BuildCosmosChannelHandshakeMessage as ChannelHandshakeMessageBuilder<Self, Self>>::build_channel_open_try_message(
+            self,
             port_id,
             counterparty_port_id,
             counterparty_channel_id,
             counterparty_payload,
-        )
+        ).await
     }
 
     async fn build_channel_open_ack_message(
@@ -809,12 +808,13 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: CosmosChannelOpenAckPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_channel_open_ack_message(
+        <BuildCosmosChannelHandshakeMessage as ChannelHandshakeMessageBuilder<Self, Self>>::build_channel_open_ack_message(
+            self,
             port_id,
             channel_id,
             counterparty_channel_id,
             counterparty_payload,
-        )
+        ).await
     }
 
     async fn build_channel_open_confirm_message(
@@ -823,6 +823,6 @@ where
         channel_id: &ChannelId,
         counterparty_payload: CosmosChannelOpenConfirmPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_channel_open_confirm_message(port_id, channel_id, counterparty_payload)
+        <BuildCosmosChannelHandshakeMessage as ChannelHandshakeMessageBuilder<Self, Self>>::build_channel_open_confirm_message(self, port_id, channel_id, counterparty_payload).await
     }
 }
