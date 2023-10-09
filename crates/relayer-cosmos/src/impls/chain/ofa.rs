@@ -8,6 +8,7 @@ use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
@@ -47,6 +48,7 @@ use tendermint::abci::Event as AbciEvent;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::chain::components::ack_packet_payload::BuildCosmosAckPacketPayload;
+use crate::impls::chain::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
 use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
@@ -67,10 +69,8 @@ use crate::impls::chain::components::timeout_packet_payload::BuildCosmosTimeoutP
 use crate::impls::chain::components::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::methods::channel::{
-    build_channel_open_ack_message, build_channel_open_ack_payload,
-    build_channel_open_confirm_message, build_channel_open_confirm_payload,
+    build_channel_open_ack_message, build_channel_open_confirm_message,
     build_channel_open_init_message, build_channel_open_try_message,
-    build_channel_open_try_payload,
 };
 use crate::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
@@ -400,32 +400,32 @@ where
 
     async fn build_channel_open_try_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<CosmosChannelOpenTryPayload, Error> {
-        build_channel_open_try_payload(self, height, port_id, channel_id).await
+        <BuildCosmosChannelHandshakePayload as ChannelHandshakePayloadBuilder<Self, Self>>::build_channel_open_try_payload(self, client_state, height, port_id, channel_id).await
     }
 
     async fn build_channel_open_ack_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<CosmosChannelOpenAckPayload, Error> {
-        build_channel_open_ack_payload(self, height, port_id, channel_id).await
+        <BuildCosmosChannelHandshakePayload as ChannelHandshakePayloadBuilder<Self, Self>>::build_channel_open_ack_payload(self, client_state, height, port_id, channel_id).await
     }
 
     async fn build_channel_open_confirm_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<CosmosChannelOpenConfirmPayload, Error> {
-        build_channel_open_confirm_payload(self, height, port_id, channel_id).await
+        <BuildCosmosChannelHandshakePayload as ChannelHandshakePayloadBuilder<Self, Self>>::build_channel_open_confirm_payload(self, client_state, height, port_id, channel_id).await
     }
 
     /// Construct a receive packet to be sent to a destination Cosmos
