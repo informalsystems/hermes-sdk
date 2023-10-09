@@ -10,52 +10,8 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
 use crate::types::error::{BaseError, Error};
 use crate::types::messages::packet::ack::CosmosAckPacketMessage;
-use crate::types::messages::packet::receive::CosmosReceivePacketMessage;
 use crate::types::messages::packet::timeout::CosmosTimeoutPacketMessage;
-use crate::types::payloads::packet::{
-    CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
-};
-
-pub async fn build_receive_packet_payload<Chain: ChainHandle>(
-    chain: &CosmosChain<Chain>,
-    height: &Height,
-    packet: &Packet,
-) -> Result<CosmosReceivePacketPayload, Error> {
-    let height = *height;
-    let packet = packet.clone();
-
-    chain
-        .with_blocking_chain_handle(move |chain_handle| {
-            let proofs = chain_handle
-                .build_packet_proofs(
-                    PacketMsgType::Recv,
-                    &packet.source_port,
-                    &packet.source_channel,
-                    packet.sequence,
-                    height,
-                )
-                .map_err(BaseError::relayer)?;
-
-            Ok(CosmosReceivePacketPayload {
-                update_height: proofs.height(),
-                proof_commitment: proofs.object_proof().clone(),
-            })
-        })
-        .await
-}
-
-pub fn build_receive_packet_message(
-    packet: &Packet,
-    payload: CosmosReceivePacketPayload,
-) -> Result<Arc<dyn CosmosMessage>, Error> {
-    let message = CosmosReceivePacketMessage {
-        packet: packet.clone(),
-        update_height: payload.update_height,
-        proof_commitment: payload.proof_commitment,
-    };
-
-    Ok(message.to_cosmos_message())
-}
+use crate::types::payloads::packet::{CosmosAckPacketPayload, CosmosTimeoutUnorderedPacketPayload};
 
 pub async fn build_ack_packet_payload<Chain: ChainHandle>(
     chain: &CosmosChain<Chain>,

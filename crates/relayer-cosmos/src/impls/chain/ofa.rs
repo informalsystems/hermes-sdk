@@ -16,6 +16,8 @@ use ibc_relayer_components::chain::traits::components::create_client_message_bui
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerier;
+use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
+use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
@@ -50,6 +52,8 @@ use crate::impls::chain::components::query_consensus_state_height::QueryConsensu
 use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
+use crate::impls::chain::components::receive_packet_message::BuildCosmosReceivePacketMessage;
+use crate::impls::chain::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::chain::components::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
@@ -65,8 +69,7 @@ use crate::methods::event::{
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
 };
 use crate::methods::packet::{
-    build_ack_packet_message, build_ack_packet_payload, build_receive_packet_message,
-    build_receive_packet_payload, build_timeout_unordered_packet_message,
+    build_ack_packet_message, build_ack_packet_payload, build_timeout_unordered_packet_message,
     build_timeout_unordered_packet_payload,
 };
 use crate::methods::unreceived_packet::{
@@ -424,11 +427,11 @@ where
     /// chain from a source Cosmos chain.
     async fn build_receive_packet_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         packet: &Packet,
     ) -> Result<CosmosReceivePacketPayload, Error> {
-        build_receive_packet_payload(self, height, packet).await
+        <BuildCosmosReceivePacketPayload as ReceivePacketPayloadBuilder<Self, Self>>::build_receive_packet_payload(self, client_state, height, packet).await
     }
 
     /// Construct an acknowledgement packet to be sent from a Cosmos
@@ -638,7 +641,11 @@ where
         packet: &Packet,
         payload: CosmosReceivePacketPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_receive_packet_message(packet, payload)
+        <BuildCosmosReceivePacketMessage as ReceivePacketMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_receive_packet_message(self, packet, payload)
+        .await
     }
 
     async fn build_ack_packet_message(
