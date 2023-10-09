@@ -21,7 +21,9 @@ use crate::chain::traits::components::packet_fields_reader::PacketFieldsReaderCo
 use crate::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
 use crate::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use crate::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
-use crate::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
+use crate::chain::traits::components::send_packets_querier::{
+    SendPacketQuerierComponent, SendPacketsQuerierComponent,
+};
 use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
 };
@@ -41,6 +43,7 @@ delegate_components!(
         CounterpartyChainIdQuerierComponent,
         PacketCommitmentsQuerierComponent,
         ReceivedPacketQuerierComponent,
+        SendPacketQuerierComponent,
         SendPacketsQuerierComponent,
         UnreceivedPacketSequencesQuerierComponent,
         WriteAckQuerierComponent,

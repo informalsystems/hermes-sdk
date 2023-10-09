@@ -20,7 +20,9 @@ use ibc_relayer_components::chain::traits::components::packet_fields_reader::Pac
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
-use ibc_relayer_components::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
+use ibc_relayer_components::chain::traits::components::send_packets_querier::{
+    SendPacketQuerierComponent, SendPacketsQuerierComponent,
+};
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
 };
@@ -47,6 +49,7 @@ delegate_components!(
         CounterpartyChainIdQuerierComponent,
         PacketCommitmentsQuerierComponent,
         ReceivedPacketQuerierComponent,
+        SendPacketQuerierComponent,
         SendPacketsQuerierComponent,
         UnreceivedPacketSequencesQuerierComponent,
         WriteAckQuerierComponent,

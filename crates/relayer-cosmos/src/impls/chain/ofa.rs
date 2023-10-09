@@ -23,6 +23,7 @@ use ibc_relayer_components::chain::traits::components::packet_commitments_querie
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use ibc_relayer_components::chain::traits::components::send_packets_querier::SendPacketsQuerier;
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
@@ -63,6 +64,7 @@ use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensus
 use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
+use crate::impls::chain::components::query_send_packets::QuerySendPacketsConcurrently;
 use crate::impls::chain::components::query_unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::receive_packet_message::BuildCosmosReceivePacketMessage;
@@ -77,7 +79,6 @@ use crate::methods::event::{
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
 };
-use crate::methods::unreceived_packet::query_send_packets_from_sequences;
 use crate::traits::message::CosmosMessage;
 use crate::types::channel::CosmosInitChannelOptions;
 use crate::types::connection::CosmosInitConnectionOptions;
@@ -627,7 +628,7 @@ where
         // `CanQueryPacketCommitments` made on the same chain.
         height: &Height,
     ) -> Result<Vec<Packet>, Self::Error> {
-        query_send_packets_from_sequences(
+        <QuerySendPacketsConcurrently as SendPacketsQuerier<Self, CosmosChain<Counterparty>>>::query_send_packets_from_sequences(
             self,
             channel_id,
             port_id,
