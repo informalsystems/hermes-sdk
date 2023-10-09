@@ -1,7 +1,6 @@
 use alloc::sync::Arc;
 
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType};
 use ibc_relayer_types::Height;
 
@@ -9,56 +8,8 @@ use crate::contexts::chain::CosmosChain;
 use crate::traits::chain_handle::HasBlockingChainHandle;
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
 use crate::types::error::{BaseError, Error};
-use crate::types::messages::packet::ack::CosmosAckPacketMessage;
 use crate::types::messages::packet::timeout::CosmosTimeoutPacketMessage;
-use crate::types::payloads::packet::{CosmosAckPacketPayload, CosmosTimeoutUnorderedPacketPayload};
-
-pub async fn build_ack_packet_payload<Chain: ChainHandle>(
-    chain: &CosmosChain<Chain>,
-    height: &Height,
-    packet: &Packet,
-    ack: &WriteAcknowledgement,
-) -> Result<CosmosAckPacketPayload, Error> {
-    let height = *height;
-    let packet = packet.clone();
-    let ack = ack.clone();
-
-    chain
-        .with_blocking_chain_handle(move |chain_handle| {
-            let proofs = chain_handle
-                .build_packet_proofs(
-                    PacketMsgType::Ack,
-                    &packet.destination_port,
-                    &packet.destination_channel,
-                    packet.sequence,
-                    height,
-                )
-                .map_err(BaseError::relayer)?;
-
-            let ack = ack.ack;
-
-            Ok(CosmosAckPacketPayload {
-                ack,
-                update_height: proofs.height(),
-                proof_acked: proofs.object_proof().clone(),
-            })
-        })
-        .await
-}
-
-pub fn build_ack_packet_message(
-    packet: &Packet,
-    payload: CosmosAckPacketPayload,
-) -> Result<Arc<dyn CosmosMessage>, Error> {
-    let message = CosmosAckPacketMessage {
-        packet: packet.clone(),
-        acknowledgement: payload.ack,
-        update_height: payload.update_height,
-        proof_acked: payload.proof_acked,
-    };
-
-    Ok(message.to_cosmos_message())
-}
+use crate::types::payloads::packet::CosmosTimeoutUnorderedPacketPayload;
 
 pub async fn build_timeout_unordered_packet_payload<Chain: ChainHandle>(
     chain: &CosmosChain<Chain>,

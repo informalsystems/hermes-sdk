@@ -1,4 +1,6 @@
 use cgp_core::prelude::*;
+use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
+use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
@@ -18,6 +20,8 @@ use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteA
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::components::ack_packet_message::BuildCosmosAckPacketMessage;
+use crate::impls::chain::components::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
@@ -78,4 +82,8 @@ delegate_components!(
         BuildCosmosReceivePacketPayload,
     ReceivePacketMessageBuilderComponent:
         BuildCosmosReceivePacketMessage,
+    AckPacketPayloadBuilderComponent:
+        BuildCosmosAckPacketPayload,
+    AckPacketMessageBuilderComponent:
+        BuildCosmosAckPacketMessage,
 );

@@ -5,6 +5,8 @@ use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
+use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
+use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
@@ -40,6 +42,8 @@ use prost::Message as _;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::components::ack_packet_message::BuildCosmosAckPacketMessage;
+use crate::impls::chain::components::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
@@ -69,8 +73,7 @@ use crate::methods::event::{
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
 };
 use crate::methods::packet::{
-    build_ack_packet_message, build_ack_packet_payload, build_timeout_unordered_packet_message,
-    build_timeout_unordered_packet_payload,
+    build_timeout_unordered_packet_message, build_timeout_unordered_packet_payload,
 };
 use crate::methods::unreceived_packet::{
     query_send_packets_from_sequences, query_unreceived_packet_sequences,
@@ -439,12 +442,12 @@ where
     /// chain.
     async fn build_ack_packet_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         packet: &Packet,
         ack: &WriteAcknowledgement,
     ) -> Result<CosmosAckPacketPayload, Error> {
-        build_ack_packet_payload(self, height, packet, ack).await
+        <BuildCosmosAckPacketPayload as AckPacketPayloadBuilder<Self, Self>>::build_ack_packet_payload(self, client_state, height, packet, ack).await
     }
 
     /// Construct a timeout packet message to be sent between Cosmos chains
@@ -653,7 +656,7 @@ where
         packet: &Packet,
         payload: CosmosAckPacketPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_ack_packet_message(packet, payload)
+        <BuildCosmosAckPacketMessage as AckPacketMessageBuilder<Self, CosmosChain<Counterparty>>>::build_ack_packet_message(self, packet, payload).await
     }
 
     async fn build_timeout_unordered_packet_message(
