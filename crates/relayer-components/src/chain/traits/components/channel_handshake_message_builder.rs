@@ -3,14 +3,15 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::std_prelude::*;
 
 #[derive_component(ChannelHandshakeMessageBuilderComponent, ChannelHandshakeMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildChannelHandshakeMessages<Counterparty>:
-    HasInitChannelOptionsType<Counterparty> + HasErrorType
+    HasInitChannelOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
 where
-    Counterparty: HasChannelHandshakePayloads<Self>,
+    Counterparty: HasChannelHandshakePayloads<Self> + HasIbcChainTypes<Self>,
 {
     async fn build_channel_open_init_message(
         &self,

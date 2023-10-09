@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::delegate_components;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use crate::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
@@ -21,7 +21,9 @@ use crate::chain::traits::components::packet_fields_reader::PacketFieldsReaderCo
 use crate::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
 use crate::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use crate::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
-use crate::chain::traits::components::send_packets_querier::SendPacketsQuerierComponent;
+use crate::chain::traits::components::send_packets_querier::{
+    SendPacketQuerierComponent, SendPacketsQuerierComponent,
+};
 use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
 };
@@ -32,6 +34,7 @@ use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponen
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
+    DefaultChainComponents<BaseComponents>;
     [
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,
@@ -40,6 +43,7 @@ delegate_components!(
         CounterpartyChainIdQuerierComponent,
         PacketCommitmentsQuerierComponent,
         ReceivedPacketQuerierComponent,
+        SendPacketQuerierComponent,
         SendPacketsQuerierComponent,
         UnreceivedPacketSequencesQuerierComponent,
         WriteAckQuerierComponent,
@@ -59,7 +63,5 @@ delegate_components!(
         CreateClientPayloadBuilderComponent,
         UpdateClientMessageBuilderComponent,
         UpdateClientPayloadBuilderComponent,
-    ],
-    DefaultChainComponents<BaseComponents>,
-    BaseComponents,
+    ]: BaseComponents,
 );

@@ -2,10 +2,7 @@ use cgp_core::Async;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
-pub trait HasConnectionOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty>
-where
-    Counterparty: HasIbcChainTypes<Self>,
-{
+pub trait HasConnectionOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type ConnectionOpenTryEvent: Async;
 
     fn try_extract_connection_open_try_event(
@@ -17,10 +14,7 @@ where
     ) -> &Self::ConnectionId;
 }
 
-pub trait HasConnectionOpenInitEvent<Counterparty>: HasIbcChainTypes<Counterparty>
-where
-    Counterparty: HasIbcChainTypes<Self>,
-{
+pub trait HasConnectionOpenInitEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type ConnectionOpenInitEvent: Async;
 
     fn try_extract_connection_open_init_event(

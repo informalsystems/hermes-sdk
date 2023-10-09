@@ -15,6 +15,7 @@ use ibc_relayer_components::transaction::traits::components::tx_submitter::TxSub
 pub struct ExtraTxComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
+    ExtraTxComponents<BaseComponents>;
     [
         MessageSenderComponent,
         MessageAsTxSenderComponent,
@@ -25,7 +26,5 @@ delegate_components!(
         TxSubmitterComponent,
         TxResponsePollerComponent,
         TxResponseQuerierComponent,
-    ],
-    ExtraTxComponents<BaseComponents>,
-    DefaultTxComponents<BaseComponents>,
+    ]:  DefaultTxComponents<BaseComponents>,
 );

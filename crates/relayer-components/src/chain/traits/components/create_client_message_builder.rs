@@ -1,14 +1,12 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::create_client::HasCreateClientPayload;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::traits::types::message::HasMessageType;
 use crate::std_prelude::*;
 
 #[derive_component(CreateClientMessageBuilderComponent, CreateClientMessageBuilder<Chain>)]
 #[async_trait]
-#[async_trait]
-pub trait CanBuildCreateClientMessage<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+pub trait CanBuildCreateClientMessage<Counterparty>: HasMessageType + HasErrorType
 where
     Counterparty: HasCreateClientPayload<Self>,
 {
