@@ -21,6 +21,9 @@ use ibc_relayer_components::chain::traits::components::packet_commitments_querie
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
+    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
+};
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
@@ -59,6 +62,8 @@ use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFr
 use crate::impls::chain::components::receive_packet_message::BuildCosmosReceivePacketMessage;
 use crate::impls::chain::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
+use crate::impls::chain::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
+use crate::impls::chain::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::chain::components::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::methods::channel::{
@@ -71,9 +76,6 @@ use crate::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
-};
-use crate::methods::packet::{
-    build_timeout_unordered_packet_message, build_timeout_unordered_packet_payload,
 };
 use crate::methods::unreceived_packet::{
     query_send_packets_from_sequences, query_unreceived_packet_sequences,
@@ -455,11 +457,11 @@ where
     /// from a source chain was not received.
     async fn build_timeout_unordered_packet_payload(
         &self,
-        _client_state: &TendermintClientState,
+        client_state: &TendermintClientState,
         height: &Height,
         packet: &Packet,
     ) -> Result<CosmosTimeoutUnorderedPacketPayload, Error> {
-        build_timeout_unordered_packet_payload(self, height, packet).await
+        <BuildCosmosTimeoutPacketPayload as TimeoutUnorderedPacketPayloadBuilder<Self, Self>>::build_timeout_unordered_packet_payload(self, client_state, height, packet).await
     }
 }
 
@@ -664,7 +666,11 @@ where
         packet: &Packet,
         payload: CosmosTimeoutUnorderedPacketPayload,
     ) -> Result<Arc<dyn CosmosMessage>, Error> {
-        build_timeout_unordered_packet_message(packet, payload)
+        <BuildCosmosTimeoutPacketMessage as TimeoutUnorderedPacketMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_timeout_unordered_packet_message(self, packet, payload)
+        .await
     }
 
     async fn build_create_client_message(

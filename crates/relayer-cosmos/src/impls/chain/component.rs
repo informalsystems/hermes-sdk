@@ -15,6 +15,9 @@ use ibc_relayer_components::chain::traits::components::packet_commitments_querie
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
+use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
+    TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
+};
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
@@ -37,6 +40,8 @@ use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFr
 use crate::impls::chain::components::receive_packet_message::BuildCosmosReceivePacketMessage;
 use crate::impls::chain::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
+use crate::impls::chain::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
+use crate::impls::chain::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 
 pub struct CosmosChainComponents;
@@ -86,4 +91,8 @@ delegate_components!(
         BuildCosmosAckPacketPayload,
     AckPacketMessageBuilderComponent:
         BuildCosmosAckPacketMessage,
+    TimeoutUnorderedPacketPayloadBuilderComponent:
+        BuildCosmosTimeoutPacketPayload,
+    TimeoutUnorderedPacketMessageBuilderComponent:
+        BuildCosmosTimeoutPacketMessage,
 );

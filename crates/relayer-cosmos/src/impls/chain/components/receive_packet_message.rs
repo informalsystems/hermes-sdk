@@ -24,9 +24,9 @@ where
 {
     async fn build_receive_packet_message(
         _chain: &Chain,
-        packet: &Chain::IncomingPacket,
-        payload: Counterparty::ReceivePacketPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        packet: &Packet,
+        payload: CosmosReceivePacketPayload,
+    ) -> Result<Arc<dyn CosmosMessage>, Chain::Error> {
         let message = CosmosReceivePacketMessage {
             packet: packet.clone(),
             update_height: payload.update_height,
