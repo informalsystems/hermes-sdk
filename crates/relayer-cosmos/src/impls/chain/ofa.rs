@@ -26,6 +26,7 @@ use ibc_relayer_components::chain::traits::components::received_packet_querier::
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
+use ibc_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerier;
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
@@ -62,6 +63,7 @@ use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensus
 use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
+use crate::impls::chain::components::query_unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::receive_packet_message::BuildCosmosReceivePacketMessage;
 use crate::impls::chain::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
@@ -75,9 +77,7 @@ use crate::methods::event::{
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
 };
-use crate::methods::unreceived_packet::{
-    query_send_packets_from_sequences, query_unreceived_packet_sequences,
-};
+use crate::methods::unreceived_packet::query_send_packets_from_sequences;
 use crate::traits::message::CosmosMessage;
 use crate::types::channel::CosmosInitChannelOptions;
 use crate::types::connection::CosmosInitConnectionOptions;
@@ -610,7 +610,7 @@ where
         port_id: &PortId,
         sequences: &[Sequence],
     ) -> Result<Vec<Sequence>, Self::Error> {
-        query_unreceived_packet_sequences(self, channel_id, port_id, sequences).await
+        <QueryUnreceivedCosmosPacketSequences as UnreceivedPacketSequencesQuerier<Self, Self>>::query_unreceived_packet_sequences(self, channel_id, port_id, sequences).await
     }
 
     /// Given a list of sequences, a channel and port will query a list of outgoing

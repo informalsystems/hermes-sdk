@@ -19,6 +19,7 @@ use ibc_relayer_components::chain::traits::components::receive_packet_payload_bu
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketPayloadBuilderComponent,
 };
+use ibc_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerierComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
@@ -38,6 +39,7 @@ use crate::impls::chain::components::query_client_state::QueryCosmosClientStateF
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
+use crate::impls::chain::components::query_unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::chain::components::receive_packet_message::BuildCosmosReceivePacketMessage;
 use crate::impls::chain::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
@@ -99,4 +101,6 @@ delegate_components!(
         BuildCosmosTimeoutPacketPayload,
     TimeoutUnorderedPacketMessageBuilderComponent:
         BuildCosmosTimeoutPacketMessage,
+    UnreceivedPacketSequencesQuerierComponent:
+        QueryUnreceivedCosmosPacketSequences,
 );

@@ -14,6 +14,7 @@ pub mod query_consensus_state;
 pub mod query_consensus_state_height;
 pub mod query_packet_commitments;
 pub mod query_received_packet;
+pub mod query_unreceived_packet;
 pub mod query_write_ack_event;
 pub mod receive_packet_message;
 pub mod receive_packet_payload;

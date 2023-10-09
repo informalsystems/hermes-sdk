@@ -1,54 +1,19 @@
 use alloc::sync::Arc;
 
 use futures::stream::{self, StreamExt, TryStreamExt};
-use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
 use ibc_relayer::chain::cosmos::query::packet_query;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{
-    Qualified, QueryHeight, QueryPacketEventDataRequest, QueryUnreceivedPacketsRequest,
-};
+use ibc_relayer::chain::requests::{Qualified, QueryHeight, QueryPacketEventDataRequest};
 use ibc_relayer_all_in_one::one_for_all::traits::chain::OfaChain;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::events::WithBlockDataType;
 use ibc_relayer_types::Height;
 use tendermint_rpc::{Client, Order};
-use tonic::Request;
 
 use crate::contexts::chain::CosmosChain;
 use crate::methods::event::try_extract_send_packet_event;
 use crate::types::error::{BaseError, Error};
-
-/// Given a list of counterparty commitment sequences,
-/// return a filtered list of sequences which the chain
-/// has not received the packet from the counterparty chain.
-pub async fn query_unreceived_packet_sequences<Chain: ChainHandle>(
-    chain: &CosmosChain<Chain>,
-    channel_id: &ChannelId,
-    port_id: &PortId,
-    sequences: &[Sequence],
-) -> Result<Vec<Sequence>, Error> {
-    let mut client = ChannelQueryClient::connect(chain.tx_context.tx_config.grpc_address.clone())
-        .await
-        .map_err(BaseError::grpc_transport)?;
-
-    let raw_request = QueryUnreceivedPacketsRequest {
-        port_id: port_id.clone(),
-        channel_id: channel_id.clone(),
-        packet_commitment_sequences: sequences.to_vec(),
-    };
-
-    let request = Request::new(raw_request.into());
-
-    let response = client
-        .unreceived_packets(request)
-        .await
-        .map_err(|e| BaseError::grpc_status(e, "unreceived_packets".to_owned()))?
-        .into_inner();
-
-    let response_sequences = response.sequences.into_iter().map(|s| s.into()).collect();
-    Ok(response_sequences)
-}
 
 /// Given a single sequence, a channel and port will query the outgoing
 /// packets if it hasn't been relayed.
