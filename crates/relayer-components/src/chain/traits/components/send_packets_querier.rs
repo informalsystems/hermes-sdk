@@ -26,3 +26,23 @@ where
         height: &Self::Height,
     ) -> Result<Vec<Self::OutgoingPacket>, Self::Error>;
 }
+
+#[derive_component(SendPacketQuerierComponent, SendPacketQuerier<Chain>)]
+#[async_trait]
+pub trait CanQuerySendPacket<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasIbcPacketTypes<Counterparty> + HasErrorType
+where
+    Counterparty: HasIbcChainTypes<Self>,
+{
+    /// Given a list of sequences, a channel and port will query a list of outgoing
+    /// packets which have not been relayed.
+    async fn query_send_packet_from_sequence(
+        &self,
+        channel_id: &Self::ChannelId,
+        port_id: &Self::PortId,
+        counterparty_channel_id: &Counterparty::ChannelId,
+        counterparty_port_id: &Counterparty::PortId,
+        sequence: &Self::Sequence,
+        height: &Self::Height,
+    ) -> Result<Self::OutgoingPacket, Self::Error>;
+}
