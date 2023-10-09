@@ -1,4 +1,4 @@
-use cgp_core::{delegate_component, Async, HasComponents};
+use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
@@ -40,86 +40,34 @@ where
     type Components = ExtraChainComponents<CosmosChainComponents>;
 }
 
-delegate_component!(
-    MessageSenderComponent,
-    CosmosChainComponents,
-    SendMessagesToTxContext,
-);
-
-delegate_component!(
-    ChainStatusQuerierComponent,
-    CosmosChainComponents,
-    QueryChainStatusWithChainHandle,
-);
-
-delegate_component!(
-    PacketFieldsReaderComponent,
-    CosmosChainComponents,
-    CosmosPacketFieldReader,
-);
-
-delegate_component!(
-    ClientStateQuerierComponent,
-    CosmosChainComponents,
-    QueryCosmosClientStateFromChainHandle,
-);
-
-delegate_component!(
-    ConsensusStateQuerierComponent,
-    CosmosChainComponents,
-    QueryCosmosConsensusStateFromChainHandle,
-);
-
-delegate_component!(
-    ConsensusStateHeightQuerierComponent,
-    CosmosChainComponents,
-    QueryConsensusStateHeightFromChainHandle,
-);
-
-delegate_component!(
-    WriteAckQuerierComponent,
-    CosmosChainComponents,
-    QueryWriteAckEventFromChainHandle,
-);
-
-delegate_component!(
-    CreateClientMessageBuilderComponent,
-    CosmosChainComponents,
-    BuildCosmosCreateClientMessage,
-);
-
-delegate_component!(
-    CreateClientPayloadBuilderComponent,
-    CosmosChainComponents,
-    BuildCreateClientPayloadWithChainHandle,
-);
-
-delegate_component!(
-    UpdateClientPayloadBuilderComponent,
-    CosmosChainComponents,
-    BuildUpdateClientPayloadWithChainHandle,
-);
-
-delegate_component!(
-    CounterpartyChainIdQuerierComponent,
-    CosmosChainComponents,
-    QueryChainIdWithChainHandle,
-);
-
-delegate_component!(
-    ConnectionHandshakePayloadBuilderComponent,
-    CosmosChainComponents,
-    BuildCosmosConnectionHandshakePayload,
-);
-
-delegate_component!(
-    ConnectionHandshakeMessageBuilderComponent,
-    CosmosChainComponents,
-    BuildCosmosConnectionHandshakeMessage,
-);
-
-delegate_component!(
-    PacketCommitmentsQuerierComponent,
-    CosmosChainComponents,
-    QueryCosmosPacketCommitments,
+delegate_components!(
+    CosmosChainComponents;
+    MessageSenderComponent:
+        SendMessagesToTxContext,
+    ChainStatusQuerierComponent:
+        QueryChainStatusWithChainHandle,
+    PacketFieldsReaderComponent:
+        CosmosPacketFieldReader,
+    ClientStateQuerierComponent:
+        QueryCosmosClientStateFromChainHandle,
+    ConsensusStateQuerierComponent:
+        QueryCosmosConsensusStateFromChainHandle,
+    ConsensusStateHeightQuerierComponent:
+        QueryConsensusStateHeightFromChainHandle,
+    WriteAckQuerierComponent:
+        QueryWriteAckEventFromChainHandle,
+    CreateClientMessageBuilderComponent:
+        BuildCosmosCreateClientMessage,
+    CreateClientPayloadBuilderComponent:
+        BuildCreateClientPayloadWithChainHandle,
+    UpdateClientPayloadBuilderComponent:
+        BuildUpdateClientPayloadWithChainHandle,
+    CounterpartyChainIdQuerierComponent:
+        QueryChainIdWithChainHandle,
+    ConnectionHandshakePayloadBuilderComponent:
+        BuildCosmosConnectionHandshakePayload,
+    ConnectionHandshakeMessageBuilderComponent:
+        BuildCosmosConnectionHandshakeMessage,
+    PacketCommitmentsQuerierComponent:
+        QueryCosmosPacketCommitments,
 );

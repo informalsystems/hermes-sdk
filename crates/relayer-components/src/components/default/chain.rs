@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::delegate_components;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use crate::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
@@ -32,6 +32,7 @@ use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponen
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
+    DefaultChainComponents<BaseComponents>;
     [
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,
@@ -59,7 +60,5 @@ delegate_components!(
         CreateClientPayloadBuilderComponent,
         UpdateClientMessageBuilderComponent,
         UpdateClientPayloadBuilderComponent,
-    ],
-    DefaultChainComponents<BaseComponents>,
-    BaseComponents,
+    ]: BaseComponents,
 );

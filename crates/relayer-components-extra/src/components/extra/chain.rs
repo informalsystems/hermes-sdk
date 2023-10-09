@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{delegate_component, delegate_components};
+use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
@@ -35,19 +35,12 @@ use crate::telemetry::components::status::ChainStatusTelemetryQuerier;
 
 pub struct ExtraChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-delegate_component!(
-    ChainStatusQuerierComponent,
-    ExtraChainComponents<BaseComponents>,
-    ChainStatusTelemetryQuerier<BaseComponents>,
-);
-
-delegate_component!(
-    ConsensusStateQuerierComponent,
-    ExtraChainComponents<BaseComponents>,
-    ConsensusStateTelemetryQuerier<BaseComponents>,
-);
-
 delegate_components!(
+    ExtraChainComponents<BaseComponents>;
+    ChainStatusQuerierComponent:
+        ChainStatusTelemetryQuerier<BaseComponents>,
+    ConsensusStateQuerierComponent:
+        ConsensusStateTelemetryQuerier<BaseComponents>,
     [
         MessageSenderComponent,
         PacketFieldsReaderComponent,
@@ -73,7 +66,6 @@ delegate_components!(
         CreateClientPayloadBuilderComponent,
         UpdateClientMessageBuilderComponent,
         UpdateClientPayloadBuilderComponent,
-    ],
-    ExtraChainComponents<BaseComponents>,
-    DefaultChainComponents<BaseComponents>,
+    ]:
+        DefaultChainComponents<BaseComponents>,
 );

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{delegate_component, delegate_components};
+use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::transaction::components::message_as_tx::EstimateFeesAndSendTx;
@@ -18,38 +18,17 @@ use crate::transaction::traits::components::tx_submitter::TxSubmitterComponent;
 
 pub struct DefaultTxComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-delegate_component!(
-    MessageSenderComponent,
-    DefaultTxComponents<BaseComponents>,
-    SendMessagesAsTx,
-);
-
-delegate_component!(
-    MessageAsTxSenderComponent,
-    DefaultTxComponents<BaseComponents>,
-    EstimateFeesAndSendTx,
-);
-
-delegate_component!(
-    NonceAllocatorComponent,
-    DefaultTxComponents<BaseComponents>,
-    AllocateNonceWithMutex,
-);
-
-delegate_component!(
-    TxResponsePollerComponent,
-    DefaultTxComponents<BaseComponents>,
-    PollTxResponse,
-);
-
 delegate_components!(
+    DefaultTxComponents<BaseComponents>;
+    MessageSenderComponent: SendMessagesAsTx,
+    MessageAsTxSenderComponent: EstimateFeesAndSendTx,
+    NonceAllocatorComponent: AllocateNonceWithMutex,
+    TxResponsePollerComponent: PollTxResponse,
     [
         NonceQuerierComponent,
         TxEncoderComponent,
         TxFeeEstimatorComponent,
         TxSubmitterComponent,
         TxResponseQuerierComponent,
-    ],
-    DefaultTxComponents<BaseComponents>,
-    BaseComponents,
+    ]: BaseComponents,
 );

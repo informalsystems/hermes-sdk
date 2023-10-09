@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp_core::{delegate_component, delegate_components, RunnerComponent};
+use cgp_core::prelude::*;
+use cgp_core::RunnerComponent;
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
@@ -38,25 +39,13 @@ use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
 pub struct ExtraRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-delegate_component!(
-    IbcMessageSenderComponent<MainSink>,
-    ExtraRelayComponents<BaseComponents>,
-    SendMessagesToBatchWorker,
-);
-
-delegate_component!(
-    IbcMessageSenderComponent<BatchWorkerSink>,
-    ExtraRelayComponents<BaseComponents>,
-    SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-);
-
-delegate_component!(
-    PacketRelayerComponent,
-    ExtraRelayComponents<BaseComponents>,
-    LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
-);
-
 delegate_components!(
+    ExtraRelayComponents<BaseComponents>;
+    IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
+    IbcMessageSenderComponent<BatchWorkerSink>:
+        SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
+    PacketRelayerComponent:
+        LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
     [
         UpdateClientMessageBuilderComponent,
         PacketFilterComponent,
@@ -78,7 +67,6 @@ delegate_components!(
         ConnectionOpenHandshakeRelayerComponent,
         AutoRelayerComponent,
         RunnerComponent,
-    ],
-    ExtraRelayComponents<BaseComponents>,
-    DefaultRelayComponents<BaseComponents>,
+    ]:
+        DefaultRelayComponents<BaseComponents>,
 );

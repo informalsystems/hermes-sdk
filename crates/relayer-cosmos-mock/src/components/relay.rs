@@ -15,46 +15,25 @@ use ibc_relayer_components::relay::traits::components::packet_relayers::ack_pack
 use ibc_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
-use cgp_core::delegate_component;
+use cgp_core::delegate_components;
 
 use crate::impls::relay::MockCosmosBuildUpdateClientMessage;
 
 pub struct MockCosmosRelayComponents;
 
-delegate_component!(
-    PacketRelayerComponent,
-    MockCosmosRelayComponents,
-    FullCycleRelayer,
+delegate_components!(
+    MockCosmosRelayComponents;
+    PacketRelayerComponent:
+        FullCycleRelayer,
+    UpdateClientMessageBuilderComponent:
+        SkipUpdateClient<WaitUpdateClient<MockCosmosBuildUpdateClientMessage>>,
+    IbcMessageSenderComponent<MainSink>:
+        SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
+    ReceivePacketRelayerComponnent:
+        SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
+    AckPacketRelayerComponent:
+        BaseAckPacketRelayer,
+    TimeoutUnorderedPacketRelayerComponent:
+        BaseTimeoutUnorderedPacketRelayer,
+    PacketFilterComponent: AllowAll,
 );
-
-delegate_component!(
-    UpdateClientMessageBuilderComponent,
-    MockCosmosRelayComponents,
-    SkipUpdateClient<WaitUpdateClient<MockCosmosBuildUpdateClientMessage>>,
-);
-
-delegate_component!(
-    IbcMessageSenderComponent<MainSink>,
-    MockCosmosRelayComponents,
-    SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-);
-
-delegate_component!(
-    ReceivePacketRelayerComponnent,
-    MockCosmosRelayComponents,
-    SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
-);
-
-delegate_component!(
-    AckPacketRelayerComponent,
-    MockCosmosRelayComponents,
-    BaseAckPacketRelayer,
-);
-
-delegate_component!(
-    TimeoutUnorderedPacketRelayerComponent,
-    MockCosmosRelayComponents,
-    BaseTimeoutUnorderedPacketRelayer,
-);
-
-delegate_component!(PacketFilterComponent, MockCosmosRelayComponents, AllowAll);
