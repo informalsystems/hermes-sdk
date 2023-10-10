@@ -10,7 +10,7 @@ use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTar
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
-use crate::components::extra::closures::chain::UseExtraChainComponents;
+use crate::components::extra::closures::chain::packet_relayer::UseExtraChainComponentsForPacketRelayer;
 use crate::components::extra::relay::ExtraRelayComponents;
 use crate::relay::components::packet_relayers::retry::SupportsPacketRetry;
 use crate::runtime::traits::channel::CanUseChannels;
@@ -31,9 +31,9 @@ where
         + HasComponents<Components = ExtraRelayComponents<RelayComponents>>,
     SrcChain: HasLoggerType<Logger = Relay::Logger>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
-        + UseExtraChainComponents<DstChain>,
+        + UseExtraChainComponentsForPacketRelayer<DstChain>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
-        + UseExtraChainComponents<SrcChain>,
+        + UseExtraChainComponentsForPacketRelayer<SrcChain>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,

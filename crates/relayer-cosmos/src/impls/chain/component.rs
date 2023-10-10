@@ -30,7 +30,7 @@ use ibc_relayer_components::chain::traits::components::update_client_message_bui
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
-use ibc_relayer_components_extra::components::extra::closures::chain::CanUseExtraChainComponents;
+use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::ack_packet_message::BuildCosmosAckPacketMessage;
