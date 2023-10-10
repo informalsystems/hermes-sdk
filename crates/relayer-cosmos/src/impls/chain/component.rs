@@ -3,6 +3,7 @@ use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
+use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
@@ -35,6 +36,7 @@ use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUs
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::chain::components::ack_packet_payload::BuildCosmosAckPacketPayload;
+use crate::impls::chain::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::chain::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
 use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
@@ -110,6 +112,8 @@ delegate_components!(
         BuildCosmosChannelHandshakePayload,
     ConnectionHandshakeMessageBuilderComponent:
         BuildCosmosConnectionHandshakeMessage,
+    ChannelHandshakeMessageBuilderComponent:
+        BuildCosmosChannelHandshakeMessage,
     PacketCommitmentsQuerierComponent:
         QueryCosmosPacketCommitments,
     ReceivedPacketQuerierComponent:
