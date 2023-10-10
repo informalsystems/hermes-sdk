@@ -5,21 +5,6 @@ use ibc_relayer_components::chain::traits::components::ack_packet_message_builde
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
 };
-use ibc_relayer_components::chain::traits::components::chain_status_querier::{
-    CanQueryChainStatus, ChainStatusQuerier,
-};
-use ibc_relayer_components::chain::traits::components::client_state_querier::{
-    CanQueryClientState, ClientStateQuerier,
-};
-use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::{
-    CanQueryConsensusStateHeight, ConsensusStateHeightQuerier,
-};
-use ibc_relayer_components::chain::traits::components::consensus_state_querier::{
-    CanQueryConsensusState, ConsensusStateQuerier,
-};
-use ibc_relayer_components::chain::traits::components::message_sender::{
-    CanSendMessages, MessageSender,
-};
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::{
     CanReadPacketFields, PacketFieldsReader,
 };
@@ -36,60 +21,31 @@ use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
-use ibc_relayer_components::chain::traits::components::update_client_message_builder::{
-    CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
-};
-use ibc_relayer_components::chain::traits::components::update_client_payload_builder::{
-    CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
-};
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, HasClientStateType,
-};
+use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
-use ibc_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, HasIbcChainTypes,
-};
+use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::components::extra::chain::ExtraChainComponents;
-use crate::telemetry::traits::metrics::HasBasicMetrics;
-use crate::telemetry::traits::telemetry::HasTelemetry;
+use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
-    HasRuntime
-    + HasChainId
-    + HasLoggerType
-    + CanIncrementHeight
-    + CanSendMessages
-    + CanQueryChainStatus
-    + HasConsensusStateType<Counterparty>
-    + HasClientStateFields<Counterparty>
-    + HasCounterpartyMessageHeight<Counterparty>
-    + CanLogChainPacket<Counterparty>
-    + CanQueryClientState<Counterparty>
-    + CanQueryConsensusState<Counterparty>
-    + CanQueryConsensusStateHeight<Counterparty>
+    CanLogChainPacket<Counterparty>
     + CanQueryReceivedPacket<Counterparty>
     + CanReadPacketFields<Counterparty>
-    + CanBuildUpdateClientPayload<Counterparty>
-    + CanBuildUpdateClientMessage<Counterparty>
     + CanBuildReceivePacketPayload<Counterparty>
     + CanBuildReceivePacketMessage<Counterparty>
     + CanBuildAckPacketPayload<Counterparty>
     + CanBuildAckPacketMessage<Counterparty>
     + CanBuildTimeoutUnorderedPacketPayload<Counterparty>
     + CanBuildTimeoutUnorderedPacketMessage<Counterparty>
+    + UseExtraChainComponentsForIbcMessageSender<Counterparty>
 where
     Counterparty: HasClientStateType<Self>
         + HasConsensusStateType<Self>
@@ -104,24 +60,13 @@ where
 impl<Chain, Counterparty, ChainComponents> UseExtraChainComponentsForPacketRelayer<Counterparty>
     for Chain
 where
-    Chain: HasRuntime
-        + HasChainId
-        + HasLoggerType
-        + CanIncrementHeight
-        + HasTelemetry
-        + HasChainStatusType
-        + HasConsensusStateType<Counterparty>
-        + HasClientStateFields<Counterparty>
-        + HasCounterpartyMessageHeight<Counterparty>
-        + CanLogChainPacket<Counterparty>
-        + HasIbcChainTypes<Counterparty>
-        + HasClientStateType<Counterparty>
+    Chain: CanLogChainPacket<Counterparty>
         + HasIbcPacketTypes<Counterparty>
-        + HasUpdateClientPayload<Counterparty>
         + HasReceivePacketPayload<Counterparty>
         + HasWriteAckEvent<Counterparty>
         + HasAckPacketPayload<Counterparty>
         + HasTimeoutUnorderedPacketPayload<Counterparty>
+        + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = ExtraChainComponents<ChainComponents>>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
@@ -130,16 +75,8 @@ where
         + HasAckPacketPayload<Chain>
         + HasTimeoutUnorderedPacketPayload<Chain>
         + HasReceivePacketPayload<Chain>,
-    Chain::Telemetry: HasBasicMetrics,
-    ChainComponents: MessageSender<Chain>
-        + ChainStatusQuerier<Chain>
-        + ConsensusStateQuerier<Chain, Counterparty>
-        + ClientStateQuerier<Chain, Counterparty>
-        + PacketFieldsReader<Chain, Counterparty>
-        + ConsensusStateHeightQuerier<Chain, Counterparty>
+    ChainComponents: PacketFieldsReader<Chain, Counterparty>
         + ReceivedPacketQuerier<Chain, Counterparty>
-        + UpdateClientPayloadBuilder<Chain, Counterparty>
-        + UpdateClientMessageBuilder<Chain, Counterparty>
         + ReceivePacketPayloadBuilder<Chain, Counterparty>
         + ReceivePacketMessageBuilder<Chain, Counterparty>
         + AckPacketPayloadBuilder<Chain, Counterparty>

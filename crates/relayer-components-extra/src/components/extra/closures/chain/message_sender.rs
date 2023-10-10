@@ -20,7 +20,6 @@ use ibc_relayer_components::chain::traits::components::update_client_message_bui
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::{
     CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
 };
-use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
@@ -74,7 +73,6 @@ where
         + HasConsensusStateType<Counterparty>
         + HasClientStateFields<Counterparty>
         + HasCounterpartyMessageHeight<Counterparty>
-        + CanLogChainPacket<Counterparty>
         + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
         + HasUpdateClientPayload<Counterparty>
