@@ -9,8 +9,6 @@ use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::ibc_events::channel::{
     HasChannelOpenInitEvent, HasChannelOpenTryEvent,
 };
-use ibc_relayer_components::relay::impls::channel::open_ack::RelayChannelOpenAck;
-use ibc_relayer_components::relay::impls::channel::open_confirm::RelayChannelOpenConfirm;
 use ibc_relayer_components::relay::impls::channel::open_init::CanRaiseMissingChannelInitEventError;
 use ibc_relayer_components::relay::impls::channel::open_try::CanRaiseMissingChannelTryEventError;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
@@ -21,11 +19,8 @@ use ibc_relayer_components::relay::traits::channel::open_init::{
     CanInitChannel, ChannelInitializer,
 };
 use ibc_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayer;
-use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
-    CanSendSingleIbcMessage, IbcMessageSender, MainSink,
-};
-use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
+use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
 use crate::components::extra::relay::ExtraRelayComponents;
 
 pub trait UseExtraChannelHandshakeRelayer: CanInitChannel + CanRelayChannelOpenHandshake
@@ -40,16 +35,15 @@ where
         + HasComponents<Components = ExtraRelayComponents<RelayComponents>>
         + CanRaiseMissingChannelInitEventError
         + CanRaiseMissingChannelTryEventError
-        + CanSendSingleIbcMessage<MainSink, DestinationTarget>,
+        + UseExtraIbcMessageSender,
     RelayComponents: ChannelOpenTryRelayer<Relay>
         + ChannelOpenAckRelayer<Relay>
         + ChannelOpenConfirmRelayer<Relay>
-        + ChannelInitializer<Relay>
-        + IbcMessageSender<Relay, MainSink, SourceTarget>
-        + IbcMessageSender<Relay, MainSink, DestinationTarget>,
+        + ChannelInitializer<Relay>,
     SrcChain: HasIbcChainTypes<DstChain>
         + HasInitChannelOptionsType<DstChain>
         + CanSendMessages
+        + CanQueryClientState<DstChain>
         + CanBuildChannelHandshakePayloads<DstChain>
         + CanBuildChannelHandshakeMessages<DstChain>
         + HasChannelOpenInitEvent<DstChain>
@@ -58,10 +52,9 @@ where
         + CanQueryClientState<SrcChain>
         + HasChannelOpenTryEvent<SrcChain>
         + CanBuildChannelHandshakePayloads<SrcChain>
-        + CanBuildChannelHandshakeMessages<SrcChain>,
+        + CanBuildChannelHandshakeMessages<SrcChain>
+        + CanQueryChainHeight,
     SrcChain::ChannelId: Clone,
     DstChain::ChannelId: Clone,
-    RelayChannelOpenAck: ChannelOpenAckRelayer<Relay>,
-    RelayChannelOpenConfirm: ChannelOpenConfirmRelayer<Relay>,
 {
 }
