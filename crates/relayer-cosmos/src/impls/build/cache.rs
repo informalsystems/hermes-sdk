@@ -2,7 +2,6 @@ use alloc::collections::BTreeMap;
 
 use futures::lock::Mutex;
 use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
 use ibc_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use ibc_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
@@ -16,17 +15,13 @@ use crate::types::batch::CosmosBatchSender;
 use crate::types::error::Error;
 
 impl HasChainCache<ChainATarget> for CosmosBuilder {
-    fn chain_cache(
-        &self,
-    ) -> &Mutex<BTreeMap<ChainId, OfaChainWrapper<CosmosChain<BaseChainHandle>>>> {
+    fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain<BaseChainHandle>>> {
         &self.chain_cache
     }
 }
 
 impl HasChainCache<ChainBTarget> for CosmosBuilder {
-    fn chain_cache(
-        &self,
-    ) -> &Mutex<BTreeMap<ChainId, OfaChainWrapper<CosmosChain<BaseChainHandle>>>> {
+    fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain<BaseChainHandle>>> {
         &self.chain_cache
     }
 }

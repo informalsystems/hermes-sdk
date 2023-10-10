@@ -1,9 +1,8 @@
 use cgp_core::async_trait;
 
+use crate::chain::traits::components::packet_from_write_ack_builder::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use crate::chain::traits::types::ibc_events::write_ack::{
-    CanBuildPacketFromWriteAckEvent, HasWriteAckEvent,
-};
+use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{Event, Height};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::components::packet_filters::chain::{
@@ -66,7 +65,7 @@ where
 impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
     Relay: CanRelayAckPacket + CanFilterPackets + HasPacketLock + CanLogRelay + CanLogRelayPacket,
-    Relay::DstChain: CanBuildPacketFromWriteAckEvent<Relay::SrcChain>,
+    Relay::DstChain: CanBuildPacketFromWriteAck<Relay::SrcChain>,
     MatchPacketSourceChain: PacketFilter<Relay>,
 {
     async fn relay_chain_event(

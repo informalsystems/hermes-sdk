@@ -4,7 +4,6 @@ use std::collections::HashSet;
 use futures::lock::Mutex;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::filter::PacketFilter;
-use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
@@ -15,8 +14,8 @@ use crate::types::batch::CosmosBatchSender;
 #[derive(Clone)]
 pub struct CosmosRelay<SrcChain, DstChain> {
     pub runtime: TokioRuntimeContext,
-    pub src_chain: OfaChainWrapper<CosmosChain<SrcChain>>,
-    pub dst_chain: OfaChainWrapper<CosmosChain<DstChain>>,
+    pub src_chain: CosmosChain<SrcChain>,
+    pub dst_chain: CosmosChain<DstChain>,
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilter,
@@ -32,8 +31,8 @@ where
 {
     pub fn new(
         runtime: TokioRuntimeContext,
-        src_chain: OfaChainWrapper<CosmosChain<SrcChain>>,
-        dst_chain: OfaChainWrapper<CosmosChain<DstChain>>,
+        src_chain: CosmosChain<SrcChain>,
+        dst_chain: CosmosChain<DstChain>,
         src_client_id: ClientId,
         dst_client_id: ClientId,
         packet_filter: PacketFilter,

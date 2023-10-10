@@ -1,7 +1,6 @@
 use cgp_core::Async;
 use eyre::eyre;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::relay::components::create_client::CanRaiseMissingCreateClientEventError;
 use ibc_relayer_components::relay::impls::channel::open_init::CanRaiseMissingChannelInitEventError;
@@ -39,8 +38,8 @@ where
     DstChain: ChainHandle,
 {
     fn missing_create_client_event_error(
-        src_chain: &OfaChainWrapper<CosmosChain<SrcChain>>,
-        dst_chain: &OfaChainWrapper<CosmosChain<DstChain>>,
+        src_chain: &CosmosChain<SrcChain>,
+        dst_chain: &CosmosChain<DstChain>,
     ) -> Error {
         BaseError::generic(eyre!("missing CreateClient event when creating client from chain {} with counterparty chain {}",
             src_chain.chain_id(),
@@ -56,8 +55,8 @@ where
     DstChain: ChainHandle,
 {
     fn missing_create_client_event_error(
-        dst_chain: &OfaChainWrapper<CosmosChain<DstChain>>,
-        src_chain: &OfaChainWrapper<CosmosChain<SrcChain>>,
+        dst_chain: &CosmosChain<DstChain>,
+        src_chain: &CosmosChain<SrcChain>,
     ) -> Error {
         BaseError::generic(eyre!("missing CreateClient event when creating client from chain {} with counterparty chain {}",
             dst_chain.chain_id(),

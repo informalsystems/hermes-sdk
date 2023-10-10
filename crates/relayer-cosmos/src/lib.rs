@@ -8,7 +8,6 @@
 
 extern crate alloc;
 
-pub mod all_for_one;
 pub mod contexts;
 pub mod impls;
 pub mod methods;

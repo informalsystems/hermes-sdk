@@ -1,6 +1,5 @@
 use async_trait::async_trait;
 use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use ibc_relayer_components_extra::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -18,8 +17,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildCompon
         build: &CosmosBuilder,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
-        src_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
-        dst_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
+        src_chain: CosmosChain<BaseChainHandle>,
+        dst_chain: CosmosChain<BaseChainHandle>,
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
     ) -> Result<CosmosRelay<BaseChainHandle, BaseChainHandle>, Error> {
@@ -42,8 +41,8 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayBToATarget> for CosmosBuildCompon
         build: &CosmosBuilder,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
-        src_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
-        dst_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
+        src_chain: CosmosChain<BaseChainHandle>,
+        dst_chain: CosmosChain<BaseChainHandle>,
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
     ) -> Result<CosmosRelay<BaseChainHandle, BaseChainHandle>, Error> {

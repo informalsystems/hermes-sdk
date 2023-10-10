@@ -10,7 +10,6 @@ use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::Config;
 use ibc_relayer::keyring::{AnySigningKeyPair, Secp256k1KeyPair};
 use ibc_relayer::spawn::spawn_chain_runtime;
-use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components_extra::batch::types::config::BatchConfig;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
@@ -32,7 +31,7 @@ pub struct CosmosBuilder {
     pub runtime: TokioRuntimeContext,
     pub batch_config: BatchConfig,
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
-    pub chain_cache: Arc<Mutex<BTreeMap<ChainId, OfaChainWrapper<CosmosChain<BaseChainHandle>>>>>,
+    pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain<BaseChainHandle>>>>,
     pub relay_cache: Arc<
         Mutex<
             BTreeMap<
@@ -116,8 +115,8 @@ impl CosmosBuilder {
         &self,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
-        src_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
-        dst_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
+        src_chain: CosmosChain<BaseChainHandle>,
+        dst_chain: CosmosChain<BaseChainHandle>,
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
     ) -> Result<CosmosRelay<BaseChainHandle, BaseChainHandle>, Error> {

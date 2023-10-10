@@ -1,3 +1,4 @@
+use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::PacketFilter;
 use ibc_relayer_components::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
 use ibc_relayer_components::chain::traits::components::send_packets_querier::CanQuerySendPackets;
@@ -5,6 +6,7 @@ use ibc_relayer_components::chain::traits::components::unreceived_packet_sequenc
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::packet_clearer::CanClearPackets;
 use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
+use ibc_relayer_cosmos::contexts::chain::CosmosChain;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::Height;
 use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
@@ -82,15 +84,27 @@ impl BinaryChannelTest for IbcClearPacketTest {
         runtime.block_on(async {
             info!("Assert query packet commitments works as expected");
 
-            let (src_commitments, src_height): (Vec<Sequence>, Height) = chain_a
-                .query_packet_commitments(channel.channel_id_a.value(), channel.port_a.value())
+            let (src_commitments, src_height): (Vec<Sequence>, Height) =
+                <CosmosChain<BaseChainHandle> as CanQueryPacketCommitments<
+                    CosmosChain<BaseChainHandle>,
+                >>::query_packet_commitments(
+                    chain_a,
+                    channel.channel_id_a.value(),
+                    channel.port_a.value(),
+                )
                 .await
                 .unwrap();
 
             assert_eq!(src_commitments, vec!(Sequence::from(1)));
 
-            let (dst_commitments, dst_height): (Vec<Sequence>, Height) = chain_b
-                .query_packet_commitments(channel.channel_id_b.value(), channel.port_b.value())
+            let (dst_commitments, dst_height): (Vec<Sequence>, Height) =
+                <CosmosChain<BaseChainHandle> as CanQueryPacketCommitments<
+                    CosmosChain<BaseChainHandle>,
+                >>::query_packet_commitments(
+                    chain_b,
+                    channel.channel_id_b.value(),
+                    channel.port_b.value(),
+                )
                 .await
                 .unwrap();
 
@@ -98,8 +112,11 @@ impl BinaryChannelTest for IbcClearPacketTest {
 
             info!("Assert query unreceived packet sequences works as expected");
 
-            let unreceived_packet_sequences: Vec<Sequence> = chain_a
-                .query_unreceived_packet_sequences(
+            let unreceived_packet_sequences: Vec<Sequence> =
+                <CosmosChain<BaseChainHandle> as CanQueryUnreceivedPacketSequences<
+                    CosmosChain<BaseChainHandle>,
+                >>::query_unreceived_packet_sequences(
+                    chain_a,
                     channel.channel_id_a.value(),
                     channel.port_a.value(),
                     &src_commitments,
@@ -109,8 +126,11 @@ impl BinaryChannelTest for IbcClearPacketTest {
 
             assert_eq!(unreceived_packet_sequences, vec!(Sequence::from(1)));
 
-            let unreceived_packet_sequences: Vec<Sequence> = chain_b
-                .query_unreceived_packet_sequences(
+            let unreceived_packet_sequences: Vec<Sequence> =
+                <CosmosChain<BaseChainHandle> as CanQueryUnreceivedPacketSequences<
+                    CosmosChain<BaseChainHandle>,
+                >>::query_unreceived_packet_sequences(
+                    chain_b,
                     channel.channel_id_b.value(),
                     channel.port_b.value(),
                     &src_commitments,
@@ -122,30 +142,34 @@ impl BinaryChannelTest for IbcClearPacketTest {
 
             info!("Assert query unreceived packets works as expected");
 
-            let send_packets = chain_a
-                .query_send_packets_from_sequences(
-                    channel.channel_id_a.value(),
-                    channel.port_a.value(),
-                    channel.channel_id_b.value(),
-                    channel.port_b.value(),
-                    &unreceived_packet_sequences,
-                    &src_height,
-                )
-                .await
-                .unwrap();
+            let send_packets = <CosmosChain<BaseChainHandle> as CanQuerySendPackets<
+                CosmosChain<BaseChainHandle>,
+            >>::query_send_packets_from_sequences(
+                chain_a,
+                channel.channel_id_a.value(),
+                channel.port_a.value(),
+                channel.channel_id_b.value(),
+                channel.port_b.value(),
+                &unreceived_packet_sequences,
+                &src_height,
+            )
+            .await
+            .unwrap();
 
             assert_eq!(send_packets.len(), 1);
 
-            let send_packets = chain_b
-                .query_send_packets_from_sequences(
-                    channel.channel_id_b.value(),
-                    channel.port_b.value(),
-                    channel.channel_id_a.value(),
-                    channel.port_a.value(),
-                    &unreceived_packet_sequences,
-                    &dst_height,
-                )
-                .await;
+            let send_packets = <CosmosChain<BaseChainHandle> as CanQuerySendPackets<
+                CosmosChain<BaseChainHandle>,
+            >>::query_send_packets_from_sequences(
+                chain_b,
+                channel.channel_id_b.value(),
+                channel.port_b.value(),
+                channel.channel_id_a.value(),
+                channel.port_a.value(),
+                &unreceived_packet_sequences,
+                &dst_height,
+            )
+            .await;
 
             assert!(
                 send_packets.is_err(),

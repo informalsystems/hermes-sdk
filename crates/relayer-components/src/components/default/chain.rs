@@ -18,6 +18,7 @@ use crate::chain::traits::components::create_client_payload_builder::CreateClien
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use crate::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
+use crate::chain::traits::components::packet_from_write_ack_builder::PacketFromWriteAckBuilderComponent;
 use crate::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
 use crate::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use crate::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
@@ -63,5 +64,6 @@ delegate_components!(
         CreateClientPayloadBuilderComponent,
         UpdateClientMessageBuilderComponent,
         UpdateClientPayloadBuilderComponent,
+        PacketFromWriteAckBuilderComponent,
     ]: BaseComponents,
 );

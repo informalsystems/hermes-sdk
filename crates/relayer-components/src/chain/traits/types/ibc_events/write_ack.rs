@@ -5,8 +5,6 @@
 use cgp_core::Async;
 
 use crate::chain::traits::types::event::HasEventType;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::packet::HasIbcPacketTypes;
 
 /**
    Indicates that a chain context's
@@ -42,26 +40,4 @@ pub trait HasWriteAckEvent<Counterparty>: HasEventType {
        parse errors.
     */
     fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent>;
-}
-
-pub trait CanBuildPacketFromWriteAckEvent<Counterparty>:
-    HasWriteAckEvent<Counterparty> + HasIbcPacketTypes<Counterparty>
-where
-    Counterparty: HasIbcChainTypes<Self>,
-{
-    /**
-       Extract the [`IncomingPacket`](HasIbcPacketTypes::IncomingPacket)
-       from a write acknowledgement event.
-
-       Since write acknowledgements are emitted from a destination chain (self),
-       it is necessary for the event to correspond to an incoming packet
-       (with self being the destination).
-
-       Here we assume that a write acknowledgement event always contains
-       the packet data. This is currently true for Cosmos chains. However
-       in case additional queries are required, then this method should be
-       refactored into a method like
-       `query_packet_from_write_ack_event`.
-    */
-    fn build_packet_from_write_ack_event(ack: &Self::WriteAckEvent) -> &Self::IncomingPacket;
 }

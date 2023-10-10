@@ -1,9 +1,4 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CanQueryCounterpartyChainId;
-use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::CanBuildPacketFromWriteAckEvent;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
@@ -13,6 +8,7 @@ use ibc_relayer_components::relay::traits::packet::HasRelayPacketFields;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
+use crate::components::extra::closures::chain::event_relayer::UseExtraChainComponentsForEventRelayer;
 use crate::components::extra::closures::relay::ack_packet_relayer::UseExtraAckPacketRelayer;
 use crate::components::extra::closures::relay::packet_relayer::UseExtraPacketRelayer;
 use crate::components::extra::relay::ExtraRelayComponents;
@@ -33,14 +29,9 @@ where
         + UseExtraAckPacketRelayer
         + UseExtraPacketRelayer
         + HasComponents<Components = ExtraRelayComponents<BaseRelayComponents>>,
-    Relay::SrcChain: HasChainId
-        + HasLoggerType<Logger = Relay::Logger>
-        + CanLogChainPacket<Relay::DstChain>
-        + HasSendPacketEvent<Relay::DstChain>
-        + CanQueryCounterpartyChainId<Relay::DstChain>,
-    Relay::DstChain: HasChainId
-        + CanQueryCounterpartyChainId<Relay::SrcChain>
-        + CanBuildPacketFromWriteAckEvent<Relay::SrcChain>,
+    Relay::SrcChain: HasLoggerType<Logger = Relay::Logger>
+        + UseExtraChainComponentsForEventRelayer<Relay::DstChain>,
+    Relay::DstChain: UseExtraChainComponentsForEventRelayer<Relay::SrcChain>,
     Relay::Logger: HasBaseLogLevels,
     BaseRelayComponents: PacketFilter<Relay>,
 {

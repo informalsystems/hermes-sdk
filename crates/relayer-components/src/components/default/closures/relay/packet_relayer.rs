@@ -37,12 +37,12 @@ pub trait CanUseDefaultPacketRelayer: UseDefaultPacketRelayer {}
 
 pub trait UseDefaultPacketRelayer: CanRelayPacket {}
 
-impl<Relay, SrcChain, DstChain, BaseRelayComponents> UseDefaultPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, RelayComponents> UseDefaultPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasLogger
         + HasPacketLock
-        + HasComponents<Components = DefaultRelayComponents<BaseRelayComponents>>,
+        + HasComponents<Components = DefaultRelayComponents<RelayComponents>>,
     SrcChain: HasErrorType
         + HasRuntime
         + HasChainId
@@ -88,6 +88,6 @@ where
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
     Relay::Logger: HasBaseLogLevels,
-    BaseRelayComponents: PacketFilter<Relay>,
+    RelayComponents: PacketFilter<Relay>,
 {
 }

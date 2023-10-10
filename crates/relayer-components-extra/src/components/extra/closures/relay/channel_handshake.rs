@@ -1,0 +1,40 @@
+use cgp_core::HasComponents;
+use ibc_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
+use ibc_relayer_components::relay::impls::channel::open_init::CanRaiseMissingChannelInitEventError;
+use ibc_relayer_components::relay::impls::channel::open_try::CanRaiseMissingChannelTryEventError;
+use ibc_relayer_components::relay::traits::chains::HasRelayChains;
+use ibc_relayer_components::relay::traits::channel::open_ack::ChannelOpenAckRelayer;
+use ibc_relayer_components::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayer;
+use ibc_relayer_components::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
+use ibc_relayer_components::relay::traits::channel::open_init::{
+    CanInitChannel, ChannelInitializer,
+};
+use ibc_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayer;
+
+use crate::components::extra::closures::chain::channel_handshake::UseExtraChainComponentsForChannelHandshake;
+use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
+use crate::components::extra::relay::ExtraRelayComponents;
+
+pub trait UseExtraChannelHandshakeRelayer: CanInitChannel + CanRelayChannelOpenHandshake
+where
+    Self::SrcChain: HasInitChannelOptionsType<Self::DstChain>,
+{
+}
+
+impl<Relay, SrcChain, DstChain, RelayComponents> UseExtraChannelHandshakeRelayer for Relay
+where
+    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + HasComponents<Components = ExtraRelayComponents<RelayComponents>>
+        + CanRaiseMissingChannelInitEventError
+        + CanRaiseMissingChannelTryEventError
+        + UseExtraIbcMessageSender,
+    RelayComponents: ChannelOpenTryRelayer<Relay>
+        + ChannelOpenAckRelayer<Relay>
+        + ChannelOpenConfirmRelayer<Relay>
+        + ChannelInitializer<Relay>,
+    SrcChain: UseExtraChainComponentsForChannelHandshake<DstChain>,
+    DstChain: UseExtraChainComponentsForChannelHandshake<SrcChain>,
+    SrcChain::ChannelId: Clone,
+    DstChain::ChannelId: Clone,
+{
+}

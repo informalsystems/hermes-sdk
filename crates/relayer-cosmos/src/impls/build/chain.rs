@@ -1,6 +1,5 @@
 use async_trait::async_trait;
 use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components::build::traits::components::chain_builder::ChainBuilder;
 use ibc_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -16,10 +15,10 @@ impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBuildComponents {
         build: &CosmosBuilder,
         _target: ChainATarget,
         chain_id: &ChainId,
-    ) -> Result<OfaChainWrapper<CosmosChain<BaseChainHandle>>, Error> {
+    ) -> Result<CosmosChain<BaseChainHandle>, Error> {
         let chain = build.build_chain(chain_id).await?;
 
-        Ok(OfaChainWrapper::new(chain))
+        Ok(chain)
     }
 }
 
@@ -29,9 +28,9 @@ impl ChainBuilder<CosmosBuilder, ChainBTarget> for CosmosBuildComponents {
         build: &CosmosBuilder,
         _target: ChainBTarget,
         chain_id: &ChainId,
-    ) -> Result<OfaChainWrapper<CosmosChain<BaseChainHandle>>, Error> {
+    ) -> Result<CosmosChain<BaseChainHandle>, Error> {
         let chain = build.build_chain(chain_id).await?;
 
-        Ok(OfaChainWrapper::new(chain))
+        Ok(chain)
     }
 }

@@ -21,11 +21,11 @@ where
     type RelayBToA = CosmosRelay<ChainB, ChainA>;
 
     fn relay_a_to_b(&self) -> &CosmosRelay<ChainA, ChainB> {
-        &self.relay_a_to_b.relay
+        &self.relay_a_to_b
     }
 
     fn relay_b_to_a(&self) -> &CosmosRelay<ChainB, ChainA> {
-        &self.relay_b_to_a.relay
+        &self.relay_b_to_a
     }
 
     fn relay_error(e: Error) -> Error {
