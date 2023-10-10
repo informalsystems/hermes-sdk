@@ -15,6 +15,7 @@ use ibc_relayer_components::chain::traits::components::create_client_payload_bui
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
 use ibc_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReaderComponent;
+use ibc_relayer_components::chain::traits::components::packet_from_write_ack_builder::PacketFromWriteAckBuilderComponent;
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerierComponent;
@@ -40,6 +41,7 @@ use crate::impls::chain::components::connection_handshake_payload::BuildCosmosCo
 use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::chain::components::packet_fields::CosmosPacketFieldReader;
+use crate::impls::chain::components::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::chain::components::query_chain_id::QueryChainIdWithChainHandle;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
@@ -130,4 +132,6 @@ delegate_components!(
         QueryCosmosSendPacket,
     SendPacketsQuerierComponent:
         QuerySendPacketsConcurrently,
+    PacketFromWriteAckBuilderComponent:
+        BuildCosmosPacketFromWriteAck,
 );

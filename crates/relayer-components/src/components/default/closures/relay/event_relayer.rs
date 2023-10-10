@@ -1,10 +1,10 @@
 use cgp_core::HasComponents;
 
 use crate::chain::traits::components::counterparty_chain_id_querier::CanQueryCounterpartyChainId;
+use crate::chain::traits::components::packet_from_write_ack_builder::CanBuildPacketFromWriteAck;
 use crate::chain::traits::logs::packet::CanLogChainPacket;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use crate::chain::traits::types::ibc_events::write_ack::CanBuildPacketFromWriteAckEvent;
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;
 use crate::components::default::closures::relay::packet_relayer::UseDefaultPacketRelayer;
 use crate::components::default::relay::DefaultRelayComponents;
@@ -40,7 +40,7 @@ where
         + CanQueryCounterpartyChainId<Relay::DstChain>,
     Relay::DstChain: HasChainId
         + CanQueryCounterpartyChainId<Relay::SrcChain>
-        + CanBuildPacketFromWriteAckEvent<Relay::SrcChain>,
+        + CanBuildPacketFromWriteAck<Relay::SrcChain>,
     Relay::Logger: HasBaseLogLevels,
     BaseRelayComponents: PacketFilter<Relay>,
 {

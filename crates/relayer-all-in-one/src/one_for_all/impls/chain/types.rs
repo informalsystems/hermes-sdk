@@ -1,5 +1,6 @@
 use cgp_core::HasErrorType;
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
+use ibc_relayer_components::chain::traits::components::packet_from_write_ack_builder::PacketFromWriteAckBuilder;
 use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
@@ -7,9 +8,7 @@ use ibc_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::{
-    CanBuildPacketFromWriteAckEvent, HasWriteAckEvent,
-};
+use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
@@ -191,13 +190,14 @@ where
     }
 }
 
-impl<Chain, Counterparty> CanBuildPacketFromWriteAckEvent<OfaChainWrapper<Counterparty>>
-    for OfaChainWrapper<Chain>
+impl<Chain, Counterparty>
+    PacketFromWriteAckBuilder<OfaChainWrapper<Chain>, OfaChainWrapper<Counterparty>>
+    for OfaComponents
 where
     Chain: OfaIbcChain<Counterparty>,
     Counterparty: OfaChainTypes,
 {
-    fn build_packet_from_write_ack_event(ack: &Self::WriteAckEvent) -> &Self::IncomingPacket {
+    fn build_packet_from_write_ack_event(ack: &Chain::WriteAckEvent) -> &Chain::IncomingPacket {
         Chain::extract_packet_from_write_ack_event(ack)
     }
 }

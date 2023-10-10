@@ -19,6 +19,10 @@ where
     SrcChain: ChainHandle,
     DstChain: ChainHandle,
 {
+    // type SrcChain = CosmosChain<SrcChain>;
+
+    // type DstChain = CosmosChain<DstChain>;
+
     type SrcChain = OfaChainWrapper<CosmosChain<SrcChain>>;
 
     type DstChain = OfaChainWrapper<CosmosChain<DstChain>>;

@@ -7,6 +7,7 @@ pub mod connection_handshake_payload;
 pub mod create_client_message;
 pub mod create_client_payload;
 pub mod packet_fields;
+pub mod packet_from_ack;
 pub mod query_chain_id;
 pub mod query_chain_status;
 pub mod query_client_state;

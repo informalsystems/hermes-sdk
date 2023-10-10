@@ -17,11 +17,17 @@ use ibc_relayer_components::chain::traits::components::consensus_state_height_qu
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::{
     CanQueryConsensusState, ConsensusStateQuerier,
 };
+use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::{
+    CanQueryCounterpartyChainId, CounterpartyChainIdQuerier,
+};
 use ibc_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };
 use ibc_relayer_components::chain::traits::components::packet_fields_reader::{
     CanReadPacketFields, PacketFieldsReader,
+};
+use ibc_relayer_components::chain::traits::components::packet_from_write_ack_builder::{
+    CanBuildPacketFromWriteAck, PacketFromWriteAckBuilder,
 };
 use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::{
     CanBuildReceivePacketMessage, ReceivePacketMessageBuilder,
@@ -52,6 +58,7 @@ use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, H
 use ibc_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
+use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
@@ -88,12 +95,14 @@ pub trait UseExtraChainComponents<Counterparty>:
     + CanQueryChainStatus
     + HasConsensusStateType<Counterparty>
     + HasClientStateFields<Counterparty>
+    + HasSendPacketEvent<Counterparty>
     + HasCounterpartyMessageHeight<Counterparty>
     + CanLogChainPacket<Counterparty>
     + CanQueryClientState<Counterparty>
     + CanQueryConsensusState<Counterparty>
     + CanQueryConsensusStateHeight<Counterparty>
     + CanQueryReceivedPacket<Counterparty>
+    + CanQueryCounterpartyChainId<Counterparty>
     + CanReadPacketFields<Counterparty>
     + CanBuildUpdateClientPayload<Counterparty>
     + CanBuildUpdateClientMessage<Counterparty>
@@ -103,6 +112,7 @@ pub trait UseExtraChainComponents<Counterparty>:
     + CanBuildAckPacketMessage<Counterparty>
     + CanBuildTimeoutUnorderedPacketPayload<Counterparty>
     + CanBuildTimeoutUnorderedPacketMessage<Counterparty>
+    + CanBuildPacketFromWriteAck<Counterparty>
 where
     Counterparty: HasHeightType
         + HasClientStateType<Self>
@@ -125,6 +135,7 @@ where
         + HasChainStatusType
         + HasConsensusStateType<Counterparty>
         + HasClientStateFields<Counterparty>
+        + HasSendPacketEvent<Counterparty>
         + HasCounterpartyMessageHeight<Counterparty>
         + CanLogChainPacket<Counterparty>
         + HasIbcChainTypes<Counterparty>
@@ -160,6 +171,8 @@ where
         + AckPacketPayloadBuilder<Chain, Counterparty>
         + AckPacketMessageBuilder<Chain, Counterparty>
         + TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
-        + TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>,
+        + TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>
+        + CounterpartyChainIdQuerier<Chain, Counterparty>
+        + PacketFromWriteAckBuilder<Chain, Counterparty>,
 {
 }
