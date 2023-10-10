@@ -1886,7 +1886,6 @@ dependencies = [
  "http",
  "ibc-proto 0.34.1",
  "ibc-relayer",
- "ibc-relayer-all-in-one",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "ibc-relayer-runtime",
