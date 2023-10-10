@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 use cgp_core::Async;
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
+use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
 use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use ibc_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
@@ -15,6 +16,7 @@ use tendermint::abci::Event as AbciEvent;
 use crate::contexts::chain::CosmosChain;
 use crate::traits::message::CosmosMessage;
 use crate::types::error::{BaseError, Error};
+use crate::types::tendermint::TendermintClientState;
 
 impl<Chain> CanIncrementHeight for CosmosChain<Chain>
 where
@@ -65,5 +67,14 @@ where
         message: &Arc<dyn CosmosMessage>,
     ) -> Option<Height> {
         message.counterparty_message_height_for_update_client()
+    }
+}
+
+impl<Chain, Counterparty> HasClientStateFields<Counterparty> for CosmosChain<Chain>
+where
+    Chain: Async,
+{
+    fn client_state_latest_height(client_state: &TendermintClientState) -> &Height {
+        &client_state.latest_height
     }
 }

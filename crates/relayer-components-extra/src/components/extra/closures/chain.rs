@@ -66,6 +66,19 @@ use crate::components::extra::chain::ExtraChainComponents;
 use crate::telemetry::traits::metrics::HasBasicMetrics;
 use crate::telemetry::traits::telemetry::HasTelemetry;
 
+pub trait CanUseExtraChainComponents<Counterparty>: UseExtraChainComponents<Counterparty>
+where
+    Counterparty: HasHeightType
+        + HasClientStateType<Self>
+        + HasConsensusStateType<Self>
+        + HasIbcChainTypes<Self>
+        + HasUpdateClientPayload<Self>
+        + HasReceivePacketPayload<Self>
+        + HasAckPacketPayload<Self>
+        + HasTimeoutUnorderedPacketPayload<Self>,
+{
+}
+
 pub trait UseExtraChainComponents<Counterparty>:
     HasRuntime
     + HasChainId
