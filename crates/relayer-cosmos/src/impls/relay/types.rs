@@ -1,6 +1,5 @@
 use cgp_core::{Async, HasErrorType};
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_all_in_one::one_for_all::types::chain::OfaChainWrapper;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -19,13 +18,9 @@ where
     SrcChain: ChainHandle,
     DstChain: ChainHandle,
 {
-    // type SrcChain = CosmosChain<SrcChain>;
+    type SrcChain = CosmosChain<SrcChain>;
 
-    // type DstChain = CosmosChain<DstChain>;
-
-    type SrcChain = OfaChainWrapper<CosmosChain<SrcChain>>;
-
-    type DstChain = OfaChainWrapper<CosmosChain<DstChain>>;
+    type DstChain = CosmosChain<DstChain>;
 
     type Packet = Packet;
 
@@ -37,11 +32,11 @@ where
         e
     }
 
-    fn src_chain(&self) -> &OfaChainWrapper<CosmosChain<SrcChain>> {
+    fn src_chain(&self) -> &CosmosChain<SrcChain> {
         &self.src_chain
     }
 
-    fn dst_chain(&self) -> &OfaChainWrapper<CosmosChain<DstChain>> {
+    fn dst_chain(&self) -> &CosmosChain<DstChain> {
         &self.dst_chain
     }
 
