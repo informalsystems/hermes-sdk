@@ -17,8 +17,8 @@ impl BiRelayFromRelayBuilder<CosmosBuilder> for CosmosBuildComponents {
     ) -> Result<CosmosBiRelay<BaseChainHandle, BaseChainHandle>, Error> {
         let birelay = CosmosBiRelay {
             runtime: build.runtime.clone(),
-            relay_a_to_b: relay_a_to_b,
-            relay_b_to_a: relay_b_to_a,
+            relay_a_to_b,
+            relay_b_to_a,
         };
 
         Ok(birelay)
