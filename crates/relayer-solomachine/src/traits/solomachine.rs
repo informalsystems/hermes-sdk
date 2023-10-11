@@ -1,11 +1,11 @@
-use core::fmt::{Debug, Display};
+use core::fmt::Debug;
 
 use async_trait::async_trait;
-use cgp_core::{Async, HasErrorType};
-use ibc_relayer_all_in_one::all_for_one::runtime::AfoRuntime;
-use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
+use cgp_core::Async;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_cosmos::types::tendermint::{TendermintClientState, TendermintConsensusState};
+use ibc_relayer_runtime::types::error::Error as RuntimeError;
+use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
 };
@@ -21,28 +21,16 @@ use secp256k1::SecretKey;
 use crate::methods::encode::public_key::PublicKey;
 
 #[async_trait]
-pub trait SolomachineChain: Async {
+pub trait Solomachine: Async {
     type Error: Debug + Async;
-
-    type Runtime: AfoRuntime;
-
-    type Logger: HasBaseLogLevels;
-
-    /// A type used to differentiate between IBC messages signed using the
-    /// same public key. It is useful in mitigating false positives when it
-    /// comes to misbehavior detection of Solomachine clients. Every UpdateClient
-    /// includes a new Diversifier for every IBC message sent.
-    type Diversifier: Display + Async;
 
     fn get_chain_id(&self) -> &ChainId;
 
     fn get_telemetry(&self) -> &CosmosTelemetry;
 
-    fn runtime(&self) -> &Self::Runtime;
+    fn runtime(&self) -> &TokioRuntimeContext;
 
-    fn runtime_error(e: <Self::Runtime as HasErrorType>::Error) -> Self::Error;
-
-    fn logger(&self) -> &Self::Logger;
+    fn runtime_error(e: RuntimeError) -> Self::Error;
 
     fn encode_error(e: EncodeError) -> Self::Error;
 

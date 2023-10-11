@@ -7,7 +7,6 @@ use async_trait::async_trait;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_cosmos::types::tendermint::{TendermintClientState, TendermintConsensusState};
 use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
@@ -23,13 +22,13 @@ use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
 use crate::methods::encode::public_key::PublicKey;
-use crate::traits::solomachine::SolomachineChain;
+use crate::traits::solomachine::Solomachine;
 use crate::types::error::{BaseError, Error};
 
 const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 
 #[derive(Clone)]
-pub struct MockSolomachineChainContext {
+pub struct MockSolomachineContext {
     pub chain_id: ChainId,
     commitment_prefix: String,
     public_key: PublicKey,
@@ -41,7 +40,7 @@ pub struct MockSolomachineChainContext {
     pub connections: Arc<Mutex<HashMap<ConnectionId, ConnectionEnd>>>,
 }
 
-impl MockSolomachineChainContext {
+impl MockSolomachineContext {
     pub fn new(
         chain_id: &str,
         commitment_prefix: String,
@@ -51,7 +50,7 @@ impl MockSolomachineChainContext {
         let secp = Secp256k1::new();
         let (secret_key, secp_public_key) = secp.generate_keypair(&mut OsRng);
         let public_key = PublicKey::from_secp256k1_key(secp_public_key);
-        MockSolomachineChainContext {
+        MockSolomachineContext {
             chain_id: ChainId::from_string(chain_id),
             commitment_prefix,
             public_key,
@@ -66,14 +65,8 @@ impl MockSolomachineChainContext {
 }
 
 #[async_trait]
-impl SolomachineChain for MockSolomachineChainContext {
+impl Solomachine for MockSolomachineContext {
     type Error = Error;
-
-    type Runtime = TokioRuntimeContext;
-
-    type Logger = TracingLogger;
-
-    type Diversifier = String;
 
     fn get_chain_id(&self) -> &ChainId {
         &self.chain_id
@@ -89,10 +82,6 @@ impl SolomachineChain for MockSolomachineChainContext {
 
     fn runtime_error(e: TokioError) -> Self::Error {
         BaseError::tokio(e).into()
-    }
-
-    fn logger(&self) -> &Self::Logger {
-        &TracingLogger
     }
 
     fn encode_error(e: EncodeError) -> Self::Error {

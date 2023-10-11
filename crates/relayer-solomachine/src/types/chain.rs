@@ -1,12 +1,12 @@
-use crate::traits::solomachine::SolomachineChain;
+use crate::traits::solomachine::Solomachine;
 
 #[derive(Clone)]
-pub struct SolomachineChainWrapper<Chain> {
+pub struct SolomachineChain<Chain> {
     pub chain: Chain,
 }
 
-impl<Chain: SolomachineChain> SolomachineChainWrapper<Chain> {
+impl<Chain: Solomachine> SolomachineChain<Chain> {
     pub fn new(chain: Chain) -> Self {
-        SolomachineChainWrapper { chain }
+        SolomachineChain { chain }
     }
 }
