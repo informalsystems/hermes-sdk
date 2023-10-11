@@ -4,13 +4,16 @@ use ibc_relayer::chain::cosmos::query::abci_query;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
+use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
+use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
 use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 use ibc_relayer_cosmos::contexts::chain::CosmosChain;
-use ibc_relayer_cosmos::methods::encode::encode_protobuf;
 use ibc_relayer_cosmos::traits::message::{CosmosMessage, ToCosmosMessage};
 use ibc_relayer_cosmos::types::channel::CosmosInitChannelOptions;
 use ibc_relayer_cosmos::types::error::{BaseError as CosmosBaseError, Error as CosmosError};
@@ -47,9 +50,7 @@ use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
-use ibc_relayer_types::core::ics24_host::path::{
-    ClientConsensusStatePath, ClientStatePath, CommitmentsPath,
-};
+use ibc_relayer_types::core::ics24_host::path::{ClientConsensusStatePath, ClientStatePath};
 use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::timestamp::Timestamp;
@@ -57,23 +58,22 @@ use ibc_relayer_types::tx_msg::Msg;
 use ibc_relayer_types::Height;
 use sha2::{Digest, Sha256};
 
+use crate::impls::chain::components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
+use crate::impls::chain::components::create_client_payload::BuildSolomachineCreateClientPayload;
 use crate::impls::chain::components::process_message::ProcessSolomachineMessages;
 use crate::impls::chain::components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
+use crate::impls::chain::components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
+use crate::impls::chain::components::update_client_payload::BuildSolomachineUpdateClientPayload;
 use crate::methods::encode::header::encode_header;
-use crate::methods::encode::header_data::sign_header_data;
-use crate::methods::encode::sign_data::{sign_with_data, timestamped_sign_data_to_bytes};
-use crate::methods::proofs::channel::channel_proof_data;
-use crate::protobuf::solomachine_v2::PacketCommitmentData;
+use crate::methods::encode::sign_data::timestamped_sign_data_to_bytes;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 use crate::types::client_state::{decode_client_state, SolomachineClientState};
 use crate::types::consensus_state::{decode_client_consensus_state, SolomachineConsensusState};
-use crate::types::error::BaseError;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };
-use crate::types::header::{SolomachineHeader, SolomachineHeaderData, SolomachineSignHeaderData};
 use crate::types::message::SolomachineMessage;
 use crate::types::payloads::channel::{
     SolomachineChannelOpenAckPayload, SolomachineChannelOpenConfirmPayload,
@@ -90,7 +90,6 @@ use crate::types::payloads::packet::{
     SolomachineAckPacketPayload, SolomachineReceivePacketPayload,
     SolomachineTimeoutUnorderedPacketPayload,
 };
-use crate::types::sign_data::SolomachineSignData;
 
 impl<Chain> OfaChainTypes for SolomachineChain<Chain>
 where
@@ -364,70 +363,18 @@ where
         height: &Height,
         packet: &Packet,
     ) -> Result<SolomachineTimeoutUnorderedPacketPayload, Chain::Error> {
-        let commitment_bytes = packet_commitment_bytes(packet);
-
-        let commitment_path = CommitmentsPath {
-            port_id: packet.source_port.clone(),
-            channel_id: packet.source_channel.clone(),
-            sequence: packet.sequence,
-        };
-
-        let commitment_path = commitment_path.to_string();
-
-        let packet_commitment_data = PacketCommitmentData {
-            path: commitment_path.as_bytes().to_vec(),
-            commitment: commitment_bytes,
-        };
-
-        let packet_commitment_data_bytes = encode_protobuf(&packet_commitment_data)
-            .map_err(BaseError::encode)
-            .unwrap();
-
-        let new_diversifier = self.chain.current_diversifier();
-        let secret_key = self.chain.secret_key();
-        let consensus_timestamp = client_state.consensus_state.timestamp;
-
-        let sign_data = SolomachineSignData {
-            sequence: u64::from(packet.sequence),
-            timestamp: consensus_timestamp,
-            diversifier: new_diversifier,
-            data: packet_commitment_data_bytes,
-            path: commitment_path.into_bytes(),
-        };
-
-        let proof = sign_with_data(secret_key, &sign_data).map_err(Chain::encode_error)?;
-
-        let payload = SolomachineTimeoutUnorderedPacketPayload {
-            update_height: *height,
-            proof_unreceived: proof,
-        };
-
-        Ok(payload)
+        <BuildSolomachineTimeoutPacketPayload as TimeoutUnorderedPacketPayloadBuilder<Self, Self>>::
+            build_timeout_unordered_packet_payload(self, client_state, height, packet).await
     }
 
     async fn build_create_client_payload(
         &self,
         create_client_options: &(),
     ) -> Result<SolomachineCreateClientPayload, Chain::Error> {
-        let public_key = self.chain.public_key().clone();
-        let diversifier = self.chain.current_diversifier();
-        let timestamp = self.chain.current_time();
-
-        let consensus_state = SolomachineConsensusState {
-            public_key: Some(public_key),
-            diversifier,
-            timestamp,
-        };
-
-        let client_state = SolomachineClientState {
-            sequence: 1,
-            is_frozen: false,
-            consensus_state,
-        };
-
-        let payload = SolomachineCreateClientPayload { client_state };
-
-        Ok(payload)
+        <BuildSolomachineCreateClientPayload as CreateClientPayloadBuilder<
+            Self,
+            Self,
+        >>::build_create_client_payload(self, create_client_options).await
     }
 
     async fn build_update_client_payload(
@@ -436,42 +383,10 @@ where
         target_height: &Height,
         client_state: SolomachineClientState,
     ) -> Result<SolomachineUpdateClientPayload, Chain::Error> {
-        // TODO: check that the public key is the same in the consensus state.
-        // We currently only support updating the diversifier but not the public key.
-
-        let public_key = self.chain.public_key();
-        let current_diversifier = &client_state.consensus_state.diversifier;
-
-        let next_diversifier = self.chain.current_diversifier();
-
-        // TODO: check that current time is greater than or equal to the consensus state time.
-        let timestamp = self.chain.current_time();
-
-        let header_data = SolomachineHeaderData {
-            new_public_key: public_key.clone(),
-            new_diversifier: next_diversifier,
-        };
-
-        let sign_data = SolomachineSignHeaderData {
-            header_data,
-            sequence: client_state.sequence,
-            timestamp,
-            diversifier: current_diversifier.clone(),
-        };
-
-        let secret_key = self.chain.secret_key();
-
-        let signature = sign_header_data(secret_key, &sign_data).map_err(Chain::encode_error)?;
-
-        let header = SolomachineHeader {
-            timestamp,
-            signature,
-            header_data: sign_data.header_data,
-        };
-
-        let payload = SolomachineUpdateClientPayload { header };
-
-        Ok(payload)
+        <BuildSolomachineUpdateClientPayload as UpdateClientPayloadBuilder<
+            Self,
+            Self,
+        >>::build_update_client_payload(self, trusted_height, target_height, client_state).await
     }
 
     async fn build_connection_open_init_payload(
@@ -544,39 +459,10 @@ where
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenTryPayload, Chain::Error> {
-        let channel = self.chain.query_channel(channel_id, port_id).await?;
-
-        if channel.state != State::Init {
-            return Err(Chain::invalid_channel_state_error(
-                State::Init,
-                channel.state,
-            ));
-        }
-
-        let ordering = *channel.ordering();
-        let connection_hops = channel.connection_hops().clone();
-        let version = channel.version().clone();
-
-        let commitment_prefix = self.chain.commitment_prefix();
-
-        let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
-                .map_err(Chain::encode_error)?;
-
-        let secret_key = self.chain.secret_key();
-
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
-
-        let payload = SolomachineChannelOpenTryPayload {
-            ordering,
-            connection_hops,
-            version,
-            update_height: *height,
-            proof_init: channel_proof,
-        };
-
-        Ok(payload)
+        <BuildSolomachineChannelHandshakePayloads as ChannelHandshakePayloadBuilder<
+            Self,
+            Self,
+        >>::build_channel_open_try_payload(self, client_state, height, port_id, channel_id).await
     }
 
     async fn build_channel_open_ack_payload(
@@ -586,35 +472,10 @@ where
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenAckPayload, Chain::Error> {
-        let channel = self.chain.query_channel(channel_id, port_id).await?;
-
-        if channel.state != State::TryOpen {
-            return Err(Chain::invalid_channel_state_error(
-                State::TryOpen,
-                channel.state,
-            ));
-        }
-
-        let version = channel.version().clone();
-
-        let commitment_prefix = self.chain.commitment_prefix();
-
-        let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
-                .map_err(Chain::encode_error)?;
-
-        let secret_key = self.chain.secret_key();
-
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
-
-        let payload = SolomachineChannelOpenAckPayload {
-            version,
-            update_height: *height,
-            proof_try: channel_proof,
-        };
-
-        Ok(payload)
+        <BuildSolomachineChannelHandshakePayloads as ChannelHandshakePayloadBuilder<
+            Self,
+            Self,
+        >>::build_channel_open_ack_payload(self, client_state, height, port_id, channel_id).await
     }
 
     async fn build_channel_open_confirm_payload(
@@ -624,32 +485,10 @@ where
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenConfirmPayload, Chain::Error> {
-        let channel = self.chain.query_channel(channel_id, port_id).await?;
-
-        if channel.state != State::Open {
-            return Err(Chain::invalid_channel_state_error(
-                State::Open,
-                channel.state,
-            ));
-        }
-
-        let commitment_prefix = self.chain.commitment_prefix();
-
-        let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
-                .map_err(Chain::encode_error)?;
-
-        let secret_key = self.chain.secret_key();
-
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
-
-        let payload = SolomachineChannelOpenConfirmPayload {
-            update_height: *height,
-            proof_ack: channel_proof,
-        };
-
-        Ok(payload)
+        <BuildSolomachineChannelHandshakePayloads as ChannelHandshakePayloadBuilder<
+            Self,
+            Self,
+        >>::build_channel_open_confirm_payload(self, client_state, height, port_id, channel_id).await
     }
 }
 

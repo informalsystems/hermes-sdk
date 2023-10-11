@@ -5,7 +5,7 @@ use ibc_relayer_components::chain::traits::types::client_state::HasClientStateTy
 use ibc_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, HasCreateClientPayload,
+    HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::height::HasHeightType;
@@ -163,6 +163,13 @@ where
     Chain: Async,
 {
     type ConsensusState = SolomachineConsensusState;
+}
+
+impl<Chain, Counterparty> HasCreateClientOptions<Counterparty> for SolomachineChain<Chain>
+where
+    Chain: Async,
+{
+    type CreateClientPayloadOptions = ();
 }
 
 impl<Chain, Counterparty> HasCreateClientPayload<Counterparty> for SolomachineChain<Chain>
