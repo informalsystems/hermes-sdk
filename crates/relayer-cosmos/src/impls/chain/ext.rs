@@ -1,6 +1,6 @@
 use cgp_core::Async;
 use http::Uri;
-use tendermint_rpc::HttpClient;
+use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::transaction::CosmosTxContext;
@@ -34,5 +34,9 @@ where
 {
     fn rpc_client(&self) -> &HttpClient {
         &self.tx_context.rpc_client
+    }
+
+    fn rpc_address(&self) -> &Url {
+        &self.tx_context.tx_config.rpc_address
     }
 }

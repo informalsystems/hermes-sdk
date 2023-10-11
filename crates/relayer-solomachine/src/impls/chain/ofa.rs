@@ -1,11 +1,12 @@
 use alloc::sync::Arc;
 use async_trait::async_trait;
-use ibc_relayer::chain::cosmos::query::abci_query;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
+use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
+use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
@@ -50,8 +51,6 @@ use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
-use ibc_relayer_types::core::ics24_host::path::{ClientConsensusStatePath, ClientStatePath};
-use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::tx_msg::Msg;
@@ -60,6 +59,8 @@ use sha2::{Digest, Sha256};
 
 use crate::impls::chain::components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
+use crate::impls::chain::components::cosmos::query_client_state::QuerySolomachineClientStateFromCosmos;
+use crate::impls::chain::components::cosmos::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::components::create_client_payload::BuildSolomachineCreateClientPayload;
 use crate::impls::chain::components::process_message::ProcessSolomachineMessages;
 use crate::impls::chain::components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
@@ -69,8 +70,8 @@ use crate::methods::encode::header::encode_header;
 use crate::methods::encode::sign_data::timestamped_sign_data_to_bytes;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
-use crate::types::client_state::{decode_client_state, SolomachineClientState};
-use crate::types::consensus_state::{decode_client_consensus_state, SolomachineConsensusState};
+use crate::types::client_state::SolomachineClientState;
+use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };
@@ -853,23 +854,11 @@ where
         &self,
         client_id: &ClientId,
     ) -> Result<SolomachineClientState, CosmosError> {
-        let data = ClientStatePath(client_id.clone());
-        let query_height = self.handle.query_latest_height().unwrap();
-
-        let response = abci_query(
-            &self.tx_context.rpc_client,
-            &self.tx_context.tx_config.rpc_address,
-            IBC_QUERY_PATH.to_string(),
-            data.to_string(),
-            query_height.into(),
-            true,
-        )
+        <QuerySolomachineClientStateFromCosmos as ClientStateQuerier<
+            CosmosChain<Chain>,
+            SolomachineChain<Counterparty>,
+        >>::query_client_state(self, client_id)
         .await
-        .unwrap();
-
-        let client_state = decode_client_state(response.value.as_slice());
-
-        Ok(client_state)
     }
 
     async fn query_consensus_state(
@@ -877,27 +866,11 @@ where
         client_id: &ClientId,
         height: &Height,
     ) -> Result<SolomachineConsensusState, CosmosError> {
-        let data = ClientConsensusStatePath {
-            client_id: client_id.clone(),
-            epoch: height.revision_number(),
-            height: height.revision_height(),
-        };
-        let _query_height = self.handle.query_latest_height().unwrap();
-
-        let response = abci_query(
-            &self.tx_context.rpc_client,
-            &self.tx_context.tx_config.rpc_address,
-            IBC_QUERY_PATH.to_string(),
-            data.to_string(),
-            (*height).into(),
-            false,
-        )
+        <QuerySolomachineConsensusStateFromCosmos as ConsensusStateQuerier<
+            CosmosChain<Chain>,
+            SolomachineChain<Counterparty>,
+        >>::query_consensus_state(self, client_id, height)
         .await
-        .unwrap();
-
-        let client_consensus_state = decode_client_consensus_state(response.value.as_slice());
-
-        Ok(client_consensus_state)
     }
 
     async fn find_consensus_state_height_before(
