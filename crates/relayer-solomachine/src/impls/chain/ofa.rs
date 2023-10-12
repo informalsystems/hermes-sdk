@@ -3,10 +3,6 @@ use alloc::sync::Arc;
 use async_trait::async_trait;
 use ibc_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use ibc_cosmos_client_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
-use ibc_cosmos_client_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
-use ibc_cosmos_client_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
-use ibc_cosmos_client_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
 use ibc_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
 use ibc_cosmos_client_components::types::messages::client::update::CosmosUpdateClientMessage;
 use ibc_cosmos_client_components::types::payloads::channel::{
@@ -28,6 +24,7 @@ use ibc_cosmos_client_components::types::tendermint::{
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_all_in_one::one_for_all::traits::chain::{OfaChain, OfaChainTypes, OfaIbcChain};
+use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
@@ -48,9 +45,6 @@ use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_runtime::types::error::Error as RuntimeError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use ibc_relayer_types::core::ics04_channel::channel::{
-    ChannelEnd, Counterparty as ChannelCounterparty, State,
-};
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;
 use ibc_relayer_types::core::ics24_host::identifier::{
@@ -60,6 +54,7 @@ use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::tx_msg::Msg;
 use ibc_relayer_types::Height;
 
+use crate::impls::chain::cosmos_components::channel_handshake_message::BuildSolomachineChannelHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::query_client_state::QuerySolomachineClientStateFromCosmos;
 use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
@@ -1034,25 +1029,16 @@ where
         counterparty_port_id: &PortId,
         init_channel_options: &CosmosInitChannelOptions,
     ) -> Result<Arc<dyn CosmosMessage>, CosmosError> {
-        let ordering = init_channel_options.ordering;
-        let connection_hops = init_channel_options.connection_hops.clone();
-        let channel_version = init_channel_options.channel_version.clone();
-        let counterparty = ChannelCounterparty::new(counterparty_port_id.clone(), None);
-
-        let channel = ChannelEnd::new(
-            State::Init,
-            ordering,
-            counterparty,
-            connection_hops,
-            channel_version,
-        );
-
-        let message = CosmosChannelOpenInitMessage {
-            port_id: port_id.clone(),
-            channel,
-        };
-
-        Ok(message.to_cosmos_message())
+        <BuildSolomachineChannelHandshakeMessagesForCosmos as ChannelHandshakeMessageBuilder<
+            Self,
+            SolomachineChain<Counterparty>,
+        >>::build_channel_open_init_message(
+            self,
+            port_id,
+            counterparty_port_id,
+            init_channel_options,
+        )
+        .await
     }
 
     async fn build_channel_open_try_message(
@@ -1062,32 +1048,17 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenTryPayload,
     ) -> Result<Arc<dyn CosmosMessage>, CosmosError> {
-        let proof_init = Vec::from(counterparty_payload.proof_init.serialize_compact())
-            .try_into()
-            .map_err(CosmosBaseError::proofs)?;
-
-        let counterparty = ChannelCounterparty::new(
-            counterparty_port_id.clone(),
-            Some(counterparty_channel_id.clone()),
-        );
-
-        let channel = ChannelEnd::new(
-            State::TryOpen,
-            counterparty_payload.ordering,
-            counterparty,
-            counterparty_payload.connection_hops,
-            counterparty_payload.version.clone(),
-        );
-
-        let message = CosmosChannelOpenTryMessage {
-            port_id: port_id.clone(),
-            channel,
-            counterparty_version: counterparty_payload.version,
-            update_height: counterparty_payload.update_height,
-            proof_init,
-        };
-
-        Ok(message.to_cosmos_message())
+        <BuildSolomachineChannelHandshakeMessagesForCosmos as ChannelHandshakeMessageBuilder<
+            Self,
+            SolomachineChain<Counterparty>,
+        >>::build_channel_open_try_message(
+            self,
+            port_id,
+            counterparty_port_id,
+            counterparty_channel_id,
+            counterparty_payload,
+        )
+        .await
     }
 
     async fn build_channel_open_ack_message(
@@ -1097,20 +1068,17 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenAckPayload,
     ) -> Result<Arc<dyn CosmosMessage>, CosmosError> {
-        let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact())
-            .try_into()
-            .map_err(CosmosBaseError::proofs)?;
-
-        let message = CosmosChannelOpenAckMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            counterparty_channel_id: counterparty_channel_id.clone(),
-            counterparty_version: counterparty_payload.version,
-            update_height: counterparty_payload.update_height,
-            proof_try,
-        };
-
-        Ok(message.to_cosmos_message())
+        <BuildSolomachineChannelHandshakeMessagesForCosmos as ChannelHandshakeMessageBuilder<
+            Self,
+            SolomachineChain<Counterparty>,
+        >>::build_channel_open_ack_message(
+            self,
+            port_id,
+            channel_id,
+            counterparty_channel_id,
+            counterparty_payload,
+        )
+        .await
     }
 
     async fn build_channel_open_confirm_message(
@@ -1119,17 +1087,12 @@ where
         channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenConfirmPayload,
     ) -> Result<Arc<dyn CosmosMessage>, CosmosError> {
-        let proof_ack = Vec::from(counterparty_payload.proof_ack.serialize_compact())
-            .try_into()
-            .map_err(CosmosBaseError::proofs)?;
-
-        let message = CosmosChannelOpenConfirmMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            update_height: counterparty_payload.update_height,
-            proof_ack,
-        };
-
-        Ok(message.to_cosmos_message())
+        <BuildSolomachineChannelHandshakeMessagesForCosmos as ChannelHandshakeMessageBuilder<
+            Self,
+            SolomachineChain<Counterparty>,
+        >>::build_channel_open_confirm_message(
+            self, port_id, channel_id, counterparty_payload
+        )
+        .await
     }
 }
