@@ -14,9 +14,9 @@ use prost::Message;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
-use crate::traits::message::CosmosMessage;
 use crate::types::error::{BaseError, Error};
-use crate::types::tendermint::TendermintClientState;
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
+use ibc_cosmos_client_components::types::tendermint::TendermintClientState;
 
 impl<Chain> CanIncrementHeight for CosmosChain<Chain>
 where

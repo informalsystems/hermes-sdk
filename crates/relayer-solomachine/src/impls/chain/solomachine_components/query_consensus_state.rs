@@ -1,8 +1,8 @@
 use async_trait::async_trait;
+use ibc_cosmos_client_components::types::tendermint::TendermintConsensusState;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_cosmos::types::tendermint::TendermintConsensusState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 

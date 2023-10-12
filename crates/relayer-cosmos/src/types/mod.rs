@@ -1,10 +1,3 @@
 pub mod batch;
-pub mod channel;
-pub mod connection;
 pub mod error;
-pub mod events;
-pub mod messages;
-pub mod packet_lock;
-pub mod payloads;
 pub mod telemetry;
-pub mod tendermint;

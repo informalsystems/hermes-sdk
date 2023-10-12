@@ -1,9 +1,11 @@
 #![allow(non_snake_case)]
 
+use ibc_cosmos_client_components::methods::encode::{
+    encode_any_to_bytes, encode_protobuf, encode_to_any,
+};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::google::protobuf::Any;
-use ibc_relayer_cosmos::methods::encode::{encode_any_to_bytes, encode_protobuf, encode_to_any};
 use prost::{EncodeError, Message};
 use secp256k1::ecdsa::Signature;
 use secp256k1::SecretKey;

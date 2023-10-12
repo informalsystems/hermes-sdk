@@ -1,6 +1,6 @@
 [package]
-name         = "ibc-relayer-solomachine"
-version      = "0.25.0"
+name         = "ibc-cosmos-client-components"
+version      = "0.1.0"
 edition      = "2021"
 license      = "Apache-2.0"
 readme       = "README.md"
@@ -8,7 +8,9 @@ keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
 repository   = "https://github.com/informalsystems/ibc-rs"
 authors      = ["Informal Systems <hello@informal.systems>"]
 rust-version = "1.72"
-description  = "An IBC relayer for relaying between Cosmos and Solomachin clients."
+description  = """
+    Implementation of an IBC Relayer in Rust, as a library
+"""
 
 [package.metadata.docs.rs]
 all-features = true
@@ -22,12 +24,11 @@ ibc-relayer       = { version = "0.25.0" }
 ibc-relayer-types = { version = "0.25.0" }
 ibc-telemetry     = { version = "0.25.0" }
 cgp-core = { version = "0.1.0" }
-ibc-relayer-cosmos = { version = "0.25.0" }
-ibc-cosmos-client-components = { version = "0.1.0" }
 ibc-relayer-runtime = { version = "0.1.0" }
 ibc-relayer-all-in-one = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0" }
 ibc-relayer-components-extra = { version = "0.1.0" }
+ibc-relayer-subscription = { version = "0.1.0" }
 
 serde = "1.0"
 serde_derive = "1.0"
@@ -39,10 +40,10 @@ tokio = "1.24"
 itertools = "0.10.3"
 futures = "0.3"
 tracing = "0.1.36"
-secp256k1 = "0.27.0"
-sha2 = "0.10.7"
-crypto-hash = "0.3.4"
-bytes = { version = "1.4.0" }
+http = "0.2.9"
+opentelemetry = { version = "0.17.0", features = ["metrics"] }
+tonic = { version = "0.9", features = ["tls", "tls-roots"] }
+moka = { version = "0.11", features = ["future"] }
 
 [dependencies.tendermint]
 version = "0.33.2"
@@ -51,3 +52,4 @@ features = ["secp256k1"]
 [dependencies.tendermint-rpc]
 version = "0.33.2"
 features = ["http-client", "websocket-client"]
+

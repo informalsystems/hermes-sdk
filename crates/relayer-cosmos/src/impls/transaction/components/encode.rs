@@ -11,8 +11,8 @@ use ibc_relayer_components::transaction::traits::components::tx_encoder::TxEncod
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;
-use crate::traits::message::CosmosMessage;
 use crate::types::error::{BaseError, Error};
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
 
 #[async_trait]
 impl TxEncoder<CosmosTxContext> for CosmosTxComponents {

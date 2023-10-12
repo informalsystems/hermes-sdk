@@ -1,8 +1,8 @@
+use ibc_cosmos_client_components::methods::encode::encode_protobuf;
+use ibc_cosmos_client_components::types::tendermint::TendermintConsensusState;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::lightclients::tendermint::v1::ConsensusState as ProtoConsensusState;
-use ibc_relayer_cosmos::methods::encode::encode_protobuf;
-use ibc_relayer_cosmos::types::tendermint::TendermintConsensusState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 use prost::EncodeError;

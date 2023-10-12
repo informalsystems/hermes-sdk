@@ -2,6 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use std::collections::HashMap;
 
+use crate::types::telemetry::CosmosTelemetry;
 use eyre::eyre;
 use futures::lock::Mutex;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
@@ -22,7 +23,6 @@ use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::error::{BaseError, Error};
-use crate::types::telemetry::CosmosTelemetry;
 
 pub struct CosmosBuilder {
     pub config: Config,

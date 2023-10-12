@@ -15,14 +15,16 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, Conne
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
-use crate::methods::event::{
+use ibc_cosmos_client_components::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
 };
-use crate::types::events::channel::{CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent};
-use crate::types::events::client::CosmosCreateClientEvent;
-use crate::types::events::connection::{
+use ibc_cosmos_client_components::types::events::channel::{
+    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
+};
+use ibc_cosmos_client_components::types::events::client::CosmosCreateClientEvent;
+use ibc_cosmos_client_components::types::events::connection::{
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
 };
 

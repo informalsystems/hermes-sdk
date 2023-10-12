@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
+use ibc_cosmos_client_components::methods::encode::encode_to_any;
 use ibc_proto::google::protobuf::Any;
-use ibc_relayer_cosmos::methods::encode::encode_to_any;
 use prost::{EncodeError, Message};
 
 use crate::methods::encode::consensus_state::{to_proto_consensus_state, ProtoConsensusState};

@@ -1,7 +1,7 @@
+use ibc_cosmos_client_components::methods::encode::encode_protobuf;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::core::connection::v1::ConnectionEnd as ProtoConnectionEnd;
-use ibc_relayer_cosmos::methods::encode::encode_protobuf;
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use prost::EncodeError;

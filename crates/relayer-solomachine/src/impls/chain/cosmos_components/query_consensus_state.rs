@@ -1,11 +1,11 @@
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
+use ibc_cosmos_client_components::traits::rpc_client::HasRpcClient;
 use ibc_relayer::chain::cosmos::query::abci_query;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_cosmos::traits::rpc_client::HasRpcClient;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::core::ics24_host::path::ClientConsensusStatePath;
 use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;

@@ -1718,6 +1718,38 @@ dependencies = [
 ]
 
 [[package]]
+name = "ibc-cosmos-client-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "http",
+ "ibc-proto 0.34.1",
+ "ibc-relayer",
+ "ibc-relayer-all-in-one",
+ "ibc-relayer-components",
+ "ibc-relayer-components-extra",
+ "ibc-relayer-runtime",
+ "ibc-relayer-subscription",
+ "ibc-relayer-types",
+ "ibc-telemetry",
+ "itertools",
+ "moka",
+ "opentelemetry 0.17.0",
+ "prost",
+ "serde",
+ "serde_derive",
+ "tendermint 0.33.2",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
 name = "ibc-derive"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1735,6 +1767,7 @@ version = "0.25.0"
 dependencies = [
  "cgp-core",
  "http",
+ "ibc-cosmos-client-components",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
  "ibc-relayer-components",
@@ -1884,6 +1917,7 @@ dependencies = [
  "flex-error",
  "futures",
  "http",
+ "ibc-cosmos-client-components",
  "ibc-proto 0.34.1",
  "ibc-relayer",
  "ibc-relayer-all-in-one",
@@ -1975,6 +2009,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
+ "ibc-cosmos-client-components",
  "ibc-proto 0.34.1",
  "ibc-relayer",
  "ibc-relayer-all-in-one",

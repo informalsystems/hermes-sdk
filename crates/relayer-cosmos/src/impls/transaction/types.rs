@@ -23,8 +23,8 @@ use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::contexts::transaction::CosmosTxContext;
-use crate::traits::message::CosmosMessage;
 use crate::types::error::{BaseError, Error};
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
 
 impl HasErrorType for CosmosTxContext {
     type Error = Error;

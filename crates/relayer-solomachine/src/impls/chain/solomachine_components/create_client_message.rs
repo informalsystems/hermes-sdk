@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
+use ibc_cosmos_client_components::types::payloads::client::CosmosCreateClientPayload;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
 use ibc_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_cosmos::types::payloads::client::CosmosCreateClientPayload;
 
 use crate::types::message::SolomachineMessage;
 

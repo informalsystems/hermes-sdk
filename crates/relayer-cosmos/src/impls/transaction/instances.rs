@@ -7,8 +7,8 @@ use ibc_relayer_components::chain::traits::components::message_sender::{
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::transaction::CosmosTxContext;
-use crate::traits::message::CosmosMessage;
 use crate::types::error::Error;
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
 
 pub struct CosmosTxInstances;
 

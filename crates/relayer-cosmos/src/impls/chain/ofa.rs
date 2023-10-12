@@ -49,58 +49,64 @@ use prost::Message as _;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
-use crate::impls::chain::components::ack_packet_message::BuildCosmosAckPacketMessage;
-use crate::impls::chain::components::ack_packet_payload::BuildCosmosAckPacketPayload;
-use crate::impls::chain::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-use crate::impls::chain::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
-use crate::impls::chain::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
-use crate::impls::chain::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
-use crate::impls::chain::components::create_client_message::BuildCosmosCreateClientMessage;
-use crate::impls::chain::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
-use crate::impls::chain::components::query_chain_id::QueryChainIdWithChainHandle;
-use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
-use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
-use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
-use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
-use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
-use crate::impls::chain::components::query_received_packet::QueryReceivedPacketWithChainHandle;
-use crate::impls::chain::components::query_send_packets::QuerySendPacketsConcurrently;
-use crate::impls::chain::components::query_unreceived_packet::QueryUnreceivedCosmosPacketSequences;
-use crate::impls::chain::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
-use crate::impls::chain::components::receive_packet_message::BuildCosmosReceivePacketMessage;
-use crate::impls::chain::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
-use crate::impls::chain::components::send_messages_as_tx::SendMessagesToTxContext;
-use crate::impls::chain::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
-use crate::impls::chain::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
-use crate::impls::chain::components::update_client_message::BuildCosmosUpdateClientMessage;
-use crate::impls::chain::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
-use crate::methods::event::{
+use crate::types::error::{BaseError, Error};
+use crate::types::telemetry::CosmosTelemetry;
+use ibc_cosmos_client_components::components::ack_packet_message::BuildCosmosAckPacketMessage;
+use ibc_cosmos_client_components::components::ack_packet_payload::BuildCosmosAckPacketPayload;
+use ibc_cosmos_client_components::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
+use ibc_cosmos_client_components::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
+use ibc_cosmos_client_components::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
+use ibc_cosmos_client_components::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
+use ibc_cosmos_client_components::components::create_client_message::BuildCosmosCreateClientMessage;
+use ibc_cosmos_client_components::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
+use ibc_cosmos_client_components::components::query_chain_id::QueryChainIdWithChainHandle;
+use ibc_cosmos_client_components::components::query_chain_status::QueryChainStatusWithChainHandle;
+use ibc_cosmos_client_components::components::query_client_state::QueryCosmosClientStateFromChainHandle;
+use ibc_cosmos_client_components::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
+use ibc_cosmos_client_components::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
+use ibc_cosmos_client_components::components::query_packet_commitments::QueryCosmosPacketCommitments;
+use ibc_cosmos_client_components::components::query_received_packet::QueryReceivedPacketWithChainHandle;
+use ibc_cosmos_client_components::components::query_send_packets::QuerySendPacketsConcurrently;
+use ibc_cosmos_client_components::components::query_unreceived_packet::QueryUnreceivedCosmosPacketSequences;
+use ibc_cosmos_client_components::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
+use ibc_cosmos_client_components::components::receive_packet_message::BuildCosmosReceivePacketMessage;
+use ibc_cosmos_client_components::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
+use ibc_cosmos_client_components::components::send_messages_as_tx::SendMessagesToTxContext;
+use ibc_cosmos_client_components::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
+use ibc_cosmos_client_components::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
+use ibc_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
+use ibc_cosmos_client_components::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
+use ibc_cosmos_client_components::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
 };
-use crate::traits::message::CosmosMessage;
-use crate::types::channel::CosmosInitChannelOptions;
-use crate::types::connection::CosmosInitConnectionOptions;
-use crate::types::error::{BaseError, Error};
-use crate::types::events::channel::{CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent};
-use crate::types::events::client::CosmosCreateClientEvent;
-use crate::types::events::connection::{
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
+use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use ibc_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use ibc_cosmos_client_components::types::events::channel::{
+    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
+};
+use ibc_cosmos_client_components::types::events::client::CosmosCreateClientEvent;
+use ibc_cosmos_client_components::types::events::connection::{
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
 };
-use crate::types::payloads::channel::{
+use ibc_cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
-use crate::types::payloads::connection::{
+use ibc_cosmos_client_components::types::payloads::client::{
+    CosmosCreateClientPayload, CosmosUpdateClientPayload,
+};
+use ibc_cosmos_client_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };
-use crate::types::payloads::packet::{
+use ibc_cosmos_client_components::types::payloads::packet::{
     CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
 };
-use crate::types::telemetry::CosmosTelemetry;
-use crate::types::tendermint::{TendermintClientState, TendermintConsensusState};
+use ibc_cosmos_client_components::types::tendermint::{
+    TendermintClientState, TendermintConsensusState,
+};
 
 #[async_trait]
 impl<Chain> OfaChainTypes for CosmosChain<Chain>
