@@ -23,8 +23,8 @@ ibc-relayer-types = { version = "0.25.0" }
 ibc-telemetry     = { version = "0.25.0" }
 cgp-core = { version = "0.1.0" }
 ibc-relayer-cosmos = { version = "0.25.0" }
+ibc-cosmos-client-components = { version = "0.1.0" }
 ibc-relayer-runtime = { version = "0.1.0" }
-ibc-relayer-all-in-one = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0" }
 ibc-relayer-components-extra = { version = "0.1.0" }
 

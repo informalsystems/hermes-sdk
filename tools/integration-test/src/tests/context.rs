@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::Config;
-use ibc_relayer_all_in_one::all_for_one::builder::CanBuildAfoBiRelay;
+use ibc_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use ibc_relayer_cosmos::contexts::birelay::CosmosBiRelay;
 use ibc_relayer_cosmos::contexts::builder::CosmosBuilder;
 use ibc_test_framework::error::{handle_generic_error, Error};
@@ -55,7 +55,7 @@ where
     let builder = new_cosmos_builder(config, chains, packet_filter)?;
 
     let birelay = runtime
-        .block_on(builder.build_afo_birelay(
+        .block_on(builder.build_birelay(
             chains.chain_id_a().value(),
             chains.chain_id_b().value(),
             chains.client_id_a().value(),

@@ -1,5 +1,25 @@
 use alloc::sync::Arc;
+
 use cgp_core::{Async, HasErrorType};
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
+use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use ibc_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use ibc_cosmos_client_components::types::payloads::channel::{
+    CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
+};
+use ibc_cosmos_client_components::types::payloads::client::{
+    CosmosCreateClientPayload, CosmosUpdateClientPayload,
+};
+use ibc_cosmos_client_components::types::payloads::connection::{
+    CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
+    CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
+};
+use ibc_cosmos_client_components::types::payloads::packet::{
+    CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
+};
+use ibc_cosmos_client_components::types::tendermint::{
+    TendermintClientState, TendermintConsensusState,
+};
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
@@ -40,24 +60,8 @@ use ibc_relayer_types::Height;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
-use crate::traits::message::CosmosMessage;
-use crate::types::channel::CosmosInitChannelOptions;
-use crate::types::connection::CosmosInitConnectionOptions;
 use crate::types::error::{BaseError, Error};
-use crate::types::payloads::channel::{
-    CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
-};
-use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
-use crate::types::payloads::connection::{
-    CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
-    CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
-};
-use crate::types::payloads::packet::{
-    CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
-};
 use crate::types::telemetry::CosmosTelemetry;
-use crate::types::tendermint::TendermintClientState;
-use crate::types::tendermint::TendermintConsensusState;
 
 impl<Chain> HasErrorType for CosmosChain<Chain>
 where

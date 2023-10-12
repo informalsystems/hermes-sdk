@@ -11,12 +11,11 @@ use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTar
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
+use crate::batch::types::sink::BatchWorkerSink;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 use crate::components::extra::relay::ExtraRelayComponents;
 use crate::runtime::traits::channel::CanUseChannels;
 use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
-
-use crate::batch::types::sink::BatchWorkerSink;
 
 pub trait UseExtraIbcMessageSender:
     CanSendIbcMessages<MainSink, SourceTarget>

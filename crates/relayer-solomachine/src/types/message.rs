@@ -1,10 +1,10 @@
-use ibc_relayer_cosmos::types::payloads::channel::{
+use ibc_cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-use ibc_relayer_cosmos::types::payloads::client::{
+use ibc_cosmos_client_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use ibc_relayer_cosmos::types::payloads::connection::{
+use ibc_cosmos_client_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };

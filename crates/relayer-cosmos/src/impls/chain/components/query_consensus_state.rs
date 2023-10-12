@@ -1,59 +1,39 @@
 use async_trait::async_trait;
-use cgp_core::CanRaiseError;
-use eyre::eyre;
+use cgp_core::DelegateComponent;
+use ibc_cosmos_client_components::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{IncludeProof, QueryConsensusStateRequest, QueryHeight};
-use ibc_relayer::consensus_state::AnyConsensusState;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use ibc_relayer_types::Height;
 
-use crate::traits::chain_handle::HasBlockingChainHandle;
-use crate::types::tendermint::TendermintConsensusState;
+use crate::contexts::chain::CosmosChain;
+use crate::types::error::Error;
 
-pub struct QueryCosmosConsensusStateFromChainHandle;
+pub struct DelegateCosmosConsensusStateQuerier;
 
 #[async_trait]
-impl<Chain, Counterparty> ConsensusStateQuerier<Chain, Counterparty>
-    for QueryCosmosConsensusStateFromChainHandle
+impl<Chain, Counterparty, Delegate> ConsensusStateQuerier<CosmosChain<Chain>, Counterparty>
+    for DelegateCosmosConsensusStateQuerier
 where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + HasBlockingChainHandle
-        + CanRaiseError<eyre::Report>,
-    Counterparty: HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
-        + HasHeightType<Height = Height>,
+    Chain: ChainHandle,
+    Counterparty: HasConsensusStateType<CosmosChain<Chain>> + HasHeightType,
+    Delegate: ConsensusStateQuerier<CosmosChain<Chain>, Counterparty>,
+    Self: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
     async fn query_consensus_state(
-        chain: &Chain,
+        chain: &CosmosChain<Chain>,
         client_id: &ClientId,
-        height: &Height,
-    ) -> Result<TendermintConsensusState, Chain::Error> {
-        let client_id = client_id.clone();
-        let height = *height;
-
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let (any_consensus_state, _) = chain_handle
-                    .query_consensus_state(
-                        QueryConsensusStateRequest {
-                            client_id: client_id.clone(),
-                            consensus_height: height,
-                            query_height: QueryHeight::Latest,
-                        },
-                        IncludeProof::No,
-                    )
-                    .map_err(Chain::raise_error)?;
-
-                match any_consensus_state {
-                    AnyConsensusState::Tendermint(consensus_state) => Ok(consensus_state),
-                    _ => Err(Chain::raise_error(eyre!(
-                        "expected tendermint consensus state"
-                    ))),
-                }
-            })
-            .await
+        height: &Counterparty::Height,
+    ) -> Result<Counterparty::ConsensusState, Error> {
+        Delegate::query_consensus_state(chain, client_id, height).await
     }
+}
+
+impl<Counterparty> DelegateComponent<CosmosChain<Counterparty>>
+    for DelegateCosmosConsensusStateQuerier
+where
+    Counterparty: ChainHandle,
+{
+    type Delegate = QueryCosmosConsensusStateFromChainHandle;
 }
