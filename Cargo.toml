@@ -6,7 +6,6 @@ members = [
     "crates/relayer-components",
     "crates/relayer-components-extra",
     "crates/relayer-subscription",
-    "crates/relayer-all-in-one",
     "crates/relayer-mock",
     "crates/relayer-runtime",
     "crates/cosmos-client-components",
@@ -29,7 +28,6 @@ overflow-checks = true
 ibc-relayer-components          = { path = "./crates/relayer-components" }
 ibc-relayer-components-extra    = { path = "./crates/relayer-components-extra" }
 ibc-relayer-runtime             = { path = "./crates/relayer-runtime" }
-ibc-relayer-all-in-one          = { path = "./crates/relayer-all-in-one" }
 ibc-relayer-subscription        = { path = "./crates/relayer-subscription" }
 ibc-cosmos-client-components    = { path = "./crates/cosmos-client-components" }
 ibc-relayer-cosmos              = { path = "./crates/relayer-cosmos" }

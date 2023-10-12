@@ -1729,19 +1729,13 @@ dependencies = [
  "http",
  "ibc-proto 0.34.1",
  "ibc-relayer",
- "ibc-relayer-all-in-one",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "ibc-relayer-runtime",
  "ibc-relayer-subscription",
  "ibc-relayer-types",
- "ibc-telemetry",
  "itertools",
- "moka",
- "opentelemetry 0.17.0",
  "prost",
- "serde",
- "serde_derive",
  "tendermint 0.33.2",
  "tendermint-rpc",
  "tokio",
@@ -1769,7 +1763,6 @@ dependencies = [
  "http",
  "ibc-cosmos-client-components",
  "ibc-relayer",
- "ibc-relayer-all-in-one",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "ibc-relayer-cosmos",
@@ -1882,17 +1875,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-relayer-all-in-one"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "futures-core",
- "futures-util",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
-]
-
-[[package]]
 name = "ibc-relayer-components"
 version = "0.1.0"
 dependencies = [
@@ -1920,7 +1902,6 @@ dependencies = [
  "ibc-cosmos-client-components",
  "ibc-proto 0.34.1",
  "ibc-relayer",
- "ibc-relayer-all-in-one",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "ibc-relayer-runtime",
@@ -2012,7 +1993,6 @@ dependencies = [
  "ibc-cosmos-client-components",
  "ibc-proto 0.34.1",
  "ibc-relayer",
- "ibc-relayer-all-in-one",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "ibc-relayer-cosmos",
@@ -2107,7 +2087,6 @@ dependencies = [
  "http",
  "ibc-proto 0.34.1",
  "ibc-relayer",
- "ibc-relayer-all-in-one",
  "ibc-relayer-components",
  "ibc-relayer-cosmos",
  "ibc-relayer-types",

@@ -22,16 +22,12 @@ default   = ["flex-error/std", "flex-error/eyre_tracer"]
 ibc-proto         = { version = "0.34.0" }
 ibc-relayer       = { version = "0.25.0" }
 ibc-relayer-types = { version = "0.25.0" }
-ibc-telemetry     = { version = "0.25.0" }
 cgp-core = { version = "0.1.0" }
 ibc-relayer-runtime = { version = "0.1.0" }
-ibc-relayer-all-in-one = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0" }
 ibc-relayer-components-extra = { version = "0.1.0" }
 ibc-relayer-subscription = { version = "0.1.0" }
 
-serde = "1.0"
-serde_derive = "1.0"
 async-trait = "0.1.56"
 flex-error = { version = "0.4.4", default-features = false }
 prost = { version = "0.11" }
@@ -41,9 +37,7 @@ itertools = "0.10.3"
 futures = "0.3"
 tracing = "0.1.36"
 http = "0.2.9"
-opentelemetry = { version = "0.17.0", features = ["metrics"] }
 tonic = { version = "0.9", features = ["tls", "tls-roots"] }
-moka = { version = "0.11", features = ["future"] }
 
 [dependencies.tendermint]
 version = "0.33.2"
