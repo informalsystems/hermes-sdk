@@ -1,0 +1,46 @@
+use alloc::sync::Arc;
+use async_trait::async_trait;
+use cgp_core::HasErrorType;
+use ibc_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use ibc_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
+use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
+use ibc_relayer_components::chain::traits::types::message::HasMessageType;
+use ibc_relayer_cosmos::types::error::Error;
+use ibc_relayer_types::tx_msg::Msg;
+
+use crate::types::payloads::client::SolomachineCreateClientPayload;
+
+pub struct BuildCreateSolomachineClientMessage;
+
+#[async_trait]
+impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
+    for BuildCreateSolomachineClientMessage
+where
+    Chain: HasMessageType<Message = Arc<dyn CosmosMessage>> + HasErrorType<Error = Error>,
+    Counterparty:
+        HasCreateClientPayload<Chain, CreateClientPayload = SolomachineCreateClientPayload>,
+{
+    async fn build_create_client_message(
+        _chain: &Chain,
+        counterparty_payload: SolomachineCreateClientPayload,
+    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+        /*let client_state = encode_client_state(&counterparty_payload.client_state)
+        .map_err(CosmosBaseError::encode)?;*/
+
+        let client_state = counterparty_payload.client_state.clone().to_any();
+
+        /*let consensus_state =
+        encode_consensus_state(&counterparty_payload.client_state.consensus_state)
+            .map_err(CosmosBaseError::encode)?;*/
+
+        let consensus_state = counterparty_payload.client_state.consensus_state.to_any();
+
+        let message = CosmosCreateClientMessage {
+            client_state,
+            consensus_state,
+        };
+
+        Ok(message.to_cosmos_message())
+    }
+}

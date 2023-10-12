@@ -3,7 +3,6 @@ use alloc::sync::Arc;
 use async_trait::async_trait;
 use ibc_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use ibc_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
 use ibc_cosmos_client_components::types::messages::client::update::CosmosUpdateClientMessage;
 use ibc_cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
@@ -51,11 +50,11 @@ use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
 use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::tx_msg::Msg;
 use ibc_relayer_types::Height;
 
 use crate::impls::chain::cosmos_components::channel_handshake_message::BuildSolomachineChannelHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
+use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
 use crate::impls::chain::cosmos_components::query_client_state::QuerySolomachineClientStateFromCosmos;
 use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
@@ -951,23 +950,11 @@ where
         &self,
         counterparty_payload: SolomachineCreateClientPayload,
     ) -> Result<Arc<dyn CosmosMessage>, CosmosError> {
-        /*let client_state = encode_client_state(&counterparty_payload.client_state)
-        .map_err(CosmosBaseError::encode)?;*/
-
-        let client_state = counterparty_payload.client_state.clone().to_any();
-
-        /*let consensus_state =
-        encode_consensus_state(&counterparty_payload.client_state.consensus_state)
-            .map_err(CosmosBaseError::encode)?;*/
-
-        let consensus_state = counterparty_payload.client_state.consensus_state.to_any();
-
-        let message = CosmosCreateClientMessage {
-            client_state,
-            consensus_state,
-        };
-
-        Ok(message.to_cosmos_message())
+        <BuildCreateSolomachineClientMessage as CreateClientMessageBuilder<
+            Self,
+            SolomachineChain<Counterparty>,
+        >>::build_create_client_message(self, counterparty_payload)
+        .await
     }
 
     async fn build_update_client_message(
