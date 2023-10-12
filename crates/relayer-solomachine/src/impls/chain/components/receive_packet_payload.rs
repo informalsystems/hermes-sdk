@@ -5,7 +5,7 @@ use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::path::CommitmentsPath;
 use ibc_relayer_types::Height;
 
-use crate::impls::chain::ofa::packet_commitment_bytes;
+use crate::methods::commitment::packet_commitment_bytes;
 use crate::methods::encode::sign_data::sign_with_data;
 use crate::protobuf::solomachine_v2::PacketCommitmentData;
 use crate::traits::solomachine::Solomachine;
