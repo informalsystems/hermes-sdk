@@ -1,17 +1,25 @@
 use alloc::sync::Arc;
 use async_trait::async_trait;
-use cgp_core::HasErrorType;
+use cgp_core::{DelegateComponent, HasErrorType};
 use ibc_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use ibc_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
 use ibc_relayer_components::chain::traits::types::message::HasMessageType;
+use ibc_relayer_cosmos::impls::chain::components::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use ibc_relayer_cosmos::types::error::Error;
 use ibc_relayer_types::tx_msg::Msg;
 
+use crate::types::chain::SolomachineChain;
 use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildCreateSolomachineClientMessage;
+
+impl<Counterparty> DelegateComponent<SolomachineChain<Counterparty>>
+    for DelegateCosmosCreateClientMessageBuilder
+{
+    type Delegate = BuildCreateSolomachineClientMessage;
+}
 
 #[async_trait]
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>

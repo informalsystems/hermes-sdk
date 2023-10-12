@@ -63,10 +63,10 @@ where
     }
 
     fn src_chain(&self) -> &SolomachineChain<Chain> {
-        &self.src_chain.chain
+        &self.src_chain
     }
 
     fn dst_chain(&self) -> &CosmosChain<BaseChainHandle> {
-        &self.dst_chain.chain
+        &self.dst_chain
     }
 }
