@@ -3,7 +3,6 @@ use ibc_cosmos_client_components::components::ack_packet_message::BuildCosmosAck
 use ibc_cosmos_client_components::components::ack_packet_payload::BuildCosmosAckPacketPayload;
 use ibc_cosmos_client_components::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use ibc_cosmos_client_components::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
-use ibc_cosmos_client_components::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use ibc_cosmos_client_components::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use ibc_cosmos_client_components::components::create_client_message::BuildCosmosCreateClientMessage;
 use ibc_cosmos_client_components::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
@@ -60,6 +59,7 @@ use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents
 use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::impls::chain::components::query_client_state::DelegateCosmosClientStateQuerier;
 use crate::impls::chain::components::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 
@@ -111,7 +111,7 @@ delegate_components!(
     ChannelHandshakePayloadBuilderComponent:
         BuildCosmosChannelHandshakePayload,
     ConnectionHandshakeMessageBuilderComponent:
-        BuildCosmosConnectionHandshakeMessage,
+        DelegateCosmosConnectionHandshakeBuilder,
     ChannelHandshakeMessageBuilderComponent:
         BuildCosmosChannelHandshakeMessage,
     PacketCommitmentsQuerierComponent:

@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 use async_trait::async_trait;
-use cgp_core::HasErrorType;
+use cgp_core::{DelegateComponent, HasErrorType};
 use ibc_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use ibc_cosmos_client_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
@@ -8,17 +8,28 @@ use ibc_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer_cosmos::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use ibc_relayer_cosmos::types::error::{BaseError, Error};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::ConsensusProof;
 
 use crate::methods::encode::sign_data::timestamped_sign_data_to_bytes;
+use crate::traits::solomachine::Solomachine;
+use crate::types::chain::SolomachineChain;
 use crate::types::payloads::connection::{
     SolomachineConnectionOpenAckPayload, SolomachineConnectionOpenConfirmPayload,
     SolomachineConnectionOpenInitPayload, SolomachineConnectionOpenTryPayload,
 };
 
 pub struct BuildSolomachineConnectionHandshakeMessagesForCosmos;
+
+impl<Counterparty> DelegateComponent<SolomachineChain<Counterparty>>
+    for DelegateCosmosConnectionHandshakeBuilder
+where
+    Counterparty: Solomachine,
+{
+    type Delegate = BuildSolomachineConnectionHandshakeMessagesForCosmos;
+}
 
 #[async_trait]
 impl<Chain, Counterparty> ConnectionHandshakeMessageBuilder<Chain, Counterparty>
