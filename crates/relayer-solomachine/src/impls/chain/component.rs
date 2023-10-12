@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_cosmos_client_components::components::packet_fields::CosmosPacketFieldReader;
 use ibc_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
+use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
 use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
@@ -16,6 +17,7 @@ use ibc_relayer_components::chain::traits::components::update_client_message_bui
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
+use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
 use crate::impls::chain::solomachine_components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
@@ -50,6 +52,8 @@ delegate_components!(
         QueryCosmosConsensusStateFromSolomachine,
     ChannelHandshakePayloadBuilderComponent:
         BuildSolomachineChannelHandshakePayloads,
+    ChannelHandshakeMessageBuilderComponent:
+        BuildCosmosToSolomachineChannelHandshakeMessage,
     ConnectionHandshakePayloadBuilderComponent:
         BuildSolomachineConnectionHandshakePayloads,
     ConnectionHandshakeMessageBuilderComponent:

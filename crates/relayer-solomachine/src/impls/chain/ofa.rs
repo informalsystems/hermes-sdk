@@ -57,6 +57,7 @@ use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSo
 use crate::impls::chain::cosmos_components::query_client_state::QuerySolomachineClientStateFromCosmos;
 use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::cosmos_components::update_client_message::BuildUpdateSolomachineClientMessage;
+use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
 use crate::impls::chain::solomachine_components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
@@ -765,9 +766,17 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: CosmosChannelOpenTryPayload,
     ) -> Result<SolomachineMessage, Chain::Error> {
-        let message = SolomachineMessage::CosmosChannelOpenTry(Box::new(counterparty_payload));
-
-        Ok(message)
+        <BuildCosmosToSolomachineChannelHandshakeMessage as ChannelHandshakeMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_channel_open_try_message(
+            self,
+            port_id,
+            counterparty_port_id,
+            counterparty_channel_id,
+            counterparty_payload,
+        )
+        .await
     }
 
     async fn build_channel_open_ack_message(
@@ -777,9 +786,17 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: CosmosChannelOpenAckPayload,
     ) -> Result<SolomachineMessage, Chain::Error> {
-        let message = SolomachineMessage::CosmosChannelOpenAck(Box::new(counterparty_payload));
-
-        Ok(message)
+        <BuildCosmosToSolomachineChannelHandshakeMessage as ChannelHandshakeMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_channel_open_ack_message(
+            self,
+            port_id,
+            channel_id,
+            counterparty_channel_id,
+            counterparty_payload,
+        )
+        .await
     }
 
     async fn build_channel_open_confirm_message(
@@ -788,9 +805,13 @@ where
         channel_id: &ChannelId,
         counterparty_payload: CosmosChannelOpenConfirmPayload,
     ) -> Result<SolomachineMessage, Chain::Error> {
-        let message = SolomachineMessage::CosmosChannelOpenConfirm(Box::new(counterparty_payload));
-
-        Ok(message)
+        <BuildCosmosToSolomachineChannelHandshakeMessage as ChannelHandshakeMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_channel_open_confirm_message(
+            self, port_id, channel_id, counterparty_payload
+        )
+        .await
     }
 }
 
