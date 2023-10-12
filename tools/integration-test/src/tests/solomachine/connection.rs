@@ -63,6 +63,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
         runtime
             .block_on(async move {
                 let cosmos_chain = builder.build_chain(&chain_id_a).await?;
+
                 let wrapped_solomachine_chain = OfaChainWrapper::new(solomachine_chain.clone());
                 let wrapped_cosmos_chain = OfaChainWrapper::new(cosmos_chain.clone());
 
