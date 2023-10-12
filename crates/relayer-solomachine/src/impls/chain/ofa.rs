@@ -1,9 +1,8 @@
 use alloc::sync::Arc;
 
 use async_trait::async_trait;
-use ibc_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use ibc_cosmos_client_components::types::messages::client::update::CosmosUpdateClientMessage;
 use ibc_cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
@@ -39,7 +38,7 @@ use ibc_relayer_components::chain::traits::components::update_client_payload_bui
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
 use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 use ibc_relayer_cosmos::contexts::chain::CosmosChain;
-use ibc_relayer_cosmos::types::error::{BaseError as CosmosBaseError, Error as CosmosError};
+use ibc_relayer_cosmos::types::error::Error as CosmosError;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_runtime::types::error::Error as RuntimeError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
@@ -57,6 +56,7 @@ use crate::impls::chain::cosmos_components::connection_handshake_message::BuildS
 use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
 use crate::impls::chain::cosmos_components::query_client_state::QuerySolomachineClientStateFromCosmos;
 use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
+use crate::impls::chain::cosmos_components::update_client_message::BuildUpdateSolomachineClientMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
 use crate::impls::chain::solomachine_components::create_client_message::BuildCreateCosmosClientMessage;
@@ -66,7 +66,6 @@ use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSo
 use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
 use crate::impls::chain::solomachine_components::update_client_message::BuildUpdateCosmosClientMessage;
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
-use crate::methods::encode::header::encode_header;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 use crate::types::client_state::SolomachineClientState;
@@ -962,14 +961,11 @@ where
         client_id: &ClientId,
         payload: SolomachineUpdateClientPayload,
     ) -> Result<Vec<Arc<dyn CosmosMessage>>, CosmosError> {
-        let header = encode_header(&payload.header).map_err(CosmosBaseError::encode)?;
-
-        let message = CosmosUpdateClientMessage {
-            client_id: client_id.clone(),
-            header,
-        };
-
-        Ok(vec![message.to_cosmos_message()])
+        <BuildUpdateSolomachineClientMessage as UpdateClientMessageBuilder<
+            Self,
+            SolomachineChain<Counterparty>,
+        >>::build_update_client_message(self, client_id, payload)
+        .await
     }
 
     async fn build_connection_open_init_message(
