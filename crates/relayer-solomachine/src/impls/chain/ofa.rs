@@ -33,10 +33,12 @@ use ibc_relayer_components::chain::traits::components::channel_handshake_payload
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
 use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketPayloadBuilder;
+use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::logger::traits::logger::BaseLogger;
 use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
@@ -63,10 +65,12 @@ use crate::impls::chain::cosmos_components::query_client_state::QuerySolomachine
 use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
+use crate::impls::chain::solomachine_components::create_client_message::BuildCreateCosmosClientMessage;
 use crate::impls::chain::solomachine_components::create_client_payload::BuildSolomachineCreateClientPayload;
 use crate::impls::chain::solomachine_components::process_message::ProcessSolomachineMessages;
 use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
 use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
+use crate::impls::chain::solomachine_components::update_client_message::BuildUpdateCosmosClientMessage;
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
 use crate::methods::encode::header::encode_header;
 use crate::methods::encode::sign_data::timestamped_sign_data_to_bytes;
@@ -655,9 +659,11 @@ where
         &self,
         counterparty_payload: CosmosCreateClientPayload,
     ) -> Result<SolomachineMessage, Chain::Error> {
-        let message = SolomachineMessage::CosmosCreateClient(Box::new(counterparty_payload));
-
-        Ok(message)
+        <BuildCreateCosmosClientMessage as CreateClientMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_create_client_message(self, counterparty_payload)
+        .await
     }
 
     async fn build_update_client_message(
@@ -665,9 +671,11 @@ where
         client_id: &ClientId,
         counterparty_payload: CosmosUpdateClientPayload,
     ) -> Result<Vec<SolomachineMessage>, Chain::Error> {
-        let message = SolomachineMessage::CosmosUpdateClient(Box::new(counterparty_payload));
-
-        Ok(vec![message])
+        <BuildUpdateCosmosClientMessage as UpdateClientMessageBuilder<
+            Self,
+            CosmosChain<Counterparty>,
+        >>::build_update_client_message(self, client_id, counterparty_payload)
+        .await
     }
 
     async fn find_consensus_state_height_before(
