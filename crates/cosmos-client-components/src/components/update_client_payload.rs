@@ -6,7 +6,6 @@ use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::light_client::AnyHeader;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
-
 use ibc_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_types::Height;

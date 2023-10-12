@@ -1,5 +1,8 @@
 use alloc::sync::Arc;
+
 use cgp_core::Async;
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
+use ibc_cosmos_client_components::types::tendermint::TendermintClientState;
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFields;
@@ -15,8 +18,6 @@ use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
-use ibc_cosmos_client_components::types::tendermint::TendermintClientState;
 
 impl<Chain> CanIncrementHeight for CosmosChain<Chain>
 where

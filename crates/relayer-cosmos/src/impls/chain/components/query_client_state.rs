@@ -1,5 +1,3 @@
-use crate::contexts::chain::CosmosChain;
-use crate::types::error::Error;
 use async_trait::async_trait;
 use cgp_core::DelegateComponent;
 use ibc_cosmos_client_components::components::query_client_state::QueryCosmosClientStateFromChainHandle;
@@ -7,6 +5,9 @@ use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+
+use crate::contexts::chain::CosmosChain;
+use crate::types::error::Error;
 
 pub struct DelegateCosmosClientStateQuerier;
 

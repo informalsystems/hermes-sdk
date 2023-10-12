@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 
 use async_trait::async_trait;
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };
@@ -8,7 +9,6 @@ use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::types::error::Error;
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
 
 pub struct CosmosTxInstances;
 

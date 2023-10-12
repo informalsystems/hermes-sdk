@@ -1,5 +1,4 @@
-use cgp_core::async_trait;
-use cgp_core::Runner;
+use cgp_core::{async_trait, Runner};
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::auto_relayer::CanAutoRelay;

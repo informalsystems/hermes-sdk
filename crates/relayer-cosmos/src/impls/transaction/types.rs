@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 
 use cgp_core::HasErrorType;
 use futures::lock::MutexGuard;
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
@@ -24,7 +25,6 @@ use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::types::error::{BaseError, Error};
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
 
 impl HasErrorType for CosmosTxContext {
     type Error = Error;

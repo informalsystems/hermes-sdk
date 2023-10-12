@@ -2,15 +2,15 @@ use async_trait::async_trait;
 use cgp_core::Async;
 use http::Uri;
 use ibc_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use ibc_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
+use ibc_cosmos_client_components::traits::has_tx_context::HasTxContext;
+use ibc_cosmos_client_components::traits::rpc_client::HasRpcClient;
 use ibc_relayer::chain::handle::ChainHandle;
 use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::transaction::CosmosTxContext;
 use crate::types::error::{BaseError, Error};
-use ibc_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
-use ibc_cosmos_client_components::traits::has_tx_context::HasTxContext;
-use ibc_cosmos_client_components::traits::rpc_client::HasRpcClient;
 
 impl<Chain> HasTxContext for CosmosChain<Chain>
 where

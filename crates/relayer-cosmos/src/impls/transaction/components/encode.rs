@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 
 use async_trait::async_trait;
+use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::encode::{key_pair_to_signer, sign_tx};
 use ibc_relayer::chain::cosmos::types::account::Account;
@@ -12,7 +13,6 @@ use ibc_relayer_components::transaction::traits::components::tx_encoder::TxEncod
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;
 use crate::types::error::{BaseError, Error};
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
 
 #[async_trait]
 impl TxEncoder<CosmosTxContext> for CosmosTxComponents {

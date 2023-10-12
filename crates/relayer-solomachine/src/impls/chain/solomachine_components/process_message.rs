@@ -2,8 +2,9 @@ use core::str::FromStr;
 
 use async_trait::async_trait;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSender;
-use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
-use ibc_relayer_types::core::ics03_connection::connection::{ConnectionEnd, Counterparty};
+use ibc_relayer_types::core::ics03_connection::connection::{
+    ConnectionEnd, Counterparty, State as ConnectionState,
+};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::timestamp::ZERO_DURATION;
 

@@ -1,9 +1,10 @@
 use alloc::sync::Arc;
+use std::collections::HashSet;
+
 use futures::channel::oneshot::channel;
 use futures::lock::Mutex;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
-use std::collections::HashSet;
 use tokio::runtime::Runtime;
 
 use crate::types::packet_lock::PacketLock;
