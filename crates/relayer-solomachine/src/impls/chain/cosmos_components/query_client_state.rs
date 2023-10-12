@@ -16,6 +16,8 @@ use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 use crate::types::client_state::{decode_client_state, SolomachineClientState};
 
+pub struct QuerySolomachineClientStateFromCosmos;
+
 impl<Counterparty> DelegateComponent<SolomachineChain<Counterparty>>
     for DelegateCosmosClientStateQuerier
 where
@@ -23,8 +25,6 @@ where
 {
     type Delegate = QuerySolomachineClientStateFromCosmos;
 }
-
-pub struct QuerySolomachineClientStateFromCosmos;
 
 #[async_trait]
 impl<Chain, Counterparty> ClientStateQuerier<Chain, Counterparty>

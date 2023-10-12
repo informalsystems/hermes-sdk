@@ -11,7 +11,6 @@ use ibc_cosmos_client_components::components::packet_fields::CosmosPacketFieldRe
 use ibc_cosmos_client_components::components::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use ibc_cosmos_client_components::components::query_chain_id::QueryChainIdWithChainHandle;
 use ibc_cosmos_client_components::components::query_chain_status::QueryChainStatusWithChainHandle;
-use ibc_cosmos_client_components::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use ibc_cosmos_client_components::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use ibc_cosmos_client_components::components::query_packet_commitments::QueryCosmosPacketCommitments;
 use ibc_cosmos_client_components::components::query_received_packet::QueryReceivedPacketWithChainHandle;
@@ -62,6 +61,7 @@ use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUs
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::query_client_state::DelegateCosmosClientStateQuerier;
+use crate::impls::chain::components::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 
 pub struct CosmosChainComponents;
 
@@ -91,7 +91,7 @@ delegate_components!(
     ClientStateQuerierComponent:
         DelegateCosmosClientStateQuerier,
     ConsensusStateQuerierComponent:
-        QueryCosmosConsensusStateFromChainHandle,
+        DelegateCosmosConsensusStateQuerier,
     ConsensusStateHeightQuerierComponent:
         QueryConsensusStateHeightFromChainHandle,
     WriteAckQuerierComponent:
