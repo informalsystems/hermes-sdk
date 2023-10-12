@@ -66,23 +66,25 @@ impl BinaryChainTest for SolomachineToCosmosTest {
                 let wrapped_solomachine_chain = OfaChainWrapper::new(solomachine_chain.clone());
                 let wrapped_cosmos_chain = OfaChainWrapper::new(cosmos_chain.clone());
 
-                let src_client_id = OfaRelayWrapper::<SolomachineRelay>::create_client(
-                    SourceTarget,
-                    &wrapped_solomachine_chain,
-                    &wrapped_cosmos_chain,
-                    &client_settings,
-                )
-                .await
-                .unwrap();
+                let src_client_id =
+                    OfaRelayWrapper::<SolomachineRelay<MockSolomachine>>::create_client(
+                        SourceTarget,
+                        &wrapped_solomachine_chain,
+                        &wrapped_cosmos_chain,
+                        &client_settings,
+                    )
+                    .await
+                    .unwrap();
 
-                let dst_client_id = OfaRelayWrapper::<SolomachineRelay>::create_client(
-                    DestinationTarget,
-                    &wrapped_cosmos_chain,
-                    &wrapped_solomachine_chain,
-                    &(),
-                )
-                .await
-                .unwrap();
+                let dst_client_id =
+                    OfaRelayWrapper::<SolomachineRelay<MockSolomachine>>::create_client(
+                        DestinationTarget,
+                        &wrapped_cosmos_chain,
+                        &wrapped_solomachine_chain,
+                        &(),
+                    )
+                    .await
+                    .unwrap();
 
                 info!("src_client_id: {src_client_id:#?}");
                 info!("dst_client_id: {dst_client_id:#?}");

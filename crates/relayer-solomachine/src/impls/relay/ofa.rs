@@ -11,14 +11,17 @@ use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
-use crate::context::chain::MockSolomachine;
 use crate::context::relay::SolomachineRelay;
+use crate::traits::solomachine::Solomachine;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::chain::SolomachineChain;
 use crate::types::error::{BaseError, Error};
 
 #[async_trait]
-impl OfaRelay for SolomachineRelay {
+impl<Chain> OfaRelay for SolomachineRelay<Chain>
+where
+    Chain: Solomachine<Error = Error>,
+{
     type Error = Error;
 
     type Runtime = TokioRuntimeContext;
@@ -27,7 +30,7 @@ impl OfaRelay for SolomachineRelay {
 
     type Packet = Packet;
 
-    type SrcChain = SolomachineChain<MockSolomachine>;
+    type SrcChain = SolomachineChain<Chain>;
 
     type DstChain = CosmosChain<BaseChainHandle>;
 
