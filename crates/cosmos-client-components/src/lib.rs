@@ -1,3 +1,6 @@
+#![allow(clippy::type_complexity)]
+#![allow(clippy::infallible_destructuring_match)]
+
 extern crate alloc;
 
 pub mod components;
