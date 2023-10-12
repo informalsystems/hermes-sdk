@@ -11,7 +11,7 @@ use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
-use crate::context::chain::MockSolomachineContext;
+use crate::context::chain::MockSolomachine;
 use crate::context::relay::SolomachineRelay;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::chain::SolomachineChain;
@@ -27,7 +27,7 @@ impl OfaRelay for SolomachineRelay {
 
     type Packet = Packet;
 
-    type SrcChain = SolomachineChain<MockSolomachineContext>;
+    type SrcChain = SolomachineChain<MockSolomachine>;
 
     type DstChain = CosmosChain<BaseChainHandle>;
 

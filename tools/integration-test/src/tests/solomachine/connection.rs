@@ -12,10 +12,10 @@ use ibc_relayer_components_extra::batch::worker::CanSpawnBatchMessageWorker;
 use ibc_relayer_cosmos::types::error::Error as CosmosError;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use ibc_relayer_solomachine::context::chain::MockSolomachineChainContext;
+use ibc_relayer_solomachine::context::chain::MockSolomachine;
 use ibc_relayer_solomachine::context::relay::SolomachineRelay;
 use ibc_relayer_solomachine::types::batch::{CosmosBatchPayload, SolomachineBatchPayload};
-use ibc_relayer_solomachine::types::chain::SolomachineChainWrapper;
+use ibc_relayer_solomachine::types::chain::SolomachineChain;
 use ibc_test_framework::prelude::*;
 use tokio::sync::mpsc;
 
@@ -139,11 +139,10 @@ impl BinaryChainTest for SolomachineToCosmosTest {
 pub fn solomachine_chain_context(
     runtime: TokioRuntimeContext,
     telemetry: CosmosTelemetry,
-) -> SolomachineChainWrapper<MockSolomachineChainContext> {
+) -> SolomachineChain<MockSolomachine> {
     let commitment_prefix = "solomachine".to_owned();
 
-    let chain =
-        MockSolomachineChainContext::new("solomachine1", commitment_prefix, runtime, telemetry);
+    let chain = MockSolomachine::new("solomachine1", commitment_prefix, runtime, telemetry);
 
-    SolomachineChainWrapper::new(chain)
+    SolomachineChain::new(chain)
 }

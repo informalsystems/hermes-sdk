@@ -30,7 +30,7 @@ use crate::types::error::{BaseError, Error};
 const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 
 #[derive(Clone)]
-pub struct MockSolomachineContext {
+pub struct MockSolomachine {
     pub chain_id: ChainId,
     commitment_prefix: String,
     public_key: PublicKey,
@@ -42,7 +42,7 @@ pub struct MockSolomachineContext {
     pub connections: Arc<Mutex<HashMap<ConnectionId, ConnectionEnd>>>,
 }
 
-impl MockSolomachineContext {
+impl MockSolomachine {
     pub fn new(
         chain_id: &str,
         commitment_prefix: String,
@@ -52,7 +52,7 @@ impl MockSolomachineContext {
         let secp = Secp256k1::new();
         let (secret_key, secp_public_key) = secp.generate_keypair(&mut OsRng);
         let public_key = PublicKey::from_secp256k1_key(secp_public_key);
-        MockSolomachineContext {
+        MockSolomachine {
             chain_id: ChainId::from_string(chain_id),
             commitment_prefix,
             public_key,
@@ -67,7 +67,7 @@ impl MockSolomachineContext {
 }
 
 #[async_trait]
-impl Solomachine for MockSolomachineContext {
+impl Solomachine for MockSolomachine {
     type Error = Error;
 
     fn get_chain_id(&self) -> &ChainId {

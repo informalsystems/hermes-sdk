@@ -4,13 +4,13 @@ use ibc_relayer_cosmos::contexts::chain::CosmosChain;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
-use crate::context::chain::MockSolomachineContext;
+use crate::context::chain::MockSolomachine;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::chain::SolomachineChain;
 
 pub struct SolomachineRelay {
     pub runtime: TokioRuntimeContext,
-    pub src_chain: OfaChainWrapper<SolomachineChain<MockSolomachineContext>>,
+    pub src_chain: OfaChainWrapper<SolomachineChain<MockSolomachine>>,
     pub dst_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
@@ -21,7 +21,7 @@ pub struct SolomachineRelay {
 impl SolomachineRelay {
     pub fn new(
         runtime: TokioRuntimeContext,
-        src_chain: OfaChainWrapper<SolomachineChain<MockSolomachineContext>>,
+        src_chain: OfaChainWrapper<SolomachineChain<MockSolomachine>>,
         dst_chain: OfaChainWrapper<CosmosChain<BaseChainHandle>>,
         src_client_id: ClientId,
         dst_client_id: ClientId,
