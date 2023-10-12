@@ -12,15 +12,15 @@ use ibc_relayer_components::chain::traits::components::update_client_payload_bui
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_cosmos::impls::chain::components::packet_fields::CosmosPacketFieldReader;
 
-use crate::impls::chain::components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
-use crate::impls::chain::components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
-use crate::impls::chain::components::create_client_payload::BuildSolomachineCreateClientPayload;
-use crate::impls::chain::components::process_message::ProcessSolomachineMessages;
-use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromSolomachine;
-use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromSolomachine;
-use crate::impls::chain::components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
-use crate::impls::chain::components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
-use crate::impls::chain::components::update_client_payload::BuildSolomachineUpdateClientPayload;
+use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
+use crate::impls::chain::solomachine_components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
+use crate::impls::chain::solomachine_components::create_client_payload::BuildSolomachineCreateClientPayload;
+use crate::impls::chain::solomachine_components::process_message::ProcessSolomachineMessages;
+use crate::impls::chain::solomachine_components::query_client_state::QueryCosmosClientStateFromSolomachine;
+use crate::impls::chain::solomachine_components::query_consensus_state::QueryCosmosConsensusStateFromSolomachine;
+use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
+use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
+use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
 use crate::types::chain::SolomachineChain;
 
 pub struct SolomachineChainComponents;

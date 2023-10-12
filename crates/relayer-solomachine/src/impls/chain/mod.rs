@@ -1,5 +1,6 @@
 pub mod component;
-pub mod components;
+pub mod cosmos_components;
 pub mod fields;
 pub mod ofa;
+pub mod solomachine_components;
 pub mod types;
