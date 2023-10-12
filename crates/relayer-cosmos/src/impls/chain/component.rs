@@ -46,7 +46,7 @@ use crate::impls::chain::components::packet_fields::CosmosPacketFieldReader;
 use crate::impls::chain::components::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::chain::components::query_chain_id::QueryChainIdWithChainHandle;
 use crate::impls::chain::components::query_chain_status::QueryChainStatusWithChainHandle;
-use crate::impls::chain::components::query_client_state::QueryCosmosClientStateFromChainHandle;
+use crate::impls::chain::components::query_client_state::DelegateCosmosClientStateQuerier;
 use crate::impls::chain::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use crate::impls::chain::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::chain::components::query_packet_commitments::QueryCosmosPacketCommitments;
@@ -89,7 +89,7 @@ delegate_components!(
     PacketFieldsReaderComponent:
         CosmosPacketFieldReader,
     ClientStateQuerierComponent:
-        QueryCosmosClientStateFromChainHandle,
+        DelegateCosmosClientStateQuerier,
     ConsensusStateQuerierComponent:
         QueryCosmosConsensusStateFromChainHandle,
     ConsensusStateHeightQuerierComponent:
