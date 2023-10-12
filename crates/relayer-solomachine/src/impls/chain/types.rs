@@ -1,8 +1,12 @@
 use cgp_core::{Async, HasErrorType};
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use ibc_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloads;
+use ibc_relayer_components::chain::traits::types::channel::{
+    HasChannelHandshakePayloads, HasInitChannelOptionsType,
+};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use ibc_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
+use ibc_relayer_components::chain::traits::types::connection::{
+    HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
+};
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
@@ -184,6 +188,20 @@ where
     Chain: Async,
 {
     type UpdateClientPayload = SolomachineUpdateClientPayload;
+}
+
+impl<Chain, Counterparty> HasInitConnectionOptionsType<Counterparty> for SolomachineChain<Chain>
+where
+    Chain: Async,
+{
+    type InitConnectionOptions = ();
+}
+
+impl<Chain, Counterparty> HasInitChannelOptionsType<Counterparty> for SolomachineChain<Chain>
+where
+    Chain: Async,
+{
+    type InitChannelOptions = ();
 }
 
 impl<Chain, Counterparty> HasConnectionHandshakePayloads<Counterparty> for SolomachineChain<Chain>
