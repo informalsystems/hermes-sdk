@@ -4,8 +4,9 @@
 
 use core::fmt::Display;
 
-use cgp_core::{Async, HasErrorType};
+use cgp_core::prelude::*;
 
+#[derive_component(HeightTypeProviderComponent, HeightTypeProvider<Chain>)]
 pub trait HasHeightType: Async {
     /**
        The height of the chain, which should behave like natural numbers.

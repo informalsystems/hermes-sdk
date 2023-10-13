@@ -528,8 +528,8 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#bdabb02eb2f5d584ef895a6d1849b74443fa11e6"
 dependencies = [
+ "itertools 0.11.0",
  "proc-macro2",
  "quote",
  "syn 2.0.37",
@@ -1734,7 +1734,7 @@ dependencies = [
  "ibc-relayer-runtime",
  "ibc-relayer-subscription",
  "ibc-relayer-types",
- "itertools",
+ "itertools 0.10.5",
  "prost",
  "tendermint 0.33.2",
  "tendermint-rpc",
@@ -1841,7 +1841,7 @@ dependencies = [
  "humantime-serde",
  "ibc-proto 0.34.1",
  "ibc-relayer-types",
- "itertools",
+ "itertools 0.10.5",
  "moka",
  "num-bigint",
  "num-rational",
@@ -1908,7 +1908,7 @@ dependencies = [
  "ibc-relayer-subscription",
  "ibc-relayer-types",
  "ibc-telemetry",
- "itertools",
+ "itertools 0.10.5",
  "moka",
  "opentelemetry 0.17.0",
  "prost",
@@ -1930,6 +1930,7 @@ dependencies = [
  "basecoin-store",
  "cgp-core",
  "ibc",
+ "ibc-cosmos-client-components",
  "ibc-proto 0.35.0",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
@@ -1957,6 +1958,7 @@ dependencies = [
  "cgp-core",
  "eyre",
  "flex-error",
+ "ibc-cosmos-client-components",
  "ibc-relayer-components",
  "ibc-relayer-runtime",
  "tokio",
@@ -1999,7 +2001,7 @@ dependencies = [
  "ibc-relayer-runtime",
  "ibc-relayer-types",
  "ibc-telemetry",
- "itertools",
+ "itertools 0.10.5",
  "prost",
  "secp256k1",
  "serde",
@@ -2035,7 +2037,7 @@ dependencies = [
  "flex-error",
  "ibc-proto 0.34.1",
  "ics23",
- "itertools",
+ "itertools 0.10.5",
  "num-rational",
  "primitive-types",
  "prost",
@@ -2090,7 +2092,7 @@ dependencies = [
  "ibc-relayer-components",
  "ibc-relayer-cosmos",
  "ibc-relayer-types",
- "itertools",
+ "itertools 0.10.5",
  "once_cell",
  "prost",
  "rand",
@@ -2231,6 +2233,15 @@ name = "itertools"
 version = "0.10.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1c173a5686ce8bfa551b3563d0c2170bf24ca44da99c7ca4bfdab5418c3fe57"
 dependencies = [
  "either",
 ]
@@ -2891,7 +2902,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5d2d8d10f3c6ded6da8b05b5fb3b8a5082514344d56c9f871412d29b4e075b4"
 dependencies = [
  "anyhow",
- "itertools",
+ "itertools 0.10.5",
  "proc-macro2",
  "quote",
  "syn 1.0.109",

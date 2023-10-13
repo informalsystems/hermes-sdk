@@ -50,7 +50,9 @@ use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use ibc_relayer_components::chain::traits::types::height::{
+    CanIncrementHeight, HeightTypeProvider,
+};
 use ibc_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
@@ -121,7 +123,9 @@ impl<Chain: BasecoinEndpoint> HasChainId for MockCosmosContext<Chain> {
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasHeightType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> HeightTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Height = Height;
 }
 

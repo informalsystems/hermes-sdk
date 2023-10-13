@@ -32,11 +32,13 @@ use crate::chain::traits::components::unreceived_packet_sequences_querier::Unrec
 use crate::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use crate::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
+use crate::chain::traits::types::height::HeightTypeProviderComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
     DefaultChainComponents<BaseComponents>;
     [
+        HeightTypeProviderComponent,
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,
         MessageSenderComponent,

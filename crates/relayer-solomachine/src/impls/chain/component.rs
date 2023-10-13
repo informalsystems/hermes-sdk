@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use ibc_cosmos_client_components::components::packet_fields::CosmosPacketFieldReader;
+use ibc_cosmos_client_components::components::types::ProvideCosmosTypes;
 use ibc_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
 use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
@@ -15,6 +16,7 @@ use ibc_relayer_components::chain::traits::components::receive_packet_payload_bu
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
+use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
@@ -42,6 +44,10 @@ where
 
 delegate_components!(
     SolomachineChainComponents;
+    [
+        HeightTypeProviderComponent,
+    ]:
+        ProvideCosmosTypes,
     PacketFieldsReaderComponent:
         CosmosPacketFieldReader,
     MessageSenderComponent:

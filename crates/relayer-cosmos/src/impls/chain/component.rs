@@ -21,6 +21,7 @@ use ibc_cosmos_client_components::components::receive_packet_payload::BuildCosmo
 use ibc_cosmos_client_components::components::send_messages_as_tx::SendMessagesToTxContext;
 use ibc_cosmos_client_components::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use ibc_cosmos_client_components::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
+use ibc_cosmos_client_components::components::types::ProvideCosmosTypes;
 use ibc_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
 use ibc_cosmos_client_components::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -54,6 +55,7 @@ use ibc_relayer_components::chain::traits::components::unreceived_packet_sequenc
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
+use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 
@@ -82,6 +84,10 @@ where
 
 delegate_components!(
     CosmosChainComponents;
+    [
+        HeightTypeProviderComponent,
+    ]:
+        ProvideCosmosTypes,
     MessageSenderComponent:
         SendMessagesToTxContext,
     ChainStatusQuerierComponent:

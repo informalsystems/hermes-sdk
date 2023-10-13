@@ -31,7 +31,9 @@ use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChai
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use ibc_relayer_components::chain::traits::types::height::{
+    CanIncrementHeight, HeightTypeProvider,
+};
 use ibc_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
@@ -89,7 +91,7 @@ impl HasLoggerType for MockChainContext {
     type Logger = TracingLogger;
 }
 
-impl HasHeightType for MockChainContext {
+impl HeightTypeProvider<MockChainContext> for MockComponents {
     type Height = MockHeight;
 }
 

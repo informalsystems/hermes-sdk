@@ -12,7 +12,6 @@ use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use ibc_relayer_components::chain::traits::types::message::HasMessageType;
@@ -32,7 +31,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
 use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
 
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
@@ -94,13 +92,6 @@ where
     fn logger(&self) -> &TracingLogger {
         &TracingLogger
     }
-}
-
-impl<Chain> HasHeightType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Height = Height;
 }
 
 impl<Chain> HasMessageType for SolomachineChain<Chain>

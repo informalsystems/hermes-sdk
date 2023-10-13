@@ -35,7 +35,6 @@ use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptions, HasCreateClientPayload,
 };
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
@@ -115,13 +114,6 @@ where
     Chain: Async,
 {
     type Event = Arc<AbciEvent>;
-}
-
-impl<Chain> HasHeightType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Height = Height;
 }
 
 impl<Chain> HasTimestampType for CosmosChain<Chain>
