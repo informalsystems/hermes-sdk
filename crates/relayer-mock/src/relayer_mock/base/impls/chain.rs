@@ -35,7 +35,7 @@ use ibc_relayer_components::chain::traits::types::height::{
     CanIncrementHeight, HeightTypeProvider,
 };
 use ibc_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, HasIbcChainTypes,
+    HasCounterpartyMessageHeight, IbcChainTypesProvider,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -111,7 +111,7 @@ impl ChainIdTypeProvider<MockChainContext> for MockComponents {
     type ChainId = String;
 }
 
-impl HasIbcChainTypes<MockChainContext> for MockChainContext {
+impl IbcChainTypesProvider<MockChainContext, MockChainContext> for MockComponents {
     type ClientId = ClientId;
 
     type ConnectionId = String;

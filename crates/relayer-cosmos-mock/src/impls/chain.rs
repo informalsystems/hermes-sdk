@@ -54,7 +54,7 @@ use ibc_relayer_components::chain::traits::types::height::{
     CanIncrementHeight, HeightTypeProvider,
 };
 use ibc_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, HasIbcChainTypes,
+    HasCounterpartyMessageHeight, IbcChainTypesProvider,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -155,8 +155,9 @@ impl<Chain: BasecoinEndpoint> MessageTypeProvider<MockCosmosContext<Chain>>
     type Message = Any;
 }
 
-impl<Chain, Counterparty> HasIbcChainTypes<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    IbcChainTypesProvider<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,

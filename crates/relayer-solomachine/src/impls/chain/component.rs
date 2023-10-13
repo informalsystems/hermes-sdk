@@ -19,6 +19,7 @@ use ibc_relayer_components::chain::traits::components::update_client_payload_bui
 use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
@@ -53,6 +54,7 @@ delegate_components!(
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,
+        IbcChainTypesProviderComponent,
     ]:
         ProvideCosmosChainTypes,
     [

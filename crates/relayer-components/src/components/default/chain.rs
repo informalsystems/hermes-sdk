@@ -35,6 +35,7 @@ use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponen
 use crate::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::height::HeightTypeProviderComponent;
+use crate::chain::traits::types::ibc::IbcChainTypesProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
 use crate::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use crate::chain::traits::types::timestamp::TimestampTypeProviderComponent;
@@ -48,6 +49,7 @@ delegate_components!(
         ChainIdTypeProviderComponent,
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
+        IbcChainTypesProviderComponent,
         ChainStatusTypeProviderComponent,
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,

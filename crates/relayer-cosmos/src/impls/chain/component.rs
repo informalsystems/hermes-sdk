@@ -58,6 +58,7 @@ use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteA
 use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
@@ -95,6 +96,7 @@ delegate_components!(
         ChainIdTypeProviderComponent,
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
+        IbcChainTypesProviderComponent,
         ChainStatusTypeProviderComponent,
     ]:
         ProvideCosmosChainTypes,

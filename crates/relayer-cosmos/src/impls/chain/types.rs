@@ -29,7 +29,6 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
@@ -41,8 +40,7 @@ use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
+use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};
@@ -86,21 +84,6 @@ where
     fn telemetry(&self) -> &CosmosTelemetry {
         &self.telemetry
     }
-}
-
-impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type ClientId = ClientId;
-
-    type ConnectionId = ConnectionId;
-
-    type ChannelId = ChannelId;
-
-    type PortId = PortId;
-
-    type Sequence = Sequence;
 }
 
 impl<Chain, Counterparty> HasClientStateType<Counterparty> for CosmosChain<Chain>
