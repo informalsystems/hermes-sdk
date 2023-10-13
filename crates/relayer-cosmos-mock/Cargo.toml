@@ -35,6 +35,6 @@ rand = "0.8.5"
 tendermint = { version = "0.33.2", features = ["rust-crypto"] }
 tendermint-testgen = "0.33.2"
 tracing = "0.1.36"
-tokio = { version = "1.0", features = ["full"] }
+tokio = { version = "1.33", features = ["full"] }
 tower-abci = "0.10"
 tower = { version = "0.4", features = ["full"] }
