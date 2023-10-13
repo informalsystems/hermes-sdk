@@ -37,6 +37,7 @@ use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::height::HeightTypeProviderComponent;
 use crate::chain::traits::types::ibc::IbcChainTypesProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
+use crate::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use crate::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use crate::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
@@ -50,6 +51,7 @@ delegate_components!(
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
         IbcChainTypesProviderComponent,
+        IbcPacketTypesProviderComponent,
         ChainStatusTypeProviderComponent,
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,

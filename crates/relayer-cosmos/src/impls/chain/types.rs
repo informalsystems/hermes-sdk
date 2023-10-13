@@ -29,7 +29,6 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
@@ -40,7 +39,6 @@ use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};
@@ -98,15 +96,6 @@ where
     Chain: Async,
 {
     type ConsensusState = TendermintConsensusState;
-}
-
-impl<Chain, Counterparty> HasIbcPacketTypes<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type IncomingPacket = Packet;
-
-    type OutgoingPacket = Packet;
 }
 
 impl<Chain, Counterparty> HasCreateClientOptions<Counterparty> for CosmosChain<Chain>

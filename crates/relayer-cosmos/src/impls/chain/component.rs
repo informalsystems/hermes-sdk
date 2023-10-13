@@ -60,6 +60,7 @@ use ibc_relayer_components::chain::traits::types::event::EventTypeProviderCompon
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
@@ -97,6 +98,7 @@ delegate_components!(
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
         IbcChainTypesProviderComponent,
+        IbcPacketTypesProviderComponent,
         ChainStatusTypeProviderComponent,
     ]:
         ProvideCosmosChainTypes,

@@ -42,7 +42,7 @@ use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWrit
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, MessageTypeProvider,
 };
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
@@ -123,7 +123,7 @@ impl IbcChainTypesProvider<MockChainContext, MockChainContext> for MockComponent
     type Sequence = Sequence;
 }
 
-impl HasIbcPacketTypes<MockChainContext> for MockChainContext {
+impl IbcPacketTypesProvider<MockChainContext, MockChainContext> for MockComponents {
     type IncomingPacket = PacketKey;
 
     type OutgoingPacket = PacketKey;

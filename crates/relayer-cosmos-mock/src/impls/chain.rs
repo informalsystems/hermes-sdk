@@ -61,7 +61,7 @@ use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWrit
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, MessageTypeProvider,
 };
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
@@ -173,8 +173,9 @@ where
     type Sequence = Sequence;
 }
 
-impl<Chain, Counterparty> HasIbcPacketTypes<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    IbcPacketTypesProvider<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,

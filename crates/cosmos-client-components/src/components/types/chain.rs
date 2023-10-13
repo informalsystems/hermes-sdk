@@ -7,11 +7,12 @@ use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
 use ibc_relayer_components::chain::traits::types::height::{HasHeightType, HeightTypeProvider};
 use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProvider;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProvider;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, TimestampTypeProvider,
 };
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
+use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
@@ -85,4 +86,13 @@ where
     type PortId = PortId;
 
     type Sequence = Sequence;
+}
+
+impl<Chain, Counterparty> IbcPacketTypesProvider<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type IncomingPacket = Packet;
+
+    type OutgoingPacket = Packet;
 }
