@@ -1,7 +1,6 @@
 use alloc::sync::Arc;
 
 use cgp_core::{Async, HasErrorType};
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use ibc_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use ibc_cosmos_client_components::types::payloads::channel::{
@@ -36,7 +35,6 @@ use ibc_relayer_components::chain::traits::types::create_client::{
 };
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
@@ -100,13 +98,6 @@ where
     fn telemetry(&self) -> &CosmosTelemetry {
         &self.telemetry
     }
-}
-
-impl<Chain> HasMessageType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Message = Arc<dyn CosmosMessage>;
 }
 
 impl<Chain> HasEventType for CosmosChain<Chain>

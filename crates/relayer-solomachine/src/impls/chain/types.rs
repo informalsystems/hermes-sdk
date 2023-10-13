@@ -14,7 +14,6 @@ use ibc_relayer_components::chain::traits::types::create_client::{
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
@@ -39,7 +38,6 @@ use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };
-use crate::types::message::SolomachineMessage;
 use crate::types::payloads::channel::{
     SolomachineChannelOpenAckPayload, SolomachineChannelOpenConfirmPayload,
     SolomachineChannelOpenTryPayload,
@@ -92,13 +90,6 @@ where
     fn logger(&self) -> &TracingLogger {
         &TracingLogger
     }
-}
-
-impl<Chain> HasMessageType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Message = SolomachineMessage;
 }
 
 impl<Chain> HasEventType for SolomachineChain<Chain>

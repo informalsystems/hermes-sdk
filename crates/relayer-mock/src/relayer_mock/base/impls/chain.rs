@@ -40,7 +40,7 @@ use ibc_relayer_components::chain::traits::types::ibc::{
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, HasMessageType,
+    CanEstimateMessageSize, MessageTypeProvider,
 };
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
@@ -103,7 +103,7 @@ impl HasTimestampType for MockChainContext {
     type Timestamp = MockTimestamp;
 }
 
-impl HasMessageType for MockChainContext {
+impl MessageTypeProvider<MockChainContext> for MockComponents {
     type Message = MockMessage;
 }
 

@@ -59,7 +59,7 @@ use ibc_relayer_components::chain::traits::types::ibc::{
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, HasMessageType,
+    CanEstimateMessageSize, MessageTypeProvider,
 };
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
@@ -143,7 +143,9 @@ impl<Chain: BasecoinEndpoint> HasTimestampType for MockCosmosContext<Chain> {
     type Timestamp = Timestamp;
 }
 
-impl<Chain: BasecoinEndpoint> HasMessageType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> MessageTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Message = Any;
 }
 

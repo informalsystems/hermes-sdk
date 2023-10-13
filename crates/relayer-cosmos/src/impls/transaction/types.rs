@@ -2,14 +2,12 @@ use alloc::sync::Arc;
 
 use cgp_core::HasErrorType;
 use futures::lock::MutexGuard;
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::transaction::traits::nonce::guard::HasNonceGuard;
@@ -48,10 +46,6 @@ impl HasLoggerType for CosmosTxContext {
 
 impl HasChainIdType for CosmosTxContext {
     type ChainId = ChainId;
-}
-
-impl HasMessageType for CosmosTxContext {
-    type Message = Arc<dyn CosmosMessage>;
 }
 
 impl HasEventType for CosmosTxContext {

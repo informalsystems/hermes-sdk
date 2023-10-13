@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use cgp_core::delegate_components;
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
+use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
 use ibc_relayer_components::components::default::transaction::DefaultTxComponents;
 use ibc_relayer_components::transaction::traits::components::message_as_tx_sender::MessageAsTxSenderComponent;
 use ibc_relayer_components::transaction::traits::components::nonce_allocater::NonceAllocatorComponent;
@@ -17,6 +18,7 @@ pub struct ExtraTxComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 delegate_components!(
     ExtraTxComponents<BaseComponents>;
     [
+        MessageTypeProviderComponent,
         MessageSenderComponent,
         MessageAsTxSenderComponent,
         NonceQuerierComponent,
