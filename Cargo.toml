@@ -34,7 +34,7 @@ ibc-relayer-cosmos              = { path = "./crates/relayer-cosmos" }
 
 cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
-cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/delegate-types" }
+cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

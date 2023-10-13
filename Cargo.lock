@@ -528,7 +528,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/delegate-types#098758ad7a27483f8ccbb1d0d7a9c59795cb2bc2"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#a7559d37797b807f92592a286ec7d057db5eadab"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",
