@@ -32,6 +32,7 @@ use crate::chain::traits::components::unreceived_packet_sequences_querier::Unrec
 use crate::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use crate::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
+use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::height::HeightTypeProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
 use crate::chain::traits::types::status::ChainStatusTypeProviderComponent;
@@ -42,6 +43,7 @@ delegate_components!(
     [
         HeightTypeProviderComponent,
         MessageTypeProviderComponent,
+        EventTypeProviderComponent,
         ChainStatusTypeProviderComponent,
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,

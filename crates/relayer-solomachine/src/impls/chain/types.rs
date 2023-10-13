@@ -11,7 +11,6 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
@@ -90,13 +89,6 @@ where
     fn logger(&self) -> &TracingLogger {
         &TracingLogger
     }
-}
-
-impl<Chain> HasEventType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Event = SolomachineEvent;
 }
 
 impl<Chain> HasChainIdType for SolomachineChain<Chain>

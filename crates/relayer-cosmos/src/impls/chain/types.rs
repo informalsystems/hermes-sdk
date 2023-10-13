@@ -1,5 +1,3 @@
-use alloc::sync::Arc;
-
 use cgp_core::{Async, HasErrorType};
 use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use ibc_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
@@ -32,7 +30,6 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
@@ -51,7 +48,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
 use ibc_relayer_types::timestamp::Timestamp;
-use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};
@@ -95,13 +91,6 @@ where
     fn telemetry(&self) -> &CosmosTelemetry {
         &self.telemetry
     }
-}
-
-impl<Chain> HasEventType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Event = Arc<AbciEvent>;
 }
 
 impl<Chain> HasTimestampType for CosmosChain<Chain>

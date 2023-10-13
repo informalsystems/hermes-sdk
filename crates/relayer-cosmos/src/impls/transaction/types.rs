@@ -1,5 +1,3 @@
-use alloc::sync::Arc;
-
 use cgp_core::HasErrorType;
 use futures::lock::MutexGuard;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
@@ -7,7 +5,6 @@ use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
 use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::transaction::traits::nonce::guard::HasNonceGuard;
@@ -17,7 +14,6 @@ use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use prost::Message;
-use tendermint::abci::Event as AbciEvent;
 use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
@@ -46,10 +42,6 @@ impl HasLoggerType for CosmosTxContext {
 
 impl HasChainIdType for CosmosTxContext {
     type ChainId = ChainId;
-}
-
-impl HasEventType for CosmosTxContext {
-    type Event = Arc<AbciEvent>;
 }
 
 impl HasSignerType for CosmosTxContext {

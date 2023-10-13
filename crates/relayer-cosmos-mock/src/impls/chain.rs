@@ -49,7 +49,7 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
+use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
 use ibc_relayer_components::chain::traits::types::height::{
     CanIncrementHeight, HeightTypeProvider,
 };
@@ -129,7 +129,9 @@ impl<Chain: BasecoinEndpoint> HeightTypeProvider<MockCosmosContext<Chain>>
     type Height = Height;
 }
 
-impl<Chain: BasecoinEndpoint> HasEventType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> EventTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Event = IbcEvent;
 }
 
