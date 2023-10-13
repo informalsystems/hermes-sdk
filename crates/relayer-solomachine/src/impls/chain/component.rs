@@ -20,6 +20,7 @@ use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderC
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
@@ -50,6 +51,7 @@ delegate_components!(
     SolomachineChainComponents;
     [
         HeightTypeProviderComponent,
+        TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,
     ]:
         ProvideCosmosChainTypes,

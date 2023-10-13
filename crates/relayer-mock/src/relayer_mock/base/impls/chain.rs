@@ -47,7 +47,7 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
@@ -99,7 +99,7 @@ impl EventTypeProvider<MockChainContext> for MockComponents {
     type Event = Event;
 }
 
-impl HasTimestampType for MockChainContext {
+impl TimestampTypeProvider<MockChainContext> for MockComponents {
     type Timestamp = MockTimestamp;
 }
 

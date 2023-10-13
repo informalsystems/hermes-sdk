@@ -16,7 +16,6 @@ use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -25,7 +24,6 @@ use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
-use ibc_relayer_types::timestamp::Timestamp;
 
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
@@ -86,13 +84,6 @@ where
     fn logger(&self) -> &TracingLogger {
         &TracingLogger
     }
-}
-
-impl<Chain> HasTimestampType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Timestamp = Timestamp;
 }
 
 impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for SolomachineChain<Chain>

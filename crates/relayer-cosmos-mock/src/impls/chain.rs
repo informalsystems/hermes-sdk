@@ -66,7 +66,7 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
@@ -143,7 +143,9 @@ impl<Chain: BasecoinEndpoint> CanLogChainEvent for MockCosmosContext<Chain> {
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasTimestampType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> TimestampTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Timestamp = Timestamp;
 }
 

@@ -37,12 +37,14 @@ use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::height::HeightTypeProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
 use crate::chain::traits::types::status::ChainStatusTypeProviderComponent;
+use crate::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
     DefaultChainComponents<BaseComponents>;
     [
         HeightTypeProviderComponent,
+        TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
