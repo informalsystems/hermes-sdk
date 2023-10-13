@@ -25,7 +25,7 @@ ibc-relayer-solomachine     = { path = "../../crates/relayer-solomachine" }
 ibc-test-framework = { path = "../test-framework" }
 
 http = "0.2.9"
-prost = { version = "0.11" }
+prost = { version = "0.12" }
 serde_json = "1"
 time = "0.3"
 tokio = { version = "1.0", features = ["rt"] }
