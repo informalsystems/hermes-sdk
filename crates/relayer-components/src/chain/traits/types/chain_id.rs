@@ -4,7 +4,7 @@
 
 use core::fmt::Display;
 
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 /**
    This is implemented by a chain context to provide a
@@ -14,6 +14,7 @@ use cgp_core::Async;
    corresponds to a given chain, based on the chain ID information that is
    queried from a channel ID.
 */
+#[derive_component(ChainIdTypeProviderComponent, ChainIdTypeProvider<Chain>)]
 pub trait HasChainIdType: Async {
     /**
        The ID of a chain, which should implement [`Eq`] to differentiate chain

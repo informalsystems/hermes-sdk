@@ -27,7 +27,7 @@ use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
+use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdTypeProvider, HasChainId};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
@@ -107,7 +107,7 @@ impl MessageTypeProvider<MockChainContext> for MockComponents {
     type Message = MockMessage;
 }
 
-impl HasChainIdType for MockChainContext {
+impl ChainIdTypeProvider<MockChainContext> for MockComponents {
     type ChainId = String;
 }
 

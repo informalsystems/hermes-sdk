@@ -16,6 +16,7 @@ use ibc_relayer_components::chain::traits::components::receive_packet_payload_bu
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
+use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
@@ -49,6 +50,7 @@ delegate_components!(
     SolomachineChainComponents;
     [
         HeightTypeProviderComponent,
+        ChainIdTypeProviderComponent,
     ]:
         ProvideCosmosChainTypes,
     [

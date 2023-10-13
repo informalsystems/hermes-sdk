@@ -18,7 +18,6 @@ use ibc_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc_relayer::chain::client::ClientSettings;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
@@ -44,9 +43,7 @@ use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
 use ibc_relayer_types::timestamp::Timestamp;
 
 use crate::contexts::chain::CosmosChain;
@@ -98,13 +95,6 @@ where
     Chain: Async,
 {
     type Timestamp = Timestamp;
-}
-
-impl<Chain> HasChainIdType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type ChainId = ChainId;
 }
 
 impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for CosmosChain<Chain>

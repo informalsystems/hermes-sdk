@@ -1,11 +1,13 @@
 use alloc::sync::Arc;
 use cgp_core::Async;
 use ibc_relayer::chain::endpoint::ChainStatus;
+use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProvider;
 use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
 use ibc_relayer_components::chain::traits::types::height::{HasHeightType, HeightTypeProvider};
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProvider;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
 use tendermint::abci::Event as AbciEvent;
@@ -47,4 +49,11 @@ where
     fn chain_status_timestamp(status: &ChainStatus) -> &Timestamp {
         &status.timestamp
     }
+}
+
+impl<Chain> ChainIdTypeProvider<Chain> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type ChainId = ChainId;
 }

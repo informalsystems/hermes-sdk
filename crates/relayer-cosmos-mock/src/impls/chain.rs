@@ -41,7 +41,7 @@ use ibc_relayer_components::chain::traits::components::update_client_payload_bui
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
+use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdTypeProvider, HasChainId};
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
@@ -113,7 +113,9 @@ impl<Chain: BasecoinEndpoint> HasLogger for MockCosmosContext<Chain> {
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasChainIdType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> ChainIdTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type ChainId = ChainId;
 }
 

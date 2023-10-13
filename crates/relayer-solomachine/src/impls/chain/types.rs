@@ -1,5 +1,4 @@
 use cgp_core::{Async, HasErrorType};
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
@@ -25,9 +24,7 @@ use ibc_relayer_runtime::types::error::Error as RuntimeError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
 use ibc_relayer_types::timestamp::Timestamp;
 
 use crate::traits::solomachine::Solomachine;
@@ -89,13 +86,6 @@ where
     fn logger(&self) -> &TracingLogger {
         &TracingLogger
     }
-}
-
-impl<Chain> HasChainIdType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type ChainId = ChainId;
 }
 
 impl<Chain> HasTimestampType for SolomachineChain<Chain>
