@@ -20,7 +20,6 @@ use ibc_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc_relayer::chain::client::ClientSettings;
-use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
@@ -39,7 +38,6 @@ use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
@@ -53,7 +51,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
 use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
@@ -119,21 +116,6 @@ where
     Chain: Async,
 {
     type ChainId = ChainId;
-}
-
-impl<Chain> HasChainStatusType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type ChainStatus = ChainStatus;
-
-    fn chain_status_height(status: &ChainStatus) -> &Height {
-        &status.height
-    }
-
-    fn chain_status_timestamp(status: &ChainStatus) -> &Timestamp {
-        &status.timestamp
-    }
 }
 
 impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for CosmosChain<Chain>

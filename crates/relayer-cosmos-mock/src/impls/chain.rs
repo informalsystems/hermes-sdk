@@ -65,7 +65,7 @@ use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
+use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
@@ -327,14 +327,16 @@ where
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasChainStatusType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> ChainStatusTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type ChainStatus = ChainStatus;
 
-    fn chain_status_height(status: &Self::ChainStatus) -> &Self::Height {
+    fn chain_status_height(status: &Self::ChainStatus) -> &Height {
         &status.height
     }
 
-    fn chain_status_timestamp(status: &Self::ChainStatus) -> &Self::Timestamp {
+    fn chain_status_timestamp(status: &Self::ChainStatus) -> &Timestamp {
         &status.timestamp
     }
 }

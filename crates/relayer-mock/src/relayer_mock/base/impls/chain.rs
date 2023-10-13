@@ -46,7 +46,7 @@ use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
+use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -207,14 +207,14 @@ impl HasClientStateType<MockChainContext> for MockChainContext {
     type ClientState = ();
 }
 
-impl HasChainStatusType for MockChainContext {
+impl ChainStatusTypeProvider<MockChainContext> for MockComponents {
     type ChainStatus = ChainStatus;
 
-    fn chain_status_height(status: &Self::ChainStatus) -> &Self::Height {
+    fn chain_status_height(status: &Self::ChainStatus) -> &MockHeight {
         &status.height
     }
 
-    fn chain_status_timestamp(status: &Self::ChainStatus) -> &Self::Timestamp {
+    fn chain_status_timestamp(status: &Self::ChainStatus) -> &MockTimestamp {
         &status.timestamp
     }
 }

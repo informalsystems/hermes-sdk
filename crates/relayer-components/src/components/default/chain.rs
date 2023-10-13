@@ -34,6 +34,7 @@ use crate::chain::traits::components::update_client_payload_builder::UpdateClien
 use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use crate::chain::traits::types::height::HeightTypeProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
+use crate::chain::traits::types::status::ChainStatusTypeProviderComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
@@ -41,6 +42,7 @@ delegate_components!(
     [
         HeightTypeProviderComponent,
         MessageTypeProviderComponent,
+        ChainStatusTypeProviderComponent,
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,
         MessageSenderComponent,

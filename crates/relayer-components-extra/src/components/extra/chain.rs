@@ -33,6 +33,7 @@ use ibc_relayer_components::chain::traits::components::update_client_payload_bui
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
@@ -49,6 +50,7 @@ delegate_components!(
     [
         HeightTypeProviderComponent,
         MessageTypeProviderComponent,
+        ChainStatusTypeProviderComponent,
         MessageSenderComponent,
         PacketFieldsReaderComponent,
         CounterpartyChainIdQuerierComponent,
