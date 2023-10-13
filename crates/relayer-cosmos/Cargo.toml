@@ -42,7 +42,7 @@ futures = "0.3"
 tracing = "0.1.36"
 http = "0.2.9"
 opentelemetry = { version = "0.17.0", features = ["metrics"] }
-tonic = { version = "0.9", features = ["tls", "tls-roots"] }
+tonic = { version = "0.10", features = ["tls", "tls-roots"] }
 moka = { version = "0.11", features = ["future"] }
 
 [dependencies.tendermint]

@@ -37,7 +37,7 @@ itertools = "0.10.3"
 futures = "0.3"
 tracing = "0.1.36"
 http = "0.2.9"
-tonic = { version = "0.9", features = ["tls", "tls-roots"] }
+tonic = { version = "0.10", features = ["tls", "tls-roots"] }
 
 [dependencies.tendermint]
 version = "0.33.2"
