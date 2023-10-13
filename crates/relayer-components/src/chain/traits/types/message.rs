@@ -2,7 +2,7 @@
    Trait definitions for [`HasMessageType`] and [`CanEstimateMessageSize`].
 */
 
-use cgp_core::{Async, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::std_prelude::*;
 
@@ -17,6 +17,7 @@ use crate::std_prelude::*;
    we want to avoid defining multiple associated `Message` types so that
    they can never be ambiguous.
 */
+#[derive_component(MessageTypeProviderComponent, MessageTypeProvider<Chain>)]
 pub trait HasMessageType: Async {
     /**
        The messages that can be assembled into transactions and be submitted to

@@ -1,6 +1,7 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
-use crate::chain::traits::types::chain::HasChainTypes;
+use crate::chain::traits::types::height::HasHeightType;
+use crate::chain::traits::types::timestamp::HasTimestampType;
 
 /**
    A chain context that offers a [`ChainStatus`](Self::ChainStatus) type to
@@ -25,7 +26,8 @@ use crate::chain::traits::types::chain::HasChainTypes;
    chain status queries can be cached without needing to know what information
    is contained inside the chain status.
 */
-pub trait HasChainStatusType: HasChainTypes {
+#[derive_component(ChainStatusTypeProviderComponent, ChainStatusTypeProvider<Chain>)]
+pub trait HasChainStatusType: HasHeightType + HasTimestampType {
     /**
        Contains information about the current status of the blockchain.
     */

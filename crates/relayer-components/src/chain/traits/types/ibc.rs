@@ -5,7 +5,7 @@
 
 use core::fmt::Display;
 
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::chain::HasChainTypes;
 use crate::chain::traits::types::height::HasHeightType;
@@ -47,6 +47,7 @@ use crate::std_prelude::*;
    access to two chain contexts are handled by the
    [relay context](crate::relay).
 */
+#[derive_component(IbcChainTypesProviderComponent, IbcChainTypesProvider<Chain>)]
 pub trait HasIbcChainTypes<Counterparty>: HasChainTypes {
     /**
        The client ID of the counterparty chain, that is stored on the self

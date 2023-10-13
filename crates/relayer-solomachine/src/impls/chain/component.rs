@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use ibc_cosmos_client_components::components::packet_fields::CosmosPacketFieldReader;
+use ibc_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
 use ibc_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
 use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
@@ -15,6 +16,13 @@ use ibc_relayer_components::chain::traits::components::receive_packet_payload_bu
 use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
+use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
+use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
@@ -28,6 +36,7 @@ use crate::impls::chain::solomachine_components::query_client_state::QueryCosmos
 use crate::impls::chain::solomachine_components::query_consensus_state::QueryCosmosConsensusStateFromSolomachine;
 use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
 use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
+use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachineChainTypes;
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
 use crate::types::chain::SolomachineChain;
 
@@ -42,6 +51,19 @@ where
 
 delegate_components!(
     SolomachineChainComponents;
+    [
+        HeightTypeProviderComponent,
+        TimestampTypeProviderComponent,
+        ChainIdTypeProviderComponent,
+        IbcChainTypesProviderComponent,
+        IbcPacketTypesProviderComponent,
+    ]:
+        ProvideCosmosChainTypes,
+    [
+        MessageTypeProviderComponent,
+        EventTypeProviderComponent,
+    ]:
+        ProvideSolomachineChainTypes,
     PacketFieldsReaderComponent:
         CosmosPacketFieldReader,
     MessageSenderComponent:

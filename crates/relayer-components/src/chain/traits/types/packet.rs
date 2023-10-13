@@ -2,7 +2,7 @@
    Trait definition for [`HasIbcPacketTypes`].
 */
 
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 /**
     Contains the abstract packet types for a chain context to send and receive
@@ -34,6 +34,7 @@ use cgp_core::Async;
     and when a chain receives [`IncomingPacket`](Self::IncomingPacket) that is
     coming from a counterparty chain.
 */
+#[derive_component(IbcPacketTypesProviderComponent, IbcPacketTypesProvider<Chain>)]
 pub trait HasIbcPacketTypes<Counterparty>: Async {
     /**
        A packet sent from counterparty to self.

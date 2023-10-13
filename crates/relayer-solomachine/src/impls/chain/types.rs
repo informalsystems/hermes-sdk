@@ -1,5 +1,4 @@
 use cgp_core::{Async, HasErrorType};
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
@@ -11,28 +10,17 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as RuntimeError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
-use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
+use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
@@ -41,7 +29,6 @@ use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };
-use crate::types::message::SolomachineMessage;
 use crate::types::payloads::channel::{
     SolomachineChannelOpenAckPayload, SolomachineChannelOpenConfirmPayload,
     SolomachineChannelOpenTryPayload,
@@ -94,65 +81,6 @@ where
     fn logger(&self) -> &TracingLogger {
         &TracingLogger
     }
-}
-
-impl<Chain> HasHeightType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Height = Height;
-}
-
-impl<Chain> HasMessageType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Message = SolomachineMessage;
-}
-
-impl<Chain> HasEventType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Event = SolomachineEvent;
-}
-
-impl<Chain> HasChainIdType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type ChainId = ChainId;
-}
-
-impl<Chain> HasTimestampType for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type Timestamp = Timestamp;
-}
-
-impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type ClientId = ClientId;
-
-    type ConnectionId = ConnectionId;
-
-    type ChannelId = ChannelId;
-
-    type PortId = PortId;
-
-    type Sequence = Sequence;
-}
-
-impl<Chain, Counterparty> HasIbcPacketTypes<Counterparty> for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
-    type IncomingPacket = Packet;
-
-    type OutgoingPacket = Packet;
 }
 
 impl<Chain, Counterparty> HasClientStateType<Counterparty> for SolomachineChain<Chain>

@@ -31,6 +31,14 @@ use ibc_relayer_components::chain::traits::components::unreceived_packet_sequenc
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
+use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
+use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
@@ -45,6 +53,14 @@ delegate_components!(
     ConsensusStateQuerierComponent:
         ConsensusStateTelemetryQuerier<BaseComponents>,
     [
+        HeightTypeProviderComponent,
+        TimestampTypeProviderComponent,
+        ChainIdTypeProviderComponent,
+        MessageTypeProviderComponent,
+        EventTypeProviderComponent,
+        IbcChainTypesProviderComponent,
+        IbcPacketTypesProviderComponent,
+        ChainStatusTypeProviderComponent,
         MessageSenderComponent,
         PacketFieldsReaderComponent,
         CounterpartyChainIdQuerierComponent,

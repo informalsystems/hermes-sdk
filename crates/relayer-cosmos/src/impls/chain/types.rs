@@ -1,7 +1,4 @@
-use alloc::sync::Arc;
-
 use cgp_core::{Async, HasErrorType};
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use ibc_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use ibc_cosmos_client_components::types::payloads::channel::{
@@ -21,8 +18,6 @@ use ibc_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc_relayer::chain::client::ClientSettings;
-use ibc_relayer::chain::endpoint::ChainStatus;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
@@ -34,16 +29,9 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -51,13 +39,6 @@ use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
-use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
-use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
-use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};
@@ -103,71 +84,6 @@ where
     }
 }
 
-impl<Chain> HasMessageType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Message = Arc<dyn CosmosMessage>;
-}
-
-impl<Chain> HasEventType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Event = Arc<AbciEvent>;
-}
-
-impl<Chain> HasHeightType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Height = Height;
-}
-
-impl<Chain> HasTimestampType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Timestamp = Timestamp;
-}
-
-impl<Chain> HasChainIdType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type ChainId = ChainId;
-}
-
-impl<Chain> HasChainStatusType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type ChainStatus = ChainStatus;
-
-    fn chain_status_height(status: &ChainStatus) -> &Height {
-        &status.height
-    }
-
-    fn chain_status_timestamp(status: &ChainStatus) -> &Timestamp {
-        &status.timestamp
-    }
-}
-
-impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type ClientId = ClientId;
-
-    type ConnectionId = ConnectionId;
-
-    type ChannelId = ChannelId;
-
-    type PortId = PortId;
-
-    type Sequence = Sequence;
-}
-
 impl<Chain, Counterparty> HasClientStateType<Counterparty> for CosmosChain<Chain>
 where
     Chain: Async,
@@ -180,15 +96,6 @@ where
     Chain: Async,
 {
     type ConsensusState = TendermintConsensusState;
-}
-
-impl<Chain, Counterparty> HasIbcPacketTypes<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type IncomingPacket = Packet;
-
-    type OutgoingPacket = Packet;
 }
 
 impl<Chain, Counterparty> HasCreateClientOptions<Counterparty> for CosmosChain<Chain>

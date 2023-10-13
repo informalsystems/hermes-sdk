@@ -41,7 +41,7 @@ use ibc_relayer_components::chain::traits::components::update_client_payload_bui
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
+use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdTypeProvider, HasChainId};
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
@@ -49,22 +49,24 @@ use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusS
 use ibc_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
 };
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
+use ibc_relayer_components::chain::traits::types::height::{
+    CanIncrementHeight, HeightTypeProvider,
+};
 use ibc_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, HasIbcChainTypes,
+    HasCounterpartyMessageHeight, IbcChainTypesProvider,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, HasMessageType,
+    CanEstimateMessageSize, MessageTypeProvider,
 };
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
+use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
@@ -111,7 +113,9 @@ impl<Chain: BasecoinEndpoint> HasLogger for MockCosmosContext<Chain> {
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasChainIdType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> ChainIdTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type ChainId = ChainId;
 }
 
@@ -121,11 +125,15 @@ impl<Chain: BasecoinEndpoint> HasChainId for MockCosmosContext<Chain> {
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasHeightType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> HeightTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Height = Height;
 }
 
-impl<Chain: BasecoinEndpoint> HasEventType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> EventTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Event = IbcEvent;
 }
 
@@ -135,16 +143,21 @@ impl<Chain: BasecoinEndpoint> CanLogChainEvent for MockCosmosContext<Chain> {
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasTimestampType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> TimestampTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Timestamp = Timestamp;
 }
 
-impl<Chain: BasecoinEndpoint> HasMessageType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> MessageTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Message = Any;
 }
 
-impl<Chain, Counterparty> HasIbcChainTypes<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    IbcChainTypesProvider<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
@@ -160,8 +173,9 @@ where
     type Sequence = Sequence;
 }
 
-impl<Chain, Counterparty> HasIbcPacketTypes<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    IbcPacketTypesProvider<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
@@ -321,14 +335,16 @@ where
     }
 }
 
-impl<Chain: BasecoinEndpoint> HasChainStatusType for MockCosmosContext<Chain> {
+impl<Chain: BasecoinEndpoint> ChainStatusTypeProvider<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type ChainStatus = ChainStatus;
 
-    fn chain_status_height(status: &Self::ChainStatus) -> &Self::Height {
+    fn chain_status_height(status: &Self::ChainStatus) -> &Height {
         &status.height
     }
 
-    fn chain_status_timestamp(status: &Self::ChainStatus) -> &Self::Timestamp {
+    fn chain_status_timestamp(status: &Self::ChainStatus) -> &Timestamp {
         &status.timestamp
     }
 }

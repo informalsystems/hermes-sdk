@@ -27,25 +27,27 @@ use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
+use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdTypeProvider, HasChainId};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
+use ibc_relayer_components::chain::traits::types::height::{
+    CanIncrementHeight, HeightTypeProvider,
+};
 use ibc_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, HasIbcChainTypes,
+    HasCounterpartyMessageHeight, IbcChainTypesProvider,
 };
 use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, HasMessageType,
+    CanEstimateMessageSize, MessageTypeProvider,
 };
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
+use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
@@ -89,27 +91,27 @@ impl HasLoggerType for MockChainContext {
     type Logger = TracingLogger;
 }
 
-impl HasHeightType for MockChainContext {
+impl HeightTypeProvider<MockChainContext> for MockComponents {
     type Height = MockHeight;
 }
 
-impl HasEventType for MockChainContext {
+impl EventTypeProvider<MockChainContext> for MockComponents {
     type Event = Event;
 }
 
-impl HasTimestampType for MockChainContext {
+impl TimestampTypeProvider<MockChainContext> for MockComponents {
     type Timestamp = MockTimestamp;
 }
 
-impl HasMessageType for MockChainContext {
+impl MessageTypeProvider<MockChainContext> for MockComponents {
     type Message = MockMessage;
 }
 
-impl HasChainIdType for MockChainContext {
+impl ChainIdTypeProvider<MockChainContext> for MockComponents {
     type ChainId = String;
 }
 
-impl HasIbcChainTypes<MockChainContext> for MockChainContext {
+impl IbcChainTypesProvider<MockChainContext, MockChainContext> for MockComponents {
     type ClientId = ClientId;
 
     type ConnectionId = String;
@@ -121,7 +123,7 @@ impl HasIbcChainTypes<MockChainContext> for MockChainContext {
     type Sequence = Sequence;
 }
 
-impl HasIbcPacketTypes<MockChainContext> for MockChainContext {
+impl IbcPacketTypesProvider<MockChainContext, MockChainContext> for MockComponents {
     type IncomingPacket = PacketKey;
 
     type OutgoingPacket = PacketKey;
@@ -205,14 +207,14 @@ impl HasClientStateType<MockChainContext> for MockChainContext {
     type ClientState = ();
 }
 
-impl HasChainStatusType for MockChainContext {
+impl ChainStatusTypeProvider<MockChainContext> for MockComponents {
     type ChainStatus = ChainStatus;
 
-    fn chain_status_height(status: &Self::ChainStatus) -> &Self::Height {
+    fn chain_status_height(status: &Self::ChainStatus) -> &MockHeight {
         &status.height
     }
 
-    fn chain_status_timestamp(status: &Self::ChainStatus) -> &Self::Timestamp {
+    fn chain_status_timestamp(status: &Self::ChainStatus) -> &MockTimestamp {
         &status.timestamp
     }
 }

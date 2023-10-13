@@ -2,7 +2,7 @@
    Trait definition for [`HasEventType`].
 */
 
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 /**
    This is used for the chain context and the transaction context to declare
@@ -15,6 +15,7 @@ use cgp_core::Async;
    we want to avoid defining multiple associated `Event` types so that
    they can never be ambiguous.
 */
+#[derive_component(EventTypeProviderComponent, EventTypeProvider<Chain>)]
 pub trait HasEventType: Async {
     /**
        The events that are emitted from a transaction being committed to a
