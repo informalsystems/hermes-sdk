@@ -830,11 +830,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1692311226,
-        "narHash": "sha256-mRzNup0PIUD6YxbrYvjzL7f+1oaOGy9nmGCV3AZkQus=",
+        "lastModified": 1697379843,
+        "narHash": "sha256-RcnGuJgC2K/UpTy+d32piEoBXq2M+nVFzM3ah/ZdJzg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ef8288935ba859fc3b30632fa6e04705f81b9c2a",
+        "rev": "12bdeb01ff9e2d3917e6a44037ed7df6e6c3df9d",
         "type": "github"
       },
       "original": {
@@ -993,16 +993,16 @@
     "risc0-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1694644341,
-        "narHash": "sha256-rSABcKirboyMTuPAN9QfrXpx0xqG3aSLyQ/2jNIV8rc=",
-        "owner": "risc0",
+        "lastModified": 1697507942,
+        "narHash": "sha256-JdDtTkvETDOogUmcFWKHL+toHRnOWiFrxW66hhGMUPU=",
+        "owner": "informalsystems",
         "repo": "risc0",
-        "rev": "29cc16f84e1f5f2af34120528b1f18a33e00ce71",
+        "rev": "a8a0b4effe08fd13b4da16f97b4fb67f5c6ab7f1",
         "type": "github"
       },
       "original": {
-        "owner": "risc0",
-        "ref": "v0.18.0",
+        "owner": "informalsystems",
+        "ref": "v0.18.0-with-lock",
         "repo": "risc0",
         "type": "github"
       }

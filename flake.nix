@@ -8,7 +8,7 @@
     rust-overlay.url = github:oxalica/rust-overlay;
 
     risc0-src = {
-      url = github:risc0/risc0/v0.18.0;
+      url = github:informalsystems/risc0/v0.18.0-with-lock;
       flake = false;
     };
   };
