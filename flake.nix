@@ -5,6 +5,12 @@
     nixpkgs.url = github:nixos/nixpkgs/nixpkgs-unstable;
     flake-utils.url = github:numtide/flake-utils;
     cosmos-nix.url = github:informalsystems/cosmos.nix;
+    rust-overlay.url = github:oxalica/rust-overlay;
+
+    risc0-src = {
+      url = github:risc0/risc0/v0.18.0;
+      flake = false;
+    };
   };
 
   outputs = inputs: let
@@ -20,6 +26,9 @@
     (system: let
       nixpkgs = import inputs.nixpkgs {
         inherit system;
+        overlays = [
+          inputs.rust-overlay.overlays.default
+        ];
       };
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
@@ -27,26 +36,14 @@
       packages = {
         inherit
           (cosmos-nix)
-          gaia6-ordered
           gaia11
-          osmosis
-          wasmd
-          ibc-go-v2-simapp
-          ibc-go-v3-simapp
-          ibc-go-v4-simapp
-          ibc-go-v5-simapp
-          ibc-go-v6-simapp
           ibc-go-v7-simapp
-          apalache
-          evmos
-          juno
-          stride
-          stride-no-admin
-          stride-consumer-no-admin
-          stride-consumer
-          migaloo
-          neutron
           ;
+
+        risc0 = import ./nix/risc0 {
+          inherit nixpkgs;
+          src = inputs.risc0-src;
+        };
 
         python = nixpkgs.python3.withPackages (p: [
           p.toml
