@@ -40,7 +40,7 @@
           ibc-go-v7-simapp
           ;
 
-        risc0 = import ./nix/risc0 {
+        cargo-risczero = import ./nix/risc0/cargo-risczero.nix {
           inherit nixpkgs;
           src = inputs.risc0-src;
         };
