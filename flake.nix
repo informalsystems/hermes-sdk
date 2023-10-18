@@ -45,6 +45,11 @@
           src = inputs.risc0-src;
         };
 
+        risc0-toolchain = import ./nix/risc0/toolchain.nix {
+          inherit nixpkgs cargo-risczero;
+          src = inputs.risc0-src;
+        };
+
         python = nixpkgs.python3.withPackages (p: [
           p.toml
         ]);
