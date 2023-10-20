@@ -11,6 +11,16 @@
       url = github:informalsystems/risc0/v0.18.0-with-lock;
       flake = false;
     };
+
+    risc0-rust-src = {
+      url = github:risc0/rust/risc0;
+      flake = false;
+    };
+
+    test-rollup-src = {
+      url = github:informalsystems/sovereign-sdk/farhad/demo-rollup-with-ibc;
+      flake = false;
+    };
   };
 
   outputs = inputs: let
@@ -32,6 +42,23 @@
       };
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
+
+
+      cargo-risczero = import ./nix/risc0/cargo-risczero.nix {
+        inherit nixpkgs;
+        src = inputs.risc0-src;
+      };
+
+      risc0-toolchain = import ./nix/risc0/toolchain.nix {
+        inherit nixpkgs cargo-risczero;
+        src = inputs.risc0-rust-src;
+      };
+
+      test-rollup = import ./nix/test-rollup {
+        inherit nixpkgs;
+        src = inputs.test-rollup-src;
+      };
+
     in {
       packages = {
         inherit
@@ -40,19 +67,7 @@
           ibc-go-v7-simapp
           ;
 
-        cargo-risczero = import ./nix/risc0/cargo-risczero.nix {
-          inherit nixpkgs;
-          src = inputs.risc0-src;
-        };
-
-        risc0-toolchain = import ./nix/risc0/toolchain.nix {
-          inherit nixpkgs cargo-risczero;
-          src = inputs.risc0-src;
-        };
-
-        python = nixpkgs.python3.withPackages (p: [
-          p.toml
-        ]);
+        inherit cargo-risczero risc0-toolchain test-rollup;
       };
     });
 }

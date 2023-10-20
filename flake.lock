@@ -990,6 +990,23 @@
         "type": "github"
       }
     },
+    "risc0-rust-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1693114167,
+        "narHash": "sha256-SDkQZUGpTWU2oiosiLRoYRzp8EGCCBSrBgaPB5dpmPc=",
+        "owner": "risc0",
+        "repo": "rust",
+        "rev": "26a8deaa9d976d5b70d4777e94f1ae78eada083a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "risc0",
+        "ref": "risc0",
+        "repo": "rust",
+        "type": "github"
+      }
+    },
     "risc0-src": {
       "flake": false,
       "locked": {
@@ -1012,6 +1029,7 @@
         "cosmos-nix": "cosmos-nix",
         "flake-utils": "flake-utils_3",
         "nixpkgs": "nixpkgs_3",
+        "risc0-rust-src": "risc0-rust-src",
         "risc0-src": "risc0-src",
         "rust-overlay": "rust-overlay_2"
       }

@@ -14,10 +14,21 @@ let
         buildInputs = [
             cargo-risczero
             rust-bin
+            nixpkgs.git
+            nixpkgs.python3
         ];
 
+        CI = "1";
+
+        configurePhase = "true";
+
         buildPhase = ''
-            cargo-risczero cargo-risczero install-toolchain
+            export RISC0_BUILD_DIR=$pwd
+            mkdir -p $out/rust
+            mv * $out/rust/
+            mv $out/rust ./
+            ls -la
+            cargo-risczero risczero build-toolchain
         '';
     };
 in
