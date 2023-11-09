@@ -19,7 +19,8 @@ use ibc::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, Connection
 use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath};
 use ibc::core::timestamp::Timestamp;
 use ibc::core::{Msg, ValidationContext};
-use ibc::{Any, Height};
+use ibc::proto::Any;
+use ibc::Height;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;

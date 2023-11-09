@@ -4,7 +4,7 @@ use basecoin_app::modules::ibc::IbcContext;
 use basecoin_store::impls::RevertibleStore;
 use ibc::core::events::IbcEvent;
 use ibc::core::ValidationContext;
-use ibc::Any;
+use ibc::proto::Any;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::traits::endpoint::BasecoinEndpoint;

@@ -28,6 +28,11 @@ ibc-cosmos-client-components    = { path = "./crates/cosmos-client-components" }
 ibc-relayer-cosmos              = { path = "./crates/relayer-cosmos" }
 ibc-relayer-solomachine         = { path = "./crates/relayer-solomachine" }
 
+ibc                 = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
+ibc-query           = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
+ibc-derive          = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
+basecoin-app        = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
+basecoin-store      = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
 cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

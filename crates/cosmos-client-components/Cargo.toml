@@ -32,11 +32,11 @@ async-trait = "0.1.56"
 flex-error = { version = "0.4.4", default-features = false }
 prost = { version = "0.12" }
 eyre = "0.6.8"
-tokio = "1.24"
+tokio = "1.0"
 itertools = "0.10.3"
 futures = "0.3"
 tracing = "0.1.36"
-http = "0.2.9"
+http = "0.2.10"
 tonic = { version = "0.10", features = ["tls", "tls-roots"] }
 
 [dependencies.tendermint]
