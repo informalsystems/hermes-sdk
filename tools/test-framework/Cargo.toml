@@ -16,12 +16,12 @@ description = """
 
 [dependencies]
 cgp-core           = { version = "0.1.0" }
-ibc-relayer-types  = { version = "=0.25.0" }
-ibc-relayer        = { version = "=0.25.0" }
-ibc-relayer-cosmos = { version = "=0.25.0" }
+ibc-relayer-types  = { version = "0.26.0" }
+ibc-relayer        = { version = "0.26.0" }
+ibc-relayer-cosmos = { version = "0.1.0" }
 ibc-relayer-components = { version = "=0.1.0" }
-ibc-proto         = { version = "0.34.0", features = ["serde"] }
-tendermint-rpc    = { version = "0.33.2", features = ["http-client", "websocket-client"] }
+ibc-proto         = { version = "0.38.0", features = ["serde"] }
+tendermint-rpc    = { version = "0.34", features = ["http-client", "websocket-client"] }
 
 http = "0.2.9"
 tokio = { version = "1.0", features = ["full"] }
@@ -42,7 +42,7 @@ sha2 = "0.10.6"
 crossbeam-channel = "0.5.8"
 semver = "1.0.16"
 flex-error = "0.4.4"
-prost = { version = "0.11" }
-tonic = { version = "0.9", features = ["tls", "tls-roots"] }
+prost = { version = "0.12" }
+tonic = { version = "0.10", features = ["tls", "tls-roots"] }
 hdpath = "0.6.3"
 once_cell = "1.18.0"

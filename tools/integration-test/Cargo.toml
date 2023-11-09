@@ -14,14 +14,14 @@ publish      = false
 
 [dependencies]
 cgp-core           = { version = "0.1.0" }
-ibc-relayer-types  = { version = "0.25.0" }
-ibc-relayer        = { version = "0.25.0" }
+ibc-relayer-types  = { version = "0.26.0" }
+ibc-relayer        = { version = "0.26.0" }
 ibc-relayer-components = { version = "0.1.0" }
 ibc-relayer-components-extra = { version = "0.1.0" }
 ibc-cosmos-client-components = { version = "0.1.0" }
-ibc-relayer-runtime    = { path = "../../crates/relayer-runtime" }
-ibc-relayer-cosmos     = { path = "../../crates/relayer-cosmos" }
-ibc-relayer-solomachine     = { path = "../../crates/relayer-solomachine" }
+ibc-relayer-runtime    = { version = "0.1.0" }
+ibc-relayer-cosmos     = { version = "0.1.0" }
+ibc-relayer-solomachine     = {version = "0.1.0" }
 ibc-test-framework = { path = "../test-framework" }
 
 http = "0.2.9"

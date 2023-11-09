@@ -16,11 +16,6 @@ members = [
     "tools/test-framework",
 ]
 
-exclude = [
-    "tools/check-guide",
-    "tools/query-events",
-]
-
 [profile.release]
 overflow-checks = true
 
@@ -31,6 +26,7 @@ ibc-relayer-runtime             = { path = "./crates/relayer-runtime" }
 ibc-relayer-subscription        = { path = "./crates/relayer-subscription" }
 ibc-cosmos-client-components    = { path = "./crates/cosmos-client-components" }
 ibc-relayer-cosmos              = { path = "./crates/relayer-cosmos" }
+ibc-relayer-solomachine         = { path = "./crates/relayer-solomachine" }
 
 cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
@@ -38,9 +34,9 @@ cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", bran
 cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
-ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-proto                        = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "main" }
 # tendermint                       = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
 # tendermint-rpc                   = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }

@@ -1,6 +1,6 @@
 [package]
 name         = "ibc-relayer-cosmos"
-version      = "0.25.0"
+version      = "0.1.0"
 edition      = "2021"
 license      = "Apache-2.0"
 readme       = "README.md"
@@ -19,10 +19,10 @@ all-features = true
 default   = ["flex-error/std", "flex-error/eyre_tracer"]
 
 [dependencies]
-ibc-proto         = { version = "0.34.0" }
-ibc-relayer       = { version = "0.25.0" }
-ibc-relayer-types = { version = "0.25.0" }
-ibc-telemetry     = { version = "0.25.0" }
+ibc-proto         = { version = "0.38.0" }
+ibc-relayer       = { version = "0.26.0" }
+ibc-relayer-types = { version = "0.26.0" }
+ibc-telemetry     = { version = "0.26.0" }
 cgp-core = { version = "0.1.0" }
 ibc-relayer-runtime = { version = "0.1.0" }
 ibc-relayer-components = { version = "0.1.0" }
@@ -34,7 +34,7 @@ serde = "1.0"
 serde_derive = "1.0"
 async-trait = "0.1.56"
 flex-error = { version = "0.4.4", default-features = false }
-prost = { version = "0.11" }
+prost = { version = "0.12" }
 eyre = "0.6.8"
 tokio = "1.24"
 itertools = "0.10.3"
@@ -46,10 +46,10 @@ tonic = { version = "0.9", features = ["tls", "tls-roots"] }
 moka = { version = "0.11", features = ["future"] }
 
 [dependencies.tendermint]
-version = "0.33.2"
+version = "0.34"
 features = ["secp256k1"]
 
 [dependencies.tendermint-rpc]
-version = "0.33.2"
+version = "0.34"
 features = ["http-client", "websocket-client"]
 
