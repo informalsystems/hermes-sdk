@@ -1,48 +1,47 @@
 [package]
 name       = "ibc-test-framework"
-version    = "0.25.0"
-edition    = "2021"
-license    = "Apache-2.0"
-readme     = "README.md"
-keywords   = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-homepage   = "https://hermes.informal.systems/"
-repository = "https://github.com/informalsystems/hermes"
-authors    = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.72"
-
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme      = "README.md"
 description = """
   Framework for writing integration tests for IBC relayers
 """
 
 [dependencies]
-cgp-core           = { version = "0.1.0" }
-ibc-relayer-types  = { version = "0.26.0" }
-ibc-relayer        = { version = "0.26.0" }
-ibc-relayer-cosmos = { version = "0.1.0" }
-ibc-relayer-components = { version = "=0.1.0" }
-ibc-proto         = { version = "0.38.0", features = ["serde"] }
-tendermint-rpc    = { version = "0.34", features = ["http-client", "websocket-client"] }
+cgp-core           = { workspace = true }
+ibc-relayer-types  = { workspace = true }
+ibc-relayer        = { workspace = true }
+ibc-relayer-cosmos = { workspace = true }
+ibc-relayer-components  = { workspace = true }
+ibc-proto               = { workspace = true, features = ["serde"] }
+tendermint-rpc          = { workspace = true, features = ["http-client", "websocket-client"] }
 
-http = "0.2.9"
-tokio = { version = "1.0", features = ["full"] }
-tracing = "0.1.36"
-tracing-subscriber = { version = "0.3.17", features = [ "env-filter" ] }
-eyre = "0.6.8"
-color-eyre = "0.6"
-cfg-if = "1.0.0"
-rand = "0.8.5"
-hex = "0.4.3"
-serde = "1.0"
-serde_json = "1"
-serde_yaml = "0.9.16"
-itertools = "0.10"
-toml = "0.7"
-subtle-encoding = "0.5.1"
-sha2 = "0.10.6"
-crossbeam-channel = "0.5.8"
-semver = "1.0.16"
-flex-error = "0.4.4"
-prost = { version = "0.12" }
-tonic = { version = "0.10", features = ["tls", "tls-roots"] }
-hdpath = "0.6.3"
-once_cell = "1.18.0"
+http        = { workspace = true }
+tokio       = { workspace = true, features = ["full"] }
+tracing     = { workspace = true }
+eyre        = { workspace = true }
+flex-error  = { workspace = true }
+itertools   = { workspace = true }
+prost       = { workspace = true }
+serde       = { workspace = true }
+serde_json  = { workspace = true }
+tonic       = { workspace = true, features = ["tls", "tls-roots"] }
+
+color-eyre          = "0.6"
+cfg-if              = "1.0.0"
+rand                = "0.8.5"
+hex                 = "0.4.3"
+serde_yaml          = "0.9.16"
+toml                = "0.7"
+subtle-encoding     = "0.5.1"
+sha2                = "0.10.6"
+crossbeam-channel   = "0.5.8"
+semver              = "1.0.16"
+tracing-subscriber  = { version = "0.3.17", features = [ "env-filter" ] }
+hdpath              = "0.6.3"
+once_cell           = "1.18.0"

@@ -1,13 +1,13 @@
 [package]
 name         = "ibc-relayer-subscription"
-version      = "0.1.0"
-edition      = "2021"
-license      = "Apache-2.0"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
 readme       = "README.md"
-keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-repository   = "https://github.com/informalsystems/ibc-rs"
-authors      = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.72"
 description  = """
     Implementation of an IBC Relayer in Rust, as a library
 """
@@ -18,9 +18,10 @@ all-features = true
 [features]
 
 [dependencies]
-ibc-relayer-components = { version = "0.1.0" }
-ibc-relayer-components-extra = { version = "0.1.0" }
-cgp-core = { version = "0.1.0" }
-async-trait = "0.1.56"
+ibc-relayer-components          = { workspace = true }
+ibc-relayer-components-extra    = { workspace = true }
+cgp-core    = { workspace = true }
+async-trait = { workspace = true }
+
 futures-core = { version = "0.3", default-features = false, features = ["alloc"] }
 futures-util = { version = "0.3", default-features = false, features = ["alloc"] }

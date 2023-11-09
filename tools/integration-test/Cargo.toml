@@ -1,37 +1,34 @@
 [package]
 name         = "ibc-integration-test"
-version      = "0.25.0"
-edition      = "2021"
-license      = "Apache-2.0"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
 readme       = "README.md"
-keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-homepage     = "https://hermes.informal.systems/"
-repository   = "https://github.com/informalsystems/hermes"
-authors      = ["Informal Systems <hello@informal.systems>"]
 description  = "Integration tests for Hermes"
-rust-version = "1.72"
 publish      = false
 
 [dependencies]
-cgp-core           = { version = "0.1.0" }
-ibc-relayer-types  = { version = "0.26.0" }
-ibc-relayer        = { version = "0.26.0" }
-ibc-relayer-components = { version = "0.1.0" }
-ibc-relayer-components-extra = { version = "0.1.0" }
-ibc-cosmos-client-components = { version = "0.1.0" }
-ibc-relayer-runtime    = { version = "0.1.0" }
-ibc-relayer-cosmos     = { version = "0.1.0" }
-ibc-relayer-solomachine     = {version = "0.1.0" }
-ibc-test-framework = { path = "../test-framework" }
+cgp-core           = { workspace = true }
+ibc-relayer-types  = { workspace = true }
+ibc-relayer        = { workspace = true }
+ibc-relayer-components          = { workspace = true }
+ibc-relayer-components-extra    = { workspace = true }
+ibc-cosmos-client-components    = { workspace = true }
+ibc-relayer-runtime         = { workspace = true }
+ibc-relayer-cosmos          = { workspace = true }
+ibc-relayer-solomachine     = { workspace = true }
+ibc-test-framework          = { path = "../test-framework" }
 
-http = "0.2.9"
-prost = { version = "0.11" }
-serde_json = "1"
+http        = { workspace = true }
+prost       = { workspace = true }
+serde_json  = { workspace = true }
+tokio       = { workspace = true, features = ["rt"] }
 time = "0.3"
-tokio = { version = "1.0", features = ["rt"] }
 toml = "0.7"
-tonic = { version = "0.9", features = ["tls", "tls-roots"] }
-serde = "1.0.166"
 
 [features]
 default = []
