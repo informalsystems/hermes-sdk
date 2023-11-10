@@ -38,10 +38,10 @@ use ibc_relayer::denom::DenomTrace;
 use ibc_relayer::error::Error;
 use ibc_relayer::event::IbcEventWithHeight;
 use ibc_relayer::keyring::AnySigningKeyPair;
-use ibc_relayer::light_client::AnyHeader;
 use ibc_relayer::misbehaviour::MisbehaviourEvidence;
 use ibc_relayer_types::applications::ics31_icq::response::CrossChainQueryResponse;
 use ibc_relayer_types::core::ics02_client::events::UpdateClient;
+use ibc_relayer_types::core::ics02_client::header::AnyHeader;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, IdentifiedConnectionEnd,
 };
@@ -428,5 +428,9 @@ where
         request: QueryIncentivizedPacketRequest,
     ) -> Result<QueryIncentivizedPacketResponse, Error> {
         self.value().query_incentivized_packet(request)
+    }
+
+    fn query_consumer_chains(&self) -> Result<Vec<(ChainId, ClientId)>, Error> {
+        self.value().query_consumer_chains()
     }
 }

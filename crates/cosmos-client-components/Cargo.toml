@@ -1,49 +1,37 @@
 [package]
 name         = "ibc-cosmos-client-components"
-version      = "0.1.0"
-edition      = "2021"
-license      = "Apache-2.0"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
 readme       = "README.md"
-keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-repository   = "https://github.com/informalsystems/ibc-rs"
-authors      = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.72"
 description  = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
-[package.metadata.docs.rs]
-all-features = true
-
-[features]
-default   = ["flex-error/std", "flex-error/eyre_tracer"]
-
 [dependencies]
-ibc-proto         = { version = "0.34.0" }
-ibc-relayer       = { version = "0.25.0" }
-ibc-relayer-types = { version = "0.25.0" }
-cgp-core = { version = "0.1.0" }
-ibc-relayer-runtime = { version = "0.1.0" }
-ibc-relayer-components = { version = "0.1.0" }
-ibc-relayer-components-extra = { version = "0.1.0" }
-ibc-relayer-subscription = { version = "0.1.0" }
+ibc-proto         = { workspace = true }
+ibc-relayer       = { workspace = true }
+ibc-relayer-types = { workspace = true }
+cgp-core          = { workspace = true }
+ibc-relayer-runtime             = { workspace = true }
+ibc-relayer-components          = { workspace = true }
+ibc-relayer-components-extra    = { workspace = true }
+ibc-relayer-subscription        = { workspace = true }
+tendermint      = { workspace = true, features = ["secp256k1"] }
+tendermint-rpc  = { workspace = true, features = ["http-client", "websocket-client"] }
 
-async-trait = "0.1.56"
-flex-error = { version = "0.4.4", default-features = false }
-prost = { version = "0.11" }
-eyre = "0.6.8"
-tokio = "1.24"
-itertools = "0.10.3"
-futures = "0.3"
-tracing = "0.1.36"
-http = "0.2.9"
-tonic = { version = "0.9", features = ["tls", "tls-roots"] }
-
-[dependencies.tendermint]
-version = "0.33.2"
-features = ["secp256k1"]
-
-[dependencies.tendermint-rpc]
-version = "0.33.2"
-features = ["http-client", "websocket-client"]
+async-trait     = { workspace = true }
+flex-error      = { workspace = true }
+prost           = { workspace = true }
+eyre            = { workspace = true }
+tokio           = { workspace = true }
+itertools       = { workspace = true }
+futures         = { workspace = true }
+tracing         = { workspace = true }
+http            = { workspace = true }
+tonic           = { workspace = true, features = ["tls", "tls-roots"] }
 

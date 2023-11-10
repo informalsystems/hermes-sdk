@@ -1,13 +1,13 @@
 [package]
 name = "ibc-relayer-mock"
-version = "0.1.0"
-edition = "2021"
-license      = "Apache-2.0"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
 readme       = "README.md"
-keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-repository   = "https://github.com/informalsystems/ibc-rs"
-authors      = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.72"
 description  = """
     TBD
 """
@@ -15,12 +15,13 @@ description  = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait = "0.1.56"
-eyre = "0.6.8"
-flex-error = "0.4.4"
-cgp-core = { version = "0.1.0" }
-ibc-relayer-components = { version = "0.1.0" }
-ibc-relayer-runtime = { version = "0.1.0" }
-ibc-cosmos-client-components = { version = "0.1.0" }
-tokio = { version = "1.0", features = ["full"] }
-tracing = "0.1.36"
+ibc-relayer-components  = { workspace = true }
+ibc-relayer-runtime     = { workspace = true }
+ibc-cosmos-client-components = { workspace = true }
+
+async-trait   = { workspace = true }
+eyre          = { workspace = true }
+flex-error    = { workspace = true }
+cgp-core      = { workspace = true }
+tokio         = { workspace = true, features = ["full"] }
+tracing       = { workspace = true }

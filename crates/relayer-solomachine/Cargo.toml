@@ -1,52 +1,40 @@
 [package]
 name         = "ibc-relayer-solomachine"
-version      = "0.25.0"
-edition      = "2021"
-license      = "Apache-2.0"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
 readme       = "README.md"
-keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
-repository   = "https://github.com/informalsystems/ibc-rs"
-authors      = ["Informal Systems <hello@informal.systems>"]
-rust-version = "1.72"
 description  = "An IBC relayer for relaying between Cosmos and Solomachin clients."
 
-[package.metadata.docs.rs]
-all-features = true
-
-[features]
-default   = ["flex-error/std", "flex-error/eyre_tracer"]
-
 [dependencies]
-ibc-proto         = { version = "0.34.0" }
-ibc-relayer       = { version = "0.25.0" }
-ibc-relayer-types = { version = "0.25.0" }
-ibc-telemetry     = { version = "0.25.0" }
-cgp-core = { version = "0.1.0" }
-ibc-relayer-cosmos = { version = "0.25.0" }
-ibc-cosmos-client-components = { version = "0.1.0" }
-ibc-relayer-runtime = { version = "0.1.0" }
-ibc-relayer-components = { version = "0.1.0" }
-ibc-relayer-components-extra = { version = "0.1.0" }
+ibc-proto           = { workspace = true }
+ibc-relayer         = { workspace = true }
+ibc-relayer-types   = { workspace = true }
+ibc-telemetry       = { workspace = true }
+cgp-core            = { workspace = true }
+ibc-relayer-cosmos  = { workspace = true }
+ibc-cosmos-client-components = { workspace = true }
+ibc-relayer-runtime          = { workspace = true }
+ibc-relayer-components       = { workspace = true }
+ibc-relayer-components-extra = { workspace = true }
+tendermint      = { workspace = true, features = ["secp256k1"] }
 
-serde = "1.0"
-serde_derive = "1.0"
-async-trait = "0.1.56"
-flex-error = { version = "0.4.4", default-features = false }
-prost = { version = "0.11" }
-eyre = "0.6.8"
-tokio = "1.24"
-itertools = "0.10.3"
-futures = "0.3"
-tracing = "0.1.36"
-secp256k1 = "0.27.0"
-sha2 = "0.10.7"
+serde           = { workspace = true }
+serde_derive    = { workspace = true }
+async-trait     = { workspace = true }
+flex-error      = { workspace = true }
+prost           = { workspace = true }
+eyre            = { workspace = true }
+tokio           = { workspace = true }
+itertools       = { workspace = true }
+futures         = { workspace = true }
+tracing         = { workspace = true }
+
+secp256k1   = "0.27.0"
+sha2        = "0.10.7"
 crypto-hash = "0.3.4"
-bytes = { version = "1.4.0" }
-
-[dependencies.tendermint]
-version = "0.33.2"
-features = ["secp256k1"]
-
-[dependencies.tendermint-rpc]
-version = "0.33.2"
-features = ["http-client", "websocket-client"]
+bytes       = { version = "1.4.0" }

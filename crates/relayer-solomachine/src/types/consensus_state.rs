@@ -1,6 +1,6 @@
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::solomachine::v3::ConsensusState as ProtoConsensusState;
-use ibc_proto::protobuf::Protobuf;
+use ibc_proto::Protobuf;
 use ibc_relayer_types::keys::ROUTER_KEY;
 use ibc_relayer_types::tx_msg::Msg;
 use prost::Message;

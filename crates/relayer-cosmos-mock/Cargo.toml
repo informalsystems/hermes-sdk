@@ -1,6 +1,6 @@
 [package]
 name = "ibc-relayer-cosmos-mock"
-version = "0.1.0"
+version = { workspace = true }
 edition = "2021"
 license      = "Apache-2.0"
 readme       = "README.md"
@@ -15,26 +15,23 @@ description  = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait = "0.1.56"
-basecoin-app = { git = "https://github.com/informalsystems/basecoin-rs.git" }
-basecoin-store = { git = "https://github.com/informalsystems/basecoin-rs.git" }
-ibc = { version = "0.45", features = ["mocks"] }
-ibc-proto = "0.35.0"
-cgp-core = { version = "0.1.0" }
-ibc-relayer-components = { version = "0.1.0" }
-ibc-relayer-components-extra = { version = "0.1.0" }
-ibc-relayer-runtime = { version = "0.1.0" }
-ibc-relayer-types = { version = "0.25.0" }
-ibc-cosmos-client-components = { version = "0.1.0" }
-primitive-types = { version = "0.12.0", default-features = false}
-prost = "0.11.0"
-serde_json = "1.0"
-sha2 = { version = "0.10", default-features = false }
-subtle-encoding = { version = "0.5", default-features = false }
-rand = "0.8.5"
-tendermint = { version = "0.33.2", features = ["rust-crypto"] }
-tendermint-testgen = "0.33.2"
-tracing = "0.1.36"
-tokio = { version = "1.0", features = ["full"] }
-tower-abci = "0.10"
-tower = { version = "0.4", features = ["full"] }
+async-trait         = { workspace = true }
+basecoin-app        = { workspace = true }
+basecoin-store      = { workspace = true }
+ibc                 = { workspace = true, features = ["mocks"] }
+ibc-proto           = { workspace = true }
+cgp-core            = { workspace = true }
+ibc-relayer-components          = { workspace = true }
+ibc-relayer-components-extra    = { workspace = true }
+ibc-relayer-runtime             = { workspace = true }
+ibc-relayer-types               = { workspace = true }
+ibc-cosmos-client-components    = { workspace = true }
+tendermint                      = { workspace = true, features = ["rust-crypto"] }
+tendermint-testgen              =  { workspace = true }
+prost       = { workspace = true }
+tokio       = { workspace = true, features = ["full"] }
+tracing     = { workspace = true }
+serde_json  = { workspace = true }
+
+primitive-types     = { version = "0.12.0", default-features = false}
+tower               = { version = "0.4", features = ["full"] }

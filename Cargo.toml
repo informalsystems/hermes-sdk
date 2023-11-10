@@ -3,45 +3,82 @@
 resolver = "2"
 
 members = [
+    "crates/cosmos-client-components",
     "crates/relayer-components",
     "crates/relayer-components-extra",
-    "crates/relayer-subscription",
-    "crates/relayer-runtime",
-    "crates/cosmos-client-components",
     "crates/relayer-cosmos",
-    "crates/relayer-solomachine",
     "crates/relayer-cosmos-mock",
+    "crates/relayer-runtime",
+    "crates/relayer-solomachine",
+    "crates/relayer-subscription",
     "crates/relayer-mock",
     "tools/integration-test",
     "tools/test-framework",
 ]
 
-exclude = [
-    "tools/check-guide",
-    "tools/query-events",
-]
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+keywords     = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
+repository   = "https://github.com/informalsystems/hermes-sdk"
+authors      = ["Informal Systems <hello@informal.systems>"]
+rust-version = "1.72"
+
+[workspace.dependencies]
+async-trait         = { version = "0.1.56" }
+ibc                 = { version = "0.47.0" }
+ibc-proto           = { version = "0.38.0" }
+ibc-relayer         = { version = "0.26.0" }
+ibc-relayer-types   = { version = "0.26.0" }
+ibc-telemetry       = { version = "0.26.0" }
+tendermint          = { version = "0.34" }
+tendermint-rpc      = { version = "0.34" }
+tendermint-testgen  = { version = "0.34" }
+basecoin-app        = { version = "0.1.0" }
+basecoin-store      = { version = "0.1.0" }
+cgp-core            = { version = "0.1.0" }
+prost               = { version = "0.12.0" }
+serde               = { version = "1.0" }
+serde_derive        = { version = "1.0" }
+serde_json          = { version = "1.0" }
+tokio               = { version = "1.34" }
+tracing             = { version = "0.1.40" }
+tonic               = { version = "0.10" }
+futures             = { version = "0.3" }
+eyre                = { version = "0.6.8" }
+itertools           = { version = "0.11" }
+http                = { version = "0.2.10" }
+flex-error          = { version = "0.4.4", default-features = false }
+ibc-relayer-components          = { version = "0.1.0", path = "./crates/relayer-components" }
+ibc-relayer-components-extra    = { version = "0.1.0", path = "./crates/relayer-components-extra" }
+ibc-relayer-runtime             = { version = "0.1.0", path = "./crates/relayer-runtime" }
+ibc-relayer-subscription        = { version = "0.1.0", path = "./crates/relayer-subscription" }
+ibc-cosmos-client-components    = { version = "0.1.0", path = "./crates/cosmos-client-components" }
+ibc-relayer-cosmos              = { version = "0.1.0", path = "./crates/relayer-cosmos" }
+ibc-relayer-solomachine         = { version = "0.1.0", path = "./crates/relayer-solomachine" }
 
 [profile.release]
 overflow-checks = true
 
 [patch.crates-io]
-ibc-relayer-components          = { path = "./crates/relayer-components" }
-ibc-relayer-components-extra    = { path = "./crates/relayer-components-extra" }
-ibc-relayer-runtime             = { path = "./crates/relayer-runtime" }
-ibc-relayer-subscription        = { path = "./crates/relayer-subscription" }
-ibc-cosmos-client-components    = { path = "./crates/cosmos-client-components" }
-ibc-relayer-cosmos              = { path = "./crates/relayer-cosmos" }
-
+ibc                 = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
+ibc-query           = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
+ibc-derive          = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
+basecoin-app        = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
+basecoin-store      = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
 cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
-ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+
+# ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-proto                        = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "main" }
+
 # tendermint                       = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
 # tendermint-rpc                   = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
 # tendermint-proto                 = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
