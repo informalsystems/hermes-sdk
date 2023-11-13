@@ -5,6 +5,7 @@ use crate::traits::chain::types::address::HasAddressType;
 use crate::traits::chain::types::token::HasTokenType;
 use crate::traits::chain::types::wallet::HasWalletType;
 
+#[derive_component(TokenIbcTransferrerComponent, TokenIbcTransferrer<Chain>)]
 #[async_trait]
 pub trait CanIbcTransferToken<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasWalletType + HasTokenType + HasErrorType

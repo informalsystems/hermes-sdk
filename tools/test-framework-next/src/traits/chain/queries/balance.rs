@@ -2,9 +2,14 @@ use cgp_core::prelude::*;
 
 use crate::traits::chain::types::address::HasAddressType;
 use crate::traits::chain::types::amount::HasAmountType;
+use crate::traits::chain::types::denom::HasDenomType;
 
 #[derive_component(BalanceQuerierComponent, BalanceQuerier<Chain>)]
 #[async_trait]
-pub trait CanQueryBalance: HasAddressType + HasAmountType + HasErrorType {
-    async fn query_balance(&self, wallet: &Self::Address) -> Result<Self::Amount, Self::Error>;
+pub trait CanQueryBalance: HasAddressType + HasDenomType + HasAmountType + HasErrorType {
+    async fn query_balance(
+        &self,
+        wallet: &Self::Address,
+        denom: &Self::Denom,
+    ) -> Result<Self::Amount, Self::Error>;
 }
