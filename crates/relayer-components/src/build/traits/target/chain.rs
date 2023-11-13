@@ -19,6 +19,8 @@ pub trait ChainBuildTarget<Build>: Default + Async {
 impl<Build> ChainBuildTarget<Build> for ChainATarget
 where
     Build: HasBiRelayType,
+    ChainA<Build>: HasIbcChainTypes<ChainB<Build>>,
+    ChainB<Build>: HasIbcChainTypes<ChainA<Build>>,
 {
     type TargetChain = ChainA<Build>;
 
@@ -28,6 +30,8 @@ where
 impl<Build> ChainBuildTarget<Build> for ChainBTarget
 where
     Build: HasBiRelayType,
+    ChainA<Build>: HasIbcChainTypes<ChainB<Build>>,
+    ChainB<Build>: HasIbcChainTypes<ChainA<Build>>,
 {
     type TargetChain = ChainB<Build>;
 

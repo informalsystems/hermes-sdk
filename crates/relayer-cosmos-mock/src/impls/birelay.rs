@@ -1,9 +1,12 @@
 use cgp_core::HasErrorType;
-use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
+use ibc_relayer_components::relay::traits::two_way::{
+    HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
+};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::MockCosmosBiRelay;
+use crate::contexts::chain::MockCosmosContext;
 use crate::contexts::relay::MockCosmosRelay;
 use crate::traits::endpoint::BasecoinEndpoint;
 use crate::types::error::Error;
@@ -32,7 +35,17 @@ where
     }
 }
 
-impl<SrcChain, DstChain> HasTwoWayRelay for MockCosmosBiRelay<SrcChain, DstChain>
+impl<ChainA, ChainB> HasTwoChainTypes for MockCosmosBiRelay<ChainA, ChainB>
+where
+    ChainA: BasecoinEndpoint,
+    ChainB: BasecoinEndpoint,
+{
+    type ChainA = MockCosmosContext<ChainA>;
+
+    type ChainB = MockCosmosContext<ChainB>;
+}
+
+impl<SrcChain, DstChain> HasTwoWayRelayTypes for MockCosmosBiRelay<SrcChain, DstChain>
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
@@ -40,7 +53,13 @@ where
     type RelayAToB = MockCosmosRelay<SrcChain, DstChain>;
 
     type RelayBToA = MockCosmosRelay<DstChain, SrcChain>;
+}
 
+impl<SrcChain, DstChain> HasTwoWayRelay for MockCosmosBiRelay<SrcChain, DstChain>
+where
+    SrcChain: BasecoinEndpoint,
+    DstChain: BasecoinEndpoint,
+{
     fn relay_a_to_b(&self) -> &Self::RelayAToB {
         self.relay_a_to_b()
     }

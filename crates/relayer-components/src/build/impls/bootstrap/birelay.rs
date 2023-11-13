@@ -5,6 +5,7 @@ use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
 use crate::build::traits::target::relay::RelayAToBTarget;
 use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB};
+use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::create_client::HasCreateClientOptions;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
@@ -14,8 +15,8 @@ use crate::std_prelude::*;
 #[async_trait]
 pub trait CanBootstrapBiRelay: HasBiRelayType + HasErrorType
 where
-    ChainA<Self>: HasCreateClientOptions<ChainB<Self>>,
-    ChainB<Self>: HasCreateClientOptions<ChainA<Self>>,
+    ChainA<Self>: HasChainIdType + HasCreateClientOptions<ChainB<Self>>,
+    ChainB<Self>: HasChainIdType + HasCreateClientOptions<ChainA<Self>>,
 {
     async fn bootstrap_birelay(
         &self,
@@ -27,16 +28,15 @@ where
 }
 
 #[async_trait]
-impl<Build, BiRelay, RelayAToB, ChainA, ChainB, Error> CanBootstrapBiRelay for Build
+impl<Build, BiRelay, ChainA, ChainB, Error> CanBootstrapBiRelay for Build
 where
     Build: HasBiRelayType<BiRelay = BiRelay>
         + HasErrorType<Error = Error>
         + CanBuildBiRelay
         + CanBootstrapRelay<RelayAToBTarget>,
-    BiRelay: HasTwoWayRelay<RelayAToB = RelayAToB>,
-    RelayAToB: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>,
-    ChainA: HasCreateClientOptions<ChainB> + HasIbcChainTypes<ChainB>,
-    ChainB: HasCreateClientOptions<ChainA> + HasIbcChainTypes<ChainA>,
+    BiRelay: HasTwoWayRelay<ChainA = ChainA, ChainB = ChainB>,
+    ChainA: HasChainIdType + HasCreateClientOptions<ChainB> + HasIbcChainTypes<ChainB>,
+    ChainB: HasChainIdType + HasCreateClientOptions<ChainA> + HasIbcChainTypes<ChainA>,
 {
     async fn bootstrap_birelay(
         &self,

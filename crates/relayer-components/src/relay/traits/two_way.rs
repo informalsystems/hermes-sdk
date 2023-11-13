@@ -1,6 +1,12 @@
-use cgp_core::HasErrorType;
+use cgp_core::{Async, HasErrorType};
 
 use crate::relay::traits::chains::HasRelayChains;
+
+pub trait HasTwoChainTypes: Async {
+    type ChainA: Async;
+
+    type ChainB: Async;
+}
 
 /// Trait for types that have a two-way relay context, i.e.,
 /// those that can relay in both directions between two connected
@@ -9,9 +15,9 @@ use crate::relay::traits::chains::HasRelayChains;
 /// Two-way relay contexts are composed of two separate relay
 /// contexts, one that relays from chain A to chain B, the
 /// other that relays from chain B to chain A.
-pub trait HasTwoWayRelay: HasErrorType {
+pub trait HasTwoWayRelayTypes: HasTwoChainTypes + HasErrorType {
     /// The relay context that relays from chain A to chain B.
-    type RelayAToB: HasRelayChains;
+    type RelayAToB: HasRelayChains<SrcChain = Self::ChainA, DstChain = Self::ChainB>;
 
     /// The relay context that relays from chain B to chain A.
     ///
@@ -22,11 +28,13 @@ pub trait HasTwoWayRelay: HasErrorType {
     /// vice versa. In addition, we also assert that both relay
     /// context's have the same error type.
     type RelayBToA: HasRelayChains<
-        SrcChain = <Self::RelayAToB as HasRelayChains>::DstChain,
-        DstChain = <Self::RelayAToB as HasRelayChains>::SrcChain,
+        SrcChain = Self::ChainB,
+        DstChain = Self::ChainA,
         Error = <Self::RelayAToB as HasErrorType>::Error,
     >;
+}
 
+pub trait HasTwoWayRelay: HasTwoWayRelayTypes {
     /// Returns a read-only reference to the relay context from chain A
     /// to chain B.
     fn relay_a_to_b(&self) -> &Self::RelayAToB;

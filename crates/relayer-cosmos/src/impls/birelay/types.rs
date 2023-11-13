@@ -1,17 +1,30 @@
 use cgp_core::{Async, HasErrorType};
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
-use ibc_relayer_components::relay::traits::two_way::HasTwoWayRelay;
+use ibc_relayer_components::relay::traits::two_way::{
+    HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
+};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
 use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
+use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::types::error::{BaseError, Error};
 
-impl<ChainA, ChainB> HasTwoWayRelay for CosmosBiRelay<ChainA, ChainB>
+impl<ChainA, ChainB> HasTwoChainTypes for CosmosBiRelay<ChainA, ChainB>
+where
+    ChainA: ChainHandle,
+    ChainB: ChainHandle,
+{
+    type ChainA = CosmosChain<ChainA>;
+
+    type ChainB = CosmosChain<ChainB>;
+}
+
+impl<ChainA, ChainB> HasTwoWayRelayTypes for CosmosBiRelay<ChainA, ChainB>
 where
     ChainA: ChainHandle,
     ChainB: ChainHandle,
@@ -19,7 +32,13 @@ where
     type RelayAToB = CosmosRelay<ChainA, ChainB>;
 
     type RelayBToA = CosmosRelay<ChainB, ChainA>;
+}
 
+impl<ChainA, ChainB> HasTwoWayRelay for CosmosBiRelay<ChainA, ChainB>
+where
+    ChainA: ChainHandle,
+    ChainB: ChainHandle,
+{
     fn relay_a_to_b(&self) -> &CosmosRelay<ChainA, ChainB> {
         &self.relay_a_to_b
     }
