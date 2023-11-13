@@ -2,6 +2,10 @@ use crate::traits::chain::types::amount::HasAmountType;
 use crate::traits::chain::types::denom::HasDenomType;
 use crate::traits::chain::types::token::HasTokenType;
 
+pub trait CanGenerateRandomTokenAmount: HasDenomType + HasTokenType {
+    fn random_token_amount(denom: &Self::Denom, min: usize, max: usize) -> Self::Token;
+}
+
 pub trait HasTokenFields: HasTokenType + HasAmountType + HasDenomType {
     fn token_amount(token: &Self::Token) -> &Self::Amount;
 

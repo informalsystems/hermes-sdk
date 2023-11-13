@@ -1,9 +1,14 @@
+use crate::traits::chain::types::address::HasAddressType;
 use crate::traits::chain::types::wallet::HasWalletType;
 
+pub trait HasWalletFields: HasWalletType + HasAddressType {
+    fn wallet_address(wallet: &Self::Wallet) -> &Self::Address;
+}
+
 pub trait HasUserWallet<const I: usize>: HasWalletType {
-    fn get_user_wallet(&self) -> &Self::Wallet;
+    fn user_wallet(&self) -> &Self::Wallet;
 }
 
 pub trait HasRelayerWallet: HasWalletType {
-    fn get_relayer_wallet(&self) -> &Self::Wallet;
+    fn relayer_wallet(&self) -> &Self::Wallet;
 }

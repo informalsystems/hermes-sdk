@@ -1,7 +1,7 @@
-use cgp_core::Async;
+use ibc_relayer_components::relay::traits::two_way::HasTwoChainTypes;
 
-pub trait HasTwoChains: Async {
-    type ChainA: Async;
+pub trait HasTwoChains: HasTwoChainTypes {
+    fn chain_a(&self) -> &Self::ChainA;
 
-    type ChainB: Async;
+    fn chain_b(&self) -> &Self::ChainB;
 }
