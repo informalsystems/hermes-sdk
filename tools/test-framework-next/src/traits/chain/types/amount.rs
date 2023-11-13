@@ -1,7 +1,11 @@
-use core::fmt::Display;
+use core::fmt::{Debug, Display};
 
 use cgp_core::Async;
 
-pub trait HasAmountType: Async {
-    type Amount: Display + Eq + PartialOrd + Async;
+use crate::traits::chain::types::denom::HasDenomType;
+
+pub trait HasAmountType: HasDenomType {
+    type Amount: Debug + Display + Eq + PartialOrd + Async;
+
+    fn amount_denom(amount: &Self::Amount) -> &Self::Denom;
 }
