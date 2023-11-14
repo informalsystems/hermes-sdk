@@ -31,7 +31,9 @@ use ibc_relayer_components::chain::traits::components::unreceived_packet_sequenc
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
-use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::chain_id::{
+    ChainIdGetterComponent, ChainIdTypeProviderComponent,
+};
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
@@ -56,6 +58,7 @@ delegate_components!(
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,
+        ChainIdGetterComponent,
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
         IbcChainTypesProviderComponent,

@@ -4,9 +4,9 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use tracing::info;
 
-use crate::traits::chain::assert::CanAssertEventualAmount;
+use crate::traits::chain::assert::eventual_amount::CanAssertEventualAmount;
 use crate::traits::chain::fields::amount::{
-    CanGenerateRandomAmount, HasAmountMethods, HasIbcTransferredAmount,
+    CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
 };
 use crate::traits::chain::fields::channel::HasChannel;
 use crate::traits::chain::fields::denom::HasDenom;
@@ -31,7 +31,7 @@ where
         + CanGenerateRandomAmount
         + CanAssertEventualAmount
         + CanIbcTransferToken<ChainB>
-        + HasIbcTransferredAmount<ChainB>,
+        + CanConvertIbcTransferredAmount<ChainB>,
     ChainB: HasIbcChainTypes<ChainA>
         + HasChannel<ChainA, 0>
         + HasChainId
@@ -41,7 +41,7 @@ where
         + CanGenerateRandomAmount
         + CanAssertEventualAmount
         + CanIbcTransferToken<ChainA>
-        + HasIbcTransferredAmount<ChainA>,
+        + CanConvertIbcTransferredAmount<ChainA>,
     Test::Error: From<ChainA::Error> + From<ChainB::Error>,
 {
     async fn run(test: &Test) -> Result<(), Test::Error> {

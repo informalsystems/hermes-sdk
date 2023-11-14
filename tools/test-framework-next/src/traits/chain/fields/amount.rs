@@ -1,13 +1,15 @@
-use cgp_core::HasErrorType;
+use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use crate::traits::chain::types::amount::HasAmountType;
 use crate::traits::chain::types::denom::HasDenomType;
 
+#[derive_component(RandomAmountGeneratorComponent, RandomAmountGenerator<Chain>)]
 pub trait CanGenerateRandomAmount: HasDenomType + HasAmountType {
     fn random_amount(min: usize, max: &Self::Amount) -> Self::Amount;
 }
 
+#[derive_component(AmountMethodsProviderComponent, AmountMethodsProvider<Chain>)]
 pub trait HasAmountMethods: HasAmountType + HasErrorType {
     fn add_amount(
         current: &Self::Amount,
@@ -20,7 +22,8 @@ pub trait HasAmountMethods: HasAmountType + HasErrorType {
     ) -> Result<Self::Amount, Self::Error>;
 }
 
-pub trait HasIbcTransferredAmount<Counterparty>:
+#[derive_component(IbcTransferredAmountConverterComponent, IbcTransferredAmountConverter<Chain>)]
+pub trait CanConvertIbcTransferredAmount<Counterparty>:
     HasAmountType + HasIbcChainTypes<Counterparty>
 where
     Counterparty: HasAmountType,

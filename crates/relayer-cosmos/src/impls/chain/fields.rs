@@ -4,7 +4,7 @@ use cgp_core::Async;
 use ibc_cosmos_client_components::traits::message::CosmosMessage;
 use ibc_cosmos_client_components::types::tendermint::TendermintClientState;
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
+use ibc_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
 use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
@@ -17,6 +17,7 @@ use prost::Message;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::component::CosmosChainComponents;
 use crate::types::error::{BaseError, Error};
 
 impl<Chain> CanIncrementHeight for CosmosChain<Chain>
@@ -41,12 +42,12 @@ where
     }
 }
 
-impl<Chain> HasChainId for CosmosChain<Chain>
+impl<Chain> ChainIdGetter<CosmosChain<Chain>> for CosmosChainComponents
 where
     Chain: Async,
 {
-    fn chain_id(&self) -> &ChainId {
-        &self.chain_id
+    fn chain_id(chain: &CosmosChain<Chain>) -> &ChainId {
+        &chain.chain_id
     }
 }
 

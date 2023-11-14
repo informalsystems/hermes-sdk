@@ -3,7 +3,7 @@ use core::time::Duration;
 use futures::lock::Mutex;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
+use ibc_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::transaction::components::poll::HasPollTimeout;
 use ibc_relayer_components::transaction::traits::fee::HasFeeForSimulation;
@@ -12,10 +12,11 @@ use ibc_relayer_components::transaction::traits::signer::HasSigner;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::transaction::CosmosTxContext;
+use crate::impls::transaction::component::CosmosTxComponents;
 
-impl HasChainId for CosmosTxContext {
-    fn chain_id(&self) -> &ChainId {
-        &self.tx_config.chain_id
+impl ChainIdGetter<CosmosTxContext> for CosmosTxComponents {
+    fn chain_id(context: &CosmosTxContext) -> &ChainId {
+        &context.tx_config.chain_id
     }
 }
 

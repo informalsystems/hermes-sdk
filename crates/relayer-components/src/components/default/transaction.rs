@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
-use crate::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use crate::chain::traits::types::chain_id::{ChainIdGetterComponent, ChainIdTypeProviderComponent};
 use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
 use crate::transaction::components::message_as_tx::EstimateFeesAndSendTx;
@@ -29,6 +29,7 @@ delegate_components!(
     TxResponsePollerComponent: PollTxResponse,
     [
         ChainIdTypeProviderComponent,
+        ChainIdGetterComponent,
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
         NonceQuerierComponent,
