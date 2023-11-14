@@ -30,4 +30,9 @@ where
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
     ) -> Self::Amount;
+
+    fn transmute_counterparty_amount(
+        counterparty_amount: &Counterparty::Amount,
+        denom: &Self::Denom,
+    ) -> Self::Amount;
 }

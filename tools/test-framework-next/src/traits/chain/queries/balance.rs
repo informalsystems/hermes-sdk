@@ -9,7 +9,7 @@ use crate::traits::chain::types::denom::HasDenomType;
 pub trait CanQueryBalance: HasAddressType + HasDenomType + HasAmountType + HasErrorType {
     async fn query_balance(
         &self,
-        wallet: &Self::Address,
+        address: &Self::Address,
         denom: &Self::Denom,
     ) -> Result<Self::Amount, Self::Error>;
 }
