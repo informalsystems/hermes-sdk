@@ -1,24 +1,25 @@
 use async_trait::async_trait;
-use cgp_core::{HasErrorType, Runner};
+use cgp_core::HasErrorType;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_test_components::traits::test_case::TestCase;
 use tracing::info;
 
-use crate::traits::chain::assert::eventual_amount::CanAssertEventualAmount;
-use crate::traits::chain::fields::amount::{
+use ibc_test_components::traits::chain::assert::eventual_amount::CanAssertEventualAmount;
+use ibc_test_components::traits::chain::fields::amount::{
     CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
 };
-use crate::traits::chain::fields::channel::HasChannel;
-use crate::traits::chain::fields::denom::HasDenom;
-use crate::traits::chain::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
-use crate::traits::chain::queries::balance::CanQueryBalance;
-use crate::traits::chain::queries::ibc_transfer::CanIbcTransferToken;
-use crate::traits::chain::types::chain::{HasChain, HasOneChain, HasTwoChains};
+use ibc_test_components::traits::chain::fields::channel::HasChannel;
+use ibc_test_components::traits::chain::fields::denom::HasDenom;
+use ibc_test_components::traits::chain::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
+use ibc_test_components::traits::chain::queries::balance::CanQueryBalance;
+use ibc_test_components::traits::chain::queries::ibc_transfer::CanIbcTransferToken;
+use ibc_test_components::traits::chain::types::chain::{HasChain, HasOneChain, HasTwoChains};
 
 pub struct TestIbcTransfer;
 
 #[async_trait]
-impl<Test, ChainA, ChainB> Runner<Test> for TestIbcTransfer
+impl<Test, ChainA, ChainB> TestCase<Test> for TestIbcTransfer
 where
     Test: HasErrorType + HasChain<0, Chain = ChainA> + HasChain<1, Chain = ChainB>,
     ChainA: HasIbcChainTypes<ChainB>
@@ -44,7 +45,7 @@ where
         + CanConvertIbcTransferredAmount<ChainA>,
     Test::Error: From<ChainA::Error> + From<ChainB::Error>,
 {
-    async fn run(test: &Test) -> Result<(), Test::Error> {
+    async fn run_test(&self, test: &Test) -> Result<(), Test::Error> {
         let chain_a = test.first_chain();
 
         let chain_id_a = chain_a.chain_id();
@@ -143,7 +144,9 @@ where
             &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
         )?;
 
-        chain_a.assert_eventual_amount(address_a2, &balance_a5);
+        chain_a
+            .assert_eventual_amount(address_a2, &balance_a5)
+            .await?;
 
         info!(
             "successfully performed reverse IBC transfer from chain {} back to chain {}",

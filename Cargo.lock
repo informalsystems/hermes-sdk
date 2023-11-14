@@ -2007,6 +2007,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "ibc-test-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "ibc-relayer-components",
+]
+
+[[package]]
 name = "ibc-test-framework"
 version = "0.1.0"
 dependencies = [
@@ -2061,6 +2069,7 @@ dependencies = [
  "ibc-relayer-components",
  "ibc-relayer-cosmos",
  "ibc-relayer-types",
+ "ibc-test-components",
  "ibc-test-framework",
  "itertools 0.11.0",
  "once_cell",

@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 

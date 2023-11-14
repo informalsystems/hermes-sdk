@@ -12,6 +12,7 @@ members = [
     "crates/relayer-solomachine",
     "crates/relayer-subscription",
     "crates/relayer-mock",
+    "crates/test-components",
     "tools/integration-test",
     "tools/test-framework",
     "tools/test-framework-next",
@@ -58,6 +59,7 @@ ibc-relayer-subscription        = { version = "0.1.0", path = "./crates/relayer-
 ibc-cosmos-client-components    = { version = "0.1.0", path = "./crates/cosmos-client-components" }
 ibc-relayer-cosmos              = { version = "0.1.0", path = "./crates/relayer-cosmos" }
 ibc-relayer-solomachine         = { version = "0.1.0", path = "./crates/relayer-solomachine" }
+ibc-test-components             = { version = "0.1.0", path = "./crates/test-components" }
 
 [profile.release]
 overflow-checks = true

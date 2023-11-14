@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use cgp_core::prelude::*;
 
 use crate::traits::chain::types::address::HasAddressType;
