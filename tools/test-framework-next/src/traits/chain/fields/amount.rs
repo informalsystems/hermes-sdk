@@ -5,7 +5,7 @@ use crate::traits::chain::types::amount::HasAmountType;
 use crate::traits::chain::types::denom::HasDenomType;
 
 pub trait CanGenerateRandomAmount: HasDenomType + HasAmountType {
-    fn random_amount(denom: &Self::Denom, min: usize, max: usize) -> Self::Amount;
+    fn random_amount(min: usize, max: &Self::Amount) -> Self::Amount;
 }
 
 pub trait HasAmountMethods: HasAmountType + HasErrorType {
