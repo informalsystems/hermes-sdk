@@ -2051,42 +2051,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-test-framework-next"
+name = "ibc-test-suite"
 version = "0.1.0"
 dependencies = [
- "async-trait",
- "cfg-if 1.0.0",
  "cgp-core",
- "color-eyre",
- "crossbeam-channel 0.5.8",
- "eyre",
- "flex-error",
- "hdpath",
- "hex 0.4.3",
- "http",
- "ibc-proto",
- "ibc-relayer",
  "ibc-relayer-components",
- "ibc-relayer-cosmos",
- "ibc-relayer-types",
  "ibc-test-components",
- "ibc-test-framework",
- "itertools 0.11.0",
- "once_cell",
- "prost",
- "rand",
- "semver",
- "serde",
- "serde_json",
- "serde_yaml",
- "sha2 0.10.8",
- "subtle-encoding",
- "tendermint-rpc",
- "tokio",
- "toml 0.7.6",
- "tonic",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]

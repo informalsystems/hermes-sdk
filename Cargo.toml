@@ -13,9 +13,9 @@ members = [
     "crates/relayer-subscription",
     "crates/relayer-mock",
     "crates/test-components",
+    "crates/test-suite",
     "tools/integration-test",
     "tools/test-framework",
-    "tools/test-framework-next",
 ]
 
 [workspace.package]
@@ -60,6 +60,7 @@ ibc-cosmos-client-components    = { version = "0.1.0", path = "./crates/cosmos-c
 ibc-relayer-cosmos              = { version = "0.1.0", path = "./crates/relayer-cosmos" }
 ibc-relayer-solomachine         = { version = "0.1.0", path = "./crates/relayer-solomachine" }
 ibc-test-components             = { version = "0.1.0", path = "./crates/test-components" }
+ibc-test-suite                  = { version = "0.1.0", path = "./crates/test-suite" }
 
 [profile.release]
 overflow-checks = true
