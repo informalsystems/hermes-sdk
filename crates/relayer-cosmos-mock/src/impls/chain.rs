@@ -70,10 +70,8 @@ use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvide
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::log::value::LogValue;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
@@ -101,16 +99,6 @@ impl<Chain: BasecoinEndpoint> HasRuntime for MockCosmosContext<Chain> {
 
     fn runtime_error(e: TokioError) -> Error {
         Error::source(e)
-    }
-}
-
-impl<Chain: BasecoinEndpoint> HasLoggerType for MockCosmosContext<Chain> {
-    type Logger = TracingLogger;
-}
-
-impl<Chain: BasecoinEndpoint> HasLogger for MockCosmosContext<Chain> {
-    fn logger(&self) -> &TracingLogger {
-        &TracingLogger
     }
 }
 

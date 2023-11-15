@@ -42,6 +42,9 @@ use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
+use ibc_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
 
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
 use crate::telemetry::components::status::ChainStatusTelemetryQuerier;
@@ -64,6 +67,8 @@ delegate_components!(
         IbcChainTypesProviderComponent,
         IbcPacketTypesProviderComponent,
         ChainStatusTypeProviderComponent,
+        LoggerTypeComponent,
+        LoggerFieldComponent,
         MessageSenderComponent,
         PacketFieldsReaderComponent,
         CounterpartyChainIdQuerierComponent,

@@ -3,6 +3,8 @@ use core::marker::PhantomData;
 use cgp_core::prelude::*;
 use cgp_core::RunnerComponent;
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
+use ibc_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
+use ibc_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::packet_relayers::general::filter_relayer::FilterRelayer;
@@ -47,6 +49,8 @@ delegate_components!(
     PacketRelayerComponent:
         LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
     [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
         UpdateClientMessageBuilderComponent,
         PacketFilterComponent,
         ReceivePacketRelayerComponnent,

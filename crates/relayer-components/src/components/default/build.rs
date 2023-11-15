@@ -11,6 +11,8 @@ use crate::build::traits::components::birelay_from_relay_builder::BiRelayFromRel
 use crate::build::traits::components::chain_builder::ChainBuilderComponent;
 use crate::build::traits::components::relay_builder::RelayBuilderComponent;
 use crate::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilderComponent;
+use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
+
 pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
@@ -19,6 +21,8 @@ delegate_components!(
     RelayBuilderComponent: BuildRelayWithCache<BuildRelayFromChains>,
     BiRelayBuilderComponent: BuildBiRelayFromRelays,
     [
+        LoggerFieldComponent,
+        LoggerTypeComponent,
         RelayFromChainsBuilderComponent,
         BiRelayFromRelayBuilderComponent,
     ]: BaseComponents

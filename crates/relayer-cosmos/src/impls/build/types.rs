@@ -1,10 +1,8 @@
 use cgp_core::HasErrorType;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
@@ -32,15 +30,5 @@ impl HasRuntime for CosmosBuilder {
 
     fn runtime_error(e: TokioError) -> Error {
         BaseError::tokio(e).into()
-    }
-}
-
-impl HasLoggerType for CosmosBuilder {
-    type Logger = TracingLogger;
-}
-
-impl HasLogger for CosmosBuilder {
-    fn logger(&self) -> &TracingLogger {
-        &TracingLogger
     }
 }

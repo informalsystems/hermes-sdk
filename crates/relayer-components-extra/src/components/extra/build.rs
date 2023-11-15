@@ -7,6 +7,9 @@ use ibc_relayer_components::build::traits::components::chain_builder::ChainBuild
 use ibc_relayer_components::build::traits::components::relay_builder::RelayBuilderComponent;
 use ibc_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilderComponent;
 use ibc_relayer_components::components::default::build::DefaultBuildComponents;
+use ibc_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
 
 use crate::build::components::relay::batch::BuildRelayWithBatchWorker;
 use crate::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilderComponent;
@@ -18,6 +21,8 @@ delegate_components!(
     RelayFromChainsBuilderComponent: BuildRelayWithBatchWorker,
     RelayWithBatchBuilderComponent: BaseComponents,
     [
+        LoggerFieldComponent,
+        LoggerTypeComponent,
         ChainBuilderComponent,
         RelayBuilderComponent,
         BiRelayBuilderComponent,

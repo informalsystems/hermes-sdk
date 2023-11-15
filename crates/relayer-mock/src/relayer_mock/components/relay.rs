@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use ibc_relayer_components::logger::traits::has_logger::{LoggerTypeComponent, LoggerFieldComponent};
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::update_client::skip::SkipUpdateClient;
@@ -14,13 +15,19 @@ use ibc_relayer_components::relay::traits::components::packet_relayer::PacketRel
 use ibc_relayer_components::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
+use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
 
-pub struct MockComponents;
+pub struct MockRelayComponents;
 
 delegate_components!(
-    MockComponents;
+    MockRelayComponents;
+    [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
+    ]:
+        ProvideTracingLogger,
     IbcMessageSenderComponent<MainSink>:
         SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
     PacketRelayerComponent: FullCycleRelayer,

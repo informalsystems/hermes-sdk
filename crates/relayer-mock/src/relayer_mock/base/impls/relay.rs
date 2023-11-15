@@ -5,14 +5,12 @@ use std::vec;
 
 use async_trait::async_trait;
 use cgp_core::{HasComponents, HasErrorType};
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::types::aliases::ClientId;
@@ -20,12 +18,12 @@ use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
 use crate::relayer_mock::base::types::packet::PacketKey;
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
-use crate::relayer_mock::components::MockComponents;
+use crate::relayer_mock::components::relay::MockRelayComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 use crate::relayer_mock::contexts::relay::MockRelayContext;
 
 impl HasComponents for MockRelayContext {
-    type Components = MockComponents;
+    type Components = MockRelayComponents;
 }
 
 impl HasErrorType for MockRelayContext {
@@ -41,16 +39,6 @@ impl HasRuntime for MockRelayContext {
 
     fn runtime_error(e: TokioError) -> Error {
         BaseError::tokio(e).into()
-    }
-}
-
-impl HasLoggerType for MockRelayContext {
-    type Logger = TracingLogger;
-}
-
-impl HasLogger for MockRelayContext {
-    fn logger(&self) -> &TracingLogger {
-        &TracingLogger
     }
 }
 

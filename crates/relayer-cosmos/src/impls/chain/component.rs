@@ -63,8 +63,12 @@ use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderCo
 use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
+use ibc_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
+use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
@@ -102,6 +106,11 @@ delegate_components!(
         ChainStatusTypeProviderComponent,
     ]:
         ProvideCosmosChainTypes,
+    [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
+    ]:
+        ProvideTracingLogger,
     MessageSenderComponent:
         SendMessagesToTxContext,
     ChainStatusQuerierComponent:

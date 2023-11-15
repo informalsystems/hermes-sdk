@@ -8,6 +8,9 @@ use ibc_relayer_components::chain::traits::types::chain_id::{
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
 use ibc_relayer_components::components::default::transaction::DefaultTxComponents;
+use ibc_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
 use ibc_relayer_components::transaction::traits::components::message_as_tx_sender::MessageAsTxSenderComponent;
 use ibc_relayer_components::transaction::traits::components::nonce_allocater::NonceAllocatorComponent;
 use ibc_relayer_components::transaction::traits::components::nonce_querier::NonceQuerierComponent;
@@ -22,6 +25,8 @@ pub struct ExtraTxComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 delegate_components!(
     ExtraTxComponents<BaseComponents>;
     [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
         ChainIdTypeProviderComponent,
         ChainIdGetterComponent,
         MessageTypeProviderComponent,

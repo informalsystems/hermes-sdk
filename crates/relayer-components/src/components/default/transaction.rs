@@ -6,6 +6,7 @@ use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::chain::traits::types::chain_id::{ChainIdGetterComponent, ChainIdTypeProviderComponent};
 use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
+use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
 use crate::transaction::components::message_as_tx::EstimateFeesAndSendTx;
 use crate::transaction::components::message_sender::send_as_tx::SendMessagesAsTx;
 use crate::transaction::components::nonce::mutex::AllocateNonceWithMutex;
@@ -28,6 +29,8 @@ delegate_components!(
     NonceAllocatorComponent: AllocateNonceWithMutex,
     TxResponsePollerComponent: PollTxResponse,
     [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
         ChainIdTypeProviderComponent,
         ChainIdGetterComponent,
         MessageTypeProviderComponent,

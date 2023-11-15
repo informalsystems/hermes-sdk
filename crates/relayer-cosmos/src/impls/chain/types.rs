@@ -33,11 +33,9 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::chain::CosmosChain;
@@ -64,13 +62,6 @@ where
     fn runtime_error(e: TokioError) -> Error {
         BaseError::tokio(e).into()
     }
-}
-
-impl<Chain> HasLoggerType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Logger = TracingLogger;
 }
 
 impl<Chain> HasTelemetry for CosmosChain<Chain>
