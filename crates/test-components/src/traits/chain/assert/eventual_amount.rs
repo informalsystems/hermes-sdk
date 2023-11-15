@@ -4,6 +4,7 @@ use cgp_core::prelude::*;
 use crate::traits::chain::types::address::HasAddressType;
 use crate::traits::chain::types::amount::HasAmountType;
 
+#[derive_component(EventualAmountAsserterComponent, EventualAmountAsserter<Chain>)]
 #[async_trait]
 pub trait CanAssertEventualAmount: HasAddressType + HasAmountType + HasErrorType {
     async fn assert_eventual_amount(

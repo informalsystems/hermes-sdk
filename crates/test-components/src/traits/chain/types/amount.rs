@@ -1,9 +1,10 @@
 use core::fmt::{Debug, Display};
 
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::traits::chain::types::denom::HasDenomType;
 
+#[derive_component(AmountTypeComponent, AmountTypeProvider<Chain>)]
 pub trait HasAmountType: HasDenomType {
     type Amount: Debug + Display + Eq + PartialOrd + Async;
 

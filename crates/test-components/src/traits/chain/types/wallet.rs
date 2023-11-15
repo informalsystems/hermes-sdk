@@ -1,7 +1,8 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::traits::chain::types::address::HasAddressType;
 
+#[derive_component(WalletTypeComponent, WalletTypeProvider<Chain>)]
 pub trait HasWalletType: HasAddressType {
     type Wallet: Async;
 

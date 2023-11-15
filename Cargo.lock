@@ -1678,6 +1678,7 @@ dependencies = [
  "ibc-relayer-runtime",
  "ibc-relayer-subscription",
  "ibc-relayer-types",
+ "ibc-test-components",
  "itertools 0.11.0",
  "prost",
  "tendermint",
