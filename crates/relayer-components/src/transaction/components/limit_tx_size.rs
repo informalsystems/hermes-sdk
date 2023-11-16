@@ -26,10 +26,10 @@ pub trait HasMaxTxSize {
     fn max_tx_size(&self) -> usize;
 }
 
-pub struct CheckEncodedTxSize<InEncoder>(PhantomData<InEncoder>);
+pub struct LimitEncodedTxSize<InEncoder>(PhantomData<InEncoder>);
 
 #[async_trait]
-impl<Context, InEncoder> TxEncoder<Context> for CheckEncodedTxSize<InEncoder>
+impl<Context, InEncoder> TxEncoder<Context> for LimitEncodedTxSize<InEncoder>
 where
     Context: HasTxTypes + HasMaxTxSize + HasMaxTxSizeExceededError,
     InEncoder: TxEncoder<Context>,

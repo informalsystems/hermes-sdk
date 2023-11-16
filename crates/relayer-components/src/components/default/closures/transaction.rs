@@ -8,7 +8,7 @@ use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
-use crate::transaction::components::poll::{CanRaiseNoTxResponseError, HasPollTimeout};
+use crate::transaction::components::poll_tx_response::{CanRaiseNoTxResponseError, HasPollTimeout};
 use crate::transaction::traits::components::message_as_tx_sender::CanSendMessagesAsTx;
 use crate::transaction::traits::components::nonce_allocater::CanAllocateNonce;
 use crate::transaction::traits::components::nonce_querier::{CanQueryNonce, NonceQuerier};

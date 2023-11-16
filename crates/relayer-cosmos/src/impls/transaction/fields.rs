@@ -5,7 +5,7 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::transaction::components::poll::HasPollTimeout;
+use ibc_relayer_components::transaction::components::poll_tx_response::HasPollTimeout;
 use ibc_relayer_components::transaction::traits::fee::HasFeeForSimulation;
 use ibc_relayer_components::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
 use ibc_relayer_components::transaction::traits::signer::HasSigner;

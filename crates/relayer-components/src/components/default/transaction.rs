@@ -7,10 +7,10 @@ use crate::chain::traits::types::chain_id::{ChainIdGetterComponent, ChainIdTypeP
 use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
 use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
-use crate::transaction::components::message_as_tx::EstimateFeesAndSendTx;
-use crate::transaction::components::message_sender::send_as_tx::SendMessagesAsTx;
-use crate::transaction::components::nonce::mutex::AllocateNonceWithMutex;
-use crate::transaction::components::poll::PollTxResponse;
+use crate::transaction::components::allocate_nonce_with_mutex::AllocateNonceWithMutex;
+use crate::transaction::components::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
+use crate::transaction::components::poll_tx_response::PollTxResponse;
+use crate::transaction::components::send_messages_as_tx::SendMessagesAsTx;
 use crate::transaction::traits::components::message_as_tx_sender::MessageAsTxSenderComponent;
 use crate::transaction::traits::components::nonce_allocater::NonceAllocatorComponent;
 use crate::transaction::traits::components::nonce_querier::NonceQuerierComponent;
