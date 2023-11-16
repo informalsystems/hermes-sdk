@@ -1,9 +1,10 @@
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
-use ibc_relayer_components::chain::traits::components::message_sender::CanSendSingleMessage;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use ibc_relayer_components::transaction::components::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
 use crate::traits::chain::fields::memo::HasDefaultMemo;
 use crate::traits::chain::fields::timeout::CanCalculateIbcTransferTimeout;
@@ -12,6 +13,10 @@ use crate::traits::chain::queries::ibc_transfer::TokenIbcTransferrer;
 use crate::traits::chain::types::address::HasAddressType;
 use crate::traits::chain::types::amount::HasAmountType;
 use crate::traits::chain::types::wallet::{HasWalletSigner, HasWalletType};
+
+pub trait CanRaiseMissingSendPacketEventError: HasErrorType {
+    fn missing_send_packet_event_error(&self) -> Self::Error;
+}
 
 pub struct SendIbcTransferMessage;
 
@@ -27,8 +32,10 @@ where
         + CanCalculateIbcTransferTimeout
         + CanQueryChainStatus
         + HasDefaultMemo
-        + CanSendSingleMessage
-        + HasWalletSigner,
+        + CanSendSingleMessageWithSigner
+        + HasWalletSigner
+        + HasSendPacketEvent<Counterparty>
+        + CanRaiseMissingSendPacketEventError,
     Counterparty: HasAddressType,
 {
     async fn ibc_transfer_token(
@@ -68,6 +75,15 @@ where
 
         let signer = Chain::wallet_signer(sender_wallet);
 
-        todo!()
+        let events = chain.send_message_with_signer(&signer, message).await?;
+
+        let send_packet_event = events
+            .iter()
+            .find_map(Chain::try_extract_send_packet_event)
+            .ok_or_else(|| chain.missing_send_packet_event_error())?;
+
+        let packet = Chain::extract_packet_from_send_packet_event(&send_packet_event);
+
+        Ok(packet)
     }
 }
