@@ -11,9 +11,9 @@ use ibc_relayer_components::components::default::transaction::DefaultTxComponent
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
-use ibc_relayer_components::transaction::traits::components::message_as_tx_sender::MessageAsTxSenderComponent;
 use ibc_relayer_components::transaction::traits::components::nonce_allocater::NonceAllocatorComponent;
 use ibc_relayer_components::transaction::traits::components::nonce_querier::NonceQuerierComponent;
+use ibc_relayer_components::transaction::traits::components::send_message_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
 use ibc_relayer_components::transaction::traits::components::tx_encoder::TxEncoderComponent;
 use ibc_relayer_components::transaction::traits::components::tx_fee_estimater::TxFeeEstimatorComponent;
 use ibc_relayer_components::transaction::traits::components::tx_response_poller::TxResponsePollerComponent;
@@ -32,7 +32,7 @@ delegate_components!(
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
         MessageSenderComponent,
-        MessageAsTxSenderComponent,
+        MessagesWithSignerAndNonceSenderComponent,
         NonceQuerierComponent,
         NonceAllocatorComponent,
         TxEncoderComponent,

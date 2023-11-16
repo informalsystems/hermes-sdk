@@ -3,10 +3,10 @@ use cgp_core::prelude::*;
 use crate::std_prelude::*;
 use crate::transaction::traits::types::HasTxTypes;
 
-#[derive_component(MessageAsTxSenderComponent, MessageAsTxSender<TxContext>)]
+#[derive_component(MessagesWithSignerAndNonceSenderComponent, MessagesWithSignerAndNonceSender<TxContext>)]
 #[async_trait]
-pub trait CanSendMessagesAsTx: HasTxTypes {
-    async fn send_messages_as_tx(
+pub trait CanSendMessagesWithSignerAndNonce: HasTxTypes {
+    async fn send_messages_with_signer_and_nonce(
         &self,
         signer: &Self::Signer,
         nonce: &Self::Nonce,

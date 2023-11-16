@@ -2,8 +2,8 @@ use cgp_core::async_trait;
 
 use crate::chain::traits::components::message_sender::MessageSender;
 use crate::std_prelude::*;
-use crate::transaction::traits::components::message_as_tx_sender::CanSendMessagesAsTx;
 use crate::transaction::traits::components::nonce_allocater::CanAllocateNonce;
+use crate::transaction::traits::components::send_message_with_signer_and_nonce::CanSendMessagesWithSignerAndNonce;
 use crate::transaction::traits::event::CanParseTxResponseAsEvents;
 use crate::transaction::traits::signer::HasSigner;
 use crate::transaction::traits::types::HasTxTypes;
@@ -16,7 +16,7 @@ where
     Chain: HasTxTypes
         + HasSigner
         + CanAllocateNonce
-        + CanSendMessagesAsTx
+        + CanSendMessagesWithSignerAndNonce
         + CanParseTxResponseAsEvents,
 {
     async fn send_messages(
@@ -27,7 +27,7 @@ where
         let nonce = chain.allocate_nonce(signer).await?;
 
         let response = chain
-            .send_messages_as_tx(signer, Chain::deref_nonce(&nonce), &messages)
+            .send_messages_with_signer_and_nonce(signer, Chain::deref_nonce(&nonce), &messages)
             .await?;
 
         let events = Chain::parse_tx_response_as_events(response)?;

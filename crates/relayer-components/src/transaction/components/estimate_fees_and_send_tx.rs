@@ -2,7 +2,7 @@ use cgp_core::async_trait;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::std_prelude::*;
-use crate::transaction::traits::components::message_as_tx_sender::MessageAsTxSender;
+use crate::transaction::traits::components::send_message_with_signer_and_nonce::MessagesWithSignerAndNonceSender;
 use crate::transaction::traits::components::tx_encoder::CanEncodeTx;
 use crate::transaction::traits::components::tx_fee_estimater::CanEstimateTxFee;
 use crate::transaction::traits::components::tx_response_poller::CanPollTxResponse;
@@ -15,7 +15,7 @@ use crate::transaction::traits::types::HasTxTypes;
 pub struct EstimateFeesAndSendTx;
 
 #[async_trait]
-impl<Context> MessageAsTxSender<Context> for EstimateFeesAndSendTx
+impl<Context> MessagesWithSignerAndNonceSender<Context> for EstimateFeesAndSendTx
 where
     Context: HasTxTypes
         + HasFeeForSimulation
@@ -26,7 +26,7 @@ where
         + CanLogTx
         + CanLogNonce,
 {
-    async fn send_messages_as_tx(
+    async fn send_messages_with_signer_and_nonce(
         context: &Context,
         signer: &Context::Signer,
         nonce: &Context::Nonce,

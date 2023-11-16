@@ -9,9 +9,9 @@ use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
 use crate::transaction::components::poll_tx_response::{CanRaiseNoTxResponseError, HasPollTimeout};
-use crate::transaction::traits::components::message_as_tx_sender::CanSendMessagesAsTx;
 use crate::transaction::traits::components::nonce_allocater::CanAllocateNonce;
 use crate::transaction::traits::components::nonce_querier::{CanQueryNonce, NonceQuerier};
+use crate::transaction::traits::components::send_message_with_signer_and_nonce::CanSendMessagesWithSignerAndNonce;
 use crate::transaction::traits::components::tx_encoder::{CanEncodeTx, TxEncoder};
 use crate::transaction::traits::components::tx_fee_estimater::{CanEstimateTxFee, TxFeeEstimator};
 use crate::transaction::traits::components::tx_response_poller::CanPollTxResponse;
@@ -29,7 +29,7 @@ use crate::transaction::traits::types::HasTxTypes;
 
 pub trait UseDefaultTxComponents:
     CanSendMessages
-    + CanSendMessagesAsTx
+    + CanSendMessagesWithSignerAndNonce
     + CanAllocateNonce
     + CanPollTxResponse
     + CanQueryNonce
