@@ -45,13 +45,16 @@ where
         let runtime = chain.runtime();
 
         for _ in 0..poll_attempts {
-            let balance = chain.query_balance(address, denom).await?;
+            let balance_result = chain.query_balance(address, denom).await;
 
-            if &balance == amount {
-                return Ok(());
-            } else {
-                runtime.sleep(poll_interval).await;
-            }
+            match balance_result {
+                Ok(balance) if &balance == amount => {
+                    return Ok(());
+                }
+                _ => {
+                    runtime.sleep(poll_interval).await;
+                }
+            };
         }
 
         Err(chain.poll_assert_eventual_amount_timeout_error(

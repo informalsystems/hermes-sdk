@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use cgp_core::DelegateComponent;
-use ibc_cosmos_client_components::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
+use cosmos_client_components::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;

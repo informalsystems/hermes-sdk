@@ -1,8 +1,10 @@
 use cgp_core::Async;
 
-pub trait HasChain<const I: usize>: Async {
+pub trait HasChainType<const I: usize>: Async {
     type Chain: Async;
+}
 
+pub trait HasChain<const I: usize>: HasChainType<I> {
     fn chain(&self) -> &Self::Chain;
 }
 
@@ -22,14 +24,14 @@ where
 
 /// Helper auto trait for accessing the second chain
 pub trait HasTwoChains: HasChain<1> + HasOneChain {
-    fn second_chain(&self) -> &<Self as HasChain<1>>::Chain;
+    fn second_chain(&self) -> &<Self as HasChainType<1>>::Chain;
 }
 
 impl<Context> HasTwoChains for Context
 where
     Context: HasChain<0> + HasChain<1>,
 {
-    fn second_chain(&self) -> &<Self as HasChain<1>>::Chain {
+    fn second_chain(&self) -> &<Self as HasChainType<1>>::Chain {
         self.nth_chain::<1>()
     }
 }

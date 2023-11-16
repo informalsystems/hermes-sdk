@@ -702,6 +702,33 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
 
 [[package]]
+name = "cosmos-client-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-components",
+ "ibc-relayer-components-extra",
+ "ibc-relayer-runtime",
+ "ibc-relayer-subscription",
+ "ibc-relayer-types",
+ "ibc-test-components",
+ "itertools 0.11.0",
+ "prost",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
 name = "cosmos-sdk-proto"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -710,6 +737,33 @@ dependencies = [
  "prost",
  "prost-types",
  "tendermint-proto",
+]
+
+[[package]]
+name = "cosmos-test-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-components",
+ "ibc-relayer-components-extra",
+ "ibc-relayer-runtime",
+ "ibc-relayer-subscription",
+ "ibc-relayer-types",
+ "ibc-test-components",
+ "itertools 0.11.0",
+ "prost",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
 ]
 
 [[package]]
@@ -1662,33 +1716,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-cosmos-client-components"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "eyre",
- "flex-error",
- "futures",
- "http",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-runtime",
- "ibc-relayer-subscription",
- "ibc-relayer-types",
- "ibc-test-components",
- "itertools 0.11.0",
- "prost",
- "tendermint",
- "tendermint-rpc",
- "tokio",
- "tonic",
- "tracing",
-]
-
-[[package]]
 name = "ibc-derive"
 version = "0.3.0"
 source = "git+https://github.com/cosmos/ibc-rs.git?branch=main#527bb141383129db804b0b9d49793c4a900deede"
@@ -1704,8 +1731,8 @@ name = "ibc-integration-test"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cosmos-client-components",
  "http",
- "ibc-cosmos-client-components",
  "ibc-relayer",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
@@ -1833,11 +1860,11 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "cgp-core",
+ "cosmos-client-components",
  "eyre",
  "flex-error",
  "futures",
  "http",
- "ibc-cosmos-client-components",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-components",
@@ -1867,8 +1894,8 @@ dependencies = [
  "basecoin-app",
  "basecoin-store",
  "cgp-core",
+ "cosmos-client-components",
  "ibc",
- "ibc-cosmos-client-components",
  "ibc-proto",
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
@@ -1890,9 +1917,9 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "cgp-core",
+ "cosmos-client-components",
  "eyre",
  "flex-error",
- "ibc-cosmos-client-components",
  "ibc-relayer-components",
  "ibc-relayer-runtime",
  "tokio",
@@ -1922,11 +1949,11 @@ dependencies = [
  "async-trait",
  "bytes",
  "cgp-core",
+ "cosmos-client-components",
  "crypto-hash",
  "eyre",
  "flex-error",
  "futures",
- "ibc-cosmos-client-components",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-components",

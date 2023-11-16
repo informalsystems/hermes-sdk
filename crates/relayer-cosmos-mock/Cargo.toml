@@ -25,7 +25,7 @@ ibc-relayer-components          = { workspace = true }
 ibc-relayer-components-extra    = { workspace = true }
 ibc-relayer-runtime             = { workspace = true }
 ibc-relayer-types               = { workspace = true }
-ibc-cosmos-client-components    = { workspace = true }
+cosmos-client-components        = { workspace = true }
 tendermint                      = { workspace = true, features = ["rust-crypto"] }
 tendermint-testgen              =  { workspace = true }
 prost       = { workspace = true }

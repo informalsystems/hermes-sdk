@@ -1,8 +1,8 @@
 use alloc::sync::Arc;
 use async_trait::async_trait;
 use cgp_core::DelegateComponent;
-use ibc_cosmos_client_components::components::create_client_message::BuildCosmosCreateClientMessage;
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
+use cosmos_client_components::components::create_client_message::BuildCosmosCreateClientMessage;
+use cosmos_client_components::traits::message::CosmosMessage;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;

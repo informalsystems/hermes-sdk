@@ -1,5 +1,5 @@
 use cgp_core::{delegate_components, HasComponents};
-use ibc_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
+use cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
 use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;

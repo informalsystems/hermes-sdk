@@ -1,8 +1,8 @@
 use alloc::sync::Arc;
 
 use cgp_core::Async;
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
-use ibc_cosmos_client_components::types::tendermint::TendermintClientState;
+use cosmos_client_components::traits::message::CosmosMessage;
+use cosmos_client_components::types::tendermint::TendermintClientState;
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFields;

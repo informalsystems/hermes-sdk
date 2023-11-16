@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
-use ibc_cosmos_client_components::components::packet_fields::CosmosPacketFieldReader;
-use ibc_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
-use ibc_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
+use cosmos_client_components::components::packet_fields::CosmosPacketFieldReader;
+use cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
+use cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
 use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;

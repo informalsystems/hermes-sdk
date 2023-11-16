@@ -1,20 +1,20 @@
 use cgp_core::{Async, HasErrorType};
-use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use ibc_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
-use ibc_cosmos_client_components::types::payloads::channel::{
+use cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-use ibc_cosmos_client_components::types::payloads::client::{
+use cosmos_client_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use ibc_cosmos_client_components::types::payloads::connection::{
+use cosmos_client_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };
-use ibc_cosmos_client_components::types::payloads::packet::{
+use cosmos_client_components::types::payloads::packet::{
     CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
 };
-use ibc_cosmos_client_components::types::tendermint::{
+use cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc_relayer::chain::client::ClientSettings;

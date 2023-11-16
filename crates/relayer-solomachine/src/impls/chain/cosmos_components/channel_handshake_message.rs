@@ -1,12 +1,12 @@
 use alloc::sync::Arc;
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use ibc_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use ibc_cosmos_client_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
-use ibc_cosmos_client_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
-use ibc_cosmos_client_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
-use ibc_cosmos_client_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
+use cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use cosmos_client_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
+use cosmos_client_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
+use cosmos_client_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
+use cosmos_client_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
 use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
