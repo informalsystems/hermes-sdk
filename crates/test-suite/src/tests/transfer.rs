@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::logger::traits::log::CanLog;
+use ibc_test_components::traits::relayer::HasBackgroundRelayer;
 use ibc_test_components::traits::test_case::TestCase;
 
 use ibc_test_components::traits::chain::assert::eventual_amount::CanAssertEventualAmount;
@@ -22,7 +23,11 @@ pub struct TestIbcTransfer;
 #[async_trait]
 impl<Test, ChainA, ChainB> TestCase<Test> for TestIbcTransfer
 where
-    Test: HasErrorType + HasChain<0, Chain = ChainA> + HasChain<1, Chain = ChainB> + CanLog,
+    Test: HasErrorType
+        + HasChain<0, Chain = ChainA>
+        + HasChain<1, Chain = ChainB>
+        + CanLog
+        + HasBackgroundRelayer,
     ChainA: HasIbcChainTypes<ChainB>
         + HasChannel<ChainB, 0>
         + HasDenom<0>
@@ -76,6 +81,8 @@ where
         let channel_id_b = chain_b.channel_id();
 
         let port_id_b = chain_b.port_id();
+
+        test.start_relayer_in_background();
 
         test.log_info(&format!(
             "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
@@ -134,7 +141,7 @@ where
 
         let denom_b = ChainB::amount_denom(&balance_b1);
 
-        let balance_b3 = chain_b.query_balance(&address_b, denom_b).await?;
+        let balance_b3 = chain_b.query_balance(address_b, denom_b).await?;
 
         assert_eq!(balance_b2, balance_b3);
 
