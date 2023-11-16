@@ -22,7 +22,6 @@ pub mod query_write_ack_event;
 pub mod receive_packet_message;
 pub mod receive_packet_payload;
 pub mod send_messages_as_tx;
-pub mod tests;
 pub mod timeout_packet_message;
 pub mod timeout_packet_payload;
 pub mod types;
