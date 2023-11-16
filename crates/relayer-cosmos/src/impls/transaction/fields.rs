@@ -8,7 +8,7 @@ use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::transaction::components::poll_tx_response::HasPollTimeout;
 use ibc_relayer_components::transaction::traits::fee::HasFeeForSimulation;
 use ibc_relayer_components::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
-use ibc_relayer_components::transaction::traits::signer::HasSigner;
+use ibc_relayer_components::transaction::traits::signer::HasDefaultSigner;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::transaction::CosmosTxContext;
@@ -20,8 +20,8 @@ impl ChainIdGetter<CosmosTxContext> for CosmosTxComponents {
     }
 }
 
-impl HasSigner for CosmosTxContext {
-    fn get_signer(&self) -> &Secp256k1KeyPair {
+impl HasDefaultSigner for CosmosTxContext {
+    fn get_default_signer(&self) -> &Secp256k1KeyPair {
         &self.key_entry
     }
 }

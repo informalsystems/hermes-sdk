@@ -20,6 +20,6 @@ use crate::transaction::traits::types::HasSignerType;
    where there is no need to implement the logic to support parallel
    transactions or multiple signers.
 */
-pub trait HasSigner: HasSignerType {
-    fn get_signer(&self) -> &Self::Signer;
+pub trait HasDefaultSigner: HasSignerType {
+    fn get_default_signer(&self) -> &Self::Signer;
 }
