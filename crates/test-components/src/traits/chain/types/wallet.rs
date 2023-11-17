@@ -10,6 +10,7 @@ pub trait HasWalletType: HasAddressType {
     fn wallet_address(wallet: &Self::Wallet) -> &Self::Address;
 }
 
+#[derive_component(WalletSignerComponent, WalletSignerProvider<Chain>)]
 pub trait HasWalletSigner: HasWalletType + HasSignerType {
     fn wallet_signer(wallet: &Self::Wallet) -> &Self::Signer;
 }

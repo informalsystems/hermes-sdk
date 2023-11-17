@@ -36,3 +36,5 @@ tracing         = { workspace = true }
 http            = { workspace = true }
 tonic           = { workspace = true, features = ["tls", "tls-roots"] }
 
+serde_json  = "1"
+toml        = "0.7"

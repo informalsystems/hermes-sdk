@@ -759,9 +759,11 @@ dependencies = [
  "ibc-test-components",
  "itertools 0.11.0",
  "prost",
+ "serde_json",
  "tendermint",
  "tendermint-rpc",
  "tokio",
+ "toml 0.7.6",
  "tonic",
  "tracing",
 ]
