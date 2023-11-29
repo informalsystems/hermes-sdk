@@ -1750,9 +1750,9 @@ dependencies = [
 
 [[package]]
 name = "ibc-relayer"
-version = "0.26.0"
+version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8dd5932e5fc4a4cc7faa7fac2d7510733921479254698c7fd68c2206cf4de39"
+checksum = "e7e4a8f72323031db803dc4bf4cc275cfafc6bb4cf0b32819d8c4219146dca47"
 dependencies = [
  "anyhow",
  "async-stream",
@@ -1959,9 +1959,9 @@ dependencies = [
 
 [[package]]
 name = "ibc-relayer-types"
-version = "0.26.0"
+version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0777bfe4167421273a9a538a9fe08cceb93f1c38023a861b3453f630b7e1ea13"
+checksum = "eef2c3c535805fb47e1a46c518482f33818e16fc447f538fbecd42a26b424d99"
 dependencies = [
  "bytes",
  "derive_more",
@@ -1987,9 +1987,9 @@ dependencies = [
 
 [[package]]
 name = "ibc-telemetry"
-version = "0.26.0"
+version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee5f9b8a3bed9d0f09cf2652d8642c0e7f8f3a393750f9e549050bcb8e69244c"
+checksum = "767c8f49a61773bd0288ffb4ef20beec644950b3534aa1fef00e1c8a315ac4c6"
 dependencies = [
  "axum",
  "dashmap 5.5.0",
