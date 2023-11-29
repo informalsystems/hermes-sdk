@@ -72,8 +72,8 @@ pub fn timestamped_sign_with_data(
 
     let data = Data {
         sum: Some(Sum::Single(Single {
-            /// SIGN_MODE_DIRECT specifies a signing mode which uses SignDoc and is
-            /// verified with raw bytes from Tx.
+            // SIGN_MODE_DIRECT specifies a signing mode which uses SignDoc and is
+            // verified with raw bytes from Tx.
             mode: 0,
             signature,
         })),
