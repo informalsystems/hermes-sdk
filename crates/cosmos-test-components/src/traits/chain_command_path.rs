@@ -1,7 +1,5 @@
-use std::path::Path;
+use crate::traits::file_path::HasFilePathType;
 
-use cgp_core::prelude::*;
-
-pub trait HasChainCommandPath: Async {
-    fn chain_command_path(&self) -> &Path;
+pub trait HasChainCommandPath: HasFilePathType {
+    fn chain_command_path(&self) -> &Self::FilePath;
 }

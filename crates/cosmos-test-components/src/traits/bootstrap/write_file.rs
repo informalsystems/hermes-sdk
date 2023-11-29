@@ -1,8 +1,8 @@
-use std::path::Path;
-
 use cgp_core::prelude::*;
 
+use crate::traits::file_path::HasFilePathType;
+
 #[async_trait]
-pub trait CanWriteFile: HasErrorType {
-    async fn write_file(&self, path: &Path, content: &str) -> Result<(), Self::Error>;
+pub trait CanWriteFile: HasFilePathType + HasErrorType {
+    async fn write_file(&self, path: &Self::FilePath, content: &str) -> Result<(), Self::Error>;
 }

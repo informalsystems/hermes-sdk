@@ -1,23 +1,22 @@
-use std::path::Path;
-
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
 use crate::traits::bootstrap::commands::init_chain::InitChainCommandRunner;
 use crate::traits::chain_command_path::HasChainCommandPath;
 use crate::traits::exec_command::CanExecCommand;
+use crate::traits::file_path::HasFilePathType;
 
 pub struct InitializeCosmosChain;
 
 #[async_trait]
 impl<Bootstrap> InitChainCommandRunner<Bootstrap> for InitializeCosmosChain
 where
-    Bootstrap: HasChainIdType + HasChainCommandPath + CanExecCommand,
+    Bootstrap: HasChainIdType + HasFilePathType + HasChainCommandPath + CanExecCommand,
 {
     async fn run_init_chain_command(
         bootstrap: &Bootstrap,
         chain_id: &Bootstrap::ChainId,
-        chain_home_dir: &Path,
+        chain_home_dir: &Bootstrap::FilePath,
     ) -> Result<(), Bootstrap::Error> {
         let chain_id = chain_id.to_string();
         let chain_command_path = bootstrap.chain_command_path();
@@ -28,7 +27,7 @@ where
                 chain_command_path,
                 &[
                     "--home",
-                    &chain_home_dir.to_string_lossy(),
+                    &Bootstrap::file_path_to_string(chain_home_dir),
                     "--chain-id",
                     &chain_id,
                     "init",

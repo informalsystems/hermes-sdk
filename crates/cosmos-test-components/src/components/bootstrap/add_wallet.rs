@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
@@ -10,7 +8,7 @@ use crate::traits::bootstrap::add_wallet::WalletAdder;
 use crate::traits::bootstrap::commands::add_wallet_seed::CanRunAddWalletSeedCommand;
 use crate::traits::bootstrap::hd_path::HasWalletHdPath;
 use crate::traits::bootstrap::write_file::CanWriteFile;
-use crate::traits::chain_command_path::HasChainCommandPath;
+use crate::traits::file_path::HasFilePathType;
 use crate::types::wallet::CosmosTestWallet;
 
 pub struct AddTestWalletWithCosmosSeed;
@@ -21,14 +19,14 @@ where
     Bootstrap: HasErrorType
         + HasWalletType<Wallet = CosmosTestWallet>
         + CanRunAddWalletSeedCommand
-        + HasChainCommandPath
+        + HasFilePathType
         + CanWriteFile
         + HasWalletHdPath,
     Bootstrap::Error: From<Report>,
 {
-    async fn run_add_wallet_command(
+    async fn add_wallet(
         bootstrap: &Bootstrap,
-        chain_home_dir: &Path,
+        chain_home_dir: &Bootstrap::FilePath,
         wallet_id: &str,
     ) -> Result<Bootstrap::Wallet, Bootstrap::Error> {
         let seed_content = bootstrap
@@ -45,7 +43,10 @@ where
             .to_string();
 
         // Write the wallet secret as a file so that a tester can use it during manual tests
-        let seed_path = chain_home_dir.join(format!("{wallet_id}-seed.json"));
+        let seed_path = Bootstrap::join_file_path(
+            chain_home_dir,
+            &Bootstrap::file_path_from_string(&format!("{wallet_id}-seed.json")),
+        );
         bootstrap.write_file(&seed_path, &seed_content).await?;
 
         let hd_path = bootstrap.wallet_hd_path();
