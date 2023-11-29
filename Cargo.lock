@@ -748,6 +748,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
+ "hdpath",
  "http",
  "ibc-proto",
  "ibc-relayer",

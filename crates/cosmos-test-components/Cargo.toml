@@ -38,3 +38,4 @@ tonic           = { workspace = true, features = ["tls", "tls-roots"] }
 
 serde_json  = "1"
 toml        = "0.7"
+hdpath      = "0.6.3"

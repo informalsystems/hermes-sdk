@@ -5,7 +5,7 @@ use ibc_test_components::traits::chain::types::wallet::{
     HasWalletType, WalletSignerProvider, WalletTypeProvider,
 };
 
-use crate::types::wallet::Wallet;
+use crate::types::wallet::CosmosTestWallet;
 
 pub struct ProvideKeyPairWallet;
 
@@ -13,7 +13,7 @@ impl<Chain> WalletTypeProvider<Chain> for ProvideKeyPairWallet
 where
     Chain: HasAddressType<Address = String>,
 {
-    type Wallet = Wallet;
+    type Wallet = CosmosTestWallet;
 
     fn wallet_address(wallet: &Self::Wallet) -> &String {
         &wallet.address
@@ -22,9 +22,9 @@ where
 
 impl<Chain> WalletSignerProvider<Chain> for ProvideKeyPairWallet
 where
-    Chain: HasWalletType<Wallet = Wallet> + HasSignerType<Signer = Secp256k1KeyPair>,
+    Chain: HasWalletType<Wallet = CosmosTestWallet> + HasSignerType<Signer = Secp256k1KeyPair>,
 {
-    fn wallet_signer(wallet: &Wallet) -> &Secp256k1KeyPair {
+    fn wallet_signer(wallet: &CosmosTestWallet) -> &Secp256k1KeyPair {
         &wallet.keypair
     }
 }
