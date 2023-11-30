@@ -5,3 +5,5 @@ pub mod chain_home_dir;
 pub mod compat_mode;
 pub mod exec_command;
 pub mod file_path;
+pub mod init_genesis_file;
+pub mod update_genesis_config;

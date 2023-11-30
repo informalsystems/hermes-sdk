@@ -7,7 +7,7 @@ use serde_json as json;
 use crate::traits::bootstrap::add_wallet::WalletAdder;
 use crate::traits::bootstrap::commands::add_wallet_seed::CanRunAddWalletSeedCommand;
 use crate::traits::bootstrap::hd_path::HasWalletHdPath;
-use crate::traits::bootstrap::write_file::CanWriteFile;
+use crate::traits::bootstrap::write_file::CanWriteStringToFile;
 use crate::traits::file_path::HasFilePathType;
 use crate::types::wallet::CosmosTestWallet;
 
@@ -20,7 +20,7 @@ where
         + HasWalletType<Wallet = CosmosTestWallet>
         + CanRunAddWalletSeedCommand
         + HasFilePathType
-        + CanWriteFile
+        + CanWriteStringToFile
         + HasWalletHdPath,
     Bootstrap::Error: From<Report>,
 {
@@ -47,7 +47,9 @@ where
             chain_home_dir,
             &Bootstrap::file_path_from_string(&format!("{wallet_id}-seed.json")),
         );
-        bootstrap.write_file(&seed_path, &seed_content).await?;
+        bootstrap
+            .write_string_to_file(&seed_path, &seed_content)
+            .await?;
 
         let hd_path = bootstrap.wallet_hd_path();
 

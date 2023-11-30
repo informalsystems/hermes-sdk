@@ -5,6 +5,7 @@ use crate::traits::bootstrap::allocate_port::CanAllocateTcpPort;
 use crate::traits::bootstrap::commands::init_chain::CanRunInitChainCommand;
 use crate::traits::bootstrap::generate_chain_id::CanGenerateChainId;
 use crate::traits::chain_home_dir::CanAllocateChainHomeDir;
+use crate::traits::init_genesis_file::CanInitGenesisFile;
 
 pub struct BoostrapCosmosChain;
 
@@ -15,7 +16,8 @@ where
         + CanGenerateChainId
         + CanAllocateChainHomeDir
         + CanAllocateTcpPort
-        + CanRunInitChainCommand,
+        + CanRunInitChainCommand
+        + CanInitGenesisFile,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -30,6 +32,8 @@ where
         bootstrap
             .run_init_chain_command(chain_id, &chain_home_dir)
             .await?;
+
+        bootstrap.init_genesis_file(&chain_home_dir).await?;
 
         let _rpc_port = bootstrap.allocate_tcp_port().await?;
         let _grpc_port = bootstrap.allocate_tcp_port().await?;

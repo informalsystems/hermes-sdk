@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 
 use crate::traits::bootstrap::commands::add_wallet_seed::AddWalletSeedCommandRunner;
 use crate::traits::bootstrap::hd_path::HasWalletHdPath;
-use crate::traits::bootstrap::write_file::CanWriteFile;
+use crate::traits::bootstrap::write_file::CanWriteStringToFile;
 use crate::traits::chain_command_path::HasChainCommandPath;
 use crate::traits::exec_command::CanExecCommand;
 use crate::traits::file_path::HasFilePathType;
@@ -16,7 +16,7 @@ where
         + HasFilePathType
         + CanExecCommand
         + HasChainCommandPath
-        + CanWriteFile
+        + CanWriteStringToFile
         + HasWalletHdPath,
 {
     async fn run_add_wallet_seed_command(
