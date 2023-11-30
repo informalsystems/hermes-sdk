@@ -25,11 +25,11 @@ jobs:
       fail-fast: false
       matrix:
         chain:
-          - package: gaia11
+          - package: gaia14
             command: gaiad
             account_prefix: cosmos
             features: ''
-          - package: ibc-go-v7-simapp
+          - package: ibc-go-v8-simapp
             command: simd
             account_prefix: cosmos
             features: solomachine
@@ -61,6 +61,6 @@ jobs:
           CHAIN_COMMAND_PATHS: ${{ matrix.chain.command }}
           ACCOUNT_PREFIXES: ${{ matrix.chain.account_prefix }}
         run: |
-            nix shell .#python .#${{ matrix.chain.package }} -c cargo \
+            nix shell .#${{ matrix.chain.package }} -c cargo \
               test -p ibc-integration-test --features=${{ matrix.chain.features }} --no-fail-fast -- \
               --nocapture --test-threads=2
