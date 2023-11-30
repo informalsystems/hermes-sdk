@@ -29,7 +29,7 @@ jobs:
             command: gaiad
             account_prefix: cosmos
             features: ''
-          - package: ibc-go-v8-simapp
+          - package: ibc-go-v7-simapp
             command: simd
             account_prefix: cosmos
             features: solomachine

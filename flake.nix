@@ -28,7 +28,7 @@
         inherit
           (cosmos-nix)
           gaia14
-          ibc-go-v8-simapp
+          ibc-go-v7-simapp
           ;
       };
     });
