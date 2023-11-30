@@ -27,30 +27,9 @@
       packages = {
         inherit
           (cosmos-nix)
-          gaia6-ordered
-          gaia11
-          osmosis
-          wasmd
-          ibc-go-v2-simapp
-          ibc-go-v3-simapp
-          ibc-go-v4-simapp
-          ibc-go-v5-simapp
-          ibc-go-v6-simapp
+          gaia14
           ibc-go-v7-simapp
-          apalache
-          evmos
-          juno
-          stride
-          stride-no-admin
-          stride-consumer-no-admin
-          stride-consumer
-          migaloo
-          neutron
           ;
-
-        python = nixpkgs.python3.withPackages (p: [
-          p.toml
-        ]);
       };
     });
 }
