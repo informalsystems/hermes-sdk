@@ -6,9 +6,9 @@ use serde_json as json;
 
 use crate::traits::bootstrap::add_wallet::WalletAdder;
 use crate::traits::bootstrap::commands::add_wallet_seed::CanRunAddWalletSeedCommand;
-use crate::traits::bootstrap::hd_path::HasWalletHdPath;
-use crate::traits::bootstrap::write_file::CanWriteStringToFile;
-use crate::traits::file_path::HasFilePathType;
+use crate::traits::fields::hd_path::HasWalletHdPath;
+use crate::traits::io::write_file::CanWriteStringToFile;
+use crate::traits::types::file_path::HasFilePathType;
 use crate::types::wallet::CosmosTestWallet;
 
 pub struct AddTestWalletWithCosmosSeed;

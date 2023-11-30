@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::traits::file_path::HasFilePathType;
+use crate::traits::types::file_path::HasFilePathType;
 
 #[derive_component(AddWalletSeedCommandRunnerComponent, AddWalletSeedCommandRunner<Bootstrap>)]
 #[async_trait]

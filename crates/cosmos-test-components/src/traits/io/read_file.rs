@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::traits::file_path::HasFilePathType;
+use crate::traits::types::file_path::HasFilePathType;
 
 #[async_trait]
 pub trait CanReadFileAsString: HasFilePathType + HasErrorType {

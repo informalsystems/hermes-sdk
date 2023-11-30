@@ -1,11 +1,12 @@
 use cgp_core::prelude::*;
 use eyre::Report;
 
-use crate::traits::bootstrap::read_file::CanReadFileAsString;
-use crate::traits::bootstrap::write_file::CanWriteStringToFile;
-use crate::traits::file_path::HasFilePathType;
 use crate::traits::init_genesis_file::GenesisFileInitializer;
-use crate::traits::update_genesis_config::CanUpdateGenesisJsonConfig;
+use crate::traits::io::read_file::CanReadFileAsString;
+use crate::traits::io::write_file::CanWriteStringToFile;
+use crate::traits::modify_genesis_config::CanModifyGenesisConfig;
+use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::genesis_config::{CanParseGenesisConfig, HasGenesisConfigFile};
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;
@@ -15,7 +16,9 @@ impl<Bootstrap> GenesisFileInitializer<Bootstrap> for UpdateCosmosGenesisConfig
 where
     Bootstrap: HasFilePathType
         + HasErrorType
-        + CanUpdateGenesisJsonConfig
+        + HasGenesisConfigFile
+        + CanParseGenesisConfig
+        + CanModifyGenesisConfig
         + CanReadFileAsString
         + CanWriteStringToFile,
     Bootstrap::Error: From<Report>,
@@ -24,18 +27,15 @@ where
         bootstrap: &Bootstrap,
         chain_home_dir: &Bootstrap::FilePath,
     ) -> Result<(), Bootstrap::Error> {
-        let genesis_file_path = Bootstrap::join_file_path(
-            chain_home_dir,
-            &Bootstrap::file_path_from_string("config/genesis.json"),
-        );
+        let genesis_file_path = bootstrap.genesis_config_file_path(chain_home_dir);
 
         let config_string = bootstrap.read_file_as_string(&genesis_file_path).await?;
 
-        let mut config = serde_json::from_str(&config_string).map_err(Report::from)?;
+        let mut config = Bootstrap::parse_genesis_config(&config_string)?;
 
-        bootstrap.update_genesis_json_config(&mut config)?;
+        bootstrap.modify_genesis_config(&mut config)?;
 
-        let modified_config_string = serde_json::to_string_pretty(&config).map_err(Report::from)?;
+        let modified_config_string = Bootstrap::serialize_genesis_config(&config)?;
 
         bootstrap
             .write_string_to_file(&genesis_file_path, &modified_config_string)

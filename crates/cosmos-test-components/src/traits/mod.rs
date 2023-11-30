@@ -1,9 +1,8 @@
-pub mod account_prefix;
 pub mod bootstrap;
-pub mod chain_command_path;
 pub mod chain_home_dir;
-pub mod compat_mode;
-pub mod exec_command;
-pub mod file_path;
+pub mod fields;
+pub mod generator;
 pub mod init_genesis_file;
-pub mod update_genesis_config;
+pub mod io;
+pub mod modify_genesis_config;
+pub mod types;

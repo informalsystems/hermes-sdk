@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 
-use crate::traits::file_path::HasFilePathType;
+use crate::traits::types::file_path::HasFilePathType;
 
 #[derive_component(WalletAdderComponent, WalletAdder<Bootstrap>)]
 #[async_trait]

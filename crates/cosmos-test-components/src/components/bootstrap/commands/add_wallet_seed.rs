@@ -1,23 +1,16 @@
 use cgp_core::prelude::*;
 
 use crate::traits::bootstrap::commands::add_wallet_seed::AddWalletSeedCommandRunner;
-use crate::traits::bootstrap::hd_path::HasWalletHdPath;
-use crate::traits::bootstrap::write_file::CanWriteStringToFile;
-use crate::traits::chain_command_path::HasChainCommandPath;
-use crate::traits::exec_command::CanExecCommand;
-use crate::traits::file_path::HasFilePathType;
+use crate::traits::fields::chain_command_path::HasChainCommandPath;
+use crate::traits::io::exec_command::CanExecCommand;
+use crate::traits::types::file_path::HasFilePathType;
 
 pub struct AddCosmosTestWalletSeed;
 
 #[async_trait]
 impl<Bootstrap> AddWalletSeedCommandRunner<Bootstrap> for AddCosmosTestWalletSeed
 where
-    Bootstrap: HasErrorType
-        + HasFilePathType
-        + CanExecCommand
-        + HasChainCommandPath
-        + CanWriteStringToFile
-        + HasWalletHdPath,
+    Bootstrap: HasErrorType + HasFilePathType + CanExecCommand + HasChainCommandPath,
 {
     async fn run_add_wallet_seed_command(
         bootstrap: &Bootstrap,

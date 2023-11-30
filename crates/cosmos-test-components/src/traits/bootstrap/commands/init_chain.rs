@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
-use crate::traits::file_path::HasFilePathType;
+use crate::traits::types::file_path::HasFilePathType;
 
 #[derive_component(InitChainCommandRunnerComponent, InitChainCommandRunner<Bootstrap>)]
 #[async_trait]
