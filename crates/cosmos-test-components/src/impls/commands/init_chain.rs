@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
-use crate::traits::bootstrap::commands::init_chain::InitChainCommandRunner;
+use crate::traits::commands::init_chain::InitChainCommandRunner;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::io::exec_command::CanExecCommand;
 use crate::traits::types::file_path::HasFilePathType;

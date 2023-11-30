@@ -1,10 +1,10 @@
 use cgp_core::prelude::*;
 use ibc_test_components::traits::bootstrap::chain::ChainBootstrapper;
 
-use crate::traits::bootstrap::commands::init_chain::CanRunInitChainCommand;
-use crate::traits::chain_home_dir::CanAllocateChainHomeDir;
+use crate::traits::commands::init_chain::CanRunInitChainCommand;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
-use crate::traits::init_genesis_file::CanInitGenesisFile;
+use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
+use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
 use crate::traits::io::reserve_port::CanReserveTcpPort;
 
 pub struct BoostrapCosmosChain;
@@ -14,10 +14,10 @@ impl<Bootstrap, Chain> ChainBootstrapper<Bootstrap, Chain> for BoostrapCosmosCha
 where
     Bootstrap: HasErrorType
         + CanGenerateChainId
-        + CanAllocateChainHomeDir
+        + CanInitChainHomeDir
         + CanReserveTcpPort
         + CanRunInitChainCommand
-        + CanInitGenesisFile,
+        + CanInitGenesisConfig,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -25,7 +25,7 @@ where
     ) -> Result<Chain, Bootstrap::Error> {
         let chain_id = bootstrap.generate_chain_id(chain_id_prefix).await;
 
-        let chain_home_dir = bootstrap.allocate_chain_home_dir(chain_id).await?;
+        let chain_home_dir = bootstrap.init_chain_home_dir(chain_id).await?;
 
         // Run the `init` chain CLI subcommand to initialize the chain data files on the
         // given chain home directory.
@@ -33,7 +33,7 @@ where
             .run_init_chain_command(chain_id, &chain_home_dir)
             .await?;
 
-        bootstrap.init_genesis_file(&chain_home_dir).await?;
+        bootstrap.init_genesis_config(&chain_home_dir).await?;
 
         let _rpc_port = bootstrap.reserve_tcp_port().await?;
         let _grpc_port = bootstrap.reserve_tcp_port().await?;

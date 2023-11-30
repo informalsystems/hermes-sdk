@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::traits::bootstrap::commands::add_wallet_seed::AddWalletSeedCommandRunner;
+use crate::traits::commands::add_wallet_seed::AddWalletSeedCommandRunner;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::io::exec_command::CanExecCommand;
 use crate::traits::types::file_path::HasFilePathType;

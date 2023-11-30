@@ -5,7 +5,7 @@ use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 use serde_json as json;
 
 use crate::traits::bootstrap::add_wallet::WalletAdder;
-use crate::traits::bootstrap::commands::add_wallet_seed::CanRunAddWalletSeedCommand;
+use crate::traits::commands::add_wallet_seed::CanRunAddWalletSeedCommand;
 use crate::traits::fields::hd_path::HasWalletHdPath;
 use crate::traits::io::write_file::CanWriteStringToFile;
 use crate::traits::types::file_path::HasFilePathType;
