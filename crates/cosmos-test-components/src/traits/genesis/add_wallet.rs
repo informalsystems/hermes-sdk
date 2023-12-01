@@ -3,10 +3,10 @@ use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 
 use crate::traits::types::file_path::HasFilePathType;
 
-#[derive_component(WalletAdderComponent, WalletAdder<Bootstrap>)]
+#[derive_component(GenesisWalletAdderComponent, GenesisWalletAdder<Bootstrap>)]
 #[async_trait]
-pub trait CanAddWallet: HasWalletType + HasFilePathType + HasErrorType {
-    async fn add_wallet(
+pub trait CanAddGenesisWallet: HasWalletType + HasFilePathType + HasErrorType {
+    async fn add_genesis_wallet(
         &self,
         chain_home_dir: &Self::FilePath,
         wallet_id: &str,

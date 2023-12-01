@@ -1,8 +1,12 @@
 use cgp_core::prelude::*;
 use ibc_test_components::traits::bootstrap::chain::ChainBootstrapper;
 
+use crate::traits::commands::add_genesis_validator::CanRunAddGenesisValidatorCommand;
 use crate::traits::commands::init_chain::CanRunInitChainCommand;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
+use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
+use crate::traits::genesis::add_balance::CanAddGenesisBalance;
+use crate::traits::genesis::add_wallet::CanAddGenesisWallet;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
 use crate::traits::io::reserve_port::CanReserveTcpPort;
@@ -17,7 +21,11 @@ where
         + CanInitChainHomeDir
         + CanReserveTcpPort
         + CanRunInitChainCommand
-        + CanInitGenesisConfig,
+        + CanInitGenesisConfig
+        + CanGenerateWalletConfigs
+        + CanAddGenesisWallet
+        + CanAddGenesisBalance
+        + CanRunAddGenesisValidatorCommand,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -35,11 +43,31 @@ where
 
         bootstrap.init_genesis_config(&chain_home_dir).await?;
 
-        let _rpc_port = bootstrap.reserve_tcp_port().await?;
-        let _grpc_port = bootstrap.reserve_tcp_port().await?;
-        let _grpc_web_port = bootstrap.reserve_tcp_port().await?;
-        let _p2p_port = bootstrap.reserve_tcp_port().await?;
-        let _pprof_port = bootstrap.reserve_tcp_port().await?;
+        let wallet_configs = bootstrap.generate_wallet_configs().await?;
+
+        for wallet_config in wallet_configs {
+            let wallet_id = Bootstrap::wallet_config_wallet_id(&wallet_config);
+
+            let wallet = bootstrap
+                .add_genesis_wallet(&chain_home_dir, &wallet_id)
+                .await?;
+
+            let address = Bootstrap::wallet_address(&wallet);
+
+            let genesis_balance = Bootstrap::wallet_config_genesis_balance(&wallet_config);
+
+            bootstrap
+                .add_genesis_balance(address, genesis_balance)
+                .await?;
+
+            if let Some(stake_amount) =
+                Bootstrap::wallet_config_validator_staked_amount(&wallet_config)
+            {
+                bootstrap
+                    .run_add_genesis_validator_command(&chain_home_dir, &wallet_id, &stake_amount)
+                    .await?;
+            }
+        }
 
         todo!()
     }

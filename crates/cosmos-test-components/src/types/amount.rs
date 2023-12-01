@@ -3,7 +3,7 @@ use core::fmt::{self, Display};
 
 use crate::types::denom::Denom;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Amount {
     pub quantity: u128,
     pub denom: Denom,
