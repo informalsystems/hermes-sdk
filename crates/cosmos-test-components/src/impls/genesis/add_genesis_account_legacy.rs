@@ -7,10 +7,16 @@ use crate::traits::genesis::add_genesis_account::GenesisAccountAdder;
 use crate::traits::io::exec_command::CanExecCommand;
 use crate::traits::types::file_path::HasFilePathType;
 
-pub struct AddCosmosGenesisAccount;
+/**
+   Implementation for adding genesis account to legacy Cosmos chains
+   with Cosmos SDK version < v0.47.0.
+   The chain command uses the `add-genesis-account` subcommand directly,
+   without a `genesis` subcommand.
+*/
+pub struct LegacyAddCosmosGenesisAccount;
 
 #[async_trait]
-impl<Bootstrap> GenesisAccountAdder<Bootstrap> for AddCosmosGenesisAccount
+impl<Bootstrap> GenesisAccountAdder<Bootstrap> for LegacyAddCosmosGenesisAccount
 where
     Bootstrap: HasFilePathType
         + HasAmountType
@@ -29,12 +35,11 @@ where
 
         bootstrap
             .exec_command(
-                "add wallet",
+                "add genesis account legacy",
                 bootstrap.chain_command_path(),
                 &[
                     "--home",
                     &Bootstrap::file_path_to_string(chain_home_dir),
-                    "genesis",
                     "add-genesis-account",
                     &address.to_string(),
                     &amounts_string,

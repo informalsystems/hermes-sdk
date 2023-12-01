@@ -5,8 +5,10 @@ use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 use serde_json as json;
 
 use crate::traits::commands::add_wallet_seed::CanRunAddWalletSeedCommand;
+use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::fields::hd_path::HasWalletHdPath;
 use crate::traits::genesis::add_wallet::GenesisWalletAdder;
+use crate::traits::io::exec_command::CanExecCommand;
 use crate::traits::io::write_file::CanWriteStringToFile;
 use crate::traits::types::file_path::HasFilePathType;
 use crate::types::wallet::CosmosTestWallet;
@@ -21,7 +23,9 @@ where
         + CanRunAddWalletSeedCommand
         + HasFilePathType
         + CanWriteStringToFile
-        + HasWalletHdPath,
+        + HasWalletHdPath
+        + CanExecCommand
+        + HasChainCommandPath,
     Bootstrap::Error: From<Report>,
 {
     async fn add_genesis_wallet(
@@ -30,8 +34,23 @@ where
         wallet_id: &str,
     ) -> Result<Bootstrap::Wallet, Bootstrap::Error> {
         let seed_content = bootstrap
-            .run_add_wallet_seed_command(chain_home_dir, wallet_id)
-            .await?;
+            .exec_command(
+                "add wallet",
+                bootstrap.chain_command_path(),
+                &[
+                    "--home",
+                    &Bootstrap::file_path_to_string(chain_home_dir),
+                    "keys",
+                    "add",
+                    wallet_id,
+                    "--keyring-backend",
+                    "test",
+                    "--output",
+                    "json",
+                ],
+            )
+            .await?
+            .stdout;
 
         let json_val: json::Value = json::from_str(&seed_content).map_err(Report::from)?;
 
