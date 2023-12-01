@@ -1,2 +1,2 @@
 pub mod add_wallet_seed;
-pub mod init_chain;
+pub mod init_chain_data;

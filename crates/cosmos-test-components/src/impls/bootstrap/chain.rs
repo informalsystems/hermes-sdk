@@ -1,12 +1,12 @@
 use cgp_core::prelude::*;
 use ibc_test_components::traits::bootstrap::chain::ChainBootstrapper;
 
-use crate::traits::commands::init_chain::CanRunInitChainCommand;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
 use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::traits::genesis::add_wallet::CanAddGenesisWallet;
+use crate::traits::genesis::init_chain_data::CanInitChainData;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
 use crate::traits::io::reserve_port::CanReserveTcpPort;
@@ -20,7 +20,7 @@ where
         + CanGenerateChainId
         + CanInitChainHomeDir
         + CanReserveTcpPort
-        + CanRunInitChainCommand
+        + CanInitChainData
         + CanInitGenesisConfig
         + CanGenerateWalletConfigs
         + CanAddGenesisWallet
@@ -37,9 +37,7 @@ where
 
         // Run the `init` chain CLI subcommand to initialize the chain data files on the
         // given chain home directory.
-        bootstrap
-            .run_init_chain_command(chain_id, &chain_home_dir)
-            .await?;
+        bootstrap.init_chain_data(chain_id, &chain_home_dir).await?;
 
         bootstrap.init_genesis_config(&chain_home_dir).await?;
 

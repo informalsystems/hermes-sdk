@@ -1,19 +1,19 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
-use crate::traits::commands::init_chain::InitChainCommandRunner;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
+use crate::traits::genesis::init_chain_data::ChainDataInitializer;
 use crate::traits::io::exec_command::CanExecCommand;
 use crate::traits::types::file_path::HasFilePathType;
 
-pub struct InitializeCosmosChain;
+pub struct InitCosmosChainData;
 
 #[async_trait]
-impl<Bootstrap> InitChainCommandRunner<Bootstrap> for InitializeCosmosChain
+impl<Bootstrap> ChainDataInitializer<Bootstrap> for InitCosmosChainData
 where
     Bootstrap: HasChainIdType + HasFilePathType + HasChainCommandPath + CanExecCommand,
 {
-    async fn run_init_chain_command(
+    async fn init_chain_data(
         bootstrap: &Bootstrap,
         chain_id: &Bootstrap::ChainId,
         chain_home_dir: &Bootstrap::FilePath,
