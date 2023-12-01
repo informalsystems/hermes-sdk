@@ -1,11 +1,11 @@
 use cgp_core::prelude::*;
 use ibc_test_components::traits::bootstrap::chain::ChainBootstrapper;
 
-use crate::traits::commands::add_genesis_validator::CanRunAddGenesisValidatorCommand;
 use crate::traits::commands::init_chain::CanRunInitChainCommand;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
-use crate::traits::genesis::add_balance::CanAddGenesisBalance;
+use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
+use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::traits::genesis::add_wallet::CanAddGenesisWallet;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
@@ -24,8 +24,8 @@ where
         + CanInitGenesisConfig
         + CanGenerateWalletConfigs
         + CanAddGenesisWallet
-        + CanAddGenesisBalance
-        + CanRunAddGenesisValidatorCommand,
+        + CanAddGenesisAccount
+        + CanAddGenesisValidator,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -57,14 +57,14 @@ where
             let genesis_balance = Bootstrap::wallet_config_genesis_balance(&wallet_config);
 
             bootstrap
-                .add_genesis_balance(address, genesis_balance)
+                .add_genesis_account(&chain_home_dir, address, genesis_balance)
                 .await?;
 
             if let Some(stake_amount) =
                 Bootstrap::wallet_config_validator_staked_amount(&wallet_config)
             {
                 bootstrap
-                    .run_add_genesis_validator_command(&chain_home_dir, &wallet_id, &stake_amount)
+                    .add_genesis_validator(&chain_home_dir, &wallet_id, &stake_amount)
                     .await?;
             }
         }

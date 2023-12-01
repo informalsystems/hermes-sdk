@@ -2,10 +2,15 @@ use cgp_core::prelude::*;
 use ibc_test_components::traits::chain::types::address::HasAddressType;
 use ibc_test_components::traits::chain::types::amount::HasAmountType;
 
+use crate::traits::types::file_path::HasFilePathType;
+
 #[async_trait]
-pub trait CanAddGenesisBalance: HasAmountType + HasAddressType + HasErrorType {
-    async fn add_genesis_balance(
+pub trait CanAddGenesisAccount:
+    HasFilePathType + HasAmountType + HasAddressType + HasErrorType
+{
+    async fn add_genesis_account(
         &self,
+        chain_home_dir: &Self::FilePath,
         address: &Self::Address,
         amounts: &[Self::Amount],
     ) -> Result<(), Self::Error>;

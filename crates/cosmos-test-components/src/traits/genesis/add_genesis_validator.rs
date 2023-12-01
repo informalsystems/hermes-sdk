@@ -4,8 +4,8 @@ use ibc_test_components::traits::chain::types::amount::HasAmountType;
 use crate::traits::types::file_path::HasFilePathType;
 
 #[async_trait]
-pub trait CanRunAddGenesisValidatorCommand: HasFilePathType + HasAmountType + HasErrorType {
-    async fn run_add_genesis_validator_command(
+pub trait CanAddGenesisValidator: HasFilePathType + HasAmountType + HasErrorType {
+    async fn add_genesis_validator(
         &self,
         chain_home_dir: &Self::FilePath,
         wallet_id: &str,
