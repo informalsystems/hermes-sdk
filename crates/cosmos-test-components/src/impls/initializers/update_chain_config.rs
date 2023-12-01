@@ -13,6 +13,15 @@ use crate::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::traits::types::chain_config::HasChainConfigType;
 use crate::traits::types::file_path::HasFilePathType;
 
+pub struct CosmosChainConfig {
+    pub rpc_port: u16,
+    pub p2p_port: u16,
+    pub pprof_port: u16,
+    pub grpc_port: u16,
+    pub comet_config: Value,
+    pub sdk_config: Value,
+}
+
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainConfig;
 
@@ -21,13 +30,14 @@ impl<Bootstrap> ChainConfigInitializer<Bootstrap> for UpdateCosmosChainConfig
 where
     Bootstrap: HasFilePathType
         + HasErrorType
-        + HasChainConfigType<ChainConfig = [Value; 2]>
+        + HasChainConfigType
         + CanModifyCometConfig
         + CanReadFileAsString
         + CanWriteStringToFile
         + CanReserveTcpPort
         + HasDenom<0>,
     Bootstrap::Error: From<Report>,
+    Bootstrap::ChainConfig: From<CosmosChainConfig>,
 {
     async fn init_chain_config(
         bootstrap: &Bootstrap,
@@ -86,7 +96,16 @@ where
             sdk_config
         };
 
-        Ok([comet_config, sdk_config])
+        let chain_config = CosmosChainConfig {
+            rpc_port,
+            p2p_port,
+            pprof_port,
+            grpc_port,
+            comet_config,
+            sdk_config,
+        };
+
+        Ok(chain_config.into())
     }
 }
 
