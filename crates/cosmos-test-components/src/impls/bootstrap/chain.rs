@@ -6,6 +6,7 @@ use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
 use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::traits::genesis::add_wallet::CanAddGenesisWallet;
+use crate::traits::genesis::collect_gentxs::CanCollectGentxs;
 use crate::traits::genesis::init_chain_data::CanInitChainData;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
@@ -25,7 +26,8 @@ where
         + CanGenerateWalletConfigs
         + CanAddGenesisWallet
         + CanAddGenesisAccount
-        + CanAddGenesisValidator,
+        + CanAddGenesisValidator
+        + CanCollectGentxs,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -68,6 +70,8 @@ where
                     .await?;
             }
         }
+
+        bootstrap.collect_gentxs(&chain_home_dir).await?;
 
         todo!()
     }
