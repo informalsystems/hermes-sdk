@@ -49,7 +49,7 @@ where
             let wallet_id = Bootstrap::wallet_config_wallet_id(&wallet_config);
 
             let wallet = bootstrap
-                .add_genesis_wallet(&chain_home_dir, &wallet_id)
+                .add_genesis_wallet(&chain_home_dir, wallet_id)
                 .await?;
 
             let address = Bootstrap::wallet_address(&wallet);
@@ -64,7 +64,7 @@ where
                 Bootstrap::wallet_config_validator_staked_amount(&wallet_config)
             {
                 bootstrap
-                    .add_genesis_validator(&chain_home_dir, &wallet_id, &stake_amount)
+                    .add_genesis_validator(&chain_home_dir, wallet_id, stake_amount)
                     .await?;
             }
         }
