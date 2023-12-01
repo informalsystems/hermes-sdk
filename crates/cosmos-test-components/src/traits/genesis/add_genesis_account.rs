@@ -4,6 +4,7 @@ use ibc_test_components::traits::chain::types::amount::HasAmountType;
 
 use crate::traits::types::file_path::HasFilePathType;
 
+#[derive_component(GenesisAccountAdderComponent, GenesisAccountAdder<Bootstrap>)]
 #[async_trait]
 pub trait CanAddGenesisAccount:
     HasFilePathType + HasAmountType + HasAddressType + HasErrorType
