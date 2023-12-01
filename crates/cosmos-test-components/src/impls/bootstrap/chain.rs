@@ -33,11 +33,13 @@ where
     ) -> Result<Chain, Bootstrap::Error> {
         let chain_id = bootstrap.generate_chain_id(chain_id_prefix).await;
 
-        let chain_home_dir = bootstrap.init_chain_home_dir(chain_id).await?;
+        let chain_home_dir = bootstrap.init_chain_home_dir(&chain_id).await?;
 
         // Run the `init` chain CLI subcommand to initialize the chain data files on the
         // given chain home directory.
-        bootstrap.init_chain_data(chain_id, &chain_home_dir).await?;
+        bootstrap
+            .init_chain_data(&chain_home_dir, &chain_id)
+            .await?;
 
         bootstrap.init_genesis_config(&chain_home_dir).await?;
 
@@ -62,7 +64,7 @@ where
                 Bootstrap::wallet_config_validator_staked_amount(&wallet_config)
             {
                 bootstrap
-                    .add_genesis_validator(&chain_home_dir, wallet_id, stake_amount)
+                    .add_genesis_validator(&chain_home_dir, &chain_id, wallet_id, stake_amount)
                     .await?;
             }
         }

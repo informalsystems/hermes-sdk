@@ -15,8 +15,8 @@ where
 {
     async fn init_chain_data(
         bootstrap: &Bootstrap,
-        chain_id: &Bootstrap::ChainId,
         chain_home_dir: &Bootstrap::FilePath,
+        chain_id: &Bootstrap::ChainId,
     ) -> Result<(), Bootstrap::Error> {
         let chain_id = chain_id.to_string();
         let chain_command_path = bootstrap.chain_command_path();

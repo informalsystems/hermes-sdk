@@ -11,7 +11,7 @@ use crate::traits::types::file_path::HasFilePathType;
 pub trait CanInitChainData: HasChainIdType + HasFilePathType + HasErrorType {
     async fn init_chain_data(
         &self,
-        chain_id: &Self::ChainId,
         chain_home_dir: &Self::FilePath,
+        chain_id: &Self::ChainId,
     ) -> Result<(), Self::Error>;
 }
