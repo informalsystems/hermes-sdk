@@ -4,7 +4,7 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::genesis::collect_gentxs::GenesisTransactionsCollector;
 use crate::traits::io::exec_command::CanExecCommand;
-use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::io::file_path::HasFilePathType;
 
 pub struct LegacyCollectCosmosGentxs;
 

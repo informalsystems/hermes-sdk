@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 
-use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::io::file_path::HasFilePathType;
 use crate::traits::types::wallet_config::HasWalletConfigType;
 
 #[derive_component(GenesisWalletAdderComponent, GenesisWalletAdder<Bootstrap>)]

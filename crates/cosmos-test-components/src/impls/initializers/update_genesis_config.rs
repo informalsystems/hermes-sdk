@@ -6,8 +6,8 @@ use crate::traits::initializers::init_genesis_config::GenesisConfigInitializer;
 use crate::traits::io::read_file::CanReadFileAsString;
 use crate::traits::io::write_file::CanWriteStringToFile;
 use crate::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
-use crate::traits::types::file_path::HasFilePathType;
 use crate::traits::types::genesis_config::HasGenesisConfigType;
+use crate::traits::types::io::file_path::HasFilePathType;
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;

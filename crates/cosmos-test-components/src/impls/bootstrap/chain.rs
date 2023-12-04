@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_test_components::traits::bootstrap::chain::ChainBootstrapper;
 
+use crate::traits::bootstrap::start_chain::CanStartChainFullNode;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
 use crate::traits::genesis::add_genesis_wallet::CanAddWalletToGenesis;
@@ -25,7 +26,8 @@ where
         + CanGenerateWalletConfigs
         + CanAddWalletToGenesis
         + CanCollectGenesisTransactions
-        + CanInitChainConfig,
+        + CanInitChainConfig
+        + CanStartChainFullNode,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -65,6 +67,8 @@ where
             .await?;
 
         let _chain_config = bootstrap.init_chain_config(&chain_home_dir).await?;
+
+        let _child_process = bootstrap.start_chain_full_node(&chain_home_dir).await?;
 
         todo!()
     }

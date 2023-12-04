@@ -6,7 +6,7 @@ use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::traits::genesis::add_genesis_wallet::GenesisWalletAdder;
 use crate::traits::initializers::init_wallet::CanInitWallet;
-use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::io::file_path::HasFilePathType;
 use crate::traits::types::wallet_config::HasWalletConfigFields;
 
 pub struct AddCosmosWalletToGenesis;

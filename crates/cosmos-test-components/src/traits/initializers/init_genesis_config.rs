@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
-use crate::traits::types::file_path::HasFilePathType;
 use crate::traits::types::genesis_config::HasGenesisConfigType;
+use crate::traits::types::io::file_path::HasFilePathType;
 
 #[derive_component(GenesisConfigInitializerComponent, GenesisConfigInitializer<Bootstrap>)]
 #[async_trait]

@@ -2,7 +2,7 @@ use std::process::Child;
 
 use cgp_core::prelude::*;
 
-use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::io::file_path::HasFilePathType;
 
 #[async_trait]
 pub trait CanBuildChainFromCosmosConfig: HasFilePathType + HasErrorType {

@@ -5,7 +5,7 @@ use ibc_test_components::traits::chain::types::amount::HasAmountType;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::genesis::add_genesis_account::GenesisAccountAdder;
 use crate::traits::io::exec_command::CanExecCommand;
-use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::io::file_path::HasFilePathType;
 
 /**
    Implementation for adding genesis account to Cosmos chains

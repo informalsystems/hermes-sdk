@@ -11,7 +11,7 @@ use crate::traits::io::reserve_port::CanReserveTcpPort;
 use crate::traits::io::write_file::CanWriteStringToFile;
 use crate::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::traits::types::chain_config::HasChainConfigType;
-use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::io::file_path::HasFilePathType;
 
 pub struct CosmosChainConfig {
     pub rpc_port: u16,

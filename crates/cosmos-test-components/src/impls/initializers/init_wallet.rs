@@ -9,7 +9,7 @@ use crate::traits::fields::hd_path::HasWalletHdPath;
 use crate::traits::initializers::init_wallet::WalletInitializer;
 use crate::traits::io::exec_command::CanExecCommand;
 use crate::traits::io::write_file::CanWriteStringToFile;
-use crate::traits::types::file_path::HasFilePathType;
+use crate::traits::types::io::file_path::HasFilePathType;
 use crate::types::wallet::CosmosTestWallet;
 
 pub struct InitCosmosTestWallet;
