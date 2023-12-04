@@ -5,12 +5,12 @@ use crate::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
 use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
-use crate::traits::genesis::add_wallet::CanAddGenesisWallet;
 use crate::traits::genesis::collect_gentxs::CanCollectGenesisTransactions;
 use crate::traits::genesis::init_chain_data::CanInitChainData;
 use crate::traits::initializers::init_chain_config::CanInitChainConfig;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
+use crate::traits::initializers::init_wallet::CanInitWallet;
 use crate::traits::io::reserve_port::CanReserveTcpPort;
 
 pub struct BoostrapCosmosChain;
@@ -25,7 +25,7 @@ where
         + CanInitChainData
         + CanInitGenesisConfig
         + CanGenerateWalletConfigs
-        + CanAddGenesisWallet
+        + CanInitWallet
         + CanAddGenesisAccount
         + CanAddGenesisValidator
         + CanCollectGenesisTransactions
@@ -57,7 +57,7 @@ where
                 let wallet_id = Bootstrap::wallet_config_wallet_id(&wallet_config);
 
                 let wallet = bootstrap
-                    .add_genesis_wallet(&chain_home_dir, wallet_id)
+                    .initialize_wallet(&chain_home_dir, wallet_id)
                     .await?;
 
                 let address = Bootstrap::wallet_address(&wallet);

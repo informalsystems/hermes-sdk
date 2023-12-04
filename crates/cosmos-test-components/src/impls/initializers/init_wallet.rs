@@ -4,23 +4,21 @@ use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
 use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 use serde_json as json;
 
-use crate::traits::commands::add_wallet_seed::CanRunAddWalletSeedCommand;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::fields::hd_path::HasWalletHdPath;
-use crate::traits::genesis::add_wallet::GenesisWalletAdder;
+use crate::traits::initializers::init_wallet::WalletInitializer;
 use crate::traits::io::exec_command::CanExecCommand;
 use crate::traits::io::write_file::CanWriteStringToFile;
 use crate::traits::types::file_path::HasFilePathType;
 use crate::types::wallet::CosmosTestWallet;
 
-pub struct AddTestWalletWithCosmosSeed;
+pub struct InitCosmosTestWallet;
 
 #[async_trait]
-impl<Bootstrap> GenesisWalletAdder<Bootstrap> for AddTestWalletWithCosmosSeed
+impl<Bootstrap> WalletInitializer<Bootstrap> for InitCosmosTestWallet
 where
     Bootstrap: HasErrorType
         + HasWalletType<Wallet = CosmosTestWallet>
-        + CanRunAddWalletSeedCommand
         + HasFilePathType
         + CanWriteStringToFile
         + HasWalletHdPath
@@ -28,7 +26,7 @@ where
         + HasChainCommandPath,
     Bootstrap::Error: From<Report>,
 {
-    async fn add_genesis_wallet(
+    async fn initialize_wallet(
         bootstrap: &Bootstrap,
         chain_home_dir: &Bootstrap::FilePath,
         wallet_id: &str,
