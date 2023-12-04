@@ -1,13 +1,17 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
-use crate::traits::types::io::file_path::HasFilePathType;
+use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(GenesisTransactionsCollectorComponent, GenesisTransactionsCollector<Bootstrap>)]
 #[async_trait]
-pub trait CanCollectGenesisTransactions: HasFilePathType + HasChainIdType + HasErrorType {
+pub trait CanCollectGenesisTransactions: HasRuntime + HasChainIdType + HasErrorType
+where
+    Self::Runtime: HasFilePathType,
+{
     async fn collect_genesis_transactions(
         &self,
-        chain_home_dir: &Self::FilePath,
+        chain_home_dir: &FilePath<Self::Runtime>,
     ) -> Result<(), Self::Error>;
 }

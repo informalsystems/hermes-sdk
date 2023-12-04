@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
-use crate::traits::types::io::child_process::HasChildProcessType;
-use crate::traits::types::io::file_path::HasFilePathType;
+use crate::traits::runtime::types::child_process::HasChildProcessType;
+use crate::traits::runtime::types::file_path::HasFilePathType;
 
 #[derive_component(ChildProcessStarterComponent, ChildProcessStarter<Bootstrap>)]
 #[async_trait]

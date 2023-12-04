@@ -11,9 +11,9 @@ use tokio::fs::File;
 use tokio::io::copy;
 use tokio::process::{Child, Command};
 
-use crate::traits::io::child_process::ChildProcessStarter;
-use crate::traits::types::io::child_process::HasChildProcessType;
-use crate::traits::types::io::file_path::HasFilePathType;
+use crate::traits::runtime::child_process::ChildProcessStarter;
+use crate::traits::runtime::types::child_process::HasChildProcessType;
+use crate::traits::runtime::types::file_path::HasFilePathType;
 
 pub struct StartTokioChildProcess;
 
@@ -79,6 +79,6 @@ impl FutureTask {
 #[async_trait]
 impl Task for FutureTask {
     async fn run(self) {
-        self.future.await
+        self.future.await;
     }
 }

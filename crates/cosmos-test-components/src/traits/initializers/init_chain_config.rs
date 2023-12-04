@@ -1,13 +1,17 @@
 use cgp_core::prelude::*;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
+use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
 use crate::traits::types::chain_config::HasChainConfigType;
-use crate::traits::types::io::file_path::HasFilePathType;
 
 #[derive_component(ChainConfigInitializerComponent, ChainConfigInitializer<Boostrap>)]
 #[async_trait]
-pub trait CanInitChainConfig: HasChainConfigType + HasFilePathType + HasErrorType {
+pub trait CanInitChainConfig: HasChainConfigType + HasRuntime + HasErrorType
+where
+    Self::Runtime: HasFilePathType,
+{
     async fn init_chain_config(
         &self,
-        chain_home_dir: &Self::FilePath,
+        chain_home_dir: &FilePath<Self::Runtime>,
     ) -> Result<Self::ChainConfig, Self::Error>;
 }

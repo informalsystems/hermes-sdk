@@ -1,20 +1,21 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 
 use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::traits::genesis::add_genesis_wallet::GenesisWalletAdder;
 use crate::traits::initializers::init_wallet::CanInitWallet;
-use crate::traits::types::io::file_path::HasFilePathType;
+use crate::traits::runtime::types::file_path::HasFilePathType;
 use crate::traits::types::wallet_config::HasWalletConfigFields;
 
 pub struct AddCosmosWalletToGenesis;
 
 #[async_trait]
-impl<Bootstrap> GenesisWalletAdder<Bootstrap> for AddCosmosWalletToGenesis
+impl<Bootstrap, Runtime> GenesisWalletAdder<Bootstrap> for AddCosmosWalletToGenesis
 where
-    Bootstrap: HasFilePathType
+    Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainIdType
         + HasWalletType
         + HasWalletConfigFields
@@ -22,10 +23,11 @@ where
         + CanInitWallet
         + CanAddGenesisAccount
         + CanAddGenesisValidator,
+    Runtime: HasFilePathType,
 {
     async fn add_wallet_to_genesis(
         bootstrap: &Bootstrap,
-        chain_home_dir: &Bootstrap::FilePath,
+        chain_home_dir: &Runtime::FilePath,
         chain_id: &Bootstrap::ChainId,
         wallet_config: &Bootstrap::WalletConfig,
     ) -> Result<Bootstrap::Wallet, Bootstrap::Error> {

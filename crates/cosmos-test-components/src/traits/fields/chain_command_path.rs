@@ -1,5 +1,10 @@
-use crate::traits::types::io::file_path::HasFilePathType;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
-pub trait HasChainCommandPath: HasFilePathType {
-    fn chain_command_path(&self) -> &Self::FilePath;
+use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
+
+pub trait HasChainCommandPath: HasRuntime
+where
+    Self::Runtime: HasFilePathType,
+{
+    fn chain_command_path(&self) -> &FilePath<Self::Runtime>;
 }

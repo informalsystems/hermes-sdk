@@ -2,16 +2,17 @@ use core::time::Duration;
 
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::chain::fields::denom::HasDenom;
 use toml::Value;
 
 use crate::traits::initializers::init_chain_config::ChainConfigInitializer;
-use crate::traits::io::read_file::CanReadFileAsString;
-use crate::traits::io::reserve_port::CanReserveTcpPort;
-use crate::traits::io::write_file::CanWriteStringToFile;
 use crate::traits::modifiers::modify_comet_config::CanModifyCometConfig;
+use crate::traits::runtime::read_file::CanReadFileAsString;
+use crate::traits::runtime::reserve_port::CanReserveTcpPort;
+use crate::traits::runtime::types::file_path::HasFilePathType;
+use crate::traits::runtime::write_file::CanWriteStringToFile;
 use crate::traits::types::chain_config::HasChainConfigType;
-use crate::traits::types::io::file_path::HasFilePathType;
 
 pub struct CosmosChainConfig {
     pub rpc_port: u16,
@@ -26,36 +27,51 @@ pub struct CosmosChainConfig {
 pub struct UpdateCosmosChainConfig;
 
 #[async_trait]
-impl<Bootstrap> ChainConfigInitializer<Bootstrap> for UpdateCosmosChainConfig
+impl<Bootstrap, Runtime> ChainConfigInitializer<Bootstrap> for UpdateCosmosChainConfig
 where
-    Bootstrap: HasFilePathType
+    Bootstrap: HasRuntime<Runtime = Runtime>
         + HasErrorType
         + HasChainConfigType
         + CanModifyCometConfig
-        + CanReadFileAsString
-        + CanWriteStringToFile
-        + CanReserveTcpPort
         + HasDenom<0>,
+    Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
     Bootstrap::Error: From<Report>,
     Bootstrap::ChainConfig: From<CosmosChainConfig>,
 {
     async fn init_chain_config(
         bootstrap: &Bootstrap,
-        chain_home_dir: &Bootstrap::FilePath,
+        chain_home_dir: &Runtime::FilePath,
     ) -> Result<Bootstrap::ChainConfig, Bootstrap::Error> {
-        let rpc_port = bootstrap.reserve_tcp_port().await?;
-        let p2p_port = bootstrap.reserve_tcp_port().await?;
-        let pprof_port = bootstrap.reserve_tcp_port().await?;
-        let grpc_port = bootstrap.reserve_tcp_port().await?;
+        let runtime = bootstrap.runtime();
+
+        let rpc_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::runtime_error)?;
+        let p2p_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::runtime_error)?;
+        let pprof_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::runtime_error)?;
+        let grpc_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::runtime_error)?;
 
         let comet_config = {
             let mut comet_config = {
-                let comet_config_path = Bootstrap::join_file_path(
+                let comet_config_path = Runtime::join_file_path(
                     chain_home_dir,
-                    &Bootstrap::file_path_from_string("config/config.toml"),
+                    &Runtime::file_path_from_string("config/config.toml"),
                 );
 
-                let comet_config_string = bootstrap.read_file_as_string(&comet_config_path).await?;
+                let comet_config_string = runtime
+                    .read_file_as_string(&comet_config_path)
+                    .await
+                    .map_err(Bootstrap::runtime_error)?;
 
                 toml::from_str(&comet_config_string).map_err(Report::from)?
             };
@@ -76,12 +92,15 @@ where
 
         let sdk_config = {
             let mut sdk_config = {
-                let sdk_config_path = Bootstrap::join_file_path(
+                let sdk_config_path = Runtime::join_file_path(
                     chain_home_dir,
-                    &Bootstrap::file_path_from_string("config/app.toml"),
+                    &Runtime::file_path_from_string("config/app.toml"),
                 );
 
-                let sdk_config_string = bootstrap.read_file_as_string(&sdk_config_path).await?;
+                let sdk_config_string = runtime
+                    .read_file_as_string(&sdk_config_path)
+                    .await
+                    .map_err(Bootstrap::runtime_error)?;
 
                 toml::from_str(&sdk_config_string).map_err(Report::from)?
             };

@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::bootstrap::chain::ChainBootstrapper;
 
 use crate::traits::bootstrap::start_chain::CanStartChainFullNode;
@@ -10,17 +11,18 @@ use crate::traits::initializers::init_chain_config::CanInitChainConfig;
 use crate::traits::initializers::init_chain_data::CanInitChainData;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
-use crate::traits::io::reserve_port::CanReserveTcpPort;
+use crate::traits::runtime::types::child_process::HasChildProcessType;
+use crate::traits::runtime::types::file_path::HasFilePathType;
 
 pub struct BoostrapCosmosChain;
 
 #[async_trait]
-impl<Bootstrap, Chain> ChainBootstrapper<Bootstrap, Chain> for BoostrapCosmosChain
+impl<Bootstrap, Chain, Runtime> ChainBootstrapper<Bootstrap, Chain> for BoostrapCosmosChain
 where
     Bootstrap: HasErrorType
+        + HasRuntime<Runtime = Runtime>
         + CanGenerateChainId
         + CanInitChainHomeDir
-        + CanReserveTcpPort
         + CanInitChainData
         + CanInitGenesisConfig
         + CanGenerateWalletConfigs
@@ -28,6 +30,7 @@ where
         + CanCollectGenesisTransactions
         + CanInitChainConfig
         + CanStartChainFullNode,
+    Runtime: HasFilePathType + HasChildProcessType,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
