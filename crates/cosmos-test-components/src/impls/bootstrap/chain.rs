@@ -6,7 +6,7 @@ use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
 use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::traits::genesis::add_wallet::CanAddGenesisWallet;
-use crate::traits::genesis::collect_gentxs::CanCollectGentxs;
+use crate::traits::genesis::collect_gentxs::CanCollectGenesisTransactions;
 use crate::traits::genesis::init_chain_data::CanInitChainData;
 use crate::traits::initializers::init_chain_config::CanInitChainConfig;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
@@ -28,7 +28,7 @@ where
         + CanAddGenesisWallet
         + CanAddGenesisAccount
         + CanAddGenesisValidator
-        + CanCollectGentxs
+        + CanCollectGenesisTransactions
         + CanInitChainConfig,
 {
     async fn bootstrap_chain(
@@ -45,35 +45,42 @@ where
             .init_chain_data(&chain_home_dir, &chain_id)
             .await?;
 
+        // Initialize (or update) the genesis config file on the chain home directory
         bootstrap.init_genesis_config(&chain_home_dir).await?;
 
-        let wallet_configs = bootstrap.generate_wallet_configs().await?;
+        {
+            // Generate and add wallets to the genesis config
 
-        for wallet_config in wallet_configs {
-            let wallet_id = Bootstrap::wallet_config_wallet_id(&wallet_config);
+            let wallet_configs = bootstrap.generate_wallet_configs().await?;
 
-            let wallet = bootstrap
-                .add_genesis_wallet(&chain_home_dir, wallet_id)
-                .await?;
+            for wallet_config in wallet_configs {
+                let wallet_id = Bootstrap::wallet_config_wallet_id(&wallet_config);
 
-            let address = Bootstrap::wallet_address(&wallet);
-
-            let genesis_balance = Bootstrap::wallet_config_genesis_balance(&wallet_config);
-
-            bootstrap
-                .add_genesis_account(&chain_home_dir, address, genesis_balance)
-                .await?;
-
-            if let Some(stake_amount) =
-                Bootstrap::wallet_config_validator_staked_amount(&wallet_config)
-            {
-                bootstrap
-                    .add_genesis_validator(&chain_home_dir, &chain_id, wallet_id, stake_amount)
+                let wallet = bootstrap
+                    .add_genesis_wallet(&chain_home_dir, wallet_id)
                     .await?;
+
+                let address = Bootstrap::wallet_address(&wallet);
+
+                let genesis_balance = Bootstrap::wallet_config_genesis_balance(&wallet_config);
+
+                bootstrap
+                    .add_genesis_account(&chain_home_dir, address, genesis_balance)
+                    .await?;
+
+                if let Some(stake_amount) =
+                    Bootstrap::wallet_config_validator_staked_amount(&wallet_config)
+                {
+                    bootstrap
+                        .add_genesis_validator(&chain_home_dir, &chain_id, wallet_id, stake_amount)
+                        .await?;
+                }
             }
         }
 
-        bootstrap.collect_gentxs(&chain_home_dir).await?;
+        bootstrap
+            .collect_genesis_transactions(&chain_home_dir)
+            .await?;
 
         let _chain_config = bootstrap.init_chain_config(&chain_home_dir).await?;
 
