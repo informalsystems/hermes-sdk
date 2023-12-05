@@ -8,11 +8,11 @@ use toml::Value;
 
 use crate::traits::initializers::init_chain_config::ChainConfigInitializer;
 use crate::traits::modifiers::modify_comet_config::CanModifyCometConfig;
-use crate::traits::runtime::read_file::CanReadFileAsString;
-use crate::traits::runtime::reserve_port::CanReserveTcpPort;
-use crate::traits::runtime::types::file_path::HasFilePathType;
-use crate::traits::runtime::write_file::CanWriteStringToFile;
 use crate::traits::types::chain_config::HasChainConfigType;
+use ibc_test_components::runtime::traits::read_file::CanReadFileAsString;
+use ibc_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::write_file::CanWriteStringToFile;
 
 pub struct CosmosChainConfig {
     pub rpc_port: u16,

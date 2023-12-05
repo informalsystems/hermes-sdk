@@ -1,3 +1,4 @@
+use alloc::string::String;
 use cgp_core::prelude::*;
 
 pub trait HasFilePathType: Async {

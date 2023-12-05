@@ -8,10 +8,10 @@ use serde_json as json;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::fields::hd_path::HasWalletHdPath;
 use crate::traits::initializers::init_wallet::WalletInitializer;
-use crate::traits::runtime::exec_command::CanExecCommand;
-use crate::traits::runtime::types::file_path::HasFilePathType;
-use crate::traits::runtime::write_file::CanWriteStringToFile;
 use crate::types::wallet::CosmosTestWallet;
+use ibc_test_components::runtime::traits::exec_command::CanExecCommand;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::write_file::CanWriteStringToFile;
 
 pub struct InitCosmosTestWallet;
 

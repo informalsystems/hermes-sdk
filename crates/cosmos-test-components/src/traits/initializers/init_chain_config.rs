@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
-use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
 use crate::traits::types::chain_config::HasChainConfigType;
+use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(ChainConfigInitializerComponent, ChainConfigInitializer<Boostrap>)]
 #[async_trait]

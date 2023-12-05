@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 
-use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
+use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(WalletInitializerComponent, WalletInitializer<Bootstrap>)]
 #[async_trait]

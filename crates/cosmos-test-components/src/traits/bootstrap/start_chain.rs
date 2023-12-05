@@ -1,8 +1,10 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
-use crate::traits::runtime::types::child_process::{ChildProcess, HasChildProcessType};
-use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
+use ibc_test_components::runtime::traits::types::child_process::{
+    ChildProcess, HasChildProcessType,
+};
+use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(ChainFullNodeStarterComponent, ChainFullNodeStarter<Bootstrap>)]
 #[async_trait]

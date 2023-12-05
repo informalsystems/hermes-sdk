@@ -13,8 +13,8 @@ use crate::traits::initializers::init_chain_config::CanInitChainConfig;
 use crate::traits::initializers::init_chain_data::CanInitChainData;
 use crate::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::traits::initializers::init_genesis_config::CanInitGenesisConfig;
-use crate::traits::runtime::types::child_process::HasChildProcessType;
-use crate::traits::runtime::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct BoostrapCosmosChain;
 

@@ -4,7 +4,7 @@ use ibc_relayer_components::chain::types::aliases::ChainId;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::chain::types::chain::HasChainType;
 
-use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
+use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 /**
    Initialize a new chain with data files stored at the given home directory

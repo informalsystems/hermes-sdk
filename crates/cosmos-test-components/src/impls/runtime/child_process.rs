@@ -11,9 +11,9 @@ use tokio::fs::File;
 use tokio::io::copy;
 use tokio::process::{Child, Command};
 
-use crate::traits::runtime::child_process::ChildProcessStarter;
-use crate::traits::runtime::types::child_process::HasChildProcessType;
-use crate::traits::runtime::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::child_process::ChildProcessStarter;
+use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct StartTokioChildProcess;
 

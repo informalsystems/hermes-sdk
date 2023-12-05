@@ -1,6 +1,8 @@
+use alloc::boxed::Box;
+use alloc::string::String;
 use cgp_core::prelude::*;
 
-use crate::traits::runtime::types::file_path::HasFilePathType;
+use crate::runtime::traits::types::file_path::HasFilePathType;
 
 #[async_trait]
 pub trait CanReadFileAsString: HasFilePathType + HasErrorType {

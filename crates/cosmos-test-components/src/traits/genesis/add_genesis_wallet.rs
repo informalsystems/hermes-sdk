@@ -5,8 +5,8 @@ use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::chain::types::chain::HasChainType;
 use ibc_test_components::traits::chain::types::wallet::HasWalletType;
 
-use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
 use crate::traits::types::wallet_config::HasWalletConfigType;
+use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(GenesisWalletAdderComponent, GenesisWalletAdder<Bootstrap>)]
 #[async_trait]

@@ -5,10 +5,10 @@ use serde_json::Value;
 
 use crate::traits::initializers::init_genesis_config::GenesisConfigInitializer;
 use crate::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
-use crate::traits::runtime::read_file::CanReadFileAsString;
-use crate::traits::runtime::types::file_path::HasFilePathType;
-use crate::traits::runtime::write_file::CanWriteStringToFile;
 use crate::traits::types::genesis_config::HasGenesisConfigType;
+use ibc_test_components::runtime::traits::read_file::CanReadFileAsString;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::write_file::CanWriteStringToFile;
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;

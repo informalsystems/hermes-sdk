@@ -6,8 +6,8 @@ use ibc_test_components::traits::chain::types::chain::HasChainType;
 
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::genesis::add_genesis_validator::GenesisValidatorAdder;
-use crate::traits::runtime::exec_command::CanExecCommand;
-use crate::traits::runtime::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::exec_command::CanExecCommand;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 /**
    Implementation for adding genesis validator to legacy Cosmos chains

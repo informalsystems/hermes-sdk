@@ -5,7 +5,7 @@ use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::chain::types::amount::HasAmountType;
 use ibc_test_components::traits::chain::types::chain::HasChainType;
 
-use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
+use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(GenesisValidatorAdderComponent, GenesisValidatorAdder<Bootstrap>)]
 #[async_trait]

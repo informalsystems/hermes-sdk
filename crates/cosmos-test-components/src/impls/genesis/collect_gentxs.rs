@@ -4,8 +4,8 @@ use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::genesis::collect_gentxs::GenesisTransactionsCollector;
-use crate::traits::runtime::exec_command::CanExecCommand;
-use crate::traits::runtime::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::exec_command::CanExecCommand;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct CollectCosmosGentxs;
 

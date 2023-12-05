@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use cgp_core::prelude::*;
 
 /// Allocate a TCP port that the full node process use for listening

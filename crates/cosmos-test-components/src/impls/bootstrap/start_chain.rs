@@ -3,8 +3,8 @@ use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::traits::bootstrap::start_chain::ChainFullNodeStarter;
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::traits::runtime::child_process::CanStartChildProcess;
-use crate::traits::runtime::types::file_path::HasFilePathType;
+use ibc_test_components::runtime::traits::child_process::CanStartChildProcess;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct StartCosmosChain;
 

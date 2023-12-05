@@ -1,6 +1,6 @@
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
-use crate::traits::runtime::types::file_path::{FilePath, HasFilePathType};
+use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 pub trait HasChainCommandPath: HasRuntime
 where

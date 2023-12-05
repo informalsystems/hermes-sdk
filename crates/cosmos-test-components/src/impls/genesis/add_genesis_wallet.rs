@@ -8,8 +8,8 @@ use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::traits::genesis::add_genesis_wallet::GenesisWalletAdder;
 use crate::traits::initializers::init_wallet::CanInitWallet;
-use crate::traits::runtime::types::file_path::HasFilePathType;
 use crate::traits::types::wallet_config::HasWalletConfigFields;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct AddCosmosWalletToGenesis;
 
