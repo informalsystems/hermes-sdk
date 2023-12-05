@@ -14,7 +14,7 @@ use ibc_test_components::traits::chain::fields::denom::HasDenom;
 use ibc_test_components::traits::chain::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
 use ibc_test_components::traits::chain::queries::balance::CanQueryBalance;
 use ibc_test_components::traits::chain::queries::ibc_transfer::CanIbcTransferToken;
-use ibc_test_components::traits::chain::types::chain::{HasChain, HasOneChain, HasTwoChains};
+use ibc_test_components::traits::chain::types::chains::{HasChainAt, HasOneChain, HasTwoChains};
 
 use crate::std_prelude::*;
 
@@ -24,8 +24,8 @@ pub struct TestIbcTransfer;
 impl<Test, ChainA, ChainB> TestCase<Test> for TestIbcTransfer
 where
     Test: HasErrorType
-        + HasChain<0, Chain = ChainA>
-        + HasChain<1, Chain = ChainB>
+        + HasChainAt<0, Chain = ChainA>
+        + HasChainAt<1, Chain = ChainB>
         + CanLog
         + HasBackgroundRelayer,
     ChainA: HasIbcChainTypes<ChainB>

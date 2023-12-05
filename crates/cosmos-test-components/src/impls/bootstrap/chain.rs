@@ -1,6 +1,8 @@
 use cgp_core::prelude::*;
+use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::bootstrap::chain::ChainBootstrapper;
+use ibc_test_components::traits::chain::types::chain::HasChainType;
 
 use crate::traits::bootstrap::start_chain::CanStartChainFullNode;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
@@ -17,10 +19,11 @@ use crate::traits::runtime::types::file_path::HasFilePathType;
 pub struct BoostrapCosmosChain;
 
 #[async_trait]
-impl<Bootstrap, Chain, Runtime> ChainBootstrapper<Bootstrap, Chain> for BoostrapCosmosChain
+impl<Bootstrap, Runtime, Chain> ChainBootstrapper<Bootstrap> for BoostrapCosmosChain
 where
     Bootstrap: HasErrorType
         + HasRuntime<Runtime = Runtime>
+        + HasChainType<Chain = Chain>
         + CanGenerateChainId
         + CanInitChainHomeDir
         + CanInitChainData
@@ -31,11 +34,12 @@ where
         + CanInitChainConfig
         + CanStartChainFullNode,
     Runtime: HasFilePathType + HasChildProcessType,
+    Chain: HasChainIdType,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
         chain_id_prefix: &str,
-    ) -> Result<Chain, Bootstrap::Error> {
+    ) -> Result<Bootstrap::Chain, Bootstrap::Error> {
         let chain_id = bootstrap.generate_chain_id(chain_id_prefix).await;
 
         let chain_home_dir = bootstrap.init_chain_home_dir(&chain_id).await?;

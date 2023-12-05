@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::traits::chain::types::amount::HasAmountType;
+use ibc_test_components::traits::chain::types::chain::HasChainType;
 
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::genesis::add_genesis_validator::GenesisValidatorAdder;
@@ -16,19 +17,20 @@ use crate::traits::runtime::types::file_path::HasFilePathType;
 pub struct AddCosmosGenesisValidator;
 
 #[async_trait]
-impl<Bootstrap, Runtime> GenesisValidatorAdder<Bootstrap> for AddCosmosGenesisValidator
+impl<Bootstrap, Runtime, Chain> GenesisValidatorAdder<Bootstrap> for AddCosmosGenesisValidator
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainIdType
+        + HasChainType<Chain = Chain>
         + HasAmountType
         + HasErrorType
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
+    Chain: HasChainIdType,
 {
     async fn add_genesis_validator(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
-        chain_id: &Bootstrap::ChainId,
+        chain_id: &Chain::ChainId,
         wallet_id: &str,
         stake_amount: &Bootstrap::Amount,
     ) -> Result<(), Bootstrap::Error> {
