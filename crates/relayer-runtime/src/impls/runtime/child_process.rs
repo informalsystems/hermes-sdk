@@ -1,29 +1,43 @@
-use core::pin::Pin;
+use core::time::Duration;
 use std::io::Error as IoError;
 use std::path::Path;
+use std::process::ExitStatus;
 use std::process::Stdio;
 
 use cgp_core::prelude::*;
-use futures::Future;
-use ibc_relayer_components::runtime::traits::task::Task;
+use cgp_core::CanRaiseError;
+use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+use ibc_test_components::runtime::traits::read_file::CanReadFileAsString;
 use tokio::fs::File;
 use tokio::io::copy;
+use tokio::io::AsyncRead;
 use tokio::process::{Child, Command};
 
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarter;
 use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
 use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
+use crate::types::future_task::FutureTask;
+
 pub struct StartTokioChildProcess;
+
+pub struct PrematureChildProcessExitError {
+    pub exit_status: ExitStatus,
+    pub output: String,
+}
 
 #[async_trait]
 impl<Runtime> ChildProcessStarter<Runtime> for StartTokioChildProcess
 where
-    Runtime:
-        HasChildProcessType<ChildProcess = Child> + HasFilePathType + HasErrorType + CanSpawnTask,
+    Runtime: HasChildProcessType<ChildProcess = Child>
+        + HasFilePathType
+        + CanSleep
+        + CanPipeReaderToFile
+        + CanReadFileAsString
+        + CanRaiseError<IoError>
+        + CanRaiseError<PrematureChildProcessExitError>,
     Runtime::FilePath: AsRef<Path>,
-    Runtime::Error: From<IoError>,
 {
     async fn start_child_process(
         runtime: &Runtime,
@@ -38,47 +52,70 @@ where
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .kill_on_drop(true)
-            .spawn()?;
+            .spawn()
+            .map_err(Runtime::raise_error)?;
 
         if let Some(stdout_path) = stdout_path {
-            if let Some(mut stdout) = child_process.stdout.take() {
-                let mut stdout_file = File::create(&stdout_path).await?;
-
-                runtime.spawn_task(FutureTask::new(async move {
-                    let _ = copy(&mut stdout, &mut stdout_file).await;
-                }));
+            if let Some(stdout) = child_process.stdout.take() {
+                runtime.pipe_reader_to_file(stdout, stdout_path).await?;
             }
         }
 
         if let Some(stderr_path) = stderr_path {
-            if let Some(mut stderr) = child_process.stderr.take() {
-                let mut stderr_file = File::open(&stderr_path).await?;
-
-                runtime.spawn_task(FutureTask::new(async move {
-                    let _ = copy(&mut stderr, &mut stderr_file).await;
-                }));
+            if let Some(stderr) = child_process.stderr.take() {
+                runtime.pipe_reader_to_file(stderr, stderr_path).await?;
             }
         }
 
-        Ok(child_process)
-    }
-}
+        // Wait for a while and check if the child process exited immediately.
+        // If so, return error since we expect the child process to be running in the background.
 
-pub struct FutureTask {
-    pub future: Pin<Box<dyn Future<Output = ()> + Send + Sync + 'static>>,
-}
+        runtime.sleep(Duration::from_millis(500)).await;
 
-impl FutureTask {
-    pub fn new(future: impl Future<Output = ()> + Send + Sync + 'static) -> Self {
-        Self {
-            future: Box::pin(future),
+        let status = child_process.try_wait().map_err(Runtime::raise_error)?;
+
+        match status {
+            None => Ok(child_process),
+            Some(exit_status) => {
+                let output = match stderr_path {
+                    None => String::new(),
+                    Some(stderr_path) => runtime.read_file_as_string(stderr_path).await?,
+                };
+
+                Err(Runtime::raise_error(PrematureChildProcessExitError {
+                    exit_status,
+                    output,
+                }))
+            }
         }
     }
 }
 
 #[async_trait]
-impl Task for FutureTask {
-    async fn run(self) {
-        self.future.await;
+pub trait CanPipeReaderToFile: HasFilePathType + HasErrorType {
+    async fn pipe_reader_to_file(
+        &self,
+        reader: impl AsyncRead + Unpin + Send + Sync + 'static,
+        write_file: &Self::FilePath,
+    ) -> Result<(), Self::Error>;
+}
+
+#[async_trait]
+impl<Runtime> CanPipeReaderToFile for Runtime
+where
+    Runtime: HasFilePathType + CanSpawnTask + CanRaiseError<IoError>,
+    Runtime::FilePath: AsRef<Path>,
+{
+    async fn pipe_reader_to_file(
+        &self,
+        mut reader: impl AsyncRead + Unpin + Send + Sync + 'static,
+        file_path: &Self::FilePath,
+    ) -> Result<(), Self::Error> {
+        let mut file = File::open(&file_path).await.map_err(Runtime::raise_error)?;
+
+        self.spawn_task(FutureTask::new(async move {
+            let _ = copy(&mut reader, &mut file).await;
+        }));
+        Ok(())
     }
 }
