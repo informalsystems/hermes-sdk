@@ -1,8 +1,8 @@
-use ibc_relayer_components::logger::traits::has_logger::{
+use cgp_core::HasInner;
+
+use crate::logger::traits::has_logger::{
     HasLogger, HasLoggerType, LoggerGetter, LoggerTypeProvider,
 };
-
-use crate::traits::inner::HasInner;
 
 pub struct ForwardLogger;
 

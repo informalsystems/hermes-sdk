@@ -79,6 +79,7 @@ cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", bran
 cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-inner           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 
 # ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
