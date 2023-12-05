@@ -1,9 +1,9 @@
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
 
-use crate::traits::chain::types::address::HasAddressType;
-use crate::traits::chain::types::amount::HasAmountType;
-use crate::traits::chain::types::wallet::HasWalletType;
+use crate::chain::traits::types::address::HasAddressType;
+use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain::traits::types::wallet::HasWalletType;
 
 #[derive_component(TokenLocalTransferrerComponent, TokenLocalTransferrer<Chain>)]
 #[async_trait]

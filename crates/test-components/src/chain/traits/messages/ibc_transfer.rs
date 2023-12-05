@@ -5,9 +5,9 @@ use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 
-use crate::traits::chain::types::address::HasAddressType;
-use crate::traits::chain::types::amount::HasAmountType;
-use crate::traits::chain::types::memo::HasMemoType;
+use crate::chain::traits::types::address::HasAddressType;
+use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain::traits::types::memo::HasMemoType;
 
 #[async_trait]
 pub trait CanBuildIbcTokenTransferMessage<Counterparty>:

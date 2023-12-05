@@ -1,8 +1,8 @@
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
 
-use crate::traits::chain::types::address::HasAddressType;
-use crate::traits::chain::types::amount::HasAmountType;
+use crate::chain::traits::types::address::HasAddressType;
+use crate::chain::traits::types::amount::HasAmountType;
 
 #[derive_component(EventualAmountAsserterComponent, EventualAmountAsserter<Chain>)]
 #[async_trait]

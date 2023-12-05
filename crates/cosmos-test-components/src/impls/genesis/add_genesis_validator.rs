@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_test_components::traits::chain::types::amount::HasAmountType;
-use ibc_test_components::traits::chain::types::chain::HasChainType;
+use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
+use ibc_test_components::chain::traits::types::amount::HasAmountType;
 
 use crate::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::traits::genesis::add_genesis_validator::GenesisValidatorAdder;

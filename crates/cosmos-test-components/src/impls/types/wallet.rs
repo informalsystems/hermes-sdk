@@ -1,7 +1,7 @@
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_components::transaction::traits::types::HasSignerType;
-use ibc_test_components::traits::chain::types::address::HasAddressType;
-use ibc_test_components::traits::chain::types::wallet::{
+use ibc_test_components::chain::traits::types::address::HasAddressType;
+use ibc_test_components::chain::traits::types::wallet::{
     HasWalletType, WalletSignerProvider, WalletTypeProvider,
 };
 

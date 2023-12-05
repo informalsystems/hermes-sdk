@@ -5,11 +5,11 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 
-use crate::traits::chain::assert::eventual_amount::EventualAmountAsserter;
-use crate::traits::chain::assert::poll_assert::HasPollAssertDuration;
-use crate::traits::chain::queries::balance::CanQueryBalance;
-use crate::traits::chain::types::address::HasAddressType;
-use crate::traits::chain::types::amount::HasAmountType;
+use crate::chain::traits::assert::eventual_amount::EventualAmountAsserter;
+use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;
+use crate::chain::traits::queries::balance::CanQueryBalance;
+use crate::chain::traits::types::address::HasAddressType;
+use crate::chain::traits::types::amount::HasAmountType;
 
 pub trait CanRaisePollAssertEventualAmountTimeout:
     HasAddressType + HasAmountType + HasErrorType

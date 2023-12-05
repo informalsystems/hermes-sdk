@@ -1,4 +1,4 @@
-use crate::traits::chain::types::wallet::HasWalletType;
+use crate::chain::traits::types::wallet::HasWalletType;
 
 pub struct UserWallet;
 

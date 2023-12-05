@@ -1,9 +1,9 @@
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
 
-use crate::traits::chain::types::address::HasAddressType;
-use crate::traits::chain::types::amount::HasAmountType;
-use crate::traits::chain::types::denom::HasDenomType;
+use crate::chain::traits::types::address::HasAddressType;
+use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain::traits::types::denom::HasDenomType;
 
 #[derive_component(BalanceQuerierComponent, BalanceQuerier<Chain>)]
 #[async_trait]

@@ -5,16 +5,16 @@ use ibc_relayer_components::logger::traits::log::CanLog;
 use ibc_test_components::traits::relayer::HasBackgroundRelayer;
 use ibc_test_components::traits::test_case::TestCase;
 
-use ibc_test_components::traits::chain::assert::eventual_amount::CanAssertEventualAmount;
-use ibc_test_components::traits::chain::fields::amount::{
+use ibc_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
+use ibc_test_components::chain::traits::fields::amount::{
     CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
 };
-use ibc_test_components::traits::chain::fields::channel::HasChannel;
-use ibc_test_components::traits::chain::fields::denom::HasDenom;
-use ibc_test_components::traits::chain::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
-use ibc_test_components::traits::chain::queries::balance::CanQueryBalance;
-use ibc_test_components::traits::chain::queries::ibc_transfer::CanIbcTransferToken;
-use ibc_test_components::traits::chain::types::chains::{HasChainAt, HasOneChain, HasTwoChains};
+use ibc_test_components::chain::traits::fields::channel::HasChannel;
+use ibc_test_components::chain::traits::fields::denom::HasDenom;
+use ibc_test_components::chain::traits::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
+use ibc_test_components::chain::traits::queries::balance::CanQueryBalance;
+use ibc_test_components::chain::traits::queries::ibc_transfer::CanIbcTransferToken;
+use ibc_test_components::chain::traits::types::chains::{HasChainAt, HasOneChain, HasTwoChains};
 
 use crate::std_prelude::*;
 

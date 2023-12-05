@@ -3,7 +3,7 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_test_components::traits::chain::fields::denom::HasDenom;
+use ibc_test_components::chain::traits::fields::denom::HasDenom;
 use toml::Value;
 
 use crate::traits::initializers::init_chain_config::ChainConfigInitializer;

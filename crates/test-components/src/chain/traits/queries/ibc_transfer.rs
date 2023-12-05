@@ -3,9 +3,9 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 
-use crate::traits::chain::types::address::HasAddressType;
-use crate::traits::chain::types::amount::HasAmountType;
-use crate::traits::chain::types::wallet::HasWalletType;
+use crate::chain::traits::types::address::HasAddressType;
+use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain::traits::types::wallet::HasWalletType;
 
 #[derive_component(TokenIbcTransferrerComponent, TokenIbcTransferrer<Chain>)]
 #[async_trait]

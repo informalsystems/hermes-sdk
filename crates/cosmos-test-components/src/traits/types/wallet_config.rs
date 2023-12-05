@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use ibc_test_components::traits::chain::types::amount::HasAmountType;
+use ibc_test_components::chain::traits::types::amount::HasAmountType;
 
 /**
    A wallet config is a template for generating fresh wallets for a chain.

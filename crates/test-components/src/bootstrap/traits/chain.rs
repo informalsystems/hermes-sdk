@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 
 use cgp_core::prelude::*;
 
-use crate::traits::chain::types::chain::HasChainType;
+use crate::bootstrap::traits::types::chain::HasChainType;
 
 #[derive_component(ChainBootstrapperComponent, ChainBootstrapper<Bootstrap>)]
 #[async_trait]

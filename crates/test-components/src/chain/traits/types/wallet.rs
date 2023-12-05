@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::transaction::traits::types::HasSignerType;
 
-use crate::traits::chain::types::address::HasAddressType;
+use crate::chain::traits::types::address::HasAddressType;
 
 #[derive_component(WalletTypeComponent, WalletTypeProvider<Chain>)]
 pub trait HasWalletType: HasAddressType {

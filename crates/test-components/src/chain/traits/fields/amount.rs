@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
-use crate::traits::chain::types::amount::HasAmountType;
-use crate::traits::chain::types::denom::HasDenomType;
+use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain::traits::types::denom::HasDenomType;
 
 #[derive_component(RandomAmountGeneratorComponent, RandomAmountGenerator<Chain>)]
 pub trait CanGenerateRandomAmount: HasDenomType + HasAmountType {
