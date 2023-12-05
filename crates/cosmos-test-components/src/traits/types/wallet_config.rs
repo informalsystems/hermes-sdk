@@ -14,10 +14,18 @@ pub trait HasWalletConfigType: HasAmountType {
 }
 
 pub trait HasWalletConfigFields: HasWalletConfigType {
+    /// Get the ID for identifying the wallet from the chain configuration.
+    /// This can be used for locating the private key of the wallet.
     fn wallet_config_wallet_id(wallet_config: &Self::WalletConfig) -> &str;
 
-    fn wallet_config_genesis_balance(wallet_config: &Self::WalletConfig) -> &[Self::Amount];
+    /// Get the balances that the wallet should have in genesis.
+    /// The returned amounts should be in different denoms, or the
+    /// gentx command may fail.
+    fn wallet_config_genesis_balances(wallet_config: &Self::WalletConfig) -> &[Self::Amount];
 
+    /// If the wallet is a validator, returns an amount that should be staked
+    /// on genesis. The amount should be in the native staking denom,
+    /// or the bootstrapping may fail.
     fn wallet_config_validator_staked_amount(
         wallet_config: &Self::WalletConfig,
     ) -> Option<&Self::Amount>;

@@ -1,4 +1,5 @@
 pub mod channel;
+pub mod child_process;
 pub mod error;
 pub mod mutex;
 pub mod sleep;

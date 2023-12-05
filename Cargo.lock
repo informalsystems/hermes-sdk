@@ -1940,6 +1940,7 @@ dependencies = [
  "ibc-relayer-components",
  "ibc-relayer-components-extra",
  "ibc-relayer-subscription",
+ "ibc-test-components",
  "tokio",
  "tokio-stream",
  "tracing",

@@ -16,6 +16,7 @@ description  = """
 ibc-relayer-components          = { workspace = true }
 ibc-relayer-components-extra    = { workspace = true }
 ibc-relayer-subscription        = { workspace = true }
+ibc-test-components             = { workspace = true }
 
 async-trait = { workspace = true }
 cgp-core    = { workspace = true }

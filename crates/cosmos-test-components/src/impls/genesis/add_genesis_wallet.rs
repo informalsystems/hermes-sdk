@@ -41,7 +41,7 @@ where
 
         let address = Bootstrap::wallet_address(&wallet);
 
-        let genesis_balance = Bootstrap::wallet_config_genesis_balance(wallet_config);
+        let genesis_balance = Bootstrap::wallet_config_genesis_balances(wallet_config);
 
         bootstrap
             .add_genesis_account(chain_home_dir, address, genesis_balance)
