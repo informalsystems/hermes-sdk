@@ -22,7 +22,6 @@ where
         bootstrap
             .runtime()
             .exec_command(
-                "collect gentxs",
                 bootstrap.chain_command_path(),
                 &[
                     "--home",

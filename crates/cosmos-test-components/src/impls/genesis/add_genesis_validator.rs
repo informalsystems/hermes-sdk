@@ -36,7 +36,6 @@ where
         bootstrap
             .runtime()
             .exec_command(
-                "add genesis validator",
                 bootstrap.chain_command_path(),
                 &[
                     "--home",

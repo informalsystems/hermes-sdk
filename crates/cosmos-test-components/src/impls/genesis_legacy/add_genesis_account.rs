@@ -38,7 +38,6 @@ where
         bootstrap
             .runtime()
             .exec_command(
-                "add genesis account legacy",
                 bootstrap.chain_command_path(),
                 &[
                     "--home",

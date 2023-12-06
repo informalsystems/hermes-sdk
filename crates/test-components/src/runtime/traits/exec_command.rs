@@ -11,11 +11,11 @@ pub struct ExecOutput {
 
 /// A context with capability to execute shell commands similar to shell scripts.
 /// The result of a successful execution is stored as string.
+#[derive_component(CommandExecutorComponent, CommandExecutor<Runtime>)]
 #[async_trait]
 pub trait CanExecCommand: HasFilePathType + HasErrorType {
     async fn exec_command(
         &self,
-        description: &str,
         command_path: &Self::FilePath,
         args: &[&str],
     ) -> Result<ExecOutput, Self::Error>;

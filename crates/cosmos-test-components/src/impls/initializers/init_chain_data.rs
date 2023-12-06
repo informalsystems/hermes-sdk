@@ -28,7 +28,6 @@ where
         bootstrap
             .runtime()
             .exec_command(
-                "initialize cosmos chain",
                 chain_command_path,
                 &[
                     "--home",

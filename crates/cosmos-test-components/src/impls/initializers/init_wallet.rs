@@ -36,7 +36,6 @@ where
         let seed_content = bootstrap
             .runtime()
             .exec_command(
-                "add wallet",
                 bootstrap.chain_command_path(),
                 &[
                     "--home",
