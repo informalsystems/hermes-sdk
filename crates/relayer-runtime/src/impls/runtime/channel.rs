@@ -72,7 +72,7 @@ impl CanUseChannels for TokioRuntimeContext {
         receiver
             .recv()
             .await
-            .ok_or_else(|| TokioRuntimeError::ChannelClosed)
+            .ok_or(TokioRuntimeError::ChannelClosed)
     }
 
     fn try_receive<T>(receiver: &mut Self::Receiver<T>) -> Result<Option<T>, Self::Error>
