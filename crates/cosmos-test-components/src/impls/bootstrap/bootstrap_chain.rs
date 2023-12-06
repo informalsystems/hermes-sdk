@@ -5,6 +5,7 @@ use ibc_test_components::bootstrap::traits::chain::ChainBootstrapper;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::chain::traits::types::wallet::HasWalletType;
 
+use crate::traits::bootstrap::build_chain::CanBuildChainFromBootstrapConfig;
 use crate::traits::bootstrap::start_chain::CanStartChainFullNode;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
@@ -33,7 +34,8 @@ where
         + CanAddWalletToGenesis
         + CanCollectGenesisTransactions
         + CanInitChainConfig
-        + CanStartChainFullNode,
+        + CanStartChainFullNode
+        + CanBuildChainFromBootstrapConfig,
     Runtime: HasFilePathType + HasChildProcessType,
     Chain: HasChainIdType + HasWalletType,
 {
@@ -52,10 +54,10 @@ where
             .await?;
 
         // Initialize (or update) the genesis config file on the chain home directory
-        let _genesis_config = bootstrap.init_genesis_config(&chain_home_dir).await?;
+        let genesis_config = bootstrap.init_genesis_config(&chain_home_dir).await?;
 
-        let _wallets = {
-            // Generate and add wallets to the genesis config
+        let wallets = {
+            // Generate configuration of wallets that should be added to genesis
             let wallet_configs = bootstrap.generate_wallet_configs().await?;
 
             let mut wallets = Vec::new();
@@ -64,20 +66,37 @@ where
                 let wallet = bootstrap
                     .add_wallet_to_genesis(&chain_home_dir, &chain_id, &wallet_config)
                     .await?;
+
                 wallets.push(wallet);
             }
 
             wallets
         };
 
+        // Run the collect-gentxs command
         bootstrap
             .collect_genesis_transactions(&chain_home_dir)
             .await?;
 
-        let _chain_config = bootstrap.init_chain_config(&chain_home_dir).await?;
+        // Initialize (or update) the chain config files that are required for starting
+        // the chain full node
+        let chain_config = bootstrap.init_chain_config(&chain_home_dir).await?;
 
-        let _child_process = bootstrap.start_chain_full_node(&chain_home_dir).await?;
+        // Start the chain full node in the background, and return the child process handle
+        let chain_process = bootstrap.start_chain_full_node(&chain_home_dir).await?;
 
-        todo!()
+        // Build the chain context from the bootstrap parameters
+        let chain = bootstrap
+            .build_chain_from_bootstrap_config(
+                chain_home_dir,
+                chain_id,
+                genesis_config,
+                chain_config,
+                wallets,
+                chain_process,
+            )
+            .await?;
+
+        Ok(chain)
     }
 }
