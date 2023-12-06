@@ -2,7 +2,7 @@ use cgp_core::HasErrorType;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::Error as TokioError;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
@@ -28,7 +28,7 @@ impl HasRuntime for CosmosBuilder {
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         BaseError::tokio(e).into()
     }
 }

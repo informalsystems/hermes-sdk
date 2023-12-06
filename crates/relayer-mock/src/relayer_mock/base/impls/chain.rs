@@ -49,7 +49,7 @@ use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUn
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::Error as TokioError;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::log::value::LogValue;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
@@ -80,7 +80,7 @@ impl HasRuntime for MockChainContext {
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         BaseError::tokio(e).into()
     }
 }

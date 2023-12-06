@@ -16,7 +16,7 @@ use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePa
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::Error as RuntimeError;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
@@ -60,7 +60,7 @@ where
         self.chain.runtime()
     }
 
-    fn runtime_error(e: RuntimeError) -> Chain::Error {
+    fn runtime_error(e: TokioRuntimeError) -> Chain::Error {
         Chain::runtime_error(e)
     }
 }

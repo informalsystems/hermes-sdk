@@ -1,23 +1,33 @@
+use core::fmt::Display;
 use std::process::ExitStatus;
 
-use flex_error::define_error;
+#[derive(Clone, Debug)]
+pub enum TokioRuntimeError {
+    ChannelClosed,
+    PoisonedLock,
+    PrematureChildProcessExit {
+        exit_status: ExitStatus,
+        output: String,
+    },
+}
 
-define_error! {
-    #[derive(Clone, Debug)]
-    Error {
-        ChannelClosed
-            | _ | { "unexpected closure of internal rust channels" },
-
-        PoisonedLock
-            | _ | { "poisoned mutex lock" },
-
-        PrematureChildProcessExit
-            {
-                exit_status: ExitStatus,
-                output: String,
+impl Display for TokioRuntimeError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Self::ChannelClosed => {
+                write!(f, "unexpected closure of internal rust channels")?;
             }
-            | e | {
-                format_args!("expected child process to be running, but it exited immediately with exit status {} and output: {}", e.exit_status, e.output)
-            },
+            Self::PoisonedLock => {
+                write!(f, "poisoned mutex lock")?;
+            }
+            Self::PrematureChildProcessExit {
+                exit_status,
+                output,
+            } => {
+                write!(f, "expected child process to be running, but it exited immediately with exit status {} and output: {}", exit_status, output)?;
+            }
+        };
+
+        Ok(())
     }
 }

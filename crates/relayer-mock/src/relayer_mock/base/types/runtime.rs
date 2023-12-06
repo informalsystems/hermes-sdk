@@ -6,7 +6,7 @@ use async_trait::async_trait;
 use cgp_core::HasErrorType;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc_relayer_components::runtime::traits::time::HasTime;
-use ibc_relayer_runtime::types::error::Error as TokioError;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 
 use crate::relayer_mock::base::types::aliases::MockTimestamp;
 use crate::relayer_mock::util::clock::MockClock;
@@ -33,7 +33,7 @@ impl Clone for MockRuntimeContext {
 }
 
 impl HasErrorType for MockRuntimeContext {
-    type Error = TokioError;
+    type Error = TokioRuntimeError;
 }
 
 #[async_trait]

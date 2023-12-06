@@ -35,7 +35,7 @@ use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUn
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
-use ibc_relayer_runtime::types::error::Error as TokioError;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::chain::CosmosChain;
@@ -59,7 +59,7 @@ where
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         BaseError::tokio(e).into()
     }
 }

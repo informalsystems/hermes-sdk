@@ -8,7 +8,7 @@ use cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
-use ibc_relayer_runtime::types::error::Error as TokioError;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
@@ -82,7 +82,7 @@ impl Solomachine for MockSolomachine {
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Self::Error {
+    fn runtime_error(e: TokioRuntimeError) -> Self::Error {
         BaseError::tokio(e).into()
     }
 
