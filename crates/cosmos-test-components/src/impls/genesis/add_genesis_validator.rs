@@ -21,18 +21,17 @@ impl<Bootstrap, Runtime, Chain> GenesisValidatorAdder<Bootstrap> for AddCosmosGe
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
-        + HasAmountType
         + HasErrorType
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
-    Chain: HasChainIdType,
+    Chain: HasChainIdType + HasAmountType,
 {
     async fn add_genesis_validator(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         chain_id: &Chain::ChainId,
         wallet_id: &str,
-        stake_amount: &Bootstrap::Amount,
+        stake_amount: &Chain::Amount,
     ) -> Result<(), Bootstrap::Error> {
         bootstrap
             .runtime()

@@ -2,6 +2,8 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
+use ibc_test_components::chain::traits::types::address::HasAddressType;
+use ibc_test_components::chain::traits::types::amount::HasAmountType;
 use ibc_test_components::chain::traits::types::wallet::HasWalletType;
 
 use crate::traits::genesis::add_genesis_account::CanAddGenesisAccount;
@@ -18,28 +20,27 @@ impl<Bootstrap, Runtime, Chain> GenesisWalletAdder<Bootstrap> for AddCosmosWalle
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
-        + HasWalletType
         + HasWalletConfigFields
         + HasErrorType
         + CanInitWallet
         + CanAddGenesisAccount
         + CanAddGenesisValidator,
     Runtime: HasFilePathType,
-    Chain: HasChainIdType,
+    Chain: HasChainIdType + HasWalletType + HasAmountType + HasAddressType,
 {
     async fn add_wallet_to_genesis(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         chain_id: &Chain::ChainId,
         wallet_config: &Bootstrap::WalletConfig,
-    ) -> Result<Bootstrap::Wallet, Bootstrap::Error> {
+    ) -> Result<Chain::Wallet, Bootstrap::Error> {
         let wallet_id = Bootstrap::wallet_config_wallet_id(wallet_config);
 
         let wallet = bootstrap
             .initialize_wallet(chain_home_dir, wallet_id)
             .await?;
 
-        let address = Bootstrap::wallet_address(&wallet);
+        let address = Chain::wallet_address(&wallet);
 
         let genesis_balance = Bootstrap::wallet_config_genesis_balances(wallet_config);
 

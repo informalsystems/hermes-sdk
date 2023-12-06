@@ -3,6 +3,7 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::chain::ChainBootstrapper;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
+use ibc_test_components::chain::traits::types::wallet::HasWalletType;
 
 use crate::traits::bootstrap::start_chain::CanStartChainFullNode;
 use crate::traits::generator::generate_chain_id::CanGenerateChainId;
@@ -34,7 +35,7 @@ where
         + CanInitChainConfig
         + CanStartChainFullNode,
     Runtime: HasFilePathType + HasChildProcessType,
-    Chain: HasChainIdType,
+    Chain: HasChainIdType + HasWalletType,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
@@ -51,7 +52,7 @@ where
             .await?;
 
         // Initialize (or update) the genesis config file on the chain home directory
-        bootstrap.init_genesis_config(&chain_home_dir).await?;
+        let _genesis_config = bootstrap.init_genesis_config(&chain_home_dir).await?;
 
         let _wallets = {
             // Generate and add wallets to the genesis config

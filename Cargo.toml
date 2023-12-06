@@ -48,6 +48,7 @@ serde_json          = { version = "1.0" }
 tokio               = { version = "1.34" }
 tracing             = { version = "0.1.40" }
 tonic               = { version = "0.10" }
+toml                = { version = "0.8.8" }
 futures             = { version = "0.3" }
 eyre                = { version = "0.6.8" }
 itertools           = { version = "0.11" }

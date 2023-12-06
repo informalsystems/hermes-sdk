@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::chain::traits::types::address::HasAddressType;
 use ibc_test_components::chain::traits::types::amount::HasAmountType;
 
@@ -17,20 +18,20 @@ use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 pub struct LegacyAddCosmosGenesisAccount;
 
 #[async_trait]
-impl<Bootstrap, Runtime> GenesisAccountAdder<Bootstrap> for LegacyAddCosmosGenesisAccount
+impl<Bootstrap, Runtime, Chain> GenesisAccountAdder<Bootstrap> for LegacyAddCosmosGenesisAccount
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasAmountType
-        + HasAddressType
+        + HasChainType<Chain = Chain>
         + HasErrorType
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
+    Chain: HasAmountType + HasAddressType,
 {
     async fn add_genesis_account(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
-        address: &Bootstrap::Address,
-        amounts: &[Bootstrap::Amount],
+        address: &Chain::Address,
+        amounts: &[Chain::Amount],
     ) -> Result<(), Bootstrap::Error> {
         let amounts_string = itertools::join(amounts, ",");
 

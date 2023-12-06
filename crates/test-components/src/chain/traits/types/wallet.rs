@@ -3,6 +3,8 @@ use ibc_relayer_components::transaction::traits::types::HasSignerType;
 
 use crate::chain::traits::types::address::HasAddressType;
 
+pub type Wallet<Chain> = <Chain as HasWalletType>::Wallet;
+
 #[derive_component(WalletTypeComponent, WalletTypeProvider<Chain>)]
 pub trait HasWalletType: HasAddressType {
     type Wallet: Async;

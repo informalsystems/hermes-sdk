@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 use eyre::{eyre, Report};
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::chain::traits::types::wallet::HasWalletType;
 use serde_json as json;
 
@@ -16,21 +17,22 @@ use ibc_test_components::runtime::traits::write_file::CanWriteStringToFile;
 pub struct InitCosmosTestWallet;
 
 #[async_trait]
-impl<Bootstrap, Runtime> WalletInitializer<Bootstrap> for InitCosmosTestWallet
+impl<Bootstrap, Runtime, Chain> WalletInitializer<Bootstrap> for InitCosmosTestWallet
 where
     Bootstrap: HasErrorType
         + HasRuntime<Runtime = Runtime>
-        + HasWalletType<Wallet = CosmosTestWallet>
+        + HasChainType<Chain = Chain>
         + HasWalletHdPath
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
+    Chain: HasWalletType<Wallet = CosmosTestWallet>,
     Bootstrap::Error: From<Report>,
 {
     async fn initialize_wallet(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         wallet_id: &str,
-    ) -> Result<Bootstrap::Wallet, Bootstrap::Error> {
+    ) -> Result<Chain::Wallet, Bootstrap::Error> {
         let seed_content = bootstrap
             .runtime()
             .exec_command(
