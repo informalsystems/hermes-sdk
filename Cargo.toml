@@ -5,6 +5,7 @@ resolver = "2"
 members = [
     "crates/cosmos-client-components",
     "crates/cosmos-test-components",
+    "crates/tokio-runtime-components",
     "crates/relayer-components",
     "crates/relayer-components-extra",
     "crates/relayer-cosmos",
@@ -60,6 +61,7 @@ ibc-relayer-runtime             = { version = "0.1.0", path = "./crates/relayer-
 ibc-relayer-subscription        = { version = "0.1.0", path = "./crates/relayer-subscription" }
 cosmos-client-components        = { version = "0.1.0", path = "./crates/cosmos-client-components" }
 cosmos-test-components          = { version = "0.1.0", path = "./crates/cosmos-test-components" }
+tokio-runtime-components        = { version = "0.1.0", path = "./crates/tokio-runtime-components" }
 ibc-relayer-cosmos              = { version = "0.1.0", path = "./crates/relayer-cosmos" }
 ibc-relayer-solomachine         = { version = "0.1.0", path = "./crates/relayer-solomachine" }
 ibc-test-components             = { version = "0.1.0", path = "./crates/test-components" }

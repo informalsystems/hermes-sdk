@@ -1,6 +1,6 @@
 use cgp_core::{CanRaiseError, HasErrorType};
+use tokio_runtime_components::impls::child_process::PrematureChildProcessExitError;
 
-use crate::impls::runtime::child_process::PrematureChildProcessExitError;
 use crate::types::error::TokioRuntimeError;
 use crate::types::runtime::TokioRuntimeContext;
 

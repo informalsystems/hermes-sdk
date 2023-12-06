@@ -1951,6 +1951,7 @@ dependencies = [
  "ibc-relayer-subscription",
  "ibc-test-components",
  "tokio",
+ "tokio-runtime-components",
  "tokio-stream",
  "tracing",
 ]
@@ -4111,6 +4112,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.37",
+]
+
+[[package]]
+name = "tokio-runtime-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "futures",
+ "ibc-relayer-components",
+ "ibc-relayer-components-extra",
+ "ibc-test-components",
+ "tokio",
 ]
 
 [[package]]
