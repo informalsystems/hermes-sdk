@@ -18,10 +18,10 @@ use crate::bootstrap::traits::initializers::init_chain_data::CanInitChainData;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::bootstrap::traits::initializers::init_genesis_config::CanInitGenesisConfig;
 
-pub struct BoostrapCosmosChain;
+pub struct BootstrapCosmosChain;
 
 #[async_trait]
-impl<Bootstrap, Runtime, Chain> ChainBootstrapper<Bootstrap> for BoostrapCosmosChain
+impl<Bootstrap, Runtime, Chain> ChainBootstrapper<Bootstrap> for BootstrapCosmosChain
 where
     Bootstrap: HasErrorType
         + HasRuntime<Runtime = Runtime>
