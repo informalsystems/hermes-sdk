@@ -1,8 +1,8 @@
 use ibc_test_components::chain::traits::types::amount::AmountTypeProvider;
 use ibc_test_components::chain::traits::types::denom::HasDenomType;
 
-use crate::types::amount::Amount;
-use crate::types::denom::Denom;
+use crate::chain::types::amount::Amount;
+use crate::chain::types::denom::Denom;
 
 pub struct ProvideIbcAmount;
 

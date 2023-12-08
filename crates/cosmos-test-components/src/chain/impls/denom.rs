@@ -1,7 +1,7 @@
 use cgp_core::Async;
 use ibc_test_components::chain::traits::types::denom::DenomTypeProvider;
 
-use crate::types::denom::Denom;
+use crate::chain::types::denom::Denom;
 
 pub struct ProvideIbcDenom;
 

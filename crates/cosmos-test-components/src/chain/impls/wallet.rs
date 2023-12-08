@@ -5,7 +5,7 @@ use ibc_test_components::chain::traits::types::wallet::{
     HasWalletType, WalletSignerProvider, WalletTypeProvider,
 };
 
-use crate::types::wallet::CosmosTestWallet;
+use crate::chain::types::wallet::CosmosTestWallet;
 
 pub struct ProvideKeyPairWallet;
 
