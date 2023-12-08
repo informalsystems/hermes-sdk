@@ -39,3 +39,4 @@ tonic           = { workspace = true, features = ["tls", "tls-roots"] }
 tracing         = { workspace = true }
 
 hdpath      = "0.6.3"
+rand        = "0.8.5"

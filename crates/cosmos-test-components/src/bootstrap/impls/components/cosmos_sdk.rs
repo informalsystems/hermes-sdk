@@ -6,6 +6,7 @@ use ibc_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
 use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
 use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;
 use crate::bootstrap::impls::fields::hd_path::ProvideCosmosHdPath;
+use crate::bootstrap::impls::generator::random_chain_id::GenerateRandomChainId;
 use crate::bootstrap::impls::genesis::add_genesis_account::AddCosmosGenesisAccount;
 use crate::bootstrap::impls::genesis::add_genesis_validator::AddCosmosGenesisValidator;
 use crate::bootstrap::impls::genesis::add_genesis_wallet::AddCosmosWalletToGenesis;
@@ -19,6 +20,7 @@ use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathComponent;
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::test_dir::TestDirComponent;
+use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
 use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderComponent;
 use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdderComponent;
 use crate::bootstrap::traits::genesis::add_genesis_wallet::GenesisWalletAdderComponent;
@@ -40,9 +42,10 @@ delegate_components!(
     GenesisTransactionsCollectorComponent: CollectCosmosGentxs,
 
     // Components that are common with `LegacyCosmosSdkBootstrapComponents`
-    WalletHdPathComponent: ProvideCosmosHdPath,
+    ChainIdGeneratorComponent: GenerateRandomChainId,
     ChainHomeDirInitializerComponent: CreateChainHomeDirFromTestDir,
     ChainDataInitializerComponent: InitCosmosChainData,
+    WalletHdPathComponent: ProvideCosmosHdPath,
     WalletInitializerComponent: InitCosmosTestWallet,
     ChainConfigInitializerComponent: UpdateCosmosChainConfig,
     GenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,

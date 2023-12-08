@@ -770,6 +770,7 @@ dependencies = [
  "ibc-test-components",
  "itertools 0.11.0",
  "prost",
+ "rand",
  "serde_json",
  "tendermint",
  "tendermint-rpc",
