@@ -6,6 +6,7 @@ use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 
 use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
+#[derive_component(ChainHomeDirInitializerComponent, ChainHomeDirInitializer<Bootstrap>)]
 #[async_trait]
 pub trait CanInitChainHomeDir: HasChainType + HasRuntime + HasErrorType
 where
