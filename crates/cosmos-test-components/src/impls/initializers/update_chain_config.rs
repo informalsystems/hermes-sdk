@@ -3,7 +3,6 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_test_components::chain::traits::fields::denom_at::HasDenomAt;
 use toml::Value;
 
 use crate::traits::initializers::init_chain_config::ChainConfigInitializer;
@@ -29,11 +28,8 @@ pub struct UpdateCosmosChainConfig;
 #[async_trait]
 impl<Bootstrap, Runtime> ChainConfigInitializer<Bootstrap> for UpdateCosmosChainConfig
 where
-    Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasErrorType
-        + HasChainConfigType
-        + CanModifyCometConfig
-        + HasDenomAt<0>,
+    Bootstrap:
+        HasRuntime<Runtime = Runtime> + HasErrorType + HasChainConfigType + CanModifyCometConfig,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
     Bootstrap::Error: From<Report>,
     Bootstrap::ChainConfig: From<CosmosChainConfig>,
@@ -105,12 +101,9 @@ where
                 toml::from_str(&sdk_config_string).map_err(Report::from)?
             };
 
-            let minimum_gas = format!("0{}", bootstrap.denom());
-
             set_grpc_port(&mut sdk_config, grpc_port)?;
             disable_grpc_web(&mut sdk_config)?;
             disable_api(&mut sdk_config)?;
-            set_minimum_gas_price(&mut sdk_config, &minimum_gas)?;
 
             sdk_config
         };
@@ -250,15 +243,6 @@ pub fn disable_api(config: &mut Value) -> Result<(), Report> {
             .ok_or_else(|| eyre!("expect object"))?
             .insert("enable".to_string(), false.into());
     }
-
-    Ok(())
-}
-
-pub fn set_minimum_gas_price(config: &mut Value, price: &str) -> Result<(), Report> {
-    config
-        .as_table_mut()
-        .ok_or_else(|| eyre!("expect object"))?
-        .insert("minimum-gas-prices".to_string(), price.into());
 
     Ok(())
 }
