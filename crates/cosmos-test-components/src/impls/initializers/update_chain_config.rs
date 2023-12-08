@@ -3,7 +3,7 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_test_components::chain::traits::fields::denom::HasDenom;
+use ibc_test_components::chain::traits::fields::denom_at::HasDenomAt;
 use toml::Value;
 
 use crate::traits::initializers::init_chain_config::ChainConfigInitializer;
@@ -33,7 +33,7 @@ where
         + HasErrorType
         + HasChainConfigType
         + CanModifyCometConfig
-        + HasDenom<0>,
+        + HasDenomAt<0>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
     Bootstrap::Error: From<Report>,
     Bootstrap::ChainConfig: From<CosmosChainConfig>,

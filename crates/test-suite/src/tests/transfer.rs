@@ -2,35 +2,37 @@ use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::logger::traits::log::CanLog;
-use ibc_test_components::traits::relayer::HasBackgroundRelayer;
-use ibc_test_components::traits::test_case::TestCase;
+use ibc_test_components::test_case::traits::test_case::TestCase;
+use ibc_test_components::test_env::traits::background_relayer::HasBackgroundRelayer;
 
 use ibc_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use ibc_test_components::chain::traits::fields::amount::{
     CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
 };
-use ibc_test_components::chain::traits::fields::channel::HasChannel;
-use ibc_test_components::chain::traits::fields::denom::HasDenom;
+use ibc_test_components::chain::traits::fields::channel_at::HasChannelAt;
+use ibc_test_components::chain::traits::fields::denom_at::HasDenomAt;
 use ibc_test_components::chain::traits::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
 use ibc_test_components::chain::traits::queries::balance::CanQueryBalance;
 use ibc_test_components::chain::traits::queries::ibc_transfer::CanIbcTransferToken;
-use ibc_test_components::chain::traits::types::chains::{HasChainAt, HasOneChain, HasTwoChains};
+use ibc_test_components::test_env::traits::types::chain_at::{
+    HasChainAt, HasOneChain, HasTwoChains,
+};
 
 use crate::std_prelude::*;
 
 pub struct TestIbcTransfer;
 
 #[async_trait]
-impl<Test, ChainA, ChainB> TestCase<Test> for TestIbcTransfer
+impl<TestEnv, ChainA, ChainB> TestCase<TestEnv> for TestIbcTransfer
 where
-    Test: HasErrorType
+    TestEnv: HasErrorType
         + HasChainAt<0, Chain = ChainA>
         + HasChainAt<1, Chain = ChainB>
         + CanLog
         + HasBackgroundRelayer,
     ChainA: HasIbcChainTypes<ChainB>
-        + HasChannel<ChainB, 0>
-        + HasDenom<0>
+        + HasChannelAt<ChainB, 0>
+        + HasDenomAt<0>
         + HasChainId
         + HasTwoUserWallets
         + HasAmountMethods
@@ -40,7 +42,7 @@ where
         + CanIbcTransferToken<ChainB>
         + CanConvertIbcTransferredAmount<ChainB>,
     ChainB: HasIbcChainTypes<ChainA>
-        + HasChannel<ChainA, 0>
+        + HasChannelAt<ChainA, 0>
         + HasChainId
         + HasOneUserWallet
         + HasAmountMethods
@@ -49,14 +51,14 @@ where
         + CanAssertEventualAmount
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>,
-    Test::Error: From<ChainA::Error> + From<ChainB::Error>,
+    TestEnv::Error: From<ChainA::Error> + From<ChainB::Error>,
 {
-    async fn run_test(&self, test: &Test) -> Result<(), Test::Error> {
-        let chain_a = test.first_chain();
+    async fn run_test(&self, test_env: &TestEnv) -> Result<(), TestEnv::Error> {
+        let chain_a = test_env.first_chain();
 
         let chain_id_a = chain_a.chain_id();
 
-        let chain_b = test.second_chain();
+        let chain_b = test_env.second_chain();
 
         let chain_id_b = chain_b.chain_id();
 
@@ -82,9 +84,9 @@ where
 
         let port_id_b = chain_b.port_id();
 
-        test.start_relayer_in_background();
+        test_env.start_relayer_in_background();
 
-        test.log_info(&format!(
+        test_env.log_info(&format!(
             "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
             chain_id_a, chain_id_b, a_to_b_amount, denom_a
         ));
@@ -107,7 +109,7 @@ where
 
         let balance_b1 = ChainB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b);
 
-        test.log_info(&format!(
+        test_env.log_info(&format!(
             "Waiting for user on chain B to receive IBC transferred amount of {}",
             balance_b1
         ));
@@ -122,7 +124,7 @@ where
 
         let b_to_a_amount = ChainB::random_amount(500, &balance_b1);
 
-        test.log_info(&format!(
+        test_env.log_info(&format!(
             "Sending IBC transfer from chain {} to chain {} with amount of {}",
             chain_id_b, chain_id_a, b_to_a_amount,
         ));
@@ -156,7 +158,7 @@ where
             .assert_eventual_amount(address_a2, &balance_a5)
             .await?;
 
-        test.log_info(&format!(
+        test_env.log_info(&format!(
             "successfully performed reverse IBC transfer from chain {} back to chain {}",
             chain_id_b, chain_id_a,
         ));

@@ -20,7 +20,7 @@ where
             let loopback = Ipv4Addr::new(127, 0, 0, 1);
             let address = SocketAddrV4::new(loopback, port);
 
-            if let Ok(_) = TcpListener::bind(address) {
+            if TcpListener::bind(address).is_ok() {
                 // TODO: also check if the port has been previously reserved
 
                 return Ok(port);
