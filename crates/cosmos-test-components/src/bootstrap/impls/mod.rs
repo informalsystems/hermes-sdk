@@ -1,9 +1,6 @@
-pub mod bootstrap_chain;
+pub mod chain;
 pub mod components;
-pub mod error;
 pub mod fields;
 pub mod genesis;
 pub mod genesis_legacy;
 pub mod initializers;
-pub mod runtime;
-pub mod start_chain;

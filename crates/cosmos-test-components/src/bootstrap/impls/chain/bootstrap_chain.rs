@@ -4,6 +4,8 @@ use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::chain::ChainBootstrapper;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::chain::traits::types::wallet::HasWalletType;
+use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::chain::build_chain::CanBuildChainFromBootstrapConfig;
 use crate::bootstrap::traits::chain::start_chain::CanStartChainFullNode;
@@ -15,8 +17,6 @@ use crate::bootstrap::traits::initializers::init_chain_config::CanInitChainConfi
 use crate::bootstrap::traits::initializers::init_chain_data::CanInitChainData;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::bootstrap::traits::initializers::init_genesis_config::CanInitGenesisConfig;
-use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct BoostrapCosmosChain;
 
