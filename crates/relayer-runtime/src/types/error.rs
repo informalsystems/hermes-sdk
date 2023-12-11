@@ -1,4 +1,5 @@
 use core::fmt::Display;
+use std::error::Error;
 use std::process::ExitStatus;
 
 #[derive(Clone, Debug)]
@@ -31,3 +32,5 @@ impl Display for TokioRuntimeError {
         Ok(())
     }
 }
+
+impl Error for TokioRuntimeError {}

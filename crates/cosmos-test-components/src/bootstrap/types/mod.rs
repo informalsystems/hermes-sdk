@@ -1,1 +1,1 @@
-pub mod bootstrap;
+pub mod wallet_config;

@@ -1,3 +1,3 @@
-
-pub mod runtime;
-pub mod error;
+pub mod chain_config;
+pub mod genesis_config;
+pub mod wallet_config;
