@@ -4,6 +4,7 @@ use eyre::Error;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
+use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use std::io::Error as IoError;
 use std::path::PathBuf;
 
@@ -14,6 +15,7 @@ use crate::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use crate::bootstrap::traits::fields::test_dir::TestDirGetter;
+use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use crate::bootstrap::traits::types::chain_config::ChainConfigTypeComponent;
 use crate::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
@@ -46,6 +48,11 @@ delegate_components!(
         WalletConfigFieldsComponent,
     ]: ProvideCosmosWalletConfigType,
 );
+
+impl ProvideChainType<CosmosBootstrapContext> for CosmosBootstrapComponents {
+    // TODO
+    type Chain = ();
+}
 
 impl HasErrorType for CosmosBootstrapContext {
     type Error = Error;
@@ -93,5 +100,14 @@ impl CosmosGenesisConfigModifier<CosmosBootstrapContext> for CosmosBootstrapComp
         config: &mut serde_json::Value,
     ) -> Result<(), <CosmosBootstrapContext as HasErrorType>::Error> {
         (bootstrap.genesis_config_modifier)(config)
+    }
+}
+
+impl CometConfigModifier<CosmosBootstrapContext> for CosmosBootstrapComponents {
+    fn modify_comet_config(
+        bootstrap: &CosmosBootstrapContext,
+        comet_config: &mut toml::Value,
+    ) -> Result<(), Error> {
+        (bootstrap.comet_config_modifier)(comet_config)
     }
 }
