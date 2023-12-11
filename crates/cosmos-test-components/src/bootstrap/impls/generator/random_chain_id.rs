@@ -25,7 +25,7 @@ where
 
             Chain::build_chain_id_from_string(&chain_id)
         } else {
-            Chain::build_chain_id_from_string(&chain_id_prefix)
+            Chain::build_chain_id_from_string(chain_id_prefix)
         }
     }
 }
