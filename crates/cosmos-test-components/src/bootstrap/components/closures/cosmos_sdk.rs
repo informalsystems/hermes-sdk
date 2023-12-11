@@ -17,7 +17,7 @@ use ibc_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use std::io::Error as IoError;
 use std::path::Path;
 
-use crate::bootstrap::impls::components::cosmos_sdk::CosmosSdkBootstrapComponents;
+use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
 use crate::bootstrap::impls::initializers::update_chain_config::CosmosChainConfig;
 use crate::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
@@ -26,10 +26,8 @@ use crate::bootstrap::traits::fields::test_dir::TestDirGetter;
 use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use crate::bootstrap::traits::types::chain_config::{HasChainConfigType, ProvideChainConfigType};
-use crate::bootstrap::traits::types::genesis_config::{
-    HasGenesisConfigType, ProvideGenesisConfigType,
-};
+use crate::bootstrap::traits::types::chain_config::ProvideChainConfigType;
+use crate::bootstrap::traits::types::genesis_config::ProvideGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::{
     ProvideWalletConfigType, WalletConfigFieldsGetter,
 };
@@ -69,7 +67,7 @@ where
     Chain::ChainId: Display,
     Runtime::FilePath: AsRef<Path>,
     Bootstrap::Error: From<Report>,
-    <Bootstrap as HasGenesisConfigType>::GenesisConfig: From<serde_json::Value>,
-    <Bootstrap as HasChainConfigType>::ChainConfig: From<CosmosChainConfig>,
+    BaseComponents::GenesisConfig: From<serde_json::Value>,
+    BaseComponents::ChainConfig: From<CosmosChainConfig>,
 {
 }
