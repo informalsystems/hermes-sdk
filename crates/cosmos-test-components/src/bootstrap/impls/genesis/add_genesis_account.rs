@@ -21,8 +21,6 @@ impl<Bootstrap, Runtime, Chain> GenesisAccountAdder<Bootstrap> for AddCosmosGene
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
-        + HasAmountType
-        + HasAddressType
         + HasErrorType
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,

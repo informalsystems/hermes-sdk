@@ -10,10 +10,12 @@ use ibc_test_components::chain::traits::types::amount::{Amount, HasAmountType};
    initial balances the wallet should have in genesis, and whether the wallet
    belongs to a validator and should have an initial staked amount.
 */
+#[derive_component(WalletConfigTypeComponent, ProvideWalletConfigType<Bootstrap>)]
 pub trait HasWalletConfigType: Async {
     type WalletConfig: Async;
 }
 
+#[derive_component(WalletConfigFieldsComponent, WalletConfigFieldsGetter<Bootstrap>)]
 pub trait HasWalletConfigFields: HasWalletConfigType + HasChainType
 where
     Self::Chain: HasAmountType,

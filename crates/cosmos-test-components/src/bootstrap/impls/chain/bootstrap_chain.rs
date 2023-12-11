@@ -7,7 +7,7 @@ use ibc_test_components::chain::traits::types::wallet::HasWalletType;
 use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
 use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
-use crate::bootstrap::traits::chain::build_chain::CanBuildChainFromBootstrapConfig;
+use crate::bootstrap::traits::chain::build_chain::CanBuildChainFromBootstrapParameters;
 use crate::bootstrap::traits::chain::start_chain::CanStartChainFullNode;
 use crate::bootstrap::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::bootstrap::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
@@ -35,7 +35,7 @@ where
         + CanCollectGenesisTransactions
         + CanInitChainConfig
         + CanStartChainFullNode
-        + CanBuildChainFromBootstrapConfig,
+        + CanBuildChainFromBootstrapParameters,
     Runtime: HasFilePathType + HasChildProcessType,
     Chain: HasChainIdType + HasWalletType,
 {

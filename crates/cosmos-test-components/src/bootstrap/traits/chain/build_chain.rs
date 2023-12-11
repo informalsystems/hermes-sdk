@@ -13,8 +13,9 @@ use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePa
 use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 
+#[derive_component(ChainFromBootstrapParamsBuilderComponent, ChainFromBootstrapParamsBuilder<Bootstrap>)]
 #[async_trait]
-pub trait CanBuildChainFromBootstrapConfig:
+pub trait CanBuildChainFromBootstrapParameters:
     HasRuntime + HasChainType + HasGenesisConfigType + HasChainConfigType + HasErrorType
 where
     Self::Runtime: HasFilePathType + HasChildProcessType,
