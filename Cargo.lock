@@ -2059,6 +2059,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "ibc-relayer-components",
+ "ibc-relayer-components-extra",
 ]
 
 [[package]]

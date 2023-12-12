@@ -1,15 +1,22 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use cosmos_test_components::bootstrap::impls::initializers::update_chain_config::CosmosChainConfig;
+use cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
+use cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
+use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use std::io::Error as IoError;
 use std::path::PathBuf;
+use tokio::process::Child;
 
-// use cosmos_test_components::bootstrap::components::closures::cosmos_sdk::CanUseCosmosSdkChainBootstrapper;
+use cosmos_test_components::bootstrap::components::closures::cosmos_sdk::CanUseCosmosSdkChainBootstrapper;
 use cosmos_test_components::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
 use cosmos_test_components::bootstrap::impls::types::chain_config::ProvideCosmosChainConfigType;
 use cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideJsonGenesisConfigType;
@@ -37,16 +44,16 @@ pub struct CosmosStdBootstrapContext {
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
 }
 
-// impl CanUseCosmosSdkChainBootstrapper for CosmosStdBootstrapContext {}
+impl CanUseCosmosSdkChainBootstrapper for CosmosStdBootstrapContext {}
 
-pub struct CosmosBootstrapComponents;
+pub struct CosmosStdBootstrapComponents;
 
 impl HasComponents for CosmosStdBootstrapContext {
-    type Components = CosmosSdkBootstrapComponents<CosmosBootstrapComponents>;
+    type Components = CosmosSdkBootstrapComponents<CosmosStdBootstrapComponents>;
 }
 
 delegate_components!(
-    CosmosBootstrapComponents;
+    CosmosStdBootstrapComponents;
     ChainConfigTypeComponent: ProvideCosmosChainConfigType,
     GenesisConfigTypeComponent: ProvideJsonGenesisConfigType,
     [
@@ -55,8 +62,32 @@ delegate_components!(
     ]: ProvideCosmosWalletConfigType,
 );
 
-impl ProvideChainType<CosmosStdBootstrapContext> for CosmosBootstrapComponents {
+impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     type Chain = CosmosChain<BaseChainHandle>;
+}
+
+#[async_trait]
+impl WalletConfigGenerator<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+    async fn generate_wallet_configs(
+        bootstrap: &CosmosStdBootstrapContext,
+    ) -> Result<Vec<CosmosWalletConfig>, Error> {
+        todo!()
+    }
+}
+
+#[async_trait]
+impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+    async fn build_chain_from_bootstrap_config(
+        bootstrap: &CosmosStdBootstrapContext,
+        chain_home_dir: PathBuf,
+        chain_id: ChainId,
+        genesis_config: serde_json::Value,
+        chain_config: CosmosChainConfig,
+        wallets: Vec<CosmosTestWallet>,
+        chain_process: Child,
+    ) -> Result<CosmosChain<BaseChainHandle>, Error> {
+        todo!()
+    }
 }
 
 impl HasErrorType for CosmosStdBootstrapContext {
@@ -81,25 +112,25 @@ impl HasRuntime for CosmosStdBootstrapContext {
     }
 }
 
-impl TestDirGetter<CosmosStdBootstrapContext> for CosmosBootstrapComponents {
+impl TestDirGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     fn test_dir(bootstrap: &CosmosStdBootstrapContext) -> &PathBuf {
         &bootstrap.test_dir
     }
 }
 
-impl ChainCommandPathGetter<CosmosStdBootstrapContext> for CosmosBootstrapComponents {
+impl ChainCommandPathGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     fn chain_command_path(bootstrap: &CosmosStdBootstrapContext) -> &PathBuf {
         &bootstrap.chain_command_path
     }
 }
 
-impl RandomIdFlagGetter<CosmosStdBootstrapContext> for CosmosBootstrapComponents {
+impl RandomIdFlagGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     fn should_randomize_identifiers(bootstrap: &CosmosStdBootstrapContext) -> bool {
         bootstrap.should_randomize_identifiers
     }
 }
 
-impl CosmosGenesisConfigModifier<CosmosStdBootstrapContext> for CosmosBootstrapComponents {
+impl CosmosGenesisConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     fn modify_genesis_config(
         bootstrap: &CosmosStdBootstrapContext,
         config: &mut serde_json::Value,
@@ -108,7 +139,7 @@ impl CosmosGenesisConfigModifier<CosmosStdBootstrapContext> for CosmosBootstrapC
     }
 }
 
-impl CometConfigModifier<CosmosStdBootstrapContext> for CosmosBootstrapComponents {
+impl CometConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     fn modify_comet_config(
         bootstrap: &CosmosStdBootstrapContext,
         comet_config: &mut toml::Value,

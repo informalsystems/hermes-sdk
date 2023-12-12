@@ -11,8 +11,11 @@ use tokio::process::Command;
 
 pub struct TokioExecCommand;
 
-pub trait CanRaiseExecFailureError: HasErrorType {
-    fn exec_failure_error(exit_code: Option<i32>, stdout: &str, stderr: &str) -> Self::Error;
+pub struct ExecCommandFailure {
+    pub command: String,
+    pub exit_code: Option<i32>,
+    pub stdout: String,
+    pub stderr: String,
 }
 
 #[async_trait]
@@ -21,7 +24,7 @@ where
     Runtime: HasFilePathType
         + CanRaiseError<IoError>
         + CanRaiseError<Utf8Error>
-        + CanRaiseExecFailureError,
+        + CanRaiseError<ExecCommandFailure>,
     Runtime::FilePath: AsRef<OsStr>,
 {
     async fn exec_command(
@@ -45,11 +48,12 @@ where
                 stderr: stderr.to_owned(),
             })
         } else {
-            Err(Runtime::exec_failure_error(
-                output.status.code(),
-                stdout,
-                stderr,
-            ))
+            Err(Runtime::raise_error(ExecCommandFailure {
+                command: Runtime::file_path_to_string(command_path),
+                exit_code: output.status.code(),
+                stdout: stdout.to_owned(),
+                stderr: stdout.to_owned(),
+            }))
         }
     }
 }
