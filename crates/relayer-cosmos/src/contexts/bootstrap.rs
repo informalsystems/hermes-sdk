@@ -1,9 +1,13 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
+use cosmos_test_components::bootstrap::impls::fields::denom::DenomForTransfer;
+use cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
+use cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use cosmos_test_components::bootstrap::impls::initializers::update_chain_config::CosmosChainConfig;
 use cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
-use cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
-use cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
+use cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
+use cosmos_test_components::chain::types::denom::Denom;
 use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
 use ibc_relayer::chain::handle::BaseChainHandle;
@@ -38,6 +42,8 @@ pub struct CosmosStdBootstrapContext {
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
+    staking_denom: Denom,
+    transfer_denom: Denom,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
@@ -56,6 +62,7 @@ delegate_components!(
     CosmosStdBootstrapComponents;
     ChainConfigTypeComponent: ProvideCosmosChainConfigType,
     GenesisConfigTypeComponent: ProvideJsonGenesisConfigType,
+    WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
     [
         WalletConfigTypeComponent,
         WalletConfigFieldsComponent,
@@ -64,15 +71,6 @@ delegate_components!(
 
 impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     type Chain = CosmosChain<BaseChainHandle>;
-}
-
-#[async_trait]
-impl WalletConfigGenerator<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    async fn generate_wallet_configs(
-        _bootstrap: &CosmosStdBootstrapContext,
-    ) -> Result<Vec<CosmosWalletConfig>, Error> {
-        todo!()
-    }
 }
 
 #[async_trait]
@@ -146,5 +144,21 @@ impl CometConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapCompon
         comet_config: &mut toml::Value,
     ) -> Result<(), Error> {
         (bootstrap.comet_config_modifier)(comet_config)
+    }
+}
+
+impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForStaking>
+    for CosmosStdBootstrapComponents
+{
+    fn genesis_denom(bootstrap: &CosmosStdBootstrapContext) -> &Denom {
+        &bootstrap.staking_denom
+    }
+}
+
+impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForTransfer>
+    for CosmosStdBootstrapComponents
+{
+    fn genesis_denom(bootstrap: &CosmosStdBootstrapContext) -> &Denom {
+        &bootstrap.transfer_denom
     }
 }
