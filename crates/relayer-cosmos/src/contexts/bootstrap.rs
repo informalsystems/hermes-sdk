@@ -69,7 +69,7 @@ impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponent
 #[async_trait]
 impl WalletConfigGenerator<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     async fn generate_wallet_configs(
-        bootstrap: &CosmosStdBootstrapContext,
+        _bootstrap: &CosmosStdBootstrapContext,
     ) -> Result<Vec<CosmosWalletConfig>, Error> {
         todo!()
     }
@@ -77,6 +77,7 @@ impl WalletConfigGenerator<CosmosStdBootstrapContext> for CosmosStdBootstrapComp
 
 #[async_trait]
 impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+    #[allow(unused_variables)]
     async fn build_chain_from_bootstrap_config(
         bootstrap: &CosmosStdBootstrapContext,
         chain_home_dir: PathBuf,

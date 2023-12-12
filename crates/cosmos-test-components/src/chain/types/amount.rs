@@ -9,6 +9,12 @@ pub struct Amount {
     pub denom: Denom,
 }
 
+impl Amount {
+    pub fn new(quantity: u128, denom: Denom) -> Self {
+        Self { quantity, denom }
+    }
+}
+
 impl Display for Amount {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}{}", self.quantity, self.denom)
