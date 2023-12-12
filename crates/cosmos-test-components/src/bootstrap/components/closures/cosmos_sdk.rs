@@ -33,10 +33,11 @@ use crate::bootstrap::traits::types::wallet_config::{
 };
 use crate::chain::types::wallet::CosmosTestWallet;
 
-pub trait CanBootstrapChainWithCosmosSdkBootstrapComponents: CanBootstrapChain {}
+pub trait CanUseCosmosSdkChainBootstrapper: UseCosmosSdkChainBootstrapper {}
 
-impl<Bootstrap, Runtime, Chain, BaseComponents> CanBootstrapChainWithCosmosSdkBootstrapComponents
-    for Bootstrap
+pub trait UseCosmosSdkChainBootstrapper: CanBootstrapChain {}
+
+impl<Bootstrap, Runtime, Chain, BaseComponents> UseCosmosSdkChainBootstrapper for Bootstrap
 where
     Bootstrap: HasComponents<Components = CosmosSdkBootstrapComponents<BaseComponents>>
         + HasRuntime<Runtime = Runtime>

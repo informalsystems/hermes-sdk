@@ -7,9 +7,9 @@ use ibc_test_components::chain::traits::types::wallet::{
 
 use crate::chain::types::wallet::CosmosTestWallet;
 
-pub struct ProvideKeyPairWallet;
+pub struct ProvideCosmosTestWallet;
 
-impl<Chain> WalletTypeProvider<Chain> for ProvideKeyPairWallet
+impl<Chain> WalletTypeProvider<Chain> for ProvideCosmosTestWallet
 where
     Chain: HasAddressType<Address = String>,
 {
@@ -20,7 +20,7 @@ where
     }
 }
 
-impl<Chain> WalletSignerProvider<Chain> for ProvideKeyPairWallet
+impl<Chain> WalletSignerProvider<Chain> for ProvideCosmosTestWallet
 where
     Chain: HasWalletType<Wallet = CosmosTestWallet> + HasSignerType<Signer = Secp256k1KeyPair>,
 {
