@@ -58,7 +58,7 @@ where
 
         let wallets = {
             // Generate configuration of wallets that should be added to genesis
-            let wallet_configs = bootstrap.generate_wallet_configs().await?;
+            let wallet_configs = bootstrap.generate_wallet_configs(&genesis_config).await?;
 
             let mut wallets = Vec::new();
 
@@ -87,7 +87,7 @@ where
 
         // Build the chain context from the bootstrap parameters
         let chain = bootstrap
-            .build_chain_from_bootstrap_config(
+            .build_chain_from_bootstrap_params(
                 chain_home_dir,
                 chain_id,
                 genesis_config,

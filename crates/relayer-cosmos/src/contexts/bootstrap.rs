@@ -6,9 +6,11 @@ use cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
 use cosmos_test_components::bootstrap::impls::fields::denom::DenomForTransfer;
 use cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
 use cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
-use cosmos_test_components::bootstrap::impls::initializers::update_chain_config::CosmosChainConfig;
+use cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
 use cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
+use cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
+use cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use cosmos_test_components::chain::types::denom::Denom;
 use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
@@ -23,7 +25,6 @@ use std::path::PathBuf;
 use tokio::process::Child;
 
 use cosmos_test_components::bootstrap::impls::types::chain_config::ProvideCosmosChainConfigType;
-use cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideJsonGenesisConfigType;
 use cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
 use cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
@@ -42,8 +43,6 @@ pub struct CosmosStdBootstrapContext {
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
-    pub staking_denom: Denom,
-    pub transfer_denom: Denom,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
@@ -61,7 +60,7 @@ impl HasComponents for CosmosStdBootstrapContext {
 delegate_components!(
     CosmosStdBootstrapComponents;
     ChainConfigTypeComponent: ProvideCosmosChainConfigType,
-    GenesisConfigTypeComponent: ProvideJsonGenesisConfigType,
+    GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
     WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
     [
         WalletConfigTypeComponent,
@@ -76,11 +75,11 @@ impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponent
 #[async_trait]
 impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     #[allow(unused_variables)]
-    async fn build_chain_from_bootstrap_config(
+    async fn build_chain_from_bootstrap_params(
         bootstrap: &CosmosStdBootstrapContext,
         chain_home_dir: PathBuf,
         chain_id: ChainId,
-        genesis_config: serde_json::Value,
+        genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainConfig,
         wallets: Vec<CosmosTestWallet>,
         chain_process: Child,
@@ -150,15 +149,15 @@ impl CometConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapCompon
 impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForStaking>
     for CosmosStdBootstrapComponents
 {
-    fn genesis_denom(bootstrap: &CosmosStdBootstrapContext) -> &Denom {
-        &bootstrap.staking_denom
+    fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
+        &genesis_config.staking_denom
     }
 }
 
 impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForTransfer>
     for CosmosStdBootstrapComponents
 {
-    fn genesis_denom(bootstrap: &CosmosStdBootstrapContext) -> &Denom {
-        &bootstrap.transfer_denom
+    fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
+        &genesis_config.transfer_denom
     }
 }

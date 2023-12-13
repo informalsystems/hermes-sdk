@@ -21,7 +21,7 @@ where
     Self::Runtime: HasFilePathType + HasChildProcessType,
     Self::Chain: HasChainIdType + HasWalletType,
 {
-    async fn build_chain_from_bootstrap_config(
+    async fn build_chain_from_bootstrap_params(
         &self,
         chain_home_dir: FilePath<Self::Runtime>,
         chain_id: ChainId<Self::Chain>,

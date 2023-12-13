@@ -8,19 +8,11 @@ use toml::Value;
 use crate::bootstrap::traits::initializers::init_chain_config::ChainConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
+use crate::bootstrap::types::chain_config::CosmosChainConfig;
 use ibc_test_components::runtime::traits::read_file::CanReadFileAsString;
 use ibc_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 use ibc_test_components::runtime::traits::write_file::CanWriteStringToFile;
-
-pub struct CosmosChainConfig {
-    pub rpc_port: u16,
-    pub p2p_port: u16,
-    pub pprof_port: u16,
-    pub grpc_port: u16,
-    pub comet_config: Value,
-    pub sdk_config: Value,
-}
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainConfig;

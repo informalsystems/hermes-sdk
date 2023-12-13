@@ -1,7 +1,7 @@
 use cgp_core::Async;
 
-use crate::bootstrap::impls::initializers::update_chain_config::CosmosChainConfig;
 use crate::bootstrap::traits::types::chain_config::ProvideChainConfigType;
+use crate::bootstrap::types::chain_config::CosmosChainConfig;
 
 pub struct ProvideCosmosChainConfigType;
 

@@ -18,7 +18,6 @@ use std::io::Error as IoError;
 use std::path::Path;
 
 use crate::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
-use crate::bootstrap::impls::initializers::update_chain_config::CosmosChainConfig;
 use crate::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
@@ -31,6 +30,8 @@ use crate::bootstrap::traits::types::genesis_config::ProvideGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::{
     ProvideWalletConfigType, WalletConfigFieldsGetter,
 };
+use crate::bootstrap::types::chain_config::CosmosChainConfig;
+use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain::types::wallet::CosmosTestWallet;
 
 pub trait CanUseLegacyCosmosSdkChainBootstrapper: UseLegacyCosmosSdkChainBootstrapper {}
@@ -68,7 +69,7 @@ where
     Chain::ChainId: Display,
     Runtime::FilePath: AsRef<Path>,
     Bootstrap::Error: From<Report>,
-    BaseComponents::GenesisConfig: From<serde_json::Value>,
+    BaseComponents::GenesisConfig: From<CosmosGenesisConfig>,
     BaseComponents::ChainConfig: From<CosmosChainConfig>,
 {
 }

@@ -4,6 +4,7 @@ use ibc_test_components::chain::traits::types::denom::HasDenomType;
 
 use crate::bootstrap::impls::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
 use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
+use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use crate::bootstrap::types::wallet_config::CosmosWalletConfig;
 use crate::chain::types::amount::Amount;
@@ -23,21 +24,23 @@ impl<Bootstrap, Chain> WalletConfigGenerator<Bootstrap> for GenerateStandardWall
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>
         + HasChainType<Chain = Chain>
+        + HasGenesisConfigType
         + HasErrorType
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>,
     Chain: HasDenomType<Denom = Denom>,
 {
     async fn generate_wallet_configs(
-        bootstrap: &Bootstrap,
+        _bootstrap: &Bootstrap,
+        genesis_config: &Bootstrap::GenesisConfig,
     ) -> Result<Vec<CosmosWalletConfig>, Bootstrap::Error> {
         // TODO: allow for randomization of denoms and amount
 
         let denom_for_staking =
-            <Bootstrap as HasGenesisDenom<DenomForStaking>>::genesis_denom(bootstrap);
+            <Bootstrap as HasGenesisDenom<DenomForStaking>>::genesis_denom(genesis_config);
 
         let denom_for_transfer =
-            <Bootstrap as HasGenesisDenom<DenomForTransfer>>::genesis_denom(bootstrap);
+            <Bootstrap as HasGenesisDenom<DenomForTransfer>>::genesis_denom(genesis_config);
 
         let validator = CosmosWalletConfig {
             wallet_id: "validator".to_owned(),
