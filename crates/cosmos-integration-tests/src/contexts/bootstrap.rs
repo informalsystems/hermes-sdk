@@ -36,7 +36,7 @@ use cosmos_test_components::bootstrap::traits::types::genesis_config::GenesisCon
 use cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
 use cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
 
-use crate::contexts::chain::CosmosChain;
+use ibc_relayer_cosmos::contexts::chain::CosmosChain;
 
 pub struct CosmosStdBootstrapContext {
     pub runtime: TokioRuntimeContext,

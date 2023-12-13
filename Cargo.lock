@@ -739,6 +739,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "cosmos-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cosmos-client-components",
+ "cosmos-test-components",
+ "eyre",
+ "ibc-relayer",
+ "ibc-relayer-components",
+ "ibc-relayer-components-extra",
+ "ibc-relayer-cosmos",
+ "ibc-relayer-runtime",
+ "ibc-relayer-types",
+ "ibc-test-components",
+ "serde_json",
+ "stable-eyre",
+ "tokio",
+ "toml 0.8.8",
+]
+
+[[package]]
 name = "cosmos-sdk-proto"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1895,12 +1916,9 @@ dependencies = [
  "prost",
  "serde",
  "serde_derive",
- "serde_json",
- "stable-eyre",
  "tendermint",
  "tendermint-rpc",
  "tokio",
- "toml 0.8.8",
  "tonic",
  "tracing",
 ]

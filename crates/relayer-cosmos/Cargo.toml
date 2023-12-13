@@ -16,20 +16,20 @@ description  = """
 all-features = true
 
 [dependencies]
-ibc-proto           = { workspace = true }
-ibc-relayer         = { workspace = true }
-ibc-relayer-types   = { workspace = true }
-ibc-telemetry       = { workspace = true }
-cgp-core            = { workspace = true }
-ibc-relayer-runtime = { workspace = true }
+ibc-proto                       = { workspace = true }
+ibc-relayer                     = { workspace = true }
+ibc-relayer-types               = { workspace = true }
+ibc-telemetry                   = { workspace = true }
+cgp-core                        = { workspace = true }
+ibc-relayer-runtime             = { workspace = true }
 ibc-relayer-components          = { workspace = true }
 ibc-relayer-components-extra    = { workspace = true }
 ibc-relayer-subscription        = { workspace = true }
 ibc-test-components             = { workspace = true }
 cosmos-client-components        = { workspace = true }
 cosmos-test-components          = { workspace = true }
-tendermint      = { workspace = true, features = ["secp256k1"] }
-tendermint-rpc  = { workspace = true, features = ["http-client", "websocket-client"] }
+tendermint                      = { workspace = true, features = ["secp256k1"] }
+tendermint-rpc                  = { workspace = true, features = ["http-client", "websocket-client"] }
 
 async-trait     = { workspace = true }
 eyre            = { workspace = true }
@@ -43,9 +43,6 @@ serde_derive    = { workspace = true }
 itertools       = { workspace = true }
 futures         = { workspace = true }
 http            = { workspace = true }
-serde_json      = { workspace = true }
-toml            = { workspace = true }
 
 opentelemetry   = { version = "0.17.0", features = ["metrics"] }
 moka            = { version = "0.11", features = ["future"] }
-stable-eyre     = { version = "0.2.2" }

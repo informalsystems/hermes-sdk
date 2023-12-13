@@ -5,6 +5,7 @@ resolver = "2"
 members = [
     "crates/cosmos-client-components",
     "crates/cosmos-test-components",
+    "crates/cosmos-integration-tests",
     "crates/tokio-runtime-components",
     "crates/relayer-components",
     "crates/relayer-components-extra",
