@@ -1,5 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use cosmos_test_components::bootstrap::components::closures::cosmos_sdk_legacy::CanUseLegacyCosmosSdkChainBootstrapper;
+use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
 use cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
 use cosmos_test_components::bootstrap::impls::fields::denom::DenomForTransfer;
 use cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
@@ -20,8 +22,6 @@ use std::io::Error as IoError;
 use std::path::PathBuf;
 use tokio::process::Child;
 
-use cosmos_test_components::bootstrap::components::closures::cosmos_sdk::CanUseCosmosSdkChainBootstrapper;
-use cosmos_test_components::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
 use cosmos_test_components::bootstrap::impls::types::chain_config::ProvideCosmosChainConfigType;
 use cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideJsonGenesisConfigType;
 use cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
@@ -42,20 +42,20 @@ pub struct CosmosStdBootstrapContext {
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
-    staking_denom: Denom,
-    transfer_denom: Denom,
+    pub staking_denom: Denom,
+    pub transfer_denom: Denom,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
 }
 
-impl CanUseCosmosSdkChainBootstrapper for CosmosStdBootstrapContext {}
+impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosStdBootstrapContext {}
 
 pub struct CosmosStdBootstrapComponents;
 
 impl HasComponents for CosmosStdBootstrapContext {
-    type Components = CosmosSdkBootstrapComponents<CosmosStdBootstrapComponents>;
+    type Components = LegacyCosmosSdkBootstrapComponents<CosmosStdBootstrapComponents>;
 }
 
 delegate_components!(

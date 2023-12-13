@@ -5,6 +5,7 @@ use ibc_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
 use ibc_test_components::bootstrap::traits::types::chain::ChainTypeComponent;
 
 use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
+use crate::bootstrap::impls::fields::denom::GenesisDenomComponent;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_validator::LegacyAddCosmosGenesisValidator;
 use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmosGentxs;
@@ -63,6 +64,7 @@ delegate_components!(
         TestDirComponent,
         ChainCommandPathComponent,
         RandomIdFlagComponent,
+        GenesisDenomComponent,
         WalletConfigTypeComponent,
         WalletConfigFieldsComponent,
         WalletConfigGeneratorComponent,

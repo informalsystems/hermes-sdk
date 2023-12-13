@@ -52,7 +52,7 @@ where
                 command: Runtime::file_path_to_string(command_path),
                 exit_code: output.status.code(),
                 stdout: stdout.to_owned(),
-                stderr: stdout.to_owned(),
+                stderr: stderr.to_owned(),
             }))
         }
     }

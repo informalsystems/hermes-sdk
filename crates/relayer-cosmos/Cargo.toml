@@ -48,3 +48,4 @@ toml            = { workspace = true }
 
 opentelemetry   = { version = "0.17.0", features = ["metrics"] }
 moka            = { version = "0.11", features = ["future"] }
+stable-eyre     = { version = "0.2.2" }

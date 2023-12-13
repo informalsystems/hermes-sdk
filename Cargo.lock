@@ -1896,6 +1896,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
+ "stable-eyre",
  "tendermint",
  "tendermint-rpc",
  "tokio",
@@ -3665,6 +3666,17 @@ checksum = "9d1e996ef02c474957d681f1b05213dfb0abab947b446a62d37770b23500184a"
 dependencies = [
  "base64ct",
  "der",
+]
+
+[[package]]
+name = "stable-eyre"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "556fec8c2da34c70b75f16d88df8a8cd7e652e567ff097b7e9df0022c8695cc4"
+dependencies = [
+ "backtrace",
+ "eyre",
+ "indenter",
 ]
 
 [[package]]

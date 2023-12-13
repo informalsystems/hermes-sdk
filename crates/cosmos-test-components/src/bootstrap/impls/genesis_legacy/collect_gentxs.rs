@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
@@ -12,7 +11,7 @@ pub struct LegacyCollectCosmosGentxs;
 #[async_trait]
 impl<Bootstrap, Runtime> GenesisTransactionsCollector<Bootstrap> for LegacyCollectCosmosGentxs
 where
-    Bootstrap: HasRuntime<Runtime = Runtime> + HasChainIdType + HasErrorType + HasChainCommandPath,
+    Bootstrap: HasRuntime<Runtime = Runtime> + HasErrorType + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
 {
     async fn collect_genesis_transactions(

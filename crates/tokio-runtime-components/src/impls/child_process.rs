@@ -9,7 +9,7 @@ use cgp_core::CanRaiseError;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 use ibc_test_components::runtime::traits::read_file::CanReadFileAsString;
-use tokio::fs::File;
+use tokio::fs::OpenOptions;
 use tokio::io::copy;
 use tokio::io::AsyncRead;
 use tokio::process::{Child, Command};
@@ -111,11 +111,17 @@ where
         mut reader: impl AsyncRead + Unpin + Send + Sync + 'static,
         file_path: &Self::FilePath,
     ) -> Result<(), Self::Error> {
-        let mut file = File::open(&file_path).await.map_err(Runtime::raise_error)?;
+        let mut file = OpenOptions::new()
+            .append(true)
+            .create(true)
+            .open(file_path)
+            .await
+            .map_err(Runtime::raise_error)?;
 
         self.spawn_task(FutureTask::new(async move {
             let _ = copy(&mut reader, &mut file).await;
         }));
+
         Ok(())
     }
 }

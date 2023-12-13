@@ -51,7 +51,7 @@ where
             )
             .await
             .map_err(Bootstrap::runtime_error)?
-            .stdout;
+            .stderr;
 
         let json_val: json::Value = json::from_str(&seed_content).map_err(Report::from)?;
 

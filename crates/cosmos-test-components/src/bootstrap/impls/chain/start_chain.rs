@@ -23,7 +23,7 @@ where
         let args = [
             "--home",
             &Runtime::file_path_to_string(chain_home_dir),
-            "--start",
+            "start",
             "--pruning",
             "nothing",
         ];

@@ -8,7 +8,7 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
-use tokio::fs::create_dir;
+use tokio::fs::create_dir_all;
 
 use crate::bootstrap::traits::fields::test_dir::HasTestDir;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializer;
@@ -36,7 +36,7 @@ where
             &Runtime::file_path_from_string(&chain_id.to_string()),
         );
 
-        create_dir(&chain_home_dir)
+        create_dir_all(&chain_home_dir)
             .await
             .map_err(Bootstrap::raise_error)?;
 
