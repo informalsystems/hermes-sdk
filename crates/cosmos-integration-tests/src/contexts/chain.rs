@@ -10,8 +10,9 @@ use ibc_test_components::chain::traits::build::ChainIdFromStringBuilderComponent
 use ibc_test_components::chain::traits::types::address::AddressTypeComponent;
 use ibc_test_components::chain::traits::types::amount::AmountTypeComponent;
 use ibc_test_components::chain::traits::types::denom::DenomTypeComponent;
-use ibc_test_components::chain::traits::types::wallet::{WalletTypeComponent, WalletSignerComponent};
-
+use ibc_test_components::chain::traits::types::wallet::{
+    WalletSignerComponent, WalletTypeComponent,
+};
 
 pub struct CosmosTestChain;
 
