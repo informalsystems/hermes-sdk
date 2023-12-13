@@ -1896,7 +1896,6 @@ dependencies = [
  "async-trait",
  "cgp-core",
  "cosmos-client-components",
- "cosmos-test-components",
  "eyre",
  "flex-error",
  "futures",

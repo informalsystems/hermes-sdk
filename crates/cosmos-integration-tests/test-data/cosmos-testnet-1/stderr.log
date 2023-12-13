@@ -1,0 +1,63 @@
+[90m8:40PM[0m [1m[31mERR[0m[0m WARNING: The minimum-gas-prices config in app.toml is set to the empty string. This defaults to 0 in the current version, but will error in the next version (SDK v0.45). Please explicitly put the desired minimum-gas-prices in your app.toml.
+[90m8:40PM[0m [32mINF[0m starting node with ABCI Tendermint in-process
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mmultiAppConn [36mmodule=[0mproxy [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mconnection=[0mquery [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mconnection=[0msnapshot [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mconnection=[0mmempool [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mconnection=[0mconsensus [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mEventBus [36mmodule=[0mevents [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mPubSub [36mmodule=[0mpubsub [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mIndexerService [36mmodule=[0mtxindex [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m ABCI Handshake App Info [36mhash=[0m [36mheight=[0m0 [36mmodule=[0mconsensus [36mprotocol-version=[0m0 [36msoftware-version=[0mv14.0.0
+[90m8:40PM[0m [32mINF[0m ABCI Replay Blocks [36mappHeight=[0m0 [36mmodule=[0mconsensus [36mstateHeight=[0m0 [36mstoreHeight=[0m0
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m1/11 [36mmodule=[0mx/crisis [36mname=[0mstaking/module-accounts
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m2/11 [36mmodule=[0mx/crisis [36mname=[0mstaking/nonnegative-power
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m3/11 [36mmodule=[0mx/crisis [36mname=[0mstaking/positive-delegation
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m4/11 [36mmodule=[0mx/crisis [36mname=[0mstaking/delegator-shares
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m5/11 [36mmodule=[0mx/crisis [36mname=[0mdistribution/nonnegative-outstanding
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m6/11 [36mmodule=[0mx/crisis [36mname=[0mdistribution/can-withdraw
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m7/11 [36mmodule=[0mx/crisis [36mname=[0mdistribution/reference-count
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m8/11 [36mmodule=[0mx/crisis [36mname=[0mdistribution/module-account
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m9/11 [36mmodule=[0mx/crisis [36mname=[0mbank/nonnegative-outstanding
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m10/11 [36mmodule=[0mx/crisis [36mname=[0mbank/total-supply
+[90m8:40PM[0m [32mINF[0m asserting crisis invariants [36minv=[0m11/11 [36mmodule=[0mx/crisis [36mname=[0mgov/module-account
+[90m8:40PM[0m [32mINF[0m asserted all invariants [36mduration=[0m2.823689 [36mheight=[0m0 [36mmodule=[0mx/crisis
+[90m8:40PM[0m [32mINF[0m created new capability [36mmodule=[0mibc [36mname=[0mports/transfer
+[90m8:40PM[0m [32mINF[0m port binded [36mmodule=[0mx/ibc/port [36mport=[0mtransfer
+[90m8:40PM[0m [32mINF[0m claimed capability [36mcapability=[0m1 [36mmodule=[0mtransfer [36mname=[0mports/transfer
+[90m8:40PM[0m [32mINF[0m created new capability [36mmodule=[0mibc [36mname=[0mports/icahost
+[90m8:40PM[0m [32mINF[0m port binded [36mmodule=[0mx/ibc/port [36mport=[0micahost
+[90m8:40PM[0m [32mINF[0m claimed capability [36mcapability=[0m2 [36mmodule=[0micahost [36mname=[0mports/icahost
+[90m8:40PM[0m [32mINF[0m created new capability [36mmodule=[0mibc [36mname=[0mports/provider
+[90m8:40PM[0m [32mINF[0m port binded [36mmodule=[0mx/ibc/port [36mport=[0mprovider
+[90m8:40PM[0m [32mINF[0m claimed capability [36mcapability=[0m3 [36mmodule=[0mprovider [36mname=[0mports/provider
+[90m8:40PM[0m [32mINF[0m Completed ABCI Handshake - CometBFT and App are synced [36mappHash=[0m [36mappHeight=[0m0 [36mmodule=[0mconsensus
+[90m8:40PM[0m [32mINF[0m Version info [36mabci=[0m0.17.0 [36mblock=[0m11 [36mcmtbft_version=[0m0.34.29 [36mcommit_hash=[0m [36mp2p=[0m8
+[90m8:40PM[0m [32mINF[0m This node is a validator [36maddr=[0mE948ED1A50743E0DDB23FBD5016F7A20D5364812 [36mmodule=[0mconsensus [36mpubKey=[0mjJIFOMCxAbDNj9KyG99zpSsGraH9UtXm2vY4oGIALF8=
+[90m8:40PM[0m [32mINF[0m P2P Node ID [36mID=[0m28c5272f601549ca5736932c9a3da902df5843ae [36mfile=[0mtest-data/cosmos-testnet-1/config/node_key.json [36mmodule=[0mp2p
+[90m8:40PM[0m [32mINF[0m Adding persistent peers [36maddrs=[0m[] [36mmodule=[0mp2p
+[90m8:40PM[0m [32mINF[0m Adding unconditional peer ids [36mids=[0m[] [36mmodule=[0mp2p
+[90m8:40PM[0m [32mINF[0m Add our address to book [36maddr=[0m{"id":"28c5272f601549ca5736932c9a3da902df5843ae","ip":"0.0.0.0","port":26656} [36mbook=[0mtest-data/cosmos-testnet-1/config/addrbook.json [36mmodule=[0mp2p
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mNode [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m Starting pprof server [36mladdr=[0mlocalhost:6060
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0m"P2P Switch" [36mmodule=[0mp2p [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mBlockchainReactor [36mmodule=[0mblockchain [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mConsensusReactor [36mmodule=[0mconsensus [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m Reactor  [36mmodule=[0mconsensus [36mwaitSync=[0mfalse
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mConsensusState [36mmodule=[0mconsensus [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m serve [36mmodule=[0mrpc-server [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mbaseWAL [36mmodule=[0mconsensus [36mmsg=[0m{} [36mwal=[0mtest-data/cosmos-testnet-1/data/cs.wal/wal
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mGroup [36mmodule=[0mconsensus [36mmsg=[0m{} [36mwal=[0mtest-data/cosmos-testnet-1/data/cs.wal/wal
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mTimeoutTicker [36mmodule=[0mconsensus [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m Searching for height [36mheight=[0m1 [36mmax=[0m0 [36mmin=[0m0 [36mmodule=[0mconsensus [36mwal=[0mtest-data/cosmos-testnet-1/data/cs.wal/wal
+[90m8:40PM[0m [32mINF[0m Searching for height [36mheight=[0m0 [36mmax=[0m0 [36mmin=[0m0 [36mmodule=[0mconsensus [36mwal=[0mtest-data/cosmos-testnet-1/data/cs.wal/wal
+[90m8:40PM[0m [32mINF[0m Found [36mheight=[0m0 [36mindex=[0m0 [36mmodule=[0mconsensus [36mwal=[0mtest-data/cosmos-testnet-1/data/cs.wal/wal
+[90m8:40PM[0m [32mINF[0m Catchup by replaying consensus messages [36mheight=[0m1 [36mmodule=[0mconsensus
+[90m8:40PM[0m [32mINF[0m Replay: Done [36mmodule=[0mconsensus
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mEvidence [36mmodule=[0mevidence [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mStateSync [36mmodule=[0mstatesync [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mimpl=[0mPEX [36mmodule=[0mpex [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m service start [36mbook=[0mtest-data/cosmos-testnet-1/config/addrbook.json [36mimpl=[0mAddrBook [36mmodule=[0mp2p [36mmsg=[0m{}
+[90m8:40PM[0m [32mINF[0m Saving AddrBook to file [36mbook=[0mtest-data/cosmos-testnet-1/config/addrbook.json [36mmodule=[0mp2p [36msize=[0m0
+[90m8:40PM[0m [32mINF[0m Ensure peers [36mmodule=[0mpex [36mnumDialing=[0m0 [36mnumInPeers=[0m0 [36mnumOutPeers=[0m0 [36mnumToDial=[0m10
+[90m8:40PM[0m [32mINF[0m No addresses to dial. Falling back to seeds [36mmodule=[0mpex

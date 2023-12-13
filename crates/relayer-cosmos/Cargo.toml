@@ -27,7 +27,6 @@ ibc-relayer-components-extra    = { workspace = true }
 ibc-relayer-subscription        = { workspace = true }
 ibc-test-components             = { workspace = true }
 cosmos-client-components        = { workspace = true }
-cosmos-test-components          = { workspace = true }
 tendermint                      = { workspace = true, features = ["secp256k1"] }
 tendermint-rpc                  = { workspace = true, features = ["http-client", "websocket-client"] }
 

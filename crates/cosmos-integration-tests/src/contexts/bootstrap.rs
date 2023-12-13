@@ -14,7 +14,6 @@ use cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfi
 use cosmos_test_components::chain::types::denom::Denom;
 use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
-use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
@@ -36,7 +35,7 @@ use cosmos_test_components::bootstrap::traits::types::genesis_config::GenesisCon
 use cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
 use cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
 
-use ibc_relayer_cosmos::contexts::chain::CosmosChain;
+use crate::contexts::chain::CosmosTestChain;
 
 pub struct CosmosStdBootstrapContext {
     pub runtime: TokioRuntimeContext,
@@ -69,7 +68,7 @@ delegate_components!(
 );
 
 impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    type Chain = CosmosChain<BaseChainHandle>;
+    type Chain = CosmosTestChain;
 }
 
 #[async_trait]
@@ -83,8 +82,8 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
         chain_config: CosmosChainConfig,
         wallets: Vec<CosmosTestWallet>,
         chain_process: Child,
-    ) -> Result<CosmosChain<BaseChainHandle>, Error> {
-        todo!()
+    ) -> Result<CosmosTestChain, Error> {
+        Ok(CosmosTestChain)
     }
 }
 

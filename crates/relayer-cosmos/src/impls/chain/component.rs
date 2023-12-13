@@ -24,11 +24,6 @@ use cosmos_client_components::components::timeout_packet_payload::BuildCosmosTim
 use cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
 use cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
 use cosmos_client_components::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
-use cosmos_test_components::chain::impls::address::ProvideStringAddress;
-use cosmos_test_components::chain::impls::amount::ProvideU128AmountWithDenom;
-use cosmos_test_components::chain::impls::chain_id::BuildCosmosChainIdFromString;
-use cosmos_test_components::chain::impls::denom::ProvideIbcDenom;
-use cosmos_test_components::chain::impls::wallet::ProvideCosmosTestWallet;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
@@ -74,13 +69,6 @@ use ibc_relayer_components::logger::traits::has_logger::{
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use ibc_test_components::chain::traits::build::ChainIdFromStringBuilderComponent;
-use ibc_test_components::chain::traits::types::address::AddressTypeComponent;
-use ibc_test_components::chain::traits::types::amount::AmountTypeComponent;
-use ibc_test_components::chain::traits::types::denom::DenomTypeComponent;
-use ibc_test_components::chain::traits::types::wallet::{
-    WalletSignerComponent, WalletTypeComponent,
-};
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
@@ -179,20 +167,4 @@ delegate_components!(
         QuerySendPacketsConcurrently,
     PacketFromWriteAckBuilderComponent:
         BuildCosmosPacketFromWriteAck,
-
-    // Test components
-
-    ChainIdFromStringBuilderComponent:
-        BuildCosmosChainIdFromString,
-    AmountTypeComponent:
-        ProvideU128AmountWithDenom,
-    DenomTypeComponent:
-        ProvideIbcDenom,
-    AddressTypeComponent:
-        ProvideStringAddress,
-    [
-        WalletTypeComponent,
-        WalletSignerComponent,
-    ]:
-        ProvideCosmosTestWallet,
 );
