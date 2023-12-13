@@ -42,7 +42,7 @@ use ibc_relayer_components::chain::traits::components::update_client_payload_bui
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdTypeProvider, HasChainId};
+use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ChainIdTypeProvider};
 use ibc_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
@@ -70,10 +70,8 @@ use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvide
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::log::value::LogValue;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
@@ -99,18 +97,8 @@ impl<Chain: BasecoinEndpoint> HasRuntime for MockCosmosContext<Chain> {
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         Error::source(e)
-    }
-}
-
-impl<Chain: BasecoinEndpoint> HasLoggerType for MockCosmosContext<Chain> {
-    type Logger = TracingLogger;
-}
-
-impl<Chain: BasecoinEndpoint> HasLogger for MockCosmosContext<Chain> {
-    fn logger(&self) -> &TracingLogger {
-        &TracingLogger
     }
 }
 
@@ -120,9 +108,11 @@ impl<Chain: BasecoinEndpoint> ChainIdTypeProvider<MockCosmosContext<Chain>>
     type ChainId = ChainId;
 }
 
-impl<Chain: BasecoinEndpoint> HasChainId for MockCosmosContext<Chain> {
-    fn chain_id(&self) -> &Self::ChainId {
-        self.get_chain_id()
+impl<Chain: BasecoinEndpoint> ChainIdGetter<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
+    fn chain_id(chain: &MockCosmosContext<Chain>) -> &ChainId {
+        chain.get_chain_id()
     }
 }
 

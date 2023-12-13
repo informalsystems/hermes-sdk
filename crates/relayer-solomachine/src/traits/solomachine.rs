@@ -2,11 +2,11 @@ use core::fmt::Debug;
 
 use async_trait::async_trait;
 use cgp_core::Async;
-use ibc_cosmos_client_components::types::tendermint::{
+use cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
-use ibc_relayer_runtime::types::error::Error as RuntimeError;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
@@ -32,7 +32,7 @@ pub trait Solomachine: Async {
 
     fn runtime(&self) -> &TokioRuntimeContext;
 
-    fn runtime_error(e: RuntimeError) -> Self::Error;
+    fn runtime_error(e: TokioRuntimeError) -> Self::Error;
 
     fn encode_error(e: EncodeError) -> Self::Error;
 

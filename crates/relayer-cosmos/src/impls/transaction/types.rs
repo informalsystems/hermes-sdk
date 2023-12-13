@@ -4,12 +4,10 @@ use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::transaction::traits::nonce::guard::HasNonceGuard;
 use ibc_relayer_components::transaction::traits::types::{HasNonceType, HasSignerType, HasTxTypes};
-use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use prost::Message;
 use tendermint::Hash as TxHash;
@@ -29,13 +27,9 @@ impl HasRuntime for CosmosTxContext {
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         BaseError::tokio(e).into()
     }
-}
-
-impl HasLoggerType for CosmosTxContext {
-    type Logger = TracingLogger;
 }
 
 impl HasSignerType for CosmosTxContext {

@@ -1,10 +1,10 @@
 use async_trait::async_trait;
 use cgp_core::Async;
+use cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use cosmos_client_components::traits::grpc_address::HasGrpcAddress;
+use cosmos_client_components::traits::has_tx_context::HasTxContext;
+use cosmos_client_components::traits::rpc_client::HasRpcClient;
 use http::Uri;
-use ibc_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
-use ibc_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
-use ibc_cosmos_client_components::traits::has_tx_context::HasTxContext;
-use ibc_cosmos_client_components::traits::rpc_client::HasRpcClient;
 use ibc_relayer::chain::handle::ChainHandle;
 use tendermint_rpc::{HttpClient, Url};
 

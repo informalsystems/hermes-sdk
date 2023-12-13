@@ -15,10 +15,8 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::Error as RuntimeError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
@@ -62,24 +60,8 @@ where
         self.chain.runtime()
     }
 
-    fn runtime_error(e: RuntimeError) -> Chain::Error {
+    fn runtime_error(e: TokioRuntimeError) -> Chain::Error {
         Chain::runtime_error(e)
-    }
-}
-
-impl<Chain> HasLoggerType for SolomachineChain<Chain>
-where
-    Chain: Solomachine,
-{
-    type Logger = TracingLogger;
-}
-
-impl<Chain> HasLogger for SolomachineChain<Chain>
-where
-    Chain: Solomachine,
-{
-    fn logger(&self) -> &TracingLogger {
-        &TracingLogger
     }
 }
 

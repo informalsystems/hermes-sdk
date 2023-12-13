@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 
 use async_trait::async_trait;
-use ibc_cosmos_client_components::traits::message::CosmosMessage;
+use cosmos_client_components::traits::message::CosmosMessage;
 use ibc_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };

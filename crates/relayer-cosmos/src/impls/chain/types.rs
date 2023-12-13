@@ -1,20 +1,20 @@
 use cgp_core::{Async, HasErrorType};
-use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use ibc_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
-use ibc_cosmos_client_components::types::payloads::channel::{
+use cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-use ibc_cosmos_client_components::types::payloads::client::{
+use cosmos_client_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use ibc_cosmos_client_components::types::payloads::connection::{
+use cosmos_client_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };
-use ibc_cosmos_client_components::types::payloads::packet::{
+use cosmos_client_components::types::payloads::packet::{
     CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
 };
-use ibc_cosmos_client_components::types::tendermint::{
+use cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc_relayer::chain::client::ClientSettings;
@@ -33,11 +33,9 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
-use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::chain::CosmosChain;
@@ -61,16 +59,9 @@ where
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         BaseError::tokio(e).into()
     }
-}
-
-impl<Chain> HasLoggerType for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Logger = TracingLogger;
 }
 
 impl<Chain> HasTelemetry for CosmosChain<Chain>

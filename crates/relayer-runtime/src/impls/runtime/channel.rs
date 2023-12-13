@@ -12,7 +12,7 @@ use ibc_relayer_components_extra::runtime::traits::channel_once::{
 use tokio::sync::{mpsc, oneshot};
 use tokio_stream::wrappers::UnboundedReceiverStream;
 
-use crate::types::error::Error;
+use crate::types::error::TokioRuntimeError;
 use crate::types::runtime::TokioRuntimeContext;
 
 impl HasChannelTypes for TokioRuntimeContext {
@@ -60,14 +60,19 @@ impl CanUseChannels for TokioRuntimeContext {
     where
         T: Async,
     {
-        sender.send(value).map_err(|_| Error::channel_closed())
+        sender
+            .send(value)
+            .map_err(|_| TokioRuntimeError::ChannelClosed)
     }
 
     async fn receive<T>(receiver: &mut Self::Receiver<T>) -> Result<T, Self::Error>
     where
         T: Async,
     {
-        receiver.recv().await.ok_or_else(Error::channel_closed)
+        receiver
+            .recv()
+            .await
+            .ok_or(TokioRuntimeError::ChannelClosed)
     }
 
     fn try_receive<T>(receiver: &mut Self::Receiver<T>) -> Result<Option<T>, Self::Error>
@@ -77,7 +82,7 @@ impl CanUseChannels for TokioRuntimeContext {
         match receiver.try_recv() {
             Ok(batch) => Ok(Some(batch)),
             Err(mpsc::error::TryRecvError::Empty) => Ok(None),
-            Err(mpsc::error::TryRecvError::Disconnected) => Err(Error::channel_closed()),
+            Err(mpsc::error::TryRecvError::Disconnected) => Err(TokioRuntimeError::ChannelClosed),
         }
     }
 }
@@ -88,14 +93,16 @@ impl CanUseChannelsOnce for TokioRuntimeContext {
     where
         T: Async,
     {
-        sender.send(value).map_err(|_| Error::channel_closed())
+        sender
+            .send(value)
+            .map_err(|_| TokioRuntimeError::ChannelClosed)
     }
 
     async fn receive_once<T>(receiver: Self::ReceiverOnce<T>) -> Result<T, Self::Error>
     where
         T: Async,
     {
-        receiver.await.map_err(|_| Error::channel_closed())
+        receiver.await.map_err(|_| TokioRuntimeError::ChannelClosed)
     }
 }
 

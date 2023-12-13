@@ -1,5 +1,5 @@
 [package]
-name         = "ibc-cosmos-client-components"
+name         = "cosmos-client-components"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }
@@ -21,6 +21,7 @@ ibc-relayer-runtime             = { workspace = true }
 ibc-relayer-components          = { workspace = true }
 ibc-relayer-components-extra    = { workspace = true }
 ibc-relayer-subscription        = { workspace = true }
+ibc-test-components             = { workspace = true }
 tendermint      = { workspace = true, features = ["secp256k1"] }
 tendermint-rpc  = { workspace = true, features = ["http-client", "websocket-client"] }
 

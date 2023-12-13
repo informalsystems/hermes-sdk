@@ -32,7 +32,7 @@ use crate::chain::traits::components::unreceived_packet_sequences_querier::Unrec
 use crate::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use crate::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use crate::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
-use crate::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use crate::chain::traits::types::chain_id::{ChainIdGetterComponent, ChainIdTypeProviderComponent};
 use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::height::HeightTypeProviderComponent;
 use crate::chain::traits::types::ibc::IbcChainTypesProviderComponent;
@@ -40,6 +40,7 @@ use crate::chain::traits::types::message::MessageTypeProviderComponent;
 use crate::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use crate::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use crate::chain::traits::types::timestamp::TimestampTypeProviderComponent;
+use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
@@ -48,11 +49,14 @@ delegate_components!(
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,
+        ChainIdGetterComponent,
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
         IbcChainTypesProviderComponent,
         IbcPacketTypesProviderComponent,
         ChainStatusTypeProviderComponent,
+        LoggerTypeComponent,
+        LoggerFieldComponent,
         ChainStatusQuerierComponent,
         ConsensusStateQuerierComponent,
         MessageSenderComponent,

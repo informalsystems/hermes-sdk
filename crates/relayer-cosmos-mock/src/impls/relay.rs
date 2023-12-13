@@ -13,14 +13,12 @@ use ibc::proto::Any;
 use ibc::Height;
 use ibc_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::components::relay::MockCosmosRelayComponents;
@@ -72,26 +70,8 @@ where
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         Error::source(e)
-    }
-}
-
-impl<SrcChain, DstChain> HasLoggerType for MockCosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
-{
-    type Logger = TracingLogger;
-}
-
-impl<SrcChain, DstChain> HasLogger for MockCosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
-{
-    fn logger(&self) -> &TracingLogger {
-        &TracingLogger
     }
 }
 

@@ -16,12 +16,12 @@ ibc-relayer         = { workspace = true }
 ibc-relayer-types   = { workspace = true }
 ibc-telemetry       = { workspace = true }
 cgp-core            = { workspace = true }
+tendermint          = { workspace = true, features = ["secp256k1"] }
 ibc-relayer-cosmos  = { workspace = true }
-ibc-cosmos-client-components = { workspace = true }
-ibc-relayer-runtime          = { workspace = true }
-ibc-relayer-components       = { workspace = true }
-ibc-relayer-components-extra = { workspace = true }
-tendermint      = { workspace = true, features = ["secp256k1"] }
+cosmos-client-components        = { workspace = true }
+ibc-relayer-runtime             = { workspace = true }
+ibc-relayer-components          = { workspace = true }
+ibc-relayer-components-extra    = { workspace = true }
 
 serde           = { workspace = true }
 serde_derive    = { workspace = true }

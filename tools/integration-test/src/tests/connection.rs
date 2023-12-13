@@ -1,4 +1,4 @@
-use ibc_cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::channel::version::Version;

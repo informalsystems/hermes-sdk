@@ -1,0 +1,42 @@
+name: Integration Tests Next
+on:
+  pull_request: {}
+  push:
+    branches: main
+
+# Cancel previous runs of this workflow when a new commit is added to the PR, branch or tag
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integration-tests-next:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v23
+        with:
+          install_url: https://nixos-nix-install-tests.cachix.org/serve/vij683ly7sl95nnhb67bdjjfabclr85m/install
+          install_options: '--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve'
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - uses: cachix/cachix-action@v12
+        with:
+          name: cosmos
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: -p cosmos-integration-tests --no-fail-fast --no-run
+      - name: run integration tests
+        env:
+          RUST_BACKTRACE: 1
+        run: |
+            nix shell .#gaia14 -c cargo \
+              test -p cosmos-integration-tests --no-fail-fast -- \
+              --nocapture --test-threads=2

@@ -1,29 +1,29 @@
 use cgp_core::prelude::*;
-use ibc_cosmos_client_components::components::ack_packet_message::BuildCosmosAckPacketMessage;
-use ibc_cosmos_client_components::components::ack_packet_payload::BuildCosmosAckPacketPayload;
-use ibc_cosmos_client_components::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-use ibc_cosmos_client_components::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
-use ibc_cosmos_client_components::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
-use ibc_cosmos_client_components::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
-use ibc_cosmos_client_components::components::packet_fields::CosmosPacketFieldReader;
-use ibc_cosmos_client_components::components::packet_from_ack::BuildCosmosPacketFromWriteAck;
-use ibc_cosmos_client_components::components::query_chain_id::QueryChainIdWithChainHandle;
-use ibc_cosmos_client_components::components::query_chain_status::QueryChainStatusWithChainHandle;
-use ibc_cosmos_client_components::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
-use ibc_cosmos_client_components::components::query_packet_commitments::QueryCosmosPacketCommitments;
-use ibc_cosmos_client_components::components::query_received_packet::QueryReceivedPacketWithChainHandle;
-use ibc_cosmos_client_components::components::query_send_packet::QueryCosmosSendPacket;
-use ibc_cosmos_client_components::components::query_send_packets::QuerySendPacketsConcurrently;
-use ibc_cosmos_client_components::components::query_unreceived_packet::QueryUnreceivedCosmosPacketSequences;
-use ibc_cosmos_client_components::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
-use ibc_cosmos_client_components::components::receive_packet_message::BuildCosmosReceivePacketMessage;
-use ibc_cosmos_client_components::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
-use ibc_cosmos_client_components::components::send_messages_as_tx::SendMessagesToTxContext;
-use ibc_cosmos_client_components::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
-use ibc_cosmos_client_components::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
-use ibc_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
-use ibc_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
-use ibc_cosmos_client_components::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
+use cosmos_client_components::components::ack_packet_message::BuildCosmosAckPacketMessage;
+use cosmos_client_components::components::ack_packet_payload::BuildCosmosAckPacketPayload;
+use cosmos_client_components::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
+use cosmos_client_components::components::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
+use cosmos_client_components::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
+use cosmos_client_components::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
+use cosmos_client_components::components::packet_fields::CosmosPacketFieldReader;
+use cosmos_client_components::components::packet_from_ack::BuildCosmosPacketFromWriteAck;
+use cosmos_client_components::components::query_chain_id::QueryChainIdWithChainHandle;
+use cosmos_client_components::components::query_chain_status::QueryChainStatusWithChainHandle;
+use cosmos_client_components::components::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
+use cosmos_client_components::components::query_packet_commitments::QueryCosmosPacketCommitments;
+use cosmos_client_components::components::query_received_packet::QueryReceivedPacketWithChainHandle;
+use cosmos_client_components::components::query_send_packet::QueryCosmosSendPacket;
+use cosmos_client_components::components::query_send_packets::QuerySendPacketsConcurrently;
+use cosmos_client_components::components::query_unreceived_packet::QueryUnreceivedCosmosPacketSequences;
+use cosmos_client_components::components::query_write_ack_event::QueryWriteAckEventFromChainHandle;
+use cosmos_client_components::components::receive_packet_message::BuildCosmosReceivePacketMessage;
+use cosmos_client_components::components::receive_packet_payload::BuildCosmosReceivePacketPayload;
+use cosmos_client_components::components::send_messages_as_tx::SendMessagesToTxContext;
+use cosmos_client_components::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
+use cosmos_client_components::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
+use cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
+use cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
+use cosmos_client_components::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
@@ -63,8 +63,12 @@ use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderCo
 use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
+use ibc_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
+use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
@@ -102,6 +106,11 @@ delegate_components!(
         ChainStatusTypeProviderComponent,
     ]:
         ProvideCosmosChainTypes,
+    [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
+    ]:
+        ProvideTracingLogger,
     MessageSenderComponent:
         SendMessagesToTxContext,
     ChainStatusQuerierComponent:

@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use cgp_core::prelude::*;
 use cgp_core::RunnerComponent;
 
+use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
 use crate::relay::components::auto_relayers::both_targets::RelayBothTargets;
 use crate::relay::components::auto_relayers::event::RelayEvents;
 use crate::relay::components::create_client::CreateClientWithChains;
@@ -60,7 +61,6 @@ delegate_components!(
     IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
     UpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
     PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
-    PacketFilterComponent: BaseComponents,
     ReceivePacketRelayerComponnent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
     AckPacketRelayerComponent: BaseAckPacketRelayer,
     TimeoutUnorderedPacketRelayerComponent: BaseTimeoutUnorderedPacketRelayer,
@@ -79,4 +79,10 @@ delegate_components!(
     ConnectionInitializerComponent: InitializeConnection,
     ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
     ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
+    [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
+        PacketFilterComponent,
+    ]:
+        BaseComponents,
 );

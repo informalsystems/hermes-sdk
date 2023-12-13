@@ -31,7 +31,9 @@ use ibc_relayer_components::chain::traits::components::unreceived_packet_sequenc
 use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
-use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use ibc_relayer_components::chain::traits::types::chain_id::{
+    ChainIdGetterComponent, ChainIdTypeProviderComponent,
+};
 use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
@@ -40,6 +42,9 @@ use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
+use ibc_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
 
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
 use crate::telemetry::components::status::ChainStatusTelemetryQuerier;
@@ -56,11 +61,14 @@ delegate_components!(
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,
+        ChainIdGetterComponent,
         MessageTypeProviderComponent,
         EventTypeProviderComponent,
         IbcChainTypesProviderComponent,
         IbcPacketTypesProviderComponent,
         ChainStatusTypeProviderComponent,
+        LoggerTypeComponent,
+        LoggerFieldComponent,
         MessageSenderComponent,
         PacketFieldsReaderComponent,
         CounterpartyChainIdQuerierComponent,

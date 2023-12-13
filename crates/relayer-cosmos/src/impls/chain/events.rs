@@ -1,16 +1,16 @@
 use alloc::sync::Arc;
 
 use cgp_core::Async;
-use ibc_cosmos_client_components::methods::event::{
+use cosmos_client_components::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
     try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
 };
-use ibc_cosmos_client_components::types::events::channel::{
+use cosmos_client_components::types::events::channel::{
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
 };
-use ibc_cosmos_client_components::types::events::client::CosmosCreateClientEvent;
-use ibc_cosmos_client_components::types::events::connection::{
+use cosmos_client_components::types::events::client::CosmosCreateClientEvent;
+use cosmos_client_components::types::events::connection::{
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
 };
 use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;

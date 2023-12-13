@@ -8,17 +8,19 @@ use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::two_way::HasTwoWayRelay;
+use crate::relay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelayTypes};
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::types::aliases::Mutex;
 
-pub type RelayAToB<Build> = <<Build as HasBiRelayType>::BiRelay as HasTwoWayRelay>::RelayAToB;
+pub type BiRelay<Build> = <Build as HasBiRelayType>::BiRelay;
 
-pub type RelayBToA<Build> = <<Build as HasBiRelayType>::BiRelay as HasTwoWayRelay>::RelayBToA;
+pub type ChainA<Build> = <BiRelay<Build> as HasTwoChainTypes>::ChainA;
 
-pub type ChainA<Build> = <RelayAToB<Build> as HasRelayChains>::SrcChain;
+pub type ChainB<Build> = <BiRelay<Build> as HasTwoChainTypes>::ChainB;
 
-pub type ChainB<Build> = <RelayAToB<Build> as HasRelayChains>::DstChain;
+pub type RelayAToB<Build> = <BiRelay<Build> as HasTwoWayRelayTypes>::RelayAToB;
+
+pub type RelayBToA<Build> = <BiRelay<Build> as HasTwoWayRelayTypes>::RelayBToA;
 
 pub type ChainIdA<Build> = <ChainA<Build> as HasChainIdType>::ChainId;
 

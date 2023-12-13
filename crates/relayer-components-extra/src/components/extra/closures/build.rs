@@ -6,6 +6,7 @@ use ibc_relayer_components::build::traits::components::birelay_from_relay_builde
 use ibc_relayer_components::build::traits::components::chain_builder::ChainBuilder;
 use ibc_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use ibc_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
+use ibc_relayer_components::build::types::aliases::{ChainA, ChainB};
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
@@ -21,9 +22,19 @@ use crate::components::extra::closures::batch::UseBatchMessageWorkerSpawner;
 use crate::runtime::traits::channel::{CanCloneSender, CanCreateChannels};
 use crate::runtime::traits::channel_once::CanUseChannelsOnce;
 
-pub trait CanUseExtraBuilderComponents: UseExtraBuilderComponents {}
+pub trait CanUseExtraBuilderComponents: UseExtraBuilderComponents
+where
+    ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
+    ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
+{
+}
 
-pub trait UseExtraBuilderComponents: CanBuildBiRelay {}
+pub trait UseExtraBuilderComponents: CanBuildBiRelay
+where
+    ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
+    ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
+{
+}
 
 impl<Build, BiRelay, RelayAToB, RelayBToA, ChainA, ChainB, Error, BaseComponents>
     UseExtraBuilderComponents for Build
@@ -39,7 +50,12 @@ where
         + HasBatchSenderCache<ChainATarget, Error>
         + HasBatchSenderCache<ChainBTarget, Error>
         + HasComponents<Components = ExtraBuildComponents<BaseComponents>>,
-    BiRelay: HasTwoWayRelay<RelayAToB = RelayAToB, RelayBToA = RelayBToA>,
+    BiRelay: HasTwoWayRelay<
+        ChainA = ChainA,
+        ChainB = ChainB,
+        RelayAToB = RelayAToB,
+        RelayBToA = RelayBToA,
+    >,
     RelayAToB: Clone
         + HasErrorType<Error = Error>
         + HasRelayChains<SrcChain = ChainA, DstChain = ChainB>

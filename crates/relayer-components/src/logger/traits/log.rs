@@ -12,6 +12,8 @@ pub trait CanLog: HasLoggerWithBaseLevels {
     );
 
     fn log_message(&self, level: <Self::Logger as BaseLogger>::LogLevel, message: &str);
+
+    fn log_info(&self, message: &str);
 }
 
 impl<Context, Logger> CanLog for Context
@@ -32,5 +34,9 @@ where
 
     fn log_message(&self, level: <Self::Logger as BaseLogger>::LogLevel, message: &str) {
         self.log(level, message, |_| {})
+    }
+
+    fn log_info(&self, message: &str) {
+        self.log_message(Logger::LEVEL_INFO, message)
     }
 }

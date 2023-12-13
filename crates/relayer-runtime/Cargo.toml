@@ -16,12 +16,13 @@ description  = """
 ibc-relayer-components          = { workspace = true }
 ibc-relayer-components-extra    = { workspace = true }
 ibc-relayer-subscription        = { workspace = true }
+ibc-test-components             = { workspace = true }
+tokio-runtime-components        = { workspace = true }
 
 async-trait = { workspace = true }
 cgp-core    = { workspace = true }
 tokio       = { workspace = true }
 tracing     = { workspace = true }
-flex-error  = { workspace = true }
 futures     = { workspace = true }
 
 tokio-stream    = "0.1"

@@ -1,3 +1,4 @@
+use ibc_relayer_components::logger::traits::has_logger::{LoggerTypeComponent, LoggerFieldComponent};
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::packet_filters::allow_all::AllowAll;
@@ -16,6 +17,7 @@ use ibc_relayer_components::relay::traits::components::packet_relayers::receive_
 use ibc_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use cgp_core::delegate_components;
+use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::impls::relay::MockCosmosBuildUpdateClientMessage;
 
@@ -36,4 +38,9 @@ delegate_components!(
     TimeoutUnorderedPacketRelayerComponent:
         BaseTimeoutUnorderedPacketRelayer,
     PacketFilterComponent: AllowAll,
+    [
+        LoggerTypeComponent,
+        LoggerFieldComponent,
+    ]:
+        ProvideTracingLogger,
 );

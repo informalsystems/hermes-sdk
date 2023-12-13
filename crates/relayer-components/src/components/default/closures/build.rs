@@ -8,12 +8,18 @@ use crate::build::traits::components::chain_builder::ChainBuilder;
 use crate::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilder;
 use crate::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
+use crate::build::types::aliases::{ChainA, ChainB};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::components::default::build::DefaultBuildComponents;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::two_way::HasTwoWayRelay;
+use crate::relay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 
-pub trait UseDefaultBuilderComponents: CanBuildBiRelay {}
+pub trait UseDefaultBuilderComponents: CanBuildBiRelay
+where
+    ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
+    ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
+{
+}
 
 impl<Build, BiRelay, RelayAToB, RelayBToA, ChainA, ChainB, BaseComponents>
     UseDefaultBuilderComponents for Build
@@ -25,7 +31,8 @@ where
         + HasChainCache<ChainATarget>
         + HasChainCache<ChainBTarget>
         + HasComponents<Components = DefaultBuildComponents<BaseComponents>>,
-    BiRelay: HasTwoWayRelay<RelayAToB = RelayAToB, RelayBToA = RelayBToA>,
+    BiRelay: HasTwoChainTypes<ChainA = ChainA, ChainB = ChainB>
+        + HasTwoWayRelay<RelayAToB = RelayAToB, RelayBToA = RelayBToA>,
     RelayAToB: Clone + HasRelayChains<SrcChain = ChainA, DstChain = ChainB>,
     RelayBToA: Clone + HasRelayChains<SrcChain = ChainB, DstChain = ChainA>,
     ChainA: Clone + HasIbcChainTypes<ChainB>,

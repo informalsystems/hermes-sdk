@@ -2,7 +2,8 @@ use cgp_core::Async;
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::chain::{ChainATarget, ChainBTarget, ChainBuildTarget};
-use crate::build::types::aliases::{RelayAToB, RelayBToA, RelayError};
+use crate::build::types::aliases::{ChainA, ChainB, RelayAToB, RelayBToA, RelayError};
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 
 #[derive(Default)]
@@ -33,6 +34,8 @@ where
 impl<Build> RelayBuildTarget<Build> for RelayAToBTarget
 where
     Build: HasBiRelayType,
+    ChainA<Build>: HasIbcChainTypes<ChainB<Build>>,
+    ChainB<Build>: HasIbcChainTypes<ChainA<Build>>,
 {
     type TargetRelay = RelayAToB<Build>;
 
@@ -44,6 +47,8 @@ where
 impl<Build> RelayBuildTarget<Build> for RelayBToATarget
 where
     Build: HasBiRelayType,
+    ChainA<Build>: HasIbcChainTypes<ChainB<Build>>,
+    ChainB<Build>: HasIbcChainTypes<ChainA<Build>>,
 {
     type TargetRelay = RelayBToA<Build>;
 

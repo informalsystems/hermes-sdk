@@ -27,7 +27,7 @@ use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_
 use ibc_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdTypeProvider, HasChainId};
+use ibc_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ChainIdTypeProvider};
 use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
@@ -48,10 +48,8 @@ use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePa
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::Error as TokioError;
-use ibc_relayer_runtime::types::log::logger::TracingLogger;
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::log::value::LogValue;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
@@ -64,11 +62,11 @@ use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
 use crate::relayer_mock::base::types::packet::PacketKey;
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
-use crate::relayer_mock::components::MockComponents;
+use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
 impl HasComponents for MockChainContext {
-    type Components = MockComponents;
+    type Components = MockChainComponents;
 }
 
 impl HasErrorType for MockChainContext {
@@ -82,36 +80,32 @@ impl HasRuntime for MockChainContext {
         &self.runtime
     }
 
-    fn runtime_error(e: TokioError) -> Error {
+    fn runtime_error(e: TokioRuntimeError) -> Error {
         BaseError::tokio(e).into()
     }
 }
 
-impl HasLoggerType for MockChainContext {
-    type Logger = TracingLogger;
-}
-
-impl HeightTypeProvider<MockChainContext> for MockComponents {
+impl HeightTypeProvider<MockChainContext> for MockChainComponents {
     type Height = MockHeight;
 }
 
-impl EventTypeProvider<MockChainContext> for MockComponents {
+impl EventTypeProvider<MockChainContext> for MockChainComponents {
     type Event = Event;
 }
 
-impl TimestampTypeProvider<MockChainContext> for MockComponents {
+impl TimestampTypeProvider<MockChainContext> for MockChainComponents {
     type Timestamp = MockTimestamp;
 }
 
-impl MessageTypeProvider<MockChainContext> for MockComponents {
+impl MessageTypeProvider<MockChainContext> for MockChainComponents {
     type Message = MockMessage;
 }
 
-impl ChainIdTypeProvider<MockChainContext> for MockComponents {
+impl ChainIdTypeProvider<MockChainContext> for MockChainComponents {
     type ChainId = String;
 }
 
-impl IbcChainTypesProvider<MockChainContext, MockChainContext> for MockComponents {
+impl IbcChainTypesProvider<MockChainContext, MockChainContext> for MockChainComponents {
     type ClientId = ClientId;
 
     type ConnectionId = String;
@@ -123,13 +117,13 @@ impl IbcChainTypesProvider<MockChainContext, MockChainContext> for MockComponent
     type Sequence = Sequence;
 }
 
-impl IbcPacketTypesProvider<MockChainContext, MockChainContext> for MockComponents {
+impl IbcPacketTypesProvider<MockChainContext, MockChainContext> for MockChainComponents {
     type IncomingPacket = PacketKey;
 
     type OutgoingPacket = PacketKey;
 }
 
-impl PacketFieldsReader<MockChainContext, MockChainContext> for MockComponents {
+impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
     fn incoming_packet_src_channel_id(packet: &PacketKey) -> &ChannelId {
         &packet.src_channel_id
     }
@@ -207,7 +201,7 @@ impl HasClientStateType<MockChainContext> for MockChainContext {
     type ClientState = ();
 }
 
-impl ChainStatusTypeProvider<MockChainContext> for MockComponents {
+impl ChainStatusTypeProvider<MockChainContext> for MockChainComponents {
     type ChainStatus = ChainStatus;
 
     fn chain_status_height(status: &Self::ChainStatus) -> &MockHeight {
@@ -236,12 +230,6 @@ impl HasSendPacketEvent<MockChainContext> for MockChainContext {
     }
 }
 
-impl HasLogger for MockChainContext {
-    fn logger(&self) -> &TracingLogger {
-        &TracingLogger
-    }
-}
-
 impl CanLogChainEvent for MockChainContext {
     fn log_event<'a>(event: &Event) -> LogValue<'_> {
         LogValue::Debug(event)
@@ -261,14 +249,14 @@ impl CanEstimateMessageSize for MockChainContext {
     }
 }
 
-impl HasChainId for MockChainContext {
-    fn chain_id(&self) -> &Self::ChainId {
-        &self.name
+impl ChainIdGetter<MockChainContext> for MockChainComponents {
+    fn chain_id(chain: &MockChainContext) -> &String {
+        &chain.name
     }
 }
 
 #[async_trait]
-impl MessageSender<MockChainContext> for MockComponents {
+impl MessageSender<MockChainContext> for MockChainComponents {
     async fn send_messages(
         chain: &MockChainContext,
         messages: Vec<MockMessage>,
@@ -278,7 +266,7 @@ impl MessageSender<MockChainContext> for MockComponents {
 }
 
 #[async_trait]
-impl ChainStatusQuerier<MockChainContext> for MockComponents {
+impl ChainStatusQuerier<MockChainContext> for MockChainComponents {
     async fn query_chain_status(chain: &MockChainContext) -> Result<ChainStatus, Error> {
         let height = chain.get_current_height();
         let state = chain.get_current_state();
@@ -312,7 +300,7 @@ impl HasCounterpartyMessageHeight<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockComponents {
+impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_consensus_state(
         chain: &MockChainContext,
         client_id: &ClientId,
@@ -325,7 +313,7 @@ impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockComponent
 }
 
 #[async_trait]
-impl ClientStateQuerier<MockChainContext, MockChainContext> for MockComponents {
+impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_client_state(
         _chain: &MockChainContext,
         _client_id: &ClientId,
@@ -335,7 +323,7 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockComponents {
 }
 
 #[async_trait]
-impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockComponents {
+impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_is_packet_received(
         chain: &MockChainContext,
         port_id: &PortId,
@@ -348,7 +336,7 @@ impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockComponent
 }
 
 #[async_trait]
-impl WriteAckQuerier<MockChainContext, MockChainContext> for MockComponents {
+impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_write_ack_event(
         chain: &MockChainContext,
         packet: &PacketKey,
@@ -381,7 +369,7 @@ impl HasReceivePacketPayload<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockComponents {
+impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_payload(
         chain: &MockChainContext,
         _client_state: &(),
@@ -406,7 +394,7 @@ impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockCom
 }
 
 #[async_trait]
-impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockComponents {
+impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_message(
         _chain: &MockChainContext,
         _packet: &PacketKey,
@@ -421,7 +409,7 @@ impl HasAckPacketPayload<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockComponents {
+impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_payload(
         chain: &MockChainContext,
         _client_state: &(),
@@ -449,7 +437,7 @@ impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockCompone
 }
 
 #[async_trait]
-impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockComponents {
+impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_message(
         _chain: &MockChainContext,
         _packet: &PacketKey,
@@ -464,7 +452,9 @@ impl HasTimeoutUnorderedPacketPayload<MockChainContext> for MockChainContext {
 }
 
 #[async_trait]
-impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext> for MockComponents {
+impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext>
+    for MockChainComponents
+{
     async fn build_timeout_unordered_packet_payload(
         chain: &MockChainContext,
         _client_state: &(),
@@ -487,7 +477,9 @@ impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext> fo
 }
 
 #[async_trait]
-impl TimeoutUnorderedPacketMessageBuilder<MockChainContext, MockChainContext> for MockComponents {
+impl TimeoutUnorderedPacketMessageBuilder<MockChainContext, MockChainContext>
+    for MockChainComponents
+{
     async fn build_timeout_unordered_packet_message(
         _chain: &MockChainContext,
         _packet: &PacketKey,

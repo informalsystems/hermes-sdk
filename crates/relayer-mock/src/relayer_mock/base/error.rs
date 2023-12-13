@@ -2,8 +2,8 @@ use alloc::string::String;
 use alloc::sync::Arc;
 
 use eyre::Report;
-use flex_error::{define_error, TraceError};
-use ibc_relayer_runtime::types::error::Error as TokioError;
+use flex_error::{define_error, DisplayError, TraceError};
+use ibc_relayer_runtime::types::error::TokioRuntimeError;
 
 pub type Error = Arc<BaseError>;
 
@@ -18,7 +18,7 @@ define_error! {
             | _ | { "generic error" },
 
         Tokio
-            [ TokioError ]
+            [ DisplayError<TokioRuntimeError> ]
             | _ | { "tokio runtime error" },
 
         MismatchError

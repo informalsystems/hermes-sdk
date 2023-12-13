@@ -16,18 +16,19 @@ description  = """
 all-features = true
 
 [dependencies]
-ibc-proto           = { workspace = true }
-ibc-relayer         = { workspace = true }
-ibc-relayer-types   = { workspace = true }
-ibc-telemetry       = { workspace = true }
-cgp-core            = { workspace = true }
-ibc-relayer-runtime = { workspace = true }
+ibc-proto                       = { workspace = true }
+ibc-relayer                     = { workspace = true }
+ibc-relayer-types               = { workspace = true }
+ibc-telemetry                   = { workspace = true }
+cgp-core                        = { workspace = true }
+ibc-relayer-runtime             = { workspace = true }
 ibc-relayer-components          = { workspace = true }
 ibc-relayer-components-extra    = { workspace = true }
 ibc-relayer-subscription        = { workspace = true }
-ibc-cosmos-client-components    = { workspace = true }
-tendermint      = { workspace = true, features = ["secp256k1"] }
-tendermint-rpc  = { workspace = true, features = ["http-client", "websocket-client"] }
+ibc-test-components             = { workspace = true }
+cosmos-client-components        = { workspace = true }
+tendermint                      = { workspace = true, features = ["secp256k1"] }
+tendermint-rpc                  = { workspace = true, features = ["http-client", "websocket-client"] }
 
 async-trait     = { workspace = true }
 eyre            = { workspace = true }
