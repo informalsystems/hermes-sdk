@@ -6,14 +6,9 @@ use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::builder::CosmosBuilder;
 use crate::impls::build::components::CosmosBuildComponents;
-use crate::types::error::Error;
 
 impl HasBiRelayType for CosmosBuilder {
     type BiRelay = CosmosBiRelay<BaseChainHandle, BaseChainHandle>;
-
-    fn birelay_error(e: Error) -> Error {
-        e
-    }
 }
 
 impl ProvideRuntime<CosmosBuilder> for CosmosBuildComponents {

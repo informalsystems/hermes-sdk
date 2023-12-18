@@ -70,7 +70,7 @@ where
             Relay::create_client(SourceTarget, &src_chain, &dst_chain, dst_payload_options)
                 .await
                 .map_err(Build::BiRelay::raise_error)
-                .map_err(Build::birelay_error)?;
+                .map_err(Build::raise_error)?;
 
         let dst_client_id = Relay::create_client(
             DestinationTarget,
@@ -80,7 +80,7 @@ where
         )
         .await
         .map_err(Build::BiRelay::raise_error)
-        .map_err(Build::birelay_error)?;
+        .map_err(Build::raise_error)?;
 
         let relay = self
             .build_relay(
