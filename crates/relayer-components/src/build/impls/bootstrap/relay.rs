@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::{async_trait, CanRaiseError, HasErrorType};
 
 use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::traits::birelay::HasBiRelayType;
@@ -69,7 +69,7 @@ where
         let src_client_id =
             Relay::create_client(SourceTarget, &src_chain, &dst_chain, dst_payload_options)
                 .await
-                .map_err(Build::BiRelay::relay_error)
+                .map_err(Build::BiRelay::raise_error)
                 .map_err(Build::birelay_error)?;
 
         let dst_client_id = Relay::create_client(
@@ -79,7 +79,7 @@ where
             src_payload_options,
         )
         .await
-        .map_err(Build::BiRelay::relay_error)
+        .map_err(Build::BiRelay::raise_error)
         .map_err(Build::birelay_error)?;
 
         let relay = self

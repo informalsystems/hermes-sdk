@@ -46,8 +46,4 @@ pub trait HasTwoWayRelay: HasTwoWayRelayTypes {
     /// Returns a read-only reference to the relay context from chain B
     /// to chain A.
     fn relay_b_to_a(&self) -> &Self::RelayBToA;
-
-    /// Converts an error from a one-way relay context into an error from
-    /// a two-way relay context.
-    fn relay_error(e: <Self::RelayAToB as HasErrorType>::Error) -> Self::Error;
 }

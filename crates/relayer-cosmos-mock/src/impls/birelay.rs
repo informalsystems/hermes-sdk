@@ -90,8 +90,4 @@ where
     fn relay_b_to_a(&self) -> &Self::RelayBToA {
         self.relay_b_to_a()
     }
-
-    fn relay_error(e: <Self::RelayAToB as HasErrorType>::Error) -> Self::Error {
-        Error::source(e)
-    }
 }

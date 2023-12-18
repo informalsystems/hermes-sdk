@@ -10,7 +10,6 @@ use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::birelay::components::CosmosBiRelayComponents;
-use crate::types::error::Error;
 
 impl<ChainA, ChainB> HasTwoChainTypes for CosmosBiRelay<ChainA, ChainB>
 where
@@ -43,10 +42,6 @@ where
 
     fn relay_b_to_a(&self) -> &CosmosRelay<ChainB, ChainA> {
         &self.relay_b_to_a
-    }
-
-    fn relay_error(e: Error) -> Error {
-        e
     }
 }
 
