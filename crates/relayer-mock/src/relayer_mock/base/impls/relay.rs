@@ -4,7 +4,7 @@ use alloc::vec::Vec;
 use std::vec;
 
 use async_trait::async_trait;
-use cgp_core::{HasComponents, HasErrorType};
+use cgp_core::{HasComponents, ProvideErrorType};
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
@@ -26,7 +26,7 @@ impl HasComponents for MockRelayContext {
     type Components = MockRelayComponents;
 }
 
-impl HasErrorType for MockRelayContext {
+impl ProvideErrorType<MockRelayContext> for MockRelayComponents {
     type Error = Error;
 }
 

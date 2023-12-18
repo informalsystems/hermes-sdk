@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::delegate_components;
+use cgp_core::{delegate_components, ErrorRaiserComponent, ErrorTypeComponent};
 use ibc_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
 use ibc_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetterComponent, ChainIdTypeProviderComponent,
@@ -26,6 +26,8 @@ pub struct ExtraTxComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 delegate_components!(
     ExtraTxComponents<BaseComponents>;
     [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,
         ChainIdTypeProviderComponent,

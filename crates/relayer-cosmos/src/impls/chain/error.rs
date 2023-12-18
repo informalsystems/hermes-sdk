@@ -1,11 +1,12 @@
-use cgp_core::{Async, CanRaiseError};
+use cgp_core::{Async, ErrorRaiser};
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::component::CosmosChainComponents;
 use crate::types::error::{BaseError, Error};
 
-impl<Chain> CanRaiseError<RelayerError> for CosmosChain<Chain>
+impl<Chain> ErrorRaiser<CosmosChain<Chain>, RelayerError> for CosmosChainComponents
 where
     Chain: Async,
 {
@@ -14,7 +15,7 @@ where
     }
 }
 
-impl<Chain> CanRaiseError<SupervisorError> for CosmosChain<Chain>
+impl<Chain> ErrorRaiser<CosmosChain<Chain>, SupervisorError> for CosmosChainComponents
 where
     Chain: Async,
 {
@@ -23,7 +24,7 @@ where
     }
 }
 
-impl<Chain> CanRaiseError<eyre::Report> for CosmosChain<Chain>
+impl<Chain> ErrorRaiser<CosmosChain<Chain>, eyre::Report> for CosmosChainComponents
 where
     Chain: Async,
 {

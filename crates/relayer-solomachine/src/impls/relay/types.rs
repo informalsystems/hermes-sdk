@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::{Async, ProvideErrorType};
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -10,11 +10,12 @@ use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::context::relay::SolomachineRelay;
+use crate::impls::relay::component::SolomachineRelayComponents;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 use crate::types::error::{BaseError, Error};
 
-impl<Chain> HasErrorType for SolomachineRelay<Chain>
+impl<Chain> ProvideErrorType<SolomachineRelay<Chain>> for SolomachineRelayComponents
 where
     Chain: Async,
 {

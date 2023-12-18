@@ -1,6 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp_core::prelude::*;
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::chain::traits::types::chain_id::{ChainIdGetterComponent, ChainIdTypeProviderComponent};
@@ -32,6 +34,8 @@ delegate_components!(
     NonceAllocatorComponent: AllocateNonceWithMutex,
     TxResponsePollerComponent: PollTxResponse,
     [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,
         ChainIdTypeProviderComponent,

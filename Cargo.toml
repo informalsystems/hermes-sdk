@@ -43,6 +43,8 @@ tendermint-testgen  = { version = "0.34" }
 basecoin-app        = { version = "0.1.0" }
 basecoin-store      = { version = "0.1.0" }
 cgp-core            = { version = "0.1.0" }
+cgp-error-eyre      = { version = "0.1.0" }
+cgp-error-std       = { version = "0.1.0" }
 prost               = { version = "0.12.0" }
 serde               = { version = "1.0" }
 serde_derive        = { version = "1.0" }
@@ -77,10 +79,12 @@ ibc-query           = { git = "https://github.com/cosmos/ibc-rs.git", branch = "
 ibc-derive          = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
 basecoin-app        = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
 basecoin-store      = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
+
 cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-error-eyre      = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-inner           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

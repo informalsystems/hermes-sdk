@@ -9,7 +9,7 @@
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
 use async_trait::async_trait;
-use cgp_core::{HasComponents, HasErrorType};
+use cgp_core::{HasComponents, ProvideErrorType};
 use eyre::eyre;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
@@ -69,7 +69,7 @@ impl HasComponents for MockChainContext {
     type Components = MockChainComponents;
 }
 
-impl HasErrorType for MockChainContext {
+impl ProvideErrorType<MockChainContext> for MockChainComponents {
     type Error = Error;
 }
 
