@@ -1,5 +1,6 @@
 use cgp_core::{async_trait, HasErrorType};
 
+use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::components::chain_builder::CanBuildChain;
 use crate::build::traits::components::relay_builder::CanBuildRelay;
@@ -12,7 +13,6 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;
 
 #[async_trait]

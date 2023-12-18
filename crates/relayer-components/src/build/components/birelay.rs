@@ -1,11 +1,11 @@
 use cgp_core::{async_trait, HasErrorType};
 
+use crate::birelay::traits::two_way::HasTwoChainTypes;
 use crate::build::traits::components::birelay_builder::BiRelayBuilder;
 use crate::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use crate::build::traits::components::relay_builder::CanBuildRelay;
 use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::two_way::HasTwoChainTypes;
 use crate::std_prelude::*;
 
 pub struct BuildBiRelayFromRelays;

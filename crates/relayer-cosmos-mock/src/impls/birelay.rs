@@ -1,5 +1,5 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use ibc_relayer_components::relay::traits::two_way::{
+use ibc_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
 use ibc_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};

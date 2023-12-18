@@ -1,5 +1,6 @@
 use cgp_core::{HasComponents, HasErrorType};
 
+use crate::birelay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
@@ -12,7 +13,6 @@ use crate::build::types::aliases::{ChainA, ChainB};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::components::default::build::DefaultBuildComponents;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 use crate::runtime::traits::mutex::HasMutex;
 
 pub trait UseDefaultBuilderComponents: CanBuildBiRelay
