@@ -11,7 +11,7 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components::runtime::traits::mutex::{HasMutex, HasRuntimeWithMutex};
+use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::batch::traits::config::HasBatchConfig;
@@ -138,12 +138,13 @@ where
 #[async_trait]
 impl<Build, Target, Chain, Counterparty, Runtime> CanBuildBatchChannel<Target> for Build
 where
-    Build: HasBiRelayType + HasRuntimeWithMutex + HasErrorType,
+    Build: HasBiRelayType + HasRuntime + HasErrorType,
     Target: ChainBuildTarget<Build, TargetChain = Chain, CounterpartyChain = Counterparty>,
     Chain: HasIbcChainTypes<Counterparty> + HasRuntime<Runtime = Runtime>,
     Counterparty: HasIbcChainTypes<Chain>,
     Runtime: CanCreateChannels + HasChannelOnceTypes + CanCloneSender,
     Build: HasBatchSenderCache<Target, RelayError<Build>>,
+    Build::Runtime: HasMutex,
     Chain::ChainId: Ord + Clone,
     Counterparty::ChainId: Ord + Clone,
     Chain::ClientId: Ord + Clone,

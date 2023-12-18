@@ -19,6 +19,7 @@ where
     Build: HasChainCache<Target> + HasErrorType,
     InBuilder: ChainBuilder<Build, Target>,
     Target: ChainBuildTarget<Build>,
+    Build::Runtime: HasMutex,
 {
     async fn build_chain(
         build: &Build,

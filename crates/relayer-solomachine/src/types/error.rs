@@ -18,7 +18,6 @@ define_error! {
             [ TraceError<CosmosError> ]
             | _ | { "cosmos chain error" },
 
-
         Encode
             [ TraceError<EncodeError> ]
             | _ | { "protobuf encode error" },

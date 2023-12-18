@@ -8,6 +8,8 @@ use ibc_relayer_components::components::default::birelay::DefaultBiRelayComponen
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
+use ibc_relayer_components::runtime::traits::runtime::RuntimeComponent;
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 
 pub struct ExtraBiRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
@@ -16,6 +18,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         RunnerComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,

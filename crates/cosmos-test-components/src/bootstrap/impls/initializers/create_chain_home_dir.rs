@@ -20,7 +20,7 @@ impl<Bootstrap, Runtime, Chain> ChainHomeDirInitializer<Bootstrap> for CreateCha
 where
     Bootstrap:
         HasChainType<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasErrorType + HasTestDir,
-    Runtime: HasFilePathType,
+    Runtime: HasFilePathType + HasErrorType,
     Chain: HasChainIdType,
     Chain::ChainId: Display,
     Runtime::FilePath: AsRef<Path>,

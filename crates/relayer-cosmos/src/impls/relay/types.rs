@@ -1,8 +1,7 @@
-use cgp_core::{Async, ProvideErrorType};
+use cgp_core::Async;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -10,7 +9,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::relay::component::CosmosRelayComponents;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 impl<SrcChain, DstChain> HasRelayChains for CosmosRelay<SrcChain, DstChain>
 where
@@ -48,26 +47,12 @@ where
     }
 }
 
-impl<SrcChain, DstChain> ProvideErrorType<CosmosRelay<SrcChain, DstChain>> for CosmosRelayComponents
+impl<SrcChain, DstChain> ProvideRuntime<CosmosRelay<SrcChain, DstChain>> for CosmosRelayComponents
 where
     SrcChain: Async,
     DstChain: Async,
 {
-    type Error = Error;
-}
-
-impl<SrcChain, DstChain> HasRuntime for CosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: Async,
-    DstChain: Async,
-{
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        BaseError::tokio(e).into()
+    fn runtime(relay: &CosmosRelay<SrcChain, DstChain>) -> &TokioRuntimeContext {
+        &relay.runtime
     }
 }

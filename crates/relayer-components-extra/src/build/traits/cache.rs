@@ -6,7 +6,8 @@ use ibc_relayer_components::build::traits::target::chain::ChainBuildTarget;
 use ibc_relayer_components::build::types::aliases::{
     CounterpartyChainId, CounterpartyClientId, TargetChain, TargetChainId, TargetClientId,
 };
-use ibc_relayer_components::runtime::traits::mutex::HasRuntimeWithMutex;
+use ibc_relayer_components::runtime::traits::mutex::HasMutex;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::types::aliases::Mutex;
 
 use crate::batch::traits::channel::HasMessageBatchSenderType;
@@ -25,9 +26,10 @@ pub trait HasBatchSenderCacheType<Build, Error>: Async {
 impl<Target, Build, Error> HasBatchSenderCacheType<Build, Error> for Target
 where
     Error: Async,
-    Build: HasBiRelayType + HasRuntimeWithMutex,
+    Build: HasBiRelayType + HasRuntime,
     Target: ChainBuildTarget<Build>,
     Target::TargetChain: HasMessageBatchSenderType<Error>,
+    Build::Runtime: HasMutex,
 {
     type BatchSenderCache = Mutex<
         Build,

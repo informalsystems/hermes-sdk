@@ -9,6 +9,8 @@ use crate::chain::traits::types::chain_id::{ChainIdGetterComponent, ChainIdTypeP
 use crate::chain::traits::types::event::EventTypeProviderComponent;
 use crate::chain::traits::types::message::MessageTypeProviderComponent;
 use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
+use crate::runtime::traits::runtime::RuntimeComponent;
+use crate::runtime::traits::runtime::RuntimeTypeComponent;
 use crate::transaction::components::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
 use crate::transaction::components::allocate_nonce_with_mutex::AllocateNonceWithMutex;
 use crate::transaction::components::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
@@ -36,6 +38,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,
         ChainIdTypeProviderComponent,

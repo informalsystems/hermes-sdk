@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::async_trait;
+use cgp_core::{async_trait, HasErrorType};
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::chain::traits::types::event::HasEventType;
@@ -52,7 +52,7 @@ where
     Relay: CanRelayEvent<Target> + HasRuntime + Clone,
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasEventSubscription<Runtime = Runtime>,
-    Runtime: HasSubscriptionType + CanMapStream + CanRunConcurrentTasks,
+    Runtime: HasSubscriptionType + CanMapStream + CanRunConcurrentTasks + HasErrorType,
 {
     async fn auto_relay(relay: &Relay, _target: Target) -> Result<(), Relay::Error> {
         let subscription = Target::target_chain(relay).event_subscription();

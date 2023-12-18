@@ -10,6 +10,7 @@ use ibc_relayer_components::runtime::traits::mutex::HasMutex;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc_relayer_components::runtime::traits::time::HasTime;
+use ibc_relayer_components::runtime::types::aliases::Runtime;
 
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::batch::worker::CanSpawnBatchMessageWorker;
@@ -21,8 +22,8 @@ pub trait CanUseBatchMessageWorkerSpawner: UseBatchMessageWorkerSpawner
 where
     Self::SrcChain: HasRuntime,
     Self::DstChain: HasRuntime,
-    <Self::SrcChain as HasRuntime>::Runtime: HasChannelTypes + HasChannelOnceTypes,
-    <Self::DstChain as HasRuntime>::Runtime: HasChannelTypes + HasChannelOnceTypes,
+    Runtime<Self::SrcChain>: HasChannelTypes + HasChannelOnceTypes,
+    Runtime<Self::DstChain>: HasChannelTypes + HasChannelOnceTypes,
 {
 }
 
@@ -31,8 +32,8 @@ pub trait UseBatchMessageWorkerSpawner:
 where
     Self::SrcChain: HasRuntime,
     Self::DstChain: HasRuntime,
-    <Self::SrcChain as HasRuntime>::Runtime: HasChannelTypes + HasChannelOnceTypes,
-    <Self::DstChain as HasRuntime>::Runtime: HasChannelTypes + HasChannelOnceTypes,
+    Runtime<Self::SrcChain>: HasChannelTypes + HasChannelOnceTypes,
+    Runtime<Self::DstChain>: HasChannelTypes + HasChannelOnceTypes,
 {
 }
 

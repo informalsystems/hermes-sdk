@@ -24,6 +24,7 @@ where
     Build: HasRelayCache<Target> + HasErrorType,
     InBuilder: RelayBuilder<Build, Target>,
     Target: RelayBuildTarget<Build>,
+    Build::Runtime: HasMutex,
 {
     async fn build_relay(
         build: &Build,

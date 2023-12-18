@@ -5,7 +5,7 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use ibc_relayer_components::runtime::traits::stream::CanMapStream;
 use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
@@ -38,9 +38,9 @@ where
         + HasEventSubscription,
     Relay::Runtime: CanSpawnTask + CanRunConcurrentTasks,
     Relay::Logger: HasBaseLogLevels,
-    <Relay::SrcChain as HasRuntime>::Runtime:
+    <Relay::SrcChain as HasRuntimeType>::Runtime:
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
-    <Relay::DstChain as HasRuntime>::Runtime:
+    <Relay::DstChain as HasRuntimeType>::Runtime:
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
     BaseRelayComponents: Async,
 {

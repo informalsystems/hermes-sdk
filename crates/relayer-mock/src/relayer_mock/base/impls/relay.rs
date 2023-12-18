@@ -1,18 +1,19 @@
 use alloc::boxed::Box;
 use alloc::string::ToString;
 use alloc::vec::Vec;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use std::vec;
 
 use async_trait::async_trait;
-use cgp_core::{HasComponents, ProvideErrorType};
+use cgp_core::prelude::*;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
+use ibc_relayer_components::runtime::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
 
-use crate::relayer_mock::base::error::{BaseError, Error};
+use crate::relayer_mock::base::error::Error;
+use crate::relayer_mock::base::impls::error::HandleMockError;
 use crate::relayer_mock::base::types::aliases::ClientId;
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
@@ -26,19 +27,22 @@ impl HasComponents for MockRelayContext {
     type Components = MockRelayComponents;
 }
 
-impl ProvideErrorType<MockRelayContext> for MockRelayComponents {
-    type Error = Error;
+delegate_components!(
+    MockRelayComponents;
+    [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
+    ]:
+        HandleMockError,
+);
+
+impl ProvideRuntimeType<MockRelayContext> for MockRelayComponents {
+    type Runtime = MockRuntimeContext;
 }
 
-impl HasRuntime for MockRelayContext {
-    type Runtime = MockRuntimeContext;
-
-    fn runtime(&self) -> &Self::Runtime {
-        &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        BaseError::tokio(e).into()
+impl ProvideRuntime<MockRelayContext> for MockRelayComponents {
+    fn runtime(relay: &MockRelayContext) -> &MockRuntimeContext {
+        &relay.runtime
     }
 }
 

@@ -43,6 +43,8 @@ use crate::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use crate::chain::traits::types::status::ChainStatusTypeProviderComponent;
 use crate::chain::traits::types::timestamp::TimestampTypeProviderComponent;
 use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
+use crate::runtime::traits::runtime::RuntimeComponent;
+use crate::runtime::traits::runtime::RuntimeTypeComponent;
 pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
 delegate_components!(
@@ -50,6 +52,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,

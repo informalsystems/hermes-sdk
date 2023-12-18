@@ -11,6 +11,7 @@ use ibc_relayer_components::components::default::transaction::DefaultTxComponent
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
+use ibc_relayer_components::runtime::traits::runtime::{RuntimeComponent, RuntimeTypeComponent};
 use ibc_relayer_components::transaction::traits::components::nonce_allocater::NonceAllocatorComponent;
 use ibc_relayer_components::transaction::traits::components::nonce_querier::NonceQuerierComponent;
 use ibc_relayer_components::transaction::traits::components::send_messages_with_signer::MessagesWithSignerSenderComponent;
@@ -28,6 +29,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,
         ChainIdTypeProviderComponent,

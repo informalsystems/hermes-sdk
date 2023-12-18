@@ -27,7 +27,9 @@ use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
+use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
@@ -55,6 +57,8 @@ where
 
 delegate_components!(
     SolomachineChainComponents;
+    RuntimeTypeComponent:
+        ProvideTokioRuntimeType,
     [
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,

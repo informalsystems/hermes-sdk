@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 
 use async_trait::async_trait;
-use cgp_core::{DelegateComponent, HasComponents, ProvideErrorType};
+use cgp_core::{DelegateComponent, ErrorRaiser, HasComponents, ProvideErrorType};
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::clients::ics07_tendermint::header::Header;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
@@ -17,7 +17,7 @@ use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
@@ -60,18 +60,24 @@ where
     type Error = Error;
 }
 
-impl<SrcChain, DstChain> HasRuntime for MockCosmosRelay<SrcChain, DstChain>
+impl<SrcChain, DstChain> ProvideRuntime<MockCosmosRelay<SrcChain, DstChain>>
+    for MockCosmosRelayComponents
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &Self::Runtime {
-        &self.runtime
+    fn runtime(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &TokioRuntimeContext {
+        &relay.runtime
     }
+}
 
-    fn runtime_error(e: TokioRuntimeError) -> Error {
+impl<SrcChain, DstChain> ErrorRaiser<MockCosmosRelay<SrcChain, DstChain>, TokioRuntimeError>
+    for MockCosmosRelayComponents
+where
+    SrcChain: BasecoinEndpoint,
+    DstChain: BasecoinEndpoint,
+{
+    fn raise_error(e: TokioRuntimeError) -> Error {
         Error::source(e)
     }
 }

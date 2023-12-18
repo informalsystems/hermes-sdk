@@ -1,17 +1,16 @@
-use cgp_core::{Async, ProvideErrorType};
+use cgp_core::Async;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::relay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::birelay::components::CosmosBiRelayComponents;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 impl<ChainA, ChainB> HasTwoChainTypes for CosmosBiRelay<ChainA, ChainB>
 where
@@ -51,26 +50,12 @@ where
     }
 }
 
-impl<ChainA, ChainB> ProvideErrorType<CosmosBiRelay<ChainA, ChainB>> for CosmosBiRelayComponents
+impl<ChainA, ChainB> ProvideRuntime<CosmosBiRelay<ChainA, ChainB>> for CosmosBiRelayComponents
 where
     ChainA: Async,
     ChainB: Async,
 {
-    type Error = Error;
-}
-
-impl<ChainA, ChainB> HasRuntime for CosmosBiRelay<ChainA, ChainB>
-where
-    ChainA: Async,
-    ChainB: Async,
-{
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        BaseError::tokio(e).into()
+    fn runtime(birelay: &CosmosBiRelay<ChainA, ChainB>) -> &TokioRuntimeContext {
+        &birelay.runtime
     }
 }

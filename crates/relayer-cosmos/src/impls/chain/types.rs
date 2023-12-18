@@ -1,4 +1,4 @@
-use cgp_core::{Async, ProvideErrorType};
+use cgp_core::Async;
 use cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use cosmos_client_components::types::payloads::channel::{
@@ -33,35 +33,20 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::component::CosmosChainComponents;
-use crate::types::error::{BaseError, Error};
 use crate::types::telemetry::CosmosTelemetry;
 
-impl<Chain> ProvideErrorType<CosmosChain<Chain>> for CosmosChainComponents
+impl<Chain> ProvideRuntime<CosmosChain<Chain>> for CosmosChainComponents
 where
     Chain: Async,
 {
-    type Error = Error;
-}
-
-impl<Chain> HasRuntime for CosmosChain<Chain>
-where
-    Chain: Async,
-{
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        BaseError::tokio(e).into()
+    fn runtime(chain: &CosmosChain<Chain>) -> &TokioRuntimeContext {
+        &chain.runtime
     }
 }
 

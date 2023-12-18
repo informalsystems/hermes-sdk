@@ -4,7 +4,7 @@ use ibc_relayer_components::build::traits::target::relay::RelayBuildTarget;
 use ibc_relayer_components::build::types::aliases::{
     TargetDstChain, TargetDstClientId, TargetRelay, TargetSrcChain, TargetSrcClientId,
 };
-use ibc_relayer_components::runtime::traits::mutex::HasRuntimeWithMutex;
+use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::batch::traits::channel::HasMessageBatchSenderTypes;
 use crate::std_prelude::*;
@@ -61,8 +61,7 @@ where
 }
 
 #[async_trait]
-pub trait CanBuildRelayWithBatch<Target>:
-    HasBiRelayType + HasRuntimeWithMutex + HasErrorType
+pub trait CanBuildRelayWithBatch<Target>: HasBiRelayType + HasRuntime + HasErrorType
 where
     Target: RelayBuildTarget<Self>,
     Target::TargetRelay: HasMessageBatchSenderTypes,
@@ -82,7 +81,7 @@ where
 #[async_trait]
 impl<Build, Target> CanBuildRelayWithBatch<Target> for Build
 where
-    Build: HasBiRelayType + HasRuntimeWithMutex + HasErrorType + HasComponents,
+    Build: HasBiRelayType + HasRuntime + HasErrorType + HasComponents,
     Target: RelayBuildTarget<Build>,
     Target::TargetRelay: HasMessageBatchSenderTypes,
     Build::Components: RelayWithBatchBuilder<Build, Target>,

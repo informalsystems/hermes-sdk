@@ -1,4 +1,4 @@
-use cgp_core::{Async, ProvideErrorType};
+use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
@@ -15,7 +15,7 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
@@ -51,18 +51,21 @@ where
     type Error = Chain::Error;
 }
 
-impl<Chain> HasRuntime for SolomachineChain<Chain>
+impl<Chain> ErrorRaiser<SolomachineChain<Chain>, TokioRuntimeError> for SolomachineChainComponents
 where
     Chain: Solomachine,
 {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        self.chain.runtime()
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Chain::Error {
+    fn raise_error(e: TokioRuntimeError) -> Chain::Error {
         Chain::runtime_error(e)
+    }
+}
+
+impl<Chain> ProvideRuntime<SolomachineChain<Chain>> for SolomachineChainComponents
+where
+    Chain: Solomachine,
+{
+    fn runtime(chain: &SolomachineChain<Chain>) -> &TokioRuntimeContext {
+        chain.chain.runtime()
     }
 }
 
