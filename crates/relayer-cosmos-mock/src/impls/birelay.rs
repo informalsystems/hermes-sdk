@@ -20,6 +20,16 @@ where
     type Error = Error;
 }
 
+impl<SrcChain, DstChain> CanRaiseError<Error> for MockCosmosBiRelay<SrcChain, DstChain>
+where
+    SrcChain: BasecoinEndpoint,
+    DstChain: BasecoinEndpoint,
+{
+    fn raise_error(e: Error) -> Error {
+        e
+    }
+}
+
 impl<SrcChain, DstChain> HasRuntimeType for MockCosmosBiRelay<SrcChain, DstChain>
 where
     SrcChain: BasecoinEndpoint,

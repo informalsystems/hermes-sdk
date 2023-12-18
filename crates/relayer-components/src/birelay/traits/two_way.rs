@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::{Async, CanRaiseError, HasErrorType};
 
 use crate::relay::traits::chains::HasRelayChains;
 
@@ -15,7 +15,11 @@ pub trait HasTwoChainTypes: Async {
 /// Two-way relay contexts are composed of two separate relay
 /// contexts, one that relays from chain A to chain B, the
 /// other that relays from chain B to chain A.
-pub trait HasTwoWayRelayTypes: HasTwoChainTypes + HasErrorType {
+pub trait HasTwoWayRelayTypes:
+    HasTwoChainTypes
+    + CanRaiseError<<Self::RelayAToB as HasErrorType>::Error>
+    + CanRaiseError<<Self::RelayBToA as HasErrorType>::Error>
+{
     /// The relay context that relays from chain A to chain B.
     type RelayAToB: HasRelayChains<SrcChain = Self::ChainA, DstChain = Self::ChainB>;
 
