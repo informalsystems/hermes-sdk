@@ -47,12 +47,12 @@ where
         let src_proof_height = src_chain
             .query_chain_height()
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let src_client_state = dst_chain
             .query_client_state(relay.dst_client_id())
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_confirm_payload = src_chain
             .build_channel_open_confirm_payload(
@@ -62,12 +62,12 @@ where
                 src_channel_id,
             )
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_confirm_message = dst_chain
             .build_channel_open_confirm_message(dst_port_id, dst_channel_id, open_confirm_payload)
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         relay
             .send_message(DestinationTarget, open_confirm_message)

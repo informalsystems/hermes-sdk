@@ -64,10 +64,6 @@ pub trait HasRelayChains:
     */
     fn dst_chain(&self) -> &Self::DstChain;
 
-    fn src_chain_error(e: <Self::SrcChain as HasErrorType>::Error) -> Self::Error;
-
-    fn dst_chain_error(e: <Self::DstChain as HasErrorType>::Error) -> Self::Error;
-
     /**
         Get the client ID on the source chain that corresponds to the destination
         chain.

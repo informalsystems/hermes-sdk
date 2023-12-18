@@ -47,12 +47,12 @@ where
         let dst_proof_height = dst_chain
             .query_chain_height()
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let dst_client_state = src_chain
             .query_client_state(relay.src_client_id())
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_ack_payload = dst_chain
             .build_channel_open_ack_payload(
@@ -62,7 +62,7 @@ where
                 dst_channel_id,
             )
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_ack_message = src_chain
             .build_channel_open_ack_message(
@@ -72,7 +72,7 @@ where
                 open_ack_payload,
             )
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         relay.send_message(SourceTarget, open_ack_message).await?;
 

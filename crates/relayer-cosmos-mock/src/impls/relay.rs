@@ -104,14 +104,6 @@ where
 
     type DstChain = MockCosmosContext<DstChain>;
 
-    fn src_chain_error(e: Error) -> Self::Error {
-        e
-    }
-
-    fn dst_chain_error(e: Error) -> Self::Error {
-        e
-    }
-
     fn src_chain(&self) -> &MockCosmosContext<SrcChain> {
         &self.src_chain
     }

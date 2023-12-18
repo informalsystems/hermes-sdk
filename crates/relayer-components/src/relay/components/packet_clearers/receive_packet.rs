@@ -53,12 +53,12 @@ where
         let (commitment_sequences, height) = src_chain
             .query_packet_commitments(src_channel_id, src_port_id)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let unreceived_sequences = dst_chain
             .query_unreceived_packet_sequences(dst_channel_id, dst_port_id, &commitment_sequences)
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let send_packets = src_chain
             .query_send_packets_from_sequences(
@@ -70,7 +70,7 @@ where
                 &height,
             )
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let tasks = send_packets
             .into_iter()

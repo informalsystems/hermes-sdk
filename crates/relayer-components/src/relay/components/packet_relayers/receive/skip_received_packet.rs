@@ -34,7 +34,7 @@ where
                 Relay::packet_sequence(packet),
             )
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         if !is_packet_received {
             Relayer::relay_receive_packet(relay, source_height, packet).await

@@ -68,14 +68,6 @@ where
 
     type Packet = Packet;
 
-    fn src_chain_error(e: Error) -> Error {
-        e
-    }
-
-    fn dst_chain_error(e: CosmosError) -> Error {
-        BaseError::cosmos_chain_error(e).into()
-    }
-
     fn src_client_id(&self) -> &ClientId {
         &self.src_client_id
     }

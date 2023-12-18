@@ -50,12 +50,12 @@ where
         let dst_client_state = src_chain
             .query_client_state(src_client_id)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_init_payload = dst_chain
             .build_connection_open_init_payload(&dst_client_state)
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let src_message = src_chain
             .build_connection_open_init_message(
@@ -65,12 +65,12 @@ where
                 open_init_payload,
             )
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let events = src_chain
             .send_message(src_message)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_init_event = events
             .into_iter()

@@ -39,19 +39,19 @@ where
             .src_chain()
             .query_client_state(relay.src_client_id())
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let payload = relay
             .dst_chain()
             .build_ack_packet_payload(&src_client_state, destination_height, packet, ack)
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let message = relay
             .src_chain()
             .build_ack_packet_message(packet, payload)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         relay.send_message(SourceTarget, message).await?;
 

@@ -32,7 +32,7 @@ where
             .dst_chain()
             .query_chain_status()
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let destination_height = Relay::DstChain::chain_status_height(&destination_status);
         let destination_timestamp = Relay::DstChain::chain_status_timestamp(&destination_status);
@@ -64,7 +64,7 @@ where
                 .src_chain()
                 .query_chain_status()
                 .await
-                .map_err(Relay::src_chain_error)?;
+                .map_err(Relay::raise_error)?;
 
             relay.log_relay(Default::default(), "relaying receive packet", |log| {
                 log.field("packet", Relay::log_packet(packet));
@@ -81,7 +81,7 @@ where
                 .dst_chain()
                 .query_chain_status()
                 .await
-                .map_err(Relay::dst_chain_error)?;
+                .map_err(Relay::raise_error)?;
 
             let destination_height = Relay::DstChain::chain_status_height(&destination_status);
 

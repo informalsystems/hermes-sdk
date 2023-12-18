@@ -32,19 +32,19 @@ where
             .dst_chain()
             .query_client_state(relay.dst_client_id())
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let payload = relay
             .src_chain()
             .build_receive_packet_payload(&src_client_state, source_height, packet)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let message = relay
             .dst_chain()
             .build_receive_packet_message(packet, payload)
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let events = relay.send_message(DestinationTarget, message).await?;
 

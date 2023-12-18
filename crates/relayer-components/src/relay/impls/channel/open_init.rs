@@ -45,12 +45,12 @@ where
         let src_message = src_chain
             .build_channel_open_init_message(src_port_id, dst_port_id, init_channel_options)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let events = src_chain
             .send_message(src_message)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_init_event = events
             .into_iter()

@@ -53,14 +53,6 @@ impl HasRelayChains for MockRelayContext {
 
     type DstChain = MockChainContext;
 
-    fn src_chain_error(e: Error) -> Self::Error {
-        e
-    }
-
-    fn dst_chain_error(e: Error) -> Self::Error {
-        e
-    }
-
     fn src_chain(&self) -> &MockChainContext {
         &self.src_chain
     }
