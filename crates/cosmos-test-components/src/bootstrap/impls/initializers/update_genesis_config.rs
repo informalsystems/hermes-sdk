@@ -40,7 +40,7 @@ where
         let config_string = runtime
             .read_file_as_string(&genesis_file_path)
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
 
         let mut config_json: Value = serde_json::from_str(&config_string).map_err(Report::from)?;
 
@@ -52,7 +52,7 @@ where
         runtime
             .write_string_to_file(&genesis_file_path, &modified_config_string)
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
 
         // TODO: generate random denom
 

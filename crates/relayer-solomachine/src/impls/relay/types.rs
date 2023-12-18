@@ -40,10 +40,6 @@ where
     fn runtime(&self) -> &Self::Runtime {
         todo!()
     }
-
-    fn runtime_error(_e: TokioRuntimeError) -> Self::Error {
-        todo!()
-    }
 }
 
 impl<Chain> HasRelayChains for SolomachineRelay<Chain>

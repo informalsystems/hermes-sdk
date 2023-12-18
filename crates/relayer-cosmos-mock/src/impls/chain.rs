@@ -98,10 +98,6 @@ impl<Chain: BasecoinEndpoint> HasRuntime for MockCosmosContext<Chain> {
     fn runtime(&self) -> &Self::Runtime {
         &self.runtime
     }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        Error::source(e)
-    }
 }
 
 impl<Chain: BasecoinEndpoint> ErrorRaiser<MockCosmosContext<Chain>, TokioRuntimeError>

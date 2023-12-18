@@ -35,19 +35,19 @@ where
         let rpc_port = runtime
             .reserve_tcp_port()
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
         let p2p_port = runtime
             .reserve_tcp_port()
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
         let pprof_port = runtime
             .reserve_tcp_port()
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
         let grpc_port = runtime
             .reserve_tcp_port()
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
 
         let comet_config = {
             let mut comet_config = {
@@ -59,7 +59,7 @@ where
                 let comet_config_string = runtime
                     .read_file_as_string(&comet_config_path)
                     .await
-                    .map_err(Bootstrap::runtime_error)?;
+                    .map_err(Bootstrap::raise_error)?;
 
                 toml::from_str(&comet_config_string).map_err(Report::from)?
             };
@@ -88,7 +88,7 @@ where
                 let sdk_config_string = runtime
                     .read_file_as_string(&sdk_config_path)
                     .await
-                    .map_err(Bootstrap::runtime_error)?;
+                    .map_err(Bootstrap::raise_error)?;
 
                 toml::from_str(&sdk_config_string).map_err(Report::from)?
             };

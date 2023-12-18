@@ -3,11 +3,11 @@ use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::chain::traits::types::amount::HasAmountType;
+use ibc_test_components::runtime::traits::exec_command::CanExecCommand;
+use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdder;
-use ibc_test_components::runtime::traits::exec_command::CanExecCommand;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 /**
    Implementation for adding genesis validator to legacy Cosmos chains
@@ -51,7 +51,7 @@ where
                 ],
             )
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
 
         Ok(())
     }

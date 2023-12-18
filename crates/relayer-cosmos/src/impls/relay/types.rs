@@ -2,14 +2,13 @@ use cgp_core::Async;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 impl<SrcChain, DstChain> HasRelayChains for CosmosRelay<SrcChain, DstChain>
 where
@@ -56,9 +55,5 @@ where
 
     fn runtime(&self) -> &TokioRuntimeContext {
         &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        BaseError::tokio(e).into()
     }
 }

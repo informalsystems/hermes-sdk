@@ -51,7 +51,7 @@ where
                 ],
             )
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
 
         Ok(())
     }

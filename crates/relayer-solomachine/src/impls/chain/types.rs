@@ -69,10 +69,6 @@ where
     fn runtime(&self) -> &TokioRuntimeContext {
         self.chain.runtime()
     }
-
-    fn runtime_error(e: TokioRuntimeError) -> Chain::Error {
-        Chain::runtime_error(e)
-    }
 }
 
 impl<Chain, Counterparty> HasClientStateType<Counterparty> for SolomachineChain<Chain>

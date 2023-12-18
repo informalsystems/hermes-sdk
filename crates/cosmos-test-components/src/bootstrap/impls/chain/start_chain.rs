@@ -42,7 +42,7 @@ where
             .runtime()
             .start_child_process(chain_command, &args, Some(&stdout_path), Some(&stderr_path))
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
 
         Ok(child_process)
     }

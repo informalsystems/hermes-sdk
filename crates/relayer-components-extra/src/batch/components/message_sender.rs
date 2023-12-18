@@ -37,12 +37,12 @@ where
         let message_sender = context.get_batch_sender();
 
         Runtime::send(message_sender, (messages, result_sender))
-            .map_err(TargetChain::runtime_error)
+            .map_err(TargetChain::raise_error)
             .map_err(Target::target_chain_error)?;
 
         let events = Runtime::receive_once(result_receiver)
             .await
-            .map_err(TargetChain::runtime_error)
+            .map_err(TargetChain::raise_error)
             .map_err(Target::target_chain_error)??;
 
         Ok(events)

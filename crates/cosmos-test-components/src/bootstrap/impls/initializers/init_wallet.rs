@@ -50,7 +50,7 @@ where
                 ],
             )
             .await
-            .map_err(Bootstrap::runtime_error)?
+            .map_err(Bootstrap::raise_error)?
             .stderr;
 
         let json_val: json::Value = json::from_str(&seed_content).map_err(Report::from)?;
@@ -72,7 +72,7 @@ where
             .runtime()
             .write_string_to_file(&seed_path, &seed_content)
             .await
-            .map_err(Bootstrap::runtime_error)?;
+            .map_err(Bootstrap::raise_error)?;
 
         let hd_path = bootstrap.wallet_hd_path();
 

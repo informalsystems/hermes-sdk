@@ -4,6 +4,4 @@ pub trait HasRuntime: HasErrorType + CanRaiseError<<Self::Runtime as HasErrorTyp
     type Runtime: HasErrorType;
 
     fn runtime(&self) -> &Self::Runtime;
-
-    fn runtime_error(e: <Self::Runtime as HasErrorType>::Error) -> Self::Error;
 }

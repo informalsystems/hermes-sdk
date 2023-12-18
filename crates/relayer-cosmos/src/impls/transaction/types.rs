@@ -6,24 +6,18 @@ use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::transaction::traits::nonce::guard::HasNonceGuard;
 use ibc_relayer_components::transaction::traits::types::{HasNonceType, HasSignerType, HasTxTypes};
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use prost::Message;
 use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::contexts::transaction::CosmosTxContext;
-use crate::types::error::{BaseError, Error};
 
 impl HasRuntime for CosmosTxContext {
     type Runtime = TokioRuntimeContext;
 
     fn runtime(&self) -> &TokioRuntimeContext {
         &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        BaseError::tokio(e).into()
     }
 }
 

@@ -1,12 +1,11 @@
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::builder::CosmosBuilder;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 impl HasBiRelayType for CosmosBuilder {
     type BiRelay = CosmosBiRelay<BaseChainHandle, BaseChainHandle>;
@@ -21,9 +20,5 @@ impl HasRuntime for CosmosBuilder {
 
     fn runtime(&self) -> &TokioRuntimeContext {
         &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        BaseError::tokio(e).into()
     }
 }

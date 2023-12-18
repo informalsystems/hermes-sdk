@@ -30,10 +30,6 @@ where
     fn runtime(&self) -> &Self::Runtime {
         &self.runtime
     }
-
-    fn runtime_error(e: <Self::Runtime as HasErrorType>::Error) -> Self::Error {
-        Error::source(e)
-    }
 }
 
 impl<SrcChain, DstChain> CanRaiseError<TokioRuntimeError> for MockCosmosBiRelay<SrcChain, DstChain>

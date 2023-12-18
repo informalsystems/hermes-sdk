@@ -16,7 +16,6 @@ use cosmos_test_components::chain::types::denom::Denom;
 use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
@@ -97,10 +96,6 @@ impl HasRuntime for CosmosStdBootstrapContext {
 
     fn runtime(&self) -> &TokioRuntimeContext {
         &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        e.into()
     }
 }
 

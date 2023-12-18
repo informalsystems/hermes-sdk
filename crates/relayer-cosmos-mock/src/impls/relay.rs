@@ -70,10 +70,6 @@ where
     fn runtime(&self) -> &Self::Runtime {
         &self.runtime
     }
-
-    fn runtime_error(e: TokioRuntimeError) -> Error {
-        Error::source(e)
-    }
 }
 
 impl<SrcChain, DstChain> ErrorRaiser<MockCosmosRelay<SrcChain, DstChain>, TokioRuntimeError>
