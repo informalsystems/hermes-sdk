@@ -1,4 +1,4 @@
-use cgp_core::{Async, ProvideErrorType};
+use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -20,6 +20,15 @@ where
     Chain: Async,
 {
     type Error = Error;
+}
+
+impl<Chain> ErrorRaiser<SolomachineRelay<Chain>, TokioRuntimeError> for SolomachineRelayComponents
+where
+    Chain: Async,
+{
+    fn raise_error(e: TokioRuntimeError) -> Error {
+        BaseError::tokio(e).into()
+    }
 }
 
 impl<Chain> HasRuntime for SolomachineRelay<Chain>

@@ -1,4 +1,4 @@
-use cgp_core::{Async, ProvideErrorType};
+use cgp_core::Async;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -9,7 +9,6 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
-use crate::impls::relay::component::CosmosRelayComponents;
 use crate::types::error::{BaseError, Error};
 
 impl<SrcChain, DstChain> HasRelayChains for CosmosRelay<SrcChain, DstChain>
@@ -46,14 +45,6 @@ where
     fn dst_client_id(&self) -> &ClientId {
         &self.dst_client_id
     }
-}
-
-impl<SrcChain, DstChain> ProvideErrorType<CosmosRelay<SrcChain, DstChain>> for CosmosRelayComponents
-where
-    SrcChain: Async,
-    DstChain: Async,
-{
-    type Error = Error;
 }
 
 impl<SrcChain, DstChain> HasRuntime for CosmosRelay<SrcChain, DstChain>

@@ -1,4 +1,4 @@
-use cgp_core::{Async, ProvideErrorType};
+use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
@@ -49,6 +49,15 @@ where
     Chain: Solomachine,
 {
     type Error = Chain::Error;
+}
+
+impl<Chain> ErrorRaiser<SolomachineChain<Chain>, TokioRuntimeError> for SolomachineChainComponents
+where
+    Chain: Solomachine,
+{
+    fn raise_error(e: TokioRuntimeError) -> Chain::Error {
+        Chain::runtime_error(e)
+    }
 }
 
 impl<Chain> HasRuntime for SolomachineChain<Chain>

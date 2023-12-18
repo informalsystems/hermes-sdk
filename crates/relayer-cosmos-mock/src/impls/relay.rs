@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 
 use async_trait::async_trait;
-use cgp_core::{DelegateComponent, HasComponents, ProvideErrorType};
+use cgp_core::{DelegateComponent, ErrorRaiser, HasComponents, ProvideErrorType};
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::clients::ics07_tendermint::header::Header;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
@@ -72,6 +72,17 @@ where
     }
 
     fn runtime_error(e: TokioRuntimeError) -> Error {
+        Error::source(e)
+    }
+}
+
+impl<SrcChain, DstChain> ErrorRaiser<MockCosmosRelay<SrcChain, DstChain>, TokioRuntimeError>
+    for MockCosmosRelayComponents
+where
+    SrcChain: BasecoinEndpoint,
+    DstChain: BasecoinEndpoint,
+{
+    fn raise_error(e: TokioRuntimeError) -> Error {
         Error::source(e)
     }
 }

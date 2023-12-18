@@ -25,7 +25,7 @@ where
         + CanInitWallet
         + CanAddGenesisAccount
         + CanAddGenesisValidator,
-    Runtime: HasFilePathType,
+    Runtime: HasFilePathType + HasErrorType,
     Chain: HasChainIdType + HasWalletType + HasAmountType + HasAddressType,
 {
     async fn add_wallet_to_genesis(

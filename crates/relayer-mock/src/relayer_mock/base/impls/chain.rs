@@ -9,7 +9,9 @@
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
 use async_trait::async_trait;
-use cgp_core::{HasComponents, ProvideErrorType};
+use cgp_core::prelude::*;
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use eyre::eyre;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
@@ -53,6 +55,7 @@ use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::log::value::LogValue;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
+use crate::relayer_mock::base::impls::error::HandleMockError;
 use crate::relayer_mock::base::types::aliases::{
     ChainStatus, ChannelId, ClientId, ConsensusState, MockTimestamp, PortId, Sequence,
 };
@@ -69,9 +72,14 @@ impl HasComponents for MockChainContext {
     type Components = MockChainComponents;
 }
 
-impl ProvideErrorType<MockChainContext> for MockChainComponents {
-    type Error = Error;
-}
+delegate_components!(
+    MockChainComponents;
+    [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
+    ]:
+        HandleMockError,
+);
 
 impl HasRuntime for MockChainContext {
     type Runtime = MockRuntimeContext;

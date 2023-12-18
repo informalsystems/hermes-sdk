@@ -15,7 +15,7 @@ where
     fn missing_create_client_event_error(
         src_chain: &Self::SrcChain,
         dst_chain: &Self::DstChain,
-    ) -> Self::Error {
+    ) -> Error {
         BaseError::generic(eyre!("missing CreateClient event when creating client from chain {} with counterparty chain {}",
             src_chain.chain_id(),
             dst_chain.chain_id(),
@@ -30,7 +30,7 @@ where
     fn missing_create_client_event_error(
         dst_chain: &Self::DstChain,
         src_chain: &Self::SrcChain,
-    ) -> Self::Error {
+    ) -> Error {
         BaseError::generic(eyre!("missing CreateClient event when creating client from chain {} with counterparty chain {}",
             dst_chain.chain_id(),
             src_chain.chain_id(),

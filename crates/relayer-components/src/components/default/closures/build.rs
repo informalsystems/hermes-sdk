@@ -13,6 +13,7 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::components::default::build::DefaultBuildComponents;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
+use crate::runtime::traits::mutex::HasMutex;
 
 pub trait UseDefaultBuilderComponents: CanBuildBiRelay
 where
@@ -41,6 +42,7 @@ where
     ChainB::ChainId: Ord + Clone,
     ChainA::ClientId: Ord + Clone,
     ChainB::ClientId: Ord + Clone,
+    Build::Runtime: HasMutex,
     BaseComponents: BiRelayFromRelayBuilder<Build>
         + RelayFromChainsBuilder<Build, RelayAToBTarget>
         + RelayFromChainsBuilder<Build, RelayBToATarget>

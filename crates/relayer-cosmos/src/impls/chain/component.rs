@@ -1,4 +1,6 @@
 use cgp_core::prelude::*;
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use cosmos_client_components::components::ack_packet_message::BuildCosmosAckPacketMessage;
 use cosmos_client_components::components::ack_packet_payload::BuildCosmosAckPacketPayload;
 use cosmos_client_components::components::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
@@ -75,6 +77,7 @@ use crate::impls::chain::components::connection_handshake_message::DelegateCosmo
 use crate::impls::chain::components::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use crate::impls::chain::components::query_client_state::DelegateCosmosClientStateQuerier;
 use crate::impls::chain::components::query_consensus_state::DelegateCosmosConsensusStateQuerier;
+use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
 
@@ -95,6 +98,11 @@ where
 
 delegate_components!(
     CosmosChainComponents;
+    [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
+    ]:
+        HandleCosmosError,
     [
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,

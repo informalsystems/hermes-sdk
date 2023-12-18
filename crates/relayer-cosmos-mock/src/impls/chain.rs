@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use async_trait::async_trait;
 use basecoin_app::modules::ibc::AnyConsensusState;
-use cgp_core::{HasComponents, ProvideErrorType};
+use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};
 use ibc::clients::ics07_tendermint::consensus_state::ConsensusState as TmConsensusState;
 use ibc::clients::ics07_tendermint::header::Header;
@@ -100,6 +100,14 @@ impl<Chain: BasecoinEndpoint> HasRuntime for MockCosmosContext<Chain> {
     }
 
     fn runtime_error(e: TokioRuntimeError) -> Error {
+        Error::source(e)
+    }
+}
+
+impl<Chain: BasecoinEndpoint> ErrorRaiser<MockCosmosContext<Chain>, TokioRuntimeError>
+    for MockCosmosChainComponents
+{
+    fn raise_error(e: TokioRuntimeError) -> Error {
         Error::source(e)
     }
 }

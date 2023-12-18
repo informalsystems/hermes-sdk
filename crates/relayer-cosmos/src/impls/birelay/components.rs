@@ -1,4 +1,6 @@
 use cgp_core::prelude::*;
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -6,6 +8,7 @@ use ibc_relayer_components_extra::components::extra::birelay::ExtraBiRelayCompon
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::contexts::birelay::CosmosBiRelay;
+use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosBiRelayComponents;
 
@@ -19,6 +22,11 @@ where
 
 delegate_components!(
     CosmosBiRelayComponents;
+    [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
+    ]:
+        HandleCosmosError,
     [
         LoggerTypeComponent,
         LoggerFieldComponent,

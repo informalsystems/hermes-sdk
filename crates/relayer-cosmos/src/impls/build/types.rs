@@ -1,4 +1,3 @@
-use cgp_core::ProvideErrorType;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -7,7 +6,6 @@ use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::builder::CosmosBuilder;
-use crate::impls::build::components::CosmosBuildComponents;
 use crate::types::error::{BaseError, Error};
 
 impl HasBiRelayType for CosmosBuilder {
@@ -16,10 +14,6 @@ impl HasBiRelayType for CosmosBuilder {
     fn birelay_error(e: Error) -> Error {
         e
     }
-}
-
-impl ProvideErrorType<CosmosBuilder> for CosmosBuildComponents {
-    type Error = Error;
 }
 
 impl HasRuntime for CosmosBuilder {
