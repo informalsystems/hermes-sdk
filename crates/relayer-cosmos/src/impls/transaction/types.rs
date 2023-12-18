@@ -3,7 +3,7 @@ use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_components::transaction::traits::nonce::guard::HasNonceGuard;
 use ibc_relayer_components::transaction::traits::types::{HasNonceType, HasSignerType, HasTxTypes};
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
@@ -12,12 +12,11 @@ use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::contexts::transaction::CosmosTxContext;
+use crate::impls::transaction::component::CosmosTxComponents;
 
-impl HasRuntime for CosmosTxContext {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        &self.runtime
+impl ProvideRuntime<CosmosTxContext> for CosmosTxComponents {
+    fn runtime(chain: &CosmosTxContext) -> &TokioRuntimeContext {
+        &chain.runtime
     }
 }
 

@@ -10,7 +10,7 @@ use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
 
 use crate::relayer_mock::base::error::Error;
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -36,11 +36,13 @@ delegate_components!(
         HandleMockError,
 );
 
-impl HasRuntime for MockRelayContext {
+impl ProvideRuntimeType<MockRelayContext> for MockRelayComponents {
     type Runtime = MockRuntimeContext;
+}
 
-    fn runtime(&self) -> &Self::Runtime {
-        &self.runtime
+impl ProvideRuntime<MockRelayContext> for MockRelayComponents {
+    fn runtime(relay: &MockRelayContext) -> &MockRuntimeContext {
+        &relay.runtime
     }
 }
 

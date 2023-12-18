@@ -70,7 +70,7 @@ use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvide
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_components::components::default::chain::DefaultChainComponents;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::log::value::LogValue;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
@@ -92,11 +92,11 @@ impl<Chain: BasecoinEndpoint> ProvideErrorType<MockCosmosContext<Chain>>
     type Error = Error;
 }
 
-impl<Chain: BasecoinEndpoint> HasRuntime for MockCosmosContext<Chain> {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &Self::Runtime {
-        &self.runtime
+impl<Chain: BasecoinEndpoint> ProvideRuntime<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
+    fn runtime(chain: &MockCosmosContext<Chain>) -> &TokioRuntimeContext {
+        &chain.runtime
     }
 }
 

@@ -55,6 +55,8 @@ use crate::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayer
 use crate::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
 use crate::relay::traits::connection::open_init::ConnectionInitializerComponent;
 use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
+use crate::runtime::traits::runtime::RuntimeComponent;
+use crate::runtime::traits::runtime::RuntimeTypeComponent;
 
 pub struct DefaultRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
@@ -84,6 +86,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,
         PacketFilterComponent,

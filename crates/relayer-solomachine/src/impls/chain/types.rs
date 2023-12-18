@@ -15,7 +15,7 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
@@ -60,14 +60,12 @@ where
     }
 }
 
-impl<Chain> HasRuntime for SolomachineChain<Chain>
+impl<Chain> ProvideRuntime<SolomachineChain<Chain>> for SolomachineChainComponents
 where
     Chain: Solomachine,
 {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        self.chain.runtime()
+    fn runtime(chain: &SolomachineChain<Chain>) -> &TokioRuntimeContext {
+        chain.chain.runtime()
     }
 }
 

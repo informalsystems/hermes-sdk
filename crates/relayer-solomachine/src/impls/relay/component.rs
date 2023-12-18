@@ -1,5 +1,7 @@
-use cgp_core::{Async, HasComponents};
+use cgp_core::prelude::*;
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::context::relay::SolomachineRelay;
 
@@ -11,3 +13,9 @@ where
 {
     type Components = DefaultRelayComponents<SolomachineRelayComponents>;
 }
+
+delegate_components!(
+    SolomachineRelayComponents;
+    RuntimeTypeComponent:
+        ProvideTokioRuntimeType,
+);

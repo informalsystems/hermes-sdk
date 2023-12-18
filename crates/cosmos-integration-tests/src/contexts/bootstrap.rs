@@ -15,7 +15,8 @@ use cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfi
 use cosmos_test_components::chain::types::denom::Denom;
 use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
+use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
@@ -62,6 +63,8 @@ delegate_components!(
         ErrorRaiserComponent,
     ]:
         HandleErrorsWithEyre,
+    RuntimeTypeComponent:
+        ProvideTokioRuntimeType,
     ChainConfigTypeComponent: ProvideCosmosChainConfigType,
     GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
     WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
@@ -91,11 +94,9 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
     }
 }
 
-impl HasRuntime for CosmosStdBootstrapContext {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        &self.runtime
+impl ProvideRuntime<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+    fn runtime(bootstrap: &CosmosStdBootstrapContext) -> &TokioRuntimeContext {
+        &bootstrap.runtime
     }
 }
 

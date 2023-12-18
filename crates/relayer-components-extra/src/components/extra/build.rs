@@ -12,6 +12,8 @@ use ibc_relayer_components::components::default::build::DefaultBuildComponents;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
+use ibc_relayer_components::runtime::traits::runtime::RuntimeComponent;
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 
 use crate::build::components::relay::batch::BuildRelayWithBatchWorker;
 use crate::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilderComponent;
@@ -25,6 +27,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         LoggerFieldComponent,
         LoggerTypeComponent,
         ChainBuilderComponent,

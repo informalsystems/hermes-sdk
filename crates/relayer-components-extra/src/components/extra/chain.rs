@@ -47,6 +47,8 @@ use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
+use ibc_relayer_components::runtime::traits::runtime::RuntimeComponent;
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 
 use crate::telemetry::components::consensus_state::ConsensusStateTelemetryQuerier;
 use crate::telemetry::components::status::ChainStatusTelemetryQuerier;
@@ -62,6 +64,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,

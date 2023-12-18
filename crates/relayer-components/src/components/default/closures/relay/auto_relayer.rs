@@ -4,7 +4,7 @@ use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
 use crate::components::default::relay::DefaultRelayComponents;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::runtime::traits::runtime::HasRuntime;
+use crate::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use crate::runtime::traits::stream::CanMapStream;
 use crate::runtime::traits::subscription::HasSubscriptionType;
 use crate::runtime::traits::task::CanRunConcurrentTasks;
@@ -23,9 +23,9 @@ where
     Relay::SrcChain: HasEventSubscription,
     Relay::DstChain: HasEventSubscription,
     Relay::Runtime: CanRunConcurrentTasks,
-    <Relay::SrcChain as HasRuntime>::Runtime:
+    <Relay::SrcChain as HasRuntimeType>::Runtime:
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
-    <Relay::DstChain as HasRuntime>::Runtime:
+    <Relay::DstChain as HasRuntimeType>::Runtime:
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
     BaseRelayComponents: Async,
 {

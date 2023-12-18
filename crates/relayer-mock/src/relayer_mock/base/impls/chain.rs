@@ -50,7 +50,8 @@ use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePa
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntimeType;
 use ibc_relayer_runtime::types::log::value::LogValue;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
@@ -80,11 +81,13 @@ delegate_components!(
         HandleMockError,
 );
 
-impl HasRuntime for MockChainContext {
+impl ProvideRuntimeType<MockChainContext> for MockChainComponents {
     type Runtime = MockRuntimeContext;
+}
 
-    fn runtime(&self) -> &Self::Runtime {
-        &self.runtime
+impl ProvideRuntime<MockChainContext> for MockChainComponents {
+    fn runtime(chain: &MockChainContext) -> &MockRuntimeContext {
+        &chain.runtime
     }
 }
 

@@ -3,6 +3,7 @@ use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::target::ChainTarget;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::types::aliases::Runtime;
 
 use crate::batch::types::aliases::MessageBatchSender;
 use crate::runtime::traits::channel::HasChannelTypes;
@@ -12,7 +13,7 @@ pub trait HasMessageBatchSender<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
     Target::TargetChain: HasRuntime,
-    <Target::TargetChain as HasRuntime>::Runtime: HasChannelTypes + HasChannelOnceTypes,
+    Runtime<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
 {
     fn get_batch_sender(&self) -> &MessageBatchSender<Target::TargetChain, Self::Error>;
 }

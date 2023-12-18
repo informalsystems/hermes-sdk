@@ -14,6 +14,8 @@ use crate::build::traits::components::chain_builder::ChainBuilderComponent;
 use crate::build::traits::components::relay_builder::RelayBuilderComponent;
 use crate::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilderComponent;
 use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
+use crate::runtime::traits::runtime::RuntimeComponent;
+use crate::runtime::traits::runtime::RuntimeTypeComponent;
 
 pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
@@ -25,6 +27,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         LoggerFieldComponent,
         LoggerTypeComponent,
         RelayFromChainsBuilderComponent,

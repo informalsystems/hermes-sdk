@@ -4,8 +4,10 @@ use cgp_core::ErrorTypeComponent;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_components_extra::components::extra::birelay::ExtraBiRelayComponents;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
+use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::impls::error::HandleCosmosError;
@@ -27,6 +29,8 @@ delegate_components!(
         ErrorRaiserComponent,
     ]:
         HandleCosmosError,
+    RuntimeTypeComponent:
+        ProvideTokioRuntimeType,
     [
         LoggerTypeComponent,
         LoggerFieldComponent,

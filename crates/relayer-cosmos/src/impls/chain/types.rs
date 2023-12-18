@@ -33,21 +33,20 @@ use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayl
 use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::chain::CosmosChain;
+use crate::impls::chain::component::CosmosChainComponents;
 use crate::types::telemetry::CosmosTelemetry;
 
-impl<Chain> HasRuntime for CosmosChain<Chain>
+impl<Chain> ProvideRuntime<CosmosChain<Chain>> for CosmosChainComponents
 where
     Chain: Async,
 {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        &self.runtime
+    fn runtime(chain: &CosmosChain<Chain>) -> &TokioRuntimeContext {
+        &chain.runtime
     }
 }
 

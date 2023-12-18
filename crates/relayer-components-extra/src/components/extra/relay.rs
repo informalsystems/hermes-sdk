@@ -36,6 +36,8 @@ use ibc_relayer_components::relay::traits::connection::open_confirm::ConnectionO
 use ibc_relayer_components::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
 use ibc_relayer_components::relay::traits::connection::open_init::ConnectionInitializerComponent;
 use ibc_relayer_components::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
+use ibc_relayer_components::runtime::traits::runtime::RuntimeComponent;
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
 use crate::batch::types::sink::BatchWorkerSink;
@@ -53,6 +55,8 @@ delegate_components!(
     [
         ErrorTypeComponent,
         ErrorRaiserComponent,
+        RuntimeTypeComponent,
+        RuntimeComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,
         UpdateClientMessageBuilderComponent,

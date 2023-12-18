@@ -1,10 +1,11 @@
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::builder::CosmosBuilder;
+use crate::impls::build::components::CosmosBuildComponents;
 use crate::types::error::Error;
 
 impl HasBiRelayType for CosmosBuilder {
@@ -15,10 +16,8 @@ impl HasBiRelayType for CosmosBuilder {
     }
 }
 
-impl HasRuntime for CosmosBuilder {
-    type Runtime = TokioRuntimeContext;
-
-    fn runtime(&self) -> &TokioRuntimeContext {
-        &self.runtime
+impl ProvideRuntime<CosmosBuilder> for CosmosBuildComponents {
+    fn runtime(build: &CosmosBuilder) -> &TokioRuntimeContext {
+        &build.runtime
     }
 }

@@ -2,7 +2,7 @@ use cgp_core::{CanRaiseError, HasErrorType};
 use ibc_relayer_components::relay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use ibc_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
@@ -20,13 +20,19 @@ where
     type Error = Error;
 }
 
-impl<SrcChain, DstChain> HasRuntime for MockCosmosBiRelay<SrcChain, DstChain>
+impl<SrcChain, DstChain> HasRuntimeType for MockCosmosBiRelay<SrcChain, DstChain>
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
     type Runtime = TokioRuntimeContext;
+}
 
+impl<SrcChain, DstChain> HasRuntime for MockCosmosBiRelay<SrcChain, DstChain>
+where
+    SrcChain: BasecoinEndpoint,
+    DstChain: BasecoinEndpoint,
+{
     fn runtime(&self) -> &Self::Runtime {
         &self.runtime
     }

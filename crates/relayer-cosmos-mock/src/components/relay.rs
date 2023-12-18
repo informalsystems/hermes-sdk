@@ -17,7 +17,9 @@ use ibc_relayer_components::relay::traits::components::packet_relayers::receive_
 use ibc_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use cgp_core::delegate_components;
+use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
+use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::impls::relay::MockCosmosBuildUpdateClientMessage;
 
@@ -38,6 +40,8 @@ delegate_components!(
     TimeoutUnorderedPacketRelayerComponent:
         BaseTimeoutUnorderedPacketRelayer,
     PacketFilterComponent: AllowAll,
+    RuntimeTypeComponent:
+        ProvideTokioRuntimeType,
     [
         LoggerTypeComponent,
         LoggerFieldComponent,
