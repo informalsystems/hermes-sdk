@@ -1,5 +1,5 @@
+use cgp_core::{ErrorRaiser, ProvideErrorType};
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use cosmos_test_components::bootstrap::components::closures::cosmos_sdk_legacy::CanUseLegacyCosmosSdkChainBootstrapper;
 use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
 use cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
@@ -87,11 +87,11 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
     }
 }
 
-impl HasErrorType for CosmosStdBootstrapContext {
+impl ProvideErrorType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     type Error = Error;
 }
 
-impl CanRaiseError<IoError> for CosmosStdBootstrapContext {
+impl ErrorRaiser<CosmosStdBootstrapContext, IoError> for CosmosStdBootstrapComponents {
     fn raise_error(e: IoError) -> Error {
         e.into()
     }

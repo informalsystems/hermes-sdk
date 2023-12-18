@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::ProvideErrorType;
 use futures::lock::MutexGuard;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use ibc_relayer::chain::cosmos::types::account::Account;
@@ -14,9 +14,10 @@ use tendermint::Hash as TxHash;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::contexts::transaction::CosmosTxContext;
+use crate::impls::transaction::component::CosmosTxComponents;
 use crate::types::error::{BaseError, Error};
 
-impl HasErrorType for CosmosTxContext {
+impl ProvideErrorType<CosmosTxContext> for CosmosTxComponents {
     type Error = Error;
 }
 

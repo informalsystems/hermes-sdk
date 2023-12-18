@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::{Async, ProvideErrorType};
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_components::relay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
@@ -10,6 +10,7 @@ use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
+use crate::impls::birelay::components::CosmosBiRelayComponents;
 use crate::types::error::{BaseError, Error};
 
 impl<ChainA, ChainB> HasTwoChainTypes for CosmosBiRelay<ChainA, ChainB>
@@ -50,7 +51,7 @@ where
     }
 }
 
-impl<ChainA, ChainB> HasErrorType for CosmosBiRelay<ChainA, ChainB>
+impl<ChainA, ChainB> ProvideErrorType<CosmosBiRelay<ChainA, ChainB>> for CosmosBiRelayComponents
 where
     ChainA: Async,
     ChainB: Async,

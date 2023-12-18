@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use cgp_core::prelude::*;
 use cgp_core::RunnerComponent;
 
@@ -80,6 +82,8 @@ delegate_components!(
     ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
     ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
     [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
         LoggerTypeComponent,
         LoggerFieldComponent,
         PacketFilterComponent,

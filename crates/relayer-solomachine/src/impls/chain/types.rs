@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::{Async, ProvideErrorType};
 use ibc_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
@@ -20,6 +20,7 @@ use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
+use crate::impls::chain::component::SolomachineChainComponents;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 use crate::types::client_state::SolomachineClientState;
@@ -43,7 +44,7 @@ use crate::types::payloads::packet::{
     SolomachineTimeoutUnorderedPacketPayload,
 };
 
-impl<Chain> HasErrorType for SolomachineChain<Chain>
+impl<Chain> ProvideErrorType<SolomachineChain<Chain>> for SolomachineChainComponents
 where
     Chain: Solomachine,
 {

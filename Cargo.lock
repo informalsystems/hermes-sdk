@@ -541,7 +541,6 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#10622d2c196313ebe9b9ae3e28c4477eabcec503"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -553,9 +552,9 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#10622d2c196313ebe9b9ae3e28c4477eabcec503"
 dependencies = [
  "cgp-async",
+ "cgp-component",
 ]
 
 [[package]]

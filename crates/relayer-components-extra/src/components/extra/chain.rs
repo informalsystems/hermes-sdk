@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
@@ -58,6 +60,8 @@ delegate_components!(
     ConsensusStateQuerierComponent:
         ConsensusStateTelemetryQuerier<BaseComponents>,
     [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,

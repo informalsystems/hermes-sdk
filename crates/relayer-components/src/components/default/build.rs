@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use cgp_core::prelude::*;
 
 use crate::build::components::birelay::BuildBiRelayFromRelays;
@@ -21,6 +23,8 @@ delegate_components!(
     RelayBuilderComponent: BuildRelayWithCache<BuildRelayFromChains>,
     BiRelayBuilderComponent: BuildBiRelayFromRelays,
     [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
         LoggerFieldComponent,
         LoggerTypeComponent,
         RelayFromChainsBuilderComponent,

@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 
 use async_trait::async_trait;
-use cgp_core::{DelegateComponent, HasComponents, HasErrorType};
+use cgp_core::{DelegateComponent, HasComponents, ProvideErrorType};
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::clients::ics07_tendermint::header::Header;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
@@ -51,7 +51,7 @@ where
 {
 }
 
-impl<SrcChain, DstChain> HasErrorType for MockCosmosRelay<SrcChain, DstChain>
+impl<SrcChain, DstChain> ProvideErrorType<MockCosmosRelay<SrcChain, DstChain>> for MockCosmosRelayComponents
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,

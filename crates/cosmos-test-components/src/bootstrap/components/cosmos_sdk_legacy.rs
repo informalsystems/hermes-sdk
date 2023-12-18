@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use cgp_core::prelude::*;
 use ibc_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
 use ibc_test_components::bootstrap::traits::types::chain::ChainTypeComponent;
@@ -46,6 +48,8 @@ delegate_components!(
 
     // Components that are the same as `CosmosSdkBootstrapComponents`
     [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
         ChainIdGeneratorComponent,
         ChainHomeDirInitializerComponent,
         ChainDataInitializerComponent,

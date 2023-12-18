@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
 use cgp_core::prelude::*;
 
 use crate::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
@@ -46,6 +48,8 @@ pub struct DefaultChainComponents<BaseComponents>(pub PhantomData<BaseComponents
 delegate_components!(
     DefaultChainComponents<BaseComponents>;
     [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
         HeightTypeProviderComponent,
         TimestampTypeProviderComponent,
         ChainIdTypeProviderComponent,
