@@ -35,8 +35,10 @@ where
         + CanBuildBiRelay
         + CanBootstrapRelay<RelayAToBTarget>,
     BiRelay: HasTwoWayRelay<ChainA = ChainA, ChainB = ChainB>,
-    ChainA: HasChainIdType + HasCreateClientOptions<ChainB> + HasIbcChainTypes<ChainB>,
-    ChainB: HasChainIdType + HasCreateClientOptions<ChainA> + HasIbcChainTypes<ChainA>,
+    ChainA:
+        HasChainIdType + HasCreateClientOptions<ChainB> + HasIbcChainTypes<ChainB> + HasErrorType,
+    ChainB:
+        HasChainIdType + HasCreateClientOptions<ChainA> + HasIbcChainTypes<ChainA> + HasErrorType,
 {
     async fn bootstrap_birelay(
         &self,

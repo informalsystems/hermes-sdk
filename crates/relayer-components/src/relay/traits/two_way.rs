@@ -3,9 +3,9 @@ use cgp_core::{Async, HasErrorType};
 use crate::relay::traits::chains::HasRelayChains;
 
 pub trait HasTwoChainTypes: Async {
-    type ChainA: Async;
+    type ChainA: HasErrorType;
 
-    type ChainB: Async;
+    type ChainB: HasErrorType;
 }
 
 /// Trait for types that have a two-way relay context, i.e.,

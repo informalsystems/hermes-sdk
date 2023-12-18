@@ -47,8 +47,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>,
-    SrcChain: HasCreateClientOptions<DstChain> + HasIbcChainTypes<DstChain>,
-    DstChain: HasCreateClientOptions<SrcChain> + HasIbcChainTypes<SrcChain>,
+    SrcChain: HasCreateClientOptions<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
+    DstChain: HasCreateClientOptions<SrcChain> + HasIbcChainTypes<SrcChain> + HasErrorType,
 {
     async fn bootstrap_relay(
         &self,

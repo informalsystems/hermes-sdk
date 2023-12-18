@@ -1,3 +1,5 @@
+use cgp_core::HasErrorType;
+
 use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
 use crate::chain::types::aliases::{ChannelId, Height, PortId, Sequence, Timestamp};
 use crate::relay::traits::chains::HasRelayChains;
@@ -47,8 +49,8 @@ pub trait HasRelayPacketFields: HasRelayChains {
 impl<Relay, SrcChain, DstChain, Packet> HasRelayPacketFields for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>,
-    SrcChain: CanReadPacketFields<DstChain, OutgoingPacket = Packet>,
-    DstChain: CanReadPacketFields<SrcChain, IncomingPacket = Packet>,
+    SrcChain: CanReadPacketFields<DstChain, OutgoingPacket = Packet> + HasErrorType,
+    DstChain: CanReadPacketFields<SrcChain, IncomingPacket = Packet> + HasErrorType,
 {
     fn packet_src_port(packet: &Self::Packet) -> &PortId<SrcChain, DstChain> {
         SrcChain::outgoing_packet_src_port(packet)

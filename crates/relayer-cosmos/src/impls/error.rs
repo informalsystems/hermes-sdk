@@ -14,6 +14,15 @@ where
     type Error = Error;
 }
 
+impl<Context> ErrorRaiser<Context, Error> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: Error) -> Error {
+        e
+    }
+}
+
 impl<Context> ErrorRaiser<Context, TokioRuntimeError> for HandleCosmosError
 where
     Context: HasErrorType<Error = Error>,

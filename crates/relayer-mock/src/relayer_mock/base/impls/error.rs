@@ -12,6 +12,15 @@ where
     type Error = Error;
 }
 
+impl<Context> ErrorRaiser<Context, Error> for HandleMockError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: Error) -> Error {
+        e
+    }
+}
+
 impl<Context> ErrorRaiser<Context, TokioRuntimeError> for HandleMockError
 where
     Context: HasErrorType<Error = Error>,

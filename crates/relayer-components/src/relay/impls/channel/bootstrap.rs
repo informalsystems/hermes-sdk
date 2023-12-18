@@ -1,4 +1,4 @@
-use cgp_core::async_trait;
+use cgp_core::{async_trait, HasErrorType};
 
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -42,8 +42,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanInitChannel
         + CanRelayChannelOpenHandshake,
-    SrcChain: HasInitChannelOptionsType<DstChain> + HasIbcChainTypes<DstChain>,
-    DstChain: HasIbcChainTypes<SrcChain>,
+    SrcChain: HasInitChannelOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
+    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
 {
     async fn bootstrap_channel(
         &self,

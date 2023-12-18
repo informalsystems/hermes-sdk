@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::{Async, CanRaiseError, HasErrorType};
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
@@ -32,7 +32,10 @@ use crate::chain::types::aliases::ClientId;
     additional constraints such as restricting a relay context to handle
     only a single channel or connection.
 */
-pub trait HasRelayChains: HasErrorType {
+pub trait HasRelayChains:
+    CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
+    + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+{
     type Packet: Async;
 
     /**
