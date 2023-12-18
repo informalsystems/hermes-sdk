@@ -51,7 +51,8 @@ where
 {
 }
 
-impl<SrcChain, DstChain> ProvideErrorType<MockCosmosRelay<SrcChain, DstChain>> for MockCosmosRelayComponents
+impl<SrcChain, DstChain> ProvideErrorType<MockCosmosRelay<SrcChain, DstChain>>
+    for MockCosmosRelayComponents
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,

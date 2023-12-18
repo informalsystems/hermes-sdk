@@ -86,7 +86,9 @@ impl<Chain: BasecoinEndpoint> HasComponents for MockCosmosContext<Chain> {
     type Components = DefaultChainComponents<MockCosmosChainComponents>;
 }
 
-impl<Chain: BasecoinEndpoint> ProvideErrorType<MockCosmosContext<Chain>> for MockCosmosChainComponents {
+impl<Chain: BasecoinEndpoint> ProvideErrorType<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
     type Error = Error;
 }
 

@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
+use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
-use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::MessageSenderComponent;
 use crate::chain::traits::types::chain_id::{ChainIdGetterComponent, ChainIdTypeProviderComponent};

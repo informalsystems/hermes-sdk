@@ -1,5 +1,5 @@
 use alloc::sync::Arc;
-use cgp_core::{ProvideErrorType, ErrorRaiser};
+use cgp_core::{ErrorRaiser, ProvideErrorType};
 use core::str::Utf8Error;
 use std::io::Error as IoError;
 use tokio_runtime_components::impls::child_process::PrematureChildProcessExitError;

@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
+use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
-use cgp_core::prelude::*;
 use cgp_core::RunnerComponent;
 
 use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};

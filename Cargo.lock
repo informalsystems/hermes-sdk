@@ -513,7 +513,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#10622d2c196313ebe9b9ae3e28c4477eabcec503"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
 dependencies = [
  "async-trait",
 ]
@@ -521,7 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#10622d2c196313ebe9b9ae3e28c4477eabcec503"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -530,7 +530,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#10622d2c196313ebe9b9ae3e28c4477eabcec503"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",
@@ -541,6 +541,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -552,15 +553,25 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
 dependencies = [
  "cgp-async",
  "cgp-component",
 ]
 
 [[package]]
+name = "cgp-error-eyre"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
+dependencies = [
+ "cgp-core",
+ "eyre",
+]
+
+[[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#10622d2c196313ebe9b9ae3e28c4477eabcec503"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -569,7 +580,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#10622d2c196313ebe9b9ae3e28c4477eabcec503"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/error-components#f02a415871f534c4e6d1e08f849dbec3c00d3185"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -742,6 +753,7 @@ name = "cosmos-integration-tests"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
  "cosmos-client-components",
  "cosmos-test-components",
  "eyre",
@@ -1255,9 +1267,9 @@ checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
 
 [[package]]
 name = "eyre"
-version = "0.6.8"
+version = "0.6.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c2b6b5a29c02cdc822728b7d7b8ae1bab3e3b05d44522770ddd49722eeac7eb"
+checksum = "b6267a1fa6f59179ea4afc8e50fd8612a3cc60bc858f786ff877a4a8cb042799"
 dependencies = [
  "indenter",
  "once_cell",

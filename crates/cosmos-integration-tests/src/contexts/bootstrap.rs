@@ -1,5 +1,6 @@
-use cgp_core::{ErrorRaiser, ProvideErrorType};
 use cgp_core::prelude::*;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::HandleErrorsWithEyre;
 use cosmos_test_components::bootstrap::components::closures::cosmos_sdk_legacy::CanUseLegacyCosmosSdkChainBootstrapper;
 use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
 use cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
@@ -19,7 +20,6 @@ use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
-use std::io::Error as IoError;
 use std::path::PathBuf;
 use tokio::process::Child;
 
@@ -58,6 +58,11 @@ impl HasComponents for CosmosStdBootstrapContext {
 
 delegate_components!(
     CosmosStdBootstrapComponents;
+    [
+        ErrorTypeComponent,
+        ErrorRaiserComponent,
+    ]:
+        HandleErrorsWithEyre,
     ChainConfigTypeComponent: ProvideCosmosChainConfigType,
     GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
     WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
@@ -84,16 +89,6 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
         chain_process: Child,
     ) -> Result<CosmosTestChain, Error> {
         Ok(CosmosTestChain)
-    }
-}
-
-impl ProvideErrorType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    type Error = Error;
-}
-
-impl ErrorRaiser<CosmosStdBootstrapContext, IoError> for CosmosStdBootstrapComponents {
-    fn raise_error(e: IoError) -> Error {
-        e.into()
     }
 }
 
