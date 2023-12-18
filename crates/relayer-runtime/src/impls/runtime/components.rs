@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -10,6 +11,7 @@ use tokio_runtime_components::impls::child_process::StartTokioChildProcess;
 use tokio_runtime_components::impls::exec_command::TokioExecCommand;
 use tokio_runtime_components::impls::read_file::TokioReadFileAsString;
 use tokio_runtime_components::impls::reserve_port::TokioReserveTcpPort;
+use tokio_runtime_components::impls::sleep::TokioSleep;
 use tokio_runtime_components::impls::types::child_process::ProvideTokioChildProcessType;
 use tokio_runtime_components::impls::types::file_path::ProvideStdPathType;
 use tokio_runtime_components::impls::write_file::TokioWriteStringToFile;
@@ -31,4 +33,5 @@ delegate_components!(
     CommandExecutorComponent: TokioExecCommand,
     StringToFileWriterComponent: TokioWriteStringToFile,
     TcpPortReserverComponent: TokioReserveTcpPort,
+    SleeperComponent: TokioSleep,
 );
