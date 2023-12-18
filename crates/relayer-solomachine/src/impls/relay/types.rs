@@ -22,6 +22,24 @@ where
     type Error = Error;
 }
 
+impl<Chain> ErrorRaiser<SolomachineRelay<Chain>, Error> for SolomachineRelayComponents
+where
+    Chain: Async,
+{
+    fn raise_error(e: Error) -> Error {
+        e
+    }
+}
+
+impl<Chain> ErrorRaiser<SolomachineRelay<Chain>, CosmosError> for SolomachineRelayComponents
+where
+    Chain: Async,
+{
+    fn raise_error(e: CosmosError) -> Error {
+        BaseError::cosmos_chain_error(e).into()
+    }
+}
+
 impl<Chain> ErrorRaiser<SolomachineRelay<Chain>, TokioRuntimeError> for SolomachineRelayComponents
 where
     Chain: Async,
@@ -49,14 +67,6 @@ where
     type DstChain = CosmosChain<BaseChainHandle>;
 
     type Packet = Packet;
-
-    fn src_chain_error(e: Error) -> Error {
-        e
-    }
-
-    fn dst_chain_error(e: CosmosError) -> Error {
-        BaseError::cosmos_chain_error(e).into()
-    }
 
     fn src_client_id(&self) -> &ClientId {
         &self.src_client_id

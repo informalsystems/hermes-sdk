@@ -9,7 +9,6 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::relay::component::CosmosRelayComponents;
-use crate::types::error::Error;
 
 impl<SrcChain, DstChain> HasRelayChains for CosmosRelay<SrcChain, DstChain>
 where
@@ -21,14 +20,6 @@ where
     type DstChain = CosmosChain<DstChain>;
 
     type Packet = Packet;
-
-    fn src_chain_error(e: Error) -> Error {
-        e
-    }
-
-    fn dst_chain_error(e: Error) -> Error {
-        e
-    }
 
     fn src_chain(&self) -> &CosmosChain<SrcChain> {
         &self.src_chain

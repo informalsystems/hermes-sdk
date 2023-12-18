@@ -28,7 +28,7 @@ where
             .dst_chain()
             .query_chain_id_from_channel_id(dst_channel_id, dst_port)
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let same_chain = &src_chain_id == relay.src_chain().chain_id();
 
@@ -54,7 +54,7 @@ where
             .src_chain()
             .query_chain_id_from_channel_id(src_channel_id, src_port)
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let same_chain = &dst_chain_id == relay.dst_chain().chain_id();
 

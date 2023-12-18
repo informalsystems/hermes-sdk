@@ -1,5 +1,5 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use ibc_relayer_components::relay::traits::two_way::{
+use ibc_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
 use ibc_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
@@ -18,6 +18,16 @@ where
     DstChain: BasecoinEndpoint,
 {
     type Error = Error;
+}
+
+impl<SrcChain, DstChain> CanRaiseError<Error> for MockCosmosBiRelay<SrcChain, DstChain>
+where
+    SrcChain: BasecoinEndpoint,
+    DstChain: BasecoinEndpoint,
+{
+    fn raise_error(e: Error) -> Error {
+        e
+    }
 }
 
 impl<SrcChain, DstChain> HasRuntimeType for MockCosmosBiRelay<SrcChain, DstChain>
@@ -79,9 +89,5 @@ where
 
     fn relay_b_to_a(&self) -> &Self::RelayBToA {
         self.relay_b_to_a()
-    }
-
-    fn relay_error(e: <Self::RelayAToB as HasErrorType>::Error) -> Self::Error {
-        Error::source(e)
     }
 }

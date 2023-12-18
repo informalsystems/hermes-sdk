@@ -6,6 +6,7 @@
 mod std_prelude;
 extern crate alloc;
 
+pub mod birelay;
 pub mod build;
 pub mod chain;
 pub mod components;

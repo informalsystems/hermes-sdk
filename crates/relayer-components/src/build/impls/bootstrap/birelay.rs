@@ -1,5 +1,6 @@
 use cgp_core::{async_trait, HasErrorType};
 
+use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
@@ -9,7 +10,6 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::create_client::HasCreateClientOptions;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;
 
 #[async_trait]
@@ -35,8 +35,10 @@ where
         + CanBuildBiRelay
         + CanBootstrapRelay<RelayAToBTarget>,
     BiRelay: HasTwoWayRelay<ChainA = ChainA, ChainB = ChainB>,
-    ChainA: HasChainIdType + HasCreateClientOptions<ChainB> + HasIbcChainTypes<ChainB>,
-    ChainB: HasChainIdType + HasCreateClientOptions<ChainA> + HasIbcChainTypes<ChainA>,
+    ChainA:
+        HasChainIdType + HasCreateClientOptions<ChainB> + HasIbcChainTypes<ChainB> + HasErrorType,
+    ChainB:
+        HasChainIdType + HasCreateClientOptions<ChainA> + HasIbcChainTypes<ChainA> + HasErrorType,
 {
     async fn bootstrap_birelay(
         &self,

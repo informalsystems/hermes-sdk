@@ -61,12 +61,12 @@ where
         let src_proof_height = src_chain
             .query_chain_height()
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let src_client_state = dst_chain
             .query_client_state(relay.dst_client_id())
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_try_payload = src_chain
             .build_connection_open_try_payload(
@@ -76,7 +76,7 @@ where
                 src_connection_id,
             )
             .await
-            .map_err(Relay::src_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let open_try_message = dst_chain
             .build_connection_open_try_message(
@@ -86,7 +86,7 @@ where
                 open_try_payload,
             )
             .await
-            .map_err(Relay::dst_chain_error)?;
+            .map_err(Relay::raise_error)?;
 
         let events = relay
             .send_message(DestinationTarget, open_try_message)

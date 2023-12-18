@@ -1,5 +1,6 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::{async_trait, CanRaiseError, HasErrorType};
 
+use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::components::chain_builder::CanBuildChain;
 use crate::build::traits::components::relay_builder::CanBuildRelay;
@@ -12,7 +13,6 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use crate::relay::traits::two_way::HasTwoWayRelay;
 use crate::std_prelude::*;
 
 #[async_trait]
@@ -47,8 +47,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>,
-    SrcChain: HasCreateClientOptions<DstChain> + HasIbcChainTypes<DstChain>,
-    DstChain: HasCreateClientOptions<SrcChain> + HasIbcChainTypes<SrcChain>,
+    SrcChain: HasCreateClientOptions<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
+    DstChain: HasCreateClientOptions<SrcChain> + HasIbcChainTypes<SrcChain> + HasErrorType,
 {
     async fn bootstrap_relay(
         &self,
@@ -69,8 +69,8 @@ where
         let src_client_id =
             Relay::create_client(SourceTarget, &src_chain, &dst_chain, dst_payload_options)
                 .await
-                .map_err(Build::BiRelay::relay_error)
-                .map_err(Build::birelay_error)?;
+                .map_err(Build::BiRelay::raise_error)
+                .map_err(Build::raise_error)?;
 
         let dst_client_id = Relay::create_client(
             DestinationTarget,
@@ -79,8 +79,8 @@ where
             src_payload_options,
         )
         .await
-        .map_err(Build::BiRelay::relay_error)
-        .map_err(Build::birelay_error)?;
+        .map_err(Build::BiRelay::raise_error)
+        .map_err(Build::raise_error)?;
 
         let relay = self
             .build_relay(

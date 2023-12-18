@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::{Async, CanRaiseError, HasErrorType};
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
@@ -32,7 +32,10 @@ use crate::chain::types::aliases::ClientId;
     additional constraints such as restricting a relay context to handle
     only a single channel or connection.
 */
-pub trait HasRelayChains: HasErrorType {
+pub trait HasRelayChains:
+    CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
+    + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+{
     type Packet: Async;
 
     /**
@@ -60,10 +63,6 @@ pub trait HasRelayChains: HasErrorType {
         Get a reference to the destination chain context from the relay context.
     */
     fn dst_chain(&self) -> &Self::DstChain;
-
-    fn src_chain_error(e: <Self::SrcChain as HasErrorType>::Error) -> Self::Error;
-
-    fn dst_chain_error(e: <Self::DstChain as HasErrorType>::Error) -> Self::Error;
 
     /**
         Get the client ID on the source chain that corresponds to the destination

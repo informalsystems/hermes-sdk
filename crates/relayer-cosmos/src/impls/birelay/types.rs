@@ -1,6 +1,6 @@
 use cgp_core::Async;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::relay::traits::two_way::{
+use ibc_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
 use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -10,7 +10,6 @@ use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::birelay::components::CosmosBiRelayComponents;
-use crate::types::error::Error;
 
 impl<ChainA, ChainB> HasTwoChainTypes for CosmosBiRelay<ChainA, ChainB>
 where
@@ -43,10 +42,6 @@ where
 
     fn relay_b_to_a(&self) -> &CosmosRelay<ChainB, ChainA> {
         &self.relay_b_to_a
-    }
-
-    fn relay_error(e: Error) -> Error {
-        e
     }
 }
 

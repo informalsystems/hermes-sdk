@@ -1,4 +1,4 @@
-use cgp_core::async_trait;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
@@ -39,8 +39,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanInitConnection
         + CanRelayConnectionOpenHandshake,
-    SrcChain: HasInitConnectionOptionsType<DstChain> + HasIbcChainTypes<DstChain>,
-    DstChain: HasIbcChainTypes<SrcChain>,
+    SrcChain: HasInitConnectionOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
+    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
 {
     async fn bootstrap_connection(
         &self,

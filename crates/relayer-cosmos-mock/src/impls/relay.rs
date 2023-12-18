@@ -82,6 +82,17 @@ where
     }
 }
 
+impl<SrcChain, DstChain> ErrorRaiser<MockCosmosRelay<SrcChain, DstChain>, Error>
+    for MockCosmosRelayComponents
+where
+    SrcChain: BasecoinEndpoint,
+    DstChain: BasecoinEndpoint,
+{
+    fn raise_error(e: Error) -> Error {
+        e
+    }
+}
+
 impl<SrcChain, DstChain> HasRelayChains for MockCosmosRelay<SrcChain, DstChain>
 where
     SrcChain: BasecoinEndpoint,
@@ -92,14 +103,6 @@ where
     type SrcChain = MockCosmosContext<SrcChain>;
 
     type DstChain = MockCosmosContext<DstChain>;
-
-    fn src_chain_error(e: Error) -> Self::Error {
-        e
-    }
-
-    fn dst_chain_error(e: Error) -> Self::Error {
-        e
-    }
 
     fn src_chain(&self) -> &MockCosmosContext<SrcChain> {
         &self.src_chain

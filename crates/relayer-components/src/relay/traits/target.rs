@@ -41,13 +41,13 @@ impl<Relay: HasRelayChains> ChainTarget<Relay> for SourceTarget {
     type CounterpartyChain = Relay::DstChain;
 
     fn target_chain_error(e: <Self::TargetChain as HasErrorType>::Error) -> Relay::Error {
-        Relay::src_chain_error(e)
+        Relay::raise_error(e)
     }
 
     fn counterparty_chain_error(
         e: <Self::CounterpartyChain as HasErrorType>::Error,
     ) -> Relay::Error {
-        Relay::dst_chain_error(e)
+        Relay::raise_error(e)
     }
 
     fn target_chain(context: &Relay) -> &Self::TargetChain {
@@ -75,13 +75,13 @@ impl<Relay: HasRelayChains> ChainTarget<Relay> for DestinationTarget {
     type CounterpartyChain = Relay::SrcChain;
 
     fn target_chain_error(e: <Self::TargetChain as HasErrorType>::Error) -> Relay::Error {
-        Relay::dst_chain_error(e)
+        Relay::raise_error(e)
     }
 
     fn counterparty_chain_error(
         e: <Self::CounterpartyChain as HasErrorType>::Error,
     ) -> Relay::Error {
-        Relay::src_chain_error(e)
+        Relay::raise_error(e)
     }
 
     fn target_chain(context: &Relay) -> &Self::TargetChain {

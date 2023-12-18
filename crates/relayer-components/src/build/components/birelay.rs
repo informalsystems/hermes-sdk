@@ -1,11 +1,11 @@
-use cgp_core::async_trait;
+use cgp_core::{async_trait, HasErrorType};
 
+use crate::birelay::traits::two_way::HasTwoChainTypes;
 use crate::build::traits::components::birelay_builder::BiRelayBuilder;
 use crate::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use crate::build::traits::components::relay_builder::CanBuildRelay;
 use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::two_way::HasTwoChainTypes;
 use crate::std_prelude::*;
 
 pub struct BuildBiRelayFromRelays;
@@ -16,8 +16,8 @@ where
     Build:
         CanBuildBiRelayFromRelays + CanBuildRelay<RelayAToBTarget> + CanBuildRelay<RelayBToATarget>,
     Build::BiRelay: HasTwoChainTypes<ChainA = ChainA, ChainB = ChainB>,
-    ChainA: HasIbcChainTypes<ChainB>,
-    ChainB: HasIbcChainTypes<ChainA>,
+    ChainA: HasIbcChainTypes<ChainB> + HasErrorType,
+    ChainB: HasIbcChainTypes<ChainA> + HasErrorType,
 {
     async fn build_birelay(
         build: &Build,

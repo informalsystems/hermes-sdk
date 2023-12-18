@@ -1,4 +1,4 @@
-use cgp_core::async_trait;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
@@ -29,8 +29,8 @@ where
         + CanRelayChannelOpenTry
         + CanRelayChannelOpenAck
         + CanRelayChannelOpenConfirm,
-    SrcChain: HasIbcChainTypes<DstChain>,
-    DstChain: HasIbcChainTypes<SrcChain>,
+    SrcChain: HasIbcChainTypes<DstChain> + HasErrorType,
+    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
 {
     async fn relay_channel_open_handshake(
         relay: &Relay,

@@ -1,5 +1,6 @@
 use cgp_core::{HasComponents, HasErrorType};
 
+use crate::birelay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
@@ -12,7 +13,6 @@ use crate::build::types::aliases::{ChainA, ChainB};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::components::default::build::DefaultBuildComponents;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 use crate::runtime::traits::mutex::HasMutex;
 
 pub trait UseDefaultBuilderComponents: CanBuildBiRelay
@@ -36,8 +36,8 @@ where
         + HasTwoWayRelay<RelayAToB = RelayAToB, RelayBToA = RelayBToA>,
     RelayAToB: Clone + HasRelayChains<SrcChain = ChainA, DstChain = ChainB>,
     RelayBToA: Clone + HasRelayChains<SrcChain = ChainB, DstChain = ChainA>,
-    ChainA: Clone + HasIbcChainTypes<ChainB>,
-    ChainB: Clone + HasIbcChainTypes<ChainA>,
+    ChainA: Clone + HasIbcChainTypes<ChainB> + HasErrorType,
+    ChainB: Clone + HasIbcChainTypes<ChainA> + HasErrorType,
     ChainA::ChainId: Ord + Clone,
     ChainB::ChainId: Ord + Clone,
     ChainA::ClientId: Ord + Clone,
