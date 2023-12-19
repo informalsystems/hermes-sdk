@@ -49,15 +49,25 @@ use crate::bootstrap::traits::types::wallet_config::{
 
 pub struct CosmosSdkBootstrapComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-delegate_components!(
-    CosmosSdkBootstrapComponents<BaseComponents>;
+pub trait IsCosmosSdkBootstrapComponent<Component> {}
 
-    // Components that will be swapped in `LegacyCosmosSdkBootstrapComponents`
+pub trait IsCommonCosmosSdkBootstrapComponent<Component> {}
+
+// Components that will be swapped in `LegacyCosmosSdkBootstrapComponents`
+delegate_components!(
+    CosmosSdkBootstrapComponents<BaseComponents>
+        @markers[ IsCosmosSdkBootstrapComponent ]
+    ;
     GenesisAccountAdderComponent: AddCosmosGenesisAccount,
     GenesisValidatorAdderComponent: AddCosmosGenesisValidator,
     GenesisTransactionsCollectorComponent: CollectCosmosGentxs,
+);
 
-    // Components that are common with `LegacyCosmosSdkBootstrapComponents`
+// Components that are common with `LegacyCosmosSdkBootstrapComponents`
+delegate_components!(
+    CosmosSdkBootstrapComponents<BaseComponents>
+        @markers[ IsCosmosSdkBootstrapComponent, IsCommonCosmosSdkBootstrapComponent ]
+    ;
     ChainIdGeneratorComponent: GenerateRandomChainId,
     ChainHomeDirInitializerComponent: CreateChainHomeDirFromTestDir,
     ChainDataInitializerComponent: InitCosmosChainData,
