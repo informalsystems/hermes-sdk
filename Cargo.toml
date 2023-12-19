@@ -80,17 +80,14 @@ ibc-derive          = { git = "https://github.com/cosmos/ibc-rs.git", branch = "
 basecoin-app        = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
 basecoin-store      = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
 
-# cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
-# cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/component-delegation-marker" }
+cgp-core            = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/component-delegation-marker" }
+cgp-component       = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/component-delegation-marker" }
 cgp-component-macro = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error-eyre      = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-run             = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-inner           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
-
-cgp-component = { path = "../cgp/crates/cgp-component" }
-cgp-core = { path = "../cgp/crates/cgp-core" }
 
 # ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
