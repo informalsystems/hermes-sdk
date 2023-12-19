@@ -1,6 +1,7 @@
 pub mod child_process;
 pub mod concurrent_task;
 pub mod exec_command;
+pub mod map_stream;
 pub mod mutex;
 pub mod parallel_task;
 pub mod read_file;

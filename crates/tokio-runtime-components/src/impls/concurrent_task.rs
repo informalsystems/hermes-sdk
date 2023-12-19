@@ -7,10 +7,9 @@ use crate::impls::types::stream::HasBoxedStreamType;
 pub struct RunConcurrentTasks;
 
 #[async_trait]
-impl<Runtime, Components> ConcurrentTaskRunner<Runtime> for RunConcurrentTasks
+impl<Runtime> ConcurrentTaskRunner<Runtime> for RunConcurrentTasks
 where
-    Runtime: HasComponents<Components = Components>,
-    Components: HasBoxedStreamType<Runtime>,
+    Runtime: HasBoxedStreamType,
 {
     async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<T>)
     where
@@ -19,11 +18,11 @@ where
         run_concurrent_tasks(stream::iter(tasks)).await
     }
 
-    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Components::Stream<T>)
+    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<T>)
     where
         T: Task,
     {
-        run_concurrent_tasks(Components::to_boxed_stream(tasks)).await
+        run_concurrent_tasks(Runtime::to_boxed_stream(tasks)).await
     }
 }
 pub async fn run_concurrent_tasks<T>(tasks: impl Stream<Item = T>)

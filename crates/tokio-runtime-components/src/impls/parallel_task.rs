@@ -11,10 +11,9 @@ use crate::impls::types::stream::HasBoxedStreamType;
 pub struct TokioRunParallelTasks;
 
 #[async_trait]
-impl<Runtime, Components> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
+impl<Runtime> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
 where
-    Runtime: HasComponents<Components = Components>,
-    Components: HasBoxedStreamType<Runtime>,
+    Runtime: HasBoxedStreamType,
 {
     async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<T>)
     where
@@ -23,11 +22,11 @@ where
         run_parallel_tasks(tasks).await
     }
 
-    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Components::Stream<T>)
+    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Runtime::Stream<T>)
     where
         T: Task,
     {
-        run_parallel_task_stream(Components::to_boxed_stream(tasks)).await
+        run_parallel_task_stream(Runtime::to_boxed_stream(tasks)).await
     }
 }
 

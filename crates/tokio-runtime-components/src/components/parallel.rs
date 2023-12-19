@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
 use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
-use ibc_relayer_components::runtime::traits::stream::StreamTypeComponent;
+use ibc_relayer_components::runtime::traits::stream::{StreamMapperComponent, StreamTypeComponent};
 use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
@@ -13,6 +13,7 @@ use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponen
 
 use crate::impls::child_process::StartTokioChildProcess;
 use crate::impls::exec_command::TokioExecCommand;
+use crate::impls::map_stream::BoxedStreamMapper;
 use crate::impls::mutex::ProvideFuturesMutex;
 use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::read_file::TokioReadFileAsString;
@@ -32,6 +33,7 @@ delegate_components! {
         SleeperComponent: TokioSleep,
         MutexComponent: ProvideFuturesMutex,
         StreamTypeComponent: ProvideBoxedStreamType,
+        StreamMapperComponent: BoxedStreamMapper,
         ConcurrentTaskRunnerComponent: TokioRunParallelTasks,
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
