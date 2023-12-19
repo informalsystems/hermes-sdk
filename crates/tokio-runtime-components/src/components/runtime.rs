@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
 use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
@@ -10,6 +11,7 @@ use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponen
 
 use crate::impls::child_process::StartTokioChildProcess;
 use crate::impls::exec_command::TokioExecCommand;
+use crate::impls::mutex::ProvideFuturesMutex;
 use crate::impls::read_file::TokioReadFileAsString;
 use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
@@ -24,6 +26,7 @@ delegate_components! {
     #[mark_delegate(DelegatesToTokioRuntimeComponents)]
     TokioRuntimeComponents {
         SleeperComponent: TokioSleep,
+        MutexComponent: ProvideFuturesMutex,
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
         ChildProcessStarterComponent: StartTokioChildProcess,

@@ -521,7 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/component-delegation-marker#7631dad0d9c6d07b000897b5eaeca70cf086b2ea"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -530,7 +530,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/fix-impl-gat-bounds#5a9330c1340cf0097ed7996aa852f422a6cfeccd"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",

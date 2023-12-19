@@ -1,5 +1,6 @@
 pub mod child_process;
 pub mod exec_command;
+pub mod mutex;
 pub mod read_file;
 pub mod reserve_port;
 pub mod sleep;

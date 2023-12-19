@@ -1,12 +1,14 @@
-use async_trait::async_trait;
-use cgp_core::Async;
+use cgp_core::prelude::*;
 use futures::lock::{Mutex, MutexGuard};
-use ibc_relayer_components::runtime::traits::mutex::HasMutex;
+use ibc_relayer_components::runtime::traits::mutex::ProvideMutex;
 
-use crate::types::runtime::TokioRuntimeContext;
+pub struct ProvideFuturesMutex;
 
 #[async_trait]
-impl HasMutex for TokioRuntimeContext {
+impl<Runtime> ProvideMutex<Runtime> for ProvideFuturesMutex
+where
+    Runtime: Async,
+{
     type Mutex<T: Async> = Mutex<T>;
 
     type MutexGuard<'a, T: Async> = MutexGuard<'a, T>;
