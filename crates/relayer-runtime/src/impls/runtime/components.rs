@@ -1,7 +1,7 @@
 use cgp_core::delegate_all;
 use cgp_core::prelude::*;
-use tokio_runtime_components::components::runtime::{
-    IsTokioRuntimeComponent, TokioRuntimeComponents,
+use tokio_runtime_components::components::parallel::{
+    IsTokioParallelRuntimeComponent, TokioParallelRuntimeComponents,
 };
 
 use crate::types::runtime::TokioRuntimeContext;
@@ -13,7 +13,7 @@ impl HasComponents for TokioRuntimeContext {
 }
 
 delegate_all!(
-    IsTokioRuntimeComponent,
-    TokioRuntimeComponents,
+    IsTokioParallelRuntimeComponent,
+    TokioParallelRuntimeComponents,
     RelayerRuntimeComponents,
 );

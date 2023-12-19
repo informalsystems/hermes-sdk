@@ -14,7 +14,7 @@ use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponen
 use crate::impls::child_process::StartTokioChildProcess;
 use crate::impls::exec_command::TokioExecCommand;
 use crate::impls::mutex::ProvideFuturesMutex;
-use crate::impls::parllel_task::TokioRunParallelTasks;
+use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::read_file::TokioReadFileAsString;
 use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
@@ -23,12 +23,12 @@ use crate::impls::types::file_path::ProvideStdPathType;
 use crate::impls::types::stream::ProvideBoxedStreamType;
 use crate::impls::write_file::TokioWriteStringToFile;
 
-pub struct TokioRuntimeComponents;
+pub struct TokioParallelRuntimeComponents;
 
 delegate_components! {
-    #[mark_component(IsTokioRuntimeComponent)]
-    #[mark_delegate(DelegatesToTokioRuntimeComponents)]
-    TokioRuntimeComponents {
+    #[mark_component(IsTokioParallelRuntimeComponent)]
+    #[mark_delegate(DelegatesToTokioParallelRuntimeComponents)]
+    TokioParallelRuntimeComponents {
         SleeperComponent: TokioSleep,
         MutexComponent: ProvideFuturesMutex,
         StreamTypeComponent: ProvideBoxedStreamType,
