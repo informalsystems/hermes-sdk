@@ -4,5 +4,4 @@ pub mod error;
 pub mod spawn;
 pub mod stream;
 pub mod subscription;
-pub mod task;
 pub mod time;

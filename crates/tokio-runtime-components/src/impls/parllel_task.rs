@@ -1,19 +1,20 @@
-use core::pin::Pin;
 use core::task::{Context, Poll};
 
 use cgp_core::prelude::*;
-use ibc_relayer_components::runtime::traits::stream::HasStreamType;
-use ibc_relayer_components::runtime::traits::task::{CanRunConcurrentTasks, Task, ConcurrentTaskRunner};
 use futures::stream::{Stream, StreamExt};
 use futures::task::noop_waker;
+use ibc_relayer_components::runtime::traits::task::{ConcurrentTaskRunner, Task};
 use tokio::task::JoinSet;
+
+use crate::impls::types::stream::HasBoxedStreamType;
 
 pub struct TokioRunParallelTasks;
 
 #[async_trait]
-impl<Runtime> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
+impl<Runtime, Components> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
 where
-    Runtime: HasStreamType<Stream<Item> = ()>,
+    Runtime: HasComponents<Components = Components>,
+    Components: HasBoxedStreamType<Runtime>,
 {
     async fn run_concurrent_tasks<T>(_runtime: &Runtime, tasks: Vec<T>)
     where
@@ -22,16 +23,13 @@ where
         run_parallel_tasks(tasks).await
     }
 
-    async fn run_concurrent_task_stream<T>(
-        _runtime: &Runtime,
-        tasks: Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>,
-    ) where
+    async fn run_concurrent_task_stream<T>(_runtime: &Runtime, tasks: Components::Stream<T>)
+    where
         T: Task,
     {
-        run_parallel_task_stream(tasks).await
+        run_parallel_task_stream(Components::to_boxed_stream(tasks)).await
     }
 }
-
 
 pub async fn run_parallel_tasks<T>(tasks: Vec<T>)
 where
