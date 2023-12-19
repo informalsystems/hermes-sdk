@@ -1,3 +1,4 @@
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -12,23 +13,27 @@ use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::contexts::builder::CosmosBuilder;
-use crate::impls::build::chain::BuildCosmosChain;
 use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosBuildComponents;
+
+pub struct CosmosBaseBuildComponents;
 
 impl HasComponents for CosmosBuilder {
     type Components = CosmosBuildComponents;
 }
 
-impl<Component> DelegateComponent<Component> for CosmosBuildComponents
-where
-    Self: IsExtraBuildComponent<Component>,
-{
-    type Delegate = ExtraBuildComponents<BuildCosmosChain>;
+impl HasComponents for CosmosBuildComponents {
+    type Components = CosmosBaseBuildComponents;
 }
 
-impl CanUseExtraBuildComponents<BuildCosmosChain> for CosmosBuilder {}
+delegate_all!(
+    IsExtraBuildComponent,
+    ExtraBuildComponents<CosmosBaseBuildComponents>,
+    CosmosBuildComponents,
+);
+
+impl CanUseExtraBuildComponents for CosmosBuilder {}
 
 delegate_components!(
     CosmosBuildComponents;

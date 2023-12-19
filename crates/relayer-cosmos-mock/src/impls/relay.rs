@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 
 use async_trait::async_trait;
-use cgp_core::{DelegateComponent, ErrorRaiser, HasComponents, ProvideErrorType};
+use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::clients::ics07_tendermint::header::Header;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
@@ -27,14 +27,6 @@ use crate::contexts::relay::MockCosmosRelay;
 use crate::traits::endpoint::BasecoinEndpoint;
 use crate::types::error::Error;
 use crate::util::dummy::dummy_signer;
-
-impl<Name, SrcChain, DstChain> DelegateComponent<Name> for MockCosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
-{
-    type Delegate = MockCosmosRelayComponents;
-}
 
 impl<SrcChain, DstChain> HasComponents for MockCosmosRelay<SrcChain, DstChain>
 where

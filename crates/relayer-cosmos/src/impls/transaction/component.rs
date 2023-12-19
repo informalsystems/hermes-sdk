@@ -1,5 +1,5 @@
 use cgp_core::{
-    delegate_components, DelegateComponent, ErrorRaiserComponent, ErrorTypeComponent, HasComponents,
+    delegate_components, DelegateComponent, ErrorRaiserComponent, ErrorTypeComponent, HasComponents, delegate_all,
 };
 use cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
 use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
@@ -24,12 +24,11 @@ impl HasComponents for CosmosTxContext {
     type Components = CosmosTxComponents;
 }
 
-impl<Component> DelegateComponent<Component> for CosmosTxComponents
-where
-    Self: IsDefaultTxComponents<Component>,
-{
-    type Delegate = DefaultTxComponents;
-}
+delegate_all!(
+    IsDefaultTxComponents,
+    DefaultTxComponents,
+    CosmosTxComponents,
+);
 
 impl CanUseDefaultTxComponents for CosmosTxContext {}
 

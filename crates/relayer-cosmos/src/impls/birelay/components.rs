@@ -1,3 +1,4 @@
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -23,12 +24,11 @@ where
     type Components = CosmosBiRelayComponents;
 }
 
-impl<Component> DelegateComponent<Component> for CosmosBiRelayComponents
-where
-    Self: IsDefaultBiRelayComponent<Component>,
-{
-    type Delegate = DefaultBiRelayComponents;
-}
+delegate_all!(
+    IsDefaultBiRelayComponent,
+    DefaultBiRelayComponents,
+    CosmosBiRelayComponents,
+);
 
 delegate_components!(
     CosmosBiRelayComponents;

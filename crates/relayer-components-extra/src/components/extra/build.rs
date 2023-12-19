@@ -45,15 +45,15 @@ delegate_components!(
     }
 );
 
-pub trait CanUseExtraBuildComponents<BaseComponents>:
-    UseExtraBuildComponents<BaseComponents>
+pub trait CanUseExtraBuildComponents:
+    UseExtraBuildComponents
 where
     ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
     ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
 {
 }
 
-pub trait UseExtraBuildComponents<BaseComponents>: CanBuildBiRelay
+pub trait UseExtraBuildComponents: CanBuildBiRelay
 where
     ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
     ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
@@ -61,7 +61,7 @@ where
 }
 
 impl<Build, BiRelay, RelayAToB, RelayBToA, ChainA, ChainB, Error, Components, BaseComponents>
-    UseExtraBuildComponents<BaseComponents> for Build
+    UseExtraBuildComponents for Build
 where
     Build: HasBatchConfig
         + HasBiRelayType<BiRelay = BiRelay>
@@ -96,7 +96,9 @@ where
     ChainA::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     ChainB::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     Build::Runtime: HasMutex,
-    Components: DelegatesToExtraBuildComponents<BaseComponents>
+    Components:
+        HasComponents<Components = BaseComponents>
+        + DelegatesToExtraBuildComponents<BaseComponents>
         + BiRelayFromRelayBuilder<Build>
         + RelayWithBatchBuilder<Build, RelayAToBTarget>
         + RelayWithBatchBuilder<Build, RelayBToATarget>,

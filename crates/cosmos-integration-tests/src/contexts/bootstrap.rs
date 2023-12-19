@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent, delegate_all};
 use cgp_error_eyre::HandleErrorsWithEyre;
 use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
 use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
@@ -58,12 +58,11 @@ impl HasComponents for CosmosStdBootstrapContext {
     type Components = CosmosStdBootstrapComponents;
 }
 
-impl<Component> DelegateComponent<Component> for CosmosStdBootstrapComponents
-where
-    CosmosStdBootstrapComponents: IsLegacyCosmosSdkBootstrapComponent<Component>,
-{
-    type Delegate = LegacyCosmosSdkBootstrapComponents;
-}
+delegate_all!(
+    IsLegacyCosmosSdkBootstrapComponent,
+    LegacyCosmosSdkBootstrapComponents,
+    CosmosStdBootstrapComponents,
+);
 
 delegate_components!(
     CosmosStdBootstrapComponents;

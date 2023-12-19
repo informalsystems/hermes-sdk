@@ -1,3 +1,4 @@
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use ibc_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
@@ -9,12 +10,11 @@ use crate::context::relay::SolomachineRelay;
 
 pub struct SolomachineRelayComponents;
 
-impl<Component> DelegateComponent<Component> for SolomachineRelayComponents
-where
-    Self: IsDefaultRelayComponent<Component>,
-{
-    type Delegate = DefaultRelayComponents;
-}
+delegate_all!(
+    IsDefaultRelayComponent,
+    DefaultRelayComponents,
+    SolomachineRelayComponents,
+);
 
 impl<Chain> HasComponents for SolomachineRelay<Chain>
 where

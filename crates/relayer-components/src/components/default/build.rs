@@ -35,7 +35,13 @@ delegate_components!(
     }
 );
 
-pub trait UseDefaultBuildComponents<BaseComponents>: CanBuildBiRelay
+pub trait CanUseDefaultBuildComponents: UseDefaultBuildComponents
+where
+    ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
+    ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
+{}
+
+pub trait UseDefaultBuildComponents: CanBuildBiRelay
 where
     ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
     ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
@@ -43,7 +49,7 @@ where
 }
 
 impl<Build, BiRelay, RelayAToB, RelayBToA, ChainA, ChainB, Components, BaseComponents>
-    UseDefaultBuildComponents<BaseComponents> for Build
+    UseDefaultBuildComponents for Build
 where
     Build: HasBiRelayType<BiRelay = BiRelay>
         + HasRelayCache<RelayAToBTarget>
@@ -62,7 +68,9 @@ where
     ChainA::ClientId: Ord + Clone,
     ChainB::ClientId: Ord + Clone,
     Build::Runtime: HasMutex,
-    Components: DelegatesToDefaultBuildComponents<BaseComponents>
+    Components:
+        HasComponents<Components = BaseComponents>
+        + DelegatesToDefaultBuildComponents<BaseComponents>
         + BiRelayFromRelayBuilder<Build>
         + RelayFromChainsBuilder<Build, RelayAToBTarget>
         + RelayFromChainsBuilder<Build, RelayBToATarget>,

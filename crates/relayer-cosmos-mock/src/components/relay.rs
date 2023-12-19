@@ -9,19 +9,18 @@ use ibc_relayer_components::relay::components::packet_filters::allow_all::AllowA
 
 use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilterComponent;
 
-use cgp_core::{delegate_components, DelegateComponent};
+use cgp_core::{delegate_components, DelegateComponent, delegate_all};
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 pub struct MockCosmosRelayComponents;
 
-impl<Component> DelegateComponent<Component> for MockCosmosRelayComponents
-where
-    Self: IsDefaultRelayComponent<Component>,
-{
-    type Delegate = DefaultRelayComponents;
-}
+delegate_all!(
+    IsDefaultRelayComponent,
+    DefaultRelayComponents,
+    MockCosmosRelayComponents,
+);
 
 delegate_components!(
     MockCosmosRelayComponents;

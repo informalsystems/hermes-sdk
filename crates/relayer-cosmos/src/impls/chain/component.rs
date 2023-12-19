@@ -1,3 +1,4 @@
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -97,12 +98,11 @@ where
     type Components = CosmosChainComponents;
 }
 
-impl<Component> DelegateComponent<Component> for CosmosChainComponents
-where
-    Self: IsExtraChainComponent<Component>,
-{
-    type Delegate = ExtraChainComponents<CosmosBaseChainComponents>;
-}
+delegate_all!(
+    IsExtraChainComponent,
+    ExtraChainComponents<CosmosBaseChainComponents>,
+    CosmosChainComponents,
+);
 
 impl<Chain, Counterparty> CanUseExtraChainComponents<CosmosChain<Counterparty>>
     for CosmosChain<Chain>
