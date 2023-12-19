@@ -18,7 +18,7 @@ use ibc_relayer_components::chain::traits::types::ibc_events::channel::{
 };
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
-use crate::components::extra::chain::ExtraChainComponents;
+use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 
 pub trait UseExtraChainComponentsForChannelHandshake<Counterparty>:
@@ -39,21 +39,23 @@ where
 {
 }
 
-impl<Chain, Counterparty, ChainComponents> UseExtraChainComponentsForChannelHandshake<Counterparty>
-    for Chain
+impl<Chain, Counterparty, Components, BaseComponents>
+    UseExtraChainComponentsForChannelHandshake<Counterparty> for Chain
 where
     Chain: HasChannelOpenInitEvent<Counterparty>
         + HasChannelOpenTryEvent<Counterparty>
         + HasInitChannelOptionsType<Counterparty>
         + HasChannelHandshakePayloads<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
-        + HasComponents<Components = ExtraChainComponents<ChainComponents>>,
+        + HasComponents<Components = Components>,
     Counterparty: HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasIbcChainTypes<Chain>
         + HasUpdateClientPayload<Chain>
         + HasChannelHandshakePayloads<Chain>,
-    ChainComponents: ChannelHandshakePayloadBuilder<Chain, Counterparty>
+    Components: HasComponents<Components = BaseComponents>
+        + DelegatesToExtraChainComponents<BaseComponents>
+        + ChannelHandshakePayloadBuilder<Chain, Counterparty>
         + ChannelHandshakeMessageBuilder<Chain, Counterparty>,
     Chain::Height: Clone,
 {

@@ -1,11 +1,7 @@
-use core::marker::PhantomData;
-
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
+
 use cgp_core::RunnerComponent;
 
-use crate::logger::traits::has_logger::{LoggerFieldComponent, LoggerTypeComponent};
 use crate::relay::components::auto_relayers::both_targets::RelayBothTargets;
 use crate::relay::components::auto_relayers::event::RelayEvents;
 use crate::relay::components::create_client::CreateClientWithChains;
@@ -44,7 +40,7 @@ use crate::relay::traits::components::client_creator::ClientCreatorComponent;
 use crate::relay::traits::components::event_relayer::EventRelayerComponent;
 use crate::relay::traits::components::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
 use crate::relay::traits::components::packet_clearer::PacketClearerComponent;
-use crate::relay::traits::components::packet_filter::PacketFilterComponent;
+
 use crate::relay::traits::components::packet_relayer::PacketRelayerComponent;
 use crate::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
@@ -55,42 +51,33 @@ use crate::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayer
 use crate::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
 use crate::relay::traits::connection::open_init::ConnectionInitializerComponent;
 use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
-use crate::runtime::traits::runtime::RuntimeComponent;
-use crate::runtime::traits::runtime::RuntimeTypeComponent;
 
-pub struct DefaultRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
+pub struct DefaultRelayComponents;
 
-delegate_components!(
-    DefaultRelayComponents<BaseComponents>;
-    IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-    UpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
-    PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
-    ReceivePacketRelayerComponnent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
-    AckPacketRelayerComponent: BaseAckPacketRelayer,
-    TimeoutUnorderedPacketRelayerComponent: BaseTimeoutUnorderedPacketRelayer,
-    EventRelayerComponent: PacketEventRelayer,
-    RunnerComponent: RelayBothTargets,
-    AutoRelayerComponent: RelayEvents,
-    ClientCreatorComponent: CreateClientWithChains,
-    PacketClearerComponent: ClearReceivePackets,
-    ChannelInitializerComponent: InitializeChannel,
-    ChannelOpenTryRelayerComponent: RelayChannelOpenTry,
-    ChannelOpenAckRelayerComponent: RelayChannelOpenAck,
-    ChannelOpenConfirmRelayerComponent: RelayChannelOpenConfirm,
-    ChannelOpenHandshakeRelayerComponent: RelayChannelOpenHandshake,
-    ConnectionOpenAckRelayerComponent: RelayConnectionOpenAck,
-    ConnectionOpenConfirmRelayerComponent: RelayConnectionOpenConfirm,
-    ConnectionInitializerComponent: InitializeConnection,
-    ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
-    ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-        RuntimeTypeComponent,
-        RuntimeComponent,
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-        PacketFilterComponent,
-    ]:
-        BaseComponents,
-);
+delegate_components! {
+    #[mark_component(IsDefaultRelayComponent)]
+    #[mark_delegate(DelegatesToDefaultRelayComponents)]
+    DefaultRelayComponents {
+        IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
+        UpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
+        PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
+        ReceivePacketRelayerComponnent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
+        AckPacketRelayerComponent: BaseAckPacketRelayer,
+        TimeoutUnorderedPacketRelayerComponent: BaseTimeoutUnorderedPacketRelayer,
+        EventRelayerComponent: PacketEventRelayer,
+        RunnerComponent: RelayBothTargets,
+        AutoRelayerComponent: RelayEvents,
+        ClientCreatorComponent: CreateClientWithChains,
+        PacketClearerComponent: ClearReceivePackets,
+        ChannelInitializerComponent: InitializeChannel,
+        ChannelOpenTryRelayerComponent: RelayChannelOpenTry,
+        ChannelOpenAckRelayerComponent: RelayChannelOpenAck,
+        ChannelOpenConfirmRelayerComponent: RelayChannelOpenConfirm,
+        ChannelOpenHandshakeRelayerComponent: RelayChannelOpenHandshake,
+        ConnectionOpenAckRelayerComponent: RelayConnectionOpenAck,
+        ConnectionOpenConfirmRelayerComponent: RelayConnectionOpenConfirm,
+        ConnectionInitializerComponent: InitializeConnection,
+        ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
+        ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
+    }
+}

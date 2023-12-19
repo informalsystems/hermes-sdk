@@ -19,17 +19,17 @@ use crate::impls::write_file::TokioWriteStringToFile;
 
 pub struct TokioRuntimeComponents;
 
-pub trait IsTokioRuntimeComponent<Component> {}
-
-delegate_components!(
-    TokioRuntimeComponents
-        @markers[ IsTokioRuntimeComponent ];
-    SleeperComponent: TokioSleep,
-    FilePathTypeComponent: ProvideStdPathType,
-    ChildProcessTypeComponent: ProvideTokioChildProcessType,
-    ChildProcessStarterComponent: StartTokioChildProcess,
-    FileAsStringReaderComponent: TokioReadFileAsString,
-    CommandExecutorComponent: TokioExecCommand,
-    StringToFileWriterComponent: TokioWriteStringToFile,
-    TcpPortReserverComponent: TokioReserveTcpPort,
-);
+delegate_components! {
+    #[mark_component(IsTokioRuntimeComponent)]
+    #[mark_delegate(DelegatesToTokioRuntimeComponents)]
+    TokioRuntimeComponents {
+        SleeperComponent: TokioSleep,
+        FilePathTypeComponent: ProvideStdPathType,
+        ChildProcessTypeComponent: ProvideTokioChildProcessType,
+        ChildProcessStarterComponent: StartTokioChildProcess,
+        FileAsStringReaderComponent: TokioReadFileAsString,
+        CommandExecutorComponent: TokioExecCommand,
+        StringToFileWriterComponent: TokioWriteStringToFile,
+        TcpPortReserverComponent: TokioReserveTcpPort,
+    }
+}

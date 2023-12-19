@@ -8,13 +8,14 @@ use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 pub struct MockCosmosChainComponents;
 
-delegate_components!(
-    MockCosmosChainComponents;
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-);
+delegate_components! {
+    MockCosmosChainComponents {
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+    }
+}

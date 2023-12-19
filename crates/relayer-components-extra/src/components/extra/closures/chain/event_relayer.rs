@@ -13,7 +13,7 @@ use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSe
 use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 
-use crate::components::extra::chain::ExtraChainComponents;
+use crate::components::extra::chain::DelegatesToExtraChainComponents;
 
 pub trait UseExtraChainComponentsForEventRelayer<Counterparty>:
     HasChainId
@@ -27,8 +27,8 @@ where
 {
 }
 
-impl<Chain, Counterparty, ChainComponents> UseExtraChainComponentsForEventRelayer<Counterparty>
-    for Chain
+impl<Chain, Counterparty, Components, BaseComponents>
+    UseExtraChainComponentsForEventRelayer<Counterparty> for Chain
 where
     Chain: HasErrorType
         + HasChainId
@@ -38,9 +38,11 @@ where
         + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
         + HasWriteAckEvent<Counterparty>
-        + HasComponents<Components = ExtraChainComponents<ChainComponents>>,
+        + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>,
-    ChainComponents: CounterpartyChainIdQuerier<Chain, Counterparty>
+    Components: HasComponents<Components = BaseComponents>
+        + DelegatesToExtraChainComponents<BaseComponents>
+        + CounterpartyChainIdQuerier<Chain, Counterparty>
         + PacketFromWriteAckBuilder<Chain, Counterparty>,
 {
 }

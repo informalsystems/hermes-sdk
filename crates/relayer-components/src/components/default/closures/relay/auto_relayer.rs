@@ -1,8 +1,8 @@
-use cgp_core::{Async, CanRun, HasComponents};
+use cgp_core::{CanRun, HasComponents};
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
-use crate::components::default::relay::DefaultRelayComponents;
+use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use crate::runtime::traits::stream::CanMapStream;
@@ -13,13 +13,13 @@ pub trait CanUseDefaultAutoRelayer: UseDefaultAutoRelayer {}
 
 pub trait UseDefaultAutoRelayer: CanRun {}
 
-impl<Relay, BaseRelayComponents> UseDefaultAutoRelayer for Relay
+impl<Relay, Components> UseDefaultAutoRelayer for Relay
 where
     Relay: Clone
         + HasRuntime
         + HasRelayChains
         + UseDefaultEventRelayer
-        + HasComponents<Components = DefaultRelayComponents<BaseRelayComponents>>,
+        + HasComponents<Components = Components>,
     Relay::SrcChain: HasEventSubscription,
     Relay::DstChain: HasEventSubscription,
     Relay::Runtime: CanRunConcurrentTasks,
@@ -27,6 +27,6 @@ where
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
     <Relay::DstChain as HasRuntimeType>::Runtime:
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
-    BaseRelayComponents: Async,
+    Components: DelegatesToDefaultRelayComponents,
 {
 }

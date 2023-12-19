@@ -1,3 +1,4 @@
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -5,7 +6,9 @@ use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use ibc_relayer_components_extra::components::extra::build::ExtraBuildComponents;
+use ibc_relayer_components_extra::components::extra::build::{
+    CanUseExtraBuildComponents, ExtraBuildComponents, IsExtraBuildComponent,
+};
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
@@ -14,22 +17,37 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosBuildComponents;
 
+pub struct CosmosBaseBuildComponents;
+
 impl HasComponents for CosmosBuilder {
-    type Components = ExtraBuildComponents<CosmosBuildComponents>;
+    type Components = CosmosBuildComponents;
 }
 
-delegate_components!(
-    CosmosBuildComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleCosmosError,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
+impl HasComponents for CosmosBuildComponents {
+    type Components = CosmosBaseBuildComponents;
+}
+
+delegate_all!(
+    IsExtraBuildComponent,
+    ExtraBuildComponents<CosmosBaseBuildComponents>,
+    CosmosBuildComponents,
 );
+
+impl CanUseExtraBuildComponents for CosmosBuilder {}
+
+delegate_components! {
+    CosmosBuildComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleCosmosError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+    }
+}

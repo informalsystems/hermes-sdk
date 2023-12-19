@@ -72,14 +72,15 @@ impl HasComponents for MockChainContext {
     type Components = MockChainComponents;
 }
 
-delegate_components!(
-    MockChainComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleMockError,
-);
+delegate_components! {
+    MockChainComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleMockError,
+    }
+}
 
 impl ProvideRuntimeType<MockChainContext> for MockChainComponents {
     type Runtime = MockRuntimeContext;

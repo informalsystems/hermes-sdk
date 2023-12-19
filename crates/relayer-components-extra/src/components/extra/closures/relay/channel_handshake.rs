@@ -13,7 +13,7 @@ use ibc_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRela
 
 use crate::components::extra::closures::chain::channel_handshake::UseExtraChainComponentsForChannelHandshake;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
-use crate::components::extra::relay::ExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayComponents;
 
 pub trait UseExtraChannelHandshakeRelayer: CanInitChannel + CanRelayChannelOpenHandshake
 where
@@ -21,14 +21,15 @@ where
 {
 }
 
-impl<Relay, SrcChain, DstChain, RelayComponents> UseExtraChannelHandshakeRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components> UseExtraChannelHandshakeRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + HasComponents<Components = ExtraRelayComponents<RelayComponents>>
+        + HasComponents<Components = Components>
         + CanRaiseMissingChannelInitEventError
         + CanRaiseMissingChannelTryEventError
         + UseExtraIbcMessageSender,
-    RelayComponents: ChannelOpenTryRelayer<Relay>
+    Components: DelegatesToExtraRelayComponents
+        + ChannelOpenTryRelayer<Relay>
         + ChannelOpenAckRelayer<Relay>
         + ChannelOpenConfirmRelayer<Relay>
         + ChannelInitializer<Relay>,

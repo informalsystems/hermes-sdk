@@ -13,7 +13,7 @@ use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
-use crate::components::extra::relay::ExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayComponents;
 use crate::runtime::traits::channel::CanUseChannels;
 use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 
@@ -25,13 +25,13 @@ pub trait UseExtraIbcMessageSender:
 {
 }
 
-impl<Relay, SrcChain, DstChain, RelayComponents> UseExtraIbcMessageSender for Relay
+impl<Relay, SrcChain, DstChain, Components> UseExtraIbcMessageSender for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasLogger
         + HasMessageBatchSender<SourceTarget>
         + HasMessageBatchSender<DestinationTarget>
-        + HasComponents<Components = ExtraRelayComponents<RelayComponents>>,
+        + HasComponents<Components = Components>,
     SrcChain: HasLoggerType<Logger = Relay::Logger>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
         + UseExtraChainComponentsForIbcMessageSender<DstChain>,
@@ -42,6 +42,6 @@ where
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     Relay::Logger: HasBaseLogLevels,
-    RelayComponents: PacketFilter<Relay>,
+    Components: DelegatesToExtraRelayComponents + PacketFilter<Relay>,
 {
 }
