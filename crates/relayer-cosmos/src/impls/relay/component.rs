@@ -18,21 +18,22 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosRelayComponents;
 
-delegate_components!(
-    CosmosRelayComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleCosmosError,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-);
+delegate_components! {
+    CosmosRelayComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleCosmosError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+    }
+}
 
 delegate_all!(
     IsExtraRelayComponent,

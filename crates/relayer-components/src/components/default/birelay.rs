@@ -5,10 +5,10 @@ use crate::relay::components::auto_relayers::both_ways::RelayBothWays;
 
 pub struct DefaultBiRelayComponents;
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsDefaultBiRelayComponent)]
     #[mark_delegate(DelegatesToDefaultBiRelayComponents)]
     DefaultBiRelayComponents {
         RunnerComponent: RelayBothWays,
     }
-);
+}

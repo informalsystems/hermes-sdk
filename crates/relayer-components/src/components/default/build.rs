@@ -25,7 +25,7 @@ use crate::runtime::traits::mutex::HasMutex;
 
 pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsDefaultBuildComponent)]
     #[mark_delegate(DelegatesToDefaultBuildComponents)]
     DefaultBuildComponents<BaseComponents> {
@@ -33,13 +33,14 @@ delegate_components!(
         RelayBuilderComponent: BuildRelayWithCache<BuildRelayFromChains>,
         BiRelayBuilderComponent: BuildBiRelayFromRelays,
     }
-);
+}
 
 pub trait CanUseDefaultBuildComponents: UseDefaultBuildComponents
 where
     ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
     ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
-{}
+{
+}
 
 pub trait UseDefaultBuildComponents: CanBuildBiRelay
 where
@@ -68,8 +69,7 @@ where
     ChainA::ClientId: Ord + Clone,
     ChainB::ClientId: Ord + Clone,
     Build::Runtime: HasMutex,
-    Components:
-        HasComponents<Components = BaseComponents>
+    Components: HasComponents<Components = BaseComponents>
         + DelegatesToDefaultBuildComponents<BaseComponents>
         + BiRelayFromRelayBuilder<Build>
         + RelayFromChainsBuilder<Build, RelayAToBTarget>

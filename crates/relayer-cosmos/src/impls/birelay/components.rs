@@ -30,18 +30,19 @@ delegate_all!(
     CosmosBiRelayComponents,
 );
 
-delegate_components!(
-    CosmosBiRelayComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleCosmosError,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-);
+delegate_components! {
+    CosmosBiRelayComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleCosmosError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+    }
+}

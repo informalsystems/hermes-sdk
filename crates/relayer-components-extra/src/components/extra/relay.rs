@@ -36,7 +36,7 @@ use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
 pub struct ExtraRelayComponents;
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsExtraRelayComponent)]
     #[mark_delegate(DelegatesToExtraRelayComponents)]
     ExtraRelayComponents {
@@ -68,4 +68,4 @@ delegate_components!(
         ]:
             DefaultRelayComponents,
     }
-);
+}

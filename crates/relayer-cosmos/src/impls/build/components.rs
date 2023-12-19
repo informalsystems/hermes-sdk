@@ -35,18 +35,19 @@ delegate_all!(
 
 impl CanUseExtraBuildComponents for CosmosBuilder {}
 
-delegate_components!(
-    CosmosBuildComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleCosmosError,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-);
+delegate_components! {
+    CosmosBuildComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleCosmosError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+    }
+}

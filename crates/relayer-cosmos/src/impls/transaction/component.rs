@@ -1,5 +1,6 @@
 use cgp_core::{
-    delegate_components, DelegateComponent, ErrorRaiserComponent, ErrorTypeComponent, HasComponents, delegate_all,
+    delegate_all, delegate_components, DelegateComponent, ErrorRaiserComponent, ErrorTypeComponent,
+    HasComponents,
 };
 use cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
 use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
@@ -32,24 +33,25 @@ delegate_all!(
 
 impl CanUseDefaultTxComponents for CosmosTxContext {}
 
-delegate_components!(
-    CosmosTxComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleCosmosError,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        ChainIdTypeProviderComponent,
-        MessageTypeProviderComponent,
-        EventTypeProviderComponent,
-    ]:
-        ProvideCosmosChainTypes,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-);
+delegate_components! {
+    CosmosTxComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleCosmosError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            ChainIdTypeProviderComponent,
+            MessageTypeProviderComponent,
+            EventTypeProviderComponent,
+        ]:
+            ProvideCosmosChainTypes,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+    }
+}

@@ -31,7 +31,7 @@ use crate::runtime::traits::channel_once::CanUseChannelsOnce;
 
 pub struct ExtraBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsExtraBuildComponent)]
     #[mark_delegate(DelegatesToExtraBuildComponents)]
     ExtraBuildComponents<BaseComponents> {
@@ -43,10 +43,9 @@ delegate_components!(
         ]:
             DefaultBuildComponents<BaseComponents>,
     }
-);
+}
 
-pub trait CanUseExtraBuildComponents:
-    UseExtraBuildComponents
+pub trait CanUseExtraBuildComponents: UseExtraBuildComponents
 where
     ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
     ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
@@ -96,8 +95,7 @@ where
     ChainA::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     ChainB::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     Build::Runtime: HasMutex,
-    Components:
-        HasComponents<Components = BaseComponents>
+    Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraBuildComponents<BaseComponents>
         + BiRelayFromRelayBuilder<Build>
         + RelayWithBatchBuilder<Build, RelayAToBTarget>

@@ -54,7 +54,7 @@ use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponen
 
 pub struct DefaultRelayComponents;
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsDefaultRelayComponent)]
     #[mark_delegate(DelegatesToDefaultRelayComponents)]
     DefaultRelayComponents {
@@ -80,4 +80,4 @@ delegate_components!(
         ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
         ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
     }
-);
+}

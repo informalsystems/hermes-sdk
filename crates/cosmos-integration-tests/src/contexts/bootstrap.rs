@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent, delegate_all};
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::HandleErrorsWithEyre;
 use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
 use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
@@ -64,23 +64,24 @@ delegate_all!(
     CosmosStdBootstrapComponents,
 );
 
-delegate_components!(
-    CosmosStdBootstrapComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleErrorsWithEyre,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    ChainConfigTypeComponent: ProvideCosmosChainConfigType,
-    GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
-    WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
-    [
-        WalletConfigTypeComponent,
-        WalletConfigFieldsComponent,
-    ]: ProvideCosmosWalletConfigType,
-);
+delegate_components! {
+    CosmosStdBootstrapComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleErrorsWithEyre,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        ChainConfigTypeComponent: ProvideCosmosChainConfigType,
+        GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
+        WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
+        [
+            WalletConfigTypeComponent,
+            WalletConfigFieldsComponent,
+        ]: ProvideCosmosWalletConfigType,
+    }
+}
 
 impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     type Chain = CosmosTestChain;

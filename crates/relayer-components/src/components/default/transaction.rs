@@ -38,7 +38,7 @@ use crate::transaction::traits::types::HasTxTypes;
 
 pub struct DefaultTxComponents;
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsDefaultTxComponents)]
     #[mark_delegate(DelegatesToDefaultTxComponents)]
     DefaultTxComponents {
@@ -48,7 +48,8 @@ delegate_components!(
         NonceAllocatorComponent: AllocateNonceWithMutex,
         TxResponsePollerComponent: PollTxResponse,
     }
-);
+}
+
 pub trait CanUseDefaultTxComponents: UseDefaultTxComponents {}
 
 pub trait UseDefaultTxComponents:

@@ -53,7 +53,7 @@ use crate::chain::types::wallet::CosmosTestWallet;
 
 pub struct LegacyCosmosSdkBootstrapComponents;
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsLegacyCosmosSdkBootstrapComponent)]
     #[mark_delegate(DelegatesToLegacyToCosmosSdkBootstrapComponents)]
     LegacyCosmosSdkBootstrapComponents {
@@ -76,7 +76,7 @@ delegate_components!(
         ]:
             CosmosSdkBootstrapComponents,
     }
-);
+}
 
 pub trait CanUseLegacyCosmosSdkChainBootstrapper: UseLegacyCosmosSdkChainBootstrapper {}
 

@@ -9,7 +9,7 @@ use crate::telemetry::components::status::ChainStatusTelemetryQuerier;
 
 pub struct ExtraChainComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 
-delegate_components!(
+delegate_components! {
     #[mark_component(IsExtraChainComponent)]
     #[mark_delegate(DelegatesToExtraChainComponents)]
     ExtraChainComponents<BaseComponents> {
@@ -18,4 +18,4 @@ delegate_components!(
         ConsensusStateQuerierComponent:
             ConsensusStateTelemetryQuerier<BaseComponents>,
     }
-);
+}

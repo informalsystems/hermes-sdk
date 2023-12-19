@@ -9,7 +9,7 @@ use ibc_relayer_components::relay::components::packet_filters::allow_all::AllowA
 
 use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilterComponent;
 
-use cgp_core::{delegate_components, DelegateComponent, delegate_all};
+use cgp_core::{delegate_all, delegate_components, DelegateComponent};
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
@@ -22,14 +22,15 @@ delegate_all!(
     MockCosmosRelayComponents,
 );
 
-delegate_components!(
-    MockCosmosRelayComponents;
-    PacketFilterComponent: AllowAll,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-);
+delegate_components! {
+    MockCosmosRelayComponents {
+        PacketFilterComponent: AllowAll,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+    }
+}

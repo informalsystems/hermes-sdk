@@ -23,8 +23,9 @@ where
     type Components = SolomachineRelayComponents;
 }
 
-delegate_components!(
-    SolomachineRelayComponents;
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-);
+delegate_components! {
+    SolomachineRelayComponents {
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+    }
+}

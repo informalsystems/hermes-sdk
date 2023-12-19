@@ -22,23 +22,24 @@ impl HasComponents for CosmosTestChain {
     type Components = CosmosTestChainComponents;
 }
 
-delegate_components!(
-    CosmosTestChainComponents;
-    [
-        ChainIdTypeProviderComponent,
-    ]:
-        ProvideCosmosChainTypes,
-    [
-        WalletTypeComponent,
-        WalletSignerComponent,
-    ]:
-        ProvideCosmosTestWallet,
-    ChainIdFromStringBuilderComponent:
-        BuildCosmosChainIdFromString,
-    AmountTypeComponent:
-        ProvideU128AmountWithDenom,
-    DenomTypeComponent:
-        ProvideIbcDenom,
-    AddressTypeComponent:
-        ProvideStringAddress,
-);
+delegate_components! {
+    CosmosTestChainComponents {
+        [
+            ChainIdTypeProviderComponent,
+        ]:
+            ProvideCosmosChainTypes,
+        [
+            WalletTypeComponent,
+            WalletSignerComponent,
+        ]:
+            ProvideCosmosTestWallet,
+        ChainIdFromStringBuilderComponent:
+            BuildCosmosChainIdFromString,
+        AmountTypeComponent:
+            ProvideU128AmountWithDenom,
+        DenomTypeComponent:
+            ProvideIbcDenom,
+        AddressTypeComponent:
+            ProvideStringAddress,
+    }
+}
