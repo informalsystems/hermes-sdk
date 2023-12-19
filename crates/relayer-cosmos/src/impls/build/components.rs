@@ -5,9 +5,9 @@ use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use ibc_relayer_components_extra::components::extra::build::ExtraBuildComponents;
-use ibc_relayer_components_extra::components::extra::build::IsExtraBuildComponent;
-use ibc_relayer_components_extra::components::extra::closures::build::CanUseExtraBuilderComponents;
+use ibc_relayer_components_extra::components::extra::build::{
+    CanUseExtraBuildComponents, ExtraBuildComponents, IsExtraBuildComponent,
+};
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
@@ -28,7 +28,7 @@ where
     type Delegate = ExtraBuildComponents<BuildCosmosChain>;
 }
 
-impl CanUseExtraBuilderComponents<BuildCosmosChain> for CosmosBuilder {}
+impl CanUseExtraBuildComponents<BuildCosmosChain> for CosmosBuilder {}
 
 delegate_components!(
     CosmosBuildComponents;
