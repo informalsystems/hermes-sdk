@@ -6,11 +6,12 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::builder::CosmosBuilder;
 use crate::contexts::chain::CosmosChain;
-use crate::impls::build::components::CosmosBuildComponents;
 use crate::types::error::Error;
 
+pub struct BuildCosmosChain;
+
 #[async_trait]
-impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBuildComponents {
+impl ChainBuilder<CosmosBuilder, ChainATarget> for BuildCosmosChain {
     async fn build_chain(
         build: &CosmosBuilder,
         _target: ChainATarget,
@@ -23,7 +24,7 @@ impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBuildComponents {
 }
 
 #[async_trait]
-impl ChainBuilder<CosmosBuilder, ChainBTarget> for CosmosBuildComponents {
+impl ChainBuilder<CosmosBuilder, ChainBTarget> for BuildCosmosChain {
     async fn build_chain(
         build: &CosmosBuilder,
         _target: ChainBTarget,

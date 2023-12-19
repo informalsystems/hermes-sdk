@@ -17,27 +17,28 @@ use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use crate::batch::traits::config::HasBatchConfig;
 use crate::build::traits::cache::HasBatchSenderCache;
 use crate::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
-use crate::components::extra::build::ExtraBuildComponents;
+use crate::components::extra::build::DelegatesToExtraBuildComponents;
 use crate::components::extra::closures::batch::UseBatchMessageWorkerSpawner;
 use crate::runtime::traits::channel::{CanCloneSender, CanCreateChannels};
 use crate::runtime::traits::channel_once::CanUseChannelsOnce;
 
-pub trait CanUseExtraBuilderComponents: UseExtraBuilderComponents
+pub trait CanUseExtraBuilderComponents<BaseComponents>:
+    UseExtraBuilderComponents<BaseComponents>
 where
     ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
     ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
 {
 }
 
-pub trait UseExtraBuilderComponents: CanBuildBiRelay
+pub trait UseExtraBuilderComponents<BaseComponents>: CanBuildBiRelay
 where
     ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
     ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
 {
 }
 
-impl<Build, BiRelay, RelayAToB, RelayBToA, ChainA, ChainB, Error, BaseComponents>
-    UseExtraBuilderComponents for Build
+impl<Build, BiRelay, RelayAToB, RelayBToA, ChainA, ChainB, Error, Components, BaseComponents>
+    UseExtraBuilderComponents<BaseComponents> for Build
 where
     Build: HasErrorType
         + HasRuntime
@@ -49,7 +50,7 @@ where
         + HasChainCache<ChainBTarget>
         + HasBatchSenderCache<ChainATarget, Error>
         + HasBatchSenderCache<ChainBTarget, Error>
-        + HasComponents<Components = ExtraBuildComponents<BaseComponents>>,
+        + HasComponents<Components = Components>,
     BiRelay: HasTwoWayRelay<
         ChainA = ChainA,
         ChainB = ChainB,
@@ -74,10 +75,10 @@ where
     ChainA::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     ChainB::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     Build::Runtime: HasMutex,
-    BaseComponents: BiRelayFromRelayBuilder<Build>
+    Components: DelegatesToExtraBuildComponents<BaseComponents>
+        + BiRelayFromRelayBuilder<Build>
         + RelayWithBatchBuilder<Build, RelayAToBTarget>
-        + RelayWithBatchBuilder<Build, RelayBToATarget>
-        + ChainBuilder<Build, ChainATarget>
-        + ChainBuilder<Build, ChainBTarget>,
+        + RelayWithBatchBuilder<Build, RelayBToATarget>,
+    BaseComponents: ChainBuilder<Build, ChainATarget> + ChainBuilder<Build, ChainBTarget>,
 {
 }
