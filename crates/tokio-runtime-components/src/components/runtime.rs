@@ -21,17 +21,9 @@ pub struct TokioRuntimeComponents;
 
 pub trait IsTokioRuntimeComponent<Component> {}
 
-impl<T> IsTokioRuntimeComponent<SleeperComponent> for T {}
-impl<T> IsTokioRuntimeComponent<FilePathTypeComponent> for T {}
-impl<T> IsTokioRuntimeComponent<ChildProcessTypeComponent> for T {}
-impl<T> IsTokioRuntimeComponent<ChildProcessStarterComponent> for T {}
-impl<T> IsTokioRuntimeComponent<FileAsStringReaderComponent> for T {}
-impl<T> IsTokioRuntimeComponent<CommandExecutorComponent> for T {}
-impl<T> IsTokioRuntimeComponent<StringToFileWriterComponent> for T {}
-impl<T> IsTokioRuntimeComponent<TcpPortReserverComponent> for T {}
-
 delegate_components!(
-    TokioRuntimeComponents;
+    TokioRuntimeComponents
+        @markers[ IsTokioRuntimeComponent ];
     SleeperComponent: TokioSleep,
     FilePathTypeComponent: ProvideStdPathType,
     ChildProcessTypeComponent: ProvideTokioChildProcessType,
