@@ -32,7 +32,7 @@ use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePa
 use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
-use crate::components::extra::chain::ExtraChainComponents;
+use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
@@ -57,8 +57,8 @@ where
 {
 }
 
-impl<Chain, Counterparty, ChainComponents> UseExtraChainComponentsForPacketRelayer<Counterparty>
-    for Chain
+impl<Chain, Counterparty, Components, BaseComponents>
+    UseExtraChainComponentsForPacketRelayer<Counterparty> for Chain
 where
     Chain: CanLogChainPacket<Counterparty>
         + HasIbcPacketTypes<Counterparty>
@@ -67,7 +67,7 @@ where
         + HasAckPacketPayload<Counterparty>
         + HasTimeoutUnorderedPacketPayload<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
-        + HasComponents<Components = ExtraChainComponents<ChainComponents>>,
+        + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
@@ -75,7 +75,9 @@ where
         + HasAckPacketPayload<Chain>
         + HasTimeoutUnorderedPacketPayload<Chain>
         + HasReceivePacketPayload<Chain>,
-    ChainComponents: PacketFieldsReader<Chain, Counterparty>
+    Components: HasComponents<Components = BaseComponents>
+        + DelegatesToExtraChainComponents<BaseComponents>
+        + PacketFieldsReader<Chain, Counterparty>
         + ReceivedPacketQuerier<Chain, Counterparty>
         + ReceivePacketPayloadBuilder<Chain, Counterparty>
         + ReceivePacketMessageBuilder<Chain, Counterparty>

@@ -34,7 +34,7 @@ use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClient
 use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
 use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 
-use crate::components::extra::chain::ExtraChainComponents;
+use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::telemetry::traits::metrics::HasBasicMetrics;
 use crate::telemetry::traits::telemetry::HasTelemetry;
 
@@ -61,8 +61,8 @@ where
 {
 }
 
-impl<Chain, Counterparty, ChainComponents> UseExtraChainComponentsForIbcMessageSender<Counterparty>
-    for Chain
+impl<Chain, Counterparty, Components, BaseComponents>
+    UseExtraChainComponentsForIbcMessageSender<Counterparty> for Chain
 where
     Chain: HasRuntime
         + HasChainId
@@ -76,13 +76,15 @@ where
         + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
         + HasUpdateClientPayload<Counterparty>
-        + HasComponents<Components = ExtraChainComponents<ChainComponents>>,
+        + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasUpdateClientPayload<Chain>,
     Chain::Telemetry: HasBasicMetrics,
-    ChainComponents: MessageSender<Chain>
+    Components: HasComponents<Components = BaseComponents>
+        + DelegatesToExtraChainComponents<BaseComponents>
+        + MessageSender<Chain>
         + ChainStatusQuerier<Chain>
         + ConsensusStateQuerier<Chain, Counterparty>
         + ClientStateQuerier<Chain, Counterparty>

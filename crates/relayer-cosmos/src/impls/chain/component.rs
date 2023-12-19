@@ -70,6 +70,7 @@ use ibc_relayer_components::logger::traits::has_logger::{
 };
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
+use ibc_relayer_components_extra::components::extra::chain::IsExtraChainComponent;
 use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
@@ -83,11 +84,24 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
 
+pub struct CosmosBaseChainComponents;
+
+impl HasComponents for CosmosChainComponents {
+    type Components = CosmosBaseChainComponents;
+}
+
 impl<Chain> HasComponents for CosmosChain<Chain>
 where
     Chain: Async,
 {
-    type Components = ExtraChainComponents<CosmosChainComponents>;
+    type Components = CosmosChainComponents;
+}
+
+impl<Component> DelegateComponent<Component> for CosmosChainComponents
+where
+    Self: IsExtraChainComponent<Component>,
+{
+    type Delegate = ExtraChainComponents<CosmosBaseChainComponents>;
 }
 
 impl<Chain, Counterparty> CanUseExtraChainComponents<CosmosChain<Counterparty>>
@@ -125,14 +139,10 @@ delegate_components!(
         ProvideTracingLogger,
     MessageSenderComponent:
         SendMessagesToTxContext,
-    ChainStatusQuerierComponent:
-        QueryChainStatusWithChainHandle,
     PacketFieldsReaderComponent:
         CosmosPacketFieldReader,
     ClientStateQuerierComponent:
         DelegateCosmosClientStateQuerier,
-    ConsensusStateQuerierComponent:
-        DelegateCosmosConsensusStateQuerier,
     ConsensusStateHeightQuerierComponent:
         QueryConsensusStateHeightFromChainHandle,
     WriteAckQuerierComponent:
@@ -179,4 +189,12 @@ delegate_components!(
         QuerySendPacketsConcurrently,
     PacketFromWriteAckBuilderComponent:
         BuildCosmosPacketFromWriteAck,
+);
+
+delegate_components!(
+    CosmosBaseChainComponents;
+    ChainStatusQuerierComponent:
+        QueryChainStatusWithChainHandle,
+    ConsensusStateQuerierComponent:
+        DelegateCosmosConsensusStateQuerier,
 );
