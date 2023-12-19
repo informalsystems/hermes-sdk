@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
 use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
+use ibc_relayer_components::runtime::traits::stream::StreamTypeComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -17,6 +18,7 @@ use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
 use crate::impls::types::child_process::ProvideTokioChildProcessType;
 use crate::impls::types::file_path::ProvideStdPathType;
+use crate::impls::types::stream::ProvideBoxedStreamType;
 use crate::impls::write_file::TokioWriteStringToFile;
 
 pub struct TokioRuntimeComponents;
@@ -27,6 +29,7 @@ delegate_components! {
     TokioRuntimeComponents {
         SleeperComponent: TokioSleep,
         MutexComponent: ProvideFuturesMutex,
+        StreamTypeComponent: ProvideBoxedStreamType,
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
         ChildProcessStarterComponent: StartTokioChildProcess,

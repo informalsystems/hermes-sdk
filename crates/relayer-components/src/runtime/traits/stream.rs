@@ -1,5 +1,6 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
+#[derive_component(StreamTypeComponent, ProvideStreamType<Runtime>)]
 pub trait HasStreamType: Async {
     type Stream<Item: Async>: Async;
 }

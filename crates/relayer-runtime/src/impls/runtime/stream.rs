@@ -3,14 +3,10 @@ use core::pin::Pin;
 use cgp_core::Async;
 use futures::stream::Stream;
 use futures::StreamExt;
-use ibc_relayer_components::runtime::traits::stream::{CanMapStream, HasStreamType};
+use ibc_relayer_components::runtime::traits::stream::CanMapStream;
 use ibc_relayer_subscription::traits::stream::HasAsyncStreamType;
 
 use crate::types::runtime::TokioRuntimeContext;
-
-impl HasStreamType for TokioRuntimeContext {
-    type Stream<Item: Async> = Pin<Box<dyn Stream<Item = Item> + Send + Sync + 'static>>;
-}
 
 impl CanMapStream for TokioRuntimeContext {
     fn map_stream<T, U, M>(stream: Self::Stream<T>, mapper: M) -> Self::Stream<U>
