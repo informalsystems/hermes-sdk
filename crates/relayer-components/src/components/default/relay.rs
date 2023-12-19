@@ -58,10 +58,12 @@ use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponen
 use crate::runtime::traits::runtime::RuntimeComponent;
 use crate::runtime::traits::runtime::RuntimeTypeComponent;
 
-pub struct DefaultRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
+pub struct DefaultRelayComponents;
 
 delegate_components!(
-    DefaultRelayComponents<BaseComponents>;
+    #[mark_component(IsDefaultRelayComponent)]
+    #[mark_delegate(DelegatesToDefaultRelayComponents)]
+    DefaultRelayComponents;
     IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
     UpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
     PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
@@ -83,14 +85,4 @@ delegate_components!(
     ConnectionInitializerComponent: InitializeConnection,
     ConnectionOpenTryRelayerComponent: RelayConnectionOpenTry,
     ConnectionOpenHandshakeRelayerComponent: RelayConnectionOpenHandshake,
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-        RuntimeTypeComponent,
-        RuntimeComponent,
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-        PacketFilterComponent,
-    ]:
-        BaseComponents,
 );

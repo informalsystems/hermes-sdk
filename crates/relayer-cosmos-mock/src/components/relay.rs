@@ -1,3 +1,4 @@
+use ibc_relayer_components::components::default::relay::{IsDefaultRelayComponent, DefaultRelayComponents};
 use ibc_relayer_components::logger::traits::has_logger::{LoggerTypeComponent, LoggerFieldComponent};
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
@@ -16,7 +17,7 @@ use ibc_relayer_components::relay::traits::components::packet_relayers::ack_pack
 use ibc_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
-use cgp_core::delegate_components;
+use cgp_core::{delegate_components, DelegateComponent};
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
@@ -25,20 +26,15 @@ use crate::impls::relay::MockCosmosBuildUpdateClientMessage;
 
 pub struct MockCosmosRelayComponents;
 
+impl<Component> DelegateComponent<Component> for MockCosmosRelayComponents
+where
+    Self: IsDefaultRelayComponent<Component>,
+{
+    type Delegate = DefaultRelayComponents;
+}
+
 delegate_components!(
     MockCosmosRelayComponents;
-    PacketRelayerComponent:
-        FullCycleRelayer,
-    UpdateClientMessageBuilderComponent:
-        SkipUpdateClient<WaitUpdateClient<MockCosmosBuildUpdateClientMessage>>,
-    IbcMessageSenderComponent<MainSink>:
-        SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-    ReceivePacketRelayerComponnent:
-        SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
-    AckPacketRelayerComponent:
-        BaseAckPacketRelayer,
-    TimeoutUnorderedPacketRelayerComponent:
-        BaseTimeoutUnorderedPacketRelayer,
     PacketFilterComponent: AllowAll,
     RuntimeTypeComponent:
         ProvideTokioRuntimeType,

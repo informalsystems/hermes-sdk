@@ -8,6 +8,7 @@ use ibc_relayer_components::logger::traits::has_logger::{
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use ibc_relayer_components_extra::components::extra::relay::ExtraRelayComponents;
+use ibc_relayer_components_extra::components::extra::relay::IsExtraRelayComponent;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
@@ -32,12 +33,19 @@ delegate_components!(
         ProvideTracingLogger,
 );
 
+impl<Component> DelegateComponent<Component> for CosmosRelayComponents
+where
+    CosmosRelayComponents: IsExtraRelayComponent<Component>,
+{
+    type Delegate = ExtraRelayComponents;
+}
+
 impl<SrcChain, DstChain> HasComponents for CosmosRelay<SrcChain, DstChain>
 where
     SrcChain: Async,
     DstChain: Async,
 {
-    type Components = ExtraRelayComponents<CosmosRelayComponents>;
+    type Components = CosmosRelayComponents;
 }
 
 impl<SrcChain, DstChain> CanUseExtraAutoRelayer for CosmosRelay<SrcChain, DstChain>

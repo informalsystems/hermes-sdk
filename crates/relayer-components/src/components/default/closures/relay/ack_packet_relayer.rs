@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasComponents, HasErrorType};
+use cgp_core::{HasComponents, HasErrorType};
 
 use crate::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
@@ -16,7 +16,7 @@ use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::components::default::relay::DefaultRelayComponents;
+use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
@@ -36,11 +36,11 @@ where
 {
 }
 
-impl<Relay, SrcChain, DstChain, BaseRelayComponents> UseDefaultAckPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components> UseDefaultAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasLogger
-        + HasComponents<Components = DefaultRelayComponents<BaseRelayComponents>>,
+        + HasComponents<Components = Components>,
     SrcChain: HasErrorType
         + HasChainId
         + CanSendMessages
@@ -66,6 +66,6 @@ where
     DstChain::Height: Clone,
     DstChain::Runtime: CanSleep,
     Relay::Logger: HasBaseLogLevels,
-    BaseRelayComponents: Async,
+    Components: DelegatesToDefaultRelayComponents,
 {
 }

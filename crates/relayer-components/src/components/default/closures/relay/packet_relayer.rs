@@ -23,7 +23,9 @@ use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::components::default::relay::DefaultRelayComponents;
+use crate::components::default::relay::{
+    DefaultRelayComponents, DelegatesToDefaultRelayComponents,
+};
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
@@ -37,12 +39,12 @@ pub trait CanUseDefaultPacketRelayer: UseDefaultPacketRelayer {}
 
 pub trait UseDefaultPacketRelayer: CanRelayPacket {}
 
-impl<Relay, SrcChain, DstChain, RelayComponents> UseDefaultPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components> UseDefaultPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasLogger
         + HasPacketLock
-        + HasComponents<Components = DefaultRelayComponents<RelayComponents>>,
+        + HasComponents<Components = Components>,
     SrcChain: HasErrorType
         + HasRuntime
         + HasChainId
@@ -88,6 +90,6 @@ where
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
     Relay::Logger: HasBaseLogLevels,
-    RelayComponents: PacketFilter<Relay>,
+    Components: DelegatesToDefaultRelayComponents + PacketFilter<Relay>,
 {
 }

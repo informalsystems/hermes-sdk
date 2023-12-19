@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasComponents, HasErrorType};
+use cgp_core::{HasComponents, HasErrorType};
 use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
@@ -24,7 +24,7 @@ use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer_components::runtime::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
-use crate::components::extra::relay::ExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayComponents;
 use crate::runtime::traits::channel::CanUseChannels;
 use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 
@@ -40,12 +40,12 @@ where
 {
 }
 
-impl<Relay, SrcChain, DstChain, BaseRelayComponents> UseExtraAckPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components> UseExtraAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasLogger
         + HasMessageBatchSender<SourceTarget>
-        + HasComponents<Components = ExtraRelayComponents<BaseRelayComponents>>,
+        + HasComponents<Components = Components>,
     SrcChain: HasErrorType
         + HasRuntime
         + HasChainId
@@ -73,6 +73,6 @@ where
     SrcChain::Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep,
     Relay::Logger: HasBaseLogLevels,
-    BaseRelayComponents: Async,
+    Components: DelegatesToExtraRelayComponents,
 {
 }

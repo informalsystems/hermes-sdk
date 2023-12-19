@@ -33,7 +33,7 @@ where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type Delegate = DefaultRelayComponents<MockCosmosRelayComponents>;
+    type Delegate = MockCosmosRelayComponents;
 }
 
 impl<SrcChain, DstChain> HasComponents for MockCosmosRelay<SrcChain, DstChain>
@@ -41,7 +41,7 @@ where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type Components = DefaultRelayComponents<MockCosmosRelayComponents>;
+    type Components = MockCosmosRelayComponents;
 }
 
 impl<SrcChain, DstChain> CanUseDefaultPacketRelayer for MockCosmosRelay<SrcChain, DstChain>
