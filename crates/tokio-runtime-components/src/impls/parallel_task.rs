@@ -1,12 +1,11 @@
 use core::task::{Context, Poll};
 
+use async_runtime_components::stream::boxed::HasBoxedStreamType;
 use cgp_core::prelude::*;
 use futures::stream::{Stream, StreamExt};
 use futures::task::noop_waker;
 use ibc_relayer_components::runtime::traits::task::{ConcurrentTaskRunner, Task};
 use tokio::task::JoinSet;
-
-use crate::impls::types::stream::HasBoxedStreamType;
 
 pub struct TokioRunParallelTasks;
 

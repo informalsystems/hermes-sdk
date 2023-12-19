@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use futures::stream::{self, Stream, StreamExt};
 use ibc_relayer_components::runtime::traits::task::{ConcurrentTaskRunner, Task};
 
-use crate::impls::types::stream::HasBoxedStreamType;
+use crate::stream::boxed::HasBoxedStreamType;
 
 pub struct RunConcurrentTasks;
 

@@ -1,3 +1,4 @@
+use async_runtime_components::task::concurrent::RunConcurrentTasks;
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
 use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
@@ -12,7 +13,6 @@ use ibc_test_components::runtime::traits::types::file_path::FilePathTypeComponen
 use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponent;
 
 use crate::components::parallel::TokioParallelRuntimeComponents;
-use crate::impls::concurrent_task::RunConcurrentTasks;
 
 pub struct TokioConcurrentRuntimeComponents;
 

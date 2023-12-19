@@ -1,3 +1,5 @@
+use async_runtime_components::stream::boxed::ProvideBoxedStreamType;
+use async_runtime_components::stream::map::BoxedStreamMapper;
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
 use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
@@ -13,7 +15,6 @@ use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponen
 
 use crate::impls::child_process::StartTokioChildProcess;
 use crate::impls::exec_command::TokioExecCommand;
-use crate::impls::map_stream::BoxedStreamMapper;
 use crate::impls::mutex::ProvideFuturesMutex;
 use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::read_file::TokioReadFileAsString;
@@ -21,7 +22,6 @@ use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
 use crate::impls::types::child_process::ProvideTokioChildProcessType;
 use crate::impls::types::file_path::ProvideStdPathType;
-use crate::impls::types::stream::ProvideBoxedStreamType;
 use crate::impls::write_file::TokioWriteStringToFile;
 
 pub struct TokioParallelRuntimeComponents;
