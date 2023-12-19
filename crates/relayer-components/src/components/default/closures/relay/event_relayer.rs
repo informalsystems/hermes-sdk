@@ -7,9 +7,7 @@ use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;
 use crate::components::default::closures::relay::packet_relayer::UseDefaultPacketRelayer;
-use crate::components::default::relay::{
-    DefaultRelayComponents, DelegatesToDefaultRelayComponents,
-};
+use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;

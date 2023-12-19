@@ -12,7 +12,7 @@ use ibc::core::{Msg, ValidationContext};
 use ibc::proto::Any;
 use ibc::Height;
 use ibc_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
-use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
+
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
