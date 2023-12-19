@@ -8,6 +8,7 @@ pub struct DefaultBiRelayComponents;
 delegate_components!(
     #[mark_component(IsDefaultBiRelayComponent)]
     #[mark_delegate(DelegatesToDefaultBiRelayComponents)]
-    DefaultBiRelayComponents;
-    RunnerComponent: RelayBothWays,
+    DefaultBiRelayComponents {
+        RunnerComponent: RelayBothWays,
+    }
 );

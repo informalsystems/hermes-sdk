@@ -66,22 +66,22 @@ pub struct CosmosSdkBootstrapComponents;
 delegate_components!(
     #[mark_component(IsCosmosSdkBootstrapComponent)]
     #[mark_delegate(DelegatesToCosmosSdkBootstrapComponents)]
-    CosmosSdkBootstrapComponents;
+    CosmosSdkBootstrapComponents {
+        GenesisAccountAdderComponent: AddCosmosGenesisAccount,
+        GenesisValidatorAdderComponent: AddCosmosGenesisValidator,
+        GenesisTransactionsCollectorComponent: CollectCosmosGentxs,
 
-    GenesisAccountAdderComponent: AddCosmosGenesisAccount,
-    GenesisValidatorAdderComponent: AddCosmosGenesisValidator,
-    GenesisTransactionsCollectorComponent: CollectCosmosGentxs,
-
-    ChainIdGeneratorComponent: GenerateRandomChainId,
-    ChainHomeDirInitializerComponent: CreateChainHomeDirFromTestDir,
-    ChainDataInitializerComponent: InitCosmosChainData,
-    WalletHdPathComponent: ProvideCosmosHdPath,
-    WalletInitializerComponent: InitCosmosTestWallet,
-    ChainConfigInitializerComponent: UpdateCosmosChainConfig,
-    GenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,
-    GenesisWalletAdderComponent: AddCosmosWalletToGenesis,
-    ChainFullNodeStarterComponent: StartCosmosChain,
-    ChainBootstrapperComponent: BootstrapCosmosChain,
+        ChainIdGeneratorComponent: GenerateRandomChainId,
+        ChainHomeDirInitializerComponent: CreateChainHomeDirFromTestDir,
+        ChainDataInitializerComponent: InitCosmosChainData,
+        WalletHdPathComponent: ProvideCosmosHdPath,
+        WalletInitializerComponent: InitCosmosTestWallet,
+        ChainConfigInitializerComponent: UpdateCosmosChainConfig,
+        GenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,
+        GenesisWalletAdderComponent: AddCosmosWalletToGenesis,
+        ChainFullNodeStarterComponent: StartCosmosChain,
+        ChainBootstrapperComponent: BootstrapCosmosChain,
+    }
 );
 
 pub trait CanUseCosmosSdkChainBootstrapper: UseCosmosSdkChainBootstrapper {}

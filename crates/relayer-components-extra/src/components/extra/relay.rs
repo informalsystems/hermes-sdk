@@ -39,32 +39,33 @@ pub struct ExtraRelayComponents;
 delegate_components!(
     #[mark_component(IsExtraRelayComponent)]
     #[mark_delegate(DelegatesToExtraRelayComponents)]
-    ExtraRelayComponents;
-    IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
-    IbcMessageSenderComponent<BatchWorkerSink>:
-        SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-    PacketRelayerComponent:
-        LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
-    [
-        UpdateClientMessageBuilderComponent,
-        ReceivePacketRelayerComponnent,
-        AckPacketRelayerComponent,
-        TimeoutUnorderedPacketRelayerComponent,
-        EventRelayerComponent,
-        ClientCreatorComponent,
-        PacketClearerComponent,
-        ChannelInitializerComponent,
-        ChannelOpenTryRelayerComponent,
-        ChannelOpenAckRelayerComponent,
-        ChannelOpenConfirmRelayerComponent,
-        ChannelOpenHandshakeRelayerComponent,
-        ConnectionOpenAckRelayerComponent,
-        ConnectionOpenConfirmRelayerComponent,
-        ConnectionInitializerComponent,
-        ConnectionOpenTryRelayerComponent,
-        ConnectionOpenHandshakeRelayerComponent,
-        AutoRelayerComponent,
-        RunnerComponent,
-    ]:
-        DefaultRelayComponents,
+    ExtraRelayComponents {
+        IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
+        IbcMessageSenderComponent<BatchWorkerSink>:
+            SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
+        PacketRelayerComponent:
+            LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
+        [
+            UpdateClientMessageBuilderComponent,
+            ReceivePacketRelayerComponnent,
+            AckPacketRelayerComponent,
+            TimeoutUnorderedPacketRelayerComponent,
+            EventRelayerComponent,
+            ClientCreatorComponent,
+            PacketClearerComponent,
+            ChannelInitializerComponent,
+            ChannelOpenTryRelayerComponent,
+            ChannelOpenAckRelayerComponent,
+            ChannelOpenConfirmRelayerComponent,
+            ChannelOpenHandshakeRelayerComponent,
+            ConnectionOpenAckRelayerComponent,
+            ConnectionOpenConfirmRelayerComponent,
+            ConnectionInitializerComponent,
+            ConnectionOpenTryRelayerComponent,
+            ConnectionOpenHandshakeRelayerComponent,
+            AutoRelayerComponent,
+            RunnerComponent,
+        ]:
+            DefaultRelayComponents,
+    }
 );

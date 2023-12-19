@@ -56,26 +56,26 @@ pub struct LegacyCosmosSdkBootstrapComponents;
 delegate_components!(
     #[mark_component(IsLegacyCosmosSdkBootstrapComponent)]
     #[mark_delegate(DelegatesToLegacyToCosmosSdkBootstrapComponents)]
-    LegacyCosmosSdkBootstrapComponents;
+    LegacyCosmosSdkBootstrapComponents {
+        GenesisAccountAdderComponent: LegacyAddCosmosGenesisAccount,
+        GenesisValidatorAdderComponent: LegacyAddCosmosGenesisValidator,
+        GenesisTransactionsCollectorComponent: LegacyCollectCosmosGentxs,
 
-    GenesisAccountAdderComponent: LegacyAddCosmosGenesisAccount,
-    GenesisValidatorAdderComponent: LegacyAddCosmosGenesisValidator,
-    GenesisTransactionsCollectorComponent: LegacyCollectCosmosGentxs,
-
-    // Components that are the same as `CosmosSdkBootstrapComponents`
-    [
-        ChainIdGeneratorComponent,
-        ChainHomeDirInitializerComponent,
-        ChainDataInitializerComponent,
-        WalletHdPathComponent,
-        WalletInitializerComponent,
-        ChainConfigInitializerComponent,
-        GenesisConfigInitializerComponent,
-        GenesisWalletAdderComponent,
-        ChainFullNodeStarterComponent,
-        ChainBootstrapperComponent,
-    ]:
-        CosmosSdkBootstrapComponents,
+        // Components that are the same as `CosmosSdkBootstrapComponents`
+        [
+            ChainIdGeneratorComponent,
+            ChainHomeDirInitializerComponent,
+            ChainDataInitializerComponent,
+            WalletHdPathComponent,
+            WalletInitializerComponent,
+            ChainConfigInitializerComponent,
+            GenesisConfigInitializerComponent,
+            GenesisWalletAdderComponent,
+            ChainFullNodeStarterComponent,
+            ChainBootstrapperComponent,
+        ]:
+            CosmosSdkBootstrapComponents,
+    }
 );
 
 pub trait CanUseLegacyCosmosSdkChainBootstrapper: UseLegacyCosmosSdkChainBootstrapper {}

@@ -521,7 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/component-delegation-marker#8ccf4b39029cd79563ce7487076b6989b4c61d29"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/component-delegation-marker#1a189e70250e1fe42465e48edbb6af8c633dbfea"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",

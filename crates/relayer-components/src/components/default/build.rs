@@ -28,11 +28,11 @@ pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents
 delegate_components!(
     #[mark_component(IsDefaultBuildComponent)]
     #[mark_delegate(DelegatesToDefaultBuildComponents)]
-    DefaultBuildComponents<BaseComponents>;
-
-    ChainBuilderComponent: BuildChainWithCache<BaseComponents>,
-    RelayBuilderComponent: BuildRelayWithCache<BuildRelayFromChains>,
-    BiRelayBuilderComponent: BuildBiRelayFromRelays,
+    DefaultBuildComponents<BaseComponents> {
+        ChainBuilderComponent: BuildChainWithCache<BaseComponents>,
+        RelayBuilderComponent: BuildRelayWithCache<BuildRelayFromChains>,
+        BiRelayBuilderComponent: BuildBiRelayFromRelays,
+    }
 );
 
 pub trait UseDefaultBuildComponents<BaseComponents>: CanBuildBiRelay

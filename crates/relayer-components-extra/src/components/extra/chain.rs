@@ -12,9 +12,10 @@ pub struct ExtraChainComponents<BaseComponents>(pub PhantomData<BaseComponents>)
 delegate_components!(
     #[mark_component(IsExtraChainComponent)]
     #[mark_delegate(DelegatesToExtraChainComponents)]
-    ExtraChainComponents<BaseComponents>;
-    ChainStatusQuerierComponent:
-        ChainStatusTelemetryQuerier<BaseComponents>,
-    ConsensusStateQuerierComponent:
-        ConsensusStateTelemetryQuerier<BaseComponents>,
+    ExtraChainComponents<BaseComponents> {
+        ChainStatusQuerierComponent:
+            ChainStatusTelemetryQuerier<BaseComponents>,
+        ConsensusStateQuerierComponent:
+            ConsensusStateTelemetryQuerier<BaseComponents>,
+    }
 );

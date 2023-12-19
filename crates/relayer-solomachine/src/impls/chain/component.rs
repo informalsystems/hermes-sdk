@@ -23,7 +23,6 @@ use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComp
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
-use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -52,7 +51,7 @@ impl<Chain> HasComponents for SolomachineChain<Chain>
 where
     Chain: Async,
 {
-    type Components = DefaultChainComponents<SolomachineChainComponents>;
+    type Components = SolomachineChainComponents;
 }
 
 delegate_components!(

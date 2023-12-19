@@ -41,12 +41,13 @@ pub struct DefaultTxComponents;
 delegate_components!(
     #[mark_component(IsDefaultTxComponents)]
     #[mark_delegate(DelegatesToDefaultTxComponents)]
-    DefaultTxComponents;
-    MessageSenderComponent: SendMessagesWithDefaultSigner,
-    MessagesWithSignerSenderComponent: AllocateNonceAndSendMessages,
-    MessagesWithSignerAndNonceSenderComponent: EstimateFeesAndSendTx,
-    NonceAllocatorComponent: AllocateNonceWithMutex,
-    TxResponsePollerComponent: PollTxResponse,
+    DefaultTxComponents {
+        MessageSenderComponent: SendMessagesWithDefaultSigner,
+        MessagesWithSignerSenderComponent: AllocateNonceAndSendMessages,
+        MessagesWithSignerAndNonceSenderComponent: EstimateFeesAndSendTx,
+        NonceAllocatorComponent: AllocateNonceWithMutex,
+        TxResponsePollerComponent: PollTxResponse,
+    }
 );
 pub trait CanUseDefaultTxComponents: UseDefaultTxComponents {}
 

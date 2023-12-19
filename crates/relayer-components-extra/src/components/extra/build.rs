@@ -34,15 +34,15 @@ pub struct ExtraBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>)
 delegate_components!(
     #[mark_component(IsExtraBuildComponent)]
     #[mark_delegate(DelegatesToExtraBuildComponents)]
-    ExtraBuildComponents<BaseComponents>;
-
-    RelayFromChainsBuilderComponent: BuildRelayWithBatchWorker,
-    [
-        ChainBuilderComponent,
-        RelayBuilderComponent,
-        BiRelayBuilderComponent,
-    ]:
-        DefaultBuildComponents<BaseComponents>,
+    ExtraBuildComponents<BaseComponents> {
+        RelayFromChainsBuilderComponent: BuildRelayWithBatchWorker,
+        [
+            ChainBuilderComponent,
+            RelayBuilderComponent,
+            BiRelayBuilderComponent,
+        ]:
+            DefaultBuildComponents<BaseComponents>,
+    }
 );
 
 pub trait CanUseExtraBuildComponents<BaseComponents>:
