@@ -1,8 +1,10 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::HandleErrorsWithEyre;
-use cosmos_test_components::bootstrap::components::closures::cosmos_sdk_legacy::CanUseLegacyCosmosSdkChainBootstrapper;
 use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
+use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
+    CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
+};
 use cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
 use cosmos_test_components::bootstrap::impls::fields::denom::DenomForTransfer;
 use cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
@@ -53,7 +55,14 @@ impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosStdBootstrapContext {}
 pub struct CosmosStdBootstrapComponents;
 
 impl HasComponents for CosmosStdBootstrapContext {
-    type Components = LegacyCosmosSdkBootstrapComponents<CosmosStdBootstrapComponents>;
+    type Components = CosmosStdBootstrapComponents;
+}
+
+impl<Component> DelegateComponent<Component> for CosmosStdBootstrapComponents
+where
+    CosmosStdBootstrapComponents: IsLegacyCosmosSdkBootstrapComponent<Component>,
+{
+    type Delegate = LegacyCosmosSdkBootstrapComponents;
 }
 
 delegate_components!(
