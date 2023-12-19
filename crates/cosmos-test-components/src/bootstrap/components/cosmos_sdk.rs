@@ -62,13 +62,11 @@ use crate::chain::types::wallet::CosmosTestWallet;
 
 pub struct CosmosSdkBootstrapComponents;
 
-pub trait IsCosmosSdkBootstrapComponent<Component> {}
-
 // Components that will be swapped in `LegacyCosmosSdkBootstrapComponents`
 delegate_components!(
-    CosmosSdkBootstrapComponents
-        @markers[ IsCosmosSdkBootstrapComponent ]
-    ;
+    #[mark_component(IsCosmosSdkBootstrapComponent)]
+    #[mark_delegate(DelegatesToCosmosSdkBootstrapComponents)]
+    CosmosSdkBootstrapComponents;
 
     GenesisAccountAdderComponent: AddCosmosGenesisAccount,
     GenesisValidatorAdderComponent: AddCosmosGenesisValidator,
@@ -96,24 +94,8 @@ where
         + HasRuntime<Runtime = Runtime>
         + HasErrorType
         + CanRaiseError<IoError>,
-    Components: DelegateComponent<ChainIdGeneratorComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<ChainHomeDirInitializerComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<ChainDataInitializerComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<WalletHdPathComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<WalletInitializerComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<ChainConfigInitializerComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<
-            GenesisConfigInitializerComponent,
-            Delegate = CosmosSdkBootstrapComponents,
-        > + DelegateComponent<GenesisWalletAdderComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<ChainFullNodeStarterComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<ChainBootstrapperComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<GenesisAccountAdderComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<GenesisValidatorAdderComponent, Delegate = CosmosSdkBootstrapComponents>
-        + DelegateComponent<
-            GenesisTransactionsCollectorComponent,
-            Delegate = CosmosSdkBootstrapComponents,
-        > + ProvideChainType<Bootstrap, Chain = Chain>
+    Components: DelegatesToCosmosSdkBootstrapComponents
+        + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideGenesisConfigType<Bootstrap>
         + ProvideChainConfigType<Bootstrap>
         + TestDirGetter<Bootstrap>

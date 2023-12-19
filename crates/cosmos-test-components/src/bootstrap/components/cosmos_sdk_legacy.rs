@@ -53,12 +53,10 @@ use crate::chain::types::wallet::CosmosTestWallet;
 
 pub struct LegacyCosmosSdkBootstrapComponents;
 
-pub trait IsLegacyCosmosSdkBootstrapComponent<Component> {}
-
 delegate_components!(
-    LegacyCosmosSdkBootstrapComponents
-        @markers[ IsLegacyCosmosSdkBootstrapComponent ]
-    ;
+    #[mark_component(IsLegacyCosmosSdkBootstrapComponent)]
+    #[mark_delegate(DelegatesToLegacyToCosmosSdkBootstrapComponents)]
+    LegacyCosmosSdkBootstrapComponents;
 
     GenesisAccountAdderComponent: LegacyAddCosmosGenesisAccount,
     GenesisValidatorAdderComponent: LegacyAddCosmosGenesisValidator,
@@ -90,38 +88,8 @@ where
         + HasRuntime<Runtime = Runtime>
         + HasErrorType
         + CanRaiseError<IoError>,
-    Components: DelegateComponent<ChainIdGeneratorComponent, Delegate = LegacyCosmosSdkBootstrapComponents>
-        + DelegateComponent<
-            ChainHomeDirInitializerComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<
-            ChainDataInitializerComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<WalletHdPathComponent, Delegate = LegacyCosmosSdkBootstrapComponents>
-        + DelegateComponent<WalletInitializerComponent, Delegate = LegacyCosmosSdkBootstrapComponents>
-        + DelegateComponent<
-            ChainConfigInitializerComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<
-            GenesisConfigInitializerComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<
-            GenesisWalletAdderComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<
-            ChainFullNodeStarterComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<ChainBootstrapperComponent, Delegate = LegacyCosmosSdkBootstrapComponents>
-        + DelegateComponent<
-            GenesisAccountAdderComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<
-            GenesisValidatorAdderComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + DelegateComponent<
-            GenesisTransactionsCollectorComponent,
-            Delegate = LegacyCosmosSdkBootstrapComponents,
-        > + ProvideChainType<Bootstrap, Chain = Chain>
+    Components: DelegatesToLegacyToCosmosSdkBootstrapComponents
+        + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideGenesisConfigType<Bootstrap>
         + ProvideChainConfigType<Bootstrap>
         + TestDirGetter<Bootstrap>
