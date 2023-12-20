@@ -1,3 +1,4 @@
+use async_runtime_components::channel::types::ChannelClosedError;
 use async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
@@ -12,8 +13,6 @@ use tokio_stream::wrappers::UnboundedReceiverStream;
 use crate::traits::channel::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
 
 pub struct ProvideUnboundedChannelType;
-
-pub struct ChannelClosedError;
 
 impl<Runtime> ProvideChannelType<Runtime> for ProvideUnboundedChannelType
 where
