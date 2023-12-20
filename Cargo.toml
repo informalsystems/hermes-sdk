@@ -3,19 +3,20 @@
 resolver = "2"
 
 members = [
-    "crates/cosmos-client-components",
-    "crates/cosmos-test-components",
-    "crates/cosmos-integration-tests",
-    "crates/tokio-runtime-components",
-    "crates/relayer-components",
-    "crates/relayer-components-extra",
-    "crates/relayer-cosmos",
-    "crates/relayer-cosmos-mock",
-    "crates/relayer-runtime",
-    "crates/relayer-solomachine",
-    "crates/relayer-mock",
-    "crates/test-components",
-    "crates/test-suite",
+    "crates/cosmos/cosmos-client-components",
+    "crates/cosmos/cosmos-test-components",
+    "crates/cosmos/cosmos-integration-tests",
+    "crates/cosmos/relayer-cosmos",
+    "crates/runtime/async-runtime-components",
+    "crates/runtime/tokio-runtime-components",
+    "crates/relayer/relayer-components",
+    "crates/relayer/relayer-components-extra",
+    "crates/runtime/relayer-runtime",
+    "crates/solomachine/relayer-solomachine",
+    "crates/mock/relayer-mock",
+    "crates/mock/relayer-cosmos-mock",
+    "crates/test/test-components",
+    "crates/test/test-suite",
     "tools/integration-test",
     "tools/test-framework",
 ]
@@ -61,17 +62,17 @@ itertools           = { version = "0.11" }
 http                = { version = "0.2.10" }
 flex-error          = { version = "0.4.4", default-features = false }
 
-ibc-relayer-components          = { version = "0.1.0", path = "./crates/relayer-components" }
-ibc-relayer-components-extra    = { version = "0.1.0", path = "./crates/relayer-components-extra" }
-ibc-relayer-runtime             = { version = "0.1.0", path = "./crates/relayer-runtime" }
-cosmos-client-components        = { version = "0.1.0", path = "./crates/cosmos-client-components" }
-cosmos-test-components          = { version = "0.1.0", path = "./crates/cosmos-test-components" }
-async-runtime-components        = { version = "0.1.0", path = "./crates/async-runtime-components" }
-tokio-runtime-components        = { version = "0.1.0", path = "./crates/tokio-runtime-components" }
-ibc-relayer-cosmos              = { version = "0.1.0", path = "./crates/relayer-cosmos" }
-ibc-relayer-solomachine         = { version = "0.1.0", path = "./crates/relayer-solomachine" }
-ibc-test-components             = { version = "0.1.0", path = "./crates/test-components" }
-ibc-test-suite                  = { version = "0.1.0", path = "./crates/test-suite" }
+ibc-relayer-components          = { version = "0.1.0", path = "./crates/relayer/relayer-components" }
+ibc-relayer-components-extra    = { version = "0.1.0", path = "./crates/relayer/relayer-components-extra" }
+cosmos-client-components        = { version = "0.1.0", path = "./crates/cosmos/cosmos-client-components" }
+cosmos-test-components          = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
+ibc-relayer-cosmos              = { version = "0.1.0", path = "./crates/cosmos/relayer-cosmos" }
+async-runtime-components        = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
+tokio-runtime-components        = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
+ibc-relayer-runtime             = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
+ibc-relayer-solomachine         = { version = "0.1.0", path = "./crates/solomachine/relayer-solomachine" }
+ibc-test-components             = { version = "0.1.0", path = "./crates/test/test-components" }
+ibc-test-suite                  = { version = "0.1.0", path = "./crates/test/test-suite" }
 
 [profile.release]
 overflow-checks = true
