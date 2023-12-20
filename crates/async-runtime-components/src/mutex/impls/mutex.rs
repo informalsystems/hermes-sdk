@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use futures::lock::{Mutex, MutexGuard};
+use futures_util::lock::{Mutex, MutexGuard};
 use ibc_relayer_components::runtime::traits::mutex::ProvideMutex;
 
 pub struct ProvideFuturesMutex;

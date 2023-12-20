@@ -1,3 +1,4 @@
+use async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;
 use async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
 use async_runtime_components::stream::impls::map::BoxedStreamMapper;
 use async_runtime_components::subscription::impls::subscription::ProvideBoxedSubscription;
@@ -17,7 +18,6 @@ use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponen
 
 use crate::impls::child_process::StartTokioChildProcess;
 use crate::impls::exec_command::TokioExecCommand;
-use crate::impls::mutex::ProvideFuturesMutex;
 use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::read_file::TokioReadFileAsString;
 use crate::impls::reserve_port::TokioReserveTcpPort;
