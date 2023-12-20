@@ -1,7 +1,7 @@
 use async_trait::async_trait;
+use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
+use hermes_relayer_components_extra::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
-use ibc_relayer_components_extra::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::builder::CosmosBuilder;

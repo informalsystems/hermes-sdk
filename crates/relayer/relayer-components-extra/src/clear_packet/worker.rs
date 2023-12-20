@@ -1,13 +1,13 @@
 use core::time::Duration;
 
 use cgp_core::async_trait;
-use ibc_relayer_components::chain::types::aliases::{ChannelId, PortId};
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::clear_interval::HasClearInterval;
-use ibc_relayer_components::relay::traits::components::packet_clearer::CanClearPackets;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_components::runtime::traits::sleep::CanSleep;
-use ibc_relayer_components::runtime::traits::task::Task;
+use hermes_relayer_components::chain::types::aliases::{ChannelId, PortId};
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::clear_interval::HasClearInterval;
+use hermes_relayer_components::relay::traits::components::packet_clearer::CanClearPackets;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::runtime::traits::task::Task;
 
 use crate::runtime::traits::spawn::CanSpawnTask;
 use crate::std_prelude::*;

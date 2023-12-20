@@ -1,6 +1,6 @@
 use cgp_core::Async;
-use ibc_relayer_components::chain::traits::types::event::EventTypeProvider;
-use ibc_relayer_components::chain::traits::types::message::MessageTypeProvider;
+use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
+use hermes_relayer_components::chain::traits::types::message::MessageTypeProvider;
 
 use crate::types::event::SolomachineEvent;
 use crate::types::message::SolomachineMessage;

@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display};
 
-use ibc_relayer_components::logger::traits::logger::BaseLogger;
+use hermes_relayer_components::logger::traits::logger::BaseLogger;
 use tracing::{debug, error, event_enabled, info, trace, warn, Level};
 
 use crate::types::log::entries::LogEntries;

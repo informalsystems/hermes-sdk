@@ -1,9 +1,9 @@
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;

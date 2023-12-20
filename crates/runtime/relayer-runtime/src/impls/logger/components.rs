@@ -1,5 +1,5 @@
 use cgp_core::Async;
-use ibc_relayer_components::logger::traits::has_logger::{
+use hermes_relayer_components::logger::traits::has_logger::{
     HasLoggerType, LoggerGetter, LoggerTypeProvider,
 };
 

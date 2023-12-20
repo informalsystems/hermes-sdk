@@ -6,12 +6,12 @@ use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
-use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::runtime::traits::task::Task;
-use ibc_relayer_components_extra::runtime::traits::channel::{
+use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::task::Task;
+use hermes_relayer_components_extra::runtime::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };
-use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 
 use crate::stream::traits::boxed::HasBoxedStreamType;
 use crate::subscription::impls::multiplex::MultiplexingSubscription;

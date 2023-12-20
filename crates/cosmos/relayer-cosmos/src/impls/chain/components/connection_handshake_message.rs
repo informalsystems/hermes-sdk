@@ -4,10 +4,10 @@ use cgp_core::DelegateComponent;
 use cosmos_client_components::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use cosmos_client_components::traits::message::CosmosMessage;
 use cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
-use ibc_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::contexts::chain::CosmosChain;

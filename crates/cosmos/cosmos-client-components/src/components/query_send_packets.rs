@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use futures::stream::{self, StreamExt, TryStreamExt};
-use ibc_relayer_components::chain::traits::components::send_packets_querier::{
+use hermes_relayer_components::chain::traits::components::send_packets_querier::{
     CanQuerySendPacket, SendPacketsQuerier,
 };
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub struct QuerySendPacketsConcurrently;
 

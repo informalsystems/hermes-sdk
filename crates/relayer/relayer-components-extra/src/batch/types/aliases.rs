@@ -1,6 +1,6 @@
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_components::runtime::types::aliases::Runtime;
+use hermes_relayer_components::chain::traits::types::event::HasEventType;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::runtime::types::aliases::Runtime;
 
 use crate::runtime::traits::channel::HasChannelTypes;
 use crate::runtime::traits::channel_once::HasChannelOnceTypes;

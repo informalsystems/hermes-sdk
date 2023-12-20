@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::chain::traits::types::amount::HasAmountType;
 

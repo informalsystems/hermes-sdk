@@ -1,19 +1,21 @@
 use async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
 use cgp_core::prelude::*;
-use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
-use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
-use ibc_relayer_components::runtime::traits::stream::{StreamMapperComponent, StreamTypeComponent};
-use ibc_relayer_components::runtime::traits::subscription::SubscriptionComponent;
-use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
-use ibc_relayer_components::runtime::traits::time::TimeComponent;
-use ibc_relayer_components_extra::runtime::traits::channel::{
+use hermes_relayer_components::runtime::traits::mutex::MutexComponent;
+use hermes_relayer_components::runtime::traits::sleep::SleeperComponent;
+use hermes_relayer_components::runtime::traits::stream::{
+    StreamMapperComponent, StreamTypeComponent,
+};
+use hermes_relayer_components::runtime::traits::subscription::SubscriptionComponent;
+use hermes_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
+use hermes_relayer_components::runtime::traits::time::TimeComponent;
+use hermes_relayer_components_extra::runtime::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
     SenderClonerComponent,
 };
-use ibc_relayer_components_extra::runtime::traits::channel_once::{
+use hermes_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
-use ibc_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
+use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;

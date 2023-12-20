@@ -1,14 +1,14 @@
 use cgp_core::{CanRun, HasComponents};
-use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
-use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
-use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
-use ibc_relayer_components::runtime::traits::stream::CanMapStream;
-use ibc_relayer_components::runtime::traits::subscription::HasSubscription;
-use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
+use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
+use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
+use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
+use hermes_relayer_components::runtime::traits::stream::CanMapStream;
+use hermes_relayer_components::runtime::traits::subscription::HasSubscription;
+use hermes_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;

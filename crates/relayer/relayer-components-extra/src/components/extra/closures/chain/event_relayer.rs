@@ -1,17 +1,17 @@
 use cgp_core::{HasComponents, HasErrorType};
-use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::{
+use hermes_relayer_components::chain::traits::components::counterparty_chain_id_querier::{
     CanQueryCounterpartyChainId, CounterpartyChainIdQuerier,
 };
-use ibc_relayer_components::chain::traits::components::packet_from_write_ack_builder::{
+use hermes_relayer_components::chain::traits::components::packet_from_write_ack_builder::{
     CanBuildPacketFromWriteAck, PacketFromWriteAckBuilder,
 };
-use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
+use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::logger::traits::has_logger::HasLoggerType;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 

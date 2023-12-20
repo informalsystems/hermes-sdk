@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollector;

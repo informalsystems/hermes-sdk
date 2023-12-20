@@ -8,13 +8,13 @@ use core::pin::Pin;
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
-use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::runtime::traits::stream::HasStreamType;
-use ibc_relayer_components::runtime::traits::task::Task;
-use ibc_relayer_components_extra::runtime::traits::channel::{
+use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::stream::HasStreamType;
+use hermes_relayer_components::runtime::traits::task::Task;
+use hermes_relayer_components_extra::runtime::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };
-use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 
 use crate::stream::traits::boxed::HasBoxedStreamType;
 use crate::subscription::traits::subscription::Subscription;
@@ -27,7 +27,7 @@ use crate::subscription::traits::subscription::Subscription;
    and [`CanStreamReceiver`].
 
    This can be used to improve the efficiency of naive subscriptions created from
-   [`CanCreateClosureSubscription`](ibc_relayer_components::runtime::impls::subscription::closure::CanCreateClosureSubscription).
+   [`CanCreateClosureSubscription`](hermes_relayer_components::runtime::impls::subscription::closure::CanCreateClosureSubscription).
    For example, one can first create a subscription closure that establishes
    new network connection each time `subscribe` is called. The subscription
    closure is then passed to [`multiplex_subscription`](Self::multiplex_subscription),

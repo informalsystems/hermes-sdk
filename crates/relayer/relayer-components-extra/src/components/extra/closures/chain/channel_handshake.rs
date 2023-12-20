@@ -1,22 +1,22 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainHeight;
-use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::{
+use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::{
     CanBuildChannelHandshakeMessages, ChannelHandshakeMessageBuilder,
 };
-use ibc_relayer_components::chain::traits::components::channel_handshake_payload_builder::{
+use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::{
     CanBuildChannelHandshakePayloads, ChannelHandshakePayloadBuilder,
 };
-use ibc_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
-use ibc_relayer_components::chain::traits::types::channel::{
+use hermes_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
+use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
-use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::ibc_events::channel::{
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     HasChannelOpenInitEvent, HasChannelOpenTryEvent,
 };
-use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;

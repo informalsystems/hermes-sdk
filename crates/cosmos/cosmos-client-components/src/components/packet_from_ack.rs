@@ -1,6 +1,6 @@
-use ibc_relayer_components::chain::traits::components::packet_from_write_ack_builder::PacketFromWriteAckBuilder;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::components::packet_from_write_ack_builder::PacketFromWriteAckBuilder;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 

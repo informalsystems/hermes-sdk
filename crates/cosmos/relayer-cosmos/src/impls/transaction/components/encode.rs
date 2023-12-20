@@ -2,13 +2,13 @@ use alloc::sync::Arc;
 
 use async_trait::async_trait;
 use cosmos_client_components::traits::message::CosmosMessage;
+use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoder;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::encode::{key_pair_to_signer, sign_tx};
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::config::types::Memo;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_components::transaction::traits::components::tx_encoder::TxEncoder;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;

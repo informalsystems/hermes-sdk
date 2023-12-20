@@ -2,11 +2,11 @@ use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
-use ibc_relayer_components::logger::traits::has_logger::{
+use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
-use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use ibc_relayer_components_extra::components::extra::build::{
+use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components_extra::components::extra::build::{
     CanUseExtraBuildComponents, ExtraBuildComponents, IsExtraBuildComponent,
 };
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;

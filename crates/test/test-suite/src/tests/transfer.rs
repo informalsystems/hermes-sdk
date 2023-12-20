@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::logger::traits::log::CanLog;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::logger::traits::log::CanLog;
 use ibc_test_components::test_case::traits::test_case::TestCase;
 use ibc_test_components::test_env::traits::background_relayer::HasBackgroundRelayer;
 

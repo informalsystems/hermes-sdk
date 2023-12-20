@@ -1,10 +1,10 @@
 use cgp_core::{async_trait, DelegateComponent, HasComponents, HasErrorType};
-use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
-use ibc_relayer_components::build::traits::target::relay::RelayBuildTarget;
-use ibc_relayer_components::build::types::aliases::{
+use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
+use hermes_relayer_components::build::traits::target::relay::RelayBuildTarget;
+use hermes_relayer_components::build::types::aliases::{
     TargetDstChain, TargetDstClientId, TargetRelay, TargetSrcChain, TargetSrcClientId,
 };
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::batch::traits::channel::HasMessageBatchSenderTypes;
 use crate::std_prelude::*;

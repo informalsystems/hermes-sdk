@@ -1,5 +1,5 @@
-use ibc_relayer_components::runtime::traits::task::Task;
-use ibc_relayer_components_extra::runtime::traits::spawn::TaskSpawner;
+use hermes_relayer_components::runtime::traits::task::Task;
+use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawner;
 
 use crate::traits::runtime::HasTokioRuntime;
 

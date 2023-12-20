@@ -1,6 +1,6 @@
+use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
+use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
-use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;

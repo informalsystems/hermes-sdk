@@ -1,14 +1,14 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
-use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
+use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::components::ibc_message_sender::{
     CanSendIbcMessages, MainSink,
 };
-use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilter;
-use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;

@@ -1,5 +1,5 @@
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 
 pub trait CanCalculateIbcTransferTimeout: HasTimestampType + HasHeightType {
     fn ibc_transfer_timeout_time(&self, current_time: &Self::Timestamp) -> Option<Self::Timestamp>;

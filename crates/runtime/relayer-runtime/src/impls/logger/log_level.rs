@@ -1,4 +1,4 @@
-use ibc_relayer_components::logger::traits::level::{
+use hermes_relayer_components::logger::traits::level::{
     HasLogLevel, LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };
 

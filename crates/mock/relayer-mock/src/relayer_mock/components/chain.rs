@@ -1,5 +1,5 @@
 use cgp_core::delegate_components;
-use ibc_relayer_components::logger::traits::has_logger::{
+use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;

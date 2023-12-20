@@ -1,8 +1,8 @@
 use cgp_core::{async_trait, HasErrorType};
-use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
-use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use crate::std_prelude::*;
 use crate::telemetry::traits::metrics::{HasMetric, TelemetryCounter};

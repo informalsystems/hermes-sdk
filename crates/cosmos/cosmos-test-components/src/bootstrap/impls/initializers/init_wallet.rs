@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::chain::traits::types::wallet::HasWalletType;
 use ibc_test_components::runtime::traits::exec_command::CanExecCommand;

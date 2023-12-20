@@ -1,12 +1,12 @@
 use alloc::sync::Arc;
 
 use async_trait::async_trait;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
-use ibc_relayer_components::chain::traits::types::connection::{
+use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::traits::chain_handle::HasBlockingChainHandle;

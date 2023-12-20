@@ -1,6 +1,6 @@
 use async_trait::async_trait;
+use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilter;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilter;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::contexts::relay::CosmosRelay;

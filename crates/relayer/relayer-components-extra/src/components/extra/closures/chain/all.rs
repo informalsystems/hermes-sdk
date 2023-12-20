@@ -1,12 +1,12 @@
-use ibc_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloads;
-use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloads;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
 use crate::components::extra::closures::chain::channel_handshake::UseExtraChainComponentsForChannelHandshake;
 use crate::components::extra::closures::chain::event_relayer::UseExtraChainComponentsForEventRelayer;

@@ -2,9 +2,9 @@ use alloc::sync::Arc;
 
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
-use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
 use crate::types::messages::client::create::CosmosCreateClientMessage;

@@ -3,9 +3,9 @@ use async_trait::async_trait;
 use cgp_core::HasErrorType;
 use cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use cosmos_client_components::types::messages::client::update::CosmosUpdateClientMessage;
-use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_cosmos::types::error::{BaseError, Error};
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 

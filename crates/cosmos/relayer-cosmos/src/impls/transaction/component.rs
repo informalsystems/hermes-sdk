@@ -3,16 +3,16 @@ use cgp_core::{
     HasComponents,
 };
 use cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
-use ibc_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
-use ibc_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
-use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
-use ibc_relayer_components::components::default::transaction::{
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use hermes_relayer_components::components::default::transaction::{
     CanUseDefaultTxComponents, DefaultTxComponents, IsDefaultTxComponents,
 };
-use ibc_relayer_components::logger::traits::has_logger::{
+use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
-use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 

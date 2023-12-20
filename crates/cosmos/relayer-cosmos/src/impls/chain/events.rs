@@ -13,15 +13,15 @@ use cosmos_client_components::types::events::client::CosmosCreateClientEvent;
 use cosmos_client_components::types::events::connection::{
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
 };
-use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::channel::{
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     HasChannelOpenInitEvent, HasChannelOpenTryEvent,
 };
-use ibc_relayer_components::chain::traits::types::ibc_events::connection::{
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     HasConnectionOpenInitEvent, HasConnectionOpenTryEvent,
 };
-use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId};

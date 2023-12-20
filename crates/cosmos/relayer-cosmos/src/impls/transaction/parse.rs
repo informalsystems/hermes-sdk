@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use ibc_relayer_components::transaction::traits::event::CanParseTxResponseAsEvents;
+use hermes_relayer_components::transaction::traits::event::CanParseTxResponseAsEvents;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 

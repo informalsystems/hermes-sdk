@@ -13,8 +13,8 @@ description  = """
 """
 
 [dependencies]
-ibc-relayer-components          = { workspace = true }
-ibc-relayer-components-extra    = { workspace = true }
+hermes-relayer-components          = { workspace = true }
+hermes-relayer-components-extra    = { workspace = true }
 ibc-test-components             = { workspace = true }
 async-runtime-components        = { workspace = true }
 tokio-runtime-components        = { workspace = true }

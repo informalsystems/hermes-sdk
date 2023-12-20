@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
 #[derive_component(ChainIdFromStringBuilderComponent, ChainIdFromStringBuilder<Chain>)]
 pub trait CanBuildChainIdFromString: HasChainIdType {

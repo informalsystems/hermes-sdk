@@ -1,38 +1,38 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::chain::traits::components::chain_status_querier::{
+use hermes_relayer_components::chain::traits::components::chain_status_querier::{
     CanQueryChainStatus, ChainStatusQuerier,
 };
-use ibc_relayer_components::chain::traits::components::client_state_querier::{
+use hermes_relayer_components::chain::traits::components::client_state_querier::{
     CanQueryClientState, ClientStateQuerier,
 };
-use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::{
+use hermes_relayer_components::chain::traits::components::consensus_state_height_querier::{
     CanQueryConsensusStateHeight, ConsensusStateHeightQuerier,
 };
-use ibc_relayer_components::chain::traits::components::consensus_state_querier::{
+use hermes_relayer_components::chain::traits::components::consensus_state_querier::{
     CanQueryConsensusState, ConsensusStateQuerier,
 };
-use ibc_relayer_components::chain::traits::components::message_sender::{
+use hermes_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };
-use ibc_relayer_components::chain::traits::components::update_client_message_builder::{
+use hermes_relayer_components::chain::traits::components::update_client_message_builder::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
 };
-use ibc_relayer_components::chain::traits::components::update_client_payload_builder::{
+use hermes_relayer_components::chain::traits::components::update_client_payload_builder::{
     CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
 };
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::client_state::{
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
-use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::height::CanIncrementHeight;
-use ibc_relayer_components::chain::traits::types::ibc::{
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::height::CanIncrementHeight;
+use hermes_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
-use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::logger::traits::has_logger::HasLoggerType;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::logger::traits::has_logger::HasLoggerType;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::telemetry::traits::metrics::HasBasicMetrics;

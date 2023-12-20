@@ -4,7 +4,7 @@ use async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use cgp_core::prelude::*;
 use futures::stream::{Stream, StreamExt};
 use futures::task::noop_waker;
-use ibc_relayer_components::runtime::traits::task::{ConcurrentTaskRunner, Task};
+use hermes_relayer_components::runtime::traits::task::{ConcurrentTaskRunner, Task};
 use tokio::task::JoinSet;
 
 pub struct TokioRunParallelTasks;

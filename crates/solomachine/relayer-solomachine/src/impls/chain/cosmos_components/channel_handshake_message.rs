@@ -7,11 +7,11 @@ use cosmos_client_components::types::messages::channel::open_ack::CosmosChannelO
 use cosmos_client_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
 use cosmos_client_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use cosmos_client_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
-use ibc_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
-use ibc_relayer_components::chain::traits::types::channel::{
+use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloads, HasInitChannelOptionsType,
 };
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_cosmos::types::error::{BaseError, Error};
 use ibc_relayer_types::core::ics04_channel::channel::{
     ChannelEnd, Counterparty as ChannelCounterparty, State,

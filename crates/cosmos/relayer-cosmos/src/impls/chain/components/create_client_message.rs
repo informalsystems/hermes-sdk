@@ -3,9 +3,9 @@ use async_trait::async_trait;
 use cgp_core::DelegateComponent;
 use cosmos_client_components::components::create_client_message::BuildCosmosCreateClientMessage;
 use cosmos_client_components::traits::message::CosmosMessage;
+use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
-use ibc_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
 
 use crate::contexts::chain::CosmosChain;
 use crate::types::error::Error;

@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
+use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
 
 use crate::traits::chain_handle::HasBlockingChainHandle;
 

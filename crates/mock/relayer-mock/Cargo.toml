@@ -15,7 +15,7 @@ description  = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ibc-relayer-components      = { workspace = true }
+hermes-relayer-components      = { workspace = true }
 ibc-relayer-runtime         = { workspace = true }
 cosmos-client-components    = { workspace = true }
 

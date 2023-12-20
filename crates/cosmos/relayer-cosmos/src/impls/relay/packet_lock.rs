@@ -1,8 +1,8 @@
 use async_trait::async_trait;
 use cosmos_client_components::methods::packet_lock::try_acquire_packet_lock;
 use cosmos_client_components::types::packet_lock::PacketLock;
+use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::contexts::relay::CosmosRelay;

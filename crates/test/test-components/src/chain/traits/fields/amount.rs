@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::denom::HasDenomType;

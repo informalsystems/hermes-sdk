@@ -18,8 +18,8 @@ ibc-relayer       = { workspace = true }
 ibc-relayer-types = { workspace = true }
 cgp-core          = { workspace = true }
 ibc-relayer-runtime             = { workspace = true }
-ibc-relayer-components          = { workspace = true }
-ibc-relayer-components-extra    = { workspace = true }
+hermes-relayer-components          = { workspace = true }
+hermes-relayer-components-extra    = { workspace = true }
 ibc-test-components             = { workspace = true }
 tendermint      = { workspace = true, features = ["secp256k1"] }
 tendermint-rpc  = { workspace = true, features = ["http-client", "websocket-client"] }

@@ -1,6 +1,6 @@
 use cgp_core::{async_trait, HasErrorType};
-use ibc_relayer_components::chain::traits::components::chain_status_querier::*;
-use ibc_relayer_components::chain::traits::types::status::HasChainStatusType;
+use hermes_relayer_components::chain::traits::components::chain_status_querier::*;
+use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 
 use crate::std_prelude::*;
 use crate::telemetry::traits::metrics::{HasMetric, TelemetryCounter};

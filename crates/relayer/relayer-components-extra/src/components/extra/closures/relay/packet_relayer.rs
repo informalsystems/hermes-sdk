@@ -1,11 +1,11 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
-use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilter;
-use ibc_relayer_components::relay::traits::components::packet_relayer::CanRelayPacket;
-use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
+use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::components::packet_relayer::CanRelayPacket;
+use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 
 use crate::components::extra::closures::chain::packet_relayer::UseExtraChainComponentsForPacketRelayer;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;

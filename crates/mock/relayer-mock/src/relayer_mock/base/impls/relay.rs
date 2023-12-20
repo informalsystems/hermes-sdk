@@ -6,11 +6,11 @@ use std::vec;
 
 use async_trait::async_trait;
 use cgp_core::prelude::*;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
-use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
-use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components::runtime::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
 
 use crate::relayer_mock::base::error::Error;
 use crate::relayer_mock::base::impls::error::HandleMockError;

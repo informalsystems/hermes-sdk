@@ -1,7 +1,7 @@
 use async_trait::async_trait;
+use hermes_relayer_components::build::traits::components::chain_builder::ChainBuilder;
+use hermes_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer_components::build::traits::components::chain_builder::ChainBuilder;
-use ibc_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::builder::CosmosBuilder;

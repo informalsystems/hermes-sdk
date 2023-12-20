@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use ibc_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;

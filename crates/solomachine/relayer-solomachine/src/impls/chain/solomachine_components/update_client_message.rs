@@ -1,10 +1,10 @@
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
 use cosmos_client_components::types::payloads::client::CosmosUpdateClientPayload;
-use ibc_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::types::message::SolomachineMessage;

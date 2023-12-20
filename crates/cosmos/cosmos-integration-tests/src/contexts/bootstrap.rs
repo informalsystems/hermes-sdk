@@ -17,7 +17,7 @@ use cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfi
 use cosmos_test_components::chain::types::denom::Denom;
 use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
-use ibc_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;

@@ -8,7 +8,7 @@
 */
 
 use cgp_core::prelude::*;
-use ibc_relayer_components::runtime::traits::stream::HasStreamType;
+use hermes_relayer_components::runtime::traits::stream::HasStreamType;
 
 use crate::std_prelude::*;
 

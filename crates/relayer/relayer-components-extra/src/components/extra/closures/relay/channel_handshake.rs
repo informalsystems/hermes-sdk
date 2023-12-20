@@ -1,15 +1,15 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
-use ibc_relayer_components::relay::impls::channel::open_init::CanRaiseMissingChannelInitEventError;
-use ibc_relayer_components::relay::impls::channel::open_try::CanRaiseMissingChannelTryEventError;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::channel::open_ack::ChannelOpenAckRelayer;
-use ibc_relayer_components::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayer;
-use ibc_relayer_components::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
-use ibc_relayer_components::relay::traits::channel::open_init::{
+use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
+use hermes_relayer_components::relay::impls::channel::open_init::CanRaiseMissingChannelInitEventError;
+use hermes_relayer_components::relay::impls::channel::open_try::CanRaiseMissingChannelTryEventError;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::channel::open_ack::ChannelOpenAckRelayer;
+use hermes_relayer_components::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayer;
+use hermes_relayer_components::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
+use hermes_relayer_components::relay::traits::channel::open_init::{
     CanInitChannel, ChannelInitializer,
 };
-use ibc_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayer;
+use hermes_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayer;
 
 use crate::components::extra::closures::chain::channel_handshake::UseExtraChainComponentsForChannelHandshake;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;

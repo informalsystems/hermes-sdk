@@ -1,4 +1,4 @@
-use ibc_relayer_components::transaction::components::poll_tx_response::CanRaiseNoTxResponseError;
+use hermes_relayer_components::transaction::components::poll_tx_response::CanRaiseNoTxResponseError;
 use tendermint::Hash as TxHash;
 
 use crate::contexts::transaction::CosmosTxContext;

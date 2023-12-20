@@ -2,10 +2,10 @@ use alloc::sync::Arc;
 
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilder;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilder;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};

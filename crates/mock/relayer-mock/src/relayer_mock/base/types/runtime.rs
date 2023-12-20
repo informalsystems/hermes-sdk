@@ -4,8 +4,8 @@ use core::time::Duration;
 
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use ibc_relayer_components::runtime::traits::sleep::CanSleep;
-use ibc_relayer_components::runtime::traits::time::HasTime;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::runtime::traits::time::HasTime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 
 use crate::relayer_mock::base::types::aliases::MockTimestamp;

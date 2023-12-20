@@ -2,7 +2,7 @@ use core::pin::Pin;
 
 use cgp_core::Async;
 use futures_core::stream::Stream;
-use ibc_relayer_components::runtime::traits::stream::HasStreamType;
+use hermes_relayer_components::runtime::traits::stream::HasStreamType;
 
 pub trait HasAsyncStreamType: HasStreamType {
     fn from_async_stream<T>(

@@ -1,36 +1,36 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::chain::traits::components::ack_packet_message_builder::{
+use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
 };
-use ibc_relayer_components::chain::traits::components::ack_packet_payload_builder::{
+use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
 };
-use ibc_relayer_components::chain::traits::components::packet_fields_reader::{
+use hermes_relayer_components::chain::traits::components::packet_fields_reader::{
     CanReadPacketFields, PacketFieldsReader,
 };
-use ibc_relayer_components::chain::traits::components::receive_packet_message_builder::{
+use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::{
     CanBuildReceivePacketMessage, ReceivePacketMessageBuilder,
 };
-use ibc_relayer_components::chain::traits::components::receive_packet_payload_builder::{
+use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::{
     CanBuildReceivePacketPayload, ReceivePacketPayloadBuilder,
 };
-use ibc_relayer_components::chain::traits::components::received_packet_querier::{
+use hermes_relayer_components::chain::traits::components::received_packet_querier::{
     CanQueryReceivedPacket, ReceivedPacketQuerier,
 };
-use ibc_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
+use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
-use ibc_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use ibc_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use ibc_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;

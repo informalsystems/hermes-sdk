@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::transaction::traits::types::HasSignerType;
+use hermes_relayer_components::transaction::traits::types::HasSignerType;
 
 use crate::chain::traits::types::address::HasAddressType;
 

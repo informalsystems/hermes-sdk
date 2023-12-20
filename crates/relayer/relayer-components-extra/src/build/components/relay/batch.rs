@@ -1,18 +1,18 @@
 use cgp_core::{async_trait, HasErrorType};
-use ibc_relayer_components::build::traits::birelay::HasBiRelayType;
-use ibc_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilder;
-use ibc_relayer_components::build::traits::target::chain::ChainBuildTarget;
-use ibc_relayer_components::build::traits::target::relay::RelayBuildTarget;
-use ibc_relayer_components::build::types::aliases::{
+use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
+use hermes_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilder;
+use hermes_relayer_components::build::traits::target::chain::ChainBuildTarget;
+use hermes_relayer_components::build::traits::target::relay::RelayBuildTarget;
+use hermes_relayer_components::build::types::aliases::{
     CounterpartyChainId, CounterpartyClientId, RelayError, TargetChain, TargetChainId,
     TargetChainRuntime, TargetClientId,
 };
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::batch::traits::config::HasBatchConfig;
 use crate::batch::types::aliases::{MessageBatchReceiver, MessageBatchSender};

@@ -4,8 +4,8 @@ use std::path::Path;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
 use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
 use tokio::fs::create_dir_all;

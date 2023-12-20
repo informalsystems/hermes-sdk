@@ -62,17 +62,17 @@ itertools           = { version = "0.11" }
 http                = { version = "0.2.10" }
 flex-error          = { version = "0.4.4", default-features = false }
 
-ibc-relayer-components          = { version = "0.1.0", path = "./crates/relayer/relayer-components" }
-ibc-relayer-components-extra    = { version = "0.1.0", path = "./crates/relayer/relayer-components-extra" }
-cosmos-client-components        = { version = "0.1.0", path = "./crates/cosmos/cosmos-client-components" }
-cosmos-test-components          = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
-ibc-relayer-cosmos              = { version = "0.1.0", path = "./crates/cosmos/relayer-cosmos" }
-async-runtime-components        = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
-tokio-runtime-components        = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
-ibc-relayer-runtime             = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
-ibc-relayer-solomachine         = { version = "0.1.0", path = "./crates/solomachine/relayer-solomachine" }
-ibc-test-components             = { version = "0.1.0", path = "./crates/test/test-components" }
-ibc-test-suite                  = { version = "0.1.0", path = "./crates/test/test-suite" }
+hermes-relayer-components           = { version = "0.1.0", path = "./crates/relayer/relayer-components" }
+hermes-relayer-components-extra     = { version = "0.1.0", path = "./crates/relayer/relayer-components-extra" }
+cosmos-client-components            = { version = "0.1.0", path = "./crates/cosmos/cosmos-client-components" }
+cosmos-test-components              = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
+ibc-relayer-cosmos                  = { version = "0.1.0", path = "./crates/cosmos/relayer-cosmos" }
+async-runtime-components            = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
+tokio-runtime-components            = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
+ibc-relayer-runtime                 = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
+ibc-relayer-solomachine             = { version = "0.1.0", path = "./crates/solomachine/relayer-solomachine" }
+ibc-test-components                 = { version = "0.1.0", path = "./crates/test/test-components" }
+ibc-test-suite                      = { version = "0.1.0", path = "./crates/test/test-suite" }
 
 [profile.release]
 overflow-checks = true

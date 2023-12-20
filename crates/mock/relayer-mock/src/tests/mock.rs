@@ -1,10 +1,10 @@
 use alloc::string::String;
 use std::time::Duration;
 
-use ibc_relayer_components::chain::traits::components::write_ack_querier::CanQueryWriteAck;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::packet_relayer::CanRelayPacket;
-use ibc_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::chain::traits::components::write_ack_querier::CanQueryWriteAck;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::components::packet_relayer::CanRelayPacket;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use tracing::info;
 
 use crate::relayer_mock::base::error::Error;

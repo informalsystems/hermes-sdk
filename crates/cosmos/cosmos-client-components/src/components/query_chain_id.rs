@@ -1,10 +1,10 @@
 use async_trait::async_trait;
 use cgp_core::CanRaiseError;
+use hermes_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerier;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::counterparty::counterparty_chain_from_channel;
 use ibc_relayer::supervisor::Error as SupervisorError;
-use ibc_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerier;
-use ibc_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 
 use crate::traits::chain_handle::HasBlockingChainHandle;

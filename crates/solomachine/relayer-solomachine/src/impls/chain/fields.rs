@@ -1,4 +1,4 @@
-use ibc_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::impls::chain::component::SolomachineChainComponents;

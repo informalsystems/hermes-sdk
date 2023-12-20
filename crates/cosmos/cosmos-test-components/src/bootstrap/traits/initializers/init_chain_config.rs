@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
 use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};

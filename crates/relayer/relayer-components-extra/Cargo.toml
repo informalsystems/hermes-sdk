@@ -1,5 +1,5 @@
 [package]
-name         = "ibc-relayer-components-extra"
+name         = "hermes-relayer-components-extra"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }
@@ -14,4 +14,4 @@ description  = """
 
 [dependencies]
 cgp-core                = { workspace = true }
-ibc-relayer-components  = { workspace = true }
+hermes-relayer-components  = { workspace = true }

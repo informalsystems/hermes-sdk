@@ -2,7 +2,7 @@ use core::time::Duration;
 
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use toml::Value;
 
 use crate::bootstrap::traits::initializers::init_chain_config::ChainConfigInitializer;

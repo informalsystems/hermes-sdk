@@ -1,4 +1,4 @@
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub trait HasChannelAt<Counterparty, const I: usize>: HasIbcChainTypes<Counterparty> {
     fn channel_id(&self) -> &Self::ChannelId;

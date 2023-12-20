@@ -14,5 +14,5 @@ description  = """
 
 [dependencies]
 cgp-core                        = { workspace = true }
-ibc-relayer-components          = { workspace = true }
-ibc-relayer-components-extra    = { workspace = true }
+hermes-relayer-components          = { workspace = true }
+hermes-relayer-components-extra    = { workspace = true }

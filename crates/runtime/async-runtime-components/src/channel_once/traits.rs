@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use futures_channel::oneshot::{Receiver, Sender};
-use ibc_relayer_components_extra::runtime::traits::channel_once::{
+use hermes_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceTypeComponent, HasChannelOnceTypes, ProvideChannelOnceType,
 };
 

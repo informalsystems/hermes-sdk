@@ -1,9 +1,9 @@
 use cgp_core::Async;
-use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::target::ChainTarget;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_components::runtime::types::aliases::Runtime;
+use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::target::ChainTarget;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::types::aliases::Runtime;
 
 use crate::batch::types::aliases::MessageBatchSender;
 use crate::runtime::traits::channel::HasChannelTypes;

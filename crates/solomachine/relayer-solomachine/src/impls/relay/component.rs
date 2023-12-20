@@ -1,9 +1,9 @@
 use cgp_core::delegate_all;
 use cgp_core::prelude::*;
-use ibc_relayer_components::components::default::relay::{
+use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::context::relay::SolomachineRelay;

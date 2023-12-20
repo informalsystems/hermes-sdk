@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use eyre::Report;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use serde_json::Value;
 
 use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigInitializer;

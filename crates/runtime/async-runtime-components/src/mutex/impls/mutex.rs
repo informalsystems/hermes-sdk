@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use futures_util::lock::{Mutex, MutexGuard};
-use ibc_relayer_components::runtime::traits::mutex::ProvideMutex;
+use hermes_relayer_components::runtime::traits::mutex::ProvideMutex;
 
 pub struct ProvideFuturesMutex;
 

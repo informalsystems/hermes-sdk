@@ -22,8 +22,8 @@ ibc-relayer-types               = { workspace = true }
 ibc-telemetry                   = { workspace = true }
 cgp-core                        = { workspace = true }
 ibc-relayer-runtime             = { workspace = true }
-ibc-relayer-components          = { workspace = true }
-ibc-relayer-components-extra    = { workspace = true }
+hermes-relayer-components          = { workspace = true }
+hermes-relayer-components-extra    = { workspace = true }
 ibc-test-components             = { workspace = true }
 async-runtime-components        = { workspace = true }
 cosmos-client-components        = { workspace = true }

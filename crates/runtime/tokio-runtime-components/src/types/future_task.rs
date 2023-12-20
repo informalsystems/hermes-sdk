@@ -2,7 +2,7 @@ use core::pin::Pin;
 
 use cgp_core::async_trait;
 use futures::Future;
-use ibc_relayer_components::runtime::traits::task::Task;
+use hermes_relayer_components::runtime::traits::task::Task;
 
 pub struct FutureTask {
     pub future: Pin<Box<dyn Future<Output = ()> + Send + Sync + 'static>>,

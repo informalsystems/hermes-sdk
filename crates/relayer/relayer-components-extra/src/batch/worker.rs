@@ -3,21 +3,21 @@ use core::marker::PhantomData;
 use core::mem;
 
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
-use ibc_relayer_components::chain::traits::types::message::{
+use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
+use hermes_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
 };
-use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::ibc_message_sender::CanSendIbcMessages;
-use ibc_relayer_components::relay::traits::logs::logger::CanLogRelayTarget;
-use ibc_relayer_components::relay::traits::target::ChainTarget;
-use ibc_relayer_components::runtime::traits::mutex::HasMutex;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_components::runtime::traits::sleep::CanSleep;
-use ibc_relayer_components::runtime::traits::task::Task;
-use ibc_relayer_components::runtime::traits::time::HasTime;
-use ibc_relayer_components::runtime::types::aliases::Runtime;
+use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::components::ibc_message_sender::CanSendIbcMessages;
+use hermes_relayer_components::relay::traits::logs::logger::CanLogRelayTarget;
+use hermes_relayer_components::relay::traits::target::ChainTarget;
+use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::runtime::traits::task::Task;
+use hermes_relayer_components::runtime::traits::time::HasTime;
+use hermes_relayer_components::runtime::types::aliases::Runtime;
 
 use crate::batch::types::aliases::{BatchSubmission, EventResultSender, MessageBatchReceiver};
 use crate::batch::types::config::BatchConfig;

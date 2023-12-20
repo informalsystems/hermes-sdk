@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use cosmos_client_components::types::tendermint::TendermintClientState;
-use ibc_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
-use ibc_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::traits::solomachine::Solomachine;

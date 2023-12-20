@@ -1,12 +1,12 @@
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
-use ibc_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_components::chain::traits::types::ibc_events::send_packet::{
+use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
     CanRaiseMissingSendPacketEventError, HasSendPacketEvent,
 };
-use ibc_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use ibc_relayer_components::transaction::components::send_single_message_with_signer::CanSendSingleMessageWithSigner;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::transaction::components::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
 use crate::chain::traits::fields::memo::HasDefaultMemo;
 use crate::chain::traits::fields::timeout::CanCalculateIbcTransferTimeout;

@@ -1,10 +1,10 @@
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use ibc_relayer_components::chain::traits::components::message_sender::{
+use hermes_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };
-use ibc_relayer_components::chain::traits::types::event::HasEventType;
-use ibc_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::types::event::HasEventType;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 
 use crate::traits::has_tx_context::HasTxContext;
 

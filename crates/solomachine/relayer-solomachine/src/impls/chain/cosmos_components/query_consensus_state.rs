@@ -1,11 +1,11 @@
 use async_trait::async_trait;
 use cgp_core::{DelegateComponent, HasErrorType};
 use cosmos_client_components::traits::rpc_client::HasRpcClient;
+use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::cosmos::query::abci_query;
-use ibc_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
-use ibc_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_cosmos::impls::chain::components::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::core::ics24_host::path::ClientConsensusStatePath;

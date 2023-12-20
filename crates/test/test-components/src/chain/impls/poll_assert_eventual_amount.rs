@@ -2,8 +2,8 @@ use core::time::Duration;
 
 use alloc::boxed::Box;
 use cgp_core::prelude::*;
-use ibc_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 
 use crate::chain::traits::assert::eventual_amount::EventualAmountAsserter;
 use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;

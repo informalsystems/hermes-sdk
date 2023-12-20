@@ -6,8 +6,8 @@ use std::process::Stdio;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use ibc_relayer_components::runtime::traits::sleep::CanSleep;
-use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 use ibc_test_components::runtime::traits::read_file::CanReadFileAsString;
 use tokio::fs::OpenOptions;
 use tokio::io::copy;

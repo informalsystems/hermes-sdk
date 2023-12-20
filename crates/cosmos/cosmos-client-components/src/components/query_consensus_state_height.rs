@@ -1,11 +1,11 @@
 use async_trait::async_trait;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
+use hermes_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{PageRequest, QueryConsensusStateHeightsRequest};
-use ibc_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
-use ibc_relayer_components::chain::traits::types::height::HasHeightType;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 

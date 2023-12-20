@@ -1,8 +1,8 @@
 use async_trait::async_trait;
+use hermes_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::QueryUnreceivedPacketsRequest;
-use ibc_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
-use ibc_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 

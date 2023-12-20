@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use futures_channel::mpsc;
 use futures_util::lock::Mutex;
-use ibc_relayer_components_extra::runtime::traits::channel::{
+use hermes_relayer_components_extra::runtime::traits::channel::{
     ChannelTypeComponent, HasChannelTypes, ProvideChannelType,
 };
 

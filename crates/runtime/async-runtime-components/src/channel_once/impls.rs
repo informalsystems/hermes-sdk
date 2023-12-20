@@ -3,7 +3,7 @@ use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use futures_channel::oneshot::{channel, Receiver, Sender};
-use ibc_relayer_components_extra::runtime::traits::channel_once::{
+use hermes_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceCreator, ChannelOnceUser, ProvideChannelOnceType,
 };
 

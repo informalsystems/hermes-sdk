@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
 use cgp_core::{async_trait, HasErrorType};
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::packet_relayer::PacketRelayer;
-use ibc_relayer_components::relay::types::aliases::Packet;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::components::packet_relayer::PacketRelayer;
+use hermes_relayer_components::relay::types::aliases::Packet;
 
 use crate::std_prelude::*;
 

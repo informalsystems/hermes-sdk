@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 
 use async_trait::async_trait;
 use cosmos_client_components::traits::message::CosmosMessage;
-use ibc_relayer_components::chain::traits::components::message_sender::{
+use hermes_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };
 use tendermint::abci::Event as AbciEvent;

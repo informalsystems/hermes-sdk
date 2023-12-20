@@ -1,8 +1,8 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use ibc_relayer_components::birelay::traits::two_way::{
+use hermes_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
-use ibc_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
+use hermes_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 

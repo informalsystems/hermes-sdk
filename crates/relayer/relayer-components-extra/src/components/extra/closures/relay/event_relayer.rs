@@ -1,12 +1,12 @@
 use cgp_core::HasComponents;
-use ibc_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
-use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
-use ibc_relayer_components::relay::traits::chains::HasRelayChains;
-use ibc_relayer_components::relay::traits::components::event_relayer::CanRelayEvent;
-use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilter;
-use ibc_relayer_components::relay::traits::packet::HasRelayPacketFields;
-use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
-use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
+use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::components::event_relayer::CanRelayEvent;
+use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet::HasRelayPacketFields;
+use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
 use crate::components::extra::closures::chain::event_relayer::UseExtraChainComponentsForEventRelayer;
 use crate::components::extra::closures::relay::ack_packet_relayer::UseExtraAckPacketRelayer;

@@ -1,7 +1,7 @@
 use async_trait::async_trait;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components_extra::batch::traits::channel::HasMessageBatchSender;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use ibc_relayer_components_extra::batch::traits::channel::HasMessageBatchSender;
 
 use crate::contexts::relay::CosmosRelay;
 use crate::types::batch::CosmosBatchSender;
