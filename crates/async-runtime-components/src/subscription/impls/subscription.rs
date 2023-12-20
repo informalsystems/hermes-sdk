@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::subscription::ProvideSubscription;
 
-use crate::stream::boxed::HasBoxedStreamType;
+use crate::stream::traits::boxed::HasBoxedStreamType;
 use crate::subscription::traits::subscription::Subscription;
 
 pub struct ProvideBoxedSubscription;

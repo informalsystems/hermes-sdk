@@ -1,2 +1,2 @@
-pub mod boxed;
-pub mod map;
+pub mod impls;
+pub mod traits;

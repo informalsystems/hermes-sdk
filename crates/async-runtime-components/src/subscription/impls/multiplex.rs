@@ -14,7 +14,7 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 };
 use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 
-use crate::stream::boxed::HasBoxedStreamType;
+use crate::stream::traits::boxed::HasBoxedStreamType;
 use crate::subscription::traits::subscription::Subscription;
 
 /**

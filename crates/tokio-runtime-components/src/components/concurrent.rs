@@ -1,4 +1,4 @@
-use async_runtime_components::task::concurrent::RunConcurrentTasks;
+use async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
 use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;

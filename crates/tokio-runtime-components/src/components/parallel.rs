@@ -1,5 +1,5 @@
-use async_runtime_components::stream::boxed::ProvideBoxedStreamType;
-use async_runtime_components::stream::map::BoxedStreamMapper;
+use async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
+use async_runtime_components::stream::impls::map::BoxedStreamMapper;
 use async_runtime_components::subscription::impls::subscription::ProvideBoxedSubscription;
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::mutex::MutexComponent;

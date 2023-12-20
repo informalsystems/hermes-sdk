@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::stream::StreamMapper;
 
-use crate::stream::boxed::HasBoxedStreamType;
+use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct BoxedStreamMapper;
 
