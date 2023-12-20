@@ -69,7 +69,6 @@ use ibc_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUn
 use ibc_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use ibc_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
-use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use ibc_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_runtime::types::log::value::LogValue;
@@ -83,7 +82,7 @@ use crate::types::status::ChainStatus;
 use crate::util::dummy::dummy_signer;
 
 impl<Chain: BasecoinEndpoint> HasComponents for MockCosmosContext<Chain> {
-    type Components = DefaultChainComponents<MockCosmosChainComponents>;
+    type Components = MockCosmosChainComponents;
 }
 
 impl<Chain: BasecoinEndpoint> ProvideErrorType<MockCosmosContext<Chain>>

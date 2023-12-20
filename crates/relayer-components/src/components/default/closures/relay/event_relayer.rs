@@ -7,7 +7,7 @@ use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;
 use crate::components::default::closures::relay::packet_relayer::UseDefaultPacketRelayer;
-use crate::components::default::relay::DefaultRelayComponents;
+use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
@@ -24,7 +24,7 @@ pub trait UseDefaultEventRelayer:
 {
 }
 
-impl<Relay, BaseRelayComponents> UseDefaultEventRelayer for Relay
+impl<Relay, Components> UseDefaultEventRelayer for Relay
 where
     Relay: HasRelayChains
         + HasPacketLock
@@ -32,7 +32,7 @@ where
         + HasRelayPacketFields
         + UseDefaultAckPacketRelayer
         + UseDefaultPacketRelayer
-        + HasComponents<Components = DefaultRelayComponents<BaseRelayComponents>>,
+        + HasComponents<Components = Components>,
     Relay::SrcChain: HasChainId
         + HasLoggerType<Logger = Relay::Logger>
         + CanLogChainPacket<Relay::DstChain>
@@ -42,6 +42,6 @@ where
         + CanQueryCounterpartyChainId<Relay::SrcChain>
         + CanBuildPacketFromWriteAck<Relay::SrcChain>,
     Relay::Logger: HasBaseLogLevels,
-    BaseRelayComponents: PacketFilter<Relay>,
+    Components: DelegatesToDefaultRelayComponents + PacketFilter<Relay>,
 {
 }

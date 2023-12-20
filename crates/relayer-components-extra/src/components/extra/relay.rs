@@ -1,12 +1,6 @@
-use core::marker::PhantomData;
-
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
 use cgp_core::RunnerComponent;
 use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
-use ibc_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
-use ibc_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
 use ibc_relayer_components::relay::components::message_senders::chain_sender::SendIbcMessagesToChain;
 use ibc_relayer_components::relay::components::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use ibc_relayer_components::relay::components::packet_relayers::general::filter_relayer::FilterRelayer;
@@ -25,7 +19,6 @@ use ibc_relayer_components::relay::traits::components::ibc_message_sender::{
     IbcMessageSenderComponent, MainSink,
 };
 use ibc_relayer_components::relay::traits::components::packet_clearer::PacketClearerComponent;
-use ibc_relayer_components::relay::traits::components::packet_filter::PacketFilterComponent;
 use ibc_relayer_components::relay::traits::components::packet_relayer::PacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use ibc_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
@@ -36,49 +29,43 @@ use ibc_relayer_components::relay::traits::connection::open_confirm::ConnectionO
 use ibc_relayer_components::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
 use ibc_relayer_components::relay::traits::connection::open_init::ConnectionInitializerComponent;
 use ibc_relayer_components::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
-use ibc_relayer_components::runtime::traits::runtime::RuntimeComponent;
-use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
-pub struct ExtraRelayComponents<BaseComponents>(pub PhantomData<BaseComponents>);
+pub struct ExtraRelayComponents;
 
-delegate_components!(
-    ExtraRelayComponents<BaseComponents>;
-    IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
-    IbcMessageSenderComponent<BatchWorkerSink>:
-        SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-    PacketRelayerComponent:
-        LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-        RuntimeTypeComponent,
-        RuntimeComponent,
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-        UpdateClientMessageBuilderComponent,
-        PacketFilterComponent,
-        ReceivePacketRelayerComponnent,
-        AckPacketRelayerComponent,
-        TimeoutUnorderedPacketRelayerComponent,
-        EventRelayerComponent,
-        ClientCreatorComponent,
-        PacketClearerComponent,
-        ChannelInitializerComponent,
-        ChannelOpenTryRelayerComponent,
-        ChannelOpenAckRelayerComponent,
-        ChannelOpenConfirmRelayerComponent,
-        ChannelOpenHandshakeRelayerComponent,
-        ConnectionOpenAckRelayerComponent,
-        ConnectionOpenConfirmRelayerComponent,
-        ConnectionInitializerComponent,
-        ConnectionOpenTryRelayerComponent,
-        ConnectionOpenHandshakeRelayerComponent,
-        AutoRelayerComponent,
-        RunnerComponent,
-    ]:
-        DefaultRelayComponents<BaseComponents>,
-);
+delegate_components! {
+    #[mark_component(IsExtraRelayComponent)]
+    #[mark_delegate(DelegatesToExtraRelayComponents)]
+    ExtraRelayComponents {
+        IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
+        IbcMessageSenderComponent<BatchWorkerSink>:
+            SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
+        PacketRelayerComponent:
+            LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
+        [
+            UpdateClientMessageBuilderComponent,
+            ReceivePacketRelayerComponnent,
+            AckPacketRelayerComponent,
+            TimeoutUnorderedPacketRelayerComponent,
+            EventRelayerComponent,
+            ClientCreatorComponent,
+            PacketClearerComponent,
+            ChannelInitializerComponent,
+            ChannelOpenTryRelayerComponent,
+            ChannelOpenAckRelayerComponent,
+            ChannelOpenConfirmRelayerComponent,
+            ChannelOpenHandshakeRelayerComponent,
+            ConnectionOpenAckRelayerComponent,
+            ConnectionOpenConfirmRelayerComponent,
+            ConnectionInitializerComponent,
+            ConnectionOpenTryRelayerComponent,
+            ConnectionOpenHandshakeRelayerComponent,
+            AutoRelayerComponent,
+            RunnerComponent,
+        ]:
+            DefaultRelayComponents,
+    }
+}

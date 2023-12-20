@@ -1,11 +1,13 @@
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
+use ibc_relayer_components::components::default::birelay::DefaultBiRelayComponents;
+use ibc_relayer_components::components::default::birelay::IsDefaultBiRelayComponent;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use ibc_relayer_components_extra::components::extra::birelay::ExtraBiRelayComponents;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
@@ -19,21 +21,28 @@ where
     ChainA: Async,
     ChainB: Async,
 {
-    type Components = ExtraBiRelayComponents<CosmosBiRelayComponents>;
+    type Components = CosmosBiRelayComponents;
 }
 
-delegate_components!(
-    CosmosBiRelayComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleCosmosError,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
+delegate_all!(
+    IsDefaultBiRelayComponent,
+    DefaultBiRelayComponents,
+    CosmosBiRelayComponents,
 );
+
+delegate_components! {
+    CosmosBiRelayComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleCosmosError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+    }
+}

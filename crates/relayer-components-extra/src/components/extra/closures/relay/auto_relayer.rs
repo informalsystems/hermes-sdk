@@ -1,4 +1,4 @@
-use cgp_core::{Async, CanRun, HasComponents};
+use cgp_core::{CanRun, HasComponents};
 use ibc_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use ibc_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use ibc_relayer_components::chain::traits::types::chain_id::HasChainId;
@@ -11,21 +11,21 @@ use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
 use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
-use crate::components::extra::relay::ExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayComponents;
 use crate::runtime::traits::spawn::CanSpawnTask;
 
 pub trait CanUseExtraAutoRelayer: UseExtraAutoRelayer {}
 
 pub trait UseExtraAutoRelayer: CanRun {}
 
-impl<Relay, BaseRelayComponents> UseExtraAutoRelayer for Relay
+impl<Relay, Components> UseExtraAutoRelayer for Relay
 where
     Relay: Clone
         + HasRuntime
         + HasLogger
         + HasRelayChains
         + UseExtraEventRelayer
-        + HasComponents<Components = ExtraRelayComponents<BaseRelayComponents>>,
+        + HasComponents<Components = Components>,
     Relay::SrcChain: HasRuntime
         + HasChainId
         + HasLoggerType<Logger = Relay::Logger>
@@ -42,6 +42,6 @@ where
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
     <Relay::DstChain as HasRuntimeType>::Runtime:
         HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
-    BaseRelayComponents: Async,
+    Components: DelegatesToExtraRelayComponents,
 {
 }

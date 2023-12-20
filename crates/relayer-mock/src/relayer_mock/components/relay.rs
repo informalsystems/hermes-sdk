@@ -21,22 +21,23 @@ use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
 
 pub struct MockRelayComponents;
 
-delegate_components!(
-    MockRelayComponents;
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-    IbcMessageSenderComponent<MainSink>:
-        SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-    PacketRelayerComponent: FullCycleRelayer,
-    ReceivePacketRelayerComponnent:
-        SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
-    AckPacketRelayerComponent:
-        BaseAckPacketRelayer,
-    TimeoutUnorderedPacketRelayerComponent:
-        BaseTimeoutUnorderedPacketRelayer,
-    UpdateClientMessageBuilderComponent:
-        SkipUpdateClient<WaitUpdateClient<MockBuildUpdateClientMessage>>,
-);
+delegate_components! {
+    MockRelayComponents {
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+        IbcMessageSenderComponent<MainSink>:
+            SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
+        PacketRelayerComponent: FullCycleRelayer,
+        ReceivePacketRelayerComponnent:
+            SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
+        AckPacketRelayerComponent:
+            BaseAckPacketRelayer,
+        TimeoutUnorderedPacketRelayerComponent:
+            BaseTimeoutUnorderedPacketRelayer,
+        UpdateClientMessageBuilderComponent:
+            SkipUpdateClient<WaitUpdateClient<MockBuildUpdateClientMessage>>,
+    }
+}

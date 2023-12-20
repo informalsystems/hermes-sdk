@@ -22,13 +22,14 @@ impl HasComponents for TokioRuntimeContext {
     type Components = TokioRuntimeComponents;
 }
 
-delegate_components!(
-    TokioRuntimeComponents;
-    FilePathTypeComponent: ProvideStdPathType,
-    ChildProcessTypeComponent: ProvideTokioChildProcessType,
-    ChildProcessStarterComponent: StartTokioChildProcess,
-    FileAsStringReaderComponent: TokioReadFileAsString,
-    CommandExecutorComponent: TokioExecCommand,
-    StringToFileWriterComponent: TokioWriteStringToFile,
-    TcpPortReserverComponent: TokioReserveTcpPort,
-);
+delegate_components! {
+    TokioRuntimeComponents {
+        FilePathTypeComponent: ProvideStdPathType,
+        ChildProcessTypeComponent: ProvideTokioChildProcessType,
+        ChildProcessStarterComponent: StartTokioChildProcess,
+        FileAsStringReaderComponent: TokioReadFileAsString,
+        CommandExecutorComponent: TokioExecCommand,
+        StringToFileWriterComponent: TokioWriteStringToFile,
+        TcpPortReserverComponent: TokioReserveTcpPort,
+    }
+}

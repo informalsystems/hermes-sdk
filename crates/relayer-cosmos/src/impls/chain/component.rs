@@ -1,3 +1,4 @@
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -70,6 +71,7 @@ use ibc_relayer_components::logger::traits::has_logger::{
 };
 use ibc_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use ibc_relayer_components_extra::components::extra::chain::ExtraChainComponents;
+use ibc_relayer_components_extra::components::extra::chain::IsExtraChainComponent;
 use ibc_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
@@ -83,12 +85,24 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
 
+pub struct CosmosBaseChainComponents;
+
+impl HasComponents for CosmosChainComponents {
+    type Components = CosmosBaseChainComponents;
+}
+
 impl<Chain> HasComponents for CosmosChain<Chain>
 where
     Chain: Async,
 {
-    type Components = ExtraChainComponents<CosmosChainComponents>;
+    type Components = CosmosChainComponents;
 }
+
+delegate_all!(
+    IsExtraChainComponent,
+    ExtraChainComponents<CosmosBaseChainComponents>,
+    CosmosChainComponents,
+);
 
 impl<Chain, Counterparty> CanUseExtraChainComponents<CosmosChain<Counterparty>>
     for CosmosChain<Chain>
@@ -98,85 +112,91 @@ where
 {
 }
 
-delegate_components!(
-    CosmosChainComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleCosmosError,
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        HeightTypeProviderComponent,
-        TimestampTypeProviderComponent,
-        ChainIdTypeProviderComponent,
-        MessageTypeProviderComponent,
-        EventTypeProviderComponent,
-        IbcChainTypesProviderComponent,
-        IbcPacketTypesProviderComponent,
-        ChainStatusTypeProviderComponent,
-    ]:
-        ProvideCosmosChainTypes,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-    MessageSenderComponent:
-        SendMessagesToTxContext,
-    ChainStatusQuerierComponent:
-        QueryChainStatusWithChainHandle,
-    PacketFieldsReaderComponent:
-        CosmosPacketFieldReader,
-    ClientStateQuerierComponent:
-        DelegateCosmosClientStateQuerier,
-    ConsensusStateQuerierComponent:
-        DelegateCosmosConsensusStateQuerier,
-    ConsensusStateHeightQuerierComponent:
-        QueryConsensusStateHeightFromChainHandle,
-    WriteAckQuerierComponent:
-        QueryWriteAckEventFromChainHandle,
-    CreateClientMessageBuilderComponent:
-        DelegateCosmosCreateClientMessageBuilder,
-    CreateClientPayloadBuilderComponent:
-        BuildCreateClientPayloadWithChainHandle,
-    UpdateClientPayloadBuilderComponent:
-        BuildUpdateClientPayloadWithChainHandle,
-    UpdateClientMessageBuilderComponent:
-        BuildCosmosUpdateClientMessage,
-    CounterpartyChainIdQuerierComponent:
-        QueryChainIdWithChainHandle,
-    ConnectionHandshakePayloadBuilderComponent:
-        BuildCosmosConnectionHandshakePayload,
-    ChannelHandshakePayloadBuilderComponent:
-        BuildCosmosChannelHandshakePayload,
-    ConnectionHandshakeMessageBuilderComponent:
-        DelegateCosmosConnectionHandshakeBuilder,
-    ChannelHandshakeMessageBuilderComponent:
-        BuildCosmosChannelHandshakeMessage,
-    PacketCommitmentsQuerierComponent:
-        QueryCosmosPacketCommitments,
-    ReceivedPacketQuerierComponent:
-        QueryReceivedPacketWithChainHandle,
-    ReceivePacketPayloadBuilderComponent:
-        BuildCosmosReceivePacketPayload,
-    ReceivePacketMessageBuilderComponent:
-        BuildCosmosReceivePacketMessage,
-    AckPacketPayloadBuilderComponent:
-        BuildCosmosAckPacketPayload,
-    AckPacketMessageBuilderComponent:
-        BuildCosmosAckPacketMessage,
-    TimeoutUnorderedPacketPayloadBuilderComponent:
-        BuildCosmosTimeoutPacketPayload,
-    TimeoutUnorderedPacketMessageBuilderComponent:
-        BuildCosmosTimeoutPacketMessage,
-    UnreceivedPacketSequencesQuerierComponent:
-        QueryUnreceivedCosmosPacketSequences,
-    SendPacketQuerierComponent:
-        QueryCosmosSendPacket,
-    SendPacketsQuerierComponent:
-        QuerySendPacketsConcurrently,
-    PacketFromWriteAckBuilderComponent:
-        BuildCosmosPacketFromWriteAck,
-);
+delegate_components! {
+    CosmosChainComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleCosmosError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            HeightTypeProviderComponent,
+            TimestampTypeProviderComponent,
+            ChainIdTypeProviderComponent,
+            MessageTypeProviderComponent,
+            EventTypeProviderComponent,
+            IbcChainTypesProviderComponent,
+            IbcPacketTypesProviderComponent,
+            ChainStatusTypeProviderComponent,
+        ]:
+            ProvideCosmosChainTypes,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+        MessageSenderComponent:
+            SendMessagesToTxContext,
+        PacketFieldsReaderComponent:
+            CosmosPacketFieldReader,
+        ClientStateQuerierComponent:
+            DelegateCosmosClientStateQuerier,
+        ConsensusStateHeightQuerierComponent:
+            QueryConsensusStateHeightFromChainHandle,
+        WriteAckQuerierComponent:
+            QueryWriteAckEventFromChainHandle,
+        CreateClientMessageBuilderComponent:
+            DelegateCosmosCreateClientMessageBuilder,
+        CreateClientPayloadBuilderComponent:
+            BuildCreateClientPayloadWithChainHandle,
+        UpdateClientPayloadBuilderComponent:
+            BuildUpdateClientPayloadWithChainHandle,
+        UpdateClientMessageBuilderComponent:
+            BuildCosmosUpdateClientMessage,
+        CounterpartyChainIdQuerierComponent:
+            QueryChainIdWithChainHandle,
+        ConnectionHandshakePayloadBuilderComponent:
+            BuildCosmosConnectionHandshakePayload,
+        ChannelHandshakePayloadBuilderComponent:
+            BuildCosmosChannelHandshakePayload,
+        ConnectionHandshakeMessageBuilderComponent:
+            DelegateCosmosConnectionHandshakeBuilder,
+        ChannelHandshakeMessageBuilderComponent:
+            BuildCosmosChannelHandshakeMessage,
+        PacketCommitmentsQuerierComponent:
+            QueryCosmosPacketCommitments,
+        ReceivedPacketQuerierComponent:
+            QueryReceivedPacketWithChainHandle,
+        ReceivePacketPayloadBuilderComponent:
+            BuildCosmosReceivePacketPayload,
+        ReceivePacketMessageBuilderComponent:
+            BuildCosmosReceivePacketMessage,
+        AckPacketPayloadBuilderComponent:
+            BuildCosmosAckPacketPayload,
+        AckPacketMessageBuilderComponent:
+            BuildCosmosAckPacketMessage,
+        TimeoutUnorderedPacketPayloadBuilderComponent:
+            BuildCosmosTimeoutPacketPayload,
+        TimeoutUnorderedPacketMessageBuilderComponent:
+            BuildCosmosTimeoutPacketMessage,
+        UnreceivedPacketSequencesQuerierComponent:
+            QueryUnreceivedCosmosPacketSequences,
+        SendPacketQuerierComponent:
+            QueryCosmosSendPacket,
+        SendPacketsQuerierComponent:
+            QuerySendPacketsConcurrently,
+        PacketFromWriteAckBuilderComponent:
+            BuildCosmosPacketFromWriteAck,
+    }
+}
+
+delegate_components! {
+    CosmosBaseChainComponents {
+        ChainStatusQuerierComponent:
+            QueryChainStatusWithChainHandle,
+        ConsensusStateQuerierComponent:
+            DelegateCosmosConsensusStateQuerier,
+    }
+}

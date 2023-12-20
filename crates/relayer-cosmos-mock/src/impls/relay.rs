@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 
 use async_trait::async_trait;
-use cgp_core::{DelegateComponent, ErrorRaiser, HasComponents, ProvideErrorType};
+use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::clients::ics07_tendermint::header::Header;
 use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
@@ -12,7 +12,7 @@ use ibc::core::{Msg, ValidationContext};
 use ibc::proto::Any;
 use ibc::Height;
 use ibc_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
-use ibc_relayer_components::components::default::relay::DefaultRelayComponents;
+
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use ibc_relayer_components::relay::traits::packet_lock::HasPacketLock;
@@ -28,20 +28,12 @@ use crate::traits::endpoint::BasecoinEndpoint;
 use crate::types::error::Error;
 use crate::util::dummy::dummy_signer;
 
-impl<Name, SrcChain, DstChain> DelegateComponent<Name> for MockCosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
-{
-    type Delegate = DefaultRelayComponents<MockCosmosRelayComponents>;
-}
-
 impl<SrcChain, DstChain> HasComponents for MockCosmosRelay<SrcChain, DstChain>
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type Components = DefaultRelayComponents<MockCosmosRelayComponents>;
+    type Components = MockCosmosRelayComponents;
 }
 
 impl<SrcChain, DstChain> CanUseDefaultPacketRelayer for MockCosmosRelay<SrcChain, DstChain>

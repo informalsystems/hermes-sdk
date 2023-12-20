@@ -11,7 +11,7 @@ use ibc_relayer_components::relay::traits::target::{DestinationTarget, SourceTar
 use crate::components::extra::closures::chain::event_relayer::UseExtraChainComponentsForEventRelayer;
 use crate::components::extra::closures::relay::ack_packet_relayer::UseExtraAckPacketRelayer;
 use crate::components::extra::closures::relay::packet_relayer::UseExtraPacketRelayer;
-use crate::components::extra::relay::ExtraRelayComponents;
+use crate::components::extra::relay::DelegatesToExtraRelayComponents;
 
 pub trait CanUseExtraEventRelayer: UseExtraEventRelayer {}
 
@@ -20,7 +20,7 @@ pub trait UseExtraEventRelayer:
 {
 }
 
-impl<Relay, BaseRelayComponents> UseExtraEventRelayer for Relay
+impl<Relay, Components> UseExtraEventRelayer for Relay
 where
     Relay: HasRelayChains
         + HasPacketLock
@@ -28,11 +28,11 @@ where
         + HasRelayPacketFields
         + UseExtraAckPacketRelayer
         + UseExtraPacketRelayer
-        + HasComponents<Components = ExtraRelayComponents<BaseRelayComponents>>,
+        + HasComponents<Components = Components>,
     Relay::SrcChain: HasLoggerType<Logger = Relay::Logger>
         + UseExtraChainComponentsForEventRelayer<Relay::DstChain>,
     Relay::DstChain: UseExtraChainComponentsForEventRelayer<Relay::SrcChain>,
     Relay::Logger: HasBaseLogLevels,
-    BaseRelayComponents: PacketFilter<Relay>,
+    Components: DelegatesToExtraRelayComponents + PacketFilter<Relay>,
 {
 }

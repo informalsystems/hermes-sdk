@@ -27,14 +27,15 @@ impl HasComponents for MockRelayContext {
     type Components = MockRelayComponents;
 }
 
-delegate_components!(
-    MockRelayComponents;
-    [
-        ErrorTypeComponent,
-        ErrorRaiserComponent,
-    ]:
-        HandleMockError,
-);
+delegate_components! {
+    MockRelayComponents {
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+        ]:
+            HandleMockError,
+    }
+}
 
 impl ProvideRuntimeType<MockRelayContext> for MockRelayComponents {
     type Runtime = MockRuntimeContext;

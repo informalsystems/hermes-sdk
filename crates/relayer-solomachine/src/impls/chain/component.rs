@@ -23,7 +23,6 @@ use ibc_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComp
 use ibc_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
 use ibc_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use ibc_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
-use ibc_relayer_components::components::default::chain::DefaultChainComponents;
 use ibc_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -52,57 +51,58 @@ impl<Chain> HasComponents for SolomachineChain<Chain>
 where
     Chain: Async,
 {
-    type Components = DefaultChainComponents<SolomachineChainComponents>;
+    type Components = SolomachineChainComponents;
 }
 
-delegate_components!(
-    SolomachineChainComponents;
-    RuntimeTypeComponent:
-        ProvideTokioRuntimeType,
-    [
-        HeightTypeProviderComponent,
-        TimestampTypeProviderComponent,
-        ChainIdTypeProviderComponent,
-        IbcChainTypesProviderComponent,
-        IbcPacketTypesProviderComponent,
-    ]:
-        ProvideCosmosChainTypes,
-    [
-        LoggerTypeComponent,
-        LoggerFieldComponent,
-    ]:
-        ProvideTracingLogger,
-    [
-        MessageTypeProviderComponent,
-        EventTypeProviderComponent,
-    ]:
-        ProvideSolomachineChainTypes,
-    PacketFieldsReaderComponent:
-        CosmosPacketFieldReader,
-    MessageSenderComponent:
-        ProcessSolomachineMessages,
-    ClientStateQuerierComponent:
-        QueryCosmosClientStateFromSolomachine,
-    ConsensusStateQuerierComponent:
-        QueryCosmosConsensusStateFromSolomachine,
-    ChannelHandshakePayloadBuilderComponent:
-        BuildSolomachineChannelHandshakePayloads,
-    ChannelHandshakeMessageBuilderComponent:
-        BuildCosmosToSolomachineChannelHandshakeMessage,
-    ConnectionHandshakePayloadBuilderComponent:
-        BuildSolomachineConnectionHandshakePayloads,
-    ConnectionHandshakeMessageBuilderComponent:
-        BuildCosmosToSolomachineConnectionHandshakeMessage,
-    CreateClientPayloadBuilderComponent:
-        BuildSolomachineCreateClientPayload,
-    CreateClientMessageBuilderComponent:
-        BuildCreateCosmosClientMessage,
-    ReceivePacketPayloadBuilderComponent:
-        BuildSolomachineReceivePacketPayload,
-    TimeoutUnorderedPacketMessageBuilderComponent:
-        BuildSolomachineTimeoutPacketPayload,
-    UpdateClientPayloadBuilderComponent:
-        BuildSolomachineUpdateClientPayload,
-    UpdateClientMessageBuilderComponent:
-        BuildCosmosUpdateClientMessage,
-);
+delegate_components! {
+    SolomachineChainComponents {
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
+        [
+            HeightTypeProviderComponent,
+            TimestampTypeProviderComponent,
+            ChainIdTypeProviderComponent,
+            IbcChainTypesProviderComponent,
+            IbcPacketTypesProviderComponent,
+        ]:
+            ProvideCosmosChainTypes,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+        [
+            MessageTypeProviderComponent,
+            EventTypeProviderComponent,
+        ]:
+            ProvideSolomachineChainTypes,
+        PacketFieldsReaderComponent:
+            CosmosPacketFieldReader,
+        MessageSenderComponent:
+            ProcessSolomachineMessages,
+        ClientStateQuerierComponent:
+            QueryCosmosClientStateFromSolomachine,
+        ConsensusStateQuerierComponent:
+            QueryCosmosConsensusStateFromSolomachine,
+        ChannelHandshakePayloadBuilderComponent:
+            BuildSolomachineChannelHandshakePayloads,
+        ChannelHandshakeMessageBuilderComponent:
+            BuildCosmosToSolomachineChannelHandshakeMessage,
+        ConnectionHandshakePayloadBuilderComponent:
+            BuildSolomachineConnectionHandshakePayloads,
+        ConnectionHandshakeMessageBuilderComponent:
+            BuildCosmosToSolomachineConnectionHandshakeMessage,
+        CreateClientPayloadBuilderComponent:
+            BuildSolomachineCreateClientPayload,
+        CreateClientMessageBuilderComponent:
+            BuildCreateCosmosClientMessage,
+        ReceivePacketPayloadBuilderComponent:
+            BuildSolomachineReceivePacketPayload,
+        TimeoutUnorderedPacketMessageBuilderComponent:
+            BuildSolomachineTimeoutPacketPayload,
+        UpdateClientPayloadBuilderComponent:
+            BuildSolomachineUpdateClientPayload,
+        UpdateClientMessageBuilderComponent:
+            BuildCosmosUpdateClientMessage,
+    }
+}
