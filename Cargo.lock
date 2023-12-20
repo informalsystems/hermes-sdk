@@ -1644,6 +1644,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-ibc-test-suite"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-test-components",
+]
+
+[[package]]
 name = "hermes-mock-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
@@ -2139,15 +2148,6 @@ dependencies = [
  "tonic",
  "tracing",
  "tracing-subscriber",
-]
-
-[[package]]
-name = "ibc-test-suite"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "hermes-relayer-components",
- "hermes-test-components",
 ]
 
 [[package]]

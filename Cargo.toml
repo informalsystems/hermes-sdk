@@ -72,7 +72,7 @@ hermes-tokio-runtime-components            = { version = "0.1.0", path = "./crat
 hermes-relayer-runtime                 = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
 hermes-solomachine-relayer             = { version = "0.1.0", path = "./crates/solomachine/solomachine-relayer" }
 hermes-test-components                 = { version = "0.1.0", path = "./crates/test/test-components" }
-ibc-test-suite                      = { version = "0.1.0", path = "./crates/test/test-suite" }
+hermes-ibc-test-suite                      = { version = "0.1.0", path = "./crates/test/test-suite" }
 
 [profile.release]
 overflow-checks = true
