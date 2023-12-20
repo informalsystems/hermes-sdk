@@ -1708,10 +1708,25 @@ dependencies = [
  "hermes-async-runtime-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-tokio-runtime-components",
  "ibc-test-components",
  "tokio",
- "tokio-runtime-components",
  "tracing",
+]
+
+[[package]]
+name = "hermes-tokio-runtime-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "futures",
+ "hermes-async-runtime-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "ibc-test-components",
+ "rand",
+ "tokio",
+ "tokio-stream",
 ]
 
 [[package]]
@@ -4157,21 +4172,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.37",
-]
-
-[[package]]
-name = "tokio-runtime-components"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "futures",
- "hermes-async-runtime-components",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "ibc-test-components",
- "rand",
- "tokio",
- "tokio-stream",
 ]
 
 [[package]]
