@@ -1,22 +1,22 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::HandleErrorsWithEyre;
-use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
-use cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
+use eyre::Error;
+use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::LegacyCosmosSdkBootstrapComponents;
+use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
 };
-use cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
-use cosmos_test_components::bootstrap::impls::fields::denom::DenomForTransfer;
-use cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
-use cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
-use cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
-use cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
-use cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
-use cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
-use cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use cosmos_test_components::chain::types::denom::Denom;
-use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
-use eyre::Error;
+use hermes_cosmos_test_components::bootstrap::impls::fields::denom::DenomForStaking;
+use hermes_cosmos_test_components::bootstrap::impls::fields::denom::DenomForTransfer;
+use hermes_cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
+use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
+use hermes_cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
+use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
+use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
+use hermes_cosmos_test_components::chain::types::denom::Denom;
+use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -25,17 +25,17 @@ use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use std::path::PathBuf;
 use tokio::process::Child;
 
-use cosmos_test_components::bootstrap::impls::types::chain_config::ProvideCosmosChainConfigType;
-use cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
-use cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
-use cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
-use cosmos_test_components::bootstrap::traits::fields::test_dir::TestDirGetter;
-use cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
-use cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use cosmos_test_components::bootstrap::traits::types::chain_config::ChainConfigTypeComponent;
-use cosmos_test_components::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
-use cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
-use cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
+use hermes_cosmos_test_components::bootstrap::impls::types::chain_config::ProvideCosmosChainConfigType;
+use hermes_cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::test_dir::TestDirGetter;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use hermes_cosmos_test_components::bootstrap::traits::types::chain_config::ChainConfigTypeComponent;
+use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
+use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
+use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
 
 use crate::contexts::chain::CosmosTestChain;
 

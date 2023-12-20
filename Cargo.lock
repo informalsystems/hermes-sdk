@@ -741,10 +741,10 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cgp-error-eyre",
- "cosmos-test-components",
  "eyre",
  "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -766,36 +766,6 @@ dependencies = [
  "prost",
  "prost-types",
  "tendermint-proto",
-]
-
-[[package]]
-name = "cosmos-test-components"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "eyre",
- "flex-error",
- "futures",
- "hdpath",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-relayer-runtime",
- "http",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-types",
- "ibc-test-components",
- "itertools 0.11.0",
- "prost",
- "rand",
- "serde_json",
- "tendermint",
- "tendermint-rpc",
- "tokio",
- "toml 0.8.8",
- "tonic",
- "tracing",
 ]
 
 [[package]]
@@ -1665,6 +1635,36 @@ dependencies = [
  "tendermint-testgen",
  "tokio",
  "tower",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-cosmos-test-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hdpath",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-test-components",
+ "itertools 0.11.0",
+ "prost",
+ "rand",
+ "serde_json",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "toml 0.8.8",
+ "tonic",
  "tracing",
 ]
 

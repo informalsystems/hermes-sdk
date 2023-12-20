@@ -65,7 +65,7 @@ flex-error          = { version = "0.4.4", default-features = false }
 hermes-relayer-components           = { version = "0.1.0", path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { version = "0.1.0", path = "./crates/relayer/relayer-components-extra" }
 hermes-cosmos-client-components            = { version = "0.1.0", path = "./crates/cosmos/cosmos-client-components" }
-cosmos-test-components              = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
+hermes-cosmos-test-components              = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-relayer                  = { version = "0.1.0", path = "./crates/cosmos/cosmos-relayer" }
 async-runtime-components            = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 tokio-runtime-components            = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
