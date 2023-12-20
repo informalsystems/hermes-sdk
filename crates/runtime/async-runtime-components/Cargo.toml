@@ -1,5 +1,5 @@
 [package]
-name         = "async-runtime-components"
+name         = "hermes-async-runtime-components"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }

@@ -16,7 +16,7 @@ description  = """
 hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
 ibc-test-components             = { workspace = true }
-async-runtime-components        = { workspace = true }
+hermes-async-runtime-components        = { workspace = true }
 tokio-runtime-components        = { workspace = true }
 
 async-trait = { workspace = true }

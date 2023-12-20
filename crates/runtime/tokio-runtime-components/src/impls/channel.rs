@@ -1,7 +1,7 @@
-use async_runtime_components::channel::types::ChannelClosedError;
-use async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_async_runtime_components::channel::types::ChannelClosedError;
+use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use hermes_relayer_components_extra::runtime::traits::channel::ReceiverStreamer;
 use hermes_relayer_components_extra::runtime::traits::channel::SenderCloner;
 use hermes_relayer_components_extra::runtime::traits::channel::{

@@ -1,10 +1,10 @@
-use async_runtime_components::channel::impls::ProvideUnboundedChannelType;
-use async_runtime_components::channel_once::impls::ProvideOneShotChannelType;
-use async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;
-use async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
-use async_runtime_components::stream::impls::map::BoxedStreamMapper;
-use async_runtime_components::subscription::impls::subscription::ProvideBoxedSubscription;
 use cgp_core::prelude::*;
+use hermes_async_runtime_components::channel::impls::ProvideUnboundedChannelType;
+use hermes_async_runtime_components::channel_once::impls::ProvideOneShotChannelType;
+use hermes_async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;
+use hermes_async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
+use hermes_async_runtime_components::stream::impls::map::BoxedStreamMapper;
+use hermes_async_runtime_components::subscription::impls::subscription::ProvideBoxedSubscription;
 use hermes_relayer_components::runtime::traits::mutex::MutexComponent;
 use hermes_relayer_components::runtime::traits::sleep::SleeperComponent;
 use hermes_relayer_components::runtime::traits::stream::{

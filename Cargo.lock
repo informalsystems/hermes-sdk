@@ -116,20 +116,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "async-runtime-components"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "futures-channel",
- "futures-core",
- "futures-util",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "ibc-test-components",
- "rand",
-]
-
-[[package]]
 name = "async-stream"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1533,6 +1519,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
+name = "hermes-async-runtime-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "futures-channel",
+ "futures-core",
+ "futures-util",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "ibc-test-components",
+ "rand",
+]
+
+[[package]]
 name = "hermes-cosmos-client-components"
 version = "0.1.0"
 dependencies = [
@@ -1584,12 +1584,12 @@ dependencies = [
 name = "hermes-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
- "async-runtime-components",
  "async-trait",
  "cgp-core",
  "eyre",
  "flex-error",
  "futures",
+ "hermes-async-runtime-components",
  "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1702,10 +1702,10 @@ dependencies = [
 name = "hermes-relayer-runtime"
 version = "0.1.0"
 dependencies = [
- "async-runtime-components",
  "async-trait",
  "cgp-core",
  "futures",
+ "hermes-async-runtime-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "ibc-test-components",
@@ -4163,9 +4163,9 @@ dependencies = [
 name = "tokio-runtime-components"
 version = "0.1.0"
 dependencies = [
- "async-runtime-components",
  "cgp-core",
  "futures",
+ "hermes-async-runtime-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "ibc-test-components",

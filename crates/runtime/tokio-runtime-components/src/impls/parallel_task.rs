@@ -1,9 +1,9 @@
 use core::task::{Context, Poll};
 
-use async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use cgp_core::prelude::*;
 use futures::stream::{Stream, StreamExt};
 use futures::task::noop_waker;
+use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use hermes_relayer_components::runtime::traits::task::{ConcurrentTaskRunner, Task};
 use tokio::task::JoinSet;
 

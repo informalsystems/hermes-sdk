@@ -2,13 +2,13 @@ use alloc::sync::Arc;
 use core::pin::Pin;
 use core::time::Duration;
 
-use async_runtime_components::subscription::impls::closure::CanCreateClosureSubscription;
-use async_runtime_components::subscription::impls::multiplex::CanMultiplexSubscription;
-use async_runtime_components::subscription::traits::subscription::Subscription;
 use async_trait::async_trait;
 use cgp_core::Async;
 use futures::lock::Mutex;
 use futures::stream::{self, Stream, StreamExt, TryStreamExt};
+use hermes_async_runtime_components::subscription::impls::closure::CanCreateClosureSubscription;
+use hermes_async_runtime_components::subscription::impls::multiplex::CanMultiplexSubscription;
+use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_relayer_components::runtime::traits::task::Task;
 use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 use ibc_relayer_types::core::ics02_client::height::Height;

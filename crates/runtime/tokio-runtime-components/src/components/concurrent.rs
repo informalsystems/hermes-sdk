@@ -1,5 +1,5 @@
-use async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
 use cgp_core::prelude::*;
+use hermes_async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
 use hermes_relayer_components::runtime::traits::mutex::MutexComponent;
 use hermes_relayer_components::runtime::traits::sleep::SleeperComponent;
 use hermes_relayer_components::runtime::traits::stream::{
