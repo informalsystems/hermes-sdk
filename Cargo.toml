@@ -12,7 +12,7 @@ members = [
     "crates/relayer/relayer-components",
     "crates/relayer/relayer-components-extra",
     "crates/runtime/relayer-runtime",
-    "crates/solomachine/relayer-solomachine",
+    "crates/solomachine/solomachine-relayer",
     "crates/mock/mock-relayer",
     "crates/mock/mock-cosmos-relayer",
     "crates/test/test-components",
@@ -70,7 +70,7 @@ hermes-cosmos-relayer                  = { version = "0.1.0", path = "./crates/c
 hermes-async-runtime-components            = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components            = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime                 = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
-ibc-relayer-solomachine             = { version = "0.1.0", path = "./crates/solomachine/relayer-solomachine" }
+hermes-solomachine-relayer             = { version = "0.1.0", path = "./crates/solomachine/solomachine-relayer" }
 ibc-test-components                 = { version = "0.1.0", path = "./crates/test/test-components" }
 ibc-test-suite                      = { version = "0.1.0", path = "./crates/test/test-suite" }
 

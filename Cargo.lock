@@ -1715,6 +1715,37 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-solomachine-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "cgp-core",
+ "crypto-hash",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hermes-cosmos-client-components",
+ "hermes-cosmos-relayer",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-telemetry",
+ "itertools 0.11.0",
+ "prost",
+ "secp256k1",
+ "serde",
+ "serde_derive",
+ "sha2 0.10.8",
+ "tendermint",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "hermes-tokio-runtime-components"
 version = "0.1.0"
 dependencies = [
@@ -1913,9 +1944,9 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-solomachine-relayer",
  "http",
  "ibc-relayer",
- "ibc-relayer-solomachine",
  "ibc-relayer-types",
  "ibc-test-framework",
  "prost",
@@ -2014,37 +2045,6 @@ dependencies = [
  "tonic",
  "tracing",
  "uuid 1.4.1",
-]
-
-[[package]]
-name = "ibc-relayer-solomachine"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bytes",
- "cgp-core",
- "crypto-hash",
- "eyre",
- "flex-error",
- "futures",
- "hermes-cosmos-client-components",
- "hermes-cosmos-relayer",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-relayer-runtime",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-types",
- "ibc-telemetry",
- "itertools 0.11.0",
- "prost",
- "secp256k1",
- "serde",
- "serde_derive",
- "sha2 0.10.8",
- "tendermint",
- "tokio",
- "tracing",
 ]
 
 [[package]]

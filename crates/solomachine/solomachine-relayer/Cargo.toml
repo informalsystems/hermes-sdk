@@ -1,5 +1,5 @@
 [package]
-name         = "ibc-relayer-solomachine"
+name         = "hermes-solomachine-relayer"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }

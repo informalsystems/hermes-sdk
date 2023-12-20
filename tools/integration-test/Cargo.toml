@@ -20,7 +20,7 @@ hermes-relayer-components-extra    = { workspace = true }
 hermes-cosmos-client-components        = { workspace = true }
 hermes-relayer-runtime         = { workspace = true }
 hermes-cosmos-relayer          = { workspace = true }
-ibc-relayer-solomachine     = { workspace = true }
+hermes-solomachine-relayer     = { workspace = true }
 ibc-test-framework          = { path = "../test-framework" }
 
 http        = { workspace = true }

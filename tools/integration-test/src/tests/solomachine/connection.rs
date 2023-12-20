@@ -4,12 +4,12 @@ use hermes_relayer_components::relay::traits::components::client_creator::CanCre
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_solomachine_relayer::context::chain::MockSolomachine;
+use hermes_solomachine_relayer::context::relay::SolomachineRelay;
+use hermes_solomachine_relayer::types::chain::SolomachineChain;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::PacketFilter;
-use ibc_relayer_solomachine::context::chain::MockSolomachine;
-use ibc_relayer_solomachine::context::relay::SolomachineRelay;
-use ibc_relayer_solomachine::types::chain::SolomachineChain;
 use ibc_test_framework::prelude::*;
 
 use crate::tests::context::new_cosmos_builder;
