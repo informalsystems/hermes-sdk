@@ -7,9 +7,9 @@ use async_trait::async_trait;
 use cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
 };

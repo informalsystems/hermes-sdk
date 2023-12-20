@@ -2,8 +2,8 @@ use alloc::sync::Arc;
 
 use eyre::Report;
 use flex_error::{define_error, DisplayError, TraceError};
+use hermes_cosmos_relayer::types::error::Error as CosmosError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use ibc_relayer_cosmos::types::error::Error as CosmosError;
 use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
 use ibc_relayer_types::core::ics04_channel::channel::State as ChannelState;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};

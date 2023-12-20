@@ -3,13 +3,13 @@ use std::time::Duration;
 
 use cgp_core::CanRun;
 use eyre::eyre;
+use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer::chain::counterparty::unreceived_acknowledgements;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
 use ibc_relayer::foreign_client::ForeignClient;
 use ibc_relayer::path::PathIdentifiers;
-use ibc_relayer_cosmos::contexts::birelay::CosmosBiRelay;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, IdentifiedChannelEnd};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use tokio::task::JoinHandle;

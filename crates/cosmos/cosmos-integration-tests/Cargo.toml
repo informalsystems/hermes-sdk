@@ -20,7 +20,7 @@ ibc-relayer-types               = { workspace = true }
 hermes-relayer-runtime             = { workspace = true }
 hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
-ibc-relayer-cosmos              = { workspace = true }
+hermes-cosmos-relayer              = { workspace = true }
 ibc-test-components             = { workspace = true }
 cosmos-client-components        = { workspace = true }
 cosmos-test-components          = { workspace = true }

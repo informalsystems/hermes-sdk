@@ -770,11 +770,11 @@ dependencies = [
  "cosmos-client-components",
  "cosmos-test-components",
  "eyre",
+ "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "ibc-relayer",
- "ibc-relayer-cosmos",
  "ibc-relayer-types",
  "ibc-test-components",
  "serde_json",
@@ -1611,6 +1611,64 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
+name = "hermes-cosmos-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-runtime-components",
+ "async-trait",
+ "cgp-core",
+ "cosmos-client-components",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-telemetry",
+ "ibc-test-components",
+ "itertools 0.11.0",
+ "moka 0.11.3",
+ "opentelemetry 0.17.0",
+ "prost",
+ "serde",
+ "serde_derive",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-cosmos-relayer-mock"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "basecoin-app",
+ "basecoin-store",
+ "cgp-core",
+ "cosmos-client-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "ibc",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "primitive-types",
+ "prost",
+ "serde_json",
+ "tendermint",
+ "tendermint-testgen",
+ "tokio",
+ "tower",
+ "tracing",
+]
+
+[[package]]
 name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
@@ -1821,12 +1879,12 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cosmos-client-components",
+ "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "http",
  "ibc-relayer",
- "ibc-relayer-cosmos",
  "ibc-relayer-solomachine",
  "ibc-relayer-types",
  "ibc-test-framework",
@@ -1929,64 +1987,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-relayer-cosmos"
-version = "0.1.0"
-dependencies = [
- "async-runtime-components",
- "async-trait",
- "cgp-core",
- "cosmos-client-components",
- "eyre",
- "flex-error",
- "futures",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-relayer-runtime",
- "http",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-types",
- "ibc-telemetry",
- "ibc-test-components",
- "itertools 0.11.0",
- "moka 0.11.3",
- "opentelemetry 0.17.0",
- "prost",
- "serde",
- "serde_derive",
- "tendermint",
- "tendermint-rpc",
- "tokio",
- "tonic",
- "tracing",
-]
-
-[[package]]
-name = "ibc-relayer-cosmos-mock"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "basecoin-app",
- "basecoin-store",
- "cgp-core",
- "cosmos-client-components",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-relayer-runtime",
- "ibc",
- "ibc-proto",
- "ibc-relayer-types",
- "primitive-types",
- "prost",
- "serde_json",
- "tendermint",
- "tendermint-testgen",
- "tokio",
- "tower",
- "tracing",
-]
-
-[[package]]
 name = "ibc-relayer-mock"
 version = "0.1.0"
 dependencies = [
@@ -2013,12 +2013,12 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
+ "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "ibc-proto",
  "ibc-relayer",
- "ibc-relayer-cosmos",
  "ibc-relayer-types",
  "ibc-telemetry",
  "itertools 0.11.0",
@@ -2101,12 +2101,12 @@ dependencies = [
  "eyre",
  "flex-error",
  "hdpath",
+ "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hex 0.4.3",
  "http",
  "ibc-proto",
  "ibc-relayer",
- "ibc-relayer-cosmos",
  "ibc-relayer-types",
  "itertools 0.11.0",
  "once_cell",

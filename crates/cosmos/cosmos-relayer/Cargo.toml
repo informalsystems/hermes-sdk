@@ -1,5 +1,5 @@
 [package]
-name         = "ibc-relayer-cosmos"
+name         = "hermes-cosmos-relayer"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }

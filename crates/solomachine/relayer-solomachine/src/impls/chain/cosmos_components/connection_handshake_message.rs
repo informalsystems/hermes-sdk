@@ -3,13 +3,13 @@ use async_trait::async_trait;
 use cgp_core::{DelegateComponent, HasErrorType};
 use cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use cosmos_client_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
+use hermes_cosmos_relayer::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
+use hermes_cosmos_relayer::types::error::{BaseError, Error};
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_cosmos::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
-use ibc_relayer_cosmos::types::error::{BaseError, Error};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::ConsensusProof;
 
