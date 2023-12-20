@@ -1,12 +1,10 @@
 use core::marker::PhantomData;
 use core::pin::Pin;
 
-use async_trait::async_trait;
-use cgp_core::Async;
+use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 
-use crate::std_prelude::*;
-use crate::traits::subscription::Subscription;
+use crate::subscription::traits::subscription::Subscription;
 
 pub struct EmptySubscription<T>(pub PhantomData<T>);
 

@@ -1,9 +1,11 @@
 use async_runtime_components::stream::boxed::ProvideBoxedStreamType;
 use async_runtime_components::stream::map::BoxedStreamMapper;
+use async_runtime_components::subscription::impls::subscription::ProvideBoxedSubscription;
 use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::mutex::MutexComponent;
 use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
 use ibc_relayer_components::runtime::traits::stream::{StreamMapperComponent, StreamTypeComponent};
+use ibc_relayer_components::runtime::traits::subscription::SubscriptionComponent;
 use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
@@ -34,6 +36,7 @@ delegate_components! {
         MutexComponent: ProvideFuturesMutex,
         StreamTypeComponent: ProvideBoxedStreamType,
         StreamMapperComponent: BoxedStreamMapper,
+        SubscriptionComponent: ProvideBoxedSubscription,
         ConcurrentTaskRunnerComponent: TokioRunParallelTasks,
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,

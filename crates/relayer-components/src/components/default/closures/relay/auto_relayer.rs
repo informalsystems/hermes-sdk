@@ -6,7 +6,7 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use crate::runtime::traits::stream::CanMapStream;
-use crate::runtime::traits::subscription::HasSubscriptionType;
+use crate::runtime::traits::subscription::HasSubscription;
 use crate::runtime::traits::task::CanRunConcurrentTasks;
 
 pub trait CanUseDefaultAutoRelayer: UseDefaultAutoRelayer {}
@@ -24,9 +24,9 @@ where
     Relay::DstChain: HasEventSubscription,
     Relay::Runtime: CanRunConcurrentTasks,
     <Relay::SrcChain as HasRuntimeType>::Runtime:
-        HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
+        HasSubscription + CanRunConcurrentTasks + CanMapStream,
     <Relay::DstChain as HasRuntimeType>::Runtime:
-        HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
+        HasSubscription + CanRunConcurrentTasks + CanMapStream,
     Components: DelegatesToDefaultRelayComponents,
 {
 }

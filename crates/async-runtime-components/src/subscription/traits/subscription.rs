@@ -1,11 +1,8 @@
 use alloc::sync::Arc;
 use core::pin::Pin;
 
-use async_trait::async_trait;
-use cgp_core::Async;
+use cgp_core::prelude::*;
 use futures_core::stream::Stream;
-
-use crate::std_prelude::*;
 
 /**
     A [`Subscription`] is a multi-consumer abstraction over a single-consumer

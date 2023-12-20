@@ -3,8 +3,7 @@ use core::marker::PhantomData;
 use core::ops::DerefMut;
 use core::pin::Pin;
 
-use async_trait::async_trait;
-use cgp_core::Async;
+use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
@@ -15,9 +14,8 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 };
 use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 
-use crate::std_prelude::*;
-use crate::traits::stream::HasAsyncStreamType;
-use crate::traits::subscription::Subscription;
+use crate::stream::boxed::HasBoxedStreamType;
+use crate::subscription::traits::subscription::Subscription;
 
 /**
    Multiplex the incoming [`Stream`] provided by an underlying [`Subscription`]
@@ -129,7 +127,7 @@ where
         + CanCreateChannels
         + CanUseChannels
         + CanStreamReceiver
-        + HasAsyncStreamType,
+        + HasBoxedStreamType,
 {
     fn multiplex_subscription<T, U>(
         &self,
@@ -189,7 +187,7 @@ where
 impl<Runtime, T> Subscription for MultiplexingSubscription<Runtime, T>
 where
     T: Async,
-    Runtime: HasMutex + CanCreateChannels + CanStreamReceiver + HasAsyncStreamType,
+    Runtime: HasMutex + CanCreateChannels + CanStreamReceiver + HasBoxedStreamType,
 {
     type Item = T;
 
@@ -206,7 +204,7 @@ where
 
                 let stream = Runtime::receiver_to_stream(receiver);
 
-                Some(Runtime::to_async_stream(stream))
+                Some(Runtime::to_boxed_stream(stream))
             }
             None => None,
         }

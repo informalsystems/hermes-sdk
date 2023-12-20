@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 
+use async_runtime_components::subscription::traits::subscription::Subscription;
 use cgp_core::Async;
 use cosmos_client_components::traits::message::CosmosMessage;
 use cosmos_client_components::types::tendermint::TendermintClientState;
@@ -9,7 +10,6 @@ use ibc_relayer_components::chain::traits::types::client_state::HasClientStateFi
 use ibc_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
 use ibc_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use ibc_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
-use ibc_relayer_subscription::traits::subscription::Subscription;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;

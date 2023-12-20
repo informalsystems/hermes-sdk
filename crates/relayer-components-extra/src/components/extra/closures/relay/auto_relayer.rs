@@ -7,7 +7,7 @@ use ibc_relayer_components::logger::traits::level::HasBaseLogLevels;
 use ibc_relayer_components::relay::traits::chains::HasRelayChains;
 use ibc_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use ibc_relayer_components::runtime::traits::stream::CanMapStream;
-use ibc_relayer_components::runtime::traits::subscription::HasSubscriptionType;
+use ibc_relayer_components::runtime::traits::subscription::HasSubscription;
 use ibc_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
 
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
@@ -39,9 +39,9 @@ where
     Relay::Runtime: CanSpawnTask + CanRunConcurrentTasks,
     Relay::Logger: HasBaseLogLevels,
     <Relay::SrcChain as HasRuntimeType>::Runtime:
-        HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
+        HasSubscription + CanRunConcurrentTasks + CanMapStream,
     <Relay::DstChain as HasRuntimeType>::Runtime:
-        HasSubscriptionType + CanRunConcurrentTasks + CanMapStream,
+        HasSubscription + CanRunConcurrentTasks + CanMapStream,
     Components: DelegatesToExtraRelayComponents,
 {
 }

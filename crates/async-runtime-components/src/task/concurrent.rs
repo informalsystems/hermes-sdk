@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use futures::stream::{self, Stream, StreamExt};
+use futures_util::stream::{self, Stream, StreamExt};
 use ibc_relayer_components::runtime::traits::task::{ConcurrentTaskRunner, Task};
 
 use crate::stream::boxed::HasBoxedStreamType;

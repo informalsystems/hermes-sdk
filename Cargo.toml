@@ -53,7 +53,9 @@ tokio               = { version = "1.34" }
 tracing             = { version = "0.1.40" }
 tonic               = { version = "0.10" }
 toml                = { version = "0.8.8" }
-futures             = { version = "0.3" }
+futures             = { version = "0.3", default-features = false }
+futures-core        = { version = "0.3", default-features = false }
+futures-util        = { version = "0.3", default-features = false }
 eyre                = { version = "0.6.8" }
 itertools           = { version = "0.11" }
 http                = { version = "0.2.10" }
@@ -62,7 +64,6 @@ flex-error          = { version = "0.4.4", default-features = false }
 ibc-relayer-components          = { version = "0.1.0", path = "./crates/relayer-components" }
 ibc-relayer-components-extra    = { version = "0.1.0", path = "./crates/relayer-components-extra" }
 ibc-relayer-runtime             = { version = "0.1.0", path = "./crates/relayer-runtime" }
-ibc-relayer-subscription        = { version = "0.1.0", path = "./crates/relayer-subscription" }
 cosmos-client-components        = { version = "0.1.0", path = "./crates/cosmos-client-components" }
 cosmos-test-components          = { version = "0.1.0", path = "./crates/cosmos-test-components" }
 async-runtime-components        = { version = "0.1.0", path = "./crates/async-runtime-components" }

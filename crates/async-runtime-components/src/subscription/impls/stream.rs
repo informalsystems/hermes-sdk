@@ -1,8 +1,7 @@
 use alloc::sync::Arc;
 use core::ops::DerefMut;
 
-use async_trait::async_trait;
-use cgp_core::Async;
+use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::mutex::HasMutex;
@@ -12,10 +11,9 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 };
 use ibc_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 
-use crate::impls::multiplex::MultiplexingSubscription;
-use crate::std_prelude::*;
-use crate::traits::stream::HasAsyncStreamType;
-use crate::traits::subscription::Subscription;
+use crate::stream::boxed::HasBoxedStreamType;
+use crate::subscription::impls::multiplex::MultiplexingSubscription;
+use crate::subscription::traits::subscription::Subscription;
 
 /**
    Allows multiplexing of a single [`Stream`] into a subscription.
@@ -45,7 +43,7 @@ where
 #[async_trait]
 impl<Runtime, S, T> Task for StreamSubscriptionTask<Runtime, S, T>
 where
-    Runtime: HasMutex + CanCreateChannels + CanUseChannels + CanStreamReceiver + HasAsyncStreamType,
+    Runtime: HasMutex + CanCreateChannels + CanUseChannels + CanStreamReceiver + HasBoxedStreamType,
     T: Clone + Async,
     S: Stream<Item = T> + Async,
 {
@@ -75,7 +73,7 @@ where
         + CanCreateChannels
         + CanUseChannels
         + CanStreamReceiver
-        + HasAsyncStreamType,
+        + HasBoxedStreamType,
 {
     fn stream_subscription<S, T>(&self, stream: S) -> Arc<dyn Subscription<Item = T>>
     where
