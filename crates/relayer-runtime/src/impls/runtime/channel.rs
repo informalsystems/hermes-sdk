@@ -1,14 +1,10 @@
-use core::pin::Pin;
-
 use async_trait::async_trait;
 use cgp_core::Async;
-use futures::Stream;
-use ibc_relayer_components_extra::runtime::traits::channel::{CanCloneSender, CanStreamReceiver};
+use ibc_relayer_components_extra::runtime::traits::channel::CanCloneSender;
 use ibc_relayer_components_extra::runtime::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes,
 };
 use tokio::sync::oneshot;
-use tokio_stream::wrappers::UnboundedReceiverStream;
 
 use crate::types::error::TokioRuntimeError;
 use crate::types::runtime::TokioRuntimeContext;
@@ -49,17 +45,6 @@ impl CanUseChannelsOnce for TokioRuntimeContext {
         T: Async,
     {
         receiver.await.map_err(|_| TokioRuntimeError::ChannelClosed)
-    }
-}
-
-impl CanStreamReceiver for TokioRuntimeContext {
-    fn receiver_to_stream<T>(
-        receiver: Self::Receiver<T>,
-    ) -> Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>
-    where
-        T: Async,
-    {
-        Box::pin(UnboundedReceiverStream::new(receiver))
     }
 }
 

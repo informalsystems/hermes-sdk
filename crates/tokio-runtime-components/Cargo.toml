@@ -22,4 +22,5 @@ cgp-core    = { workspace = true }
 tokio       = { workspace = true, features = ["full"] }
 futures     = { workspace = true }
 
-rand = { version = "0.8.5" }
+tokio-stream    = { version = "0.1" }
+rand            = { version = "0.8.5" }

@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use core::pin::Pin;
 
 use cgp_core::prelude::*;

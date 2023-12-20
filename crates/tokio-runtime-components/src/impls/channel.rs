@@ -1,9 +1,12 @@
+use async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use ibc_relayer_components_extra::runtime::traits::channel::ReceiverStreamer;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     ChannelCreator, ChannelUser, ProvideChannelType,
 };
 use tokio::sync::mpsc;
+use tokio_stream::wrappers::UnboundedReceiverStream;
 
 use crate::traits::channel::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
 
@@ -42,6 +45,12 @@ where
         receiver
     }
 
+    fn to_unbounded_receiver<T>(receiver: Self::Receiver<T>) -> mpsc::UnboundedReceiver<T>
+    where
+        T: Async,
+    {
+        receiver
+    }
     fn to_unbounded_sender_ref<T>(sender: &Self::Sender<T>) -> &mpsc::UnboundedSender<T>
     where
         T: Async,
@@ -111,5 +120,19 @@ where
                 Err(Runtime::raise_error(ChannelClosedError))
             }
         }
+    }
+}
+
+impl<Runtime> ReceiverStreamer<Runtime> for ProvideUnboundedChannelType
+where
+    Runtime: HasUnboundedChannelType + HasBoxedStreamType,
+{
+    fn receiver_to_stream<T>(receiver: Runtime::Receiver<T>) -> Runtime::Stream<T>
+    where
+        T: Async,
+    {
+        Runtime::from_boxed_stream(Box::pin(UnboundedReceiverStream::new(
+            Runtime::to_unbounded_receiver(receiver),
+        )))
     }
 }

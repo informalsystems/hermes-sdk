@@ -23,5 +23,3 @@ cgp-core    = { workspace = true }
 tokio       = { workspace = true }
 tracing     = { workspace = true }
 futures     = { workspace = true }
-
-tokio-stream    = "0.1"

@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use futures_util::stream::StreamExt;
 use ibc_relayer_components::runtime::traits::stream::StreamMapper;

@@ -13,6 +13,10 @@ pub trait HasUnboundedChannelType: HasChannelTypes {
     where
         T: Async;
 
+    fn to_unbounded_receiver<T>(receiver: Self::Receiver<T>) -> mpsc::UnboundedReceiver<T>
+    where
+        T: Async;
+
     fn to_unbounded_sender_ref<T>(sender: &Self::Sender<T>) -> &mpsc::UnboundedSender<T>
     where
         T: Async;
@@ -33,6 +37,10 @@ where
         T: Async;
 
     fn from_unbounded_receiver<T>(receiver: mpsc::UnboundedReceiver<T>) -> Self::Receiver<T>
+    where
+        T: Async;
+
+    fn to_unbounded_receiver<T>(receiver: Self::Receiver<T>) -> mpsc::UnboundedReceiver<T>
     where
         T: Async;
 
@@ -64,6 +72,13 @@ where
         T: Async,
     {
         Components::from_unbounded_receiver(receiver)
+    }
+
+    fn to_unbounded_receiver<T>(receiver: Self::Receiver<T>) -> mpsc::UnboundedReceiver<T>
+    where
+        T: Async,
+    {
+        Components::to_unbounded_receiver(receiver)
     }
 
     fn to_unbounded_sender_ref<T>(sender: &Self::Sender<T>) -> &mpsc::UnboundedSender<T>
@@ -101,6 +116,13 @@ where
         T: Async,
     {
         Delegate::from_unbounded_receiver(receiver)
+    }
+
+    fn to_unbounded_receiver<T>(receiver: Self::Receiver<T>) -> mpsc::UnboundedReceiver<T>
+    where
+        T: Async,
+    {
+        Delegate::to_unbounded_receiver(receiver)
     }
 
     fn to_unbounded_sender_ref<T>(sender: &Self::Sender<T>) -> &mpsc::UnboundedSender<T>

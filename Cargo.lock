@@ -1996,7 +1996,6 @@ dependencies = [
  "ibc-test-components",
  "tokio",
  "tokio-runtime-components",
- "tokio-stream",
  "tracing",
 ]
 
@@ -4182,6 +4181,7 @@ dependencies = [
  "ibc-test-components",
  "rand",
  "tokio",
+ "tokio-stream",
 ]
 
 [[package]]

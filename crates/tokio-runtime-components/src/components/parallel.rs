@@ -10,7 +10,7 @@ use ibc_relayer_components::runtime::traits::subscription::SubscriptionComponent
 use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
 use ibc_relayer_components::runtime::traits::time::TimeComponent;
 use ibc_relayer_components_extra::runtime::traits::channel::{
-    ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent,
+    ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
 };
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
@@ -49,6 +49,7 @@ delegate_components! {
             ChannelTypeComponent,
             ChannelCreatorComponent,
             ChannelUserComponent,
+            ReceiverStreamerComponent,
         ]: ProvideUnboundedChannelType,
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,

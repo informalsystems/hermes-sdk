@@ -143,7 +143,7 @@ pub trait CanUseChannels: HasChannelTypes + HasErrorType {
         T: Async;
 }
 
-// #[derive_component(ReceiverStreamerComponent, ReceiverStreamer<Runtime>)]
+#[derive_component(ReceiverStreamerComponent, ReceiverStreamer<Runtime>)]
 pub trait CanStreamReceiver: HasChannelTypes + HasStreamType {
     fn receiver_to_stream<T>(receiver: Self::Receiver<T>) -> Self::Stream<T>
     where
