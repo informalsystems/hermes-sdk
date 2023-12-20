@@ -17,9 +17,9 @@ hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
 hermes-test-components             = { workspace = true }
 
-cgp-core        = { workspace = true }
-futures-core    = { workspace = true }
-futures-util    = { workspace = true }
-futures-channel = { workspace = true }
+cgp-core            = { workspace = true }
+futures-core        = { workspace = true }
+futures-util        = { workspace = true }
+futures-channel     = { workspace = true }
 
-rand = { version = "0.8.5" }
+rand                = { version = "0.8.5" }

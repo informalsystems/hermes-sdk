@@ -13,4 +13,4 @@ description  = """
 """
 
 [dependencies]
-cgp-core = { workspace = true }
+cgp-core    = { workspace = true }

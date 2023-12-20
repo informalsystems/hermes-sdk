@@ -13,6 +13,6 @@ description  = """
 """
 
 [dependencies]
-cgp-core                        = { workspace = true }
-hermes-relayer-components          = { workspace = true }
-hermes-relayer-components-extra    = { workspace = true }
+cgp-core                            = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-relayer-components-extra     = { workspace = true }

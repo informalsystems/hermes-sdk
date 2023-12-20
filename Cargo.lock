@@ -513,7 +513,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "async-trait",
 ]
@@ -521,7 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -530,7 +530,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/fix-impl-gat-bounds#5a9330c1340cf0097ed7996aa852f422a6cfeccd"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",
@@ -541,7 +541,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -553,7 +553,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -562,7 +562,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -571,7 +571,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -580,7 +580,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -2957,7 +2957,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "265baba7fabd416cf5078179f7d2cbeca4ce7a9041111900675ea7c4cb8a4c32"
 dependencies = [
  "anyhow",
- "itertools 0.11.0",
+ "itertools 0.10.5",
  "proc-macro2",
  "quote",
  "syn 2.0.37",

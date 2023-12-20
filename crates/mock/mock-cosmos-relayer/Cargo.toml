@@ -15,19 +15,20 @@ description  = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait         = { workspace = true }
-basecoin-app        = { workspace = true }
-basecoin-store      = { workspace = true }
-ibc                 = { workspace = true, features = ["mocks"] }
-ibc-proto           = { workspace = true }
-cgp-core            = { workspace = true }
-hermes-relayer-components          = { workspace = true }
-hermes-relayer-components-extra    = { workspace = true }
-hermes-relayer-runtime             = { workspace = true }
-ibc-relayer-types               = { workspace = true }
-hermes-cosmos-client-components        = { workspace = true }
-tendermint                      = { workspace = true, features = ["rust-crypto"] }
-tendermint-testgen              =  { workspace = true }
+async-trait                         = { workspace = true }
+basecoin-app                        = { workspace = true }
+basecoin-store                      = { workspace = true }
+ibc                                 = { workspace = true, features = ["mocks"] }
+ibc-proto                           = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
+cgp-core                            = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-relayer-components-extra     = { workspace = true }
+hermes-relayer-runtime              = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
+tendermint                          = { workspace = true, features = ["rust-crypto"] }
+tendermint-testgen                  =  { workspace = true }
+
 prost       = { workspace = true }
 tokio       = { workspace = true, features = ["full"] }
 tracing     = { workspace = true }
