@@ -7,7 +7,7 @@
    [`std::sync::mpsc::channel`](https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html).
 */
 
-use cgp_core::{async_trait, Async, HasErrorType};
+use cgp_core::prelude::*;
 use ibc_relayer_components::runtime::traits::stream::HasStreamType;
 
 use crate::std_prelude::*;
@@ -54,7 +54,8 @@ use crate::std_prelude::*;
    which defines abstract one-shot channel types that allow at most one message
    to be sent over.
 */
-pub trait HasChannelTypes: HasErrorType {
+#[derive_component(ChannelTypeComponent, ProvideChannelType<Runtime>)]
+pub trait HasChannelTypes: Async {
     /**
        The sender end of a channel with payload type `T`.
     */
@@ -74,6 +75,7 @@ pub trait HasChannelTypes: HasErrorType {
    Allow the creation of new sender-receiver pairs for the channel types
    defined in [`HasChannelTypes`].
 */
+// #[derive_component(ChannelCreatorComponent, ChannelCreator<Runtime>)]
 pub trait CanCreateChannels: HasChannelTypes {
     /**
        Given a generic payload type `T`, create a
@@ -103,8 +105,9 @@ pub trait CanCreateChannels: HasChannelTypes {
    [`Sender`](HasChannelTypes::Sender<T>) and
    [`Receiver`](HasChannelTypes::Receiver<T>) ends of a channel.
 */
+// #[derive_component(ChannelUserComponent, ChannelUser<Runtime>)]
 #[async_trait]
-pub trait CanUseChannels: HasChannelTypes {
+pub trait CanUseChannels: HasChannelTypes + HasErrorType {
     /**
        Given a reference to [`Sender<T>`](HasChannelTypes::Sender<T>),
        send a message payload of type `T` over the sender.
@@ -140,12 +143,14 @@ pub trait CanUseChannels: HasChannelTypes {
         T: Async;
 }
 
+// #[derive_component(ReceiverStreamerComponent, ReceiverStreamer<Runtime>)]
 pub trait CanStreamReceiver: HasChannelTypes + HasStreamType {
     fn receiver_to_stream<T>(receiver: Self::Receiver<T>) -> Self::Stream<T>
     where
         T: Async;
 }
 
+// #[derive_component(SenderClonerComponent, SenderCloner<Runtime>)]
 pub trait CanCloneSender: HasChannelTypes {
     fn clone_sender<T>(sender: &Self::Sender<T>) -> Self::Sender<T>
     where

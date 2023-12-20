@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use cgp_core::Async;
 use futures::Stream;
 use ibc_relayer_components_extra::runtime::traits::channel::{
-    CanCloneSender, CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
+    CanCloneSender, CanCreateChannels, CanStreamReceiver, CanUseChannels,
 };
 use ibc_relayer_components_extra::runtime::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes,
@@ -14,16 +14,6 @@ use tokio_stream::wrappers::UnboundedReceiverStream;
 
 use crate::types::error::TokioRuntimeError;
 use crate::types::runtime::TokioRuntimeContext;
-
-impl HasChannelTypes for TokioRuntimeContext {
-    type Sender<T> = mpsc::UnboundedSender<T>
-    where
-        T: Async;
-
-    type Receiver<T> = mpsc::UnboundedReceiver<T>
-    where
-        T: Async;
-}
 
 impl HasChannelOnceTypes for TokioRuntimeContext {
     type SenderOnce<T> = oneshot::Sender<T>

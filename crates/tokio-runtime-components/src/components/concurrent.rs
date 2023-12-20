@@ -6,6 +6,7 @@ use ibc_relayer_components::runtime::traits::stream::{StreamMapperComponent, Str
 use ibc_relayer_components::runtime::traits::subscription::SubscriptionComponent;
 use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
 use ibc_relayer_components::runtime::traits::time::TimeComponent;
+use ibc_relayer_components_extra::runtime::traits::channel::ChannelTypeComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -30,6 +31,7 @@ delegate_components! {
             StreamTypeComponent,
             StreamMapperComponent,
             SubscriptionComponent,
+            ChannelTypeComponent,
             FilePathTypeComponent,
             ChildProcessTypeComponent,
             ChildProcessStarterComponent,
