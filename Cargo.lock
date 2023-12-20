@@ -736,28 +736,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
 
 [[package]]
-name = "cosmos-integration-tests"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "cgp-error-eyre",
- "eyre",
- "hermes-cosmos-client-components",
- "hermes-cosmos-relayer",
- "hermes-cosmos-test-components",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-relayer-runtime",
- "ibc-relayer",
- "ibc-relayer-types",
- "ibc-test-components",
- "serde_json",
- "stable-eyre",
- "tokio",
- "toml 0.8.8",
-]
-
-[[package]]
 name = "cosmos-sdk-proto"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1578,6 +1556,28 @@ dependencies = [
  "tokio",
  "tonic",
  "tracing",
+]
+
+[[package]]
+name = "hermes-cosmos-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cgp-error-eyre",
+ "eyre",
+ "hermes-cosmos-client-components",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-test-components",
+ "serde_json",
+ "stable-eyre",
+ "tokio",
+ "toml 0.8.8",
 ]
 
 [[package]]

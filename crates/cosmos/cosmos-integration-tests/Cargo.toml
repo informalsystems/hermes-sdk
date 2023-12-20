@@ -1,5 +1,5 @@
 [package]
-name         = "cosmos-integration-tests"
+name         = "hermes-cosmos-integration-tests"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }
