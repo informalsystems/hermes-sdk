@@ -8,6 +8,7 @@ use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent
 use ibc_relayer_components::runtime::traits::time::TimeComponent;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
+    SenderClonerComponent,
 };
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
@@ -37,6 +38,7 @@ delegate_components! {
             ChannelCreatorComponent,
             ChannelUserComponent,
             ReceiverStreamerComponent,
+            SenderClonerComponent,
             FilePathTypeComponent,
             ChildProcessTypeComponent,
             ChildProcessStarterComponent,

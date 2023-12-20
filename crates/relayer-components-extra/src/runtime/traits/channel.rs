@@ -150,7 +150,7 @@ pub trait CanStreamReceiver: HasChannelTypes + HasStreamType {
         T: Async;
 }
 
-// #[derive_component(SenderClonerComponent, SenderCloner<Runtime>)]
+#[derive_component(SenderClonerComponent, SenderCloner<Runtime>)]
 pub trait CanCloneSender: HasChannelTypes {
     fn clone_sender<T>(sender: &Self::Sender<T>) -> Self::Sender<T>
     where

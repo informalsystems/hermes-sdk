@@ -1,6 +1,5 @@
 use async_trait::async_trait;
 use cgp_core::Async;
-use ibc_relayer_components_extra::runtime::traits::channel::CanCloneSender;
 use ibc_relayer_components_extra::runtime::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes,
 };
@@ -45,14 +44,5 @@ impl CanUseChannelsOnce for TokioRuntimeContext {
         T: Async,
     {
         receiver.await.map_err(|_| TokioRuntimeError::ChannelClosed)
-    }
-}
-
-impl CanCloneSender for TokioRuntimeContext {
-    fn clone_sender<T>(sender: &Self::Sender<T>) -> Self::Sender<T>
-    where
-        T: Async,
-    {
-        sender.clone()
     }
 }

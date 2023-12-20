@@ -2,6 +2,7 @@ use async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use ibc_relayer_components_extra::runtime::traits::channel::ReceiverStreamer;
+use ibc_relayer_components_extra::runtime::traits::channel::SenderCloner;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     ChannelCreator, ChannelUser, ProvideChannelType,
 };
@@ -134,5 +135,17 @@ where
         Runtime::from_boxed_stream(Box::pin(UnboundedReceiverStream::new(
             Runtime::to_unbounded_receiver(receiver),
         )))
+    }
+}
+
+impl<Runtime> SenderCloner<Runtime> for ProvideUnboundedChannelType
+where
+    Runtime: HasUnboundedChannelType,
+{
+    fn clone_sender<T>(sender: &Runtime::Sender<T>) -> Runtime::Sender<T>
+    where
+        T: Async,
+    {
+        Runtime::from_unbounded_sender(Runtime::to_unbounded_sender_ref(sender).clone())
     }
 }
