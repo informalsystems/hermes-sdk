@@ -118,9 +118,16 @@ where
     where
         T: Async,
     {
-        Runtime::to_unbounded_receiver_ref(receiver)
-            .try_next()
-            .map_err(|_| Runtime::raise_error(ChannelClosedError))
+        let res = Runtime::to_unbounded_receiver_ref(receiver).try_next();
+
+        // The result semantics of the futures version of receiver is slightly different
+        match res {
+            Ok(Some(res)) => Ok(Some(res)),
+            // Ok(None) means that the channel is closed
+            Ok(None) => Err(Runtime::raise_error(ChannelClosedError)),
+            // Error means that there is no meesage currently available
+            Err(_) => Ok(None),
+        }
     }
 }
 
