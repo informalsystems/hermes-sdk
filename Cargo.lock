@@ -1989,6 +1989,7 @@ dependencies = [
 name = "ibc-relayer-runtime"
 version = "0.1.0"
 dependencies = [
+ "async-runtime-components",
  "async-trait",
  "cgp-core",
  "futures",
