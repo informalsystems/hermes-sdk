@@ -75,7 +75,7 @@ pub trait HasChannelTypes: Async {
    Allow the creation of new sender-receiver pairs for the channel types
    defined in [`HasChannelTypes`].
 */
-// #[derive_component(ChannelCreatorComponent, ChannelCreator<Runtime>)]
+#[derive_component(ChannelCreatorComponent, ChannelCreator<Runtime>)]
 pub trait CanCreateChannels: HasChannelTypes {
     /**
        Given a generic payload type `T`, create a
@@ -105,7 +105,7 @@ pub trait CanCreateChannels: HasChannelTypes {
    [`Sender`](HasChannelTypes::Sender<T>) and
    [`Receiver`](HasChannelTypes::Receiver<T>) ends of a channel.
 */
-// #[derive_component(ChannelUserComponent, ChannelUser<Runtime>)]
+#[derive_component(ChannelUserComponent, ChannelUser<Runtime>)]
 #[async_trait]
 pub trait CanUseChannels: HasChannelTypes + HasErrorType {
     /**

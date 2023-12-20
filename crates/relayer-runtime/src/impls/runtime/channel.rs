@@ -3,13 +3,11 @@ use core::pin::Pin;
 use async_trait::async_trait;
 use cgp_core::Async;
 use futures::Stream;
-use ibc_relayer_components_extra::runtime::traits::channel::{
-    CanCloneSender, CanCreateChannels, CanStreamReceiver, CanUseChannels,
-};
+use ibc_relayer_components_extra::runtime::traits::channel::{CanCloneSender, CanStreamReceiver};
 use ibc_relayer_components_extra::runtime::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes,
 };
-use tokio::sync::{mpsc, oneshot};
+use tokio::sync::oneshot;
 use tokio_stream::wrappers::UnboundedReceiverStream;
 
 use crate::types::error::TokioRuntimeError;
@@ -25,15 +23,6 @@ impl HasChannelOnceTypes for TokioRuntimeContext {
         T: Async;
 }
 
-impl CanCreateChannels for TokioRuntimeContext {
-    fn new_channel<T>() -> (Self::Sender<T>, Self::Receiver<T>)
-    where
-        T: Async,
-    {
-        mpsc::unbounded_channel()
-    }
-}
-
 impl CanCreateChannelsOnce for TokioRuntimeContext {
     fn new_channel_once<T>() -> (Self::SenderOnce<T>, Self::ReceiverOnce<T>)
     where
@@ -41,39 +30,6 @@ impl CanCreateChannelsOnce for TokioRuntimeContext {
     {
         let (sender, receiver) = oneshot::channel();
         (sender, receiver)
-    }
-}
-
-#[async_trait]
-impl CanUseChannels for TokioRuntimeContext {
-    fn send<T>(sender: &Self::Sender<T>, value: T) -> Result<(), Self::Error>
-    where
-        T: Async,
-    {
-        sender
-            .send(value)
-            .map_err(|_| TokioRuntimeError::ChannelClosed)
-    }
-
-    async fn receive<T>(receiver: &mut Self::Receiver<T>) -> Result<T, Self::Error>
-    where
-        T: Async,
-    {
-        receiver
-            .recv()
-            .await
-            .ok_or(TokioRuntimeError::ChannelClosed)
-    }
-
-    fn try_receive<T>(receiver: &mut Self::Receiver<T>) -> Result<Option<T>, Self::Error>
-    where
-        T: Async,
-    {
-        match receiver.try_recv() {
-            Ok(batch) => Ok(Some(batch)),
-            Err(mpsc::error::TryRecvError::Empty) => Ok(None),
-            Err(mpsc::error::TryRecvError::Disconnected) => Err(TokioRuntimeError::ChannelClosed),
-        }
     }
 }
 

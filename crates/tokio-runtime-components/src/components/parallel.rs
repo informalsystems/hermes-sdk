@@ -9,7 +9,9 @@ use ibc_relayer_components::runtime::traits::stream::{StreamMapperComponent, Str
 use ibc_relayer_components::runtime::traits::subscription::SubscriptionComponent;
 use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
 use ibc_relayer_components::runtime::traits::time::TimeComponent;
-use ibc_relayer_components_extra::runtime::traits::channel::ChannelTypeComponent;
+use ibc_relayer_components_extra::runtime::traits::channel::{
+    ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent,
+};
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -18,6 +20,7 @@ use ibc_test_components::runtime::traits::types::child_process::ChildProcessType
 use ibc_test_components::runtime::traits::types::file_path::FilePathTypeComponent;
 use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponent;
 
+use crate::impls::channel::ProvideUnboundedChannelType;
 use crate::impls::child_process::StartTokioChildProcess;
 use crate::impls::exec_command::TokioExecCommand;
 use crate::impls::parallel_task::TokioRunParallelTasks;
@@ -25,7 +28,6 @@ use crate::impls::read_file::TokioReadFileAsString;
 use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
 use crate::impls::time::ProvideStdTime;
-use crate::impls::types::channel::ProvideUnboundedChannelType;
 use crate::impls::types::child_process::ProvideTokioChildProcessType;
 use crate::impls::types::file_path::ProvideStdPathType;
 use crate::impls::write_file::TokioWriteStringToFile;
@@ -43,7 +45,11 @@ delegate_components! {
         StreamMapperComponent: BoxedStreamMapper,
         SubscriptionComponent: ProvideBoxedSubscription,
         ConcurrentTaskRunnerComponent: TokioRunParallelTasks,
-        ChannelTypeComponent: ProvideUnboundedChannelType,
+        [
+            ChannelTypeComponent,
+            ChannelCreatorComponent,
+            ChannelUserComponent,
+        ]: ProvideUnboundedChannelType,
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
         ChildProcessStarterComponent: StartTokioChildProcess,

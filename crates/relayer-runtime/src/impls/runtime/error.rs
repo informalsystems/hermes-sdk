@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 use cgp_core::{ErrorRaiser, ProvideErrorType};
 use core::str::Utf8Error;
 use std::io::Error as IoError;
+use tokio_runtime_components::impls::channel::ChannelClosedError;
 use tokio_runtime_components::impls::child_process::PrematureChildProcessExitError;
 use tokio_runtime_components::impls::exec_command::ExecCommandFailure;
 
@@ -31,6 +32,12 @@ impl ErrorRaiser<TokioRuntimeContext, IoError> for RelayerRuntimeComponents {
 impl ErrorRaiser<TokioRuntimeContext, Utf8Error> for RelayerRuntimeComponents {
     fn raise_error(e: Utf8Error) -> TokioRuntimeError {
         TokioRuntimeError::Utf8(e)
+    }
+}
+
+impl ErrorRaiser<TokioRuntimeContext, ChannelClosedError> for RelayerRuntimeComponents {
+    fn raise_error(_e: ChannelClosedError) -> TokioRuntimeError {
+        TokioRuntimeError::ChannelClosed
     }
 }
 

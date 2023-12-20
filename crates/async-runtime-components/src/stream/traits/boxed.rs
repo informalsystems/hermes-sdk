@@ -20,11 +20,10 @@ pub trait HasBoxedStreamType: HasStreamType {
         Item: Async;
 }
 
-impl<Runtime, Components, Delegate> HasBoxedStreamType for Runtime
+impl<Runtime, Components> HasBoxedStreamType for Runtime
 where
     Runtime: HasComponents<Components = Components>,
-    Components: DelegateComponent<StreamTypeComponent, Delegate = Delegate>,
-    Delegate: BoxedStreamTypeProvider<Runtime>,
+    Components: BoxedStreamTypeProvider<Runtime>,
 {
     fn to_boxed_stream<Item>(
         stream: Self::Stream<Item>,
