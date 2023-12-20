@@ -4,7 +4,7 @@ use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::context::relay::SolomachineRelay;
 

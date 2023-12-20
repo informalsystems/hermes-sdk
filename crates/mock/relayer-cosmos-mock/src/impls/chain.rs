@@ -70,9 +70,9 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProv
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
-use ibc_relayer_runtime::types::log::value::LogValue;
-use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_relayer_runtime::types::log::value::LogValue;
+use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::components::chain::MockCosmosChainComponents;
 use crate::contexts::chain::MockCosmosContext;

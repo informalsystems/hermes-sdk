@@ -19,7 +19,7 @@ cgp-core            = { workspace = true }
 tendermint          = { workspace = true, features = ["secp256k1"] }
 ibc-relayer-cosmos  = { workspace = true }
 cosmos-client-components        = { workspace = true }
-ibc-relayer-runtime             = { workspace = true }
+hermes-relayer-runtime             = { workspace = true }
 hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
 

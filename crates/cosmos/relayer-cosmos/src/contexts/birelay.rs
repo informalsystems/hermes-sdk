@@ -1,5 +1,5 @@
+use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::relay::CosmosRelay;
 

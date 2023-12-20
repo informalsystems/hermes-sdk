@@ -1,5 +1,5 @@
 use eyre::Error;
-use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use std::sync::Arc;
 use tokio::runtime::Runtime;

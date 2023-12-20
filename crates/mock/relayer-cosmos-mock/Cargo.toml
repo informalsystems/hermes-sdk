@@ -23,7 +23,7 @@ ibc-proto           = { workspace = true }
 cgp-core            = { workspace = true }
 hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
-ibc-relayer-runtime             = { workspace = true }
+hermes-relayer-runtime             = { workspace = true }
 ibc-relayer-types               = { workspace = true }
 cosmos-client-components        = { workspace = true }
 tendermint                      = { workspace = true, features = ["rust-crypto"] }

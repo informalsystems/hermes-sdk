@@ -69,7 +69,7 @@ cosmos-test-components              = { version = "0.1.0", path = "./crates/cosm
 ibc-relayer-cosmos                  = { version = "0.1.0", path = "./crates/cosmos/relayer-cosmos" }
 async-runtime-components            = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 tokio-runtime-components            = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
-ibc-relayer-runtime                 = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
+hermes-relayer-runtime                 = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
 ibc-relayer-solomachine             = { version = "0.1.0", path = "./crates/solomachine/relayer-solomachine" }
 ibc-test-components                 = { version = "0.1.0", path = "./crates/test/test-components" }
 ibc-test-suite                      = { version = "0.1.0", path = "./crates/test/test-suite" }

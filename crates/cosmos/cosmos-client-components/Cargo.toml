@@ -17,10 +17,10 @@ ibc-proto         = { workspace = true }
 ibc-relayer       = { workspace = true }
 ibc-relayer-types = { workspace = true }
 cgp-core          = { workspace = true }
-ibc-relayer-runtime             = { workspace = true }
-hermes-relayer-components          = { workspace = true }
-hermes-relayer-components-extra    = { workspace = true }
-ibc-test-components             = { workspace = true }
+hermes-relayer-runtime                 = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-relayer-components-extra     = { workspace = true }
+ibc-test-components                 = { workspace = true }
 tendermint      = { workspace = true, features = ["secp256k1"] }
 tendermint-rpc  = { workspace = true, features = ["http-client", "websocket-client"] }
 

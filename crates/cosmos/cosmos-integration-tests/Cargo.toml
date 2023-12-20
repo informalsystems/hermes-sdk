@@ -17,7 +17,7 @@ cgp-core                        = { workspace = true }
 cgp-error-eyre                  = { workspace = true }
 ibc-relayer                     = { workspace = true }
 ibc-relayer-types               = { workspace = true }
-ibc-relayer-runtime             = { workspace = true }
+hermes-relayer-runtime             = { workspace = true }
 hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
 ibc-relayer-cosmos              = { workspace = true }

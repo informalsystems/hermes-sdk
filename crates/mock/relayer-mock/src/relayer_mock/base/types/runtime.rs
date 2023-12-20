@@ -6,7 +6,7 @@ use async_trait::async_trait;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_relayer_components::runtime::traits::time::HasTime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_relayer_runtime::types::error::TokioRuntimeError;
 
 use crate::relayer_mock::base::types::aliases::MockTimestamp;
 use crate::relayer_mock::util::clock::MockClock;

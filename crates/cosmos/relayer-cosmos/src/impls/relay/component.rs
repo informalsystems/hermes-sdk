@@ -9,9 +9,9 @@ use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::ExtraRelayComponents;
 use hermes_relayer_components_extra::components::extra::relay::IsExtraRelayComponent;
+use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
+use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;

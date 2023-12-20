@@ -73,8 +73,8 @@ use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use hermes_relayer_components_extra::components::extra::chain::IsExtraChainComponent;
 use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
-use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
+use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;

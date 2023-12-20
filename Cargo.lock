@@ -746,10 +746,10 @@ dependencies = [
  "futures",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
  "http",
  "ibc-proto",
  "ibc-relayer",
- "ibc-relayer-runtime",
  "ibc-relayer-types",
  "ibc-test-components",
  "itertools 0.11.0",
@@ -772,9 +772,9 @@ dependencies = [
  "eyre",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
  "ibc-relayer",
  "ibc-relayer-cosmos",
- "ibc-relayer-runtime",
  "ibc-relayer-types",
  "ibc-test-components",
  "serde_json",
@@ -806,10 +806,10 @@ dependencies = [
  "hdpath",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
  "http",
  "ibc-proto",
  "ibc-relayer",
- "ibc-relayer-runtime",
  "ibc-relayer-types",
  "ibc-test-components",
  "itertools 0.11.0",
@@ -1626,6 +1626,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-relayer-runtime"
+version = "0.1.0"
+dependencies = [
+ "async-runtime-components",
+ "async-trait",
+ "cgp-core",
+ "futures",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "ibc-test-components",
+ "tokio",
+ "tokio-runtime-components",
+ "tracing",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1807,10 +1823,10 @@ dependencies = [
  "cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
  "http",
  "ibc-relayer",
  "ibc-relayer-cosmos",
- "ibc-relayer-runtime",
  "ibc-relayer-solomachine",
  "ibc-relayer-types",
  "ibc-test-framework",
@@ -1925,10 +1941,10 @@ dependencies = [
  "futures",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
  "http",
  "ibc-proto",
  "ibc-relayer",
- "ibc-relayer-runtime",
  "ibc-relayer-types",
  "ibc-telemetry",
  "ibc-test-components",
@@ -1956,9 +1972,9 @@ dependencies = [
  "cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
  "ibc",
  "ibc-proto",
- "ibc-relayer-runtime",
  "ibc-relayer-types",
  "primitive-types",
  "prost",
@@ -1980,24 +1996,8 @@ dependencies = [
  "eyre",
  "flex-error",
  "hermes-relayer-components",
- "ibc-relayer-runtime",
+ "hermes-relayer-runtime",
  "tokio",
- "tracing",
-]
-
-[[package]]
-name = "ibc-relayer-runtime"
-version = "0.1.0"
-dependencies = [
- "async-runtime-components",
- "async-trait",
- "cgp-core",
- "futures",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "ibc-test-components",
- "tokio",
- "tokio-runtime-components",
  "tracing",
 ]
 
@@ -2015,10 +2015,10 @@ dependencies = [
  "futures",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-cosmos",
- "ibc-relayer-runtime",
  "ibc-relayer-types",
  "ibc-telemetry",
  "itertools 0.11.0",

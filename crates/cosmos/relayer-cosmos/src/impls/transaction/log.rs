@@ -1,6 +1,6 @@
 use hermes_relayer_components::transaction::traits::logs::nonce::CanLogNonce;
+use hermes_relayer_runtime::types::log::value::LogValue;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer_runtime::types::log::value::LogValue;
 
 use crate::contexts::transaction::CosmosTxContext;
 

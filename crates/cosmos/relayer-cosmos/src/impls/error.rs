@@ -1,7 +1,7 @@
 use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
+use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
 
 use crate::types::error::{BaseError, Error};
 

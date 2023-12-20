@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use ibc_relayer_runtime::types::log::value::LogValue;
+use hermes_relayer_runtime::types::log::value::LogValue;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use tendermint::abci::Event as AbciEvent;
 

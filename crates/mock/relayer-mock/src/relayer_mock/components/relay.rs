@@ -15,7 +15,7 @@ use hermes_relayer_components::relay::traits::components::packet_relayer::Packet
 use hermes_relayer_components::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use hermes_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use hermes_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
-use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
+use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
 

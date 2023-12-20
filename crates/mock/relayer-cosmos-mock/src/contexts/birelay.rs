@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use super::relay::MockCosmosRelay;
 use crate::traits::endpoint::BasecoinEndpoint;

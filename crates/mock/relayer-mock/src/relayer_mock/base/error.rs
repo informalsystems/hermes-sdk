@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 
 use eyre::Report;
 use flex_error::{define_error, DisplayError, TraceError};
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_relayer_runtime::types::error::TokioRuntimeError;
 
 pub type Error = Arc<BaseError>;
 

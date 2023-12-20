@@ -27,8 +27,8 @@ use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use ibc_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use ibc_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
+use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;

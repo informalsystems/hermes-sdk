@@ -16,7 +16,7 @@ description  = """
 
 [dependencies]
 hermes-relayer-components      = { workspace = true }
-ibc-relayer-runtime         = { workspace = true }
+hermes-relayer-runtime         = { workspace = true }
 cosmos-client-components    = { workspace = true }
 
 async-trait   = { workspace = true }

@@ -52,7 +52,7 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProv
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntimeType;
-use ibc_relayer_runtime::types::log::value::LogValue;
+use hermes_relayer_runtime::types::log::value::LogValue;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;

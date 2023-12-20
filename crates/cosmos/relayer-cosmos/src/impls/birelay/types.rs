@@ -3,8 +3,8 @@ use hermes_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
+use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;

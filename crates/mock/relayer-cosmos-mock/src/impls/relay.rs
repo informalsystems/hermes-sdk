@@ -18,8 +18,8 @@ use hermes_relayer_components::relay::traits::components::update_client_message_
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
-use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::components::relay::MockCosmosRelayComponents;
 use crate::contexts::chain::MockCosmosContext;

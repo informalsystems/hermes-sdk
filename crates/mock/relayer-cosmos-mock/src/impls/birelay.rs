@@ -3,8 +3,8 @@ use hermes_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
 use hermes_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
-use ibc_relayer_runtime::types::error::TokioRuntimeError;
-use ibc_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
 
 use crate::contexts::birelay::MockCosmosBiRelay;
 use crate::contexts::chain::MockCosmosContext;

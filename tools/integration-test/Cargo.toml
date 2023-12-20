@@ -18,7 +18,7 @@ ibc-relayer        = { workspace = true }
 hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
 cosmos-client-components        = { workspace = true }
-ibc-relayer-runtime         = { workspace = true }
+hermes-relayer-runtime         = { workspace = true }
 ibc-relayer-cosmos          = { workspace = true }
 ibc-relayer-solomachine     = { workspace = true }
 ibc-test-framework          = { path = "../test-framework" }
