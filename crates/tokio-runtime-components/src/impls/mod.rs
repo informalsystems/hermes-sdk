@@ -4,5 +4,6 @@ pub mod parallel_task;
 pub mod read_file;
 pub mod reserve_port;
 pub mod sleep;
+pub mod time;
 pub mod types;
 pub mod write_file;

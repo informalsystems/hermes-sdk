@@ -8,6 +8,7 @@ use ibc_relayer_components::runtime::traits::sleep::SleeperComponent;
 use ibc_relayer_components::runtime::traits::stream::{StreamMapperComponent, StreamTypeComponent};
 use ibc_relayer_components::runtime::traits::subscription::SubscriptionComponent;
 use ibc_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
+use ibc_relayer_components::runtime::traits::time::TimeComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -22,6 +23,7 @@ use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::read_file::TokioReadFileAsString;
 use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
+use crate::impls::time::ProvideStdTime;
 use crate::impls::types::child_process::ProvideTokioChildProcessType;
 use crate::impls::types::file_path::ProvideStdPathType;
 use crate::impls::write_file::TokioWriteStringToFile;
@@ -33,6 +35,7 @@ delegate_components! {
     #[mark_delegate(DelegatesToTokioParallelRuntimeComponents)]
     TokioParallelRuntimeComponents {
         SleeperComponent: TokioSleep,
+        TimeComponent: ProvideStdTime,
         MutexComponent: ProvideFuturesMutex,
         StreamTypeComponent: ProvideBoxedStreamType,
         StreamMapperComponent: BoxedStreamMapper,
