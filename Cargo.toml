@@ -13,7 +13,6 @@ members = [
     "crates/relayer-cosmos-mock",
     "crates/relayer-runtime",
     "crates/relayer-solomachine",
-    "crates/relayer-subscription",
     "crates/relayer-mock",
     "crates/test-components",
     "crates/test-suite",

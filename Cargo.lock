@@ -2031,18 +2031,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-relayer-subscription"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "futures-core",
- "futures-util",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
-]
-
-[[package]]
 name = "ibc-relayer-types"
 version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
