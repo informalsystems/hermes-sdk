@@ -1,13 +1,13 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::types::address::HasAddressType;
-use ibc_test_components::chain::traits::types::amount::HasAmountType;
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdder;
-use ibc_test_components::runtime::traits::exec_command::CanExecCommand;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 /**
    Implementation for adding genesis account to legacy Cosmos chains

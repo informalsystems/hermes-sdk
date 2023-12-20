@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::build::CanBuildChainIdFromString;
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::build::CanBuildChainIdFromString;
 use rand::prelude::*;
 
 use crate::bootstrap::traits::fields::random_id::HasRandomIdFlag;

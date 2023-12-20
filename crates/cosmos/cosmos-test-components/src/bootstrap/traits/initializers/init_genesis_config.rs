@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
-use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(GenesisConfigInitializerComponent, GenesisConfigInitializer<Bootstrap>)]
 #[async_trait]

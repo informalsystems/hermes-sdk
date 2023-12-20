@@ -1,5 +1,5 @@
+use hermes_tokio_runtime_components::traits::runtime::HasTokioRuntime;
 use tokio::runtime::Runtime;
-use tokio_runtime_components::traits::runtime::HasTokioRuntime;
 
 use crate::types::runtime::HermesRuntime;
 

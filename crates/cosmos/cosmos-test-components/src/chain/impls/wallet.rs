@@ -1,9 +1,9 @@
 use hermes_relayer_components::transaction::traits::types::HasSignerType;
-use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_test_components::chain::traits::types::address::HasAddressType;
-use ibc_test_components::chain::traits::types::wallet::{
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain::traits::types::wallet::{
     HasWalletType, WalletSignerProvider, WalletTypeProvider,
 };
+use ibc_relayer::keyring::Secp256k1KeyPair;
 
 use crate::chain::types::wallet::CosmosTestWallet;
 

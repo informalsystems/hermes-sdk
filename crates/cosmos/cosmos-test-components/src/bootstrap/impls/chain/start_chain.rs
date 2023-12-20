@@ -3,8 +3,8 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarter;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use ibc_test_components::runtime::traits::child_process::CanStartChildProcess;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct StartCosmosChain;
 

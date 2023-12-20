@@ -1,6 +1,6 @@
 use eyre::Error;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use std::sync::Arc;
 use tokio::runtime::Runtime;
 

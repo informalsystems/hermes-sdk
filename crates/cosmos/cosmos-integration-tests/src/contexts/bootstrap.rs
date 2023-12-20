@@ -20,8 +20,8 @@ use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use std::path::PathBuf;
 use tokio::process::Child;
 

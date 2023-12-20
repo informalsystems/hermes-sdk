@@ -8,15 +8,15 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
-use ibc_test_components::runtime::traits::read_file::CanReadFileAsString;
+use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use tokio::fs::OpenOptions;
 use tokio::io::copy;
 use tokio::io::AsyncRead;
 use tokio::process::{Child, Command};
 
-use ibc_test_components::runtime::traits::child_process::ChildProcessStarter;
-use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::child_process::ChildProcessStarter;
+use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::types::future_task::FutureTask;
 

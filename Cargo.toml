@@ -71,7 +71,7 @@ hermes-async-runtime-components            = { version = "0.1.0", path = "./crat
 hermes-tokio-runtime-components            = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime                 = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
 hermes-solomachine-relayer             = { version = "0.1.0", path = "./crates/solomachine/solomachine-relayer" }
-ibc-test-components                 = { version = "0.1.0", path = "./crates/test/test-components" }
+hermes-test-components                 = { version = "0.1.0", path = "./crates/test/test-components" }
 ibc-test-suite                      = { version = "0.1.0", path = "./crates/test/test-suite" }
 
 [profile.release]

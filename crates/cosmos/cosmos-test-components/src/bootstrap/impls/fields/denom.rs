@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::types::denom::{Denom, HasDenomType};
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::types::denom::{Denom, HasDenomType};
 
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 

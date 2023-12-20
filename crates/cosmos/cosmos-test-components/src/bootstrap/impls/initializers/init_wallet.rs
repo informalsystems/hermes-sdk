@@ -1,12 +1,12 @@
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::types::wallet::HasWalletType;
-use ibc_test_components::runtime::traits::exec_command::CanExecCommand;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
-use ibc_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use serde_json as json;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;

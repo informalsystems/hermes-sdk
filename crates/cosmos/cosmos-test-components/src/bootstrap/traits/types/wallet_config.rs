@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::types::amount::{Amount, HasAmountType};
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::types::amount::{Amount, HasAmountType};
 
 /**
    A wallet config is a template for generating fresh wallets for a chain.

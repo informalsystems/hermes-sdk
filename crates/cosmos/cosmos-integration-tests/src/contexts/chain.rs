@@ -6,11 +6,11 @@ use hermes_cosmos_test_components::chain::impls::chain_id::BuildCosmosChainIdFro
 use hermes_cosmos_test_components::chain::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain::impls::wallet::ProvideCosmosTestWallet;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
-use ibc_test_components::chain::traits::build::ChainIdFromStringBuilderComponent;
-use ibc_test_components::chain::traits::types::address::AddressTypeComponent;
-use ibc_test_components::chain::traits::types::amount::AmountTypeComponent;
-use ibc_test_components::chain::traits::types::denom::DenomTypeComponent;
-use ibc_test_components::chain::traits::types::wallet::{
+use hermes_test_components::chain::traits::build::ChainIdFromStringBuilderComponent;
+use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
+use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
+use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
+use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
 

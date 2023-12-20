@@ -3,8 +3,8 @@ use std::path::Path;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
-use ibc_test_components::runtime::traits::write_file::StringToFileWriter;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::write_file::StringToFileWriter;
 use tokio::fs::write;
 
 pub struct TokioWriteStringToFile;

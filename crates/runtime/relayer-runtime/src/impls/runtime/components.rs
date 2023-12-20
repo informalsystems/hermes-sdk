@@ -1,6 +1,6 @@
 use cgp_core::delegate_all;
 use cgp_core::prelude::*;
-use tokio_runtime_components::components::parallel::{
+use hermes_tokio_runtime_components::components::parallel::{
     IsTokioParallelRuntimeComponent, TokioParallelRuntimeComponents,
 };
 

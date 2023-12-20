@@ -3,8 +3,8 @@ use std::path::Path;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use ibc_test_components::runtime::traits::read_file::FileAsStringReader;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::read_file::FileAsStringReader;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use tokio::fs::read_to_string;
 
 pub struct TokioReadFileAsString;

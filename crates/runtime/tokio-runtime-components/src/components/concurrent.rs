@@ -16,13 +16,13 @@ use hermes_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
 use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
-use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
-use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
-use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
-use ibc_test_components::runtime::traits::reserve_port::TcpPortReserverComponent;
-use ibc_test_components::runtime::traits::types::child_process::ChildProcessTypeComponent;
-use ibc_test_components::runtime::traits::types::file_path::FilePathTypeComponent;
-use ibc_test_components::runtime::traits::write_file::StringToFileWriterComponent;
+use hermes_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
+use hermes_test_components::runtime::traits::exec_command::CommandExecutorComponent;
+use hermes_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
+use hermes_test_components::runtime::traits::reserve_port::TcpPortReserverComponent;
+use hermes_test_components::runtime::traits::types::child_process::ChildProcessTypeComponent;
+use hermes_test_components::runtime::traits::types::file_path::FilePathTypeComponent;
+use hermes_test_components::runtime::traits::write_file::StringToFileWriterComponent;
 
 use crate::components::parallel::TokioParallelRuntimeComponents;
 

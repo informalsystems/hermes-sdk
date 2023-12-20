@@ -1,11 +1,11 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use ibc_test_components::bootstrap::traits::chain::ChainBootstrapper;
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::types::wallet::HasWalletType;
-use ibc_test_components::runtime::traits::types::child_process::HasChildProcessType;
-use ibc_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::bootstrap::traits::chain::ChainBootstrapper;
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::chain::build_chain::CanBuildChainFromBootstrapParameters;
 use crate::bootstrap::traits::chain::start_chain::CanStartChainFullNode;

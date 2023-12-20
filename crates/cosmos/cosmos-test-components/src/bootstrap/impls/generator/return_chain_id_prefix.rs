@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::build::CanBuildChainIdFromString;
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::build::CanBuildChainIdFromString;
 
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;
 

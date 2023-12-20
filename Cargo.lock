@@ -1528,7 +1528,7 @@ dependencies = [
  "futures-util",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
- "ibc-test-components",
+ "hermes-test-components",
  "rand",
 ]
 
@@ -1544,11 +1544,11 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-test-components",
  "http",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
- "ibc-test-components",
  "itertools 0.11.0",
  "prost",
  "tendermint",
@@ -1571,9 +1571,9 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
- "ibc-test-components",
  "serde_json",
  "stable-eyre",
  "tokio",
@@ -1594,12 +1594,12 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-test-components",
  "http",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
  "ibc-telemetry",
- "ibc-test-components",
  "itertools 0.11.0",
  "moka 0.11.3",
  "opentelemetry 0.17.0",
@@ -1626,11 +1626,11 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-test-components",
  "http",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
- "ibc-test-components",
  "itertools 0.11.0",
  "prost",
  "rand",
@@ -1708,8 +1708,8 @@ dependencies = [
  "hermes-async-runtime-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-test-components",
  "hermes-tokio-runtime-components",
- "ibc-test-components",
  "tokio",
  "tracing",
 ]
@@ -1746,6 +1746,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-test-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+]
+
+[[package]]
 name = "hermes-tokio-runtime-components"
 version = "0.1.0"
 dependencies = [
@@ -1754,7 +1763,7 @@ dependencies = [
  "hermes-async-runtime-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
- "ibc-test-components",
+ "hermes-test-components",
  "rand",
  "tokio",
  "tokio-stream",
@@ -2097,15 +2106,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-test-components"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
-]
-
-[[package]]
 name = "ibc-test-framework"
 version = "0.1.0"
 dependencies = [
@@ -2147,7 +2147,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "hermes-relayer-components",
- "ibc-test-components",
+ "hermes-test-components",
 ]
 
 [[package]]

@@ -1,6 +1,6 @@
 use cgp_core::Async;
-use ibc_test_components::bootstrap::traits::types::chain::HasChainType;
-use ibc_test_components::chain::traits::types::amount::HasAmountType;
+use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
 
 use crate::bootstrap::traits::types::wallet_config::{
     HasWalletConfigType, ProvideWalletConfigType, WalletConfigFieldsGetter,

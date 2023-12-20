@@ -1,10 +1,10 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
-use ibc_test_components::runtime::traits::types::child_process::{
+use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
 };
-use ibc_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(ChainFullNodeStarterComponent, ChainFullNodeStarter<Bootstrap>)]
 #[async_trait]
