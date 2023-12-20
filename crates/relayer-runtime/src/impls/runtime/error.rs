@@ -1,5 +1,5 @@
 use alloc::sync::Arc;
-use async_runtime_components::channel::impls::channel::ChannelClosedError;
+use async_runtime_components::channel::types::ChannelClosedError;
 use cgp_core::{ErrorRaiser, ProvideErrorType};
 use core::str::Utf8Error;
 use std::io::Error as IoError;

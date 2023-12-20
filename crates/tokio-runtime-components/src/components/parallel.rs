@@ -1,4 +1,4 @@
-use async_runtime_components::channel::impls::channel::ProvideUnboundedChannelType;
+use async_runtime_components::channel::impls::ProvideUnboundedChannelType;
 use async_runtime_components::channel_once::impls::ProvideOneShotChannelType;
 use async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;
 use async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;

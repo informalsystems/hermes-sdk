@@ -7,7 +7,7 @@ use ibc_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceCreator, ChannelOnceUser, ProvideChannelOnceType,
 };
 
-use crate::channel::impls::channel::ChannelClosedError;
+use crate::channel::types::ChannelClosedError;
 use crate::channel_once::traits::HasOneShotChannelType;
 use crate::channel_once::traits::OneShotChannelTypeProvider;
 

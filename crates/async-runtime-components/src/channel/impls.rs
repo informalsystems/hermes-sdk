@@ -11,12 +11,11 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
     ChannelCreator, ChannelUser, ProvideChannelType,
 };
 
-use crate::channel::traits::channel::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
+use crate::channel::traits::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
+use crate::channel::types::ChannelClosedError;
 use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct ProvideUnboundedChannelType;
-
-pub struct ChannelClosedError;
 
 impl<Runtime> ProvideChannelType<Runtime> for ProvideUnboundedChannelType
 where
