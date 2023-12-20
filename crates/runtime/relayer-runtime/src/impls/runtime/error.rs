@@ -8,13 +8,13 @@ use tokio_runtime_components::impls::exec_command::ExecCommandFailure;
 
 use crate::impls::runtime::components::RelayerRuntimeComponents;
 use crate::types::error::TokioRuntimeError;
-use crate::types::runtime::TokioRuntimeContext;
+use crate::types::runtime::HermesRuntime;
 
-impl ProvideErrorType<TokioRuntimeContext> for RelayerRuntimeComponents {
+impl ProvideErrorType<HermesRuntime> for RelayerRuntimeComponents {
     type Error = TokioRuntimeError;
 }
 
-impl ErrorRaiser<TokioRuntimeContext, PrematureChildProcessExitError> for RelayerRuntimeComponents {
+impl ErrorRaiser<HermesRuntime, PrematureChildProcessExitError> for RelayerRuntimeComponents {
     fn raise_error(e: PrematureChildProcessExitError) -> TokioRuntimeError {
         TokioRuntimeError::PrematureChildProcessExit {
             exit_status: e.exit_status,
@@ -23,25 +23,25 @@ impl ErrorRaiser<TokioRuntimeContext, PrematureChildProcessExitError> for Relaye
     }
 }
 
-impl ErrorRaiser<TokioRuntimeContext, IoError> for RelayerRuntimeComponents {
+impl ErrorRaiser<HermesRuntime, IoError> for RelayerRuntimeComponents {
     fn raise_error(e: IoError) -> TokioRuntimeError {
         TokioRuntimeError::Io(Arc::new(e))
     }
 }
 
-impl ErrorRaiser<TokioRuntimeContext, Utf8Error> for RelayerRuntimeComponents {
+impl ErrorRaiser<HermesRuntime, Utf8Error> for RelayerRuntimeComponents {
     fn raise_error(e: Utf8Error) -> TokioRuntimeError {
         TokioRuntimeError::Utf8(e)
     }
 }
 
-impl ErrorRaiser<TokioRuntimeContext, ChannelClosedError> for RelayerRuntimeComponents {
+impl ErrorRaiser<HermesRuntime, ChannelClosedError> for RelayerRuntimeComponents {
     fn raise_error(_e: ChannelClosedError) -> TokioRuntimeError {
         TokioRuntimeError::ChannelClosed
     }
 }
 
-impl ErrorRaiser<TokioRuntimeContext, ExecCommandFailure> for RelayerRuntimeComponents {
+impl ErrorRaiser<HermesRuntime, ExecCommandFailure> for RelayerRuntimeComponents {
     fn raise_error(e: ExecCommandFailure) -> TokioRuntimeError {
         TokioRuntimeError::ExecCommandFailure {
             command: e.command,

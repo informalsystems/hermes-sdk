@@ -17,7 +17,7 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeou
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::impls::chain::component::SolomachineChainComponents;
@@ -64,7 +64,7 @@ impl<Chain> ProvideRuntime<SolomachineChain<Chain>> for SolomachineChainComponen
 where
     Chain: Solomachine,
 {
-    fn runtime(chain: &SolomachineChain<Chain>) -> &TokioRuntimeContext {
+    fn runtime(chain: &SolomachineChain<Chain>) -> &HermesRuntime {
         chain.chain.runtime()
     }
 }

@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use basecoin_app::modules::ibc::IbcContext;
 use basecoin_store::impls::RevertibleStore;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::core::events::IbcEvent;
 use ibc::core::ValidationContext;
 use ibc::proto::Any;
@@ -15,18 +15,18 @@ use crate::types::error::Error;
 #[derive(Clone)]
 pub struct MockCosmosContext<Endpoint: BasecoinEndpoint> {
     /// Chain runtime
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     /// Chain handle
     pub querier: Arc<Endpoint>,
 }
 
 impl<Endpoint: BasecoinEndpoint> MockCosmosContext<Endpoint> {
     /// Constructs a new mock cosmos chain instance.
-    pub fn new(runtime: TokioRuntimeContext, querier: Arc<Endpoint>) -> Self {
+    pub fn new(runtime: HermesRuntime, querier: Arc<Endpoint>) -> Self {
         Self { runtime, querier }
     }
 
-    pub fn runtime(&self) -> &TokioRuntimeContext {
+    pub fn runtime(&self) -> &HermesRuntime {
         &self.runtime
     }
 

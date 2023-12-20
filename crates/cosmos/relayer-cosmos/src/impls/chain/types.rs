@@ -34,7 +34,7 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeou
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::client::ClientSettings;
 
 use crate::contexts::chain::CosmosChain;
@@ -45,7 +45,7 @@ impl<Chain> ProvideRuntime<CosmosChain<Chain>> for CosmosChainComponents
 where
     Chain: Async,
 {
-    fn runtime(chain: &CosmosChain<Chain>) -> &TokioRuntimeContext {
+    fn runtime(chain: &CosmosChain<Chain>) -> &HermesRuntime {
         &chain.runtime
     }
 }

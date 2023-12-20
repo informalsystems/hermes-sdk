@@ -6,7 +6,7 @@ use cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
@@ -30,7 +30,7 @@ pub trait Solomachine: Async {
 
     fn get_telemetry(&self) -> &CosmosTelemetry;
 
-    fn runtime(&self) -> &TokioRuntimeContext;
+    fn runtime(&self) -> &HermesRuntime;
 
     fn runtime_error(e: TokioRuntimeError) -> Self::Error;
 

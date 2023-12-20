@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use std::collections::HashSet;
 
 use futures::lock::Mutex;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
@@ -13,7 +13,7 @@ use crate::types::batch::CosmosBatchSender;
 
 #[derive(Clone)]
 pub struct CosmosRelay<SrcChain, DstChain> {
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub src_chain: CosmosChain<SrcChain>,
     pub dst_chain: CosmosChain<DstChain>,
     pub src_client_id: ClientId,
@@ -30,7 +30,7 @@ where
     DstChain: ChainHandle,
 {
     pub fn new(
-        runtime: TokioRuntimeContext,
+        runtime: HermesRuntime,
         src_chain: CosmosChain<SrcChain>,
         dst_chain: CosmosChain<DstChain>,
         src_client_id: ClientId,

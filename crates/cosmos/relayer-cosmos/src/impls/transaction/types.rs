@@ -4,7 +4,7 @@ use hermes_relayer_components::transaction::traits::nonce::guard::HasNonceGuard;
 use hermes_relayer_components::transaction::traits::types::{
     HasNonceType, HasSignerType, HasTxTypes,
 };
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
@@ -17,7 +17,7 @@ use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;
 
 impl ProvideRuntime<CosmosTxContext> for CosmosTxComponents {
-    fn runtime(chain: &CosmosTxContext) -> &TokioRuntimeContext {
+    fn runtime(chain: &CosmosTxContext) -> &HermesRuntime {
         &chain.runtime
     }
 }

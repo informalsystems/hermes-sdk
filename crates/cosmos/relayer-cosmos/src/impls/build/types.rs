@@ -1,6 +1,6 @@
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::handle::BaseChainHandle;
 
 use crate::contexts::birelay::CosmosBiRelay;
@@ -12,7 +12,7 @@ impl HasBiRelayType for CosmosBuilder {
 }
 
 impl ProvideRuntime<CosmosBuilder> for CosmosBuildComponents {
-    fn runtime(build: &CosmosBuilder) -> &TokioRuntimeContext {
+    fn runtime(build: &CosmosBuilder) -> &HermesRuntime {
         &build.runtime
     }
 }

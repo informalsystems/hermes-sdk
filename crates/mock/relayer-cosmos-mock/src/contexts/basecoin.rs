@@ -8,7 +8,7 @@ use basecoin_app::modules::context::{prefix, Identifiable};
 use basecoin_app::modules::ibc::Ibc;
 use basecoin_app::{BaseCoinApp, Builder};
 use basecoin_store::context::ProvableStore;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::core::ics24_host::identifier::ChainId;
 use ibc::Height;
 use tendermint::{AppHash, Time};
@@ -38,7 +38,7 @@ where
     S: ProvableStore + Debug,
 {
     /// Chain runtime
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     /// Chain identifier
     pub chain_id: ChainId,
     /// Chain validators
@@ -54,7 +54,7 @@ where
 impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
     /// Constructs a new mock cosmos chain instance.
     pub fn new(
-        runtime: TokioRuntimeContext,
+        runtime: HermesRuntime,
         chain_id: ChainId,
         validators: Vec<Validator>,
         store: S,
@@ -106,7 +106,7 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
         }
     }
 
-    pub fn runtime(&self) -> &TokioRuntimeContext {
+    pub fn runtime(&self) -> &HermesRuntime {
         &self.runtime
     }
 

@@ -4,7 +4,7 @@ use hermes_relayer_components::birelay::traits::two_way::{
 };
 use hermes_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
 use crate::contexts::birelay::MockCosmosBiRelay;
 use crate::contexts::chain::MockCosmosContext;
@@ -35,7 +35,7 @@ where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    type Runtime = TokioRuntimeContext;
+    type Runtime = HermesRuntime;
 }
 
 impl<SrcChain, DstChain> HasRuntime for MockCosmosBiRelay<SrcChain, DstChain>

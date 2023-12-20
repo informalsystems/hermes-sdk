@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
 use super::relay::MockCosmosRelay;
 use crate::traits::endpoint::BasecoinEndpoint;
@@ -8,14 +8,14 @@ use crate::traits::endpoint::BasecoinEndpoint;
 /// Bi-directional relayer for relaying between
 /// [`crates::relayer-cosmos-mock::contexts::MockCosmosRelay`]s
 pub struct MockCosmosBiRelay<SrcChain: BasecoinEndpoint, DstChain: BasecoinEndpoint> {
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub relay_a_to_b: Arc<MockCosmosRelay<SrcChain, DstChain>>,
     pub relay_b_to_a: Arc<MockCosmosRelay<DstChain, SrcChain>>,
 }
 
 impl<SrcChain: BasecoinEndpoint, DstChain: BasecoinEndpoint> MockCosmosBiRelay<SrcChain, DstChain> {
     pub fn new(
-        runtime: TokioRuntimeContext,
+        runtime: HermesRuntime,
         relay_a_to_b: Arc<MockCosmosRelay<SrcChain, DstChain>>,
         relay_b_to_a: Arc<MockCosmosRelay<DstChain, SrcChain>>,
     ) -> Self {

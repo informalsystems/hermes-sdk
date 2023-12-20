@@ -19,7 +19,7 @@ use cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use eyre::Error;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use std::path::PathBuf;
@@ -40,7 +40,7 @@ use cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfi
 use crate::contexts::chain::CosmosTestChain;
 
 pub struct CosmosStdBootstrapContext {
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
@@ -104,7 +104,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
 }
 
 impl ProvideRuntime<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn runtime(bootstrap: &CosmosStdBootstrapContext) -> &TokioRuntimeContext {
+    fn runtime(bootstrap: &CosmosStdBootstrapContext) -> &HermesRuntime {
         &bootstrap.runtime
     }
 }

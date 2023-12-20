@@ -3,11 +3,11 @@ use alloc::sync::Arc;
 use tokio::runtime::Runtime;
 
 #[derive(Clone)]
-pub struct TokioRuntimeContext {
+pub struct HermesRuntime {
     pub runtime: Arc<Runtime>,
 }
 
-impl TokioRuntimeContext {
+impl HermesRuntime {
     pub fn new(runtime: Arc<Runtime>) -> Self {
         Self { runtime }
     }

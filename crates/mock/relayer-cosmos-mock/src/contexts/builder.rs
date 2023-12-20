@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use std::fmt::Debug;
 
 use basecoin_store::context::ProvableStore;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::core::ics24_host::identifier::ChainId;
 use tendermint_testgen::Validator;
 use tokio::runtime::Runtime as TokioRuntime;
@@ -13,13 +13,13 @@ use crate::contexts::relay::MockCosmosRelay;
 use crate::traits::endpoint::BasecoinEndpoint;
 
 pub struct MockCosmosBuilder {
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
 }
 
 impl MockCosmosBuilder {
     pub fn new(runtime: TokioRuntime) -> Self {
         Self {
-            runtime: TokioRuntimeContext::new(Arc::new(runtime)),
+            runtime: HermesRuntime::new(Arc::new(runtime)),
         }
     }
 

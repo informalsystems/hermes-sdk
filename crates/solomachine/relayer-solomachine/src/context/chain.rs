@@ -8,7 +8,7 @@ use cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_cosmos::types::telemetry::CosmosTelemetry;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
@@ -37,7 +37,7 @@ pub struct MockSolomachine {
     secret_key: SecretKey,
     client_states: Arc<Mutex<HashMap<ClientId, TendermintClientState>>>,
     client_consensus_states: Arc<Mutex<HashMap<ClientId, TendermintConsensusState>>>,
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub telemetry: CosmosTelemetry,
     pub connections: Arc<Mutex<HashMap<ConnectionId, ConnectionEnd>>>,
 }
@@ -46,7 +46,7 @@ impl MockSolomachine {
     pub fn new(
         chain_id: &str,
         commitment_prefix: String,
-        runtime: TokioRuntimeContext,
+        runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
     ) -> Self {
         let secp = Secp256k1::new();
@@ -78,7 +78,7 @@ impl Solomachine for MockSolomachine {
         &self.telemetry
     }
 
-    fn runtime(&self) -> &TokioRuntimeContext {
+    fn runtime(&self) -> &HermesRuntime {
         &self.runtime
     }
 

@@ -19,7 +19,7 @@ use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
 use crate::components::relay::MockCosmosRelayComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -58,7 +58,7 @@ where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    fn runtime(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &TokioRuntimeContext {
+    fn runtime(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &HermesRuntime {
         &relay.runtime
     }
 }

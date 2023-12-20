@@ -3,7 +3,7 @@ use hermes_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::handle::ChainHandle;
 
 use crate::contexts::birelay::CosmosBiRelay;
@@ -50,7 +50,7 @@ where
     ChainA: Async,
     ChainB: Async,
 {
-    fn runtime(birelay: &CosmosBiRelay<ChainA, ChainB>) -> &TokioRuntimeContext {
+    fn runtime(birelay: &CosmosBiRelay<ChainA, ChainB>) -> &HermesRuntime {
         &birelay.runtime
     }
 }

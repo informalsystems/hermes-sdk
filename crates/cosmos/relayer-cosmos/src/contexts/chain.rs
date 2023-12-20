@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 
 use async_runtime_components::subscription::impls::empty::EmptySubscription;
 use async_runtime_components::subscription::traits::subscription::Subscription;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::EventSourceMode;
@@ -23,7 +23,7 @@ pub struct CosmosChain<Handle> {
     pub handle: Handle,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub telemetry: CosmosTelemetry,
     pub subscription: Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>,
     pub tx_context: Arc<CosmosTxContext>,
@@ -37,7 +37,7 @@ impl<Handle: ChainHandle> CosmosChain<Handle> {
         compat_mode: CompatMode,
         key_entry: Secp256k1KeyPair,
         event_source_mode: EventSourceMode,
-        runtime: TokioRuntimeContext,
+        runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
     ) -> Self {
         let chain_version = tx_config.chain_id.version();

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::clients::ics07_tendermint::client_type;
 use ibc::core::ics24_host::identifier::ClientId;
 use ibc::core::ValidationContext;
@@ -20,7 +20,7 @@ where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub src_chain: Arc<MockCosmosContext<SrcChain>>,
     pub dst_chain: Arc<MockCosmosContext<DstChain>>,
     pub src_client_id: ClientId,
@@ -33,7 +33,7 @@ where
     DstChain: BasecoinEndpoint,
 {
     pub fn new(
-        runtime: TokioRuntimeContext,
+        runtime: HermesRuntime,
         src_chain: Arc<MockCosmosContext<SrcChain>>,
         dst_chain: Arc<MockCosmosContext<DstChain>>,
     ) -> Result<MockCosmosRelay<SrcChain, DstChain>, Error> {
@@ -54,7 +54,7 @@ where
         })
     }
 
-    pub fn runtime(&self) -> &TokioRuntimeContext {
+    pub fn runtime(&self) -> &HermesRuntime {
         &self.runtime
     }
 

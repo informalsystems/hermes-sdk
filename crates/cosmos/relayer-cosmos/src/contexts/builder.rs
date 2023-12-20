@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use eyre::eyre;
 use futures::lock::Mutex;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
@@ -28,7 +28,7 @@ pub struct CosmosBuilder {
     pub config: Config,
     pub packet_filter: PacketFilter,
     pub telemetry: CosmosTelemetry,
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub batch_config: BatchConfig,
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
     pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain<BaseChainHandle>>>>,
@@ -53,7 +53,7 @@ impl CosmosBuilder {
         batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
     ) -> Self {
-        let runtime = TokioRuntimeContext::new(runtime);
+        let runtime = HermesRuntime::new(runtime);
 
         Self {
             config,

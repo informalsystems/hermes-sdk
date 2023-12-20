@@ -4,11 +4,11 @@ use tokio_runtime_components::components::parallel::{
     IsTokioParallelRuntimeComponent, TokioParallelRuntimeComponents,
 };
 
-use crate::types::runtime::TokioRuntimeContext;
+use crate::types::runtime::HermesRuntime;
 
 pub struct RelayerRuntimeComponents;
 
-impl HasComponents for TokioRuntimeContext {
+impl HasComponents for HermesRuntime {
     type Components = RelayerRuntimeComponents;
 }
 

@@ -2,7 +2,7 @@ use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_cosmos::contexts::chain::CosmosChain;
 use ibc_relayer_cosmos::types::error::Error as CosmosError;
@@ -53,7 +53,7 @@ impl<Chain> ProvideRuntime<SolomachineRelay<Chain>> for SolomachineRelayComponen
 where
     Chain: Async,
 {
-    fn runtime(relay: &SolomachineRelay<Chain>) -> &TokioRuntimeContext {
+    fn runtime(relay: &SolomachineRelay<Chain>) -> &HermesRuntime {
         &relay.runtime
     }
 }

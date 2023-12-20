@@ -72,7 +72,7 @@ use hermes_relayer_components::chain::traits::types::update_client::HasUpdateCli
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::log::value::LogValue;
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
 use crate::components::chain::MockCosmosChainComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -94,7 +94,7 @@ impl<Chain: BasecoinEndpoint> ProvideErrorType<MockCosmosContext<Chain>>
 impl<Chain: BasecoinEndpoint> ProvideRuntime<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
-    fn runtime(chain: &MockCosmosContext<Chain>) -> &TokioRuntimeContext {
+    fn runtime(chain: &MockCosmosContext<Chain>) -> &HermesRuntime {
         &chain.runtime
     }
 }

@@ -1,7 +1,7 @@
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::PacketFilter;
@@ -43,7 +43,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
         let chain_id_a = chains.chain_id_a().cloned_value();
 
         let solomachine_runtime =
-            TokioRuntimeContext::new(chains.node_b.value().chain_driver.runtime.clone());
+            HermesRuntime::new(chains.node_b.value().chain_driver.runtime.clone());
 
         let solomachine_chain = solomachine_chain_context(solomachine_runtime, Default::default());
 
@@ -108,7 +108,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
 }
 
 pub fn solomachine_chain_context(
-    runtime: TokioRuntimeContext,
+    runtime: HermesRuntime,
     telemetry: CosmosTelemetry,
 ) -> SolomachineChain<MockSolomachine> {
     let commitment_prefix = "solomachine".to_owned();

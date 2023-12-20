@@ -1,4 +1,4 @@
-use hermes_relayer_runtime::types::runtime::TokioRuntimeContext;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_cosmos::contexts::chain::CosmosChain;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -6,7 +6,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use crate::types::chain::SolomachineChain;
 
 pub struct SolomachineRelay<Chain> {
-    pub runtime: TokioRuntimeContext,
+    pub runtime: HermesRuntime,
     pub src_chain: SolomachineChain<Chain>,
     pub dst_chain: CosmosChain<BaseChainHandle>,
     pub src_client_id: ClientId,
@@ -15,7 +15,7 @@ pub struct SolomachineRelay<Chain> {
 
 impl<Chain> SolomachineRelay<Chain> {
     pub fn new(
-        runtime: TokioRuntimeContext,
+        runtime: HermesRuntime,
         src_chain: SolomachineChain<Chain>,
         dst_chain: CosmosChain<BaseChainHandle>,
         src_client_id: ClientId,
