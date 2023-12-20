@@ -18,6 +18,7 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 use ibc_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
+use ibc_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -32,6 +33,7 @@ use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::read_file::TokioReadFileAsString;
 use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
+use crate::impls::spawn::TokioSpawnTask;
 use crate::impls::time::ProvideStdTime;
 use crate::impls::types::child_process::ProvideTokioChildProcessType;
 use crate::impls::types::file_path::ProvideStdPathType;
@@ -50,6 +52,7 @@ delegate_components! {
         StreamMapperComponent: BoxedStreamMapper,
         SubscriptionComponent: ProvideBoxedSubscription,
         ConcurrentTaskRunnerComponent: TokioRunParallelTasks,
+        TaskSpawnerComponent: TokioSpawnTask,
         [
             ChannelTypeComponent,
             ChannelCreatorComponent,

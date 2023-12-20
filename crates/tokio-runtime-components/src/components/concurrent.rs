@@ -13,6 +13,7 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
 use ibc_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
+use ibc_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -37,6 +38,7 @@ delegate_components! {
             StreamTypeComponent,
             StreamMapperComponent,
             SubscriptionComponent,
+            TaskSpawnerComponent,
             ChannelTypeComponent,
             ChannelCreatorComponent,
             ChannelUserComponent,
