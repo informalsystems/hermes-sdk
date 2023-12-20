@@ -1614,31 +1614,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-cosmos-relayer-mock"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "basecoin-app",
- "basecoin-store",
- "cgp-core",
- "hermes-cosmos-client-components",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-relayer-runtime",
- "ibc",
- "ibc-proto",
- "ibc-relayer-types",
- "primitive-types",
- "prost",
- "serde_json",
- "tendermint",
- "tendermint-testgen",
- "tokio",
- "tower",
- "tracing",
-]
-
-[[package]]
 name = "hermes-cosmos-test-components"
 version = "0.1.0"
 dependencies = [
@@ -1665,6 +1640,46 @@ dependencies = [
  "tokio",
  "toml 0.8.8",
  "tonic",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-mock-cosmos-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "basecoin-app",
+ "basecoin-store",
+ "cgp-core",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "ibc",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "primitive-types",
+ "prost",
+ "serde_json",
+ "tendermint",
+ "tendermint-testgen",
+ "tokio",
+ "tower",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-mock-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "tokio",
  "tracing",
 ]
 
@@ -1984,21 +1999,6 @@ dependencies = [
  "tonic",
  "tracing",
  "uuid 1.4.1",
-]
-
-[[package]]
-name = "ibc-relayer-mock"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "eyre",
- "flex-error",
- "hermes-cosmos-client-components",
- "hermes-relayer-components",
- "hermes-relayer-runtime",
- "tokio",
- "tracing",
 ]
 
 [[package]]
