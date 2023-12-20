@@ -3,6 +3,7 @@
 
 extern crate alloc;
 
+pub mod channel;
 pub mod mutex;
 pub mod stream;
 pub mod subscription;

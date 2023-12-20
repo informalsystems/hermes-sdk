@@ -1,15 +1,18 @@
-use async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
+use alloc::boxed::Box;
+use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use futures_channel::mpsc;
+use futures_util::lock::Mutex;
+use futures_util::stream::StreamExt;
 use ibc_relayer_components_extra::runtime::traits::channel::ReceiverStreamer;
 use ibc_relayer_components_extra::runtime::traits::channel::SenderCloner;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     ChannelCreator, ChannelUser, ProvideChannelType,
 };
-use tokio::sync::mpsc;
-use tokio_stream::wrappers::UnboundedReceiverStream;
 
-use crate::traits::channel::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
+use crate::channel::traits::channel::{HasUnboundedChannelType, UnboundedChannelTypeProvider};
+use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct ProvideUnboundedChannelType;
 
@@ -19,7 +22,7 @@ impl<Runtime> ProvideChannelType<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: Async,
 {
-    type Sender<T> = mpsc::UnboundedSender<T>
+    type Sender<T> = Arc<Mutex<mpsc::UnboundedSender<T>>>
     where
         T: Async;
 
@@ -32,7 +35,7 @@ impl<Runtime> UnboundedChannelTypeProvider<Runtime> for ProvideUnboundedChannelT
 where
     Runtime: Async,
 {
-    fn from_unbounded_sender<T>(sender: mpsc::UnboundedSender<T>) -> Self::Sender<T>
+    fn from_unbounded_sender<T>(sender: Arc<Mutex<mpsc::UnboundedSender<T>>>) -> Self::Sender<T>
     where
         T: Async,
     {
@@ -52,7 +55,7 @@ where
     {
         receiver
     }
-    fn to_unbounded_sender_ref<T>(sender: &Self::Sender<T>) -> &mpsc::UnboundedSender<T>
+    fn to_unbounded_sender_ref<T>(sender: &Self::Sender<T>) -> &Arc<Mutex<mpsc::UnboundedSender<T>>>
     where
         T: Async,
     {
@@ -77,10 +80,10 @@ where
     where
         T: Async,
     {
-        let (sender, receiver) = mpsc::unbounded_channel();
+        let (sender, receiver) = mpsc::unbounded();
 
         (
-            Runtime::from_unbounded_sender(sender),
+            Runtime::from_unbounded_sender(Arc::new(Mutex::new(sender))),
             Runtime::from_unbounded_receiver(receiver),
         )
     }
@@ -96,7 +99,9 @@ where
         T: Async,
     {
         Runtime::to_unbounded_sender_ref(sender)
-            .send(value)
+            .lock()
+            .await
+            .unbounded_send(value)
             .map_err(|_| Runtime::raise_error(ChannelClosedError))
     }
 
@@ -105,7 +110,7 @@ where
         T: Async,
     {
         Runtime::to_unbounded_receiver_ref(receiver)
-            .recv()
+            .next()
             .await
             .ok_or(Runtime::raise_error(ChannelClosedError))
     }
@@ -114,13 +119,9 @@ where
     where
         T: Async,
     {
-        match Runtime::to_unbounded_receiver_ref(receiver).try_recv() {
-            Ok(batch) => Ok(Some(batch)),
-            Err(mpsc::error::TryRecvError::Empty) => Ok(None),
-            Err(mpsc::error::TryRecvError::Disconnected) => {
-                Err(Runtime::raise_error(ChannelClosedError))
-            }
-        }
+        Runtime::to_unbounded_receiver_ref(receiver)
+            .try_next()
+            .map_err(|_| Runtime::raise_error(ChannelClosedError))
     }
 }
 
@@ -132,9 +133,7 @@ where
     where
         T: Async,
     {
-        Runtime::from_boxed_stream(Box::pin(UnboundedReceiverStream::new(
-            Runtime::to_unbounded_receiver(receiver),
-        )))
+        Runtime::from_boxed_stream(Box::pin(Runtime::to_unbounded_receiver(receiver)))
     }
 }
 

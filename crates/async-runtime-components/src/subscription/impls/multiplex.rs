@@ -102,9 +102,18 @@ where
                             let mut m_senders = Runtime::acquire_mutex(task_senders).await;
 
                             if let Some(senders) = m_senders.deref_mut() {
-                                // Remove senders where the receiver side has been dropped
-                                senders
-                                    .retain(|sender| Runtime::send(sender, mapped.clone()).is_ok());
+                                let mut new_senders = Vec::new();
+
+                                for sender in senders.drain(..) {
+                                    let send_result = Runtime::send(&sender, mapped.clone()).await;
+                                    // Remove senders where the receiver side has been dropped,
+                                    // i.e. keep the ones where sending is successful
+                                    if send_result.is_ok() {
+                                        new_senders.push(sender);
+                                    }
+                                }
+
+                                *senders = new_senders;
                             }
                         })
                         .await;

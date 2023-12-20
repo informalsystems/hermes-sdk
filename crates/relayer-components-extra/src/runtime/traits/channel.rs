@@ -122,7 +122,7 @@ pub trait CanUseChannels: HasChannelTypes + HasErrorType {
        that any operation after `receive()` is called on the receiving end
        should _never_ execute within `send()`.
     */
-    fn send<T>(sender: &Self::Sender<T>, value: T) -> Result<(), Self::Error>
+    async fn send<T>(sender: &Self::Sender<T>, value: T) -> Result<(), Self::Error>
     where
         T: Async;
 
