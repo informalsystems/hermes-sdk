@@ -1,9 +1,9 @@
 use alloc::sync::Arc;
 
-use cosmos_client_components::traits::message::CosmosMessage;
 use futures::channel::mpsc::{UnboundedReceiver, UnboundedSender};
 use futures::channel::oneshot::Sender as SenderOnce;
 use futures::lock::Mutex;
+use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::types::error::Error;

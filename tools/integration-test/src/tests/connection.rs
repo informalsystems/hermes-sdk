@@ -1,4 +1,4 @@
-use cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_relayer::types::error::Error as CosmosError;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::impls::bootstrap::birelay::CanBootstrapBiRelay;

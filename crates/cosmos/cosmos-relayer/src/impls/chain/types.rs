@@ -1,20 +1,20 @@
 use cgp_core::Async;
-use cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use cosmos_client_components::types::connection::CosmosInitConnectionOptions;
-use cosmos_client_components::types::payloads::channel::{
+use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-use cosmos_client_components::types::payloads::client::{
+use hermes_cosmos_client_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use cosmos_client_components::types::payloads::connection::{
+use hermes_cosmos_client_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };
-use cosmos_client_components::types::payloads::packet::{
+use hermes_cosmos_client_components::types::payloads::packet::{
     CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
 };
-use cosmos_client_components::types::tendermint::{
+use hermes_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_relayer_components::chain::traits::types::channel::{

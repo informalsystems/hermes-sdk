@@ -2,7 +2,7 @@ use core::fmt::Debug;
 
 use async_trait::async_trait;
 use cgp_core::Async;
-use cosmos_client_components::types::tendermint::{
+use hermes_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;

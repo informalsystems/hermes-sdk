@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use cosmos_client_components::types::payloads::connection::{
+use hermes_cosmos_client_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };

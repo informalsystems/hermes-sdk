@@ -1,4 +1,4 @@
-use cosmos_client_components::methods::encode::encode_protobuf;
+use hermes_cosmos_client_components::methods::encode::encode_protobuf;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::core::connection::v1::ConnectionEnd as ProtoConnectionEnd;

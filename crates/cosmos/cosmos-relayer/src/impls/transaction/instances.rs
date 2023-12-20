@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 
 use async_trait::async_trait;
-use cosmos_client_components::traits::message::CosmosMessage;
+use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };

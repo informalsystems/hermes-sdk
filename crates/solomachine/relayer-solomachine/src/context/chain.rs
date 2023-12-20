@@ -4,7 +4,7 @@ use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use async_trait::async_trait;
-use cosmos_client_components::types::tendermint::{
+use hermes_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;

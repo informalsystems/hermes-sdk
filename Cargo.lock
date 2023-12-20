@@ -736,40 +736,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
 
 [[package]]
-name = "cosmos-client-components"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "eyre",
- "flex-error",
- "futures",
- "hermes-relayer-components",
- "hermes-relayer-components-extra",
- "hermes-relayer-runtime",
- "http",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-types",
- "ibc-test-components",
- "itertools 0.11.0",
- "prost",
- "tendermint",
- "tendermint-rpc",
- "tokio",
- "tonic",
- "tracing",
-]
-
-[[package]]
 name = "cosmos-integration-tests"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cgp-error-eyre",
- "cosmos-client-components",
  "cosmos-test-components",
  "eyre",
+ "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1611,16 +1585,42 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
+name = "hermes-cosmos-client-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-test-components",
+ "itertools 0.11.0",
+ "prost",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
 name = "hermes-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
  "async-runtime-components",
  "async-trait",
  "cgp-core",
- "cosmos-client-components",
  "eyre",
  "flex-error",
  "futures",
+ "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1651,7 +1651,7 @@ dependencies = [
  "basecoin-app",
  "basecoin-store",
  "cgp-core",
- "cosmos-client-components",
+ "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1878,7 +1878,7 @@ name = "ibc-integration-test"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
- "cosmos-client-components",
+ "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1992,9 +1992,9 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "cgp-core",
- "cosmos-client-components",
  "eyre",
  "flex-error",
+ "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "tokio",
@@ -2008,11 +2008,11 @@ dependencies = [
  "async-trait",
  "bytes",
  "cgp-core",
- "cosmos-client-components",
  "crypto-hash",
  "eyre",
  "flex-error",
  "futures",
+ "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",

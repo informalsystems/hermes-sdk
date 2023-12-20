@@ -18,7 +18,7 @@ ibc-telemetry       = { workspace = true }
 cgp-core            = { workspace = true }
 tendermint          = { workspace = true, features = ["secp256k1"] }
 hermes-cosmos-relayer  = { workspace = true }
-cosmos-client-components        = { workspace = true }
+hermes-cosmos-client-components        = { workspace = true }
 hermes-relayer-runtime             = { workspace = true }
 hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }

@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cosmos_client_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::Height;
 

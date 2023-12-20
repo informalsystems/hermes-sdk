@@ -26,7 +26,7 @@ hermes-relayer-components          = { workspace = true }
 hermes-relayer-components-extra    = { workspace = true }
 ibc-test-components             = { workspace = true }
 async-runtime-components        = { workspace = true }
-cosmos-client-components        = { workspace = true }
+hermes-cosmos-client-components        = { workspace = true }
 tendermint                      = { workspace = true, features = ["secp256k1"] }
 tendermint-rpc                  = { workspace = true, features = ["http-client", "websocket-client"] }
 

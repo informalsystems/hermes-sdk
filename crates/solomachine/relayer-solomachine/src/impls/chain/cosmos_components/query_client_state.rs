@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use cgp_core::{DelegateComponent, HasErrorType};
-use cosmos_client_components::traits::rpc_client::HasRpcClient;
+use hermes_cosmos_client_components::traits::rpc_client::HasRpcClient;
 use hermes_cosmos_relayer::impls::chain::components::query_client_state::DelegateCosmosClientStateQuerier;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;

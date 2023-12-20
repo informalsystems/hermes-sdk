@@ -1,5 +1,5 @@
-use cosmos_client_components::methods::encode::encode_protobuf;
-use cosmos_client_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_client_components::methods::encode::encode_protobuf;
+use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoClientState;

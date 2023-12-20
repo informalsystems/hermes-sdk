@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use cgp_core::{DelegateComponent, HasErrorType};
-use cosmos_client_components::traits::rpc_client::HasRpcClient;
+use hermes_cosmos_client_components::traits::rpc_client::HasRpcClient;
 use hermes_cosmos_relayer::impls::chain::components::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;

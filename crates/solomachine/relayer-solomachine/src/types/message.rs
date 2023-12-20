@@ -1,10 +1,10 @@
-use cosmos_client_components::types::payloads::channel::{
+use hermes_cosmos_client_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-use cosmos_client_components::types::payloads::client::{
+use hermes_cosmos_client_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use cosmos_client_components::types::payloads::connection::{
+use hermes_cosmos_client_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };

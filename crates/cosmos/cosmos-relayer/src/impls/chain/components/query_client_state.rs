@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use cgp_core::DelegateComponent;
-use cosmos_client_components::components::query_client_state::QueryCosmosClientStateFromChainHandle;
+use hermes_cosmos_client_components::components::query_client_state::QueryCosmosClientStateFromChainHandle;
 use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer::chain::handle::ChainHandle;

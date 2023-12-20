@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cosmos_client_components::traits::message::CosmosMessage;
+use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use tendermint::abci::Event as AbciEvent;
 use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender};
 use tokio::sync::oneshot::Sender as SenderOnce;

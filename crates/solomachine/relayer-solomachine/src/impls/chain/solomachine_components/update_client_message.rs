@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use cgp_core::HasErrorType;
-use cosmos_client_components::types::payloads::client::CosmosUpdateClientPayload;
+use hermes_cosmos_client_components::types::payloads::client::CosmosUpdateClientPayload;
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
