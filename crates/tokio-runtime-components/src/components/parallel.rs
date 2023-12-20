@@ -1,4 +1,5 @@
 use async_runtime_components::channel::impls::channel::ProvideUnboundedChannelType;
+use async_runtime_components::channel_once::impls::ProvideOneShotChannelType;
 use async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;
 use async_runtime_components::stream::impls::boxed::ProvideBoxedStreamType;
 use async_runtime_components::stream::impls::map::BoxedStreamMapper;
@@ -13,6 +14,9 @@ use ibc_relayer_components::runtime::traits::time::TimeComponent;
 use ibc_relayer_components_extra::runtime::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
     SenderClonerComponent,
+};
+use ibc_relayer_components_extra::runtime::traits::channel_once::{
+    ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
@@ -53,6 +57,12 @@ delegate_components! {
             ReceiverStreamerComponent,
             SenderClonerComponent,
         ]: ProvideUnboundedChannelType,
+        [
+            ChannelOnceTypeComponent,
+            ChannelOnceCreatorComponent,
+            ChannelOnceUserComponent,
+        ]:
+            ProvideOneShotChannelType,
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
         ChildProcessStarterComponent: StartTokioChildProcess,

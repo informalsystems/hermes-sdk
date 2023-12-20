@@ -10,6 +10,9 @@ use ibc_relayer_components_extra::runtime::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
     SenderClonerComponent,
 };
+use ibc_relayer_components_extra::runtime::traits::channel_once::{
+    ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
+};
 use ibc_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use ibc_test_components::runtime::traits::exec_command::CommandExecutorComponent;
 use ibc_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
@@ -37,6 +40,9 @@ delegate_components! {
             ChannelTypeComponent,
             ChannelCreatorComponent,
             ChannelUserComponent,
+            ChannelOnceTypeComponent,
+            ChannelOnceCreatorComponent,
+            ChannelOnceUserComponent,
             ReceiverStreamerComponent,
             SenderClonerComponent,
             FilePathTypeComponent,

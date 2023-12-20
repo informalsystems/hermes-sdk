@@ -1,8 +1,9 @@
-use cgp_core::{async_trait, Async, HasErrorType};
+use alloc::boxed::Box;
 
-use crate::std_prelude::*;
+use cgp_core::prelude::*;
 
-pub trait HasChannelOnceTypes: HasErrorType {
+#[derive_component(ChannelOnceTypeComponent, ProvideChannelOnceType<Runtime>)]
+pub trait HasChannelOnceTypes {
     type SenderOnce<T>: Async
     where
         T: Async;
@@ -12,14 +13,16 @@ pub trait HasChannelOnceTypes: HasErrorType {
         T: Async;
 }
 
+#[derive_component(ChannelOnceCreatorComponent, ChannelOnceCreator<Runtime>)]
 pub trait CanCreateChannelsOnce: HasChannelOnceTypes {
     fn new_channel_once<T>() -> (Self::SenderOnce<T>, Self::ReceiverOnce<T>)
     where
         T: Async;
 }
 
+#[derive_component(ChannelOnceUserComponent, ChannelOnceUser<Runtime>)]
 #[async_trait]
-pub trait CanUseChannelsOnce: HasChannelOnceTypes {
+pub trait CanUseChannelsOnce: HasChannelOnceTypes + HasErrorType {
     fn send_once<T>(sender: Self::SenderOnce<T>, value: T) -> Result<(), Self::Error>
     where
         T: Async;
