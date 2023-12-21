@@ -83,7 +83,9 @@ where
         let chain_config = bootstrap.init_chain_config(&chain_home_dir).await?;
 
         // Start the chain full node in the background, and return the child process handle
-        let chain_process = bootstrap.start_chain_full_node(&chain_home_dir).await?;
+        let chain_process = bootstrap
+            .start_chain_full_node(&chain_home_dir, &chain_config)
+            .await?;
 
         // Build the chain context from the bootstrap parameters
         let chain = bootstrap

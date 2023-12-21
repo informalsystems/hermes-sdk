@@ -92,8 +92,8 @@ where
         + CanRaiseError<IoError>,
     Components: DelegatesToLegacyToCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
-        + ProvideGenesisConfigType<Bootstrap>
-        + ProvideChainConfigType<Bootstrap>
+        + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
+        + ProvideChainConfigType<Bootstrap, ChainConfig = CosmosChainConfig>
         + TestDirGetter<Bootstrap>
         + ChainCommandPathGetter<Bootstrap>
         + RandomIdFlagGetter<Bootstrap>
@@ -116,7 +116,5 @@ where
     Chain::ChainId: Display,
     Runtime::FilePath: AsRef<Path>,
     Bootstrap::Error: From<Report>,
-    Components::GenesisConfig: From<CosmosGenesisConfig>,
-    Components::ChainConfig: From<CosmosChainConfig>,
 {
 }

@@ -5,18 +5,24 @@ use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarter;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
+use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
+use crate::bootstrap::types::chain_config::CosmosChainConfig;
 
 pub struct StartCosmosChain;
 
 #[async_trait]
 impl<Bootstrap, Runtime> ChainFullNodeStarter<Bootstrap> for StartCosmosChain
 where
-    Bootstrap: HasRuntime<Runtime = Runtime> + HasErrorType + HasChainCommandPath,
+    Bootstrap: HasRuntime<Runtime = Runtime>
+        + HasErrorType
+        + HasChainCommandPath
+        + HasChainConfigType<ChainConfig = CosmosChainConfig>,
     Runtime: HasFilePathType + CanStartChildProcess,
 {
     async fn start_chain_full_node(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
+        chain_config: &CosmosChainConfig,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
         let chain_command = bootstrap.chain_command_path();
 
@@ -26,6 +32,10 @@ where
             "start",
             "--pruning",
             "nothing",
+            "--grpc.address",
+            &format!("localhost:{}", chain_config.grpc_port),
+            "--rpc.laddr",
+            &format!("tcp://localhost:{}", chain_config.rpc_port),
         ];
 
         let stdout_path = Runtime::join_file_path(
