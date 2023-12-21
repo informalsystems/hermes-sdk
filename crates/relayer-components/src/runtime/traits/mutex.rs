@@ -1,9 +1,9 @@
+use alloc::boxed::Box;
 use core::ops::DerefMut;
 
-use cgp_core::{async_trait, Async};
+use cgp_core::prelude::*;
 
-use crate::std_prelude::*;
-
+#[derive_component(MutexComponent, ProvideMutex<Runtime>)]
 #[async_trait]
 pub trait HasMutex: Async {
     type Mutex<T: Async>: Async;

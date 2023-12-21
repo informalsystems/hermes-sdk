@@ -2,7 +2,7 @@ use alloc::collections::VecDeque;
 use core::marker::PhantomData;
 use core::mem;
 
-use cgp_core::{async_trait, Async};
+use cgp_core::prelude::*;
 use ibc_relayer_components::chain::traits::types::chain::HasChainTypes;
 use ibc_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, HasMessageType,
@@ -47,7 +47,7 @@ where
     Relay: Clone + CanRunLoop<Target>,
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasRuntime<Runtime = Runtime>,
-    Runtime: CanSpawnTask + HasChannelTypes + HasChannelOnceTypes,
+    Runtime: CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasErrorType,
 {
     fn spawn_batch_message_worker(
         &self,
@@ -85,7 +85,7 @@ where
     Relay: CanRunLoop<Target>,
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasRuntime<Runtime = Runtime>,
-    Runtime: HasChannelTypes + HasChannelOnceTypes,
+    Runtime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
 {
     async fn run(self) {
         self.relay.run_loop(&self.config, self.receiver).await;
@@ -197,7 +197,7 @@ where
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasRuntime<Runtime = Runtime>,
     Target::TargetChain: CanPartitionMessageBatches<Relay::Error>,
-    Runtime: HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes,
+    Runtime: HasTime + CanSpawnTask + HasChannelTypes + HasChannelOnceTypes + HasErrorType,
 {
     async fn process_message_batches(
         &self,
@@ -250,7 +250,7 @@ where
     Error: Async,
     Chain: HasChainTypes + HasRuntime<Runtime = Runtime>,
     Chain: CanEstimateBatchSize,
-    Runtime: HasChannelTypes + HasChannelOnceTypes,
+    Runtime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
 {
     fn partition_message_batches(
         config: &BatchConfig,

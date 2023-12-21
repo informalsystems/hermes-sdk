@@ -11,7 +11,7 @@ use crate::relay::traits::components::event_relayer::CanRelayEvent;
 use crate::relay::traits::target::ChainTarget;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::stream::CanMapStream;
-use crate::runtime::traits::subscription::HasSubscriptionType;
+use crate::runtime::traits::subscription::HasSubscription;
 use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 use crate::std_prelude::*;
 
@@ -52,7 +52,7 @@ where
     Relay: CanRelayEvent<Target> + HasRuntime + Clone,
     Target: ChainTarget<Relay>,
     Target::TargetChain: HasEventSubscription<Runtime = Runtime>,
-    Runtime: HasSubscriptionType + CanMapStream + CanRunConcurrentTasks + HasErrorType,
+    Runtime: HasSubscription + CanMapStream + CanRunConcurrentTasks + HasErrorType,
 {
     async fn auto_relay(relay: &Relay, _target: Target) -> Result<(), Relay::Error> {
         let subscription = Target::target_chain(relay).event_subscription();

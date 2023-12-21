@@ -1,19 +1,20 @@
 use alloc::sync::Arc;
+use async_runtime_components::channel::types::ChannelClosedError;
 use cgp_core::{ErrorRaiser, ProvideErrorType};
 use core::str::Utf8Error;
 use std::io::Error as IoError;
 use tokio_runtime_components::impls::child_process::PrematureChildProcessExitError;
 use tokio_runtime_components::impls::exec_command::ExecCommandFailure;
 
-use crate::impls::runtime::components::TokioRuntimeComponents;
+use crate::impls::runtime::components::RelayerRuntimeComponents;
 use crate::types::error::TokioRuntimeError;
 use crate::types::runtime::TokioRuntimeContext;
 
-impl ProvideErrorType<TokioRuntimeContext> for TokioRuntimeComponents {
+impl ProvideErrorType<TokioRuntimeContext> for RelayerRuntimeComponents {
     type Error = TokioRuntimeError;
 }
 
-impl ErrorRaiser<TokioRuntimeContext, PrematureChildProcessExitError> for TokioRuntimeComponents {
+impl ErrorRaiser<TokioRuntimeContext, PrematureChildProcessExitError> for RelayerRuntimeComponents {
     fn raise_error(e: PrematureChildProcessExitError) -> TokioRuntimeError {
         TokioRuntimeError::PrematureChildProcessExit {
             exit_status: e.exit_status,
@@ -22,19 +23,25 @@ impl ErrorRaiser<TokioRuntimeContext, PrematureChildProcessExitError> for TokioR
     }
 }
 
-impl ErrorRaiser<TokioRuntimeContext, IoError> for TokioRuntimeComponents {
+impl ErrorRaiser<TokioRuntimeContext, IoError> for RelayerRuntimeComponents {
     fn raise_error(e: IoError) -> TokioRuntimeError {
         TokioRuntimeError::Io(Arc::new(e))
     }
 }
 
-impl ErrorRaiser<TokioRuntimeContext, Utf8Error> for TokioRuntimeComponents {
+impl ErrorRaiser<TokioRuntimeContext, Utf8Error> for RelayerRuntimeComponents {
     fn raise_error(e: Utf8Error) -> TokioRuntimeError {
         TokioRuntimeError::Utf8(e)
     }
 }
 
-impl ErrorRaiser<TokioRuntimeContext, ExecCommandFailure> for TokioRuntimeComponents {
+impl ErrorRaiser<TokioRuntimeContext, ChannelClosedError> for RelayerRuntimeComponents {
+    fn raise_error(_e: ChannelClosedError) -> TokioRuntimeError {
+        TokioRuntimeError::ChannelClosed
+    }
+}
+
+impl ErrorRaiser<TokioRuntimeContext, ExecCommandFailure> for RelayerRuntimeComponents {
     fn raise_error(e: ExecCommandFailure) -> TokioRuntimeError {
         TokioRuntimeError::ExecCommandFailure {
             command: e.command,

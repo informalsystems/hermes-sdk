@@ -16,9 +16,11 @@ description  = """
 ibc-relayer-components          = { workspace = true }
 ibc-relayer-components-extra    = { workspace = true }
 ibc-test-components             = { workspace = true }
+async-runtime-components        = { workspace = true }
 
 cgp-core    = { workspace = true }
 tokio       = { workspace = true, features = ["full"] }
 futures     = { workspace = true }
 
-rand = { version = "0.8.5" }
+tokio-stream    = { version = "0.1" }
+rand            = { version = "0.8.5" }

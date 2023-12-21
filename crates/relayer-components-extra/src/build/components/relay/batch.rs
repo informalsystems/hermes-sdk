@@ -45,8 +45,8 @@ where
     DstChain: HasIbcChainTypes<SrcChain>,
     SrcChain: HasRuntime<Runtime = SrcRuntime> + HasChainId,
     DstChain: HasRuntime<Runtime = DstRuntime> + HasChainId,
-    SrcRuntime: HasChannelTypes + HasChannelOnceTypes,
-    DstRuntime: HasChannelTypes + HasChannelOnceTypes,
+    SrcRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
+    DstRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
     Build::Runtime: HasMutex,
 {
     async fn build_relay_from_chains(
@@ -142,7 +142,7 @@ where
     Target: ChainBuildTarget<Build, TargetChain = Chain, CounterpartyChain = Counterparty>,
     Chain: HasIbcChainTypes<Counterparty> + HasRuntime<Runtime = Runtime>,
     Counterparty: HasIbcChainTypes<Chain>,
-    Runtime: CanCreateChannels + HasChannelOnceTypes + CanCloneSender,
+    Runtime: CanCreateChannels + HasChannelOnceTypes + CanCloneSender + HasErrorType,
     Build: HasBatchSenderCache<Target, RelayError<Build>>,
     Build::Runtime: HasMutex,
     Chain::ChainId: Ord + Clone,

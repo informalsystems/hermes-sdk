@@ -1,13 +1,15 @@
-use cgp_core::{async_trait, Async};
+use alloc::boxed::Box;
+use alloc::vec::Vec;
+use cgp_core::prelude::*;
 
 use crate::runtime::traits::stream::HasStreamType;
-use crate::std_prelude::*;
 
 #[async_trait]
 pub trait Task: Async {
     async fn run(self);
 }
 
+#[derive_component(ConcurrentTaskRunnerComponent, ConcurrentTaskRunner<Runtime>)]
 #[async_trait]
 pub trait CanRunConcurrentTasks: HasStreamType {
     async fn run_concurrent_tasks<T>(&self, tasks: Vec<T>)
