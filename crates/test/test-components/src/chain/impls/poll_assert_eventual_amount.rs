@@ -1,6 +1,6 @@
+use alloc::boxed::Box;
 use core::time::Duration;
 
-use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;

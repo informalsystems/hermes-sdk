@@ -1,8 +1,8 @@
+use alloc::boxed::Box;
 use alloc::sync::Arc;
 use alloc::vec::Vec;
 use core::ops::DerefMut;
 
-use alloc::boxed::Box;
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;

@@ -5,13 +5,13 @@ use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::genesis::add_genesis_account::CanAddGenesisAccount;
 use crate::bootstrap::traits::genesis::add_genesis_validator::CanAddGenesisValidator;
 use crate::bootstrap::traits::genesis::add_genesis_wallet::GenesisWalletAdder;
 use crate::bootstrap::traits::initializers::init_wallet::CanInitWallet;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigFields;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 pub struct AddCosmosWalletToGenesis;
 

@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(ChainConfigInitializerComponent, ChainConfigInitializer<Boostrap>)]
 #[async_trait]

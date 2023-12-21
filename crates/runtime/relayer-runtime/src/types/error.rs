@@ -1,10 +1,9 @@
+use alloc::sync::Arc;
 use core::fmt::Display;
 use core::str::Utf8Error;
 use std::error::Error;
 use std::io::Error as IoError;
 use std::process::ExitStatus;
-
-use alloc::sync::Arc;
 
 #[derive(Clone, Debug)]
 pub enum TokioRuntimeError {

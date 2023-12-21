@@ -1,4 +1,5 @@
 use core::fmt::Display;
+use std::io::Error as IoError;
 use std::path::Path;
 
 use cgp_core::prelude::*;
@@ -6,8 +7,9 @@ use cgp_core::CanRaiseError;
 use eyre::Report;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::bootstrap::traits::chain::ChainBootstrapperComponent;
+use hermes_test_components::bootstrap::traits::chain::{
+    CanBootstrapChain, ChainBootstrapperComponent,
+};
 use hermes_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use hermes_test_components::chain::traits::build::CanBuildChainIdFromString;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
@@ -18,7 +20,6 @@ use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
-use std::io::Error as IoError;
 
 use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
 use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;
@@ -54,8 +55,9 @@ use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifie
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use crate::bootstrap::traits::types::chain_config::ProvideChainConfigType;
 use crate::bootstrap::traits::types::genesis_config::ProvideGenesisConfigType;
-use crate::bootstrap::traits::types::wallet_config::ProvideWalletConfigType;
-use crate::bootstrap::traits::types::wallet_config::WalletConfigFieldsGetter;
+use crate::bootstrap::traits::types::wallet_config::{
+    ProvideWalletConfigType, WalletConfigFieldsGetter,
+};
 use crate::bootstrap::types::chain_config::CosmosChainConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain::types::wallet::CosmosTestWallet;

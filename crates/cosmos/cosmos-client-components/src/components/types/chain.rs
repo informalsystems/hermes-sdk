@@ -1,4 +1,5 @@
 use alloc::sync::Arc;
+
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProvider;

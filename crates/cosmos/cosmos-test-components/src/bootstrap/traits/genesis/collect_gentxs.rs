@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-
 use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(GenesisTransactionsCollectorComponent, GenesisTransactionsCollector<Bootstrap>)]

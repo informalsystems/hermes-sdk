@@ -1,6 +1,9 @@
 use cgp_core::prelude::*;
 use eyre::Report;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use serde_json::Value;
 
 use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigInitializer;
@@ -8,9 +11,6 @@ use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosG
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain::types::denom::Denom;
-use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;

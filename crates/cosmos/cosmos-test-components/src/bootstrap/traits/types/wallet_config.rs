@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-
 use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
 use hermes_test_components::chain::traits::types::amount::{Amount, HasAmountType};
 

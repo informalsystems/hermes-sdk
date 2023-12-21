@@ -1,14 +1,13 @@
 use alloc::boxed::Box;
 use alloc::sync::Arc;
+
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use futures_channel::mpsc;
 use futures_util::lock::Mutex;
 use futures_util::stream::StreamExt;
-use hermes_relayer_components_extra::runtime::traits::channel::ReceiverStreamer;
-use hermes_relayer_components_extra::runtime::traits::channel::SenderCloner;
 use hermes_relayer_components_extra::runtime::traits::channel::{
-    ChannelCreator, ChannelUser, ProvideChannelType,
+    ChannelCreator, ChannelUser, ProvideChannelType, ReceiverStreamer, SenderCloner,
 };
 
 use crate::channel::traits::{HasUnboundedChannelType, UnboundedChannelTypeProvider};

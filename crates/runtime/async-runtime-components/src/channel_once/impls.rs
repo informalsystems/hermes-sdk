@@ -8,8 +8,7 @@ use hermes_relayer_components_extra::runtime::traits::channel_once::{
 };
 
 use crate::channel::types::ChannelClosedError;
-use crate::channel_once::traits::HasOneShotChannelType;
-use crate::channel_once::traits::OneShotChannelTypeProvider;
+use crate::channel_once::traits::{HasOneShotChannelType, OneShotChannelTypeProvider};
 
 pub struct ProvideOneShotChannelType;
 
