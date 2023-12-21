@@ -1576,6 +1576,7 @@ dependencies = [
  "ibc-relayer-types",
  "serde_json",
  "stable-eyre",
+ "tendermint-rpc",
  "tokio",
  "toml 0.8.8",
 ]

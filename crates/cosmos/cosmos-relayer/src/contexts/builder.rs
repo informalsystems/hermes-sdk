@@ -15,7 +15,6 @@ use ibc_relayer::spawn::spawn_chain_runtime;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
-use tokio::runtime::Runtime as TokioRuntime;
 use tokio::task;
 
 use crate::contexts::chain::CosmosChain;
@@ -40,14 +39,12 @@ pub struct CosmosBuilder {
 impl CosmosBuilder {
     pub fn new(
         config: Config,
-        runtime: Arc<TokioRuntime>,
+        runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
         packet_filter: PacketFilter,
         batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
     ) -> Self {
-        let runtime = HermesRuntime::new(runtime);
-
         Self {
             config,
             packet_filter,
