@@ -1,21 +1,18 @@
 use async_trait::async_trait;
-use cgp_core::Async;
+
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_client_components::traits::has_tx_context::HasTxContext;
 use hermes_cosmos_client_components::traits::rpc_client::HasRpcClient;
 use http::Uri;
-use ibc_relayer::chain::handle::ChainHandle;
+use ibc_relayer::chain::handle::BaseChainHandle;
 use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::transaction::CosmosTxContext;
 use crate::types::error::{BaseError, Error};
 
-impl<Chain> HasTxContext for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl HasTxContext for CosmosChain {
     type TxContext = CosmosTxContext;
 
     fn tx_context(&self) -> &Self::TxContext {
@@ -23,19 +20,13 @@ where
     }
 }
 
-impl<Chain> HasGrpcAddress for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl HasGrpcAddress for CosmosChain {
     fn grpc_address(&self) -> &Uri {
         &self.tx_context.tx_config.grpc_address
     }
 }
 
-impl<Chain> HasRpcClient for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl HasRpcClient for CosmosChain {
     fn rpc_client(&self) -> &HttpClient {
         &self.tx_context.rpc_client
     }
@@ -46,15 +37,12 @@ where
 }
 
 #[async_trait]
-impl<Chain> HasBlockingChainHandle for CosmosChain<Chain>
-where
-    Chain: ChainHandle,
-{
-    type ChainHandle = Chain;
+impl HasBlockingChainHandle for CosmosChain {
+    type ChainHandle = BaseChainHandle;
 
     async fn with_blocking_chain_handle<R>(
         &self,
-        cont: impl FnOnce(Chain) -> Result<R, Error> + Send + 'static,
+        cont: impl FnOnce(BaseChainHandle) -> Result<R, Error> + Send + 'static,
     ) -> Result<R, Error>
     where
         R: Send + 'static,

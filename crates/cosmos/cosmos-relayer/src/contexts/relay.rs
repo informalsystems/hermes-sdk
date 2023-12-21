@@ -3,7 +3,6 @@ use std::collections::HashSet;
 
 use futures::lock::Mutex;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
@@ -12,10 +11,10 @@ use crate::contexts::chain::CosmosChain;
 use crate::types::batch::CosmosBatchSender;
 
 #[derive(Clone)]
-pub struct CosmosRelay<SrcChain, DstChain> {
+pub struct CosmosRelay {
     pub runtime: HermesRuntime,
-    pub src_chain: CosmosChain<SrcChain>,
-    pub dst_chain: CosmosChain<DstChain>,
+    pub src_chain: CosmosChain,
+    pub dst_chain: CosmosChain,
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilter,
@@ -24,15 +23,11 @@ pub struct CosmosRelay<SrcChain, DstChain> {
     pub dst_chain_message_batch_sender: CosmosBatchSender,
 }
 
-impl<SrcChain, DstChain> CosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: ChainHandle,
-    DstChain: ChainHandle,
-{
+impl CosmosRelay {
     pub fn new(
         runtime: HermesRuntime,
-        src_chain: CosmosChain<SrcChain>,
-        dst_chain: CosmosChain<DstChain>,
+        src_chain: CosmosChain,
+        dst_chain: CosmosChain,
         src_client_id: ClientId,
         dst_client_id: ClientId,
         packet_filter: PacketFilter,

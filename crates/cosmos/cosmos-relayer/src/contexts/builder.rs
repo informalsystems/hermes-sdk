@@ -31,15 +31,8 @@ pub struct CosmosBuilder {
     pub runtime: HermesRuntime,
     pub batch_config: BatchConfig,
     pub key_map: HashMap<ChainId, Secp256k1KeyPair>,
-    pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain<BaseChainHandle>>>>,
-    pub relay_cache: Arc<
-        Mutex<
-            BTreeMap<
-                (ChainId, ChainId, ClientId, ClientId),
-                CosmosRelay<BaseChainHandle, BaseChainHandle>,
-            >,
-        >,
-    >,
+    pub chain_cache: Arc<Mutex<BTreeMap<ChainId, CosmosChain>>>,
+    pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
     pub batch_senders:
         Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>>>,
 }
@@ -68,10 +61,7 @@ impl CosmosBuilder {
         }
     }
 
-    pub async fn build_chain(
-        &self,
-        chain_id: &ChainId,
-    ) -> Result<CosmosChain<BaseChainHandle>, Error> {
+    pub async fn build_chain(&self, chain_id: &ChainId) -> Result<CosmosChain, Error> {
         let runtime = self.runtime.runtime.clone();
 
         let (handle, key, chain_config) = task::block_in_place(|| -> Result<_, Error> {
@@ -115,11 +105,11 @@ impl CosmosBuilder {
         &self,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
-        src_chain: CosmosChain<BaseChainHandle>,
-        dst_chain: CosmosChain<BaseChainHandle>,
+        src_chain: CosmosChain,
+        dst_chain: CosmosChain,
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
-    ) -> Result<CosmosRelay<BaseChainHandle, BaseChainHandle>, Error> {
+    ) -> Result<CosmosRelay, Error> {
         let relay = CosmosRelay::new(
             self.runtime.clone(),
             src_chain,

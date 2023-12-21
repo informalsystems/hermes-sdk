@@ -6,7 +6,7 @@ use eyre::eyre;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use ibc_relayer::chain::counterparty::unreceived_acknowledgements;
-use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
+use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
 use ibc_relayer::foreign_client::ForeignClient;
 use ibc_relayer::path::PathIdentifiers;
@@ -225,7 +225,7 @@ impl<ChainA: ChainHandle, ChainB: ChainHandle> HasContextId for TestContextV1<Ch
 pub struct TestContextV2<ChainA: ChainHandle, ChainB: ChainHandle> {
     pub context_id: String,
     pub config: TestConfig,
-    pub relayer: CosmosBiRelay<BaseChainHandle, BaseChainHandle>,
+    pub relayer: CosmosBiRelay,
     pub chains: ConnectedChains<ChainA, ChainB>,
     pub channel: ConnectedChannel<ChainA, ChainB>,
 }
