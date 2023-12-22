@@ -1,9 +1,13 @@
+use core::str::FromStr;
+use core::time::Duration;
+use std::collections::HashMap;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::HandleErrorsWithEyre;
-use eyre::Error;
+use eyre::{eyre, Error};
+use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
@@ -35,7 +39,12 @@ use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, Runtim
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::types::chain::ProvideChainType;
+use ibc_relayer::chain::ChainType;
+use ibc_relayer::config::gas_multiplier::GasMultiplier;
+use ibc_relayer::config::{self, AddressType, ChainConfig, Config};
+use ibc_relayer::keyring::Store;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use tendermint_rpc::{Url, WebSocketClientUrl};
 use tokio::process::Child;
 
 use crate::contexts::chain::CosmosTestChain;
@@ -45,6 +54,7 @@ pub struct CosmosStdBootstrapContext {
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
+    pub account_prefix: String,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
@@ -100,7 +110,79 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
         wallets: Vec<CosmosTestWallet>,
         chain_process: Child,
     ) -> Result<CosmosTestChain, Error> {
-        Ok(CosmosTestChain)
+        let relayer_wallet = wallets
+            .iter()
+            .find(|wallet| wallet.id.starts_with("relayer"))
+            .ok_or_else(|| {
+                eyre!("expect relayer wallet to be provided in the list of test wallets")
+            })?;
+
+        let relayer_chain_config = ChainConfig {
+            id: chain_id.clone(),
+            r#type: ChainType::CosmosSdk,
+            rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_config.rpc_port))?,
+            grpc_addr: Url::from_str(&format!("http://localhost:{}", chain_config.grpc_port))?,
+            event_source: config::EventSourceMode::Push {
+                url: WebSocketClientUrl::from_str(&format!(
+                    "ws://localhost:{}/websocket",
+                    chain_config.rpc_port
+                ))?,
+                batch_delay: config::default::batch_delay(),
+            },
+            rpc_timeout: config::default::rpc_timeout(),
+            trusted_node: false,
+            genesis_restart: None,
+            account_prefix: bootstrap.account_prefix.clone(),
+            key_name: relayer_wallet.id.clone(),
+            key_store_type: Store::Test,
+            key_store_folder: Some(chain_home_dir.join("hermes_keyring")),
+            store_prefix: "ibc".to_string(),
+            default_gas: None,
+            max_gas: Some(3000000),
+            gas_adjustment: None,
+            gas_multiplier: Some(GasMultiplier::unsafe_new(1.2)),
+            fee_granter: None,
+            max_msg_num: Default::default(),
+            max_tx_size: Default::default(),
+            max_grpc_decoding_size: config::default::max_grpc_decoding_size(),
+            max_block_time: Duration::from_secs(30),
+            clock_drift: Duration::from_secs(5),
+            trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
+            ccv_consumer_chain: false,
+            trust_threshold: Default::default(),
+            gas_price: config::GasPrice::new(0.003, "stake".to_string()),
+            packet_filter: Default::default(),
+            address_type: AddressType::Cosmos,
+            memo_prefix: Default::default(),
+            proof_specs: Default::default(),
+            extension_options: Default::default(),
+            sequential_batch_tx: false,
+            compat_mode: None,
+            clear_interval: None,
+        };
+
+        let mut relayer_config = Config::default();
+        relayer_config.chains.push(relayer_chain_config);
+
+        let key_map = HashMap::from([(chain_id.clone(), relayer_wallet.keypair.clone())]);
+
+        let builder = CosmosBuilder::new(
+            relayer_config,
+            bootstrap.runtime.clone(),
+            Default::default(),
+            Default::default(),
+            Default::default(),
+            key_map,
+        );
+
+        let base_chain = builder.build_chain(&chain_id).await?;
+
+        let test_chain = CosmosTestChain {
+            base_chain,
+            full_node_process: chain_process,
+        };
+
+        Ok(test_chain)
     }
 }
 

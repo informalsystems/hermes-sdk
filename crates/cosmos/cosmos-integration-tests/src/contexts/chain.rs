@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain::impls::address::ProvideStringAddress;
 use hermes_cosmos_test_components::chain::impls::amount::ProvideU128AmountWithDenom;
 use hermes_cosmos_test_components::chain::impls::chain_id::BuildCosmosChainIdFromString;
@@ -13,8 +14,12 @@ use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
+use tokio::process::Child;
 
-pub struct CosmosTestChain;
+pub struct CosmosTestChain {
+    pub base_chain: CosmosChain,
+    pub full_node_process: Child,
+}
 
 pub struct CosmosTestChainComponents;
 

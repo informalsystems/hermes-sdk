@@ -19,6 +19,7 @@ fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
         should_randomize_identifiers: false,
         test_dir: "./test-data".into(),
         chain_command_path: "gaiad".into(),
+        account_prefix: "cosmos".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     };
