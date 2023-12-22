@@ -1,9 +1,9 @@
 #[cfg(feature = "next")]
 use {
     crate::framework::binary::next::TestContextV2, crate::prelude::handle_generic_error,
+    hermes_cosmos_relayer::contexts::full::builder::CosmosRelayBuilder,
     ibc_relayer::keyring::Secp256k1KeyPair,
     ibc_relayer_all_in_one::extra::all_for_one::builder::CanBuildAfoFullBiRelay,
-    ibc_relayer_cosmos::contexts::full::builder::CosmosRelayBuilder,
     ibc_relayer_types::core::ics24_host::identifier::ChainId, std::collections::HashMap,
     std::sync::Arc, tokio::runtime::Runtime as TokioRuntime,
 };

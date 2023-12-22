@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
+use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
+use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::Config;
-use ibc_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
-use ibc_relayer_cosmos::contexts::birelay::CosmosBiRelay;
-use ibc_relayer_cosmos::contexts::builder::CosmosBuilder;
 use ibc_test_framework::error::{handle_generic_error, Error};
 use ibc_test_framework::prelude::TaggedFullNodeExt;
 use ibc_test_framework::types::binary::chains::ConnectedChains;
