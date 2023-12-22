@@ -1,9 +1,10 @@
+use std::io::Error as IoError;
+use std::net::{Ipv4Addr, SocketAddrV4};
+
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_test_components::runtime::traits::reserve_port::TcpPortReserver;
 use rand::Rng;
-use std::io::Error as IoError;
-use std::net::{Ipv4Addr, SocketAddrV4};
 use tokio::net::TcpListener;
 
 pub struct TokioReserveTcpPort;

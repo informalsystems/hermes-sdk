@@ -2,9 +2,6 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::logger::traits::log::CanLog;
-use hermes_test_components::test_case::traits::test_case::TestCase;
-use hermes_test_components::test_env::traits::background_relayer::HasBackgroundRelayer;
-
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::fields::amount::{
     CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
@@ -14,6 +11,8 @@ use hermes_test_components::chain::traits::fields::denom_at::HasDenomAt;
 use hermes_test_components::chain::traits::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::queries::ibc_transfer::CanIbcTransferToken;
+use hermes_test_components::test_case::traits::test_case::TestCase;
+use hermes_test_components::test_env::traits::background_relayer::HasBackgroundRelayer;
 use hermes_test_components::test_env::traits::types::chain_at::{
     HasChainAt, HasOneChain, HasTwoChains,
 };

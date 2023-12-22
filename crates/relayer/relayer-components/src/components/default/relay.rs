@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-
 use cgp_core::RunnerComponent;
 
 use crate::relay::components::auto_relayers::both_targets::RelayBothTargets;
@@ -40,7 +39,6 @@ use crate::relay::traits::components::client_creator::ClientCreatorComponent;
 use crate::relay::traits::components::event_relayer::EventRelayerComponent;
 use crate::relay::traits::components::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
 use crate::relay::traits::components::packet_clearer::PacketClearerComponent;
-
 use crate::relay::traits::components::packet_relayer::PacketRelayerComponent;
 use crate::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;

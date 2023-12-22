@@ -4,11 +4,13 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
-use hermes_relayer_components::build::traits::components::birelay_builder::BiRelayBuilderComponent;
-use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
+use hermes_relayer_components::build::traits::components::birelay_builder::{
+    BiRelayBuilderComponent, CanBuildBiRelay,
+};
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilder;
-use hermes_relayer_components::build::traits::components::chain_builder::ChainBuilder;
-use hermes_relayer_components::build::traits::components::chain_builder::ChainBuilderComponent;
+use hermes_relayer_components::build::traits::components::chain_builder::{
+    ChainBuilder, ChainBuilderComponent,
+};
 use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilderComponent;
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilderComponent;
 use hermes_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};

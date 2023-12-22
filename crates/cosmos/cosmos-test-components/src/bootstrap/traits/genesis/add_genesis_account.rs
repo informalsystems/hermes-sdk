@@ -3,7 +3,6 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
 use hermes_test_components::chain::traits::types::address::{Address, HasAddressType};
 use hermes_test_components::chain::traits::types::amount::{Amount, HasAmountType};
-
 use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
 
 #[derive_component(GenesisAccountAdderComponent, GenesisAccountAdder<Bootstrap>)]

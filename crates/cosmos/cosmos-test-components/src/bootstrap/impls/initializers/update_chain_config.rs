@@ -3,16 +3,16 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use eyre::{eyre, Report};
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
+use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use toml::Value;
 
 use crate::bootstrap::traits::initializers::init_chain_config::ChainConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
 use crate::bootstrap::types::chain_config::CosmosChainConfig;
-use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
-use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainConfig;
