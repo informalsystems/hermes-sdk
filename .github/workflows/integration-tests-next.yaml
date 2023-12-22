@@ -32,11 +32,11 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: -p cosmos-integration-tests --no-fail-fast --no-run
+          args: -p hermes-cosmos-integration-tests --no-fail-fast --no-run
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
         run: |
             nix shell .#gaia14 -c cargo \
-              test -p cosmos-integration-tests --no-fail-fast -- \
+              test -p hermes-cosmos-integration-tests --no-fail-fast -- \
               --nocapture --test-threads=2
