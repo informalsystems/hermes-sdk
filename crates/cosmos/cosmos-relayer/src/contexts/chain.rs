@@ -4,7 +4,7 @@ use hermes_async_runtime_components::subscription::impls::empty::EmptySubscripti
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
-use ibc_relayer::chain::handle::ChainHandle;
+use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
@@ -19,8 +19,8 @@ use crate::impls::subscription::CanCreateAbciEventSubscription;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
-pub struct CosmosChain<Handle> {
-    pub handle: Handle,
+pub struct CosmosChain {
+    pub handle: BaseChainHandle,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,
     pub runtime: HermesRuntime,
@@ -29,9 +29,9 @@ pub struct CosmosChain<Handle> {
     pub tx_context: Arc<CosmosTxContext>,
 }
 
-impl<Handle: ChainHandle> CosmosChain<Handle> {
+impl CosmosChain {
     pub fn new(
-        handle: Handle,
+        handle: BaseChainHandle,
         tx_config: TxConfig,
         rpc_client: HttpClient,
         compat_mode: CompatMode,

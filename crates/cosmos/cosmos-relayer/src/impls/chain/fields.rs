@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 
-use cgp_core::Async;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
@@ -20,19 +19,13 @@ use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::component::CosmosChainComponents;
 use crate::types::error::{BaseError, Error};
 
-impl<Chain> CanIncrementHeight for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl CanIncrementHeight for CosmosChain {
     fn increment_height(height: &Height) -> Result<Height, Error> {
         Ok(height.increment())
     }
 }
 
-impl<Chain> CanEstimateMessageSize for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl CanEstimateMessageSize for CosmosChain {
     fn estimate_message_size(message: &Arc<dyn CosmosMessage>) -> Result<usize, Error> {
         let raw = message
             .encode_protobuf(&Signer::dummy())
@@ -42,27 +35,20 @@ where
     }
 }
 
-impl<Chain> ChainIdGetter<CosmosChain<Chain>> for CosmosChainComponents
-where
-    Chain: Async,
-{
-    fn chain_id(chain: &CosmosChain<Chain>) -> &ChainId {
+impl ChainIdGetter<CosmosChain> for CosmosChainComponents {
+    fn chain_id(chain: &CosmosChain) -> &ChainId {
         &chain.chain_id
     }
 }
 
-impl<Chain> HasEventSubscription for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl HasEventSubscription for CosmosChain {
     fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
         &self.subscription
     }
 }
 
-impl<Chain, Counterparty> HasCounterpartyMessageHeight<Counterparty> for CosmosChain<Chain>
+impl<Counterparty> HasCounterpartyMessageHeight<Counterparty> for CosmosChain
 where
-    Chain: Async,
     Counterparty: HasHeightType<Height = Height>,
 {
     fn counterparty_message_height_for_update_client(
@@ -72,10 +58,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasClientStateFields<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasClientStateFields<Counterparty> for CosmosChain {
     fn client_state_latest_height(client_state: &TendermintClientState) -> &Height {
         &client_state.latest_height
     }

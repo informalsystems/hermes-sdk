@@ -27,7 +27,7 @@ use hermes_cosmos_client_components::components::timeout_packet_payload::BuildCo
 use hermes_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_client_components::components::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_client_components::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
-use ibc_relayer::chain::handle::ChainHandle;
+
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
@@ -91,10 +91,7 @@ impl HasComponents for CosmosChainComponents {
     type Components = CosmosBaseChainComponents;
 }
 
-impl<Chain> HasComponents for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl HasComponents for CosmosChain {
     type Components = CosmosChainComponents;
 }
 
@@ -104,13 +101,7 @@ delegate_all!(
     CosmosChainComponents,
 );
 
-impl<Chain, Counterparty> CanUseExtraChainComponents<CosmosChain<Counterparty>>
-    for CosmosChain<Chain>
-where
-    Chain: ChainHandle,
-    Counterparty: ChainHandle,
-{
-}
+impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
 delegate_components! {
     CosmosChainComponents {

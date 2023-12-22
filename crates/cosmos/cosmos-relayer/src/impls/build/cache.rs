@@ -5,7 +5,7 @@ use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCac
 use hermes_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components_extra::build::traits::cache::HasBatchSenderCache;
-use ibc_relayer::chain::handle::BaseChainHandle;
+
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 
 use crate::contexts::builder::CosmosBuilder;
@@ -15,39 +15,25 @@ use crate::types::batch::CosmosBatchSender;
 use crate::types::error::Error;
 
 impl HasChainCache<ChainATarget> for CosmosBuilder {
-    fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain<BaseChainHandle>>> {
+    fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain>> {
         &self.chain_cache
     }
 }
 
 impl HasChainCache<ChainBTarget> for CosmosBuilder {
-    fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain<BaseChainHandle>>> {
+    fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain>> {
         &self.chain_cache
     }
 }
 
 impl HasRelayCache<RelayAToBTarget> for CosmosBuilder {
-    fn relay_cache(
-        &self,
-    ) -> &Mutex<
-        BTreeMap<
-            (ChainId, ChainId, ClientId, ClientId),
-            CosmosRelay<BaseChainHandle, BaseChainHandle>,
-        >,
-    > {
+    fn relay_cache(&self) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>> {
         &self.relay_cache
     }
 }
 
 impl HasRelayCache<RelayBToATarget> for CosmosBuilder {
-    fn relay_cache(
-        &self,
-    ) -> &Mutex<
-        BTreeMap<
-            (ChainId, ChainId, ClientId, ClientId),
-            CosmosRelay<BaseChainHandle, BaseChainHandle>,
-        >,
-    > {
+    fn relay_cache(&self) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>> {
         &self.relay_cache
     }
 }

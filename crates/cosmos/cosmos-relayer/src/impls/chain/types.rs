@@ -1,4 +1,3 @@
-use cgp_core::Async;
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_client_components::types::payloads::channel::{
@@ -41,19 +40,13 @@ use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::component::CosmosChainComponents;
 use crate::types::telemetry::CosmosTelemetry;
 
-impl<Chain> ProvideRuntime<CosmosChain<Chain>> for CosmosChainComponents
-where
-    Chain: Async,
-{
-    fn runtime(chain: &CosmosChain<Chain>) -> &HermesRuntime {
+impl ProvideRuntime<CosmosChain> for CosmosChainComponents {
+    fn runtime(chain: &CosmosChain) -> &HermesRuntime {
         &chain.runtime
     }
 }
 
-impl<Chain> HasTelemetry for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl HasTelemetry for CosmosChain {
     type Telemetry = CosmosTelemetry;
 
     fn telemetry(&self) -> &CosmosTelemetry {
@@ -61,59 +54,35 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasClientStateType<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasClientStateType<Counterparty> for CosmosChain {
     type ClientState = TendermintClientState;
 }
 
-impl<Chain, Counterparty> HasConsensusStateType<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasConsensusStateType<Counterparty> for CosmosChain {
     type ConsensusState = TendermintConsensusState;
 }
 
-impl<Chain, Counterparty> HasCreateClientOptions<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasCreateClientOptions<Counterparty> for CosmosChain {
     type CreateClientPayloadOptions = ClientSettings;
 }
 
-impl<Chain, Counterparty> HasInitConnectionOptionsType<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasInitConnectionOptionsType<Counterparty> for CosmosChain {
     type InitConnectionOptions = CosmosInitConnectionOptions;
 }
 
-impl<Chain, Counterparty> HasInitChannelOptionsType<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasInitChannelOptionsType<Counterparty> for CosmosChain {
     type InitChannelOptions = CosmosInitChannelOptions;
 }
 
-impl<Chain, Counterparty> HasCreateClientPayload<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasCreateClientPayload<Counterparty> for CosmosChain {
     type CreateClientPayload = CosmosCreateClientPayload;
 }
 
-impl<Chain, Counterparty> HasUpdateClientPayload<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasUpdateClientPayload<Counterparty> for CosmosChain {
     type UpdateClientPayload = CosmosUpdateClientPayload;
 }
 
-impl<Chain, Counterparty> HasConnectionHandshakePayloads<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasConnectionHandshakePayloads<Counterparty> for CosmosChain {
     type ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload;
 
     type ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload;
@@ -123,10 +92,7 @@ where
     type ConnectionOpenConfirmPayload = CosmosConnectionOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> HasChannelHandshakePayloads<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasChannelHandshakePayloads<Counterparty> for CosmosChain {
     type ChannelOpenTryPayload = CosmosChannelOpenTryPayload;
 
     type ChannelOpenAckPayload = CosmosChannelOpenAckPayload;
@@ -134,23 +100,14 @@ where
     type ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> HasReceivePacketPayload<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasReceivePacketPayload<Counterparty> for CosmosChain {
     type ReceivePacketPayload = CosmosReceivePacketPayload;
 }
 
-impl<Chain, Counterparty> HasAckPacketPayload<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasAckPacketPayload<Counterparty> for CosmosChain {
     type AckPacketPayload = CosmosAckPacketPayload;
 }
 
-impl<Chain, Counterparty> HasTimeoutUnorderedPacketPayload<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasTimeoutUnorderedPacketPayload<Counterparty> for CosmosChain {
     type TimeoutUnorderedPacketPayload = CosmosTimeoutUnorderedPacketPayload;
 }

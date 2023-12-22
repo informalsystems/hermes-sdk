@@ -1,24 +1,19 @@
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_relayer::chain::handle::ChainHandle;
 
 use crate::contexts::relay::CosmosRelay;
 
 #[derive(Clone)]
-pub struct CosmosBiRelay<ChainA, ChainB> {
+pub struct CosmosBiRelay {
     pub runtime: HermesRuntime,
-    pub relay_a_to_b: CosmosRelay<ChainA, ChainB>,
-    pub relay_b_to_a: CosmosRelay<ChainB, ChainA>,
+    pub relay_a_to_b: CosmosRelay,
+    pub relay_b_to_a: CosmosRelay,
 }
 
-impl<ChainA, ChainB> CosmosBiRelay<ChainA, ChainB>
-where
-    ChainA: ChainHandle,
-    ChainB: ChainHandle,
-{
+impl CosmosBiRelay {
     pub fn new(
         runtime: HermesRuntime,
-        relay_a_to_b: CosmosRelay<ChainA, ChainB>,
-        relay_b_to_a: CosmosRelay<ChainB, ChainA>,
+        relay_a_to_b: CosmosRelay,
+        relay_b_to_a: CosmosRelay,
     ) -> Self {
         Self {
             runtime,

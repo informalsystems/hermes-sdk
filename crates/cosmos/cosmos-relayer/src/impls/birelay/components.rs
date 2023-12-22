@@ -15,11 +15,7 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosBiRelayComponents;
 
-impl<ChainA, ChainB> HasComponents for CosmosBiRelay<ChainA, ChainB>
-where
-    ChainA: Async,
-    ChainB: Async,
-{
+impl HasComponents for CosmosBiRelay {
     type Components = CosmosBiRelayComponents;
 }
 

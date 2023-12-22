@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components_extra::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
-use ibc_relayer::chain::handle::BaseChainHandle;
+
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::builder::CosmosBuilder;
@@ -17,11 +17,11 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildCompon
         build: &CosmosBuilder,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
-        src_chain: CosmosChain<BaseChainHandle>,
-        dst_chain: CosmosChain<BaseChainHandle>,
+        src_chain: CosmosChain,
+        dst_chain: CosmosChain,
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
-    ) -> Result<CosmosRelay<BaseChainHandle, BaseChainHandle>, Error> {
+    ) -> Result<CosmosRelay, Error> {
         let relay = build.build_relay(
             src_client_id,
             dst_client_id,
@@ -41,11 +41,11 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayBToATarget> for CosmosBuildCompon
         build: &CosmosBuilder,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
-        src_chain: CosmosChain<BaseChainHandle>,
-        dst_chain: CosmosChain<BaseChainHandle>,
+        src_chain: CosmosChain,
+        dst_chain: CosmosChain,
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
-    ) -> Result<CosmosRelay<BaseChainHandle, BaseChainHandle>, Error> {
+    ) -> Result<CosmosRelay, Error> {
         let relay = build.build_relay(
             src_client_id,
             dst_client_id,

@@ -1,8 +1,7 @@
-use cgp_core::Async;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_relayer::chain::handle::ChainHandle;
+
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
@@ -10,22 +9,18 @@ use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::relay::component::CosmosRelayComponents;
 
-impl<SrcChain, DstChain> HasRelayChains for CosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: ChainHandle,
-    DstChain: ChainHandle,
-{
-    type SrcChain = CosmosChain<SrcChain>;
+impl HasRelayChains for CosmosRelay {
+    type SrcChain = CosmosChain;
 
-    type DstChain = CosmosChain<DstChain>;
+    type DstChain = CosmosChain;
 
     type Packet = Packet;
 
-    fn src_chain(&self) -> &CosmosChain<SrcChain> {
+    fn src_chain(&self) -> &CosmosChain {
         &self.src_chain
     }
 
-    fn dst_chain(&self) -> &CosmosChain<DstChain> {
+    fn dst_chain(&self) -> &CosmosChain {
         &self.dst_chain
     }
 
@@ -38,12 +33,8 @@ where
     }
 }
 
-impl<SrcChain, DstChain> ProvideRuntime<CosmosRelay<SrcChain, DstChain>> for CosmosRelayComponents
-where
-    SrcChain: Async,
-    DstChain: Async,
-{
-    fn runtime(relay: &CosmosRelay<SrcChain, DstChain>) -> &HermesRuntime {
+impl ProvideRuntime<CosmosRelay> for CosmosRelayComponents {
+    fn runtime(relay: &CosmosRelay) -> &HermesRuntime {
         &relay.runtime
     }
 }

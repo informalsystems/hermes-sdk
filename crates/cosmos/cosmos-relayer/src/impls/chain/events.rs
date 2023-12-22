@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 
-use cgp_core::Async;
 use hermes_cosmos_client_components::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
@@ -29,10 +28,7 @@ use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
 
-impl<Chain, Counterparty> HasCreateClientEvent<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasCreateClientEvent<Counterparty> for CosmosChain {
     type CreateClientEvent = CosmosCreateClientEvent;
 
     fn try_extract_create_client_event(event: Arc<AbciEvent>) -> Option<CosmosCreateClientEvent> {
@@ -44,10 +40,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasSendPacketEvent<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasSendPacketEvent<Counterparty> for CosmosChain {
     type SendPacketEvent = SendPacket;
 
     fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacket> {
@@ -59,10 +52,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasWriteAckEvent<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasWriteAckEvent<Counterparty> for CosmosChain {
     type WriteAckEvent = WriteAcknowledgement;
 
     fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAcknowledgement> {
@@ -70,10 +60,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasConnectionOpenInitEvent<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasConnectionOpenInitEvent<Counterparty> for CosmosChain {
     type ConnectionOpenInitEvent = CosmosConnectionOpenInitEvent;
 
     fn try_extract_connection_open_init_event(
@@ -89,10 +76,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasConnectionOpenTryEvent<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasConnectionOpenTryEvent<Counterparty> for CosmosChain {
     type ConnectionOpenTryEvent = CosmosConnectionOpenTryEvent;
 
     fn try_extract_connection_open_try_event(
@@ -108,10 +92,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasChannelOpenInitEvent<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasChannelOpenInitEvent<Counterparty> for CosmosChain {
     type ChannelOpenInitEvent = CosmosChannelOpenInitEvent;
 
     fn try_extract_channel_open_init_event(
@@ -125,10 +106,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasChannelOpenTryEvent<Counterparty> for CosmosChain<Chain>
-where
-    Chain: Async,
-{
+impl<Counterparty> HasChannelOpenTryEvent<Counterparty> for CosmosChain {
     type ChannelOpenTryEvent = CosmosChannelOpenTryEvent;
 
     fn try_extract_channel_open_try_event(

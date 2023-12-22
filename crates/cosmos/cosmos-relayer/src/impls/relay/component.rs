@@ -10,7 +10,6 @@ use hermes_relayer_components_extra::components::extra::relay::{
 };
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
-use ibc_relayer::chain::handle::ChainHandle;
 
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;
@@ -40,17 +39,8 @@ delegate_all!(
     CosmosRelayComponents,
 );
 
-impl<SrcChain, DstChain> HasComponents for CosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: Async,
-    DstChain: Async,
-{
+impl HasComponents for CosmosRelay {
     type Components = CosmosRelayComponents;
 }
 
-impl<SrcChain, DstChain> CanUseExtraAutoRelayer for CosmosRelay<SrcChain, DstChain>
-where
-    SrcChain: ChainHandle,
-    DstChain: ChainHandle,
-{
-}
+impl CanUseExtraAutoRelayer for CosmosRelay {}

@@ -5,7 +5,6 @@ use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
@@ -64,7 +63,7 @@ where
 {
     type SrcChain = SolomachineChain<Chain>;
 
-    type DstChain = CosmosChain<BaseChainHandle>;
+    type DstChain = CosmosChain;
 
     type Packet = Packet;
 
@@ -80,7 +79,7 @@ where
         &self.src_chain
     }
 
-    fn dst_chain(&self) -> &CosmosChain<BaseChainHandle> {
+    fn dst_chain(&self) -> &CosmosChain {
         &self.dst_chain
     }
 }
