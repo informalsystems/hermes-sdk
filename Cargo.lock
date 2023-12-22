@@ -116,20 +116,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "async-runtime-components"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "futures-channel",
- "futures-core",
- "futures-util",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-test-components",
- "rand",
-]
-
-[[package]]
 name = "async-stream"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -527,7 +513,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "async-trait",
 ]
@@ -535,7 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -544,7 +530,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/fix-impl-gat-bounds#5a9330c1340cf0097ed7996aa852f422a6cfeccd"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",
@@ -555,7 +541,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -567,7 +553,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -576,7 +562,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -585,7 +571,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -594,7 +580,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#359d5bbbe6368e1dbe7b2dcd0f0489ac1e55ca75"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d60e2cbd1d2a702cc8c878dcbdfdf099722da7e"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -736,54 +722,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
 
 [[package]]
-name = "cosmos-client-components"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "eyre",
- "flex-error",
- "futures",
- "http",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-runtime",
- "ibc-relayer-types",
- "ibc-test-components",
- "itertools 0.11.0",
- "prost",
- "tendermint",
- "tendermint-rpc",
- "tokio",
- "tonic",
- "tracing",
-]
-
-[[package]]
-name = "cosmos-integration-tests"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "cgp-error-eyre",
- "cosmos-client-components",
- "cosmos-test-components",
- "eyre",
- "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-cosmos",
- "ibc-relayer-runtime",
- "ibc-relayer-types",
- "ibc-test-components",
- "serde_json",
- "stable-eyre",
- "tokio",
- "toml 0.8.8",
-]
-
-[[package]]
 name = "cosmos-sdk-proto"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -792,36 +730,6 @@ dependencies = [
  "prost",
  "prost-types",
  "tendermint-proto",
-]
-
-[[package]]
-name = "cosmos-test-components"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "eyre",
- "flex-error",
- "futures",
- "hdpath",
- "http",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-runtime",
- "ibc-relayer-types",
- "ibc-test-components",
- "itertools 0.11.0",
- "prost",
- "rand",
- "serde_json",
- "tendermint",
- "tendermint-rpc",
- "tokio",
- "toml 0.8.8",
- "tonic",
- "tracing",
 ]
 
 [[package]]
@@ -1611,6 +1519,266 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
+name = "hermes-async-runtime-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "futures-channel",
+ "futures-core",
+ "futures-util",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-test-components",
+ "rand",
+]
+
+[[package]]
+name = "hermes-cosmos-client-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "hermes-test-components",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "itertools 0.11.0",
+ "prost",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-cosmos-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cgp-error-eyre",
+ "eyre",
+ "hermes-cosmos-client-components",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "hermes-test-components",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "serde_json",
+ "stable-eyre",
+ "tokio",
+ "toml 0.8.8",
+]
+
+[[package]]
+name = "hermes-cosmos-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hermes-async-runtime-components",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "hermes-test-components",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-telemetry",
+ "itertools 0.11.0",
+ "moka 0.11.3",
+ "opentelemetry 0.17.0",
+ "prost",
+ "serde",
+ "serde_derive",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-cosmos-test-components"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hdpath",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "hermes-test-components",
+ "http",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "itertools 0.11.0",
+ "prost",
+ "rand",
+ "serde_json",
+ "tendermint",
+ "tendermint-rpc",
+ "tokio",
+ "toml 0.8.8",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-ibc-test-suite"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-test-components",
+]
+
+[[package]]
+name = "hermes-mock-cosmos-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "basecoin-app",
+ "basecoin-store",
+ "cgp-core",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "ibc",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "primitive-types",
+ "prost",
+ "serde_json",
+ "tendermint",
+ "tendermint-testgen",
+ "tokio",
+ "tower",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-mock-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "eyre",
+ "flex-error",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-relayer-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+]
+
+[[package]]
+name = "hermes-relayer-components-extra"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+]
+
+[[package]]
+name = "hermes-relayer-runtime"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cgp-core",
+ "futures",
+ "hermes-async-runtime-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-test-components",
+ "hermes-tokio-runtime-components",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-solomachine-relayer"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "cgp-core",
+ "crypto-hash",
+ "eyre",
+ "flex-error",
+ "futures",
+ "hermes-cosmos-client-components",
+ "hermes-cosmos-relayer",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-telemetry",
+ "itertools 0.11.0",
+ "prost",
+ "secp256k1",
+ "serde",
+ "serde_derive",
+ "sha2 0.10.8",
+ "tendermint",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-test-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+]
+
+[[package]]
+name = "hermes-tokio-runtime-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "futures",
+ "hermes-async-runtime-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-test-components",
+ "rand",
+ "tokio",
+ "tokio-stream",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1789,14 +1957,14 @@ name = "ibc-integration-test"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
- "cosmos-client-components",
+ "hermes-cosmos-client-components",
+ "hermes-cosmos-relayer",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "hermes-solomachine-relayer",
  "http",
  "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-cosmos",
- "ibc-relayer-runtime",
- "ibc-relayer-solomachine",
  "ibc-relayer-types",
  "ibc-test-framework",
  "prost",
@@ -1898,141 +2066,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-relayer-components"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
-]
-
-[[package]]
-name = "ibc-relayer-components-extra"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "ibc-relayer-components",
-]
-
-[[package]]
-name = "ibc-relayer-cosmos"
-version = "0.1.0"
-dependencies = [
- "async-runtime-components",
- "async-trait",
- "cgp-core",
- "cosmos-client-components",
- "eyre",
- "flex-error",
- "futures",
- "http",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-runtime",
- "ibc-relayer-types",
- "ibc-telemetry",
- "ibc-test-components",
- "itertools 0.11.0",
- "moka 0.11.3",
- "opentelemetry 0.17.0",
- "prost",
- "serde",
- "serde_derive",
- "tendermint",
- "tendermint-rpc",
- "tokio",
- "tonic",
- "tracing",
-]
-
-[[package]]
-name = "ibc-relayer-cosmos-mock"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "basecoin-app",
- "basecoin-store",
- "cgp-core",
- "cosmos-client-components",
- "ibc",
- "ibc-proto",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-runtime",
- "ibc-relayer-types",
- "primitive-types",
- "prost",
- "serde_json",
- "tendermint",
- "tendermint-testgen",
- "tokio",
- "tower",
- "tracing",
-]
-
-[[package]]
-name = "ibc-relayer-mock"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "cgp-core",
- "cosmos-client-components",
- "eyre",
- "flex-error",
- "ibc-relayer-components",
- "ibc-relayer-runtime",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "ibc-relayer-runtime"
-version = "0.1.0"
-dependencies = [
- "async-runtime-components",
- "async-trait",
- "cgp-core",
- "futures",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-test-components",
- "tokio",
- "tokio-runtime-components",
- "tracing",
-]
-
-[[package]]
-name = "ibc-relayer-solomachine"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bytes",
- "cgp-core",
- "cosmos-client-components",
- "crypto-hash",
- "eyre",
- "flex-error",
- "futures",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-relayer-cosmos",
- "ibc-relayer-runtime",
- "ibc-relayer-types",
- "ibc-telemetry",
- "itertools 0.11.0",
- "prost",
- "secp256k1",
- "serde",
- "serde_derive",
- "sha2 0.10.8",
- "tendermint",
- "tokio",
- "tracing",
-]
-
-[[package]]
 name = "ibc-relayer-types"
 version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2082,15 +2115,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibc-test-components"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
-]
-
-[[package]]
 name = "ibc-test-framework"
 version = "0.1.0"
 dependencies = [
@@ -2101,12 +2125,12 @@ dependencies = [
  "eyre",
  "flex-error",
  "hdpath",
+ "hermes-cosmos-relayer",
+ "hermes-relayer-components",
  "hex 0.4.3",
  "http",
  "ibc-proto",
  "ibc-relayer",
- "ibc-relayer-components",
- "ibc-relayer-cosmos",
  "ibc-relayer-types",
  "itertools 0.11.0",
  "once_cell",
@@ -2124,15 +2148,6 @@ dependencies = [
  "tonic",
  "tracing",
  "tracing-subscriber",
-]
-
-[[package]]
-name = "ibc-test-suite"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "ibc-relayer-components",
- "ibc-test-components",
 ]
 
 [[package]]
@@ -2942,7 +2957,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "265baba7fabd416cf5078179f7d2cbeca4ce7a9041111900675ea7c4cb8a4c32"
 dependencies = [
  "anyhow",
- "itertools 0.11.0",
+ "itertools 0.10.5",
  "proc-macro2",
  "quote",
  "syn 2.0.37",
@@ -4157,21 +4172,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.37",
-]
-
-[[package]]
-name = "tokio-runtime-components"
-version = "0.1.0"
-dependencies = [
- "async-runtime-components",
- "cgp-core",
- "futures",
- "ibc-relayer-components",
- "ibc-relayer-components-extra",
- "ibc-test-components",
- "rand",
- "tokio",
- "tokio-stream",
 ]
 
 [[package]]

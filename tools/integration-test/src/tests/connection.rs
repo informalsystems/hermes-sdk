@@ -1,13 +1,13 @@
-use cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_relayer::types::error::Error as CosmosError;
+use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
+use hermes_relayer_components::build::impls::bootstrap::birelay::CanBootstrapBiRelay;
+use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::channel::version::Version;
 use ibc_relayer::config::PacketFilter;
-use ibc_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
-use ibc_relayer_components::build::impls::bootstrap::birelay::CanBootstrapBiRelay;
-use ibc_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
-use ibc_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use ibc_relayer_cosmos::types::error::Error as CosmosError;
 use ibc_test_framework::prelude::*;
 
 use crate::tests::context::new_cosmos_builder;

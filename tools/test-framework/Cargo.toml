@@ -16,8 +16,8 @@ description = """
 cgp-core           = { workspace = true }
 ibc-relayer-types  = { workspace = true }
 ibc-relayer        = { workspace = true }
-ibc-relayer-cosmos = { workspace = true }
-ibc-relayer-components  = { workspace = true }
+hermes-cosmos-relayer = { workspace = true }
+hermes-relayer-components  = { workspace = true }
 ibc-proto               = { workspace = true, features = ["serde"] }
 tendermint-rpc          = { workspace = true, features = ["http-client", "websocket-client"] }
 

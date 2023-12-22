@@ -1,0 +1,26 @@
+[package]
+name         = "hermes-tokio-runtime-components"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Modular runtime components implemented using Tokio
+"""
+
+[dependencies]
+hermes-relayer-components           = { workspace = true }
+hermes-relayer-components-extra     = { workspace = true }
+hermes-test-components              = { workspace = true }
+hermes-async-runtime-components     = { workspace = true }
+
+cgp-core    = { workspace = true }
+tokio       = { workspace = true, features = ["full"] }
+futures     = { workspace = true }
+
+tokio-stream    = { version = "0.1" }
+rand            = { version = "0.8.5" }

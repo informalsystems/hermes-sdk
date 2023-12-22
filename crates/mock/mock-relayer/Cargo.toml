@@ -1,0 +1,27 @@
+[package]
+name = "hermes-mock-relayer"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    TBD
+"""
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+hermes-relayer-components           = { workspace = true }
+hermes-relayer-runtime              = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
+
+async-trait   = { workspace = true }
+eyre          = { workspace = true }
+flex-error    = { workspace = true }
+cgp-core      = { workspace = true }
+tokio         = { workspace = true, features = ["full"] }
+tracing       = { workspace = true }

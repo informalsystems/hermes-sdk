@@ -1,0 +1,40 @@
+[package]
+name         = "hermes-solomachine-relayer"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = "An IBC relayer for relaying between Cosmos and Solomachin clients."
+
+[dependencies]
+ibc-proto                           = { workspace = true }
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
+ibc-telemetry                       = { workspace = true }
+cgp-core                            = { workspace = true }
+tendermint                          = { workspace = true, features = ["secp256k1"] }
+hermes-cosmos-relayer               = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
+hermes-relayer-runtime              = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-relayer-components-extra     = { workspace = true }
+
+serde           = { workspace = true }
+serde_derive    = { workspace = true }
+async-trait     = { workspace = true }
+flex-error      = { workspace = true }
+prost           = { workspace = true }
+eyre            = { workspace = true }
+tokio           = { workspace = true }
+itertools       = { workspace = true }
+futures         = { workspace = true }
+tracing         = { workspace = true }
+
+secp256k1       = "0.27.0"
+sha2            = "0.10.7"
+crypto-hash     = "0.3.4"
+bytes           = { version = "1.4.0" }
