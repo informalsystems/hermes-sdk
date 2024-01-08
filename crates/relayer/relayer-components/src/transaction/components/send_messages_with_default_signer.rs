@@ -1,8 +1,8 @@
 use alloc::vec::Vec;
+
 use cgp_core::async_trait;
 
 use crate::chain::traits::components::message_sender::MessageSender;
-
 use crate::transaction::traits::components::send_messages_with_signer::CanSendMessagesWithSigner;
 use crate::transaction::traits::signer::HasDefaultSigner;
 use crate::transaction::traits::types::HasTxTypes;

@@ -5,7 +5,6 @@ use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOpti
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::contexts::chain::CosmosChain;

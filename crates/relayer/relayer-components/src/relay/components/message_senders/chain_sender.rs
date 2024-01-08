@@ -1,4 +1,5 @@
 use alloc::vec::Vec;
+
 use cgp_core::async_trait;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;

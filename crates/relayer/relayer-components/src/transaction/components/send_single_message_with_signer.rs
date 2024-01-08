@@ -1,9 +1,9 @@
 use alloc::vec::Vec;
+
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
-
 use crate::transaction::traits::components::send_messages_with_signer::CanSendMessagesWithSigner;
 use crate::transaction::traits::types::HasSignerType;
 
