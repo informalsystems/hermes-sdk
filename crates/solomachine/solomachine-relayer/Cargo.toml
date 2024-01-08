@@ -36,4 +36,4 @@ tracing         = { workspace = true }
 secp256k1       = "0.27.0"
 sha2            = "0.10.7"
 crypto-hash     = "0.3.4"
-bytes           = { version = "1.4.0" }
+bytes           = { version = "1.5.0" }
