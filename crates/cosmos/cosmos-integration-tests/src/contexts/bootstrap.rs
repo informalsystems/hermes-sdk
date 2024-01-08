@@ -5,7 +5,7 @@ use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::HandleErrorsWithEyre;
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::{eyre, Error};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
@@ -77,11 +77,8 @@ delegate_all!(
 
 delegate_components! {
     CosmosStdBootstrapComponents {
-        [
-            ErrorTypeComponent,
-            ErrorRaiserComponent,
-        ]:
-            HandleErrorsWithEyre,
+        ErrorTypeComponent: ProvideEyreError,
+        ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         ChainConfigTypeComponent: ProvideCosmosChainConfigType,

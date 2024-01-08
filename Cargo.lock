@@ -572,7 +572,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/eyre-error-raisers#5511d98eec9551ca182e4746ed294a072b453073"
 dependencies = [
  "cgp-core",
  "eyre",

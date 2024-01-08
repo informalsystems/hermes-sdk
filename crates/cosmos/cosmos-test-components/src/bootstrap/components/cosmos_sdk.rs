@@ -95,7 +95,10 @@ where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
         + HasErrorType
-        + CanRaiseError<IoError>,
+        + CanRaiseError<String>
+        + CanRaiseError<IoError>
+        + CanRaiseError<toml::ser::Error>
+        + CanRaiseError<toml::de::Error>,
     Components: DelegatesToCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
