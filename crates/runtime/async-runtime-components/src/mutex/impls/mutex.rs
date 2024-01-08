@@ -17,7 +17,7 @@ where
         Mutex::new(item)
     }
 
-    async fn acquire_mutex<'a, T: Async>(mutex: &'a Self::Mutex<T>) -> Self::MutexGuard<'a, T> {
+    async fn acquire_mutex<T: Async>(mutex: &Self::Mutex<T>) -> Self::MutexGuard<'_, T> {
         mutex.lock().await
     }
 }
