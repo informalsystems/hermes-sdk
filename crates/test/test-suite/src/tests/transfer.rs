@@ -1,3 +1,4 @@
+use alloc::format;
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -16,8 +17,6 @@ use hermes_test_components::test_env::traits::background_relayer::HasBackgroundR
 use hermes_test_components::test_env::traits::types::chain_at::{
     HasChainAt, HasOneChain, HasTwoChains,
 };
-
-use crate::std_prelude::*;
 
 pub struct TestIbcTransfer;
 
