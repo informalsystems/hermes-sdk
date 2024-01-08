@@ -1,5 +1,3 @@
-use alloc::boxed::Box;
-
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

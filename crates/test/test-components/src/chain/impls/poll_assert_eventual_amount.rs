@@ -1,4 +1,3 @@
-use alloc::boxed::Box;
 use core::time::Duration;
 
 use cgp_core::prelude::*;

@@ -1,5 +1,3 @@
-use alloc::boxed::Box;
-
 use cgp_core::prelude::*;
 
 #[async_trait]

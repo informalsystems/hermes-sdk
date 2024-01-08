@@ -60,6 +60,6 @@ where
             },
         );
 
-        return InUpdateClient::build_update_client_messages(relay, target, height).await;
+        InUpdateClient::build_update_client_messages(relay, target, height).await
     }
 }

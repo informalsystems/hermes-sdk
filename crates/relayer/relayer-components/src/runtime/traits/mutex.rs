@@ -1,4 +1,3 @@
-use alloc::boxed::Box;
 use core::ops::DerefMut;
 
 use cgp_core::prelude::*;
