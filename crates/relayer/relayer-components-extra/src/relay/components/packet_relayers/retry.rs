@@ -5,8 +5,6 @@ use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::components::packet_relayer::PacketRelayer;
 use hermes_relayer_components::relay::types::aliases::Packet;
 
-use crate::std_prelude::*;
-
 pub struct RetryRelayer<InRelay> {
     pub phantom: PhantomData<InRelay>,
 }

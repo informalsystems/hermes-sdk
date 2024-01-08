@@ -10,7 +10,6 @@ use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_relayer_components::runtime::traits::task::Task;
 
 use crate::runtime::traits::spawn::CanSpawnTask;
-use crate::std_prelude::*;
 
 #[async_trait]
 pub trait CanSpawnClearPacketWorker: HasRelayChains {
