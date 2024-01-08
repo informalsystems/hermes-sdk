@@ -1,5 +1,3 @@
-use alloc::sync::Arc;
-
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
@@ -16,7 +14,7 @@ pub struct BuildCosmosCreateClientMessage;
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCosmosCreateClientMessage
 where
-    Chain: HasMessageType<Message = Arc<dyn CosmosMessage>> + HasErrorType,
+    Chain: HasMessageType<Message = CosmosMessage> + HasErrorType,
     Counterparty: HasCreateClientPayload<Chain, CreateClientPayload = CosmosCreateClientPayload>,
 {
     async fn build_create_client_message(

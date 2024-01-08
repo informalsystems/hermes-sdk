@@ -34,7 +34,7 @@ where
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &CosmosInitConnectionOptions,
         counterparty_payload: Counterparty::ConnectionOpenInitPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_init_message(
             chain,
             client_id,
@@ -51,7 +51,7 @@ where
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenTryPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_try_message(
             chain,
             client_id,
@@ -67,7 +67,7 @@ where
         connection_id: &ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenAckPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_ack_message(
             chain,
             connection_id,
@@ -81,7 +81,7 @@ where
         chain: &CosmosChain,
         connection_id: &ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenConfirmPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_confirm_message(chain, connection_id, counterparty_payload)
             .await
     }

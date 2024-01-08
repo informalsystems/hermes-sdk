@@ -1,5 +1,3 @@
-use alloc::sync::Arc;
-
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -17,7 +15,7 @@ pub struct BuildCosmosAckPacketMessage;
 impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosAckPacketMessage
 where
-    Chain: HasMessageType<Message = Arc<dyn CosmosMessage>>
+    Chain: HasMessageType<Message = CosmosMessage>
         + HasErrorType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>,
     Counterparty: HasAckPacketPayload<Chain, AckPacketPayload = CosmosAckPacketPayload>,
@@ -26,7 +24,7 @@ where
         _chain: &Chain,
         packet: &Packet,
         payload: CosmosAckPacketPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Chain::Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosAckPacketMessage {
             packet: packet.clone(),
             acknowledgement: payload.ack,

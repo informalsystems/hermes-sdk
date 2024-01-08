@@ -1,5 +1,3 @@
-use alloc::sync::Arc;
-
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilder;
@@ -18,7 +16,7 @@ pub struct BuildCosmosTimeoutPacketMessage;
 impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosTimeoutPacketMessage
 where
-    Chain: HasMessageType<Message = Arc<dyn CosmosMessage>>
+    Chain: HasMessageType<Message = CosmosMessage>
         + HasErrorType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>,
     Counterparty: HasTimeoutUnorderedPacketPayload<
@@ -30,7 +28,7 @@ where
         _chain: &Chain,
         packet: &Packet,
         payload: Counterparty::TimeoutUnorderedPacketPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Chain::Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosTimeoutPacketMessage {
             next_sequence_recv: packet.sequence,
             packet: packet.clone(),

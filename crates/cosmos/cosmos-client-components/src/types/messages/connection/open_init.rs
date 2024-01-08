@@ -12,7 +12,7 @@ use ibc_relayer_types::signer::Signer;
 use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
-use crate::traits::message::CosmosMessage;
+use crate::traits::message::DynCosmosMessage;
 
 const TYPE_URL: &str = "/ibc.core.connection.v1.MsgConnectionOpenInit";
 
@@ -25,7 +25,7 @@ pub struct CosmosConnectionOpenInitMessage {
     pub delay_period: Duration,
 }
 
-impl CosmosMessage for CosmosConnectionOpenInitMessage {
+impl DynCosmosMessage for CosmosConnectionOpenInitMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
         let counterparty = Counterparty {
             client_id: self.counterparty_client_id.as_str().to_string(),

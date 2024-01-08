@@ -21,7 +21,7 @@ impl TxEncoder<CosmosTxContext> for CosmosTxComponents {
         key_pair: &Secp256k1KeyPair,
         account: &Account,
         fee: &Fee,
-        messages: &[Arc<dyn CosmosMessage>],
+        messages: &[CosmosMessage],
     ) -> Result<SignedTx, Error> {
         let tx_config = &context.tx_config;
         let memo = Memo::default();

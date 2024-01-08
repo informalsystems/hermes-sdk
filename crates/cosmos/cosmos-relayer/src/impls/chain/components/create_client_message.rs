@@ -27,7 +27,7 @@ where
     async fn build_create_client_message(
         chain: &CosmosChain,
         counterparty_payload: Counterparty::CreateClientPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_create_client_message(chain, counterparty_payload).await
     }
 }

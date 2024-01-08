@@ -6,7 +6,20 @@ use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 use prost::EncodeError;
 
-pub trait CosmosMessage: Debug + Send + Sync + 'static {
+#[derive(Debug, Clone)]
+pub struct CosmosMessage {
+    pub message: Arc<dyn DynCosmosMessage>,
+}
+
+impl CosmosMessage {
+    pub fn new<Message: DynCosmosMessage>(message: Message) -> Self {
+        Self {
+            message: Arc::new(message),
+        }
+    }
+}
+
+pub trait DynCosmosMessage: Debug + Send + Sync + 'static {
     fn counterparty_message_height_for_update_client(&self) -> Option<Height> {
         None
     }
@@ -19,18 +32,18 @@ pub trait CosmosMessage: Debug + Send + Sync + 'static {
 }
 
 pub trait ToCosmosMessage {
-    fn to_cosmos_message(self) -> Arc<dyn CosmosMessage>;
+    fn to_cosmos_message(self) -> CosmosMessage;
 }
 
 impl<Message> ToCosmosMessage for Message
 where
-    Message: CosmosMessage,
+    Message: DynCosmosMessage,
 {
-    fn to_cosmos_message(self) -> Arc<dyn CosmosMessage> {
-        Arc::new(self)
+    fn to_cosmos_message(self) -> CosmosMessage {
+        CosmosMessage::new(self)
     }
 }
 
-pub fn wrap_cosmos_message<Message: CosmosMessage>(message: Message) -> Arc<dyn CosmosMessage> {
-    Arc::new(message)
+pub fn wrap_cosmos_message<Message: DynCosmosMessage>(message: Message) -> CosmosMessage {
+    CosmosMessage::new(message)
 }

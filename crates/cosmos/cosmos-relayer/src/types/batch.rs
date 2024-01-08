@@ -9,7 +9,7 @@ use tendermint::abci::Event as AbciEvent;
 use crate::types::error::Error;
 
 pub type CosmosBatchPayload = (
-    Vec<Arc<dyn CosmosMessage>>,
+    Vec<CosmosMessage>,
     SenderOnce<Result<Vec<Vec<Arc<AbciEvent>>>, Error>>,
 );
 

@@ -1,5 +1,3 @@
-use alloc::sync::Arc;
-
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
@@ -18,7 +16,7 @@ pub struct BuildCosmosReceivePacketMessage;
 impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosReceivePacketMessage
 where
-    Chain: HasMessageType<Message = Arc<dyn CosmosMessage>>
+    Chain: HasMessageType<Message = CosmosMessage>
         + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
         + HasErrorType,
     Counterparty: HasReceivePacketPayload<Chain, ReceivePacketPayload = CosmosReceivePacketPayload>,
@@ -27,7 +25,7 @@ where
         _chain: &Chain,
         packet: &Packet,
         payload: CosmosReceivePacketPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Chain::Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosReceivePacketMessage {
             packet: packet.clone(),
             update_height: payload.update_height,

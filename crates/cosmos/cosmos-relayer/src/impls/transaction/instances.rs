@@ -17,7 +17,7 @@ pub struct CosmosTxInstances;
 impl MessageSender<CosmosTxContext> for CosmosTxInstances {
     async fn send_messages(
         tx_context: &CosmosTxContext,
-        messages: Vec<Arc<dyn CosmosMessage>>,
+        messages: Vec<CosmosMessage>,
     ) -> Result<Vec<Vec<Arc<AbciEvent>>>, Error> {
         tx_context.send_messages(messages).await
     }

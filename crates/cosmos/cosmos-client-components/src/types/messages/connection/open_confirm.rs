@@ -7,7 +7,7 @@ use ibc_relayer_types::Height;
 use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
-use crate::traits::message::CosmosMessage;
+use crate::traits::message::DynCosmosMessage;
 
 const TYPE_URL: &str = "/ibc.core.connection.v1.MsgConnectionOpenConfirm";
 
@@ -18,7 +18,7 @@ pub struct CosmosConnectionOpenConfirmMessage {
     pub proof_ack: CommitmentProofBytes,
 }
 
-impl CosmosMessage for CosmosConnectionOpenConfirmMessage {
+impl DynCosmosMessage for CosmosConnectionOpenConfirmMessage {
     fn counterparty_message_height_for_update_client(&self) -> Option<Height> {
         Some(self.update_height)
     }

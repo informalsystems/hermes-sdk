@@ -26,7 +26,7 @@ impl CanIncrementHeight for CosmosChain {
 }
 
 impl CanEstimateMessageSize for CosmosChain {
-    fn estimate_message_size(message: &Arc<dyn CosmosMessage>) -> Result<usize, Error> {
+    fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Error> {
         let raw = message
             .encode_protobuf(&Signer::dummy())
             .map_err(BaseError::encode)?;
@@ -51,9 +51,7 @@ impl<Counterparty> HasCounterpartyMessageHeight<Counterparty> for CosmosChain
 where
     Counterparty: HasHeightType<Height = Height>,
 {
-    fn counterparty_message_height_for_update_client(
-        message: &Arc<dyn CosmosMessage>,
-    ) -> Option<Height> {
+    fn counterparty_message_height_for_update_client(message: &CosmosMessage) -> Option<Height> {
         message.counterparty_message_height_for_update_client()
     }
 }
