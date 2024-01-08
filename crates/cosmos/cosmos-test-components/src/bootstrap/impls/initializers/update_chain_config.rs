@@ -36,26 +36,29 @@ where
             .reserve_tcp_port()
             .await
             .map_err(Bootstrap::raise_error)?;
+
         let p2p_port = runtime
             .reserve_tcp_port()
             .await
             .map_err(Bootstrap::raise_error)?;
-        let pprof_port = runtime
-            .reserve_tcp_port()
-            .await
-            .map_err(Bootstrap::raise_error)?;
+
         let grpc_port = runtime
             .reserve_tcp_port()
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        let comet_config = {
-            let mut comet_config = {
-                let comet_config_path = Runtime::join_file_path(
-                    chain_home_dir,
-                    &Runtime::file_path_from_string("config/config.toml"),
-                );
+        let pprof_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::raise_error)?;
 
+        let comet_config = {
+            let comet_config_path = Runtime::join_file_path(
+                chain_home_dir,
+                &Runtime::file_path_from_string("config/config.toml"),
+            );
+
+            let mut comet_config = {
                 let comet_config_string = runtime
                     .read_file_as_string(&comet_config_path)
                     .await
@@ -75,16 +78,24 @@ where
 
             bootstrap.modify_comet_config(&mut comet_config)?;
 
+            let comet_config_string =
+                toml::to_string_pretty(&comet_config).map_err(Report::from)?;
+
+            runtime
+                .write_string_to_file(&comet_config_path, &comet_config_string)
+                .await
+                .map_err(Bootstrap::raise_error)?;
+
             comet_config
         };
 
         let sdk_config = {
-            let mut sdk_config = {
-                let sdk_config_path = Runtime::join_file_path(
-                    chain_home_dir,
-                    &Runtime::file_path_from_string("config/app.toml"),
-                );
+            let sdk_config_path = Runtime::join_file_path(
+                chain_home_dir,
+                &Runtime::file_path_from_string("config/app.toml"),
+            );
 
+            let mut sdk_config = {
                 let sdk_config_string = runtime
                     .read_file_as_string(&sdk_config_path)
                     .await
@@ -96,6 +107,13 @@ where
             set_grpc_port(&mut sdk_config, grpc_port)?;
             disable_grpc_web(&mut sdk_config)?;
             disable_api(&mut sdk_config)?;
+
+            let sdk_config_string = toml::to_string_pretty(&sdk_config).map_err(Report::from)?;
+
+            runtime
+                .write_string_to_file(&sdk_config_path, &sdk_config_string)
+                .await
+                .map_err(Bootstrap::raise_error)?;
 
             sdk_config
         };
@@ -146,6 +164,8 @@ pub fn set_p2p_port(config: &mut Value, port: u16) -> Result<(), Report> {
 
 pub fn set_pprof_port(config: &mut Value, port: u16) -> Result<(), Report> {
     config
+        .get_mut("rpc")
+        .ok_or_else(|| eyre!("expect rpc section"))?
         .as_table_mut()
         .ok_or_else(|| eyre!("expect object"))?
         .insert(
