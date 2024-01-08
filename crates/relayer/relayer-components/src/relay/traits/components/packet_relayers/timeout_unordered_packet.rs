@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::chain::types::aliases::Height;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::std_prelude::*;
 
 /// Encapsulates the capability of a relayer to send timeout packets over
 /// unordered channels.

@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::std_prelude::*;
 
 #[derive_component(CounterpartyChainIdQuerierComponent, CounterpartyChainIdQuerier<Chain>)]
 #[async_trait]

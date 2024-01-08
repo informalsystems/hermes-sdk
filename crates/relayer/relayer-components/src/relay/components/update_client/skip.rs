@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp_core::async_trait;
@@ -11,7 +12,6 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use crate::relay::traits::logs::logger::CanLogRelayTarget;
 use crate::relay::traits::target::ChainTarget;
-use crate::std_prelude::*;
 
 pub struct SkipUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 

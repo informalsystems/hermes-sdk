@@ -10,7 +10,6 @@ use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
-use crate::std_prelude::*;
 
 pub trait CanRaiseMissingConnectionInitEventError: HasRelayChains {
     fn missing_connection_init_event_error(&self) -> Self::Error;

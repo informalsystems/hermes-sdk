@@ -5,7 +5,6 @@ use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
-use crate::std_prelude::*;
 
 #[derive_component(AckPacketPayloadBuilderComponent, AckPacketPayloadBuilder<Chain>)]
 #[async_trait]

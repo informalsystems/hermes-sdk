@@ -7,7 +7,6 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{Height, WriteAckEvent};
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayer;
 use crate::relay::traits::packet::HasRelayPacketFields;
-use crate::std_prelude::*;
 
 pub struct SkipReceivedPacketRelayer<Relayer> {
     pub phantom: PhantomData<Relayer>,

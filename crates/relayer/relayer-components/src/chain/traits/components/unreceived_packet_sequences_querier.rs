@@ -1,8 +1,9 @@
+use alloc::vec::Vec;
+
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::std_prelude::*;
 
 #[derive_component(UnreceivedPacketSequencesQuerierComponent, UnreceivedPacketSequencesQuerier<Chain>)]
 #[async_trait]

@@ -3,7 +3,6 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
-use crate::std_prelude::*;
 
 #[derive_component(AckPacketMessageBuilderComponent, AckPacketMessageBuilder<Chain>)]
 #[async_trait]

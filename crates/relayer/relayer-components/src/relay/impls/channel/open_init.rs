@@ -7,7 +7,6 @@ use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_init::ChannelInitializer;
-use crate::std_prelude::*;
 
 pub trait CanRaiseMissingChannelInitEventError: HasRelayChains {
     fn missing_channel_init_event_error(&self) -> Self::Error;

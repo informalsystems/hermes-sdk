@@ -4,7 +4,6 @@ use crate::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::std_prelude::*;
 
 #[derive_component(ConnectionHandshakeMessageBuilderComponent, ConnectionHandshakeMessageBuilder<Chain>)]
 #[async_trait]

@@ -6,7 +6,6 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
 use crate::relay::traits::channel::open_init::CanInitChannel;
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
-use crate::std_prelude::*;
 
 /**
    This is an autotrait implementation by the relay context to allow bootstrapping

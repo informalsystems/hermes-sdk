@@ -1,7 +1,6 @@
 use cgp_core::prelude::*;
 
 use crate::relay::traits::chains::HasRelayChains;
-use crate::std_prelude::*;
 
 #[derive_component(PacketFilterComponent, PacketFilter<Relay>)]
 #[async_trait]

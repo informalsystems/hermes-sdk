@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
-use crate::std_prelude::*;
 
 #[derive_component(ChannelOpenConfirmRelayerComponent, ChannelOpenConfirmRelayer<Relay>)]
 #[async_trait]

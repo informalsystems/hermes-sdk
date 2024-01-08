@@ -4,7 +4,6 @@ use crate::chain::traits::types::event::HasEventType;
 use crate::chain::types::aliases::{Event, Height};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
-use crate::std_prelude::*;
 
 /**
    An event relayer performs relay actions based on one event at a time from

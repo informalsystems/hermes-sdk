@@ -1,4 +1,5 @@
 use alloc::collections::BTreeSet;
+use alloc::vec::Vec;
 
 use cgp_core::async_trait;
 
@@ -9,7 +10,6 @@ use crate::relay::traits::components::ibc_message_sender::IbcMessageSender;
 use crate::relay::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use crate::relay::traits::logs::logger::CanLogRelayTarget;
 use crate::relay::traits::target::ChainTarget;
-use crate::std_prelude::*;
 
 pub struct SendIbcMessagesWithUpdateClient<Sender>(pub Sender);
 

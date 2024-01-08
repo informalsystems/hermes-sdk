@@ -1,12 +1,13 @@
 /*!
    Trait definitions for [`CanSendMessages`] and [`MessageSender`].
 */
+use alloc::vec;
+use alloc::vec::Vec;
 
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
-use crate::std_prelude::*;
 
 /**
    This is a simplified interface offered by a chain context or a transaction

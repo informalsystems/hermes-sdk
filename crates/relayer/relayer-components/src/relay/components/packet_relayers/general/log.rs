@@ -7,7 +7,6 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::packet_relayer::PacketRelayer;
 use crate::relay::traits::logs::logger::CanLogRelay;
 use crate::relay::traits::logs::packet::CanLogRelayPacket;
-use crate::std_prelude::*;
 
 pub struct LoggerRelayer<InRelayer>(pub PhantomData<InRelayer>);
 

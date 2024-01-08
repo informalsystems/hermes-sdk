@@ -10,7 +10,6 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::create_client::HasCreateClientOptions;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::std_prelude::*;
 
 #[async_trait]
 pub trait CanBootstrapBiRelay: HasBiRelayType + HasErrorType

@@ -6,7 +6,6 @@ use crate::relay::traits::channel::open_ack::CanRelayChannelOpenAck;
 use crate::relay::traits::channel::open_confirm::CanRelayChannelOpenConfirm;
 use crate::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayer;
 use crate::relay::traits::channel::open_try::CanRelayChannelOpenTry;
-use crate::std_prelude::*;
 
 /**
    Relays a channel open handshake using a channel ID that has been

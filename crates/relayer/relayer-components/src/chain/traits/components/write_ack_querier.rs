@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::std_prelude::*;
 
 #[derive_component(WriteAckQuerierComponent, WriteAckQuerier<Chain>)]
 #[async_trait]

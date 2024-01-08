@@ -9,7 +9,6 @@ use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessa
 use crate::relay::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use crate::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayer;
 use crate::relay::traits::target::DestinationTarget;
-use crate::std_prelude::*;
 
 /**
    A base implementation of [`ConnectionOpenConfirmRelayer`] that relays a new connection

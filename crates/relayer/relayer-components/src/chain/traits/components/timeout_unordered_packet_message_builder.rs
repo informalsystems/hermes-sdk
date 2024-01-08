@@ -5,7 +5,6 @@ use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use crate::std_prelude::*;
 
 #[derive_component(TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadBuilder<Chain>)]
 #[async_trait]

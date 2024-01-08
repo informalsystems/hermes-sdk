@@ -9,7 +9,6 @@ use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayer;
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::DestinationTarget;
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
-use crate::std_prelude::*;
 
 /**
    A base implementation of [`ChannelOpenConfirmRelayer`] that relays a new channel

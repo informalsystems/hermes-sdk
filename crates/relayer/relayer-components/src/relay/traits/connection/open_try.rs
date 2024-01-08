@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::{DstConnectionId, SrcConnectionId};
-use crate::std_prelude::*;
 
 #[derive_component(ConnectionOpenTryRelayerComponent, ConnectionOpenTryRelayer<Relay>)]
 #[async_trait]

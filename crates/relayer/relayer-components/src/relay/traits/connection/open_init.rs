@@ -3,7 +3,6 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::types::aliases::SrcConnectionId;
-use crate::std_prelude::*;
 
 #[derive_component(ConnectionInitializerComponent, ConnectionInitializer<Relay>)]
 #[async_trait]

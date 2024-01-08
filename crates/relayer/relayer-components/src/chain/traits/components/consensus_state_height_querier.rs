@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::std_prelude::*;
 
 #[derive_component(ConsensusStateHeightQuerierComponent, ConsensusStateHeightQuerier<Chain>)]
 #[async_trait]

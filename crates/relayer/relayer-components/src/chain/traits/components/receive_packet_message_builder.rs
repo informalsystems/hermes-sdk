@@ -3,7 +3,6 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use crate::std_prelude::*;
 
 #[derive_component(ReceivePacketMessageBuilderComponent, ReceivePacketMessageBuilder<Chain>)]
 #[async_trait]

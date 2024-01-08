@@ -4,8 +4,6 @@
 
 use cgp_core::prelude::*;
 
-use crate::std_prelude::*;
-
 /**
    This is used for the chain context and the transaction context to declare
    that they have a unique `Self::Message` type, which corresponds to messages

@@ -3,7 +3,6 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{Height, WriteAckEvent};
 use crate::relay::traits::chains::HasRelayChains;
-use crate::std_prelude::*;
 
 #[derive_component(AckPacketRelayerComponent, AckPacketRelayer<Relay>)]
 #[async_trait]

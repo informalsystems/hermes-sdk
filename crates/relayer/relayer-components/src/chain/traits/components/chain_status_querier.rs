@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::status::HasChainStatusType;
-use crate::std_prelude::*;
 
 /**
    Implemented by a chain context to provide method for querying the
