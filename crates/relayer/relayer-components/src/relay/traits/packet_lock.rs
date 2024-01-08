@@ -1,7 +1,6 @@
 use cgp_core::async_trait;
 
 use crate::relay::traits::chains::HasRelayChains;
-use crate::std_prelude::*;
 
 /**
    Provides a packet lock mutex for packet relayers to coordinate and avoid

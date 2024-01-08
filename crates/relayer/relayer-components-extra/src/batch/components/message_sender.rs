@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 use cgp_core::async_trait;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -11,7 +13,6 @@ use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::runtime::traits::channel::CanUseChannels;
 use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
-use crate::std_prelude::*;
 
 pub struct SendMessagesToBatchWorker;
 

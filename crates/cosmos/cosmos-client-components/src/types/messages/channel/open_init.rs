@@ -6,7 +6,7 @@ use ibc_relayer_types::signer::Signer;
 use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
-use crate::traits::message::CosmosMessage;
+use crate::traits::message::DynCosmosMessage;
 
 const TYPE_URL: &str = "/ibc.core.channel.v1.MsgChannelOpenInit";
 
@@ -16,7 +16,7 @@ pub struct CosmosChannelOpenInitMessage {
     pub channel: ChannelEnd,
 }
 
-impl CosmosMessage for CosmosChannelOpenInitMessage {
+impl DynCosmosMessage for CosmosChannelOpenInitMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
         let proto_message = ProtoMsgChannelOpenInit {
             port_id: self.port_id.to_string(),

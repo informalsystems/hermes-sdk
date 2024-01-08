@@ -24,7 +24,6 @@ hermes-test-components              = { workspace = true }
 tendermint                          = { workspace = true, features = ["secp256k1"] }
 tendermint-rpc                      = { workspace = true, features = ["http-client", "websocket-client"] }
 
-async-trait     = { workspace = true }
 flex-error      = { workspace = true }
 prost           = { workspace = true }
 eyre            = { workspace = true }

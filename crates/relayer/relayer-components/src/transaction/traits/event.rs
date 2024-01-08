@@ -1,4 +1,5 @@
-use crate::std_prelude::*;
+use alloc::vec::Vec;
+
 use crate::transaction::traits::types::HasTxTypes;
 
 pub trait CanParseTxResponseAsEvents: HasTxTypes {

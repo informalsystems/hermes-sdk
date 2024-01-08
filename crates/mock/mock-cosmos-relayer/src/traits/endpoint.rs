@@ -1,10 +1,10 @@
 use std::fmt::Debug;
 use std::sync::Arc;
 
-use async_trait::async_trait;
 use basecoin_app::modules::ibc::Ibc;
 use basecoin_store::context::ProvableStore;
 use basecoin_store::impls::RevertibleStore;
+use cgp_core::prelude::*;
 use cgp_core::Async;
 use ibc::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc::core::ics24_host::identifier::ChainId;

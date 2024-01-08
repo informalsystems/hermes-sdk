@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_cosmos_client_components::methods::encode::encode_protobuf;
 use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;

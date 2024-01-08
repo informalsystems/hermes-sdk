@@ -8,7 +8,6 @@ use crate::relay::traits::components::packet_relayer::PacketRelayer;
 use crate::relay::traits::logs::logger::CanLogRelay;
 use crate::relay::traits::logs::packet::CanLogRelayPacket;
 use crate::relay::traits::packet_lock::HasPacketLock;
-use crate::std_prelude::*;
 
 /**
    Call the inner relayer only if the packet lock provided by [`HasPacketLock`]

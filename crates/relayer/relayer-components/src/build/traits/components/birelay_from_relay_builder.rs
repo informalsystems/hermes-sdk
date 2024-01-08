@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::types::aliases::{RelayAToB, RelayBToA};
-use crate::std_prelude::*;
 
 #[derive_component(BiRelayFromRelayBuilderComponent, BiRelayFromRelayBuilder<Build>)]
 #[async_trait]

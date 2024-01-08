@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
 use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};

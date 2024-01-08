@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
 use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloads;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;

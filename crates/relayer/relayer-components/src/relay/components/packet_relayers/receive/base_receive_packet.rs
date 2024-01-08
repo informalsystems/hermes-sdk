@@ -10,7 +10,6 @@ use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessa
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayer;
 use crate::relay::traits::target::DestinationTarget;
 use crate::relay::types::aliases::Packet;
-use crate::std_prelude::*;
 
 pub struct BaseReceivePacketRelayer;
 

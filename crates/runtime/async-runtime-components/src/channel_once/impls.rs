@@ -1,5 +1,3 @@
-use alloc::boxed::Box;
-
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use futures_channel::oneshot::{channel, Receiver, Sender};

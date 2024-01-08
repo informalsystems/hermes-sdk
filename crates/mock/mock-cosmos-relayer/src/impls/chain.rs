@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use basecoin_app::modules::ibc::AnyConsensusState;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};

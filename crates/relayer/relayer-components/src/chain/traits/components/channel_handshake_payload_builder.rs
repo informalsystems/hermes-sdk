@@ -3,7 +3,6 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::channel::HasChannelHandshakePayloads;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::std_prelude::*;
 
 #[derive_component(ChannelHandshakePayloadBuilderComponent, ChannelHandshakePayloadBuilder<Chain>)]
 #[async_trait]

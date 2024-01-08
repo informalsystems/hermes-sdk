@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
-use crate::std_prelude::*;
 
 #[derive_component(AutoRelayerComponent, AutoRelayer<Relay>)]
 #[async_trait]

@@ -1,3 +1,6 @@
+use alloc::vec;
+use alloc::vec::Vec;
+
 use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::InjectMismatchIbcEventsCountError;
@@ -5,7 +8,6 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::{Event, Message};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
-use crate::std_prelude::*;
 
 pub struct MainSink;
 

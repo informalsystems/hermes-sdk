@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
@@ -17,7 +17,7 @@ pub struct CosmosTxInstances;
 impl MessageSender<CosmosTxContext> for CosmosTxInstances {
     async fn send_messages(
         tx_context: &CosmosTxContext,
-        messages: Vec<Arc<dyn CosmosMessage>>,
+        messages: Vec<CosmosMessage>,
     ) -> Result<Vec<Vec<Arc<AbciEvent>>>, Error> {
         tx_context.send_messages(messages).await
     }

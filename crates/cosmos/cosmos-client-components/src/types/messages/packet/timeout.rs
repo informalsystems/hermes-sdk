@@ -7,7 +7,7 @@ use ibc_relayer_types::Height;
 use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
-use crate::traits::message::CosmosMessage;
+use crate::traits::message::DynCosmosMessage;
 
 const TYPE_URL: &str = "/ibc.core.channel.v1.MsgTimeout";
 
@@ -19,7 +19,7 @@ pub struct CosmosTimeoutPacketMessage {
     pub proof_unreceived: CommitmentProofBytes,
 }
 
-impl CosmosMessage for CosmosTimeoutPacketMessage {
+impl DynCosmosMessage for CosmosTimeoutPacketMessage {
     fn counterparty_message_height_for_update_client(&self) -> Option<Height> {
         Some(self.update_height)
     }

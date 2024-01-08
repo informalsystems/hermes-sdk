@@ -1,6 +1,4 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoder;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
@@ -21,7 +19,7 @@ impl TxEncoder<CosmosTxContext> for CosmosTxComponents {
         key_pair: &Secp256k1KeyPair,
         account: &Account,
         fee: &Fee,
-        messages: &[Arc<dyn CosmosMessage>],
+        messages: &[CosmosMessage],
     ) -> Result<SignedTx, Error> {
         let tx_config = &context.tx_config;
         let memo = Memo::default();
@@ -29,7 +27,12 @@ impl TxEncoder<CosmosTxContext> for CosmosTxComponents {
 
         let raw_messages = messages
             .iter()
-            .map(|message| message.encode_protobuf(&signer).map_err(BaseError::encode))
+            .map(|message| {
+                message
+                    .message
+                    .encode_protobuf(&signer)
+                    .map_err(BaseError::encode)
+            })
             .collect::<Result<Vec<_>, _>>()?;
 
         let signed_tx = sign_tx(tx_config, key_pair, account, &memo, &raw_messages, fee)

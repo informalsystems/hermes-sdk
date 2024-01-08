@@ -21,7 +21,7 @@ impl<T> EmptySubscription<T> {
     }
 }
 
-#[async_trait]
+#[async_trait::async_trait]
 impl<T: Async> Subscription for EmptySubscription<T> {
     type Item = T;
 

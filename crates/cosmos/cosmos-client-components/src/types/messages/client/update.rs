@@ -5,7 +5,7 @@ use ibc_relayer_types::signer::Signer;
 use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
-use crate::traits::message::CosmosMessage;
+use crate::traits::message::DynCosmosMessage;
 
 pub const TYPE_URL: &str = "/ibc.core.client.v1.MsgUpdateClient";
 
@@ -15,7 +15,7 @@ pub struct CosmosUpdateClientMessage {
     pub header: Any,
 }
 
-impl CosmosMessage for CosmosUpdateClientMessage {
+impl DynCosmosMessage for CosmosUpdateClientMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
         let proto_message = ProtoMsgUpdateClient {
             client_id: self.client_id.to_string(),

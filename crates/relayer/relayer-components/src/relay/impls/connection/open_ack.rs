@@ -9,7 +9,6 @@ use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessa
 use crate::relay::traits::components::update_client_message_builder::CanSendUpdateClientMessage;
 use crate::relay::traits::connection::open_ack::ConnectionOpenAckRelayer;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use crate::std_prelude::*;
 
 /**
    A base implementation of [`ConnectionOpenAckRelayer`] that relays a new connection

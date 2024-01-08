@@ -4,7 +4,6 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
-use crate::std_prelude::*;
 use crate::telemetry::traits::metrics::{HasMetric, TelemetryCounter};
 use crate::telemetry::traits::telemetry::HasTelemetry;
 

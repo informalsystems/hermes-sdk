@@ -7,7 +7,6 @@ use hermes_relayer_components::relay::impls::connection::open_init::CanRaiseMiss
 use hermes_relayer_components::relay::impls::connection::open_try::CanRaiseMissingConnectionTryEventError;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components_extra::relay::components::packet_relayers::retry::SupportsPacketRetry;
-
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId};
 
 use crate::contexts::chain::CosmosChain;

@@ -4,7 +4,6 @@ use cgp_core::async_trait;
 
 use crate::relay::traits::components::packet_filter::CanFilterPackets;
 use crate::relay::traits::components::packet_relayer::PacketRelayer;
-use crate::std_prelude::*;
 
 pub struct FilterRelayer<InRelayer> {
     pub phantom: PhantomData<InRelayer>,

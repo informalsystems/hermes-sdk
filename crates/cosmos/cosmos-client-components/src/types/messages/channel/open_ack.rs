@@ -8,7 +8,7 @@ use ibc_relayer_types::Height;
 use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
-use crate::traits::message::CosmosMessage;
+use crate::traits::message::DynCosmosMessage;
 
 const TYPE_URL: &str = "/ibc.core.channel.v1.MsgChannelOpenAck";
 
@@ -22,7 +22,7 @@ pub struct CosmosChannelOpenAckMessage {
     pub proof_try: CommitmentProofBytes,
 }
 
-impl CosmosMessage for CosmosChannelOpenAckMessage {
+impl DynCosmosMessage for CosmosChannelOpenAckMessage {
     fn counterparty_message_height_for_update_client(&self) -> Option<Height> {
         Some(self.update_height)
     }

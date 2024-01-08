@@ -1,5 +1,3 @@
-use alloc::boxed::Box;
-
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::client_state::HasClientStateType;

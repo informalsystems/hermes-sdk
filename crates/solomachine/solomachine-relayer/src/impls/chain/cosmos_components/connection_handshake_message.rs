@@ -1,6 +1,4 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::{DelegateComponent, HasErrorType};
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
@@ -41,7 +39,7 @@ where
             Counterparty,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-            Message = Arc<dyn CosmosMessage>,
+            Message = CosmosMessage,
         > + HasErrorType<Error = Error>,
     Counterparty: HasConnectionHandshakePayloads<
             Chain,
@@ -57,7 +55,7 @@ where
         _counterparty_client_id: &ClientId,
         _init_connection_options: &Chain::InitConnectionOptions,
         _counterparty_payload: SolomachineConnectionOpenInitPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         todo!()
     }
 
@@ -67,7 +65,7 @@ where
         counterparty_client_id: &ClientId,
         counterparty_connection_id: &ConnectionId,
         payload: SolomachineConnectionOpenTryPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         let counterparty_commitment_prefix = Vec::from(payload.commitment_prefix)
             .try_into()
             .map_err(BaseError::ics23)?;
@@ -111,7 +109,7 @@ where
         _connection_id: &ConnectionId,
         _counterparty_connection_id: &ConnectionId,
         _counterparty_payload: SolomachineConnectionOpenAckPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         todo!()
     }
 
@@ -119,7 +117,7 @@ where
         _chain: &Chain,
         _connection_id: &ConnectionId,
         _counterparty_payload: SolomachineConnectionOpenConfirmPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         todo!()
     }
 }

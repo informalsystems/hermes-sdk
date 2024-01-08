@@ -7,7 +7,6 @@ use hermes_relayer_components::build::types::aliases::{
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
 use crate::batch::traits::channel::HasMessageBatchSenderTypes;
-use crate::std_prelude::*;
 
 pub struct RelayWithBatchBuilderComponent;
 

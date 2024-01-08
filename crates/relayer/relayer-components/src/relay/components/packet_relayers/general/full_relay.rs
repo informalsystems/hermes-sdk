@@ -11,7 +11,6 @@ use crate::relay::traits::logs::logger::CanLogRelay;
 use crate::relay::traits::logs::packet::CanLogRelayPacket;
 use crate::relay::traits::packet::HasRelayPacketFields;
 use crate::relay::types::aliases::Packet;
-use crate::std_prelude::*;
 
 pub struct FullCycleRelayer;
 

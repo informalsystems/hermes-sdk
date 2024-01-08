@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 
 use crate::chain::types::aliases::{ChannelId, PortId};
 use crate::relay::traits::chains::HasRelayChains;
-use crate::std_prelude::*;
 
 #[derive_component(PacketClearerComponent, PacketClearer<Relay>)]
 #[async_trait]

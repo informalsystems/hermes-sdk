@@ -4,7 +4,6 @@ use cgp_core::async_trait;
 
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::packet_filter::PacketFilter;
-use crate::std_prelude::*;
 
 pub struct And<FilterA, FilterB>(pub PhantomData<(FilterA, FilterB)>);
 

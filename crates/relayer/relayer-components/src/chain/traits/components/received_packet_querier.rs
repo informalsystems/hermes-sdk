@@ -1,7 +1,6 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::std_prelude::*;
 
 #[derive_component(ReceivedPacketQuerierComponent, ReceivedPacketQuerier<Chain>)]
 #[async_trait]

@@ -1,14 +1,10 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
-use cgp_core::DelegateComponent;
+use cgp_core::prelude::*;
 use hermes_cosmos_client_components::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::contexts::chain::CosmosChain;
@@ -34,7 +30,7 @@ where
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &CosmosInitConnectionOptions,
         counterparty_payload: Counterparty::ConnectionOpenInitPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_init_message(
             chain,
             client_id,
@@ -51,7 +47,7 @@ where
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenTryPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_try_message(
             chain,
             client_id,
@@ -67,7 +63,7 @@ where
         connection_id: &ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenAckPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_ack_message(
             chain,
             connection_id,
@@ -81,7 +77,7 @@ where
         chain: &CosmosChain,
         connection_id: &ConnectionId,
         counterparty_payload: Counterparty::ConnectionOpenConfirmPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_connection_open_confirm_message(chain, connection_id, counterparty_payload)
             .await
     }

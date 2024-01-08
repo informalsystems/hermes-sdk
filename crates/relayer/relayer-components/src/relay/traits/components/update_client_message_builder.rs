@@ -1,10 +1,11 @@
+use alloc::vec::Vec;
+
 use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::types::aliases::{Height, Message};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
-use crate::std_prelude::*;
 
 #[derive_component(UpdateClientMessageBuilderComponent, UpdateClientMessageBuilder<Relay>)]
 #[async_trait]

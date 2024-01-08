@@ -90,6 +90,7 @@ cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git", 
 cgp-error               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error-eyre          = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-run                 = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-inner               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 

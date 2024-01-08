@@ -6,7 +6,6 @@ use crate::chain::traits::components::chain_status_querier::CanQueryChainHeight;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
-use crate::std_prelude::*;
 
 #[async_trait]
 pub trait CanWaitChainReachHeight: HasHeightType + HasErrorType {

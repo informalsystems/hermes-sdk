@@ -1,7 +1,4 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
-use cgp_core::DelegateComponent;
+use cgp_core::prelude::*;
 use hermes_cosmos_client_components::components::create_client_message::BuildCosmosCreateClientMessage;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
@@ -27,7 +24,7 @@ where
     async fn build_create_client_message(
         chain: &CosmosChain,
         counterparty_payload: Counterparty::CreateClientPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         Delegate::build_create_client_message(chain, counterparty_payload).await
     }
 }

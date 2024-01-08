@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_cosmos_client_components::types::tendermint::TendermintConsensusState;
 use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;

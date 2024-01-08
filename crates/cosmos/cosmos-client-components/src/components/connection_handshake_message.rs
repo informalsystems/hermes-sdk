@@ -1,6 +1,4 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
@@ -34,7 +32,7 @@ where
             Counterparty,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-            Message = Arc<dyn CosmosMessage>,
+            Message = CosmosMessage,
         > + HasBlockingChainHandle,
     Counterparty: HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionHandshakePayloads<
@@ -51,7 +49,7 @@ where
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &Chain::InitConnectionOptions,
         counterparty_payload: Counterparty::ConnectionOpenInitPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let client_id = client_id.clone();
         let counterparty_client_id = counterparty_client_id.clone();
         let counterparty_commitment_prefix = counterparty_payload.commitment_prefix;

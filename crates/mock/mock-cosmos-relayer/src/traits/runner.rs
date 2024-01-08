@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 
-use async_trait::async_trait;
 use basecoin_store::context::ProvableStore;
+use cgp_core::prelude::*;
 
 /// Defines the interface for running a mock Cosmos chain.
 #[async_trait]

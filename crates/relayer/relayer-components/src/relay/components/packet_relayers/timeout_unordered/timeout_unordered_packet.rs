@@ -10,7 +10,6 @@ use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessa
 use crate::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayer;
 use crate::relay::traits::target::SourceTarget;
 use crate::relay::types::aliases::Packet;
-use crate::std_prelude::*;
 
 /// The minimal component that implements timeout packet relayer
 /// capabilities. Timeout packet relayers with more capabilities can be

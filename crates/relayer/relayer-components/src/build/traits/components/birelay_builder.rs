@@ -3,7 +3,6 @@ use cgp_core::prelude::*;
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB, ClientIdA, ClientIdB};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::std_prelude::*;
 
 #[derive_component(BiRelayBuilderComponent, BiRelayBuilder<Build>)]
 #[async_trait]

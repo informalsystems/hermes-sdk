@@ -1,6 +1,4 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -32,7 +30,7 @@ where
             Counterparty,
             ChannelId = ChannelId,
             PortId = PortId,
-            Message = Arc<dyn CosmosMessage>,
+            Message = CosmosMessage,
         > + HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>
         + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>

@@ -5,7 +5,6 @@ use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     TargetDstChain, TargetDstClientId, TargetRelay, TargetSrcChain, TargetSrcClientId,
 };
-use crate::std_prelude::*;
 
 #[derive_component(RelayFromChainsBuilderComponent, RelayFromChainsBuilder<Build>)]
 #[async_trait]

@@ -10,7 +10,7 @@ use crate::types::event::SolomachineEvent;
 use crate::types::message::SolomachineMessage;
 
 pub type CosmosBatchPayload = (
-    Vec<Arc<dyn CosmosMessage>>,
+    Vec<CosmosMessage>,
     SenderOnce<Result<Vec<Vec<Arc<AbciEvent>>>, Error>>,
 );
 

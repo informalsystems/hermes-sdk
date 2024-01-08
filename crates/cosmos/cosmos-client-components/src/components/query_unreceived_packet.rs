@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

@@ -1,6 +1,4 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::{DelegateComponent, HasErrorType};
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
@@ -26,14 +24,14 @@ impl<Counterparty> DelegateComponent<SolomachineChain<Counterparty>>
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateSolomachineClientMessage
 where
-    Chain: HasMessageType<Message = Arc<dyn CosmosMessage>> + HasErrorType<Error = Error>,
+    Chain: HasMessageType<Message = CosmosMessage> + HasErrorType<Error = Error>,
     Counterparty:
         HasCreateClientPayload<Chain, CreateClientPayload = SolomachineCreateClientPayload>,
 {
     async fn build_create_client_message(
         _chain: &Chain,
         counterparty_payload: SolomachineCreateClientPayload,
-    ) -> Result<Arc<dyn CosmosMessage>, Error> {
+    ) -> Result<CosmosMessage, Error> {
         /*let client_state = encode_client_state(&counterparty_payload.client_state)
         .map_err(CosmosBaseError::encode)?;*/
 

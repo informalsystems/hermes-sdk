@@ -42,7 +42,7 @@ impl<Chain> MessageTypeProvider<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
-    type Message = Arc<dyn CosmosMessage>;
+    type Message = CosmosMessage;
 }
 
 impl<Chain> EventTypeProvider<Chain> for ProvideCosmosChainTypes

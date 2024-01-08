@@ -1,9 +1,7 @@
-use alloc::boxed::Box;
 use alloc::string::ToString;
 use alloc::vec::Vec;
 use std::vec;
 
-use async_trait::async_trait;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;

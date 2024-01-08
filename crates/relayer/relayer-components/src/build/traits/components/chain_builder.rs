@@ -3,7 +3,6 @@ use cgp_core::prelude::*;
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::types::aliases::{TargetChain, TargetChainId};
-use crate::std_prelude::*;
 
 #[derive_component(ChainBuilderComponent, ChainBuilder<Build>)]
 #[async_trait]

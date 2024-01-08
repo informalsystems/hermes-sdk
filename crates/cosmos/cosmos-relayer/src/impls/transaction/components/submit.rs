@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::transaction::traits::components::tx_submitter::TxSubmitter;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;
 use ibc_relayer::chain::cosmos::tx::broadcast_tx_sync;

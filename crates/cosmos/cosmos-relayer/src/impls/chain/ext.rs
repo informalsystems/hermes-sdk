@@ -1,5 +1,4 @@
-use async_trait::async_trait;
-
+use cgp_core::prelude::*;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_client_components::traits::has_tx_context::HasTxContext;

@@ -3,7 +3,6 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::needless_lifetimes)]
 
-mod std_prelude;
 extern crate alloc;
 
 pub mod birelay;
