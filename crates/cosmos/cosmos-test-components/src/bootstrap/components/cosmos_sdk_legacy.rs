@@ -4,7 +4,6 @@ use std::path::Path;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use eyre::Report;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::chain::{
@@ -120,6 +119,5 @@ where
         + CanBuildChainIdFromString,
     Chain::ChainId: Display,
     Runtime::FilePath: AsRef<Path>,
-    Bootstrap::Error: From<Report>,
 {
 }
