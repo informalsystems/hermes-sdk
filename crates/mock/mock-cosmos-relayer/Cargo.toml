@@ -15,7 +15,6 @@ description  = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait                         = { workspace = true }
 basecoin-app                        = { workspace = true }
 basecoin-store                      = { workspace = true }
 ibc                                 = { workspace = true, features = ["mocks"] }

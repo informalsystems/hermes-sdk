@@ -25,7 +25,6 @@ hermes-relayer-components-extra     = { workspace = true }
 
 serde           = { workspace = true }
 serde_derive    = { workspace = true }
-async-trait     = { workspace = true }
 flex-error      = { workspace = true }
 prost           = { workspace = true }
 eyre            = { workspace = true }

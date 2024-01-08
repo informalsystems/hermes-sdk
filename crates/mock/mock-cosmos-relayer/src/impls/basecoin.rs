@@ -1,11 +1,11 @@
 use std::fmt::Debug;
 
-use async_trait::async_trait;
 use basecoin_app::modules::ibc::Ibc;
 use basecoin_app::modules::types::IdentifiedModule;
 use basecoin_store::context::{ProvableStore, Store};
 use basecoin_store::impls::RevertibleStore;
 use basecoin_store::utils::SharedRwExt;
+use cgp_core::prelude::*;
 use ibc::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc::core::ics24_host::identifier::ChainId;
 use ibc::core::ics24_host::path::Path;

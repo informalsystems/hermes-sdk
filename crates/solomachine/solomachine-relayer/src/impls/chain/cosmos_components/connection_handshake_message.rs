@@ -1,8 +1,6 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::{DelegateComponent, HasErrorType};
-use hermes_cosmos_client_components::traits::message::{DynCosmosMessage, ToCosmosMessage};
+use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
 use hermes_cosmos_relayer::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use hermes_cosmos_relayer::types::error::{BaseError, Error};

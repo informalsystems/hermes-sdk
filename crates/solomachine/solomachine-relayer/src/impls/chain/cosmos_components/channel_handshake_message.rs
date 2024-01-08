@@ -1,8 +1,6 @@
-use alloc::sync::Arc;
-
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
-use hermes_cosmos_client_components::traits::message::{DynCosmosMessage, ToCosmosMessage};
+use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_client_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
 use hermes_cosmos_client_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;

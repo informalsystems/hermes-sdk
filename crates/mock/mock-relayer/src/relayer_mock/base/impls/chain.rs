@@ -8,7 +8,6 @@
 //!   have been sent, received, acknowledged, and timed out.
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
-use async_trait::async_trait;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;

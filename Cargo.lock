@@ -1665,7 +1665,6 @@ dependencies = [
 name = "hermes-mock-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
- "async-trait",
  "basecoin-app",
  "basecoin-store",
  "cgp-core",
@@ -1690,7 +1689,6 @@ dependencies = [
 name = "hermes-mock-relayer"
 version = "0.1.0"
 dependencies = [
- "async-trait",
  "cgp-core",
  "eyre",
  "flex-error",
@@ -1736,7 +1734,6 @@ dependencies = [
 name = "hermes-solomachine-relayer"
 version = "0.1.0"
 dependencies = [
- "async-trait",
  "bytes",
  "cgp-core",
  "crypto-hash",
