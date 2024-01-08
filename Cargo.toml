@@ -90,11 +90,9 @@ cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git", 
 cgp-error               = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/native-async-fn" }
 cgp-error-eyre          = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/native-async-fn" }
 cgp-async               = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/native-async-fn" }
-# cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/native-async-fn" }
+cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/native-async-fn" }
 cgp-run                 = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/native-async-fn" }
 cgp-inner               = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/native-async-fn" }
-
-cgp-async-macro     = { path = "../cgp/crates/cgp-async-macro" }
 
 # ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }

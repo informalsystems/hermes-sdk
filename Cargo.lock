@@ -513,7 +513,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "cgp-async-macro",
 ]
@@ -521,6 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-async-macro"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -530,7 +531,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -539,7 +540,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",
@@ -550,7 +551,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -562,7 +563,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -571,7 +572,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -580,7 +581,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -589,7 +590,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#73ecb8059b6651e8832eaf523f844a2300893b4b"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/native-async-fn#4dc0e532386729c466f6c71420907a860e35f13f"
 dependencies = [
  "cgp-async",
  "cgp-component",
