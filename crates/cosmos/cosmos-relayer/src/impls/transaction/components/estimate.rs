@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::transaction::traits::components::tx_fee_estimater::TxFeeEstimator;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, Tx};
 use ibc_relayer::chain::cosmos::gas::gas_amount_to_fee;

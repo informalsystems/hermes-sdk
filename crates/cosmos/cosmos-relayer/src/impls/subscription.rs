@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use core::pin::Pin;
 use core::time::Duration;
 
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::Async;
 use futures::lock::Mutex;
 use futures::stream::{self, Stream, StreamExt, TryStreamExt};

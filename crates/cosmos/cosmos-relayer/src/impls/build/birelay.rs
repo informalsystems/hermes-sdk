@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 
 use crate::contexts::birelay::CosmosBiRelay;

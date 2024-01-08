@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::transaction::traits::components::nonce_querier::NonceQuerier;
 use ibc_relayer::chain::cosmos::query::account::query_account;
 use ibc_relayer::chain::cosmos::types::account::Account;

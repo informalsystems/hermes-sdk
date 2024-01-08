@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerier;
 use ibc_relayer::chain::cosmos::query::tx::query_tx_response;
 use tendermint::Hash as TxHash;

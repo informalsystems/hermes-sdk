@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use hermes_relayer_components::build::traits::components::chain_builder::ChainBuilder;
 use hermes_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 
