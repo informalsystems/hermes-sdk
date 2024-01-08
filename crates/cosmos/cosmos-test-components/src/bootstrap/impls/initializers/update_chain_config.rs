@@ -23,7 +23,7 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainConfigType
         + CanModifyCometConfig
-        + CanRaiseError<String>
+        + CanRaiseError<&'static str>
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
@@ -137,7 +137,7 @@ where
     }
 }
 
-pub fn set_log_level(config: &mut Value, log_level: &str) -> Result<(), String> {
+pub fn set_log_level(config: &mut Value, log_level: &str) -> Result<(), &'static str> {
     config
         .as_table_mut()
         .ok_or_else(|| "expect object")?
@@ -146,7 +146,7 @@ pub fn set_log_level(config: &mut Value, log_level: &str) -> Result<(), String> 
     Ok(())
 }
 
-pub fn set_rpc_port(config: &mut Value, port: u16) -> Result<(), String> {
+pub fn set_rpc_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("rpc")
         .ok_or_else(|| "expect rpc section")?
@@ -157,7 +157,7 @@ pub fn set_rpc_port(config: &mut Value, port: u16) -> Result<(), String> {
     Ok(())
 }
 
-pub fn set_p2p_port(config: &mut Value, port: u16) -> Result<(), String> {
+pub fn set_p2p_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("p2p")
         .ok_or_else(|| "expect p2p section")?
@@ -168,7 +168,7 @@ pub fn set_p2p_port(config: &mut Value, port: u16) -> Result<(), String> {
     Ok(())
 }
 
-pub fn set_pprof_port(config: &mut Value, port: u16) -> Result<(), String> {
+pub fn set_pprof_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("rpc")
         .ok_or_else(|| "expect rpc section")?
@@ -183,7 +183,7 @@ pub fn set_pprof_port(config: &mut Value, port: u16) -> Result<(), String> {
 }
 
 /// Set the `consensus.timeout_commit` field in the full node config.
-pub fn set_timeout_commit(config: &mut Value, duration: Duration) -> Result<(), String> {
+pub fn set_timeout_commit(config: &mut Value, duration: Duration) -> Result<(), &'static str> {
     config
         .get_mut("consensus")
         .ok_or_else(|| "expect consensus section")?
@@ -198,7 +198,7 @@ pub fn set_timeout_commit(config: &mut Value, duration: Duration) -> Result<(), 
 }
 
 /// Set the `consensus.timeout_propose` field in the full node config.
-pub fn set_timeout_propose(config: &mut Value, duration: Duration) -> Result<(), String> {
+pub fn set_timeout_propose(config: &mut Value, duration: Duration) -> Result<(), &'static str> {
     config
         .get_mut("consensus")
         .ok_or_else(|| "expect consensus section")?
@@ -212,7 +212,7 @@ pub fn set_timeout_propose(config: &mut Value, duration: Duration) -> Result<(),
     Ok(())
 }
 
-pub fn set_mode(config: &mut Value, mode: &str) -> Result<(), String> {
+pub fn set_mode(config: &mut Value, mode: &str) -> Result<(), &'static str> {
     config
         .as_table_mut()
         .ok_or_else(|| "expect object")?
@@ -221,7 +221,7 @@ pub fn set_mode(config: &mut Value, mode: &str) -> Result<(), String> {
     Ok(())
 }
 
-pub fn set_indexer(config: &mut Value, mode: &str) -> Result<(), String> {
+pub fn set_indexer(config: &mut Value, mode: &str) -> Result<(), &'static str> {
     config
         .get_mut("tx_index")
         .ok_or_else(|| "expect tx_index section")?
@@ -232,7 +232,7 @@ pub fn set_indexer(config: &mut Value, mode: &str) -> Result<(), String> {
     Ok(())
 }
 
-pub fn set_grpc_port(config: &mut Value, port: u16) -> Result<(), String> {
+pub fn set_grpc_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("grpc")
         .ok_or_else(|| "expect grpc section")?
@@ -243,7 +243,7 @@ pub fn set_grpc_port(config: &mut Value, port: u16) -> Result<(), String> {
     Ok(())
 }
 
-pub fn disable_grpc_web(config: &mut Value) -> Result<(), String> {
+pub fn disable_grpc_web(config: &mut Value) -> Result<(), &'static str> {
     if let Some(field) = config.get_mut("grpc-web") {
         field
             .as_table_mut()
@@ -254,7 +254,7 @@ pub fn disable_grpc_web(config: &mut Value) -> Result<(), String> {
     Ok(())
 }
 
-pub fn disable_api(config: &mut Value) -> Result<(), String> {
+pub fn disable_api(config: &mut Value) -> Result<(), &'static str> {
     if let Some(field) = config.get_mut("api") {
         field
             .as_table_mut()

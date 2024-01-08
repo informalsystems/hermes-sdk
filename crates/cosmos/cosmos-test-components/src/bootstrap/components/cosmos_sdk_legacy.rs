@@ -20,6 +20,7 @@ use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use ibc_relayer::keyring::errors::Error as KeyringError;
 
 use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
@@ -88,9 +89,10 @@ impl<Bootstrap, Runtime, Chain, Components> UseLegacyCosmosSdkChainBootstrapper 
 where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
-        + HasErrorType
-        + CanRaiseError<String>
+        + CanRaiseError<&'static str>
         + CanRaiseError<IoError>
+        + CanRaiseError<KeyringError>
+        + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<toml::de::Error>,
     Components: DelegatesToLegacyToCosmosSdkBootstrapComponents
