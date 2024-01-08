@@ -19,7 +19,8 @@ hermes-test-components             = { workspace = true }
 
 cgp-core            = { workspace = true }
 futures-core        = { workspace = true }
-futures-util        = { workspace = true }
-futures-channel     = { workspace = true }
+futures-util        = { workspace = true, features = ["io"] }
+futures-channel     = { workspace = true, features = ["std"] }
+async-trait         = { workspace = true }
 
 rand                = { version = "0.8.5" }

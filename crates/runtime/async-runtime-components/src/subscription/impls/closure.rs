@@ -77,7 +77,7 @@ where
     >,
 }
 
-#[async_trait]
+#[async_trait::async_trait]
 impl<Runtime, T: Async> Subscription for SubscriptionClosure<Runtime, T>
 where
     Runtime: HasMutex,

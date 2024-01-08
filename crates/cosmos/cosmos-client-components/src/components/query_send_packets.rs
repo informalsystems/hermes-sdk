@@ -1,4 +1,4 @@
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use futures::stream::{self, StreamExt, TryStreamExt};
 use hermes_relayer_components::chain::traits::components::send_packets_querier::{
     CanQuerySendPacket, SendPacketsQuerier,

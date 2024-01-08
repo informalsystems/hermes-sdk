@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use async_trait::async_trait;
+use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;

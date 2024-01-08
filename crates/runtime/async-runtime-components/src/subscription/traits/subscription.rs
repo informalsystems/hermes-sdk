@@ -51,7 +51,7 @@ use futures_core::stream::Stream;
     [`Stream`]s, so that the running consumers would receive the termination
     signal.
 */
-#[async_trait]
+#[async_trait::async_trait]
 pub trait Subscription: Send + Sync + 'static {
     /**
        The item that is yielded in the [`Stream`]s returned from
@@ -79,7 +79,7 @@ pub trait Subscription: Send + Sync + 'static {
     ) -> Option<Pin<Box<dyn Stream<Item = Self::Item> + Send + Sync + 'static>>>;
 }
 
-#[async_trait]
+#[async_trait::async_trait]
 impl<T: Async> Subscription for Box<dyn Subscription<Item = T>> {
     type Item = T;
 
@@ -90,7 +90,7 @@ impl<T: Async> Subscription for Box<dyn Subscription<Item = T>> {
     }
 }
 
-#[async_trait]
+#[async_trait::async_trait]
 impl<T: Async> Subscription for Arc<dyn Subscription<Item = T>> {
     type Item = T;
 

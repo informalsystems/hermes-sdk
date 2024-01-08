@@ -194,7 +194,7 @@ where
     }
 }
 
-#[async_trait]
+#[async_trait::async_trait]
 impl<Runtime, T> Subscription for MultiplexingSubscription<Runtime, T>
 where
     T: Async,
