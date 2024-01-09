@@ -1,8 +1,9 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::build::impls::bootstrap::birelay::CanBootstrapBiRelay;
+use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
+use hermes_relayer_components::build::traits::target::relay::RelayBToATarget;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
@@ -35,7 +36,8 @@ where
         + HasCreateClientOptionsAt<B, A>
         + CanRaiseError<<BootstrapAt<Setup, A> as HasErrorType>::Error>
         + CanRaiseError<<BootstrapAt<Setup, B> as HasErrorType>::Error>
-        + CanRaiseError<<RelayTypeAt<Driver, A, B> as HasErrorType>::Error>,
+        + CanRaiseError<<RelayTypeAt<Driver, A, B> as HasErrorType>::Error>
+        + CanRaiseError<<Driver::Builder as HasErrorType>::Error>,
     Driver: HasErrorType
         + HasChainTypeAt<A>
         + HasChainTypeAt<B>
@@ -43,11 +45,15 @@ where
         + HasBuilderTypeAt<A, B>,
     BootstrapAt<Setup, A>: CanBootstrapChain,
     BootstrapAt<Setup, B>: CanBootstrapChain,
-    Driver::Builder: CanBootstrapBiRelay,
+    Driver::Builder: CanBuildRelayFromChains<RelayAToBTarget>
+        + CanBuildRelayFromChains<RelayBToATarget>
+        + CanBuildBiRelayFromRelays,
     ChainTypeAt<Driver, A>: HasIbcChainTypes<ChainTypeAt<Driver, B>>
-        + HasCreateClientOptionsType<ChainTypeAt<Driver, B>>,
+        + HasCreateClientOptionsType<ChainTypeAt<Driver, B>>
+        + Clone,
     ChainTypeAt<Driver, B>: HasIbcChainTypes<ChainTypeAt<Driver, A>>
-        + HasCreateClientOptionsType<ChainTypeAt<Driver, A>>,
+        + HasCreateClientOptionsType<ChainTypeAt<Driver, A>>
+        + Clone,
     RelayTypeAt<Driver, A, B>: CanCreateClient<SourceTarget> + CanCreateClient<DestinationTarget>,
 {
     async fn build_driver(setup: &Setup) -> Result<Setup::Driver, Setup::Error> {
@@ -69,7 +75,7 @@ where
             SourceTarget,
             &chain_a,
             &chain_b,
-            &<Setup as HasCreateClientOptionsAt<B, A>>::create_client_options(setup),
+            <Setup as HasCreateClientOptionsAt<B, A>>::create_client_options(setup),
         )
         .await
         .map_err(Setup::raise_error)?;
@@ -78,10 +84,39 @@ where
             DestinationTarget,
             &chain_b,
             &chain_a,
-            &<Setup as HasCreateClientOptionsAt<A, B>>::create_client_options(setup),
+            <Setup as HasCreateClientOptionsAt<A, B>>::create_client_options(setup),
         )
         .await
         .map_err(Setup::raise_error)?;
+
+        let builder = setup.builder();
+
+        let relay_a_to_b = builder
+            .build_relay_from_chains(
+                RelayAToBTarget,
+                &client_id_a,
+                &client_id_b,
+                chain_a.clone(),
+                chain_b.clone(),
+            )
+            .await
+            .map_err(Setup::raise_error)?;
+
+        let relay_b_to_a = builder
+            .build_relay_from_chains(
+                RelayBToATarget,
+                &client_id_b,
+                &client_id_a,
+                chain_b.clone(),
+                chain_a.clone(),
+            )
+            .await
+            .map_err(Setup::raise_error)?;
+
+        let birelay = builder
+            .build_birelay_from_relays(relay_a_to_b, relay_b_to_a)
+            .await
+            .map_err(Setup::raise_error)?;
 
         todo!()
     }
