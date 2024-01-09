@@ -25,7 +25,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientOptions, HasCreateClientPayload,
+    HasCreateClientOptionsType, HasCreateClientPayload,
 };
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
@@ -62,7 +62,7 @@ impl<Counterparty> HasConsensusStateType<Counterparty> for CosmosChain {
     type ConsensusState = TendermintConsensusState;
 }
 
-impl<Counterparty> HasCreateClientOptions<Counterparty> for CosmosChain {
+impl<Counterparty> HasCreateClientOptionsType<Counterparty> for CosmosChain {
     type CreateClientPayloadOptions = ClientSettings;
 }
 

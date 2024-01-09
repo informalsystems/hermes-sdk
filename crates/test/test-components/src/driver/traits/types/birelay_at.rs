@@ -13,3 +13,6 @@ pub trait HasBiRelayTypeAt<const A: usize, const B: usize>:
         RelayBToA = RelayTypeAt<Self, B, A>,
     >;
 }
+
+pub type BiRelayTypeAt<Context, const A: usize, const B: usize> =
+    <Context as HasBiRelayTypeAt<A, B>>::BiRelay;

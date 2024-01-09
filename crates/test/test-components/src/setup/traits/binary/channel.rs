@@ -1,21 +1,24 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::ClientId;
+use hermes_relayer_components::chain::types::aliases::{ChannelId, ConnectionId};
 
-use crate::driver::traits::types::birelay_at::HasBiRelayTypeAt;
+use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
+use crate::setup::traits::driver::HasDriverType;
 
 #[async_trait]
-pub trait CanSetupBinaryChannel: HasBiRelayTypeAt<0, 1> + HasErrorType
+pub trait CanSetupDriverWithBinaryChannel: HasDriverType + HasErrorType
 where
-    ChainTypeAt<Self, 0>: HasIbcChainTypes<ChainTypeAt<Self, 1>>,
-    ChainTypeAt<Self, 1>: HasIbcChainTypes<ChainTypeAt<Self, 0>>,
+    Self::Driver: HasBiRelayTypeAt<0, 1>,
+    ChainTypeAt<Self::Driver, 0>: HasIbcChainTypes<ChainTypeAt<Self::Driver, 1>>,
+    ChainTypeAt<Self::Driver, 1>: HasIbcChainTypes<ChainTypeAt<Self::Driver, 0>>,
 {
-    async fn setup_binary_channel(
+    async fn setup_driver_with_binary_channel(
         &self,
-        chain_a: &ChainTypeAt<Self, 0>,
-        chain_b: &ChainTypeAt<Self, 1>,
-        client_id_a: &ClientId<ChainTypeAt<Self, 0>, ChainTypeAt<Self, 1>>,
-        client_id_b: &ClientId<ChainTypeAt<Self, 1>, ChainTypeAt<Self, 0>>,
-    ) -> Result<Self::BiRelay, Self::Error>;
+        birelay: BiRelayTypeAt<Self::Driver, 0, 1>,
+        connection_id_a: ConnectionId<ChainTypeAt<Self::Driver, 0>, ChainTypeAt<Self::Driver, 1>>,
+        connection_id_b: ConnectionId<ChainTypeAt<Self::Driver, 1>, ChainTypeAt<Self::Driver, 0>>,
+        channel_id_a: ChannelId<ChainTypeAt<Self::Driver, 0>, ChainTypeAt<Self::Driver, 1>>,
+        channel_id_b: ChannelId<ChainTypeAt<Self::Driver, 1>, ChainTypeAt<Self::Driver, 0>>,
+    ) -> Result<Self::Driver, Self::Error>;
 }

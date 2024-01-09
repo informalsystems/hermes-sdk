@@ -5,3 +5,6 @@ use crate::driver::traits::types::birelay_at::HasBiRelayTypeAt;
 pub trait HasBuilderTypeAt<const A: usize, const B: usize>: HasBiRelayTypeAt<A, B> {
     type Builder: HasBiRelayType<BiRelay = Self::BiRelay>;
 }
+
+pub type BuilderTypeAt<Context, const A: usize, const B: usize> =
+    <Context as HasBuilderTypeAt<A, B>>::Builder;
