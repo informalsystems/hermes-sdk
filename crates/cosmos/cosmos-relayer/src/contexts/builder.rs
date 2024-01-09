@@ -75,7 +75,7 @@ impl CosmosBuilder {
                 BaseError::spawn(SpawnError::missing_chain_config(chain_id.clone()))
             })?;
 
-        self.build_chain_with_config(chain_config, self.key_map.get(&chain_id))
+        self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
             .await
     }
 

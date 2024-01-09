@@ -67,7 +67,7 @@ where
         // Wait for a while and check if the child process exited immediately.
         // If so, return error since we expect the child process to be running in the background.
 
-        runtime.sleep(Duration::from_millis(500)).await;
+        runtime.sleep(Duration::from_secs(1)).await;
 
         let status = child_process.try_wait().map_err(Runtime::raise_error)?;
 
