@@ -2,6 +2,7 @@ use core::time::Duration;
 use std::sync::Arc;
 
 use eyre::Error;
+use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -19,11 +20,14 @@ use crate::contexts::bootstrap::CosmosStdBootstrapContext;
 async fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
     stable_eyre::install()?;
 
-    let runtime = Arc::new(Runtime::new()?);
-    let runtime_context = HermesRuntime::new(runtime.clone());
+    let tokio_runtime = Arc::new(Runtime::new()?);
+    let runtime = HermesRuntime::new(tokio_runtime.clone());
+
+    let builder = CosmosBuilder::new_with_default(runtime.clone());
 
     let bootstrap = CosmosStdBootstrapContext {
-        runtime: runtime_context,
+        runtime,
+        builder,
         should_randomize_identifiers: true,
         test_dir: "./test-data".into(),
         chain_command_path: "gaiad".into(),

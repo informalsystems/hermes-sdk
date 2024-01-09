@@ -37,6 +37,17 @@ pub struct CosmosBuilder {
 }
 
 impl CosmosBuilder {
+    pub fn new_with_default(runtime: HermesRuntime) -> Self {
+        Self::new(
+            Default::default(),
+            runtime,
+            Default::default(),
+            Default::default(),
+            Default::default(),
+            Default::default(),
+        )
+    }
+
     pub fn new(
         config: Config,
         runtime: HermesRuntime,
@@ -64,12 +75,14 @@ impl CosmosBuilder {
                 BaseError::spawn(SpawnError::missing_chain_config(chain_id.clone()))
             })?;
 
-        self.build_chain_with_config(chain_config).await
+        self.build_chain_with_config(chain_config, self.key_map.get(&chain_id))
+            .await
     }
 
     pub async fn build_chain_with_config(
         &self,
         chain_config: ChainConfig,
+        m_keypair: Option<&Secp256k1KeyPair>,
     ) -> Result<CosmosChain, Error> {
         let runtime = self.runtime.runtime.clone();
         let chain_id = chain_config.id.clone();
@@ -78,7 +91,7 @@ impl CosmosBuilder {
             let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(chain_config, runtime)
                 .map_err(BaseError::spawn)?;
 
-            let key = get_keypair(&chain_id, &handle, &self.key_map)?;
+            let key = get_keypair(&chain_id, &handle, m_keypair)?;
 
             let chain_config = handle.config().map_err(BaseError::relayer)?;
 
@@ -138,19 +151,19 @@ impl CosmosBuilder {
 pub fn get_keypair(
     chain_id: &ChainId,
     handle: &BaseChainHandle,
-    key_map: &HashMap<ChainId, Secp256k1KeyPair>,
+    m_keypair: Option<&Secp256k1KeyPair>,
 ) -> Result<Secp256k1KeyPair, Error> {
-    if let Some(key) = key_map.get(chain_id) {
+    if let Some(keypair) = m_keypair {
         let chain_config = handle.config().map_err(BaseError::relayer)?;
 
         // try add the key to the chain handle, in case if it is only in the key map,
         // as for the case of integration tests.
         let _ = handle.add_key(
             chain_config.key_name,
-            AnySigningKeyPair::Secp256k1(key.clone()),
+            AnySigningKeyPair::Secp256k1(keypair.clone()),
         );
 
-        return Ok(key.clone());
+        return Ok(keypair.clone());
     }
 
     let keypair = handle.get_key().map_err(BaseError::relayer)?;

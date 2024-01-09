@@ -1,6 +1,5 @@
 use core::str::FromStr;
 use core::time::Duration;
-use std::collections::HashMap;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -51,6 +50,7 @@ use crate::contexts::chain::CosmosTestChain;
 
 pub struct CosmosStdBootstrapContext {
     pub runtime: HermesRuntime,
+    pub builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
@@ -158,19 +158,9 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
             clear_interval: None,
         };
 
-        let key_map = HashMap::from([(chain_id.clone(), relayer_wallet.keypair.clone())]);
-
-        let builder: CosmosBuilder = CosmosBuilder::new(
-            Default::default(),
-            bootstrap.runtime.clone(),
-            Default::default(),
-            Default::default(),
-            Default::default(),
-            key_map,
-        );
-
-        let base_chain = builder
-            .build_chain_with_config(chain_config.clone())
+        let base_chain = bootstrap
+            .builder
+            .build_chain_with_config(chain_config.clone(), Some(&relayer_wallet.keypair))
             .await?;
 
         let test_chain = CosmosTestChain {
