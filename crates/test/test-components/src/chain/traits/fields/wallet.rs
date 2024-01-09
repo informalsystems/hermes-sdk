@@ -1,9 +1,12 @@
+use cgp_core::prelude::*;
+
 use crate::chain::traits::types::wallet::HasWalletType;
 
 pub struct UserWallet;
 
 pub struct RelayerWallet;
 
+#[derive_component(WalletFieldComponent, ProvideWallet<Chain>)]
 pub trait HasWallet<WalletKind, const I: usize>: HasWalletType {
     fn user_wallet(&self) -> &Self::Wallet;
 }

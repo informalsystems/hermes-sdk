@@ -48,7 +48,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
+    HasCreateClientEvent, HasCreateClientOptionsType, HasCreateClientPayload,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -357,7 +357,7 @@ impl<Chain: BasecoinEndpoint> ChainStatusQuerier<MockCosmosContext<Chain>>
     }
 }
 
-impl<Chain, Counterparty> HasCreateClientOptions<MockCosmosContext<Counterparty>>
+impl<Chain, Counterparty> HasCreateClientOptionsType<MockCosmosContext<Counterparty>>
     for MockCosmosContext<Chain>
 where
     Chain: BasecoinEndpoint,

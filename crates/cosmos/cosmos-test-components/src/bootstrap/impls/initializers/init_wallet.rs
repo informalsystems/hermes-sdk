@@ -1,11 +1,12 @@
 use cgp_core::prelude::*;
-use eyre::{eyre, Report};
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
 use serde_json as json;
 
@@ -19,14 +20,15 @@ pub struct InitCosmosTestWallet;
 #[async_trait]
 impl<Bootstrap, Runtime, Chain> WalletInitializer<Bootstrap> for InitCosmosTestWallet
 where
-    Bootstrap: HasErrorType
-        + HasRuntime<Runtime = Runtime>
+    Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
         + HasWalletHdPath
-        + HasChainCommandPath,
+        + HasChainCommandPath
+        + CanRaiseError<&'static str>
+        + CanRaiseError<json::Error>
+        + CanRaiseError<KeyringError>,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
-    Bootstrap::Error: From<Report>,
 {
     async fn initialize_wallet(
         bootstrap: &Bootstrap,
@@ -53,13 +55,18 @@ where
             .map_err(Bootstrap::raise_error)?
             .stderr;
 
-        let json_val: json::Value = json::from_str(&seed_content).map_err(Report::from)?;
+        let json_val: json::Value =
+            json::from_str(&seed_content).map_err(Bootstrap::raise_error)?;
 
         let wallet_address = json_val
             .get("address")
-            .ok_or_else(|| eyre!("expect address string field to be present in json result"))?
+            .ok_or_else(|| {
+                Bootstrap::raise_error("expect address string field to be present in json result")
+            })?
             .as_str()
-            .ok_or_else(|| eyre!("expect address string field to be present in json result"))?
+            .ok_or_else(|| {
+                Bootstrap::raise_error("expect address string field to be present in json result")
+            })?
             .to_string();
 
         // Write the wallet secret as a file so that a tester can use it during manual tests
@@ -76,8 +83,8 @@ where
 
         let hd_path = bootstrap.wallet_hd_path();
 
-        let keypair =
-            Secp256k1KeyPair::from_seed_file(&seed_content, &hd_path).map_err(Report::from)?;
+        let keypair = Secp256k1KeyPair::from_seed_file(&seed_content, &hd_path)
+            .map_err(Bootstrap::raise_error)?;
 
         let wallet = CosmosTestWallet {
             id: wallet_id.to_owned(),
