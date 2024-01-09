@@ -13,18 +13,16 @@ use hermes_test_components::chain::traits::fields::denom_at::HasDenomAt;
 use hermes_test_components::chain::traits::fields::wallet::{HasOneUserWallet, HasTwoUserWallets};
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::queries::ibc_transfer::CanIbcTransferToken;
+use hermes_test_components::driver::traits::background_relayer::HasBackgroundRelayer;
+use hermes_test_components::driver::traits::types::chain::{HasChainAt, HasOneChain, HasTwoChains};
 use hermes_test_components::test_case::traits::test_case::TestCase;
-use hermes_test_components::test_env::traits::background_relayer::HasBackgroundRelayer;
-use hermes_test_components::test_env::traits::types::chain_at::{
-    HasChainAt, HasOneChain, HasTwoChains,
-};
 
 pub struct TestIbcTransfer;
 
 #[async_trait]
-impl<TestEnv, ChainA, ChainB> TestCase<TestEnv> for TestIbcTransfer
+impl<Driver, ChainA, ChainB> TestCase<Driver> for TestIbcTransfer
 where
-    TestEnv: HasErrorType
+    Driver: HasErrorType
         + HasChainAt<0, Chain = ChainA>
         + HasChainAt<1, Chain = ChainB>
         + CanLog
@@ -50,14 +48,14 @@ where
         + CanAssertEventualAmount
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>,
-    TestEnv::Error: From<ChainA::Error> + From<ChainB::Error>,
+    Driver::Error: From<ChainA::Error> + From<ChainB::Error>,
 {
-    async fn run_test(&self, test_env: &TestEnv) -> Result<(), TestEnv::Error> {
-        let chain_a = test_env.first_chain();
+    async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
+        let chain_a = driver.first_chain();
 
         let chain_id_a = chain_a.chain_id();
 
-        let chain_b = test_env.second_chain();
+        let chain_b = driver.second_chain();
 
         let chain_id_b = chain_b.chain_id();
 
@@ -83,9 +81,9 @@ where
 
         let port_id_b = chain_b.port_id();
 
-        test_env.start_relayer_in_background();
+        driver.start_relayer_in_background();
 
-        test_env.log_info(&format!(
+        driver.log_info(&format!(
             "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
             chain_id_a, chain_id_b, a_to_b_amount, denom_a
         ));
@@ -108,7 +106,7 @@ where
 
         let balance_b1 = ChainB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b);
 
-        test_env.log_info(&format!(
+        driver.log_info(&format!(
             "Waiting for user on chain B to receive IBC transferred amount of {}",
             balance_b1
         ));
@@ -123,7 +121,7 @@ where
 
         let b_to_a_amount = ChainB::random_amount(500, &balance_b1);
 
-        test_env.log_info(&format!(
+        driver.log_info(&format!(
             "Sending IBC transfer from chain {} to chain {} with amount of {}",
             chain_id_b, chain_id_a, b_to_a_amount,
         ));
@@ -157,7 +155,7 @@ where
             .assert_eventual_amount(address_a2, &balance_a5)
             .await?;
 
-        test_env.log_info(&format!(
+        driver.log_info(&format!(
             "successfully performed reverse IBC transfer from chain {} back to chain {}",
             chain_id_b, chain_id_a,
         ));
