@@ -572,7 +572,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=soares/eyre-error-raisers#5511d98eec9551ca182e4746ed294a072b453073"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/eyre-error-raisers#0f4303b68ff3327a4a556eaea00ba936b545d564"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -1579,7 +1579,6 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
- "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "hermes-test-components",
  "ibc-relayer",

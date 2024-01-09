@@ -114,7 +114,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
                 eyre!("expect relayer wallet to be provided in the list of test wallets")
             })?;
 
-        let relayer_chain_config = ChainConfig {
+        let chain_config = ChainConfig {
             id: chain_id.clone(),
             r#type: ChainType::CosmosSdk,
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_config.rpc_port))?,
@@ -147,7 +147,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
             trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(0.003, "stake".to_string()),
+            gas_price: config::GasPrice::new(0.003, genesis_config.staking_denom.to_string()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),
@@ -159,7 +159,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
         };
 
         let mut relayer_config = Config::default();
-        relayer_config.chains.push(relayer_chain_config);
+        relayer_config.chains.push(chain_config.clone());
 
         let key_map = HashMap::from([(chain_id.clone(), relayer_wallet.keypair.clone())]);
 
@@ -176,6 +176,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
 
         let test_chain = CosmosTestChain {
             base_chain,
+            chain_config,
             full_node_process: chain_process,
         };
 

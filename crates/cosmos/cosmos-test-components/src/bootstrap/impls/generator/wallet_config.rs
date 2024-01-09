@@ -56,28 +56,28 @@ where
 
         let user1 = CosmosWalletConfig {
             wallet_id: "user1".to_owned(),
-            genesis_balances: vec![Amount::new(
-                1_000_000_000_000_000_000,
-                denom_for_transfer.clone(),
-            )],
+            genesis_balances: vec![
+                Amount::new(1_000_000_000_000_000_000, denom_for_staking.clone()),
+                Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
+            ],
             validator_staked_amount: None,
         };
 
         let user2 = CosmosWalletConfig {
             wallet_id: "user2".to_owned(),
-            genesis_balances: vec![Amount::new(
-                1_000_000_000_000_000_000,
-                denom_for_transfer.clone(),
-            )],
+            genesis_balances: vec![
+                Amount::new(1_000_000_000_000_000_000, denom_for_staking.clone()),
+                Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
+            ],
             validator_staked_amount: None,
         };
 
         let relayer = CosmosWalletConfig {
             wallet_id: "relayer".to_owned(),
-            genesis_balances: vec![Amount::new(
-                1_000_000_000_000_000_000,
-                denom_for_transfer.clone(),
-            )],
+            genesis_balances: vec![
+                Amount::new(1_000_000_000_000_000_000, denom_for_staking.clone()),
+                Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
+            ],
             validator_staked_amount: None,
         };
 

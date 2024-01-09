@@ -14,11 +14,13 @@ use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
+use ibc_relayer::config::ChainConfig;
 use tokio::process::Child;
 
 pub struct CosmosTestChain {
     pub base_chain: CosmosChain,
     pub full_node_process: Child,
+    pub chain_config: ChainConfig,
 }
 
 pub struct CosmosTestChainComponents;
