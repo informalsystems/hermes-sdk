@@ -140,7 +140,7 @@ where
 pub fn set_log_level(config: &mut Value, log_level: &str) -> Result<(), &'static str> {
     config
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert("log_level".to_string(), log_level.into());
 
     Ok(())
@@ -149,9 +149,9 @@ pub fn set_log_level(config: &mut Value, log_level: &str) -> Result<(), &'static
 pub fn set_rpc_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("rpc")
-        .ok_or_else(|| "expect rpc section")?
+        .ok_or("expect rpc section")?
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert("laddr".to_string(), format!("tcp://0.0.0.0:{port}").into());
 
     Ok(())
@@ -160,9 +160,9 @@ pub fn set_rpc_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
 pub fn set_p2p_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("p2p")
-        .ok_or_else(|| "expect p2p section")?
+        .ok_or("expect p2p section")?
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert("laddr".to_string(), format!("tcp://0.0.0.0:{port}").into());
 
     Ok(())
@@ -171,9 +171,9 @@ pub fn set_p2p_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
 pub fn set_pprof_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("rpc")
-        .ok_or_else(|| "expect rpc section")?
+        .ok_or("expect rpc section")?
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert(
             "pprof_laddr".to_string(),
             format!("tcp://0.0.0.0:{port}").into(),
@@ -186,9 +186,9 @@ pub fn set_pprof_port(config: &mut Value, port: u16) -> Result<(), &'static str>
 pub fn set_timeout_commit(config: &mut Value, duration: Duration) -> Result<(), &'static str> {
     config
         .get_mut("consensus")
-        .ok_or_else(|| "expect consensus section")?
+        .ok_or("expect consensus section")?
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert(
             "timeout_commit".to_string(),
             format!("{}ms", duration.as_millis()).into(),
@@ -201,9 +201,9 @@ pub fn set_timeout_commit(config: &mut Value, duration: Duration) -> Result<(), 
 pub fn set_timeout_propose(config: &mut Value, duration: Duration) -> Result<(), &'static str> {
     config
         .get_mut("consensus")
-        .ok_or_else(|| "expect consensus section")?
+        .ok_or("expect consensus section")?
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert(
             "timeout_propose".to_string(),
             format!("{}ms", duration.as_millis()).into(),
@@ -215,7 +215,7 @@ pub fn set_timeout_propose(config: &mut Value, duration: Duration) -> Result<(),
 pub fn set_mode(config: &mut Value, mode: &str) -> Result<(), &'static str> {
     config
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert("mode".to_string(), mode.into());
 
     Ok(())
@@ -224,9 +224,9 @@ pub fn set_mode(config: &mut Value, mode: &str) -> Result<(), &'static str> {
 pub fn set_indexer(config: &mut Value, mode: &str) -> Result<(), &'static str> {
     config
         .get_mut("tx_index")
-        .ok_or_else(|| "expect tx_index section")?
+        .ok_or("expect tx_index section")?
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert("indexer".to_string(), mode.into());
 
     Ok(())
@@ -235,9 +235,9 @@ pub fn set_indexer(config: &mut Value, mode: &str) -> Result<(), &'static str> {
 pub fn set_grpc_port(config: &mut Value, port: u16) -> Result<(), &'static str> {
     config
         .get_mut("grpc")
-        .ok_or_else(|| "expect grpc section")?
+        .ok_or("expect grpc section")?
         .as_table_mut()
-        .ok_or_else(|| "expect object")?
+        .ok_or("expect object")?
         .insert("address".to_string(), format!("0.0.0.0:{port}").into());
 
     Ok(())
@@ -247,7 +247,7 @@ pub fn disable_grpc_web(config: &mut Value) -> Result<(), &'static str> {
     if let Some(field) = config.get_mut("grpc-web") {
         field
             .as_table_mut()
-            .ok_or_else(|| "expect object")?
+            .ok_or("expect object")?
             .insert("enable".to_string(), false.into());
     }
 
@@ -258,7 +258,7 @@ pub fn disable_api(config: &mut Value) -> Result<(), &'static str> {
     if let Some(field) = config.get_mut("api") {
         field
             .as_table_mut()
-            .ok_or_else(|| "expect object")?
+            .ok_or("expect object")?
             .insert("enable".to_string(), false.into());
     }
 
