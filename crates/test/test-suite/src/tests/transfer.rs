@@ -14,7 +14,9 @@ use hermes_test_components::chain::traits::fields::wallet::{HasOneUserWallet, Ha
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::queries::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::driver::traits::background_relayer::HasBackgroundRelayer;
-use hermes_test_components::driver::traits::types::chain::{HasChainAt, HasOneChain, HasTwoChains};
+use hermes_test_components::driver::traits::types::chain_at::{
+    HasChainAt, HasOneChain, HasTwoChains,
+};
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
 pub struct TestIbcTransfer;

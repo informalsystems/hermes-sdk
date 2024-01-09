@@ -1,10 +1,10 @@
-use cgp_core::Async;
+use cgp_core::{Async, HasErrorType};
 
 pub trait HasChainTypeAt<const I: usize>: Async {
-    type Chain: Async;
+    type Chain: HasErrorType;
 }
 
-pub type ChainTypeAt<Driver, const I: usize> = <Driver as HasChainTypeAt<I>>::Chain;
+pub type ChainTypeAt<Context, const I: usize> = <Context as HasChainTypeAt<I>>::Chain;
 
 pub trait HasChainAt<const I: usize>: HasChainTypeAt<I> {
     fn chain(&self) -> &Self::Chain;
