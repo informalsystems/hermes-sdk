@@ -540,7 +540,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2a6e7958c4e694808064d48a507d62e28754f253"
+source = "git+https://github.com/informalsystems/cgp.git?branch=soares/const-generic-argument#9df03860b0eaa33fff8bdec4c099f2fb3f837d4b"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",
