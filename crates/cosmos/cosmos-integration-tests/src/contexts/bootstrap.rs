@@ -41,7 +41,7 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::types::chain::ProvideChainType;
 use ibc_relayer::chain::ChainType;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
-use ibc_relayer::config::{self, AddressType, ChainConfig, Config};
+use ibc_relayer::config::{self, AddressType, ChainConfig};
 use ibc_relayer::keyring::Store;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tendermint_rpc::{Url, WebSocketClientUrl};
@@ -158,13 +158,10 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
             clear_interval: None,
         };
 
-        let mut relayer_config = Config::default();
-        relayer_config.chains.push(chain_config.clone());
-
         let key_map = HashMap::from([(chain_id.clone(), relayer_wallet.keypair.clone())]);
 
-        let builder = CosmosBuilder::new(
-            relayer_config,
+        let builder: CosmosBuilder = CosmosBuilder::new(
+            Default::default(),
             bootstrap.runtime.clone(),
             Default::default(),
             Default::default(),
@@ -172,7 +169,9 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
             key_map,
         );
 
-        let base_chain = builder.build_chain(&chain_id).await?;
+        let base_chain = builder
+            .build_chain_with_config(chain_config.clone())
+            .await?;
 
         let test_chain = CosmosTestChain {
             base_chain,

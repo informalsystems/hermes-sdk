@@ -9,9 +9,9 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
-use ibc_relayer::config::Config;
+use ibc_relayer::config::{ChainConfig, Config};
 use ibc_relayer::keyring::{AnySigningKeyPair, Secp256k1KeyPair};
-use ibc_relayer::spawn::spawn_chain_runtime;
+use ibc_relayer::spawn::{spawn_chain_runtime_with_config, SpawnError};
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{Client, HttpClient};
@@ -59,13 +59,26 @@ impl CosmosBuilder {
     }
 
     pub async fn build_chain(&self, chain_id: &ChainId) -> Result<CosmosChain, Error> {
+        let chain_config =
+            self.config.find_chain(chain_id).cloned().ok_or_else(|| {
+                BaseError::spawn(SpawnError::missing_chain_config(chain_id.clone()))
+            })?;
+
+        self.build_chain_with_config(chain_config).await
+    }
+
+    pub async fn build_chain_with_config(
+        &self,
+        chain_config: ChainConfig,
+    ) -> Result<CosmosChain, Error> {
         let runtime = self.runtime.runtime.clone();
+        let chain_id = chain_config.id.clone();
 
         let (handle, key, chain_config) = task::block_in_place(|| -> Result<_, Error> {
-            let handle = spawn_chain_runtime::<BaseChainHandle>(&self.config, chain_id, runtime)
+            let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(chain_config, runtime)
                 .map_err(BaseError::spawn)?;
 
-            let key = get_keypair(chain_id, &handle, &self.key_map)?;
+            let key = get_keypair(&chain_id, &handle, &self.key_map)?;
 
             let chain_config = handle.config().map_err(BaseError::relayer)?;
 
