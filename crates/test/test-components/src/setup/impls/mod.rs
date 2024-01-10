@@ -1,4 +1,5 @@
 pub mod binary;
+pub mod binary_channel;
 pub mod birelay;
 pub mod chain;
 pub mod channel;

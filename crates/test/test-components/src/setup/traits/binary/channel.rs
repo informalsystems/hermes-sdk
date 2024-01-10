@@ -7,16 +7,16 @@ use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::setup::traits::driver::HasDriverType;
 
 #[async_trait]
-pub trait CanSetupDriverWithBinaryChannel: HasDriverType + HasErrorType
+pub trait CanBuildDriverWithBinaryChannel:
+    HasBiRelayTypeAt<0, 1> + HasDriverType + HasErrorType
 where
-    Self::Driver: HasBiRelayTypeAt<0, 1>,
-    ChainTypeAt<Self::Driver, 0>: HasIbcChainTypes<ChainTypeAt<Self::Driver, 1>>,
-    ChainTypeAt<Self::Driver, 1>: HasIbcChainTypes<ChainTypeAt<Self::Driver, 0>>,
+    ChainTypeAt<Self, 0>: HasIbcChainTypes<ChainTypeAt<Self, 1>>,
+    ChainTypeAt<Self, 1>: HasIbcChainTypes<ChainTypeAt<Self, 0>>,
 {
-    async fn setup_driver_with_binary_channel(
+    async fn build_driver_with_binary_channel(
         &self,
-        birelay: BiRelayTypeAt<Self::Driver, 0, 1>,
-        channel_id_a: ChannelId<ChainTypeAt<Self::Driver, 0>, ChainTypeAt<Self::Driver, 1>>,
-        channel_id_b: ChannelId<ChainTypeAt<Self::Driver, 1>, ChainTypeAt<Self::Driver, 0>>,
+        birelay: BiRelayTypeAt<Self, 0, 1>,
+        channel_id_a: ChannelId<ChainTypeAt<Self, 0>, ChainTypeAt<Self, 1>>,
+        channel_id_b: ChannelId<ChainTypeAt<Self, 1>, ChainTypeAt<Self, 0>>,
     ) -> Result<Self::Driver, Self::Error>;
 }

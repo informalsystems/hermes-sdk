@@ -7,7 +7,7 @@ use crate::driver::traits::types::chain_at::ChainTypeAt;
 
 #[derive_component(ChannelSetupComponent, ChannelSetup<Setup>)]
 #[async_trait]
-pub trait CanSetupConnection<const A: usize, const B: usize>:
+pub trait CanSetupChannel<const A: usize, const B: usize>:
     HasBiRelayTypeAt<A, B> + HasErrorType
 where
     ChainTypeAt<Self, A>: HasIbcChainTypes<ChainTypeAt<Self, B>>,
