@@ -19,7 +19,7 @@ pub struct BuildCreateClientPayloadWithChainHandle;
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCreateClientPayloadWithChainHandle
 where
-    Chain: HasCreateClientOptionsType<Counterparty, CreateClientPayloadOptions = ClientSettings>
+    Chain: HasCreateClientOptionsType<Counterparty, CreateClientOptions = ClientSettings>
         + HasCreateClientPayload<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
         + HasBlockingChainHandle
         + CanRaiseError<eyre::Report>,

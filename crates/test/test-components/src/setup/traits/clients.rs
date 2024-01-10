@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::types::aliases::ClientId;
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 
+#[derive_component(ClientSetupComponent, ClientSetup<Setup>)]
 #[async_trait]
 pub trait CanSetupClients<const A: usize, const B: usize>:
     HasChainTypeAt<A> + HasChainTypeAt<B> + HasErrorType
@@ -11,7 +12,7 @@ where
     ChainTypeAt<Self, A>: HasIbcChainTypes<ChainTypeAt<Self, B>>,
     ChainTypeAt<Self, B>: HasIbcChainTypes<ChainTypeAt<Self, A>>,
 {
-    async fn setup_birelay(
+    async fn setup_clients(
         &self,
         chain_a: &ChainTypeAt<Self, A>,
         chain_b: &ChainTypeAt<Self, B>,

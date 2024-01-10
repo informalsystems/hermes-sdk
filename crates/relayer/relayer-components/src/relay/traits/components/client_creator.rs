@@ -30,6 +30,6 @@ where
         counterparty_chain: &Target::CounterpartyChain,
         create_client_options: &<Target::CounterpartyChain as HasCreateClientOptionsType<
             Target::TargetChain,
-        >>::CreateClientPayloadOptions,
+        >>::CreateClientOptions,
     ) -> Result<ClientId<Target::TargetChain, Target::CounterpartyChain>, Self::Error>;
 }

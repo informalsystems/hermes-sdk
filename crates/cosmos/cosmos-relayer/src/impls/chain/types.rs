@@ -63,7 +63,7 @@ impl<Counterparty> HasConsensusStateType<Counterparty> for CosmosChain {
 }
 
 impl<Counterparty> HasCreateClientOptionsType<Counterparty> for CosmosChain {
-    type CreateClientPayloadOptions = ClientSettings;
+    type CreateClientOptions = ClientSettings;
 }
 
 impl<Counterparty> HasInitConnectionOptionsType<Counterparty> for CosmosChain {

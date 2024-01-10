@@ -363,7 +363,7 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    type CreateClientPayloadOptions = ();
+    type CreateClientOptions = ();
 }
 
 impl<Chain, Counterparty> HasCreateClientPayload<MockCosmosContext<Counterparty>>

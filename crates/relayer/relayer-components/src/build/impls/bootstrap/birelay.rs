@@ -21,8 +21,8 @@ where
         &self,
         chain_id_a: &ChainIdA<Self>,
         chain_id_b: &ChainIdB<Self>,
-        payload_options_a: &<ChainA<Self> as HasCreateClientOptionsType<ChainB<Self>>>::CreateClientPayloadOptions,
-        payload_options_b: &<ChainB<Self> as HasCreateClientOptionsType<ChainA<Self>>>::CreateClientPayloadOptions,
+        payload_options_a: &<ChainA<Self> as HasCreateClientOptionsType<ChainB<Self>>>::CreateClientOptions,
+        payload_options_b: &<ChainB<Self> as HasCreateClientOptionsType<ChainA<Self>>>::CreateClientOptions,
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 
@@ -47,8 +47,8 @@ where
         &self,
         chain_id_a: &ChainA::ChainId,
         chain_id_b: &ChainB::ChainId,
-        payload_options_a: &ChainA::CreateClientPayloadOptions,
-        payload_options_b: &ChainB::CreateClientPayloadOptions,
+        payload_options_a: &ChainA::CreateClientOptions,
+        payload_options_b: &ChainB::CreateClientOptions,
     ) -> Result<BiRelay, Error> {
         let relay_a_to_b = self
             .bootstrap_relay(

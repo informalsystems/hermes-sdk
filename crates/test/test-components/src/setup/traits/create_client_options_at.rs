@@ -1,18 +1,17 @@
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientOptions, HasCreateClientOptionsType,
+};
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
-use crate::setup::traits::driver::HasDriverType;
+use crate::types::index::Twindex;
 
 pub trait HasCreateClientOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:
-    HasDriverType
+    HasChainTypeAt<TARGET> + HasChainTypeAt<COUNTERPARTY>
 where
-    Self::Driver: HasChainTypeAt<TARGET> + HasChainTypeAt<COUNTERPARTY>,
-    ChainTypeAt<Self::Driver, TARGET>:
-        HasCreateClientOptionsType<ChainTypeAt<Self::Driver, COUNTERPARTY>>,
+    ChainTypeAt<Self, TARGET>: HasCreateClientOptionsType<ChainTypeAt<Self, COUNTERPARTY>>,
 {
     fn create_client_options(
         &self,
-    ) -> &<ChainTypeAt<Self::Driver, TARGET> as HasCreateClientOptionsType<
-        ChainTypeAt<Self::Driver, COUNTERPARTY>,
-    >>::CreateClientPayloadOptions;
+        index: Twindex<TARGET, COUNTERPARTY>,
+    ) -> &CreateClientOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
 }

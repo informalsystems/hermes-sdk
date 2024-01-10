@@ -87,7 +87,7 @@ impl<Chain, Counterparty> HasCreateClientOptionsType<Counterparty> for Solomachi
 where
     Chain: Async,
 {
-    type CreateClientPayloadOptions = ();
+    type CreateClientOptions = ();
 }
 
 impl<Chain, Counterparty> HasCreateClientPayload<Counterparty> for SolomachineChain<Chain>

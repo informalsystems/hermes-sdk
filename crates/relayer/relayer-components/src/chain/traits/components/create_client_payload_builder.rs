@@ -11,6 +11,6 @@ pub trait CanBuildCreateClientPayload<Counterparty>:
 {
     async fn build_create_client_payload(
         &self,
-        create_client_options: &Self::CreateClientPayloadOptions,
+        create_client_options: &Self::CreateClientOptions,
     ) -> Result<Self::CreateClientPayload, Self::Error>;
 }

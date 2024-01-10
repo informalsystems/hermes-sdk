@@ -28,10 +28,10 @@ where
         dst_chain_id: &TargetDstChainId<Self, Target>,
         src_options: &<TargetSrcChain<Self, Target> as HasCreateClientOptionsType<
             TargetDstChain<Self, Target>,
-        >>::CreateClientPayloadOptions,
+        >>::CreateClientOptions,
         dst_options: &<TargetDstChain<Self, Target> as HasCreateClientOptionsType<
             TargetSrcChain<Self, Target>,
-        >>::CreateClientPayloadOptions,
+        >>::CreateClientOptions,
     ) -> Result<TargetRelay<Self, Target>, Self::Error>;
 }
 
@@ -54,8 +54,8 @@ where
         target: Target,
         src_chain_id: &SrcChain::ChainId,
         dst_chain_id: &DstChain::ChainId,
-        src_payload_options: &SrcChain::CreateClientPayloadOptions,
-        dst_payload_options: &DstChain::CreateClientPayloadOptions,
+        src_payload_options: &SrcChain::CreateClientOptions,
+        dst_payload_options: &DstChain::CreateClientOptions,
     ) -> Result<Relay, Self::Error> {
         let src_chain = self
             .build_chain(Target::SrcChainTarget::default(), src_chain_id)
