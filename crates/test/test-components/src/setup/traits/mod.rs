@@ -8,4 +8,5 @@ pub mod clients;
 pub mod connection;
 pub mod create_client_options_at;
 pub mod driver;
+pub mod relay;
 pub mod run_test;

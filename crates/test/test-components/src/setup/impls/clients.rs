@@ -12,9 +12,9 @@ use crate::setup::traits::clients::ClientSetup;
 use crate::setup::traits::create_client_options_at::HasCreateClientOptionsAt;
 use crate::types::index::Twindex;
 
-pub struct SetupClients;
+pub struct SetupClientsWithRelay;
 
-impl<Setup, const A: usize, const B: usize> ClientSetup<Setup, A, B> for SetupClients
+impl<Setup, const A: usize, const B: usize> ClientSetup<Setup, A, B> for SetupClientsWithRelay
 where
     Setup: HasErrorType
         + HasRelayTypeAt<A, B>

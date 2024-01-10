@@ -8,9 +8,9 @@ use crate::setup::traits::chain::ChainSetup;
 use crate::types::error::ErrorOf;
 use crate::types::index::Index;
 
-pub struct SetupChain;
+pub struct SetupChainWithBootstrap;
 
-impl<Setup, const I: usize> ChainSetup<Setup, I> for SetupChain
+impl<Setup, const I: usize> ChainSetup<Setup, I> for SetupChainWithBootstrap
 where
     Setup: HasBootstrapAt<I> + CanRaiseError<ErrorOf<Setup::Bootstrap>>,
     Setup::Bootstrap: CanBootstrapChain,
