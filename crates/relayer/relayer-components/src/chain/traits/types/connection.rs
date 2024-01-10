@@ -18,6 +18,9 @@ pub trait HasInitConnectionOptionsType<Counterparty>: Async {
     type InitConnectionOptions: Async;
 }
 
+pub type InitConnectionOptions<Chain, Counterparty> =
+    <Chain as HasInitConnectionOptionsType<Counterparty>>::InitConnectionOptions;
+
 /**
     Payload that contains necessary counterparty information such as proofs and parameters
     in order for a self chain to build a connection handshake message.

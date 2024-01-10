@@ -8,5 +8,8 @@ pub mod clients;
 pub mod connection;
 pub mod create_client_options_at;
 pub mod driver;
+pub mod init_channel_options_at;
+pub mod init_connection_options_at;
+pub mod port_id_at;
 pub mod relay;
 pub mod run_test;

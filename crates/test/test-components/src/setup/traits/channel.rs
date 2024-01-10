@@ -5,6 +5,7 @@ use hermes_relayer_components::chain::types::aliases::{ChannelId, ConnectionId};
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 
+#[derive_component(ChannelSetupComponent, ChannelSetup<Setup>)]
 #[async_trait]
 pub trait CanSetupConnection<const A: usize, const B: usize>:
     HasBiRelayTypeAt<A, B> + HasErrorType
