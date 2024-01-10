@@ -10,3 +10,4 @@ pub mod driver;
 pub mod runtime;
 pub mod setup;
 pub mod test_case;
+pub mod types;

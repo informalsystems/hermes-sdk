@@ -1,5 +1,7 @@
 use cgp_core::{Async, HasErrorType};
 
+use crate::types::index::Index;
+
 pub trait HasChainTypeAt<const I: usize>: Async {
     type Chain: HasErrorType;
 }
@@ -7,7 +9,7 @@ pub trait HasChainTypeAt<const I: usize>: Async {
 pub type ChainTypeAt<Context, const I: usize> = <Context as HasChainTypeAt<I>>::Chain;
 
 pub trait HasChainAt<const I: usize>: HasChainTypeAt<I> {
-    fn chain(&self) -> &Self::Chain;
+    fn chain_at(&self, index: Index<I>) -> &Self::Chain;
 }
 
 /// Helper auto trait for accessing the first chain
@@ -20,7 +22,7 @@ where
     Context: HasChainAt<0>,
 {
     fn first_chain(&self) -> &Self::Chain {
-        self.chain()
+        self.chain_at(Index::<0>)
     }
 }
 
@@ -52,6 +54,6 @@ where
     where
         Context: HasChainAt<I>,
     {
-        self.chain()
+        self.chain_at(Index::<I>)
     }
 }
