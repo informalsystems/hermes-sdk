@@ -86,7 +86,7 @@ basecoin-store      = { git = "https://github.com/informalsystems/basecoin-rs.gi
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
-cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git", branch = "soares/const-generic-argument" }
+cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error-eyre          = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

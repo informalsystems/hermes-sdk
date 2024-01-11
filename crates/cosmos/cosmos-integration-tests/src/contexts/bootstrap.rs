@@ -2,6 +2,7 @@ use core::str::FromStr;
 use core::time::Duration;
 use std::path::PathBuf;
 
+use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
@@ -166,7 +167,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
         let test_chain = CosmosTestChain {
             base_chain,
             chain_config,
-            full_node_process: chain_process,
+            full_node_process: Arc::new(chain_process),
         };
 
         Ok(test_chain)

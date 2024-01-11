@@ -24,9 +24,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientOptionsType, HasCreateClientPayload,
-};
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
@@ -34,7 +32,6 @@ use hermes_relayer_components::chain::traits::types::update_client::HasUpdateCli
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_relayer::chain::client::ClientSettings;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::component::CosmosChainComponents;
@@ -60,10 +57,6 @@ impl<Counterparty> HasClientStateType<Counterparty> for CosmosChain {
 
 impl<Counterparty> HasConsensusStateType<Counterparty> for CosmosChain {
     type ConsensusState = TendermintConsensusState;
-}
-
-impl<Counterparty> HasCreateClientOptionsType<Counterparty> for CosmosChain {
-    type CreateClientOptions = ClientSettings;
 }
 
 impl<Counterparty> HasInitConnectionOptionsType<Counterparty> for CosmosChain {
