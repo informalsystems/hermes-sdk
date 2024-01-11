@@ -7,8 +7,12 @@ use hermes_relayer_components::build::traits::components::birelay_from_relay_bui
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
 use hermes_relayer_components::build::traits::target::relay::RelayBToATarget;
+use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
+use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
@@ -27,16 +31,18 @@ use crate::setup::impls::clients::SetupClientsWithRelay;
 use crate::setup::impls::connection::SetupConnectionHandshake;
 use crate::setup::impls::relay::SetupRelayWithBuilder;
 use crate::setup::impls::run_test::BuildDriverAndRunTest;
-use crate::setup::traits::birelay::{BiRelaySetup, BiRelaySetupComponent};
+use crate::setup::traits::birelay::BiRelaySetupComponent;
 use crate::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use crate::setup::traits::builder_at::ProvideBuilderAt;
 use crate::setup::traits::chain::ChainSetupComponent;
 use crate::setup::traits::channel::{ChannelSetup, ChannelSetupComponent};
 use crate::setup::traits::clients::ClientSetupComponent;
-use crate::setup::traits::connection::{ConnectionSetup, ConnectionSetupComponent};
+use crate::setup::traits::connection::ConnectionSetupComponent;
 use crate::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
 use crate::setup::traits::driver::{CanBuildDriver, DriverBuilderComponent, ProvideDriverType};
 use crate::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
+use crate::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
+use crate::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use crate::setup::traits::relay::RelaySetupComponent;
 use crate::setup::traits::run_test::TestRunnerComponent;
 
@@ -76,20 +82,27 @@ where
         + ProvideBootstrapAt<Setup, 1, Bootstrap = BootstrapB>
         + ProvideCreateClientOptionsAt<Setup, 0, 1>
         + ProvideCreateClientOptionsAt<Setup, 1, 0>
+        + ProvideInitConnectionOptionsAt<Setup, 0, 1>
+        + ProvideInitChannelOptionsAt<Setup, 0, 1>
         + ProvideBuilderTypeAt<Setup, 0, 1, Builder = Build>
         + ProvideBuilderAt<Setup, 0, 1>
         + ErrorRaiser<Setup, BootstrapA::Error>
         + ErrorRaiser<Setup, BootstrapB::Error>
         + ErrorRaiser<Setup, Relay::Error>
         + ErrorRaiser<Setup, Build::Error>,
-    SetupBiRelayWithBuilder: BiRelaySetup<Setup, 0, 1>,
-    SetupConnectionHandshake: ConnectionSetup<Setup, 0, 1>,
     SetupChannelHandshake: ChannelSetup<Setup, 0, 1>,
-    ChainA: HasIbcChainTypes<ChainB> + HasCreateClientOptionsType<ChainB> + HasErrorType + Clone,
+    ChainA: HasIbcChainTypes<ChainB>
+        + HasCreateClientOptionsType<ChainB>
+        + HasInitConnectionOptionsType<ChainB>
+        + HasInitChannelOptionsType<ChainB>
+        + HasErrorType
+        + Clone,
     ChainB: HasIbcChainTypes<ChainA> + HasCreateClientOptionsType<ChainA> + HasErrorType + Clone,
     Relay: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
         + CanCreateClient<SourceTarget>
-        + CanCreateClient<DestinationTarget>,
+        + CanCreateClient<DestinationTarget>
+        + CanBootstrapConnection
+        + CanBootstrapChannel,
     BootstrapA: CanBootstrapChain,
     BootstrapB: CanBootstrapChain,
     Build: HasBiRelayType<BiRelay = BiRelay>

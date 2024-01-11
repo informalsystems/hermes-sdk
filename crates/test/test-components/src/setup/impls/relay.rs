@@ -1,6 +1,6 @@
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::CanBuildRelayFromChains;
-use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
+use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientId;
 
@@ -18,18 +18,20 @@ where
     Setup: HasRelayTypeAt<A, B> + HasBuilderAt<A, B> + CanRaiseError<ErrorOf<Setup::Builder>>,
     ChainTypeAt<Setup, A>: HasIbcChainTypes<ChainTypeAt<Setup, B>> + Clone,
     ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>> + Clone,
-    Setup::Builder: CanBuildRelayFromChains<RelayAToBTarget>,
+    Setup::Builder:
+        CanBuildRelayFromChains<RelayAToBTarget> + CanBuildRelayFromChains<RelayBToATarget>,
 {
-    async fn setup_relay(
+    async fn setup_relays(
         setup: &Setup,
         _index: Twindex<A, B>,
         chain_a: &ChainTypeAt<Setup, A>,
         chain_b: &ChainTypeAt<Setup, B>,
         client_id_a: &ClientId<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
         client_id_b: &ClientId<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
-    ) -> Result<RelayTypeAt<Setup, A, B>, Setup::Error> {
-        let relay = setup
-            .builder()
+    ) -> Result<(RelayTypeAt<Setup, A, B>, RelayTypeAt<Setup, B, A>), Setup::Error> {
+        let build = setup.builder();
+
+        let relay_a_to_b = build
             .build_relay_from_chains(
                 RelayAToBTarget,
                 client_id_a,
@@ -40,6 +42,17 @@ where
             .await
             .map_err(Setup::raise_error)?;
 
-        Ok(relay)
+        let relay_b_to_a = build
+            .build_relay_from_chains(
+                RelayBToATarget,
+                client_id_b,
+                client_id_a,
+                chain_b.clone(),
+                chain_a.clone(),
+            )
+            .await
+            .map_err(Setup::raise_error)?;
+
+        Ok((relay_a_to_b, relay_b_to_a))
     }
 }

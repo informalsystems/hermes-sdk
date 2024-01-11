@@ -1,3 +1,4 @@
+use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::channel::{
     HasInitChannelOptionsType, InitChannelOptions,
 };
@@ -6,6 +7,7 @@ use hermes_relayer_components::chain::types::aliases::ConnectionId;
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 
+#[derive_component(InitChannelOptionsAtComponent, ProvideInitChannelOptionsAt<Setup>)]
 pub trait HasInitChannelOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:
     HasChainTypeAt<TARGET> + HasChainTypeAt<COUNTERPARTY>
 where
@@ -20,5 +22,5 @@ where
             ChainTypeAt<Self, COUNTERPARTY>,
             ChainTypeAt<Self, TARGET>,
         >,
-    ) -> &InitChannelOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> InitChannelOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
 }

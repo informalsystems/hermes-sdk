@@ -46,7 +46,7 @@ where
             .bootstrap_channel(
                 setup.port_id_at(Twindex::<A, B>),
                 setup.port_id_at(Twindex::<B, A>),
-                setup.init_channel_options(connection_id_a, connection_id_b),
+                &setup.init_channel_options(connection_id_a, connection_id_b),
             )
             .await
             .map_err(Setup::raise_error)?;
