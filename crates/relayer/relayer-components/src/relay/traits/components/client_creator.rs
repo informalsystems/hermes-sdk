@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::create_client::HasCreateClientOptionsType;
+use crate::chain::traits::types::create_client::{CreateClientOptions, HasCreateClientOptionsType};
 use crate::chain::types::aliases::ClientId;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
@@ -28,8 +28,6 @@ where
         target: Target,
         target_chain: &Target::TargetChain,
         counterparty_chain: &Target::CounterpartyChain,
-        create_client_options: &<Target::CounterpartyChain as HasCreateClientOptionsType<
-            Target::TargetChain,
-        >>::CreateClientOptions,
+        create_client_options: &CreateClientOptions<Target::CounterpartyChain, Target::TargetChain>,
     ) -> Result<ClientId<Target::TargetChain, Target::CounterpartyChain>, Self::Error>;
 }
