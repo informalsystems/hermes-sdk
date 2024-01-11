@@ -33,7 +33,7 @@ use crate::chain::types::aliases::ClientId;
     additional constraints such as restricting a relay context to handle
     only a single channel or connection.
 */
-// #[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
+#[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
 pub trait HasRelayChains: HasErrorType {
     type Packet: Async;
 

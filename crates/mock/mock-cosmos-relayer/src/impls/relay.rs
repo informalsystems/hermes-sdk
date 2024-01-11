@@ -3,7 +3,7 @@ use alloc::vec::Vec;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -83,7 +83,8 @@ where
     }
 }
 
-impl<SrcChain, DstChain> HasRelayChains for MockCosmosRelay<SrcChain, DstChain>
+impl<SrcChain, DstChain> ProvideRelayChains<MockCosmosRelay<SrcChain, DstChain>>
+    for MockCosmosRelayComponents
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
@@ -94,20 +95,20 @@ where
 
     type DstChain = MockCosmosContext<DstChain>;
 
-    fn src_chain(&self) -> &MockCosmosContext<SrcChain> {
-        &self.src_chain
+    fn src_chain(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &MockCosmosContext<SrcChain> {
+        &relay.src_chain
     }
 
-    fn dst_chain(&self) -> &MockCosmosContext<DstChain> {
-        &self.dst_chain
+    fn dst_chain(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &MockCosmosContext<DstChain> {
+        &relay.dst_chain
     }
 
-    fn src_client_id(&self) -> &ClientId {
-        self.src_client_id()
+    fn src_client_id(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &ClientId {
+        relay.src_client_id()
     }
 
-    fn dst_client_id(&self) -> &ClientId {
-        self.dst_client_id()
+    fn dst_client_id(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &ClientId {
+        relay.dst_client_id()
     }
 }
 
