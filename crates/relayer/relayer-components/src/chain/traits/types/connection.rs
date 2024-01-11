@@ -14,6 +14,7 @@ pub trait HasConnectionStateType<Counterparty>: HasIbcChainTypes<Counterparty> {
     fn connection_base_state(state: &Self::ConnectionState) -> Option<ConnectionBaseState>;
 }
 
+#[derive_component(InitConnectionOptionsTypeComponent, ProvideInitConnectionOptionsType<Chain>)]
 pub trait HasInitConnectionOptionsType<Counterparty>: Async {
     type InitConnectionOptions: Async;
 }

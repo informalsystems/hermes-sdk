@@ -14,6 +14,9 @@ use hermes_cosmos_test_components::chain::impls::wallet::ProvideCosmosTestWallet
 use hermes_relayer_components::chain::impls::forward::all::ForwardToInnerChain;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_test_components::chain::traits::build::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
@@ -46,6 +49,9 @@ delegate_components! {
         [
             ChainIdTypeProviderComponent,
             ChainIdGetterComponent,
+            CreateClientOptionsTypeComponent,
+            InitConnectionOptionsTypeComponent,
+            InitChannelOptionsTypeComponent,
         ]:
             ForwardToInnerChain,
         [

@@ -7,6 +7,8 @@ pub mod connection_handshake_message;
 pub mod connection_handshake_payload;
 pub mod create_client_message;
 pub mod create_client_payload;
+pub mod init_channel_options;
+pub mod init_connection_options;
 pub mod packet_fields;
 pub mod packet_from_ack;
 pub mod query_chain_id;

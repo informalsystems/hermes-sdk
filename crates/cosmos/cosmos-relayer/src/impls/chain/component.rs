@@ -51,6 +51,8 @@ use hermes_relayer_components_extra::components::extra::chain::IsExtraChainCompo
 use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
@@ -126,6 +128,8 @@ delegate_components! {
             SendPacketQuerierComponent,
             SendPacketsQuerierComponent,
             PacketFromWriteAckBuilderComponent,
+            InitConnectionOptionsTypeComponent,
+            InitChannelOptionsTypeComponent
         ]:
             CosmosClientComponents,
         ClientStateQuerierComponent:

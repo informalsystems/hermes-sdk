@@ -1,5 +1,6 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
+#[derive_component(InitChannelOptionsTypeComponent, ProvideInitChannelOptionsType<Chain>)]
 pub trait HasInitChannelOptionsType<Counterparty> {
     type InitChannelOptions: Async;
 }

@@ -26,6 +26,8 @@ use hermes_relayer_components::chain::traits::components::update_client_message_
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
@@ -43,6 +45,8 @@ use crate::components::connection_handshake_message::BuildCosmosConnectionHandsh
 use crate::components::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::components::create_client_message::BuildCosmosCreateClientMessage;
 use crate::components::create_client_payload::BuildCreateClientPayloadWithChainHandle;
+use crate::components::init_channel_options::ProvideCosmosInitChannelOptionsType;
+use crate::components::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::components::packet_fields::CosmosPacketFieldReader;
 use crate::components::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::components::query_chain_id::QueryChainIdWithChainHandle;
@@ -139,5 +143,9 @@ delegate_components! {
             QueryChainStatusWithChainHandle,
         ConsensusStateQuerierComponent:
             QueryCosmosConsensusStateFromChainHandle,
+        InitConnectionOptionsTypeComponent:
+            ProvideCosmosInitConnectionOptionsType,
+        InitChannelOptionsTypeComponent:
+            ProvideCosmosInitChannelOptionsType,
     }
 }
