@@ -42,7 +42,7 @@ use hermes_relayer_components::chain::traits::components::update_client_payload_
 use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ChainIdTypeProvider};
+use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ProvideChainIdType};
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
@@ -50,24 +50,24 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayload, ProvideCreateClientOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
+use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    CanIncrementHeight, HeightTypeProvider,
+    CanIncrementHeight, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, IbcChainTypesProvider,
+    HasCounterpartyMessageHeight, ProvideIbcChainTypes,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, MessageTypeProvider,
+    CanEstimateMessageSize, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
-use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
+use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
@@ -107,7 +107,7 @@ impl<Chain: BasecoinEndpoint> ErrorRaiser<MockCosmosContext<Chain>, TokioRuntime
     }
 }
 
-impl<Chain: BasecoinEndpoint> ChainIdTypeProvider<MockCosmosContext<Chain>>
+impl<Chain: BasecoinEndpoint> ProvideChainIdType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type ChainId = ChainId;
@@ -121,13 +121,13 @@ impl<Chain: BasecoinEndpoint> ChainIdGetter<MockCosmosContext<Chain>>
     }
 }
 
-impl<Chain: BasecoinEndpoint> HeightTypeProvider<MockCosmosContext<Chain>>
+impl<Chain: BasecoinEndpoint> ProvideHeightType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Height = Height;
 }
 
-impl<Chain: BasecoinEndpoint> EventTypeProvider<MockCosmosContext<Chain>>
+impl<Chain: BasecoinEndpoint> ProvideEventType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Event = IbcEvent;
@@ -139,20 +139,20 @@ impl<Chain: BasecoinEndpoint> CanLogChainEvent for MockCosmosContext<Chain> {
     }
 }
 
-impl<Chain: BasecoinEndpoint> TimestampTypeProvider<MockCosmosContext<Chain>>
+impl<Chain: BasecoinEndpoint> ProvideTimestampType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Timestamp = Timestamp;
 }
 
-impl<Chain: BasecoinEndpoint> MessageTypeProvider<MockCosmosContext<Chain>>
+impl<Chain: BasecoinEndpoint> ProvideMessageType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Message = Any;
 }
 
 impl<Chain, Counterparty>
-    IbcChainTypesProvider<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    ProvideIbcChainTypes<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,

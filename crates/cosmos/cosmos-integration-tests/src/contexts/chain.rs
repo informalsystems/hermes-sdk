@@ -13,7 +13,7 @@ use hermes_cosmos_test_components::chain::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain::impls::wallet::ProvideCosmosTestWallet;
 use hermes_relayer_components::chain::impls::forward::all::ForwardToInnerChain;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
@@ -47,7 +47,12 @@ delegate_components! {
         ErrorRaiserComponent:
             RaiseDebugError,
         [
-            ChainIdTypeProviderComponent,
+            HeightTypeComponent,
+            MessageTypeComponent,
+            EventTypeComponent,
+            ChainIdTypeComponent,
+            TimestampTypeComponent,
+            IbcChainTypesComponent,
             ChainIdGetterComponent,
             CreateClientOptionsTypeComponent,
             InitConnectionOptionsTypeComponent,

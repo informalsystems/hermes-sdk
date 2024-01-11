@@ -28,27 +28,27 @@ use hermes_relayer_components::chain::traits::components::timeout_unordered_pack
 use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ChainIdTypeProvider};
+use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ProvideChainIdType};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
+use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    CanIncrementHeight, HeightTypeProvider,
+    CanIncrementHeight, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, IbcChainTypesProvider,
+    HasCounterpartyMessageHeight, ProvideIbcChainTypes,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, MessageTypeProvider,
+    CanEstimateMessageSize, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
-use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeProvider;
+use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntimeType;
 use hermes_relayer_runtime::types::log::value::LogValue;
@@ -91,27 +91,27 @@ impl ProvideRuntime<MockChainContext> for MockChainComponents {
     }
 }
 
-impl HeightTypeProvider<MockChainContext> for MockChainComponents {
+impl ProvideHeightType<MockChainContext> for MockChainComponents {
     type Height = MockHeight;
 }
 
-impl EventTypeProvider<MockChainContext> for MockChainComponents {
+impl ProvideEventType<MockChainContext> for MockChainComponents {
     type Event = Event;
 }
 
-impl TimestampTypeProvider<MockChainContext> for MockChainComponents {
+impl ProvideTimestampType<MockChainContext> for MockChainComponents {
     type Timestamp = MockTimestamp;
 }
 
-impl MessageTypeProvider<MockChainContext> for MockChainComponents {
+impl ProvideMessageType<MockChainContext> for MockChainComponents {
     type Message = MockMessage;
 }
 
-impl ChainIdTypeProvider<MockChainContext> for MockChainComponents {
+impl ProvideChainIdType<MockChainContext> for MockChainComponents {
     type ChainId = String;
 }
 
-impl IbcChainTypesProvider<MockChainContext, MockChainContext> for MockChainComponents {
+impl ProvideIbcChainTypes<MockChainContext, MockChainContext> for MockChainComponents {
     type ClientId = ClientId;
 
     type ConnectionId = String;

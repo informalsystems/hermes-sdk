@@ -6,7 +6,7 @@ use core::fmt::Display;
 
 use cgp_core::prelude::*;
 
-#[derive_component(HeightTypeProviderComponent, HeightTypeProvider<Chain>)]
+#[derive_component(HeightTypeComponent, ProvideHeightType<Chain>)]
 pub trait HasHeightType: Async {
     /**
        The height of the chain, which should behave like natural numbers.
