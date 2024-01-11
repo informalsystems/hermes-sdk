@@ -51,7 +51,13 @@ where
             .await?;
 
         let driver = setup
-            .build_driver_with_binary_channel(birelay, channel_id_a, channel_id_b)
+            .build_driver_with_binary_channel(
+                birelay,
+                connection_id_a,
+                connection_id_b,
+                channel_id_a,
+                channel_id_b,
+            )
             .await?;
 
         Ok(driver)

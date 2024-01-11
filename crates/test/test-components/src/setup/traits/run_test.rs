@@ -6,5 +6,5 @@ pub trait CanRunTest<Test>: HasErrorType
 where
     Test: Async,
 {
-    async fn run_test(&self, test_case: &Test) -> Result<(), Self::Error>;
+    async fn run_test(&self, test: &Test) -> Result<(), Self::Error>;
 }
