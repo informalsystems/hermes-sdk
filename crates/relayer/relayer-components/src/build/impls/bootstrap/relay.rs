@@ -10,7 +10,7 @@ use crate::build::types::aliases::{
 };
 use crate::chain::traits::types::create_client::HasCreateClientOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 
@@ -45,7 +45,8 @@ where
     Target: RelayBuildTarget<Self, TargetRelay = Relay>,
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>
         + CanCreateClient<SourceTarget>
-        + CanCreateClient<DestinationTarget>,
+        + CanCreateClient<DestinationTarget>
+        + CanRaiseRelayChainErrors,
     SrcChain: HasCreateClientOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
     DstChain: HasCreateClientOptionsType<SrcChain> + HasIbcChainTypes<SrcChain> + HasErrorType,
 {

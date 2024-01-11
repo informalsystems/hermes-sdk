@@ -3,6 +3,7 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientId;
+use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
@@ -25,7 +26,9 @@ where
         HasIbcChainTypes<ChainTypeAt<Setup, B>> + HasCreateClientOptionsType<ChainTypeAt<Setup, B>>,
     ChainTypeAt<Setup, B>:
         HasIbcChainTypes<ChainTypeAt<Setup, A>> + HasCreateClientOptionsType<ChainTypeAt<Setup, A>>,
-    RelayTypeAt<Setup, A, B>: CanCreateClient<SourceTarget> + CanCreateClient<DestinationTarget>,
+    RelayTypeAt<Setup, A, B>: CanCreateClient<SourceTarget>
+        + CanCreateClient<DestinationTarget>
+        + CanRaiseRelayChainErrors,
 {
     async fn setup_clients(
         setup: &Setup,

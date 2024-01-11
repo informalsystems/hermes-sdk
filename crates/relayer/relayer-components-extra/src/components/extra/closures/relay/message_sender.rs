@@ -1,8 +1,8 @@
-use cgp_core::HasComponents;
+use cgp_core::{ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::components::ibc_message_sender::{
     CanSendIbcMessages, MainSink,
 };
@@ -22,6 +22,7 @@ pub trait UseExtraIbcMessageSender:
     + CanSendIbcMessages<MainSink, DestinationTarget>
     + CanSendIbcMessages<BatchWorkerSink, SourceTarget>
     + CanSendIbcMessages<BatchWorkerSink, DestinationTarget>
+    + CanRaiseRelayChainErrors
 {
 }
 
@@ -42,6 +43,9 @@ where
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     Relay::Logger: HasBaseLogLevels,
-    Components: DelegatesToExtraRelayComponents + PacketFilter<Relay>,
+    Components: DelegatesToExtraRelayComponents
+        + PacketFilter<Relay>
+        + ErrorRaiser<Relay, SrcChain::Error>
+        + ErrorRaiser<Relay, DstChain::Error>,
 {
 }

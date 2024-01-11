@@ -1,4 +1,5 @@
 use alloc::sync::Arc;
+use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -12,11 +13,7 @@ use hermes_cosmos_test_components::chain::impls::chain_id::BuildCosmosChainIdFro
 use hermes_cosmos_test_components::chain::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain::impls::wallet::ProvideCosmosTestWallet;
 use hermes_relayer_components::chain::impls::forward::all::ForwardToInnerChain;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetterComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
-use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
-use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
+use hermes_relayer_components::chain::impls::forward::all::IsForwardToInnerChainComponent;
 use hermes_test_components::chain::traits::build::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
@@ -40,25 +37,18 @@ impl HasComponents for CosmosTestChain {
     type Components = CosmosTestChainComponents;
 }
 
+delegate_all!(
+    IsForwardToInnerChainComponent,
+    ForwardToInnerChain,
+    CosmosTestChainComponents,
+);
+
 delegate_components! {
     CosmosTestChainComponents {
         ErrorTypeComponent:
             ProvideEyreError,
         ErrorRaiserComponent:
             RaiseDebugError,
-        [
-            HeightTypeComponent,
-            MessageTypeComponent,
-            EventTypeComponent,
-            ChainIdTypeComponent,
-            TimestampTypeComponent,
-            IbcChainTypesComponent,
-            ChainIdGetterComponent,
-            CreateClientOptionsTypeComponent,
-            InitConnectionOptionsTypeComponent,
-            InitChannelOptionsTypeComponent,
-        ]:
-            ForwardToInnerChain,
         [
             WalletTypeComponent,
             WalletSignerComponent,

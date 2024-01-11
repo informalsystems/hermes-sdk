@@ -13,6 +13,7 @@ use hermes_relayer_components::chain::traits::types::create_client::HasCreateCli
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
@@ -104,7 +105,8 @@ where
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanBootstrapConnection
-        + CanBootstrapChannel,
+        + CanBootstrapChannel
+        + CanRaiseRelayChainErrors,
     BootstrapA: CanBootstrapChain,
     BootstrapB: CanBootstrapChain,
     Build: HasBiRelayType<BiRelay = BiRelay>

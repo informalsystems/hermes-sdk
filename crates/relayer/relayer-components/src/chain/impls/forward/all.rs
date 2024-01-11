@@ -18,6 +18,8 @@ use crate::chain::traits::types::timestamp::TimestampTypeComponent;
 pub struct ForwardToInnerChain;
 
 delegate_components! {
+    #[mark_component(IsForwardToInnerChainComponent)]
+    #[mark_delegate(DelegatesToInnerChain)]
     ForwardToInnerChain {
         [
             HeightTypeComponent,
