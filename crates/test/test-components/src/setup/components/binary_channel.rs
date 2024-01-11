@@ -35,7 +35,7 @@ use crate::setup::traits::birelay::BiRelaySetupComponent;
 use crate::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use crate::setup::traits::builder_at::ProvideBuilderAt;
 use crate::setup::traits::chain::ChainSetupComponent;
-use crate::setup::traits::channel::{ChannelSetup, ChannelSetupComponent};
+use crate::setup::traits::channel::ChannelSetupComponent;
 use crate::setup::traits::clients::ClientSetupComponent;
 use crate::setup::traits::connection::ConnectionSetupComponent;
 use crate::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
@@ -43,6 +43,7 @@ use crate::setup::traits::driver::{CanBuildDriver, DriverBuilderComponent, Provi
 use crate::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use crate::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use crate::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
+use crate::setup::traits::port_id_at::ProvidePortIdAt;
 use crate::setup::traits::relay::RelaySetupComponent;
 use crate::setup::traits::run_test::TestRunnerComponent;
 
@@ -84,13 +85,14 @@ where
         + ProvideCreateClientOptionsAt<Setup, 1, 0>
         + ProvideInitConnectionOptionsAt<Setup, 0, 1>
         + ProvideInitChannelOptionsAt<Setup, 0, 1>
+        + ProvidePortIdAt<Setup, 0, 1>
+        + ProvidePortIdAt<Setup, 1, 0>
         + ProvideBuilderTypeAt<Setup, 0, 1, Builder = Build>
         + ProvideBuilderAt<Setup, 0, 1>
         + ErrorRaiser<Setup, BootstrapA::Error>
         + ErrorRaiser<Setup, BootstrapB::Error>
         + ErrorRaiser<Setup, Relay::Error>
         + ErrorRaiser<Setup, Build::Error>,
-    SetupChannelHandshake: ChannelSetup<Setup, 0, 1>,
     ChainA: HasIbcChainTypes<ChainB>
         + HasCreateClientOptionsType<ChainB>
         + HasInitConnectionOptionsType<ChainB>
