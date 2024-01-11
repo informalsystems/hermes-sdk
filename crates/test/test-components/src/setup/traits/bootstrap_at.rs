@@ -4,7 +4,7 @@ use crate::bootstrap::traits::types::chain::HasChainType;
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 use crate::types::index::Index;
 
-#[derive_component(ChainBootstrapAtComponent, ProvideChainBootstrapAt<Setup>)]
+#[derive_component(BootstrapAtComponent, ProvideBootstrapAt<Setup>)]
 pub trait HasBootstrapAt<const I: usize>: HasChainTypeAt<I> {
     type Bootstrap: HasChainType<Chain = ChainTypeAt<Self, I>>;
 

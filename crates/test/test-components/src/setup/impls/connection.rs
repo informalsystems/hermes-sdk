@@ -12,9 +12,10 @@ use crate::setup::traits::connection::ConnectionSetup;
 use crate::setup::traits::init_connection_options_at::HasInitConnectionOptionsAt;
 use crate::types::error::ErrorOf;
 
-pub struct SetupConnection;
+pub struct SetupConnectionHandshake;
 
-impl<Setup, const A: usize, const B: usize> ConnectionSetup<Setup, A, B> for SetupConnection
+impl<Setup, const A: usize, const B: usize> ConnectionSetup<Setup, A, B>
+    for SetupConnectionHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>
         + HasInitConnectionOptionsAt<A, B>

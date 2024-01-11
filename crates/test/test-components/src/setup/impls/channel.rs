@@ -14,9 +14,9 @@ use crate::setup::traits::port_id_at::HasPortIdAt;
 use crate::types::error::ErrorOf;
 use crate::types::index::Twindex;
 
-pub struct SetupChannel;
+pub struct SetupChannelHandshake;
 
-impl<Setup, const A: usize, const B: usize> ChannelSetup<Setup, A, B> for SetupChannel
+impl<Setup, const A: usize, const B: usize> ChannelSetup<Setup, A, B> for SetupChannelHandshake
 where
     Setup: HasBiRelayTypeAt<A, B>
         + HasInitChannelOptionsAt<A, B>

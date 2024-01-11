@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 
+#[derive_component(DriverTypeComponent, ProvideDriverType<Setup>)]
 pub trait HasDriverType: Async {
     type Driver: Async;
 }

@@ -1,7 +1,8 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::types::index::Index;
 
+#[derive_component(ChainTypeAtComponent, ProvideChainTypeAt<Context>)]
 pub trait HasChainTypeAt<const I: usize>: Async {
     type Chain: HasErrorType;
 }

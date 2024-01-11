@@ -6,6 +6,7 @@ use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::setup::traits::driver::HasDriverType;
 
+#[derive_component(BinaryChannelDriverBuilderComponent, BinaryChannelDriverBuilder<Setup>)]
 #[async_trait]
 pub trait CanBuildDriverWithBinaryChannel:
     HasBiRelayTypeAt<0, 1> + HasDriverType + HasErrorType
