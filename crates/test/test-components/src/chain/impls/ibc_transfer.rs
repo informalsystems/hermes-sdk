@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
@@ -14,50 +15,59 @@ use crate::chain::traits::queries::ibc_transfer::TokenIbcTransferrer;
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
+use crate::driver::traits::types::chain::HasChain;
+use crate::driver::traits::types::chain::HasChainType;
 
 pub struct SendIbcTransferMessage;
 
 #[async_trait]
-impl<Chain, Counterparty> TokenIbcTransferrer<Chain, Counterparty> for SendIbcTransferMessage
+impl<ChainDriver, Chain, CounterpartyDriver, Counterparty>
+    TokenIbcTransferrer<ChainDriver, CounterpartyDriver> for SendIbcTransferMessage
 where
-    Chain: HasErrorType
+    ChainDriver: HasChain<Chain = Chain>
+        + CanRaiseError<Chain::Error>
         + HasWalletType
         + HasAmountType
         + HasDefaultMemo
         + HasWalletSigner
-        + CanQueryChainStatus
         + CanCalculateIbcTransferTimeout
+        + CanBuildIbcTokenTransferMessage<CounterpartyDriver>
+        + CanRaiseMissingSendPacketEventError,
+    Chain: CanQueryChainStatus
         + CanSendSingleMessageWithSigner
-        + CanRaiseMissingSendPacketEventError
         + HasIbcChainTypes<Counterparty>
         + HasIbcPacketTypes<Counterparty>
-        + HasSendPacketEvent<Counterparty>
-        + CanBuildIbcTokenTransferMessage<Counterparty>,
-    Counterparty: HasAddressType,
+        + HasSendPacketEvent<Counterparty>,
+    CounterpartyDriver: HasAddressType + HasChainType<Chain = Counterparty>,
 {
     async fn ibc_transfer_token(
-        chain: &Chain,
+        chain_driver: &ChainDriver,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
-        sender_wallet: &Chain::Wallet,
-        recipient_address: &Counterparty::Address,
-        amount: &Chain::Amount,
-    ) -> Result<Chain::OutgoingPacket, Chain::Error> {
-        let chain_status = chain.query_chain_status().await?;
+        sender_wallet: &ChainDriver::Wallet,
+        recipient_address: &CounterpartyDriver::Address,
+        amount: &ChainDriver::Amount,
+    ) -> Result<Chain::OutgoingPacket, ChainDriver::Error> {
+        let chain = chain_driver.chain();
+
+        let chain_status = chain
+            .query_chain_status()
+            .await
+            .map_err(ChainDriver::raise_error)?;
 
         let current_height = Chain::chain_status_height(&chain_status);
 
         let current_time = Chain::chain_status_timestamp(&chain_status);
 
-        let timeout_height = chain.ibc_transfer_timeout_height(current_height);
+        let timeout_height = chain_driver.ibc_transfer_timeout_height(current_height);
 
-        let timeout_time = chain.ibc_transfer_timeout_time(current_time);
+        let timeout_time = chain_driver.ibc_transfer_timeout_time(current_time);
 
-        let memo = chain.default_memo();
+        let memo = chain_driver.default_memo();
 
-        let sender_address = Chain::wallet_address(sender_wallet);
+        let sender_address = ChainDriver::wallet_address(sender_wallet);
 
-        let message = chain
+        let message = chain_driver
             .build_ibc_token_transfer_message(
                 channel_id,
                 port_id,
@@ -70,14 +80,17 @@ where
             )
             .await?;
 
-        let signer = Chain::wallet_signer(sender_wallet);
+        let signer = ChainDriver::wallet_signer(sender_wallet);
 
-        let events = chain.send_message_with_signer(signer, message).await?;
+        let events = chain
+            .send_message_with_signer(signer, message)
+            .await
+            .map_err(ChainDriver::raise_error)?;
 
         let send_packet_event = events
             .iter()
             .find_map(Chain::try_extract_send_packet_event)
-            .ok_or_else(|| chain.missing_send_packet_event_error())?;
+            .ok_or_else(|| chain_driver.missing_send_packet_event_error())?;
 
         let packet = Chain::extract_packet_from_send_packet_event(&send_packet_event);
 

@@ -3,33 +3,34 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use hermes_relayer_components::chain::types::aliases::{
+    ChannelId, Height, Message, PortId, Timestamp,
+};
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::memo::HasMemoType;
+use crate::driver::traits::types::chain::HasChainType;
 
 #[async_trait]
-pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
-    HasErrorType
-    + HasMessageType
-    + HasAddressType
-    + HasAmountType
-    + HasMemoType
-    + HasHeightType
-    + HasTimestampType
-    + HasIbcChainTypes<Counterparty>
+pub trait CanBuildIbcTokenTransferMessage<CounterpartyDriver>:
+    HasErrorType + HasChainType + HasAddressType + HasAmountType + HasMemoType
 where
-    Counterparty: HasAddressType,
+    Self::Chain: HasMessageType
+        + HasHeightType
+        + HasTimestampType
+        + HasIbcChainTypes<CounterpartyDriver::Chain>,
+    CounterpartyDriver: HasAddressType + HasChainType,
 {
     async fn build_ibc_token_transfer_message(
         &self,
-        channel_id: &Self::ChannelId,
-        port_id: &Self::PortId,
+        channel_id: &ChannelId<Self::Chain, CounterpartyDriver::Chain>,
+        port_id: &PortId<Self::Chain, CounterpartyDriver::Chain>,
         sender_address: &Self::Address,
-        recipient_address: &Counterparty::Address,
+        recipient_address: &CounterpartyDriver::Address,
         amount: &Self::Amount,
         memo: &Self::Memo,
-        timeout_height: Option<&Self::Height>,
-        timeout_time: Option<&Self::Timestamp>,
-    ) -> Result<Self::Message, Self::Error>;
+        timeout_height: Option<&Height<Self::Chain>>,
+        timeout_time: Option<&Timestamp<Self::Chain>>,
+    ) -> Result<Message<Self::Chain>, Self::Error>;
 }

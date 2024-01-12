@@ -1,37 +1,13 @@
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::types::aliases::{ChannelId, PortId};
 
-pub trait HasChannelAt<Counterparty, const I: usize>: HasIbcChainTypes<Counterparty> {
-    fn channel_id(&self) -> &Self::ChannelId;
+use crate::driver::traits::types::chain::HasChainType;
 
-    fn port_id(&self) -> &Self::PortId;
-}
-
-/// Helper auto trait method for accessing N-th channel/port ID
-pub trait NthChannel<Counterparty>: HasIbcChainTypes<Counterparty> {
-    fn nth_channel_id<const I: usize>(&self) -> &Self::ChannelId
-    where
-        Self: HasChannelAt<Counterparty, I>;
-
-    fn nth_port_id<const I: usize>(&self) -> &Self::PortId
-    where
-        Self: HasChannelAt<Counterparty, I>;
-}
-
-impl<Chain, Counterparty> NthChannel<Counterparty> for Chain
+pub trait HasChannelAt<Counterparty, const I: usize>: HasChainType
 where
-    Chain: HasIbcChainTypes<Counterparty>,
+    Self::Chain: HasIbcChainTypes<Counterparty>,
 {
-    fn nth_channel_id<const I: usize>(&self) -> &Self::ChannelId
-    where
-        Self: HasChannelAt<Counterparty, I>,
-    {
-        self.channel_id()
-    }
+    fn channel_id(&self) -> &ChannelId<Self::Chain, Counterparty>;
 
-    fn nth_port_id<const I: usize>(&self) -> &Self::PortId
-    where
-        Self: HasChannelAt<Counterparty, I>,
-    {
-        self.port_id()
-    }
+    fn port_id(&self) -> &PortId<Self::Chain, Counterparty>;
 }

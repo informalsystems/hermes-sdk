@@ -1,8 +1,10 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::types::aliases::{ChannelId, PortId};
 
 use crate::chain::traits::types::amount::HasAmountType;
 use crate::chain::traits::types::denom::HasDenomType;
+use crate::driver::traits::types::chain::HasChainType;
 
 #[derive_component(RandomAmountGeneratorComponent, RandomAmountGenerator<Chain>)]
 pub trait CanGenerateRandomAmount: HasDenomType + HasAmountType {
@@ -23,19 +25,19 @@ pub trait HasAmountMethods: HasAmountType + HasErrorType {
 }
 
 #[derive_component(IbcTransferredAmountConverterComponent, IbcTransferredAmountConverter<Chain>)]
-pub trait CanConvertIbcTransferredAmount<Counterparty>:
-    HasAmountType + HasIbcChainTypes<Counterparty>
+pub trait CanConvertIbcTransferredAmount<CounterpartyDriver>: HasAmountType + HasChainType
 where
-    Counterparty: HasAmountType,
+    Self::Chain: HasIbcChainTypes<CounterpartyDriver::Chain>,
+    CounterpartyDriver: HasChainType + HasAmountType,
 {
     fn ibc_transfer_amount_from(
-        counterparty_amount: &Counterparty::Amount,
-        channel_id: &Self::ChannelId,
-        port_id: &Self::PortId,
+        counterparty_amount: &CounterpartyDriver::Amount,
+        channel_id: &ChannelId<Self::Chain, CounterpartyDriver::Chain>,
+        port_id: &PortId<Self::Chain, CounterpartyDriver::Chain>,
     ) -> Self::Amount;
 
     fn transmute_counterparty_amount(
-        counterparty_amount: &Counterparty::Amount,
+        counterparty_amount: &CounterpartyDriver::Amount,
         denom: &Self::Denom,
     ) -> Self::Amount;
 }
