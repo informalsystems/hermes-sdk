@@ -14,13 +14,14 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use ibc_relayer::chain::client::ClientSettings;
-use ibc_relayer::foreign_client::CreateOptions;
+use ibc_relayer::chain::cosmos::client::Settings;
+use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use tokio::runtime::Runtime;
 use tokio::test;
 use tokio::time::sleep;
 
-use crate::contexts::bootstrap::CosmosStdBootstrapContext;
+use crate::contexts::bootstrap::CosmosBootstrap;
 
 #[test(flavor = "multi_thread")]
 async fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
@@ -31,7 +32,7 @@ async fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
 
     let builder = CosmosBuilder::new_with_default(runtime.clone());
 
-    let bootstrap = CosmosStdBootstrapContext {
+    let bootstrap = CosmosBootstrap {
         runtime,
         builder,
         should_randomize_identifiers: true,
@@ -48,15 +49,19 @@ async fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
 
     sleep(Duration::from_secs(2)).await;
 
+    let client_settings = ClientSettings::Tendermint(Settings {
+        max_clock_drift: Duration::from_secs(40),
+        trusting_period: None,
+        trust_threshold: TrustThreshold::ONE_THIRD,
+    });
+
+    println!("client settings: {:?}", client_settings);
+
     let client_id_a = CosmosRelay::create_client(
         SourceTarget,
         &chain_a.base_chain,
         &chain_b.base_chain,
-        &ClientSettings::for_create_command(
-            CreateOptions::default(),
-            &chain_a.chain_config,
-            &chain_b.chain_config,
-        ),
+        &client_settings,
     )
     .await?;
 
@@ -64,11 +69,7 @@ async fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
         DestinationTarget,
         &chain_b.base_chain,
         &chain_a.base_chain,
-        &ClientSettings::for_create_command(
-            CreateOptions::default(),
-            &chain_b.chain_config,
-            &chain_a.chain_config,
-        ),
+        &client_settings,
     )
     .await?;
 

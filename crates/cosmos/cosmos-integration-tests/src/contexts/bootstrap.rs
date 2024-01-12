@@ -51,7 +51,7 @@ use tokio::process::Child;
 
 use crate::contexts::chain::CosmosChainDriver;
 
-pub struct CosmosStdBootstrapContext {
+pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,
     pub builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
@@ -64,11 +64,11 @@ pub struct CosmosStdBootstrapContext {
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
 }
 
-impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosStdBootstrapContext {}
+impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosBootstrap {}
 
 pub struct CosmosStdBootstrapComponents;
 
-impl HasComponents for CosmosStdBootstrapContext {
+impl HasComponents for CosmosBootstrap {
     type Components = CosmosStdBootstrapComponents;
 }
 
@@ -94,19 +94,19 @@ delegate_components! {
     }
 }
 
-impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl ProvideChainType<CosmosBootstrap> for CosmosStdBootstrapComponents {
     type Chain = CosmosChain;
 }
 
-impl ProvideChainDriverType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl ProvideChainDriverType<CosmosBootstrap> for CosmosStdBootstrapComponents {
     type ChainDriver = CosmosChainDriver;
 }
 
 #[async_trait]
-impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComponents {
     #[allow(unused_variables)]
     async fn build_chain_from_bootstrap_params(
-        bootstrap: &CosmosStdBootstrapContext,
+        bootstrap: &CosmosBootstrap,
         chain_home_dir: PathBuf,
         chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
@@ -180,59 +180,55 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
     }
 }
 
-impl ProvideRuntime<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn runtime(bootstrap: &CosmosStdBootstrapContext) -> &HermesRuntime {
+impl ProvideRuntime<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn runtime(bootstrap: &CosmosBootstrap) -> &HermesRuntime {
         &bootstrap.runtime
     }
 }
 
-impl TestDirGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn test_dir(bootstrap: &CosmosStdBootstrapContext) -> &PathBuf {
+impl TestDirGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn test_dir(bootstrap: &CosmosBootstrap) -> &PathBuf {
         &bootstrap.test_dir
     }
 }
 
-impl ChainCommandPathGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn chain_command_path(bootstrap: &CosmosStdBootstrapContext) -> &PathBuf {
+impl ChainCommandPathGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn chain_command_path(bootstrap: &CosmosBootstrap) -> &PathBuf {
         &bootstrap.chain_command_path
     }
 }
 
-impl RandomIdFlagGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn should_randomize_identifiers(bootstrap: &CosmosStdBootstrapContext) -> bool {
+impl RandomIdFlagGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn should_randomize_identifiers(bootstrap: &CosmosBootstrap) -> bool {
         bootstrap.should_randomize_identifiers
     }
 }
 
-impl CosmosGenesisConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl CosmosGenesisConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
     fn modify_genesis_config(
-        bootstrap: &CosmosStdBootstrapContext,
+        bootstrap: &CosmosBootstrap,
         config: &mut serde_json::Value,
-    ) -> Result<(), <CosmosStdBootstrapContext as HasErrorType>::Error> {
+    ) -> Result<(), <CosmosBootstrap as HasErrorType>::Error> {
         (bootstrap.genesis_config_modifier)(config)
     }
 }
 
-impl CometConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl CometConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
     fn modify_comet_config(
-        bootstrap: &CosmosStdBootstrapContext,
+        bootstrap: &CosmosBootstrap,
         comet_config: &mut toml::Value,
     ) -> Result<(), Error> {
         (bootstrap.comet_config_modifier)(comet_config)
     }
 }
 
-impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForStaking>
-    for CosmosStdBootstrapComponents
-{
+impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosStdBootstrapComponents {
     fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
         &genesis_config.staking_denom
     }
 }
 
-impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForTransfer>
-    for CosmosStdBootstrapComponents
-{
+impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosStdBootstrapComponents {
     fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
         &genesis_config.transfer_denom
     }

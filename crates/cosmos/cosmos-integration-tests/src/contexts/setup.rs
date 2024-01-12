@@ -1,15 +1,45 @@
 use cgp_core::delegate_all;
 use cgp_core::prelude::*;
+use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
+use cgp_error_eyre::RaiseDebugError;
+use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
+use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
+use hermes_test_components::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
+use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTypeAt;
 use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
+use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
+use hermes_test_components::driver::traits::types::relay_at::ProvideRelayTypeAt;
 use hermes_test_components::setup::components::binary_channel::BinaryChannelTestComponents;
 use hermes_test_components::setup::components::binary_channel::IsBinaryChannelTestComponent;
+use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
+use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
+use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
+use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
+use hermes_test_components::types::index::Twindex;
+use ibc_relayer::chain::client::ClientSettings;
+use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
-pub struct CosmosSetup;
+use crate::contexts::bootstrap::CosmosBootstrap;
+use crate::contexts::chain::CosmosChainDriver;
+
+pub struct CosmosSetup {
+    pub create_client_settings: ClientSettings,
+    pub bootstrap: CosmosBootstrap,
+    pub builder: CosmosBuilder,
+    pub port_id: PortId,
+    pub init_connection_options: CosmosInitConnectionOptions,
+}
 
 pub struct CosmosSetupComponents;
+
+impl HasComponents for CosmosSetup {
+    type Components = CosmosSetupComponents;
+}
 
 delegate_all!(
     IsBinaryChannelTestComponent,
@@ -20,6 +50,7 @@ delegate_all!(
 delegate_components! {
     CosmosSetupComponents {
         ErrorTypeComponent: ProvideEyreError,
+        ErrorRaiserComponent: RaiseDebugError,
     }
 }
 
@@ -28,4 +59,54 @@ where
     Setup: Async,
 {
     type Chain = CosmosChain;
+}
+
+impl<const I: usize> ProvideChainDriverTypeAt<CosmosSetup, I> for CosmosSetupComponents {
+    type ChainDriver = CosmosChainDriver;
+}
+
+impl<const I: usize, const J: usize> ProvideRelayTypeAt<CosmosSetup, I, J>
+    for CosmosSetupComponents
+{
+    type Relay = CosmosRelay;
+}
+
+impl<const I: usize, const J: usize> ProvideBiRelayTypeAt<CosmosSetup, I, J>
+    for CosmosSetupComponents
+{
+    type BiRelay = CosmosBiRelay;
+}
+
+impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosSetup, I, J>
+    for CosmosSetupComponents
+{
+    type Builder = CosmosBuilder;
+}
+
+impl<const I: usize, const J: usize> ProvideBuilderAt<CosmosSetup, I, J> for CosmosSetupComponents {
+    fn builder(setup: &CosmosSetup) -> &CosmosBuilder {
+        &setup.builder
+    }
+}
+
+impl<const I: usize, const J: usize> ProvideCreateClientOptionsAt<CosmosSetup, I, J>
+    for CosmosSetupComponents
+{
+    fn create_client_options(setup: &CosmosSetup, _index: Twindex<I, J>) -> &ClientSettings {
+        &setup.create_client_settings
+    }
+}
+
+impl<const I: usize, const J: usize> ProvideInitConnectionOptionsAt<CosmosSetup, I, J>
+    for CosmosSetupComponents
+{
+    fn init_connection_options(setup: &CosmosSetup) -> &CosmosInitConnectionOptions {
+        &setup.init_connection_options
+    }
+}
+
+impl<const I: usize, const J: usize> ProvidePortIdAt<CosmosSetup, I, J> for CosmosSetupComponents {
+    fn port_id_at(setup: &CosmosSetup, _index: Twindex<I, J>) -> &PortId {
+        &setup.port_id
+    }
 }
