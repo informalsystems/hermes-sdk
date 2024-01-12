@@ -17,7 +17,6 @@ use hermes_test_components::driver::traits::background_relayer::HasBackgroundRel
 use hermes_test_components::driver::traits::types::chain_at::{
     HasChainAt, HasOneChain, HasTwoChains,
 };
-use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 
 pub struct TestIbcTransfer;
@@ -28,8 +27,6 @@ where
     Driver: HasErrorType
         + HasChainAt<0, Chain = ChainA>
         + HasChainAt<1, Chain = ChainB>
-        + HasChainDriverAt<0, Chain = ChainA>
-        + HasChainDriverAt<1, Chain = ChainB>
         + CanLog
         + HasBackgroundRelayer,
     ChainA: HasIbcChainTypes<ChainB>

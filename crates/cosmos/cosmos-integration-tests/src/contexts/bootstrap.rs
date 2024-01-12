@@ -94,6 +94,8 @@ delegate_components! {
 
 impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
     type Chain = CosmosTestChain;
+
+    type Counterparty = CosmosTestChain;
 }
 
 #[async_trait]
