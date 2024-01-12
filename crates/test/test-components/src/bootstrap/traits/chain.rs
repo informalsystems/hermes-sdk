@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::bootstrap::traits::types::chain::HasChainType;
+use crate::driver::traits::types::chain::HasChainType;
 
 #[derive_component(ChainBootstrapperComponent, ChainBootstrapper<Bootstrap>)]
 #[async_trait]
