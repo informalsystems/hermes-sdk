@@ -4,6 +4,7 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::chain::ChainBootstrapper;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain::HasChainType;
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
@@ -21,11 +22,12 @@ use crate::bootstrap::traits::initializers::init_genesis_config::CanInitGenesisC
 pub struct BootstrapCosmosChain;
 
 #[async_trait]
-impl<Bootstrap, Runtime, Chain> ChainBootstrapper<Bootstrap> for BootstrapCosmosChain
+impl<Bootstrap, Runtime, Chain, ChainDriver> ChainBootstrapper<Bootstrap> for BootstrapCosmosChain
 where
     Bootstrap: HasErrorType
         + HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
+        + HasChainDriverType<ChainDriver = ChainDriver>
         + CanGenerateChainId
         + CanInitChainHomeDir
         + CanInitChainData
@@ -42,7 +44,7 @@ where
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,
         chain_id_prefix: &str,
-    ) -> Result<Bootstrap::Chain, Bootstrap::Error> {
+    ) -> Result<ChainDriver, Bootstrap::Error> {
         let chain_id = bootstrap.generate_chain_id(chain_id_prefix).await;
 
         let chain_home_dir = bootstrap.init_chain_home_dir(&chain_id).await?;

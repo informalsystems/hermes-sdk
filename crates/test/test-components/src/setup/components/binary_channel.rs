@@ -22,7 +22,10 @@ use hermes_relayer_components::relay::traits::target::SourceTarget;
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
 use crate::driver::traits::types::builder_at::ProvideBuilderTypeAt;
+use crate::driver::traits::types::chain::HasChain;
+use crate::driver::traits::types::chain::HasChainType;
 use crate::driver::traits::types::chain_at::ProvideChainTypeAt;
+use crate::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use crate::driver::traits::types::relay_at::ProvideRelayTypeAt;
 use crate::setup::impls::binary_channel::SetupBinaryChannelDriver;
 use crate::setup::impls::birelay::SetupBiRelayWithBuilder;
@@ -67,8 +70,19 @@ delegate_components! {
 
 pub trait UseBinaryChannelTestSetup: CanBuildDriver {}
 
-impl<Setup, Components, ChainA, ChainB, BootstrapA, BootstrapB, Relay, BiRelay, Build>
-    UseBinaryChannelTestSetup for Setup
+impl<
+        Setup,
+        Components,
+        ChainDriverA,
+        ChainDriverB,
+        ChainA,
+        ChainB,
+        BootstrapA,
+        BootstrapB,
+        Relay,
+        BiRelay,
+        Build,
+    > UseBinaryChannelTestSetup for Setup
 where
     Setup: HasComponents<Components = Components>,
     Components: DelegatesToBinaryChannelTestComponents
@@ -76,6 +90,8 @@ where
         + ProvideErrorType<Setup>
         + ProvideChainTypeAt<Setup, 0, Chain = ChainA>
         + ProvideChainTypeAt<Setup, 1, Chain = ChainB>
+        + ProvideChainDriverTypeAt<Setup, 0, ChainDriver = ChainDriverA>
+        + ProvideChainDriverTypeAt<Setup, 1, ChainDriver = ChainDriverB>
         + ProvideRelayTypeAt<Setup, 0, 1, Relay = Relay>
         + ProvideRelayTypeAt<Setup, 1, 0>
         + ProvideBiRelayTypeAt<Setup, 0, 1, BiRelay = BiRelay>
@@ -94,6 +110,8 @@ where
         + ErrorRaiser<Setup, BootstrapB::Error>
         + ErrorRaiser<Setup, Relay::Error>
         + ErrorRaiser<Setup, Build::Error>,
+    ChainDriverA: HasChain<Chain = ChainA>,
+    ChainDriverB: HasChain<Chain = ChainB>,
     ChainA: HasIbcChainTypes<ChainB>
         + HasCreateClientOptionsType<ChainB>
         + HasInitConnectionOptionsType<ChainB>

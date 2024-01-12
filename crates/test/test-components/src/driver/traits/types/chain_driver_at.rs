@@ -1,14 +1,16 @@
 use crate::driver::traits::types::chain::HasChainType;
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
-use crate::types::index::Twindex;
+use crate::types::index::Index;
+use cgp_core::prelude::*;
 
-pub trait HasChainDriverAt<const CHAIN: usize, const COUNTERPARTY: usize>:
-    HasChainTypeAt<CHAIN> + HasChainTypeAt<COUNTERPARTY>
-{
-    type ChainDriver: HasChainType<
-        Chain = ChainTypeAt<Self, CHAIN>,
-        Counterparty = ChainTypeAt<Self, COUNTERPARTY>,
-    >;
+#[derive_component(ChainDriverTypeAtComponent, ProvideChainDriverTypeAt<Context>)]
+pub trait HasChainDriverTypeAt<const I: usize>: HasChainTypeAt<I> {
+    type ChainDriver: HasChainType<Chain = ChainTypeAt<Self, I>>;
+}
 
-    fn chain_driver_at(&self, index: Twindex<CHAIN, COUNTERPARTY>) -> &Self::ChainDriver;
+pub type ChainDriverTypeAt<Context, const I: usize> =
+    <Context as HasChainDriverTypeAt<I>>::ChainDriver;
+
+pub trait HasChainDriverAt<const I: usize>: HasChainDriverTypeAt<I> {
+    fn chain_driver_at(&self, index: Index<I>) -> &Self::ChainDriver;
 }

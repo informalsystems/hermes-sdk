@@ -3,6 +3,7 @@ use cgp_core::CanRaiseError;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::driver::traits::types::chain_at::ChainTypeAt;
+use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
 use crate::setup::traits::bootstrap_at::HasBootstrapAt;
 use crate::setup::traits::chain::ChainSetup;
 use crate::types::error::ErrorOf;
@@ -18,7 +19,7 @@ where
     async fn setup_chain(
         setup: &Setup,
         _index: Index<I>,
-    ) -> Result<ChainTypeAt<Setup, I>, Setup::Error> {
+    ) -> Result<ChainDriverTypeAt<Setup, I>, Setup::Error> {
         let bootstrap = setup.chain_bootstrap(Index::<I>);
 
         let chain_name = format!("chain-{}", I);

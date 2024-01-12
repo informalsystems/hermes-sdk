@@ -8,6 +8,7 @@ use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::{eyre, Error};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
@@ -39,6 +40,7 @@ use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, Runtim
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::driver::traits::types::chain::ProvideChainType;
+use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::chain::ChainType;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::config::{self, AddressType, ChainConfig};
@@ -47,7 +49,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tendermint_rpc::{Url, WebSocketClientUrl};
 use tokio::process::Child;
 
-use crate::contexts::chain::CosmosTestChain;
+use crate::contexts::chain::{CosmosChainDriver, CosmosTestChain};
 
 pub struct CosmosStdBootstrapContext {
     pub runtime: HermesRuntime,
@@ -93,9 +95,11 @@ delegate_components! {
 }
 
 impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    type Chain = CosmosTestChain;
+    type Chain = CosmosChain;
+}
 
-    type Counterparty = CosmosTestChain;
+impl ProvideChainDriverType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+    type ChainDriver = CosmosChainDriver;
 }
 
 #[async_trait]
@@ -109,7 +113,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
         chain_config: CosmosChainConfig,
         wallets: Vec<CosmosTestWallet>,
         chain_process: Child,
-    ) -> Result<CosmosTestChain, Error> {
+    ) -> Result<CosmosChainDriver, Error> {
         let relayer_wallet = wallets
             .iter()
             .find(|wallet| wallet.id.starts_with("relayer"))

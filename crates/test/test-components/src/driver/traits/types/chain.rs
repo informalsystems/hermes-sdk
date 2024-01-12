@@ -1,9 +1,11 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 #[derive_component(ChainTypeComponent, ProvideChainType<Bootstrap>)]
 pub trait HasChainType: Async {
-    type Chain: HasIbcChainTypes<Self::Counterparty>;
+    type Chain: Async;
+}
 
-    type Counterparty: Async;
+#[derive_component(ChainGetterComponent, ChainGetter<Driver>)]
+pub trait HasChain: HasChainType {
+    fn chain(&self) -> &Self::Chain;
 }

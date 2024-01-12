@@ -21,30 +21,32 @@ use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
+use hermes_test_components::driver::traits::types::chain::ChainGetter;
+use hermes_test_components::driver::traits::types::chain::ProvideChainType;
 use ibc_relayer::config::ChainConfig;
 use tokio::process::Child;
 
 #[derive(Clone)]
-pub struct CosmosTestChain {
+pub struct CosmosChainDriver {
     pub base_chain: CosmosChain,
     pub full_node_process: Arc<Child>,
     pub chain_config: ChainConfig,
 }
 
-pub struct CosmosTestChainComponents;
+pub struct CosmosChainDriverComponents;
 
-impl HasComponents for CosmosTestChain {
-    type Components = CosmosTestChainComponents;
+impl HasComponents for CosmosChainDriver {
+    type Components = CosmosChainDriverComponents;
 }
 
 delegate_all!(
     IsForwardToInnerChainComponent,
     ForwardToInnerChain,
-    CosmosTestChainComponents,
+    CosmosChainDriverComponents,
 );
 
 delegate_components! {
-    CosmosTestChainComponents {
+    CosmosChainDriverComponents {
         ErrorTypeComponent:
             ProvideEyreError,
         ErrorRaiserComponent:
@@ -65,10 +67,23 @@ delegate_components! {
     }
 }
 
-impl ProvideInner<CosmosTestChain> for CosmosTestChainComponents {
+impl<Driver> ProvideChainType<Driver> for CosmosChainDriverComponents
+where
+    Driver: Async,
+{
+    type Chain = CosmosChain;
+}
+
+impl ChainGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn chain(driver: &CosmosChainDriver) -> &CosmosChain {
+        &driver.base_chain
+    }
+}
+
+impl ProvideInner<CosmosChainDriver> for CosmosChainDriverComponents {
     type Inner = CosmosChain;
 
-    fn inner(chain: &CosmosTestChain) -> &Self::Inner {
+    fn inner(chain: &CosmosChainDriver) -> &Self::Inner {
         &chain.base_chain
     }
 }

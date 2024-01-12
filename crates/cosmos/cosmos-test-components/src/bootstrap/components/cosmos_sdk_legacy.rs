@@ -14,6 +14,7 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain::ProvideChainType;
+use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
@@ -84,7 +85,8 @@ pub trait CanUseLegacyCosmosSdkChainBootstrapper: UseLegacyCosmosSdkChainBootstr
 
 pub trait UseLegacyCosmosSdkChainBootstrapper: CanBootstrapChain {}
 
-impl<Bootstrap, Runtime, Chain, Components> UseLegacyCosmosSdkChainBootstrapper for Bootstrap
+impl<Bootstrap, Runtime, Chain, ChainDriver, Components> UseLegacyCosmosSdkChainBootstrapper
+    for Bootstrap
 where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
@@ -96,6 +98,7 @@ where
         + CanRaiseError<toml::de::Error>,
     Components: DelegatesToLegacyToCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
+        + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
         + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
         + ProvideChainConfigType<Bootstrap, ChainConfig = CosmosChainConfig>
         + TestDirGetter<Bootstrap>
