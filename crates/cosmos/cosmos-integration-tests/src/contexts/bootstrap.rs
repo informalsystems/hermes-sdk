@@ -48,6 +48,7 @@ use ibc_relayer::keyring::Store;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tendermint_rpc::{Url, WebSocketClientUrl};
 use tokio::process::Child;
+use tokio::time::sleep;
 
 use crate::contexts::chain::CosmosChainDriver;
 
@@ -175,6 +176,10 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             chain_config,
             full_node_process: Arc::new(chain_process),
         };
+
+        // Sleep for a while to wait for the chain node to really start up
+        // TODO: use other more reliable method to check that the full node has started.
+        sleep(Duration::from_secs(1)).await;
 
         Ok(test_chain)
     }

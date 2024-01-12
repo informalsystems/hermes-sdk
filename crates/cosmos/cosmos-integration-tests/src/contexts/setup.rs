@@ -38,12 +38,11 @@ use crate::contexts::bootstrap::CosmosBootstrap;
 use crate::contexts::chain::CosmosChainDriver;
 
 pub struct CosmosSetup {
-    pub create_client_settings: ClientSettings,
     pub bootstrap: CosmosBootstrap,
-    pub builder: CosmosBuilder,
-    pub port_id: PortId,
+    pub create_client_settings: ClientSettings,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
+    pub port_id: PortId,
 }
 
 impl CanUseBinaryChannelTestSetup for CosmosSetup {}
@@ -126,7 +125,7 @@ impl<const I: usize> ProvideBootstrapAt<CosmosSetup, I> for CosmosSetupComponent
 
 impl<const I: usize, const J: usize> ProvideBuilderAt<CosmosSetup, I, J> for CosmosSetupComponents {
     fn builder(setup: &CosmosSetup) -> &CosmosBuilder {
-        &setup.builder
+        &setup.bootstrap.builder
     }
 }
 

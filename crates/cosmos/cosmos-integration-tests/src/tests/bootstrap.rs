@@ -19,13 +19,12 @@ use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use tokio::runtime::Runtime;
 use tokio::test;
-use tokio::time::sleep;
 
 use crate::contexts::bootstrap::CosmosBootstrap;
 
 #[test(flavor = "multi_thread")]
 async fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
-    stable_eyre::install()?;
+    let _ = stable_eyre::install();
 
     let tokio_runtime = Arc::new(Runtime::new()?);
     let runtime = HermesRuntime::new(tokio_runtime.clone());
@@ -47,15 +46,11 @@ async fn test_bootstrap_cosmos_chain() -> Result<(), Error> {
 
     let chain_b = bootstrap.bootstrap_chain("cosmos-testnet-2").await?;
 
-    sleep(Duration::from_secs(2)).await;
-
     let client_settings = ClientSettings::Tendermint(Settings {
         max_clock_drift: Duration::from_secs(40),
         trusting_period: None,
         trust_threshold: TrustThreshold::ONE_THIRD,
     });
-
-    println!("client settings: {:?}", client_settings);
 
     let client_id_a = CosmosRelay::create_client(
         SourceTarget,
