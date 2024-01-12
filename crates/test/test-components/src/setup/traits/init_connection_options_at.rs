@@ -13,5 +13,5 @@ where
 {
     fn init_connection_options(
         &self,
-    ) -> &InitConnectionOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> InitConnectionOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
 }

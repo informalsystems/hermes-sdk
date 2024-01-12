@@ -4,6 +4,7 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -18,10 +19,12 @@ use hermes_test_components::setup::components::binary_channel::BinaryChannelTest
 use hermes_test_components::setup::components::binary_channel::IsBinaryChannelTestComponent;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
 use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
+use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
 use hermes_test_components::types::index::Twindex;
 use ibc_relayer::chain::client::ClientSettings;
+use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 use crate::contexts::bootstrap::CosmosBootstrap;
@@ -33,6 +36,7 @@ pub struct CosmosSetup {
     pub builder: CosmosBuilder,
     pub port_id: PortId,
     pub init_connection_options: CosmosInitConnectionOptions,
+    pub init_channel_options: CosmosInitChannelOptions,
 }
 
 pub struct CosmosSetupComponents;
@@ -100,8 +104,27 @@ impl<const I: usize, const J: usize> ProvideCreateClientOptionsAt<CosmosSetup, I
 impl<const I: usize, const J: usize> ProvideInitConnectionOptionsAt<CosmosSetup, I, J>
     for CosmosSetupComponents
 {
-    fn init_connection_options(setup: &CosmosSetup) -> &CosmosInitConnectionOptions {
-        &setup.init_connection_options
+    fn init_connection_options(setup: &CosmosSetup) -> CosmosInitConnectionOptions {
+        setup.init_connection_options.clone()
+    }
+}
+
+impl<const I: usize, const J: usize> ProvideInitChannelOptionsAt<CosmosSetup, I, J>
+    for CosmosSetupComponents
+{
+    fn init_channel_options(
+        setup: &CosmosSetup,
+        connection_id: &ConnectionId,
+        _counterparty_connection_id: &ConnectionId,
+    ) -> CosmosInitChannelOptions {
+        let mut options = setup.init_channel_options.clone();
+
+        // Use an init channel options that is provided by the setup.
+        // Insert the connection ID to the front (or to the back?) to allow
+        // testing multihop connections in the future.
+        options.connection_hops.insert(0, connection_id.clone());
+
+        options
     }
 }
 
