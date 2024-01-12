@@ -50,7 +50,7 @@ use tendermint_rpc::{Url, WebSocketClientUrl};
 use tokio::process::Child;
 use tokio::time::sleep;
 
-use crate::contexts::chain::CosmosChainDriver;
+use crate::contexts::chain_driver::CosmosChainDriver;
 
 pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,

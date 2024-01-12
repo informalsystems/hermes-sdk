@@ -35,7 +35,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 use crate::contexts::bootstrap::CosmosBootstrap;
-use crate::contexts::chain::CosmosChainDriver;
+use crate::contexts::chain_driver::CosmosChainDriver;
 
 pub struct CosmosSetup {
     pub bootstrap: CosmosBootstrap,
