@@ -4,6 +4,7 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use eyre::Error;
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
@@ -16,14 +17,20 @@ use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use hermes_test_components::driver::traits::types::relay_at::ProvideRelayTypeAt;
 use hermes_test_components::setup::components::binary_channel::BinaryChannelTestComponents;
+use hermes_test_components::setup::components::binary_channel::CanUseBinaryChannelTestSetup;
 use hermes_test_components::setup::components::binary_channel::IsBinaryChannelTestComponent;
+use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
 use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
+use hermes_test_components::setup::traits::driver::ProvideDriverType;
+use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
+use hermes_test_components::types::index::Index;
 use hermes_test_components::types::index::Twindex;
 use ibc_relayer::chain::client::ClientSettings;
+use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
@@ -38,6 +45,8 @@ pub struct CosmosSetup {
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
 }
+
+impl CanUseBinaryChannelTestSetup for CosmosSetup {}
 
 pub struct CosmosSetupComponents;
 
@@ -55,6 +64,26 @@ delegate_components! {
     CosmosSetupComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
+    }
+}
+
+impl<Setup> ProvideDriverType<Setup> for CosmosSetupComponents
+where
+    Setup: Async,
+{
+    type Driver = ();
+}
+
+impl BinaryChannelDriverBuilder<CosmosSetup> for CosmosSetupComponents {
+    async fn build_driver_with_binary_channel(
+        _setup: &CosmosSetup,
+        _birelay: CosmosBiRelay,
+        _connection_id_a: ConnectionId,
+        _connection_id_b: ConnectionId,
+        _channel_id_a: ChannelId,
+        _channel_id_b: ChannelId,
+    ) -> Result<(), Error> {
+        Ok(())
     }
 }
 
@@ -85,6 +114,14 @@ impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosSetup, I, J>
     for CosmosSetupComponents
 {
     type Builder = CosmosBuilder;
+}
+
+impl<const I: usize> ProvideBootstrapAt<CosmosSetup, I> for CosmosSetupComponents {
+    type Bootstrap = CosmosBootstrap;
+
+    fn chain_bootstrap(setup: &CosmosSetup, _index: Index<I>) -> &CosmosBootstrap {
+        &setup.bootstrap
+    }
 }
 
 impl<const I: usize, const J: usize> ProvideBuilderAt<CosmosSetup, I, J> for CosmosSetupComponents {

@@ -68,6 +68,8 @@ delegate_components! {
     }
 }
 
+pub trait CanUseBinaryChannelTestSetup: UseBinaryChannelTestSetup {}
+
 pub trait UseBinaryChannelTestSetup: CanBuildDriver {}
 
 impl<
