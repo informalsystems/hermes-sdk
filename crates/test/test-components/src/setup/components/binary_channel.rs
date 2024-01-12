@@ -23,7 +23,7 @@ use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
 use crate::driver::traits::types::builder_at::ProvideBuilderTypeAt;
 use crate::driver::traits::types::chain::HasChain;
-use crate::driver::traits::types::chain::HasChainType;
+
 use crate::driver::traits::types::chain_at::ProvideChainTypeAt;
 use crate::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use crate::driver::traits::types::relay_at::ProvideRelayTypeAt;

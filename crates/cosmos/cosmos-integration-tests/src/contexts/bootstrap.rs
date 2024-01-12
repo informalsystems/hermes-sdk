@@ -49,7 +49,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tendermint_rpc::{Url, WebSocketClientUrl};
 use tokio::process::Child;
 
-use crate::contexts::chain::{CosmosChainDriver, CosmosTestChain};
+use crate::contexts::chain::CosmosChainDriver;
 
 pub struct CosmosStdBootstrapContext {
     pub runtime: HermesRuntime,
@@ -170,7 +170,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
             .build_chain_with_config(chain_config.clone(), Some(&relayer_wallet.keypair))
             .await?;
 
-        let test_chain = CosmosTestChain {
+        let test_chain = CosmosChainDriver {
             base_chain,
             chain_config,
             full_node_process: Arc::new(chain_process),

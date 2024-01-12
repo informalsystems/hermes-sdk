@@ -13,6 +13,7 @@ use hermes_test_components::chain::traits::build::CanBuildChainIdFromString;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
@@ -115,7 +116,8 @@ where
         + CanReadFileAsString
         + CanWriteStringToFile
         + CanReserveTcpPort,
-    Chain: HasChainIdType
+    Chain: HasChainIdType,
+    ChainDriver: HasChainType<Chain = Chain>
         + HasWalletType<Wallet = CosmosTestWallet>
         + HasAmountType
         + HasAddressType

@@ -2,7 +2,8 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
-use hermes_test_components::driver::traits::types::chain::HasChainType;
+
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
@@ -18,23 +19,23 @@ use crate::chain::types::wallet::CosmosTestWallet;
 pub struct InitCosmosTestWallet;
 
 #[async_trait]
-impl<Bootstrap, Runtime, Chain> WalletInitializer<Bootstrap> for InitCosmosTestWallet
+impl<Bootstrap, Runtime, ChainDriver> WalletInitializer<Bootstrap> for InitCosmosTestWallet
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainType<Chain = Chain>
+        + HasChainDriverType<ChainDriver = ChainDriver>
         + HasWalletHdPath
         + HasChainCommandPath
         + CanRaiseError<&'static str>
         + CanRaiseError<json::Error>
         + CanRaiseError<KeyringError>,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
-    Chain: HasWalletType<Wallet = CosmosTestWallet>,
+    ChainDriver: HasWalletType<Wallet = CosmosTestWallet>,
 {
     async fn initialize_wallet(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         wallet_id: &str,
-    ) -> Result<Chain::Wallet, Bootstrap::Error> {
+    ) -> Result<ChainDriver::Wallet, Bootstrap::Error> {
         let seed_content = bootstrap
             .runtime()
             .exec_command(

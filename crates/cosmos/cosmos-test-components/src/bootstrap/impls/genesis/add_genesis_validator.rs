@@ -2,7 +2,8 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
-use hermes_test_components::driver::traits::types::chain::HasChainType;
+
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
@@ -17,21 +18,23 @@ use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAd
 pub struct AddCosmosGenesisValidator;
 
 #[async_trait]
-impl<Bootstrap, Runtime, Chain> GenesisValidatorAdder<Bootstrap> for AddCosmosGenesisValidator
+impl<Bootstrap, Runtime, Chain, ChainDriver> GenesisValidatorAdder<Bootstrap>
+    for AddCosmosGenesisValidator
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainType<Chain = Chain>
+        + HasChainDriverType<Chain = Chain, ChainDriver = ChainDriver>
         + HasErrorType
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
-    Chain: HasChainIdType + HasAmountType,
+    Chain: HasChainIdType,
+    ChainDriver: HasAmountType,
 {
     async fn add_genesis_validator(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         chain_id: &Chain::ChainId,
         wallet_id: &str,
-        stake_amount: &Chain::Amount,
+        stake_amount: &ChainDriver::Amount,
     ) -> Result<(), Bootstrap::Error> {
         bootstrap
             .runtime()

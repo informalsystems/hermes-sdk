@@ -39,7 +39,8 @@ where
         + CanStartChainFullNode
         + CanBuildChainFromBootstrapParameters,
     Runtime: HasFilePathType + HasChildProcessType + HasErrorType,
-    Chain: HasChainIdType + HasWalletType,
+    Chain: HasChainIdType,
+    ChainDriver: HasWalletType,
 {
     async fn bootstrap_chain(
         bootstrap: &Bootstrap,

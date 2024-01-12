@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::types::aliases::ChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet};
-use hermes_test_components::driver::traits::types::chain::HasChainType;
+
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
@@ -19,7 +19,8 @@ pub trait CanBuildChainFromBootstrapParameters:
     HasRuntime + HasChainDriverType + HasGenesisConfigType + HasChainConfigType + HasErrorType
 where
     Self::Runtime: HasFilePathType + HasChildProcessType,
-    Self::Chain: HasChainIdType + HasWalletType,
+    Self::Chain: HasChainIdType,
+    Self::ChainDriver: HasWalletType,
 {
     async fn build_chain_from_bootstrap_params(
         &self,
@@ -27,7 +28,7 @@ where
         chain_id: ChainId<Self::Chain>,
         genesis_config: Self::GenesisConfig,
         chain_config: Self::ChainConfig,
-        wallets: Vec<Wallet<Self::Chain>>,
+        wallets: Vec<Wallet<Self::ChainDriver>>,
         chain_process: ChildProcess<Self::Runtime>,
     ) -> Result<Self::ChainDriver, Self::Error>;
 }

@@ -40,13 +40,13 @@ where
 
         let chain_b = chain_driver_b.chain();
 
-        let (client_id_a, client_id_b) = setup.setup_clients(&chain_a, &chain_b).await?;
+        let (client_id_a, client_id_b) = setup.setup_clients(chain_a, chain_b).await?;
 
         let birelay = setup
             .setup_birelay(
                 Twindex::<0, 1>,
-                &chain_a,
-                &chain_b,
+                chain_a,
+                chain_b,
                 &client_id_a,
                 &client_id_b,
             )
