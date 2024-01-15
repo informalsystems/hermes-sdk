@@ -2,9 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
-    CanRaiseMissingSendPacketEventError, HasSendPacketEvent,
-};
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::transaction::components::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
@@ -20,6 +18,9 @@ use crate::driver::traits::types::chain::HasChainType;
 
 pub struct SendIbcTransferMessage;
 
+#[derive(Debug)]
+pub struct MissingSendPacketEventError;
+
 #[async_trait]
 impl<ChainDriver, Chain, CounterpartyDriver, Counterparty>
     TokenIbcTransferrer<ChainDriver, CounterpartyDriver> for SendIbcTransferMessage
@@ -32,7 +33,7 @@ where
         + HasWalletSigner
         + CanCalculateIbcTransferTimeout
         + CanBuildIbcTokenTransferMessage<CounterpartyDriver>
-        + CanRaiseMissingSendPacketEventError,
+        + CanRaiseError<MissingSendPacketEventError>,
     Chain: CanQueryChainStatus
         + CanSendSingleMessageWithSigner
         + HasIbcChainTypes<Counterparty>
@@ -71,7 +72,6 @@ where
             .build_ibc_token_transfer_message(
                 channel_id,
                 port_id,
-                sender_address,
                 recipient_address,
                 amount,
                 &memo,
@@ -90,7 +90,7 @@ where
         let send_packet_event = events
             .iter()
             .find_map(Chain::try_extract_send_packet_event)
-            .ok_or_else(|| chain_driver.missing_send_packet_event_error())?;
+            .ok_or_else(|| ChainDriver::raise_error(MissingSendPacketEventError))?;
 
         let packet = Chain::extract_packet_from_send_packet_event(&send_packet_event);
 

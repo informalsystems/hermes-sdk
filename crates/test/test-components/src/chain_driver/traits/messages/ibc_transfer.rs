@@ -12,6 +12,7 @@ use crate::chain_driver::traits::types::amount::HasAmountType;
 use crate::chain_driver::traits::types::memo::HasMemoType;
 use crate::driver::traits::types::chain::HasChainType;
 
+#[derive_component(IbcTokenTransferMessageBuilderComponent, IbcTokenTransferMessageBuilder<ChainDriver>)]
 #[async_trait]
 pub trait CanBuildIbcTokenTransferMessage<CounterpartyDriver>:
     HasErrorType + HasChainType + HasAddressType + HasAmountType + HasMemoType
@@ -26,7 +27,6 @@ where
         &self,
         channel_id: &ChannelId<Self::Chain, CounterpartyDriver::Chain>,
         port_id: &PortId<Self::Chain, CounterpartyDriver::Chain>,
-        sender_address: &Self::Address,
         recipient_address: &CounterpartyDriver::Address,
         amount: &Self::Amount,
         memo: &Self::Memo,

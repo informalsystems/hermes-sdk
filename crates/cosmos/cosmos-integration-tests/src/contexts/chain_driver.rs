@@ -6,6 +6,8 @@ use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
 use eyre::Error;
 use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
+use hermes_cosmos_client_components::traits::message::DynCosmosMessage;
+use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
@@ -35,9 +37,11 @@ use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterA
 use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
 use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
 use hermes_test_components::chain_driver::traits::fields::memo::DefaultMemoGetterComponent;
+use hermes_test_components::chain_driver::traits::fields::timeout::IbcTransferTimeoutCalculator;
 use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
+use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
 use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrerComponent;
 use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
@@ -50,9 +54,20 @@ use hermes_test_components::chain_driver::traits::types::wallet::{
 use hermes_test_components::driver::traits::types::chain::ChainGetter;
 use hermes_test_components::driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::types::index::Index;
+use ibc_proto::cosmos::base::v1beta1::Coin;
+use ibc_proto::google::protobuf::Any;
 use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::config::ChainConfig;
+use ibc_relayer_types::Height;
+use ibc_relayer_types::applications::transfer::msgs::transfer::MsgTransfer;
+use ibc_relayer_types::core::ics04_channel::timeout::TimeoutHeight;
+use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
+use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use ibc_relayer_types::signer::Signer;
+use ibc_relayer_types::timestamp::Timestamp;
+use prost::EncodeError;
 use tokio::process::Child;
+use core::str::FromStr;
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
@@ -191,5 +206,63 @@ impl BalanceQuerier<CosmosChainDriver> for CosmosChainDriverComponents {
             quantity,
             denom: denom.clone(),
         })
+    }
+}
+
+impl IbcTransferTimeoutCalculator<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn ibc_transfer_timeout_time(
+        _chain_driver: &CosmosChainDriver,
+        _current_time: &Timestamp,
+    ) -> Option<Timestamp> {
+        None
+    }
+
+    fn ibc_transfer_timeout_height(
+        _chain_driver: &CosmosChainDriver,
+        current_height: &Height,
+    ) -> Option<Height> {
+        Some(*current_height + 100)
+    }
+}
+
+#[derive(Debug)]
+pub struct TokenTransferMessage {
+    pub channel_id: ChannelId,
+    pub port_id: PortId,
+    pub recipient_address: String,
+    pub amount: Amount,
+    pub memo: Option<String>,
+    pub timeout_height: Option<Height>,
+    pub timeout_time: Option<Timestamp>,
+}
+
+impl DynCosmosMessage for TokenTransferMessage {
+    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+        todo!()
+    }
+}
+
+impl IbcTokenTransferMessageBuilder<CosmosChainDriver, CosmosChainDriver> for CosmosChainDriverComponents {
+    async fn build_ibc_token_transfer_message(
+        _chain_driver: &CosmosChainDriver,
+        channel_id: &ChannelId,
+        port_id: &PortId,
+        recipient_address: &String,
+        amount: &Amount,
+        memo: &Option<String>,
+        timeout_height: Option<&Height>,
+        timeout_time: Option<&Timestamp>,
+    ) -> Result<CosmosMessage, Error> {
+        let message = TokenTransferMessage {
+            channel_id: channel_id.clone(),
+            port_id: port_id.clone(),
+            recipient_address: recipient_address.clone(),
+            amount: amount.clone(),
+            memo: memo.clone(),
+            timeout_height: timeout_height.cloned(),
+            timeout_time: timeout_time.cloned(),
+        };
+
+        todo!()
     }
 }

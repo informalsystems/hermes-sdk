@@ -18,7 +18,7 @@ use crate::transaction::traits::components::nonce_allocater::{
     CanAllocateNonce, NonceAllocatorComponent,
 };
 use crate::transaction::traits::components::nonce_querier::{CanQueryNonce, NonceQuerier};
-use crate::transaction::traits::components::send_messages_with_signer::MessagesWithSignerSenderComponent;
+use crate::transaction::traits::components::send_messages_with_signer::{MessagesWithSignerSenderComponent, CanSendMessagesWithSigner};
 use crate::transaction::traits::components::send_messages_with_signer_and_nonce::{
     CanSendMessagesWithSignerAndNonce, MessagesWithSignerAndNonceSenderComponent,
 };
@@ -57,6 +57,7 @@ pub trait CanUseDefaultTxComponents: UseDefaultTxComponents {}
 
 pub trait UseDefaultTxComponents:
     CanSendMessages
+    + CanSendMessagesWithSigner
     + CanSendMessagesWithSignerAndNonce
     + CanAllocateNonce
     + CanPollTxResponse
