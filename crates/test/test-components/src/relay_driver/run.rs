@@ -14,5 +14,5 @@ pub trait CanRunRelayerInBackground: HasErrorType {
        is kept alive. If the relayer stops before the `RunHandle` is dropped,
        the relay driver may panic to cause the running test to fail.
     */
-    async fn run_relayer_in_background<'a>(&'a self) -> Result<Self::RunHandle<'a>, Self::Error>;
+    async fn run_relayer_in_background(&self) -> Result<Self::RunHandle<'_>, Self::Error>;
 }
