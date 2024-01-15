@@ -126,7 +126,21 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
                 eyre!("expect relayer wallet to be provided in the list of test wallets")
             })?;
 
-        let chain_config = ChainConfig {
+        let user_wallet_a = wallets
+            .iter()
+            .find(|wallet| wallet.id.starts_with("user1"))
+            .ok_or_else(|| {
+                eyre!("expect user1 wallet to be provided in the list of test wallets")
+            })?;
+
+        let user_wallet_b = wallets
+            .iter()
+            .find(|wallet| wallet.id.starts_with("user2"))
+            .ok_or_else(|| {
+                eyre!("expect user2 wallet to be provided in the list of test wallets")
+            })?;
+
+        let relayer_chain_config = ChainConfig {
             id: chain_id.clone(),
             r#type: ChainType::CosmosSdk,
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_config.rpc_port))?,
@@ -172,13 +186,21 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
 
         let base_chain = bootstrap
             .builder
-            .build_chain_with_config(chain_config.clone(), Some(&relayer_wallet.keypair))
+            .build_chain_with_config(
+                relayer_chain_config.clone(),
+                Some(&relayer_wallet.keypair.clone()),
+            )
             .await?;
 
         let test_chain = CosmosChainDriver {
             base_chain,
             chain_config,
+            genesis_config,
+            relayer_chain_config,
             full_node_process: Arc::new(chain_process),
+            relayer_wallet: relayer_wallet.clone(),
+            user_wallet_a: user_wallet_a.clone(),
+            user_wallet_b: user_wallet_b.clone(),
         };
 
         // Sleep for a while to wait for the chain node to really start up

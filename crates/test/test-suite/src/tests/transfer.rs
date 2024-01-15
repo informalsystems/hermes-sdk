@@ -15,8 +15,7 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, 
 use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::driver::traits::background_relayer::HasBackgroundRelayer;
-use hermes_test_components::driver::traits::types::chain::HasChainType;
-use hermes_test_components::driver::traits::types::chain_at::HasChainAt;
+use hermes_test_components::driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
 use hermes_test_components::test_case::traits::test_case::TestCase;
 use hermes_test_components::types::index::Index;
@@ -27,13 +26,11 @@ pub struct TestIbcTransfer;
 impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB> TestCase<Driver> for TestIbcTransfer
 where
     Driver: HasErrorType
-        + HasChainAt<0, Chain = ChainA>
-        + HasChainAt<1, Chain = ChainB>
         + HasChainDriverAt<0, ChainDriver = ChainDriverA>
         + HasChainDriverAt<1, ChainDriver = ChainDriverB>
         + CanLog
         + HasBackgroundRelayer,
-    ChainDriverA: HasChainType<Chain = ChainA>
+    ChainDriverA: HasChain<Chain = ChainA>
         + HasChannelAt<ChainB, 0>
         + HasDenomAt<0>
         + CanQueryBalance
@@ -44,7 +41,7 @@ where
         + CanAssertEventualAmount
         + CanIbcTransferToken<ChainDriverB>
         + CanConvertIbcTransferredAmount<ChainDriverB>,
-    ChainDriverB: HasChainType<Chain = ChainB>
+    ChainDriverB: HasChain<Chain = ChainB>
         + HasChannelAt<ChainA, 0>
         + HasWalletAt<UserWallet, 0>
         + HasAmountMethods
@@ -62,11 +59,11 @@ where
 
         let chain_driver_b = driver.chain_driver_at(Index::<1>);
 
-        let chain_a = driver.chain_at(Index::<0>);
+        let chain_a = chain_driver_a.chain();
 
         let chain_id_a = chain_a.chain_id();
 
-        let chain_b = driver.chain_at(Index::<1>);
+        let chain_b = chain_driver_b.chain();
 
         let chain_id_b = chain_b.chain_id();
 

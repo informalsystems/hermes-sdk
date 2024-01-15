@@ -1,5 +1,6 @@
 use toml::Value;
 
+#[derive(Clone)]
 pub struct CosmosChainConfig {
     pub rpc_port: u16,
     pub p2p_port: u16,
