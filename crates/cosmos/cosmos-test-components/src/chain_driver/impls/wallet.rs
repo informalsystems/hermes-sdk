@@ -6,7 +6,7 @@ use hermes_test_components::chain_driver::traits::types::wallet::{
 use hermes_test_components::driver::traits::types::chain::HasChainType;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain_driver::types::wallet::CosmosTestWallet;
 
 pub struct ProvideCosmosTestWallet;
 

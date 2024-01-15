@@ -7,7 +7,7 @@ use crate::bootstrap::traits::types::wallet_config::{
     HasWalletConfigType, ProvideWalletConfigType, WalletConfigFieldsGetter,
 };
 use crate::bootstrap::types::wallet_config::CosmosWalletConfig;
-use crate::chain::types::amount::Amount;
+use crate::chain_driver::types::amount::Amount;
 
 pub struct ProvideCosmosWalletConfigType;
 

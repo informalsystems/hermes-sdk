@@ -8,8 +8,8 @@ use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGen
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use crate::bootstrap::types::wallet_config::CosmosWalletConfig;
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain_driver::types::amount::Amount;
+use crate::chain_driver::types::denom::Denom;
 
 /**
    Generator for standard sets of wallets for testing. Consists of one validator wallet,

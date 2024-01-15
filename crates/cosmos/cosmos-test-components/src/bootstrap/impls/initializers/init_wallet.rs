@@ -14,7 +14,7 @@ use serde_json as json;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::fields::hd_path::HasWalletHdPath;
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializer;
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain_driver::types::wallet::CosmosTestWallet;
 
 pub struct InitCosmosTestWallet;
 

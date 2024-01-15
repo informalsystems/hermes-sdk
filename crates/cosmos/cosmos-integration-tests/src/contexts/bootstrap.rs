@@ -34,8 +34,8 @@ use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::{
 };
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain::types::denom::Denom;
-use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
+use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;

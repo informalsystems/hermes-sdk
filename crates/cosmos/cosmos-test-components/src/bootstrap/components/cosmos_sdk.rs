@@ -62,7 +62,7 @@ use crate::bootstrap::traits::types::wallet_config::{
 };
 use crate::bootstrap::types::chain_config::CosmosChainConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain_driver::types::wallet::CosmosTestWallet;
 
 pub struct CosmosSdkBootstrapComponents;
 

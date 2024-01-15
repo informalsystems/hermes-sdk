@@ -1,8 +1,8 @@
 use hermes_test_components::chain_driver::traits::types::amount::AmountTypeProvider;
 use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
 
-use crate::chain::types::amount::Amount;
-use crate::chain::types::denom::Denom;
+use crate::chain_driver::types::amount::Amount;
+use crate::chain_driver::types::denom::Denom;
 
 pub struct ProvideU128AmountWithDenom;
 
