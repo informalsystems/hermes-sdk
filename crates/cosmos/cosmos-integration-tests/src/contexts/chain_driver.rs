@@ -282,7 +282,7 @@ impl DynCosmosMessage for TokenTransferMessage {
             receiver: self.recipient_address.clone(),
             timeout_height: self.timeout_height.map(Into::into),
             timeout_timestamp,
-            memo: self.memo.clone().unwrap_or_else(|| "".to_string()),
+            memo: self.memo.clone().unwrap_or_default(),
         };
 
         encode_to_any("/ibc.applications.transfer.v1.MsgTransfer", &message)

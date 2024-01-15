@@ -32,7 +32,7 @@ pub fn derive_ibc_denom(
 
     match denom {
         Denom::Base(denom) => {
-            let hashed = derive_denom(port_id, channel_id, &denom)?;
+            let hashed = derive_denom(port_id, channel_id, denom)?;
 
             Ok(Denom::Ibc {
                 path: format!("{port_id}/{channel_id}"),
