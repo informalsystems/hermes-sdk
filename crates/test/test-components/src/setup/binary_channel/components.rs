@@ -136,5 +136,7 @@ where
         + CanBuildRelayFromChains<RelayBToATarget>
         + CanBuildBiRelayFromRelays,
     BiRelay: HasTwoWayRelay<ChainA = ChainA, ChainB = ChainB>,
+    ChainA::PortId: Clone,
+    ChainB::PortId: Clone,
 {
 }

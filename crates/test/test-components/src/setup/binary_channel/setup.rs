@@ -54,7 +54,7 @@ where
 
         let (connection_id_a, connection_id_b) = setup.setup_connection(&birelay).await?;
 
-        let (channel_id_a, channel_id_b) = setup
+        let (channel_id_a, channel_id_b, port_id_a, port_id_b) = setup
             .setup_channel(&birelay, &connection_id_a, &connection_id_b)
             .await?;
 
@@ -67,6 +67,8 @@ where
                 connection_id_b,
                 channel_id_a,
                 channel_id_b,
+                port_id_a,
+                port_id_b,
             )
             .await?;
 

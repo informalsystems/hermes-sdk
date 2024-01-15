@@ -3,8 +3,9 @@ use std::sync::Arc;
 
 use eyre::Error;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::setup::traits::driver::CanBuildTestDriver;
+use hermes_test_components::setup::traits::run_test::CanRunTest;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -49,7 +50,7 @@ async fn test_setup_cosmos_chain() -> Result<(), Error> {
         port_id: PortId::transfer(),
     };
 
-    setup.build_driver().await?;
+    setup.run_test(&TestIbcTransfer).await?;
 
     Ok(())
 }

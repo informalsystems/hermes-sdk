@@ -9,12 +9,13 @@ use hermes_test_components::chain_driver::traits::assert::eventual_amount::CanAs
 use hermes_test_components::chain_driver::traits::fields::amount::{
     CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
 };
-use hermes_test_components::chain_driver::traits::fields::channel_at::HasChannelAt;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_test_components::driver::traits::channel_at::HasChannelAt;
+use hermes_test_components::driver::traits::types::chain_at::HasChainTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
 use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriverAt;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
@@ -28,12 +29,15 @@ impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver> TestCase<D
     for TestIbcTransfer
 where
     Driver: HasErrorType
+        + HasChainTypeAt<0, Chain = ChainA>
+        + HasChainTypeAt<1, Chain = ChainB>
         + HasChainDriverAt<0, ChainDriver = ChainDriverA>
         + HasChainDriverAt<1, ChainDriver = ChainDriverB>
         + HasRelayDriverAt<0, 1, RelayDriver = RelayDriver>
+        + HasChannelAt<0, 1>
+        + HasChannelAt<1, 0>
         + CanLog,
     ChainDriverA: HasChain<Chain = ChainA>
-        + HasChannelAt<ChainB, 0>
         + HasDenomAt<TransferDenom, 0>
         + CanQueryBalance
         + HasWalletAt<UserWallet, 0>
@@ -44,7 +48,6 @@ where
         + CanIbcTransferToken<ChainDriverB>
         + CanConvertIbcTransferredAmount<ChainDriverB>,
     ChainDriverB: HasChain<Chain = ChainB>
-        + HasChannelAt<ChainA, 0>
         + HasWalletAt<UserWallet, 0>
         + HasAmountMethods
         + CanQueryBalance
@@ -86,13 +89,13 @@ where
 
         let a_to_b_amount = ChainDriverA::random_amount(1000, &balance_a1);
 
-        let channel_id_a = chain_driver_a.channel_id();
+        let channel_id_a = driver.channel_id_at(Twindex::<0, 1>);
 
-        let port_id_a = chain_driver_a.port_id();
+        let port_id_a = driver.port_id_at(Twindex::<0, 1>);
 
-        let channel_id_b = chain_driver_b.channel_id();
+        let channel_id_b = driver.channel_id_at(Twindex::<1, 0>);
 
-        let port_id_b = chain_driver_b.port_id();
+        let port_id_b = driver.port_id_at(Twindex::<1, 0>);
 
         let _relayer = relay_driver.run_relayer_in_background().await?;
 

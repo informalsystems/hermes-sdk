@@ -89,6 +89,8 @@ impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChanne
         connection_id_b: ConnectionId,
         channel_id_a: ChannelId,
         channel_id_b: ChannelId,
+        port_id_a: PortId,
+        port_id_b: PortId,
     ) -> Result<CosmosBinaryChannelTestDriver, Error> {
         let relay_driver = CosmosRelayDriver { birelay };
 
@@ -100,6 +102,8 @@ impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChanne
             connection_id_b,
             channel_id_a,
             channel_id_b,
+            port_id_a,
+            port_id_b,
         };
 
         Ok(driver)

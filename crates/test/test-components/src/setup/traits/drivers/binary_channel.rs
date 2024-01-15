@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::{ChannelId, ConnectionId};
+use hermes_relayer_components::chain::types::aliases::{ChannelId, ConnectionId, PortId};
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
@@ -28,5 +28,7 @@ where
         connection_id_b: ConnectionId<ChainTypeAt<Self, 1>, ChainTypeAt<Self, 0>>,
         channel_id_a: ChannelId<ChainTypeAt<Self, 0>, ChainTypeAt<Self, 1>>,
         channel_id_b: ChannelId<ChainTypeAt<Self, 1>, ChainTypeAt<Self, 0>>,
+        port_id_a: PortId<ChainTypeAt<Self, 0>, ChainTypeAt<Self, 1>>,
+        port_id_b: PortId<ChainTypeAt<Self, 1>, ChainTypeAt<Self, 0>>,
     ) -> Result<Self::TestDriver, Self::Error>;
 }
