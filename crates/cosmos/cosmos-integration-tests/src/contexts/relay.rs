@@ -3,18 +3,14 @@ use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 
-use crate::contexts::chain_driver::CosmosChainDriver;
-
-pub struct CosmosTestRelay {
-    pub src_chain: CosmosChainDriver,
-    pub dst_chain: CosmosChainDriver,
+pub struct CosmosRelayDriver {
     pub base_relay: CosmosRelay,
 }
 
-pub struct CosmosTestRelayComponents;
+pub struct CosmosRelayDriverComponents;
 
 delegate_components! {
-    CosmosTestRelayComponents {
+    CosmosRelayDriverComponents {
         ErrorTypeComponent:
             ProvideEyreError,
         ErrorRaiserComponent:

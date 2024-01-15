@@ -7,6 +7,7 @@ extern crate alloc;
 pub mod bootstrap;
 pub mod chain_driver;
 pub mod driver;
+pub mod relay_driver;
 pub mod runtime;
 pub mod setup;
 pub mod test_case;

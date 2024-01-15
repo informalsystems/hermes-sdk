@@ -14,22 +14,25 @@ use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt,
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::driver::traits::background_relayer::HasBackgroundRelayer;
 use hermes_test_components::driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
+use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriverAt;
+use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::test_case::traits::test_case::TestCase;
-use hermes_test_components::types::index::Index;
+use hermes_test_components::types::index::{Index, Twindex};
 
 pub struct TestIbcTransfer;
 
 #[async_trait]
-impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB> TestCase<Driver> for TestIbcTransfer
+impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver> TestCase<Driver>
+    for TestIbcTransfer
 where
     Driver: HasErrorType
         + HasChainDriverAt<0, ChainDriver = ChainDriverA>
         + HasChainDriverAt<1, ChainDriver = ChainDriverB>
-        + CanLog
-        + HasBackgroundRelayer,
+        + HasRelayDriverAt<0, 1, RelayDriver = RelayDriver>
+        + HasRelayDriverAt<0, 1>
+        + CanLog,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasChannelAt<ChainB, 0>
         + HasDenomAt<TransferDenom, 0>
@@ -50,14 +53,17 @@ where
         + CanAssertEventualAmount
         + CanIbcTransferToken<ChainDriverA>
         + CanConvertIbcTransferredAmount<ChainDriverA>,
+    RelayDriver: CanRunRelayerInBackground,
     ChainA: HasIbcChainTypes<ChainB> + HasChainId + HasIbcPacketTypes<ChainB>,
     ChainB: HasIbcChainTypes<ChainA> + HasChainId + HasIbcPacketTypes<ChainA>,
-    Driver::Error: From<ChainDriverA::Error> + From<ChainDriverB::Error>,
+    Driver::Error: From<ChainDriverA::Error> + From<ChainDriverB::Error> + From<RelayDriver::Error>,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let chain_driver_a = driver.chain_driver_at(Index::<0>);
 
         let chain_driver_b = driver.chain_driver_at(Index::<1>);
+
+        let relay_driver = driver.relay_driver_at(Twindex::<0, 1>);
 
         let chain_a = chain_driver_a.chain();
 
@@ -89,7 +95,7 @@ where
 
         let port_id_b = chain_driver_b.port_id();
 
-        driver.start_relayer_in_background();
+        let _relayer = relay_driver.run_relayer_in_background().await?;
 
         driver.log_info(&format!(
             "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
