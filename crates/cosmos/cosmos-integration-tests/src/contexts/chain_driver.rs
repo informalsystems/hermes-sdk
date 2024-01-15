@@ -26,6 +26,9 @@ use hermes_test_components::driver::traits::types::chain::ProvideChainType;
 use ibc_relayer::config::ChainConfig;
 use tokio::process::Child;
 
+/**
+   A chain driver for adding test functionalities to a Cosmos chain.
+*/
 #[derive(Clone)]
 pub struct CosmosChainDriver {
     pub base_chain: CosmosChain,

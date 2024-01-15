@@ -37,7 +37,11 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use crate::contexts::bootstrap::CosmosBootstrap;
 use crate::contexts::chain_driver::CosmosChainDriver;
 
-pub struct CosmosSetup {
+/**
+   A setup context for setting up a binary channel test driver,
+   with both chains being Cosmos chains.
+*/
+pub struct CosmosBinaryChannelSetup {
     pub bootstrap: CosmosBootstrap,
     pub create_client_settings: ClientSettings,
     pub init_connection_options: CosmosInitConnectionOptions,
@@ -45,37 +49,37 @@ pub struct CosmosSetup {
     pub port_id: PortId,
 }
 
-impl CanUseBinaryChannelTestSetup for CosmosSetup {}
+impl CanUseBinaryChannelTestSetup for CosmosBinaryChannelSetup {}
 
-pub struct CosmosSetupComponents;
+pub struct CosmosBinaryChannelSetupComponents;
 
-impl HasComponents for CosmosSetup {
-    type Components = CosmosSetupComponents;
+impl HasComponents for CosmosBinaryChannelSetup {
+    type Components = CosmosBinaryChannelSetupComponents;
 }
 
 delegate_all!(
     IsBinaryChannelTestComponent,
     BinaryChannelTestComponents,
-    CosmosSetupComponents,
+    CosmosBinaryChannelSetupComponents,
 );
 
 delegate_components! {
-    CosmosSetupComponents {
+    CosmosBinaryChannelSetupComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
     }
 }
 
-impl<Setup> ProvideDriverType<Setup> for CosmosSetupComponents
+impl<Setup> ProvideDriverType<Setup> for CosmosBinaryChannelSetupComponents
 where
     Setup: Async,
 {
     type Driver = ();
 }
 
-impl BinaryChannelDriverBuilder<CosmosSetup> for CosmosSetupComponents {
+impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChannelSetupComponents {
     async fn build_driver_with_binary_channel(
-        _setup: &CosmosSetup,
+        _setup: &CosmosBinaryChannelSetup,
         _birelay: CosmosBiRelay,
         _connection_id_a: ConnectionId,
         _connection_id_b: ConnectionId,
@@ -86,70 +90,79 @@ impl BinaryChannelDriverBuilder<CosmosSetup> for CosmosSetupComponents {
     }
 }
 
-impl<Setup, const I: usize> ProvideChainTypeAt<Setup, I> for CosmosSetupComponents
+impl<Setup, const I: usize> ProvideChainTypeAt<Setup, I> for CosmosBinaryChannelSetupComponents
 where
     Setup: Async,
 {
     type Chain = CosmosChain;
 }
 
-impl<const I: usize> ProvideChainDriverTypeAt<CosmosSetup, I> for CosmosSetupComponents {
+impl<const I: usize> ProvideChainDriverTypeAt<CosmosBinaryChannelSetup, I>
+    for CosmosBinaryChannelSetupComponents
+{
     type ChainDriver = CosmosChainDriver;
 }
 
-impl<const I: usize, const J: usize> ProvideRelayTypeAt<CosmosSetup, I, J>
-    for CosmosSetupComponents
+impl<const I: usize, const J: usize> ProvideRelayTypeAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
 {
     type Relay = CosmosRelay;
 }
 
-impl<const I: usize, const J: usize> ProvideBiRelayTypeAt<CosmosSetup, I, J>
-    for CosmosSetupComponents
+impl<const I: usize, const J: usize> ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
 {
     type BiRelay = CosmosBiRelay;
 }
 
-impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosSetup, I, J>
-    for CosmosSetupComponents
+impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
 {
     type Builder = CosmosBuilder;
 }
 
-impl<const I: usize> ProvideBootstrapAt<CosmosSetup, I> for CosmosSetupComponents {
+impl<const I: usize> ProvideBootstrapAt<CosmosBinaryChannelSetup, I>
+    for CosmosBinaryChannelSetupComponents
+{
     type Bootstrap = CosmosBootstrap;
 
-    fn chain_bootstrap(setup: &CosmosSetup, _index: Index<I>) -> &CosmosBootstrap {
+    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<I>) -> &CosmosBootstrap {
         &setup.bootstrap
     }
 }
 
-impl<const I: usize, const J: usize> ProvideBuilderAt<CosmosSetup, I, J> for CosmosSetupComponents {
-    fn builder(setup: &CosmosSetup) -> &CosmosBuilder {
+impl<const I: usize, const J: usize> ProvideBuilderAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
+{
+    fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
         &setup.bootstrap.builder
     }
 }
 
-impl<const I: usize, const J: usize> ProvideCreateClientOptionsAt<CosmosSetup, I, J>
-    for CosmosSetupComponents
+impl<const I: usize, const J: usize> ProvideCreateClientOptionsAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
 {
-    fn create_client_options(setup: &CosmosSetup, _index: Twindex<I, J>) -> &ClientSettings {
+    fn create_client_options(
+        setup: &CosmosBinaryChannelSetup,
+        _index: Twindex<I, J>,
+    ) -> &ClientSettings {
         &setup.create_client_settings
     }
 }
 
-impl<const I: usize, const J: usize> ProvideInitConnectionOptionsAt<CosmosSetup, I, J>
-    for CosmosSetupComponents
+impl<const I: usize, const J: usize> ProvideInitConnectionOptionsAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
 {
-    fn init_connection_options(setup: &CosmosSetup) -> CosmosInitConnectionOptions {
+    fn init_connection_options(setup: &CosmosBinaryChannelSetup) -> CosmosInitConnectionOptions {
         setup.init_connection_options.clone()
     }
 }
 
-impl<const I: usize, const J: usize> ProvideInitChannelOptionsAt<CosmosSetup, I, J>
-    for CosmosSetupComponents
+impl<const I: usize, const J: usize> ProvideInitChannelOptionsAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
 {
     fn init_channel_options(
-        setup: &CosmosSetup,
+        setup: &CosmosBinaryChannelSetup,
         connection_id: &ConnectionId,
         _counterparty_connection_id: &ConnectionId,
     ) -> CosmosInitChannelOptions {
@@ -164,8 +177,10 @@ impl<const I: usize, const J: usize> ProvideInitChannelOptionsAt<CosmosSetup, I,
     }
 }
 
-impl<const I: usize, const J: usize> ProvidePortIdAt<CosmosSetup, I, J> for CosmosSetupComponents {
-    fn port_id_at(setup: &CosmosSetup, _index: Twindex<I, J>) -> &PortId {
+impl<const I: usize, const J: usize> ProvidePortIdAt<CosmosBinaryChannelSetup, I, J>
+    for CosmosBinaryChannelSetupComponents
+{
+    fn port_id_at(setup: &CosmosBinaryChannelSetup, _index: Twindex<I, J>) -> &PortId {
         &setup.port_id
     }
 }

@@ -52,6 +52,10 @@ use tokio::time::sleep;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 
+/**
+   A bootstrap context for bootstrapping a new Cosmos chain, and builds
+   a `CosmosChainDriver`.
+*/
 pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,
     pub builder: CosmosBuilder,

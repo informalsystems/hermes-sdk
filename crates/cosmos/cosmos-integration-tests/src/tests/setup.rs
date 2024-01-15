@@ -13,7 +13,7 @@ use tokio::runtime::Runtime;
 use tokio::test;
 
 use crate::contexts::bootstrap::CosmosBootstrap;
-use crate::contexts::setup::CosmosSetup;
+use crate::contexts::setup::binary_channel::CosmosBinaryChannelSetup;
 
 #[test(flavor = "multi_thread")]
 async fn test_setup_cosmos_chain() -> Result<(), Error> {
@@ -41,7 +41,7 @@ async fn test_setup_cosmos_chain() -> Result<(), Error> {
         trust_threshold: TrustThreshold::ONE_THIRD,
     });
 
-    let setup = CosmosSetup {
+    let setup = CosmosBinaryChannelSetup {
         bootstrap,
         create_client_settings,
         init_connection_options: Default::default(),
