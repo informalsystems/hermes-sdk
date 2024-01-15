@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::address::HasAddressType;
+use crate::chain_driver::traits::types::amount::HasAmountType;
 
 #[derive_component(EventualAmountAsserterComponent, EventualAmountAsserter<Chain>)]
 #[async_trait]

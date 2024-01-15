@@ -14,11 +14,11 @@ use hermes_cosmos_test_components::chain::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain::impls::wallet::ProvideCosmosTestWallet;
 use hermes_relayer_components::chain::impls::forward::all::ForwardToInnerChain;
 use hermes_relayer_components::chain::impls::forward::all::IsForwardToInnerChainComponent;
-use hermes_test_components::chain::traits::build::ChainIdFromStringBuilderComponent;
-use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
-use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
-use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
-use hermes_test_components::chain::traits::types::wallet::{
+use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
+use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
+use hermes_test_components::chain_driver::traits::types::amount::AmountTypeComponent;
+use hermes_test_components::chain_driver::traits::types::denom::DenomTypeComponent;
+use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
 use hermes_test_components::driver::traits::types::chain::ChainGetter;

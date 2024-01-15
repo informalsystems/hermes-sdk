@@ -4,11 +4,11 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 
-use crate::chain::traits::assert::eventual_amount::EventualAmountAsserter;
-use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;
-use crate::chain::traits::queries::balance::CanQueryBalance;
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::assert::eventual_amount::EventualAmountAsserter;
+use crate::chain_driver::traits::assert::poll_assert::HasPollAssertDuration;
+use crate::chain_driver::traits::queries::balance::CanQueryBalance;
+use crate::chain_driver::traits::types::address::HasAddressType;
+use crate::chain_driver::traits::types::amount::HasAmountType;
 
 pub trait CanRaisePollAssertEventualAmountTimeout:
     HasAddressType + HasAmountType + HasErrorType

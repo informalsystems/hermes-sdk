@@ -1,5 +1,5 @@
 use cgp_core::Async;
-use hermes_test_components::chain::traits::types::denom::DenomTypeProvider;
+use hermes_test_components::chain_driver::traits::types::denom::DenomTypeProvider;
 
 use crate::chain::types::denom::Denom;
 

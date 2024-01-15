@@ -5,7 +5,7 @@
 extern crate alloc;
 
 pub mod bootstrap;
-pub mod chain;
+pub mod chain_driver;
 pub mod driver;
 pub mod runtime;
 pub mod setup;

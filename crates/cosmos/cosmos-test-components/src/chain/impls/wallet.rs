@@ -1,6 +1,6 @@
 use hermes_relayer_components::transaction::traits::types::HasSignerType;
-use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::wallet::{
+use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
+use hermes_test_components::chain_driver::traits::types::wallet::{
     HasWalletType, WalletSignerProvider, WalletTypeProvider,
 };
 use hermes_test_components::driver::traits::types::chain::HasChainType;

@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_test_components::chain::traits::types::denom::{Denom, HasDenomType};
+use hermes_test_components::chain_driver::traits::types::denom::{Denom, HasDenomType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;

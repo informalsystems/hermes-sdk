@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;

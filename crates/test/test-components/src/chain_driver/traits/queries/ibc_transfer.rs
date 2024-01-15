@@ -3,9 +3,9 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelId, OutgoingPacket, PortId};
 
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
-use crate::chain::traits::types::wallet::HasWalletType;
+use crate::chain_driver::traits::types::address::HasAddressType;
+use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::wallet::HasWalletType;
 use crate::driver::traits::types::chain::HasChainType;
 
 #[derive_component(TokenIbcTransferrerComponent, TokenIbcTransferrer<Chain>)]

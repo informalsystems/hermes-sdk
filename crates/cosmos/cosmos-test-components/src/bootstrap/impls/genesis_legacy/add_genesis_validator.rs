@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
 
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;

@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
-use crate::chain::traits::types::denom::HasDenomType;
+use crate::chain_driver::traits::types::address::HasAddressType;
+use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::denom::HasDenomType;
 
 #[derive_component(BalanceQuerierComponent, BalanceQuerier<Chain>)]
 #[async_trait]

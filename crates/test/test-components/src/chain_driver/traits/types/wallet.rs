@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::transaction::traits::types::{HasSignerType, SignerOf};
 
-use crate::chain::traits::types::address::HasAddressType;
+use crate::chain_driver::traits::types::address::HasAddressType;
 use crate::driver::traits::types::chain::HasChainType;
 
 pub type Wallet<Chain> = <Chain as HasWalletType>::Wallet;

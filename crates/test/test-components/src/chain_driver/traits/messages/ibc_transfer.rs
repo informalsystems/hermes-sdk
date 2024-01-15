@@ -7,9 +7,9 @@ use hermes_relayer_components::chain::types::aliases::{
     ChannelId, Height, Message, PortId, Timestamp,
 };
 
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
-use crate::chain::traits::types::memo::HasMemoType;
+use crate::chain_driver::traits::types::address::HasAddressType;
+use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::memo::HasMemoType;
 use crate::driver::traits::types::chain::HasChainType;
 
 #[async_trait]

@@ -1,5 +1,5 @@
-use hermes_test_components::chain::traits::types::amount::AmountTypeProvider;
-use hermes_test_components::chain::traits::types::denom::HasDenomType;
+use hermes_test_components::chain_driver::traits::types::amount::AmountTypeProvider;
+use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
 
 use crate::chain::types::amount::Amount;
 use crate::chain::types::denom::Denom;

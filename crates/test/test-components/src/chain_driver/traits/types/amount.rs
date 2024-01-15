@@ -2,7 +2,7 @@ use core::fmt::{Debug, Display};
 
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::denom::HasDenomType;
+use crate::chain_driver::traits::types::denom::HasDenomType;
 
 pub type Amount<Chain> = <Chain as HasAmountType>::Amount;
 

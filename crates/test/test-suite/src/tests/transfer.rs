@@ -5,15 +5,15 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::logger::traits::log::CanLog;
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
-use hermes_test_components::chain::traits::fields::amount::{
+use hermes_test_components::chain_driver::traits::assert::eventual_amount::CanAssertEventualAmount;
+use hermes_test_components::chain_driver::traits::fields::amount::{
     CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
 };
-use hermes_test_components::chain::traits::fields::channel_at::HasChannelAt;
-use hermes_test_components::chain::traits::fields::denom_at::HasDenomAt;
-use hermes_test_components::chain::traits::fields::wallet::{HasWalletAt, UserWallet};
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use hermes_test_components::chain::traits::queries::ibc_transfer::CanIbcTransferToken;
+use hermes_test_components::chain_driver::traits::fields::channel_at::HasChannelAt;
+use hermes_test_components::chain_driver::traits::fields::denom_at::HasDenomAt;
+use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
+use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::driver::traits::background_relayer::HasBackgroundRelayer;
 use hermes_test_components::driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_at::HasChainAt;

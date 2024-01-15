@@ -8,13 +8,13 @@ use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::{
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::transaction::components::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
-use crate::chain::traits::fields::memo::HasDefaultMemo;
-use crate::chain::traits::fields::timeout::CanCalculateIbcTransferTimeout;
-use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
-use crate::chain::traits::queries::ibc_transfer::TokenIbcTransferrer;
-use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::amount::HasAmountType;
-use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
+use crate::chain_driver::traits::fields::memo::HasDefaultMemo;
+use crate::chain_driver::traits::fields::timeout::CanCalculateIbcTransferTimeout;
+use crate::chain_driver::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
+use crate::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrer;
+use crate::chain_driver::traits::types::address::HasAddressType;
+use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::wallet::{HasWalletSigner, HasWalletType};
 use crate::driver::traits::types::chain::HasChain;
 use crate::driver::traits::types::chain::HasChainType;
 

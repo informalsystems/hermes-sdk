@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::wallet::HasWalletType;
+use crate::chain_driver::traits::types::wallet::HasWalletType;
 use crate::types::index::Index;
 
 #[derive(Copy, Clone)]
