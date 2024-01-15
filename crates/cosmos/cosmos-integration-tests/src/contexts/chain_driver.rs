@@ -4,6 +4,8 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use eyre::Error;
+use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
@@ -12,16 +14,19 @@ use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128Amoun
 use hermes_cosmos_test_components::chain_driver::impls::chain_id::BuildCosmosChainIdFromString;
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
+use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::AmountMethodsComponent;
+use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
 use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
 use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
 use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
+use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain_driver::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain_driver::traits::types::denom::DenomTypeComponent;
@@ -31,6 +36,7 @@ use hermes_test_components::chain_driver::traits::types::wallet::{
 use hermes_test_components::driver::traits::types::chain::ChainGetter;
 use hermes_test_components::driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::types::index::Index;
+use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::config::ChainConfig;
 use tokio::process::Child;
 
@@ -71,6 +77,7 @@ delegate_components! {
         [
             AmountTypeComponent,
             AmountMethodsComponent,
+            RandomAmountGeneratorComponent,
         ]:
             ProvideU128AmountWithDenom,
         DenomTypeComponent:
@@ -132,5 +139,25 @@ impl DenomGetterAt<CosmosChainDriver, TransferDenom, 0> for CosmosChainDriverCom
 impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComponents {
     fn denom_at(driver: &CosmosChainDriver, _kind: StakingDenom, _index: Index<0>) -> &Denom {
         &driver.genesis_config.staking_denom
+    }
+}
+
+impl BalanceQuerier<CosmosChainDriver> for CosmosChainDriverComponents {
+    async fn query_balance(
+        chain_driver: &CosmosChainDriver,
+        address: &String,
+        denom: &Denom,
+    ) -> Result<Amount, Error> {
+        let grpc_address = chain_driver.base_chain.grpc_address();
+        let denom_str = denom.to_string();
+
+        let balance = query_balance(grpc_address, address, &denom_str).await?;
+
+        let quantity = balance.amount.parse()?;
+
+        Ok(Amount {
+            quantity,
+            denom: denom.clone(),
+        })
     }
 }
