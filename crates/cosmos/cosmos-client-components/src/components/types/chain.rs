@@ -2,15 +2,15 @@ use alloc::sync::Arc;
 
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProvider;
-use hermes_relayer_components::chain::traits::types::event::EventTypeProvider;
-use hermes_relayer_components::chain::traits::types::height::{HasHeightType, HeightTypeProvider};
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesProvider;
-use hermes_relayer_components::chain::traits::types::message::MessageTypeProvider;
+use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
+use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
+use hermes_relayer_components::chain::traits::types::height::{HasHeightType, ProvideHeightType};
+use hermes_relayer_components::chain::traits::types::ibc::ProvideIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimestampType, TimestampTypeProvider,
+    HasTimestampType, ProvideTimestampType,
 };
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
@@ -24,28 +24,28 @@ use tendermint::abci::Event as AbciEvent;
 use crate::traits::message::CosmosMessage;
 pub struct ProvideCosmosChainTypes;
 
-impl<Chain> HeightTypeProvider<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideHeightType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
     type Height = Height;
 }
 
-impl<Chain> TimestampTypeProvider<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideTimestampType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
     type Timestamp = Timestamp;
 }
 
-impl<Chain> MessageTypeProvider<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideMessageType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
     type Message = CosmosMessage;
 }
 
-impl<Chain> EventTypeProvider<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideEventType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
@@ -67,14 +67,14 @@ where
     }
 }
 
-impl<Chain> ChainIdTypeProvider<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideChainIdType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
     type ChainId = ChainId;
 }
 
-impl<Chain, Counterparty> IbcChainTypesProvider<Chain, Counterparty> for ProvideCosmosChainTypes
+impl<Chain, Counterparty> ProvideIbcChainTypes<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: HasChainTypes,
 {

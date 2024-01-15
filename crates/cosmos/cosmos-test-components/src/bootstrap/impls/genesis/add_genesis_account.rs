@@ -1,8 +1,9 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
-use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
+use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
+
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
@@ -17,20 +18,20 @@ use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdder;
 pub struct AddCosmosGenesisAccount;
 
 #[async_trait]
-impl<Bootstrap, Runtime, Chain> GenesisAccountAdder<Bootstrap> for AddCosmosGenesisAccount
+impl<Bootstrap, Runtime, ChainDriver> GenesisAccountAdder<Bootstrap> for AddCosmosGenesisAccount
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainType<Chain = Chain>
+        + HasChainDriverType<ChainDriver = ChainDriver>
         + HasErrorType
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
-    Chain: HasAmountType + HasAddressType,
+    ChainDriver: HasAmountType + HasAddressType,
 {
     async fn add_genesis_account(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
-        address: &Chain::Address,
-        amounts: &[Chain::Amount],
+        address: &ChainDriver::Address,
+        amounts: &[ChainDriver::Amount],
     ) -> Result<(), Bootstrap::Error> {
         let amounts_string = itertools::join(amounts, ",");
 

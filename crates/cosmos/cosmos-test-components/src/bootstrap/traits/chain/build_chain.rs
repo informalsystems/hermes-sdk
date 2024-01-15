@@ -2,8 +2,9 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::types::aliases::ChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
-use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet};
+use hermes_test_components::chain_driver::traits::types::wallet::{HasWalletType, Wallet};
+
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
 };
@@ -15,10 +16,11 @@ use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 #[derive_component(ChainFromBootstrapParamsBuilderComponent, ChainFromBootstrapParamsBuilder<Bootstrap>)]
 #[async_trait]
 pub trait CanBuildChainFromBootstrapParameters:
-    HasRuntime + HasChainType + HasGenesisConfigType + HasChainConfigType + HasErrorType
+    HasRuntime + HasChainDriverType + HasGenesisConfigType + HasChainConfigType + HasErrorType
 where
     Self::Runtime: HasFilePathType + HasChildProcessType,
-    Self::Chain: HasChainIdType + HasWalletType,
+    Self::Chain: HasChainIdType,
+    Self::ChainDriver: HasWalletType,
 {
     async fn build_chain_from_bootstrap_params(
         &self,
@@ -26,7 +28,7 @@ where
         chain_id: ChainId<Self::Chain>,
         genesis_config: Self::GenesisConfig,
         chain_config: Self::ChainConfig,
-        wallets: Vec<Wallet<Self::Chain>>,
+        wallets: Vec<Wallet<Self::ChainDriver>>,
         chain_process: ChildProcess<Self::Runtime>,
-    ) -> Result<Self::Chain, Self::Error>;
+    ) -> Result<Self::ChainDriver, Self::Error>;
 }

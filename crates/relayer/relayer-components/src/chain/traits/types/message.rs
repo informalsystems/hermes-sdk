@@ -15,7 +15,7 @@ use cgp_core::prelude::*;
    we want to avoid defining multiple associated `Message` types so that
    they can never be ambiguous.
 */
-#[derive_component(MessageTypeProviderComponent, MessageTypeProvider<Chain>)]
+#[derive_component(MessageTypeComponent, ProvideMessageType<Chain>)]
 pub trait HasMessageType: Async {
     /**
        The messages that can be assembled into transactions and be submitted to

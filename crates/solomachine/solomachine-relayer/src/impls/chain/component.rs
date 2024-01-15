@@ -16,13 +16,13 @@ use hermes_relayer_components::chain::traits::components::receive_packet_payload
 use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesProviderComponent;
-use hermes_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -59,10 +59,10 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
-            HeightTypeProviderComponent,
-            TimestampTypeProviderComponent,
-            ChainIdTypeProviderComponent,
-            IbcChainTypesProviderComponent,
+            HeightTypeComponent,
+            TimestampTypeComponent,
+            ChainIdTypeComponent,
+            IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
         ]:
             ProvideCosmosChainTypes,
@@ -72,8 +72,8 @@ delegate_components! {
         ]:
             ProvideTracingLogger,
         [
-            MessageTypeProviderComponent,
-            EventTypeProviderComponent,
+            MessageTypeComponent,
+            EventTypeComponent,
         ]:
             ProvideSolomachineChainTypes,
         PacketFieldsReaderComponent:

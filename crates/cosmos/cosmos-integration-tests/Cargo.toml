@@ -15,6 +15,7 @@ description  = """
 [dependencies]
 cgp-core                            = { workspace = true }
 cgp-error-eyre                      = { workspace = true }
+ibc-proto                           = { workspace = true }
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
@@ -22,6 +23,8 @@ hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-test-components              = { workspace = true }
+hermes-ibc-test-suite               = { workspace = true }
+hermes-async-runtime-components     = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 tendermint-rpc                      = { workspace = true }
@@ -30,5 +33,8 @@ eyre            = { workspace = true }
 tokio           = { workspace = true }
 toml            = { workspace = true }
 serde_json      = { workspace = true }
+prost           = { workspace = true }
 
-stable-eyre     = { version = "0.2.2" }
+sha2                = { version = "0.10.8" }
+stable-eyre         = { version = "0.2.2" }
+subtle-encoding     = { version = "0.5.1" }

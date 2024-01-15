@@ -1,10 +1,14 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
-pub trait HasCreateClientOptions<Counterparty>: Async {
-    type CreateClientPayloadOptions: Async;
+#[derive_component(CreateClientOptionsTypeComponent, ProvideCreateClientOptionsType<Chain>)]
+pub trait HasCreateClientOptionsType<Counterparty>: Async {
+    type CreateClientOptions: Async;
 }
+
+pub type CreateClientOptions<Chain, Counterparty> =
+    <Chain as HasCreateClientOptionsType<Counterparty>>::CreateClientOptions;
 
 pub trait HasCreateClientPayload<Counterparty>: Async {
     type CreateClientPayload: Async;

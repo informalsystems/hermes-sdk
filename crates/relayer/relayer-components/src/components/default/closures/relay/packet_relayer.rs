@@ -1,4 +1,4 @@
-use cgp_core::{HasComponents, HasErrorType};
+use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 
 use crate::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
@@ -88,6 +88,9 @@ where
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
     Relay::Logger: HasBaseLogLevels,
-    Components: DelegatesToDefaultRelayComponents + PacketFilter<Relay>,
+    Components: DelegatesToDefaultRelayComponents
+        + PacketFilter<Relay>
+        + ErrorRaiser<Relay, SrcChain::Error>
+        + ErrorRaiser<Relay, DstChain::Error>,
 {
 }

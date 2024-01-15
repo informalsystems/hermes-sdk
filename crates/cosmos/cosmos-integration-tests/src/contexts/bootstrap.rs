@@ -1,13 +1,14 @@
 use core::str::FromStr;
 use core::time::Duration;
-use std::collections::HashMap;
 use std::path::PathBuf;
 
+use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::HandleErrorsWithEyre;
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::{eyre, Error};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
@@ -33,24 +34,31 @@ use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::{
 };
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain::types::denom::Denom;
-use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
+use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::bootstrap::traits::types::chain::ProvideChainType;
+use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
+use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::chain::ChainType;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
-use ibc_relayer::config::{self, AddressType, ChainConfig, Config};
+use ibc_relayer::config::{self, AddressType, ChainConfig};
 use ibc_relayer::keyring::Store;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tendermint_rpc::{Url, WebSocketClientUrl};
 use tokio::process::Child;
+use tokio::time::sleep;
 
-use crate::contexts::chain::CosmosTestChain;
+use crate::contexts::chain_driver::CosmosChainDriver;
 
-pub struct CosmosStdBootstrapContext {
+/**
+   A bootstrap context for bootstrapping a new Cosmos chain, and builds
+   a `CosmosChainDriver`.
+*/
+pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,
+    pub builder: CosmosBuilder,
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
@@ -61,11 +69,11 @@ pub struct CosmosStdBootstrapContext {
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
 }
 
-impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosStdBootstrapContext {}
+impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosBootstrap {}
 
 pub struct CosmosStdBootstrapComponents;
 
-impl HasComponents for CosmosStdBootstrapContext {
+impl HasComponents for CosmosBootstrap {
     type Components = CosmosStdBootstrapComponents;
 }
 
@@ -77,11 +85,8 @@ delegate_all!(
 
 delegate_components! {
     CosmosStdBootstrapComponents {
-        [
-            ErrorTypeComponent,
-            ErrorRaiserComponent,
-        ]:
-            HandleErrorsWithEyre,
+        ErrorTypeComponent: ProvideEyreError,
+        ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         ChainConfigTypeComponent: ProvideCosmosChainConfigType,
@@ -94,27 +99,45 @@ delegate_components! {
     }
 }
 
-impl ProvideChainType<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    type Chain = CosmosTestChain;
+impl ProvideChainType<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    type Chain = CosmosChain;
+}
+
+impl ProvideChainDriverType<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    type ChainDriver = CosmosChainDriver;
 }
 
 #[async_trait]
-impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComponents {
     #[allow(unused_variables)]
     async fn build_chain_from_bootstrap_params(
-        bootstrap: &CosmosStdBootstrapContext,
+        bootstrap: &CosmosBootstrap,
         chain_home_dir: PathBuf,
         chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainConfig,
         wallets: Vec<CosmosTestWallet>,
         chain_process: Child,
-    ) -> Result<CosmosTestChain, Error> {
+    ) -> Result<CosmosChainDriver, Error> {
         let relayer_wallet = wallets
             .iter()
             .find(|wallet| wallet.id.starts_with("relayer"))
             .ok_or_else(|| {
                 eyre!("expect relayer wallet to be provided in the list of test wallets")
+            })?;
+
+        let user_wallet_a = wallets
+            .iter()
+            .find(|wallet| wallet.id.starts_with("user1"))
+            .ok_or_else(|| {
+                eyre!("expect user1 wallet to be provided in the list of test wallets")
+            })?;
+
+        let user_wallet_b = wallets
+            .iter()
+            .find(|wallet| wallet.id.starts_with("user2"))
+            .ok_or_else(|| {
+                eyre!("expect user2 wallet to be provided in the list of test wallets")
             })?;
 
         let relayer_chain_config = ChainConfig {
@@ -150,7 +173,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
             trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(0.003, "stake".to_string()),
+            gas_price: config::GasPrice::new(0.003, genesis_config.staking_denom.to_string()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),
@@ -161,84 +184,82 @@ impl ChainFromBootstrapParamsBuilder<CosmosStdBootstrapContext> for CosmosStdBoo
             clear_interval: None,
         };
 
-        let mut relayer_config = Config::default();
-        relayer_config.chains.push(relayer_chain_config);
+        let base_chain = bootstrap
+            .builder
+            .build_chain_with_config(
+                relayer_chain_config.clone(),
+                Some(&relayer_wallet.keypair.clone()),
+            )
+            .await?;
 
-        let key_map = HashMap::from([(chain_id.clone(), relayer_wallet.keypair.clone())]);
-
-        let builder = CosmosBuilder::new(
-            relayer_config,
-            bootstrap.runtime.clone(),
-            Default::default(),
-            Default::default(),
-            Default::default(),
-            key_map,
-        );
-
-        let base_chain = builder.build_chain(&chain_id).await?;
-
-        let test_chain = CosmosTestChain {
+        let test_chain = CosmosChainDriver {
             base_chain,
-            full_node_process: chain_process,
+            chain_config,
+            genesis_config,
+            relayer_chain_config,
+            full_node_process: Arc::new(chain_process),
+            relayer_wallet: relayer_wallet.clone(),
+            user_wallet_a: user_wallet_a.clone(),
+            user_wallet_b: user_wallet_b.clone(),
         };
+
+        // Sleep for a while to wait for the chain node to really start up
+        // TODO: use other more reliable method to check that the full node has started.
+        sleep(Duration::from_secs(1)).await;
 
         Ok(test_chain)
     }
 }
 
-impl ProvideRuntime<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn runtime(bootstrap: &CosmosStdBootstrapContext) -> &HermesRuntime {
+impl ProvideRuntime<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn runtime(bootstrap: &CosmosBootstrap) -> &HermesRuntime {
         &bootstrap.runtime
     }
 }
 
-impl TestDirGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn test_dir(bootstrap: &CosmosStdBootstrapContext) -> &PathBuf {
+impl TestDirGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn test_dir(bootstrap: &CosmosBootstrap) -> &PathBuf {
         &bootstrap.test_dir
     }
 }
 
-impl ChainCommandPathGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn chain_command_path(bootstrap: &CosmosStdBootstrapContext) -> &PathBuf {
+impl ChainCommandPathGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn chain_command_path(bootstrap: &CosmosBootstrap) -> &PathBuf {
         &bootstrap.chain_command_path
     }
 }
 
-impl RandomIdFlagGetter<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
-    fn should_randomize_identifiers(bootstrap: &CosmosStdBootstrapContext) -> bool {
+impl RandomIdFlagGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+    fn should_randomize_identifiers(bootstrap: &CosmosBootstrap) -> bool {
         bootstrap.should_randomize_identifiers
     }
 }
 
-impl CosmosGenesisConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl CosmosGenesisConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
     fn modify_genesis_config(
-        bootstrap: &CosmosStdBootstrapContext,
+        bootstrap: &CosmosBootstrap,
         config: &mut serde_json::Value,
-    ) -> Result<(), <CosmosStdBootstrapContext as HasErrorType>::Error> {
+    ) -> Result<(), <CosmosBootstrap as HasErrorType>::Error> {
         (bootstrap.genesis_config_modifier)(config)
     }
 }
 
-impl CometConfigModifier<CosmosStdBootstrapContext> for CosmosStdBootstrapComponents {
+impl CometConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
     fn modify_comet_config(
-        bootstrap: &CosmosStdBootstrapContext,
+        bootstrap: &CosmosBootstrap,
         comet_config: &mut toml::Value,
     ) -> Result<(), Error> {
         (bootstrap.comet_config_modifier)(comet_config)
     }
 }
 
-impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForStaking>
-    for CosmosStdBootstrapComponents
-{
+impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosStdBootstrapComponents {
     fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
         &genesis_config.staking_denom
     }
 }
 
-impl GenesisDenomGetter<CosmosStdBootstrapContext, DenomForTransfer>
-    for CosmosStdBootstrapComponents
-{
+impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosStdBootstrapComponents {
     fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
         &genesis_config.transfer_denom
     }

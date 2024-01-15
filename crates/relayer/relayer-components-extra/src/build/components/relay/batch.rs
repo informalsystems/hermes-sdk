@@ -9,7 +9,7 @@ use hermes_relayer_components::build::types::aliases::{
 };
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::runtime::traits::mutex::HasMutex;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -39,7 +39,8 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>,
     Relay: Clone
         + CanSpawnBatchMessageWorker<SourceTarget>
-        + CanSpawnBatchMessageWorker<DestinationTarget>,
+        + CanSpawnBatchMessageWorker<DestinationTarget>
+        + CanRaiseRelayChainErrors,
     SrcChain: HasIbcChainTypes<DstChain>,
     DstChain: HasIbcChainTypes<SrcChain>,
     SrcChain: HasRuntime<Runtime = SrcRuntime> + HasChainId,

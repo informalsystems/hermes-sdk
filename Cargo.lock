@@ -513,7 +513,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async-macro",
 ]
@@ -521,7 +521,7 @@ dependencies = [
 [[package]]
 name = "cgp-async-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -531,7 +531,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -540,7 +540,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "itertools 0.11.0",
  "proc-macro2",
@@ -551,7 +551,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -563,7 +563,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -572,7 +572,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -581,7 +581,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -590,7 +590,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#2d8929ff8d903dcf2d0a3a4ef847f03e9d05bd79"
+source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -1575,17 +1575,23 @@ dependencies = [
  "cgp-core",
  "cgp-error-eyre",
  "eyre",
+ "hermes-async-runtime-components",
  "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
+ "hermes-ibc-test-suite",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "hermes-test-components",
+ "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
+ "prost",
  "serde_json",
+ "sha2 0.10.8",
  "stable-eyre",
+ "subtle-encoding",
  "tendermint-rpc",
  "tokio",
  "toml 0.8.8",
@@ -1627,30 +1633,18 @@ dependencies = [
 name = "hermes-cosmos-test-components"
 version = "0.1.0"
 dependencies = [
- "async-trait",
  "cgp-core",
- "eyre",
- "flex-error",
- "futures",
  "hdpath",
  "hermes-relayer-components",
- "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "hermes-test-components",
- "http",
- "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
  "itertools 0.11.0",
- "prost",
  "rand",
  "serde_json",
- "tendermint",
- "tendermint-rpc",
  "tokio",
  "toml 0.8.8",
- "tonic",
- "tracing",
 ]
 
 [[package]]

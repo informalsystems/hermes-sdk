@@ -1,4 +1,4 @@
-use cgp_core::{HasComponents, HasErrorType};
+use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
@@ -73,6 +73,8 @@ where
     SrcChain::Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep,
     Relay::Logger: HasBaseLogLevels,
-    Components: DelegatesToExtraRelayComponents,
+    Components: DelegatesToExtraRelayComponents
+        + ErrorRaiser<Relay, SrcChain::Error>
+        + ErrorRaiser<Relay, DstChain::Error>,
 {
 }

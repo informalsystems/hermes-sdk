@@ -1,4 +1,5 @@
-use cgp_core::{Async, CanRaiseError, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
@@ -32,10 +33,8 @@ use crate::chain::types::aliases::ClientId;
     additional constraints such as restricting a relay context to handle
     only a single channel or connection.
 */
-pub trait HasRelayChains:
-    CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
-    + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
-{
+#[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
+pub trait HasRelayChains: HasErrorType {
     type Packet: Async;
 
     /**
@@ -80,4 +79,18 @@ pub trait HasRelayChains:
         chain.
     */
     fn dst_client_id(&self) -> &ClientId<Self::DstChain, Self::SrcChain>;
+}
+
+pub trait CanRaiseRelayChainErrors:
+    HasRelayChains
+    + CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
+    + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+{
+}
+
+impl<Relay> CanRaiseRelayChainErrors for Relay where
+    Relay: HasRelayChains
+        + CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
+        + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+{
 }
