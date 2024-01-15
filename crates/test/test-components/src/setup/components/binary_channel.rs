@@ -43,7 +43,9 @@ use crate::setup::traits::channel::ChannelSetupComponent;
 use crate::setup::traits::clients::ClientSetupComponent;
 use crate::setup::traits::connection::ConnectionSetupComponent;
 use crate::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
-use crate::setup::traits::driver::{CanBuildDriver, DriverBuilderComponent, ProvideDriverType};
+use crate::setup::traits::driver::{
+    CanBuildTestDriver, DriverBuilderComponent, ProvideTestDriverType,
+};
 use crate::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use crate::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use crate::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
@@ -70,7 +72,7 @@ delegate_components! {
 
 pub trait CanUseBinaryChannelTestSetup: UseBinaryChannelTestSetup {}
 
-pub trait UseBinaryChannelTestSetup: CanBuildDriver {}
+pub trait UseBinaryChannelTestSetup: CanBuildTestDriver {}
 
 impl<
         Setup,
@@ -88,7 +90,7 @@ impl<
 where
     Setup: HasComponents<Components = Components>,
     Components: DelegatesToBinaryChannelTestComponents
-        + ProvideDriverType<Setup>
+        + ProvideTestDriverType<Setup>
         + ProvideErrorType<Setup>
         + ProvideChainTypeAt<Setup, 0, Chain = ChainA>
         + ProvideChainTypeAt<Setup, 1, Chain = ChainB>

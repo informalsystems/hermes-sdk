@@ -4,7 +4,7 @@ use std::sync::Arc;
 use eyre::Error;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::setup::traits::driver::CanBuildDriver;
+use hermes_test_components::setup::traits::driver::CanBuildTestDriver;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;

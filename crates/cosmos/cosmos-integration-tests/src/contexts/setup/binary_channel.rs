@@ -22,7 +22,7 @@ use hermes_test_components::setup::components::binary_channel::IsBinaryChannelTe
 use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
 use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
-use hermes_test_components::setup::traits::driver::ProvideDriverType;
+use hermes_test_components::setup::traits::driver::ProvideTestDriverType;
 use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
@@ -36,6 +36,7 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 use crate::contexts::bootstrap::CosmosBootstrap;
 use crate::contexts::chain_driver::CosmosChainDriver;
+use crate::contexts::test_driver::binary_channel::CosmosBinaryChannelTestDriver;
 
 /**
    A setup context for setting up a binary channel test driver,
@@ -70,23 +71,35 @@ delegate_components! {
     }
 }
 
-impl<Setup> ProvideDriverType<Setup> for CosmosBinaryChannelSetupComponents
+impl<Setup> ProvideTestDriverType<Setup> for CosmosBinaryChannelSetupComponents
 where
     Setup: Async,
 {
-    type Driver = ();
+    type TestDriver = CosmosBinaryChannelTestDriver;
 }
 
 impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChannelSetupComponents {
     async fn build_driver_with_binary_channel(
         _setup: &CosmosBinaryChannelSetup,
-        _birelay: CosmosBiRelay,
-        _connection_id_a: ConnectionId,
-        _connection_id_b: ConnectionId,
-        _channel_id_a: ChannelId,
-        _channel_id_b: ChannelId,
-    ) -> Result<(), Error> {
-        Ok(())
+        birelay: CosmosBiRelay,
+        chain_driver_a: CosmosChainDriver,
+        chain_driver_b: CosmosChainDriver,
+        connection_id_a: ConnectionId,
+        connection_id_b: ConnectionId,
+        channel_id_a: ChannelId,
+        channel_id_b: ChannelId,
+    ) -> Result<CosmosBinaryChannelTestDriver, Error> {
+        let driver = CosmosBinaryChannelTestDriver {
+            birelay,
+            chain_driver_a,
+            chain_driver_b,
+            connection_id_a,
+            connection_id_b,
+            channel_id_a,
+            channel_id_b,
+        };
+
+        Ok(driver)
     }
 }
 

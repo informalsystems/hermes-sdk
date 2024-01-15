@@ -1,6 +1,6 @@
 use cgp_core::{CanRaiseError, HasErrorType};
 
-use crate::setup::traits::driver::CanBuildDriver;
+use crate::setup::traits::driver::CanBuildTestDriver;
 use crate::setup::traits::run_test::TestRunner;
 use crate::test_case::traits::test_case::TestCase;
 
@@ -11,7 +11,7 @@ pub struct BuildDriverAndRunTest;
 
 impl<Setup, Driver, Test> TestRunner<Setup, Test> for BuildDriverAndRunTest
 where
-    Setup: CanBuildDriver<Driver = Driver> + CanRaiseError<Driver::Error>,
+    Setup: CanBuildTestDriver<TestDriver = Driver> + CanRaiseError<Driver::Error>,
     Driver: HasErrorType,
     Test: TestCase<Driver>,
 {
