@@ -34,10 +34,10 @@ use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
+use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
 use crate::contexts::bootstrap::CosmosBootstrap;
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
-use crate::contexts::test_driver::binary_channel::CosmosBinaryChannelTestDriver;
 
 /**
    A setup context for setting up a binary channel test driver,

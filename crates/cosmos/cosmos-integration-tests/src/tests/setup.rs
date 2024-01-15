@@ -12,8 +12,8 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use tokio::runtime::Runtime;
 use tokio::test;
 
+use crate::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use crate::contexts::bootstrap::CosmosBootstrap;
-use crate::contexts::setup::binary_channel::CosmosBinaryChannelSetup;
 
 #[test(flavor = "multi_thread")]
 async fn test_setup_cosmos_chain() -> Result<(), Error> {
