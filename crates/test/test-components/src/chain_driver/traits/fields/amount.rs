@@ -11,7 +11,7 @@ pub trait CanGenerateRandomAmount: HasDenomType + HasAmountType {
     fn random_amount(min: usize, max: &Self::Amount) -> Self::Amount;
 }
 
-#[derive_component(AmountMethodsProviderComponent, AmountMethodsProvider<Chain>)]
+#[derive_component(AmountMethodsComponent, ProvideAmountMethods<Chain>)]
 pub trait HasAmountMethods: HasAmountType + HasErrorType {
     fn add_amount(
         current: &Self::Amount,

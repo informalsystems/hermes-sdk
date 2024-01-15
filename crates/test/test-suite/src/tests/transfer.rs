@@ -31,7 +31,6 @@ where
         + HasChainDriverAt<0, ChainDriver = ChainDriverA>
         + HasChainDriverAt<1, ChainDriver = ChainDriverB>
         + HasRelayDriverAt<0, 1, RelayDriver = RelayDriver>
-        + HasRelayDriverAt<0, 1>
         + CanLog,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasChannelAt<ChainB, 0>

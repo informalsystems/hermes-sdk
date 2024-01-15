@@ -3,6 +3,9 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
+use hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
+use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_test_components::driver::traits::types::birelay_at::BiRelayTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_at::ChainTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverGetterAt;
@@ -39,13 +42,18 @@ delegate_components! {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+        [
             ChainTypeAtComponent,
             ChainDriverTypeAtComponent,
             RelayTypeAtComponent,
             BiRelayTypeAtComponent,
             RelayDriverTypeAtComponent,
         ]:
-            ProvideCosmosTestTypes
+            ProvideCosmosTestTypes,
     }
 }
 

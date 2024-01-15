@@ -15,6 +15,7 @@ use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTes
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
+use hermes_test_components::chain_driver::traits::fields::amount::AmountMethodsComponent;
 use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
 use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
 use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
@@ -67,7 +68,10 @@ delegate_components! {
             ProvideCosmosTestWallet,
         ChainIdFromStringBuilderComponent:
             BuildCosmosChainIdFromString,
-        AmountTypeComponent:
+        [
+            AmountTypeComponent,
+            AmountMethodsComponent,
+        ]:
             ProvideU128AmountWithDenom,
         DenomTypeComponent:
             ProvideIbcDenom,
