@@ -66,8 +66,6 @@ where
 
         let memo = chain_driver.default_memo();
 
-        let sender_address = ChainDriver::wallet_address(sender_wallet);
-
         let message = chain_driver
             .build_ibc_token_transfer_message(
                 channel_id,
