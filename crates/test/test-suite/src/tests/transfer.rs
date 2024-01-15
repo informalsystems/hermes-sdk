@@ -118,7 +118,7 @@ where
         assert_eq!(balance_a2, balance_a3);
 
         let balance_b1 =
-            ChainDriverB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b);
+            ChainDriverB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b)?;
 
         driver.log_info(&format!(
             "Waiting for user on chain B to receive IBC transferred amount of {}",

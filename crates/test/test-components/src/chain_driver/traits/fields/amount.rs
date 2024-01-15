@@ -25,7 +25,8 @@ pub trait HasAmountMethods: HasAmountType + HasErrorType {
 }
 
 #[derive_component(IbcTransferredAmountConverterComponent, IbcTransferredAmountConverter<Chain>)]
-pub trait CanConvertIbcTransferredAmount<CounterpartyDriver>: HasAmountType + HasChainType
+pub trait CanConvertIbcTransferredAmount<CounterpartyDriver>:
+    HasAmountType + HasChainType + HasErrorType
 where
     Self::Chain: HasIbcChainTypes<CounterpartyDriver::Chain>,
     CounterpartyDriver: HasChainType + HasAmountType,
@@ -34,7 +35,7 @@ where
         counterparty_amount: &CounterpartyDriver::Amount,
         channel_id: &ChannelId<Self::Chain, CounterpartyDriver::Chain>,
         port_id: &PortId<Self::Chain, CounterpartyDriver::Chain>,
-    ) -> Self::Amount;
+    ) -> Result<Self::Amount, Self::Error>;
 
     fn transmute_counterparty_amount(
         counterparty_amount: &CounterpartyDriver::Amount,

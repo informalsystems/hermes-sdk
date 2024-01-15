@@ -35,6 +35,7 @@ use hermes_test_components::chain_driver::traits::assert::eventual_amount::Event
 use hermes_test_components::chain_driver::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::AmountMethodsComponent;
+use hermes_test_components::chain_driver::traits::fields::amount::IbcTransferredAmountConverter;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
 use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
@@ -73,6 +74,8 @@ use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
 use prost::EncodeError;
 use tokio::process::Child;
+
+use crate::impls::denom::derive_ibc_denom;
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
@@ -305,5 +308,29 @@ impl IbcTokenTransferMessageBuilder<CosmosChainDriver, CosmosChainDriver>
         };
 
         Ok(message.to_cosmos_message())
+    }
+}
+
+impl IbcTransferredAmountConverter<CosmosChainDriver, CosmosChainDriver>
+    for CosmosChainDriverComponents
+{
+    fn ibc_transfer_amount_from(
+        counterparty_amount: &Amount,
+        channel_id: &ChannelId,
+        port_id: &PortId,
+    ) -> Result<Amount, Error> {
+        let denom = derive_ibc_denom(port_id, channel_id, &counterparty_amount.denom)?;
+
+        Ok(Amount {
+            quantity: counterparty_amount.quantity,
+            denom,
+        })
+    }
+
+    fn transmute_counterparty_amount(counterparty_amount: &Amount, denom: &Denom) -> Amount {
+        Amount {
+            quantity: counterparty_amount.quantity,
+            denom: denom.clone(),
+        }
     }
 }
