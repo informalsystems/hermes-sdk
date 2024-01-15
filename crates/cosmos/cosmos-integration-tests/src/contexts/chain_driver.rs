@@ -12,8 +12,12 @@ use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128Amoun
 use hermes_cosmos_test_components::chain_driver::impls::chain_id::BuildCosmosChainIdFromString;
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
+use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
+use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
+use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
+use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
 use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
@@ -112,5 +116,17 @@ impl WalletGetterAt<CosmosChainDriver, UserWallet, 1> for CosmosChainDriverCompo
         _index: Index<1>,
     ) -> &CosmosTestWallet {
         &driver.user_wallet_b
+    }
+}
+
+impl DenomGetterAt<CosmosChainDriver, TransferDenom, 0> for CosmosChainDriverComponents {
+    fn denom_at(driver: &CosmosChainDriver, _kind: TransferDenom, _index: Index<0>) -> &Denom {
+        &driver.genesis_config.transfer_denom
+    }
+}
+
+impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComponents {
+    fn denom_at(driver: &CosmosChainDriver, _kind: StakingDenom, _index: Index<0>) -> &Denom {
+        &driver.genesis_config.staking_denom
     }
 }

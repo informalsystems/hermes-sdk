@@ -10,7 +10,7 @@ use hermes_test_components::chain_driver::traits::fields::amount::{
     CanConvertIbcTransferredAmount, CanGenerateRandomAmount, HasAmountMethods,
 };
 use hermes_test_components::chain_driver::traits::fields::channel_at::HasChannelAt;
-use hermes_test_components::chain_driver::traits::fields::denom_at::HasDenomAt;
+use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
@@ -32,7 +32,7 @@ where
         + HasBackgroundRelayer,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasChannelAt<ChainB, 0>
-        + HasDenomAt<0>
+        + HasDenomAt<TransferDenom, 0>
         + CanQueryBalance
         + HasWalletAt<UserWallet, 0>
         + HasWalletAt<UserWallet, 1>
@@ -75,7 +75,7 @@ where
 
         let address_b = ChainDriverB::wallet_address(wallet_b);
 
-        let denom_a = chain_driver_a.denom();
+        let denom_a = chain_driver_a.denom_at(TransferDenom, Index::<0>);
 
         let balance_a1 = chain_driver_a.query_balance(address_a1, denom_a).await?;
 
