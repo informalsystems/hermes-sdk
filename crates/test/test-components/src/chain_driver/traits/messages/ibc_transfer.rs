@@ -9,8 +9,8 @@ use hermes_relayer_components::chain::types::aliases::{
 
 use crate::chain_driver::traits::types::address::HasAddressType;
 use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::chain_driver::traits::types::memo::HasMemoType;
-use crate::driver::traits::types::chain::HasChainType;
 
 #[derive_component(IbcTokenTransferMessageBuilderComponent, IbcTokenTransferMessageBuilder<ChainDriver>)]
 #[async_trait]

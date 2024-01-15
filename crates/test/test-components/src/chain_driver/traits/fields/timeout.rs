@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use hermes_relayer_components::chain::types::aliases::{Height, Timestamp};
 
-use crate::driver::traits::types::chain::HasChainType;
+use crate::chain_driver::traits::types::chain::HasChainType;
 
 #[derive_component(IbcTransferTimeoutCalculatorComponent, IbcTransferTimeoutCalculator<ChainDriver>)]
 pub trait CanCalculateIbcTransferTimeout: HasChainType

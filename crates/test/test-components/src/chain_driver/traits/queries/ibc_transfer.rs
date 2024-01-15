@@ -5,8 +5,8 @@ use hermes_relayer_components::chain::types::aliases::{ChannelId, OutgoingPacket
 
 use crate::chain_driver::traits::types::address::HasAddressType;
 use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::chain_driver::traits::types::wallet::HasWalletType;
-use crate::driver::traits::types::chain::HasChainType;
 
 #[derive_component(TokenIbcTransferrerComponent, TokenIbcTransferrer<Chain>)]
 #[async_trait]

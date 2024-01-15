@@ -39,7 +39,7 @@ use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::driver::traits::types::chain::ProvideChainType;
+use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::chain::ChainType;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;

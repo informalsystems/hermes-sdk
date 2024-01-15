@@ -1,7 +1,7 @@
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
-use crate::driver::traits::types::chain::HasChain;
+use crate::chain_driver::traits::types::chain::HasChain;
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
 use crate::setup::traits::birelay::CanSetupBiRelay;

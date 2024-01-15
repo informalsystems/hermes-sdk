@@ -3,8 +3,8 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelId, PortId};
 
 use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::chain_driver::traits::types::denom::HasDenomType;
-use crate::driver::traits::types::chain::HasChainType;
 
 #[derive_component(RandomAmountGeneratorComponent, RandomAmountGenerator<Chain>)]
 pub trait CanGenerateRandomAmount: HasDenomType + HasAmountType {

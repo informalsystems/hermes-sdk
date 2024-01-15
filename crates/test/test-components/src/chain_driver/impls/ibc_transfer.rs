@@ -12,9 +12,9 @@ use crate::chain_driver::traits::messages::ibc_transfer::CanBuildIbcTokenTransfe
 use crate::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrer;
 use crate::chain_driver::traits::types::address::HasAddressType;
 use crate::chain_driver::traits::types::amount::HasAmountType;
+use crate::chain_driver::traits::types::chain::HasChain;
+use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::chain_driver::traits::types::wallet::{HasWalletSigner, HasWalletType};
-use crate::driver::traits::types::chain::HasChain;
-use crate::driver::traits::types::chain::HasChainType;
 
 pub struct SendIbcTransferMessage;
 

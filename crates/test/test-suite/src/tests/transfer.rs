@@ -14,7 +14,7 @@ use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt,
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::driver::traits::types::chain::HasChain;
+use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
 use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriverAt;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;

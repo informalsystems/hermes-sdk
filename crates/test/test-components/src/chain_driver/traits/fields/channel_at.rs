@@ -1,7 +1,7 @@
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelId, PortId};
 
-use crate::driver::traits::types::chain::HasChainType;
+use crate::chain_driver::traits::types::chain::HasChainType;
 
 pub trait HasChannelAt<Counterparty, const I: usize>: HasChainType
 where

@@ -1,6 +1,6 @@
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilder;
-use hermes_test_components::driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 pub struct BuildCosmosChainIdFromString;

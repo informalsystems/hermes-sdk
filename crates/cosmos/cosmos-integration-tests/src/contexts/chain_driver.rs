@@ -47,13 +47,13 @@ use hermes_test_components::chain_driver::traits::queries::balance::BalanceQueri
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrerComponent;
 use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain_driver::traits::types::amount::AmountTypeComponent;
+use hermes_test_components::chain_driver::traits::types::chain::ChainGetter;
+use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::chain_driver::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain_driver::traits::types::memo::MemoTypeComponent;
 use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
-use hermes_test_components::driver::traits::types::chain::ChainGetter;
-use hermes_test_components::driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::types::index::Index;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::google::protobuf::Any;
@@ -281,37 +281,3 @@ impl IbcTokenTransferMessageBuilder<CosmosChainDriver, CosmosChainDriver>
         Ok(message.to_cosmos_message())
     }
 }
-
-// impl TokenIbcTransferrer<CosmosChainDriver, CosmosChainDriver> for CosmosChainDriverComponents {
-//     async fn ibc_transfer_token(
-//         chain_driver: &CosmosChainDriver,
-//         channel_id: &ChannelId,
-//         port_id: &PortId,
-//         sender_wallet: &CosmosTestWallet,
-//         recipient_address: &String,
-//         amount: &Amount,
-//     ) -> Result<Packet, Error> {
-//         let chain_status = chain_driver
-//             .base_chain
-//             .query_chain_status()
-//             .await?;
-
-//         let timeout_height = chain_status.height + 100;
-
-//         let message = MsgTransfer {
-//             source_port: port_id.to_string(),
-//             source_channel: channel_id.to_string(),
-//             token: Some(Coin {
-//                 denom: amount.denom.to_string(),
-//                 amount: amount.quantity.to_string(),
-//             }),
-//             sender: sender_wallet.address.clone(),
-//             receiver: recipient_address.clone(),
-//             timeout_height: Some((chain_status.height + 100).into()),
-//             timeout_timestamp: 0,
-//             memo: "".to_string(),
-//         };
-
-//         todo!()
-//     }
-// }

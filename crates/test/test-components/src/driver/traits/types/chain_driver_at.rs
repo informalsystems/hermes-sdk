@@ -1,4 +1,4 @@
-use crate::driver::traits::types::chain::HasChainType;
+use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 use crate::types::index::Index;
 use cgp_core::prelude::*;
