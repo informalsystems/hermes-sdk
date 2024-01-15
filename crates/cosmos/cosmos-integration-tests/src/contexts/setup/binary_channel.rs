@@ -16,9 +16,9 @@ use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTyp
 use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use hermes_test_components::driver::traits::types::relay_at::ProvideRelayTypeAt;
-use hermes_test_components::setup::components::binary_channel::BinaryChannelTestComponents;
-use hermes_test_components::setup::components::binary_channel::CanUseBinaryChannelTestSetup;
-use hermes_test_components::setup::components::binary_channel::IsBinaryChannelTestComponent;
+use hermes_test_components::setup::binary_channel::components::BinaryChannelTestComponents;
+use hermes_test_components::setup::binary_channel::components::CanUseBinaryChannelTestSetup;
+use hermes_test_components::setup::binary_channel::components::IsBinaryChannelTestComponent;
 use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
 use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;

@@ -27,7 +27,7 @@ use crate::driver::traits::types::chain::HasChain;
 use crate::driver::traits::types::chain_at::ProvideChainTypeAt;
 use crate::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use crate::driver::traits::types::relay_at::ProvideRelayTypeAt;
-use crate::setup::impls::binary_channel::SetupBinaryChannelDriver;
+use crate::setup::binary_channel::setup::SetupBinaryChannelDriver;
 use crate::setup::impls::birelay::SetupBiRelayWithBuilder;
 use crate::setup::impls::chain::SetupChainWithBootstrap;
 use crate::setup::impls::channel::SetupChannelHandshake;
