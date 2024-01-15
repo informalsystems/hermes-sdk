@@ -1,8 +1,10 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::transaction::components::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
@@ -14,6 +16,7 @@ use crate::chain_driver::traits::types::address::HasAddressType;
 use crate::chain_driver::traits::types::amount::HasAmountType;
 use crate::chain_driver::traits::types::chain::HasChain;
 use crate::chain_driver::traits::types::chain::HasChainType;
+use crate::chain_driver::traits::types::tx_context::HasTxContext;
 use crate::chain_driver::traits::types::wallet::{HasWalletSigner, HasWalletType};
 
 pub struct SendIbcTransferMessage;
@@ -22,11 +25,13 @@ pub struct SendIbcTransferMessage;
 pub struct MissingSendPacketEventError;
 
 #[async_trait]
-impl<ChainDriver, Chain, CounterpartyDriver, Counterparty>
+impl<ChainDriver, Chain, CounterpartyDriver, Counterparty, TxContext>
     TokenIbcTransferrer<ChainDriver, CounterpartyDriver> for SendIbcTransferMessage
 where
     ChainDriver: HasChain<Chain = Chain>
+        + HasTxContext<TxContext = TxContext>
         + CanRaiseError<Chain::Error>
+        + CanRaiseError<TxContext::Error>
         + HasWalletType
         + HasAmountType
         + HasDefaultMemo
@@ -35,10 +40,12 @@ where
         + CanBuildIbcTokenTransferMessage<CounterpartyDriver>
         + CanRaiseError<MissingSendPacketEventError>,
     Chain: CanQueryChainStatus
-        + CanSendSingleMessageWithSigner
         + HasIbcChainTypes<Counterparty>
         + HasIbcPacketTypes<Counterparty>
         + HasSendPacketEvent<Counterparty>,
+    TxContext: HasMessageType<Message = Chain::Message>
+        + HasEventType<Event = Chain::Event>
+        + CanSendSingleMessageWithSigner,
     CounterpartyDriver: HasAddressType + HasChainType<Chain = Counterparty>,
 {
     async fn ibc_transfer_token(
@@ -50,6 +57,7 @@ where
         amount: &ChainDriver::Amount,
     ) -> Result<Chain::OutgoingPacket, ChainDriver::Error> {
         let chain = chain_driver.chain();
+        let tx_context = chain_driver.tx_context();
 
         let chain_status = chain
             .query_chain_status()
@@ -80,7 +88,7 @@ where
 
         let signer = ChainDriver::wallet_signer(sender_wallet);
 
-        let events = chain
+        let events = tx_context
             .send_message_with_signer(signer, message)
             .await
             .map_err(ChainDriver::raise_error)?;

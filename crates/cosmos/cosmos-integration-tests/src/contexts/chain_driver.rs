@@ -10,6 +10,7 @@ use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_client_components::traits::message::DynCosmosMessage;
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::transaction::CosmosTxContext;
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::impls::address::ProvideStringAddress;
@@ -29,6 +30,7 @@ use hermes_test_components::chain_driver::impls::default_memo::ProvideDefaultMem
 use hermes_test_components::chain_driver::impls::ibc_transfer::SendIbcTransferMessage;
 use hermes_test_components::chain_driver::impls::poll_assert_eventual_amount::PollAssertEventualAmount;
 use hermes_test_components::chain_driver::impls::string_memo::ProvideStringMemoType;
+use hermes_test_components::chain_driver::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain_driver::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain_driver::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
@@ -44,13 +46,17 @@ use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
 use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
 use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
+use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrerComponent;
 use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain_driver::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain_driver::traits::types::chain::ChainGetter;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::chain_driver::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain_driver::traits::types::memo::MemoTypeComponent;
+use hermes_test_components::chain_driver::traits::types::tx_context::ProvideTxContextType;
+use hermes_test_components::chain_driver::traits::types::tx_context::TxContextGetter;
 use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
@@ -84,6 +90,13 @@ pub struct CosmosChainDriver {
 }
 
 pub struct CosmosChainDriverComponents;
+
+pub trait UseChainDriver:
+    HasChainType<Chain = CosmosChain> + CanIbcTransferToken<CosmosChainDriver> + CanAssertEventualAmount
+{
+}
+
+impl UseChainDriver for CosmosChainDriver {}
 
 impl HasComponents for CosmosChainDriver {
     type Components = CosmosChainDriverComponents;
@@ -134,9 +147,22 @@ where
     type Chain = CosmosChain;
 }
 
+impl<Driver> ProvideTxContextType<Driver> for CosmosChainDriverComponents
+where
+    Driver: Async,
+{
+    type TxContext = CosmosTxContext;
+}
+
 impl ChainGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn chain(driver: &CosmosChainDriver) -> &CosmosChain {
         &driver.base_chain
+    }
+}
+
+impl TxContextGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn tx_context(driver: &CosmosChainDriver) -> &CosmosTxContext {
+        &driver.base_chain.tx_context
     }
 }
 
