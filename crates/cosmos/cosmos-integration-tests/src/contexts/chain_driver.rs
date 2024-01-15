@@ -1,3 +1,5 @@
+use core::time::Duration;
+
 use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
@@ -240,16 +242,17 @@ impl BalanceQuerier<CosmosChainDriver> for CosmosChainDriverComponents {
 impl IbcTransferTimeoutCalculator<CosmosChainDriver> for CosmosChainDriverComponents {
     fn ibc_transfer_timeout_time(
         _chain_driver: &CosmosChainDriver,
-        _current_time: &Timestamp,
+        current_time: &Timestamp,
     ) -> Option<Timestamp> {
-        None
+        let time = (*current_time + Duration::from_secs(90)).unwrap();
+        Some(time)
     }
 
     fn ibc_transfer_timeout_height(
         _chain_driver: &CosmosChainDriver,
-        current_height: &Height,
+        _current_height: &Height,
     ) -> Option<Height> {
-        Some(*current_height + 100)
+        None
     }
 }
 
@@ -266,6 +269,8 @@ pub struct TokenTransferMessage {
 
 impl DynCosmosMessage for TokenTransferMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+        let timeout_timestamp = self.timeout_time.unwrap_or_default().nanoseconds();
+
         let message = MsgTransfer {
             source_port: self.port_id.to_string(),
             source_channel: self.channel_id.to_string(),
@@ -276,8 +281,8 @@ impl DynCosmosMessage for TokenTransferMessage {
             sender: signer.to_string(),
             receiver: self.recipient_address.clone(),
             timeout_height: self.timeout_height.map(Into::into),
-            timeout_timestamp: 0,
-            memo: "".to_string(),
+            timeout_timestamp,
+            memo: self.memo.clone().unwrap_or_else(|| "".to_string()),
         };
 
         encode_to_any("/ibc.applications.transfer.v1.MsgTransfer", &message)
