@@ -1,10 +1,10 @@
-use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId};
 
 use crate::contexts::chain_driver::CosmosChainDriver;
+use crate::contexts::relay_driver::CosmosRelayDriver;
 
 pub struct CosmosBinaryChannelTestDriver {
-    pub birelay: CosmosBiRelay,
+    pub relay_driver: CosmosRelayDriver,
     pub chain_driver_a: CosmosChainDriver,
     pub chain_driver_b: CosmosChainDriver,
     pub connection_id_a: ConnectionId,

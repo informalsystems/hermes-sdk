@@ -5,6 +5,7 @@ use std::process::{ExitStatus, Stdio};
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
 use hermes_test_components::runtime::traits::child_process::ChildProcessStarter;
@@ -14,8 +15,6 @@ use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use tokio::fs::OpenOptions;
 use tokio::io::{copy, AsyncRead};
 use tokio::process::{Child, Command};
-
-use crate::types::future_task::FutureTask;
 
 pub struct StartTokioChildProcess;
 

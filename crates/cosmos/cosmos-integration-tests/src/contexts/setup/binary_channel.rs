@@ -36,6 +36,7 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 use crate::contexts::bootstrap::CosmosBootstrap;
 use crate::contexts::chain_driver::CosmosChainDriver;
+use crate::contexts::relay_driver::CosmosRelayDriver;
 use crate::contexts::test_driver::binary_channel::CosmosBinaryChannelTestDriver;
 
 /**
@@ -89,8 +90,10 @@ impl BinaryChannelDriverBuilder<CosmosBinaryChannelSetup> for CosmosBinaryChanne
         channel_id_a: ChannelId,
         channel_id_b: ChannelId,
     ) -> Result<CosmosBinaryChannelTestDriver, Error> {
+        let relay_driver = CosmosRelayDriver { birelay };
+
         let driver = CosmosBinaryChannelTestDriver {
-            birelay,
+            relay_driver,
             chain_driver_a,
             chain_driver_b,
             connection_id_a,
