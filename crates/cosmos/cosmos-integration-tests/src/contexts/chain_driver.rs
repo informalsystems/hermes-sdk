@@ -22,7 +22,10 @@ use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::impls::default_assert_duration::ProvideDefaultPollAssertDuration;
+use hermes_test_components::chain_driver::impls::default_memo::ProvideDefaultMemo;
+use hermes_test_components::chain_driver::impls::ibc_transfer::SendIbcTransferMessage;
 use hermes_test_components::chain_driver::impls::poll_assert_eventual_amount::PollAssertEventualAmount;
+use hermes_test_components::chain_driver::impls::string_memo::ProvideStringMemoType;
 use hermes_test_components::chain_driver::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain_driver::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
@@ -31,13 +34,16 @@ use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGe
 use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
 use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
 use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
+use hermes_test_components::chain_driver::traits::fields::memo::DefaultMemoGetterComponent;
 use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
 use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
+use hermes_test_components::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrerComponent;
 use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain_driver::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain_driver::traits::types::denom::DenomTypeComponent;
+use hermes_test_components::chain_driver::traits::types::memo::MemoTypeComponent;
 use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
@@ -94,10 +100,16 @@ delegate_components! {
             ProvideIbcDenom,
         AddressTypeComponent:
             ProvideStringAddress,
+        MemoTypeComponent:
+            ProvideStringMemoType,
+        DefaultMemoGetterComponent:
+            ProvideDefaultMemo,
         EventualAmountAsserterComponent:
             PollAssertEventualAmount,
         PollAssertDurationGetterComponent:
             ProvideDefaultPollAssertDuration,
+        TokenIbcTransferrerComponent:
+            SendIbcTransferMessage,
     }
 }
 

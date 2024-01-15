@@ -1,7 +1,6 @@
-use core::fmt::Display;
+use cgp_core::prelude::*;
 
-use cgp_core::Async;
-
+#[derive_component(MemoTypeComponent, ProvideMemoType<ChainDriver>)]
 pub trait HasMemoType: Async {
-    type Memo: Display + Async;
+    type Memo: Async;
 }
