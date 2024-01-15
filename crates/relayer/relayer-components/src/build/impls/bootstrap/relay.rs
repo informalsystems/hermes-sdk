@@ -36,12 +36,14 @@ where
 }
 
 #[async_trait]
-impl<Build, Target, Relay, SrcChain, DstChain> CanBootstrapRelay<Target> for Build
+impl<Build, Target, BiRelay, Relay, SrcChain, DstChain> CanBootstrapRelay<Target> for Build
 where
-    Build: CanBuildRelay<Target>
+    Build: HasBiRelayType<BiRelay = BiRelay>
+        + CanBuildRelay<Target>
         + CanBuildChain<Target::SrcChainTarget>
-        + CanBuildChain<Target::DstChainTarget>,
-    Build::BiRelay: HasTwoWayRelay,
+        + CanBuildChain<Target::DstChainTarget>
+        + CanRaiseError<BiRelay::Error>,
+    BiRelay: HasTwoWayRelay,
     Target: RelayBuildTarget<Self, TargetRelay = Relay>,
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>
         + CanCreateClient<SourceTarget>
