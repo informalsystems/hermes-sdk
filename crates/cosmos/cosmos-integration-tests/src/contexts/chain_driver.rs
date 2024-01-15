@@ -17,6 +17,14 @@ use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTes
 use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
+use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
+use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_test_components::chain_driver::impls::default_assert_duration::ProvideDefaultPollAssertDuration;
+use hermes_test_components::chain_driver::impls::poll_assert_eventual_amount::PollAssertEventualAmount;
+use hermes_test_components::chain_driver::traits::assert::eventual_amount::EventualAmountAsserterComponent;
+use hermes_test_components::chain_driver::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::AmountMethodsComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
@@ -67,6 +75,8 @@ delegate_components! {
             ProvideEyreError,
         ErrorRaiserComponent:
             RaiseDebugError,
+        RuntimeTypeComponent:
+            ProvideTokioRuntimeType,
         [
             WalletTypeComponent,
             WalletSignerComponent,
@@ -84,6 +94,10 @@ delegate_components! {
             ProvideIbcDenom,
         AddressTypeComponent:
             ProvideStringAddress,
+        EventualAmountAsserterComponent:
+            PollAssertEventualAmount,
+        PollAssertDurationGetterComponent:
+            ProvideDefaultPollAssertDuration,
     }
 }
 
@@ -97,6 +111,12 @@ where
 impl ChainGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn chain(driver: &CosmosChainDriver) -> &CosmosChain {
         &driver.base_chain
+    }
+}
+
+impl ProvideRuntime<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn runtime(chain_driver: &CosmosChainDriver) -> &HermesRuntime {
+        &chain_driver.base_chain.runtime
     }
 }
 

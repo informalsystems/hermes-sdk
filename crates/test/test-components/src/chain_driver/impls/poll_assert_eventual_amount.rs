@@ -1,6 +1,8 @@
+use core::fmt::Debug;
 use core::time::Duration;
 
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 
@@ -10,41 +12,30 @@ use crate::chain_driver::traits::queries::balance::CanQueryBalance;
 use crate::chain_driver::traits::types::address::HasAddressType;
 use crate::chain_driver::traits::types::amount::HasAmountType;
 
-pub trait CanRaisePollAssertEventualAmountTimeout:
-    HasAddressType + HasAmountType + HasErrorType
-{
-    fn poll_assert_eventual_amount_timeout_error(
-        &self,
-        address: &Self::Address,
-        amount: &Self::Amount,
-        duration: Duration,
-    ) -> Self::Error;
-}
-
 pub struct PollAssertEventualAmount;
 
 #[async_trait]
-impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount
+impl<ChainDriver> EventualAmountAsserter<ChainDriver> for PollAssertEventualAmount
 where
-    Chain: HasRuntime
+    ChainDriver: HasRuntime
         + CanQueryBalance
         + HasPollAssertDuration
-        + CanRaisePollAssertEventualAmountTimeout,
-    Chain::Runtime: CanSleep,
+        + for<'a> CanRaiseError<EventualAmountTimeoutError<'a, ChainDriver>>,
+    ChainDriver::Runtime: CanSleep,
 {
     async fn assert_eventual_amount(
-        chain: &Chain,
-        address: &Chain::Address,
-        amount: &Chain::Amount,
-    ) -> Result<(), Chain::Error> {
-        let poll_interval = chain.poll_assert_interval();
-        let poll_attempts = chain.poll_assert_attempts();
+        chain_driver: &ChainDriver,
+        address: &ChainDriver::Address,
+        amount: &ChainDriver::Amount,
+    ) -> Result<(), ChainDriver::Error> {
+        let poll_interval = chain_driver.poll_assert_interval();
+        let poll_attempts = chain_driver.poll_assert_attempts();
 
-        let denom = Chain::amount_denom(amount);
-        let runtime = chain.runtime();
+        let denom = ChainDriver::amount_denom(amount);
+        let runtime = chain_driver.runtime();
 
         for _ in 0..poll_attempts {
-            let balance_result = chain.query_balance(address, denom).await;
+            let balance_result = chain_driver.query_balance(address, denom).await;
 
             match balance_result {
                 Ok(balance) if &balance == amount => {
@@ -56,10 +47,40 @@ where
             };
         }
 
-        Err(chain.poll_assert_eventual_amount_timeout_error(
+        Err(ChainDriver::raise_error(EventualAmountTimeoutError {
+            chain_driver,
             address,
             amount,
-            poll_interval * poll_attempts,
-        ))
+            duration: poll_interval * poll_attempts,
+        }))
+    }
+}
+
+pub struct EventualAmountTimeoutError<'a, ChainDriver>
+where
+    ChainDriver: HasAddressType + HasAmountType + HasErrorType,
+{
+    pub chain_driver: &'a ChainDriver,
+    pub address: &'a ChainDriver::Address,
+    pub amount: &'a ChainDriver::Amount,
+    pub duration: Duration,
+}
+
+impl<'a, ChainDriver> Debug for EventualAmountTimeoutError<'a, ChainDriver>
+where
+    ChainDriver: HasAddressType + HasAmountType + HasErrorType,
+    ChainDriver::Address: Debug,
+    ChainDriver::Amount: Debug,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("EventualAmountTimeoutError")
+            .field(
+                "message",
+                &"timeout waiting for the balance of address to reach the expected amount",
+            )
+            .field("address", &self.address)
+            .field("amount", &self.amount)
+            .field("duration", &self.duration)
+            .finish()
     }
 }
