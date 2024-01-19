@@ -28,6 +28,7 @@
         inherit
           (cosmos-nix)
           gaia14
+          celestia
           ibc-go-v7-simapp
           ;
       };

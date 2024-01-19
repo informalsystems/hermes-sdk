@@ -42,6 +42,7 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::chain::ChainType;
+use ibc_relayer::config::compat_mode::CompatMode;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::config::{self, AddressType, ChainConfig};
 use ibc_relayer::keyring::Store;
@@ -63,6 +64,9 @@ pub struct CosmosBootstrap {
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
     pub account_prefix: String,
+    pub staking_denom: Denom,
+    pub transfer_denom: Denom,
+    pub compat_mode: Option<CompatMode>,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
@@ -173,14 +177,14 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(0.003, genesis_config.staking_denom.to_string()),
+            gas_price: config::GasPrice::new(0.003, bootstrap.staking_denom.to_string()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),
             proof_specs: Default::default(),
             extension_options: Default::default(),
             sequential_batch_tx: false,
-            compat_mode: None,
+            compat_mode: bootstrap.compat_mode.clone(),
             clear_interval: None,
         };
 
@@ -198,6 +202,8 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             genesis_config,
             relayer_chain_config,
             full_node_process: Arc::new(chain_process),
+            staking_denom: bootstrap.staking_denom.clone(),
+            transfer_denom: bootstrap.transfer_denom.clone(),
             relayer_wallet: relayer_wallet.clone(),
             user_wallet_a: user_wallet_a.clone(),
             user_wallet_b: user_wallet_b.clone(),
@@ -254,13 +260,21 @@ impl CometConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
 }
 
 impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosStdBootstrapComponents {
-    fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.staking_denom
+    fn genesis_denom(
+        bootstrap: &CosmosBootstrap,
+        _label: DenomForStaking,
+        _genesis_config: &CosmosGenesisConfig,
+    ) -> Denom {
+        bootstrap.staking_denom.clone()
     }
 }
 
 impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosStdBootstrapComponents {
-    fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.transfer_denom
+    fn genesis_denom(
+        bootstrap: &CosmosBootstrap,
+        _label: DenomForTransfer,
+        _genesis_config: &CosmosGenesisConfig,
+    ) -> Denom {
+        bootstrap.transfer_denom.clone()
     }
 }
