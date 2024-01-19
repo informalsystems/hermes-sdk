@@ -10,7 +10,6 @@ use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigIn
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use crate::chain_driver::types::denom::Denom;
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;
@@ -56,11 +55,7 @@ where
 
         // TODO: generate random denom
 
-        let genesis_config = CosmosGenesisConfig {
-            config_json,
-            staking_denom: Denom::base("stake"),
-            transfer_denom: Denom::base("coin"),
-        };
+        let genesis_config = CosmosGenesisConfig { config_json };
 
         Ok(genesis_config.into())
     }

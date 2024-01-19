@@ -109,6 +109,7 @@ where
                 toml::from_str(&sdk_config_string).map_err(Bootstrap::raise_error)?
             };
 
+            enable_grpc(&mut sdk_config).map_err(Bootstrap::raise_error)?;
             set_grpc_port(&mut sdk_config, grpc_port).map_err(Bootstrap::raise_error)?;
             disable_grpc_web(&mut sdk_config).map_err(Bootstrap::raise_error)?;
             disable_api(&mut sdk_config).map_err(Bootstrap::raise_error)?;
@@ -228,6 +229,17 @@ pub fn set_indexer(config: &mut Value, mode: &str) -> Result<(), &'static str> {
         .as_table_mut()
         .ok_or("expect object")?
         .insert("indexer".to_string(), mode.into());
+
+    Ok(())
+}
+
+pub fn enable_grpc(config: &mut Value) -> Result<(), &'static str> {
+    config
+        .get_mut("grpc")
+        .ok_or("expect grpc section")?
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("enable".to_string(), true.into());
 
     Ok(())
 }

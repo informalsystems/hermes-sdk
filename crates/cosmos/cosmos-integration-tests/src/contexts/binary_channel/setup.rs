@@ -1,3 +1,4 @@
+use alloc::sync::Arc;
 use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
@@ -44,7 +45,8 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
    with both chains being Cosmos chains.
 */
 pub struct CosmosBinaryChannelSetup {
-    pub bootstrap: CosmosBootstrap,
+    pub bootstrap_a: Arc<CosmosBootstrap>,
+    pub bootstrap_b: Arc<CosmosBootstrap>,
     pub create_client_settings: ClientSettings,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
@@ -141,21 +143,31 @@ impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosBinaryChannelSet
     type Builder = CosmosBuilder;
 }
 
-impl<const I: usize> ProvideBootstrapAt<CosmosBinaryChannelSetup, I>
-    for CosmosBinaryChannelSetupComponents
-{
+impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 0> for CosmosBinaryChannelSetupComponents {
     type Bootstrap = CosmosBootstrap;
 
-    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<I>) -> &CosmosBootstrap {
-        &setup.bootstrap
+    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<0>) -> &CosmosBootstrap {
+        &setup.bootstrap_a
     }
 }
 
-impl<const I: usize, const J: usize> ProvideBuilderAt<CosmosBinaryChannelSetup, I, J>
-    for CosmosBinaryChannelSetupComponents
-{
+impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 1> for CosmosBinaryChannelSetupComponents {
+    type Bootstrap = CosmosBootstrap;
+
+    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<1>) -> &CosmosBootstrap {
+        &setup.bootstrap_b
+    }
+}
+
+impl ProvideBuilderAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
     fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
-        &setup.bootstrap.builder
+        &setup.bootstrap_a.builder
+    }
+}
+
+impl ProvideBuilderAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
+    fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
+        &setup.bootstrap_b.builder
     }
 }
 

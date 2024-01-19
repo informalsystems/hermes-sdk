@@ -1,2 +1,2 @@
-pub mod bootstrap;
-pub mod setup;
+pub mod celestia;
+pub mod cosmos;

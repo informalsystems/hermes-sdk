@@ -36,12 +36,14 @@ use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainCo
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
+use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::chain::ChainType;
+use ibc_relayer::config::compat_mode::CompatMode;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::config::{self, AddressType, ChainConfig};
 use ibc_relayer::keyring::Store;
@@ -58,11 +60,14 @@ use crate::contexts::chain_driver::CosmosChainDriver;
 */
 pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,
-    pub builder: CosmosBuilder,
+    pub builder: Arc<CosmosBuilder>,
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
     pub account_prefix: String,
+    pub staking_denom: Denom,
+    pub transfer_denom: Denom,
+    pub compat_mode: Option<CompatMode>,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
@@ -173,14 +178,14 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(0.003, genesis_config.staking_denom.to_string()),
+            gas_price: config::GasPrice::new(0.003, bootstrap.staking_denom.to_string()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),
             proof_specs: Default::default(),
             extension_options: Default::default(),
             sequential_batch_tx: false,
-            compat_mode: None,
+            compat_mode: bootstrap.compat_mode.clone(),
             clear_interval: None,
         };
 
@@ -192,20 +197,30 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             )
             .await?;
 
+        for _ in 0..10 {
+            sleep(Duration::from_secs(1)).await;
+
+            // Wait for full node process to start up. We do this by waiting
+            // the chain to reach at least height 2 after starting.
+            if let Ok(status) = base_chain.query_chain_status().await {
+                if status.height.revision_height() > 1 {
+                    break;
+                }
+            }
+        }
+
         let test_chain = CosmosChainDriver {
             base_chain,
             chain_config,
             genesis_config,
             relayer_chain_config,
             full_node_process: Arc::new(chain_process),
+            staking_denom: bootstrap.staking_denom.clone(),
+            transfer_denom: bootstrap.transfer_denom.clone(),
             relayer_wallet: relayer_wallet.clone(),
             user_wallet_a: user_wallet_a.clone(),
             user_wallet_b: user_wallet_b.clone(),
         };
-
-        // Sleep for a while to wait for the chain node to really start up
-        // TODO: use other more reliable method to check that the full node has started.
-        sleep(Duration::from_secs(1)).await;
 
         Ok(test_chain)
     }
@@ -254,13 +269,21 @@ impl CometConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
 }
 
 impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosStdBootstrapComponents {
-    fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.staking_denom
+    fn genesis_denom(
+        bootstrap: &CosmosBootstrap,
+        _label: DenomForStaking,
+        _genesis_config: &CosmosGenesisConfig,
+    ) -> Denom {
+        bootstrap.staking_denom.clone()
     }
 }
 
 impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosStdBootstrapComponents {
-    fn genesis_denom(genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.transfer_denom
+    fn genesis_denom(
+        bootstrap: &CosmosBootstrap,
+        _label: DenomForTransfer,
+        _genesis_config: &CosmosGenesisConfig,
+    ) -> Denom {
+        bootstrap.transfer_denom.clone()
     }
 }

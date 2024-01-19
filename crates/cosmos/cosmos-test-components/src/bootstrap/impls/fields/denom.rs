@@ -13,5 +13,9 @@ pub trait HasGenesisDenom<Label>: HasGenesisConfigType + HasChainDriverType
 where
     Self::ChainDriver: HasDenomType,
 {
-    fn genesis_denom(chain_config: &Self::GenesisConfig) -> &Denom<Self::ChainDriver>;
+    fn genesis_denom(
+        &self,
+        label: Label,
+        chain_config: &Self::GenesisConfig,
+    ) -> Denom<Self::ChainDriver>;
 }

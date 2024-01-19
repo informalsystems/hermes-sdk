@@ -105,8 +105,16 @@ impl CosmosBuilder {
         let mut rpc_client =
             HttpClient::new(tx_config.rpc_address.clone()).map_err(BaseError::tendermint_rpc)?;
 
-        let status = rpc_client.status().await.unwrap();
-        let compat_mode = CompatMode::from_version(status.node_info.version).unwrap();
+        let compat_mode = if let Some(compat_mode) = chain_config.compat_mode {
+            compat_mode.into()
+        } else {
+            let status = rpc_client
+                .status()
+                .await
+                .map_err(BaseError::tendermint_rpc)?;
+
+            CompatMode::from_version(status.node_info.version).map_err(BaseError::tendermint_rpc)?
+        };
 
         rpc_client.set_compat_mode(compat_mode);
 

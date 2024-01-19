@@ -32,16 +32,14 @@ where
     ChainDriver: HasDenomType<Denom = Denom>,
 {
     async fn generate_wallet_configs(
-        _bootstrap: &Bootstrap,
+        bootstrap: &Bootstrap,
         genesis_config: &Bootstrap::GenesisConfig,
     ) -> Result<Vec<CosmosWalletConfig>, Bootstrap::Error> {
         // TODO: allow for randomization of denoms and amount
 
-        let denom_for_staking =
-            <Bootstrap as HasGenesisDenom<DenomForStaking>>::genesis_denom(genesis_config);
+        let denom_for_staking = bootstrap.genesis_denom(DenomForStaking, genesis_config);
 
-        let denom_for_transfer =
-            <Bootstrap as HasGenesisDenom<DenomForTransfer>>::genesis_denom(genesis_config);
+        let denom_for_transfer = bootstrap.genesis_denom(DenomForTransfer, genesis_config);
 
         let validator = CosmosWalletConfig {
             wallet_id: "validator".to_owned(),
