@@ -1544,6 +1544,49 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-celestia-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cgp-error-eyre",
+ "eyre",
+ "hermes-async-runtime-components",
+ "hermes-celestia-test-components",
+ "hermes-cosmos-client-components",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
+ "hermes-ibc-test-suite",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-relayer-runtime",
+ "hermes-test-components",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "prost",
+ "serde_json",
+ "sha2 0.10.8",
+ "stable-eyre",
+ "subtle-encoding",
+ "tendermint-rpc",
+ "tokio",
+ "toml 0.8.8",
+]
+
+[[package]]
+name = "hermes-celestia-test-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-cosmos-test-components",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "hermes-test-components",
+ "ibc-relayer",
+ "ibc-relayer-types",
+]
+
+[[package]]
 name = "hermes-cosmos-client-components"
 version = "0.1.0"
 dependencies = [
