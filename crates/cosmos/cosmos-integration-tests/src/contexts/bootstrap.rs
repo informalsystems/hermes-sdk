@@ -197,6 +197,8 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             )
             .await?;
 
+        sleep(Duration::from_secs(1)).await;
+
         for _ in 0..10 {
             // Wait for full node process to start up
             if base_chain.query_chain_status().await.is_ok() {
