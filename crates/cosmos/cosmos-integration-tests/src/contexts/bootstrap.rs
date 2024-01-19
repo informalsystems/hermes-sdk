@@ -197,14 +197,15 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             )
             .await?;
 
-        sleep(Duration::from_secs(1)).await;
-
         for _ in 0..10 {
-            // Wait for full node process to start up
-            if base_chain.query_chain_status().await.is_ok() {
-                break;
-            } else {
-                sleep(Duration::from_secs(1)).await;
+            sleep(Duration::from_secs(1)).await;
+
+            // Wait for full node process to start up. We do this by waiting
+            // the chain to reach at least height 2 after starting.
+            if let Ok(status) = base_chain.query_chain_status().await {
+                if status.height.revision_height() > 1 {
+                    break;
+                }
             }
         }
 
