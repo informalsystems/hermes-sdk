@@ -5,6 +5,7 @@
     nixpkgs.url = github:nixos/nixpkgs/nixpkgs-unstable;
     flake-utils.url = github:numtide/flake-utils;
     cosmos-nix.url = github:informalsystems/cosmos.nix;
+    sovereign-nix.url = github:informalsystems/sov-rollup-starter;
   };
 
   outputs = inputs: let
@@ -23,14 +24,20 @@
       };
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
+      sovereign-nix = inputs.sovereign-nix.packages.${system};
     in {
       packages = {
         inherit
           (cosmos-nix)
-          gaia14
-          celestia
           ibc-go-v7-simapp
           ;
+
+        inherit
+          (sovereign-nix)
+          gaia
+          celestia-app
+          celestia-node
+        ;
       };
     });
 }

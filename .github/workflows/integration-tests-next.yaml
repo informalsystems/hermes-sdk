@@ -37,6 +37,6 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#gaia14 .#celestia -c cargo \
+            nix shell .#gaia .#celestia-app -c cargo \
               test -p hermes-cosmos-integration-tests --no-fail-fast -- \
               --nocapture --test-threads=2
