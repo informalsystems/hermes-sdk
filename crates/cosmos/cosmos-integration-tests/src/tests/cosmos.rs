@@ -24,10 +24,10 @@ fn cosmos_integration_tests() -> Result<(), Error> {
 
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let builder = CosmosBuilder::new_with_default(runtime.clone());
+    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
-    let bootstrap = CosmosBootstrap {
+    let bootstrap = Arc::new(CosmosBootstrap {
         runtime,
         builder,
         should_randomize_identifiers: true,
@@ -39,7 +39,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         transfer_denom: Denom::base("coin"),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-    };
+    });
 
     let create_client_settings = ClientSettings::Tendermint(Settings {
         max_clock_drift: Duration::from_secs(40),
@@ -48,7 +48,8 @@ fn cosmos_integration_tests() -> Result<(), Error> {
     });
 
     let setup = CosmosBinaryChannelSetup {
-        bootstrap,
+        bootstrap_a: bootstrap.clone(),
+        bootstrap_b: bootstrap,
         create_client_settings,
         init_connection_options: Default::default(),
         init_channel_options: Default::default(),

@@ -36,6 +36,7 @@ use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainCo
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
+use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -59,7 +60,7 @@ use crate::contexts::chain_driver::CosmosChainDriver;
 */
 pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,
-    pub builder: CosmosBuilder,
+    pub builder: Arc<CosmosBuilder>,
     pub should_randomize_identifiers: bool,
     pub test_dir: PathBuf,
     pub chain_command_path: PathBuf,
@@ -196,6 +197,15 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             )
             .await?;
 
+        for _ in 0..10 {
+            // Wait for full node process to start up
+            if let Ok(_) = base_chain.query_chain_status().await {
+                break;
+            } else {
+                sleep(Duration::from_secs(1)).await;
+            }
+        }
+
         let test_chain = CosmosChainDriver {
             base_chain,
             chain_config,
@@ -208,10 +218,6 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             user_wallet_a: user_wallet_a.clone(),
             user_wallet_b: user_wallet_b.clone(),
         };
-
-        // Sleep for a while to wait for the chain node to really start up
-        // TODO: use other more reliable method to check that the full node has started.
-        sleep(Duration::from_secs(1)).await;
 
         Ok(test_chain)
     }

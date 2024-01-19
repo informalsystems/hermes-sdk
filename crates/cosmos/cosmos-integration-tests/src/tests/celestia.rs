@@ -25,9 +25,23 @@ fn celestia_integration_tests() -> Result<(), Error> {
 
     let runtime = HermesRuntime::new(tokio_runtime.clone());
 
-    let builder = CosmosBuilder::new_with_default(runtime.clone());
+    let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let bootstrap = CosmosBootstrap {
+    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
+        runtime: runtime.clone(),
+        builder: builder.clone(),
+        should_randomize_identifiers: true,
+        test_dir: "./test-data".into(),
+        chain_command_path: "gaiad".into(),
+        account_prefix: "cosmos".into(),
+        compat_mode: None,
+        staking_denom: Denom::base("stake"),
+        transfer_denom: Denom::base("coin"),
+        genesis_config_modifier: Box::new(|_| Ok(())),
+        comet_config_modifier: Box::new(|_| Ok(())),
+    });
+
+    let celestia_bootstrap = Arc::new(CosmosBootstrap {
         runtime,
         builder,
         should_randomize_identifiers: true,
@@ -39,16 +53,17 @@ fn celestia_integration_tests() -> Result<(), Error> {
         transfer_denom: Denom::base("coin"),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-    };
+    });
 
     let create_client_settings = ClientSettings::Tendermint(Settings {
         max_clock_drift: Duration::from_secs(40),
-        trusting_period: None,
+        trusting_period: Some(Duration::from_secs(60 * 60)),
         trust_threshold: TrustThreshold::ONE_THIRD,
     });
 
     let setup = CosmosBinaryChannelSetup {
-        bootstrap,
+        bootstrap_a: cosmos_bootstrap,
+        bootstrap_b: celestia_bootstrap,
         create_client_settings,
         init_connection_options: Default::default(),
         init_channel_options: Default::default(),
