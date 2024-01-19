@@ -27,29 +27,29 @@ fn celestia_integration_tests() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
+    let celestia_bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
-        should_randomize_identifiers: true,
-        test_dir: "./test-data".into(),
-        chain_command_path: "gaiad".into(),
-        account_prefix: "cosmos".into(),
-        compat_mode: None,
-        staking_denom: Denom::base("stake"),
-        transfer_denom: Denom::base("coin"),
-        genesis_config_modifier: Box::new(|_| Ok(())),
-        comet_config_modifier: Box::new(|_| Ok(())),
-    });
-
-    let celestia_bootstrap = Arc::new(CosmosBootstrap {
-        runtime,
-        builder,
         should_randomize_identifiers: true,
         test_dir: "./test-data".into(),
         chain_command_path: "celestia-appd".into(),
         account_prefix: "celestia".into(),
         compat_mode: Some(CompatMode::V0_34),
         staking_denom: Denom::base("utia"),
+        transfer_denom: Denom::base("coin"),
+        genesis_config_modifier: Box::new(|_| Ok(())),
+        comet_config_modifier: Box::new(|_| Ok(())),
+    });
+
+    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
+        runtime,
+        builder,
+        should_randomize_identifiers: true,
+        test_dir: "./test-data".into(),
+        chain_command_path: "gaiad".into(),
+        account_prefix: "cosmos".into(),
+        compat_mode: None,
+        staking_denom: Denom::base("stake"),
         transfer_denom: Denom::base("coin"),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
@@ -62,8 +62,8 @@ fn celestia_integration_tests() -> Result<(), Error> {
     });
 
     let setup = CosmosBinaryChannelSetup {
-        bootstrap_a: cosmos_bootstrap,
-        bootstrap_b: celestia_bootstrap,
+        bootstrap_a: celestia_bootstrap,
+        bootstrap_b: cosmos_bootstrap,
         create_client_settings,
         init_connection_options: Default::default(),
         init_channel_options: Default::default(),
