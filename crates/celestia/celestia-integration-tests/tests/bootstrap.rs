@@ -26,7 +26,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: false,
-        test_dir: "./chain-data".into(),
+        chain_store_dir: "./chain-data".into(),
         chain_command_path: "celestia-appd".into(),
         account_prefix: "celestia".into(),
         compat_mode: Some(CompatMode::V0_34),

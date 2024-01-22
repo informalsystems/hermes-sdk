@@ -32,7 +32,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         runtime,
         builder,
         should_randomize_identifiers: true,
-        test_dir: "./test-data".into(),
+        chain_store_dir: "./test-data".into(),
         chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
         compat_mode: None,
