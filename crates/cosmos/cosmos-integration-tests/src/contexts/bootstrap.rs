@@ -22,7 +22,7 @@ use hermes_cosmos_test_components::bootstrap::impls::types::genesis_config::Prov
 use hermes_cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::TestDirGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
@@ -231,7 +231,7 @@ impl ProvideRuntime<CosmosBootstrap> for CosmosBootstrapComponents {
     }
 }
 
-impl TestDirGetter<CosmosBootstrap> for CosmosBootstrapComponents {
+impl ChainStoreDirGetter<CosmosBootstrap> for CosmosBootstrapComponents {
     fn chain_store_dir(bootstrap: &CosmosBootstrap) -> &PathBuf {
         &bootstrap.chain_store_dir
     }

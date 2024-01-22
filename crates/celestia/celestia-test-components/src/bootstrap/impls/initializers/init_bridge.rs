@@ -1,9 +1,12 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::types::aliases::ChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
+use hermes_test_components::runtime::traits::copy_file::CanCopyFile;
 use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommandWithEnvs;
 use hermes_test_components::runtime::traits::types::child_process::{
@@ -23,6 +26,7 @@ where
         &self,
         chain_home_dir: &FilePath<Self::Runtime>,
         chain_id: &ChainId<Self::Chain>,
+        chain_config: &CosmosChainConfig,
     ) -> Result<ChildProcess<Self::Runtime>, Self::Error>;
 }
 
@@ -33,12 +37,18 @@ where
         + HasBridgeStoreDir
         + CanRaiseError<Runtime::Error>,
     Chain: HasChainIdType,
-    Runtime: HasFilePathType + HasChildProcessType + CanExecCommandWithEnvs + CanCreateDir,
+    Runtime: HasFilePathType
+        + HasChildProcessType
+        + CanExecCommandWithEnvs
+        + CanCreateDir
+        + CanCopyFile
+        + CanStartChildProcess,
 {
     async fn init_celestia_bridge(
         &self,
         chain_home_dir: &Runtime::FilePath,
         chain_id: &Chain::ChainId,
+        chain_config: &CosmosChainConfig,
     ) -> Result<Runtime::ChildProcess, Self::Error> {
         let runtime = self.runtime();
         let chain_id_str = chain_id.to_string();
@@ -48,6 +58,11 @@ where
             bridge_store_dir,
             &Runtime::file_path_from_string(&chain_id_str),
         );
+
+        runtime
+            .create_dir(&bridge_home_dir)
+            .await
+            .map_err(Bootstrap::raise_error)?;
 
         runtime
             .exec_command_with_envs(
@@ -70,6 +85,33 @@ where
             )),
         );
 
-        todo!()
+        runtime
+            .copy_file(&bridge_key_source_path, &bridge_key_destination_path)
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        let child = runtime
+            .start_child_process(
+                &Runtime::file_path_from_string("celestia"),
+                &[
+                    "bridge",
+                    "start",
+                    "--keyring.accname",
+                    "bridge",
+                    "--core.ip",
+                    "127.0.0.1",
+                    "--core.rpc.port",
+                    &chain_config.rpc_port.to_string(),
+                    "--p2p.network",
+                    &chain_id_str,
+                ],
+                &[("HOME", &Runtime::file_path_to_string(&bridge_home_dir))],
+                None,
+                None,
+            )
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        Ok(child)
     }
 }

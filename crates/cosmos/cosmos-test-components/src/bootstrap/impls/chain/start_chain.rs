@@ -52,7 +52,13 @@ where
 
         let child_process = bootstrap
             .runtime()
-            .start_child_process(chain_command, &args, Some(&stdout_path), Some(&stderr_path))
+            .start_child_process(
+                chain_command,
+                &args,
+                &[],
+                Some(&stdout_path),
+                Some(&stderr_path),
+            )
             .await
             .map_err(Bootstrap::raise_error)?;
 

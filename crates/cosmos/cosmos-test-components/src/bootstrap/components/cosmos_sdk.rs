@@ -38,7 +38,7 @@ use crate::bootstrap::impls::initializers::update_genesis_config::UpdateCosmosGe
 use crate::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
-use crate::bootstrap::traits::fields::chain_store_dir::TestDirGetter;
+use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
@@ -106,7 +106,7 @@ where
         + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
         + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
         + ProvideChainConfigType<Bootstrap, ChainConfig = CosmosChainConfig>
-        + TestDirGetter<Bootstrap>
+        + ChainStoreDirGetter<Bootstrap>
         + ChainCommandPathGetter<Bootstrap>
         + RandomIdFlagGetter<Bootstrap>
         + CosmosGenesisConfigModifier<Bootstrap>

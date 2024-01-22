@@ -6,6 +6,8 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use eyre::Error;
 use hermes_celestia_test_components::bootstrap::impls::generator::wallet_config::GenerateCelestiaWalletConfig;
+use hermes_celestia_test_components::bootstrap::impls::initializers::init_bridge::CanInitCelestiaBridge;
+use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::BridgeStoreDirGetter;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -20,8 +22,8 @@ use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::CanBui
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::HasChainStoreDir;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::TestDirGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::HasRandomIdFlag;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
@@ -94,9 +96,15 @@ impl ProvideRuntime<CelestiaBootstrap> for CelestiaBootstrapComponents {
     }
 }
 
-impl TestDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+impl ChainStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn chain_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
         &bootstrap.cosmos_bootstrap.chain_store_dir()
+    }
+}
+
+impl BridgeStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn bridge_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
+        &bootstrap.bridge_store_dir
     }
 }
 
@@ -154,8 +162,14 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainConfig,
         wallets: Vec<CosmosTestWallet>,
-        chain_processes: Vec<Child>,
+        mut chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
+        let bridge_process = bootstrap
+            .init_celestia_bridge(&chain_home_dir, &chain_id, &chain_config)
+            .await?;
+
+        chain_processes.push(bridge_process);
+
         bootstrap
             .cosmos_bootstrap
             .build_chain_from_bootstrap_params(
