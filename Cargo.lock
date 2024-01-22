@@ -1553,6 +1553,7 @@ dependencies = [
  "hermes-async-runtime-components",
  "hermes-celestia-test-components",
  "hermes-cosmos-client-components",
+ "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
  "hermes-ibc-test-suite",

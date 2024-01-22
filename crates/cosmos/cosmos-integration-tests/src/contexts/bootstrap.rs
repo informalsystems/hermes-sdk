@@ -76,20 +76,20 @@ pub struct CosmosBootstrap {
 
 impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosBootstrap {}
 
-pub struct CosmosStdBootstrapComponents;
+pub struct CosmosBootstrapComponents;
 
 impl HasComponents for CosmosBootstrap {
-    type Components = CosmosStdBootstrapComponents;
+    type Components = CosmosBootstrapComponents;
 }
 
 delegate_all!(
     IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
-    CosmosStdBootstrapComponents,
+    CosmosBootstrapComponents,
 );
 
 delegate_components! {
-    CosmosStdBootstrapComponents {
+    CosmosBootstrapComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent:
@@ -104,17 +104,16 @@ delegate_components! {
     }
 }
 
-impl ProvideChainType<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl ProvideChainType<CosmosBootstrap> for CosmosBootstrapComponents {
     type Chain = CosmosChain;
 }
 
-impl ProvideChainDriverType<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl ProvideChainDriverType<CosmosBootstrap> for CosmosBootstrapComponents {
     type ChainDriver = CosmosChainDriver;
 }
 
 #[async_trait]
-impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComponents {
-    #[allow(unused_variables)]
+impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapComponents {
     async fn build_chain_from_bootstrap_params(
         bootstrap: &CosmosBootstrap,
         chain_home_dir: PathBuf,
@@ -226,40 +225,40 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
     }
 }
 
-impl ProvideRuntime<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl ProvideRuntime<CosmosBootstrap> for CosmosBootstrapComponents {
     fn runtime(bootstrap: &CosmosBootstrap) -> &HermesRuntime {
         &bootstrap.runtime
     }
 }
 
-impl TestDirGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl TestDirGetter<CosmosBootstrap> for CosmosBootstrapComponents {
     fn test_dir(bootstrap: &CosmosBootstrap) -> &PathBuf {
         &bootstrap.test_dir
     }
 }
 
-impl ChainCommandPathGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl ChainCommandPathGetter<CosmosBootstrap> for CosmosBootstrapComponents {
     fn chain_command_path(bootstrap: &CosmosBootstrap) -> &PathBuf {
         &bootstrap.chain_command_path
     }
 }
 
-impl RandomIdFlagGetter<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl RandomIdFlagGetter<CosmosBootstrap> for CosmosBootstrapComponents {
     fn should_randomize_identifiers(bootstrap: &CosmosBootstrap) -> bool {
         bootstrap.should_randomize_identifiers
     }
 }
 
-impl CosmosGenesisConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl CosmosGenesisConfigModifier<CosmosBootstrap> for CosmosBootstrapComponents {
     fn modify_genesis_config(
         bootstrap: &CosmosBootstrap,
         config: &mut serde_json::Value,
-    ) -> Result<(), <CosmosBootstrap as HasErrorType>::Error> {
+    ) -> Result<(), Error> {
         (bootstrap.genesis_config_modifier)(config)
     }
 }
 
-impl CometConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
+impl CometConfigModifier<CosmosBootstrap> for CosmosBootstrapComponents {
     fn modify_comet_config(
         bootstrap: &CosmosBootstrap,
         comet_config: &mut toml::Value,
@@ -268,7 +267,7 @@ impl CometConfigModifier<CosmosBootstrap> for CosmosStdBootstrapComponents {
     }
 }
 
-impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosStdBootstrapComponents {
+impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosBootstrapComponents {
     fn genesis_denom(
         bootstrap: &CosmosBootstrap,
         _label: DenomForStaking,
@@ -278,7 +277,7 @@ impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosStdBootstrap
     }
 }
 
-impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosStdBootstrapComponents {
+impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosBootstrapComponents {
     fn genesis_denom(
         bootstrap: &CosmosBootstrap,
         _label: DenomForTransfer,
