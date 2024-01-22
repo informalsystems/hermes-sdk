@@ -25,8 +25,8 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
     let cosmos_bootstrap = CosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
-        should_randomize_identifiers: true,
-        test_dir: "./test-data".into(),
+        should_randomize_identifiers: false,
+        test_dir: "./chain-data".into(),
         chain_command_path: "celestia-appd".into(),
         account_prefix: "celestia".into(),
         compat_mode: Some(CompatMode::V0_34),
@@ -39,7 +39,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
     let celestia_bootstrap = CelestiaAppBootstrap { cosmos_bootstrap };
 
     tokio_runtime.block_on(async move {
-        celestia_bootstrap.bootstrap_chain("testnet-1").await?;
+        celestia_bootstrap.bootstrap_chain("private").await?;
 
         <Result<(), Error>>::Ok(())
     })?;

@@ -23,6 +23,7 @@ use hermes_relayer_components_extra::runtime::traits::channel_once::{
 use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
 use hermes_test_components::runtime::impls::exec_command::ExecCommandWithNoEnv;
 use hermes_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
+use hermes_test_components::runtime::traits::create_dir::DirCreatorComponent;
 use hermes_test_components::runtime::traits::exec_command::{
     CommandExecutorComponent, CommandWithEnvsExecutorComponent,
 };
@@ -33,6 +34,7 @@ use hermes_test_components::runtime::traits::types::file_path::FilePathTypeCompo
 use hermes_test_components::runtime::traits::write_file::StringToFileWriterComponent;
 
 use crate::impls::child_process::StartTokioChildProcess;
+use crate::impls::create_dir::TokioCreateDir;
 use crate::impls::exec_command::TokioExecCommand;
 use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::read_file::TokioReadFileAsString;
@@ -75,6 +77,7 @@ delegate_components! {
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
         ChildProcessStarterComponent: StartTokioChildProcess,
         FileAsStringReaderComponent: TokioReadFileAsString,
+        DirCreatorComponent: TokioCreateDir,
         CommandWithEnvsExecutorComponent: TokioExecCommand,
         CommandExecutorComponent: ExecCommandWithNoEnv,
         StringToFileWriterComponent: TokioWriteStringToFile,

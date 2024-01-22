@@ -1,6 +1,4 @@
 use core::fmt::Display;
-use std::io::Error as IoError;
-use std::path::Path;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
@@ -17,6 +15,7 @@ use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
+use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
@@ -93,7 +92,6 @@ where
         + HasRuntime<Runtime = Runtime>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
-        + CanRaiseError<IoError>
         + CanRaiseError<KeyringError>
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
@@ -116,6 +114,7 @@ where
         + CanStartChildProcess
         + CanReadFileAsString
         + CanWriteStringToFile
+        + CanCreateDir
         + CanReserveTcpPort,
     Chain: HasChainIdType,
     ChainDriver: HasChainType<Chain = Chain>
@@ -124,6 +123,5 @@ where
         + HasAddressType
         + CanBuildChainIdFromString,
     Chain::ChainId: Display,
-    Runtime::FilePath: AsRef<Path>,
 {
 }
