@@ -1,3 +1,4 @@
+use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp_core::delegate_all;
@@ -47,6 +48,7 @@ use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tokio::process::Child;
+use tokio::time::sleep;
 
 pub struct CelestiaBootstrap {
     pub cosmos_bootstrap: CosmosBootstrap,
@@ -164,6 +166,8 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         wallets: Vec<CosmosTestWallet>,
         mut chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
+        sleep(Duration::from_secs(3)).await;
+
         let bridge_process = bootstrap
             .init_celestia_bridge(&chain_home_dir, &chain_id, &chain_config)
             .await?;
