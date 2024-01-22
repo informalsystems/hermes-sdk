@@ -1,4 +1,5 @@
 pub mod child_process;
+pub mod copy_file;
 pub mod create_dir;
 pub mod exec_command;
 pub mod read_file;

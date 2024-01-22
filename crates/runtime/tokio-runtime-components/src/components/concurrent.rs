@@ -17,6 +17,7 @@ use hermes_relayer_components_extra::runtime::traits::channel_once::{
 };
 use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
 use hermes_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
+use hermes_test_components::runtime::traits::copy_file::FileCopierComponent;
 use hermes_test_components::runtime::traits::create_dir::DirCreatorComponent;
 use hermes_test_components::runtime::traits::exec_command::{
     CommandExecutorComponent, CommandWithEnvsExecutorComponent,
@@ -57,6 +58,7 @@ delegate_components! {
             ChildProcessStarterComponent,
             FileAsStringReaderComponent,
             DirCreatorComponent,
+            FileCopierComponent,
             CommandExecutorComponent,
             CommandWithEnvsExecutorComponent,
             StringToFileWriterComponent,
