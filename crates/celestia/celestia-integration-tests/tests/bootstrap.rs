@@ -1,6 +1,7 @@
 #![recursion_limit = "256"]
 
 use std::sync::Arc;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use eyre::Error;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
@@ -10,7 +11,6 @@ use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use ibc_relayer::config::compat_mode::CompatMode;
-use rand::prelude::*;
 use tokio::runtime::Builder;
 
 #[test]
@@ -23,10 +23,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let store_postfix: u32 = {
-        let mut rng = thread_rng();
-        rng.gen()
-    };
+    let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
 
     let cosmos_bootstrap = CosmosBootstrap {
         runtime: runtime.clone(),
