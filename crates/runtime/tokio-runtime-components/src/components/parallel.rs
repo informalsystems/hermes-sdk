@@ -21,8 +21,11 @@ use hermes_relayer_components_extra::runtime::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
 use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
+use hermes_test_components::runtime::impls::exec_command::ExecCommandWithNoEnv;
 use hermes_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
-use hermes_test_components::runtime::traits::exec_command::CommandExecutorComponent;
+use hermes_test_components::runtime::traits::exec_command::{
+    CommandExecutorComponent, CommandWithEnvsExecutorComponent,
+};
 use hermes_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
 use hermes_test_components::runtime::traits::reserve_port::TcpPortReserverComponent;
 use hermes_test_components::runtime::traits::types::child_process::ChildProcessTypeComponent;
@@ -72,7 +75,8 @@ delegate_components! {
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
         ChildProcessStarterComponent: StartTokioChildProcess,
         FileAsStringReaderComponent: TokioReadFileAsString,
-        CommandExecutorComponent: TokioExecCommand,
+        CommandWithEnvsExecutorComponent: TokioExecCommand,
+        CommandExecutorComponent: ExecCommandWithNoEnv,
         StringToFileWriterComponent: TokioWriteStringToFile,
         TcpPortReserverComponent: TokioReserveTcpPort,
     }

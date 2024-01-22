@@ -1,13 +1,15 @@
 use cgp_core::prelude::*;
-use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
+use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
+    DenomForStaking, DenomForTransfer, HasGenesisDenom,
+};
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use hermes_cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
 use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
+use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 pub struct GenerateCelestiaWalletConfig;
 
