@@ -85,7 +85,7 @@ use crate::impls::denom::derive_ibc_denom;
 #[derive(Clone)]
 pub struct CosmosChainDriver {
     pub base_chain: CosmosChain,
-    pub full_node_process: Arc<Child>,
+    pub full_node_processes: Arc<Vec<Child>>,
     pub relayer_chain_config: ChainConfig,
     pub chain_config: CosmosChainConfig,
     pub genesis_config: CosmosGenesisConfig,

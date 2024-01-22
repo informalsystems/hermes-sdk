@@ -122,7 +122,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainConfig,
         wallets: Vec<CosmosTestWallet>,
-        chain_process: Child,
+        chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
         let relayer_wallet = wallets
             .iter()
@@ -214,7 +214,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosStdBootstrapComp
             chain_config,
             genesis_config,
             relayer_chain_config,
-            full_node_process: Arc::new(chain_process),
+            full_node_processes: Arc::new(chain_processes),
             staking_denom: bootstrap.staking_denom.clone(),
             transfer_denom: bootstrap.transfer_denom.clone(),
             relayer_wallet: relayer_wallet.clone(),
