@@ -50,10 +50,7 @@ where
                 Amount::new(2_000_000_000_000_000_000, denom_for_staking.clone()),
                 Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
             ],
-            validator_staked_amount: Some(Amount::new(
-                1_000_000_000_000_000_000,
-                denom_for_staking.clone(),
-            )),
+            validator_staked_amount: None,
         };
 
         let user1 = CosmosWalletConfig {

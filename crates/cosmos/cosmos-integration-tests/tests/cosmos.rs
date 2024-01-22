@@ -4,6 +4,8 @@ use core::time::Duration;
 use std::sync::Arc;
 
 use eyre::Error;
+use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
+use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
@@ -14,8 +16,6 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use tokio::runtime::Builder;
-use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 
 #[test]
 fn cosmos_integration_tests() -> Result<(), Error> {
