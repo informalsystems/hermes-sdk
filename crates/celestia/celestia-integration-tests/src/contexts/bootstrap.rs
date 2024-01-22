@@ -46,26 +46,27 @@ use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDri
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tokio::process::Child;
 
-pub struct CelestiaAppBootstrap {
+pub struct CelestiaBootstrap {
     pub cosmos_bootstrap: CosmosBootstrap,
+    pub bridge_store_dir: PathBuf,
 }
 
-impl CanUseLegacyCosmosSdkChainBootstrapper for CelestiaAppBootstrap {}
+impl CanUseLegacyCosmosSdkChainBootstrapper for CelestiaBootstrap {}
 
-pub struct CelestiaAppBootstrapComponents;
+pub struct CelestiaBootstrapComponents;
 
-impl HasComponents for CelestiaAppBootstrap {
-    type Components = CelestiaAppBootstrapComponents;
+impl HasComponents for CelestiaBootstrap {
+    type Components = CelestiaBootstrapComponents;
 }
 
 delegate_all!(
     IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
-    CelestiaAppBootstrapComponents,
+    CelestiaBootstrapComponents,
 );
 
 delegate_components! {
-    CelestiaAppBootstrapComponents {
+    CelestiaBootstrapComponents {
         WalletConfigGeneratorComponent: GenerateCelestiaWalletConfig,
         [
             ErrorTypeComponent,
@@ -79,62 +80,62 @@ delegate_components! {
     }
 }
 
-impl ProvideChainType<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
+impl ProvideChainType<CelestiaBootstrap> for CelestiaBootstrapComponents {
     type Chain = CosmosChain;
 }
 
-impl ProvideChainDriverType<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
+impl ProvideChainDriverType<CelestiaBootstrap> for CelestiaBootstrapComponents {
     type ChainDriver = CosmosChainDriver;
 }
 
-impl ProvideRuntime<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
-    fn runtime(bootstrap: &CelestiaAppBootstrap) -> &HermesRuntime {
+impl ProvideRuntime<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn runtime(bootstrap: &CelestiaBootstrap) -> &HermesRuntime {
         &bootstrap.cosmos_bootstrap.runtime()
     }
 }
 
-impl TestDirGetter<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
-    fn chain_store_dir(bootstrap: &CelestiaAppBootstrap) -> &PathBuf {
+impl TestDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn chain_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
         &bootstrap.cosmos_bootstrap.chain_store_dir()
     }
 }
 
-impl ChainCommandPathGetter<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
-    fn chain_command_path(bootstrap: &CelestiaAppBootstrap) -> &PathBuf {
+impl ChainCommandPathGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn chain_command_path(bootstrap: &CelestiaBootstrap) -> &PathBuf {
         &bootstrap.cosmos_bootstrap.chain_command_path()
     }
 }
 
-impl RandomIdFlagGetter<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
-    fn should_randomize_identifiers(bootstrap: &CelestiaAppBootstrap) -> bool {
+impl RandomIdFlagGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn should_randomize_identifiers(bootstrap: &CelestiaBootstrap) -> bool {
         bootstrap.cosmos_bootstrap.should_randomize_identifiers()
     }
 }
 
-impl CosmosGenesisConfigModifier<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
+impl CosmosGenesisConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn modify_genesis_config(
-        bootstrap: &CelestiaAppBootstrap,
+        bootstrap: &CelestiaBootstrap,
         config: &mut serde_json::Value,
     ) -> Result<(), Error> {
         bootstrap.cosmos_bootstrap.modify_genesis_config(config)
     }
 }
 
-impl CometConfigModifier<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
+impl CometConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn modify_comet_config(
-        bootstrap: &CelestiaAppBootstrap,
+        bootstrap: &CelestiaBootstrap,
         comet_config: &mut toml::Value,
     ) -> Result<(), Error> {
         bootstrap.cosmos_bootstrap.modify_comet_config(comet_config)
     }
 }
 
-impl<Label> GenesisDenomGetter<CelestiaAppBootstrap, Label> for CelestiaAppBootstrapComponents
+impl<Label> GenesisDenomGetter<CelestiaBootstrap, Label> for CelestiaBootstrapComponents
 where
     CosmosBootstrap: HasGenesisDenom<Label>,
 {
     fn genesis_denom(
-        bootstrap: &CelestiaAppBootstrap,
+        bootstrap: &CelestiaBootstrap,
         label: Label,
         genesis_config: &CosmosGenesisConfig,
     ) -> Denom {
@@ -145,9 +146,9 @@ where
 }
 
 #[async_trait]
-impl ChainFromBootstrapParamsBuilder<CelestiaAppBootstrap> for CelestiaAppBootstrapComponents {
+impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
     async fn build_chain_from_bootstrap_params(
-        bootstrap: &CelestiaAppBootstrap,
+        bootstrap: &CelestiaBootstrap,
         chain_home_dir: PathBuf,
         chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
