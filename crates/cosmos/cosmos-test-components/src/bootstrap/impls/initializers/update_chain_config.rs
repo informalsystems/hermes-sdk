@@ -23,6 +23,7 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainConfigType
         + CanModifyCometConfig
+        + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>,

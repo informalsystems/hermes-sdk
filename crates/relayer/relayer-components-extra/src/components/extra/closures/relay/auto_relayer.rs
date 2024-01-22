@@ -1,3 +1,4 @@
+use cgp_core::prelude::HasErrorType;
 use cgp_core::{CanRun, ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
@@ -26,12 +27,14 @@ where
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + UseExtraEventRelayer
         + HasComponents<Components = Components>,
-    SrcChain: HasRuntime
+    SrcChain: HasErrorType
+        + HasRuntime
         + HasChainId
         + HasLoggerType<Logger = Relay::Logger>
         + CanLogChainEvent
         + HasEventSubscription,
-    DstChain: HasRuntime
+    DstChain: HasErrorType
+        + HasRuntime
         + HasChainId
         + HasLoggerType<Logger = Relay::Logger>
         + CanLogChainEvent

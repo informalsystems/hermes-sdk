@@ -96,6 +96,7 @@ impl<Bootstrap, Runtime, Chain, ChainDriver, Components> UseCosmosSdkChainBootst
 where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
+        + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<IoError>
         + CanRaiseError<KeyringError>

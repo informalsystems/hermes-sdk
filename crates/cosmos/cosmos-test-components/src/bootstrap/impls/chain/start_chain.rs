@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
@@ -16,7 +17,8 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasErrorType
         + HasChainCommandPath
-        + HasChainConfigType<ChainConfig = CosmosChainConfig>,
+        + HasChainConfigType<ChainConfig = CosmosChainConfig>
+        + CanRaiseError<Runtime::Error>,
     Runtime: HasFilePathType + CanStartChildProcess,
 {
     async fn start_chain_full_nodes(

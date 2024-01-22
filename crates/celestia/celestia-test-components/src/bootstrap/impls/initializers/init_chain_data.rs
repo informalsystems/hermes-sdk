@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::impls::initializers::init_chain_data::InitCosmosChainData;
 use hermes_cosmos_test_components::bootstrap::traits::initializers::init_chain_data::ChainDataInitializer;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
@@ -12,7 +13,8 @@ pub struct InitCelestiaChainData;
 #[async_trait]
 impl<Bootstrap, Runtime, Chain> ChainDataInitializer<Bootstrap> for InitCelestiaChainData
 where
-    Bootstrap: HasChainType<Chain = Chain> + HasRuntime<Runtime = Runtime>,
+    Bootstrap:
+        HasChainType<Chain = Chain> + HasRuntime<Runtime = Runtime> + CanRaiseError<Runtime::Error>,
     Runtime: HasFilePathType + CanExecCommandWithEnvs,
     Chain: HasChainIdType,
     InitCosmosChainData: ChainDataInitializer<Bootstrap>,

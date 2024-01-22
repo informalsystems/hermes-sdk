@@ -1,4 +1,4 @@
-use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
+use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents, HasErrorType};
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
@@ -57,7 +57,8 @@ where
         + CanQueryConsensusState<DstChain>
         + CanQueryConsensusStateHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
-        + CanBuildUpdateClientMessage<DstChain>,
+        + CanBuildUpdateClientMessage<DstChain>
+        + CanRaiseError<<SrcChain::Runtime as HasErrorType>::Error>,
     DstChain: HasErrorType
         + HasRuntime
         + HasChainId
@@ -67,7 +68,8 @@ where
         + HasConsensusStateType<SrcChain>
         + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanBuildAckPacketPayload<SrcChain>
-        + CanBuildUpdateClientPayload<SrcChain>,
+        + CanBuildUpdateClientPayload<SrcChain>
+        + CanRaiseError<<DstChain::Runtime as HasErrorType>::Error>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     SrcChain::Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,

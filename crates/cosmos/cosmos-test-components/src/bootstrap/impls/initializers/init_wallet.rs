@@ -25,6 +25,7 @@ where
         + HasChainDriverType<ChainDriver = ChainDriver>
         + HasWalletHdPath
         + HasChainCommandPath
+        + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<json::Error>
         + CanRaiseError<KeyringError>,

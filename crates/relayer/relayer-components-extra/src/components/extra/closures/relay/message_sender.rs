@@ -1,4 +1,5 @@
-use cgp_core::{ErrorRaiser, HasComponents};
+use cgp_core::prelude::HasErrorType;
+use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
@@ -35,9 +36,11 @@ where
         + HasComponents<Components = Components>,
     SrcChain: HasLoggerType<Logger = Relay::Logger>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
-        + UseExtraChainComponentsForIbcMessageSender<DstChain>,
+        + UseExtraChainComponentsForIbcMessageSender<DstChain>
+        + CanRaiseError<<SrcChain::Runtime as HasErrorType>::Error>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
-        + UseExtraChainComponentsForIbcMessageSender<SrcChain>,
+        + UseExtraChainComponentsForIbcMessageSender<SrcChain>
+        + CanRaiseError<<DstChain::Runtime as HasErrorType>::Error>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
