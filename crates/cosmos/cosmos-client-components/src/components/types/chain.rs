@@ -1,13 +1,15 @@
 use alloc::sync::Arc;
 
-use cgp_core::Async;
+use cgp_core::{Async, HasErrorType};
 use hermes_relayer_components::chain::traits::types::block::{
     HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
-use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
+use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
-use hermes_relayer_components::chain::traits::types::height::{HasHeightType, ProvideHeightType};
+use hermes_relayer_components::chain::traits::types::height::{
+    GenesisHeightGetter, HasHeightType, HeightIncrementer, ProvideHeightType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::ProvideIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
@@ -34,6 +36,24 @@ where
     Chain: Async,
 {
     type Height = Height;
+}
+
+impl<Chain> HeightIncrementer<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasHeightType<Height = Height> + HasErrorType,
+{
+    fn increment_height(height: &Height) -> Result<Height, Chain::Error> {
+        Ok(height.increment())
+    }
+}
+
+impl<Chain> GenesisHeightGetter<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasHeightType<Height = Height> + HasChainId<ChainId = ChainId> + HasErrorType,
+{
+    fn genesis_height(chain: &Chain) -> Height {
+        Height::from_tm(1_i64.try_into().unwrap(), chain.chain_id())
+    }
 }
 
 impl<Chain> ProvideTimestampType<Chain> for ProvideCosmosChainTypes

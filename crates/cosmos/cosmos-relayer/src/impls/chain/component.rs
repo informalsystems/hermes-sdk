@@ -38,6 +38,8 @@ use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::GenesisHeightGetterComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
@@ -100,6 +102,8 @@ delegate_components! {
             ProvideTracingLogger,
         [
             HeightTypeComponent,
+            HeightIncrementerComponent,
+            GenesisHeightGetterComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,

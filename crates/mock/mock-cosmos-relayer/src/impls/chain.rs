@@ -52,7 +52,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    CanIncrementHeight, ProvideHeightType,
+    HeightIncrementer, ProvideHeightType
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, ProvideIbcChainTypes,
@@ -550,8 +550,10 @@ where
     }
 }
 
-impl<Chain: BasecoinEndpoint> CanIncrementHeight for MockCosmosContext<Chain> {
-    fn increment_height(height: &Self::Height) -> Result<Self::Height, Self::Error> {
+impl<Chain: BasecoinEndpoint> HeightIncrementer<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
+    fn increment_height(height: &Height) -> Result<Height, Error> {
         Ok(height.increment())
     }
 }

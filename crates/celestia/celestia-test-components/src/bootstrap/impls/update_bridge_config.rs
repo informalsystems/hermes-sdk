@@ -4,15 +4,13 @@ use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_relayer_components::chain::traits::components::block_querier::CanQueryBlock;
 use hermes_relayer_components::chain::traits::types::block::HasBlockHash;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::height::HasGenesisHeight;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::Height;
 use toml::Value;
 
 use crate::bootstrap::traits::init_bridge_config::BridgeConfigInitializer;
@@ -34,10 +32,7 @@ where
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<&'static str>,
     Runtime: CanReadFileAsString + CanWriteStringToFile,
-    Chain: HasChainId<ChainId = ChainId>
-        + HasHeightType<Height = Height>
-        + CanQueryBlock
-        + HasBlockHash,
+    Chain: HasChainId + HasGenesisHeight + CanQueryBlock + HasBlockHash,
     ChainDriver: HasChain<Chain = Chain> + HasRpcPort + HasGrpcPort,
     Bootstrap::BridgeConfig: From<Value>,
 {
@@ -51,10 +46,8 @@ where
         let chain_id = chain.chain_id();
         let chain_id_str = chain_id.to_string();
 
-        let genesis_height = Height::new(chain_id.version(), 1).map_err(Bootstrap::raise_error)?;
-
         let block = chain
-            .query_block(&genesis_height)
+            .query_block(&chain.genesis_height())
             .await
             .map_err(Bootstrap::raise_error)?;
 

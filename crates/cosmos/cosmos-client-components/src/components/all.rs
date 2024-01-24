@@ -32,7 +32,7 @@ use hermes_relayer_components::chain::traits::types::channel::InitChannelOptions
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -80,6 +80,8 @@ delegate_components! {
     CosmosClientComponents {
         [
             HeightTypeComponent,
+            HeightIncrementerComponent,
+            GenesisHeightGetterComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
