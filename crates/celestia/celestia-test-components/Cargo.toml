@@ -21,3 +21,5 @@ hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 tendermint                          = { workspace = true }
+
+toml            = { workspace = true }

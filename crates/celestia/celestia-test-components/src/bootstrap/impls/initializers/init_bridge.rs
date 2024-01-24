@@ -12,14 +12,17 @@ use hermes_test_components::runtime::traits::child_process::CanStartChildProcess
 use hermes_test_components::runtime::traits::copy_file::CanCopyFile;
 use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommandWithEnvs;
+use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
 };
 use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
 use tendermint::block::{Block, Id as BlockId};
+use toml::Value;
 
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 
@@ -44,7 +47,10 @@ where
         + HasBridgeStoreDir
         + CanRaiseError<Chain::Error>
         + CanRaiseError<Runtime::Error>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<toml::de::Error>
+        + CanRaiseError<toml::ser::Error>
+        + CanRaiseError<&'static str>,
     Chain: HasChainId<ChainId = ChainId>
         + HasHeightType<Height = Height>
         + CanQueryBlock<Block = (BlockId, Block)>,
@@ -54,7 +60,9 @@ where
         + CanCreateDir
         + CanCopyFile
         + CanStartChildProcess
-        + CanSleep,
+        + CanSleep
+        + CanReadFileAsString
+        + CanWriteStringToFile,
 {
     async fn init_celestia_bridge(
         &self,
@@ -110,7 +118,33 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        let _block_hash = block_id.hash;
+        let block_hash = block_id.hash;
+
+        let bridge_config_path = Runtime::join_file_path(
+            &bridge_home_dir,
+            &Runtime::file_path_from_string(&format!(
+                ".celestia-bridge-{chain_id_str}/config.toml"
+            )),
+        );
+
+        let bridge_config_str = runtime
+            .read_file_as_string(&bridge_config_path)
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        let mut bridge_config =
+            toml::from_str(&bridge_config_str).map_err(Bootstrap::raise_error)?;
+
+        set_trusted_hash(&mut bridge_config, &block_hash.to_string())
+            .map_err(Bootstrap::raise_error)?;
+
+        runtime
+            .write_string_to_file(
+                &bridge_config_path,
+                &toml::to_string_pretty(&bridge_config).map_err(Bootstrap::raise_error)?,
+            )
+            .await
+            .map_err(Bootstrap::raise_error)?;
 
         let stdout_path = Runtime::join_file_path(
             &bridge_home_dir,
@@ -122,29 +156,23 @@ where
             &Runtime::file_path_from_string("stderr.log"),
         );
 
-        let args = [
-            "bridge",
-            "start",
-            "--keyring.accname",
-            "bridge",
-            "--core.ip",
-            "127.0.0.1",
-            "--core.rpc.port",
-            &chain_config.rpc_port.to_string(),
-            "--core.grpc.port",
-            &chain_config.grpc_port.to_string(),
-            "--p2p.network",
-            &chain_id_str,
-        ];
-
-        println!("running celestia bridge with args: {:?}", args);
-
-        // runtime.sleep(Duration::from_secs(999999)).await;
-
         let child = runtime
             .start_child_process(
                 &Runtime::file_path_from_string("celestia"),
-                &args,
+                &[
+                    "bridge",
+                    "start",
+                    "--keyring.accname",
+                    "bridge",
+                    "--core.ip",
+                    "127.0.0.1",
+                    "--core.rpc.port",
+                    &chain_config.rpc_port.to_string(),
+                    "--core.grpc.port",
+                    &chain_config.grpc_port.to_string(),
+                    "--p2p.network",
+                    &chain_id_str,
+                ],
                 &[("HOME", &Runtime::file_path_to_string(&bridge_home_dir))],
                 Some(&stdout_path),
                 Some(&stderr_path),
@@ -154,4 +182,15 @@ where
 
         Ok(child)
     }
+}
+
+pub fn set_trusted_hash(config: &mut Value, trusted_hash: &str) -> Result<(), &'static str> {
+    config
+        .get_mut("Header")
+        .ok_or("expect header section")?
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("TrustedHash".to_string(), trusted_hash.into());
+
+    Ok(())
 }

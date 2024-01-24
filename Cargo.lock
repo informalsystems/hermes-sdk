@@ -1586,6 +1586,7 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "tendermint",
+ "toml 0.8.8",
 ]
 
 [[package]]

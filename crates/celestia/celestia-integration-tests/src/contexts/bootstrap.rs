@@ -188,6 +188,6 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
 
         chain_driver.chain_processes.push(bridge_process);
 
-        todo!()
+        Ok(chain_driver)
     }
 }
