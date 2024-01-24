@@ -7,14 +7,15 @@ use cgp_core::ErrorTypeComponent;
 use eyre::Error;
 use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapComponents as BaseCelestiaBootstrapComponents;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
-use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::BridgeStoreDirGetter;
+use hermes_celestia_test_components::bootstrap::traits::build_bridge_driver::BridgeDriverBuilder;
 use hermes_celestia_test_components::bootstrap::traits::import_bridge_key::BridgeKeyImporterComponent;
 use hermes_celestia_test_components::bootstrap::traits::init_bridge_config::BridgeConfigInitializerComponent;
 use hermes_celestia_test_components::bootstrap::traits::init_bridge_data::BridgeDataInitializerComponent;
 use hermes_celestia_test_components::bootstrap::traits::start_bridge::BridgeStarterComponent;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_config::BridgeConfigTypeComponent;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
+use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -175,6 +176,19 @@ where
     }
 }
 
+impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    async fn build_bridge_driver(
+        _bootstrap: &CelestiaBootstrap,
+        bridge_config: CelestiaBridgeConfig,
+        bridge_process: Child,
+    ) -> Result<CelestiaBridgeDriver, Error> {
+        Ok(CelestiaBridgeDriver {
+            bridge_config,
+            bridge_process,
+        })
+    }
+}
+
 #[async_trait]
 impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
     async fn build_chain_from_bootstrap_params(
@@ -186,8 +200,7 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         wallets: Vec<CosmosTestWallet>,
         chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
-        // sleep(Duration::from_secs(3)).await;
-        let mut chain_driver = bootstrap
+        let chain_driver = bootstrap
             .cosmos_bootstrap
             .build_chain_from_bootstrap_params(
                 chain_home_dir,
@@ -198,10 +211,6 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
                 chain_processes,
             )
             .await?;
-
-        let bridge_process = bootstrap.bootstrap_bridge(&chain_driver).await?;
-
-        chain_driver.chain_processes.push(bridge_process);
 
         Ok(chain_driver)
     }

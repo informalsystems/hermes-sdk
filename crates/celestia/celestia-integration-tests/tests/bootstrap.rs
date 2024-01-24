@@ -5,6 +5,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use eyre::Error;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
+use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
@@ -45,7 +46,9 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
     };
 
     tokio_runtime.block_on(async move {
-        celestia_bootstrap.bootstrap_chain("private").await?;
+        let chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
+
+        let _bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
