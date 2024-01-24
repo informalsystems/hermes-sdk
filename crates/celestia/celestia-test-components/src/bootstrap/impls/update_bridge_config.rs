@@ -1,4 +1,6 @@
 use cgp_core::CanRaiseError;
+use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
+use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_relayer_components::chain::traits::components::block_querier::CanQueryBlock;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -35,7 +37,7 @@ where
     Chain: HasChainId<ChainId = ChainId>
         + HasHeightType<Height = Height>
         + CanQueryBlock<Block = (BlockId, Block)>,
-    ChainDriver: HasChain<Chain = Chain>,
+    ChainDriver: HasChain<Chain = Chain> + HasRpcPort + HasGrpcPort,
     Bootstrap::BridgeConfig: From<Value>,
 {
     async fn init_bridge_config(
@@ -75,6 +77,14 @@ where
         set_trusted_hash(&mut bridge_config, &block_hash.to_string())
             .map_err(Bootstrap::raise_error)?;
 
+        set_chain_ip(&mut bridge_config, "127.0.0.1").map_err(Bootstrap::raise_error)?;
+
+        set_chain_rpc_port(&mut bridge_config, chain_driver.rpc_port())
+            .map_err(Bootstrap::raise_error)?;
+
+        set_chain_grpc_port(&mut bridge_config, chain_driver.grpc_port())
+            .map_err(Bootstrap::raise_error)?;
+
         runtime
             .write_string_to_file(
                 &bridge_config_path,
@@ -94,6 +104,39 @@ pub fn set_trusted_hash(config: &mut Value, trusted_hash: &str) -> Result<(), &'
         .as_table_mut()
         .ok_or("expect object")?
         .insert("TrustedHash".to_string(), trusted_hash.into());
+
+    Ok(())
+}
+
+pub fn set_chain_rpc_port(config: &mut Value, rpc_port: u16) -> Result<(), &'static str> {
+    config
+        .get_mut("Core")
+        .ok_or("expect header section")?
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("RPCPort".to_string(), rpc_port.to_string().into());
+
+    Ok(())
+}
+
+pub fn set_chain_grpc_port(config: &mut Value, grpc_port: u16) -> Result<(), &'static str> {
+    config
+        .get_mut("Core")
+        .ok_or("expect core section")?
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("GRPCPort".to_string(), grpc_port.to_string().into());
+
+    Ok(())
+}
+
+pub fn set_chain_ip(config: &mut Value, ip: &str) -> Result<(), &'static str> {
+    config
+        .get_mut("Core")
+        .ok_or("expect core section")?
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("GRPCPort".to_string(), ip.to_string().into());
 
     Ok(())
 }
