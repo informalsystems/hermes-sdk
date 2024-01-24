@@ -128,21 +128,20 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
             .find(|wallet| wallet.id.starts_with("relayer"))
             .ok_or_else(|| {
                 eyre!("expect relayer wallet to be provided in the list of test wallets")
-            })?;
+            })?
+            .clone();
 
         let user_wallet_a = wallets
             .iter()
             .find(|wallet| wallet.id.starts_with("user1"))
-            .ok_or_else(|| {
-                eyre!("expect user1 wallet to be provided in the list of test wallets")
-            })?;
+            .ok_or_else(|| eyre!("expect user1 wallet to be provided in the list of test wallets"))?
+            .clone();
 
         let user_wallet_b = wallets
             .iter()
             .find(|wallet| wallet.id.starts_with("user2"))
-            .ok_or_else(|| {
-                eyre!("expect user2 wallet to be provided in the list of test wallets")
-            })?;
+            .ok_or_else(|| eyre!("expect user2 wallet to be provided in the list of test wallets"))?
+            .clone();
 
         let relayer_chain_config = ChainConfig {
             id: chain_id.clone(),
@@ -210,6 +209,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
 
         let test_chain = CosmosChainDriver {
             base_chain,
+            chain_home_dir,
             chain_config,
             genesis_config,
             relayer_chain_config,
@@ -219,6 +219,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
             relayer_wallet: relayer_wallet.clone(),
             user_wallet_a: user_wallet_a.clone(),
             user_wallet_b: user_wallet_b.clone(),
+            wallets,
         };
 
         Ok(test_chain)

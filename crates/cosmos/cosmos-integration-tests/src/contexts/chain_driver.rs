@@ -1,4 +1,5 @@
 use core::time::Duration;
+use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
@@ -38,6 +39,7 @@ use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromSt
 use hermes_test_components::chain_driver::traits::fields::amount::AmountMethodsComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::IbcTransferredAmountConverter;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
+use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;
 use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
 use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
 use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
@@ -83,6 +85,7 @@ use crate::impls::denom::derive_ibc_denom;
 */
 pub struct CosmosChainDriver {
     pub base_chain: CosmosChain,
+    pub chain_home_dir: PathBuf,
     pub chain_processes: Vec<Child>,
     pub relayer_chain_config: ChainConfig,
     pub chain_config: CosmosChainConfig,
@@ -92,6 +95,7 @@ pub struct CosmosChainDriver {
     pub relayer_wallet: CosmosTestWallet,
     pub user_wallet_a: CosmosTestWallet,
     pub user_wallet_b: CosmosTestWallet,
+    pub wallets: Vec<CosmosTestWallet>,
 }
 
 pub struct CosmosChainDriverComponents;
@@ -174,6 +178,12 @@ impl TxContextGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 impl ProvideRuntime<CosmosChainDriver> for CosmosChainDriverComponents {
     fn runtime(chain_driver: &CosmosChainDriver) -> &HermesRuntime {
         &chain_driver.base_chain.runtime
+    }
+}
+
+impl ChainHomeDirGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn chain_home_dir(chain_driver: &CosmosChainDriver) -> &PathBuf {
+        &chain_driver.chain_home_dir
     }
 }
 
