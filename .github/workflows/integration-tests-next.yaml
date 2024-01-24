@@ -39,7 +39,7 @@ jobs:
         run: |
             nix shell .#gaia .#celestia-app -c \
               cargo nextest run -p hermes-cosmos-integration-tests \
-              --nocapture --test-threads=2
+              --test-threads=2
 
   celestia-integration-tests:
     runs-on: ubuntu-20.04
@@ -69,5 +69,6 @@ jobs:
           RUST_BACKTRACE: 1
         run: |
             nix shell .#gaia .#celestia-app .#celestia-node -c \
-              cargo nextest run -p hermes-celestia-integration-test -- \
-              --nocapture --test-threads=2
+              cargo nextest run -p hermes-celestia-integration-tests \
+              --test-threads=2 \
+              --failure-output final

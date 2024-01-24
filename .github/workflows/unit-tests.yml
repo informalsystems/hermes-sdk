@@ -86,4 +86,4 @@ jobs:
               --exclude ibc-integration-test \
               --exclude hermes-cosmos-integration-tests \
               --exclude hermes-celestia-integration-tests \
-              --no-capture
+              --failure-output final
