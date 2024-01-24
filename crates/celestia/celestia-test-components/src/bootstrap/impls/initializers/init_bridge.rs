@@ -10,8 +10,6 @@ use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
 use hermes_test_components::runtime::traits::copy_file::CanCopyFile;
-use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
-use hermes_test_components::runtime::traits::exec_command::CanExecCommandWithEnvs;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
@@ -25,6 +23,7 @@ use tendermint::block::{Block, Id as BlockId};
 use toml::Value;
 
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
+use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
 
 #[async_trait]
 pub trait CanInitCelestiaBridge: HasChainType + HasRuntime + HasErrorType
@@ -45,6 +44,7 @@ where
     Bootstrap: HasChainType<Chain = Chain>
         + HasRuntime<Runtime = Runtime>
         + HasBridgeStoreDir
+        + CanInitBridgeData
         + CanRaiseError<Chain::Error>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<Ics02Error>
@@ -56,8 +56,6 @@ where
         + CanQueryBlock<Block = (BlockId, Block)>,
     Runtime: HasFilePathType
         + HasChildProcessType
-        + CanExecCommandWithEnvs
-        + CanCreateDir
         + CanCopyFile
         + CanStartChildProcess
         + CanSleep
@@ -71,7 +69,8 @@ where
         chain_config: &CosmosChainConfig,
     ) -> Result<Runtime::ChildProcess, Self::Error> {
         let runtime = self.runtime();
-        let chain_id_str = chain.chain_id().to_string();
+        let chain_id = chain.chain_id();
+        let chain_id_str = chain_id.to_string();
         let bridge_store_dir = self.bridge_store_dir();
 
         let bridge_home_dir = Runtime::join_file_path(
@@ -79,19 +78,7 @@ where
             &Runtime::file_path_from_string(&chain_id_str),
         );
 
-        runtime
-            .create_dir(&bridge_home_dir)
-            .await
-            .map_err(Bootstrap::raise_error)?;
-
-        runtime
-            .exec_command_with_envs(
-                &Runtime::file_path_from_string("celestia"),
-                &["bridge", "init", "--p2p.network", &chain_id_str],
-                &[("HOME", &Runtime::file_path_to_string(&bridge_home_dir))],
-            )
-            .await
-            .map_err(Bootstrap::raise_error)?;
+        self.init_bridge_data(&bridge_home_dir, chain_id).await?;
 
         let bridge_key_source_path = Runtime::join_file_path(
             chain_home_dir,

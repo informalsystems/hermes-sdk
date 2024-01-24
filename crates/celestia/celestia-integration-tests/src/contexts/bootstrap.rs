@@ -7,7 +7,9 @@ use cgp_core::ErrorTypeComponent;
 use eyre::Error;
 use hermes_celestia_test_components::bootstrap::impls::generator::wallet_config::GenerateCelestiaWalletConfig;
 use hermes_celestia_test_components::bootstrap::impls::initializers::init_bridge::CanInitCelestiaBridge;
+use hermes_celestia_test_components::bootstrap::impls::initializers::init_bridge_data::InitCelestiaBridgeData;
 use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::BridgeStoreDirGetter;
+use hermes_celestia_test_components::bootstrap::traits::init_bridge_data::BridgeDataInitializerComponent;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -79,6 +81,8 @@ delegate_components! {
             WalletConfigTypeComponent,
             WalletConfigFieldsComponent,
         ]: CosmosBootstrapComponents,
+        BridgeDataInitializerComponent:
+            InitCelestiaBridgeData,
     }
 }
 

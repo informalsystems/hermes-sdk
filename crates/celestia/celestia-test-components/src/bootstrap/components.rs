@@ -7,7 +7,7 @@ use hermes_cosmos_test_components::bootstrap::traits::initializers::init_chain_d
 use hermes_cosmos_test_components::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializerComponent;
 
 use crate::bootstrap::impls::generator::wallet_config::GenerateCelestiaWalletConfig;
-use crate::bootstrap::impls::initializers::init_chain_data::InitCelestiaChainData;
+use crate::bootstrap::impls::initializers::init_bridge_data::InitCelestiaBridgeData;
 
 pub struct CelestiaBootstrapComponents;
 
@@ -16,7 +16,7 @@ delegate_components! {
     #[mark_delegate(DelegatesToLegacyToCosmosSdkBootstrapComponents)]
     CelestiaBootstrapComponents {
         ChainDataInitializerComponent:
-            InitCelestiaChainData,
+            InitCelestiaBridgeData,
         WalletConfigGeneratorComponent:
             GenerateCelestiaWalletConfig,
         [
