@@ -14,6 +14,7 @@ use hermes_celestia_test_components::bootstrap::traits::init_bridge_config::Brid
 use hermes_celestia_test_components::bootstrap::traits::init_bridge_data::BridgeDataInitializerComponent;
 use hermes_celestia_test_components::bootstrap::traits::start_bridge::BridgeStarterComponent;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_config::BridgeConfigTypeComponent;
+use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -53,6 +54,8 @@ use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tokio::process::Child;
+
+use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 
 pub struct CelestiaBootstrap {
     pub cosmos_bootstrap: CosmosBootstrap,
@@ -103,6 +106,10 @@ impl ProvideChainType<CelestiaBootstrap> for CelestiaBootstrapComponents {
 
 impl ProvideChainDriverType<CelestiaBootstrap> for CelestiaBootstrapComponents {
     type ChainDriver = CosmosChainDriver;
+}
+
+impl ProvideBridgeDriverType<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    type BridgeDriver = CelestiaBridgeDriver;
 }
 
 impl ProvideRuntime<CelestiaBootstrap> for CelestiaBootstrapComponents {
