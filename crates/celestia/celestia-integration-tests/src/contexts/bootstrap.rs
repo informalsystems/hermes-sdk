@@ -172,26 +172,19 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
         // sleep(Duration::from_secs(3)).await;
-        let mut chain_driver = {
-            let chain_home_dir = chain_home_dir.clone();
-            let chain_config = chain_config.clone();
-
-            bootstrap
-                .cosmos_bootstrap
-                .build_chain_from_bootstrap_params(
-                    chain_home_dir,
-                    chain_id,
-                    genesis_config,
-                    chain_config,
-                    wallets,
-                    chain_processes,
-                )
-                .await?
-        };
-
-        let bridge_process = bootstrap
-            .bootstrap_bridge(&chain_driver, &chain_config)
+        let mut chain_driver = bootstrap
+            .cosmos_bootstrap
+            .build_chain_from_bootstrap_params(
+                chain_home_dir,
+                chain_id,
+                genesis_config,
+                chain_config,
+                wallets,
+                chain_processes,
+            )
             .await?;
+
+        let bridge_process = bootstrap.bootstrap_bridge(&chain_driver).await?;
 
         chain_driver.chain_processes.push(bridge_process);
 

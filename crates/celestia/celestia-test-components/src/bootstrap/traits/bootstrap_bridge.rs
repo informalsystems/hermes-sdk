@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
@@ -16,6 +15,5 @@ where
     async fn bootstrap_bridge(
         &self,
         chain_driver: &Self::ChainDriver,
-        chain_config: &CosmosChainConfig,
     ) -> Result<ChildProcess<Self::Runtime>, Self::Error>;
 }

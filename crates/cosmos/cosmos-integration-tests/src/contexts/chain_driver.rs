@@ -20,6 +20,8 @@ use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128Amoun
 use hermes_cosmos_test_components::chain_driver::impls::chain_id::BuildCosmosChainIdFromString;
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
+use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
+use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
@@ -184,6 +186,18 @@ impl ProvideRuntime<CosmosChainDriver> for CosmosChainDriverComponents {
 impl ChainHomeDirGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn chain_home_dir(chain_driver: &CosmosChainDriver) -> &PathBuf {
         &chain_driver.chain_home_dir
+    }
+}
+
+impl RpcPortGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn rpc_port(chain_driver: &CosmosChainDriver) -> u16 {
+        chain_driver.chain_config.rpc_port
+    }
+}
+
+impl GrpcPortGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn grpc_port(chain_driver: &CosmosChainDriver) -> u16 {
+        chain_driver.chain_config.grpc_port
     }
 }
 

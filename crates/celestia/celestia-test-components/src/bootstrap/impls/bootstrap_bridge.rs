@@ -1,5 +1,6 @@
 use cgp_core::CanRaiseError;
-use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
+use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
+use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_relayer_components::chain::traits::components::block_querier::CanQueryBlock;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -40,7 +41,11 @@ where
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<&'static str>,
-    ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasChainHomeDir,
+    ChainDriver: HasChain<Chain = Chain>
+        + HasRuntime<Runtime = Runtime>
+        + HasChainHomeDir
+        + HasRpcPort
+        + HasGrpcPort,
     Chain: HasChainId<ChainId = ChainId>
         + HasHeightType<Height = Height>
         + CanQueryBlock<Block = (BlockId, Block)>,
@@ -55,11 +60,13 @@ where
     async fn bootstrap_bridge(
         boostrap: &Bootstrap,
         chain_driver: &ChainDriver,
-        chain_config: &CosmosChainConfig,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
         let runtime = boostrap.runtime();
         let chain = chain_driver.chain();
+
         let chain_home_dir = chain_driver.chain_home_dir();
+        let rpc_port = chain_driver.rpc_port();
+        let grpc_port = chain_driver.grpc_port();
 
         let chain_id = chain.chain_id();
         let chain_id_str = chain_id.to_string();
@@ -148,9 +155,9 @@ where
                     "--core.ip",
                     "127.0.0.1",
                     "--core.rpc.port",
-                    &chain_config.rpc_port.to_string(),
+                    &rpc_port.to_string(),
                     "--core.grpc.port",
-                    &chain_config.grpc_port.to_string(),
+                    &grpc_port.to_string(),
                     "--p2p.network",
                     &chain_id_str,
                 ],
