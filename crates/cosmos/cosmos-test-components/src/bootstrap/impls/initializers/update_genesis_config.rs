@@ -20,6 +20,7 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasGenesisConfigType
         + CanModifyCosmosGenesisConfig
+        + CanRaiseError<Runtime::Error>
         + CanRaiseError<JsonError>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile,
     Bootstrap::GenesisConfig: From<CosmosGenesisConfig>,

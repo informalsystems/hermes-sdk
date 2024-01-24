@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
 use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
@@ -22,7 +23,7 @@ impl<Bootstrap, Runtime, ChainDriver> GenesisAccountAdder<Bootstrap> for AddCosm
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainDriverType<ChainDriver = ChainDriver>
-        + HasErrorType
+        + CanRaiseError<Runtime::Error>
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
     ChainDriver: HasAmountType + HasAddressType,

@@ -12,6 +12,8 @@ members = [
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
+    "crates/celestia/celestia-test-components",
+    "crates/celestia/celestia-integration-tests",
     "crates/solomachine/solomachine-relayer",
     "crates/mock/mock-relayer",
     "crates/mock/mock-cosmos-relayer",
@@ -65,8 +67,10 @@ flex-error          = { version = "0.4.4", default-features = false }
 hermes-relayer-components           = { version = "0.1.0", path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { version = "0.1.0", path = "./crates/relayer/relayer-components-extra" }
 hermes-cosmos-client-components     = { version = "0.1.0", path = "./crates/cosmos/cosmos-client-components" }
-hermes-cosmos-test-components       = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-relayer               = { version = "0.1.0", path = "./crates/cosmos/cosmos-relayer" }
+hermes-cosmos-test-components       = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
+hermes-cosmos-integration-tests     = { version = "0.1.0", path = "./crates/cosmos/cosmos-integration-tests" }
+hermes-celestia-test-components     = { version = "0.1.0", path = "./crates/celestia/celestia-test-components" }
 hermes-async-runtime-components     = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }

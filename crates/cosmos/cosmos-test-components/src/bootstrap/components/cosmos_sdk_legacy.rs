@@ -1,6 +1,4 @@
 use core::fmt::Display;
-use std::io::Error as IoError;
-use std::path::Path;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
@@ -17,6 +15,7 @@ use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
+use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
@@ -30,9 +29,9 @@ use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmos
 use crate::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
+use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
-use crate::bootstrap::traits::fields::test_dir::TestDirGetter;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
 use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
 use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderComponent;
@@ -91,8 +90,8 @@ impl<Bootstrap, Runtime, Chain, ChainDriver, Components> UseLegacyCosmosSdkChain
 where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
+        + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
-        + CanRaiseError<IoError>
         + CanRaiseError<KeyringError>
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
@@ -102,7 +101,7 @@ where
         + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
         + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
         + ProvideChainConfigType<Bootstrap, ChainConfig = CosmosChainConfig>
-        + TestDirGetter<Bootstrap>
+        + ChainStoreDirGetter<Bootstrap>
         + ChainCommandPathGetter<Bootstrap>
         + RandomIdFlagGetter<Bootstrap>
         + CosmosGenesisConfigModifier<Bootstrap>
@@ -115,6 +114,7 @@ where
         + CanStartChildProcess
         + CanReadFileAsString
         + CanWriteStringToFile
+        + CanCreateDir
         + CanReserveTcpPort,
     Chain: HasChainIdType,
     ChainDriver: HasChainType<Chain = Chain>
@@ -123,6 +123,5 @@ where
         + HasAddressType
         + CanBuildChainIdFromString,
     Chain::ChainId: Display,
-    Runtime::FilePath: AsRef<Path>,
 {
 }

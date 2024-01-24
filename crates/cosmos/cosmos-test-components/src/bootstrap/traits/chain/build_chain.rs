@@ -29,6 +29,6 @@ where
         genesis_config: Self::GenesisConfig,
         chain_config: Self::ChainConfig,
         wallets: Vec<Wallet<Self::ChainDriver>>,
-        chain_process: ChildProcess<Self::Runtime>,
+        chain_processes: Vec<ChildProcess<Self::Runtime>>,
     ) -> Result<Self::ChainDriver, Self::Error>;
 }

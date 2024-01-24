@@ -89,8 +89,8 @@ where
         + HasRelayChains<SrcChain = ChainB, DstChain = ChainA>
         + UseBatchMessageWorkerSpawner
         + CanRaiseRelayChainErrors,
-    ChainA: Clone + HasRuntime + HasChainId + HasIbcChainTypes<ChainB>,
-    ChainB: Clone + HasRuntime + HasChainId + HasIbcChainTypes<ChainA>,
+    ChainA: Clone + HasErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainB>,
+    ChainB: Clone + HasErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainA>,
     Error: Async,
     ChainA::ChainId: Ord + Clone,
     ChainB::ChainId: Ord + Clone,

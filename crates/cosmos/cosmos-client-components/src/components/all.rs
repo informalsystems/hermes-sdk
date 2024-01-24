@@ -1,6 +1,7 @@
 use cgp_core::prelude::delegate_components;
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::components::block_querier::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
@@ -25,12 +26,13 @@ use hermes_relayer_components::chain::traits::components::unreceived_packet_sequ
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
+use hermes_relayer_components::chain::traits::types::block::{BlockHashComponent, BlockTypeComponent};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -49,6 +51,7 @@ use crate::components::init_channel_options::ProvideCosmosInitChannelOptionsType
 use crate::components::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::components::packet_fields::CosmosPacketFieldReader;
 use crate::components::packet_from_ack::BuildCosmosPacketFromWriteAck;
+use crate::components::query_block::QueryCometBlock;
 use crate::components::query_chain_id::QueryChainIdWithChainHandle;
 use crate::components::query_chain_status::QueryChainStatusWithChainHandle;
 use crate::components::query_client_state::QueryCosmosClientStateFromChainHandle;
@@ -73,9 +76,12 @@ use crate::components::update_client_payload::BuildUpdateClientPayloadWithChainH
 pub struct CosmosClientComponents;
 
 delegate_components! {
+    #[mark_component(IsCosmosClientComponents)]
     CosmosClientComponents {
         [
             HeightTypeComponent,
+            HeightIncrementerComponent,
+            GenesisHeightGetterComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
@@ -83,6 +89,8 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeProviderComponent,
+            BlockTypeComponent,
+            BlockHashComponent,
         ]:
             ProvideCosmosChainTypes,
         MessageSenderComponent:
@@ -147,5 +155,7 @@ delegate_components! {
             ProvideCosmosInitConnectionOptionsType,
         InitChannelOptionsTypeComponent:
             ProvideCosmosInitChannelOptionsType,
+        BlockQuerierComponent:
+            QueryCometBlock,
     }
 }

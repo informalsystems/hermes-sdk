@@ -32,9 +32,8 @@ use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, P
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
-use hermes_relayer_components::chain::traits::types::height::{
-    CanIncrementHeight, ProvideHeightType,
-};
+use hermes_relayer_components::chain::traits::types::height::HeightIncrementer;
+use hermes_relayer_components::chain::traits::types::height::ProvideHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, ProvideIbcChainTypes,
 };
@@ -242,8 +241,8 @@ impl CanLogChainEvent for MockChainContext {
     }
 }
 
-impl CanIncrementHeight for MockChainContext {
-    fn increment_height(height: &Self::Height) -> Result<Self::Height, Self::Error> {
+impl HeightIncrementer<MockChainContext> for MockChainComponents {
+    fn increment_height(height: &MockHeight) -> Result<MockHeight, Error> {
         Ok(height.increment())
     }
 }

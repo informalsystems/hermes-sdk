@@ -39,11 +39,13 @@ where
         runtime: &Runtime,
         command_path: &Runtime::FilePath,
         command_args: &[&str],
+        envs: &[(&str, &str)],
         stdout_path: Option<&Runtime::FilePath>,
         stderr_path: Option<&Runtime::FilePath>,
     ) -> Result<Runtime::ChildProcess, Runtime::Error> {
         let mut child_process = Command::new(command_path.as_ref())
             .args(command_args)
+            .envs(Vec::from(envs))
             .stdin(Stdio::null())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())

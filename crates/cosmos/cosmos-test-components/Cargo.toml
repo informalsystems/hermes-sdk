@@ -22,7 +22,6 @@ hermes-test-components              = { workspace = true }
 
 itertools       = { workspace = true }
 serde_json      = { workspace = true }
-tokio           = { workspace = true }
 toml            = { workspace = true }
 
 hdpath      = "0.6.3"

@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
@@ -23,7 +24,7 @@ impl<Bootstrap, Runtime, Chain, ChainDriver> GenesisValidatorAdder<Bootstrap>
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainDriverType<Chain = Chain, ChainDriver = ChainDriver>
-        + HasErrorType
+        + CanRaiseError<Runtime::Error>
         + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
     Chain: HasChainIdType,

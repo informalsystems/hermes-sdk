@@ -1,4 +1,4 @@
-use cgp_core::{CanRun, ErrorRaiser, HasComponents};
+use cgp_core::{CanRun, ErrorRaiser, HasComponents, HasErrorType};
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
@@ -20,8 +20,8 @@ where
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + UseDefaultEventRelayer
         + HasComponents<Components = Components>,
-    SrcChain: HasEventSubscription,
-    DstChain: HasEventSubscription,
+    SrcChain: HasEventSubscription + HasErrorType,
+    DstChain: HasEventSubscription + HasErrorType,
     Relay::Runtime: CanRunConcurrentTasks,
     SrcChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,
     DstChain::Runtime: HasSubscription + CanRunConcurrentTasks + CanMapStream,

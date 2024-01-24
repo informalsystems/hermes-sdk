@@ -41,8 +41,8 @@ where
         + CanSpawnBatchMessageWorker<SourceTarget>
         + CanSpawnBatchMessageWorker<DestinationTarget>
         + CanRaiseRelayChainErrors,
-    SrcChain: HasIbcChainTypes<DstChain>,
-    DstChain: HasIbcChainTypes<SrcChain>,
+    SrcChain: HasIbcChainTypes<DstChain> + HasErrorType,
+    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
     SrcChain: HasRuntime<Runtime = SrcRuntime> + HasChainId,
     DstChain: HasRuntime<Runtime = DstRuntime> + HasChainId,
     SrcRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,

@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
@@ -11,7 +12,7 @@ pub struct CollectCosmosGentxs;
 #[async_trait]
 impl<Bootstrap, Runtime> GenesisTransactionsCollector<Bootstrap> for CollectCosmosGentxs
 where
-    Bootstrap: HasRuntime<Runtime = Runtime> + HasErrorType + HasChainCommandPath,
+    Bootstrap: HasRuntime<Runtime = Runtime> + CanRaiseError<Runtime::Error> + HasChainCommandPath,
     Runtime: HasFilePathType + CanExecCommand,
 {
     async fn collect_genesis_transactions(
