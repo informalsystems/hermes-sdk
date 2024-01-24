@@ -26,7 +26,7 @@ where
     ) -> Result<(), Bootstrap::Error> {
         bootstrap
             .runtime()
-            .create_dir(&bridge_home_dir)
+            .create_dir(bridge_home_dir)
             .await
             .map_err(Bootstrap::raise_error)?;
 
@@ -35,7 +35,7 @@ where
             .exec_command_with_envs(
                 &Runtime::file_path_from_string("celestia"),
                 &["bridge", "init", "--p2p.network", &chain_id.to_string()],
-                &[("HOME", &Runtime::file_path_to_string(&bridge_home_dir))],
+                &[("HOME", &Runtime::file_path_to_string(bridge_home_dir))],
             )
             .await
             .map_err(Bootstrap::raise_error)?;

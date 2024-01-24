@@ -35,7 +35,7 @@ where
         );
 
         let bridge_key_destination_path = Runtime::join_file_path(
-            &bridge_home_dir,
+            bridge_home_dir,
             &Runtime::file_path_from_string(&format!(
                 ".celestia-bridge-{chain_id_str}/keys/keyring-test/bridge.info"
             )),

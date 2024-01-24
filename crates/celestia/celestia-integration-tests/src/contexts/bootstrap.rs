@@ -105,13 +105,13 @@ impl ProvideChainDriverType<CelestiaBootstrap> for CelestiaBootstrapComponents {
 
 impl ProvideRuntime<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn runtime(bootstrap: &CelestiaBootstrap) -> &HermesRuntime {
-        &bootstrap.cosmos_bootstrap.runtime()
+        bootstrap.cosmos_bootstrap.runtime()
     }
 }
 
 impl ChainStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn chain_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
-        &bootstrap.cosmos_bootstrap.chain_store_dir()
+        bootstrap.cosmos_bootstrap.chain_store_dir()
     }
 }
 
@@ -123,7 +123,7 @@ impl BridgeStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
 
 impl ChainCommandPathGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn chain_command_path(bootstrap: &CelestiaBootstrap) -> &PathBuf {
-        &bootstrap.cosmos_bootstrap.chain_command_path()
+        bootstrap.cosmos_bootstrap.chain_command_path()
     }
 }
 
