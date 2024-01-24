@@ -1,10 +1,10 @@
-use core::time::Duration;
-
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
+use hermes_relayer_components::chain::traits::components::block_querier::CanQueryBlock;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::types::aliases::ChainId;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -16,6 +16,10 @@ use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
 };
 use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc_relayer_types::Height;
+use tendermint::block::{Block, Id as BlockId};
 
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 
@@ -27,8 +31,8 @@ where
 {
     async fn init_celestia_bridge(
         &self,
+        chain: &Self::Chain,
         chain_home_dir: &FilePath<Self::Runtime>,
-        chain_id: &ChainId<Self::Chain>,
         chain_config: &CosmosChainConfig,
     ) -> Result<ChildProcess<Self::Runtime>, Self::Error>;
 }
@@ -38,8 +42,12 @@ where
     Bootstrap: HasChainType<Chain = Chain>
         + HasRuntime<Runtime = Runtime>
         + HasBridgeStoreDir
-        + CanRaiseError<Runtime::Error>,
-    Chain: HasChainIdType,
+        + CanRaiseError<Chain::Error>
+        + CanRaiseError<Runtime::Error>
+        + CanRaiseError<Ics02Error>,
+    Chain: HasChainId<ChainId = ChainId>
+        + HasHeightType<Height = Height>
+        + CanQueryBlock<Block = (BlockId, Block)>,
     Runtime: HasFilePathType
         + HasChildProcessType
         + CanExecCommandWithEnvs
@@ -50,12 +58,12 @@ where
 {
     async fn init_celestia_bridge(
         &self,
+        chain: &Self::Chain,
         chain_home_dir: &Runtime::FilePath,
-        chain_id: &Chain::ChainId,
         chain_config: &CosmosChainConfig,
     ) -> Result<Runtime::ChildProcess, Self::Error> {
         let runtime = self.runtime();
-        let chain_id_str = chain_id.to_string();
+        let chain_id_str = chain.chain_id().to_string();
         let bridge_store_dir = self.bridge_store_dir();
 
         let bridge_home_dir = Runtime::join_file_path(
@@ -94,6 +102,16 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
+        let genesis_height =
+            Height::new(chain.chain_id().version(), 1).map_err(Bootstrap::raise_error)?;
+
+        let (block_id, _) = chain
+            .query_block(&genesis_height)
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        let _block_hash = block_id.hash;
+
         let stdout_path = Runtime::join_file_path(
             &bridge_home_dir,
             &Runtime::file_path_from_string("stdout.log"),
@@ -121,7 +139,7 @@ where
 
         println!("running celestia bridge with args: {:?}", args);
 
-        runtime.sleep(Duration::from_secs(999999)).await;
+        // runtime.sleep(Duration::from_secs(999999)).await;
 
         let child = runtime
             .start_child_process(

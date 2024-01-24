@@ -2,8 +2,7 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::components::block_querier::BlockQuerier;
 use hermes_relayer_components::chain::traits::types::block::HasBlockType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use tendermint::block::{Height as BlockHeight, Id as BlockId};
-use tendermint::Block;
+use tendermint::block::{Block, Height as BlockHeight, Id as BlockId};
 use tendermint_rpc::{Client, Error as RpcError};
 
 use crate::traits::rpc_client::HasRpcClient;

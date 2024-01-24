@@ -213,7 +213,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
             chain_config,
             genesis_config,
             relayer_chain_config,
-            full_node_processes: Arc::new(chain_processes),
+            chain_processes,
             staking_denom: bootstrap.staking_denom.clone(),
             transfer_denom: bootstrap.transfer_denom.clone(),
             relayer_wallet: relayer_wallet.clone(),

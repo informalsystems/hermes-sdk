@@ -1,4 +1,3 @@
-use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp_core::delegate_all;
@@ -48,7 +47,6 @@ use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tokio::process::Child;
-use tokio::time::sleep;
 
 pub struct CelestiaBootstrap {
     pub cosmos_bootstrap: CosmosBootstrap,
@@ -164,26 +162,32 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainConfig,
         wallets: Vec<CosmosTestWallet>,
-        mut chain_processes: Vec<Child>,
+        chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
-        sleep(Duration::from_secs(3)).await;
+        // sleep(Duration::from_secs(3)).await;
+        let mut chain_driver = {
+            let chain_home_dir = chain_home_dir.clone();
+            let chain_config = chain_config.clone();
+
+            bootstrap
+                .cosmos_bootstrap
+                .build_chain_from_bootstrap_params(
+                    chain_home_dir,
+                    chain_id,
+                    genesis_config,
+                    chain_config,
+                    wallets,
+                    chain_processes,
+                )
+                .await?
+        };
 
         let bridge_process = bootstrap
-            .init_celestia_bridge(&chain_home_dir, &chain_id, &chain_config)
+            .init_celestia_bridge(&chain_driver.base_chain, &chain_home_dir, &chain_config)
             .await?;
 
-        chain_processes.push(bridge_process);
+        chain_driver.chain_processes.push(bridge_process);
 
-        bootstrap
-            .cosmos_bootstrap
-            .build_chain_from_bootstrap_params(
-                chain_home_dir,
-                chain_id,
-                genesis_config,
-                chain_config,
-                wallets,
-                chain_processes,
-            )
-            .await
+        todo!()
     }
 }

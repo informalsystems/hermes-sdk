@@ -1,6 +1,5 @@
 use core::time::Duration;
 
-use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -82,10 +81,9 @@ use crate::impls::denom::derive_ibc_denom;
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
 */
-#[derive(Clone)]
 pub struct CosmosChainDriver {
     pub base_chain: CosmosChain,
-    pub full_node_processes: Arc<Vec<Child>>,
+    pub chain_processes: Vec<Child>,
     pub relayer_chain_config: ChainConfig,
     pub chain_config: CosmosChainConfig,
     pub genesis_config: CosmosGenesisConfig,
