@@ -1,9 +1,7 @@
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
 use hermes_relayer_components::chain::traits::components::block_querier::CanQueryBlock;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
@@ -11,10 +9,8 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
 use hermes_test_components::runtime::traits::copy_file::CanCopyFile;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
-use hermes_test_components::runtime::traits::types::child_process::{
-    ChildProcess, HasChildProcessType,
-};
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -22,24 +18,13 @@ use ibc_relayer_types::Height;
 use tendermint::block::{Block, Id as BlockId};
 use toml::Value;
 
+use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapper;
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
 
-#[async_trait]
-pub trait CanInitCelestiaBridge: HasChainType + HasRuntime + HasErrorType
-where
-    Self::Chain: HasChainIdType,
-    Self::Runtime: HasFilePathType + HasChildProcessType,
-{
-    async fn init_celestia_bridge(
-        &self,
-        chain: &Self::Chain,
-        chain_home_dir: &FilePath<Self::Runtime>,
-        chain_config: &CosmosChainConfig,
-    ) -> Result<ChildProcess<Self::Runtime>, Self::Error>;
-}
+pub struct BoostrapCelestiaBridge;
 
-impl<Bootstrap, Chain, Runtime> CanInitCelestiaBridge for Bootstrap
+impl<Bootstrap, Chain, Runtime> BridgeBootstrapper<Bootstrap> for BoostrapCelestiaBridge
 where
     Bootstrap: HasChainType<Chain = Chain>
         + HasRuntime<Runtime = Runtime>
@@ -62,23 +47,25 @@ where
         + CanReadFileAsString
         + CanWriteStringToFile,
 {
-    async fn init_celestia_bridge(
-        &self,
-        chain: &Self::Chain,
+    async fn bootstrap_bridge(
+        boostrap: &Bootstrap,
+        chain: &Chain,
         chain_home_dir: &Runtime::FilePath,
         chain_config: &CosmosChainConfig,
-    ) -> Result<Runtime::ChildProcess, Self::Error> {
-        let runtime = self.runtime();
+    ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
+        let runtime = boostrap.runtime();
         let chain_id = chain.chain_id();
         let chain_id_str = chain_id.to_string();
-        let bridge_store_dir = self.bridge_store_dir();
+        let bridge_store_dir = boostrap.bridge_store_dir();
 
         let bridge_home_dir = Runtime::join_file_path(
             bridge_store_dir,
             &Runtime::file_path_from_string(&chain_id_str),
         );
 
-        self.init_bridge_data(&bridge_home_dir, chain_id).await?;
+        boostrap
+            .init_bridge_data(&bridge_home_dir, chain_id)
+            .await?;
 
         let bridge_key_source_path = Runtime::join_file_path(
             chain_home_dir,
