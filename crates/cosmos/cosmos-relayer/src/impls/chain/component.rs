@@ -33,6 +33,7 @@ use hermes_relayer_components::chain::traits::components::unreceived_packet_sequ
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
+use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
@@ -53,6 +54,7 @@ use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::components::block_querier::BlockQuerierComponent;
 
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
@@ -104,6 +106,7 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeProviderComponent,
+            BlockTypeComponent,
             MessageSenderComponent,
             PacketFieldsReaderComponent,
             ConsensusStateHeightQuerierComponent,
@@ -129,7 +132,8 @@ delegate_components! {
             SendPacketsQuerierComponent,
             PacketFromWriteAckBuilderComponent,
             InitConnectionOptionsTypeComponent,
-            InitChannelOptionsTypeComponent
+            InitChannelOptionsTypeComponent,
+            BlockQuerierComponent,
         ]:
             CosmosClientComponents,
         ClientStateQuerierComponent:

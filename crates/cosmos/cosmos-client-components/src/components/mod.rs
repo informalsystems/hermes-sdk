@@ -11,6 +11,7 @@ pub mod init_channel_options;
 pub mod init_connection_options;
 pub mod packet_fields;
 pub mod packet_from_ack;
+pub mod query_block;
 pub mod query_chain_id;
 pub mod query_chain_status;
 pub mod query_client_state;
