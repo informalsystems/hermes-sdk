@@ -5,7 +5,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
+use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
 use hermes_test_components::runtime::traits::copy_file::CanCopyFile;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
@@ -24,9 +26,11 @@ use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
 
 pub struct BootstrapCelestiaBridge;
 
-impl<Bootstrap, Chain, Runtime> BridgeBootstrapper<Bootstrap> for BootstrapCelestiaBridge
+impl<Bootstrap, Chain, ChainDriver, Runtime> BridgeBootstrapper<Bootstrap>
+    for BootstrapCelestiaBridge
 where
     Bootstrap: HasChainType<Chain = Chain>
+        + HasChainDriverType<ChainDriver = ChainDriver>
         + HasRuntime<Runtime = Runtime>
         + HasBridgeStoreDir
         + CanInitBridgeData
@@ -36,6 +40,7 @@ where
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<&'static str>,
+    ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasChainHomeDir,
     Chain: HasChainId<ChainId = ChainId>
         + HasHeightType<Height = Height>
         + CanQueryBlock<Block = (BlockId, Block)>,
@@ -49,11 +54,13 @@ where
 {
     async fn bootstrap_bridge(
         boostrap: &Bootstrap,
-        chain: &Chain,
-        chain_home_dir: &Runtime::FilePath,
+        chain_driver: &ChainDriver,
         chain_config: &CosmosChainConfig,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
         let runtime = boostrap.runtime();
+        let chain = chain_driver.chain();
+        let chain_home_dir = chain_driver.chain_home_dir();
+
         let chain_id = chain.chain_id();
         let chain_id_str = chain_id.to_string();
         let bridge_store_dir = boostrap.bridge_store_dir();

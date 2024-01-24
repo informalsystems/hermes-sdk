@@ -190,7 +190,7 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         };
 
         let bridge_process = bootstrap
-            .bootstrap_bridge(&chain_driver.base_chain, &chain_home_dir, &chain_config)
+            .bootstrap_bridge(&chain_driver, &chain_config)
             .await?;
 
         chain_driver.chain_processes.push(bridge_process);
