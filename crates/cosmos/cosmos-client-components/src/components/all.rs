@@ -26,7 +26,7 @@ use hermes_relayer_components::chain::traits::components::unreceived_packet_sequ
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
-use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
+use hermes_relayer_components::chain::traits::types::block::{BlockHashComponent, BlockTypeComponent};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
@@ -88,6 +88,7 @@ delegate_components! {
             IbcPacketTypesProviderComponent,
             ChainStatusTypeProviderComponent,
             BlockTypeComponent,
+            BlockHashComponent,
         ]:
             ProvideCosmosChainTypes,
         MessageSenderComponent:

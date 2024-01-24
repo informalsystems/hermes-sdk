@@ -1,7 +1,9 @@
 use alloc::sync::Arc;
 
 use cgp_core::Async;
-use hermes_relayer_components::chain::traits::types::block::ProvideBlockType;
+use hermes_relayer_components::chain::traits::types::block::{
+    HasBlockType, ProvideBlockHash, ProvideBlockType,
+};
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
@@ -22,6 +24,7 @@ use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
+use tendermint::Hash;
 
 use crate::traits::message::CosmosMessage;
 pub struct ProvideCosmosChainTypes;
@@ -105,4 +108,15 @@ where
     Chain: Async,
 {
     type Block = (BlockId, Block);
+}
+
+impl<Chain> ProvideBlockHash<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasBlockType<Block = (BlockId, Block)>,
+{
+    type BlockHash = Hash;
+
+    fn block_hash((block_id, _): &(BlockId, Block)) -> &Hash {
+        &block_id.hash
+    }
 }

@@ -2,6 +2,7 @@ use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_relayer_components::chain::traits::components::block_querier::CanQueryBlock;
+use hermes_relayer_components::chain::traits::types::block::HasBlockHash;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -12,7 +13,6 @@ use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
-use tendermint::block::{Block, Id as BlockId};
 use toml::Value;
 
 use crate::bootstrap::traits::init_bridge_config::BridgeConfigInitializer;
@@ -36,7 +36,8 @@ where
     Runtime: CanReadFileAsString + CanWriteStringToFile,
     Chain: HasChainId<ChainId = ChainId>
         + HasHeightType<Height = Height>
-        + CanQueryBlock<Block = (BlockId, Block)>,
+        + CanQueryBlock
+        + HasBlockHash,
     ChainDriver: HasChain<Chain = Chain> + HasRpcPort + HasGrpcPort,
     Bootstrap::BridgeConfig: From<Value>,
 {
@@ -52,12 +53,10 @@ where
 
         let genesis_height = Height::new(chain_id.version(), 1).map_err(Bootstrap::raise_error)?;
 
-        let (block_id, _) = chain
+        let block = chain
             .query_block(&genesis_height)
             .await
             .map_err(Bootstrap::raise_error)?;
-
-        let block_hash = block_id.hash;
 
         let bridge_config_path = Runtime::join_file_path(
             &bridge_home_dir,
@@ -74,7 +73,7 @@ where
         let mut bridge_config =
             toml::from_str(&bridge_config_str).map_err(Bootstrap::raise_error)?;
 
-        set_trusted_hash(&mut bridge_config, &block_hash.to_string())
+        set_trusted_hash(&mut bridge_config, &Chain::block_hash(&block).to_string())
             .map_err(Bootstrap::raise_error)?;
 
         set_chain_ip(&mut bridge_config, "127.0.0.1").map_err(Bootstrap::raise_error)?;
