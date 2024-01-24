@@ -47,7 +47,7 @@ basecoin-store      = { version = "0.1.0" }
 cgp-core            = { version = "0.1.0" }
 cgp-error-eyre      = { version = "0.1.0" }
 cgp-error-std       = { version = "0.1.0" }
-prost               = { version = "0.12.0" }
+prost               = { version = "0.12.3" }
 serde               = { version = "1.0" }
 serde_derive        = { version = "1.0" }
 serde_json          = { version = "1.0" }
