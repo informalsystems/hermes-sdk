@@ -22,9 +22,9 @@ use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapper;
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
 
-pub struct BoostrapCelestiaBridge;
+pub struct BootstrapCelestiaBridge;
 
-impl<Bootstrap, Chain, Runtime> BridgeBootstrapper<Bootstrap> for BoostrapCelestiaBridge
+impl<Bootstrap, Chain, Runtime> BridgeBootstrapper<Bootstrap> for BootstrapCelestiaBridge
 where
     Bootstrap: HasChainType<Chain = Chain>
         + HasRuntime<Runtime = Runtime>
