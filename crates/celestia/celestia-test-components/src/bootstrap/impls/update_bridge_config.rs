@@ -15,6 +15,7 @@ use toml::Value;
 
 use crate::bootstrap::traits::init_bridge_config::BridgeConfigInitializer;
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
+use crate::types::bridge_config::CelestiaBridgeConfig;
 
 pub struct UpdateCelestiaBridgeConfig;
 
@@ -34,7 +35,7 @@ where
     Runtime: CanReadFileAsString + CanWriteStringToFile,
     Chain: HasChainId + HasGenesisHeight + CanQueryBlock + HasBlockHash,
     ChainDriver: HasChain<Chain = Chain> + HasRpcPort + HasGrpcPort,
-    Bootstrap::BridgeConfig: From<Value>,
+    Bootstrap::BridgeConfig: From<CelestiaBridgeConfig>,
 {
     async fn init_bridge_config(
         bootstrap: &Bootstrap,
@@ -85,7 +86,11 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        Ok(bridge_config.into())
+        let config = CelestiaBridgeConfig {
+            config: bridge_config,
+        };
+
+        Ok(config.into())
     }
 }
 

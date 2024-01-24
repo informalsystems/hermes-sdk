@@ -6,7 +6,7 @@ use crate::bootstrap::impls::copy_bridge_key::CopyBridgeKey;
 use crate::bootstrap::impls::generate_wallet_config::GenerateCelestiaWalletConfig;
 use crate::bootstrap::impls::init_bridge_data::InitCelestiaBridgeData;
 use crate::bootstrap::impls::start_bridge::StartCelestiaBridge;
-use crate::bootstrap::impls::types::bridge_config::ProvideTomlBridgeConfig;
+use crate::bootstrap::impls::types::bridge_config::ProvideCelestiaBridgeConfig;
 use crate::bootstrap::impls::update_bridge_config::UpdateCelestiaBridgeConfig;
 use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
 use crate::bootstrap::traits::import_bridge_key::BridgeKeyImporterComponent;
@@ -28,7 +28,7 @@ delegate_components! {
         BridgeKeyImporterComponent:
             CopyBridgeKey,
         BridgeConfigTypeComponent:
-            ProvideTomlBridgeConfig,
+            ProvideCelestiaBridgeConfig,
         BridgeConfigInitializerComponent:
             UpdateCelestiaBridgeConfig,
         BridgeStarterComponent:
