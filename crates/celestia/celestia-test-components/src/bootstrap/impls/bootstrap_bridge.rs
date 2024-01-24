@@ -12,6 +12,7 @@ use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 use crate::bootstrap::traits::import_bridge_key::CanImportBridgeKey;
 use crate::bootstrap::traits::init_bridge_config::CanInitBridgeConfig;
 use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
+use crate::bootstrap::traits::start_bridge::CanStartBridge;
 
 pub struct BootstrapCelestiaBridge;
 
@@ -25,6 +26,7 @@ where
         + CanInitBridgeData
         + CanImportBridgeKey
         + CanInitBridgeConfig
+        + CanStartBridge
         + CanRaiseError<Runtime::Error>,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime>,
     Chain: HasChainId<ChainId = ChainId>,
@@ -34,16 +36,12 @@ where
         bootstrap: &Bootstrap,
         chain_driver: &ChainDriver,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
-        let runtime = bootstrap.runtime();
-        let chain = chain_driver.chain();
-
-        let chain_id = chain.chain_id();
-        let chain_id_str = chain_id.to_string();
+        let chain_id = chain_driver.chain().chain_id();
         let bridge_store_dir = bootstrap.bridge_store_dir();
 
         let bridge_home_dir = Runtime::join_file_path(
             bridge_store_dir,
-            &Runtime::file_path_from_string(&chain_id_str),
+            &Runtime::file_path_from_string(&chain_id.to_string()),
         );
 
         bootstrap
@@ -58,33 +56,9 @@ where
             .import_bridge_key(&bridge_home_dir, chain_driver)
             .await?;
 
-        let stdout_path = Runtime::join_file_path(
-            &bridge_home_dir,
-            &Runtime::file_path_from_string("stdout.log"),
-        );
-
-        let stderr_path = Runtime::join_file_path(
-            &bridge_home_dir,
-            &Runtime::file_path_from_string("stderr.log"),
-        );
-
-        let child = runtime
-            .start_child_process(
-                &Runtime::file_path_from_string("celestia"),
-                &[
-                    "bridge",
-                    "start",
-                    "--keyring.accname",
-                    "bridge",
-                    "--p2p.network",
-                    &chain_id_str,
-                ],
-                &[("HOME", &Runtime::file_path_to_string(&bridge_home_dir))],
-                Some(&stdout_path),
-                Some(&stderr_path),
-            )
-            .await
-            .map_err(Bootstrap::raise_error)?;
+        let child = bootstrap
+            .start_bridge(&bridge_home_dir, chain_driver)
+            .await?;
 
         Ok(child)
     }

@@ -12,6 +12,7 @@ use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::Bridge
 use hermes_celestia_test_components::bootstrap::traits::import_bridge_key::BridgeKeyImporterComponent;
 use hermes_celestia_test_components::bootstrap::traits::init_bridge_config::BridgeConfigInitializerComponent;
 use hermes_celestia_test_components::bootstrap::traits::init_bridge_data::BridgeDataInitializerComponent;
+use hermes_celestia_test_components::bootstrap::traits::start_bridge::BridgeStarterComponent;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_config::BridgeConfigTypeComponent;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
@@ -90,6 +91,7 @@ delegate_components! {
             BridgeKeyImporterComponent,
             BridgeConfigTypeComponent,
             BridgeConfigInitializerComponent,
+            BridgeStarterComponent,
         ]:
             BaseCelestiaBootstrapComponents,
     }
