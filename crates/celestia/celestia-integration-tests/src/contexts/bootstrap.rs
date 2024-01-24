@@ -9,6 +9,7 @@ use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapCom
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::BridgeStoreDirGetter;
+use hermes_celestia_test_components::bootstrap::traits::import_bridge_key::BridgeKeyImporterComponent;
 use hermes_celestia_test_components::bootstrap::traits::init_bridge_data::BridgeDataInitializerComponent;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
@@ -84,6 +85,7 @@ delegate_components! {
             WalletConfigGeneratorComponent,
             BridgeBootstrapperComponent,
             BridgeDataInitializerComponent,
+            BridgeKeyImporterComponent,
         ]:
             BaseCelestiaBootstrapComponents,
     }

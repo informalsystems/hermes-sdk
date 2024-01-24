@@ -23,6 +23,7 @@ use toml::Value;
 
 use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapper;
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
+use crate::bootstrap::traits::import_bridge_key::CanImportBridgeKey;
 use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
 
 pub struct BootstrapCelestiaBridge;
@@ -35,6 +36,7 @@ where
         + HasRuntime<Runtime = Runtime>
         + HasBridgeStoreDir
         + CanInitBridgeData
+        + CanImportBridgeKey
         + CanRaiseError<Chain::Error>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<Ics02Error>
@@ -58,45 +60,31 @@ where
         + CanWriteStringToFile,
 {
     async fn bootstrap_bridge(
-        boostrap: &Bootstrap,
+        bootstrap: &Bootstrap,
         chain_driver: &ChainDriver,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
-        let runtime = boostrap.runtime();
+        let runtime = bootstrap.runtime();
         let chain = chain_driver.chain();
 
-        let chain_home_dir = chain_driver.chain_home_dir();
         let rpc_port = chain_driver.rpc_port();
         let grpc_port = chain_driver.grpc_port();
 
         let chain_id = chain.chain_id();
         let chain_id_str = chain_id.to_string();
-        let bridge_store_dir = boostrap.bridge_store_dir();
+        let bridge_store_dir = bootstrap.bridge_store_dir();
 
         let bridge_home_dir = Runtime::join_file_path(
             bridge_store_dir,
             &Runtime::file_path_from_string(&chain_id_str),
         );
 
-        boostrap
+        bootstrap
             .init_bridge_data(&bridge_home_dir, chain_id)
             .await?;
 
-        let bridge_key_source_path = Runtime::join_file_path(
-            chain_home_dir,
-            &Runtime::file_path_from_string("keyring-test/bridge.info"),
-        );
-
-        let bridge_key_destination_path = Runtime::join_file_path(
-            &bridge_home_dir,
-            &Runtime::file_path_from_string(&format!(
-                ".celestia-bridge-{chain_id_str}/keys/keyring-test/bridge.info"
-            )),
-        );
-
-        runtime
-            .copy_file(&bridge_key_source_path, &bridge_key_destination_path)
-            .await
-            .map_err(Bootstrap::raise_error)?;
+        bootstrap
+            .import_bridge_key(&bridge_home_dir, chain_driver)
+            .await?;
 
         let genesis_height =
             Height::new(chain.chain_id().version(), 1).map_err(Bootstrap::raise_error)?;
