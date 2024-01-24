@@ -27,12 +27,12 @@ where
         chain_driver: &ChainDriver,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
         let stdout_path = Runtime::join_file_path(
-            &bridge_home_dir,
+            bridge_home_dir,
             &Runtime::file_path_from_string("stdout.log"),
         );
 
         let stderr_path = Runtime::join_file_path(
-            &bridge_home_dir,
+            bridge_home_dir,
             &Runtime::file_path_from_string("stderr.log"),
         );
 
@@ -48,7 +48,7 @@ where
                     "--p2p.network",
                     &chain_driver.chain().chain_id().to_string(),
                 ],
-                &[("HOME", &Runtime::file_path_to_string(&bridge_home_dir))],
+                &[("HOME", &Runtime::file_path_to_string(bridge_home_dir))],
                 Some(&stdout_path),
                 Some(&stderr_path),
             )
