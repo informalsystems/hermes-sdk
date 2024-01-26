@@ -1,6 +1,6 @@
 use alloc::vec;
 
-use cgp_core::{async_trait, CanRun, Runner};
+use cgp_core::{async_trait, CanRun, HasErrorType, Runner};
 
 use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::runtime::traits::runtime::HasRuntime;
@@ -43,7 +43,7 @@ where
 #[async_trait]
 impl<BiRelay> Runner<BiRelay> for RelayBothWays
 where
-    BiRelay: HasTwoWayRelay + HasRuntime,
+    BiRelay: HasTwoWayRelay + HasRuntime + HasErrorType,
     BiRelay::RelayAToB: Clone + CanRun,
     BiRelay::RelayBToA: Clone + CanRun,
     BiRelay::Runtime: CanRunConcurrentTasks,
