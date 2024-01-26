@@ -18,3 +18,4 @@ ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }

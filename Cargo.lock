@@ -1827,6 +1827,7 @@ name = "hermes-sovereign-client-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "ibc-relayer",
@@ -1838,10 +1839,12 @@ name = "hermes-sovereign-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
  "hermes-celestia-chain",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-sovereign-client-components",
  "ibc-relayer",
  "ibc-relayer-types",
 ]

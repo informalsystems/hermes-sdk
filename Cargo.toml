@@ -80,10 +80,10 @@ hermes-celestia-client-components   = { version = "0.1.0", path = "./crates/cele
 hermes-celestia-chain               = { version = "0.1.0", path = "./crates/celestia/celestia-chain" }
 hermes-celestia-test-components     = { version = "0.1.0", path = "./crates/celestia/celestia-test-components" }
 hermes-celestia-integration-tests   = { version = "0.1.0", path = "./crates/celestia/celestia-integration-tests" }
-hermes-sovereign-client-components  = { version = "0.1.0", path = "./crates/celestia/sovereign-client-components" }
-hermes-sovereign-cosmos-relayer     = { version = "0.1.0", path = "./crates/celestia/sovereign-cosmos-relayer" }
-hermes-sovereign-test-components    = { version = "0.1.0", path = "./crates/celestia/sovereign-test-components" }
-hermes-sovereign-integration-tests  = { version = "0.1.0", path = "./crates/celestia/sovereign-integration-tests" }
+hermes-sovereign-client-components  = { version = "0.1.0", path = "./crates/sovereign/sovereign-client-components" }
+hermes-sovereign-cosmos-relayer     = { version = "0.1.0", path = "./crates/sovereign/sovereign-cosmos-relayer" }
+hermes-sovereign-test-components    = { version = "0.1.0", path = "./crates/sovereign/sovereign-test-components" }
+hermes-sovereign-integration-tests  = { version = "0.1.0", path = "./crates/sovereign/sovereign-integration-tests" }
 hermes-async-runtime-components     = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
