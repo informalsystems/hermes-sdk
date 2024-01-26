@@ -19,7 +19,7 @@ use hermes_relayer_components::build::types::aliases::{ChainA, ChainB};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::components::default::build::DefaultBuildComponents;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::runtime::traits::mutex::HasMutex;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
@@ -82,13 +82,15 @@ where
     RelayAToB: Clone
         + HasErrorType<Error = Error>
         + HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
-        + UseBatchMessageWorkerSpawner,
+        + UseBatchMessageWorkerSpawner
+        + CanRaiseRelayChainErrors,
     RelayBToA: Clone
         + HasErrorType<Error = Error>
         + HasRelayChains<SrcChain = ChainB, DstChain = ChainA>
-        + UseBatchMessageWorkerSpawner,
-    ChainA: Clone + HasRuntime + HasChainId + HasIbcChainTypes<ChainB>,
-    ChainB: Clone + HasRuntime + HasChainId + HasIbcChainTypes<ChainA>,
+        + UseBatchMessageWorkerSpawner
+        + CanRaiseRelayChainErrors,
+    ChainA: Clone + HasErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainB>,
+    ChainB: Clone + HasErrorType + HasRuntime + HasChainId + HasIbcChainTypes<ChainA>,
     Error: Async,
     ChainA::ChainId: Ord + Clone,
     ChainB::ChainId: Ord + Clone,

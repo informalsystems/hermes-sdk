@@ -2,7 +2,7 @@
    Trait definitions for [`HasSendPacketEvent`].
 */
 
-use cgp_core::{Async, HasErrorType};
+use cgp_core::Async;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
@@ -19,8 +19,4 @@ pub trait HasSendPacketEvent<Counterparty>: HasIbcPacketTypes<Counterparty> + Ha
 
     fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent)
         -> Self::OutgoingPacket;
-}
-
-pub trait CanRaiseMissingSendPacketEventError: HasErrorType {
-    fn missing_send_packet_event_error(&self) -> Self::Error;
 }

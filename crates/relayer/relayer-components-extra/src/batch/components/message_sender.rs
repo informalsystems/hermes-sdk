@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp_core::async_trait;
+use cgp_core::{async_trait, CanRaiseError};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::components::ibc_message_sender::{
@@ -24,7 +24,7 @@ where
     Relay: CanSendIbcMessages<BatchWorkerSink, Target>,
     Target: ChainTarget<Relay, TargetChain = TargetChain>,
     TargetChain: HasIbcChainTypes<Target::CounterpartyChain>,
-    TargetChain: HasRuntime<Runtime = Runtime>,
+    TargetChain: HasRuntime<Runtime = Runtime> + CanRaiseError<Runtime::Error>,
     Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     Relay: HasMessageBatchSender<Target>,
 {

@@ -5,6 +5,7 @@ use cgp_core::async_trait;
 use crate::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{Height, WriteAckEvent};
+use crate::relay::traits::chains::CanRaiseRelayChainErrors;
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayer;
 use crate::relay::traits::packet::HasRelayPacketFields;
 
@@ -15,7 +16,7 @@ pub struct SkipReceivedPacketRelayer<Relayer> {
 #[async_trait]
 impl<Relay, Relayer> ReceivePacketRelayer<Relay> for SkipReceivedPacketRelayer<Relayer>
 where
-    Relay: HasRelayPacketFields,
+    Relay: HasRelayPacketFields + CanRaiseRelayChainErrors,
     Relayer: ReceivePacketRelayer<Relay>,
     Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
     Relay::DstChain: CanQueryReceivedPacket<Relay::SrcChain>,

@@ -6,7 +6,7 @@ use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
-use hermes_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use hermes_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -18,12 +18,6 @@ use tendermint::abci::Event as AbciEvent;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::chain::component::CosmosChainComponents;
 use crate::types::error::{BaseError, Error};
-
-impl CanIncrementHeight for CosmosChain {
-    fn increment_height(height: &Height) -> Result<Height, Error> {
-        Ok(height.increment())
-    }
-}
 
 impl CanEstimateMessageSize for CosmosChain {
     fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Error> {

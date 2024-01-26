@@ -1,6 +1,8 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
+use crate::chain::traits::types::connection::{
+    HasInitConnectionOptionsType, InitConnectionOptions,
+};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
@@ -26,9 +28,7 @@ where
 {
     async fn bootstrap_connection(
         &self,
-        init_connection_options: &<Self::SrcChain as HasInitConnectionOptionsType<
-            Self::DstChain,
-        >>::InitConnectionOptions,
+        init_connection_options: &InitConnectionOptions<Self::SrcChain, Self::DstChain>,
     ) -> Result<(SrcConnectionId<Self>, DstConnectionId<Self>), Self::Error>;
 }
 

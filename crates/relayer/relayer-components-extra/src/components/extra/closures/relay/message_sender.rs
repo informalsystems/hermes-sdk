@@ -1,8 +1,9 @@
-use cgp_core::HasComponents;
+use cgp_core::prelude::HasErrorType;
+use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::components::ibc_message_sender::{
     CanSendIbcMessages, MainSink,
 };
@@ -22,6 +23,7 @@ pub trait UseExtraIbcMessageSender:
     + CanSendIbcMessages<MainSink, DestinationTarget>
     + CanSendIbcMessages<BatchWorkerSink, SourceTarget>
     + CanSendIbcMessages<BatchWorkerSink, DestinationTarget>
+    + CanRaiseRelayChainErrors
 {
 }
 
@@ -34,14 +36,19 @@ where
         + HasComponents<Components = Components>,
     SrcChain: HasLoggerType<Logger = Relay::Logger>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
-        + UseExtraChainComponentsForIbcMessageSender<DstChain>,
+        + UseExtraChainComponentsForIbcMessageSender<DstChain>
+        + CanRaiseError<<SrcChain::Runtime as HasErrorType>::Error>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
-        + UseExtraChainComponentsForIbcMessageSender<SrcChain>,
+        + UseExtraChainComponentsForIbcMessageSender<SrcChain>
+        + CanRaiseError<<DstChain::Runtime as HasErrorType>::Error>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     Relay::Logger: HasBaseLogLevels,
-    Components: DelegatesToExtraRelayComponents + PacketFilter<Relay>,
+    Components: DelegatesToExtraRelayComponents
+        + PacketFilter<Relay>
+        + ErrorRaiser<Relay, SrcChain::Error>
+        + ErrorRaiser<Relay, DstChain::Error>,
 {
 }

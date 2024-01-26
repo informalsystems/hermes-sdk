@@ -15,7 +15,7 @@ use cgp_core::prelude::*;
    we want to avoid defining multiple associated `Event` types so that
    they can never be ambiguous.
 */
-#[derive_component(EventTypeProviderComponent, EventTypeProvider<Chain>)]
+#[derive_component(EventTypeComponent, ProvideEventType<Chain>)]
 pub trait HasEventType: Async {
     /**
        The events that are emitted from a transaction being committed to a

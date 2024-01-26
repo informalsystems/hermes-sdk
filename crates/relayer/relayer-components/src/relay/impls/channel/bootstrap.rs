@@ -1,6 +1,6 @@
 use cgp_core::{async_trait, HasErrorType};
 
-use crate::chain::traits::types::channel::HasInitChannelOptionsType;
+use crate::chain::traits::types::channel::{HasInitChannelOptionsType, InitChannelOptions};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
@@ -29,9 +29,7 @@ where
         &self,
         src_port_id: &SrcPortId<Self>,
         dst_port_id: &DstPortId<Self>,
-        init_channel_options: &<Self::SrcChain as HasInitChannelOptionsType<
-            Self::DstChain,
-        >>::InitChannelOptions,
+        init_channel_options: &InitChannelOptions<Self::SrcChain, Self::DstChain>,
     ) -> Result<(SrcChannelId<Self>, DstChannelId<Self>), Self::Error>;
 }
 

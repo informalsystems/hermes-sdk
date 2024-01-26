@@ -3,9 +3,9 @@ use cgp_core::{
     HasComponents,
 };
 use hermes_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::event::EventTypeProviderComponent;
-use hermes_relayer_components::chain::traits::types::message::MessageTypeProviderComponent;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::components::default::transaction::{
     CanUseDefaultTxComponents, DefaultTxComponents, IsDefaultTxComponents,
 };
@@ -43,9 +43,9 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
-            ChainIdTypeProviderComponent,
-            MessageTypeProviderComponent,
-            EventTypeProviderComponent,
+            ChainIdTypeComponent,
+            MessageTypeComponent,
+            EventTypeComponent,
         ]:
             ProvideCosmosChainTypes,
         [

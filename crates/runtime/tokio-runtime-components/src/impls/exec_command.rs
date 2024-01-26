@@ -5,7 +5,7 @@ use std::io::Error as IoError;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_test_components::runtime::traits::exec_command::{CommandExecutor, ExecOutput};
+use hermes_test_components::runtime::traits::exec_command::{CommandWithEnvsExecutor, ExecOutput};
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use tokio::process::Command;
 
@@ -19,7 +19,7 @@ pub struct ExecCommandFailure {
 }
 
 #[async_trait]
-impl<Runtime> CommandExecutor<Runtime> for TokioExecCommand
+impl<Runtime> CommandWithEnvsExecutor<Runtime> for TokioExecCommand
 where
     Runtime: HasFilePathType
         + CanRaiseError<IoError>
@@ -27,13 +27,15 @@ where
         + CanRaiseError<ExecCommandFailure>,
     Runtime::FilePath: AsRef<OsStr>,
 {
-    async fn exec_command(
+    async fn exec_command_with_envs(
         _runtime: &Runtime,
         command_path: &Runtime::FilePath,
         args: &[&str],
+        envs: &[(&str, &str)],
     ) -> Result<ExecOutput, Runtime::Error> {
         let output = Command::new(command_path)
             .args(args)
+            .envs(Vec::from(envs))
             .output()
             .await
             .map_err(Runtime::raise_error)?;

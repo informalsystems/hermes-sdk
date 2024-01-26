@@ -2,7 +2,7 @@ use alloc::vec;
 
 use cgp_core::{async_trait, Runner};
 
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::auto_relayer::CanAutoRelay;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 use crate::runtime::traits::runtime::HasRuntime;
@@ -23,8 +23,11 @@ pub struct TargetRelayerTask<Relay> {
 #[async_trait]
 impl<Relay> Task for TargetRelayerTask<Relay>
 where
-    Relay:
-        HasRelayChains + HasRuntime + CanAutoRelay<SourceTarget> + CanAutoRelay<DestinationTarget>,
+    Relay: HasRelayChains
+        + CanRaiseRelayChainErrors
+        + HasRuntime
+        + CanAutoRelay<SourceTarget>
+        + CanAutoRelay<DestinationTarget>,
 {
     async fn run(self) {
         match self.target {
@@ -45,7 +48,8 @@ where
         + HasRelayChains
         + HasRuntime
         + CanAutoRelay<SourceTarget>
-        + CanAutoRelay<DestinationTarget>,
+        + CanAutoRelay<DestinationTarget>
+        + CanRaiseRelayChainErrors,
     Relay::Runtime: CanRunConcurrentTasks,
 {
     async fn run(relay: &Relay) -> Result<(), Relay::Error> {

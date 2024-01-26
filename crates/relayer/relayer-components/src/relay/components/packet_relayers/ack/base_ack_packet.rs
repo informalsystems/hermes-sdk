@@ -5,7 +5,7 @@ use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPac
 use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayer;
 use crate::relay::traits::target::SourceTarget;
@@ -18,7 +18,8 @@ pub struct BaseAckPacketRelayer;
 #[async_trait]
 impl<Relay, SrcChain, DstChain, Packet> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
-    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>,
+    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>
+        + CanRaiseRelayChainErrors,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
     SrcChain: CanQueryClientState<DstChain>
         + CanBuildAckPacketMessage<DstChain>
