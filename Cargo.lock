@@ -1826,6 +1826,7 @@ name = "hermes-sovereign-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "ibc-relayer",
