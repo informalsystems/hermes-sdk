@@ -1,25 +1,26 @@
 use core::fmt::Display;
-use std::io::Error as IoError;
-use std::path::Path;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use eyre::Report;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::chain::{
     CanBootstrapChain, ChainBootstrapperComponent,
 };
-use hermes_test_components::bootstrap::traits::types::chain::ProvideChainType;
-use hermes_test_components::chain::traits::build::CanBuildChainIdFromString;
-use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::amount::HasAmountType;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain_driver::traits::build::chain_id::CanBuildChainIdFromString;
+use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
+use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
+use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
+use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
+use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use ibc_relayer::keyring::errors::Error as KeyringError;
 
 use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
@@ -28,9 +29,9 @@ use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmos
 use crate::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
+use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
-use crate::bootstrap::traits::fields::test_dir::TestDirGetter;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
 use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
 use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderComponent;
@@ -51,7 +52,7 @@ use crate::bootstrap::traits::types::wallet_config::{
 };
 use crate::bootstrap::types::chain_config::CosmosChainConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain_driver::types::wallet::CosmosTestWallet;
 
 pub struct LegacyCosmosSdkBootstrapComponents;
 
@@ -84,17 +85,23 @@ pub trait CanUseLegacyCosmosSdkChainBootstrapper: UseLegacyCosmosSdkChainBootstr
 
 pub trait UseLegacyCosmosSdkChainBootstrapper: CanBootstrapChain {}
 
-impl<Bootstrap, Runtime, Chain, Components> UseLegacyCosmosSdkChainBootstrapper for Bootstrap
+impl<Bootstrap, Runtime, Chain, ChainDriver, Components> UseLegacyCosmosSdkChainBootstrapper
+    for Bootstrap
 where
     Bootstrap: HasComponents<Components = Components>
         + HasRuntime<Runtime = Runtime>
-        + HasErrorType
-        + CanRaiseError<IoError>,
+        + CanRaiseError<Runtime::Error>
+        + CanRaiseError<&'static str>
+        + CanRaiseError<KeyringError>
+        + CanRaiseError<serde_json::Error>
+        + CanRaiseError<toml::ser::Error>
+        + CanRaiseError<toml::de::Error>,
     Components: DelegatesToLegacyToCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
+        + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
         + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
         + ProvideChainConfigType<Bootstrap, ChainConfig = CosmosChainConfig>
-        + TestDirGetter<Bootstrap>
+        + ChainStoreDirGetter<Bootstrap>
         + ChainCommandPathGetter<Bootstrap>
         + RandomIdFlagGetter<Bootstrap>
         + CosmosGenesisConfigModifier<Bootstrap>
@@ -107,14 +114,14 @@ where
         + CanStartChildProcess
         + CanReadFileAsString
         + CanWriteStringToFile
+        + CanCreateDir
         + CanReserveTcpPort,
-    Chain: HasChainIdType
+    Chain: HasChainIdType,
+    ChainDriver: HasChainType<Chain = Chain>
         + HasWalletType<Wallet = CosmosTestWallet>
         + HasAmountType
         + HasAddressType
         + CanBuildChainIdFromString,
     Chain::ChainId: Display,
-    Runtime::FilePath: AsRef<Path>,
-    Bootstrap::Error: From<Report>,
 {
 }

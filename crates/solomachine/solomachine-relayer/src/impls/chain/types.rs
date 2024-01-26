@@ -1,14 +1,14 @@
 use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloads, HasInitChannelOptionsType,
+    HasChannelHandshakePayloads, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
+    HasConnectionHandshakePayloads, ProvideInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, HasCreateClientOptions, HasCreateClientPayload,
+    HasCreateClientEvent, HasCreateClientPayload, ProvideCreateClientOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
@@ -83,11 +83,12 @@ where
     type ConsensusState = SolomachineConsensusState;
 }
 
-impl<Chain, Counterparty> HasCreateClientOptions<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideCreateClientOptionsType<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
-    type CreateClientPayloadOptions = ();
+    type CreateClientOptions = ();
 }
 
 impl<Chain, Counterparty> HasCreateClientPayload<Counterparty> for SolomachineChain<Chain>
@@ -104,14 +105,16 @@ where
     type UpdateClientPayload = SolomachineUpdateClientPayload;
 }
 
-impl<Chain, Counterparty> HasInitConnectionOptionsType<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideInitConnectionOptionsType<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type InitConnectionOptions = ();
 }
 
-impl<Chain, Counterparty> HasInitChannelOptionsType<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideInitChannelOptionsType<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

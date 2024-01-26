@@ -3,6 +3,7 @@ use cgp_core::async_trait;
 use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::status::HasChainStatusType;
+use crate::relay::traits::chains::CanRaiseRelayChainErrors;
 use crate::relay::traits::components::packet_relayer::PacketRelayer;
 use crate::relay::traits::components::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::components::packet_relayers::receive_packet::CanRelayReceivePacket;
@@ -22,7 +23,8 @@ where
         + CanRelayAckPacket
         + CanRelayReceivePacket
         + CanRelayTimeoutUnorderedPacket
-        + HasRelayPacketFields,
+        + HasRelayPacketFields
+        + CanRaiseRelayChainErrors,
     Relay::SrcChain: CanQueryChainStatus,
     Relay::DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain>,
 {

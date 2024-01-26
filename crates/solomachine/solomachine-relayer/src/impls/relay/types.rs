@@ -1,7 +1,7 @@
 use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error as CosmosError;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -57,7 +57,7 @@ where
     }
 }
 
-impl<Chain> HasRelayChains for SolomachineRelay<Chain>
+impl<Chain> ProvideRelayChains<SolomachineRelay<Chain>> for SolomachineRelayComponents
 where
     Chain: Solomachine<Error = Error>,
 {
@@ -67,19 +67,19 @@ where
 
     type Packet = Packet;
 
-    fn src_client_id(&self) -> &ClientId {
-        &self.src_client_id
+    fn src_client_id(relay: &SolomachineRelay<Chain>) -> &ClientId {
+        &relay.src_client_id
     }
 
-    fn dst_client_id(&self) -> &ClientId {
-        &self.dst_client_id
+    fn dst_client_id(relay: &SolomachineRelay<Chain>) -> &ClientId {
+        &relay.dst_client_id
     }
 
-    fn src_chain(&self) -> &SolomachineChain<Chain> {
-        &self.src_chain
+    fn src_chain(relay: &SolomachineRelay<Chain>) -> &SolomachineChain<Chain> {
+        &relay.src_chain
     }
 
-    fn dst_chain(&self) -> &CosmosChain {
-        &self.dst_chain
+    fn dst_chain(relay: &SolomachineRelay<Chain>) -> &CosmosChain {
+        &relay.dst_chain
     }
 }

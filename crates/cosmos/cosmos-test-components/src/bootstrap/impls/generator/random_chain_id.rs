@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
-use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
-use hermes_test_components::chain::traits::build::CanBuildChainIdFromString;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_test_components::chain_driver::traits::build::chain_id::CanBuildChainIdFromString;
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use rand::prelude::*;
 
 use crate::bootstrap::traits::fields::random_id::HasRandomIdFlag;
@@ -9,10 +10,11 @@ use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;
 pub struct GenerateRandomChainId;
 
 #[async_trait]
-impl<Bootstrap, Chain> ChainIdGenerator<Bootstrap> for GenerateRandomChainId
+impl<Bootstrap, Chain, ChainDriver> ChainIdGenerator<Bootstrap> for GenerateRandomChainId
 where
-    Bootstrap: HasChainType<Chain = Chain> + HasRandomIdFlag,
-    Chain: CanBuildChainIdFromString,
+    Bootstrap: HasChainDriverType<Chain = Chain, ChainDriver = ChainDriver> + HasRandomIdFlag,
+    ChainDriver: CanBuildChainIdFromString<Chain = Chain>,
+    Chain: HasChainIdType,
 {
     async fn generate_chain_id(bootstrap: &Bootstrap, chain_id_prefix: &str) -> Chain::ChainId {
         if bootstrap.should_randomize_identifiers() {
@@ -23,9 +25,9 @@ where
 
             let chain_id = format!("{chain_id_prefix}-{postfix}");
 
-            Chain::build_chain_id_from_string(&chain_id)
+            ChainDriver::build_chain_id_from_string(&chain_id)
         } else {
-            Chain::build_chain_id_from_string(chain_id_prefix)
+            ChainDriver::build_chain_id_from_string(chain_id_prefix)
         }
     }
 }
