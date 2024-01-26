@@ -20,3 +20,16 @@ pub trait CanExecCommand: HasFilePathType + HasErrorType {
         args: &[&str],
     ) -> Result<ExecOutput, Self::Error>;
 }
+
+/// A context with capability to execute shell commands similar to shell scripts.
+/// The result of a successful execution is stored as string.
+#[derive_component(CommandWithEnvsExecutorComponent, CommandWithEnvsExecutor<Runtime>)]
+#[async_trait]
+pub trait CanExecCommandWithEnvs: HasFilePathType + HasErrorType {
+    async fn exec_command_with_envs(
+        &self,
+        command_path: &Self::FilePath,
+        args: &[&str],
+        envs: &[(&str, &str)],
+    ) -> Result<ExecOutput, Self::Error>;
+}

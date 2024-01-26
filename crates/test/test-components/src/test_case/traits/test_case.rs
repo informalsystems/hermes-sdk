@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
 
 #[async_trait]
-pub trait TestCase<TestContext>: Async
+pub trait TestCase<Driver>: Async
 where
-    TestContext: HasErrorType,
+    Driver: HasErrorType,
 {
-    async fn run_test(&self, test_context: &TestContext) -> Result<(), TestContext::Error>;
+    async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error>;
 }

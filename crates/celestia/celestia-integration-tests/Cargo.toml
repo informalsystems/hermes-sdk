@@ -1,0 +1,42 @@
+[package]
+name         = "hermes-celestia-integration-tests"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Implementation of an IBC Relayer in Rust, as a library
+"""
+
+[dependencies]
+cgp-core                            = { workspace = true }
+cgp-error-eyre                      = { workspace = true }
+ibc-proto                           = { workspace = true }
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
+hermes-relayer-runtime              = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-relayer-components-extra     = { workspace = true }
+hermes-cosmos-relayer               = { workspace = true }
+hermes-test-components              = { workspace = true }
+hermes-ibc-test-suite               = { workspace = true }
+hermes-async-runtime-components     = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
+hermes-cosmos-test-components       = { workspace = true }
+hermes-cosmos-integration-tests     = { workspace = true }
+hermes-celestia-test-components     = { workspace = true }
+tendermint-rpc                      = { workspace = true }
+
+eyre            = { workspace = true }
+tokio           = { workspace = true }
+toml            = { workspace = true }
+serde_json      = { workspace = true }
+prost           = { workspace = true }
+
+sha2                = { version = "0.10.8" }
+stable-eyre         = { version = "0.2.2" }
+subtle-encoding     = { version = "0.5.1" }

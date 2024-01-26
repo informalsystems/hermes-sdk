@@ -4,7 +4,7 @@ use crate::chain::traits::components::packet_commitments_querier::CanQueryPacket
 use crate::chain::traits::components::send_packets_querier::CanQuerySendPackets;
 use crate::chain::traits::components::unreceived_packet_sequences_querier::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelId, PortId};
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::packet_clearer::PacketClearer;
 use crate::relay::traits::components::packet_relayer::CanRelayPacket;
 use crate::runtime::traits::runtime::HasRuntime;
@@ -33,7 +33,7 @@ where
 #[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
-    Relay: Clone + CanRelayPacket + HasRuntime,
+    Relay: Clone + CanRelayPacket + HasRuntime + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryUnreceivedPacketSequences<Relay::SrcChain>,
     Relay::SrcChain:
         CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,

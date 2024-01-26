@@ -4,7 +4,7 @@ use std::vec;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChains, ProvideRelayChains};
 use hermes_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -45,27 +45,27 @@ impl ProvideRuntime<MockRelayContext> for MockRelayComponents {
     }
 }
 
-impl HasRelayChains for MockRelayContext {
+impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
     type Packet = PacketKey;
 
     type SrcChain = MockChainContext;
 
     type DstChain = MockChainContext;
 
-    fn src_chain(&self) -> &MockChainContext {
-        &self.src_chain
+    fn src_chain(relay: &MockRelayContext) -> &MockChainContext {
+        &relay.src_chain
     }
 
-    fn dst_chain(&self) -> &MockChainContext {
-        &self.dst_chain
+    fn dst_chain(relay: &MockRelayContext) -> &MockChainContext {
+        &relay.dst_chain
     }
 
-    fn src_client_id(&self) -> &ClientId {
-        self.dst_to_src_client()
+    fn src_client_id(relay: &MockRelayContext) -> &ClientId {
+        relay.dst_to_src_client()
     }
 
-    fn dst_client_id(&self) -> &ClientId {
-        self.src_to_dst_client()
+    fn dst_client_id(relay: &MockRelayContext) -> &ClientId {
+        relay.src_to_dst_client()
     }
 }
 

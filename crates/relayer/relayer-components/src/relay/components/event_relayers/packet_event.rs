@@ -8,6 +8,7 @@ use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::components::packet_filters::chain::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
+use crate::relay::traits::chains::CanRaiseRelayChainErrors;
 use crate::relay::traits::components::event_relayer::EventRelayer;
 use crate::relay::traits::components::packet_filter::{CanFilterPackets, PacketFilter};
 use crate::relay::traits::components::packet_relayer::CanRelayPacket;
@@ -39,7 +40,7 @@ pub struct PacketEventRelayer;
 #[async_trait]
 impl<Relay> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
-    Relay: CanRelayPacket,
+    Relay: CanRelayPacket + CanRaiseRelayChainErrors,
     Relay::SrcChain: HasSendPacketEvent<Relay::DstChain>,
     MatchPacketDestinationChain: PacketFilter<Relay>,
 {
@@ -63,7 +64,12 @@ where
 #[async_trait]
 impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
-    Relay: CanRelayAckPacket + CanFilterPackets + HasPacketLock + CanLogRelay + CanLogRelayPacket,
+    Relay: CanRelayAckPacket
+        + CanFilterPackets
+        + HasPacketLock
+        + CanLogRelay
+        + CanLogRelayPacket
+        + CanRaiseRelayChainErrors,
     Relay::DstChain: CanBuildPacketFromWriteAck<Relay::SrcChain>,
     MatchPacketSourceChain: PacketFilter<Relay>,
 {

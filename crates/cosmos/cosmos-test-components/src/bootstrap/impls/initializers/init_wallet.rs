@@ -1,38 +1,42 @@
 use cgp_core::prelude::*;
-use eyre::{eyre, Report};
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
+
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
 use serde_json as json;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::fields::hd_path::HasWalletHdPath;
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializer;
-use crate::chain::types::wallet::CosmosTestWallet;
+use crate::chain_driver::types::wallet::CosmosTestWallet;
 
 pub struct InitCosmosTestWallet;
 
 #[async_trait]
-impl<Bootstrap, Runtime, Chain> WalletInitializer<Bootstrap> for InitCosmosTestWallet
+impl<Bootstrap, Runtime, ChainDriver> WalletInitializer<Bootstrap> for InitCosmosTestWallet
 where
-    Bootstrap: HasErrorType
-        + HasRuntime<Runtime = Runtime>
-        + HasChainType<Chain = Chain>
+    Bootstrap: HasRuntime<Runtime = Runtime>
+        + HasChainDriverType<ChainDriver = ChainDriver>
         + HasWalletHdPath
-        + HasChainCommandPath,
+        + HasChainCommandPath
+        + CanRaiseError<Runtime::Error>
+        + CanRaiseError<&'static str>
+        + CanRaiseError<json::Error>
+        + CanRaiseError<KeyringError>,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
-    Chain: HasWalletType<Wallet = CosmosTestWallet>,
-    Bootstrap::Error: From<Report>,
+    ChainDriver: HasWalletType<Wallet = CosmosTestWallet>,
 {
     async fn initialize_wallet(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         wallet_id: &str,
-    ) -> Result<Chain::Wallet, Bootstrap::Error> {
+    ) -> Result<ChainDriver::Wallet, Bootstrap::Error> {
         let seed_content = bootstrap
             .runtime()
             .exec_command(
@@ -53,13 +57,18 @@ where
             .map_err(Bootstrap::raise_error)?
             .stderr;
 
-        let json_val: json::Value = json::from_str(&seed_content).map_err(Report::from)?;
+        let json_val: json::Value =
+            json::from_str(&seed_content).map_err(Bootstrap::raise_error)?;
 
         let wallet_address = json_val
             .get("address")
-            .ok_or_else(|| eyre!("expect address string field to be present in json result"))?
+            .ok_or_else(|| {
+                Bootstrap::raise_error("expect address string field to be present in json result")
+            })?
             .as_str()
-            .ok_or_else(|| eyre!("expect address string field to be present in json result"))?
+            .ok_or_else(|| {
+                Bootstrap::raise_error("expect address string field to be present in json result")
+            })?
             .to_string();
 
         // Write the wallet secret as a file so that a tester can use it during manual tests
@@ -76,8 +85,8 @@ where
 
         let hd_path = bootstrap.wallet_hd_path();
 
-        let keypair =
-            Secp256k1KeyPair::from_seed_file(&seed_content, &hd_path).map_err(Report::from)?;
+        let keypair = Secp256k1KeyPair::from_seed_file(&seed_content, &hd_path)
+            .map_err(Bootstrap::raise_error)?;
 
         let wallet = CosmosTestWallet {
             id: wallet_id.to_owned(),

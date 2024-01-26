@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
@@ -14,9 +14,13 @@ pub trait HasConnectionStateType<Counterparty>: HasIbcChainTypes<Counterparty> {
     fn connection_base_state(state: &Self::ConnectionState) -> Option<ConnectionBaseState>;
 }
 
+#[derive_component(InitConnectionOptionsTypeComponent, ProvideInitConnectionOptionsType<Chain>)]
 pub trait HasInitConnectionOptionsType<Counterparty>: Async {
     type InitConnectionOptions: Async;
 }
+
+pub type InitConnectionOptions<Chain, Counterparty> =
+    <Chain as HasInitConnectionOptionsType<Counterparty>>::InitConnectionOptions;
 
 /**
     Payload that contains necessary counterparty information such as proofs and parameters

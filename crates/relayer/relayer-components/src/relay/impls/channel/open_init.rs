@@ -5,7 +5,7 @@ use crate::chain::traits::components::channel_handshake_payload_builder::CanBuil
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::channel::open_init::ChannelInitializer;
 
 pub trait CanRaiseMissingChannelInitEventError: HasRelayChains {
@@ -25,7 +25,8 @@ pub struct InitializeChannel;
 impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanRaiseMissingChannelInitEventError,
+        + CanRaiseMissingChannelInitEventError
+        + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitChannelOptionsType<DstChain>
         + CanBuildChannelHandshakeMessages<DstChain>

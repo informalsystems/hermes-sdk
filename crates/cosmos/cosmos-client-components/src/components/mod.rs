@@ -1,13 +1,17 @@
 pub mod ack_packet_message;
 pub mod ack_packet_payload;
+pub mod all;
 pub mod channel_handshake_message;
 pub mod channel_handshake_payload;
 pub mod connection_handshake_message;
 pub mod connection_handshake_payload;
 pub mod create_client_message;
 pub mod create_client_payload;
+pub mod init_channel_options;
+pub mod init_connection_options;
 pub mod packet_fields;
 pub mod packet_from_ack;
+pub mod query_block;
 pub mod query_chain_id;
 pub mod query_chain_status;
 pub mod query_client_state;

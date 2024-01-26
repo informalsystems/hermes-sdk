@@ -6,7 +6,7 @@ use crate::chain::traits::components::channel_handshake_payload_builder::CanBuil
 use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenTryEvent;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::channel::open_try::ChannelOpenTryRelayer;
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::DestinationTarget;
@@ -39,7 +39,8 @@ impl<Relay, SrcChain, DstChain> ChannelOpenTryRelayer<Relay> for RelayChannelOpe
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + CanRaiseMissingChannelTryEventError,
+        + CanRaiseMissingChannelTryEventError
+        + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildChannelHandshakePayloads<DstChain>,
     DstChain: CanQueryClientState<SrcChain>
         + CanBuildChannelHandshakeMessages<SrcChain>

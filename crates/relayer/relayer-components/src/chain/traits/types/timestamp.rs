@@ -6,7 +6,7 @@ use core::fmt::Display;
 
 use cgp_core::prelude::*;
 
-#[derive_component(TimestampTypeProviderComponent, TimestampTypeProvider<Chain>)]
+#[derive_component(TimestampTypeComponent, ProvideTimestampType<Chain>)]
 pub trait HasTimestampType: Async {
     /**
        The timestamp of a chain, which should increment monotonically.

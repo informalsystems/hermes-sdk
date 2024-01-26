@@ -10,6 +10,7 @@ pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasError
         &self,
         command_path: &Self::FilePath,
         command_args: &[&str],
+        envs: &[(&str, &str)],
         stdout_path: Option<&Self::FilePath>,
         stderr_path: Option<&Self::FilePath>,
     ) -> Result<Self::ChildProcess, Self::Error>;
