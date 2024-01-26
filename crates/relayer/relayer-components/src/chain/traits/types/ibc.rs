@@ -46,7 +46,7 @@ use crate::chain::traits::types::message::HasMessageType;
    access to two chain contexts are handled by the
    [relay context](crate::relay).
 */
-#[derive_component(IbcChainTypesProviderComponent, IbcChainTypesProvider<Chain>)]
+#[derive_component(IbcChainTypesComponent, ProvideIbcChainTypes<Chain>)]
 pub trait HasIbcChainTypes<Counterparty>: HasChainTypes {
     /**
        The client ID of the counterparty chain, that is stored on the self

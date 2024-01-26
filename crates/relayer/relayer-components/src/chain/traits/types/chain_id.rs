@@ -14,7 +14,7 @@ use cgp_core::prelude::*;
    corresponds to a given chain, based on the chain ID information that is
    queried from a channel ID.
 */
-#[derive_component(ChainIdTypeProviderComponent, ChainIdTypeProvider<Chain>)]
+#[derive_component(ChainIdTypeComponent, ProvideChainIdType<Chain>)]
 pub trait HasChainIdType: Async {
     /**
        The ID of a chain, which should implement [`Eq`] to differentiate chain

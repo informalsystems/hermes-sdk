@@ -1,5 +1,6 @@
 pub mod ack_packet_message_builder;
 pub mod ack_packet_payload_builder;
+pub mod block_querier;
 pub mod chain_status_querier;
 pub mod channel_handshake_message_builder;
 pub mod channel_handshake_payload_builder;

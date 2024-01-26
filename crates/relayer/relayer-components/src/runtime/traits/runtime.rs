@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 
 #[derive_component(RuntimeTypeComponent, ProvideRuntimeType<Context>)]
 pub trait HasRuntimeType: Async {
@@ -7,8 +6,6 @@ pub trait HasRuntimeType: Async {
 }
 
 #[derive_component(RuntimeComponent, ProvideRuntime<Context>)]
-pub trait HasRuntime:
-    HasRuntimeType + CanRaiseError<<Self::Runtime as HasErrorType>::Error>
-{
+pub trait HasRuntime: HasRuntimeType {
     fn runtime(&self) -> &Self::Runtime;
 }

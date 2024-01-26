@@ -78,8 +78,12 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --all-features --no-fail-fast --no-run
-      - uses: actions-rs/cargo@v1
-        with:
-          command: nextest
-          args: run --all-features --no-fail-fast --workspace --exclude ibc-integration-test --exclude hermes-cosmos-integration-tests --no-capture
+          args: --all-features --no-run
+      - name: run unit tests
+        run: |
+            cargo nextest run \
+              --all-features --workspace \
+              --exclude ibc-integration-test \
+              --exclude hermes-cosmos-integration-tests \
+              --exclude hermes-celestia-integration-tests \
+              --failure-output final

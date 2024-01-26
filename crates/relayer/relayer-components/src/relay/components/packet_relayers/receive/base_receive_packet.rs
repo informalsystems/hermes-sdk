@@ -5,7 +5,7 @@ use crate::chain::traits::components::receive_packet_message_builder::CanBuildRe
 use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::Height;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayer;
 use crate::relay::traits::target::DestinationTarget;
@@ -16,7 +16,9 @@ pub struct BaseReceivePacketRelayer;
 #[async_trait]
 impl<Relay, AckEvent> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
 where
-    Relay: HasRelayChains + CanSendSingleIbcMessage<MainSink, DestinationTarget>,
+    Relay: HasRelayChains
+        + CanSendSingleIbcMessage<MainSink, DestinationTarget>
+        + CanRaiseRelayChainErrors,
     Relay::SrcChain: CanBuildReceivePacketPayload<Relay::DstChain>,
     Relay::DstChain: CanQueryClientState<Relay::SrcChain>
         + CanBuildReceivePacketMessage<Relay::SrcChain>

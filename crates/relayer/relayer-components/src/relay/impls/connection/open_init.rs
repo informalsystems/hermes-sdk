@@ -8,7 +8,7 @@ use crate::chain::traits::components::connection_handshake_payload_builder::CanB
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
 
 pub trait CanRaiseMissingConnectionInitEventError: HasRelayChains {
@@ -27,7 +27,8 @@ pub struct InitializeConnection;
 impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConnection
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanRaiseMissingConnectionInitEventError,
+        + CanRaiseMissingConnectionInitEventError
+        + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>
         + CanBuildConnectionHandshakeMessages<DstChain>

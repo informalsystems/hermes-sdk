@@ -1,7 +1,8 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
@@ -13,7 +14,10 @@ pub struct InitCosmosChainData;
 #[async_trait]
 impl<Bootstrap, Runtime, Chain> ChainDataInitializer<Bootstrap> for InitCosmosChainData
 where
-    Bootstrap: HasChainType<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasChainCommandPath,
+    Bootstrap: HasChainType<Chain = Chain>
+        + HasRuntime<Runtime = Runtime>
+        + HasChainCommandPath
+        + CanRaiseError<Runtime::Error>,
     Runtime: HasFilePathType + CanExecCommand,
     Chain: HasChainIdType,
 {

@@ -1,12 +1,12 @@
 use cgp_core::HasInner;
 
 use crate::chain::traits::types::chain_id::{
-    ChainIdGetter, ChainIdTypeProvider, HasChainId, HasChainIdType,
+    ChainIdGetter, HasChainId, HasChainIdType, ProvideChainIdType,
 };
 
 pub struct ForwardChainId;
 
-impl<Chain, Inner> ChainIdTypeProvider<Chain> for ForwardChainId
+impl<Chain, Inner> ProvideChainIdType<Chain> for ForwardChainId
 where
     Chain: HasInner<Inner = Inner>,
     Inner: HasChainIdType,

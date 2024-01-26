@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use hermes_test_components::bootstrap::traits::types::chain::HasChainType;
-use hermes_test_components::chain::traits::types::amount::{Amount, HasAmountType};
+use hermes_test_components::chain_driver::traits::types::amount::{Amount, HasAmountType};
+use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 /**
    A wallet config is a template for generating fresh wallets for a chain.
@@ -15,9 +15,9 @@ pub trait HasWalletConfigType: Async {
 }
 
 #[derive_component(WalletConfigFieldsComponent, WalletConfigFieldsGetter<Bootstrap>)]
-pub trait HasWalletConfigFields: HasWalletConfigType + HasChainType
+pub trait HasWalletConfigFields: HasWalletConfigType + HasChainDriverType
 where
-    Self::Chain: HasAmountType,
+    Self::ChainDriver: HasAmountType,
 {
     /// Get the ID for identifying the wallet from the chain configuration.
     /// This can be used for locating the private key of the wallet.
@@ -26,13 +26,14 @@ where
     /// Get the balances that the wallet should have in genesis.
     /// The returned amounts should be in different denoms, or the
     /// gentx command may fail.
-    fn wallet_config_genesis_balances(wallet_config: &Self::WalletConfig)
-        -> &[Amount<Self::Chain>];
+    fn wallet_config_genesis_balances(
+        wallet_config: &Self::WalletConfig,
+    ) -> &[Amount<Self::ChainDriver>];
 
     /// If the wallet is a validator, returns an amount that should be staked
     /// on genesis. The amount should be in the native staking denom,
     /// or the bootstrapping may fail.
     fn wallet_config_validator_staked_amount(
         wallet_config: &Self::WalletConfig,
-    ) -> Option<&Amount<Self::Chain>>;
+    ) -> Option<&Amount<Self::ChainDriver>>;
 }
