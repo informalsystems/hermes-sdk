@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -11,7 +10,6 @@ use crate::types::payloads::client::CosmosUpdateClientPayload;
 
 pub struct BuildCosmosUpdateClientMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
     for BuildCosmosUpdateClientMessage
 where
@@ -21,9 +19,9 @@ where
 {
     async fn build_update_client_message(
         _chain: &Chain,
-        client_id: &Chain::ClientId,
-        payload: Counterparty::UpdateClientPayload,
-    ) -> Result<Vec<Chain::Message>, Chain::Error> {
+        client_id: &ClientId,
+        payload: CosmosUpdateClientPayload,
+    ) -> Result<Vec<CosmosMessage>, Chain::Error> {
         let messages = payload
             .headers
             .into_iter()

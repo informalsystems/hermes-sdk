@@ -46,7 +46,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
+use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntimeType;
@@ -206,7 +206,7 @@ impl HasClientStateType<MockChainContext> for MockChainContext {
     type ClientState = ();
 }
 
-impl ChainStatusTypeProvider<MockChainContext> for MockChainComponents {
+impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
     type ChainStatus = ChainStatus;
 
     fn chain_status_height(status: &Self::ChainStatus) -> &MockHeight {

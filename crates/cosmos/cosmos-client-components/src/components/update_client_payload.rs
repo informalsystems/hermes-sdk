@@ -1,6 +1,5 @@
 use core::iter;
 
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -16,7 +15,6 @@ use crate::types::tendermint::{TendermintClientState, TendermintHeader};
 
 pub struct BuildUpdateClientPayloadWithChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildUpdateClientPayloadWithChainHandle
 where
@@ -27,10 +25,10 @@ where
 {
     async fn build_update_client_payload(
         chain: &Chain,
-        trusted_height: &Chain::Height,
-        target_height: &Chain::Height,
-        client_state: Chain::ClientState,
-    ) -> Result<Chain::UpdateClientPayload, Chain::Error> {
+        trusted_height: &Height,
+        target_height: &Height,
+        client_state: TendermintClientState,
+    ) -> Result<CosmosUpdateClientPayload, Chain::Error> {
         let trusted_height = *trusted_height;
         let target_height = *target_height;
 
