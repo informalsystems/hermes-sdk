@@ -12,8 +12,13 @@ members = [
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
+    "crates/celestia/celestia-client-components",
     "crates/celestia/celestia-test-components",
     "crates/celestia/celestia-integration-tests",
+    "crates/sovereign/sovereign-client-components",
+    "crates/sovereign/sovereign-cosmos-relayer",
+    "crates/sovereign/sovereign-test-components",
+    "crates/sovereign/sovereign-integration-tests",
     "crates/solomachine/solomachine-relayer",
     "crates/mock/mock-relayer",
     "crates/mock/mock-cosmos-relayer",
@@ -70,7 +75,13 @@ hermes-cosmos-client-components     = { version = "0.1.0", path = "./crates/cosm
 hermes-cosmos-relayer               = { version = "0.1.0", path = "./crates/cosmos/cosmos-relayer" }
 hermes-cosmos-test-components       = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-integration-tests     = { version = "0.1.0", path = "./crates/cosmos/cosmos-integration-tests" }
+hermes-celestia-client-components   = { version = "0.1.0", path = "./crates/celestia/celestia-client-components" }
 hermes-celestia-test-components     = { version = "0.1.0", path = "./crates/celestia/celestia-test-components" }
+hermes-celestia-integration-tests   = { version = "0.1.0", path = "./crates/celestia/celestia-integration-tests" }
+hermes-sovereign-client-components  = { version = "0.1.0", path = "./crates/celestia/sovereign-client-components" }
+hermes-sovereign-cosmos-relayer     = { version = "0.1.0", path = "./crates/celestia/sovereign-cosmos-relayer" }
+hermes-sovereign-test-components    = { version = "0.1.0", path = "./crates/celestia/sovereign-test-components" }
+hermes-sovereign-integration-tests  = { version = "0.1.0", path = "./crates/celestia/sovereign-integration-tests" }
 hermes-async-runtime-components     = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
