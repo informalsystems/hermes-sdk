@@ -66,7 +66,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
+use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -331,7 +331,7 @@ where
     }
 }
 
-impl<Chain: BasecoinEndpoint> ChainStatusTypeProvider<MockCosmosContext<Chain>>
+impl<Chain: BasecoinEndpoint> ProvideChainStatusType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type ChainStatus = ChainStatus;

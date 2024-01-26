@@ -1,7 +1,8 @@
-use cgp_core::{Async, CanRaiseError, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::relay::traits::chains::HasRelayChains;
 
+#[derive_component(TwoChainTypesComponent, ProvideTwoChainTypes<BiRelay>)]
 pub trait HasTwoChainTypes: Async {
     type ChainA: HasErrorType;
 
@@ -15,11 +16,8 @@ pub trait HasTwoChainTypes: Async {
 /// Two-way relay contexts are composed of two separate relay
 /// contexts, one that relays from chain A to chain B, the
 /// other that relays from chain B to chain A.
-pub trait HasTwoWayRelayTypes:
-    HasTwoChainTypes
-    + CanRaiseError<<Self::RelayAToB as HasErrorType>::Error>
-    + CanRaiseError<<Self::RelayBToA as HasErrorType>::Error>
-{
+#[derive_component(TwoWayRelayTypesComponent, ProvideTwoWayRelayTypes<BiRelay>)]
+pub trait HasTwoWayRelayTypes: HasTwoChainTypes {
     /// The relay context that relays from chain A to chain B.
     type RelayAToB: HasRelayChains<SrcChain = Self::ChainA, DstChain = Self::ChainB>;
 
@@ -38,6 +36,7 @@ pub trait HasTwoWayRelayTypes:
     >;
 }
 
+#[derive_component(TwoWayRelayGetterComponent, TwoWayRelayGetter<BiRelay>)]
 pub trait HasTwoWayRelay: HasTwoWayRelayTypes {
     /// Returns a read-only reference to the relay context from chain A
     /// to chain B.

@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
@@ -15,7 +14,6 @@ use crate::types::payloads::client::CosmosCreateClientPayload;
 
 pub struct BuildCreateClientPayloadWithChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCreateClientPayloadWithChainHandle
 where
@@ -27,7 +25,7 @@ where
     async fn build_create_client_payload(
         chain: &Chain,
         create_client_options: &ClientSettings,
-    ) -> Result<Chain::CreateClientPayload, Chain::Error> {
+    ) -> Result<CosmosCreateClientPayload, Chain::Error> {
         let client_settings = create_client_options.clone();
 
         chain

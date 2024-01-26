@@ -1,0 +1,20 @@
+[package]
+name         = "hermes-sovereign-test-components"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Dependencies for running Sovereign integration tests
+"""
+
+[dependencies]
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
+cgp-core                            = { workspace = true }
+hermes-relayer-runtime              = { workspace = true }
+hermes-relayer-components           = { workspace = true }

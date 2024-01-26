@@ -1,0 +1,21 @@
+[package]
+name         = "hermes-celestia-chain"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Concrete implementation of Celestia chain context
+"""
+
+[dependencies]
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
+cgp-core                            = { workspace = true }
+hermes-relayer-runtime              = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+hermes-cosmos-relayer               = { workspace = true }

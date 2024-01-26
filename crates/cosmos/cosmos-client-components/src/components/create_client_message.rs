@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
@@ -10,7 +9,6 @@ use crate::types::payloads::client::CosmosCreateClientPayload;
 
 pub struct BuildCosmosCreateClientMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCosmosCreateClientMessage
 where
@@ -19,8 +17,8 @@ where
 {
     async fn build_create_client_message(
         _chain: &Chain,
-        payload: Counterparty::CreateClientPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        payload: CosmosCreateClientPayload,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosCreateClientMessage {
             client_state: payload.client_state.into(),
             consensus_state: payload.consensus_state.into(),

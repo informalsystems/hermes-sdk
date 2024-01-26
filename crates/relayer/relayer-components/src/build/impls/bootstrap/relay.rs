@@ -43,7 +43,7 @@ where
         + CanBuildChain<Target::SrcChainTarget>
         + CanBuildChain<Target::DstChainTarget>
         + CanRaiseError<BiRelay::Error>,
-    BiRelay: HasTwoWayRelay,
+    BiRelay: HasTwoWayRelay + CanRaiseError<Relay::Error>,
     Target: RelayBuildTarget<Self, TargetRelay = Relay>,
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>
         + CanCreateClient<SourceTarget>

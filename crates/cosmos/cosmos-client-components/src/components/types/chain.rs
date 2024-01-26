@@ -13,7 +13,7 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::ProvideIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
-use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeProvider;
+use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, ProvideTimestampType,
 };
@@ -77,7 +77,7 @@ where
     type Event = Arc<AbciEvent>;
 }
 
-impl<Chain> ChainStatusTypeProvider<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideChainStatusType<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasHeightType<Height = Height> + HasTimestampType<Timestamp = Timestamp>,
 {

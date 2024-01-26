@@ -1544,6 +1544,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-celestia-chain"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-cosmos-relayer",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "ibc-relayer",
+ "ibc-relayer-types",
+]
+
+[[package]]
+name = "hermes-celestia-client-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "ibc-relayer",
+ "ibc-relayer-types",
+]
+
+[[package]]
 name = "hermes-celestia-integration-tests"
 version = "0.1.0"
 dependencies = [
@@ -1600,7 +1623,6 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
- "hermes-test-components",
  "http",
  "ibc-proto",
  "ibc-relayer",
@@ -1798,6 +1820,55 @@ dependencies = [
  "tendermint",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "hermes-sovereign-client-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "ibc-relayer",
+ "ibc-relayer-types",
+]
+
+[[package]]
+name = "hermes-sovereign-cosmos-relayer"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cgp-error-eyre",
+ "hermes-celestia-chain",
+ "hermes-cosmos-relayer",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "hermes-sovereign-client-components",
+ "ibc-relayer",
+ "ibc-relayer-types",
+]
+
+[[package]]
+name = "hermes-sovereign-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "ibc-relayer",
+ "ibc-relayer-types",
+]
+
+[[package]]
+name = "hermes-sovereign-test-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "ibc-relayer",
+ "ibc-relayer-types",
 ]
 
 [[package]]
