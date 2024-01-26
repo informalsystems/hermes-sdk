@@ -1,5 +1,5 @@
 [package]
-name         = "hermes-sovereign-cosmos-relayer"
+name         = "hermes-celestia-chain"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }
@@ -9,7 +9,7 @@ authors      = { workspace = true }
 rust-version = { workspace = true }
 readme       = "README.md"
 description  = """
-    Concrete context implementation for building a Sovereign to Cosmos relayer
+    Concrete implementation of Celestia chain context
 """
 
 [dependencies]
@@ -19,4 +19,3 @@ cgp-core                            = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
-hermes-celestia-chain               = { workspace = true }

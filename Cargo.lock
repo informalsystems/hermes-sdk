@@ -1544,6 +1544,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-celestia-chain"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-cosmos-relayer",
+ "hermes-relayer-components",
+ "hermes-relayer-runtime",
+ "ibc-relayer",
+ "ibc-relayer-types",
+]
+
+[[package]]
 name = "hermes-celestia-client-components"
 version = "0.1.0"
 dependencies = [
@@ -1826,6 +1838,7 @@ name = "hermes-sovereign-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-celestia-chain",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",

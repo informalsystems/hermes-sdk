@@ -12,6 +12,7 @@ members = [
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
+    "crates/celestia/celestia-chain",
     "crates/celestia/celestia-client-components",
     "crates/celestia/celestia-test-components",
     "crates/celestia/celestia-integration-tests",
@@ -76,6 +77,7 @@ hermes-cosmos-relayer               = { version = "0.1.0", path = "./crates/cosm
 hermes-cosmos-test-components       = { version = "0.1.0", path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-integration-tests     = { version = "0.1.0", path = "./crates/cosmos/cosmos-integration-tests" }
 hermes-celestia-client-components   = { version = "0.1.0", path = "./crates/celestia/celestia-client-components" }
+hermes-celestia-chain               = { version = "0.1.0", path = "./crates/celestia/celestia-chain" }
 hermes-celestia-test-components     = { version = "0.1.0", path = "./crates/celestia/celestia-test-components" }
 hermes-celestia-integration-tests   = { version = "0.1.0", path = "./crates/celestia/celestia-integration-tests" }
 hermes-sovereign-client-components  = { version = "0.1.0", path = "./crates/celestia/sovereign-client-components" }

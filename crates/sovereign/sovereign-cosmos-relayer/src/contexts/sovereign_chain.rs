@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
-
-use crate::contexts::celestia_chain::CelestiaChain;
+use hermes_celestia_chain::contexts::celestia_chain::CelestiaChain;
 
 pub struct SovereignChain {
     pub celestia_chain: CelestiaChain,
