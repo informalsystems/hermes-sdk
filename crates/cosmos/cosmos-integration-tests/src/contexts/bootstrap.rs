@@ -92,8 +92,7 @@ delegate_components! {
     CosmosBootstrapComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
-        RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideTokioRuntimeType,
         ChainConfigTypeComponent: ProvideCosmosChainConfigType,
         GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,

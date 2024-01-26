@@ -11,7 +11,11 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
+use hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
+use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::impls::types::ProvideSovereignChainTypes;
@@ -32,8 +36,12 @@ delegate_components! {
     SovereignChainComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
-        RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
         [
             HeightTypeComponent,
             TimestampTypeComponent,
@@ -44,5 +52,11 @@ delegate_components! {
             IbcPacketTypesProviderComponent,
         ]:
             ProvideSovereignChainTypes,
+    }
+}
+
+impl ProvideRuntime<SovereignChain> for SovereignChainComponents {
+    fn runtime(chain: &SovereignChain) -> &HermesRuntime {
+        &chain.runtime
     }
 }
