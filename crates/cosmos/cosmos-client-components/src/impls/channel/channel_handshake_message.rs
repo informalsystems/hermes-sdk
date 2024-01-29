@@ -43,8 +43,8 @@ where
         _chain: &Chain,
         port_id: &Chain::PortId,
         counterparty_port_id: &Counterparty::PortId,
-        init_channel_options: &Chain::InitChannelOptions,
-    ) -> Result<Chain::Message, Chain::Error> {
+        init_channel_options: &CosmosInitChannelOptions,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let port_id = port_id.clone();
         let ordering = init_channel_options.ordering;
         let connection_hops = init_channel_options.connection_hops.clone();
@@ -70,8 +70,8 @@ where
         port_id: &Chain::PortId,
         counterparty_port_id: &Counterparty::PortId,
         counterparty_channel_id: &Counterparty::ChannelId,
-        counterparty_payload: Counterparty::ChannelOpenTryPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        counterparty_payload: CosmosChannelOpenTryPayload,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let port_id = port_id.clone();
         let counterparty = ChannelCounterparty::new(
             counterparty_port_id.clone(),
@@ -105,8 +105,8 @@ where
         port_id: &Chain::PortId,
         channel_id: &Chain::ChannelId,
         counterparty_channel_id: &Counterparty::ChannelId,
-        counterparty_payload: Counterparty::ChannelOpenAckPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        counterparty_payload: CosmosChannelOpenAckPayload,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosChannelOpenAckMessage {
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
@@ -123,8 +123,8 @@ where
         _chain: &Chain,
         port_id: &Chain::PortId,
         channel_id: &Chain::ChannelId,
-        counterparty_payload: Counterparty::ChannelOpenConfirmPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        counterparty_payload: CosmosChannelOpenConfirmPayload,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosChannelOpenConfirmMessage {
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
