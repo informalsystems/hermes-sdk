@@ -1,13 +1,10 @@
-use hermes_cosmos_client_components::types::payloads::client::{
-    CosmosCreateClientPayload, CosmosUpdateClientPayload,
-};
+use hermes_cosmos_client_components::types::payloads::client::CosmosCreateClientPayload;
 use hermes_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -40,8 +37,4 @@ impl<Counterparty> HasConsensusStateType<Counterparty> for CosmosChain {
 
 impl<Counterparty> HasCreateClientPayload<Counterparty> for CosmosChain {
     type CreateClientPayload = CosmosCreateClientPayload;
-}
-
-impl<Counterparty> HasUpdateClientPayload<Counterparty> for CosmosChain {
-    type UpdateClientPayload = CosmosUpdateClientPayload;
 }

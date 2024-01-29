@@ -30,7 +30,7 @@ use hermes_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, HasIbcChainTypes,
 };
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::logger::traits::has_logger::HasLoggerType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 
@@ -57,7 +57,7 @@ where
     Counterparty: HasClientStateType<Self>
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
-        + HasUpdateClientPayload<Self>,
+        + HasUpdateClientPayloadType<Self>,
 {
 }
 
@@ -75,12 +75,12 @@ where
         + HasCounterpartyMessageHeight<Counterparty>
         + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
-        + HasUpdateClientPayload<Counterparty>
+        + HasUpdateClientPayloadType<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
-        + HasUpdateClientPayload<Chain>,
+        + HasUpdateClientPayloadType<Chain>,
     Chain::Telemetry: HasBasicMetrics,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraChainComponents<BaseComponents>

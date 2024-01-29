@@ -37,6 +37,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePa
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::impls::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::ack_packet_payload::BuildCosmosAckPacketPayload;
@@ -90,6 +91,7 @@ delegate_components! {
         ]:
             ProvideCosmosChainTypes,
         [
+            UpdateClientPayloadTypeComponent,
             ConnectionHandshakePayloadTypeComponent,
             ChannelHandshakePayloadTypeComponent,
             ReceivePacketPayloadTypeComponent,

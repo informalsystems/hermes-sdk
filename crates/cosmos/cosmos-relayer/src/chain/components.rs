@@ -50,6 +50,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePa
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -114,11 +115,14 @@ delegate_components! {
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
+
+            UpdateClientPayloadTypeComponent,
             ConnectionHandshakePayloadTypeComponent,
             ChannelHandshakePayloadTypeComponent,
             ReceivePacketPayloadTypeComponent,
             AckPacketPayloadTypeComponent,
             TimeoutUnorderedPacketPayloadTypeComponent,
+
             MessageSenderComponent,
             PacketFieldsReaderComponent,
             ConsensusStateHeightQuerierComponent,

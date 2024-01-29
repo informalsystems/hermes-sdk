@@ -30,7 +30,7 @@ use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
@@ -50,7 +50,7 @@ where
     Counterparty: HasClientStateType<Self>
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
-        + HasUpdateClientPayload<Self>
+        + HasUpdateClientPayloadType<Self>
         + HasReceivePacketPayloadType<Self>
         + HasAckPacketPayloadType<Self>
         + HasTimeoutUnorderedPacketPayloadType<Self>,
@@ -71,7 +71,7 @@ where
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
-        + HasUpdateClientPayload<Chain>
+        + HasUpdateClientPayloadType<Chain>
         + HasAckPacketPayloadType<Chain>
         + HasTimeoutUnorderedPacketPayloadType<Chain>
         + HasReceivePacketPayloadType<Chain>,

@@ -3,7 +3,7 @@ use core::iter;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer_types::core::ics02_client::header::AnyHeader;
@@ -19,7 +19,7 @@ impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildUpdateClientPayloadWithChainHandle
 where
     Chain: HasHeightType<Height = Height>
-        + HasUpdateClientPayload<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
+        + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
         + HasClientStateType<Counterparty, ClientState = TendermintClientState>
         + HasBlockingChainHandle,
 {

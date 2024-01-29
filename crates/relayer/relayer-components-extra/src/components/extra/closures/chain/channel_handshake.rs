@@ -16,7 +16,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     HasChannelOpenInitEvent, HasChannelOpenTryEvent,
 };
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
@@ -34,7 +34,7 @@ where
     Counterparty: HasClientStateType<Self>
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
-        + HasUpdateClientPayload<Self>
+        + HasUpdateClientPayloadType<Self>
         + HasChannelHandshakePayloadTypes<Self>,
 {
 }
@@ -51,7 +51,7 @@ where
     Counterparty: HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasIbcChainTypes<Chain>
-        + HasUpdateClientPayload<Chain>
+        + HasUpdateClientPayloadType<Chain>
         + HasChannelHandshakePayloadTypes<Chain>,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraChainComponents<BaseComponents>

@@ -2,7 +2,7 @@ use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
 use crate::types::client_state::SovereignClientState;
 use crate::types::height::RollupHeight;
@@ -18,7 +18,7 @@ impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildSovereignUpdateClientPayload
 where
     Chain: HasHeightType<Height = RollupHeight>
-        + HasUpdateClientPayload<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
+        + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>
         + HasErrorType, // TODO: Add dependencies for update client payload here
 {

@@ -68,7 +68,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::log::value::LogValue;
@@ -455,11 +455,10 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasUpdateClientPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty> ProvideUpdateClientPayloadType<Chain, Counterparty>
+    for MockCosmosChainComponents
 where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
+    Chain: Async,
 {
     type UpdateClientPayload = MsgUpdateClient;
 }
