@@ -44,7 +44,7 @@ use hermes_relayer_components::chain::traits::types::message::{
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
@@ -369,7 +369,7 @@ impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents
     }
 }
 
-impl HasReceivePacketPayload<MockChainContext> for MockChainContext {
+impl ProvideReceivePacketPayloadType<MockChainContext, MockChainContext> for MockChainComponents {
     type ReceivePacketPayload = MockMessage;
 }
 

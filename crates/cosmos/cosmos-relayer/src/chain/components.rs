@@ -45,6 +45,7 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
@@ -111,6 +112,7 @@ delegate_components! {
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
+            ReceivePacketPayloadTypeComponent,
             MessageSenderComponent,
             PacketFieldsReaderComponent,
             ConsensusStateHeightQuerierComponent,

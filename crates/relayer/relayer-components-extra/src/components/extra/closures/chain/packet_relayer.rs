@@ -28,7 +28,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
@@ -51,7 +51,7 @@ where
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
         + HasUpdateClientPayload<Self>
-        + HasReceivePacketPayload<Self>
+        + HasReceivePacketPayloadType<Self>
         + HasAckPacketPayload<Self>
         + HasTimeoutUnorderedPacketPayload<Self>,
 {
@@ -62,7 +62,7 @@ impl<Chain, Counterparty, Components, BaseComponents>
 where
     Chain: CanLogChainPacket<Counterparty>
         + HasIbcPacketTypes<Counterparty>
-        + HasReceivePacketPayload<Counterparty>
+        + HasReceivePacketPayloadType<Counterparty>
         + HasWriteAckEvent<Counterparty>
         + HasAckPacketPayload<Counterparty>
         + HasTimeoutUnorderedPacketPayload<Counterparty>
@@ -74,7 +74,7 @@ where
         + HasUpdateClientPayload<Chain>
         + HasAckPacketPayload<Chain>
         + HasTimeoutUnorderedPacketPayload<Chain>
-        + HasReceivePacketPayload<Chain>,
+        + HasReceivePacketPayloadType<Chain>,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraChainComponents<BaseComponents>
         + PacketFieldsReader<Chain, Counterparty>

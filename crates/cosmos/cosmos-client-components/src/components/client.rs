@@ -32,6 +32,7 @@ use hermes_relayer_components::chain::traits::types::height::{GenesisHeightGette
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
@@ -64,6 +65,7 @@ use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::channel_handshake_payload::ProvideCosmosChannelHandshakePayloads;
 use crate::impls::types::connection_handshake_payload::ProvideCosmosConnectionHandshakePayloads;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
+use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 use crate::impls::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 
@@ -87,6 +89,10 @@ delegate_components! {
             BlockHashComponent,
         ]:
             ProvideCosmosChainTypes,
+        [
+            ReceivePacketPayloadTypeComponent,
+        ]:
+            ProvideCosmosPayloadTypes,
         MessageSenderComponent:
             SendMessagesToTxContext,
         PacketFieldsReaderComponent:

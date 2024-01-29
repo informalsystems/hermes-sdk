@@ -12,7 +12,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -147,7 +147,8 @@ where
     type ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> HasReceivePacketPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

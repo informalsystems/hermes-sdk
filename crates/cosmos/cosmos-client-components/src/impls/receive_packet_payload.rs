@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::components::receive_packet_payload
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType};
 use ibc_relayer_types::Height;
@@ -17,7 +17,7 @@ pub struct BuildCosmosReceivePacketPayload;
 impl<Chain, Counterparty> ReceivePacketPayloadBuilder<Chain, Counterparty>
     for BuildCosmosReceivePacketPayload
 where
-    Chain: HasReceivePacketPayload<Counterparty, ReceivePacketPayload = CosmosReceivePacketPayload>
+    Chain: HasReceivePacketPayloadType<Counterparty, ReceivePacketPayload = CosmosReceivePacketPayload>
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
         + HasClientStateType<Counterparty>
         + HasHeightType<Height = Height>
