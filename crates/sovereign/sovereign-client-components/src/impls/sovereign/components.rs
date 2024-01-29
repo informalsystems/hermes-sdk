@@ -15,7 +15,7 @@ use crate::impls::sovereign::client::create_client_message::BuildCreateCosmosCli
 use crate::impls::sovereign::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::impls::sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::impls::sovereign::client::update_client_payload::BuildSovereignUpdateClientPayload;
-use crate::impls::sovereign::types::ProvideSovereignChainTypes;
+use crate::impls::sovereign::types::chain::ProvideSovereignChainTypes;
 
 pub struct SovereignClientComponents;
 
