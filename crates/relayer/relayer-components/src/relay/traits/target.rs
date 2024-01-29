@@ -3,6 +3,7 @@ use cgp_core::{Async, HasErrorType};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::runtime::types::aliases::ErrorOf;
 
 #[derive(Default, Clone, Copy)]
 pub struct SourceTarget;
@@ -15,11 +16,9 @@ pub trait ChainTarget<Relay: HasRelayChains>: Async + Default + Copy + private::
 
     type CounterpartyChain: HasIbcChainTypes<Self::TargetChain> + HasErrorType;
 
-    fn target_chain_error(e: <Self::TargetChain as HasErrorType>::Error) -> Relay::Error;
+    fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error;
 
-    fn counterparty_chain_error(
-        e: <Self::CounterpartyChain as HasErrorType>::Error,
-    ) -> Relay::Error;
+    fn counterparty_chain_error(e: ErrorOf<Self::CounterpartyChain>) -> Relay::Error;
 
     fn target_chain(relay: &Relay) -> &Self::TargetChain;
 
@@ -43,13 +42,11 @@ where
 
     type CounterpartyChain = Relay::DstChain;
 
-    fn target_chain_error(e: <Self::TargetChain as HasErrorType>::Error) -> Relay::Error {
+    fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
         Relay::raise_error(e)
     }
 
-    fn counterparty_chain_error(
-        e: <Self::CounterpartyChain as HasErrorType>::Error,
-    ) -> Relay::Error {
+    fn counterparty_chain_error(e: ErrorOf<Self::CounterpartyChain>) -> Relay::Error {
         Relay::raise_error(e)
     }
 
@@ -82,13 +79,11 @@ where
 
     type CounterpartyChain = Relay::SrcChain;
 
-    fn target_chain_error(e: <Self::TargetChain as HasErrorType>::Error) -> Relay::Error {
+    fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
         Relay::raise_error(e)
     }
 
-    fn counterparty_chain_error(
-        e: <Self::CounterpartyChain as HasErrorType>::Error,
-    ) -> Relay::Error {
+    fn counterparty_chain_error(e: ErrorOf<Self::CounterpartyChain>) -> Relay::Error {
         Relay::raise_error(e)
     }
 

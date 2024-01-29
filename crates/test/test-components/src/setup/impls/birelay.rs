@@ -2,13 +2,13 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
+use hermes_relayer_components::runtime::types::aliases::ErrorOf;
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::setup::traits::birelay::BiRelaySetup;
 use crate::setup::traits::builder_at::HasBuilderAt;
 use crate::setup::traits::relay::CanSetupRelays;
-use crate::types::error::ErrorOf;
 use crate::types::index::Twindex;
 
 pub struct SetupBiRelayWithBuilder;

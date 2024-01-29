@@ -4,6 +4,7 @@ use cgp_core::CanRaiseError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::types::aliases::ClientIdOf;
+use crate::runtime::types::aliases::ErrorOf;
 
 /**
     This covers the minimal abstract types that are used inside a relay context.
@@ -82,15 +83,13 @@ pub trait HasRelayChains: HasErrorType {
 }
 
 pub trait CanRaiseRelayChainErrors:
-    HasRelayChains
-    + CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
-    + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+    HasRelayChains + CanRaiseError<ErrorOf<Self::SrcChain>> + CanRaiseError<ErrorOf<Self::DstChain>>
 {
 }
 
 impl<Relay> CanRaiseRelayChainErrors for Relay where
     Relay: HasRelayChains
-        + CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
-        + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+        + CanRaiseError<ErrorOf<Self::SrcChain>>
+        + CanRaiseError<ErrorOf<Self::DstChain>>
 {
 }

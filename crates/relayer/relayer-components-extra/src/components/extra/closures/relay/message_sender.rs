@@ -1,4 +1,3 @@
-use cgp_core::prelude::HasErrorType;
 use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
@@ -10,6 +9,7 @@ use hermes_relayer_components::relay::traits::components::ibc_message_sender::{
 use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::runtime::types::aliases::ErrorOf;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
@@ -37,10 +37,10 @@ where
     SrcChain: HasLoggerType<Logger = Relay::Logger>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
         + UseExtraChainComponentsForIbcMessageSender<DstChain>
-        + CanRaiseError<<SrcChain::Runtime as HasErrorType>::Error>,
+        + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
         + UseExtraChainComponentsForIbcMessageSender<SrcChain>
-        + CanRaiseError<<DstChain::Runtime as HasErrorType>::Error>,
+        + CanRaiseError<ErrorOf<DstChain::Runtime>>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,

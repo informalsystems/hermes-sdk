@@ -4,13 +4,13 @@ use hermes_relayer_components::chain::traits::types::connection::HasInitConnecti
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use hermes_relayer_components::runtime::types::aliases::ErrorOf;
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::driver::traits::types::relay_at::RelayTypeAt;
 use crate::setup::traits::connection::ConnectionSetup;
 use crate::setup::traits::init_connection_options_at::HasInitConnectionOptionsAt;
-use crate::types::error::ErrorOf;
 
 pub struct SetupConnectionHandshake;
 

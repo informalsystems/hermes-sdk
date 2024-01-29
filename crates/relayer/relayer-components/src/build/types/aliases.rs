@@ -10,7 +10,7 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::runtime::traits::runtime::HasRuntimeType;
-use crate::runtime::types::aliases::MutexOf;
+use crate::runtime::types::aliases::{ErrorOf, MutexOf};
 
 pub type BiRelay<Build> = <Build as HasBiRelayType>::BiRelay;
 
@@ -34,7 +34,7 @@ pub type ChainACache<Build> = MutexOf<Build, BTreeMap<ChainIdA<Build>, ChainA<Bu
 
 pub type ChainBCache<Build> = MutexOf<Build, BTreeMap<ChainIdB<Build>, ChainB<Build>>>;
 
-pub type RelayError<Build> = <RelayAToB<Build> as HasErrorType>::Error;
+pub type RelayError<Build> = ErrorOf<RelayAToB<Build>>;
 
 pub type RelayAToBCache<Build> = MutexOf<
     Build,
