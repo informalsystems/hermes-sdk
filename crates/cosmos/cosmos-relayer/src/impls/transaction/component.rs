@@ -2,7 +2,7 @@ use cgp_core::{
     delegate_all, delegate_components, DelegateComponent, ErrorRaiserComponent, ErrorTypeComponent,
     HasComponents,
 };
-use hermes_cosmos_client_components::components::types::chain::ProvideCosmosChainTypes;
+use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;

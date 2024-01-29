@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::components::create_client_message::BuildCosmosCreateClientMessage;
+use hermes_cosmos_client_components::impls::create_client_message::BuildCosmosCreateClientMessage;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;

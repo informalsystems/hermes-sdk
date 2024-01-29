@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
+use hermes_cosmos_client_components::impls::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
