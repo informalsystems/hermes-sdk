@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
@@ -21,7 +20,6 @@ use crate::types::payloads::connection::{
 
 pub struct BuildCosmosConnectionHandshakeMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> ConnectionHandshakeMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
@@ -48,7 +46,7 @@ where
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &Chain::InitConnectionOptions,
-        counterparty_payload: Counterparty::ConnectionOpenInitPayload,
+        counterparty_payload: CosmosConnectionOpenInitPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
         let client_id = client_id.clone();
         let counterparty_client_id = counterparty_client_id.clone();
@@ -81,8 +79,8 @@ where
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
-        counterparty_payload: Counterparty::ConnectionOpenTryPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        counterparty_payload: CosmosConnectionOpenTryPayload,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosConnectionOpenTryMessage {
             client_id: client_id.clone(),
             counterparty_client_id: counterparty_client_id.clone(),
@@ -104,8 +102,8 @@ where
         _chain: &Chain,
         connection_id: &Chain::ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
-        counterparty_payload: Counterparty::ConnectionOpenAckPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        counterparty_payload: CosmosConnectionOpenAckPayload,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let connection_id = connection_id.clone();
         let counterparty_connection_id = counterparty_connection_id.clone();
 
@@ -126,8 +124,8 @@ where
     async fn build_connection_open_confirm_message(
         _chain: &Chain,
         connection_id: &Chain::ConnectionId,
-        counterparty_payload: Counterparty::ConnectionOpenConfirmPayload,
-    ) -> Result<Chain::Message, Chain::Error> {
+        counterparty_payload: CosmosConnectionOpenConfirmPayload,
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosConnectionOpenConfirmMessage {
             connection_id: connection_id.clone(),
             update_height: counterparty_payload.update_height,
