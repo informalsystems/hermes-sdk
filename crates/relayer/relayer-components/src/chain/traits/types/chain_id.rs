@@ -7,8 +7,8 @@ use core::fmt::Display;
 use cgp_core::prelude::*;
 
 /**
-   This is implemented by a chain context to provide a
-   [`ChainId`](Self::ChainId) type that should uniquely identify the chain.
+   This is implemented by a chain context to provide a `ChainId` type that
+   should uniquely identify the chain.
 
    The relay context uses this information to identify whether an IBC packet
    corresponds to a given chain, based on the chain ID information that is
