@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloads, HasInitChannelOptionsType,
+    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics04_channel::channel::{
@@ -34,7 +34,7 @@ where
         > + HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>
         + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
-        + HasChannelHandshakePayloads<
+        + HasChannelHandshakePayloadTypes<
             Chain,
             ChannelOpenTryPayload = CosmosChannelOpenTryPayload,
             ChannelOpenAckPayload = CosmosChannelOpenAckPayload,

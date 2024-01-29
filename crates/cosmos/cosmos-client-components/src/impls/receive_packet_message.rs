@@ -3,7 +3,7 @@ use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
@@ -19,7 +19,8 @@ where
     Chain: HasMessageType<Message = CosmosMessage>
         + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
         + HasErrorType,
-    Counterparty: HasReceivePacketPayload<Chain, ReceivePacketPayload = CosmosReceivePacketPayload>,
+    Counterparty:
+        HasReceivePacketPayloadType<Chain, ReceivePacketPayload = CosmosReceivePacketPayload>,
 {
     async fn build_receive_packet_message(
         _chain: &Chain,

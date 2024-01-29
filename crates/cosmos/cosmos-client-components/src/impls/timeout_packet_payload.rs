@@ -1,34 +1,36 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
+use ibc_relayer::chain::handle::ChainHandle;
+use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use ibc_relayer::chain::handle::ChainHandle;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType};
 use ibc_relayer_types::Height;
 
 use crate::traits::chain_handle::HasBlockingChainHandle;
-use crate::types::payloads::packet::CosmosReceivePacketPayload;
+use crate::types::payloads::packet::CosmosTimeoutUnorderedPacketPayload;
 
-pub struct BuildCosmosReceivePacketPayload;
+pub struct BuildCosmosTimeoutPacketPayload;
 
 #[async_trait]
-impl<Chain, Counterparty> ReceivePacketPayloadBuilder<Chain, Counterparty>
-    for BuildCosmosReceivePacketPayload
+impl<Chain, Counterparty> TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
+    for BuildCosmosTimeoutPacketPayload
 where
-    Chain: HasReceivePacketPayload<Counterparty, ReceivePacketPayload = CosmosReceivePacketPayload>
-        + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
+    Chain: HasTimeoutUnorderedPacketPayloadType<
+            Counterparty,
+            TimeoutUnorderedPacketPayload = CosmosTimeoutUnorderedPacketPayload,
+        > + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
         + HasClientStateType<Counterparty>
         + HasHeightType<Height = Height>
         + HasBlockingChainHandle,
 {
-    async fn build_receive_packet_payload(
+    async fn build_timeout_unordered_packet_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
         height: &Height,
         packet: &Packet,
-    ) -> Result<CosmosReceivePacketPayload, Chain::Error> {
+    ) -> Result<CosmosTimeoutUnorderedPacketPayload, Chain::Error> {
         let height = *height;
         let packet = packet.clone();
 
@@ -36,17 +38,17 @@ where
             .with_blocking_chain_handle(move |chain_handle| {
                 let proofs = chain_handle
                     .build_packet_proofs(
-                        PacketMsgType::Recv,
-                        &packet.source_port,
-                        &packet.source_channel,
+                        PacketMsgType::TimeoutUnordered,
+                        &packet.destination_port,
+                        &packet.destination_channel,
                         packet.sequence,
                         height,
                     )
                     .map_err(Chain::raise_error)?;
 
-                Ok(CosmosReceivePacketPayload {
+                Ok(CosmosTimeoutUnorderedPacketPayload {
                     update_height: proofs.height(),
-                    proof_commitment: proofs.object_proof().clone(),
+                    proof_unreceived: proofs.object_proof().clone(),
                 })
             })
             .await

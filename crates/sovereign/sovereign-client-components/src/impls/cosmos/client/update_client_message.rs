@@ -2,7 +2,7 @@ use cgp_core::prelude::HasErrorType;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::types::payloads::client::SovereignUpdateClientPayload;
@@ -14,7 +14,8 @@ impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
 where
     Chain:
         HasIbcChainTypes<Counterparty, ClientId = ClientId, Message = CosmosMessage> + HasErrorType,
-    Counterparty: HasUpdateClientPayload<Chain, UpdateClientPayload = SovereignUpdateClientPayload>,
+    Counterparty:
+        HasUpdateClientPayloadType<Chain, UpdateClientPayload = SovereignUpdateClientPayload>,
 {
     async fn build_update_client_message(
         _chain: &Chain,

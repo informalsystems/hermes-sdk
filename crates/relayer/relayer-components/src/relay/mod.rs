@@ -17,11 +17,9 @@
    direction may differ from the relay context in the original direction.
 
    A key feature the relay context provides is on performing relaying of
-   a single packet, as defined by
-   [`CanRelayPacket`](traits::packet_relayer::CanRelayPacket).
+   a single packet, as defined by `CanRelayPacket`.
    The relay context also provides the important functionality of building
-   the update client messages using
-   [`CanBuildUpdateClientMessage`](traits::messages::update_client::CanBuildUpdateClientMessage)
+   the update client messages using `CanBuildUpdateClientMessage`
    to update the client state of one chain to its counterparty chain.
 
    Compared to a single chain context, the relay context holds access to two

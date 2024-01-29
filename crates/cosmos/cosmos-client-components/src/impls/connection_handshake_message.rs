@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
+    HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -35,7 +35,7 @@ where
             Message = CosmosMessage,
         > + HasBlockingChainHandle,
     Counterparty: HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
-        + HasConnectionHandshakePayloads<
+        + HasConnectionHandshakePayloadTypes<
             Chain,
             ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload,
             ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload,

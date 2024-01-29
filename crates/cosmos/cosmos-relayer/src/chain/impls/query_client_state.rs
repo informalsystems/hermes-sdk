@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::components::query_client_state::QueryCosmosClientStateFromChainHandle;
+use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComponents;
 use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -26,5 +26,5 @@ where
 }
 
 impl DelegateComponent<CosmosChain> for DelegateCosmosClientStateQuerier {
-    type Delegate = QueryCosmosClientStateFromChainHandle;
+    type Delegate = CosmosIbcClientComponents;
 }

@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_cosmos_client_components::types::payloads::client::CosmosCreateClientPayload;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 
 use crate::types::message::SolomachineMessage;
@@ -14,7 +14,8 @@ impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateCosmosClientMessage
 where
     Chain: HasMessageType<Message = SolomachineMessage> + HasErrorType,
-    Counterparty: HasCreateClientPayload<Chain, CreateClientPayload = CosmosCreateClientPayload>,
+    Counterparty:
+        HasCreateClientPayloadType<Chain, CreateClientPayload = CosmosCreateClientPayload>,
 {
     async fn build_create_client_message(
         _chain: &Chain,

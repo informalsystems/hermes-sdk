@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::components::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
+use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComponents;
 use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -28,5 +28,5 @@ where
 }
 
 impl DelegateComponent<CosmosChain> for DelegateCosmosConsensusStateQuerier {
-    type Delegate = QueryCosmosConsensusStateFromChainHandle;
+    type Delegate = CosmosIbcClientComponents;
 }

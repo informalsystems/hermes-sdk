@@ -23,11 +23,11 @@ use crate::subscription::traits::subscription::Subscription;
    Multiplex the incoming [`Stream`] provided by an underlying [`Subscription`]
    into multiple outgoing [`Stream`]s through a background task. This is
    an auto trait implemented by all runtime contexts that implement
-   [`HasSpawner`], [`HasMutex`], [`CanCreateChannels`], [`CanUseChannels`],
+   `HasSpawner`, [`HasMutex`], [`CanCreateChannels`], [`CanUseChannels`],
    and [`CanStreamReceiver`].
 
    This can be used to improve the efficiency of naive subscriptions created from
-   [`CanCreateClosureSubscription`](hermes_relayer_components::runtime::impls::subscription::closure::CanCreateClosureSubscription).
+   `CanCreateClosureSubscription`.
    For example, one can first create a subscription closure that establishes
    new network connection each time `subscribe` is called. The subscription
    closure is then passed to [`multiplex_subscription`](Self::multiplex_subscription),

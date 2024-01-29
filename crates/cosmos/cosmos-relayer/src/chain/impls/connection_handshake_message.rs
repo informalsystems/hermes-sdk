@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::components::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
+use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComponents;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
@@ -13,14 +13,14 @@ use crate::types::error::Error;
 pub struct DelegateCosmosConnectionHandshakeBuilder;
 
 impl DelegateComponent<CosmosChain> for DelegateCosmosConnectionHandshakeBuilder {
-    type Delegate = BuildCosmosConnectionHandshakeMessage;
+    type Delegate = CosmosIbcClientComponents;
 }
 
 #[async_trait]
 impl<Counterparty, Delegate> ConnectionHandshakeMessageBuilder<CosmosChain, Counterparty>
     for DelegateCosmosConnectionHandshakeBuilder
 where
-    Counterparty: HasConnectionHandshakePayloads<CosmosChain> + HasIbcChainTypes<CosmosChain>,
+    Counterparty: HasConnectionHandshakePayloadTypes<CosmosChain> + HasIbcChainTypes<CosmosChain>,
     Delegate: ConnectionHandshakeMessageBuilder<CosmosChain, Counterparty>,
     Self: DelegateComponent<Counterparty, Delegate = Delegate>,
 {

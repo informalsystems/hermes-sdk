@@ -1,14 +1,14 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
-use crate::chain::traits::types::connection::HasConnectionHandshakePayloads;
+use crate::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 #[derive_component(ConnectionHandshakePayloadBuilderComponent, ConnectionHandshakePayloadBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildConnectionHandshakePayloads<Counterparty>:
     HasIbcChainTypes<Counterparty>
-    + HasConnectionHandshakePayloads<Counterparty>
+    + HasConnectionHandshakePayloadTypes<Counterparty>
     + HasClientStateType<Counterparty>
     + HasErrorType
 {

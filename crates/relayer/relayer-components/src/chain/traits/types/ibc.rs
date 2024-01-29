@@ -90,8 +90,7 @@ where
        Get the height of the counterparty chain which the UpdateClient message
        should be built. If the message is not IBC-related, this would return `None`.
 
-       This is used by the
-       [`SendIbcMessagesWithUpdateClient`](crate::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient)
+       This is used by the `SendIbcMessagesWithUpdateClient`
        message sender middleware to attach `UpdateClient` messages to the
        front of the message batch before sending it to the downstream
        message sender.

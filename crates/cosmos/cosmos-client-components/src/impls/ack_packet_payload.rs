@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType};
@@ -19,7 +19,7 @@ pub struct BuildCosmosAckPacketPayload;
 impl<Chain, Counterparty> AckPacketPayloadBuilder<Chain, Counterparty>
     for BuildCosmosAckPacketPayload
 where
-    Chain: HasAckPacketPayload<Counterparty, AckPacketPayload = CosmosAckPacketPayload>
+    Chain: HasAckPacketPayloadType<Counterparty, AckPacketPayload = CosmosAckPacketPayload>
         + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>
         + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
         + HasClientStateType<Counterparty>

@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
@@ -18,7 +18,7 @@ where
     Chain: HasMessageType<Message = CosmosMessage>
         + HasErrorType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>,
-    Counterparty: HasAckPacketPayload<Chain, AckPacketPayload = CosmosAckPacketPayload>,
+    Counterparty: HasAckPacketPayloadType<Chain, AckPacketPayload = CosmosAckPacketPayload>,
 {
     async fn build_ack_packet_message(
         _chain: &Chain,

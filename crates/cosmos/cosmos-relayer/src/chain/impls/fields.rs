@@ -15,8 +15,8 @@ use ibc_relayer_types::Height;
 use prost::Message;
 use tendermint::abci::Event as AbciEvent;
 
+use crate::chain::components::CosmosChainComponents;
 use crate::contexts::chain::CosmosChain;
-use crate::impls::chain::component::CosmosChainComponents;
 use crate::types::error::{BaseError, Error};
 
 impl CanEstimateMessageSize for CosmosChain {

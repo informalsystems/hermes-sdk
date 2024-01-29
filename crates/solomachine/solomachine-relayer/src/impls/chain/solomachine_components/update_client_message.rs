@@ -4,7 +4,7 @@ use hermes_cosmos_client_components::types::payloads::client::CosmosUpdateClient
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::types::message::SolomachineMessage;
@@ -18,7 +18,8 @@ where
     Chain: HasMessageType<Message = SolomachineMessage>
         + HasIbcChainTypes<Counterparty, ClientId = ClientId>
         + HasErrorType,
-    Counterparty: HasUpdateClientPayload<Chain, UpdateClientPayload = CosmosUpdateClientPayload>,
+    Counterparty:
+        HasUpdateClientPayloadType<Chain, UpdateClientPayload = CosmosUpdateClientPayload>,
 {
     async fn build_update_client_message(
         _chain: &Chain,

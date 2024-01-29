@@ -31,7 +31,7 @@ pub struct RelayerDriver {
 
     /**
        The relayer [`Config`]. Use this config when spawning new supervisor
-       using [`spawn_supervisor`](ibc_relayer::supervisor::spawn_supervisor).
+       using `spawn_supervisor`.
     */
     pub config: Config,
 
@@ -40,7 +40,7 @@ pub struct RelayerDriver {
        that is shared with any running supervisor.
 
        Use this shared registry when spawning new supervisor using
-       [`spawn_supervisor`](ibc_relayer::supervisor::spawn_supervisor).
+       `spawn_supervisor`.
     */
     pub registry: SharedRegistry<CountingAndCachingChainHandle>,
 

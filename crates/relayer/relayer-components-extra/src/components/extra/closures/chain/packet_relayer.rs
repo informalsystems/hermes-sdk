@@ -27,10 +27,10 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
@@ -50,10 +50,10 @@ where
     Counterparty: HasClientStateType<Self>
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
-        + HasUpdateClientPayload<Self>
-        + HasReceivePacketPayload<Self>
-        + HasAckPacketPayload<Self>
-        + HasTimeoutUnorderedPacketPayload<Self>,
+        + HasUpdateClientPayloadType<Self>
+        + HasReceivePacketPayloadType<Self>
+        + HasAckPacketPayloadType<Self>
+        + HasTimeoutUnorderedPacketPayloadType<Self>,
 {
 }
 
@@ -62,19 +62,19 @@ impl<Chain, Counterparty, Components, BaseComponents>
 where
     Chain: CanLogChainPacket<Counterparty>
         + HasIbcPacketTypes<Counterparty>
-        + HasReceivePacketPayload<Counterparty>
+        + HasReceivePacketPayloadType<Counterparty>
         + HasWriteAckEvent<Counterparty>
-        + HasAckPacketPayload<Counterparty>
-        + HasTimeoutUnorderedPacketPayload<Counterparty>
+        + HasAckPacketPayloadType<Counterparty>
+        + HasTimeoutUnorderedPacketPayloadType<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
-        + HasUpdateClientPayload<Chain>
-        + HasAckPacketPayload<Chain>
-        + HasTimeoutUnorderedPacketPayload<Chain>
-        + HasReceivePacketPayload<Chain>,
+        + HasUpdateClientPayloadType<Chain>
+        + HasAckPacketPayloadType<Chain>
+        + HasTimeoutUnorderedPacketPayloadType<Chain>
+        + HasReceivePacketPayloadType<Chain>,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraChainComponents<BaseComponents>
         + PacketFieldsReader<Chain, Counterparty>

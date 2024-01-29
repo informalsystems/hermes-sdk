@@ -3,12 +3,12 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::chain::traits::types::packets::receive::HasReceivePacketPayload;
+use crate::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 
 #[derive_component(ReceivePacketPayloadBuilderComponent, ReceivePacketPayloadBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildReceivePacketPayload<Counterparty>:
-    HasReceivePacketPayload<Counterparty>
+    HasReceivePacketPayloadType<Counterparty>
     + HasIbcPacketTypes<Counterparty>
     + HasClientStateType<Counterparty>
     + HasHeightType

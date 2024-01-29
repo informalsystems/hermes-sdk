@@ -43,9 +43,9 @@ use hermes_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -369,7 +369,7 @@ impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents
     }
 }
 
-impl HasReceivePacketPayload<MockChainContext> for MockChainContext {
+impl ProvideReceivePacketPayloadType<MockChainContext, MockChainContext> for MockChainComponents {
     type ReceivePacketPayload = MockMessage;
 }
 
@@ -409,7 +409,7 @@ impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockCha
     }
 }
 
-impl HasAckPacketPayload<MockChainContext> for MockChainContext {
+impl ProvideAckPacketPayloadType<MockChainContext, MockChainContext> for MockChainComponents {
     type AckPacketPayload = MockMessage;
 }
 
@@ -452,7 +452,9 @@ impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockChainCo
     }
 }
 
-impl HasTimeoutUnorderedPacketPayload<MockChainContext> for MockChainContext {
+impl ProvideTimeoutUnorderedPacketPayloadType<MockChainContext, MockChainContext>
+    for MockChainComponents
+{
     type TimeoutUnorderedPacketPayload = MockMessage;
 }
 
