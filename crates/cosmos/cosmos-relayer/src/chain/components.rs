@@ -60,11 +60,11 @@ use hermes_relayer_components::chain::traits::types::connection::InitConnectionO
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::components::block_querier::BlockQuerierComponent;
 
+use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
+use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
+use crate::chain::impls::query_client_state::DelegateCosmosClientStateQuerier;
+use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::contexts::chain::CosmosChain;
-use crate::impls::chain::components::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
-use crate::impls::chain::components::create_client_message::DelegateCosmosCreateClientMessageBuilder;
-use crate::impls::chain::components::query_client_state::DelegateCosmosClientStateQuerier;
-use crate::impls::chain::components::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
