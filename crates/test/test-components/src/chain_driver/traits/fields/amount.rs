@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::{ChannelId, PortId};
+use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 
 use crate::chain_driver::traits::types::amount::HasAmountType;
 use crate::chain_driver::traits::types::chain::HasChainType;
@@ -33,8 +33,8 @@ where
 {
     fn ibc_transfer_amount_from(
         counterparty_amount: &CounterpartyDriver::Amount,
-        channel_id: &ChannelId<Self::Chain, CounterpartyDriver::Chain>,
-        port_id: &PortId<Self::Chain, CounterpartyDriver::Chain>,
+        channel_id: &ChannelIdOf<Self::Chain, CounterpartyDriver::Chain>,
+        port_id: &PortIdOf<Self::Chain, CounterpartyDriver::Chain>,
     ) -> Result<Self::Amount, Self::Error>;
 
     fn transmute_counterparty_amount(

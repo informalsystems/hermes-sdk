@@ -14,3 +14,5 @@ pub trait HasBiRelayType: HasErrorType {
 pub trait HasBiRelay: HasBiRelayType {
     fn birelay(&self) -> &Self::BiRelay;
 }
+
+pub type BiRelayOf<Build> = <Build as HasBiRelayType>::BiRelay;

@@ -1,11 +1,11 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
 #[derive_component(ChainStoreDirGetterComponent, ChainStoreDirGetter<Bootstrap>)]
 pub trait HasChainStoreDir: HasRuntime
 where
     Self::Runtime: HasFilePathType,
 {
-    fn chain_store_dir(&self) -> &FilePath<Self::Runtime>;
+    fn chain_store_dir(&self) -> &FilePathOf<Self::Runtime>;
 }

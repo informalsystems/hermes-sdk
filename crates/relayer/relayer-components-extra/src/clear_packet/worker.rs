@@ -1,7 +1,7 @@
 use core::time::Duration;
 
 use cgp_core::async_trait;
-use hermes_relayer_components::chain::types::aliases::{ChannelId, PortId};
+use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::clear_interval::HasClearInterval;
 use hermes_relayer_components::relay::traits::components::packet_clearer::CanClearPackets;
@@ -15,10 +15,10 @@ use crate::runtime::traits::spawn::CanSpawnTask;
 pub trait CanSpawnClearPacketWorker: HasRelayChains {
     fn spawn_packet_clear_worker(
         &self,
-        src_channel_id: ChannelId<Self::SrcChain, Self::DstChain>,
-        src_port_id: PortId<Self::SrcChain, Self::DstChain>,
-        dst_channel_id: ChannelId<Self::DstChain, Self::SrcChain>,
-        dst_port_id: PortId<Self::DstChain, Self::SrcChain>,
+        src_channel_id: ChannelIdOf<Self::SrcChain, Self::DstChain>,
+        src_port_id: PortIdOf<Self::SrcChain, Self::DstChain>,
+        dst_channel_id: ChannelIdOf<Self::DstChain, Self::SrcChain>,
+        dst_port_id: PortIdOf<Self::DstChain, Self::SrcChain>,
     );
 }
 
@@ -27,10 +27,10 @@ where
     Relay: HasRelayChains,
 {
     pub relay: Relay,
-    pub src_channel_id: ChannelId<Relay::SrcChain, Relay::DstChain>,
-    pub src_port_id: PortId<Relay::SrcChain, Relay::DstChain>,
-    pub dst_channel_id: ChannelId<Relay::DstChain, Relay::SrcChain>,
-    pub dst_port_id: PortId<Relay::DstChain, Relay::SrcChain>,
+    pub src_channel_id: ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
+    pub src_port_id: PortIdOf<Relay::SrcChain, Relay::DstChain>,
+    pub dst_channel_id: ChannelIdOf<Relay::DstChain, Relay::SrcChain>,
+    pub dst_port_id: PortIdOf<Relay::DstChain, Relay::SrcChain>,
 }
 
 #[async_trait]
@@ -57,10 +57,10 @@ where
 {
     fn spawn_packet_clear_worker(
         &self,
-        src_channel_id: ChannelId<Relay::SrcChain, Relay::DstChain>,
-        src_port_id: PortId<Relay::SrcChain, Relay::DstChain>,
-        dst_channel_id: ChannelId<Relay::DstChain, Relay::SrcChain>,
-        dst_port_id: PortId<Relay::DstChain, Relay::SrcChain>,
+        src_channel_id: ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
+        src_port_id: PortIdOf<Relay::SrcChain, Relay::DstChain>,
+        dst_channel_id: ChannelIdOf<Relay::DstChain, Relay::SrcChain>,
+        dst_port_id: PortIdOf<Relay::DstChain, Relay::SrcChain>,
     ) {
         let task = ClearPacketTask {
             relay: self.clone(),
@@ -78,10 +78,10 @@ where
 trait CanRunLoop: HasRelayChains {
     async fn run_loop(
         &self,
-        src_channel_id: &ChannelId<Self::SrcChain, Self::DstChain>,
-        src_port_id: &PortId<Self::SrcChain, Self::DstChain>,
-        dst_channel_id: &ChannelId<Self::DstChain, Self::SrcChain>,
-        dst_port_id: &PortId<Self::DstChain, Self::SrcChain>,
+        src_channel_id: &ChannelIdOf<Self::SrcChain, Self::DstChain>,
+        src_port_id: &PortIdOf<Self::SrcChain, Self::DstChain>,
+        dst_channel_id: &ChannelIdOf<Self::DstChain, Self::SrcChain>,
+        dst_port_id: &PortIdOf<Self::DstChain, Self::SrcChain>,
     );
 }
 
@@ -93,10 +93,10 @@ where
 {
     async fn run_loop(
         &self,
-        src_channel_id: &ChannelId<Relay::SrcChain, Relay::DstChain>,
-        src_port_id: &PortId<Relay::SrcChain, Relay::DstChain>,
-        dst_channel_id: &ChannelId<Relay::DstChain, Relay::SrcChain>,
-        dst_port_id: &PortId<Relay::DstChain, Relay::SrcChain>,
+        src_channel_id: &ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
+        src_port_id: &PortIdOf<Relay::SrcChain, Relay::DstChain>,
+        dst_channel_id: &ChannelIdOf<Relay::DstChain, Relay::SrcChain>,
+        dst_port_id: &PortIdOf<Relay::DstChain, Relay::SrcChain>,
     ) {
         let runtime = self.runtime();
         let clear_interval = self.clear_interval().into();

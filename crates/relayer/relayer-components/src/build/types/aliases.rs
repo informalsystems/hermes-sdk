@@ -3,24 +3,23 @@ use alloc::collections::BTreeMap;
 use cgp_core::HasErrorType;
 
 use crate::birelay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelayTypes};
-use crate::build::traits::birelay::HasBiRelayType;
+use crate::build::traits::birelay::BiRelayOf;
 use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
+use crate::runtime::traits::mutex::MutexOf;
 use crate::runtime::traits::runtime::HasRuntimeType;
-use crate::runtime::types::aliases::Mutex;
+use crate::runtime::types::aliases::{ErrorOf, RuntimeOf};
 
-pub type BiRelay<Build> = <Build as HasBiRelayType>::BiRelay;
+pub type ChainA<Build> = <BiRelayOf<Build> as HasTwoChainTypes>::ChainA;
 
-pub type ChainA<Build> = <BiRelay<Build> as HasTwoChainTypes>::ChainA;
+pub type ChainB<Build> = <BiRelayOf<Build> as HasTwoChainTypes>::ChainB;
 
-pub type ChainB<Build> = <BiRelay<Build> as HasTwoChainTypes>::ChainB;
+pub type RelayAToB<Build> = <BiRelayOf<Build> as HasTwoWayRelayTypes>::RelayAToB;
 
-pub type RelayAToB<Build> = <BiRelay<Build> as HasTwoWayRelayTypes>::RelayAToB;
-
-pub type RelayBToA<Build> = <BiRelay<Build> as HasTwoWayRelayTypes>::RelayBToA;
+pub type RelayBToA<Build> = <BiRelayOf<Build> as HasTwoWayRelayTypes>::RelayBToA;
 
 pub type ChainIdA<Build> = <ChainA<Build> as HasChainIdType>::ChainId;
 
@@ -30,14 +29,14 @@ pub type ClientIdA<Build> = <ChainA<Build> as HasIbcChainTypes<ChainB<Build>>>::
 
 pub type ClientIdB<Build> = <ChainB<Build> as HasIbcChainTypes<ChainA<Build>>>::ClientId;
 
-pub type ChainACache<Build> = Mutex<Build, BTreeMap<ChainIdA<Build>, ChainA<Build>>>;
+pub type ChainACache<Build> = MutexOf<RuntimeOf<Build>, BTreeMap<ChainIdA<Build>, ChainA<Build>>>;
 
-pub type ChainBCache<Build> = Mutex<Build, BTreeMap<ChainIdB<Build>, ChainB<Build>>>;
+pub type ChainBCache<Build> = MutexOf<RuntimeOf<Build>, BTreeMap<ChainIdB<Build>, ChainB<Build>>>;
 
-pub type RelayError<Build> = <RelayAToB<Build> as HasErrorType>::Error;
+pub type RelayError<Build> = ErrorOf<RelayAToB<Build>>;
 
-pub type RelayAToBCache<Build> = Mutex<
-    Build,
+pub type RelayAToBCache<Build> = MutexOf<
+    RuntimeOf<Build>,
     BTreeMap<
         (
             ChainIdA<Build>,
@@ -49,8 +48,8 @@ pub type RelayAToBCache<Build> = Mutex<
     >,
 >;
 
-pub type RelayBToACache<Build> = Mutex<
-    Build,
+pub type RelayBToACache<Build> = MutexOf<
+    RuntimeOf<Build>,
     BTreeMap<
         (
             ChainIdB<Build>,
@@ -81,7 +80,7 @@ pub type CounterpartyClientId<Build, Target> =
     <CounterpartyChain<Build, Target> as HasIbcChainTypes<TargetChain<Build, Target>>>::ClientId;
 
 pub type TargetChainCache<Build, Target> =
-    Mutex<Build, BTreeMap<TargetChainId<Build, Target>, TargetChain<Build, Target>>>;
+    MutexOf<RuntimeOf<Build>, BTreeMap<TargetChainId<Build, Target>, TargetChain<Build, Target>>>;
 
 pub type TargetRelay<Build, Target> = <Target as RelayBuildTarget<Build>>::TargetRelay;
 
@@ -107,8 +106,8 @@ pub type TargetSrcClientId<Build, Target> =
 pub type TargetDstClientId<Build, Target> =
     <TargetDstChain<Build, Target> as HasIbcChainTypes<TargetSrcChain<Build, Target>>>::ClientId;
 
-pub type TargetRelayCache<Build, Target> = Mutex<
-    Build,
+pub type TargetRelayCache<Build, Target> = MutexOf<
+    RuntimeOf<Build>,
     BTreeMap<
         (
             TargetSrcChainId<Build, Target>,

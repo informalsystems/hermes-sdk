@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::types::aliases::ChainId;
+use hermes_relayer_components::chain::types::aliases::ChainIdOf;
 
 use crate::chain_driver::traits::types::chain::HasChainType;
 
@@ -9,5 +9,5 @@ pub trait CanBuildChainIdFromString: HasChainType
 where
     Self::Chain: HasChainIdType,
 {
-    fn build_chain_id_from_string(chain_id: &str) -> ChainId<Self::Chain>;
+    fn build_chain_id_from_string(chain_id: &str) -> ChainIdOf<Self::Chain>;
 }

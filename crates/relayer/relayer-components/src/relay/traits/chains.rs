@@ -3,7 +3,8 @@ use cgp_core::CanRaiseError;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::chain::types::aliases::ClientId;
+use crate::chain::types::aliases::ClientIdOf;
+use crate::runtime::types::aliases::ErrorOf;
 
 /**
     This covers the minimal abstract types that are used inside a relay context.
@@ -72,25 +73,23 @@ pub trait HasRelayChains: HasErrorType {
         the connection and channel IDs, because a relay context may handle
         more than one of them.
     */
-    fn src_client_id(&self) -> &ClientId<Self::SrcChain, Self::DstChain>;
+    fn src_client_id(&self) -> &ClientIdOf<Self::SrcChain, Self::DstChain>;
 
     /**
         Get the client ID on the destination chain that corresponds to the source
         chain.
     */
-    fn dst_client_id(&self) -> &ClientId<Self::DstChain, Self::SrcChain>;
+    fn dst_client_id(&self) -> &ClientIdOf<Self::DstChain, Self::SrcChain>;
 }
 
 pub trait CanRaiseRelayChainErrors:
-    HasRelayChains
-    + CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
-    + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+    HasRelayChains + CanRaiseError<ErrorOf<Self::SrcChain>> + CanRaiseError<ErrorOf<Self::DstChain>>
 {
 }
 
 impl<Relay> CanRaiseRelayChainErrors for Relay where
     Relay: HasRelayChains
-        + CanRaiseError<<Self::SrcChain as HasErrorType>::Error>
-        + CanRaiseError<<Self::DstChain as HasErrorType>::Error>
+        + CanRaiseError<ErrorOf<Self::SrcChain>>
+        + CanRaiseError<ErrorOf<Self::DstChain>>
 {
 }

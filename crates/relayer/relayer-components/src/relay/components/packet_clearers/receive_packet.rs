@@ -3,7 +3,7 @@ use cgp_core::async_trait;
 use crate::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
 use crate::chain::traits::components::send_packets_querier::CanQuerySendPackets;
 use crate::chain::traits::components::unreceived_packet_sequences_querier::CanQueryUnreceivedPacketSequences;
-use crate::chain::types::aliases::{ChannelId, PortId};
+use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::packet_clearer::PacketClearer;
 use crate::relay::traits::components::packet_relayer::CanRelayPacket;
@@ -41,10 +41,10 @@ where
 {
     async fn clear_packets(
         relay: &Relay,
-        src_channel_id: &ChannelId<Relay::SrcChain, Relay::DstChain>,
-        src_port_id: &PortId<Relay::SrcChain, Relay::DstChain>,
-        dst_channel_id: &ChannelId<Relay::DstChain, Relay::SrcChain>,
-        dst_port_id: &PortId<Relay::DstChain, Relay::SrcChain>,
+        src_channel_id: &ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
+        src_port_id: &PortIdOf<Relay::SrcChain, Relay::DstChain>,
+        dst_channel_id: &ChannelIdOf<Relay::DstChain, Relay::SrcChain>,
+        dst_port_id: &PortIdOf<Relay::DstChain, Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
         let dst_chain = relay.dst_chain();
         let src_chain = relay.src_chain();

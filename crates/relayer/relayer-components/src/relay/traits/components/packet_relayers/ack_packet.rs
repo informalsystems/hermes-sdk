@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::types::aliases::{Height, WriteAckEvent};
+use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
 use crate::relay::traits::chains::HasRelayChains;
 
 #[derive_component(AckPacketRelayerComponent, AckPacketRelayer<Relay>)]
@@ -12,8 +12,8 @@ where
 {
     async fn relay_ack_packet(
         &self,
-        destination_height: &Height<Self::DstChain>,
+        destination_height: &HeightOf<Self::DstChain>,
         packet: &Self::Packet,
-        ack: &WriteAckEvent<Self::DstChain, Self::SrcChain>,
+        ack: &WriteAckEventOf<Self::DstChain, Self::SrcChain>,
     ) -> Result<(), Self::Error>;
 }

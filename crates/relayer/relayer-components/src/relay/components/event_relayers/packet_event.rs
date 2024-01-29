@@ -3,7 +3,7 @@ use cgp_core::async_trait;
 use crate::chain::traits::components::packet_from_write_ack_builder::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::types::aliases::{Event, Height};
+use crate::chain::types::aliases::{EventOf, HeightOf};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::components::packet_filters::chain::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
@@ -46,8 +46,8 @@ where
 {
     async fn relay_chain_event(
         relay: &Relay,
-        _height: &Height<Relay::SrcChain>,
-        event: &Event<Relay::SrcChain>,
+        _height: &HeightOf<Relay::SrcChain>,
+        event: &EventOf<Relay::SrcChain>,
     ) -> Result<(), Relay::Error> {
         if let Some(send_packet_event) = Relay::SrcChain::try_extract_send_packet_event(event) {
             let packet = Relay::SrcChain::extract_packet_from_send_packet_event(&send_packet_event);
@@ -75,8 +75,8 @@ where
 {
     async fn relay_chain_event(
         relay: &Relay,
-        height: &Height<Relay::DstChain>,
-        event: &Event<Relay::DstChain>,
+        height: &HeightOf<Relay::DstChain>,
+        event: &EventOf<Relay::DstChain>,
     ) -> Result<(), Relay::Error> {
         let m_ack_event = Relay::DstChain::try_extract_write_ack_event(event);
 

@@ -22,6 +22,7 @@ use hermes_relayer_components::relay::traits::components::packet_relayers::ack_p
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_relayer_components::runtime::types::aliases::ErrorOf;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
@@ -58,7 +59,7 @@ where
         + CanQueryConsensusStateHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + CanBuildUpdateClientMessage<DstChain>
-        + CanRaiseError<<SrcChain::Runtime as HasErrorType>::Error>,
+        + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
     DstChain: HasErrorType
         + HasRuntime
         + HasChainId
@@ -69,7 +70,7 @@ where
         + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanBuildAckPacketPayload<SrcChain>
         + CanBuildUpdateClientPayload<SrcChain>
-        + CanRaiseError<<DstChain::Runtime as HasErrorType>::Error>,
+        + CanRaiseError<ErrorOf<DstChain>>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     SrcChain::Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,

@@ -1,4 +1,4 @@
-use crate::runtime::traits::mutex::HasMutex;
+use crate::runtime::traits::mutex::{HasMutex, MutexGuardOf, MutexOf};
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::transaction::traits::nonce::guard::HasNonceGuard;
 use crate::transaction::traits::types::HasSignerType;
@@ -16,13 +16,10 @@ pub trait HasMutexForNonceAllocation: HasRuntime + HasNonceGuard + HasSignerType
 where
     Self::Runtime: HasMutex,
 {
-    fn mutex_for_nonce_allocation(
-        &self,
-        signer: &Self::Signer,
-    ) -> &<Self::Runtime as HasMutex>::Mutex<()>;
+    fn mutex_for_nonce_allocation(&self, signer: &Self::Signer) -> &MutexOf<Self::Runtime, ()>;
 
     fn mutex_to_nonce_guard<'a>(
-        mutex_guard: <Self::Runtime as HasMutex>::MutexGuard<'a, ()>,
+        mutex_guard: MutexGuardOf<'a, Self::Runtime, ()>,
         nonce: Self::Nonce,
     ) -> Self::NonceGuard<'a>;
 }

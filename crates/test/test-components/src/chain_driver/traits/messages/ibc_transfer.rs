@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use hermes_relayer_components::chain::types::aliases::{
-    ChannelId, Height, Message, PortId, Timestamp,
+    ChannelIdOf, HeightOf, MessageOf, PortIdOf, TimestampOf,
 };
 
 use crate::chain_driver::traits::types::address::HasAddressType;
@@ -25,12 +25,12 @@ where
 {
     async fn build_ibc_token_transfer_message(
         &self,
-        channel_id: &ChannelId<Self::Chain, CounterpartyDriver::Chain>,
-        port_id: &PortId<Self::Chain, CounterpartyDriver::Chain>,
+        channel_id: &ChannelIdOf<Self::Chain, CounterpartyDriver::Chain>,
+        port_id: &PortIdOf<Self::Chain, CounterpartyDriver::Chain>,
         recipient_address: &CounterpartyDriver::Address,
         amount: &Self::Amount,
         memo: &Self::Memo,
-        timeout_height: Option<&Height<Self::Chain>>,
-        timeout_time: Option<&Timestamp<Self::Chain>>,
-    ) -> Result<Message<Self::Chain>, Self::Error>;
+        timeout_height: Option<&HeightOf<Self::Chain>>,
+        timeout_time: Option<&TimestampOf<Self::Chain>>,
+    ) -> Result<MessageOf<Self::Chain>, Self::Error>;
 }

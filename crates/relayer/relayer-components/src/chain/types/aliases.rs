@@ -7,32 +7,32 @@ use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::timestamp::HasTimestampType;
 
-pub type IncomingPacket<Chain, Counterparty> =
+pub type IncomingPacketOf<Chain, Counterparty> =
     <Chain as HasIbcPacketTypes<Counterparty>>::IncomingPacket;
 
-pub type OutgoingPacket<Chain, Counterparty> =
+pub type OutgoingPacketOf<Chain, Counterparty> =
     <Chain as HasIbcPacketTypes<Counterparty>>::OutgoingPacket;
 
-pub type ClientId<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::ClientId;
+pub type ClientIdOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::ClientId;
 
-pub type ConnectionId<Chain, Counterparty> =
+pub type ConnectionIdOf<Chain, Counterparty> =
     <Chain as HasIbcChainTypes<Counterparty>>::ConnectionId;
 
-pub type ChannelId<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::ChannelId;
+pub type ChannelIdOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::ChannelId;
 
-pub type PortId<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::PortId;
+pub type PortIdOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::PortId;
 
-pub type Sequence<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::Sequence;
+pub type SequenceOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::Sequence;
 
-pub type ChainId<Chain> = <Chain as HasChainIdType>::ChainId;
+pub type ChainIdOf<Chain> = <Chain as HasChainIdType>::ChainId;
 
-pub type Message<Chain> = <Chain as HasMessageType>::Message;
+pub type MessageOf<Chain> = <Chain as HasMessageType>::Message;
 
-pub type Event<Chain> = <Chain as HasEventType>::Event;
+pub type EventOf<Chain> = <Chain as HasEventType>::Event;
 
-pub type Height<Chain> = <Chain as HasHeightType>::Height;
+pub type HeightOf<Chain> = <Chain as HasHeightType>::Height;
 
-pub type Timestamp<Chain> = <Chain as HasTimestampType>::Timestamp;
+pub type TimestampOf<Chain> = <Chain as HasTimestampType>::Timestamp;
 
-pub type WriteAckEvent<Chain, Counterparty> =
+pub type WriteAckEventOf<Chain, Counterparty> =
     <Chain as HasWriteAckEvent<Counterparty>>::WriteAckEvent;

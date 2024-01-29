@@ -13,3 +13,7 @@ pub trait HasMutex: Async {
 
     async fn acquire_mutex<'a, T: Async>(mutex: &'a Self::Mutex<T>) -> Self::MutexGuard<'a, T>;
 }
+
+pub type MutexOf<Runtime, T> = <Runtime as HasMutex>::Mutex<T>;
+
+pub type MutexGuardOf<'a, Runtime, T> = <Runtime as HasMutex>::MutexGuard<'a, T>;

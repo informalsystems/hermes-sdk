@@ -5,7 +5,7 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::InjectMismatchIbcEventsCountError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::types::aliases::{Event, Message};
+use crate::chain::types::aliases::{EventOf, MessageOf};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 
@@ -20,8 +20,8 @@ where
     async fn send_messages(
         &self,
         target: Target,
-        messages: Vec<Message<Target::TargetChain>>,
-    ) -> Result<Vec<Vec<Event<Target::TargetChain>>>, Self::Error>;
+        messages: Vec<MessageOf<Target::TargetChain>>,
+    ) -> Result<Vec<Vec<EventOf<Target::TargetChain>>>, Self::Error>;
 }
 
 #[async_trait]
@@ -32,8 +32,8 @@ where
     async fn send_messages_fixed<const COUNT: usize>(
         &self,
         target: Target,
-        messages: [Message<Target::TargetChain>; COUNT],
-    ) -> Result<[Vec<Event<Target::TargetChain>>; COUNT], Self::Error>;
+        messages: [MessageOf<Target::TargetChain>; COUNT],
+    ) -> Result<[Vec<EventOf<Target::TargetChain>>; COUNT], Self::Error>;
 }
 
 #[async_trait]
@@ -44,8 +44,8 @@ where
     async fn send_message(
         &self,
         target: Target,
-        message: Message<Target::TargetChain>,
-    ) -> Result<Vec<Event<Target::TargetChain>>, Self::Error>;
+        message: MessageOf<Target::TargetChain>,
+    ) -> Result<Vec<EventOf<Target::TargetChain>>, Self::Error>;
 }
 
 #[async_trait]

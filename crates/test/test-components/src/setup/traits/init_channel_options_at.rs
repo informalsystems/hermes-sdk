@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     HasInitChannelOptionsType, InitChannelOptions,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::ConnectionId;
+use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 
@@ -17,8 +17,8 @@ where
 {
     fn init_channel_options(
         &self,
-        connection_id: &ConnectionId<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>,
-        counterparty_connection_id: &ConnectionId<
+        connection_id: &ConnectionIdOf<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>,
+        counterparty_connection_id: &ConnectionIdOf<
             ChainTypeAt<Self, COUNTERPARTY>,
             ChainTypeAt<Self, TARGET>,
         >,

@@ -2,7 +2,7 @@ use core::time::Duration;
 
 use futures::lock::Mutex;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
-use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
 use hermes_relayer_components::transaction::components::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::fee::HasFeeForSimulation;
 use hermes_relayer_components::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
@@ -48,7 +48,7 @@ impl HasMutexForNonceAllocation for CosmosTxContext {
     }
 
     fn mutex_to_nonce_guard<'a>(
-        mutex_guard: <Self::Runtime as HasMutex>::MutexGuard<'a, ()>,
+        mutex_guard: MutexGuardOf<'a, Self::Runtime, ()>,
         nonce: Self::Nonce,
     ) -> Self::NonceGuard<'a> {
         (mutex_guard, nonce)

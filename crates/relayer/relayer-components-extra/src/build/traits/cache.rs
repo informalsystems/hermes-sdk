@@ -6,9 +6,9 @@ use hermes_relayer_components::build::traits::target::chain::ChainBuildTarget;
 use hermes_relayer_components::build::types::aliases::{
     CounterpartyChainId, CounterpartyClientId, TargetChain, TargetChainId, TargetClientId,
 };
-use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::mutex::{HasMutex, MutexOf};
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::types::aliases::Mutex;
+use hermes_relayer_components::runtime::types::aliases::RuntimeOf;
 
 use crate::batch::traits::channel::HasMessageBatchSenderType;
 
@@ -31,8 +31,8 @@ where
     Target::TargetChain: HasMessageBatchSenderType<Error>,
     Build::Runtime: HasMutex,
 {
-    type BatchSenderCache = Mutex<
-        Build,
+    type BatchSenderCache = MutexOf<
+        RuntimeOf<Build>,
         BTreeMap<
             (
                 TargetChainId<Build, Target>,

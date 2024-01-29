@@ -3,7 +3,7 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
 };
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
 use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
 
@@ -15,7 +15,7 @@ where
 {
     async fn start_chain_full_nodes(
         &self,
-        chain_home_dir: &FilePath<Self::Runtime>,
+        chain_home_dir: &FilePathOf<Self::Runtime>,
         chain_config: &Self::ChainConfig,
     ) -> Result<Vec<ChildProcess<Self::Runtime>>, Self::Error>;
 }

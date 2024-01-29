@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::{ChannelId, ConnectionId, PortId};
+use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
@@ -16,14 +16,14 @@ where
     async fn setup_channel(
         &self,
         birelay: &BiRelayTypeAt<Self, A, B>,
-        connection_id_a: &ConnectionId<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
-        connection_id_b: &ConnectionId<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
+        connection_id_a: &ConnectionIdOf<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
+        connection_id_b: &ConnectionIdOf<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
     ) -> Result<
         (
-            ChannelId<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
-            ChannelId<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
-            PortId<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
-            PortId<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
+            ChannelIdOf<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
+            ChannelIdOf<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
+            PortIdOf<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
+            PortIdOf<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
         ),
         Self::Error,
     >;
