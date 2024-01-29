@@ -5,7 +5,7 @@ use core::pin::Pin;
 
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
-use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::mutex::{HasMutex, MutexOf};
 
 use crate::subscription::traits::subscription::Subscription;
 
@@ -62,7 +62,7 @@ struct SubscriptionClosure<Runtime, T>
 where
     Runtime: HasMutex,
 {
-    terminated: <Runtime as HasMutex>::Mutex<bool>,
+    terminated: MutexOf<Runtime, bool>,
     subscribe: Box<
         dyn Fn() -> Pin<
                 Box<

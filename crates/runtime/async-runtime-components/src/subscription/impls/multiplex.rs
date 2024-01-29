@@ -8,7 +8,7 @@ use core::pin::Pin;
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
-use hermes_relayer_components::runtime::traits::mutex::HasMutex;
+use hermes_relayer_components::runtime::traits::mutex::{HasMutex, MutexOf};
 use hermes_relayer_components::runtime::traits::stream::HasStreamType;
 use hermes_relayer_components::runtime::traits::task::Task;
 use hermes_relayer_components_extra::runtime::traits::channel::{
@@ -169,8 +169,7 @@ where
 
 type StreamSender<Runtime, T> = <Runtime as HasChannelTypes>::Sender<T>;
 
-type StreamSenders<Runtime, T> =
-    Arc<<Runtime as HasMutex>::Mutex<Option<Vec<StreamSender<Runtime, T>>>>>;
+type StreamSenders<Runtime, T> = Arc<MutexOf<Runtime, Option<Vec<StreamSender<Runtime, T>>>>>;
 
 pub struct MultiplexingSubscription<Runtime, T>
 where
