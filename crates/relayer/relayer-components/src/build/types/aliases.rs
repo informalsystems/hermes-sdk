@@ -10,7 +10,7 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::runtime::traits::runtime::HasRuntimeType;
-use crate::runtime::types::aliases::Mutex;
+use crate::runtime::types::aliases::MutexOf;
 
 pub type BiRelay<Build> = <Build as HasBiRelayType>::BiRelay;
 
@@ -30,13 +30,13 @@ pub type ClientIdA<Build> = <ChainA<Build> as HasIbcChainTypes<ChainB<Build>>>::
 
 pub type ClientIdB<Build> = <ChainB<Build> as HasIbcChainTypes<ChainA<Build>>>::ClientId;
 
-pub type ChainACache<Build> = Mutex<Build, BTreeMap<ChainIdA<Build>, ChainA<Build>>>;
+pub type ChainACache<Build> = MutexOf<Build, BTreeMap<ChainIdA<Build>, ChainA<Build>>>;
 
-pub type ChainBCache<Build> = Mutex<Build, BTreeMap<ChainIdB<Build>, ChainB<Build>>>;
+pub type ChainBCache<Build> = MutexOf<Build, BTreeMap<ChainIdB<Build>, ChainB<Build>>>;
 
 pub type RelayError<Build> = <RelayAToB<Build> as HasErrorType>::Error;
 
-pub type RelayAToBCache<Build> = Mutex<
+pub type RelayAToBCache<Build> = MutexOf<
     Build,
     BTreeMap<
         (
@@ -49,7 +49,7 @@ pub type RelayAToBCache<Build> = Mutex<
     >,
 >;
 
-pub type RelayBToACache<Build> = Mutex<
+pub type RelayBToACache<Build> = MutexOf<
     Build,
     BTreeMap<
         (
@@ -81,7 +81,7 @@ pub type CounterpartyClientId<Build, Target> =
     <CounterpartyChain<Build, Target> as HasIbcChainTypes<TargetChain<Build, Target>>>::ClientId;
 
 pub type TargetChainCache<Build, Target> =
-    Mutex<Build, BTreeMap<TargetChainId<Build, Target>, TargetChain<Build, Target>>>;
+    MutexOf<Build, BTreeMap<TargetChainId<Build, Target>, TargetChain<Build, Target>>>;
 
 pub type TargetRelay<Build, Target> = <Target as RelayBuildTarget<Build>>::TargetRelay;
 
@@ -107,7 +107,7 @@ pub type TargetSrcClientId<Build, Target> =
 pub type TargetDstClientId<Build, Target> =
     <TargetDstChain<Build, Target> as HasIbcChainTypes<TargetSrcChain<Build, Target>>>::ClientId;
 
-pub type TargetRelayCache<Build, Target> = Mutex<
+pub type TargetRelayCache<Build, Target> = MutexOf<
     Build,
     BTreeMap<
         (

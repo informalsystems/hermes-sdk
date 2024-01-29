@@ -8,7 +8,7 @@ use hermes_relayer_components::build::types::aliases::{
 };
 use hermes_relayer_components::runtime::traits::mutex::HasMutex;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::types::aliases::Mutex;
+use hermes_relayer_components::runtime::types::aliases::MutexOf;
 
 use crate::batch::traits::channel::HasMessageBatchSenderType;
 
@@ -31,7 +31,7 @@ where
     Target::TargetChain: HasMessageBatchSenderType<Error>,
     Build::Runtime: HasMutex,
 {
-    type BatchSenderCache = Mutex<
+    type BatchSenderCache = MutexOf<
         Build,
         BTreeMap<
             (
