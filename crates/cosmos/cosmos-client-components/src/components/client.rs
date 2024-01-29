@@ -62,8 +62,6 @@ use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::impls::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
-use crate::impls::types::channel_handshake_payload::ProvideCosmosChannelHandshakePayloads;
-use crate::impls::types::connection_handshake_payload::ProvideCosmosConnectionHandshakePayloads;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 use crate::impls::update_client_message::BuildCosmosUpdateClientMessage;
@@ -90,7 +88,9 @@ delegate_components! {
         ]:
             ProvideCosmosChainTypes,
         [
+            ConnectionHandshakePayloadTypeComponent,
             ReceivePacketPayloadTypeComponent,
+            ChannelHandshakePayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
         MessageSenderComponent:
@@ -111,12 +111,8 @@ delegate_components! {
             BuildCosmosUpdateClientMessage,
         CounterpartyChainIdQuerierComponent:
             QueryChainIdWithChainHandle,
-        ConnectionHandshakePayloadTypeComponent:
-            ProvideCosmosConnectionHandshakePayloads,
         ConnectionHandshakePayloadBuilderComponent:
             BuildCosmosConnectionHandshakePayload,
-        ChannelHandshakePayloadTypeComponent:
-            ProvideCosmosChannelHandshakePayloads,
         ChannelHandshakePayloadBuilderComponent:
             BuildCosmosChannelHandshakePayload,
         ChannelHandshakeMessageBuilderComponent:
