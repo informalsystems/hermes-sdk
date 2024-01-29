@@ -1,4 +1,3 @@
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -52,7 +51,6 @@ use hermes_relayer_components::logger::traits::has_logger::{
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
-use hermes_relayer_components_extra::components::extra::chain::IsExtraChainComponent;
 use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
@@ -69,8 +67,6 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
 
-pub struct CosmosBaseChainComponents;
-
 impl HasComponents for CosmosChainComponents {
     type Components = CosmosBaseChainComponents;
 }
@@ -79,11 +75,11 @@ impl HasComponents for CosmosChain {
     type Components = CosmosChainComponents;
 }
 
-delegate_all!(
-    IsExtraChainComponent,
-    ExtraChainComponents<CosmosBaseChainComponents>,
-    CosmosChainComponents,
-);
+// delegate_all!(
+//     IsCosmosClientComponents,
+//     CosmosClientComponents,
+//     CosmosChainComponents,
+// );
 
 impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
@@ -144,6 +140,11 @@ delegate_components! {
             BlockQuerierComponent,
         ]:
             CosmosClientComponents,
+        [
+            ChainStatusQuerierComponent,
+            ConsensusStateQuerierComponent,
+        ]:
+            ExtraChainComponents<CosmosBaseChainComponents>,
         ClientStateQuerierComponent:
             DelegateCosmosClientStateQuerier,
         CreateClientMessageBuilderComponent:
@@ -152,6 +153,8 @@ delegate_components! {
             DelegateCosmosConnectionHandshakeBuilder,
     }
 }
+
+pub struct CosmosBaseChainComponents;
 
 delegate_components! {
     CosmosBaseChainComponents {

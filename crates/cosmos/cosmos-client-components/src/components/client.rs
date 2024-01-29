@@ -5,13 +5,9 @@ use hermes_relayer_components::chain::traits::components::block_querier::BlockQu
 use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
-use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerierComponent;
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerierComponent;
-use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerierComponent;
@@ -43,9 +39,7 @@ use crate::impls::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
-use crate::impls::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
-use crate::impls::create_client_message::BuildCosmosCreateClientMessage;
 use crate::impls::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::init_connection_options::ProvideCosmosInitConnectionOptionsType;
@@ -54,8 +48,6 @@ use crate::impls::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::query_block::QueryCometBlock;
 use crate::impls::query_chain_id::QueryChainIdWithChainHandle;
 use crate::impls::query_chain_status::QueryChainStatusWithChainHandle;
-use crate::impls::query_client_state::QueryCosmosClientStateFromChainHandle;
-use crate::impls::query_consensus_state::QueryCosmosConsensusStateFromChainHandle;
 use crate::impls::query_consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::query_packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::query_received_packet::QueryReceivedPacketWithChainHandle;
@@ -98,16 +90,12 @@ delegate_components! {
             SendMessagesToTxContext,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
-        ClientStateQuerierComponent:
-            QueryCosmosClientStateFromChainHandle,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightFromChainHandle,
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
-        CreateClientMessageBuilderComponent:
-            BuildCosmosCreateClientMessage,
         CreateClientPayloadBuilderComponent:
             BuildCreateClientPayloadWithChainHandle,
         UpdateClientPayloadBuilderComponent:
@@ -122,8 +110,6 @@ delegate_components! {
             BuildCosmosConnectionHandshakePayload,
         ChannelHandshakePayloadBuilderComponent:
             BuildCosmosChannelHandshakePayload,
-        ConnectionHandshakeMessageBuilderComponent:
-            BuildCosmosConnectionHandshakeMessage,
         ChannelHandshakeMessageBuilderComponent:
             BuildCosmosChannelHandshakeMessage,
         PacketCommitmentsQuerierComponent:
@@ -152,8 +138,6 @@ delegate_components! {
             BuildCosmosPacketFromWriteAck,
         ChainStatusQuerierComponent:
             QueryChainStatusWithChainHandle,
-        ConsensusStateQuerierComponent:
-            QueryCosmosConsensusStateFromChainHandle,
         InitConnectionOptionsTypeComponent:
             ProvideCosmosInitConnectionOptionsType,
         InitChannelOptionsTypeComponent:

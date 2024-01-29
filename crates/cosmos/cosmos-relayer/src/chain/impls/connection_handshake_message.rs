@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::impls::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
+use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComponents;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
@@ -13,7 +13,7 @@ use crate::types::error::Error;
 pub struct DelegateCosmosConnectionHandshakeBuilder;
 
 impl DelegateComponent<CosmosChain> for DelegateCosmosConnectionHandshakeBuilder {
-    type Delegate = BuildCosmosConnectionHandshakeMessage;
+    type Delegate = CosmosIbcClientComponents;
 }
 
 #[async_trait]
