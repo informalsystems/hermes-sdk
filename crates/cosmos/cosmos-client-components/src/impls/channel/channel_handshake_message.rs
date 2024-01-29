@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -22,7 +21,6 @@ use crate::types::payloads::channel::{
 
 pub struct BuildCosmosChannelHandshakeMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> ChannelHandshakeMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
