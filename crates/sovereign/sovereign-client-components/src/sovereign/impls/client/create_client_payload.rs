@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use ibc_relayer::chain::client::ClientSettings;
 
-use crate::types::payloads::client::SovereignCreateClientPayload;
+use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
 /**
    Build a create client payload from a Sovereign rollup, to be

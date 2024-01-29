@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::components::create_client_message_
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 
-use crate::types::message::SovereignMessage;
+use crate::sovereign::types::message::SovereignMessage;
 
 /**
    Build a message to create a Cosmos client on a Sovereign rollup

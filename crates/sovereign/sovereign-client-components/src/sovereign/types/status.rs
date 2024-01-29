@@ -1,6 +1,6 @@
 use ibc_relayer_types::timestamp::Timestamp;
 
-use crate::types::height::RollupHeight;
+use crate::sovereign::types::height::RollupHeight;
 
 pub struct SovereignRollupStatus {
     // TODO: Add fields

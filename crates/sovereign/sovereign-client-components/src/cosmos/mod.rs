@@ -3,4 +3,4 @@
    with the counterparty being a Sovereign rollup
 */
 
-pub mod client;
+pub mod impls;

@@ -7,16 +7,18 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 
-use crate::types::payloads::channel::{
+use crate::sovereign::types::payloads::channel::{
     SovereignChannelOpenAckPayload, SovereignChannelOpenConfirmPayload,
     SovereignChannelOpenTryPayload,
 };
-use crate::types::payloads::client::{SovereignCreateClientPayload, SovereignUpdateClientPayload};
-use crate::types::payloads::connection::{
+use crate::sovereign::types::payloads::client::{
+    SovereignCreateClientPayload, SovereignUpdateClientPayload,
+};
+use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
     SovereignConnectionOpenInitPayload, SovereignConnectionOpenTryPayload,
 };
-use crate::types::payloads::packet::{
+use crate::sovereign::types::payloads::packet::{
     SovereignAckPacketPayload, SovereignReceivePacketPayload,
     SovereignTimeoutUnorderedPacketPayload,
 };

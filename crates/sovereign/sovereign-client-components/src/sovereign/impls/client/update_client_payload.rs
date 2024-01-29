@@ -4,9 +4,9 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
-use crate::types::client_state::SovereignClientState;
-use crate::types::height::RollupHeight;
-use crate::types::payloads::client::SovereignUpdateClientPayload;
+use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::height::RollupHeight;
+use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
 /**
    Build an update client payload from a Sovereign rollup, to be used later

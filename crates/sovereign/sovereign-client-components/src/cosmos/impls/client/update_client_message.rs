@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
-use crate::types::payloads::client::SovereignUpdateClientPayload;
+use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
 pub struct BuildUpdateUpdateSovereignClientMessageOnCosmos;
 

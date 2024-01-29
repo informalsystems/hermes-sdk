@@ -12,11 +12,11 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
 };
 use ibc_relayer_types::timestamp::Timestamp;
 
-use crate::types::event::SovereignEvent;
-use crate::types::height::RollupHeight;
-use crate::types::message::SovereignMessage;
-use crate::types::rollup_id::RollupId;
-use crate::types::status::SovereignRollupStatus;
+use crate::sovereign::types::event::SovereignEvent;
+use crate::sovereign::types::height::RollupHeight;
+use crate::sovereign::types::message::SovereignMessage;
+use crate::sovereign::types::rollup_id::RollupId;
+use crate::sovereign::types::status::SovereignRollupStatus;
 
 pub struct ProvideSovereignChainTypes;
 

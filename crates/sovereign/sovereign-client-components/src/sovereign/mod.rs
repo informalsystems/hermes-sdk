@@ -3,6 +3,6 @@
    with a counterparty Cosmos chain context.
 */
 
-pub mod client;
 pub mod components;
+pub mod impls;
 pub mod types;

@@ -11,11 +11,11 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
-use crate::impls::sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
-use crate::impls::sovereign::client::create_client_payload::BuildSovereignCreateClientPayload;
-use crate::impls::sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
-use crate::impls::sovereign::client::update_client_payload::BuildSovereignUpdateClientPayload;
-use crate::impls::sovereign::types::chain::ProvideSovereignChainTypes;
+use crate::sovereign::impls::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
+use crate::sovereign::impls::client::create_client_payload::BuildSovereignCreateClientPayload;
+use crate::sovereign::impls::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
+use crate::sovereign::impls::client::update_client_payload::BuildSovereignUpdateClientPayload;
+use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 
 pub struct SovereignClientComponents;
 
