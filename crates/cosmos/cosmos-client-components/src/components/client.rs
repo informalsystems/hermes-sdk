@@ -24,7 +24,7 @@ use hermes_relayer_components::chain::traits::components::update_client_payload_
 use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerierComponent;
 use hermes_relayer_components::chain::traits::types::block::{BlockHashComponent, BlockTypeComponent};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::channel::{ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent};
 use hermes_relayer_components::chain::traits::types::connection::{ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent};
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
@@ -61,6 +61,7 @@ use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::impls::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
+use crate::impls::types::channel_handshake_payload::ProvideCosmosChannelHandshakePayloads;
 use crate::impls::types::connection_handshake_payload::ProvideCosmosConnectionHandshakePayloads;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::update_client_message::BuildCosmosUpdateClientMessage;
@@ -108,6 +109,8 @@ delegate_components! {
             ProvideCosmosConnectionHandshakePayloads,
         ConnectionHandshakePayloadBuilderComponent:
             BuildCosmosConnectionHandshakePayload,
+        ChannelHandshakePayloadTypeComponent:
+            ProvideCosmosChannelHandshakePayloads,
         ChannelHandshakePayloadBuilderComponent:
             BuildCosmosChannelHandshakePayload,
         ChannelHandshakeMessageBuilderComponent:

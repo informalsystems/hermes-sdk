@@ -8,7 +8,7 @@ use hermes_relayer_components::chain::traits::components::channel_handshake_payl
 };
 use hermes_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloads, HasInitChannelOptionsType,
+    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -35,7 +35,7 @@ where
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
         + HasUpdateClientPayload<Self>
-        + HasChannelHandshakePayloads<Self>,
+        + HasChannelHandshakePayloadTypes<Self>,
 {
 }
 
@@ -45,14 +45,14 @@ where
     Chain: HasChannelOpenInitEvent<Counterparty>
         + HasChannelOpenTryEvent<Counterparty>
         + HasInitChannelOptionsType<Counterparty>
-        + HasChannelHandshakePayloads<Counterparty>
+        + HasChannelHandshakePayloadTypes<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasIbcChainTypes<Chain>
         + HasUpdateClientPayload<Chain>
-        + HasChannelHandshakePayloads<Chain>,
+        + HasChannelHandshakePayloadTypes<Chain>,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraChainComponents<BaseComponents>
         + ChannelHandshakePayloadBuilder<Chain, Counterparty>

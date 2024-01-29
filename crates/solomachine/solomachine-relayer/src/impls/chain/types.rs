@@ -1,6 +1,6 @@
 use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloads, ProvideInitChannelOptionsType,
+    ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -135,7 +135,8 @@ where
     type ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> HasChannelHandshakePayloads<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

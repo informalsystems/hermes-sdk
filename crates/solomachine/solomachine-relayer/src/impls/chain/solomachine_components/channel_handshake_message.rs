@@ -5,7 +5,7 @@ use hermes_cosmos_client_components::types::payloads::channel::{
 };
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloads, HasInitChannelOptionsType,
+    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
@@ -25,7 +25,7 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
         > + HasErrorType,
-    Counterparty: HasChannelHandshakePayloads<
+    Counterparty: HasChannelHandshakePayloadTypes<
             Chain,
             ChannelOpenTryPayload = CosmosChannelOpenTryPayload,
             ChannelOpenAckPayload = CosmosChannelOpenAckPayload,

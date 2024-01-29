@@ -35,6 +35,7 @@ use hermes_relayer_components::chain::traits::components::write_ack_querier::Wri
 use hermes_relayer_components::chain::traits::types::block::BlockHashComponent;
 use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
@@ -121,6 +122,7 @@ delegate_components! {
             CounterpartyChainIdQuerierComponent,
             ConnectionHandshakePayloadTypeComponent,
             ConnectionHandshakePayloadBuilderComponent,
+            ChannelHandshakePayloadTypeComponent,
             ChannelHandshakePayloadBuilderComponent,
             ChannelHandshakeMessageBuilderComponent,
             PacketCommitmentsQuerierComponent,

@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloads;
+use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -19,7 +19,7 @@ pub struct BuildCosmosChannelHandshakePayload;
 impl<Chain, Counterparty> ChannelHandshakePayloadBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakePayload
 where
-    Chain: HasChannelHandshakePayloads<
+    Chain: HasChannelHandshakePayloadTypes<
             Counterparty,
             ChannelOpenTryPayload = CosmosChannelOpenTryPayload,
             ChannelOpenAckPayload = CosmosChannelOpenAckPayload,
