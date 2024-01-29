@@ -2,7 +2,7 @@ use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
-use hermes_cosmos_client_components::impls::all::CosmosClientComponents;
+use hermes_cosmos_client_components::components::client::CosmosClientComponents;
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerierComponent;
