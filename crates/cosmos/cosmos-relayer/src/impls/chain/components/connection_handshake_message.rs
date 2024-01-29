@@ -3,7 +3,7 @@ use hermes_cosmos_client_components::components::connection_handshake_message::B
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
@@ -20,7 +20,7 @@ impl DelegateComponent<CosmosChain> for DelegateCosmosConnectionHandshakeBuilder
 impl<Counterparty, Delegate> ConnectionHandshakeMessageBuilder<CosmosChain, Counterparty>
     for DelegateCosmosConnectionHandshakeBuilder
 where
-    Counterparty: HasConnectionHandshakePayloads<CosmosChain> + HasIbcChainTypes<CosmosChain>,
+    Counterparty: HasConnectionHandshakePayloadTypes<CosmosChain> + HasIbcChainTypes<CosmosChain>,
     Delegate: ConnectionHandshakeMessageBuilder<CosmosChain, Counterparty>,
     Self: DelegateComponent<Counterparty, Delegate = Delegate>,
 {

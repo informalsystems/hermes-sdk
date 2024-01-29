@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionHandshakePayloads, ProvideInitConnectionOptionsType,
+    ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -121,7 +121,8 @@ where
     type InitChannelOptions = ();
 }
 
-impl<Chain, Counterparty> HasConnectionHandshakePayloads<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideConnectionHandshakePayloadTypes<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

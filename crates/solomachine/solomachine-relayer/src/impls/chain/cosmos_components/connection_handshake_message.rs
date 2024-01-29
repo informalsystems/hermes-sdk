@@ -6,7 +6,7 @@ use hermes_cosmos_relayer::impls::chain::components::connection_handshake_messag
 use hermes_cosmos_relayer::types::error::{BaseError, Error};
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
+    HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
@@ -41,7 +41,7 @@ where
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
         > + HasErrorType<Error = Error>,
-    Counterparty: HasConnectionHandshakePayloads<
+    Counterparty: HasConnectionHandshakePayloadTypes<
             Chain,
             ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload,
             ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,

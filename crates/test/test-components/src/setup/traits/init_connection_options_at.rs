@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasInitConnectionOptionsType, InitConnectionOptions,
+    HasInitConnectionOptionsType, InitConnectionOptionsOf,
 };
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
@@ -13,5 +13,5 @@ where
 {
     fn init_connection_options(
         &self,
-    ) -> InitConnectionOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> InitConnectionOptionsOf<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
 }

@@ -4,10 +4,6 @@ use hermes_cosmos_client_components::types::payloads::channel::{
 use hermes_cosmos_client_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use hermes_cosmos_client_components::types::payloads::connection::{
-    CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
-    CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
-};
 use hermes_cosmos_client_components::types::payloads::packet::{
     CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
 };
@@ -16,7 +12,6 @@ use hermes_cosmos_client_components::types::tendermint::{
 };
 use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloads;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
@@ -59,16 +54,6 @@ impl<Counterparty> HasCreateClientPayload<Counterparty> for CosmosChain {
 
 impl<Counterparty> HasUpdateClientPayload<Counterparty> for CosmosChain {
     type UpdateClientPayload = CosmosUpdateClientPayload;
-}
-
-impl<Counterparty> HasConnectionHandshakePayloads<Counterparty> for CosmosChain {
-    type ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload;
-
-    type ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload;
-
-    type ConnectionOpenAckPayload = CosmosConnectionOpenAckPayload;
-
-    type ConnectionOpenConfirmPayload = CosmosConnectionOpenConfirmPayload;
 }
 
 impl<Counterparty> HasChannelHandshakePayloads<Counterparty> for CosmosChain {

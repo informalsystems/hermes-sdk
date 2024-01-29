@@ -29,7 +29,7 @@ use hermes_relayer_components::chain::traits::components::write_ack_querier::Wri
 use hermes_relayer_components::chain::traits::types::block::{BlockHashComponent, BlockTypeComponent};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
-use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::{ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent};
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent};
@@ -69,6 +69,7 @@ use crate::components::send_messages_as_tx::SendMessagesToTxContext;
 use crate::components::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::components::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::components::types::chain::ProvideCosmosChainTypes;
+use crate::components::types::connection_handshake_payload::ProvideCosmosConnectionHandshakePayloads;
 use crate::components::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::components::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::components::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
@@ -115,6 +116,8 @@ delegate_components! {
             BuildCosmosUpdateClientMessage,
         CounterpartyChainIdQuerierComponent:
             QueryChainIdWithChainHandle,
+        ConnectionHandshakePayloadTypeComponent:
+            ProvideCosmosConnectionHandshakePayloads,
         ConnectionHandshakePayloadBuilderComponent:
             BuildCosmosConnectionHandshakePayload,
         ChannelHandshakePayloadBuilderComponent:

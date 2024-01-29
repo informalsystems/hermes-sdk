@@ -6,7 +6,7 @@ use hermes_cosmos_client_components::types::payloads::connection::{
 };
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionHandshakePayloads, HasInitConnectionOptionsType,
+    HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
@@ -26,7 +26,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
         > + HasErrorType,
-    Counterparty: HasConnectionHandshakePayloads<
+    Counterparty: HasConnectionHandshakePayloadTypes<
             Chain,
             ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload,
             ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload,

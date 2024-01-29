@@ -3,7 +3,7 @@ use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryConnectionRequest, QueryHeight};
@@ -24,7 +24,7 @@ pub struct BuildCosmosConnectionHandshakePayload;
 impl<Chain, Counterparty> ConnectionHandshakePayloadBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakePayload
 where
-    Chain: HasConnectionHandshakePayloads<
+    Chain: HasConnectionHandshakePayloadTypes<
             Counterparty,
             ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload,
             ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload,
