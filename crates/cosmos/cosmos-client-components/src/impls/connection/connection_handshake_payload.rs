@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
@@ -20,7 +19,6 @@ use crate::types::payloads::connection::{
 
 pub struct BuildCosmosConnectionHandshakePayload;
 
-#[async_trait]
 impl<Chain, Counterparty> ConnectionHandshakePayloadBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakePayload
 where
