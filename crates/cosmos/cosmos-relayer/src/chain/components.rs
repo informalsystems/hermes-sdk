@@ -38,6 +38,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::create_client::CreateClientPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::GenesisHeightGetterComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightIncrementerComponent;
@@ -116,6 +117,7 @@ delegate_components! {
             BlockTypeComponent,
             BlockHashComponent,
 
+            CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             ConnectionHandshakePayloadTypeComponent,
             ChannelHandshakePayloadTypeComponent,

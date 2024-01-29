@@ -26,7 +26,7 @@ use hermes_relayer_components::chain::traits::types::block::{BlockHashComponent,
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent};
 use hermes_relayer_components::chain::traits::types::connection::{ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent};
-use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::create_client::{CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent};
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
@@ -91,6 +91,7 @@ delegate_components! {
         ]:
             ProvideCosmosChainTypes,
         [
+            CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             ConnectionHandshakePayloadTypeComponent,
             ChannelHandshakePayloadTypeComponent,
