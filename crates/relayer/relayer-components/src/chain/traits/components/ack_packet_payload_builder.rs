@@ -4,12 +4,12 @@ use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::chain::traits::types::packets::ack::HasAckPacketPayload;
+use crate::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 
 #[derive_component(AckPacketPayloadBuilderComponent, AckPacketPayloadBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildAckPacketPayload<Counterparty>:
-    HasAckPacketPayload<Counterparty>
+    HasAckPacketPayloadType<Counterparty>
     + HasWriteAckEvent<Counterparty>
     + HasIbcPacketTypes<Counterparty>
     + HasClientStateType<Counterparty>

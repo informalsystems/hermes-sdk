@@ -27,9 +27,9 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
@@ -52,8 +52,8 @@ where
         + HasIbcChainTypes<Self>
         + HasUpdateClientPayload<Self>
         + HasReceivePacketPayloadType<Self>
-        + HasAckPacketPayload<Self>
-        + HasTimeoutUnorderedPacketPayload<Self>,
+        + HasAckPacketPayloadType<Self>
+        + HasTimeoutUnorderedPacketPayloadType<Self>,
 {
 }
 
@@ -64,16 +64,16 @@ where
         + HasIbcPacketTypes<Counterparty>
         + HasReceivePacketPayloadType<Counterparty>
         + HasWriteAckEvent<Counterparty>
-        + HasAckPacketPayload<Counterparty>
-        + HasTimeoutUnorderedPacketPayload<Counterparty>
+        + HasAckPacketPayloadType<Counterparty>
+        + HasTimeoutUnorderedPacketPayloadType<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasUpdateClientPayload<Chain>
-        + HasAckPacketPayload<Chain>
-        + HasTimeoutUnorderedPacketPayload<Chain>
+        + HasAckPacketPayloadType<Chain>
+        + HasTimeoutUnorderedPacketPayloadType<Chain>
         + HasReceivePacketPayloadType<Chain>,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraChainComponents<BaseComponents>

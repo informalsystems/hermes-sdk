@@ -3,9 +3,9 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 
 use crate::components::extra::closures::chain::channel_handshake::UseExtraChainComponentsForChannelHandshake;
@@ -23,8 +23,8 @@ where
         + HasIbcChainTypes<Self>
         + HasUpdateClientPayload<Self>
         + HasReceivePacketPayloadType<Self>
-        + HasAckPacketPayload<Self>
-        + HasTimeoutUnorderedPacketPayload<Self>
+        + HasAckPacketPayloadType<Self>
+        + HasTimeoutUnorderedPacketPayloadType<Self>
         + HasChannelHandshakePayloadTypes<Self>,
 {
 }

@@ -11,9 +11,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayload, ProvideCreateClientOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
@@ -155,14 +155,16 @@ where
     type ReceivePacketPayload = SolomachineReceivePacketPayload;
 }
 
-impl<Chain, Counterparty> HasAckPacketPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type AckPacketPayload = SolomachineAckPacketPayload;
 }
 
-impl<Chain, Counterparty> HasTimeoutUnorderedPacketPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

@@ -3,7 +3,7 @@ use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::TimeoutUnorderedPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
@@ -19,7 +19,7 @@ where
     Chain: HasMessageType<Message = CosmosMessage>
         + HasErrorType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>,
-    Counterparty: HasTimeoutUnorderedPacketPayload<
+    Counterparty: HasTimeoutUnorderedPacketPayloadType<
         Chain,
         TimeoutUnorderedPacketPayload = CosmosTimeoutUnorderedPacketPayload,
     >,

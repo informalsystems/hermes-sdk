@@ -32,7 +32,9 @@ use hermes_relayer_components::chain::traits::types::height::{GenesisHeightGette
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
@@ -89,8 +91,10 @@ delegate_components! {
             ProvideCosmosChainTypes,
         [
             ConnectionHandshakePayloadTypeComponent,
-            ReceivePacketPayloadTypeComponent,
             ChannelHandshakePayloadTypeComponent,
+            ReceivePacketPayloadTypeComponent,
+            AckPacketPayloadTypeComponent,
+            TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
         MessageSenderComponent:

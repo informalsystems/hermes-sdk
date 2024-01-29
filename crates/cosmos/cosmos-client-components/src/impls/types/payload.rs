@@ -1,7 +1,9 @@
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::channel::ProvideChannelHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 
 use crate::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
@@ -10,7 +12,9 @@ use crate::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
 };
-use crate::types::payloads::packet::CosmosReceivePacketPayload;
+use crate::types::payloads::packet::{
+    CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
+};
 
 pub struct ProvideCosmosPayloadTypes;
 
@@ -46,4 +50,20 @@ where
     Chain: Async,
 {
     type ReceivePacketPayload = CosmosReceivePacketPayload;
+}
+
+impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
+    for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
+    type AckPacketPayload = CosmosAckPacketPayload;
+}
+
+impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
+    for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
+    type TimeoutUnorderedPacketPayload = CosmosTimeoutUnorderedPacketPayload;
 }

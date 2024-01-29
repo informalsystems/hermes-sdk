@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::components::timeout_unordered_pack
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType};
 use ibc_relayer_types::Height;
 
@@ -17,7 +17,7 @@ pub struct BuildCosmosTimeoutPacketPayload;
 impl<Chain, Counterparty> TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
     for BuildCosmosTimeoutPacketPayload
 where
-    Chain: HasTimeoutUnorderedPacketPayload<
+    Chain: HasTimeoutUnorderedPacketPayloadType<
             Counterparty,
             TimeoutUnorderedPacketPayload = CosmosTimeoutUnorderedPacketPayload,
         > + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>

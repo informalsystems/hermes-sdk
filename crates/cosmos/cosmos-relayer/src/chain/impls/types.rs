@@ -1,17 +1,12 @@
 use hermes_cosmos_client_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use hermes_cosmos_client_components::types::payloads::packet::{
-    CosmosAckPacketPayload, CosmosTimeoutUnorderedPacketPayload,
-};
 use hermes_cosmos_client_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayload;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
@@ -49,12 +44,4 @@ impl<Counterparty> HasCreateClientPayload<Counterparty> for CosmosChain {
 
 impl<Counterparty> HasUpdateClientPayload<Counterparty> for CosmosChain {
     type UpdateClientPayload = CosmosUpdateClientPayload;
-}
-
-impl<Counterparty> HasAckPacketPayload<Counterparty> for CosmosChain {
-    type AckPacketPayload = CosmosAckPacketPayload;
-}
-
-impl<Counterparty> HasTimeoutUnorderedPacketPayload<Counterparty> for CosmosChain {
-    type TimeoutUnorderedPacketPayload = CosmosTimeoutUnorderedPacketPayload;
 }
