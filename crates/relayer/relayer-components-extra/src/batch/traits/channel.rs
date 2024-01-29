@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::types::aliases::Runtime;
+use hermes_relayer_components::runtime::types::aliases::RuntimeOf;
 
 use crate::batch::types::aliases::MessageBatchSender;
 use crate::runtime::traits::channel::HasChannelTypes;
@@ -13,7 +13,7 @@ pub trait HasMessageBatchSender<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
     Target::TargetChain: HasRuntime,
-    Runtime<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
+    RuntimeOf<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
 {
     fn get_batch_sender(&self) -> &MessageBatchSender<Target::TargetChain, Self::Error>;
 }

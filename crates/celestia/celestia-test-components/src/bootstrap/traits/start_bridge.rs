@@ -4,7 +4,7 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcess, HasChildProcessType,
 };
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
 #[derive_component(BridgeStarterComponent, BridgeStarter<Bootstrap>)]
 #[async_trait]
@@ -14,7 +14,7 @@ where
 {
     async fn start_bridge(
         &self,
-        bridge_home_dir: &FilePath<Self::Runtime>,
+        bridge_home_dir: &FilePathOf<Self::Runtime>,
         chain_driver: &Self::ChainDriver,
     ) -> Result<ChildProcess<Self::Runtime>, Self::Error>;
 }

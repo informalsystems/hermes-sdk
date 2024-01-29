@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
-use crate::chain::types::aliases::{Event, Height};
+use crate::chain::types::aliases::{EventOf, HeightOf};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 
@@ -30,7 +30,7 @@ where
     */
     async fn relay_chain_event(
         &self,
-        height: &Height<Target::TargetChain>,
-        event: &Event<Target::TargetChain>,
+        height: &HeightOf<Target::TargetChain>,
+        event: &EventOf<Target::TargetChain>,
     ) -> Result<(), Self::Error>;
 }

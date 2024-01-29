@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::types::aliases::ChainId;
+use hermes_relayer_components::chain::types::aliases::ChainIdOf;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
 /**
    Initialize a new chain with data files stored at the given home directory
@@ -17,7 +17,7 @@ where
 {
     async fn init_bridge_data(
         &self,
-        bridge_home_dir: &FilePath<Self::Runtime>,
-        chain_id: &ChainId<Self::Chain>,
+        bridge_home_dir: &FilePathOf<Self::Runtime>,
+        chain_id: &ChainIdOf<Self::Chain>,
     ) -> Result<(), Self::Error>;
 }

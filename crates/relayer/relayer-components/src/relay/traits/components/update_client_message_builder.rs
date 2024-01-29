@@ -3,7 +3,7 @@ use alloc::vec::Vec;
 use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::CanSendMessages;
-use crate::chain::types::aliases::{Height, Message};
+use crate::chain::types::aliases::{HeightOf, MessageOf};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 
@@ -16,8 +16,8 @@ where
     async fn build_update_client_messages(
         &self,
         _target: Target,
-        height: &Height<Target::CounterpartyChain>,
-    ) -> Result<Vec<Message<Target::TargetChain>>, Self::Error>;
+        height: &HeightOf<Target::CounterpartyChain>,
+    ) -> Result<Vec<MessageOf<Target::TargetChain>>, Self::Error>;
 }
 
 #[async_trait]
@@ -28,7 +28,7 @@ where
     async fn send_update_client_messages(
         &self,
         target: Target,
-        height: &Height<Target::CounterpartyChain>,
+        height: &HeightOf<Target::CounterpartyChain>,
     ) -> Result<(), Self::Error>;
 }
 
@@ -42,7 +42,7 @@ where
     async fn send_update_client_messages(
         &self,
         target: Target,
-        height: &Height<Target::CounterpartyChain>,
+        height: &HeightOf<Target::CounterpartyChain>,
     ) -> Result<(), Self::Error> {
         let messages = self.build_update_client_messages(target, height).await?;
 

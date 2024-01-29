@@ -4,7 +4,7 @@ use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
 use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::types::aliases::Height;
+use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayer;
@@ -26,7 +26,7 @@ where
 {
     async fn relay_receive_packet(
         relay: &Relay,
-        source_height: &Height<Relay::SrcChain>,
+        source_height: &HeightOf<Relay::SrcChain>,
         packet: &Packet<Relay>,
     ) -> Result<Option<AckEvent>, Relay::Error> {
         let src_client_state = relay

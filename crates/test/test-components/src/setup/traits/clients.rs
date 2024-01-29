@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::ClientId;
+use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 
@@ -18,8 +18,8 @@ where
         chain_b: &ChainTypeAt<Self, B>,
     ) -> Result<
         (
-            ClientId<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
-            ClientId<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
+            ClientIdOf<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
+            ClientIdOf<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
         ),
         Self::Error,
     >;

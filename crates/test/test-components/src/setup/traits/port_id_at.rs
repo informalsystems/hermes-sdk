@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::PortId;
+use hermes_relayer_components::chain::types::aliases::PortIdOf;
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 use crate::types::index::Twindex;
@@ -14,5 +14,5 @@ where
     fn port_id_at(
         &self,
         index: Twindex<CHAIN, COUNTERPARTY>,
-    ) -> &PortId<ChainTypeAt<Self, CHAIN>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> &PortIdOf<ChainTypeAt<Self, CHAIN>, ChainTypeAt<Self, COUNTERPARTY>>;
 }

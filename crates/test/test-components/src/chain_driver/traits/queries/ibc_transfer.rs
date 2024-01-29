@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::types::aliases::{ChannelId, OutgoingPacket, PortId};
+use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, OutgoingPacketOf, PortIdOf};
 
 use crate::chain_driver::traits::types::address::HasAddressType;
 use crate::chain_driver::traits::types::amount::HasAmountType;
@@ -19,10 +19,10 @@ where
 {
     async fn ibc_transfer_token(
         &self,
-        channel_id: &ChannelId<Self::Chain, CounterpartyDriver::Chain>,
-        port_id: &PortId<Self::Chain, CounterpartyDriver::Chain>,
+        channel_id: &ChannelIdOf<Self::Chain, CounterpartyDriver::Chain>,
+        port_id: &PortIdOf<Self::Chain, CounterpartyDriver::Chain>,
         sender_wallet: &Self::Wallet,
         recipient_address: &CounterpartyDriver::Address,
         amount: &Self::Amount,
-    ) -> Result<OutgoingPacket<Self::Chain, CounterpartyDriver::Chain>, Self::Error>;
+    ) -> Result<OutgoingPacketOf<Self::Chain, CounterpartyDriver::Chain>, Self::Error>;
 }

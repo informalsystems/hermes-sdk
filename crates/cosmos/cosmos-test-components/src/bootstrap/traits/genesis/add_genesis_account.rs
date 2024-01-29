@@ -4,7 +4,7 @@ use hermes_test_components::chain_driver::traits::types::address::{Address, HasA
 use hermes_test_components::chain_driver::traits::types::amount::{Amount, HasAmountType};
 
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
 #[derive_component(GenesisAccountAdderComponent, GenesisAccountAdder<Bootstrap>)]
 #[async_trait]
@@ -15,7 +15,7 @@ where
 {
     async fn add_genesis_account(
         &self,
-        chain_home_dir: &FilePath<Self::Runtime>,
+        chain_home_dir: &FilePathOf<Self::Runtime>,
         address: &Address<Self::ChainDriver>,
         amounts: &[Amount<Self::ChainDriver>],
     ) -> Result<(), Self::Error>;

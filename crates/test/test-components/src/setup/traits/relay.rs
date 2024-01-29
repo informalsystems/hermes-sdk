@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::ClientId;
+use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::driver::traits::types::relay_at::{HasRelayTypeAt, RelayTypeAt};
@@ -19,7 +19,7 @@ where
         index: Twindex<A, B>,
         chain_a: &ChainTypeAt<Self, A>,
         chain_b: &ChainTypeAt<Self, B>,
-        client_id_a: &ClientId<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
-        client_id_b: &ClientId<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
+        client_id_a: &ClientIdOf<ChainTypeAt<Self, A>, ChainTypeAt<Self, B>>,
+        client_id_b: &ClientIdOf<ChainTypeAt<Self, B>, ChainTypeAt<Self, A>>,
     ) -> Result<(RelayTypeAt<Self, A, B>, RelayTypeAt<Self, B, A>), Self::Error>;
 }

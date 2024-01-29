@@ -2,7 +2,7 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::ConnectionId;
+use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
@@ -31,8 +31,8 @@ where
         birelay: &BiRelayTypeAt<Setup, A, B>,
     ) -> Result<
         (
-            ConnectionId<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            ConnectionId<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            ConnectionIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
+            ConnectionIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
         ),
         Setup::Error,
     > {

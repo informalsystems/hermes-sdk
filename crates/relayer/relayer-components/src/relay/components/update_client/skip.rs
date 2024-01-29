@@ -6,7 +6,7 @@ use cgp_core::async_trait;
 use crate::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::HasHeightType;
-use crate::chain::types::aliases::Height;
+use crate::chain::types::aliases::HeightOf;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
@@ -28,7 +28,7 @@ where
     async fn build_update_client_messages(
         relay: &Relay,
         target: Target,
-        height: &Height<Target::CounterpartyChain>,
+        height: &HeightOf<Target::CounterpartyChain>,
     ) -> Result<Vec<TargetChain::Message>, Relay::Error> {
         let target_chain = Target::target_chain(relay);
         let target_client_id = Target::target_client_id(relay);

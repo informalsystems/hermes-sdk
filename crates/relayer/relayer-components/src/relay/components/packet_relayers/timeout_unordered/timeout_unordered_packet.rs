@@ -4,7 +4,7 @@ use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
-use crate::chain::types::aliases::Height;
+use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayer;
@@ -27,7 +27,7 @@ where
 {
     async fn relay_timeout_unordered_packet(
         relay: &Relay,
-        destination_height: &Height<Relay::DstChain>,
+        destination_height: &HeightOf<Relay::DstChain>,
         packet: &Packet<Relay>,
     ) -> Result<(), Relay::Error> {
         let dst_client_state = relay

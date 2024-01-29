@@ -2,7 +2,7 @@ use cgp_core::{CanRaiseError, HasInner};
 
 use crate::chain::traits::types::create_client::{CreateClientOptions, HasCreateClientOptionsType};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::types::aliases::ClientId;
+use crate::chain::types::aliases::ClientIdOf;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::components::client_creator::{CanCreateClient, ClientCreator};
 use crate::relay::traits::target::ChainTarget;
@@ -24,7 +24,7 @@ where
         target_chain: &TargetChain,
         counterparty_chain: &CounterpartyChain,
         create_client_options: &CreateClientOptions<CounterpartyChain, TargetChain>,
-    ) -> Result<ClientId<TargetChain, CounterpartyChain>, Relay::Error> {
+    ) -> Result<ClientIdOf<TargetChain, CounterpartyChain>, Relay::Error> {
         Inner::create_client(
             target,
             target_chain,

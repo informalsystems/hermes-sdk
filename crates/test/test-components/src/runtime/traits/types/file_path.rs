@@ -13,4 +13,4 @@ pub trait HasFilePathType: Async {
     fn join_file_path(path1: &Self::FilePath, path2: &Self::FilePath) -> Self::FilePath;
 }
 
-pub type FilePath<Runtime> = <Runtime as HasFilePathType>::FilePath;
+pub type FilePathOf<Runtime> = <Runtime as HasFilePathType>::FilePath;

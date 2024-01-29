@@ -1,7 +1,7 @@
 use cgp_core::{Async, HasErrorType};
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::types::aliases::ClientId;
+use crate::chain::types::aliases::ClientIdOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 
 #[derive(Default, Clone, Copy)]
@@ -25,11 +25,11 @@ pub trait ChainTarget<Relay: HasRelayChains>: Async + Default + Copy + private::
 
     fn counterparty_chain(relay: &Relay) -> &Self::CounterpartyChain;
 
-    fn target_client_id(relay: &Relay) -> &ClientId<Self::TargetChain, Self::CounterpartyChain>;
+    fn target_client_id(relay: &Relay) -> &ClientIdOf<Self::TargetChain, Self::CounterpartyChain>;
 
     fn counterparty_client_id(
         relay: &Relay,
-    ) -> &ClientId<Self::CounterpartyChain, Self::TargetChain>;
+    ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain>;
 }
 
 impl private::Sealed for SourceTarget {}
@@ -61,13 +61,15 @@ where
         context.dst_chain()
     }
 
-    fn target_client_id(context: &Relay) -> &ClientId<Self::TargetChain, Self::CounterpartyChain> {
+    fn target_client_id(
+        context: &Relay,
+    ) -> &ClientIdOf<Self::TargetChain, Self::CounterpartyChain> {
         context.src_client_id()
     }
 
     fn counterparty_client_id(
         context: &Relay,
-    ) -> &ClientId<Self::CounterpartyChain, Self::TargetChain> {
+    ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain> {
         context.dst_client_id()
     }
 }
@@ -98,13 +100,15 @@ where
         context.src_chain()
     }
 
-    fn target_client_id(context: &Relay) -> &ClientId<Self::TargetChain, Self::CounterpartyChain> {
+    fn target_client_id(
+        context: &Relay,
+    ) -> &ClientIdOf<Self::TargetChain, Self::CounterpartyChain> {
         context.dst_client_id()
     }
 
     fn counterparty_client_id(
         context: &Relay,
-    ) -> &ClientId<Self::CounterpartyChain, Self::TargetChain> {
+    ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain> {
         context.src_client_id()
     }
 }

@@ -3,7 +3,7 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::wallet::{HasWalletType, Wallet};
 
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::types::file_path::{FilePath, HasFilePathType};
+use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
 #[derive_component(WalletInitializerComponent, WalletInitializer<Bootstrap>)]
 #[async_trait]
@@ -14,7 +14,7 @@ where
 {
     async fn initialize_wallet(
         &self,
-        chain_home_dir: &FilePath<Self::Runtime>,
+        chain_home_dir: &FilePathOf<Self::Runtime>,
         wallet_id: &str,
     ) -> Result<Wallet<Self::ChainDriver>, Self::Error>;
 }

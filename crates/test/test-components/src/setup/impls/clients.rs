@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::ClientId;
+use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -36,8 +36,8 @@ where
         chain_b: &ChainTypeAt<Setup, B>,
     ) -> Result<
         (
-            ClientId<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            ClientId<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            ClientIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
+            ClientIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
         ),
         Setup::Error,
     > {

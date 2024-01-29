@@ -2,7 +2,7 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::{ChannelId, ConnectionId, PortId};
+use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
@@ -28,20 +28,20 @@ where
     ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>>,
     RelayTypeAt<Setup, A, B>: CanBootstrapChannel,
     BiRelayTypeAt<Setup, A, B>: HasTwoWayRelay,
-    PortId<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>: Clone,
-    PortId<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>: Clone,
+    PortIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>: Clone,
+    PortIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>: Clone,
 {
     async fn setup_channel(
         setup: &Setup,
         birelay: &BiRelayTypeAt<Setup, A, B>,
-        connection_id_a: &ConnectionId<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-        connection_id_b: &ConnectionId<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+        connection_id_a: &ConnectionIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
+        connection_id_b: &ConnectionIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
     ) -> Result<
         (
-            ChannelId<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            ChannelId<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
-            PortId<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            PortId<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            ChannelIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
+            ChannelIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            PortIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
+            PortIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
         ),
         Setup::Error,
     > {
