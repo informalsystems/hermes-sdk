@@ -1,4 +1,4 @@
-pub struct SovereignChannelOpenInitPayload {
+pub struct SovereignInitChannelOptions {
     // TODO: fill in fields
 }
 

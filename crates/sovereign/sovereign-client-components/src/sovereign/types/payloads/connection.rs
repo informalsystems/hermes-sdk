@@ -1,3 +1,7 @@
+pub struct SovereignInitConnectionOptions {
+    // TODO: fill in fields
+}
+
 pub struct SovereignConnectionOpenInitPayload {
     // TODO: fill in fields
 }

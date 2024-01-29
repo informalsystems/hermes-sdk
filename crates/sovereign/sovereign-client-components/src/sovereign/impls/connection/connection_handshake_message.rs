@@ -11,14 +11,17 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::sovereign::types::message::SovereignMessage;
+use crate::sovereign::types::payloads::connection::SovereignInitConnectionOptions;
 
 pub struct BuildCosmosConnectionHandshakeMessageOnSovereign;
 
 impl<Chain, Counterparty> ConnectionHandshakeMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessageOnSovereign
 where
-    Chain: HasInitConnectionOptionsType<Counterparty>
-        + HasIbcChainTypes<
+    Chain: HasInitConnectionOptionsType<
+            Counterparty,
+            InitConnectionOptions = SovereignInitConnectionOptions,
+        > + HasIbcChainTypes<
             Counterparty,
             Message = SovereignMessage,
             ClientId = ClientId,

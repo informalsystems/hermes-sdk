@@ -1,6 +1,10 @@
 use cgp_core::prelude::Async;
-use hermes_relayer_components::chain::traits::types::channel::ProvideChannelHandshakePayloadTypes;
-use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::channel::{
+    ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
+};
+use hermes_relayer_components::chain::traits::types::connection::{
+    ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
@@ -9,7 +13,7 @@ use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdat
 
 use crate::sovereign::types::payloads::channel::{
     SovereignChannelOpenAckPayload, SovereignChannelOpenConfirmPayload,
-    SovereignChannelOpenTryPayload,
+    SovereignChannelOpenTryPayload, SovereignInitChannelOptions,
 };
 use crate::sovereign::types::payloads::client::{
     SovereignCreateClientPayload, SovereignUpdateClientPayload,
@@ -17,6 +21,7 @@ use crate::sovereign::types::payloads::client::{
 use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
     SovereignConnectionOpenInitPayload, SovereignConnectionOpenTryPayload,
+    SovereignInitConnectionOptions,
 };
 use crate::sovereign::types::payloads::packet::{
     SovereignAckPacketPayload, SovereignReceivePacketPayload,
@@ -41,16 +46,12 @@ where
     type UpdateClientPayload = SovereignUpdateClientPayload;
 }
 
-impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideInitConnectionOptionsType<Chain, Counterparty>
     for ProvideSovereignPayloadTypes
 where
     Chain: Async,
 {
-    type ChannelOpenTryPayload = SovereignChannelOpenTryPayload;
-
-    type ChannelOpenAckPayload = SovereignChannelOpenAckPayload;
-
-    type ChannelOpenConfirmPayload = SovereignChannelOpenConfirmPayload;
+    type InitConnectionOptions = SovereignInitConnectionOptions;
 }
 
 impl<Chain, Counterparty> ProvideConnectionHandshakePayloadTypes<Chain, Counterparty>
@@ -65,6 +66,26 @@ where
     type ConnectionOpenAckPayload = SovereignConnectionOpenAckPayload;
 
     type ConnectionOpenConfirmPayload = SovereignConnectionOpenConfirmPayload;
+}
+
+impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
+    type InitChannelOptions = SovereignInitChannelOptions;
+}
+
+impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
+    type ChannelOpenTryPayload = SovereignChannelOpenTryPayload;
+
+    type ChannelOpenAckPayload = SovereignChannelOpenAckPayload;
+
+    type ChannelOpenConfirmPayload = SovereignChannelOpenConfirmPayload;
 }
 
 impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
