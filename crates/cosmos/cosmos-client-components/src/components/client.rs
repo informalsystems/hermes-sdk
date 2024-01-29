@@ -41,12 +41,14 @@ use hermes_relayer_components::chain::traits::types::update_client::UpdateClient
 
 use crate::impls::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::ack_packet_payload::BuildCosmosAckPacketPayload;
-use crate::impls::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-use crate::impls::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
-use crate::impls::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
-use crate::impls::create_client_payload::BuildCreateClientPayloadWithChainHandle;
-use crate::impls::init_channel_options::ProvideCosmosInitChannelOptionsType;
-use crate::impls::init_connection_options::ProvideCosmosInitConnectionOptionsType;
+use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
+use crate::impls::channel::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
+use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
+use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
+use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
+use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
+use crate::impls::connection::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
+use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::impls::packet_fields::CosmosPacketFieldReader;
 use crate::impls::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::query_block::QueryCometBlock;
@@ -67,8 +69,6 @@ use crate::impls::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
-use crate::impls::update_client_message::BuildCosmosUpdateClientMessage;
-use crate::impls::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 
 pub struct CosmosClientComponents;
 
