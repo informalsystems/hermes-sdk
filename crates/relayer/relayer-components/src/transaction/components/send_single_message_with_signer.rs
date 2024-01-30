@@ -18,7 +18,6 @@ pub trait CanSendSingleMessageWithSigner:
     ) -> Result<Vec<Self::Event>, Self::Error>;
 }
 
-#[async_trait]
 impl<Chain> CanSendSingleMessageWithSigner for Chain
 where
     Chain: CanSendMessagesWithSigner,

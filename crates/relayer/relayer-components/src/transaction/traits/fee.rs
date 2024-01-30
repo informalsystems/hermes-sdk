@@ -1,5 +1,5 @@
-use crate::transaction::traits::types::HasTxTypes;
+use crate::transaction::traits::types::HasFeeType;
 
-pub trait HasFeeForSimulation: HasTxTypes {
+pub trait HasFeeForSimulation: HasFeeType {
     fn fee_for_simulation(&self) -> &Self::Fee;
 }

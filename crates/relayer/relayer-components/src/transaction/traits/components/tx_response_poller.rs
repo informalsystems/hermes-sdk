@@ -1,10 +1,10 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::HasTxTypes;
+use crate::transaction::traits::types::{HasTransactionHashType, HasTxResponseType};
 
 #[derive_component(TxResponsePollerComponent, TxResponsePoller<TxContext>)]
 #[async_trait]
-pub trait CanPollTxResponse: HasTxTypes {
+pub trait CanPollTxResponse: HasTransactionHashType + HasTxResponseType + HasErrorType {
     async fn poll_tx_response(
         &self,
         tx_hash: &Self::TxHash,

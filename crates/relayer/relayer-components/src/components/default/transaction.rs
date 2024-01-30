@@ -2,6 +2,8 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::components::message_sender::{CanSendMessages, MessageSenderComponent};
 use crate::chain::traits::types::chain_id::HasChainId;
+use crate::chain::traits::types::event::HasEventType;
+use crate::chain::traits::types::message::HasMessageType;
 use crate::logger::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
@@ -39,7 +41,10 @@ use crate::transaction::traits::logs::nonce::CanLogNonce;
 use crate::transaction::traits::nonce::guard::HasNonceGuard;
 use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::signer::HasDefaultSigner;
-use crate::transaction::traits::types::HasTxTypes;
+use crate::transaction::traits::types::{
+    HasFeeType, HasNonceType, HasSignerType, HasTransactionHashType, HasTransactionType,
+    HasTxResponseType,
+};
 
 pub struct DefaultTxComponents;
 
@@ -74,7 +79,14 @@ pub trait UseDefaultTxComponents:
 impl<Chain, Components> UseDefaultTxComponents for Chain
 where
     Chain: HasErrorType
-        + HasTxTypes
+        + HasMessageType
+        + HasEventType
+        + HasTransactionType
+        + HasNonceType
+        + HasFeeType
+        + HasSignerType
+        + HasTransactionHashType
+        + HasTxResponseType
         + HasDefaultSigner
         + HasNonceGuard
         + HasChainId

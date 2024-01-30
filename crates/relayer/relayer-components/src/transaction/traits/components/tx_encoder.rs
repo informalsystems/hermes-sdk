@@ -1,10 +1,15 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::HasTxTypes;
+use crate::chain::traits::types::message::HasMessageType;
+use crate::transaction::traits::types::{
+    HasFeeType, HasNonceType, HasSignerType, HasTransactionType,
+};
 
 #[derive_component(TxEncoderComponent, TxEncoder<TxContext>)]
 #[async_trait]
-pub trait CanEncodeTx: HasTxTypes {
+pub trait CanEncodeTx:
+    HasSignerType + HasNonceType + HasFeeType + HasMessageType + HasTransactionType + HasErrorType
+{
     async fn encode_tx(
         &self,
         signer: &Self::Signer,

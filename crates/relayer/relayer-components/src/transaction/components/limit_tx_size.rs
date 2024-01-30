@@ -7,12 +7,15 @@
 
 use core::marker::PhantomData;
 
-use cgp_core::{async_trait, CanRaiseError};
+use cgp_core::CanRaiseError;
 
-
+use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::components::tx_encoder::TxEncoder;
-use crate::transaction::traits::types::HasTxTypes;
+use crate::transaction::traits::types::{
+    HasFeeType, HasNonceType, HasSignerType, HasTransactionType,
+};
 
+#[derive(Debug)]
 pub struct MaxTxSizeExceededError {
     pub max_tx_size: usize,
     pub given_tx_size: usize,
@@ -28,26 +31,31 @@ pub trait HasMaxTxSize {
 
 pub struct LimitEncodedTxSize<InEncoder>(PhantomData<InEncoder>);
 
-#[async_trait]
-impl<Context, InEncoder> TxEncoder<Context> for LimitEncodedTxSize<InEncoder>
+impl<Chain, InEncoder> TxEncoder<Chain> for LimitEncodedTxSize<InEncoder>
 where
-    Context: HasTxTypes + HasMaxTxSize + HasMaxTxSizeExceededError,
-    InEncoder: TxEncoder<Context>,
+    Chain: HasSignerType
+        + HasNonceType
+        + HasFeeType
+        + HasMessageType
+        + HasTransactionType
+        + HasMaxTxSize
+        + HasMaxTxSizeExceededError,
+    InEncoder: TxEncoder<Chain>,
 {
     async fn encode_tx(
-        context: &Context,
-        signer: &Context::Signer,
-        nonce: &Context::Nonce,
-        fee: &Context::Fee,
-        messages: &[Context::Message],
-    ) -> Result<Context::Transaction, Context::Error> {
-        let tx = InEncoder::encode_tx(context, signer, nonce, fee, messages).await?;
+        chain: &Chain,
+        signer: &Chain::Signer,
+        nonce: &Chain::Nonce,
+        fee: &Chain::Fee,
+        messages: &[Chain::Message],
+    ) -> Result<Chain::Transaction, Chain::Error> {
+        let tx = InEncoder::encode_tx(chain, signer, nonce, fee, messages).await?;
 
-        let given_tx_size = Context::tx_size(&tx);
-        let max_tx_size = context.max_tx_size();
+        let given_tx_size = Chain::tx_size(&tx);
+        let max_tx_size = chain.max_tx_size();
 
         if given_tx_size > max_tx_size {
-            Err(Context::raise_error(MaxTxSizeExceededError {
+            Err(Chain::raise_error(MaxTxSizeExceededError {
                 given_tx_size,
                 max_tx_size,
             }))

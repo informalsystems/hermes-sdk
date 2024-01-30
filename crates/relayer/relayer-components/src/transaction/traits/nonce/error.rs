@@ -1,6 +1,6 @@
 use cgp_core::CanRaiseError;
 
-use crate::transaction::traits::types::HasTxTypes;
+use crate::transaction::traits::types::HasNonceType;
 
 pub struct NonceMistmatchError<Nonce> {
     pub expected_nonce: Nonce,
@@ -8,7 +8,7 @@ pub struct NonceMistmatchError<Nonce> {
 }
 
 pub trait HasNonceMismatchError:
-    HasTxTypes + CanRaiseError<NonceMistmatchError<Self::Nonce>>
+    HasNonceType + CanRaiseError<NonceMistmatchError<Self::Nonce>>
 {
     fn try_extract_nonce_mismatch_error(
         e: &Self::Error,
