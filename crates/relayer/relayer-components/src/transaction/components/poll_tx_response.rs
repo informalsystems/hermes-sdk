@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::async_trait;
+use cgp_core::HasErrorType;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::runtime::HasRuntime;
@@ -9,9 +9,9 @@ use crate::runtime::traits::time::HasTime;
 use crate::transaction::traits::components::tx_response_poller::TxResponsePoller;
 use crate::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use crate::transaction::traits::logs::logger::CanLogTx;
-use crate::transaction::traits::types::HasTxTypes;
+use crate::transaction::traits::types::HasTransactionHashType;
 
-pub trait CanRaiseNoTxResponseError: HasTxTypes {
+pub trait CanRaiseNoTxResponseError: HasTransactionHashType + HasErrorType {
     fn tx_no_response_error(tx_hash: &Self::TxHash) -> Self::Error;
 }
 
@@ -23,7 +23,6 @@ pub trait HasPollTimeout {
 
 pub struct PollTxResponse;
 
-#[async_trait]
 impl<Context> TxResponsePoller<Context> for PollTxResponse
 where
     Context:

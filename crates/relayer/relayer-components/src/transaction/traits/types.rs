@@ -1,8 +1,5 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::event::HasEventType;
-use crate::chain::traits::types::message::HasMessageType;
-
 #[derive_component(NonceTypeComponent, ProvideNonceType<Chain>)]
 pub trait HasNonceType: Async {
     type Nonce: Async;
@@ -37,28 +34,27 @@ pub trait HasTxResponseType: Async {
     type TxResponse: Async;
 }
 
-pub trait HasTxTypes:
-    HasMessageType
-    + HasEventType
-    + HasTransactionType
-    + HasNonceType
-    + HasFeeType
-    + HasSignerType
-    + HasTransactionHashType
-    + HasTxResponseType
-    + HasErrorType
-{
-}
+// pub trait HasTxTypes:
+//     HasMessageType
+//     + HasEventType
+//     + HasTransactionType
+//     + HasNonceType
+//     + HasFeeType
+//     + HasSignerType
+//     + HasTransactionHashType
+//     + HasErrorType
+// {
+// }
 
-impl<Chain> HasTxTypes for Chain where
-    Chain: HasMessageType
-        + HasEventType
-        + HasTransactionType
-        + HasNonceType
-        + HasFeeType
-        + HasSignerType
-        + HasTransactionHashType
-        + HasTxResponseType
-        + HasErrorType
-{
-}
+// impl<Chain> HasTxTypes for Chain where
+//     Chain: HasMessageType
+//         + HasEventType
+//         + HasTransactionType
+//         + HasNonceType
+//         + HasFeeType
+//         + HasSignerType
+//         + HasTransactionHashType
+//         + HasTxResponseType
+//         + HasErrorType
+// {
+// }
