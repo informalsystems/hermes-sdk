@@ -20,4 +20,5 @@ hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 
-jsonrpsee   = { version = "0.21.0", features = ["http-client"] }
+jsonrpsee       = { version = "0.21.0", features = ["http-client"] }
+ed25519-dalek   = { version = "2.1.0" }
