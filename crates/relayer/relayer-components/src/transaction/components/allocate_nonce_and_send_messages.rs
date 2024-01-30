@@ -1,23 +1,15 @@
 use alloc::vec::Vec;
 
-use cgp_core::async_trait;
-
 use crate::transaction::traits::components::nonce_allocater::CanAllocateNonce;
 use crate::transaction::traits::components::send_messages_with_signer::MessagesWithSignerSender;
 use crate::transaction::traits::components::send_messages_with_signer_and_nonce::CanSendMessagesWithSignerAndNonce;
 use crate::transaction::traits::event::CanParseTxResponseAsEvents;
-use crate::transaction::traits::types::{HasSignerType, HasTxTypes};
 
 pub struct AllocateNonceAndSendMessages;
 
-#[async_trait]
 impl<Chain> MessagesWithSignerSender<Chain> for AllocateNonceAndSendMessages
 where
-    Chain: HasTxTypes
-        + HasSignerType
-        + CanAllocateNonce
-        + CanSendMessagesWithSignerAndNonce
-        + CanParseTxResponseAsEvents,
+    Chain: CanAllocateNonce + CanSendMessagesWithSignerAndNonce + CanParseTxResponseAsEvents,
 {
     async fn send_messages_with_signer(
         chain: &Chain,
