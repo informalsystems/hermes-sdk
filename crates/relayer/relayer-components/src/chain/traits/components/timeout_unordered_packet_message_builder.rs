@@ -4,12 +4,12 @@ use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 
 #[derive_component(TimeoutUnorderedPacketPayloadBuilderComponent, TimeoutUnorderedPacketPayloadBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildTimeoutUnorderedPacketPayload<Counterparty>:
-    HasTimeoutUnorderedPacketPayload<Counterparty>
+    HasTimeoutUnorderedPacketPayloadType<Counterparty>
     + HasIbcPacketTypes<Counterparty>
     + HasClientStateType<Counterparty>
     + HasHeightType
@@ -28,7 +28,7 @@ pub trait CanBuildTimeoutUnorderedPacketPayload<Counterparty>:
 pub trait CanBuildTimeoutUnorderedPacketMessage<Counterparty>:
     HasMessageType + HasErrorType + HasIbcPacketTypes<Counterparty>
 where
-    Counterparty: HasTimeoutUnorderedPacketPayload<Self>,
+    Counterparty: HasTimeoutUnorderedPacketPayloadType<Self>,
 {
     async fn build_timeout_unordered_packet_message(
         &self,

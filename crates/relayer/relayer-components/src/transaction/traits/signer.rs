@@ -12,8 +12,7 @@ use crate::transaction::traits::types::HasSignerType;
    multiple signers, as the context cannot know how long a
    signer is going to be used. If we want to use a more
    sophisticated strategy to multiple signers, we can define
-   more complex trait similar to
-   [`NonceAllocator`](crate::transaction::traits::nonce::NonceAllocator)
+   more complex trait similar to `NonceAllocator`
    so that the usage of each signer is tracked across the implementation.
 
    On the other hand, this trait is suited for use in the minimal relayer,

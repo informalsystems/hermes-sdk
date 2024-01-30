@@ -42,8 +42,7 @@ pub trait HasMessageType: Async {
        when being assembled into transactions.
 
        The relayer framework delegates the _construction_ of messages to
-       specialized traits such as
-       [`CanBuildUpdateClientMessage`](crate::relay::traits::messages::update_client::CanBuildUpdateClientMessage).
+       specialized traits such as `CanBuildUpdateClientMessage`.
        Because the construction of messages typically also requires querying
        from the chain, the relayer framework lets the concrete chain contexts
        to perform both the querying operations and message construction

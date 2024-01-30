@@ -22,8 +22,7 @@ use crate::relay::traits::target::ChainTarget;
    [`CanSendIbcMessages`](crate::relay::traits::components::ibc_message_sender::CanSendIbcMessages)
    but not [`CanSendMessages`], as the former is parameterized by a relay target.
    The two traits also have different charasteristics, as `CanSendIbcMessages` allows
-   middleware components such as
-   [`SendIbcMessagesWithUpdateClient`](crate::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient)
+   middleware components such as `SendIbcMessagesWithUpdateClient`
    to access the relay context and build `UpdateClient` messages to append to the
    front of incoming messages. On the other hand, [`CanSendMessages`] can only
    access the chain context but not the counterparty chain context, thus not able

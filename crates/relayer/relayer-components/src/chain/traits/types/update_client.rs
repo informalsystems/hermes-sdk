@@ -1,7 +1,6 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-
-pub trait HasUpdateClientPayload<Counterparty>: HasIbcChainTypes<Counterparty> {
+#[derive_component(UpdateClientPayloadTypeComponent, ProvideUpdateClientPayloadType<Chain>)]
+pub trait HasUpdateClientPayloadType<Counterparty>: Async {
     type UpdateClientPayload: Async;
 }

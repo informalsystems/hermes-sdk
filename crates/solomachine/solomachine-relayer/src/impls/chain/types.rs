@@ -1,20 +1,20 @@
 use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloads, ProvideInitChannelOptionsType,
+    ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionHandshakePayloads, ProvideInitConnectionOptionsType,
+    ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, HasCreateClientPayload, ProvideCreateClientOptionsType,
+    HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -91,14 +91,16 @@ where
     type CreateClientOptions = ();
 }
 
-impl<Chain, Counterparty> HasCreateClientPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type CreateClientPayload = SolomachineCreateClientPayload;
 }
 
-impl<Chain, Counterparty> HasUpdateClientPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideUpdateClientPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
@@ -121,7 +123,8 @@ where
     type InitChannelOptions = ();
 }
 
-impl<Chain, Counterparty> HasConnectionHandshakePayloads<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideConnectionHandshakePayloadTypes<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
@@ -134,7 +137,8 @@ where
     type ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> HasChannelHandshakePayloads<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
@@ -145,21 +149,24 @@ where
     type ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> HasReceivePacketPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type ReceivePacketPayload = SolomachineReceivePacketPayload;
 }
 
-impl<Chain, Counterparty> HasAckPacketPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type AckPacketPayload = SolomachineAckPacketPayload;
 }
 
-impl<Chain, Counterparty> HasTimeoutUnorderedPacketPayload<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

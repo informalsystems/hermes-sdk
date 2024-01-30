@@ -23,8 +23,7 @@ use futures_core::stream::Stream;
     stream would have to open new network connections, but it is simpler and
     more resilient to error conditions such as network disconnections. A simple
     way to implement a naive subscription is to use
-    [`CanCreateClosureSubscription`](crate::runtime::impls::subscription::closure::CanCreateClosureSubscription)
-    to turn a closure into a [`Subscription`].
+    `CanCreateClosureSubscription` to turn a closure into a [`Subscription`].
 
     A [`Subscription`] implementation could be made efficient by sharing one
     incoming [`Stream`] with multiple consumers, by multiplexing them to multiple

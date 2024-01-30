@@ -12,8 +12,8 @@ use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_sovereign_client_components::impls::sovereign::components::IsSovereignClientComponent;
-use hermes_sovereign_client_components::impls::sovereign::components::SovereignClientComponents;
+use hermes_sovereign_client_components::sovereign::components::IsSovereignClientComponent;
+use hermes_sovereign_client_components::sovereign::components::SovereignClientComponents;
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,

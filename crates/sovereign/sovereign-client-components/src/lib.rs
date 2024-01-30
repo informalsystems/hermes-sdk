@@ -1,2 +1,2 @@
-pub mod impls;
-pub mod types;
+pub mod cosmos;
+pub mod sovereign;
