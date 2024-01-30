@@ -43,4 +43,4 @@ futures         = { workspace = true }
 http            = { workspace = true }
 
 opentelemetry   = { version = "0.17.0", features = ["metrics"] }
-moka            = { version = "0.11", features = ["future"] }
+moka            = { version = "0.12", features = ["future"] }
