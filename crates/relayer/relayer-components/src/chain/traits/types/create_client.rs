@@ -10,7 +10,8 @@ pub trait HasCreateClientOptionsType<Counterparty>: Async {
 pub type CreateClientOptions<Chain, Counterparty> =
     <Chain as HasCreateClientOptionsType<Counterparty>>::CreateClientOptions;
 
-pub trait HasCreateClientPayload<Counterparty>: Async {
+#[derive_component(CreateClientPayloadTypeComponent, ProvideCreateClientPayloadType<Chain>)]
+pub trait HasCreateClientPayloadType<Counterparty>: Async {
     type CreateClientPayload: Async;
 }
 

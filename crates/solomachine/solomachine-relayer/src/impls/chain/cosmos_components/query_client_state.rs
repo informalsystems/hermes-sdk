@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::{DelegateComponent, HasErrorType};
 use hermes_cosmos_client_components::traits::rpc_client::HasRpcClient;
-use hermes_cosmos_relayer::impls::chain::components::query_client_state::DelegateCosmosClientStateQuerier;
+use hermes_cosmos_relayer::chain::impls::query_client_state::DelegateCosmosClientStateQuerier;
 use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;

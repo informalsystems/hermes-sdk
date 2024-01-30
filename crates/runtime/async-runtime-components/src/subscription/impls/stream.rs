@@ -19,7 +19,7 @@ use crate::subscription::traits::subscription::Subscription;
 /**
    Allows multiplexing of a single [`Stream`] into a subscription.
    This is an auto trait implemented by all runtime contexts that implement
-   [`HasSpawner`], [`HasMutex`], [`CanCreateChannels`], [`CanUseChannels`],
+   `HasSpawner`, [`HasMutex`], [`CanCreateChannels`], [`CanUseChannels`],
    and [`CanStreamReceiver`].
 
    When the stream terminates, the subscription also terminates.

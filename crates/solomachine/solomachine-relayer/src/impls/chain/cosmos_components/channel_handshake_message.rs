@@ -9,7 +9,7 @@ use hermes_cosmos_client_components::types::messages::channel::open_try::CosmosC
 use hermes_cosmos_relayer::types::error::{BaseError, Error};
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloads, HasInitChannelOptionsType,
+    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics04_channel::channel::{
@@ -35,7 +35,7 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
         > + HasErrorType<Error = Error>,
-    Counterparty: HasChannelHandshakePayloads<
+    Counterparty: HasChannelHandshakePayloadTypes<
             Chain,
             ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
             ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,

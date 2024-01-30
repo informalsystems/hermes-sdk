@@ -10,25 +10,23 @@ use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
 
 /**
-   This is a simplified interface offered by a chain context or a transaction
-   context for atomically sending a list of [messages](HasMessageType::Message)
-   to a chain.
+    This is a simplified interface offered by a chain context or a transaction
+    context for atomically sending a list of messages to a chain.
 
-   Behind the scene, the chain context may implement this by encoding the
-   given messages into a transaction, and then sending it to the chain.
+    Behind the scene, the chain context may implement this by encoding the
+    given messages into a transaction, and then sending it to the chain.
 
-   Before the given messages are submitted as a transaction, the chain context
-   may also perform additional operations, such as batching messages sent from
-   other tasks into the same transaction.
+    Before the given messages are submitted as a transaction, the chain context
+    may also perform additional operations, such as batching messages sent from
+    other tasks into the same transaction.
 
-   A chain context may also use other strategies of submitting messages. For
-   example, a mock chain context can provide a mock implementation of sending
-   messages, without mocking the part for submitting the messages as
-   transactions.
+    A chain context may also use other strategies of submitting messages. For
+    example, a mock chain context can provide a mock implementation of sending
+    messages, without mocking the part for submitting the messages as
+    transactions.
 
-    The implementation of [`send_messages`](Self::send_messages) _must_ treat
-    the sending of messages as an atomic operation. i.e. the messages must all
-    sent successfully, or all failed.
+    The implementation of `send_messages` _must_ treat the sending of messages
+    as an atomic operation. i.e. the messages must all sent successfully, or all failed.
 
     In case if the total size of a given list of messages exceed some underlying
     transaction limit, the implementation _must not_ attempt to split the given
@@ -37,27 +35,11 @@ use crate::chain::traits::types::message::HasMessageType;
     chain implementation should return an error and leave the task of splitting
     the messages to smaller batch to the caller.
 
-    For example, the
-    [`MaxTxSizeExceededError`](crate::transaction::impls::encoders::max_tx_size::MaxTxSizeExceededError)
-    error is returned from the
-    [`CheckEncodedTxSize`](crate::transaction::impls::encoders::max_tx_size::CheckEncodedTxSize)
-    component if the total message size exceeds a given transaction size limit.
-    A component like `CanSpawnBatchMessageWorker`
+    For example, the `MaxTxSizeExceededError` error is returned from the
+    `CheckEncodedTxSize` component if the total message size exceeds a given
+    transaction size limit. A component like `CanSpawnBatchMessageWorker`
     can then try and match against the error, and split the sent messages into
     smaller batches.
-
-   This trait is automatically implemented by
-   `OfaChainWrapper` for a chain context that implements `OfaBaseChain`.
-   From there, the [`CanSendMessages::send_messages`] method is derived from
-   `OfaBaseChain::send_messages`.
-
-   Additionally, this trait is also automatically implemented by
-   `OfaTxWrapper` for a chain context that implements `OfaTxContext`.
-   From there, the
-   [`SendMessagesAsTx`](crate::transaction::impls::message_sender::SendMessagesAsTx)
-   component is used to submit the messages as transaction using the transaction
-   context. In other words, both the chain context and the transaction context
-   provides the same interface for sending messages using this trait.
 */
 #[derive_component(MessageSenderComponent, MessageSender<Chain>)]
 #[async_trait]

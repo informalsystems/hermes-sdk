@@ -1,5 +1,6 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
-pub trait HasAckPacketPayload<Counterparty>: Async {
+#[derive_component(AckPacketPayloadTypeComponent, ProvideAckPacketPayloadType<Chain>)]
+pub trait HasAckPacketPayloadType<Counterparty>: Async {
     type AckPacketPayload: Async;
 }

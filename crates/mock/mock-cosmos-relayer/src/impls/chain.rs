@@ -48,7 +48,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, HasCreateClientPayload, ProvideCreateClientOptionsType,
+    HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType
 };
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -63,12 +63,12 @@ use hermes_relayer_components::chain::traits::types::message::{
     CanEstimateMessageSize, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
-use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayload;
-use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayload;
+use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
-use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::log::value::LogValue;
@@ -367,11 +367,10 @@ where
     type CreateClientOptions = ();
 }
 
-impl<Chain, Counterparty> HasCreateClientPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
+    for MockCosmosChainComponents
 where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
+    Chain: Async,
 {
     type CreateClientPayload = Any;
 }
@@ -455,11 +454,10 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasUpdateClientPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty> ProvideUpdateClientPayloadType<Chain, Counterparty>
+    for MockCosmosChainComponents
 where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
+    Chain: Async,
 {
     type UpdateClientPayload = MsgUpdateClient;
 }
@@ -634,11 +632,10 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasReceivePacketPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
+    for MockCosmosChainComponents
 where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
+    Chain: Async,
 {
     type ReceivePacketPayload = Any;
 }
@@ -744,11 +741,10 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasAckPacketPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
+    for MockCosmosChainComponents
 where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
+    Chain: Async,
 {
     type AckPacketPayload = Any;
 }
@@ -801,11 +797,10 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasTimeoutUnorderedPacketPayload<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
+    for MockCosmosChainComponents
 where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
+    Chain: Async,
 {
     type TimeoutUnorderedPacketPayload = Any;
 }

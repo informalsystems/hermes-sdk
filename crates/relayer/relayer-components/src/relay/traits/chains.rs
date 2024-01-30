@@ -9,12 +9,11 @@ use crate::runtime::types::aliases::ErrorOf;
 /**
     This covers the minimal abstract types that are used inside a relay context.
 
-    A relay context is made of two chain sub-contexts,
-    [`SrcChain`](Self::SrcChain) and [`DstChain`](Self::DstChain), that are
-    connected to each others. This is reflected by both types being required
+    A relay context is made of two chain sub-contexts, `SrcChain` and `DstChain`,
+    that are connected to each others. This is reflected by both types being required
     to implement [`HasIbcPacketTypes`] with each others being the counterparty.
 
-    The relay context also has an abstract [`Packet`](crate::relay::traits::packet::HasRelayPacket::Packet) type, which
+    The relay context also has an abstract `Packet` type, which
     represents the IBC packet sent from the source chain to the destination
     chain. In other words, the relay context only covers relaying of IBC packets
     in one direction. To support bi-directional relaying between two chains,

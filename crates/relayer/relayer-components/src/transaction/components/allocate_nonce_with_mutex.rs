@@ -1,5 +1,3 @@
-use cgp_core::async_trait;
-
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::transaction::traits::components::nonce_allocater::NonceAllocator;
@@ -10,7 +8,6 @@ use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
 
 pub struct AllocateNonceWithMutex;
 
-#[async_trait]
 impl<Context> NonceAllocator<Context> for AllocateNonceWithMutex
 where
     Context: CanLogTx + CanLogNonce + CanQueryNonce + HasMutexForNonceAllocation,

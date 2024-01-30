@@ -1,5 +1,6 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
-pub trait HasTimeoutUnorderedPacketPayload<Counterparty>: Async {
+#[derive_component(TimeoutUnorderedPacketPayloadTypeComponent, ProvideTimeoutUnorderedPacketPayloadType<Chain>)]
+pub trait HasTimeoutUnorderedPacketPayloadType<Counterparty>: Async {
     type TimeoutUnorderedPacketPayload: Async;
 }
