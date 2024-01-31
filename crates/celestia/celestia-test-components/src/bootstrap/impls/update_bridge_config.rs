@@ -96,6 +96,7 @@ where
 
         let config = CelestiaBridgeConfig {
             config: bridge_config,
+            bridge_rpc_port,
         };
 
         Ok(config.into())

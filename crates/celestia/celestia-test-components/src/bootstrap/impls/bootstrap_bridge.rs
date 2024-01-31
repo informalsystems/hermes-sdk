@@ -38,10 +38,11 @@ where
     ) -> Result<Bootstrap::BridgeDriver, Bootstrap::Error> {
         let chain_id = chain_driver.chain().chain_id();
         let bridge_store_dir = bootstrap.bridge_store_dir();
+        let bridge_postfix = bootstrap.runtime().generate_random().await;
 
         let bridge_home_dir = Runtime::join_file_path(
             bridge_store_dir,
-            &Runtime::file_path_from_string(&chain_id.to_string()),
+            &Runtime::file_path_from_string(&format!("{chain_id}-{bridge_postfix}")),
         );
 
         bootstrap
