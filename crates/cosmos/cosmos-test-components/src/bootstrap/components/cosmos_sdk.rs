@@ -17,6 +17,7 @@ use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDri
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
 use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
+use hermes_test_components::runtime::traits::random::CanGenerateRandom;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
@@ -120,7 +121,8 @@ where
         + CanReadFileAsString
         + CanWriteStringToFile
         + CanCreateDir
-        + CanReserveTcpPort,
+        + CanReserveTcpPort
+        + CanGenerateRandom<u32>,
     Chain: HasChainIdType,
     ChainDriver: HasChainType<Chain = Chain>
         + HasWalletType<Wallet = CosmosTestWallet>

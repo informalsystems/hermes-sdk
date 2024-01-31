@@ -22,6 +22,7 @@ use hermes_test_components::runtime::traits::create_dir::DirCreatorComponent;
 use hermes_test_components::runtime::traits::exec_command::{
     CommandExecutorComponent, CommandWithEnvsExecutorComponent,
 };
+use hermes_test_components::runtime::traits::random::RandomGeneratorComponent;
 use hermes_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
 use hermes_test_components::runtime::traits::reserve_port::TcpPortReserverComponent;
 use hermes_test_components::runtime::traits::types::child_process::ChildProcessTypeComponent;
@@ -63,6 +64,7 @@ delegate_components! {
             CommandWithEnvsExecutorComponent,
             StringToFileWriterComponent,
             TcpPortReserverComponent,
+            RandomGeneratorComponent,
         ]:
             TokioParallelRuntimeComponents,
     }

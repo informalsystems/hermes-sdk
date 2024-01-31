@@ -9,6 +9,7 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
+use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use toml::Value;
@@ -32,7 +33,7 @@ where
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<&'static str>,
-    Runtime: CanReadFileAsString + CanWriteStringToFile,
+    Runtime: CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
     Chain: HasChainId + HasGenesisHeight + CanQueryBlock + HasBlockHash,
     ChainDriver: HasChain<Chain = Chain> + HasRpcPort + HasGrpcPort,
     Bootstrap::BridgeConfig: From<CelestiaBridgeConfig>,
@@ -78,6 +79,13 @@ where
         set_chain_grpc_port(&mut bridge_config, chain_driver.grpc_port())
             .map_err(Bootstrap::raise_error)?;
 
+        let bridge_rpc_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        set_bridge_rpc_port(&mut bridge_config, bridge_rpc_port).map_err(Bootstrap::raise_error)?;
+
         runtime
             .write_string_to_file(
                 &bridge_config_path,
@@ -88,6 +96,7 @@ where
 
         let config = CelestiaBridgeConfig {
             config: bridge_config,
+            bridge_rpc_port,
         };
 
         Ok(config.into())
@@ -123,6 +132,17 @@ pub fn set_chain_grpc_port(config: &mut Value, grpc_port: u16) -> Result<(), &'s
         .as_table_mut()
         .ok_or("expect object")?
         .insert("GRPCPort".to_string(), grpc_port.to_string().into());
+
+    Ok(())
+}
+
+pub fn set_bridge_rpc_port(config: &mut Value, rpc_port: u16) -> Result<(), &'static str> {
+    config
+        .get_mut("RPC")
+        .ok_or("expect rpc section")?
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("Port".to_string(), rpc_port.to_string().into());
 
     Ok(())
 }

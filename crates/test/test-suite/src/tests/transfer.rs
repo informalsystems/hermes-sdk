@@ -87,7 +87,7 @@ where
 
         let balance_a1 = chain_driver_a.query_balance(address_a1, denom_a).await?;
 
-        let a_to_b_amount = ChainDriverA::random_amount(1000, &balance_a1);
+        let a_to_b_amount = chain_driver_a.random_amount(1000, &balance_a1).await;
 
         let channel_id_a = driver.channel_id_at(Twindex::<0, 1>);
 
@@ -136,7 +136,7 @@ where
 
         let address_a2 = ChainDriverA::wallet_address(wallet_a2);
 
-        let b_to_a_amount = ChainDriverB::random_amount(500, &balance_b1);
+        let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
 
         driver.log_info(&format!(
             "Sending IBC transfer from chain {} to chain {} with amount of {}",

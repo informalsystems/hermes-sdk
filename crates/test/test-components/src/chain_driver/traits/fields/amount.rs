@@ -7,8 +7,9 @@ use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::chain_driver::traits::types::denom::HasDenomType;
 
 #[derive_component(RandomAmountGeneratorComponent, RandomAmountGenerator<Chain>)]
+#[async_trait]
 pub trait CanGenerateRandomAmount: HasDenomType + HasAmountType {
-    fn random_amount(min: usize, max: &Self::Amount) -> Self::Amount;
+    async fn random_amount(&self, min: usize, max: &Self::Amount) -> Self::Amount;
 }
 
 #[derive_component(AmountMethodsComponent, ProvideAmountMethods<Chain>)]

@@ -2,16 +2,19 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::runtime::traits::random::CanGenerateRandom;
 use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapper;
+use crate::bootstrap::traits::bridge_auth_token::CanGenerateBridgeAuthToken;
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 use crate::bootstrap::traits::build_bridge_driver::CanBuildBridgeDriver;
 use crate::bootstrap::traits::import_bridge_key::CanImportBridgeKey;
 use crate::bootstrap::traits::init_bridge_config::CanInitBridgeConfig;
 use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
 use crate::bootstrap::traits::start_bridge::CanStartBridge;
+use crate::bridge_driver::traits::bridge_auth_token::HasBridgeAuthTokenType;
 
 pub struct BootstrapCelestiaBridge;
 
@@ -24,12 +27,14 @@ where
         + HasBridgeStoreDir
         + CanInitBridgeData
         + CanImportBridgeKey
+        + CanGenerateBridgeAuthToken
         + CanInitBridgeConfig
         + CanStartBridge
         + CanBuildBridgeDriver,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime>,
     Chain: HasChainId,
-    Runtime: HasFilePathType + HasChildProcessType,
+    Runtime: HasFilePathType + HasChildProcessType + CanGenerateRandom<u32>,
+    Bootstrap::BridgeDriver: HasBridgeAuthTokenType,
 {
     async fn bootstrap_bridge(
         bootstrap: &Bootstrap,
@@ -37,10 +42,11 @@ where
     ) -> Result<Bootstrap::BridgeDriver, Bootstrap::Error> {
         let chain_id = chain_driver.chain().chain_id();
         let bridge_store_dir = bootstrap.bridge_store_dir();
+        let bridge_postfix = bootstrap.runtime().generate_random().await;
 
         let bridge_home_dir = Runtime::join_file_path(
             bridge_store_dir,
-            &Runtime::file_path_from_string(&chain_id.to_string()),
+            &Runtime::file_path_from_string(&format!("{chain_id}-{bridge_postfix}")),
         );
 
         bootstrap
@@ -55,12 +61,16 @@ where
             .import_bridge_key(&bridge_home_dir, chain_driver)
             .await?;
 
+        let bridge_auth_token = bootstrap
+            .generate_bridge_auth_token(&bridge_home_dir, chain_id)
+            .await?;
+
         let bridge_process = bootstrap
             .start_bridge(&bridge_home_dir, chain_driver)
             .await?;
 
         let bridge_driver = bootstrap
-            .build_bridge_driver(bridge_config, bridge_process)
+            .build_bridge_driver(bridge_config, bridge_auth_token, bridge_process)
             .await?;
 
         Ok(bridge_driver)
