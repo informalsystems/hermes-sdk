@@ -38,6 +38,8 @@
           celestia-app
           celestia-node
         ;
+
+        sovereign-rollup = sovereign-nix.rollup;
       };
     });
 }

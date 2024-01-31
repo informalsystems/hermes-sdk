@@ -1,4 +1,5 @@
 use cgp_core::CanRaiseError;
+use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::fields::amount::{
     ProvideAmountMethods, RandomAmountGenerator,
 };
@@ -6,7 +7,7 @@ use hermes_test_components::chain_driver::traits::types::amount::{
     AmountTypeProvider, HasAmountType,
 };
 use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
-use rand::prelude::Rng;
+use hermes_test_components::runtime::traits::random::CanGenerateRandom;
 
 use crate::chain_driver::types::amount::Amount;
 use crate::chain_driver::types::denom::Denom;
@@ -63,13 +64,14 @@ where
 
 impl<ChainDriver> RandomAmountGenerator<ChainDriver> for ProvideU128AmountWithDenom
 where
-    ChainDriver: HasAmountType<Amount = Amount> + CanRaiseError<&'static str>,
+    ChainDriver: HasAmountType<Amount = Amount> + HasRuntime + CanRaiseError<&'static str>,
+    ChainDriver::Runtime: CanGenerateRandom<u128>,
 {
-    fn random_amount(min: usize, max: &Amount) -> Amount {
-        let mut rng = rand::thread_rng();
-
-        let max_quantity = max.quantity as usize;
-        let quantity = rng.gen_range(min..max_quantity);
+    async fn random_amount(chain_driver: &ChainDriver, min: usize, max: &Amount) -> Amount {
+        let quantity = chain_driver
+            .runtime()
+            .random_range(min as u128, max.quantity)
+            .await;
 
         Amount {
             quantity: quantity as u128,

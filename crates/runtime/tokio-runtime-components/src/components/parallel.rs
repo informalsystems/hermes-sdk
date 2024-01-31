@@ -28,6 +28,7 @@ use hermes_test_components::runtime::traits::create_dir::DirCreatorComponent;
 use hermes_test_components::runtime::traits::exec_command::{
     CommandExecutorComponent, CommandWithEnvsExecutorComponent,
 };
+use hermes_test_components::runtime::traits::random::RandomGeneratorComponent;
 use hermes_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
 use hermes_test_components::runtime::traits::reserve_port::TcpPortReserverComponent;
 use hermes_test_components::runtime::traits::types::child_process::ChildProcessTypeComponent;
@@ -39,6 +40,7 @@ use crate::impls::copy_file::TokioCopyFile;
 use crate::impls::create_dir::TokioCreateDir;
 use crate::impls::exec_command::TokioExecCommand;
 use crate::impls::parallel_task::TokioRunParallelTasks;
+use crate::impls::random::ThreadRandomGenerator;
 use crate::impls::read_file::TokioReadFileAsString;
 use crate::impls::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
@@ -85,5 +87,6 @@ delegate_components! {
         CommandExecutorComponent: ExecCommandWithNoEnv,
         StringToFileWriterComponent: TokioWriteStringToFile,
         TcpPortReserverComponent: TokioReserveTcpPort,
+        RandomGeneratorComponent: ThreadRandomGenerator,
     }
 }

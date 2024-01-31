@@ -25,4 +25,3 @@ serde_json      = { workspace = true }
 toml            = { workspace = true }
 
 hdpath      = "0.6.3"
-rand        = "0.8.5"

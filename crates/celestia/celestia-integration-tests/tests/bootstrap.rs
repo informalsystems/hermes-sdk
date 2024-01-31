@@ -49,6 +49,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
         let chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
         let _bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
+        let _bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
         <Result<(), Error>>::Ok(())
     })?;

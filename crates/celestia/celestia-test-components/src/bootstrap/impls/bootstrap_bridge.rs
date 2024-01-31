@@ -2,6 +2,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::runtime::traits::random::CanGenerateRandom;
 use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
@@ -29,7 +30,7 @@ where
         + CanBuildBridgeDriver,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime>,
     Chain: HasChainId,
-    Runtime: HasFilePathType + HasChildProcessType,
+    Runtime: HasFilePathType + HasChildProcessType + CanGenerateRandom<u32>,
 {
     async fn bootstrap_bridge(
         bootstrap: &Bootstrap,
