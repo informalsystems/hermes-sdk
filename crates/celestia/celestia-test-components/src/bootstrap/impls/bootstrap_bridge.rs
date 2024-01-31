@@ -61,12 +61,16 @@ where
             .import_bridge_key(&bridge_home_dir, chain_driver)
             .await?;
 
+        let bridge_auth_token = bootstrap
+            .generate_bridge_auth_token(&bridge_home_dir, chain_id)
+            .await?;
+
         let bridge_process = bootstrap
             .start_bridge(&bridge_home_dir, chain_driver)
             .await?;
 
         let bridge_driver = bootstrap
-            .build_bridge_driver(bridge_config, bridge_process)
+            .build_bridge_driver(bridge_config, bridge_auth_token, bridge_process)
             .await?;
 
         Ok(bridge_driver)

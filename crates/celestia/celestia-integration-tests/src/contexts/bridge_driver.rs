@@ -6,6 +6,7 @@ use tokio::process::Child;
 pub struct CelestiaBridgeDriver {
     pub bridge_process: Child,
     pub bridge_config: CelestiaBridgeConfig,
+    pub bridge_auth_token: String,
 }
 
 pub struct CelestiaBridgeDriverComponents;

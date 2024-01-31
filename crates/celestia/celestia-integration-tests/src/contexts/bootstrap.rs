@@ -182,10 +182,12 @@ impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
     async fn build_bridge_driver(
         _bootstrap: &CelestiaBootstrap,
         bridge_config: CelestiaBridgeConfig,
+        bridge_auth_token: String,
         bridge_process: Child,
     ) -> Result<CelestiaBridgeDriver, Error> {
         Ok(CelestiaBridgeDriver {
             bridge_config,
+            bridge_auth_token,
             bridge_process,
         })
     }
