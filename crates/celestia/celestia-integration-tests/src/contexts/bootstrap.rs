@@ -7,6 +7,7 @@ use cgp_core::ErrorTypeComponent;
 use eyre::Error;
 use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapComponents as BaseCelestiaBootstrapComponents;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
+use hermes_celestia_test_components::bootstrap::traits::bridge_auth_token::BridgeAuthTokenGeneratorComponent;
 use hermes_celestia_test_components::bootstrap::traits::bridge_store_dir::BridgeStoreDirGetter;
 use hermes_celestia_test_components::bootstrap::traits::build_bridge_driver::BridgeDriverBuilder;
 use hermes_celestia_test_components::bootstrap::traits::import_bridge_key::BridgeKeyImporterComponent;
@@ -95,6 +96,7 @@ delegate_components! {
             BridgeKeyImporterComponent,
             BridgeConfigTypeComponent,
             BridgeConfigInitializerComponent,
+            BridgeAuthTokenGeneratorComponent,
             BridgeStarterComponent,
         ]:
             BaseCelestiaBootstrapComponents,

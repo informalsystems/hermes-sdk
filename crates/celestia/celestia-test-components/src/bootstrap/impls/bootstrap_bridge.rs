@@ -7,12 +7,14 @@ use hermes_test_components::runtime::traits::types::child_process::HasChildProce
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapper;
+use crate::bootstrap::traits::bridge_auth_token::CanGenerateBridgeAuthToken;
 use crate::bootstrap::traits::bridge_store_dir::HasBridgeStoreDir;
 use crate::bootstrap::traits::build_bridge_driver::CanBuildBridgeDriver;
 use crate::bootstrap::traits::import_bridge_key::CanImportBridgeKey;
 use crate::bootstrap::traits::init_bridge_config::CanInitBridgeConfig;
 use crate::bootstrap::traits::init_bridge_data::CanInitBridgeData;
 use crate::bootstrap::traits::start_bridge::CanStartBridge;
+use crate::bridge_driver::traits::bridge_auth_token::HasBridgeAuthTokenType;
 
 pub struct BootstrapCelestiaBridge;
 
@@ -25,12 +27,14 @@ where
         + HasBridgeStoreDir
         + CanInitBridgeData
         + CanImportBridgeKey
+        + CanGenerateBridgeAuthToken
         + CanInitBridgeConfig
         + CanStartBridge
         + CanBuildBridgeDriver,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime>,
     Chain: HasChainId,
     Runtime: HasFilePathType + HasChildProcessType + CanGenerateRandom<u32>,
+    Bootstrap::BridgeDriver: HasBridgeAuthTokenType,
 {
     async fn bootstrap_bridge(
         bootstrap: &Bootstrap,
