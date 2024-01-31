@@ -74,7 +74,7 @@ where
             .await;
 
         Amount {
-            quantity: quantity as u128,
+            quantity,
             denom: max.denom.clone(),
         }
     }

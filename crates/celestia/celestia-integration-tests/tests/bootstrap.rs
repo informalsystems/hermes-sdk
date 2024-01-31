@@ -48,7 +48,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
     tokio_runtime.block_on(async move {
         let chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
-        // Bootstrap twice to ensure that there is no conflicts such as listening port
+        // Bootstrap twice to ensure that there is no conflict such as listening port
         let _bridge_driver_a = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
         let _bridge_driver_b = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
