@@ -1825,10 +1825,15 @@ name = "hermes-sovereign-test-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-celestia-test-components",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "serde",
+ "toml 0.8.8",
 ]
 
 [[package]]
