@@ -1833,6 +1833,7 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "serde",
+ "serde_json",
  "toml 0.8.8",
 ]
 
