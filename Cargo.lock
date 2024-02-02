@@ -1834,6 +1834,7 @@ dependencies = [
  "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "rand",
  "serde",
  "serde_json",
  "sha2 0.10.8",

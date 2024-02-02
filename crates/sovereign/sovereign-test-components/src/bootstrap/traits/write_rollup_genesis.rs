@@ -4,14 +4,16 @@ use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasF
 
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;
 
-#[derive_component(RollupGenesisInitializerComponent, RollupGenesisInitializer<Bootstrap>)]
+#[derive_component(RollupGenesisWriterComponent, RollupGenesisWriter<Bootstrap>)]
 #[async_trait]
-pub trait CanInitRollupGenesis: HasRollupGenesisConfigType + HasRuntimeType + HasErrorType
+pub trait CanWriteRollupGenesis:
+    HasRollupGenesisConfigType + HasRuntimeType + HasErrorType
 where
     Self::Runtime: HasFilePathType,
 {
-    async fn init_rollup_genesis(
+    async fn write_rollup_genesis(
         &self,
         rollup_home_dir: &FilePathOf<Self::Runtime>,
-    ) -> Result<Self::RollupGenesisConfig, Self::Error>;
+        genesis_config: &Self::RollupGenesisConfig,
+    ) -> Result<(), Self::Error>;
 }

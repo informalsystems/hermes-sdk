@@ -1,3 +1,4 @@
+pub mod generate_rollup_genesis;
 pub mod init_rollup_config;
-pub mod init_rollup_genesis;
 pub mod types;
+pub mod write_rollup_genesis;

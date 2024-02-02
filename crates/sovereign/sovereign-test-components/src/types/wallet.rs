@@ -5,8 +5,24 @@ use sha2::Digest;
 use sha2::Sha256;
 
 pub struct SovereignWallet {
+    pub wallet_id: String,
     pub signing_key: SigningKey,
     pub address: String,
+}
+
+impl SovereignWallet {
+    pub fn generate(wallet_id: &str, account_prefix: &str) -> Result<Self, bech32::Error> {
+        let mut rng = rand::thread_rng();
+        let signing_key = SigningKey::generate(&mut rng);
+        let address =
+            public_key_to_sovereign_address(&signing_key.verifying_key(), account_prefix)?;
+
+        Ok(Self {
+            wallet_id: wallet_id.to_owned(),
+            signing_key,
+            address,
+        })
+    }
 }
 
 pub fn public_key_to_sovereign_address(
