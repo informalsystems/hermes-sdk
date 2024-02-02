@@ -1,4 +1,3 @@
-use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -19,6 +18,7 @@ use hermes_cosmos_test_components::chain_driver::impls::address::ProvideStringAd
 use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128AmountWithDenom;
 use hermes_cosmos_test_components::chain_driver::impls::chain_id::BuildCosmosChainIdFromString;
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
+use hermes_cosmos_test_components::chain_driver::impls::ibc_transfer_timeout::IbcTransferTimeoutAfterSeconds;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
@@ -46,7 +46,7 @@ use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterA
 use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
 use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
 use hermes_test_components::chain_driver::traits::fields::memo::DefaultMemoGetterComponent;
-use hermes_test_components::chain_driver::traits::fields::timeout::IbcTransferTimeoutCalculator;
+use hermes_test_components::chain_driver::traits::fields::timeout::IbcTransferTimeoutCalculatorComponent;
 use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
@@ -148,6 +148,8 @@ delegate_components! {
             ProvideDefaultPollAssertDuration,
         TokenIbcTransferrerComponent:
             SendIbcTransferMessage,
+        IbcTransferTimeoutCalculatorComponent:
+            IbcTransferTimeoutAfterSeconds<90>,
     }
 }
 
@@ -260,23 +262,6 @@ impl BalanceQuerier<CosmosChainDriver> for CosmosChainDriverComponents {
             quantity,
             denom: denom.clone(),
         })
-    }
-}
-
-impl IbcTransferTimeoutCalculator<CosmosChainDriver> for CosmosChainDriverComponents {
-    fn ibc_transfer_timeout_time(
-        _chain_driver: &CosmosChainDriver,
-        current_time: &Timestamp,
-    ) -> Option<Timestamp> {
-        let time = (*current_time + Duration::from_secs(90)).unwrap();
-        Some(time)
-    }
-
-    fn ibc_transfer_timeout_height(
-        _chain_driver: &CosmosChainDriver,
-        _current_height: &Height,
-    ) -> Option<Height> {
-        None
     }
 }
 

@@ -42,17 +42,25 @@ where
         let address_and_balances = rollup_wallets
             .iter()
             .map(|wallet| (wallet.address.clone(), 1_000_000_000_000))
-            .collect();
+            .collect::<Vec<_>>();
 
         let rollup_genesis = SovereignGenesisConfig {
             accounts: AccountsGenesis { pub_keys: vec![] },
             bank: BankGenesis {
-                tokens: vec![TokenGenesis {
-                    token_name: "coin".to_owned(),
-                    address_and_balances,
-                    authorized_minters: vec![],
-                    salt: 0,
-                }],
+                tokens: vec![
+                    TokenGenesis {
+                        token_name: "stake".to_owned(),
+                        address_and_balances: address_and_balances.clone(),
+                        authorized_minters: vec![],
+                        salt: 0,
+                    },
+                    TokenGenesis {
+                        token_name: "coin".to_owned(),
+                        address_and_balances,
+                        authorized_minters: vec![],
+                        salt: 0,
+                    },
+                ],
             },
             chain_state: ChainStateGenesis {
                 current_time: TimeGenesis { secs: 0, nanos: 0 },
