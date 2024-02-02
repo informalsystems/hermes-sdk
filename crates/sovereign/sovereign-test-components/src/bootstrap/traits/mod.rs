@@ -1,3 +1,4 @@
+pub mod account_prefix;
 pub mod bootstrap_rollup;
 pub mod generate_rollup_genesis;
 pub mod init_rollup_config;

@@ -13,6 +13,8 @@ pub trait HasWalletType: HasAddressType {
     fn wallet_address(wallet: &Self::Wallet) -> &Self::Address;
 }
 
+pub type WalletOf<ChainDriver> = <ChainDriver as HasWalletType>::Wallet;
+
 #[derive_component(WalletSignerComponent, WalletSignerProvider<Chain>)]
 pub trait HasWalletSigner: HasWalletType + HasTxContextType
 where

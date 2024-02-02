@@ -8,3 +8,5 @@ pub type Address<Chain> = <Chain as HasAddressType>::Address;
 pub trait HasAddressType: Async {
     type Address: Display + Async;
 }
+
+pub type AddressOf<ChainDriver> = <ChainDriver as HasAddressType>::Address;
