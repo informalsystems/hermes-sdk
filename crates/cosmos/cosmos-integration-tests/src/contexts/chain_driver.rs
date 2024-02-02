@@ -5,8 +5,6 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
-use eyre::Error;
-use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::transaction::CosmosTxContext;
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
@@ -18,10 +16,10 @@ use hermes_cosmos_test_components::chain_driver::impls::convert_ibc_amout::Conve
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain_driver::impls::ibc_transfer_timeout::IbcTransferTimeoutAfterSeconds;
 use hermes_cosmos_test_components::chain_driver::impls::messages::ibc_transfer::BuildCosmosIbcTransferMessage;
+use hermes_cosmos_test_components::chain_driver::impls::query_balance::QueryCosmosBalance;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
-use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -50,7 +48,7 @@ use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
 use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
-use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
+use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerierComponent;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrerComponent;
 use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
@@ -66,7 +64,6 @@ use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
 use hermes_test_components::types::index::Index;
-use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::config::ChainConfig;
 use tokio::process::Child;
 
@@ -142,6 +139,8 @@ delegate_components! {
             BuildCosmosIbcTransferMessage,
         IbcTransferredAmountConverterComponent:
             ConvertCosmosIbcAmount,
+        BalanceQuerierComponent:
+            QueryCosmosBalance,
     }
 }
 
@@ -234,25 +233,5 @@ impl DenomGetterAt<CosmosChainDriver, TransferDenom, 0> for CosmosChainDriverCom
 impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComponents {
     fn denom_at(driver: &CosmosChainDriver, _kind: StakingDenom, _index: Index<0>) -> &Denom {
         &driver.staking_denom
-    }
-}
-
-impl BalanceQuerier<CosmosChainDriver> for CosmosChainDriverComponents {
-    async fn query_balance(
-        chain_driver: &CosmosChainDriver,
-        address: &String,
-        denom: &Denom,
-    ) -> Result<Amount, Error> {
-        let grpc_address = chain_driver.base_chain.grpc_address();
-        let denom_str = denom.to_string();
-
-        let balance = query_balance(grpc_address, address, &denom_str).await?;
-
-        let quantity = balance.amount.parse()?;
-
-        Ok(Amount {
-            quantity,
-            denom: denom.clone(),
-        })
     }
 }
