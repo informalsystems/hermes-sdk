@@ -1,0 +1,24 @@
+[package]
+name = "hermes-wasm-client-components"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Context-generic client components for communicating with a 08-wasm client enabled node
+"""
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cgp-core                            = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
+hermes-relayer-components           = { workspace = true }
+ibc-proto                           = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
+
+prost           = { workspace = true }

@@ -1786,9 +1786,13 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "ed25519-dalek",
+ "eyre",
  "hermes-cosmos-client-components",
+ "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-wasm-client-components",
+ "ibc",
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
@@ -1853,6 +1857,18 @@ dependencies = [
  "rand",
  "tokio",
  "tokio-stream",
+]
+
+[[package]]
+name = "hermes-wasm-client-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "prost",
 ]
 
 [[package]]

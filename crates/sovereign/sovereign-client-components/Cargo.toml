@@ -13,12 +13,16 @@ description  = """
 """
 
 [dependencies]
+ibc                                 = { workspace = true }
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
+hermes-wasm-client-components       = { workspace = true }
+hermes-cosmos-relayer               = { workspace = true }
 
-jsonrpsee       = { version = "0.21.0", features = ["http-client"] }
 ed25519-dalek   = { version = "2.1.0" }
+eyre            = { workspace = true }
+jsonrpsee       = { version = "0.21.0", features = ["http-client"] }

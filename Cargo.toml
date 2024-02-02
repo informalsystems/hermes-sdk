@@ -23,6 +23,7 @@ members = [
     "crates/solomachine/solomachine-relayer",
     "crates/mock/mock-relayer",
     "crates/mock/mock-cosmos-relayer",
+    "crates/wasm/wasm-client-components",
     "crates/test/test-components",
     "crates/test/test-suite",
     "tools/integration-test",
@@ -84,6 +85,7 @@ hermes-sovereign-client-components  = { version = "0.1.0", path = "./crates/sove
 hermes-sovereign-cosmos-relayer     = { version = "0.1.0", path = "./crates/sovereign/sovereign-cosmos-relayer" }
 hermes-sovereign-test-components    = { version = "0.1.0", path = "./crates/sovereign/sovereign-test-components" }
 hermes-sovereign-integration-tests  = { version = "0.1.0", path = "./crates/sovereign/sovereign-integration-tests" }
+hermes-wasm-client-components       = { version = "0.1.0", path = "./crates/wasm/wasm-client-components" }
 hermes-async-runtime-components     = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
