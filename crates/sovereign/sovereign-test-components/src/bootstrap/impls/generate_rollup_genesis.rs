@@ -1,10 +1,12 @@
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
+use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::bootstrap::traits::account_prefix::HasAccountPrefix;
 use crate::bootstrap::traits::generate_rollup_genesis::RollupGenesisGenerator;
+use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;
 use crate::types::rollup_genesis_config::{
     AccountsGenesis, BankGenesis, ChainStateGenesis, CoinsToLock, SequencerRegistryGenesis,
@@ -14,44 +16,40 @@ use crate::types::wallet::SovereignWallet;
 
 pub struct GenerateSovereignGenesis;
 
-impl<Bootstrap, Runtime, ChainDriver> RollupGenesisGenerator<Bootstrap> for GenerateSovereignGenesis
+impl<Bootstrap, Runtime, ChainDriver, RollupDriver> RollupGenesisGenerator<Bootstrap>
+    for GenerateSovereignGenesis
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasRollupGenesisConfigType<RollupGenesisConfig = SovereignGenesisConfig>
         + HasAccountPrefix
         + HasChainDriverType<ChainDriver = ChainDriver>
-        + CanRaiseError<bech32::Error>,
+        + HasRollupDriverType<RollupDriver = RollupDriver>
+        + CanRaiseError<bech32::Error>
+        + CanRaiseError<&'static str>,
     ChainDriver: HasAddressType,
+    RollupDriver: HasWalletType<Wallet = SovereignWallet>,
 {
     async fn generate_rollup_genesis(
-        bootstrap: &Bootstrap,
+        _bootstrap: &Bootstrap,
         sequencer_da_address: &ChainDriver::Address,
+        rollup_wallets: &[RollupDriver::Wallet],
     ) -> Result<Bootstrap::RollupGenesisConfig, Bootstrap::Error> {
-        let account_prefix = bootstrap.account_prefix();
+        let sequencer_wallet = rollup_wallets
+            .iter()
+            .find(|wallet| &wallet.wallet_id == "sequencer")
+            .ok_or_else(|| Bootstrap::raise_error("expect sequencer wallet to be present"))?;
 
-        let sequencer_wallet = SovereignWallet::generate("sequencer", account_prefix)
-            .map_err(Bootstrap::raise_error)?;
-
-        let relayer_wallet =
-            SovereignWallet::generate("relayer", account_prefix).map_err(Bootstrap::raise_error)?;
-
-        let user_a_wallet =
-            SovereignWallet::generate("user-a", account_prefix).map_err(Bootstrap::raise_error)?;
-
-        let user_b_wallet =
-            SovereignWallet::generate("user-b", account_prefix).map_err(Bootstrap::raise_error)?;
+        let address_and_balances = rollup_wallets
+            .iter()
+            .map(|wallet| (wallet.address.clone(), 1_000_000_000_000))
+            .collect();
 
         let rollup_genesis = SovereignGenesisConfig {
             accounts: AccountsGenesis { pub_keys: vec![] },
             bank: BankGenesis {
                 tokens: vec![TokenGenesis {
                     token_name: "coin".to_owned(),
-                    address_and_balances: vec![
-                        (sequencer_wallet.address.clone(), 1_000_000_000_000),
-                        (relayer_wallet.address.clone(), 1_000_000_000_000),
-                        (user_a_wallet.address.clone(), 1_000_000_000_000),
-                        (user_b_wallet.address.clone(), 1_000_000_000_000),
-                    ],
+                    address_and_balances,
                     authorized_minters: vec![],
                     salt: 0,
                 }],
