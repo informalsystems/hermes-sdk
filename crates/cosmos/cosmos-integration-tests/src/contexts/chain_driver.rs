@@ -14,6 +14,7 @@ use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenes
 use hermes_cosmos_test_components::chain_driver::impls::address::ProvideStringAddress;
 use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128AmountWithDenom;
 use hermes_cosmos_test_components::chain_driver::impls::chain_id::BuildCosmosChainIdFromString;
+use hermes_cosmos_test_components::chain_driver::impls::convert_ibc_amout::ConvertCosmosIbcAmount;
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain_driver::impls::ibc_transfer_timeout::IbcTransferTimeoutAfterSeconds;
 use hermes_cosmos_test_components::chain_driver::impls::messages::ibc_transfer::BuildCosmosIbcTransferMessage;
@@ -37,7 +38,7 @@ use hermes_test_components::chain_driver::traits::assert::eventual_amount::Event
 use hermes_test_components::chain_driver::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::AmountMethodsComponent;
-use hermes_test_components::chain_driver::traits::fields::amount::IbcTransferredAmountConverter;
+use hermes_test_components::chain_driver::traits::fields::amount::IbcTransferredAmountConverterComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;
 use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
@@ -67,11 +68,7 @@ use hermes_test_components::chain_driver::traits::types::wallet::{
 use hermes_test_components::types::index::Index;
 use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::config::ChainConfig;
-use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use tokio::process::Child;
-
-use crate::impls::denom::derive_ibc_denom;
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
@@ -143,6 +140,8 @@ delegate_components! {
             IbcTransferTimeoutAfterSeconds<90>,
         IbcTokenTransferMessageBuilderComponent:
             BuildCosmosIbcTransferMessage,
+        IbcTransferredAmountConverterComponent:
+            ConvertCosmosIbcAmount,
     }
 }
 
@@ -255,29 +254,5 @@ impl BalanceQuerier<CosmosChainDriver> for CosmosChainDriverComponents {
             quantity,
             denom: denom.clone(),
         })
-    }
-}
-
-impl IbcTransferredAmountConverter<CosmosChainDriver, CosmosChainDriver>
-    for CosmosChainDriverComponents
-{
-    fn ibc_transfer_amount_from(
-        counterparty_amount: &Amount,
-        channel_id: &ChannelId,
-        port_id: &PortId,
-    ) -> Result<Amount, Error> {
-        let denom = derive_ibc_denom(port_id, channel_id, &counterparty_amount.denom)?;
-
-        Ok(Amount {
-            quantity: counterparty_amount.quantity,
-            denom,
-        })
-    }
-
-    fn transmute_counterparty_amount(counterparty_amount: &Amount, denom: &Denom) -> Amount {
-        Amount {
-            quantity: counterparty_amount.quantity,
-            denom: denom.clone(),
-        }
     }
 }
