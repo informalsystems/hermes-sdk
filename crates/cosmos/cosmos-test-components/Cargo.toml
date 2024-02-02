@@ -15,13 +15,16 @@ description  = """
 [dependencies]
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
+ibc-proto                           = { workspace = true }
 cgp-core                            = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
 
 itertools       = { workspace = true }
 serde_json      = { workspace = true }
 toml            = { workspace = true }
+prost           = { workspace = true }
 
 hdpath      = "0.6.3"

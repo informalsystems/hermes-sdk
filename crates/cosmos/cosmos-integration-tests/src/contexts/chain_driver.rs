@@ -6,10 +6,7 @@ use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
 use eyre::Error;
-use hermes_cosmos_client_components::methods::encode::encode_to_any;
 use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
-use hermes_cosmos_client_components::traits::message::DynCosmosMessage;
-use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::transaction::CosmosTxContext;
 use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
@@ -19,6 +16,7 @@ use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128Amoun
 use hermes_cosmos_test_components::chain_driver::impls::chain_id::BuildCosmosChainIdFromString;
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain_driver::impls::ibc_transfer_timeout::IbcTransferTimeoutAfterSeconds;
+use hermes_cosmos_test_components::chain_driver::impls::messages::ibc_transfer::BuildCosmosIbcTransferMessage;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
@@ -50,7 +48,7 @@ use hermes_test_components::chain_driver::traits::fields::timeout::IbcTransferTi
 use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
-use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
+use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
 use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrerComponent;
@@ -67,17 +65,10 @@ use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
 use hermes_test_components::types::index::Index;
-use ibc_proto::cosmos::base::v1beta1::Coin;
-use ibc_proto::google::protobuf::Any;
-use ibc_proto::ibc::apps::transfer::v1::MsgTransfer;
 use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::config::ChainConfig;
 use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
-use ibc_relayer_types::signer::Signer;
-use ibc_relayer_types::timestamp::Timestamp;
-use ibc_relayer_types::Height;
-use prost::EncodeError;
 use tokio::process::Child;
 
 use crate::impls::denom::derive_ibc_denom;
@@ -150,6 +141,8 @@ delegate_components! {
             SendIbcTransferMessage,
         IbcTransferTimeoutCalculatorComponent:
             IbcTransferTimeoutAfterSeconds<90>,
+        IbcTokenTransferMessageBuilderComponent:
+            BuildCosmosIbcTransferMessage,
     }
 }
 
@@ -262,66 +255,6 @@ impl BalanceQuerier<CosmosChainDriver> for CosmosChainDriverComponents {
             quantity,
             denom: denom.clone(),
         })
-    }
-}
-
-#[derive(Debug)]
-pub struct TokenTransferMessage {
-    pub channel_id: ChannelId,
-    pub port_id: PortId,
-    pub recipient_address: String,
-    pub amount: Amount,
-    pub memo: Option<String>,
-    pub timeout_height: Option<Height>,
-    pub timeout_time: Option<Timestamp>,
-}
-
-impl DynCosmosMessage for TokenTransferMessage {
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
-        let timeout_timestamp = self.timeout_time.unwrap_or_default().nanoseconds();
-
-        let message = MsgTransfer {
-            source_port: self.port_id.to_string(),
-            source_channel: self.channel_id.to_string(),
-            token: Some(Coin {
-                denom: self.amount.denom.to_string(),
-                amount: self.amount.quantity.to_string(),
-            }),
-            sender: signer.to_string(),
-            receiver: self.recipient_address.clone(),
-            timeout_height: self.timeout_height.map(Into::into),
-            timeout_timestamp,
-            memo: self.memo.clone().unwrap_or_default(),
-        };
-
-        encode_to_any("/ibc.applications.transfer.v1.MsgTransfer", &message)
-    }
-}
-
-impl IbcTokenTransferMessageBuilder<CosmosChainDriver, CosmosChainDriver>
-    for CosmosChainDriverComponents
-{
-    async fn build_ibc_token_transfer_message(
-        _chain_driver: &CosmosChainDriver,
-        channel_id: &ChannelId,
-        port_id: &PortId,
-        recipient_address: &String,
-        amount: &Amount,
-        memo: &Option<String>,
-        timeout_height: Option<&Height>,
-        timeout_time: Option<&Timestamp>,
-    ) -> Result<CosmosMessage, Error> {
-        let message = TokenTransferMessage {
-            channel_id: channel_id.clone(),
-            port_id: port_id.clone(),
-            recipient_address: recipient_address.clone(),
-            amount: amount.clone(),
-            memo: memo.clone(),
-            timeout_height: timeout_height.cloned(),
-            timeout_time: timeout_time.cloned(),
-        };
-
-        Ok(message.to_cosmos_message())
     }
 }
 

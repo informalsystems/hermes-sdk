@@ -33,7 +33,8 @@ jobs:
             experimental-features = nix-command flakes
       - uses: cachix/cachix-action@v14
         with:
-          name: informal-sovereign
+          name: cosmos
+          extraPullNames: informal-sovereign
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
