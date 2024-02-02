@@ -2,4 +2,8 @@ pub mod address;
 pub mod amount;
 pub mod chain_id;
 pub mod denom;
+pub mod deposit_proposal;
+pub mod proposal_status;
+pub mod store_wasm_client;
+pub mod vote_proposal;
 pub mod wallet;
