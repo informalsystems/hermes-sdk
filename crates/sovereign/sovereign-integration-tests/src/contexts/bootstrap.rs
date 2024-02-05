@@ -20,6 +20,7 @@ use hermes_sovereign_test_components::bootstrap::components::SovereignBootstrapC
 use hermes_sovereign_test_components::bootstrap::traits::account_prefix::AccountPrefixGetter;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::bootstrap::traits::build_rollup_driver::RollupDriverBuilder;
+use hermes_sovereign_test_components::bootstrap::traits::rollup_command_path::RollupCommandPathGetter;
 use hermes_sovereign_test_components::bootstrap::traits::rollup_store_dir::RollupStoreDirGetter;
 use hermes_sovereign_test_components::bootstrap::traits::types::rollup_driver::ProvideRollupDriverType;
 use hermes_sovereign_test_components::types::rollup_config::SovereignRollupConfig;
@@ -27,12 +28,14 @@ use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGen
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
+use tokio::process::Child;
 
 use crate::contexts::rollup_driver::SovereignRollupDriver;
 
 pub struct SovereignBootstrap {
     pub runtime: HermesRuntime,
     pub rollup_store_dir: PathBuf,
+    pub rollup_command_path: PathBuf,
     pub account_prefix: String,
 }
 
@@ -90,11 +93,18 @@ impl AccountPrefixGetter<SovereignBootstrap> for SovereignBootstrapComponents {
     }
 }
 
+impl RollupCommandPathGetter<SovereignBootstrap> for SovereignBootstrapComponents {
+    fn rollup_command_path(bootstrap: &SovereignBootstrap) -> &PathBuf {
+        &bootstrap.rollup_command_path
+    }
+}
+
 impl RollupDriverBuilder<SovereignBootstrap> for SovereignBootstrapComponents {
     async fn build_rollup_driver(
         _bootstrap: &SovereignBootstrap,
         _rollup_config: SovereignRollupConfig,
         _genesis_config: SovereignGenesisConfig,
+        _rollup_process: Child,
     ) -> Result<SovereignRollupDriver, Error> {
         Ok(SovereignRollupDriver {})
     }

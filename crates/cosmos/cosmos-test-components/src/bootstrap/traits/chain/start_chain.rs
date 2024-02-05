@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::runtime::traits::types::child_process::{
-    ChildProcess, HasChildProcessType,
+    ChildProcessOf, HasChildProcessType,
 };
 use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
@@ -17,5 +17,5 @@ where
         &self,
         chain_home_dir: &FilePathOf<Self::Runtime>,
         chain_config: &Self::ChainConfig,
-    ) -> Result<Vec<ChildProcess<Self::Runtime>>, Self::Error>;
+    ) -> Result<Vec<ChildProcessOf<Self::Runtime>>, Self::Error>;
 }

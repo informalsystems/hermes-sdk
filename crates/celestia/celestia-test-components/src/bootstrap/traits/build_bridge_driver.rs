@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
 use hermes_test_components::runtime::traits::types::child_process::{
-    ChildProcess, HasChildProcessType,
+    ChildProcessOf, HasChildProcessType,
 };
 
 use crate::bootstrap::traits::types::bridge_config::HasBridgeConfigType;
@@ -20,6 +20,6 @@ where
         &self,
         bridge_config: Self::BridgeConfig,
         bridge_auth_token: BridgeAuthTokenOf<Self::BridgeDriver>,
-        bridge_process: ChildProcess<Self::Runtime>,
+        bridge_process: ChildProcessOf<Self::Runtime>,
     ) -> Result<Self::BridgeDriver, Self::Error>;
 }

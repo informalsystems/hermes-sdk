@@ -6,6 +6,7 @@ use hermes_test_components::chain_driver::traits::fields::wallet::HasWallets;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
+use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::bootstrap_rollup::RollupBootstrapper;
@@ -14,6 +15,7 @@ use crate::bootstrap::traits::generate_rollup_genesis::CanGenerateRollupGenesis;
 use crate::bootstrap::traits::generate_rollup_wallets::CanGenerateRollupWallets;
 use crate::bootstrap::traits::init_rollup_config::CanInitRollupConfig;
 use crate::bootstrap::traits::rollup_store_dir::HasRollupStoreDir;
+use crate::bootstrap::traits::start_rollup::CanStartRollup;
 use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
 use crate::bootstrap::traits::write_rollup_genesis::CanWriteRollupGenesis;
 
@@ -31,12 +33,13 @@ where
         + CanGenerateRollupWallets
         + CanGenerateRollupGenesis
         + CanWriteRollupGenesis
+        + CanStartRollup
         + CanBuildRollupDriver
         + CanRaiseError<&'static str>
         + CanRaiseError<Runtime::Error>,
     ChainDriver: HasWallets<Wallet = CosmosTestWallet>,
     RollupDriver: HasWalletType,
-    Runtime: HasFilePathType + CanCreateDir,
+    Runtime: HasFilePathType + HasChildProcessType + CanCreateDir,
 {
     async fn bootstrap_rollup(
         bootstrap: &Bootstrap,
@@ -82,8 +85,10 @@ where
             .write_rollup_genesis(&rollup_home_dir, &rollup_genesis)
             .await?;
 
+        let rollup_process = bootstrap.start_rollup(&rollup_home_dir).await?;
+
         let rollup_driver = bootstrap
-            .build_rollup_driver(rollup_config, rollup_genesis)
+            .build_rollup_driver(rollup_config, rollup_genesis, rollup_process)
             .await?;
 
         // TODO: spawn rollup child process

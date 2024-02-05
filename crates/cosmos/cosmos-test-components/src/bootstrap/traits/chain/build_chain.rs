@@ -6,7 +6,7 @@ use hermes_test_components::chain_driver::traits::types::wallet::{HasWalletType,
 
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::types::child_process::{
-    ChildProcess, HasChildProcessType,
+    ChildProcessOf, HasChildProcessType,
 };
 use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
@@ -29,6 +29,6 @@ where
         genesis_config: Self::GenesisConfig,
         chain_config: Self::ChainConfig,
         wallets: Vec<Wallet<Self::ChainDriver>>,
-        chain_processes: Vec<ChildProcess<Self::Runtime>>,
+        chain_processes: Vec<ChildProcessOf<Self::Runtime>>,
     ) -> Result<Self::ChainDriver, Self::Error>;
 }
