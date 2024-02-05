@@ -72,10 +72,6 @@ where
             chain_state: ChainStateGenesis {
                 initial_slot_height: 0,
                 current_time: TimeGenesis { secs: 0, nanos: 0 },
-                gas_price_blocks_depth: 0,
-                gas_price_maximum_elasticity: 0,
-                initial_gas_price: vec![0],
-                minimum_gas_price: vec![0],
             },
             sequencer_registry: SequencerRegistryGenesis {
                 seq_rollup_address: sequencer_wallet.address.clone(),
