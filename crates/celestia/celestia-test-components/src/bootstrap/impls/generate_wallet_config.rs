@@ -53,6 +53,15 @@ where
             validator_staked_amount: None,
         };
 
+        let sequencer = CosmosWalletConfig {
+            wallet_id: "sequencer".to_owned(),
+            genesis_balances: vec![
+                Amount::new(2_000_000_000_000_000_000, denom_for_staking.clone()),
+                Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
+            ],
+            validator_staked_amount: None,
+        };
+
         let user1 = CosmosWalletConfig {
             wallet_id: "user1".to_owned(),
             genesis_balances: vec![
@@ -80,6 +89,6 @@ where
             validator_staked_amount: None,
         };
 
-        Ok(vec![validator, bridge, user1, user2, relayer])
+        Ok(vec![validator, bridge, sequencer, user1, user2, relayer])
     }
 }

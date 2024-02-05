@@ -1612,9 +1612,7 @@ dependencies = [
  "ibc-relayer-types",
  "prost",
  "serde_json",
- "sha2 0.10.8",
  "stable-eyre",
- "subtle-encoding",
  "tendermint-rpc",
  "tokio",
  "toml 0.8.8",
@@ -1658,13 +1656,18 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "hdpath",
+ "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-test-components",
+ "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
  "itertools 0.11.0",
+ "prost",
  "serde_json",
+ "sha2 0.10.8",
+ "subtle-encoding",
  "toml 0.8.8",
 ]
 
@@ -1810,21 +1813,42 @@ name = "hermes-sovereign-integration-tests"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
+ "eyre",
+ "hermes-celestia-integration-tests",
+ "hermes-celestia-test-components",
+ "hermes-cosmos-integration-tests",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-sovereign-test-components",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "stable-eyre",
+ "tokio",
 ]
 
 [[package]]
 name = "hermes-sovereign-test-components"
 version = "0.1.0"
 dependencies = [
+ "bech32",
  "cgp-core",
+ "ed25519-dalek",
+ "hermes-celestia-test-components",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "rand",
+ "serde",
+ "serde_json",
+ "sha2 0.10.8",
+ "toml 0.8.8",
 ]
 
 [[package]]
