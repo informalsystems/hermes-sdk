@@ -21,7 +21,7 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId};
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
-use crate::impls::types::ProvideCosmosTestTypes;
+use crate::impls::test_driver::types::ProvideCosmosTestTypes;
 
 pub struct CosmosBinaryChannelTestDriver {
     pub relay_driver: CosmosRelayDriver,

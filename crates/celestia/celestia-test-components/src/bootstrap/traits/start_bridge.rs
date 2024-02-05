@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::types::child_process::{
-    ChildProcess, HasChildProcessType,
+    ChildProcessOf, HasChildProcessType,
 };
 use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
@@ -16,5 +16,5 @@ where
         &self,
         bridge_home_dir: &FilePathOf<Self::Runtime>,
         chain_driver: &Self::ChainDriver,
-    ) -> Result<ChildProcess<Self::Runtime>, Self::Error>;
+    ) -> Result<ChildProcessOf<Self::Runtime>, Self::Error>;
 }

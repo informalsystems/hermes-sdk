@@ -2,7 +2,7 @@ use hermes_relayer_components::transaction::traits::types::HasSignerType;
 use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
 use hermes_test_components::chain_driver::traits::types::tx_context::HasTxContextType;
 use hermes_test_components::chain_driver::traits::types::wallet::{
-    HasWalletType, WalletSignerProvider, WalletTypeProvider,
+    HasWalletType, ProvideWalletType, WalletSignerProvider,
 };
 use ibc_relayer::keyring::Secp256k1KeyPair;
 
@@ -10,7 +10,7 @@ use crate::chain_driver::types::wallet::CosmosTestWallet;
 
 pub struct ProvideCosmosTestWallet;
 
-impl<Chain> WalletTypeProvider<Chain> for ProvideCosmosTestWallet
+impl<Chain> ProvideWalletType<Chain> for ProvideCosmosTestWallet
 where
     Chain: HasAddressType<Address = String>,
 {

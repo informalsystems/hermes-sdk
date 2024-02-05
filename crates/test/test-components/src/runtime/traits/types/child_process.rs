@@ -5,4 +5,4 @@ pub trait HasChildProcessType: Async {
     type ChildProcess: Async;
 }
 
-pub type ChildProcess<Runtime> = <Runtime as HasChildProcessType>::ChildProcess;
+pub type ChildProcessOf<Runtime> = <Runtime as HasChildProcessType>::ChildProcess;
