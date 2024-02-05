@@ -1,6 +1,5 @@
 #![recursion_limit = "256"]
 
-use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -16,7 +15,6 @@ use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBo
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use ibc_relayer::config::compat_mode::CompatMode;
 use tokio::runtime::Builder;
-use tokio::time::sleep;
 
 #[test]
 fn test_sovereign_bootstrap() -> Result<(), Error> {
@@ -65,7 +63,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             .bootstrap_rollup(&chain_driver, &bridge_driver, "test-rollup")
             .await?;
 
-        // sleep(Duration::from_secs(9999)).await;
+        // tokio::time::sleep(core::time::Duration::from_secs(99999)).await;
 
         <Result<(), Error>>::Ok(())
     })?;

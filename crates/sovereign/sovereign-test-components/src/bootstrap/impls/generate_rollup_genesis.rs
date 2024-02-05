@@ -44,13 +44,9 @@ where
             .map(|wallet| (wallet.address.clone(), 1_000_000_000_000))
             .collect::<Vec<_>>();
 
-        let sequencer_token_address = encode_token_address(
-            "coin",
-            &sequencer_wallet.address_hash_bytes,
-            0,
-            bootstrap.account_prefix(),
-        )
-        .map_err(Bootstrap::raise_error)?;
+        let sequencer_token_address =
+            encode_token_address("stake", &[0; 32], 0, bootstrap.account_prefix())
+                .map_err(Bootstrap::raise_error)?;
 
         let rollup_genesis = SovereignGenesisConfig {
             accounts: AccountsGenesis { pub_keys: vec![] },
