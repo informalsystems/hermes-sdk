@@ -42,5 +42,5 @@ itertools       = { workspace = true }
 futures         = { workspace = true }
 http            = { workspace = true }
 
-opentelemetry   = { version = "0.17.0", features = ["metrics"] }
+opentelemetry   = { version = "0.19.0", features = ["metrics"] }
 moka            = { version = "0.12", features = ["future"] }
