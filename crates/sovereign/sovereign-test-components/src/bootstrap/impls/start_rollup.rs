@@ -52,7 +52,7 @@ where
                     "--kernel-genesis-paths",
                     &Runtime::file_path_to_string(&rollup_chain_state_path),
                 ],
-                &[],
+                &[("RUST_BACKTRACE", "full")],
                 Some(&stdout_path),
                 Some(&stderr_path),
             )

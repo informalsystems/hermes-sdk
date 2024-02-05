@@ -63,6 +63,7 @@ where
                 ],
             },
             chain_state: ChainStateGenesis {
+                initial_slot_height: 0,
                 current_time: TimeGenesis { secs: 0, nanos: 0 },
                 gas_price_blocks_depth: 0,
                 gas_price_maximum_elasticity: 0,
@@ -74,7 +75,7 @@ where
                 seq_da_address: sequencer_da_address.to_string(),
                 coins_to_lock: CoinsToLock {
                     amount: 0,
-                    token_address: "".to_owned(),
+                    token_address: sequencer_wallet.address.clone(),
                 },
                 is_preferred_sequencer: true,
             },
