@@ -14,5 +14,6 @@ pub trait CanBootstrapRollup:
         &self,
         chain_driver: &Self::ChainDriver,
         bridge_driver: &Self::BridgeDriver,
+        rollup_id: &str,
     ) -> Result<Self::RollupDriver, Self::Error>;
 }

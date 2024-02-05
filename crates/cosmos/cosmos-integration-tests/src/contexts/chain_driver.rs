@@ -47,6 +47,7 @@ use hermes_test_components::chain_driver::traits::fields::timeout::IbcTransferTi
 use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
 use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
+use hermes_test_components::chain_driver::traits::fields::wallet::WalletsGetter;
 use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
 use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerierComponent;
 use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
@@ -221,6 +222,12 @@ impl WalletGetterAt<CosmosChainDriver, UserWallet, 1> for CosmosChainDriverCompo
         _index: Index<1>,
     ) -> &CosmosTestWallet {
         &driver.user_wallet_b
+    }
+}
+
+impl WalletsGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn wallets(chain_driver: &CosmosChainDriver) -> &[CosmosTestWallet] {
+        &chain_driver.wallets
     }
 }
 
