@@ -12,7 +12,7 @@ use crate::types::rollup_genesis_config::{
     AccountsGenesis, BankGenesis, ChainStateGenesis, CoinsToLock, SequencerRegistryGenesis,
     SovereignGenesisConfig, TimeGenesis, TokenGenesis,
 };
-use crate::types::wallet::SovereignWallet;
+use crate::types::wallet::{encode_token_address, SovereignWallet};
 
 pub struct GenerateSovereignGenesis;
 
@@ -30,7 +30,7 @@ where
     RollupDriver: HasWalletType<Wallet = SovereignWallet>,
 {
     async fn generate_rollup_genesis(
-        _bootstrap: &Bootstrap,
+        bootstrap: &Bootstrap,
         sequencer_da_address: &ChainDriver::Address,
         rollup_wallets: &[RollupDriver::Wallet],
     ) -> Result<Bootstrap::RollupGenesisConfig, Bootstrap::Error> {
@@ -43,6 +43,14 @@ where
             .iter()
             .map(|wallet| (wallet.address.clone(), 1_000_000_000_000))
             .collect::<Vec<_>>();
+
+        let sequencer_token_address = encode_token_address(
+            "coin",
+            &sequencer_wallet.address_hash_bytes,
+            0,
+            bootstrap.account_prefix(),
+        )
+        .map_err(Bootstrap::raise_error)?;
 
         let rollup_genesis = SovereignGenesisConfig {
             accounts: AccountsGenesis { pub_keys: vec![] },
@@ -75,7 +83,7 @@ where
                 seq_da_address: sequencer_da_address.to_string(),
                 coins_to_lock: CoinsToLock {
                     amount: 0,
-                    token_address: sequencer_wallet.address.clone(),
+                    token_address: sequencer_token_address,
                 },
                 is_preferred_sequencer: true,
             },
