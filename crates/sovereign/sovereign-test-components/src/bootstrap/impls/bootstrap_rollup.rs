@@ -5,6 +5,7 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::fields::wallet::HasWallets;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::bootstrap_rollup::RollupBootstrapper;
@@ -31,10 +32,11 @@ where
         + CanGenerateRollupGenesis
         + CanWriteRollupGenesis
         + CanBuildRollupDriver
-        + CanRaiseError<&'static str>,
+        + CanRaiseError<&'static str>
+        + CanRaiseError<Runtime::Error>,
     ChainDriver: HasWallets<Wallet = CosmosTestWallet>,
     RollupDriver: HasWalletType,
-    Runtime: HasFilePathType,
+    Runtime: HasFilePathType + CanCreateDir,
 {
     async fn bootstrap_rollup(
         bootstrap: &Bootstrap,
@@ -46,6 +48,12 @@ where
             bootstrap.rollup_store_dir(),
             &Runtime::file_path_from_string(rollup_id),
         );
+
+        bootstrap
+            .runtime()
+            .create_dir(&rollup_home_dir)
+            .await
+            .map_err(Bootstrap::raise_error)?;
 
         let rollup_config = bootstrap
             .init_rollup_config(&rollup_home_dir, bridge_driver)

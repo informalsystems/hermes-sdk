@@ -1830,6 +1830,8 @@ dependencies = [
  "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "stable-eyre",
+ "tokio",
 ]
 
 [[package]]
