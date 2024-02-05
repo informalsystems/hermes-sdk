@@ -763,12 +763,11 @@ dependencies = [
 
 [[package]]
 name = "crossbeam-channel"
-version = "0.5.8"
+version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a33c2bf77f2df06183c3aa30d1e96c0695a313d4f9c453cc3762a6db39f99200"
+checksum = "176dc175b78f56c0f321911d9c8eb2b77a78a4860b9c19db83835fea1a46649b"
 dependencies = [
- "cfg-if 1.0.0",
- "crossbeam-utils 0.8.16",
+ "crossbeam-utils 0.8.19",
 ]
 
 [[package]]
@@ -779,7 +778,7 @@ checksum = "ae211234986c545741a7dc064309f67ee1e5ad243d0e48335adc0484d960bcc7"
 dependencies = [
  "autocfg",
  "cfg-if 1.0.0",
- "crossbeam-utils 0.8.16",
+ "crossbeam-utils 0.8.19",
  "memoffset",
  "scopeguard",
 ]
@@ -797,12 +796,9 @@ dependencies = [
 
 [[package]]
 name = "crossbeam-utils"
-version = "0.8.16"
+version = "0.8.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5a22b2d63d4d1dc0b7f1b6b2747dd0088008a9be28b6ddf0b1e7d335e3037294"
-dependencies = [
- "cfg-if 1.0.0",
-]
+checksum = "248e3bacc7dc6baa3b21e405ee045c3047101a49145e7e9eca583ab4c2ca5345"
 
 [[package]]
 name = "crunchy"
@@ -1616,9 +1612,7 @@ dependencies = [
  "ibc-relayer-types",
  "prost",
  "serde_json",
- "sha2 0.10.8",
  "stable-eyre",
- "subtle-encoding",
  "tendermint-rpc",
  "tokio",
  "toml 0.8.8",
@@ -1662,13 +1656,18 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "hdpath",
+ "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-test-components",
+ "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
  "itertools 0.11.0",
+ "prost",
  "serde_json",
+ "sha2 0.10.8",
+ "subtle-encoding",
  "toml 0.8.8",
 ]
 
@@ -1814,21 +1813,42 @@ name = "hermes-sovereign-integration-tests"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
+ "eyre",
+ "hermes-celestia-integration-tests",
+ "hermes-celestia-test-components",
+ "hermes-cosmos-integration-tests",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-sovereign-test-components",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "stable-eyre",
+ "tokio",
 ]
 
 [[package]]
 name = "hermes-sovereign-test-components"
 version = "0.1.0"
 dependencies = [
+ "bech32",
  "cgp-core",
+ "ed25519-dalek",
+ "hermes-celestia-test-components",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "rand",
+ "serde",
+ "serde_json",
+ "sha2 0.10.8",
+ "toml 0.8.8",
 ]
 
 [[package]]
@@ -2094,7 +2114,7 @@ dependencies = [
  "bs58",
  "byte-unit",
  "bytes",
- "crossbeam-channel 0.5.8",
+ "crossbeam-channel 0.5.11",
  "digest 0.10.7",
  "dirs-next",
  "ed25519",
@@ -2200,7 +2220,7 @@ dependencies = [
  "cfg-if 1.0.0",
  "cgp-core",
  "color-eyre",
- "crossbeam-channel 0.5.8",
+ "crossbeam-channel 0.5.11",
  "eyre",
  "flex-error",
  "hdpath",
@@ -2563,9 +2583,9 @@ checksum = "d8017ec3548ffe7d4cef7ac0e12b044c01164a74c0f3119420faeaf13490ad8b"
 dependencies = [
  "async-lock",
  "async-trait",
- "crossbeam-channel 0.5.8",
+ "crossbeam-channel 0.5.11",
  "crossbeam-epoch",
- "crossbeam-utils 0.8.16",
+ "crossbeam-utils 0.8.19",
  "futures-util",
  "once_cell",
  "parking_lot",
@@ -2726,7 +2746,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6105e89802af13fdf48c49d7646d3b533a70e536d818aae7e78ba0433d01acb8"
 dependencies = [
  "async-trait",
- "crossbeam-channel 0.5.8",
+ "crossbeam-channel 0.5.11",
  "dashmap 4.0.2",
  "fnv",
  "futures-channel",
@@ -2784,7 +2804,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b3a2a91fdbfdd4d212c0dcc2ab540de2c2bcbbd90be17de7a7daf8822d010c1"
 dependencies = [
  "async-trait",
- "crossbeam-channel 0.5.8",
+ "crossbeam-channel 0.5.11",
  "dashmap 5.5.0",
  "fnv",
  "futures-channel",
@@ -3073,7 +3093,7 @@ version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a17e662a7a8291a865152364c20c7abc5e60486ab2001e8ec10b24862de0b9ab"
 dependencies = [
- "crossbeam-utils 0.8.16",
+ "crossbeam-utils 0.8.19",
  "libc",
  "mach2",
  "once_cell",

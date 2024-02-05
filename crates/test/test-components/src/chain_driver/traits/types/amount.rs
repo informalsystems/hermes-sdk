@@ -4,7 +4,7 @@ use cgp_core::prelude::*;
 
 use crate::chain_driver::traits::types::denom::HasDenomType;
 
-pub type Amount<Chain> = <Chain as HasAmountType>::Amount;
+pub type AmountOf<Chain> = <Chain as HasAmountType>::Amount;
 
 #[derive_component(AmountTypeComponent, AmountTypeProvider<Chain>)]
 pub trait HasAmountType: HasDenomType {

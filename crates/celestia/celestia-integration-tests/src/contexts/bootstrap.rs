@@ -60,6 +60,7 @@ use tokio::process::Child;
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 
 pub struct CelestiaBootstrap {
+    // TODO: reuse Cosmos test components directly instead of delegating to `CosmosBootstrap`.
     pub cosmos_bootstrap: CosmosBootstrap,
     pub bridge_store_dir: PathBuf,
 }
@@ -108,6 +109,7 @@ impl ProvideChainType<CelestiaBootstrap> for CelestiaBootstrapComponents {
 }
 
 impl ProvideChainDriverType<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    // TODO: define a `CelestiaChainDriver` type
     type ChainDriver = CosmosChainDriver;
 }
 

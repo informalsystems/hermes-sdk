@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_test_components::chain_driver::traits::types::amount::{Amount, HasAmountType};
+use hermes_test_components::chain_driver::traits::types::amount::{AmountOf, HasAmountType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 /**
@@ -28,12 +28,12 @@ where
     /// gentx command may fail.
     fn wallet_config_genesis_balances(
         wallet_config: &Self::WalletConfig,
-    ) -> &[Amount<Self::ChainDriver>];
+    ) -> &[AmountOf<Self::ChainDriver>];
 
     /// If the wallet is a validator, returns an amount that should be staked
     /// on genesis. The amount should be in the native staking denom,
     /// or the bootstrapping may fail.
     fn wallet_config_validator_staked_amount(
         wallet_config: &Self::WalletConfig,
-    ) -> Option<&Amount<Self::ChainDriver>>;
+    ) -> Option<&AmountOf<Self::ChainDriver>>;
 }

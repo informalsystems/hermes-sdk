@@ -2,9 +2,9 @@ use core::fmt::Display;
 
 use cgp_core::prelude::*;
 
-pub type Address<Chain> = <Chain as HasAddressType>::Address;
+pub type AddressOf<ChainDriver> = <ChainDriver as HasAddressType>::Address;
 
-#[derive_component(AddressTypeComponent, AddressTypeProvider<Chain>)]
+#[derive_component(AddressTypeComponent, ProvideAddressType<Chain>)]
 pub trait HasAddressType: Async {
     type Address: Display + Async;
 }
