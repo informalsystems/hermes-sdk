@@ -30,10 +30,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Install cargo-nextest
         run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -p hermes-cosmos-integration-tests --no-run
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
@@ -62,15 +58,40 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Install cargo-nextest
         run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -p hermes-cosmos-integration-tests --no-run
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
         run: |
             nix shell .#gaia .#celestia-app .#celestia-node -c \
               cargo nextest run -p hermes-celestia-integration-tests \
+              --test-threads=2 \
+              --failure-output final
+
+  sovereign-integration-tests:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v25
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - uses: cachix/cachix-action@v14
+        with:
+          name: cosmos
+          extraPullNames: informal-sovereign
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-nextest
+        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
+      - name: run integration tests
+        env:
+          RUST_BACKTRACE: 1
+        run: |
+            nix shell .#gaia .#celestia-app .#celestia-node .#sovereign-rollup -c \
+              cargo nextest run -p hermes-sovereign-integration-tests \
               --test-threads=2 \
               --failure-output final
