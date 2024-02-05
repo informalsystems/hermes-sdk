@@ -1817,8 +1817,17 @@ name = "hermes-sovereign-integration-tests"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
+ "eyre",
+ "hermes-celestia-integration-tests",
+ "hermes-celestia-test-components",
+ "hermes-cosmos-integration-tests",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-sovereign-test-components",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
 ]

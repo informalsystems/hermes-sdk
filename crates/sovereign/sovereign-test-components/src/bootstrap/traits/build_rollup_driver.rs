@@ -5,6 +5,7 @@ use crate::bootstrap::traits::types::rollup_config::HasRollupConfigType;
 use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;
 
+#[derive_component(RollupDriverBuilderComponent, RollupDriverBuilder<Bootstrap>)]
 #[async_trait]
 pub trait CanBuildRollupDriver:
     HasRuntimeType

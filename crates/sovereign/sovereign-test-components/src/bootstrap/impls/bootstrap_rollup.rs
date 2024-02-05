@@ -78,6 +78,8 @@ where
             .build_rollup_driver(rollup_config, rollup_genesis)
             .await?;
 
+        // TODO: spawn rollup child process
+
         Ok(rollup_driver)
     }
 }

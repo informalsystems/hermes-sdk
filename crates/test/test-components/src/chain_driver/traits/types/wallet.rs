@@ -6,7 +6,7 @@ use crate::chain_driver::traits::types::tx_context::HasTxContextType;
 
 pub type Wallet<Chain> = <Chain as HasWalletType>::Wallet;
 
-#[derive_component(WalletTypeComponent, WalletTypeProvider<Chain>)]
+#[derive_component(WalletTypeComponent, ProvideWalletType<Chain>)]
 pub trait HasWalletType: HasAddressType {
     type Wallet: Async;
 
