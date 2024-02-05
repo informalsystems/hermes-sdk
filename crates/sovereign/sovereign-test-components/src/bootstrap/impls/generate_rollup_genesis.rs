@@ -44,6 +44,9 @@ where
             .map(|wallet| (wallet.address.clone(), 1_000_000_000_000))
             .collect::<Vec<_>>();
 
+        // The sequencer token address is derived based on the code `get_genesis_token_address` at
+        // <https://github.com/Sovereign-Labs/sovereign-sdk/blob/c9f56b479c6ea17893e282099fcb8ab804c2feb1/module-system/module-implementations/sov-bank/src/utils.rs#L21>.
+        // At the moment of writing, the sender (deployer) address is all zeroes.
         let sequencer_token_address =
             encode_token_address("stake", &[0; 32], 0, bootstrap.account_prefix())
                 .map_err(Bootstrap::raise_error)?;

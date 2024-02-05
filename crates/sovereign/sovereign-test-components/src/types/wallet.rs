@@ -34,6 +34,15 @@ pub fn public_key_to_hash_bytes(public_key: &VerifyingKey) -> [u8; 32] {
     hasher.finalize().into()
 }
 
+/**
+   Encode a public key to a Sovereign SDK address with a given account prefix.
+
+   The encoding is based on the `to_address` function at
+   <https://github.com/Sovereign-Labs/sovereign-sdk/blob/c9f56b479c6ea17893e282099fcb8ab804c2feb1/module-system/sov-modules-api/src/default_context.rs#L107>.
+
+   Essentiall, we hash the public key raw bytes, and then convert the raw hash bytes
+   using bech32.
+*/
 pub fn public_key_to_sovereign_address(
     public_key: &VerifyingKey,
     account_prefix: &str,
@@ -44,6 +53,15 @@ pub fn public_key_to_sovereign_address(
     encode_hash_bytes_to_address(&key_hash_bytes, account_prefix)
 }
 
+/**
+   Encode a token with the sender as a Sovereign address.
+
+   This is based on the `get_token_address` function at
+   <https://github.com/Sovereign-Labs/sovereign-sdk/blob/c9f56b479c6ea17893e282099fcb8ab804c2feb1/module-system/module-implementations/sov-bank/src/utils.rs#L6>.
+
+   Essentially, we take the hash of the sender hash bytes, token name, and salt.
+   We then perform bech32 encoding on the raw hash value.
+*/
 pub fn encode_token_address(
     token_name: &str,
     sender: &[u8],
