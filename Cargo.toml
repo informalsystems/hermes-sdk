@@ -56,6 +56,7 @@ cgp-core            = { version = "0.1.0" }
 cgp-error-eyre      = { version = "0.1.0" }
 cgp-error-std       = { version = "0.1.0" }
 clap                = { version = "4.4.18" }
+oneline-eyre        = { version = "0.1.0" }
 prost               = { version = "0.12.3" }
 serde               = { version = "1.0" }
 serde_derive        = { version = "1.0" }

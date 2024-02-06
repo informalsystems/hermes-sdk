@@ -1576,7 +1576,10 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "humantime",
  "ibc-relayer",
+ "ibc-relayer-types",
+ "oneline-eyre",
 ]
 
 [[package]]
