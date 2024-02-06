@@ -25,8 +25,10 @@ members = [
     "crates/mock/mock-cosmos-relayer",
     "crates/test/test-components",
     "crates/test/test-suite",
+    "crates/cli/cli-framework", 
+    "crates/cli/cli",
     "tools/integration-test",
-    "tools/test-framework",
+    "tools/test-framework", 
 ]
 
 [workspace.package]
@@ -53,6 +55,7 @@ basecoin-store      = { version = "0.1.0" }
 cgp-core            = { version = "0.1.0" }
 cgp-error-eyre      = { version = "0.1.0" }
 cgp-error-std       = { version = "0.1.0" }
+clap                = { version = "4.4.18" }
 prost               = { version = "0.12.3" }
 serde               = { version = "1.0" }
 serde_derive        = { version = "1.0" }
@@ -69,6 +72,7 @@ eyre                = { version = "0.6.8" }
 itertools           = { version = "0.11" }
 http                = { version = "0.2.11" }
 flex-error          = { version = "0.4.4", default-features = false }
+tracing-subscriber  = { version = "0.3.18" }
 
 hermes-relayer-components           = { version = "0.1.0", path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { version = "0.1.0", path = "./crates/relayer/relayer-components-extra" }

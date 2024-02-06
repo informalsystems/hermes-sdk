@@ -1,0 +1,26 @@
+[package]
+name = "hermes-cli"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Hermes: IBC Relayer in Rust
+"""
+
+[[bin]]
+name = "hermes"
+path = "bin/hermes.rs"
+
+[dependencies]
+hermes-cli-framework = { path = "../cli-framework" }
+hermes-relayer-runtime = { path = "../../runtime/relayer-runtime" }
+hermes-relayer-components = { path = "../../relayer/relayer-components" }
+hermes-cosmos-relayer = { path = "../../cosmos/cosmos-relayer" }
+
+ibc-relayer = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
