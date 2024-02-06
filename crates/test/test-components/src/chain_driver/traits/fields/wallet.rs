@@ -9,7 +9,12 @@ pub struct UserWallet;
 #[derive(Copy, Clone)]
 pub struct RelayerWallet;
 
-#[derive_component(WalletGetterComponent, WalletGetterAt<Chain>)]
+#[derive_component(WalletGetterComponent, WalletGetterAt<ChainDriver>)]
 pub trait HasWalletAt<WalletKind, const I: usize>: HasWalletType {
     fn wallet_at(&self, kind: WalletKind, index: Index<I>) -> &Self::Wallet;
+}
+
+#[derive_component(WalletsGetterComponent, WalletsGetter<ChainDriver>)]
+pub trait HasWallets: HasWalletType {
+    fn wallets(&self) -> &[Self::Wallet];
 }
