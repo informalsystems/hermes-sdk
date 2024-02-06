@@ -9,8 +9,10 @@ use crate::types::error::Error;
 
 pub struct DelegateCosmosCreateClientMessageBuilder;
 
-impl DelegateComponent<CosmosChain> for DelegateCosmosCreateClientMessageBuilder {
-    type Delegate = CosmosIbcClientComponents;
+delegate_components! {
+    DelegateCosmosCreateClientMessageBuilder {
+        CosmosChain: CosmosIbcClientComponents,
+    }
 }
 
 #[async_trait]
