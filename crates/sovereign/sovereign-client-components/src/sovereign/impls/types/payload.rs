@@ -5,11 +5,14 @@ use hermes_relayer_components::chain::traits::types::channel::{
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
+use ibc_relayer::chain::client::ClientSettings;
 
 use crate::sovereign::types::payloads::channel::{
     SovereignChannelOpenAckPayload, SovereignChannelOpenConfirmPayload,
@@ -29,6 +32,14 @@ use crate::sovereign::types::payloads::packet::{
 };
 
 pub struct ProvideSovereignPayloadTypes;
+
+impl<Chain, Counterparty> ProvideCreateClientOptionsType<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
+    type CreateClientOptions = ClientSettings;
+}
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
     for ProvideSovereignPayloadTypes
