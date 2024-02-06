@@ -20,5 +20,6 @@ hermes-cosmos-client-components     = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 ibc-proto                           = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
+ibc-core              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5c7cea88d0", default-features = false, features = ["borsh","schema","serde"] }
 
 prost           = { workspace = true }

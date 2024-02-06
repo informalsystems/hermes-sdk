@@ -1,17 +1,13 @@
-use cgp_core::CanRaiseError;
 use cgp_core::HasErrorType;
-use eyre::eyre;
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_client_components::types::payloads::client::CosmosCreateClientPayload;
 use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptionsType, HasCreateClientPayloadType,
 };
+use ibc_core::client::types::Height;
+use ibc_core::host::types::identifiers::ChainId;
 use ibc_relayer::chain::client::ClientSettings;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::client_state::AnyClientState;
-use ibc_relayer::consensus_state::AnyConsensusState;
-use ibc_relayer_types::core::ics02_client::height::Height;
+use sov_ibc_mocks::sovereign::dummy_sov_client_state;
+use sov_ibc_mocks::sovereign::dummy_sov_consensus_state;
 
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
@@ -26,62 +22,32 @@ impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
 where
     Chain: HasCreateClientOptionsType<Counterparty, CreateClientOptions = ClientSettings>
         + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
-        + CanRaiseError<eyre::Report>
-        + HasBlockingChainHandle
         + HasErrorType, // TODO: Add chain dependencies for create client payload here
 {
     async fn build_create_client_payload(
-        chain: &Chain,
-        create_client_options: &ClientSettings,
+        _chain: &Chain,
+        _create_client_options: &ClientSettings,
     ) -> Result<SovereignCreateClientPayload, Chain::Error> {
-        let client_settings = create_client_options.clone();
-
         // TODO: This will be replaced by data queried from the Roll-Up
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let height = chain_handle
-                    .query_latest_height()
-                    .map_err(Chain::raise_error)?;
 
-                let any_client_state = chain_handle
-                    .build_client_state(height, client_settings)
-                    .map_err(Chain::raise_error)?;
+        //let chain_id = chain.chain_id();
+        //let latest_height = chain.query_chain_height().await?;
 
-                let client_state = match &any_client_state {
-                    AnyClientState::Tendermint(client_state) => client_state.clone(),
-                };
+        let chain_id = ChainId::new("private").unwrap();
+        let latest_height = Height::new(10, 1).unwrap();
 
-                let any_consensus_state = chain_handle
-                    .build_consensus_state(
-                        any_client_state.latest_height(),
-                        height,
-                        any_client_state,
-                    )
-                    .map_err(Chain::raise_error)?;
+        let client_state = dummy_sov_client_state(chain_id.clone(), latest_height);
+        let consensus_state = dummy_sov_consensus_state();
 
-                let consensus_state = match any_consensus_state {
-                    AnyConsensusState::Tendermint(consensus_state) => consensus_state,
-                    _ => {
-                        return Err(Chain::raise_error(eyre!(
-                            "expect Tendermint consensus state"
-                        )));
-                    }
-                };
+        let code_hash =
+            hex::decode("2469f43c3ca20d476442bd3d98cbd97a180776ab37332aa7b02cae5a620acfc6")
+                .unwrap();
 
-                let celestia_payload = CosmosCreateClientPayload {
-                    client_state,
-                    consensus_state,
-                };
-
-                let code_hash = "wasm_code_hash".as_bytes().to_vec();
-                let latest_height = Height::new(1, 20).unwrap();
-
-                Ok(SovereignCreateClientPayload {
-                    celestia_payload,
-                    code_hash,
-                    latest_height,
-                })
-            })
-            .await
+        Ok(SovereignCreateClientPayload {
+            client_state: client_state.inner().clone(),
+            consensus_state,
+            code_hash,
+            latest_height,
+        })
     }
 }

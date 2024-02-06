@@ -1,7 +1,7 @@
 use hermes_cosmos_client_components::methods::encode::encode_to_any;
+use ibc_core::client::types::Height;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
-use ibc_relayer_types::Height;
 use prost::EncodeError;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -28,10 +28,14 @@ pub struct WasmClientState {
 
 impl WasmClientState {
     pub fn encode_protobuf(&self) -> Result<Any, EncodeError> {
+        let latest_height = ProtoHeight {
+            revision_number: self.latest_height.revision_number(),
+            revision_height: self.latest_height.revision_height(),
+        };
         let proto_message = ProtoClientState {
             data: self.data.clone(),
             checksum: self.checksum.clone(),
-            latest_height: Some(self.latest_height.into()),
+            latest_height: Some(latest_height),
         };
 
         encode_to_any(TYPE_URL, &proto_message)
