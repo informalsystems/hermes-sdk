@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::types::aliases::ChainIdOf;
@@ -28,7 +29,7 @@ where
         chain_id: ChainIdOf<Self::Chain>,
         genesis_config: Self::GenesisConfig,
         chain_config: Self::ChainConfig,
-        wallets: Vec<Wallet<Self::ChainDriver>>,
+        wallets: BTreeMap<String, Wallet<Self::ChainDriver>>,
         chain_processes: Vec<ChildProcessOf<Self::Runtime>>,
     ) -> Result<Self::ChainDriver, Self::Error>;
 }

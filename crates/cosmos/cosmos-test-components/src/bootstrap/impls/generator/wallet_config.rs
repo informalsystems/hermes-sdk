@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
@@ -33,7 +34,7 @@ where
     async fn generate_wallet_configs(
         bootstrap: &Bootstrap,
         genesis_config: &Bootstrap::GenesisConfig,
-    ) -> Result<Vec<CosmosWalletConfig>, Bootstrap::Error> {
+    ) -> Result<BTreeMap<String, CosmosWalletConfig>, Bootstrap::Error> {
         // TODO: allow for randomization of denoms and amount
 
         let denom_for_staking = bootstrap.genesis_denom(DenomForStaking, genesis_config);
@@ -79,6 +80,11 @@ where
             validator_staked_amount: None,
         };
 
-        Ok(vec![validator, user1, user2, relayer])
+        Ok(BTreeMap::from([
+            ("validator".into(), validator),
+            ("user1".into(), user1),
+            ("user2".into(), user2),
+            ("relayer".into(), relayer),
+        ]))
     }
 }

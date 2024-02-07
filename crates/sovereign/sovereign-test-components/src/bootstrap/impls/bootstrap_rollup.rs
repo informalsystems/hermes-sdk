@@ -64,13 +64,9 @@ where
 
         // TODO: Use `HasWalletAt<SequencerWallet, 0>` instead once we define a
         // `CelestiaChainDriver` context that implements that.
-        let sequencer_wallet = chain_driver
-            .wallets()
-            .iter()
-            .find(|wallet| wallet.id.starts_with("sequencer"))
-            .ok_or_else(|| {
-                Bootstrap::raise_error("expected chain driver to contain sequencer wallet")
-            })?;
+        let sequencer_wallet = chain_driver.wallets().get("sequencer").ok_or_else(|| {
+            Bootstrap::raise_error("expected chain driver to contain sequencer wallet")
+        })?;
 
         let rollup_wallets = bootstrap.generate_rollup_wallets().await?;
 

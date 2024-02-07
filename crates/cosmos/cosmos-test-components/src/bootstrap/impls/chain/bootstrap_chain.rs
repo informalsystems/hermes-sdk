@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -63,14 +64,14 @@ where
             // Generate configuration of wallets that should be added to genesis
             let wallet_configs = bootstrap.generate_wallet_configs(&genesis_config).await?;
 
-            let mut wallets = Vec::new();
+            let mut wallets = BTreeMap::new();
 
-            for wallet_config in wallet_configs {
+            for (key, wallet_config) in wallet_configs {
                 let wallet = bootstrap
                     .add_wallet_to_genesis(&chain_home_dir, &chain_id, &wallet_config)
                     .await?;
 
-                wallets.push(wallet);
+                wallets.insert(key, wallet);
             }
 
             wallets

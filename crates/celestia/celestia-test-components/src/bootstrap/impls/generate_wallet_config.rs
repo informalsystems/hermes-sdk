@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
@@ -27,7 +28,7 @@ where
     async fn generate_wallet_configs(
         bootstrap: &Bootstrap,
         genesis_config: &Bootstrap::GenesisConfig,
-    ) -> Result<Vec<CosmosWalletConfig>, Bootstrap::Error> {
+    ) -> Result<BTreeMap<String, CosmosWalletConfig>, Bootstrap::Error> {
         let denom_for_staking = bootstrap.genesis_denom(DenomForStaking, genesis_config);
 
         let denom_for_transfer = bootstrap.genesis_denom(DenomForTransfer, genesis_config);
@@ -89,6 +90,13 @@ where
             validator_staked_amount: None,
         };
 
-        Ok(vec![validator, bridge, sequencer, user1, user2, relayer])
+        Ok(BTreeMap::from([
+            ("validator".into(), validator),
+            ("bridge".into(), bridge),
+            ("sequencer".into(), sequencer),
+            ("user1".into(), user1),
+            ("user2".into(), user2),
+            ("relayer".into(), relayer),
+        ]))
     }
 }

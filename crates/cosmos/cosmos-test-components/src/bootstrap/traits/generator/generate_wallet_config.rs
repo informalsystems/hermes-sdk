@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
@@ -11,5 +12,5 @@ pub trait CanGenerateWalletConfigs:
     async fn generate_wallet_configs(
         &self,
         genesis_config: &Self::GenesisConfig,
-    ) -> Result<Vec<Self::WalletConfig>, Self::Error>;
+    ) -> Result<BTreeMap<String, Self::WalletConfig>, Self::Error>;
 }

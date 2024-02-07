@@ -1,3 +1,5 @@
+use alloc::collections::BTreeMap;
+use alloc::string::String;
 use cgp_core::prelude::*;
 
 use crate::chain_driver::traits::types::wallet::HasWalletType;
@@ -16,5 +18,5 @@ pub trait HasWalletAt<WalletKind, const I: usize>: HasWalletType {
 
 #[derive_component(WalletsGetterComponent, WalletsGetter<ChainDriver>)]
 pub trait HasWallets: HasWalletType {
-    fn wallets(&self) -> &[Self::Wallet];
+    fn wallets(&self) -> &BTreeMap<String, Self::Wallet>;
 }

@@ -2,6 +2,7 @@ use core::str::FromStr;
 use core::time::Duration;
 use std::path::PathBuf;
 
+use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
@@ -119,26 +120,23 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
         chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainConfig,
-        wallets: Vec<CosmosTestWallet>,
+        wallets: BTreeMap<String, CosmosTestWallet>,
         chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
         let relayer_wallet = wallets
-            .iter()
-            .find(|wallet| wallet.id.starts_with("relayer"))
+            .get("relayer")
             .ok_or_else(|| {
                 eyre!("expect relayer wallet to be provided in the list of test wallets")
             })?
             .clone();
 
         let user_wallet_a = wallets
-            .iter()
-            .find(|wallet| wallet.id.starts_with("user1"))
+            .get("user1")
             .ok_or_else(|| eyre!("expect user1 wallet to be provided in the list of test wallets"))?
             .clone();
 
         let user_wallet_b = wallets
-            .iter()
-            .find(|wallet| wallet.id.starts_with("user2"))
+            .get("user2")
             .ok_or_else(|| eyre!("expect user2 wallet to be provided in the list of test wallets"))?
             .clone();
 

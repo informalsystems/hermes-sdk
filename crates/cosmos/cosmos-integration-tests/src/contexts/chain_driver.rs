@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -85,7 +86,7 @@ pub struct CosmosChainDriver {
     pub relayer_wallet: CosmosTestWallet,
     pub user_wallet_a: CosmosTestWallet,
     pub user_wallet_b: CosmosTestWallet,
-    pub wallets: Vec<CosmosTestWallet>,
+    pub wallets: BTreeMap<String, CosmosTestWallet>,
 }
 
 pub struct CosmosChainDriverComponents;
@@ -230,7 +231,7 @@ impl WalletGetterAt<CosmosChainDriver, UserWallet, 1> for CosmosChainDriverCompo
 }
 
 impl WalletsGetter<CosmosChainDriver> for CosmosChainDriverComponents {
-    fn wallets(chain_driver: &CosmosChainDriver) -> &[CosmosTestWallet] {
+    fn wallets(chain_driver: &CosmosChainDriver) -> &BTreeMap<String, CosmosTestWallet> {
         &chain_driver.wallets
     }
 }

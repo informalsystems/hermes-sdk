@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use alloc::collections::BTreeMap;
 use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
@@ -203,7 +204,7 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainConfig,
-        wallets: Vec<CosmosTestWallet>,
+        wallets: BTreeMap<String, CosmosTestWallet>,
         chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
         let chain_driver = bootstrap
