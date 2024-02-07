@@ -37,6 +37,7 @@ use crate::bootstrap::impls::genesis::add_genesis_wallet::AddCosmosWalletToGenes
 use crate::bootstrap::impls::genesis::collect_gentxs::CollectCosmosGentxs;
 use crate::bootstrap::impls::initializers::create_chain_home_dir::CreateChainHomeDirFromTestDir;
 use crate::bootstrap::impls::initializers::init_chain_data::InitCosmosChainData;
+use crate::bootstrap::impls::initializers::init_wallet::GetStdOut;
 use crate::bootstrap::impls::initializers::init_wallet::InitCosmosTestWallet;
 use crate::bootstrap::impls::initializers::update_chain_config::UpdateCosmosChainNodeConfig;
 use crate::bootstrap::impls::initializers::update_genesis_config::UpdateCosmosGenesisConfig;
@@ -89,6 +90,7 @@ delegate_components! {
         GenesisAccountAdderComponent: AddCosmosGenesisAccount,
         GenesisValidatorAdderComponent: AddCosmosGenesisValidator,
         GenesisTransactionsCollectorComponent: CollectCosmosGentxs,
+        WalletInitializerComponent: InitCosmosTestWallet<GetStdOut>,
 
         ChainNodeConfigTypeComponent: ProvideCosmosChainNodeConfigType,
         GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
@@ -101,7 +103,6 @@ delegate_components! {
         ChainDataInitializerComponent: InitCosmosChainData,
         WalletHdPathComponent: ProvideCosmosHdPath,
         GenesisDenomGetterComponent: GetCosmosGenesisDenoms,
-        WalletInitializerComponent: InitCosmosTestWallet,
         ChainNodeConfigInitializerComponent: UpdateCosmosChainNodeConfig,
         GenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,
         GenesisWalletAdderComponent: AddCosmosWalletToGenesis,

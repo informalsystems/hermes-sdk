@@ -1,10 +1,12 @@
-use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
+use core::marker::PhantomData;
+
+use cgp_core::{Async, CanRaiseError};
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
+use hermes_test_components::runtime::traits::exec_command::ExecOutput;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer::keyring::errors::Error as KeyringError;
@@ -16,10 +18,34 @@ use crate::bootstrap::traits::fields::hd_path::HasWalletHdPath;
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializer;
 use crate::chain_driver::types::wallet::CosmosTestWallet;
 
-pub struct InitCosmosTestWallet;
+pub struct InitCosmosTestWallet<OutputGetter>(pub PhantomData<OutputGetter>);
 
-#[async_trait]
-impl<Bootstrap, Runtime, ChainDriver> WalletInitializer<Bootstrap> for InitCosmosTestWallet
+pub trait ExecOutputGetter: Async {
+    fn get_exec_output(output: ExecOutput) -> String;
+}
+
+pub struct GetStdOut;
+
+pub struct GetStdOutOrElseStdErr;
+
+impl ExecOutputGetter for GetStdOut {
+    fn get_exec_output(output: ExecOutput) -> String {
+        output.stdout
+    }
+}
+
+impl ExecOutputGetter for GetStdOutOrElseStdErr {
+    fn get_exec_output(output: ExecOutput) -> String {
+        if !output.stdout.is_empty() {
+            output.stdout
+        } else {
+            output.stderr
+        }
+    }
+}
+
+impl<Bootstrap, Runtime, ChainDriver, OutputGetter> WalletInitializer<Bootstrap>
+    for InitCosmosTestWallet<OutputGetter>
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainDriverType<ChainDriver = ChainDriver>
@@ -31,13 +57,14 @@ where
         + CanRaiseError<KeyringError>,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
     ChainDriver: HasWalletType<Wallet = CosmosTestWallet>,
+    OutputGetter: ExecOutputGetter,
 {
     async fn initialize_wallet(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         wallet_id: &str,
     ) -> Result<ChainDriver::Wallet, Bootstrap::Error> {
-        let seed_content = bootstrap
+        let add_wallet_output = bootstrap
             .runtime()
             .exec_command(
                 bootstrap.chain_command_path(),
@@ -54,8 +81,9 @@ where
                 ],
             )
             .await
-            .map_err(Bootstrap::raise_error)?
-            .stderr;
+            .map_err(Bootstrap::raise_error)?;
+
+        let seed_content = OutputGetter::get_exec_output(add_wallet_output);
 
         let json_val: json::Value =
             json::from_str(&seed_content).map_err(Bootstrap::raise_error)?;

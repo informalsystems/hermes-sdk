@@ -3,14 +3,14 @@
 use std::sync::Arc;
 
 use eyre::Error;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use tokio::runtime::Builder;
 
 #[test]
-fn test_cosmos_bootstrap() -> Result<(), Error> {
+fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
     let _ = stable_eyre::install();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
@@ -20,12 +20,12 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
-    let bootstrap = Arc::new(CosmosBootstrap {
+    let bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime,
         builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
-        chain_command_path: "simd".into(),
+        chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
         compat_mode: None,
         staking_denom: "stake".into(),
