@@ -1,12 +1,16 @@
 use core::time::Duration;
+use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use toml::Value;
 
 use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
@@ -18,21 +22,28 @@ use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 pub struct UpdateCosmosChainNodeConfig;
 
 #[async_trait]
-impl<Bootstrap, Runtime> ChainNodeConfigInitializer<Bootstrap> for UpdateCosmosChainNodeConfig
+impl<Bootstrap, Runtime, Chain> ChainNodeConfigInitializer<Bootstrap>
+    for UpdateCosmosChainNodeConfig
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
+        + HasChainType<Chain = Chain>
         + HasChainNodeConfigType
         + CanModifyCometConfig
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>,
-    Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
+    Runtime: HasFilePathType<FilePath = PathBuf>
+        + CanReadFileAsString
+        + CanWriteStringToFile
+        + CanReserveTcpPort,
     Bootstrap::ChainNodeConfig: From<CosmosChainNodeConfig>,
+    Chain: HasChainIdType<ChainId = ChainId>,
 {
     async fn init_chain_node_config(
         bootstrap: &Bootstrap,
-        chain_home_dir: &Runtime::FilePath,
+        chain_home_dir: &PathBuf,
+        chain_id: &ChainId,
     ) -> Result<Bootstrap::ChainNodeConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
@@ -127,6 +138,8 @@ where
         };
 
         let chain_config = CosmosChainNodeConfig {
+            chain_id: chain_id.clone(),
+            chain_home_dir: chain_home_dir.clone(),
             rpc_port,
             p2p_port,
             pprof_port,

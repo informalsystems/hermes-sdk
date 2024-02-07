@@ -119,7 +119,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
         chain_home_dir: PathBuf,
         chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
-        chain_config: CosmosChainNodeConfig,
+        chain_node_config: CosmosChainNodeConfig,
         wallets: BTreeMap<String, CosmosTestWallet>,
         chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {
@@ -143,12 +143,12 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
         let relayer_chain_config = ChainConfig {
             id: chain_id.clone(),
             r#type: ChainType::CosmosSdk,
-            rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_config.rpc_port))?,
-            grpc_addr: Url::from_str(&format!("http://localhost:{}", chain_config.grpc_port))?,
+            rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))?,
+            grpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.grpc_port))?,
             event_source: config::EventSourceMode::Push {
                 url: WebSocketClientUrl::from_str(&format!(
                     "ws://localhost:{}/websocket",
-                    chain_config.rpc_port
+                    chain_node_config.rpc_port
                 ))?,
                 batch_delay: config::default::batch_delay(),
             },
@@ -207,7 +207,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
         let test_chain = CosmosChainDriver {
             base_chain,
             chain_home_dir,
-            chain_config,
+            chain_node_config,
             genesis_config,
             relayer_chain_config,
             chain_processes,

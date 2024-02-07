@@ -1,4 +1,3 @@
-pub mod account_prefix;
 pub mod bootstrap_rollup;
 pub mod build_rollup_driver;
 pub mod generate_rollup_genesis;

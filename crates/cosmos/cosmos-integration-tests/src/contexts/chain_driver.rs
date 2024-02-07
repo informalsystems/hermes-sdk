@@ -79,7 +79,7 @@ pub struct CosmosChainDriver {
     pub chain_home_dir: PathBuf,
     pub chain_processes: Vec<Child>,
     pub relayer_chain_config: ChainConfig,
-    pub chain_config: CosmosChainNodeConfig,
+    pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
     pub staking_denom: Denom,
     pub transfer_denom: Denom,
@@ -190,13 +190,13 @@ impl ChainHomeDirGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 
 impl RpcPortGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn rpc_port(chain_driver: &CosmosChainDriver) -> u16 {
-        chain_driver.chain_config.rpc_port
+        chain_driver.chain_node_config.rpc_port
     }
 }
 
 impl GrpcPortGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn grpc_port(chain_driver: &CosmosChainDriver) -> u16 {
-        chain_driver.chain_config.grpc_port
+        chain_driver.chain_node_config.grpc_port
     }
 }
 

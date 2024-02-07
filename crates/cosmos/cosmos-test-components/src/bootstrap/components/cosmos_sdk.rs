@@ -1,4 +1,5 @@
 use core::fmt::Display;
+use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
@@ -20,8 +21,10 @@ use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::random::CanGenerateRandom;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer::keyring::errors::Error as KeyringError;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
 use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;
@@ -116,14 +119,15 @@ where
         + ChainFromBootstrapParamsBuilder<Bootstrap>
         + ProvideWalletConfigType<Bootstrap>
         + WalletConfigFieldsGetter<Bootstrap>,
-    Runtime: CanExecCommand
+    Runtime: HasFilePathType<FilePath = PathBuf>
+        + CanExecCommand
         + CanStartChildProcess
         + CanReadFileAsString
         + CanWriteStringToFile
         + CanCreateDir
         + CanReserveTcpPort
         + CanGenerateRandom<u32>,
-    Chain: HasChainIdType,
+    Chain: HasChainIdType<ChainId = ChainId>,
     ChainDriver: HasChainType<Chain = Chain>
         + HasWalletType<Wallet = CosmosTestWallet>
         + HasAmountType

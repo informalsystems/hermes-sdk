@@ -11,13 +11,13 @@ use hermes_celestia_integration_tests::contexts::bridge_driver::CelestiaBridgeDr
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_test_components::bootstrap::components::IsSovereignBootstrapComponent;
 use hermes_sovereign_test_components::bootstrap::components::SovereignBootstrapComponents as BaseSovereignBootstrapComponents;
-use hermes_sovereign_test_components::bootstrap::traits::account_prefix::AccountPrefixGetter;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::bootstrap::traits::build_rollup_driver::RollupDriverBuilder;
 use hermes_sovereign_test_components::bootstrap::traits::rollup_command_path::RollupCommandPathGetter;
