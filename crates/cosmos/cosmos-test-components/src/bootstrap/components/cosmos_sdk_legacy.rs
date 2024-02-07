@@ -53,8 +53,12 @@ use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigIn
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use crate::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
 use crate::bootstrap::traits::types::chain_node_config::ProvideChainNodeConfigType;
+use crate::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
 use crate::bootstrap::traits::types::genesis_config::ProvideGenesisConfigType;
+use crate::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
+use crate::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
 use crate::bootstrap::traits::types::wallet_config::{
     ProvideWalletConfigType, WalletConfigFieldsGetter,
 };
@@ -74,6 +78,10 @@ delegate_components! {
 
         // Components that are the same as `CosmosSdkBootstrapComponents`
         [
+            ChainNodeConfigTypeComponent,
+            GenesisConfigTypeComponent,
+            WalletConfigTypeComponent,
+            WalletConfigFieldsComponent,
             ChainIdGeneratorComponent,
             ChainHomeDirInitializerComponent,
             ChainDataInitializerComponent,

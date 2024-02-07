@@ -11,9 +11,6 @@ use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::{
     CanUseCosmosSdkChainBootstrapper, CosmosSdkBootstrapComponents, IsCosmosSdkBootstrapComponent,
 };
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
-use hermes_cosmos_test_components::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
-use hermes_cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
-use hermes_cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
@@ -25,11 +22,6 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomI
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
-use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::{
-    WalletConfigFieldsComponent, WalletConfigTypeComponent,
-};
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -86,13 +78,7 @@ delegate_components! {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideTokioRuntimeType,
-        ChainNodeConfigTypeComponent: ProvideCosmosChainNodeConfigType,
-        GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
-        [
-            WalletConfigTypeComponent,
-            WalletConfigFieldsComponent,
-        ]: ProvideCosmosWalletConfigType,
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:

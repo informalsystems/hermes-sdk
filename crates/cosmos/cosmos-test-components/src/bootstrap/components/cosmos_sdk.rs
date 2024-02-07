@@ -40,6 +40,9 @@ use crate::bootstrap::impls::initializers::init_chain_data::InitCosmosChainData;
 use crate::bootstrap::impls::initializers::init_wallet::InitCosmosTestWallet;
 use crate::bootstrap::impls::initializers::update_chain_config::UpdateCosmosChainNodeConfig;
 use crate::bootstrap::impls::initializers::update_genesis_config::UpdateCosmosGenesisConfig;
+use crate::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
+use crate::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
+use crate::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
 use crate::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
@@ -63,8 +66,12 @@ use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigIn
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use crate::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
 use crate::bootstrap::traits::types::chain_node_config::ProvideChainNodeConfigType;
+use crate::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
 use crate::bootstrap::traits::types::genesis_config::ProvideGenesisConfigType;
+use crate::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
+use crate::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
 use crate::bootstrap::traits::types::wallet_config::{
     ProvideWalletConfigType, WalletConfigFieldsGetter,
 };
@@ -83,6 +90,12 @@ delegate_components! {
         GenesisValidatorAdderComponent: AddCosmosGenesisValidator,
         GenesisTransactionsCollectorComponent: CollectCosmosGentxs,
 
+        ChainNodeConfigTypeComponent: ProvideCosmosChainNodeConfigType,
+        GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
+        [
+            WalletConfigTypeComponent,
+            WalletConfigFieldsComponent,
+        ]: ProvideCosmosWalletConfigType,
         ChainIdGeneratorComponent: GenerateRandomChainId,
         ChainHomeDirInitializerComponent: CreateChainHomeDirFromTestDir,
         ChainDataInitializerComponent: InitCosmosChainData,
