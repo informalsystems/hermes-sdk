@@ -15,7 +15,7 @@ use crate::chain_driver::traits::types::memo::HasMemoType;
 #[derive_component(IbcTokenTransferMessageBuilderComponent, IbcTokenTransferMessageBuilder<ChainDriver>)]
 #[async_trait]
 pub trait CanBuildIbcTokenTransferMessage<CounterpartyDriver>:
-    HasErrorType + HasChainType + HasAddressType + HasAmountType + HasMemoType
+    HasErrorType + HasChainType + HasAmountType + HasMemoType
 where
     Self::Chain: HasMessageType
         + HasHeightType

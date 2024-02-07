@@ -1,10 +1,8 @@
 use alloc::sync::Arc;
-use cgp_core::delegate_all;
+
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
@@ -17,9 +15,9 @@ use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTyp
 use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use hermes_test_components::driver::traits::types::relay_at::ProvideRelayTypeAt;
-use hermes_test_components::setup::binary_channel::components::BinaryChannelTestComponents;
-use hermes_test_components::setup::binary_channel::components::CanUseBinaryChannelTestSetup;
-use hermes_test_components::setup::binary_channel::components::IsBinaryChannelTestComponent;
+use hermes_test_components::setup::binary_channel::components::{
+    BinaryChannelTestComponents, CanUseBinaryChannelTestSetup, IsBinaryChannelTestComponent,
+};
 use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
 use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
@@ -28,15 +26,12 @@ use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChanne
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
-use hermes_test_components::types::index::Index;
-use hermes_test_components::types::index::Twindex;
+use hermes_test_components::types::index::{Index, Twindex};
 use ibc_relayer::chain::client::ClientSettings;
-use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::bootstrap::CosmosBootstrap;
+use crate::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
 
@@ -45,8 +40,8 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
    with both chains being Cosmos chains.
 */
 pub struct CosmosBinaryChannelSetup {
-    pub bootstrap_a: Arc<CosmosBootstrap>,
-    pub bootstrap_b: Arc<CosmosBootstrap>,
+    pub bootstrap_a: Arc<LegacyCosmosBootstrap>,
+    pub bootstrap_b: Arc<LegacyCosmosBootstrap>,
     pub create_client_settings: ClientSettings,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
@@ -144,17 +139,23 @@ impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosBinaryChannelSet
 }
 
 impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 0> for CosmosBinaryChannelSetupComponents {
-    type Bootstrap = CosmosBootstrap;
+    type Bootstrap = LegacyCosmosBootstrap;
 
-    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<0>) -> &CosmosBootstrap {
+    fn chain_bootstrap(
+        setup: &CosmosBinaryChannelSetup,
+        _index: Index<0>,
+    ) -> &LegacyCosmosBootstrap {
         &setup.bootstrap_a
     }
 }
 
 impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 1> for CosmosBinaryChannelSetupComponents {
-    type Bootstrap = CosmosBootstrap;
+    type Bootstrap = LegacyCosmosBootstrap;
 
-    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<1>) -> &CosmosBootstrap {
+    fn chain_bootstrap(
+        setup: &CosmosBinaryChannelSetup,
+        _index: Index<1>,
+    ) -> &LegacyCosmosBootstrap {
         &setup.bootstrap_b
     }
 }

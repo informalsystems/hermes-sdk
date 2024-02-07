@@ -42,6 +42,6 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        Ok(output.stdout)
+        Ok(output.stdout.trim().into())
     }
 }

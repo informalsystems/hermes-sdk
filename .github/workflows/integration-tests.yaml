@@ -34,13 +34,12 @@ jobs:
       - uses: cachix/cachix-action@v14
         with:
           name: cosmos
+          extraPullNames: informal-sovereign
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@v2
-      - name: Install cargo-nextest
-        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
       - uses: actions-rs/cargo@v1
         with:
           command: test
@@ -53,6 +52,9 @@ jobs:
           CHAIN_COMMAND_PATHS: ${{ matrix.chain.command }}
           ACCOUNT_PREFIXES: ${{ matrix.chain.account_prefix }}
         run: |
-            nix shell .#${{ matrix.chain.package }} -c cargo \
-              test -p ibc-integration-test --features=${{ matrix.chain.features }} -- \
-              --nocapture --test-threads=2
+            nix shell .#cargo-nextest .#protobuf .#${{ matrix.chain.package }} -c \
+              cargo nextest run \
+              -p ibc-integration-test \
+              --features=${{ matrix.chain.features }} \
+              --test-threads=2 \
+              --failure-output final

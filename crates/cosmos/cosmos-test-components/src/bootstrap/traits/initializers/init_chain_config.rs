@@ -1,17 +1,23 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::types::aliases::ChainIdOf;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
-use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
+use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 
-#[derive_component(ChainConfigInitializerComponent, ChainConfigInitializer<Boostrap>)]
+#[derive_component(ChainNodeConfigInitializerComponent, ChainNodeConfigInitializer<Boostrap>)]
 #[async_trait]
-pub trait CanInitChainConfig: HasChainConfigType + HasRuntimeType + HasErrorType
+pub trait CanInitChainNodeConfig:
+    HasChainNodeConfigType + HasChainType + HasRuntimeType + HasErrorType
 where
     Self::Runtime: HasFilePathType,
+    Self::Chain: HasChainIdType,
 {
-    async fn init_chain_config(
+    async fn init_chain_node_config(
         &self,
         chain_home_dir: &FilePathOf<Self::Runtime>,
-    ) -> Result<Self::ChainConfig, Self::Error>;
+        chain_id: &ChainIdOf<Self::Chain>,
+    ) -> Result<Self::ChainNodeConfig, Self::Error>;
 }

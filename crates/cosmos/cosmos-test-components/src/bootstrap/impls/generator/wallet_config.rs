@@ -1,10 +1,12 @@
+use alloc::collections::BTreeMap;
+
 use cgp_core::prelude::*;
 use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
-use crate::bootstrap::impls::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
+use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
 use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
-use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
+use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use crate::bootstrap::types::wallet_config::CosmosWalletConfig;
 use crate::chain_driver::types::amount::Amount;
@@ -24,21 +26,21 @@ impl<Bootstrap, ChainDriver> WalletConfigGenerator<Bootstrap> for GenerateStanda
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>
         + HasChainDriverType<ChainDriver = ChainDriver>
-        + HasGenesisConfigType
+        + HasChainGenesisConfigType
         + HasErrorType
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>,
     ChainDriver: HasDenomType<Denom = Denom>,
 {
     async fn generate_wallet_configs(
-        bootstrap: &Bootstrap,
-        genesis_config: &Bootstrap::GenesisConfig,
-    ) -> Result<Vec<CosmosWalletConfig>, Bootstrap::Error> {
+        _bootstrap: &Bootstrap,
+        genesis_config: &Bootstrap::ChainGenesisConfig,
+    ) -> Result<BTreeMap<String, CosmosWalletConfig>, Bootstrap::Error> {
         // TODO: allow for randomization of denoms and amount
 
-        let denom_for_staking = bootstrap.genesis_denom(DenomForStaking, genesis_config);
+        let denom_for_staking = Bootstrap::genesis_denom(DenomForStaking, genesis_config);
 
-        let denom_for_transfer = bootstrap.genesis_denom(DenomForTransfer, genesis_config);
+        let denom_for_transfer = Bootstrap::genesis_denom(DenomForTransfer, genesis_config);
 
         let validator = CosmosWalletConfig {
             wallet_id: "validator".to_owned(),
@@ -79,6 +81,11 @@ where
             validator_staked_amount: None,
         };
 
-        Ok(vec![validator, user1, user2, relayer])
+        Ok(BTreeMap::from([
+            ("validator".into(), validator),
+            ("user1".into(), user1),
+            ("user2".into(), user2),
+            ("relayer".into(), relayer),
+        ]))
     }
 }

@@ -1,9 +1,9 @@
 use alloc::format;
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::types::aliases::ErrorOf;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
-
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
 use crate::setup::traits::bootstrap_at::HasBootstrapAt;
 use crate::setup::traits::chain::ChainSetup;
