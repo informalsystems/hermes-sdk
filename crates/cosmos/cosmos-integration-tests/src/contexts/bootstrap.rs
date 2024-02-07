@@ -121,7 +121,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
         genesis_config: CosmosGenesisConfig,
         chain_node_config: CosmosChainNodeConfig,
         wallets: BTreeMap<String, CosmosTestWallet>,
-        chain_processes: Vec<Child>,
+        chain_process: Child,
     ) -> Result<CosmosChainDriver, Error> {
         let relayer_wallet = wallets
             .get("relayer")
@@ -168,7 +168,7 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
             chain_node_config,
             genesis_config,
             relayer_chain_config,
-            chain_processes,
+            chain_process,
             staking_denom: bootstrap.staking_denom.clone(),
             transfer_denom: bootstrap.transfer_denom.clone(),
             relayer_wallet: relayer_wallet.clone(),

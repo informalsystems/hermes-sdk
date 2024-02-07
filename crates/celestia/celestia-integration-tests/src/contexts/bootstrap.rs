@@ -202,7 +202,7 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainNodeConfig,
         wallets: BTreeMap<String, CosmosTestWallet>,
-        chain_processes: Vec<Child>,
+        chain_processes: Child,
     ) -> Result<CosmosChainDriver, Error> {
         let chain_driver = bootstrap
             .cosmos_bootstrap

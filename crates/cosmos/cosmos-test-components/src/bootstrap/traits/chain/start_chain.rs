@@ -13,9 +13,9 @@ pub trait CanStartChainFullNode: HasChainNodeConfigType + HasRuntime + HasErrorT
 where
     Self::Runtime: HasChildProcessType + HasFilePathType,
 {
-    async fn start_chain_full_nodes(
+    async fn start_chain_full_node(
         &self,
         chain_home_dir: &FilePathOf<Self::Runtime>,
         chain_node_config: &Self::ChainNodeConfig,
-    ) -> Result<Vec<ChildProcessOf<Self::Runtime>>, Self::Error>;
+    ) -> Result<ChildProcessOf<Self::Runtime>, Self::Error>;
 }

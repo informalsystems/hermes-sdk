@@ -89,18 +89,13 @@ where
             .await?;
 
         // Start the chain full node in the background, and return the child process handle
-        let chain_processes = bootstrap
-            .start_chain_full_nodes(&chain_home_dir, &chain_config)
+        let chain_process = bootstrap
+            .start_chain_full_node(&chain_home_dir, &chain_config)
             .await?;
 
         // Build the chain context from the bootstrap parameters
         let chain = bootstrap
-            .build_chain_from_bootstrap_params(
-                genesis_config,
-                chain_config,
-                wallets,
-                chain_processes,
-            )
+            .build_chain_from_bootstrap_params(genesis_config, chain_config, wallets, chain_process)
             .await?;
 
         Ok(chain)

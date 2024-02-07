@@ -27,6 +27,6 @@ where
         genesis_config: Self::GenesisConfig,
         chain_node_config: Self::ChainNodeConfig,
         wallets: BTreeMap<String, Wallet<Self::ChainDriver>>,
-        chain_processes: Vec<ChildProcessOf<Self::Runtime>>,
+        chain_process: ChildProcessOf<Self::Runtime>,
     ) -> Result<Self::ChainDriver, Self::Error>;
 }

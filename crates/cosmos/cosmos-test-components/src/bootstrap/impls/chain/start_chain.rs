@@ -21,11 +21,11 @@ where
         + CanRaiseError<Runtime::Error>,
     Runtime: HasFilePathType + CanStartChildProcess,
 {
-    async fn start_chain_full_nodes(
+    async fn start_chain_full_node(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         chain_config: &CosmosChainNodeConfig,
-    ) -> Result<Vec<Runtime::ChildProcess>, Bootstrap::Error> {
+    ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
         let chain_command = bootstrap.chain_command_path();
 
         let args = [
@@ -62,6 +62,6 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        Ok(vec![child_process])
+        Ok(child_process)
     }
 }
