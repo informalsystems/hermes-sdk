@@ -28,13 +28,11 @@ jobs:
           toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@v2
-      - name: Install cargo-nextest
-        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#gaia .#celestia-app -c \
+            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app -c \
               cargo nextest run -p hermes-cosmos-integration-tests \
               --test-threads=2
 
@@ -56,13 +54,11 @@ jobs:
           toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@v2
-      - name: Install cargo-nextest
-        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#gaia .#celestia-app .#celestia-node -c \
+            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#celestia-node -c \
               cargo nextest run -p hermes-celestia-integration-tests \
               --test-threads=2 \
               --failure-output final
@@ -85,13 +81,11 @@ jobs:
           toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@v2
-      - name: Install cargo-nextest
-        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
       - name: run integration tests
         env:
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#gaia .#celestia-app .#celestia-node .#sovereign-rollup -c \
+            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#celestia-node .#sovereign-rollup -c \
               cargo nextest run -p hermes-sovereign-integration-tests \
               --test-threads=2 \
               --failure-output final
