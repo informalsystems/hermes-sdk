@@ -1,11 +1,10 @@
 use std::path::PathBuf;
 
-use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::{eyre, Error};
+use eyre::Error;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
@@ -19,7 +18,7 @@ use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::G
 use hermes_cosmos_test_components::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
@@ -32,24 +31,20 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Gen
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::{
     WalletConfigFieldsComponent, WalletConfigTypeComponent,
 };
-use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
-use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::config::compat_mode::CompatMode;
-use tokio::process::Child;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
+use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use crate::traits::bootstrap::build_chain::{
-    CanBuildChainWithNodeConfig, ChainBuilderWithNodeConfigComponent,
-};
+use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use crate::traits::bootstrap::compat_mode::CompatModeGetter;
 use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
 use crate::traits::bootstrap::gas_denom::GasDenomGetter;
@@ -105,6 +100,8 @@ delegate_components! {
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:
             BuildCosmosChainWithNodeConfig,
+        ChainDriverBuilderComponent:
+            BuildCosmosChainDriver,
     }
 }
 
@@ -114,50 +111,6 @@ impl ProvideChainType<CosmosBootstrap> for CosmosBootstrapComponents {
 
 impl ProvideChainDriverType<CosmosBootstrap> for CosmosBootstrapComponents {
     type ChainDriver = CosmosChainDriver;
-}
-
-impl ChainDriverBuilder<CosmosBootstrap> for CosmosBootstrapComponents {
-    async fn build_chain_driver(
-        bootstrap: &CosmosBootstrap,
-        genesis_config: CosmosGenesisConfig,
-        chain_node_config: CosmosChainNodeConfig,
-        wallets: BTreeMap<String, CosmosTestWallet>,
-        chain_process: Child,
-    ) -> Result<CosmosChainDriver, Error> {
-        let relayer_wallet = wallets
-            .get("relayer")
-            .ok_or_else(|| {
-                eyre!("expect relayer wallet to be provided in the list of test wallets")
-            })?
-            .clone();
-
-        let user_wallet_a = wallets
-            .get("user1")
-            .ok_or_else(|| eyre!("expect user1 wallet to be provided in the list of test wallets"))?
-            .clone();
-
-        let user_wallet_b = wallets
-            .get("user2")
-            .ok_or_else(|| eyre!("expect user2 wallet to be provided in the list of test wallets"))?
-            .clone();
-
-        let chain = bootstrap
-            .build_chain_with_node_config(&chain_node_config, &relayer_wallet)
-            .await?;
-
-        let test_chain = CosmosChainDriver {
-            chain,
-            chain_node_config,
-            genesis_config,
-            chain_process,
-            relayer_wallet: relayer_wallet.clone(),
-            user_wallet_a: user_wallet_a.clone(),
-            user_wallet_b: user_wallet_b.clone(),
-            wallets,
-        };
-
-        Ok(test_chain)
-    }
 }
 
 impl ProvideRuntime<CosmosBootstrap> for CosmosBootstrapComponents {
