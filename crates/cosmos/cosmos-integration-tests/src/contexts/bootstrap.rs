@@ -1,4 +1,3 @@
-use core::time::Duration;
 use std::path::PathBuf;
 
 use alloc::collections::BTreeMap;
@@ -37,7 +36,6 @@ use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosCh
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
-use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -45,15 +43,17 @@ use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use ibc_relayer::config::compat_mode::CompatMode;
 use tokio::process::Child;
-use tokio::time::sleep;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
+use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChain;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
-use crate::traits::bootstrap::compat_mode::CompatModeGetter;
-use crate::traits::bootstrap::gas_denom::GasDenomGetter;
-use crate::traits::bootstrap::relayer_chain_config::{
-    CanBuildRelayerChainConfig, RelayerChainConfigBuilderComponent,
+use crate::traits::bootstrap::build_chain::{
+    CanBuildChainWithNodeConfig, ChainBuilderWithNodeConfigComponent,
 };
+use crate::traits::bootstrap::compat_mode::CompatModeGetter;
+use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
+use crate::traits::bootstrap::gas_denom::GasDenomGetter;
+use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 
 /**
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
@@ -103,6 +103,8 @@ delegate_components! {
         ]: ProvideCosmosWalletConfigType,
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
+        ChainBuilderWithNodeConfigComponent:
+            BuildCosmosChain,
     }
 }
 
@@ -140,34 +142,14 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
             .ok_or_else(|| eyre!("expect user2 wallet to be provided in the list of test wallets"))?
             .clone();
 
-        let relayer_chain_config =
-            bootstrap.build_relayer_chain_config(&chain_node_config, &relayer_wallet)?;
-
-        let base_chain = bootstrap
-            .builder
-            .build_chain_with_config(
-                relayer_chain_config.clone(),
-                Some(&relayer_wallet.keypair.clone()),
-            )
+        let chain = bootstrap
+            .build_chain_with_node_config(&chain_node_config, &relayer_wallet)
             .await?;
 
-        for _ in 0..10 {
-            sleep(Duration::from_secs(1)).await;
-
-            // Wait for full node process to start up. We do this by waiting
-            // the chain to reach at least height 2 after starting.
-            if let Ok(status) = base_chain.query_chain_status().await {
-                if status.height.revision_height() > 1 {
-                    break;
-                }
-            }
-        }
-
         let test_chain = CosmosChainDriver {
-            base_chain,
+            chain,
             chain_node_config,
             genesis_config,
-            relayer_chain_config,
             chain_process,
             staking_denom: bootstrap.staking_denom.clone(),
             transfer_denom: bootstrap.transfer_denom.clone(),
@@ -258,5 +240,11 @@ impl CompatModeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
 impl GasDenomGetter<CosmosBootstrap> for CosmosBootstrapComponents {
     fn gas_denom(bootstrap: &CosmosBootstrap) -> &Denom {
         &bootstrap.staking_denom
+    }
+}
+
+impl CosmosBuilderGetter<CosmosBootstrap> for CosmosBootstrapComponents {
+    fn cosmos_builder(bootstrap: &CosmosBootstrap) -> &CosmosBuilder {
+        &bootstrap.builder
     }
 }

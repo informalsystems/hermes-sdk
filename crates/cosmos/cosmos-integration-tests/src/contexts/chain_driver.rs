@@ -68,16 +68,14 @@ use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
 use hermes_test_components::types::index::Index;
-use ibc_relayer::config::ChainConfig;
 use tokio::process::Child;
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
 */
 pub struct CosmosChainDriver {
-    pub base_chain: CosmosChain,
+    pub chain: CosmosChain,
     pub chain_process: Child,
-    pub relayer_chain_config: ChainConfig,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
     pub staking_denom: Denom,
@@ -165,19 +163,19 @@ where
 
 impl ChainGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn chain(driver: &CosmosChainDriver) -> &CosmosChain {
-        &driver.base_chain
+        &driver.chain
     }
 }
 
 impl TxContextGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn tx_context(driver: &CosmosChainDriver) -> &CosmosTxContext {
-        &driver.base_chain.tx_context
+        &driver.chain.tx_context
     }
 }
 
 impl ProvideRuntime<CosmosChainDriver> for CosmosChainDriverComponents {
     fn runtime(chain_driver: &CosmosChainDriver) -> &HermesRuntime {
-        &chain_driver.base_chain.runtime
+        &chain_driver.chain.runtime
     }
 }
 
