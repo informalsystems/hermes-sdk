@@ -6,13 +6,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use eyre::Error;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
-use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use ibc_relayer::config::compat_mode::CompatMode;
 use tokio::runtime::Builder;
 
 #[test]
@@ -27,22 +25,10 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
     let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
 
-    let cosmos_bootstrap = LegacyCosmosBootstrap {
+    let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
-        should_randomize_identifiers: false,
         chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
-        chain_command_path: "celestia-appd".into(),
-        account_prefix: "celestia".into(),
-        compat_mode: Some(CompatMode::V0_34),
-        staking_denom: "utia".into(),
-        transfer_denom: "coin".into(),
-        genesis_config_modifier: Box::new(|_| Ok(())),
-        comet_config_modifier: Box::new(|_| Ok(())),
-    };
-
-    let celestia_bootstrap = CelestiaBootstrap {
-        cosmos_bootstrap,
         bridge_store_dir: format!("./test-data/{store_postfix}/bridges").into(),
     };
 

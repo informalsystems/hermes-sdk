@@ -6,7 +6,6 @@ use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
@@ -26,14 +25,14 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
-use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
+use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
+use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use ibc_relayer::config::compat_mode::CompatMode;
 
-use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
+use crate::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use crate::traits::bootstrap::compat_mode::CompatModeGetter;
 use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
@@ -80,6 +79,11 @@ delegate_components! {
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideTokioRuntimeType,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
+        [
+            ChainTypeComponent,
+            ChainDriverTypeComponent,
+        ]:
+            ProvideCosmosBootstrapChainTypes,
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:
@@ -87,14 +91,6 @@ delegate_components! {
         ChainDriverBuilderComponent:
             BuildCosmosChainDriver,
     }
-}
-
-impl ProvideChainType<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
-    type Chain = CosmosChain;
-}
-
-impl ProvideChainDriverType<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
-    type ChainDriver = CosmosChainDriver;
 }
 
 impl ProvideRuntime<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
