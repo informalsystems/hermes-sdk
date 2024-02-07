@@ -20,7 +20,7 @@ jobs:
           toolchain: stable
           override: true
       - name: Build API documentation
-        uses: actions-rs/cargo@v1
-        with:
-          command: doc
-          args: --all-features
+        run: |
+            nix shell .#protobuf -c \
+              cargo doc \
+              --all-features

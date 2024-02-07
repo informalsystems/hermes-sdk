@@ -41,11 +41,11 @@ jobs:
           components: clippy
           override: true
       - uses: Swatinem/rust-cache@v2
-      - uses: actions-rs/clippy-check@v1
-        with:
-          name: clippy-all-features
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features --all-targets -- -D warnings
+      - name: Run Clippy
+        run: |
+            nix shell .#protobuf -c \
+              cargo clippy \
+              --all-features --all-targets -- -D warnings
 
   clippy-no-default-features:
     runs-on: ubuntu-latest
@@ -57,11 +57,11 @@ jobs:
           components: clippy
           override: true
       - uses: Swatinem/rust-cache@v2
-      - uses: actions-rs/clippy-check@v1
-        with:
-          name: clippy-no-default-features
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --no-default-features --all-targets -- -D warnings
+      - name: Run Clippy
+        run: |
+            nix shell .#protobuf -c \
+              cargo clippy \
+              --no-default-features --all-targets -- -D warnings
 
   test-stable:
     runs-on: ubuntu-latest
@@ -72,16 +72,15 @@ jobs:
         with:
           toolchain: stable
           override: true
-      - uses: Swatinem/rust-cache@v2
-      - name: Install cargo-nextest
-        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
-      - uses: actions-rs/cargo@v1
+      - uses: cachix/install-nix-action@v25
         with:
-          command: test
-          args: --all-features --no-run
-      - name: run unit tests
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - uses: Swatinem/rust-cache@v2
+      - name: Run unit tests
         run: |
-            cargo nextest run \
+            nix shell .#cargo-nextest .#protobuf -c \
+              cargo nextest run \
               --all-features --workspace \
               --exclude ibc-integration-test \
               --exclude hermes-cosmos-integration-tests \
