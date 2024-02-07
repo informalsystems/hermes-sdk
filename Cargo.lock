@@ -1822,6 +1822,8 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-sovereign-client-components",
+ "hermes-sovereign-cosmos-relayer",
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "ibc-relayer",

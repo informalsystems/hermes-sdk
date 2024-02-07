@@ -40,6 +40,8 @@
         ;
 
         sovereign-rollup = sovereign-nix.rollup;
+
+        simd = cosmos-nix.ibc-go-v7-simapp;
       };
     });
 }
