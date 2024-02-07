@@ -13,7 +13,9 @@ pub fn install_logger(with_color: bool) {
         .with_default_directive(LevelFilter::INFO.into())
         .from_env_lossy();
 
-    let layer = tracing_subscriber::fmt::layer().with_ansi(with_color);
+    let layer = tracing_subscriber::fmt::layer()
+        .with_ansi(with_color)
+        .with_target(false);
 
     tracing_subscriber::registry()
         .with(env_filter)
