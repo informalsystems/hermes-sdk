@@ -116,10 +116,16 @@ impl Runnable for ClientCreate {
                 .await
                 .map_err(|e| eyre!("Failed to create client on host chain: {e}"))?;
 
-        builder.log_info(&format!(
-            "Successfully created client on host chain `{}`: {client_id_on_host}",
-            self.host_chain_id,
-        ));
+        builder.log(
+            LogLevel::Info,
+            &format!(
+                "Successfully created client on host chain `{}`: {client_id_on_host}",
+                self.host_chain_id,
+            ),
+            |l| {
+                l.display("client_id_on_host", &client_id_on_host);
+            },
+        );
 
         Ok(())
     }
