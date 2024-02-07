@@ -1,11 +1,9 @@
+use alloc::collections::BTreeMap;
 use std::path::PathBuf;
 
-use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::transaction::CosmosTxContext;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -25,8 +23,7 @@ use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::WasmClientCodeUploaderComponent;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::impls::default_assert_duration::ProvideDefaultPollAssertDuration;
@@ -34,36 +31,38 @@ use hermes_test_components::chain_driver::impls::default_memo::ProvideDefaultMem
 use hermes_test_components::chain_driver::impls::ibc_transfer::SendIbcTransferMessage;
 use hermes_test_components::chain_driver::impls::poll_assert_eventual_amount::PollAssertEventualAmount;
 use hermes_test_components::chain_driver::impls::string_memo::ProvideStringMemoType;
-use hermes_test_components::chain_driver::traits::assert::eventual_amount::CanAssertEventualAmount;
-use hermes_test_components::chain_driver::traits::assert::eventual_amount::EventualAmountAsserterComponent;
+use hermes_test_components::chain_driver::traits::assert::eventual_amount::{
+    CanAssertEventualAmount, EventualAmountAsserterComponent,
+};
 use hermes_test_components::chain_driver::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain_driver::traits::build::chain_id::ChainIdFromStringBuilderComponent;
-use hermes_test_components::chain_driver::traits::fields::amount::AmountMethodsComponent;
-use hermes_test_components::chain_driver::traits::fields::amount::IbcTransferredAmountConverterComponent;
-use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
+use hermes_test_components::chain_driver::traits::fields::amount::{
+    AmountMethodsComponent, IbcTransferredAmountConverterComponent, RandomAmountGeneratorComponent,
+};
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;
-use hermes_test_components::chain_driver::traits::fields::denom_at::DenomGetterAt;
-use hermes_test_components::chain_driver::traits::fields::denom_at::StakingDenom;
-use hermes_test_components::chain_driver::traits::fields::denom_at::TransferDenom;
+use hermes_test_components::chain_driver::traits::fields::denom_at::{
+    DenomGetterAt, StakingDenom, TransferDenom,
+};
 use hermes_test_components::chain_driver::traits::fields::memo::DefaultMemoGetterComponent;
 use hermes_test_components::chain_driver::traits::fields::timeout::IbcTransferTimeoutCalculatorComponent;
-use hermes_test_components::chain_driver::traits::fields::wallet::RelayerWallet;
-use hermes_test_components::chain_driver::traits::fields::wallet::UserWallet;
-use hermes_test_components::chain_driver::traits::fields::wallet::WalletGetterAt;
-use hermes_test_components::chain_driver::traits::fields::wallet::WalletsGetter;
+use hermes_test_components::chain_driver::traits::fields::wallet::{
+    RelayerWallet, UserWallet, WalletGetterAt, WalletsGetter,
+};
 use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
 use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerierComponent;
-use hermes_test_components::chain_driver::traits::queries::ibc_transfer::CanIbcTransferToken;
-use hermes_test_components::chain_driver::traits::queries::ibc_transfer::TokenIbcTransferrerComponent;
+use hermes_test_components::chain_driver::traits::queries::ibc_transfer::{
+    CanIbcTransferToken, TokenIbcTransferrerComponent,
+};
 use hermes_test_components::chain_driver::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain_driver::traits::types::amount::AmountTypeComponent;
-use hermes_test_components::chain_driver::traits::types::chain::ChainGetter;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
+use hermes_test_components::chain_driver::traits::types::chain::{
+    ChainGetter, HasChainType, ProvideChainType,
+};
 use hermes_test_components::chain_driver::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain_driver::traits::types::memo::MemoTypeComponent;
-use hermes_test_components::chain_driver::traits::types::tx_context::ProvideTxContextType;
-use hermes_test_components::chain_driver::traits::types::tx_context::TxContextGetter;
+use hermes_test_components::chain_driver::traits::types::tx_context::{
+    ProvideTxContextType, TxContextGetter,
+};
 use hermes_test_components::chain_driver::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };

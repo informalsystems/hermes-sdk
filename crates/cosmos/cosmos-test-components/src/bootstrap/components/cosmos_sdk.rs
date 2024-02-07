@@ -11,8 +11,7 @@ use hermes_test_components::bootstrap::traits::chain::{
 use hermes_test_components::chain_driver::traits::build::chain_id::CanBuildChainIdFromString;
 use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
 use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
+use hermes_test_components::chain_driver::traits::types::chain::{HasChainType, ProvideChainType};
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
@@ -37,8 +36,7 @@ use crate::bootstrap::impls::genesis::add_genesis_wallet::AddCosmosWalletToGenes
 use crate::bootstrap::impls::genesis::collect_gentxs::CollectCosmosGentxs;
 use crate::bootstrap::impls::initializers::create_chain_home_dir::CreateChainHomeDirFromTestDir;
 use crate::bootstrap::impls::initializers::init_chain_data::InitCosmosChainData;
-use crate::bootstrap::impls::initializers::init_wallet::GetStdOut;
-use crate::bootstrap::impls::initializers::init_wallet::InitCosmosTestWallet;
+use crate::bootstrap::impls::initializers::init_wallet::{GetStdOut, InitCosmosTestWallet};
 use crate::bootstrap::impls::initializers::update_chain_config::UpdateCosmosChainNodeConfig;
 use crate::bootstrap::impls::initializers::update_genesis_config::UpdateCosmosGenesisConfig;
 use crate::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
@@ -48,10 +46,9 @@ use crate::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
-use crate::bootstrap::traits::fields::denom::DenomForStaking;
-use crate::bootstrap::traits::fields::denom::DenomForTransfer;
-use crate::bootstrap::traits::fields::denom::DenomPrefixGetter;
-use crate::bootstrap::traits::fields::denom::GenesisDenomGetterComponent;
+use crate::bootstrap::traits::fields::denom::{
+    DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetterComponent,
+};
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
@@ -67,14 +64,15 @@ use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisCon
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use crate::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
-use crate::bootstrap::traits::types::chain_node_config::ProvideChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::ChainGenesisConfigTypeComponent;
-use crate::bootstrap::traits::types::genesis_config::ProvideChainGenesisConfigType;
-use crate::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
-use crate::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
+use crate::bootstrap::traits::types::chain_node_config::{
+    ChainNodeConfigTypeComponent, ProvideChainNodeConfigType,
+};
+use crate::bootstrap::traits::types::genesis_config::{
+    ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType,
+};
 use crate::bootstrap::traits::types::wallet_config::{
-    ProvideWalletConfigType, WalletConfigFieldsGetter,
+    ProvideWalletConfigType, WalletConfigFieldsComponent, WalletConfigFieldsGetter,
+    WalletConfigTypeComponent,
 };
 use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;

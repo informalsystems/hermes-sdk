@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+
 use cgp_core::prelude::*;
 
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;

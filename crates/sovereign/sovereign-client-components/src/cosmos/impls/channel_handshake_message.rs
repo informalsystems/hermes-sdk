@@ -9,9 +9,10 @@ use hermes_relayer_components::chain::traits::types::channel::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 
-use crate::sovereign::types::payloads::channel::SovereignChannelOpenAckPayload;
-use crate::sovereign::types::payloads::channel::SovereignChannelOpenConfirmPayload;
-use crate::sovereign::types::payloads::channel::SovereignChannelOpenTryPayload;
+use crate::sovereign::types::payloads::channel::{
+    SovereignChannelOpenAckPayload, SovereignChannelOpenConfirmPayload,
+    SovereignChannelOpenTryPayload,
+};
 
 pub struct BuildSovereignChannelHandshakeMessageOnCosmos;
 

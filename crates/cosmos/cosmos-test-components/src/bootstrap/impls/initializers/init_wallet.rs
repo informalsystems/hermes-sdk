@@ -3,10 +3,8 @@ use core::marker::PhantomData;
 use cgp_core::{Async, CanRaiseError};
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
-
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
-use hermes_test_components::runtime::traits::exec_command::ExecOutput;
+use hermes_test_components::runtime::traits::exec_command::{CanExecCommand, ExecOutput};
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer::keyring::errors::Error as KeyringError;
