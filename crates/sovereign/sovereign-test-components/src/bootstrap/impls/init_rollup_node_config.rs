@@ -8,33 +8,33 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 
-use crate::bootstrap::traits::init_rollup_config::RollupConfigInitializer;
-use crate::bootstrap::traits::types::rollup_config::HasRollupConfigType;
-use crate::types::rollup_config::{
-    SovereignDaConfig, SovereignProverConfig, SovereignRollupConfig, SovereignRpcConfig,
+use crate::bootstrap::traits::init_rollup_node_config::RollupNodeConfigInitializer;
+use crate::bootstrap::traits::types::rollup_node_config::HasRollupNodeConfigType;
+use crate::types::rollup_node_config::{
+    SovereignDaConfig, SovereignProverConfig, SovereignRollupNodeConfig, SovereignRpcConfig,
     SovereignRunnerConfig, SovereignStorageConfig,
 };
 
-pub struct InitSovereignRollupConfig;
+pub struct InitSovereignRollupNodeConfig;
 
-impl<Bootstrap, BridgeDriver, Runtime> RollupConfigInitializer<Bootstrap>
-    for InitSovereignRollupConfig
+impl<Bootstrap, BridgeDriver, Runtime> RollupNodeConfigInitializer<Bootstrap>
+    for InitSovereignRollupNodeConfig
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasBridgeDriverType<BridgeDriver = BridgeDriver>
-        + HasRollupConfigType
+        + HasRollupNodeConfigType
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<toml::ser::Error>,
     Runtime: CanReserveTcpPort + CanWriteStringToFile,
     BridgeDriver: HasBridgeRpcPort + HasBridgeAuthToken,
     BridgeDriver::BridgeAuthToken: Display,
-    Bootstrap::RollupConfig: From<SovereignRollupConfig>,
+    Bootstrap::RollupNodeConfig: From<SovereignRollupNodeConfig>,
 {
-    async fn init_rollup_config(
+    async fn init_rollup_node_config(
         bootstrap: &Bootstrap,
         rollup_home_dir: &Runtime::FilePath,
         bridge_driver: &BridgeDriver,
-    ) -> Result<Bootstrap::RollupConfig, Bootstrap::Error> {
+    ) -> Result<Bootstrap::RollupNodeConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
         let bridge_rpc_port = bridge_driver.bridge_rpc_port();
@@ -53,7 +53,7 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        let rollup_config = SovereignRollupConfig {
+        let rollup_node_config = SovereignRollupNodeConfig {
             da: SovereignDaConfig {
                 celestia_rpc_auth_token: auth_token.to_string(),
                 celestia_rpc_address: format!("http://127.0.0.1:{bridge_rpc_port}"),
@@ -75,14 +75,14 @@ where
             },
         };
 
-        let rollup_config_str =
-            toml::to_string_pretty(&rollup_config).map_err(Bootstrap::raise_error)?;
+        let rollup_node_config_str =
+            toml::to_string_pretty(&rollup_node_config).map_err(Bootstrap::raise_error)?;
 
         runtime
-            .write_string_to_file(&config_path, &rollup_config_str)
+            .write_string_to_file(&config_path, &rollup_node_config_str)
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        Ok(rollup_config.into())
+        Ok(rollup_node_config.into())
     }
 }

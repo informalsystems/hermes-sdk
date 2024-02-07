@@ -13,7 +13,7 @@ use crate::bootstrap::traits::bootstrap_rollup::RollupBootstrapper;
 use crate::bootstrap::traits::build_rollup_driver::CanBuildRollupDriver;
 use crate::bootstrap::traits::generate_rollup_genesis::CanGenerateRollupGenesis;
 use crate::bootstrap::traits::generate_rollup_wallets::CanGenerateRollupWallets;
-use crate::bootstrap::traits::init_rollup_config::CanInitRollupConfig;
+use crate::bootstrap::traits::init_rollup_node_config::CanInitRollupNodeConfig;
 use crate::bootstrap::traits::rollup_store_dir::HasRollupStoreDir;
 use crate::bootstrap::traits::start_rollup::CanStartRollup;
 use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
@@ -29,7 +29,7 @@ where
         + HasBridgeDriverType
         + HasRollupDriverType<RollupDriver = RollupDriver>
         + HasRollupStoreDir
-        + CanInitRollupConfig
+        + CanInitRollupNodeConfig
         + CanGenerateRollupWallets
         + CanGenerateRollupGenesis
         + CanWriteRollupGenesis
@@ -58,8 +58,8 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        let rollup_config = bootstrap
-            .init_rollup_config(&rollup_home_dir, bridge_driver)
+        let rollup_node_config = bootstrap
+            .init_rollup_node_config(&rollup_home_dir, bridge_driver)
             .await?;
 
         // TODO: Use `HasWalletAt<SequencerWallet, 0>` instead once we define a
@@ -84,7 +84,7 @@ where
         let rollup_process = bootstrap.start_rollup(&rollup_home_dir).await?;
 
         let rollup_driver = bootstrap
-            .build_rollup_driver(rollup_config, rollup_genesis, rollup_process)
+            .build_rollup_driver(rollup_node_config, rollup_genesis, rollup_process)
             .await?;
 
         // TODO: spawn rollup child process

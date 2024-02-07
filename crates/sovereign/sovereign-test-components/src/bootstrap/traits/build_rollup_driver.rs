@@ -4,16 +4,16 @@ use hermes_test_components::runtime::traits::types::child_process::{
     ChildProcessOf, HasChildProcessType,
 };
 
-use crate::bootstrap::traits::types::rollup_config::HasRollupConfigType;
 use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;
+use crate::bootstrap::traits::types::rollup_node_config::HasRollupNodeConfigType;
 
 #[derive_component(RollupDriverBuilderComponent, RollupDriverBuilder<Bootstrap>)]
 #[async_trait]
 pub trait CanBuildRollupDriver:
     HasRuntimeType
     + HasRollupDriverType
-    + HasRollupConfigType
+    + HasRollupNodeConfigType
     + HasRollupGenesisConfigType
     + HasErrorType
 where
@@ -21,7 +21,7 @@ where
 {
     async fn build_rollup_driver(
         &self,
-        rollup_config: Self::RollupConfig,
+        rollup_node_config: Self::RollupNodeConfig,
         rollup_genesis_config: Self::RollupGenesisConfig,
         rollup_process: ChildProcessOf<Self::Runtime>,
     ) -> Result<Self::RollupDriver, Self::Error>;

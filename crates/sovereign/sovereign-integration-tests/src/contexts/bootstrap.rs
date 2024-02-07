@@ -23,8 +23,8 @@ use hermes_sovereign_test_components::bootstrap::traits::build_rollup_driver::Ro
 use hermes_sovereign_test_components::bootstrap::traits::rollup_command_path::RollupCommandPathGetter;
 use hermes_sovereign_test_components::bootstrap::traits::rollup_store_dir::RollupStoreDirGetter;
 use hermes_sovereign_test_components::bootstrap::traits::types::rollup_driver::ProvideRollupDriverType;
-use hermes_sovereign_test_components::types::rollup_config::SovereignRollupConfig;
 use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGenesisConfig;
+use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollupNodeConfig;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
@@ -102,7 +102,7 @@ impl RollupCommandPathGetter<SovereignBootstrap> for SovereignBootstrapComponent
 impl RollupDriverBuilder<SovereignBootstrap> for SovereignBootstrapComponents {
     async fn build_rollup_driver(
         _bootstrap: &SovereignBootstrap,
-        _rollup_config: SovereignRollupConfig,
+        _rollup_node_config: SovereignRollupNodeConfig,
         _genesis_config: SovereignGenesisConfig,
         _rollup_process: Child,
     ) -> Result<SovereignRollupDriver, Error> {
