@@ -1,22 +1,20 @@
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CanBuildCreateClientMessage;
-use hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
-use hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::cosmos::impls::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
-use hermes_sovereign_client_components::sovereign::components::IsSovereignClientComponent;
-use hermes_sovereign_client_components::sovereign::components::SovereignClientComponents;
+use hermes_sovereign_client_components::sovereign::components::{
+    IsSovereignClientComponent, SovereignClientComponents,
+};
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,

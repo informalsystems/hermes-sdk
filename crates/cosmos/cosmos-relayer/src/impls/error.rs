@@ -2,6 +2,7 @@ use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
+use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use tendermint_rpc::Error as TendermintRpcError;
 
 use crate::types::error::{BaseError, Error};
@@ -57,6 +58,15 @@ where
 {
     fn raise_error(err: TendermintRpcError) -> Error {
         BaseError::tendermint_rpc(err).into()
+    }
+}
+
+impl<Context> ErrorRaiser<Context, Ics02Error> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(err: Ics02Error) -> Error {
+        BaseError::ics02(err).into()
     }
 }
 

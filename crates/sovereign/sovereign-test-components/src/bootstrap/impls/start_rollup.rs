@@ -17,7 +17,7 @@ where
         bootstrap: &Bootstrap,
         rollup_home_dir: &Runtime::FilePath,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
-        let rollup_config_path = Runtime::join_file_path(
+        let rollup_node_config_path = Runtime::join_file_path(
             rollup_home_dir,
             &Runtime::file_path_from_string("config.toml"),
         );
@@ -46,7 +46,7 @@ where
                 bootstrap.rollup_command_path(),
                 &[
                     "--rollup-config-path",
-                    &Runtime::file_path_to_string(&rollup_config_path),
+                    &Runtime::file_path_to_string(&rollup_node_config_path),
                     "--genesis-paths",
                     &Runtime::file_path_to_string(&rollup_genesis_path),
                     "--kernel-genesis-paths",

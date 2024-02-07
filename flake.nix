@@ -30,7 +30,8 @@
         inherit
           (cosmos-nix)
           ibc-go-v7-simapp
-          ;
+          ibc-go-v8-simapp
+        ;
 
         inherit
           (sovereign-nix)
@@ -46,8 +47,6 @@
         ;
 
         sovereign-rollup = sovereign-nix.rollup;
-
-        simd = cosmos-nix.ibc-go-v7-simapp;
       };
     });
 }

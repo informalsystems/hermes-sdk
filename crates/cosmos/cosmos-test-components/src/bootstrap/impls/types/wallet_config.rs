@@ -1,6 +1,5 @@
 use cgp_core::Async;
 use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
-
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::bootstrap::traits::types::wallet_config::{

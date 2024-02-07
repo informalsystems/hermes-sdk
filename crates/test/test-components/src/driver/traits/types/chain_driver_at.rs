@@ -1,7 +1,8 @@
+use cgp_core::prelude::*;
+
 use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
 use crate::types::index::Index;
-use cgp_core::prelude::*;
 
 #[derive_component(ChainDriverTypeAtComponent, ProvideChainDriverTypeAt<Driver>)]
 pub trait HasChainDriverTypeAt<const I: usize>: HasChainTypeAt<I> {

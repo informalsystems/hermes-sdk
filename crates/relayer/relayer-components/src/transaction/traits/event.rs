@@ -1,4 +1,5 @@
 use alloc::vec::Vec;
+
 use cgp_core::HasErrorType;
 
 use crate::chain::traits::types::event::HasEventType;
