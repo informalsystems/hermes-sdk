@@ -18,7 +18,7 @@ use crate::bootstrap::traits::genesis::collect_gentxs::CanCollectGenesisTransact
 use crate::bootstrap::traits::initializers::init_chain_config::CanInitChainNodeConfig;
 use crate::bootstrap::traits::initializers::init_chain_data::CanInitChainData;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
-use crate::bootstrap::traits::initializers::init_genesis_config::CanInitGenesisConfig;
+use crate::bootstrap::traits::initializers::init_genesis_config::CanInitChainGenesisConfig;
 
 pub struct BootstrapCosmosChain;
 
@@ -32,7 +32,7 @@ where
         + CanGenerateChainId
         + CanInitChainHomeDir
         + CanInitChainData
-        + CanInitGenesisConfig
+        + CanInitChainGenesisConfig
         + CanGenerateWalletConfigs
         + CanAddWalletToGenesis
         + CanCollectGenesisTransactions

@@ -4,7 +4,7 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 use crate::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, GenesisDenomGetter,
 };
-use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
+use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain_driver::types::denom::Denom;
 
@@ -13,7 +13,7 @@ pub struct GetCosmosGenesisDenoms;
 impl<Bootstrap, ChainDriver> GenesisDenomGetter<Bootstrap, DenomForStaking>
     for GetCosmosGenesisDenoms
 where
-    Bootstrap: HasGenesisConfigType<GenesisConfig = CosmosGenesisConfig>
+    Bootstrap: HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainDriverType<ChainDriver = ChainDriver>,
     ChainDriver: HasDenomType<Denom = Denom>,
 {
@@ -25,7 +25,7 @@ where
 impl<Bootstrap, ChainDriver> GenesisDenomGetter<Bootstrap, DenomForTransfer>
     for GetCosmosGenesisDenoms
 where
-    Bootstrap: HasGenesisConfigType<GenesisConfig = CosmosGenesisConfig>
+    Bootstrap: HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainDriverType<ChainDriver = ChainDriver>,
     ChainDriver: HasDenomType<Denom = Denom>,
 {

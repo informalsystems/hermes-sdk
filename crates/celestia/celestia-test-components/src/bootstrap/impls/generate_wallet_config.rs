@@ -4,7 +4,7 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
+use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use hermes_cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
 use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
@@ -19,7 +19,7 @@ impl<Bootstrap, ChainDriver> WalletConfigGenerator<Bootstrap> for GenerateCelest
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>
         + HasChainDriverType<ChainDriver = ChainDriver>
-        + HasGenesisConfigType
+        + HasChainGenesisConfigType
         + HasErrorType
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>,
@@ -27,7 +27,7 @@ where
 {
     async fn generate_wallet_configs(
         _bootstrap: &Bootstrap,
-        genesis_config: &Bootstrap::GenesisConfig,
+        genesis_config: &Bootstrap::ChainGenesisConfig,
     ) -> Result<BTreeMap<String, CosmosWalletConfig>, Bootstrap::Error> {
         let denom_for_staking = Bootstrap::genesis_denom(DenomForStaking, genesis_config);
 

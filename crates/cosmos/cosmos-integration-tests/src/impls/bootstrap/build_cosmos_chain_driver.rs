@@ -6,7 +6,7 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
+use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
@@ -26,7 +26,7 @@ where
     Bootstrap: HasChainDriverType<ChainDriver = CosmosChainDriver>
         + HasChainType<Chain = CosmosChain>
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
-        + HasGenesisConfigType<GenesisConfig = CosmosGenesisConfig>
+        + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasRuntimeType<Runtime = Runtime>
         + CanBuildChainWithNodeConfig
         + HasGenesisDenom<DenomForStaking>

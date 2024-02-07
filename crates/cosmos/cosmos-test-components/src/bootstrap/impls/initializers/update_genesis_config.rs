@@ -9,9 +9,9 @@ use serde_json::{Error as JsonError, Value};
 use crate::bootstrap::traits::fields::denom::DenomForStaking;
 use crate::bootstrap::traits::fields::denom::DenomForTransfer;
 use crate::bootstrap::traits::fields::denom::HasDenomPrefix;
-use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigInitializer;
+use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
-use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
+use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain_driver::types::denom::Denom;
 
@@ -19,22 +19,22 @@ use crate::chain_driver::types::denom::Denom;
 pub struct UpdateCosmosGenesisConfig;
 
 #[async_trait]
-impl<Bootstrap, Runtime> GenesisConfigInitializer<Bootstrap> for UpdateCosmosGenesisConfig
+impl<Bootstrap, Runtime> ChainGenesisConfigInitializer<Bootstrap> for UpdateCosmosGenesisConfig
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasGenesisConfigType
+        + HasChainGenesisConfigType
         + CanModifyCosmosGenesisConfig
         + HasDenomPrefix<DenomForStaking>
         + HasDenomPrefix<DenomForTransfer>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<JsonError>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile,
-    Bootstrap::GenesisConfig: From<CosmosGenesisConfig>,
+    Bootstrap::ChainGenesisConfig: From<CosmosGenesisConfig>,
 {
     async fn init_genesis_config(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
-    ) -> Result<Bootstrap::GenesisConfig, Bootstrap::Error> {
+    ) -> Result<Bootstrap::ChainGenesisConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
         let genesis_file_path = Runtime::join_file_path(

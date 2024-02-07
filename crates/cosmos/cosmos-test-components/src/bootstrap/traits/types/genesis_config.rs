@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-#[derive_component(GenesisConfigTypeComponent, ProvideGenesisConfigType<Bootstrap>)]
-pub trait HasGenesisConfigType: Async {
-    type GenesisConfig: Async;
+#[derive_component(ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType<Bootstrap>)]
+pub trait HasChainGenesisConfigType: Async {
+    type ChainGenesisConfig: Async;
 }

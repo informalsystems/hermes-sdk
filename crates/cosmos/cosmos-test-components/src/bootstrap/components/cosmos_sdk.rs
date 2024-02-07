@@ -63,14 +63,14 @@ use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollec
 use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializerComponent;
 use crate::bootstrap::traits::initializers::init_chain_data::ChainDataInitializerComponent;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializerComponent;
-use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigInitializerComponent;
+use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializerComponent;
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use crate::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
 use crate::bootstrap::traits::types::chain_node_config::ProvideChainNodeConfigType;
-use crate::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
-use crate::bootstrap::traits::types::genesis_config::ProvideGenesisConfigType;
+use crate::bootstrap::traits::types::genesis_config::ChainGenesisConfigTypeComponent;
+use crate::bootstrap::traits::types::genesis_config::ProvideChainGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
 use crate::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
 use crate::bootstrap::traits::types::wallet_config::{
@@ -93,7 +93,7 @@ delegate_components! {
         WalletInitializerComponent: InitCosmosTestWallet<GetStdOut>,
 
         ChainNodeConfigTypeComponent: ProvideCosmosChainNodeConfigType,
-        GenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
+        ChainGenesisConfigTypeComponent: ProvideCosmosGenesisConfigType,
         [
             WalletConfigTypeComponent,
             WalletConfigFieldsComponent,
@@ -104,7 +104,7 @@ delegate_components! {
         WalletHdPathComponent: ProvideCosmosHdPath,
         GenesisDenomGetterComponent: GetCosmosGenesisDenoms,
         ChainNodeConfigInitializerComponent: UpdateCosmosChainNodeConfig,
-        GenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,
+        ChainGenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,
         GenesisWalletAdderComponent: AddCosmosWalletToGenesis,
         ChainFullNodeStarterComponent: StartCosmosChain,
         ChainBootstrapperComponent: BootstrapCosmosChain,
@@ -128,7 +128,7 @@ where
     Components: DelegatesToCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
-        + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
+        + ProvideChainGenesisConfigType<Bootstrap, ChainGenesisConfig = CosmosGenesisConfig>
         + ProvideChainNodeConfigType<Bootstrap, ChainNodeConfig = CosmosChainNodeConfig>
         + ChainStoreDirGetter<Bootstrap>
         + ChainCommandPathGetter<Bootstrap>
