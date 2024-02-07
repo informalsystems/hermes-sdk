@@ -3,7 +3,7 @@ use cgp_core::prelude::*;
 use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
-use crate::bootstrap::impls::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
+use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasGenesisDenom};
 use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;

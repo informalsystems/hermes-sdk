@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;

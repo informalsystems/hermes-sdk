@@ -7,12 +7,8 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
-    CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
-    LegacyCosmosSdkBootstrapComponents,
-};
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
-    DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetter,
+use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::{
+    CanUseCosmosSdkChainBootstrapper, CosmosSdkBootstrapComponents, IsCosmosSdkBootstrapComponent,
 };
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
@@ -22,6 +18,9 @@ use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver:
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
+    DenomForStaking, DenomForTransfer, DenomPrefixGetter,
+};
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
@@ -31,8 +30,6 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Gen
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::{
     WalletConfigFieldsComponent, WalletConfigTypeComponent,
 };
-use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -70,7 +67,7 @@ pub struct CosmosBootstrap {
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
 }
 
-impl CanUseLegacyCosmosSdkChainBootstrapper for CosmosBootstrap {}
+impl CanUseCosmosSdkChainBootstrapper for CosmosBootstrap {}
 
 pub struct CosmosBootstrapComponents;
 
@@ -79,8 +76,8 @@ impl HasComponents for CosmosBootstrap {
 }
 
 delegate_all!(
-    IsLegacyCosmosSdkBootstrapComponent,
-    LegacyCosmosSdkBootstrapComponents,
+    IsCosmosSdkBootstrapComponent,
+    CosmosSdkBootstrapComponents,
     CosmosBootstrapComponents,
 );
 
@@ -164,18 +161,6 @@ impl DenomPrefixGetter<CosmosBootstrap, DenomForStaking> for CosmosBootstrapComp
 impl DenomPrefixGetter<CosmosBootstrap, DenomForTransfer> for CosmosBootstrapComponents {
     fn denom_prefix(bootstrap: &CosmosBootstrap, _label: DenomForTransfer) -> &str {
         &bootstrap.transfer_denom
-    }
-}
-
-impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosBootstrapComponents {
-    fn genesis_denom(_label: DenomForStaking, genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.staking_denom
-    }
-}
-
-impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosBootstrapComponents {
-    fn genesis_denom(_label: DenomForTransfer, genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.transfer_denom
     }
 }
 

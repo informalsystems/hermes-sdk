@@ -6,9 +6,9 @@ use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use serde_json::{Error as JsonError, Value};
 
-use crate::bootstrap::impls::fields::denom::DenomForStaking;
-use crate::bootstrap::impls::fields::denom::DenomForTransfer;
-use crate::bootstrap::impls::fields::denom::HasDenomPrefix;
+use crate::bootstrap::traits::fields::denom::DenomForStaking;
+use crate::bootstrap::traits::fields::denom::DenomForTransfer;
+use crate::bootstrap::traits::fields::denom::HasDenomPrefix;
 use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;

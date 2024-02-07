@@ -26,16 +26,14 @@ use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::Can
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     IsLegacyCosmosSdkBootstrapComponent, LegacyCosmosSdkBootstrapComponents,
 };
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::DenomPrefixGetter;
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::HasDenomPrefix;
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::HasGenesisDenom;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::CanBuildChainDriver;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::HasChainStoreDir;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::HasDenomPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::HasRandomIdFlag;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
@@ -49,7 +47,6 @@ use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::Wall
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -173,15 +170,6 @@ where
 {
     fn denom_prefix(bootstrap: &CelestiaBootstrap, label: Label) -> &str {
         bootstrap.cosmos_bootstrap.denom_prefix(label)
-    }
-}
-
-impl<Label> GenesisDenomGetter<CelestiaBootstrap, Label> for CelestiaBootstrapComponents
-where
-    LegacyCosmosBootstrap: HasGenesisDenom<Label>,
-{
-    fn genesis_denom(label: Label, genesis_config: &CosmosGenesisConfig) -> &Denom {
-        LegacyCosmosBootstrap::genesis_denom(label, genesis_config)
     }
 }
 

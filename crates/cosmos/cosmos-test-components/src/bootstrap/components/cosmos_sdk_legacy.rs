@@ -27,9 +27,6 @@ use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
-use crate::bootstrap::impls::fields::denom::DenomForStaking;
-use crate::bootstrap::impls::fields::denom::DenomForTransfer;
-use crate::bootstrap::impls::fields::denom::DenomPrefixGetter;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_validator::LegacyAddCosmosGenesisValidator;
 use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmosGentxs;
@@ -37,6 +34,10 @@ use crate::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
+use crate::bootstrap::traits::fields::denom::DenomForStaking;
+use crate::bootstrap::traits::fields::denom::DenomForTransfer;
+use crate::bootstrap::traits::fields::denom::DenomPrefixGetter;
+use crate::bootstrap::traits::fields::denom::GenesisDenomGetterComponent;
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
@@ -76,6 +77,7 @@ delegate_components! {
             ChainIdGeneratorComponent,
             ChainHomeDirInitializerComponent,
             ChainDataInitializerComponent,
+            GenesisDenomGetterComponent,
             WalletHdPathComponent,
             WalletInitializerComponent,
             ChainNodeConfigInitializerComponent,

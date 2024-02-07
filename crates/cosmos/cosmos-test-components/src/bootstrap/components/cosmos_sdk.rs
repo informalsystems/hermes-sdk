@@ -28,9 +28,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
 use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;
-use crate::bootstrap::impls::fields::denom::DenomForStaking;
-use crate::bootstrap::impls::fields::denom::DenomForTransfer;
-use crate::bootstrap::impls::fields::denom::DenomPrefixGetter;
+use crate::bootstrap::impls::fields::genesis_denom::GetCosmosGenesisDenoms;
 use crate::bootstrap::impls::fields::hd_path::ProvideCosmosHdPath;
 use crate::bootstrap::impls::generator::random_chain_id::GenerateRandomChainId;
 use crate::bootstrap::impls::genesis::add_genesis_account::AddCosmosGenesisAccount;
@@ -46,6 +44,10 @@ use crate::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
+use crate::bootstrap::traits::fields::denom::DenomForStaking;
+use crate::bootstrap::traits::fields::denom::DenomForTransfer;
+use crate::bootstrap::traits::fields::denom::DenomPrefixGetter;
+use crate::bootstrap::traits::fields::denom::GenesisDenomGetterComponent;
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
@@ -85,6 +87,7 @@ delegate_components! {
         ChainHomeDirInitializerComponent: CreateChainHomeDirFromTestDir,
         ChainDataInitializerComponent: InitCosmosChainData,
         WalletHdPathComponent: ProvideCosmosHdPath,
+        GenesisDenomGetterComponent: GetCosmosGenesisDenoms,
         WalletInitializerComponent: InitCosmosTestWallet,
         ChainNodeConfigInitializerComponent: UpdateCosmosChainNodeConfig,
         GenesisConfigInitializerComponent: UpdateCosmosGenesisConfig,

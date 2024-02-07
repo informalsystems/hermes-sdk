@@ -11,9 +11,6 @@ use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
 };
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
-    DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetter,
-};
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
@@ -22,6 +19,9 @@ use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver:
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
+    DenomForStaking, DenomForTransfer, DenomPrefixGetter,
+};
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
@@ -31,8 +31,6 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Gen
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::{
     WalletConfigFieldsComponent, WalletConfigTypeComponent,
 };
-use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -166,22 +164,6 @@ impl DenomPrefixGetter<LegacyCosmosBootstrap, DenomForTransfer>
 {
     fn denom_prefix(bootstrap: &LegacyCosmosBootstrap, _label: DenomForTransfer) -> &str {
         &bootstrap.transfer_denom
-    }
-}
-
-impl GenesisDenomGetter<LegacyCosmosBootstrap, DenomForStaking>
-    for LegacyCosmosBootstrapComponents
-{
-    fn genesis_denom(_label: DenomForStaking, genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.staking_denom
-    }
-}
-
-impl GenesisDenomGetter<LegacyCosmosBootstrap, DenomForTransfer>
-    for LegacyCosmosBootstrapComponents
-{
-    fn genesis_denom(_label: DenomForTransfer, genesis_config: &CosmosGenesisConfig) -> &Denom {
-        &genesis_config.transfer_denom
     }
 }
 

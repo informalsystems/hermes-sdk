@@ -8,7 +8,7 @@ pub struct DenomForStaking;
 
 pub struct DenomForTransfer;
 
-#[derive_component(GenesisDenomComponent, GenesisDenomGetter<Bootstrap>)]
+#[derive_component(GenesisDenomGetterComponent, GenesisDenomGetter<Bootstrap>)]
 pub trait HasGenesisDenom<Label>: HasGenesisConfigType + HasChainDriverType
 where
     Self::ChainDriver: HasDenomType,
