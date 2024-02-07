@@ -1571,6 +1571,7 @@ dependencies = [
 name = "hermes-cli"
 version = "0.1.0"
 dependencies = [
+ "cgp-core",
  "clap",
  "hermes-cli-framework",
  "hermes-cosmos-client-components",

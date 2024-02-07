@@ -23,6 +23,7 @@ hermes-relayer-components       = { path = "../../relayer/relayer-components" }
 hermes-cosmos-relayer           = { path = "../../cosmos/cosmos-relayer" }
 hermes-cosmos-client-components = { path = "../../cosmos/cosmos-client-components" }
 
+cgp-core                  = { workspace = true }
 ibc-relayer               = { workspace = true }
 ibc-relayer-types         = { workspace = true }
 
