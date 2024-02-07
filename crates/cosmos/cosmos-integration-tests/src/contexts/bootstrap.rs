@@ -19,7 +19,7 @@ use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::G
 use hermes_cosmos_test_components::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
@@ -116,9 +116,8 @@ impl ProvideChainDriverType<CosmosBootstrap> for CosmosBootstrapComponents {
     type ChainDriver = CosmosChainDriver;
 }
 
-#[async_trait]
-impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapComponents {
-    async fn build_chain_from_bootstrap_params(
+impl ChainDriverBuilder<CosmosBootstrap> for CosmosBootstrapComponents {
+    async fn build_chain_driver(
         bootstrap: &CosmosBootstrap,
         genesis_config: CosmosGenesisConfig,
         chain_node_config: CosmosChainNodeConfig,

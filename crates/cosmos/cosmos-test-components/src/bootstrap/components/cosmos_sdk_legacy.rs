@@ -33,7 +33,7 @@ use crate::bootstrap::impls::fields::denom::DenomPrefixGetter;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_validator::LegacyAddCosmosGenesisValidator;
 use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmosGentxs;
-use crate::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use crate::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
@@ -114,7 +114,7 @@ where
         + CosmosGenesisConfigModifier<Bootstrap>
         + CometConfigModifier<Bootstrap>
         + WalletConfigGenerator<Bootstrap>
-        + ChainFromBootstrapParamsBuilder<Bootstrap>
+        + ChainDriverBuilder<Bootstrap>
         + ProvideWalletConfigType<Bootstrap>
         + WalletConfigFieldsGetter<Bootstrap>
         + DenomPrefixGetter<Bootstrap, DenomForStaking>

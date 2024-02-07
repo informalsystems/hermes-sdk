@@ -30,8 +30,8 @@ use hermes_cosmos_test_components::bootstrap::impls::fields::denom::DenomPrefixG
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::HasDenomPrefix;
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::HasGenesisDenom;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::CanBuildChainFromBootstrapParameters;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::CanBuildChainDriver;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
@@ -200,9 +200,8 @@ impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
     }
 }
 
-#[async_trait]
-impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    async fn build_chain_from_bootstrap_params(
+impl ChainDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    async fn build_chain_driver(
         bootstrap: &CelestiaBootstrap,
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainNodeConfig,
@@ -211,12 +210,7 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
     ) -> Result<CosmosChainDriver, Error> {
         let chain_driver = bootstrap
             .cosmos_bootstrap
-            .build_chain_from_bootstrap_params(
-                genesis_config,
-                chain_config,
-                wallets,
-                chain_processes,
-            )
+            .build_chain_driver(genesis_config, chain_config, wallets, chain_processes)
             .await?;
 
         Ok(chain_driver)

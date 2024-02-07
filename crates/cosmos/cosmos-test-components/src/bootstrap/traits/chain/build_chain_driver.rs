@@ -11,15 +11,15 @@ use hermes_test_components::runtime::traits::types::child_process::{
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 
-#[derive_component(ChainFromBootstrapParamsBuilderComponent, ChainFromBootstrapParamsBuilder<Bootstrap>)]
+#[derive_component(ChainDriverBuilderComponent, ChainDriverBuilder<Bootstrap>)]
 #[async_trait]
-pub trait CanBuildChainFromBootstrapParameters:
+pub trait CanBuildChainDriver:
     HasRuntimeType + HasChainDriverType + HasGenesisConfigType + HasChainNodeConfigType + HasErrorType
 where
     Self::Runtime: HasChildProcessType,
     Self::ChainDriver: HasWalletType,
 {
-    async fn build_chain_from_bootstrap_params(
+    async fn build_chain_driver(
         &self,
         genesis_config: Self::GenesisConfig,
         chain_node_config: Self::ChainNodeConfig,

@@ -4,7 +4,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -21,7 +21,7 @@ use crate::traits::bootstrap::build_chain::CanBuildChainWithNodeConfig;
 
 pub struct BuildCosmosChainDriver;
 
-impl<Bootstrap, Runtime> ChainFromBootstrapParamsBuilder<Bootstrap> for BuildCosmosChainDriver
+impl<Bootstrap, Runtime> ChainDriverBuilder<Bootstrap> for BuildCosmosChainDriver
 where
     Bootstrap: HasChainDriverType<ChainDriver = CosmosChainDriver>
         + HasChainType<Chain = CosmosChain>
@@ -34,7 +34,7 @@ where
         + CanRaiseError<&'static str>,
     Runtime: HasChildProcessType<ChildProcess = Child>,
 {
-    async fn build_chain_from_bootstrap_params(
+    async fn build_chain_driver(
         bootstrap: &Bootstrap,
         genesis_config: CosmosGenesisConfig,
         chain_node_config: CosmosChainNodeConfig,
