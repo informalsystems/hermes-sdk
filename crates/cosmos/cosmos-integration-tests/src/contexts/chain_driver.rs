@@ -17,9 +17,11 @@ use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
 use hermes_cosmos_test_components::chain_driver::impls::ibc_transfer_timeout::IbcTransferTimeoutAfterSeconds;
 use hermes_cosmos_test_components::chain_driver::impls::messages::ibc_transfer::BuildCosmosIbcTransferMessage;
 use hermes_cosmos_test_components::chain_driver::impls::query_balance::QueryCosmosBalance;
+use hermes_cosmos_test_components::chain_driver::impls::store_wasm_client::UploadWasmClientCodeWithChainCommand;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
+use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::WasmClientCodeUploaderComponent;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -142,6 +144,8 @@ delegate_components! {
             ConvertCosmosIbcAmount,
         BalanceQuerierComponent:
             QueryCosmosBalance,
+        WasmClientCodeUploaderComponent:
+            UploadWasmClientCodeWithChainCommand,
     }
 }
 

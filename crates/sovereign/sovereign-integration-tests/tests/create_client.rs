@@ -10,6 +10,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::components::message_sender::CanSendSingleMessage;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -64,10 +65,12 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             &create_client_settings
         ).await?;
 
-        let _create_client_message = <CosmosChain as CanBuildCreateClientMessage<SovereignChain>>::build_create_client_message(
+        let create_client_message = <CosmosChain as CanBuildCreateClientMessage<SovereignChain>>::build_create_client_message(
             cosmos_chain,
             create_client_payload,
         ).await?;
+
+        let _events = cosmos_chain.send_message(create_client_message).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
