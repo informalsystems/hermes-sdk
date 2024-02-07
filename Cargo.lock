@@ -1573,6 +1573,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "hermes-cli-framework",
+ "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",

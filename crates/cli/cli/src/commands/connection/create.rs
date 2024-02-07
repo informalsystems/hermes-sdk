@@ -1,0 +1,109 @@
+use std::time::Duration;
+
+use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_relayer_components::logger::traits::log::CanLog;
+use hermes_relayer_runtime::types::log::level::LogLevel;
+use oneline_eyre::eyre::eyre;
+
+use hermes_cli_framework::command::Runnable;
+use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_relayer_components::build::components::relay::build_from_chain::BuildRelayFromChains;
+use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilder;
+use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use ibc_relayer_types::core::ics03_connection::version::Version;
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+
+use crate::Result;
+
+#[derive(Debug, clap::Parser)]
+pub struct ConnectionCreate {
+    /// Identifier of chain A
+    #[clap(
+        long = "chain-a",
+        required = true,
+        value_name = "CHAIN_ID_A",
+        help_heading = "REQUIRED"
+    )]
+    chain_id_a: ChainId,
+
+    /// Identifier of client A
+    #[clap(
+        long = "client-a",
+        required = true,
+        value_name = "CLIENT_ID_A",
+        help_heading = "REQUIRED"
+    )]
+    client_id_a: ClientId,
+
+    /// Identifier of chain B
+    #[clap(
+        long = "chain-b",
+        required = true,
+        value_name = "CHAIN_ID_B",
+        help_heading = "REQUIRED"
+    )]
+    chain_id_b: ChainId,
+
+    /// Identifier of client B
+    #[clap(
+        long = "client-b",
+        required = true,
+        value_name = "CLIENT_ID_B",
+        help_heading = "REQUIRED"
+    )]
+    client_id_b: ClientId,
+}
+
+impl Runnable for ConnectionCreate {
+    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+        // let chain_a = builder.build_chain(&self.chain_id_a).await?;
+        // let chain_b = builder.build_chain(&self.chain_id_b).await?;
+
+        let relay = BuildRelayFromChains::build_relay(
+            &builder,
+            RelayAToBTarget,
+            &self.chain_id_a,
+            &self.chain_id_b,
+            &self.client_id_a,
+            &self.client_id_b,
+        )
+        .await
+        .map_err(|e| eyre!("Failed to build relay: {e}"))?;
+
+        let options = CosmosInitConnectionOptions {
+            delay_period: Duration::from_secs(0),
+            connection_version: Version::default(),
+        };
+
+        builder.log(
+            LogLevel::Info,
+            &format!(
+                "Creating connection between {}:{} and {}:{}...",
+                self.chain_id_a, self.client_id_a, self.chain_id_b, self.client_id_b
+            ),
+            |l| {
+                l.debug("options", &options);
+            },
+        );
+
+        let (connection_id_a, connection_id_b) = relay
+            .bootstrap_connection(&options)
+            .await
+            .map_err(|e| eyre!("Failed to create connection: connection handshake failed: {e}"))?;
+
+        builder.log(
+            LogLevel::Info,
+            &format!(
+                "Connection successfully created between {}:{} and {}:{}",
+                self.chain_id_a, self.client_id_a, self.chain_id_b, self.client_id_b
+            ),
+            |l| {
+                l.display("connection_id_a", &connection_id_a);
+                l.display("connection_id_b", &connection_id_b);
+            },
+        );
+
+        Ok(())
+    }
+}

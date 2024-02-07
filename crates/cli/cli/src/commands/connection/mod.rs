@@ -1,5 +1,5 @@
 mod create;
-pub use create::ClientCreate;
+pub use create::ConnectionCreate;
 
 use hermes_cli_framework::command::Runnable;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -7,12 +7,12 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use crate::Result;
 
 #[derive(Debug, clap::Subcommand)]
-pub enum ClientCommands {
-    /// Create a new client
-    Create(ClientCreate),
+pub enum ConnectionCommands {
+    /// Create a new connection
+    Create(ConnectionCreate),
 }
 
-impl ClientCommands {
+impl ConnectionCommands {
     pub async fn run(&self, builder: CosmosBuilder) -> Result<()> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
