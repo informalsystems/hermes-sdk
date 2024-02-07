@@ -9,31 +9,31 @@ use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use toml::Value;
 
-use crate::bootstrap::traits::initializers::init_chain_config::ChainConfigInitializer;
+use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
-use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
-use crate::bootstrap::types::chain_config::CosmosChainConfig;
+use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
-pub struct UpdateCosmosChainConfig;
+pub struct UpdateCosmosChainNodeConfig;
 
 #[async_trait]
-impl<Bootstrap, Runtime> ChainConfigInitializer<Bootstrap> for UpdateCosmosChainConfig
+impl<Bootstrap, Runtime> ChainNodeConfigInitializer<Bootstrap> for UpdateCosmosChainNodeConfig
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainConfigType
+        + HasChainNodeConfigType
         + CanModifyCometConfig
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
-    Bootstrap::ChainConfig: From<CosmosChainConfig>,
+    Bootstrap::ChainNodeConfig: From<CosmosChainNodeConfig>,
 {
-    async fn init_chain_config(
+    async fn init_chain_node_config(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
-    ) -> Result<Bootstrap::ChainConfig, Bootstrap::Error> {
+    ) -> Result<Bootstrap::ChainNodeConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
         let rpc_port = runtime
@@ -126,7 +126,7 @@ where
             sdk_config
         };
 
-        let chain_config = CosmosChainConfig {
+        let chain_config = CosmosChainNodeConfig {
             rpc_port,
             p2p_port,
             pprof_port,

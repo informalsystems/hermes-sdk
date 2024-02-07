@@ -41,11 +41,11 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_co
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use hermes_cosmos_test_components::bootstrap::traits::types::chain_config::ChainConfigTypeComponent;
+use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::ChainNodeConfigTypeComponent;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
-use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
+use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
@@ -86,7 +86,7 @@ delegate_components! {
             ErrorTypeComponent,
             ErrorRaiserComponent,
             RuntimeTypeComponent,
-            ChainConfigTypeComponent,
+            ChainNodeConfigTypeComponent,
             GenesisConfigTypeComponent,
             WalletConfigTypeComponent,
             WalletConfigFieldsComponent,
@@ -203,7 +203,7 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         chain_home_dir: PathBuf,
         chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
-        chain_config: CosmosChainConfig,
+        chain_config: CosmosChainNodeConfig,
         wallets: BTreeMap<String, CosmosTestWallet>,
         chain_processes: Vec<Child>,
     ) -> Result<CosmosChainDriver, Error> {

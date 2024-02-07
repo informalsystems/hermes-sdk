@@ -11,13 +11,13 @@ use hermes_test_components::runtime::traits::types::child_process::{
 };
 use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
-use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
+use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 
 #[derive_component(ChainFromBootstrapParamsBuilderComponent, ChainFromBootstrapParamsBuilder<Bootstrap>)]
 #[async_trait]
 pub trait CanBuildChainFromBootstrapParameters:
-    HasRuntime + HasChainDriverType + HasGenesisConfigType + HasChainConfigType + HasErrorType
+    HasRuntime + HasChainDriverType + HasGenesisConfigType + HasChainNodeConfigType + HasErrorType
 where
     Self::Runtime: HasFilePathType + HasChildProcessType,
     Self::Chain: HasChainIdType,
@@ -28,7 +28,7 @@ where
         chain_home_dir: FilePathOf<Self::Runtime>,
         chain_id: ChainIdOf<Self::Chain>,
         genesis_config: Self::GenesisConfig,
-        chain_config: Self::ChainConfig,
+        chain_node_config: Self::ChainNodeConfig,
         wallets: BTreeMap<String, Wallet<Self::ChainDriver>>,
         chain_processes: Vec<ChildProcessOf<Self::Runtime>>,
     ) -> Result<Self::ChainDriver, Self::Error>;

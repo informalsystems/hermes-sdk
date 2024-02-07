@@ -6,8 +6,8 @@ use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarter;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
-use crate::bootstrap::types::chain_config::CosmosChainConfig;
+use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 
 pub struct StartCosmosChain;
 
@@ -17,14 +17,14 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasErrorType
         + HasChainCommandPath
-        + HasChainConfigType<ChainConfig = CosmosChainConfig>
+        + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
         + CanRaiseError<Runtime::Error>,
     Runtime: HasFilePathType + CanStartChildProcess,
 {
     async fn start_chain_full_nodes(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
-        chain_config: &CosmosChainConfig,
+        chain_config: &CosmosChainNodeConfig,
     ) -> Result<Vec<Runtime::ChildProcess>, Bootstrap::Error> {
         let chain_command = bootstrap.chain_command_path();
 

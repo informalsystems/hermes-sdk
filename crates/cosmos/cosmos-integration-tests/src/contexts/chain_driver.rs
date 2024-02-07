@@ -8,7 +8,7 @@ use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::transaction::CosmosTxContext;
-use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
+use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::impls::address::ProvideStringAddress;
 use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128AmountWithDenom;
@@ -79,7 +79,7 @@ pub struct CosmosChainDriver {
     pub chain_home_dir: PathBuf,
     pub chain_processes: Vec<Child>,
     pub relayer_chain_config: ChainConfig,
-    pub chain_config: CosmosChainConfig,
+    pub chain_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
     pub staking_denom: Denom,
     pub transfer_denom: Denom,

@@ -39,19 +39,19 @@ use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderC
 use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdderComponent;
 use crate::bootstrap::traits::genesis::add_genesis_wallet::GenesisWalletAdderComponent;
 use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollectorComponent;
-use crate::bootstrap::traits::initializers::init_chain_config::ChainConfigInitializerComponent;
+use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializerComponent;
 use crate::bootstrap::traits::initializers::init_chain_data::ChainDataInitializerComponent;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializerComponent;
 use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigInitializerComponent;
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use crate::bootstrap::traits::types::chain_config::ProvideChainConfigType;
+use crate::bootstrap::traits::types::chain_node_config::ProvideChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::ProvideGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::{
     ProvideWalletConfigType, WalletConfigFieldsGetter,
 };
-use crate::bootstrap::types::chain_config::CosmosChainConfig;
+use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain_driver::types::wallet::CosmosTestWallet;
 
@@ -72,7 +72,7 @@ delegate_components! {
             ChainDataInitializerComponent,
             WalletHdPathComponent,
             WalletInitializerComponent,
-            ChainConfigInitializerComponent,
+            ChainNodeConfigInitializerComponent,
             GenesisConfigInitializerComponent,
             GenesisWalletAdderComponent,
             ChainFullNodeStarterComponent,
@@ -101,7 +101,7 @@ where
         + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
         + ProvideGenesisConfigType<Bootstrap, GenesisConfig = CosmosGenesisConfig>
-        + ProvideChainConfigType<Bootstrap, ChainConfig = CosmosChainConfig>
+        + ProvideChainNodeConfigType<Bootstrap, ChainNodeConfig = CosmosChainNodeConfig>
         + ChainStoreDirGetter<Bootstrap>
         + ChainCommandPathGetter<Bootstrap>
         + RandomIdFlagGetter<Bootstrap>

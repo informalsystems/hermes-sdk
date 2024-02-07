@@ -15,7 +15,7 @@ use crate::bootstrap::traits::generator::generate_chain_id::CanGenerateChainId;
 use crate::bootstrap::traits::generator::generate_wallet_config::CanGenerateWalletConfigs;
 use crate::bootstrap::traits::genesis::add_genesis_wallet::CanAddWalletToGenesis;
 use crate::bootstrap::traits::genesis::collect_gentxs::CanCollectGenesisTransactions;
-use crate::bootstrap::traits::initializers::init_chain_config::CanInitChainConfig;
+use crate::bootstrap::traits::initializers::init_chain_config::CanInitChainNodeConfig;
 use crate::bootstrap::traits::initializers::init_chain_data::CanInitChainData;
 use crate::bootstrap::traits::initializers::init_chain_home_dir::CanInitChainHomeDir;
 use crate::bootstrap::traits::initializers::init_genesis_config::CanInitGenesisConfig;
@@ -36,7 +36,7 @@ where
         + CanGenerateWalletConfigs
         + CanAddWalletToGenesis
         + CanCollectGenesisTransactions
-        + CanInitChainConfig
+        + CanInitChainNodeConfig
         + CanStartChainFullNode
         + CanBuildChainFromBootstrapParameters,
     Runtime: HasFilePathType + HasChildProcessType + HasErrorType,
@@ -84,7 +84,7 @@ where
 
         // Initialize (or update) the chain config files that are required for starting
         // the chain full node
-        let chain_config = bootstrap.init_chain_config(&chain_home_dir).await?;
+        let chain_config = bootstrap.init_chain_node_config(&chain_home_dir).await?;
 
         // Start the chain full node in the background, and return the child process handle
         let chain_processes = bootstrap
