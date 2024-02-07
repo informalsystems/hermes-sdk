@@ -1,3 +1,4 @@
+use hermes_cli_framework::command::Runnable;
 use oneline_eyre::eyre::eyre;
 
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -64,8 +65,8 @@ pub struct ClientCreate {
     trust_threshold: Option<TrustThreshold>,
 }
 
-impl ClientCreate {
-    pub async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+impl Runnable for ClientCreate {
+    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
         let host_chain_config =
             builder
                 .config

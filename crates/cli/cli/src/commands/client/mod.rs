@@ -1,6 +1,7 @@
 mod create;
 pub use create::ClientCreate;
 
+use hermes_cli_framework::command::Runnable;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;

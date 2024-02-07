@@ -7,14 +7,14 @@ use std::path::Path;
 
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
-use crate::command::Command;
+use crate::command::Runnable;
 use crate::config::Config;
 use crate::Result;
 
 #[allow(async_fn_in_trait)]
 pub trait Application: Sized {
     type Config: Config;
-    type Command: Command<Self>;
+    type Command: Runnable;
 
     fn parse_from_env() -> Self;
 

@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use hermes_cli_framework::application::Application;
-use hermes_cli_framework::command::Command;
+use hermes_cli_framework::command::Runnable;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
