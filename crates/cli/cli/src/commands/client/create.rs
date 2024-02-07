@@ -1,6 +1,4 @@
 use hermes_cli_framework::command::Runnable;
-use oneline_eyre::eyre::eyre;
-
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::logger::traits::log::CanLog;
@@ -11,6 +9,7 @@ use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use oneline_eyre::eyre::eyre;
 
 use crate::Result;
 

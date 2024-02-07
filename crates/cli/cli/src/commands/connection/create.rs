@@ -1,18 +1,17 @@
 use std::time::Duration;
 
-use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
-use hermes_relayer_components::logger::traits::log::CanLog;
-use hermes_relayer_runtime::types::log::level::LogLevel;
-use oneline_eyre::eyre::eyre;
-
 use hermes_cli_framework::command::Runnable;
+use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::components::relay::build_from_chain::BuildRelayFromChains;
 use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilder;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
+use hermes_relayer_components::logger::traits::log::CanLog;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use hermes_relayer_runtime::types::log::level::LogLevel;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use oneline_eyre::eyre::eyre;
 
 use crate::Result;
 
@@ -57,9 +56,6 @@ pub struct ConnectionCreate {
 
 impl Runnable for ConnectionCreate {
     async fn run(&self, builder: CosmosBuilder) -> Result<()> {
-        // let chain_a = builder.build_chain(&self.chain_id_a).await?;
-        // let chain_b = builder.build_chain(&self.chain_id_b).await?;
-
         let relay = BuildRelayFromChains::build_relay(
             &builder,
             RelayAToBTarget,

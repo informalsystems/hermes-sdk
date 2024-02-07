@@ -3,6 +3,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;
 
+pub mod channel;
 pub mod client;
 pub mod connection;
 pub mod start;
@@ -19,6 +20,10 @@ pub enum HermesCommand {
     /// Work with connections
     #[clap(subcommand)]
     Connection(connection::ConnectionCommands),
+
+    /// Work with channels
+    #[clap(subcommand)]
+    Channel(channel::ChannelCommands),
 }
 
 impl Runnable for HermesCommand {
@@ -27,6 +32,7 @@ impl Runnable for HermesCommand {
             Self::Start(cmd) => cmd.run(builder).await,
             Self::Client(cmd) => cmd.run(builder).await,
             Self::Connection(cmd) => cmd.run(builder).await,
+            Self::Channel(cmd) => cmd.run(builder).await,
         }
     }
 }
