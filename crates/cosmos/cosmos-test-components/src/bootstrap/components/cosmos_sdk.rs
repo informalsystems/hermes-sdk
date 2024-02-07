@@ -28,6 +28,9 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::bootstrap::impls::chain::bootstrap_chain::BootstrapCosmosChain;
 use crate::bootstrap::impls::chain::start_chain::StartCosmosChain;
+use crate::bootstrap::impls::fields::denom::DenomForStaking;
+use crate::bootstrap::impls::fields::denom::DenomForTransfer;
+use crate::bootstrap::impls::fields::denom::DenomPrefixGetter;
 use crate::bootstrap::impls::fields::hd_path::ProvideCosmosHdPath;
 use crate::bootstrap::impls::generator::random_chain_id::GenerateRandomChainId;
 use crate::bootstrap::impls::genesis::add_genesis_account::AddCosmosGenesisAccount;
@@ -118,7 +121,9 @@ where
         + WalletConfigGenerator<Bootstrap>
         + ChainFromBootstrapParamsBuilder<Bootstrap>
         + ProvideWalletConfigType<Bootstrap>
-        + WalletConfigFieldsGetter<Bootstrap>,
+        + WalletConfigFieldsGetter<Bootstrap>
+        + DenomPrefixGetter<Bootstrap, DenomForStaking>
+        + DenomPrefixGetter<Bootstrap, DenomForTransfer>,
     Runtime: HasFilePathType<FilePath = PathBuf>
         + CanExecCommand
         + CanStartChildProcess

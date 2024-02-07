@@ -14,8 +14,12 @@ where
     Self::ChainDriver: HasDenomType,
 {
     fn genesis_denom(
-        &self,
         label: Label,
         chain_config: &Self::GenesisConfig,
-    ) -> DenomOf<Self::ChainDriver>;
+    ) -> &DenomOf<Self::ChainDriver>;
+}
+
+#[derive_component(DenomPrefixGetterComponent, DenomPrefixGetter<Bootstrap>)]
+pub trait HasDenomPrefix<Label>: Async {
+    fn denom_prefix(&self, label: Label) -> &str;
 }

@@ -15,9 +15,10 @@ use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfig;
 use crate::traits::bootstrap::cosmos_builder::HasCosmosBuilder;
 use crate::traits::bootstrap::relayer_chain_config::CanBuildRelayerChainConfig;
 
-pub struct BuildCosmosChain;
+pub struct BuildCosmosChainWithNodeConfig;
 
-impl<Bootstrap, ChainDriver> ChainBuilderWithNodeConfig<Bootstrap> for BuildCosmosChain
+impl<Bootstrap, ChainDriver> ChainBuilderWithNodeConfig<Bootstrap>
+    for BuildCosmosChainWithNodeConfig
 where
     Bootstrap: HasChainType<Chain = CosmosChain>
         + HasChainDriverType<ChainDriver = ChainDriver>

@@ -13,7 +13,7 @@ use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     LegacyCosmosSdkBootstrapComponents,
 };
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
-    DenomForStaking, DenomForTransfer, GenesisDenomGetter,
+    DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetter,
 };
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::types::chain_node_config::ProvideCosmosChainNodeConfigType;
@@ -45,7 +45,7 @@ use ibc_relayer::config::compat_mode::CompatMode;
 use tokio::process::Child;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
-use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChain;
+use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
 use crate::traits::bootstrap::build_chain::{
     CanBuildChainWithNodeConfig, ChainBuilderWithNodeConfigComponent,
@@ -66,8 +66,8 @@ pub struct CosmosBootstrap {
     pub chain_store_dir: PathBuf,
     pub chain_command_path: PathBuf,
     pub account_prefix: String,
-    pub staking_denom: Denom,
-    pub transfer_denom: Denom,
+    pub staking_denom: String,
+    pub transfer_denom: String,
     pub compat_mode: Option<CompatMode>,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
@@ -104,7 +104,7 @@ delegate_components! {
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:
-            BuildCosmosChain,
+            BuildCosmosChainWithNodeConfig,
     }
 }
 
@@ -151,8 +151,6 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
             chain_node_config,
             genesis_config,
             chain_process,
-            staking_denom: bootstrap.staking_denom.clone(),
-            transfer_denom: bootstrap.transfer_denom.clone(),
             relayer_wallet: relayer_wallet.clone(),
             user_wallet_a: user_wallet_a.clone(),
             user_wallet_b: user_wallet_b.clone(),
@@ -205,23 +203,27 @@ impl CometConfigModifier<CosmosBootstrap> for CosmosBootstrapComponents {
     }
 }
 
+impl DenomPrefixGetter<CosmosBootstrap, DenomForStaking> for CosmosBootstrapComponents {
+    fn denom_prefix(bootstrap: &CosmosBootstrap, _label: DenomForStaking) -> &str {
+        &bootstrap.staking_denom
+    }
+}
+
+impl DenomPrefixGetter<CosmosBootstrap, DenomForTransfer> for CosmosBootstrapComponents {
+    fn denom_prefix(bootstrap: &CosmosBootstrap, _label: DenomForTransfer) -> &str {
+        &bootstrap.transfer_denom
+    }
+}
+
 impl GenesisDenomGetter<CosmosBootstrap, DenomForStaking> for CosmosBootstrapComponents {
-    fn genesis_denom(
-        bootstrap: &CosmosBootstrap,
-        _label: DenomForStaking,
-        _genesis_config: &CosmosGenesisConfig,
-    ) -> Denom {
-        bootstrap.staking_denom.clone()
+    fn genesis_denom(_label: DenomForStaking, genesis_config: &CosmosGenesisConfig) -> &Denom {
+        &genesis_config.staking_denom
     }
 }
 
 impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosBootstrapComponents {
-    fn genesis_denom(
-        bootstrap: &CosmosBootstrap,
-        _label: DenomForTransfer,
-        _genesis_config: &CosmosGenesisConfig,
-    ) -> Denom {
-        bootstrap.transfer_denom.clone()
+    fn genesis_denom(_label: DenomForTransfer, genesis_config: &CosmosGenesisConfig) -> &Denom {
+        &genesis_config.transfer_denom
     }
 }
 
@@ -238,7 +240,7 @@ impl CompatModeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
 }
 
 impl GasDenomGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn gas_denom(bootstrap: &CosmosBootstrap) -> &Denom {
+    fn gas_denom(bootstrap: &CosmosBootstrap) -> &str {
         &bootstrap.staking_denom
     }
 }

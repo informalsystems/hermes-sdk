@@ -6,10 +6,14 @@ use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use serde_json::{Error as JsonError, Value};
 
+use crate::bootstrap::impls::fields::denom::DenomForStaking;
+use crate::bootstrap::impls::fields::denom::DenomForTransfer;
+use crate::bootstrap::impls::fields::denom::HasDenomPrefix;
 use crate::bootstrap::traits::initializers::init_genesis_config::GenesisConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use crate::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
+use crate::chain_driver::types::denom::Denom;
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;
@@ -20,6 +24,8 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasGenesisConfigType
         + CanModifyCosmosGenesisConfig
+        + HasDenomPrefix<DenomForStaking>
+        + HasDenomPrefix<DenomForTransfer>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<JsonError>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile,
@@ -55,8 +61,14 @@ where
             .map_err(Bootstrap::raise_error)?;
 
         // TODO: generate random denom
+        let staking_denom = Denom::Base(bootstrap.denom_prefix(DenomForStaking).into());
+        let transfer_denom = Denom::Base(bootstrap.denom_prefix(DenomForTransfer).into());
 
-        let genesis_config = CosmosGenesisConfig { config_json };
+        let genesis_config = CosmosGenesisConfig {
+            config_json,
+            staking_denom,
+            transfer_denom,
+        };
 
         Ok(genesis_config.into())
     }

@@ -27,6 +27,9 @@ use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::bootstrap::components::cosmos_sdk::CosmosSdkBootstrapComponents;
+use crate::bootstrap::impls::fields::denom::DenomForStaking;
+use crate::bootstrap::impls::fields::denom::DenomForTransfer;
+use crate::bootstrap::impls::fields::denom::DenomPrefixGetter;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_account::LegacyAddCosmosGenesisAccount;
 use crate::bootstrap::impls::genesis_legacy::add_genesis_validator::LegacyAddCosmosGenesisValidator;
 use crate::bootstrap::impls::genesis_legacy::collect_gentxs::LegacyCollectCosmosGentxs;
@@ -113,7 +116,9 @@ where
         + WalletConfigGenerator<Bootstrap>
         + ChainFromBootstrapParamsBuilder<Bootstrap>
         + ProvideWalletConfigType<Bootstrap>
-        + WalletConfigFieldsGetter<Bootstrap>,
+        + WalletConfigFieldsGetter<Bootstrap>
+        + DenomPrefixGetter<Bootstrap, DenomForStaking>
+        + DenomPrefixGetter<Bootstrap, DenomForTransfer>,
     Runtime: HasFilePathType<FilePath = PathBuf>
         + CanExecCommand
         + CanStartChildProcess

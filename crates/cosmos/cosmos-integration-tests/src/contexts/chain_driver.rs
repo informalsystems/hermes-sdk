@@ -78,8 +78,6 @@ pub struct CosmosChainDriver {
     pub chain_process: Child,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
-    pub staking_denom: Denom,
-    pub transfer_denom: Denom,
     pub relayer_wallet: CosmosTestWallet,
     pub user_wallet_a: CosmosTestWallet,
     pub user_wallet_b: CosmosTestWallet,
@@ -235,12 +233,12 @@ impl WalletsGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 
 impl DenomGetterAt<CosmosChainDriver, TransferDenom, 0> for CosmosChainDriverComponents {
     fn denom_at(driver: &CosmosChainDriver, _kind: TransferDenom, _index: Index<0>) -> &Denom {
-        &driver.transfer_denom
+        &driver.genesis_config.transfer_denom
     }
 }
 
 impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComponents {
     fn denom_at(driver: &CosmosChainDriver, _kind: StakingDenom, _index: Index<0>) -> &Denom {
-        &driver.staking_denom
+        &driver.genesis_config.staking_denom
     }
 }

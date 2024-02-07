@@ -6,7 +6,6 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::Ha
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
-use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use ibc_relayer::chain::ChainType;
@@ -29,7 +28,7 @@ where
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
         + HasChainDriverType<ChainDriver = ChainDriver>
         + CanRaiseError<TendermintRpcError>,
-    ChainDriver: HasWalletType<Wallet = CosmosTestWallet> + HasDenomType,
+    ChainDriver: HasWalletType<Wallet = CosmosTestWallet>,
 {
     fn build_relayer_chain_config(
         bootstrap: &Bootstrap,
@@ -72,7 +71,7 @@ where
             trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(0.003, bootstrap.gas_denom().to_string()),
+            gas_price: config::GasPrice::new(0.003, bootstrap.gas_denom().into()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),

@@ -8,7 +8,6 @@ use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
@@ -36,8 +35,8 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
         chain_command_path: "celestia-appd".into(),
         account_prefix: "celestia".into(),
         compat_mode: Some(CompatMode::V0_34),
-        staking_denom: Denom::base("utia"),
-        transfer_denom: Denom::base("coin"),
+        staking_denom: "utia".into(),
+        transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     };

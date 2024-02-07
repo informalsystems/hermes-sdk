@@ -26,7 +26,9 @@ use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::Can
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     IsLegacyCosmosSdkBootstrapComponent, LegacyCosmosSdkBootstrapComponents,
 };
+use hermes_cosmos_test_components::bootstrap::impls::fields::denom::DenomPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
+use hermes_cosmos_test_components::bootstrap::impls::fields::denom::HasDenomPrefix;
 use hermes_cosmos_test_components::bootstrap::impls::fields::denom::HasGenesisDenom;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::CanBuildChainFromBootstrapParameters;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
@@ -165,18 +167,21 @@ impl CometConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
     }
 }
 
+impl<Label> DenomPrefixGetter<CelestiaBootstrap, Label> for CelestiaBootstrapComponents
+where
+    CosmosBootstrap: HasDenomPrefix<Label>,
+{
+    fn denom_prefix(bootstrap: &CelestiaBootstrap, label: Label) -> &str {
+        bootstrap.cosmos_bootstrap.denom_prefix(label)
+    }
+}
+
 impl<Label> GenesisDenomGetter<CelestiaBootstrap, Label> for CelestiaBootstrapComponents
 where
     CosmosBootstrap: HasGenesisDenom<Label>,
 {
-    fn genesis_denom(
-        bootstrap: &CelestiaBootstrap,
-        label: Label,
-        genesis_config: &CosmosGenesisConfig,
-    ) -> Denom {
-        bootstrap
-            .cosmos_bootstrap
-            .genesis_denom(label, genesis_config)
+    fn genesis_denom(label: Label, genesis_config: &CosmosGenesisConfig) -> &Denom {
+        CosmosBootstrap::genesis_denom(label, genesis_config)
     }
 }
 
