@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct SovereignRollupConfig {
+pub struct SovereignRollupNodeConfig {
     pub da: SovereignDaConfig,
     pub storage: SovereignStorageConfig,
     pub runner: SovereignRunnerConfig,

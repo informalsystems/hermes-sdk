@@ -1,4 +1,6 @@
 #![allow(clippy::type_complexity)]
 
+extern crate alloc;
+
 pub mod bootstrap;
 pub mod chain_driver;

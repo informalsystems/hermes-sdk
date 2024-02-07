@@ -1,7 +1,7 @@
 use cgp_core::CanRaiseError;
+use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 
-use crate::bootstrap::traits::account_prefix::HasAccountPrefix;
 use crate::bootstrap::traits::generate_rollup_wallets::RollupWalletGenerator;
 use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
 use crate::types::wallet::SovereignWallet;

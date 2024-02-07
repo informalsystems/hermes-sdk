@@ -1,23 +1,22 @@
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
-use hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
-use hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_test_components::driver::traits::channel_at::ChannelGetterAt;
 use hermes_test_components::driver::traits::types::birelay_at::BiRelayTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_at::ChainTypeAtComponent;
-use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverGetterAt;
-use hermes_test_components::driver::traits::types::chain_driver_at::ChainDriverTypeAtComponent;
+use hermes_test_components::driver::traits::types::chain_driver_at::{
+    ChainDriverGetterAt, ChainDriverTypeAtComponent,
+};
 use hermes_test_components::driver::traits::types::relay_at::RelayTypeAtComponent;
-use hermes_test_components::driver::traits::types::relay_driver_at::RelayDriverGetterAt;
-use hermes_test_components::driver::traits::types::relay_driver_at::RelayDriverTypeAtComponent;
-use hermes_test_components::types::index::Index;
-use hermes_test_components::types::index::Twindex;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId};
+use hermes_test_components::driver::traits::types::relay_driver_at::{
+    RelayDriverGetterAt, RelayDriverTypeAtComponent,
+};
+use hermes_test_components::types::index::{Index, Twindex};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;

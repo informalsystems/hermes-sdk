@@ -1,39 +1,50 @@
 use core::time::Duration;
+use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
 use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use toml::Value;
 
-use crate::bootstrap::traits::initializers::init_chain_config::ChainConfigInitializer;
+use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
-use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
-use crate::bootstrap::types::chain_config::CosmosChainConfig;
+use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
-pub struct UpdateCosmosChainConfig;
+pub struct UpdateCosmosChainNodeConfig;
 
 #[async_trait]
-impl<Bootstrap, Runtime> ChainConfigInitializer<Bootstrap> for UpdateCosmosChainConfig
+impl<Bootstrap, Runtime, Chain> ChainNodeConfigInitializer<Bootstrap>
+    for UpdateCosmosChainNodeConfig
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainConfigType
+        + HasChainType<Chain = Chain>
+        + HasChainNodeConfigType
         + CanModifyCometConfig
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<toml::de::Error>
         + CanRaiseError<toml::ser::Error>,
-    Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile + CanReserveTcpPort,
-    Bootstrap::ChainConfig: From<CosmosChainConfig>,
+    Runtime: HasFilePathType<FilePath = PathBuf>
+        + CanReadFileAsString
+        + CanWriteStringToFile
+        + CanReserveTcpPort,
+    Bootstrap::ChainNodeConfig: From<CosmosChainNodeConfig>,
+    Chain: HasChainIdType<ChainId = ChainId>,
 {
-    async fn init_chain_config(
+    async fn init_chain_node_config(
         bootstrap: &Bootstrap,
-        chain_home_dir: &Runtime::FilePath,
-    ) -> Result<Bootstrap::ChainConfig, Bootstrap::Error> {
+        chain_home_dir: &PathBuf,
+        chain_id: &ChainId,
+    ) -> Result<Bootstrap::ChainNodeConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
         let rpc_port = runtime
@@ -126,7 +137,9 @@ where
             sdk_config
         };
 
-        let chain_config = CosmosChainConfig {
+        let chain_config = CosmosChainNodeConfig {
+            chain_id: chain_id.clone(),
+            chain_home_dir: chain_home_dir.clone(),
             rpc_port,
             p2p_port,
             pprof_port,
