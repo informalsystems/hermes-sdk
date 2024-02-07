@@ -55,7 +55,7 @@ where
             )
             .await
             .map_err(Bootstrap::raise_error)?
-            .stdout;
+            .stderr;
 
         let json_val: json::Value =
             json::from_str(&seed_content).map_err(Bootstrap::raise_error)?;
