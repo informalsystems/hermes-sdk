@@ -20,7 +20,7 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use tokio::runtime::Builder;
 
-//#[test]
+// #[test]
 pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     let _ = stable_eyre::install();
 
