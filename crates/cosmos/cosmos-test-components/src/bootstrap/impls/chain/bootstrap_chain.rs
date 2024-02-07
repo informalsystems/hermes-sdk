@@ -96,8 +96,6 @@ where
         // Build the chain context from the bootstrap parameters
         let chain = bootstrap
             .build_chain_from_bootstrap_params(
-                chain_home_dir,
-                chain_id,
                 genesis_config,
                 chain_config,
                 wallets,

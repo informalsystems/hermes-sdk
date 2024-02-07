@@ -1,4 +1,3 @@
-use core::str::FromStr;
 use core::time::Duration;
 use std::path::PathBuf;
 
@@ -22,6 +21,7 @@ use hermes_cosmos_test_components::bootstrap::impls::types::chain_node_config::P
 use hermes_cosmos_test_components::bootstrap::impls::types::genesis_config::ProvideCosmosGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::impls::types::wallet_config::ProvideCosmosWalletConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
@@ -43,17 +43,17 @@ use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
-use ibc_relayer::chain::ChainType;
 use ibc_relayer::config::compat_mode::CompatMode;
-use ibc_relayer::config::gas_multiplier::GasMultiplier;
-use ibc_relayer::config::{self, AddressType, ChainConfig};
-use ibc_relayer::keyring::Store;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use tendermint_rpc::{Url, WebSocketClientUrl};
 use tokio::process::Child;
 use tokio::time::sleep;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
+use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
+use crate::traits::bootstrap::compat_mode::CompatModeGetter;
+use crate::traits::bootstrap::gas_denom::GasDenomGetter;
+use crate::traits::bootstrap::relayer_chain_config::{
+    CanBuildRelayerChainConfig, RelayerChainConfigBuilderComponent,
+};
 
 /**
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
@@ -101,6 +101,8 @@ delegate_components! {
             WalletConfigTypeComponent,
             WalletConfigFieldsComponent,
         ]: ProvideCosmosWalletConfigType,
+        RelayerChainConfigBuilderComponent:
+            BuildRelayerChainConfig,
     }
 }
 
@@ -116,8 +118,6 @@ impl ProvideChainDriverType<CosmosBootstrap> for CosmosBootstrapComponents {
 impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapComponents {
     async fn build_chain_from_bootstrap_params(
         bootstrap: &CosmosBootstrap,
-        chain_home_dir: PathBuf,
-        chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
         chain_node_config: CosmosChainNodeConfig,
         wallets: BTreeMap<String, CosmosTestWallet>,
@@ -140,49 +140,8 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
             .ok_or_else(|| eyre!("expect user2 wallet to be provided in the list of test wallets"))?
             .clone();
 
-        let relayer_chain_config = ChainConfig {
-            id: chain_id.clone(),
-            r#type: ChainType::CosmosSdk,
-            rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))?,
-            grpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.grpc_port))?,
-            event_source: config::EventSourceMode::Push {
-                url: WebSocketClientUrl::from_str(&format!(
-                    "ws://localhost:{}/websocket",
-                    chain_node_config.rpc_port
-                ))?,
-                batch_delay: config::default::batch_delay(),
-            },
-            rpc_timeout: config::default::rpc_timeout(),
-            trusted_node: false,
-            genesis_restart: None,
-            account_prefix: bootstrap.account_prefix.clone(),
-            key_name: relayer_wallet.id.clone(),
-            key_store_type: Store::Test,
-            key_store_folder: Some(chain_home_dir.join("hermes_keyring")),
-            store_prefix: "ibc".to_string(),
-            default_gas: None,
-            max_gas: Some(3000000),
-            gas_adjustment: None,
-            gas_multiplier: Some(GasMultiplier::unsafe_new(1.2)),
-            fee_granter: None,
-            max_msg_num: Default::default(),
-            max_tx_size: Default::default(),
-            max_grpc_decoding_size: config::default::max_grpc_decoding_size(),
-            max_block_time: Duration::from_secs(30),
-            clock_drift: Duration::from_secs(5),
-            trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
-            ccv_consumer_chain: false,
-            trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(0.003, bootstrap.staking_denom.to_string()),
-            packet_filter: Default::default(),
-            address_type: AddressType::Cosmos,
-            memo_prefix: Default::default(),
-            proof_specs: Default::default(),
-            extension_options: Default::default(),
-            sequential_batch_tx: false,
-            compat_mode: bootstrap.compat_mode.clone(),
-            clear_interval: None,
-        };
+        let relayer_chain_config =
+            bootstrap.build_relayer_chain_config(&chain_node_config, &relayer_wallet)?;
 
         let base_chain = bootstrap
             .builder
@@ -206,7 +165,6 @@ impl ChainFromBootstrapParamsBuilder<CosmosBootstrap> for CosmosBootstrapCompone
 
         let test_chain = CosmosChainDriver {
             base_chain,
-            chain_home_dir,
             chain_node_config,
             genesis_config,
             relayer_chain_config,
@@ -282,5 +240,23 @@ impl GenesisDenomGetter<CosmosBootstrap, DenomForTransfer> for CosmosBootstrapCo
         _genesis_config: &CosmosGenesisConfig,
     ) -> Denom {
         bootstrap.transfer_denom.clone()
+    }
+}
+
+impl AccountPrefixGetter<CosmosBootstrap> for CosmosBootstrapComponents {
+    fn account_prefix(bootstrap: &CosmosBootstrap) -> &str {
+        &bootstrap.account_prefix
+    }
+}
+
+impl CompatModeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
+    fn compat_mode(bootstrap: &CosmosBootstrap) -> Option<&CompatMode> {
+        bootstrap.compat_mode.as_ref()
+    }
+}
+
+impl GasDenomGetter<CosmosBootstrap> for CosmosBootstrapComponents {
+    fn gas_denom(bootstrap: &CosmosBootstrap) -> &Denom {
+        &bootstrap.staking_denom
     }
 }

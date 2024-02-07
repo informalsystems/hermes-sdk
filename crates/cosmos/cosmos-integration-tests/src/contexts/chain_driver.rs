@@ -76,7 +76,6 @@ use tokio::process::Child;
 */
 pub struct CosmosChainDriver {
     pub base_chain: CosmosChain,
-    pub chain_home_dir: PathBuf,
     pub chain_processes: Vec<Child>,
     pub relayer_chain_config: ChainConfig,
     pub chain_node_config: CosmosChainNodeConfig,
@@ -184,7 +183,7 @@ impl ProvideRuntime<CosmosChainDriver> for CosmosChainDriverComponents {
 
 impl ChainHomeDirGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn chain_home_dir(chain_driver: &CosmosChainDriver) -> &PathBuf {
-        &chain_driver.chain_home_dir
+        &chain_driver.chain_node_config.chain_home_dir
     }
 }
 

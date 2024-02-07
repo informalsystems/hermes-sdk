@@ -55,7 +55,6 @@ use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
@@ -200,8 +199,6 @@ impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
 impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
     async fn build_chain_from_bootstrap_params(
         bootstrap: &CelestiaBootstrap,
-        chain_home_dir: PathBuf,
-        chain_id: ChainId,
         genesis_config: CosmosGenesisConfig,
         chain_config: CosmosChainNodeConfig,
         wallets: BTreeMap<String, CosmosTestWallet>,
@@ -210,8 +207,6 @@ impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapCom
         let chain_driver = bootstrap
             .cosmos_bootstrap
             .build_chain_from_bootstrap_params(
-                chain_home_dir,
-                chain_id,
                 genesis_config,
                 chain_config,
                 wallets,
