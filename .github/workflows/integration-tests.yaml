@@ -55,6 +55,6 @@ jobs:
             nix shell .#cargo-nextest .#protobuf .#${{ matrix.chain.package }} -c \
               cargo nextest run \
               -p ibc-integration-test \
-              --features=${{ matrix.chain.features }} -- \
+              --features=${{ matrix.chain.features }} \
               --test-threads=2 \
               --failure-output final
