@@ -18,8 +18,8 @@ use hermes_celestia_test_components::bootstrap::traits::start_bridge::BridgeStar
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_config::BridgeConfigTypeComponent;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrapComponents;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::CanUseLegacyCosmosSdkChainBootstrapper;
@@ -62,8 +62,8 @@ use tokio::process::Child;
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 
 pub struct CelestiaBootstrap {
-    // TODO: reuse Cosmos test components directly instead of delegating to `CosmosBootstrap`.
-    pub cosmos_bootstrap: CosmosBootstrap,
+    // TODO: reuse Cosmos test components directly instead of delegating to `LegacyCosmosBootstrap`.
+    pub cosmos_bootstrap: LegacyCosmosBootstrap,
     pub bridge_store_dir: PathBuf,
 }
 
@@ -91,7 +91,7 @@ delegate_components! {
             GenesisConfigTypeComponent,
             WalletConfigTypeComponent,
             WalletConfigFieldsComponent,
-        ]: CosmosBootstrapComponents,
+        ]: LegacyCosmosBootstrapComponents,
         [
             WalletConfigGeneratorComponent,
             BridgeBootstrapperComponent,
@@ -169,7 +169,7 @@ impl CometConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
 
 impl<Label> DenomPrefixGetter<CelestiaBootstrap, Label> for CelestiaBootstrapComponents
 where
-    CosmosBootstrap: HasDenomPrefix<Label>,
+    LegacyCosmosBootstrap: HasDenomPrefix<Label>,
 {
     fn denom_prefix(bootstrap: &CelestiaBootstrap, label: Label) -> &str {
         bootstrap.cosmos_bootstrap.denom_prefix(label)
@@ -178,10 +178,10 @@ where
 
 impl<Label> GenesisDenomGetter<CelestiaBootstrap, Label> for CelestiaBootstrapComponents
 where
-    CosmosBootstrap: HasGenesisDenom<Label>,
+    LegacyCosmosBootstrap: HasGenesisDenom<Label>,
 {
     fn genesis_denom(label: Label, genesis_config: &CosmosGenesisConfig) -> &Denom {
-        CosmosBootstrap::genesis_denom(label, genesis_config)
+        LegacyCosmosBootstrap::genesis_denom(label, genesis_config)
     }
 }
 

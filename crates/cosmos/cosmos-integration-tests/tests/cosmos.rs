@@ -5,7 +5,7 @@ use std::sync::Arc;
 
 use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -27,7 +27,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
-    let bootstrap = Arc::new(CosmosBootstrap {
+    let bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime,
         builder,
         should_randomize_identifiers: true,

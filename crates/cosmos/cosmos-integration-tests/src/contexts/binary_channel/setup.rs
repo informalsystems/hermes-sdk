@@ -36,7 +36,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
-use crate::contexts::bootstrap::CosmosBootstrap;
+use crate::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::contexts::relay_driver::CosmosRelayDriver;
 
@@ -45,8 +45,8 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
    with both chains being Cosmos chains.
 */
 pub struct CosmosBinaryChannelSetup {
-    pub bootstrap_a: Arc<CosmosBootstrap>,
-    pub bootstrap_b: Arc<CosmosBootstrap>,
+    pub bootstrap_a: Arc<LegacyCosmosBootstrap>,
+    pub bootstrap_b: Arc<LegacyCosmosBootstrap>,
     pub create_client_settings: ClientSettings,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
@@ -144,17 +144,23 @@ impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosBinaryChannelSet
 }
 
 impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 0> for CosmosBinaryChannelSetupComponents {
-    type Bootstrap = CosmosBootstrap;
+    type Bootstrap = LegacyCosmosBootstrap;
 
-    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<0>) -> &CosmosBootstrap {
+    fn chain_bootstrap(
+        setup: &CosmosBinaryChannelSetup,
+        _index: Index<0>,
+    ) -> &LegacyCosmosBootstrap {
         &setup.bootstrap_a
     }
 }
 
 impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 1> for CosmosBinaryChannelSetupComponents {
-    type Bootstrap = CosmosBootstrap;
+    type Bootstrap = LegacyCosmosBootstrap;
 
-    fn chain_bootstrap(setup: &CosmosBinaryChannelSetup, _index: Index<1>) -> &CosmosBootstrap {
+    fn chain_bootstrap(
+        setup: &CosmosBinaryChannelSetup,
+        _index: Index<1>,
+    ) -> &LegacyCosmosBootstrap {
         &setup.bootstrap_b
     }
 }

@@ -5,7 +5,7 @@ use std::sync::Arc;
 
 use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -27,7 +27,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let celestia_bootstrap = Arc::new(CosmosBootstrap {
+    let celestia_bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
@@ -41,7 +41,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
         comet_config_modifier: Box::new(|_| Ok(())),
     });
 
-    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
+    let cosmos_bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime,
         builder,
         should_randomize_identifiers: true,
