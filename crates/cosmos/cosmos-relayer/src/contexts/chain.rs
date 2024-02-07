@@ -5,7 +5,7 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
-use ibc_relayer::config::EventSourceMode;
+use ibc_relayer::config::{ChainConfig, EventSourceMode};
 use ibc_relayer::event::source::queries::all as all_queries;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics02_client::height::Height;
@@ -21,6 +21,7 @@ use crate::types::telemetry::CosmosTelemetry;
 #[derive(Clone)]
 pub struct CosmosChain {
     pub handle: BaseChainHandle,
+    pub chain_config: ChainConfig,
     pub chain_id: ChainId,
     pub compat_mode: CompatMode,
     pub runtime: HermesRuntime,
@@ -32,6 +33,7 @@ pub struct CosmosChain {
 impl CosmosChain {
     pub fn new(
         handle: BaseChainHandle,
+        chain_config: ChainConfig,
         tx_config: TxConfig,
         rpc_client: HttpClient,
         compat_mode: CompatMode,
@@ -66,6 +68,7 @@ impl CosmosChain {
 
         let chain = Self {
             handle,
+            chain_config,
             chain_id,
             compat_mode,
             runtime,

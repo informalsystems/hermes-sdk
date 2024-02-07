@@ -1,16 +1,14 @@
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::birelay::traits::two_way::{
     ProvideTwoChainTypes, ProvideTwoWayRelayTypes, TwoWayRelayGetter,
 };
-use hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
-use hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;

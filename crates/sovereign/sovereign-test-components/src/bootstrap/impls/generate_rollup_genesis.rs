@@ -1,10 +1,10 @@
 use cgp_core::CanRaiseError;
+use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
-use crate::bootstrap::traits::account_prefix::HasAccountPrefix;
 use crate::bootstrap::traits::generate_rollup_genesis::RollupGenesisGenerator;
 use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;

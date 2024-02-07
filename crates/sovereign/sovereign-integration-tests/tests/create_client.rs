@@ -7,7 +7,6 @@ use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::components::message_sender::CanSendSingleMessage;
@@ -39,8 +38,8 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         chain_command_path: "simd".into(),
         account_prefix: "cosmos".into(),
         compat_mode: None,
-        staking_denom: Denom::base("stake"),
-        transfer_denom: Denom::base("coin"),
+        staking_denom: "stake".into(),
+        transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     });

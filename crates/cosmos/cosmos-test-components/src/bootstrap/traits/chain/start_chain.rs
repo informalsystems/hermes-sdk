@@ -5,17 +5,17 @@ use hermes_test_components::runtime::traits::types::child_process::{
 };
 use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
-use crate::bootstrap::traits::types::chain_config::HasChainConfigType;
+use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 
 #[derive_component(ChainFullNodeStarterComponent, ChainFullNodeStarter<Bootstrap>)]
 #[async_trait]
-pub trait CanStartChainFullNode: HasChainConfigType + HasRuntime + HasErrorType
+pub trait CanStartChainFullNode: HasChainNodeConfigType + HasRuntime + HasErrorType
 where
     Self::Runtime: HasChildProcessType + HasFilePathType,
 {
-    async fn start_chain_full_nodes(
+    async fn start_chain_full_node(
         &self,
         chain_home_dir: &FilePathOf<Self::Runtime>,
-        chain_config: &Self::ChainConfig,
-    ) -> Result<Vec<ChildProcessOf<Self::Runtime>>, Self::Error>;
+        chain_node_config: &Self::ChainNodeConfig,
+    ) -> Result<ChildProcessOf<Self::Runtime>, Self::Error>;
 }

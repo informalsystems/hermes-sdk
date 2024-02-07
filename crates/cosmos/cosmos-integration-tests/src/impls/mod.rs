@@ -1,2 +1,2 @@
-pub mod chain_driver;
+pub mod bootstrap;
 pub mod test_driver;

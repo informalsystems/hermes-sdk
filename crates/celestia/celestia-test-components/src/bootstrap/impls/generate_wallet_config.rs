@@ -1,9 +1,11 @@
+use alloc::collections::BTreeMap;
+
 use cgp_core::prelude::*;
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::{
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasGenesisConfigType;
+use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use hermes_cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
 use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
@@ -18,19 +20,19 @@ impl<Bootstrap, ChainDriver> WalletConfigGenerator<Bootstrap> for GenerateCelest
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>
         + HasChainDriverType<ChainDriver = ChainDriver>
-        + HasGenesisConfigType
+        + HasChainGenesisConfigType
         + HasErrorType
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>,
     ChainDriver: HasDenomType<Denom = Denom>,
 {
     async fn generate_wallet_configs(
-        bootstrap: &Bootstrap,
-        genesis_config: &Bootstrap::GenesisConfig,
-    ) -> Result<Vec<CosmosWalletConfig>, Bootstrap::Error> {
-        let denom_for_staking = bootstrap.genesis_denom(DenomForStaking, genesis_config);
+        _bootstrap: &Bootstrap,
+        genesis_config: &Bootstrap::ChainGenesisConfig,
+    ) -> Result<BTreeMap<String, CosmosWalletConfig>, Bootstrap::Error> {
+        let denom_for_staking = Bootstrap::genesis_denom(DenomForStaking, genesis_config);
 
-        let denom_for_transfer = bootstrap.genesis_denom(DenomForTransfer, genesis_config);
+        let denom_for_transfer = Bootstrap::genesis_denom(DenomForTransfer, genesis_config);
 
         let validator = CosmosWalletConfig {
             wallet_id: "validator".to_owned(),
@@ -89,6 +91,13 @@ where
             validator_staked_amount: None,
         };
 
-        Ok(vec![validator, bridge, sequencer, user1, user2, relayer])
+        Ok(BTreeMap::from([
+            ("validator".into(), validator),
+            ("bridge".into(), bridge),
+            ("sequencer".into(), sequencer),
+            ("user1".into(), user1),
+            ("user2".into(), user2),
+            ("relayer".into(), relayer),
+        ]))
     }
 }

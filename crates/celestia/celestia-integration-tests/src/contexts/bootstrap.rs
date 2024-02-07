@@ -1,9 +1,9 @@
+use alloc::sync::Arc;
 use std::path::PathBuf;
 
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapComponents as BaseCelestiaBootstrapComponents;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::BridgeBootstrapperComponent;
@@ -17,51 +17,46 @@ use hermes_celestia_test_components::bootstrap::traits::start_bridge::BridgeStar
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_config::BridgeConfigTypeComponent;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_celestia_test_components::types::bridge_config::CelestiaBridgeConfig;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrapComponents;
-use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::CanUseLegacyCosmosSdkChainBootstrapper;
+use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
+use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
+use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
+use hermes_cosmos_integration_tests::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
+use hermes_cosmos_integration_tests::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
+use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::CompatModeGetter;
+use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
+use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
+use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
+use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
-    IsLegacyCosmosSdkBootstrapComponent, LegacyCosmosSdkBootstrapComponents,
+    CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
+    LegacyCosmosSdkBootstrapComponents,
 };
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::GenesisDenomGetter;
-use hermes_cosmos_test_components::bootstrap::impls::fields::denom::HasGenesisDenom;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::CanBuildChainFromBootstrapParameters;
-use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain::ChainFromBootstrapParamsBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::HasChainStoreDir;
-use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::HasRandomIdFlag;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
+    DenomForStaking, DenomForTransfer, DenomPrefixGetter,
+};
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use hermes_cosmos_test_components::bootstrap::traits::types::chain_config::ChainConfigTypeComponent;
-use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::GenesisConfigTypeComponent;
-use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigFieldsComponent;
-use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::WalletConfigTypeComponent;
-use hermes_cosmos_test_components::bootstrap::types::chain_config::CosmosChainConfig;
-use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
-use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
+use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
-use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
+use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
+use ibc_relayer::config::compat_mode::CompatMode;
+use once_cell::sync::OnceCell;
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 
 pub struct CelestiaBootstrap {
-    // TODO: reuse Cosmos test components directly instead of delegating to `CosmosBootstrap`.
-    pub cosmos_bootstrap: CosmosBootstrap,
+    pub runtime: HermesRuntime,
+    pub builder: Arc<CosmosBuilder>,
+    pub chain_store_dir: PathBuf,
     pub bridge_store_dir: PathBuf,
 }
 
@@ -82,15 +77,6 @@ delegate_all!(
 delegate_components! {
     CelestiaBootstrapComponents {
         [
-            ErrorTypeComponent,
-            ErrorRaiserComponent,
-            RuntimeTypeComponent,
-            ChainConfigTypeComponent,
-            GenesisConfigTypeComponent,
-            WalletConfigTypeComponent,
-            WalletConfigFieldsComponent,
-        ]: CosmosBootstrapComponents,
-        [
             WalletConfigGeneratorComponent,
             BridgeBootstrapperComponent,
             BridgeDataInitializerComponent,
@@ -101,82 +87,30 @@ delegate_components! {
             BridgeStarterComponent,
         ]:
             BaseCelestiaBootstrapComponents,
+        ErrorTypeComponent: ProvideEyreError,
+        ErrorRaiserComponent: RaiseDebugError,
+        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        [
+            ChainTypeComponent,
+            ChainDriverTypeComponent,
+        ]:
+            ProvideCosmosBootstrapChainTypes,
+        RelayerChainConfigBuilderComponent:
+            BuildRelayerChainConfig,
+        ChainBuilderWithNodeConfigComponent:
+            BuildCosmosChainWithNodeConfig,
+        ChainDriverBuilderComponent:
+            BuildCosmosChainDriver,
     }
-}
-
-impl ProvideChainType<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    type Chain = CosmosChain;
-}
-
-impl ProvideChainDriverType<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    // TODO: define a `CelestiaChainDriver` type
-    type ChainDriver = CosmosChainDriver;
 }
 
 impl ProvideBridgeDriverType<CelestiaBootstrap> for CelestiaBootstrapComponents {
     type BridgeDriver = CelestiaBridgeDriver;
 }
 
-impl ProvideRuntime<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn runtime(bootstrap: &CelestiaBootstrap) -> &HermesRuntime {
-        bootstrap.cosmos_bootstrap.runtime()
-    }
-}
-
-impl ChainStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn chain_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
-        bootstrap.cosmos_bootstrap.chain_store_dir()
-    }
-}
-
 impl BridgeStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn bridge_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
         &bootstrap.bridge_store_dir
-    }
-}
-
-impl ChainCommandPathGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn chain_command_path(bootstrap: &CelestiaBootstrap) -> &PathBuf {
-        bootstrap.cosmos_bootstrap.chain_command_path()
-    }
-}
-
-impl RandomIdFlagGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn should_randomize_identifiers(bootstrap: &CelestiaBootstrap) -> bool {
-        bootstrap.cosmos_bootstrap.should_randomize_identifiers()
-    }
-}
-
-impl CosmosGenesisConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn modify_genesis_config(
-        bootstrap: &CelestiaBootstrap,
-        config: &mut serde_json::Value,
-    ) -> Result<(), Error> {
-        bootstrap.cosmos_bootstrap.modify_genesis_config(config)
-    }
-}
-
-impl CometConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn modify_comet_config(
-        bootstrap: &CelestiaBootstrap,
-        comet_config: &mut toml::Value,
-    ) -> Result<(), Error> {
-        bootstrap.cosmos_bootstrap.modify_comet_config(comet_config)
-    }
-}
-
-impl<Label> GenesisDenomGetter<CelestiaBootstrap, Label> for CelestiaBootstrapComponents
-where
-    CosmosBootstrap: HasGenesisDenom<Label>,
-{
-    fn genesis_denom(
-        bootstrap: &CelestiaBootstrap,
-        label: Label,
-        genesis_config: &CosmosGenesisConfig,
-    ) -> Denom {
-        bootstrap
-            .cosmos_bootstrap
-            .genesis_denom(label, genesis_config)
     }
 }
 
@@ -195,29 +129,84 @@ impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
     }
 }
 
-#[async_trait]
-impl ChainFromBootstrapParamsBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    async fn build_chain_from_bootstrap_params(
-        bootstrap: &CelestiaBootstrap,
-        chain_home_dir: PathBuf,
-        chain_id: ChainId,
-        genesis_config: CosmosGenesisConfig,
-        chain_config: CosmosChainConfig,
-        wallets: Vec<CosmosTestWallet>,
-        chain_processes: Vec<Child>,
-    ) -> Result<CosmosChainDriver, Error> {
-        let chain_driver = bootstrap
-            .cosmos_bootstrap
-            .build_chain_from_bootstrap_params(
-                chain_home_dir,
-                chain_id,
-                genesis_config,
-                chain_config,
-                wallets,
-                chain_processes,
-            )
-            .await?;
+impl ProvideRuntime<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn runtime(bootstrap: &CelestiaBootstrap) -> &HermesRuntime {
+        &bootstrap.runtime
+    }
+}
 
-        Ok(chain_driver)
+impl ChainStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn chain_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
+        &bootstrap.chain_store_dir
+    }
+}
+
+impl ChainCommandPathGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn chain_command_path(_bootstrap: &CelestiaBootstrap) -> &PathBuf {
+        static CELESTIA_COMMAND_PATH: OnceCell<PathBuf> = OnceCell::new();
+
+        CELESTIA_COMMAND_PATH.get_or_init(|| "celestia-appd".into())
+    }
+}
+
+impl RandomIdFlagGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn should_randomize_identifiers(_bootstrap: &CelestiaBootstrap) -> bool {
+        false
+    }
+}
+
+impl CosmosGenesisConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn modify_genesis_config(
+        _bootstrap: &CelestiaBootstrap,
+        _config: &mut serde_json::Value,
+    ) -> Result<(), Error> {
+        Ok(())
+    }
+}
+
+impl CometConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn modify_comet_config(
+        _bootstrap: &CelestiaBootstrap,
+        _comet_config: &mut toml::Value,
+    ) -> Result<(), Error> {
+        Ok(())
+    }
+}
+
+impl DenomPrefixGetter<CelestiaBootstrap, DenomForStaking> for CelestiaBootstrapComponents {
+    fn denom_prefix(_bootstrap: &CelestiaBootstrap, _label: DenomForStaking) -> &str {
+        "utia"
+    }
+}
+
+impl DenomPrefixGetter<CelestiaBootstrap, DenomForTransfer> for CelestiaBootstrapComponents {
+    fn denom_prefix(_bootstrap: &CelestiaBootstrap, _label: DenomForTransfer) -> &str {
+        "coin"
+    }
+}
+
+impl AccountPrefixGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn account_prefix(_bootstrap: &CelestiaBootstrap) -> &str {
+        "celestia"
+    }
+}
+
+impl CompatModeGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn compat_mode(_bootstrap: &CelestiaBootstrap) -> Option<&CompatMode> {
+        const COMPAT_MODE: CompatMode = CompatMode::V0_34;
+
+        Some(&COMPAT_MODE)
+    }
+}
+
+impl GasDenomGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn gas_denom(_bootstrap: &CelestiaBootstrap) -> &str {
+        "utia"
+    }
+}
+
+impl CosmosBuilderGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
+    fn cosmos_builder(bootstrap: &CelestiaBootstrap) -> &CosmosBuilder {
+        &bootstrap.builder
     }
 }
