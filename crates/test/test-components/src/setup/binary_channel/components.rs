@@ -1,29 +1,24 @@
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiser;
-use cgp_core::ProvideErrorType;
+use cgp_core::{ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::CanBuildRelayFromChains;
-use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
-use hermes_relayer_components::build::traits::target::relay::RelayBToATarget;
+use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::DestinationTarget;
-use hermes_relayer_components::relay::traits::target::SourceTarget;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::chain_driver::traits::types::chain::HasChain;
 use crate::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
 use crate::driver::traits::types::builder_at::ProvideBuilderTypeAt;
-
 use crate::driver::traits::types::chain_at::ProvideChainTypeAt;
 use crate::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use crate::driver::traits::types::relay_at::ProvideRelayTypeAt;

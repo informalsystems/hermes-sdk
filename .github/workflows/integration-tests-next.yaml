@@ -32,7 +32,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app -c \
+            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#ibc-go-v8-simapp -c \
               cargo nextest run -p hermes-cosmos-integration-tests \
               --test-threads=2
 

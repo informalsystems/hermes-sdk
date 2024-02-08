@@ -1,8 +1,7 @@
 use bech32::ToBase32;
 use bech32::Variant::Bech32m;
 use ed25519_dalek::{SigningKey, VerifyingKey};
-use sha2::Digest;
-use sha2::Sha256;
+use sha2::{Digest, Sha256};
 
 pub struct SovereignWallet {
     pub wallet_id: String,

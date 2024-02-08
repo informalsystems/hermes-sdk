@@ -1,3 +1,5 @@
+use std::string::FromUtf8Error;
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_test_components::chain_driver::traits::fields::amount::IbcTransferredAmountConverter;
@@ -5,7 +7,6 @@ use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
-use std::string::FromUtf8Error;
 use subtle_encoding::hex;
 
 use crate::chain_driver::types::amount::Amount;

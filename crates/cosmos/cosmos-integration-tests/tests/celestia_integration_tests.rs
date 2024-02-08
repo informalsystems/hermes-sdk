@@ -5,9 +5,8 @@ use std::sync::Arc;
 
 use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::setup::traits::run_test::CanRunTest;
@@ -28,7 +27,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let celestia_bootstrap = Arc::new(CosmosBootstrap {
+    let celestia_bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
@@ -36,13 +35,13 @@ fn celestia_integration_tests() -> Result<(), Error> {
         chain_command_path: "celestia-appd".into(),
         account_prefix: "celestia".into(),
         compat_mode: Some(CompatMode::V0_34),
-        staking_denom: Denom::base("utia"),
-        transfer_denom: Denom::base("coin"),
+        staking_denom: "utia".into(),
+        transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     });
 
-    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
+    let cosmos_bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime,
         builder,
         should_randomize_identifiers: true,
@@ -50,8 +49,8 @@ fn celestia_integration_tests() -> Result<(), Error> {
         chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
         compat_mode: None,
-        staking_denom: Denom::base("stake"),
-        transfer_denom: Denom::base("coin"),
+        staking_denom: "stake".into(),
+        transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     });

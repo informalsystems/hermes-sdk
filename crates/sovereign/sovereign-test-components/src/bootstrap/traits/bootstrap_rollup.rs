@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
