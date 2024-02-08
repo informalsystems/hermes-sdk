@@ -17,11 +17,11 @@ name = "hermes"
 path = "bin/hermes.rs"
 
 [dependencies]
-hermes-cli-framework            = { path = "../cli-framework" }
-hermes-relayer-runtime          = { path = "../../runtime/relayer-runtime" }
-hermes-relayer-components       = { path = "../../relayer/relayer-components" }
-hermes-cosmos-relayer           = { path = "../../cosmos/cosmos-relayer" }
-hermes-cosmos-client-components = { path = "../../cosmos/cosmos-client-components" }
+hermes-cli-framework            = { workspace = true }
+hermes-relayer-runtime          = { workspace = true }
+hermes-relayer-components       = { workspace = true }
+hermes-cosmos-relayer           = { workspace = true }
+hermes-cosmos-client-components = { workspace = true }
 
 cgp-core                  = { workspace = true }
 ibc-relayer               = { workspace = true }

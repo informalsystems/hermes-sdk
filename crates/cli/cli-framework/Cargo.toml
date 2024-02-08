@@ -1,5 +1,5 @@
 [package]
-name = "hermes-cli-framework"
+name         = "hermes-cli-framework"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }
@@ -13,11 +13,11 @@ description  = """
 """
 
 [dependencies]
-hermes-relayer-runtime = { path = "../../runtime/relayer-runtime" }
-hermes-cosmos-relayer = { path = "../../cosmos/cosmos-relayer" }
+hermes-relayer-runtime = { workspace = true }
+hermes-cosmos-relayer  = { workspace = true }
 
-clap = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
-tracing = { workspace = true }
+clap               = { workspace = true }
+tokio              = { workspace = true, features = ["full"] }
+tracing            = { workspace = true }
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
-oneline-eyre = { version = "0.1.0" }
+oneline-eyre       = { version = "0.1.0" }
