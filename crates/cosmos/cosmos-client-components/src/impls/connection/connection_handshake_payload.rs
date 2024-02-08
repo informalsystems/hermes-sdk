@@ -1,6 +1,6 @@
 use cgp_core::CanRaiseError;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

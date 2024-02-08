@@ -12,10 +12,7 @@ use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
-use hermes_relayer_components::chain::traits::components::message_sender::MessageSender;
 use hermes_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
-use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
@@ -23,11 +20,14 @@ use hermes_relayer_components::chain::traits::message_builders::receive_packet::
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
+use hermes_relayer_components::chain::traits::send_message::MessageSender;
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ProvideChainIdType,
 };

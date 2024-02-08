@@ -1,12 +1,9 @@
 use cgp_core::HasComponents;
-use hermes_relayer_components::chain::traits::components::message_sender::{
-    CanSendMessages, MessageSender,
-};
-use hermes_relayer_components::chain::traits::components::update_client_payload_builder::{
-    CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
-};
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
+};
+use hermes_relayer_components::chain::traits::payload_builders::update_client::{
+    CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, ChainStatusQuerier,
@@ -20,6 +17,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeight, ConsensusStateHeightQuerier,
 };
+use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,

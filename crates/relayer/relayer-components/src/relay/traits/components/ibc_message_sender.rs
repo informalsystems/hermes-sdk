@@ -3,7 +3,7 @@ use alloc::vec::Vec;
 
 use cgp_core::prelude::*;
 
-use crate::chain::traits::components::message_sender::InjectMismatchIbcEventsCountError;
+use crate::chain::traits::send_message::InjectMismatchIbcEventsCountError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::{EventOf, MessageOf};
 use crate::relay::traits::chains::HasRelayChains;

@@ -1,7 +1,7 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
+use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::HeightOf;

@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::components::message_sender::{CanSendMessages, MessageSenderComponent};
+use crate::chain::traits::send_message::{CanSendMessages, MessageSenderComponent};
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;

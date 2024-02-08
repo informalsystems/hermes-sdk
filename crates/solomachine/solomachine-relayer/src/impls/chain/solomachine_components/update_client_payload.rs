@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
 use ibc_relayer_types::Height;
 
 use crate::methods::encode::header_data::sign_header_data;
