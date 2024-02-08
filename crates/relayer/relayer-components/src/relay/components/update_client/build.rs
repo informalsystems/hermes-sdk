@@ -2,8 +2,8 @@ use alloc::vec::Vec;
 
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use crate::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
+use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;

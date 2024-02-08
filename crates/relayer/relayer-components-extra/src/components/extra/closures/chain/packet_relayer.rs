@@ -1,27 +1,27 @@
 use cgp_core::HasComponents;
-use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::{
-    AckPacketMessageBuilder, CanBuildAckPacketMessage,
-};
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
 };
 use hermes_relayer_components::chain::traits::components::packet_fields_reader::{
     CanReadPacketFields, PacketFieldsReader,
 };
-use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::{
-    CanBuildReceivePacketMessage, ReceivePacketMessageBuilder,
-};
 use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::{
     CanBuildReceivePacketPayload, ReceivePacketPayloadBuilder,
+};
+use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
+    AckPacketMessageBuilder, CanBuildAckPacketMessage,
+};
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
+    CanBuildReceivePacketMessage, ReceivePacketMessageBuilder,
+};
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
+    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::packet_is_received::{
     CanQueryPacketIsReceived, ReceivedPacketQuerier,
 };
-use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
-};
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

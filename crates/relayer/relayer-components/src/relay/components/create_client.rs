@@ -1,8 +1,8 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::create_client_message_builder::CanBuildCreateClientMessage;
 use crate::chain::traits::components::create_client_payload_builder::CanBuildCreateClientPayload;
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
+use crate::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use crate::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayloadType,
 };

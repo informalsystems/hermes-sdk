@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };

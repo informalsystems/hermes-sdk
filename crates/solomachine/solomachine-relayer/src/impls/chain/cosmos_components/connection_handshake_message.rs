@@ -4,7 +4,7 @@ use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMe
 use hermes_cosmos_client_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
 use hermes_cosmos_relayer::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use hermes_cosmos_relayer::types::error::{BaseError, Error};
-use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };

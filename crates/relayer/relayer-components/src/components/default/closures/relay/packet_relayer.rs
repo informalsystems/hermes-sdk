@@ -1,17 +1,17 @@
 use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 
-use crate::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
 use crate::chain::traits::components::message_sender::CanSendMessages;
 use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
-use crate::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
 use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
-use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-};
-use crate::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use crate::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
 use crate::chain::traits::logs::packet::CanLogChainPacket;
+use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
+use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
+use crate::chain::traits::message_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
+};
+use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::chain::traits::queries::consensus_state::CanQueryConsensusState;

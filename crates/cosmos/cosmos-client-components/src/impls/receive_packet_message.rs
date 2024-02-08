@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
-use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;

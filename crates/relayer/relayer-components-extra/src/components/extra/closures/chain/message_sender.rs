@@ -2,11 +2,11 @@ use cgp_core::HasComponents;
 use hermes_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };
-use hermes_relayer_components::chain::traits::components::update_client_message_builder::{
-    CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
-};
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::{
     CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
+};
+use hermes_relayer_components::chain::traits::message_builders::update_client::{
+    CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, ChainStatusQuerier,

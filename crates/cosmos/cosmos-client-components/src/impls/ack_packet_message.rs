@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;

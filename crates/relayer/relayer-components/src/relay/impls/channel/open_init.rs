@@ -1,8 +1,8 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::channel_handshake_message_builder::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::components::channel_handshake_payload_builder::CanBuildChannelHandshakePayloads;
 use crate::chain::traits::components::message_sender::CanSendSingleMessage;
+use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};

@@ -1,7 +1,7 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::channel_handshake_message_builder::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::components::channel_handshake_payload_builder::CanBuildChannelHandshakePayloads;
+use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};

@@ -4,7 +4,7 @@ use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMe
 use hermes_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::types::error::Error;
-use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_types::tx_msg::Msg;
