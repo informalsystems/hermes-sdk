@@ -1,4 +1,4 @@
-use hermes_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
+use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};

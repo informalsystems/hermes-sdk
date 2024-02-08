@@ -1,8 +1,8 @@
 use cgp_core::{HasComponents, HasErrorType};
-use hermes_relayer_components::chain::traits::components::packet_from_write_ack_builder::{
+use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
+use hermes_relayer_components::chain::traits::packet::from_write_ack::{
     CanBuildPacketFromWriteAck, PacketFromWriteAckBuilder,
 };
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::{
     CanQueryCounterpartyChainId, CounterpartyChainIdQuerier,
 };

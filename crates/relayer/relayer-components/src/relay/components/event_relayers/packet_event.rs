@@ -1,6 +1,6 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::packet_from_write_ack_builder::CanBuildPacketFromWriteAck;
+use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{EventOf, HeightOf};

@@ -4,7 +4,6 @@ use std::time::Duration;
 use basecoin_app::modules::ibc::AnyConsensusState;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
-use hermes_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
@@ -14,6 +13,7 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;

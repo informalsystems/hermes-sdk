@@ -1,8 +1,8 @@
 use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 
-use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;

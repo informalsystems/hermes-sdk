@@ -1,7 +1,4 @@
 use cgp_core::HasComponents;
-use hermes_relayer_components::chain::traits::components::packet_fields_reader::{
-    CanReadPacketFields, PacketFieldsReader,
-};
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
@@ -12,6 +9,9 @@ use hermes_relayer_components::chain::traits::message_builders::receive_packet::
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
+};
+use hermes_relayer_components::chain::traits::packet::fields::{
+    CanReadPacketFields, PacketFieldsReader,
 };
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
