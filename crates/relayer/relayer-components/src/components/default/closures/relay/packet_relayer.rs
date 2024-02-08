@@ -1,22 +1,21 @@
 use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 
-use crate::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
-use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
-use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
-use crate::chain::traits::components::client_state_querier::CanQueryClientState;
-use crate::chain::traits::components::consensus_state_height_querier::CanQueryConsensusStateHeight;
-use crate::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
-use crate::chain::traits::components::message_sender::CanSendMessages;
-use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
-use crate::chain::traits::components::receive_packet_message_builder::CanBuildReceivePacketMessage;
-use crate::chain::traits::components::receive_packet_payload_builder::CanBuildReceivePacketPayload;
-use crate::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
-use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-};
-use crate::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
-use crate::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
 use crate::chain::traits::logs::packet::CanLogChainPacket;
+use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
+use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
+use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
+use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use crate::chain::traits::packet::fields::CanReadPacketFields;
+use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
+use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
+use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
+use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
+use crate::chain::traits::queries::client_state::CanQueryClientState;
+use crate::chain::traits::queries::consensus_state::CanQueryConsensusState;
+use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
+use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
+use crate::chain::traits::send_message::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -27,9 +26,9 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::packet_filter::PacketFilter;
-use crate::relay::traits::components::packet_relayer::CanRelayPacket;
+use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
+use crate::relay::traits::packet_relayer::CanRelayPacket;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 
@@ -75,7 +74,7 @@ where
         + HasWriteAckEvent<SrcChain>
         + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanQueryClientState<SrcChain>
-        + CanQueryReceivedPacket<SrcChain>
+        + CanQueryPacketIsReceived<SrcChain>
         + CanQueryConsensusState<SrcChain>
         + CanQueryConsensusStateHeight<SrcChain>
         + CanBuildAckPacketPayload<SrcChain>

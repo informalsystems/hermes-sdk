@@ -1,12 +1,12 @@
 use cgp_core::HasComponents;
-use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::{
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelHandshakeMessages, ChannelHandshakeMessageBuilder,
 };
-use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::{
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     CanBuildChannelHandshakePayloads, ChannelHandshakePayloadBuilder,
 };
-use hermes_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };

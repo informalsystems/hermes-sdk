@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp_core::{async_trait, HasErrorType};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::components::packet_relayer::PacketRelayer;
+use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayer;
 use hermes_relayer_components::relay::types::aliases::Packet;
 
 pub struct RetryRelayer<InRelay> {

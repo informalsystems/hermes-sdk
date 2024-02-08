@@ -1,7 +1,7 @@
 use core::str::FromStr;
 
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::components::message_sender::MessageSender;
+use hermes_relayer_components::chain::traits::send_message::MessageSender;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, Counterparty, State as ConnectionState,
 };

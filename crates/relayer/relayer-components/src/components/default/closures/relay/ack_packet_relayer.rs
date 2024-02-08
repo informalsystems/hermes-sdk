@@ -1,15 +1,15 @@
 use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 
-use crate::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
-use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
-use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
-use crate::chain::traits::components::client_state_querier::CanQueryClientState;
-use crate::chain::traits::components::consensus_state_height_querier::CanQueryConsensusStateHeight;
-use crate::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
-use crate::chain::traits::components::message_sender::CanSendMessages;
-use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
-use crate::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
-use crate::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
+use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
+use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use crate::chain::traits::packet::fields::CanReadPacketFields;
+use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
+use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
+use crate::chain::traits::queries::client_state::CanQueryClientState;
+use crate::chain::traits::queries::consensus_state::CanQueryConsensusState;
+use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
+use crate::chain::traits::send_message::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -20,7 +20,7 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::packet_relayers::ack_packet::CanRelayAckPacket;
+use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 

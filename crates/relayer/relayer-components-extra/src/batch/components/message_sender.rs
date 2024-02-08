@@ -3,7 +3,7 @@ use alloc::vec::Vec;
 use cgp_core::{async_trait, CanRaiseError};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::components::ibc_message_sender::{
+use hermes_relayer_components::relay::traits::ibc_message_sender::{
     CanSendIbcMessages, IbcMessageSender,
 };
 use hermes_relayer_components::relay::traits::target::ChainTarget;

@@ -3,7 +3,7 @@ use cgp_core::HasErrorType;
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::messages::client::update::CosmosUpdateClientMessage;
 use hermes_cosmos_relayer::types::error::{BaseError, Error};
-use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;

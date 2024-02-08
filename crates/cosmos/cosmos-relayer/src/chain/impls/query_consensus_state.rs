@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComponents;
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;

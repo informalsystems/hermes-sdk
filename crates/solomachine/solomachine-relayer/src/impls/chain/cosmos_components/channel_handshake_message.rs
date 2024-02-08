@@ -7,7 +7,7 @@ use hermes_cosmos_client_components::types::messages::channel::open_confirm::Cos
 use hermes_cosmos_client_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_cosmos_client_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
 use hermes_cosmos_relayer::types::error::{BaseError, Error};
-use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };

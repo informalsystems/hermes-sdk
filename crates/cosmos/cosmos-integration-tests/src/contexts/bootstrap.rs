@@ -51,7 +51,6 @@ pub struct CosmosBootstrap {
     pub account_prefix: String,
     pub staking_denom: String,
     pub transfer_denom: String,
-    pub compat_mode: Option<CompatMode>,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
@@ -153,8 +152,10 @@ impl AccountPrefixGetter<CosmosBootstrap> for CosmosBootstrapComponents {
 }
 
 impl CompatModeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn compat_mode(bootstrap: &CosmosBootstrap) -> Option<&CompatMode> {
-        bootstrap.compat_mode.as_ref()
+    fn compat_mode(_bootstrap: &CosmosBootstrap) -> Option<&CompatMode> {
+        const COMPAT_MODE: CompatMode = CompatMode::V0_37;
+
+        Some(&COMPAT_MODE)
     }
 }
 

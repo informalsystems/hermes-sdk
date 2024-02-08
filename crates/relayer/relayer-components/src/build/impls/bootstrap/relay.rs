@@ -11,7 +11,7 @@ use crate::build::types::aliases::{
 use crate::chain::traits::types::create_client::HasCreateClientOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use crate::relay::traits::components::client_creator::CanCreateClient;
+use crate::relay::traits::client_creator::CanCreateClient;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 
 #[async_trait]

@@ -7,9 +7,9 @@ use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_relayer_components::chain::traits::components::create_client_message_builder::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CanBuildCreateClientPayload;
-use hermes_relayer_components::chain::traits::components::message_sender::CanSendSingleMessage;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -37,7 +37,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         chain_store_dir: "./test-data".into(),
         chain_command_path: "simd".into(),
         account_prefix: "cosmos".into(),
-        compat_mode: None,
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),

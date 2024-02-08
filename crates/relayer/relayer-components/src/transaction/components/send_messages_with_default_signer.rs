@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use crate::chain::traits::components::message_sender::MessageSender;
+use crate::chain::traits::send_message::MessageSender;
 use crate::transaction::traits::components::send_messages_with_signer::CanSendMessagesWithSigner;
 use crate::transaction::traits::signer::HasDefaultSigner;
 

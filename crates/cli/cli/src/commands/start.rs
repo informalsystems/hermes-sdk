@@ -1,8 +1,7 @@
-use cgp_core::Runner;
+use cgp_core::CanRun;
 use hermes_cli_framework::command::Runnable;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
-use hermes_relayer_components::relay::components::auto_relayers::both_ways::RelayBothWays;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::eyre;
 use tracing::info;
@@ -67,7 +66,8 @@ impl Runnable for Start {
             self.chain_id_a, self.chain_id_b
         );
 
-        RelayBothWays::run(&birelay)
+        birelay
+            .run()
             .await
             .map_err(|e| eyre!("Relayed exited because of error: {e}"))?;
 

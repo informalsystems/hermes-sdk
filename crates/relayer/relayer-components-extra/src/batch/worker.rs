@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::traits::types::message::{
 };
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::components::ibc_message_sender::CanSendIbcMessages;
+use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::logs::logger::CanLogRelayTarget;
 use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components::runtime::traits::mutex::HasMutex;

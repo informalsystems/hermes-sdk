@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::create_client::HasCreateCli
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
-use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
 use crate::driver::traits::types::chain_at::ChainTypeAt;

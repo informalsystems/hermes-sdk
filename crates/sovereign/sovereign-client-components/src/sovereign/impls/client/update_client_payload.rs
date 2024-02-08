@@ -1,5 +1,5 @@
 use cgp_core::HasErrorType;
-use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
