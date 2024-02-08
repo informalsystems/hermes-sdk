@@ -16,6 +16,7 @@ description  = """
 hermes-relayer-runtime = { workspace = true }
 hermes-cosmos-relayer  = { workspace = true }
 
+cgp-core           = { workspace = true }
 clap               = { workspace = true }
 tokio              = { workspace = true, features = ["full"] }
 tracing            = { workspace = true }
