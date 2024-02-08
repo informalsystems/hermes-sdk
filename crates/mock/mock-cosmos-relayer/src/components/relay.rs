@@ -5,7 +5,7 @@ use hermes_relayer_components::components::default::relay::{
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::relay::components::packet_filters::allow_all::AllowAll;
+use hermes_relayer_components::relay::impls::packet_filters::allow_all::AllowAll;
 use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilterComponent;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;

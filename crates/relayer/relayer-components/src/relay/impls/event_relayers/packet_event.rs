@@ -5,7 +5,7 @@ use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{EventOf, HeightOf};
 use crate::logger::traits::level::HasBaseLogLevels;
-use crate::relay::components::packet_filters::chain::{
+use crate::relay::impls::packet_filters::chain::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;

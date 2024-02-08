@@ -1,7 +1,7 @@
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::relay::components::create_client::CanRaiseMissingCreateClientEventError;
 use hermes_relayer_components::relay::impls::connection::open_init::CanRaiseMissingConnectionInitEventError;
+use hermes_relayer_components::relay::impls::create_client::CanRaiseMissingCreateClientEventError;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
 use crate::context::relay::SolomachineRelay;
