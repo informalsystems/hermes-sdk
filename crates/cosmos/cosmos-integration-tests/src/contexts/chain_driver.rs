@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use alloc::collections::BTreeMap;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
