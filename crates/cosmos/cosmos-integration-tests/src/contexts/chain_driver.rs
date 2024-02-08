@@ -1,11 +1,3 @@
-use alloc::collections::BTreeMap;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
-use hermes_cosmos_test_components::chain_driver::impls::deposit_proposal::DepositGovernanceProposalWithChainCommand;
-use hermes_cosmos_test_components::chain_driver::impls::proposal_status::QueryGovernanceProposalStatusWithChainCommand;
-use hermes_cosmos_test_components::chain_driver::impls::vote_proposal::VoteGovernanceProposalWithChainCommand;
-use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::GovernanceProposalDepositerComponent;
-use hermes_cosmos_test_components::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerierComponent;
-use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
