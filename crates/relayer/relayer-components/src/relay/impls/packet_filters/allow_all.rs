@@ -1,7 +1,7 @@
 use cgp_core::async_trait;
 
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::packet_filter::PacketFilter;
+use crate::relay::traits::packet_filter::PacketFilter;
 
 pub struct AllowAll;
 

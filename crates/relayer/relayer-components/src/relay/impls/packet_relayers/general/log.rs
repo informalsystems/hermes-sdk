@@ -4,9 +4,9 @@ use cgp_core::async_trait;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::packet_relayer::PacketRelayer;
 use crate::relay::traits::logs::logger::CanLogRelay;
 use crate::relay::traits::logs::packet::CanLogRelayPacket;
+use crate::relay::traits::packet_relayer::PacketRelayer;
 
 pub struct LoggerRelayer<InRelayer>(pub PhantomData<InRelayer>);
 

@@ -5,7 +5,7 @@
 //! relayed by a full relayer.
 
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
-use hermes_relayer_components::relay::traits::components::packet_relayer::CanRelayPacket;
+use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use ibc_relayer::config::PacketFilter;
 use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
 use ibc_test_framework::prelude::*;

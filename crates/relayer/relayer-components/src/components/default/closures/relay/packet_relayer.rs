@@ -26,9 +26,9 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::packet_filter::PacketFilter;
-use crate::relay::traits::components::packet_relayer::CanRelayPacket;
+use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
+use crate::relay::traits::packet_relayer::CanRelayPacket;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 

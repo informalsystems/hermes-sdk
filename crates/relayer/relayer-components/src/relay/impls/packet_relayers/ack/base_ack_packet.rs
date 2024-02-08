@@ -6,8 +6,8 @@ use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
-use crate::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayer;
+use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
+use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayer;
 use crate::relay::traits::target::SourceTarget;
 
 /// The minimal component that can send an acknowledgement packet.

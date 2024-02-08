@@ -2,8 +2,8 @@ use alloc::vec;
 
 use cgp_core::{async_trait, Runner};
 
+use crate::relay::traits::auto_relayer::CanAutoRelay;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use crate::relay::traits::components::auto_relayer::CanAutoRelay;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};

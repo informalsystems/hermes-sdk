@@ -5,8 +5,8 @@ use crate::chain::traits::queries::send_packets::CanQuerySendPackets;
 use crate::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use crate::relay::traits::components::packet_clearer::PacketClearer;
-use crate::relay::traits::components::packet_relayer::CanRelayPacket;
+use crate::relay::traits::packet_clearer::PacketClearer;
+use crate::relay::traits::packet_relayer::CanRelayPacket;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 

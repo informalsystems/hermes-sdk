@@ -3,8 +3,8 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
-use hermes_relayer_components::relay::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
+use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc::core::ics24_host::identifier::ClientId;
 use ibc::core::ValidationContext;

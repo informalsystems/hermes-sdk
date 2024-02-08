@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 
 use cgp_core::async_trait;
 
-use crate::relay::traits::components::packet_filter::CanFilterPackets;
-use crate::relay::traits::components::packet_relayer::PacketRelayer;
+use crate::relay::traits::packet_filter::CanFilterPackets;
+use crate::relay::traits::packet_relayer::PacketRelayer;
 
 pub struct FilterRelayer<InRelayer> {
     pub phantom: PhantomData<InRelayer>,

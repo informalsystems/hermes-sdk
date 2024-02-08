@@ -18,7 +18,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasW
 use hermes_relayer_components::logger::traits::has_logger::HasLogger;
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::components::packet_relayers::ack_packet::CanRelayAckPacket;
+use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;

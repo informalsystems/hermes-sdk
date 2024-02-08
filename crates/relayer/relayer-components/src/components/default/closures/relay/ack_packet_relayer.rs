@@ -20,7 +20,7 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::packet_relayers::ack_packet::CanRelayAckPacket;
+use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 

@@ -2,9 +2,9 @@ use cgp_core::{ErrorRaiser, HasComponents};
 use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use hermes_relayer_components::relay::traits::components::event_relayer::CanRelayEvent;
-use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::event_relayer::CanRelayEvent;
 use hermes_relayer_components::relay::traits::packet::HasRelayPacketFields;
+use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 

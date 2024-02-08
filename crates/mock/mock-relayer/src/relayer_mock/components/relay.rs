@@ -9,12 +9,12 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::full_rela
 use hermes_relayer_components::relay::impls::packet_relayers::receive::base_receive_packet::BaseReceivePacketRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::receive::skip_received_packet::SkipReceivedPacketRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_packet::BaseTimeoutUnorderedPacketRelayer;
-use hermes_relayer_components::relay::traits::components::ibc_message_sender::{MainSink, IbcMessageSenderComponent};
-use hermes_relayer_components::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::relay::traits::components::packet_relayer::PacketRelayerComponent;
-use hermes_relayer_components::relay::traits::components::packet_relayers::ack_packet::AckPacketRelayerComponent;
-use hermes_relayer_components::relay::traits::components::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
-use hermes_relayer_components::relay::traits::components::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
+use hermes_relayer_components::relay::traits::ibc_message_sender::{MainSink, IbcMessageSenderComponent};
+use hermes_relayer_components::relay::traits::update_client_message_builder::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerComponent;
+use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
+use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
+use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;

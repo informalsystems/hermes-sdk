@@ -11,7 +11,7 @@ use crate::relay::traits::target::ChainTarget;
 
    The event relayer is a general abstraction over other relayer types that
    need to be reactive to chain events. This includes the
-   [packet relayer]( crate::relay::traits::components::packet_relayer::CanRelayPacket),
+   [packet relayer]( crate::relay::traits::packet_relayer::CanRelayPacket),
    but also future relayers such as connection and channel handshake relayers.
 */
 #[derive_component(EventRelayerComponent, EventRelayer<Relay>)]

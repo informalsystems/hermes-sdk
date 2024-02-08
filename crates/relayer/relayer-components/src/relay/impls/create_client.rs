@@ -7,7 +7,7 @@ use crate::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayloadType,
 };
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::client_creator::ClientCreator;
+use crate::relay::traits::client_creator::ClientCreator;
 use crate::relay::traits::target::ChainTarget;
 
 pub struct CreateClientWithChains;

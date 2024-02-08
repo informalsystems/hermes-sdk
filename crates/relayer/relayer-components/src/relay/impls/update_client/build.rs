@@ -8,8 +8,8 @@ use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
 use crate::relay::traits::target::ChainTarget;
+use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
 
 pub struct BuildUpdateClientMessages;
 

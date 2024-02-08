@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQu
 use hermes_relayer_components::chain::traits::queries::send_packets::CanQuerySendPackets;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::relay::traits::components::packet_clearer::CanClearPackets;
+use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
 use ibc_relayer::config::PacketFilter;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::Height;
