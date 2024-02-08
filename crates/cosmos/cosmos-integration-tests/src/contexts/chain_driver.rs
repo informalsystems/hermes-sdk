@@ -74,6 +74,7 @@ use tokio::process::Child;
 */
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
+    pub chain_command_path: PathBuf,
     pub chain_process: Child,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
