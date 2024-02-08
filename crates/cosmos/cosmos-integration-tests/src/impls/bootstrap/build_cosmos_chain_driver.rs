@@ -1,8 +1,11 @@
+use std::path::PathBuf;
+
 use alloc::collections::BTreeMap;
 
 use cgp_core::CanRaiseError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };
@@ -15,6 +18,7 @@ use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
+use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use tokio::process::Child;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
@@ -32,8 +36,9 @@ where
         + CanBuildChainWithNodeConfig
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>
+        + HasChainCommandPath
         + CanRaiseError<&'static str>,
-    Runtime: HasChildProcessType<ChildProcess = Child>,
+    Runtime: HasFilePathType<FilePath = PathBuf> + HasChildProcessType<ChildProcess = Child>,
 {
     async fn build_chain_driver(
         bootstrap: &Bootstrap,
@@ -73,8 +78,11 @@ where
             .build_chain_with_node_config(&chain_node_config, &relayer_wallet)
             .await?;
 
+        let chain_command_path = bootstrap.chain_command_path().clone();
+
         let chain_driver = CosmosChainDriver {
             chain,
+            chain_command_path,
             chain_node_config,
             genesis_config,
             chain_process,
