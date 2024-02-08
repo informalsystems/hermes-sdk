@@ -7,8 +7,7 @@ use hermes_relayer_components::chain::traits::message_builders::receive_packet::
     CanBuildReceivePacketMessage, ReceivePacketMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
+    CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::packet::fields::{
     CanReadPacketFields, PacketFieldsReader,
@@ -18,6 +17,9 @@ use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
 };
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::{
     CanBuildReceivePacketPayload, ReceivePacketPayloadBuilder,
+};
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketPayload, TimeoutUnorderedPacketPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::packet_is_received::{
     CanQueryPacketIsReceived, ReceivedPacketQuerier,

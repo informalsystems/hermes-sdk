@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
-use hermes_cosmos_client_components::impls::packet_fields::CosmosPacketFieldReader;
+use hermes_cosmos_client_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;

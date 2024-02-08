@@ -3,13 +3,12 @@ use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 use crate::chain::traits::logs::packet::CanLogChainPacket;
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
-use crate::chain::traits::message_builders::timeout_unordered_packet::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-};
+use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
+use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::queries::client_state::CanQueryClientState;
