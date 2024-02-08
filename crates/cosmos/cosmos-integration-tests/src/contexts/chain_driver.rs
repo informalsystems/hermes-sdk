@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -5,6 +6,7 @@ use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::transaction::CosmosTxContext;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain_driver::impls::address::ProvideStringAddress;
@@ -12,14 +14,20 @@ use hermes_cosmos_test_components::chain_driver::impls::amount::ProvideU128Amoun
 use hermes_cosmos_test_components::chain_driver::impls::chain_id::BuildCosmosChainIdFromString;
 use hermes_cosmos_test_components::chain_driver::impls::convert_ibc_amout::ConvertCosmosIbcAmount;
 use hermes_cosmos_test_components::chain_driver::impls::denom::ProvideIbcDenom;
+use hermes_cosmos_test_components::chain_driver::impls::deposit_proposal::DepositGovernanceProposalWithChainCommand;
 use hermes_cosmos_test_components::chain_driver::impls::ibc_transfer_timeout::IbcTransferTimeoutAfterSeconds;
 use hermes_cosmos_test_components::chain_driver::impls::messages::ibc_transfer::BuildCosmosIbcTransferMessage;
+use hermes_cosmos_test_components::chain_driver::impls::proposal_status::QueryGovernanceProposalStatusWithChainCommand;
 use hermes_cosmos_test_components::chain_driver::impls::query_balance::QueryCosmosBalance;
 use hermes_cosmos_test_components::chain_driver::impls::store_wasm_client::UploadWasmClientCodeWithChainCommand;
+use hermes_cosmos_test_components::chain_driver::impls::vote_proposal::VoteGovernanceProposalWithChainCommand;
 use hermes_cosmos_test_components::chain_driver::impls::wallet::ProvideCosmosTestWallet;
+use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::GovernanceProposalDepositerComponent;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerierComponent;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::WasmClientCodeUploaderComponent;
+use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
 use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
