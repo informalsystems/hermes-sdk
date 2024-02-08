@@ -1,0 +1,24 @@
+[package]
+name         = "hermes-cli-framework"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Implementation of an IBC Relayer in Rust, as a library
+"""
+
+[dependencies]
+hermes-relayer-runtime = { workspace = true }
+hermes-cosmos-relayer  = { workspace = true }
+
+cgp-core           = { workspace = true }
+clap               = { workspace = true }
+tokio              = { workspace = true, features = ["full"] }
+tracing            = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter"] }
+oneline-eyre       = { workspace = true }
