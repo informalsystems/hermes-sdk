@@ -2,10 +2,10 @@ use cgp_core::Runner;
 use hermes_cli_framework::command::Runnable;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
-use hermes_relayer_components::logger::traits::log::CanLog;
 use hermes_relayer_components::relay::components::auto_relayers::both_ways::RelayBothWays;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::eyre;
+use tracing::info;
 
 use crate::Result;
 
@@ -50,7 +50,7 @@ pub struct Start {
 
 impl Runnable for Start {
     async fn run(&self, builder: CosmosBuilder) -> Result<()> {
-        builder.log_info("Starting relayer...");
+        info!("Starting relayer...");
 
         let birelay = builder
             .build_birelay(
@@ -62,10 +62,10 @@ impl Runnable for Start {
             .await
             .map_err(|e| eyre!("Relayer failed to start: {e}"))?;
 
-        builder.log_info(&format!(
+        info!(
             "Relaying between {} and {}...",
             self.chain_id_a, self.chain_id_b
-        ));
+        );
 
         RelayBothWays::run(&birelay)
             .await

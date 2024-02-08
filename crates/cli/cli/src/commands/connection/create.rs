@@ -6,12 +6,11 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::components::relay::build_from_chain::BuildRelayFromChains;
 use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilder;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
-use hermes_relayer_components::logger::traits::log::CanLog;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use hermes_relayer_runtime::types::log::level::LogLevel;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::eyre;
+use tracing::info;
 
 use crate::Result;
 
@@ -72,15 +71,13 @@ impl Runnable for ConnectionCreate {
             connection_version: Version::default(),
         };
 
-        builder.log(
-            LogLevel::Info,
-            &format!(
-                "Creating connection between {}:{} and {}:{}...",
-                self.chain_id_a, self.client_id_a, self.chain_id_b, self.client_id_b
-            ),
-            |l| {
-                l.debug("options", &options);
-            },
+        info!(
+            ?options,
+            "Creating connection between {}:{} and {}:{}...",
+            self.chain_id_a,
+            self.client_id_a,
+            self.chain_id_b,
+            self.client_id_b
         );
 
         let (connection_id_a, connection_id_b) = relay
@@ -88,16 +85,10 @@ impl Runnable for ConnectionCreate {
             .await
             .map_err(|e| eyre!("Failed to create connection: connection handshake failed: {e}"))?;
 
-        builder.log(
-            LogLevel::Info,
-            &format!(
-                "Connection successfully created between {}:{} and {}:{}",
-                self.chain_id_a, self.client_id_a, self.chain_id_b, self.client_id_b
-            ),
-            |l| {
-                l.display("connection_id_a", &connection_id_a);
-                l.display("connection_id_b", &connection_id_b);
-            },
+        info!(
+            %connection_id_a, %connection_id_b,
+            "Connection successfully created between {}:{} and {}:{}",
+            self.chain_id_a, self.client_id_a, self.chain_id_b, self.client_id_b
         );
 
         Ok(())

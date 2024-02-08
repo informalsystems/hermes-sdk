@@ -29,4 +29,5 @@ ibc-relayer-types         = { workspace = true }
 
 clap                      = { workspace = true, features = ["derive"] }
 oneline-eyre              = { workspace = true }
-humantime                 = { version = "2.1.0" }
+humantime                 = { workspace = true }
+tracing                   = { workspace = true }

@@ -1,15 +1,14 @@
 use hermes_cli_framework::command::Runnable;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
-use hermes_relayer_components::logger::traits::log::CanLog;
 use hermes_relayer_components::relay::traits::components::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
-use hermes_relayer_runtime::types::log::level::LogLevel;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre::eyre;
+use tracing::info;
 
 use crate::Result;
 
@@ -99,15 +98,11 @@ impl Runnable for ClientCreate {
         let settings =
             ClientSettings::for_create_command(options, host_chain_config, reference_chain_config);
 
-        builder.log(
-            LogLevel::Info,
-            &format!(
-                "Creating client on host chain `{}` that references chain `{}`...",
-                self.host_chain_id, self.reference_chain_id
-            ),
-            |l| {
-                l.debug("settings", &settings);
-            },
+        info!(
+            ?settings,
+            "Creating client on host chain `{}` that references chain `{}`...",
+            self.host_chain_id,
+            self.reference_chain_id
         );
 
         let client_id_on_host =
@@ -115,15 +110,10 @@ impl Runnable for ClientCreate {
                 .await
                 .map_err(|e| eyre!("Failed to create client on host chain: {e}"))?;
 
-        builder.log(
-            LogLevel::Info,
-            &format!(
-                "Successfully created client on host chain `{}`: {client_id_on_host}",
-                self.host_chain_id,
-            ),
-            |l| {
-                l.display("client_id_on_host", &client_id_on_host);
-            },
+        info!(
+            %client_id_on_host,
+            "Successfully created client on host chain `{}`",
+            self.host_chain_id,
         );
 
         Ok(())

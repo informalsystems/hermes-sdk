@@ -4,13 +4,12 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::components::relay::build_from_chain::BuildRelayFromChains;
 use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilder;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
-use hermes_relayer_components::logger::traits::log::CanLog;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
-use hermes_relayer_runtime::types::log::level::LogLevel;
 use ibc_relayer::channel::version::Version;
 use ibc_relayer_types::core::ics04_channel::channel::Ordering;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId, ConnectionId, PortId};
 use oneline_eyre::eyre::eyre;
+use tracing::info;
 
 use crate::Result;
 
@@ -113,19 +112,14 @@ impl Runnable for ChannelCreate {
             channel_version: self.version.clone(),
         };
 
-        builder.log(
-            LogLevel::Info,
-            &format!(
-                "Creating channel between {}:{} and {}:{} on connection {}...",
-                self.chain_id_a,
-                self.client_id_a,
-                self.chain_id_b,
-                self.client_id_b,
-                self.connection_id_a,
-            ),
-            |l| {
-                l.debug("options", &options);
-            },
+        info!(
+            ?options,
+            "Creating channel between {}:{} and {}:{} on connection {}...",
+            self.chain_id_a,
+            self.client_id_a,
+            self.chain_id_b,
+            self.client_id_b,
+            self.connection_id_a,
         );
 
         let (channel_id_a, channel_id_b) = relay
@@ -133,16 +127,10 @@ impl Runnable for ChannelCreate {
             .await
             .map_err(|e| eyre!("Failed to create channel: channel handshake failed: {e}"))?;
 
-        builder.log(
-            LogLevel::Info,
-            &format!(
-                "Channel successfully created between {} and {}",
-                self.chain_id_a, self.chain_id_b,
-            ),
-            |l| {
-                l.display("channel_id_a", &channel_id_a);
-                l.display("channel_id_b", &channel_id_b);
-            },
+        info!(
+            %channel_id_a, %channel_id_b,
+            "Channel successfully created between {} and {}",
+            self.chain_id_a, self.chain_id_b,
         );
 
         Ok(())
