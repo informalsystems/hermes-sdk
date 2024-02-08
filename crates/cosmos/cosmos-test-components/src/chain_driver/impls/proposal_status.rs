@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
@@ -8,10 +10,20 @@ use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerier;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
 
-pub struct DepositGovernanceProposalWithChainCommand;
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ProposalStatus {
+    Unspecified = 0,
+    DepositPeriod = 1,
+    VotingPeriod = 2,
+    Passed = 3,
+    Rejected = 4,
+    Failed = 5,
+}
+
+pub struct QueryGovernanceProposalStatusWithChainCommand;
 
 impl<ChainDriver, Runtime> GovernanceProposalStatusQuerier<ChainDriver>
-    for DepositGovernanceProposalWithChainCommand
+    for QueryGovernanceProposalStatusWithChainCommand
 where
     ChainDriver: HasRuntime<Runtime = Runtime>
         + CanRaiseError<Runtime::Error>
@@ -34,7 +46,7 @@ where
                     "proposal",
                     proposal_id,
                     "--node",
-                    &chain_driver.rpc_port().to_string(),
+                    &format!("tcp://localhost:{}", chain_driver.rpc_port()),
                     "--home",
                     &Runtime::file_path_to_string(chain_driver.chain_home_dir()),
                     "--output",
@@ -44,6 +56,28 @@ where
             .await
             .map_err(ChainDriver::raise_error)?;
 
-        Ok(output.stdout)
+        let json: HashMap<String, serde_json::Value> =
+            serde_json::from_str(&output.stdout).unwrap();
+
+        let status_str = json
+            //.get("proposal")
+            //.unwrap()
+            .get("status")
+            .unwrap()
+            //.as_i64()
+            .as_str()
+            .unwrap();
+
+        /*let status_str = match status_str {
+            0 => "PROPOSAL_STATUS_UNSPECIFIED",
+            1 => "PROPOSAL_STATUS_DEPOSIT_PERIOD",
+            2 => "PROPOSAL_STATUS_VOTING_PERIOD",
+            3 => "PROPOSAL_STATUS_PASSED",
+            4 => "PROPOSAL_STATUS_REJECTED",
+            5 => "PROPOSAL_STATUS_FAILED",
+            _ => "UNKNOWN_STATUS",
+        };*/
+
+        Ok(status_str.to_owned())
     }
 }

@@ -1,4 +1,11 @@
 use alloc::collections::BTreeMap;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
+use hermes_cosmos_test_components::chain_driver::impls::deposit_proposal::DepositGovernanceProposalWithChainCommand;
+use hermes_cosmos_test_components::chain_driver::impls::proposal_status::QueryGovernanceProposalStatusWithChainCommand;
+use hermes_cosmos_test_components::chain_driver::impls::vote_proposal::VoteGovernanceProposalWithChainCommand;
+use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::GovernanceProposalDepositerComponent;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerierComponent;
+use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -74,6 +81,7 @@ use tokio::process::Child;
 */
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
+    pub chain_command_path: PathBuf,
     pub chain_process: Child,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
@@ -141,6 +149,12 @@ delegate_components! {
             QueryCosmosBalance,
         WasmClientCodeUploaderComponent:
             UploadWasmClientCodeWithChainCommand,
+        GovernanceProposalStatusQuerierComponent:
+            QueryGovernanceProposalStatusWithChainCommand,
+        GovernanceProposalDepositerComponent:
+            DepositGovernanceProposalWithChainCommand,
+        GovernanceProposalVoterComponent:
+            VoteGovernanceProposalWithChainCommand
     }
 }
 
@@ -239,5 +253,11 @@ impl DenomGetterAt<CosmosChainDriver, TransferDenom, 0> for CosmosChainDriverCom
 impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComponents {
     fn denom_at(driver: &CosmosChainDriver, _kind: StakingDenom, _index: Index<0>) -> &Denom {
         &driver.genesis_config.staking_denom
+    }
+}
+
+impl ChainCommandPathGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn chain_command_path(driver: &CosmosChainDriver) -> &PathBuf {
+        &driver.chain_command_path
     }
 }

@@ -33,7 +33,7 @@ where
         //let latest_height = chain.query_chain_height().await?;
 
         let chain_id = ChainId::new("private").unwrap();
-        let latest_height = Height::new(10, 1).unwrap();
+        let latest_height = Height::new(1, 10).unwrap();
 
         let client_state = dummy_sov_client_state(chain_id.clone(), latest_height);
         let consensus_state = dummy_sov_consensus_state();

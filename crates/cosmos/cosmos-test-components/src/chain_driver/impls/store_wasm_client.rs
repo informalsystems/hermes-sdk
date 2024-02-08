@@ -47,7 +47,7 @@ where
                     "--chain-id",
                     &chain_driver.chain().chain_id().to_string(),
                     "--node",
-                    &chain_driver.rpc_port().to_string(),
+                    &format!("tcp://localhost:{}", chain_driver.rpc_port()),
                     "--home",
                     &Runtime::file_path_to_string(chain_driver.chain_home_dir()),
                     "--from",
@@ -58,6 +58,8 @@ where
                     "auto",
                     "--fees",
                     "1000016stake",
+                    "--deposit",
+                    "200000stake",
                     "-y",
                 ],
             )
