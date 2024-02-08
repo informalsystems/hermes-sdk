@@ -1,9 +1,9 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::client_state_querier::CanQueryClientState;
 use crate::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
 };
+use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};

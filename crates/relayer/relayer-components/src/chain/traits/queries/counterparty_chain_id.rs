@@ -10,7 +10,7 @@ pub trait CanQueryCounterpartyChainId<Counterparty>:
 where
     Counterparty: HasChainIdType,
 {
-    async fn query_chain_id_from_channel_id(
+    async fn query_counterparty_chain_id_from_channel_id(
         &self,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,

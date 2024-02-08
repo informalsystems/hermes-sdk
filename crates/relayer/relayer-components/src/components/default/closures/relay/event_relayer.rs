@@ -1,8 +1,8 @@
 use cgp_core::{ErrorRaiser, HasComponents};
 
-use crate::chain::traits::components::counterparty_chain_id_querier::CanQueryCounterpartyChainId;
 use crate::chain::traits::components::packet_from_write_ack_builder::CanBuildPacketFromWriteAck;
 use crate::chain::traits::logs::packet::CanLogChainPacket;
+use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;

@@ -1,14 +1,14 @@
 use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents, HasErrorType};
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
-use hermes_relayer_components::chain::traits::components::chain_status_querier::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::components::client_state_querier::CanQueryClientState;
-use hermes_relayer_components::chain::traits::components::consensus_state_height_querier::CanQueryConsensusStateHeight;
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::components::message_sender::CanSendMessages;
 use hermes_relayer_components::chain::traits::components::packet_fields_reader::CanReadPacketFields;
 use hermes_relayer_components::chain::traits::components::update_client_message_builder::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;

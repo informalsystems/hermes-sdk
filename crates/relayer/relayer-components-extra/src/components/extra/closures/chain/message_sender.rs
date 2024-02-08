@@ -1,16 +1,4 @@
 use cgp_core::HasComponents;
-use hermes_relayer_components::chain::traits::components::chain_status_querier::{
-    CanQueryChainStatus, ChainStatusQuerier,
-};
-use hermes_relayer_components::chain::traits::components::client_state_querier::{
-    CanQueryClientState, ClientStateQuerier,
-};
-use hermes_relayer_components::chain::traits::components::consensus_state_height_querier::{
-    CanQueryConsensusStateHeight, ConsensusStateHeightQuerier,
-};
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::{
-    CanQueryConsensusState, ConsensusStateQuerier,
-};
 use hermes_relayer_components::chain::traits::components::message_sender::{
     CanSendMessages, MessageSender,
 };
@@ -19,6 +7,18 @@ use hermes_relayer_components::chain::traits::components::update_client_message_
 };
 use hermes_relayer_components::chain::traits::components::update_client_payload_builder::{
     CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
+};
+use hermes_relayer_components::chain::traits::queries::chain_status::{
+    CanQueryChainStatus, ChainStatusQuerier,
+};
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    CanQueryClientState, ClientStateQuerier,
+};
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusState, ConsensusStateQuerier,
+};
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
+    CanQueryConsensusStateHeight, ConsensusStateHeightQuerier,
 };
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::client_state::{

@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
+use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;

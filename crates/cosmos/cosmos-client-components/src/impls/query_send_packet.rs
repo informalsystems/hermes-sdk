@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::components::send_packets_querier::SendPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::send_packets::SendPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer::chain::cosmos::query::packet_query;

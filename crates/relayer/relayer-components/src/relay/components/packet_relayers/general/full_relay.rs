@@ -1,6 +1,6 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::chain_status_querier::CanQueryChainStatus;
+use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::status::HasChainStatusType;
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;

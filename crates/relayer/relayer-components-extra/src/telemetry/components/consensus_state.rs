@@ -1,5 +1,5 @@
 use cgp_core::{async_trait, HasErrorType};
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

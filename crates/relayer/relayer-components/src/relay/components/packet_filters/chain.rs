@@ -1,6 +1,6 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::counterparty_chain_id_querier::CanQueryCounterpartyChainId;
+use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;
 use crate::relay::traits::components::packet_filter::PacketFilter;
@@ -26,7 +26,7 @@ where
 
         let src_chain_id = relay
             .dst_chain()
-            .query_chain_id_from_channel_id(dst_channel_id, dst_port)
+            .query_counterparty_chain_id_from_channel_id(dst_channel_id, dst_port)
             .await
             .map_err(Relay::raise_error)?;
 
@@ -52,7 +52,7 @@ where
 
         let dst_chain_id = relay
             .src_chain()
-            .query_chain_id_from_channel_id(src_channel_id, src_port)
+            .query_counterparty_chain_id_from_channel_id(src_channel_id, src_port)
             .await
             .map_err(Relay::raise_error)?;
 

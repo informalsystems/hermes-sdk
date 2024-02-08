@@ -2,7 +2,7 @@ use cgp_core::{async_trait, Async};
 
 use crate::chain::traits::components::ack_packet_message_builder::CanBuildAckPacketMessage;
 use crate::chain::traits::components::ack_packet_payload_builder::CanBuildAckPacketPayload;
-use crate::chain::traits::components::client_state_querier::CanQueryClientState;
+use crate::chain::traits::queries::client_state::CanQueryClientState;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};

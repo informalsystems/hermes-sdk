@@ -4,10 +4,10 @@ use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainType
 use hermes_cosmos_client_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_relayer_components::chain::traits::components::channel_handshake_message_builder::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::components::connection_handshake_message_builder::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::connection_handshake_payload_builder::ConnectionHandshakePayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::components::message_sender::MessageSenderComponent;

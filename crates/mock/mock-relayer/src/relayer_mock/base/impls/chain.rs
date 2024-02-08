@@ -14,18 +14,18 @@ use cgp_core::ErrorTypeComponent;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
-use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
-use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::components::message_sender::MessageSender;
 use hermes_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
 use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
-use hermes_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
 use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
 };
-use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
+use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ProvideChainIdType};
@@ -329,7 +329,7 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainCompone
 
 #[async_trait]
 impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComponents {
-    async fn query_is_packet_received(
+    async fn query_packet_is_received(
         chain: &MockChainContext,
         port_id: &PortId,
         channel_id: &ChannelId,

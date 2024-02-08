@@ -1,5 +1,5 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::components::block_querier::BlockQuerier;
+use hermes_relayer_components::chain::traits::queries::block::BlockQuerier;
 use hermes_relayer_components::chain::traits::types::block::HasBlockType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use tendermint::block::{Block, Height as BlockHeight, Id as BlockId};

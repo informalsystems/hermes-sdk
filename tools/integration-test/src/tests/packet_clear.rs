@@ -1,8 +1,8 @@
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
-use hermes_relayer_components::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
-use hermes_relayer_components::chain::traits::components::send_packets_querier::CanQuerySendPackets;
-use hermes_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::CanQueryUnreceivedPacketSequences;
+use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
+use hermes_relayer_components::chain::traits::queries::send_packets::CanQuerySendPackets;
+use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::components::packet_clearer::CanClearPackets;
 use ibc_relayer::config::PacketFilter;

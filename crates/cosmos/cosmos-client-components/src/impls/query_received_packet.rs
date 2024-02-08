@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::QueryUnreceivedPacketsRequest;
@@ -18,7 +18,7 @@ where
         + HasBlockingChainHandle,
     Counterparty: HasIbcChainTypes<Chain, Sequence = Sequence>,
 {
-    async fn query_is_packet_received(
+    async fn query_packet_is_received(
         chain: &Chain,
         port_id: &Chain::PortId,
         channel_id: &Chain::ChannelId,

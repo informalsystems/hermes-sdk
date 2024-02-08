@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::received_packet_querier::CanQueryReceivedPacket;
+use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;
@@ -19,7 +19,7 @@ where
     Relay: HasRelayPacketFields + CanRaiseRelayChainErrors,
     Relayer: ReceivePacketRelayer<Relay>,
     Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
-    Relay::DstChain: CanQueryReceivedPacket<Relay::SrcChain>,
+    Relay::DstChain: CanQueryPacketIsReceived<Relay::SrcChain>,
 {
     async fn relay_receive_packet(
         relay: &Relay,
@@ -28,7 +28,7 @@ where
     ) -> Result<Option<WriteAckEventOf<Relay::DstChain, Relay::SrcChain>>, Relay::Error> {
         let is_packet_received = relay
             .dst_chain()
-            .query_is_packet_received(
+            .query_packet_is_received(
                 Relay::packet_dst_port(packet),
                 Relay::packet_dst_channel_id(packet),
                 Relay::packet_sequence(packet),

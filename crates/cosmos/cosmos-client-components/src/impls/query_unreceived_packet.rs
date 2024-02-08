@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_relayer_components::chain::traits::components::unreceived_packet_sequences_querier::UnreceivedPacketSequencesQuerier;
+use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;

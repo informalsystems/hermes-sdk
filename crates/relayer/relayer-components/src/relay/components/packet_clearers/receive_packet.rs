@@ -1,8 +1,8 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::components::packet_commitments_querier::CanQueryPacketCommitments;
-use crate::chain::traits::components::send_packets_querier::CanQuerySendPackets;
-use crate::chain::traits::components::unreceived_packet_sequences_querier::CanQueryUnreceivedPacketSequences;
+use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
+use crate::chain::traits::queries::send_packets::CanQuerySendPackets;
+use crate::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::components::packet_clearer::PacketClearer;

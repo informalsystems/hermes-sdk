@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::components::counterparty_chain_id_querier::CounterpartyChainIdQuerier;
+use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerier;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::counterparty::counterparty_chain_from_channel;
@@ -20,7 +20,7 @@ where
         + CanRaiseError<SupervisorError>,
     Counterparty: HasChainIdType<ChainId = ChainId>,
 {
-    async fn query_chain_id_from_channel_id(
+    async fn query_counterparty_chain_id_from_channel_id(
         chain: &Chain,
         channel_id: &ChannelId,
         port_id: &PortId,

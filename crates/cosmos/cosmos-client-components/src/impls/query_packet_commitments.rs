@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::components::packet_commitments_querier::PacketCommitmentsQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
 use ibc_relayer::chain::requests::QueryPacketCommitmentsRequest;

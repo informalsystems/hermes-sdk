@@ -14,8 +14,8 @@ use hermes_relayer_components::chain::traits::components::receive_packet_message
 use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::{
     CanBuildReceivePacketPayload, ReceivePacketPayloadBuilder,
 };
-use hermes_relayer_components::chain::traits::components::received_packet_querier::{
-    CanQueryReceivedPacket, ReceivedPacketQuerier,
+use hermes_relayer_components::chain::traits::queries::packet_is_received::{
+    CanQueryPacketIsReceived, ReceivedPacketQuerier,
 };
 use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
     CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
@@ -37,7 +37,7 @@ use crate::components::extra::closures::chain::message_sender::UseExtraChainComp
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
     CanLogChainPacket<Counterparty>
-    + CanQueryReceivedPacket<Counterparty>
+    + CanQueryPacketIsReceived<Counterparty>
     + CanReadPacketFields<Counterparty>
     + CanBuildReceivePacketPayload<Counterparty>
     + CanBuildReceivePacketMessage<Counterparty>

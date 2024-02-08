@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use futures::stream::{self, StreamExt, TryStreamExt};
-use hermes_relayer_components::chain::traits::components::send_packets_querier::{
+use hermes_relayer_components::chain::traits::queries::send_packets::{
     CanQuerySendPacket, SendPacketsQuerier,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
