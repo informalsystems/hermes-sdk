@@ -78,20 +78,15 @@ impl Runnable for QueryConnections {
                     });
                 };
 
-                info!(
-                    "Successfully queried connections on host chain `{}`",
-                    chain_id,
-                );
+                info!("Successfully queried connections on chain `{chain_id}`");
 
-                if verbose {
-                    connections.iter().for_each(|c| {
-                        info!("{c:#?}",);
-                    });
-                } else {
-                    connections.iter().for_each(|c| {
-                        info!("{}", c.connection_id);
-                    })
-                }
+                connections.iter().for_each(|connection| {
+                    if verbose {
+                        info!("{connection:#?}",);
+                    } else {
+                        info!("{}", connection.connection_id);
+                    }
+                });
 
                 Ok(())
             })
