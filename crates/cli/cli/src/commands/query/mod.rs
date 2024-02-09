@@ -8,7 +8,7 @@ use crate::Result;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum QueryCommands {
-    /// Create a new channel
+    /// Query all connections
     Connections(QueryConnections),
 }
 
