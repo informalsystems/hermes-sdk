@@ -1,3 +1,4 @@
+use hermes_cli_framework::output::Output;
 use oneline_eyre::eyre::eyre;
 use tracing::info;
 use tracing::warn;
@@ -39,13 +40,13 @@ pub struct QueryConnections {
 }
 
 impl Runnable for QueryConnections {
-    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let counterparty_chain_id = self.counterparty_chain_id.clone();
         let verbose = self.verbose;
 
-        chain
+        let connections = chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let mut connections =
                     chain_handle.query_connections(QueryConnectionsRequest { pagination: None }).unwrap();
@@ -88,11 +89,11 @@ impl Runnable for QueryConnections {
                     }
                 });
 
-                Ok(())
+                Ok(connections)
             })
             .await
             .map_err(|e| eyre!("Failed to query connections for host chain: {e}"))?;
 
-        Ok(())
+        Ok(Output::success(connections))
     }
 }

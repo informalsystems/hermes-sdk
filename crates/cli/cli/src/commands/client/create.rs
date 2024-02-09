@@ -1,4 +1,5 @@
 use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
@@ -64,7 +65,7 @@ pub struct ClientCreate {
 }
 
 impl Runnable for ClientCreate {
-    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let host_chain_config =
             builder
                 .config
@@ -116,7 +117,7 @@ impl Runnable for ClientCreate {
             self.host_chain_id,
         );
 
-        Ok(())
+        Ok(Output::success_msg("Done"))
     }
 }
 

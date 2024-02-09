@@ -1,22 +1,22 @@
-mod create;
-pub use create::ClientCreate;
+mod state;
+use hermes_cli_framework::output::Output;
+pub use state::QueryClientState;
 
 use hermes_cli_framework::command::Runnable;
-use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum ClientCommands {
-    /// Create a new client
-    Create(ClientCreate),
+    /// Query the state of a client
+    State(QueryClientState),
 }
 
 impl Runnable for ClientCommands {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         match self {
-            Self::Create(cmd) => cmd.run(builder).await,
+            Self::State(cmd) => cmd.run(builder).await,
         }
     }
 }

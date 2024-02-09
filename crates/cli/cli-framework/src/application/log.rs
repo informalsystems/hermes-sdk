@@ -2,25 +2,29 @@
    Install the [`tracing_subscriber`] logger handlers so that logs will
    be displayed during test.
 */
-pub fn install_logger(with_color: bool) {
+pub fn install_logger(with_color: bool, with_json: bool) {
     use tracing::level_filters::LevelFilter;
     use tracing_subscriber::layer::SubscriberExt;
     use tracing_subscriber::util::SubscriberInitExt;
     use tracing_subscriber::EnvFilter;
+    use tracing_subscriber::{fmt, registry};
 
     // Use log level INFO by default if RUST_LOG is not set.
     let env_filter = EnvFilter::builder()
         .with_default_directive(LevelFilter::INFO.into())
         .from_env_lossy();
 
-    let layer = tracing_subscriber::fmt::layer()
-        .with_ansi(with_color)
-        .with_target(false);
+    if with_json {
+        let fmt_layer = fmt::layer().with_target(false).json();
+        registry().with(env_filter).with(fmt_layer).init();
+    } else {
+        let fmt_layer = fmt::layer()
+            .with_ansi(with_color)
+            .with_target(false)
+            .compact();
 
-    tracing_subscriber::registry()
-        .with(env_filter)
-        .with(layer)
-        .init();
+        registry().with(env_filter).with(fmt_layer).init();
+    };
 }
 
 /// Check if both stdout and stderr are proper terminal (tty),
