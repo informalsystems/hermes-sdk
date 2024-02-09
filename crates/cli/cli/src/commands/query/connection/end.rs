@@ -1,3 +1,4 @@
+use hermes_cli_framework::output::Output;
 use oneline_eyre::eyre::eyre;
 use tracing::error;
 use tracing::info;
@@ -46,13 +47,13 @@ pub struct QueryConnectionEnd {
 }
 
 impl Runnable for QueryConnectionEnd {
-    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let connection_id = self.connection_id.clone();
         let height = self.height;
 
-        let output = chain
+        let connection_end = chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let query_height = if let Some(height) = height {
                     let specified_height = Height::new(chain_handle.id().version(), height)
@@ -62,7 +63,7 @@ impl Runnable for QueryConnectionEnd {
                 } else {
                     QueryHeight::Latest
                 };
-                let (connection, _) = chain_handle
+                let (connection_end, _) = chain_handle
                     .query_connection(
                         QueryConnectionRequest {
                             connection_id: connection_id.clone(),
@@ -72,24 +73,19 @@ impl Runnable for QueryConnectionEnd {
                     )
                     .map_err(|e| RelayerError::generic(eyre!("Failed to query connection with id `{connection_id}`. Error: {e}")))?;
 
-                if connection.state_matches(&State::Uninitialized) {
-                    error!("connection '{connection_id}' does not exist")
+                if connection_end.state_matches(&State::Uninitialized) {
+                    error!("Connection '{connection_id}' does not exist")
                 } else {
                     info!(
                         "Successfully queried connection end on chain `{}`",
                         chain_id,
                     );
-                    info!("{connection:#?}",);
                 }
 
-                Ok(())
+                Ok(connection_end)
             })
-            .await;
+            .await?;
 
-        if let Err(e) = output {
-            error!("Command failed with error: {e}");
-        }
-
-        Ok(())
+        Ok(Output::success(connection_end))
     }
 }

@@ -2,6 +2,7 @@ mod create;
 pub use create::ConnectionCreate;
 
 use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;
@@ -12,8 +13,8 @@ pub enum ConnectionCommands {
     Create(ConnectionCreate),
 }
 
-impl ConnectionCommands {
-    pub async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+impl Runnable for ConnectionCommands {
+    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
         }

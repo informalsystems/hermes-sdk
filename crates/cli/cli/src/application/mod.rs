@@ -2,6 +2,7 @@ use std::path::{Path, PathBuf};
 
 use hermes_cli_framework::application::Application;
 use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
@@ -13,6 +14,9 @@ use crate::Result;
 pub struct HermesCli {
     #[clap(short = 'c', long = "config", default_value = "config.toml")]
     pub config_path: PathBuf,
+
+    #[clap(long)]
+    pub json: bool,
 
     #[clap(subcommand)]
     pub command: HermesCommand,
@@ -26,11 +30,15 @@ impl Application for HermesCli {
         &self.config_path
     }
 
+    fn json_output(&self) -> bool {
+        self.json
+    }
+
     fn parse_from_env() -> Self {
         clap::Parser::parse()
     }
 
-    async fn run(&self, runtime: HermesRuntime, config: Self::Config) -> Result<()> {
+    async fn run(&self, runtime: HermesRuntime, config: Self::Config) -> Result<Output> {
         let builder = CosmosBuilder::new(
             config.config,
             runtime,
