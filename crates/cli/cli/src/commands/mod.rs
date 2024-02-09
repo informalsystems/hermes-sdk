@@ -6,6 +6,7 @@ use crate::Result;
 pub mod channel;
 pub mod client;
 pub mod connection;
+pub mod query;
 pub mod start;
 
 #[derive(Debug, clap::Parser)]
@@ -24,6 +25,10 @@ pub enum HermesCommand {
     /// Work with channels
     #[clap(subcommand)]
     Channel(channel::ChannelCommands),
+
+    /// Query information about IBC objects
+    #[clap(subcommand)]
+    Query(query::QueryCommands),
 }
 
 impl Runnable for HermesCommand {
@@ -33,6 +38,7 @@ impl Runnable for HermesCommand {
             Self::Client(cmd) => cmd.run(builder).await,
             Self::Connection(cmd) => cmd.run(builder).await,
             Self::Channel(cmd) => cmd.run(builder).await,
+            Self::Query(cmd) => cmd.run(builder).await,
         }
     }
 }
