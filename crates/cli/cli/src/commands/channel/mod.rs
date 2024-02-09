@@ -12,8 +12,8 @@ pub enum ChannelCommands {
     Create(ChannelCreate),
 }
 
-impl ChannelCommands {
-    pub async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+impl Runnable for ChannelCommands {
+    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
         }

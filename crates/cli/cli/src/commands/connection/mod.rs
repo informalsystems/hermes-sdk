@@ -12,8 +12,8 @@ pub enum ConnectionCommands {
     Create(ConnectionCreate),
 }
 
-impl ConnectionCommands {
-    pub async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+impl Runnable for ConnectionCommands {
+    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
         }

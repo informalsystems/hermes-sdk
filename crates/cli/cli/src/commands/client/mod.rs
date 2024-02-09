@@ -12,8 +12,8 @@ pub enum ClientCommands {
     Create(ClientCreate),
 }
 
-impl ClientCommands {
-    pub async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+impl Runnable for ClientCommands {
+    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
         }
