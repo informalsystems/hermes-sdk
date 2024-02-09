@@ -2,6 +2,7 @@ mod client;
 pub use client::ClientCommands;
 
 use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;
@@ -10,13 +11,13 @@ use crate::Result;
 pub enum QueryCommands {
     /// Query information about IBC clients
     #[clap(subcommand)]
-    Clients(ClientCommands),
+    Client(ClientCommands),
 }
 
 impl Runnable for QueryCommands {
-    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         match self {
-            Self::Clients(cmd) => cmd.run(builder).await,
+            Self::Client(cmd) => cmd.run(builder).await,
         }
     }
 }

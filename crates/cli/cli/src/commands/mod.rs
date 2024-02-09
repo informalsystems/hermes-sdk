@@ -1,4 +1,5 @@
 use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;
@@ -32,7 +33,7 @@ pub enum HermesCommand {
 }
 
 impl Runnable for HermesCommand {
-    async fn run(&self, builder: CosmosBuilder) -> Result<()> {
+    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         match self {
             Self::Start(cmd) => cmd.run(builder).await,
             Self::Client(cmd) => cmd.run(builder).await,
