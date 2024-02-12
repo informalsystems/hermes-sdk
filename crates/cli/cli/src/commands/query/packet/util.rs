@@ -39,7 +39,7 @@ pub struct PacketSeqs {
 }
 
 impl PacketSeqs {
-    pub fn _collated(self) -> CollatedPacketSeqs {
+    pub fn collated(self) -> CollatedPacketSeqs {
         CollatedPacketSeqs {
             height: self.height,
             seqs: self.seqs.into_iter().collated().collect(),
