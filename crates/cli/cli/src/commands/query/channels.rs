@@ -4,7 +4,6 @@ use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{
