@@ -133,7 +133,7 @@ impl CosmosBuilder {
         Ok(context)
     }
 
-    pub fn build_relay(
+    pub fn build_cosmos_relay(
         &self,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,

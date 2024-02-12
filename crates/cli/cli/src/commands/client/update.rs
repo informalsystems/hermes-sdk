@@ -1,14 +1,12 @@
 use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
 use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
-use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::Context;
@@ -42,33 +40,6 @@ pub struct ClientUpdate {
         help = "The target height of the client update. Leave unspecified for latest height."
     )]
     target_height: Option<u64>,
-    //
-    // #[clap(
-    //     long = "trusted-height",
-    //     value_name = "TRUSTED_HEIGHT",
-    //     help = "The trusted height of the client update. Leave unspecified for latest height."
-    // )]
-    // trusted_height: Option<u64>,
-    //
-    // #[clap(
-    //     long = "archive-address",
-    //     value_name = "ARCHIVE_ADDRESS",
-    //     group = "restart",
-    //     requires = "restart_height",
-    //     help_heading = "Update the client across a genesis restart",
-    //     help = "The RPC address of the archive node to use to fetch headers from before the restart. Requires --restart-height if used."
-    // )]
-    // archive_address: Option<String>,
-    //
-    // #[clap(
-    //     long = "restart-height",
-    //     value_name = "RESTART_HEIGHT",
-    //     group = "restart",
-    //     requires = "archive_address",
-    //     help_heading = "Update the client across a genesis restart",
-    //     help = "The height that the chain underwent a genesis restart at. Requires --archive-address if used."
-    // )]
-    // restart_height: Option<u64>,
 }
 
 impl Runnable for ClientUpdate {
@@ -78,15 +49,15 @@ impl Runnable for ClientUpdate {
         let reference_chain_id = client_state.chain_id;
         let reference_chain = builder.build_chain(&reference_chain_id).await?;
 
-        let relayer = CanBuildRelay::build_relay(
-            &builder,
-            RelayAToBTarget,
-            &self.host_chain_id,
-            &reference_chain_id,
-            &self.client_id,
-            &self.client_id, // nothing to pass here
-        )
-        .await?;
+        let relayer = builder
+            .build_relay(
+                RelayAToBTarget,
+                &self.host_chain_id,
+                &reference_chain_id,
+                &self.client_id,
+                &self.client_id, // nothing to pass here
+            )
+            .await?;
 
         let target_height = match self.target_height {
             Some(height) => {
@@ -97,14 +68,7 @@ impl Runnable for ClientUpdate {
                 height
             }
             None => {
-                let height = reference_chain
-                    .with_blocking_chain_handle(|handle| {
-                        handle
-                            .query_latest_height()
-                            .map_err(|e| BaseError::relayer(e).into())
-                    })
-                    .await
-                    .wrap_err("Failed to fetch latest height on reference chain")?;
+                let height = reference_chain.query_chain_height().await?;
 
                 info!("Updating client using specified target height: {height}");
                 height
