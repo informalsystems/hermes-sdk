@@ -14,3 +14,17 @@ where
         client_id: &Self::ClientId,
     ) -> Result<Counterparty::ClientState, Self::Error>;
 }
+
+#[derive_component(ClientStateWithHeightQuerierComponent, ClientStateWithHeightQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryClientStateWithHeight<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
+where
+    Counterparty: HasClientStateType<Self>,
+{
+    async fn query_client_state_with_height(
+        &self,
+        client_id: &Self::ClientId,
+        height: &Self::Height,
+    ) -> Result<Counterparty::ClientState, Self::Error>;
+}
