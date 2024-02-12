@@ -49,18 +49,22 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             .bootstrap_rollup(&chain_driver, &bridge_driver, "test-rollup")
             .await?;
 
-        let wallet = rollup_driver
-            .wallets
-            .get("user-a")
-            .ok_or_else(|| eyre!("expect user-a wallet"))?;
+        {
+            // Temporary test to check that rollup driver is bootstrapped properly
 
-        let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
+            let wallet = rollup_driver
+                .wallets
+                .get("user-a")
+                .ok_or_else(|| eyre!("expect user-a wallet"))?;
 
-        let amount = rollup_driver
-            .query_balance(&wallet.address, &transfer_denom)
-            .await?;
-        println!("wallet balance: {}", amount);
+            let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
+            let amount = rollup_driver
+                .query_balance(&wallet.address, &transfer_denom)
+                .await?;
+
+            assert_eq!(amount.quantity, 1_000_000_000_000);
+        }
         <Result<(), Error>>::Ok(())
     })?;
 
