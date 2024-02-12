@@ -99,11 +99,15 @@ impl RollupCommandPathGetter<SovereignBootstrap> for SovereignBootstrapComponent
 impl RollupDriverBuilder<SovereignBootstrap> for SovereignBootstrapComponents {
     async fn build_rollup_driver(
         _bootstrap: &SovereignBootstrap,
-        _rollup_node_config: SovereignRollupNodeConfig,
-        _genesis_config: SovereignGenesisConfig,
-        _rollup_process: Child,
+        rollup_node_config: SovereignRollupNodeConfig,
+        genesis_config: SovereignGenesisConfig,
+        rollup_process: Child,
     ) -> Result<SovereignRollupDriver, Error> {
-        Ok(SovereignRollupDriver {})
+        Ok(SovereignRollupDriver {
+            rollup_node_config,
+            genesis_config,
+            rollup_process,
+        })
     }
 }
 
