@@ -39,11 +39,8 @@ impl Runnable for QueryCommands {
         match self {
             Self::Client(cmd) => cmd.run(builder).await,
             Self::Connections(cmd) => cmd.run(builder).await,
-<<<<<<< HEAD
-            Self::Packet(cmd) => cmd.run(builder).await,
-=======
             Self::Connection(cmd) => cmd.run(builder).await,
->>>>>>> main
+            Self::Packet(cmd) => cmd.run(builder).await,
         }
     }
 }
