@@ -2350,6 +2350,7 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
+ "serde_json",
  "stable-eyre",
  "tokio",
 ]

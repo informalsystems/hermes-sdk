@@ -31,5 +31,6 @@ hermes-sovereign-cosmos-relayer     = { workspace = true }
 
 eyre            = { workspace = true }
 tokio           = { workspace = true }
+serde_json      = { workspace = true }
 stable-eyre     = { version = "0.2.2" }
 jsonrpsee       = { workspace = true, features = ["http-client"] }
