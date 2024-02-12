@@ -4,12 +4,16 @@ pub use client::ClientCommands;
 mod connections;
 pub use connections::QueryConnections;
 
+mod channels;
+pub use channels::QueryChannels;
+
 use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;
 
+/// All subcommands for querying IBC-related objects and data.
 #[derive(Debug, clap::Subcommand)]
 pub enum QueryCommands {
     /// Query information about IBC clients
@@ -18,6 +22,9 @@ pub enum QueryCommands {
 
     /// Query all connections
     Connections(QueryConnections),
+
+    /// Query all channels
+    Channels(QueryChannels),
 }
 
 impl Runnable for QueryCommands {
@@ -25,6 +32,7 @@ impl Runnable for QueryCommands {
         match self {
             Self::Client(cmd) => cmd.run(builder).await,
             Self::Connections(cmd) => cmd.run(builder).await,
+            Self::Channels(cmd) => cmd.run(builder).await,
         }
     }
 }
