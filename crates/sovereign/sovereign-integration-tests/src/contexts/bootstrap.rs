@@ -3,7 +3,6 @@ use std::path::PathBuf;
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::Error;
 use hermes_celestia_integration_tests::contexts::bridge_driver::CelestiaBridgeDriver;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -16,18 +15,16 @@ use hermes_sovereign_test_components::bootstrap::components::{
     IsSovereignBootstrapComponent, SovereignBootstrapComponents as BaseSovereignBootstrapComponents,
 };
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
-use hermes_sovereign_test_components::bootstrap::traits::build_rollup_driver::RollupDriverBuilder;
+use hermes_sovereign_test_components::bootstrap::traits::build_rollup_driver::RollupDriverBuilderComponent;
 use hermes_sovereign_test_components::bootstrap::traits::rollup_command_path::RollupCommandPathGetter;
 use hermes_sovereign_test_components::bootstrap::traits::rollup_store_dir::RollupStoreDirGetter;
 use hermes_sovereign_test_components::bootstrap::traits::types::rollup_driver::ProvideRollupDriverType;
-use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGenesisConfig;
-use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollupNodeConfig;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
 use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
-use tokio::process::Child;
 
 use crate::contexts::rollup_driver::SovereignRollupDriver;
+use crate::impls::build_rollup_driver::BuildSovereignRollupDriver;
 
 pub struct SovereignBootstrap {
     pub runtime: HermesRuntime,
@@ -49,6 +46,7 @@ delegate_components! {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideTokioRuntimeType,
+        RollupDriverBuilderComponent: BuildSovereignRollupDriver,
     }
 }
 
@@ -93,17 +91,6 @@ impl AccountPrefixGetter<SovereignBootstrap> for SovereignBootstrapComponents {
 impl RollupCommandPathGetter<SovereignBootstrap> for SovereignBootstrapComponents {
     fn rollup_command_path(bootstrap: &SovereignBootstrap) -> &PathBuf {
         &bootstrap.rollup_command_path
-    }
-}
-
-impl RollupDriverBuilder<SovereignBootstrap> for SovereignBootstrapComponents {
-    async fn build_rollup_driver(
-        _bootstrap: &SovereignBootstrap,
-        _rollup_node_config: SovereignRollupNodeConfig,
-        _genesis_config: SovereignGenesisConfig,
-        _rollup_process: Child,
-    ) -> Result<SovereignRollupDriver, Error> {
-        Ok(SovereignRollupDriver {})
     }
 }
 

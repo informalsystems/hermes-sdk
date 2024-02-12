@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use hermes_test_components::chain_driver::traits::types::address::{AddressOf, HasAddressType};
 use hermes_test_components::chain_driver::traits::types::wallet::{HasWalletType, WalletOf};
@@ -17,6 +18,6 @@ where
     async fn generate_rollup_genesis(
         &self,
         sequencer_da_address: &AddressOf<Self::ChainDriver>,
-        rollup_wallets: &[WalletOf<Self::RollupDriver>],
+        rollup_wallets: &BTreeMap<String, WalletOf<Self::RollupDriver>>,
     ) -> Result<Self::RollupGenesisConfig, Self::Error>;
 }
