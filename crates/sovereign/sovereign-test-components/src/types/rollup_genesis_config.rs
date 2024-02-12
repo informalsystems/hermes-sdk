@@ -6,6 +6,8 @@ pub struct SovereignGenesisConfig {
     pub bank: BankGenesis,
     pub chain_state: ChainStateGenesis,
     pub sequencer_registry: SequencerRegistryGenesis,
+    pub staking_token_address: String,
+    pub transfer_token_address: String,
 }
 
 #[derive(Serialize)]
