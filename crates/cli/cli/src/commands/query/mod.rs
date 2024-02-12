@@ -25,6 +25,10 @@ pub enum QueryCommands {
     /// Query connection information
     #[clap(subcommand)]
     Connection(QueryConnection),
+
+    /// Query channel information
+    #[clap(subcommand)]
+    Channel(QueryChannel),
 }
 
 impl Runnable for QueryCommands {
@@ -33,6 +37,7 @@ impl Runnable for QueryCommands {
             Self::Client(cmd) => cmd.run(builder).await,
             Self::Connections(cmd) => cmd.run(builder).await,
             Self::Connection(cmd) => cmd.run(builder).await,
+            Self::Channel(cmd) => cmd.run(builder).await,
         }
     }
 }
