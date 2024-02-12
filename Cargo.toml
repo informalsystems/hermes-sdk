@@ -72,7 +72,7 @@ futures-util        = { version = "0.3.29", default-features = false }
 futures-channel     = { version = "0.3.30", default-features = false }
 eyre                = { version = "0.6.8" }
 itertools           = { version = "0.11" }
-http                = { version = "0.2.11" }
+http                = { version = "1.0.0" }
 humantime           = { version = "2.1.0" }
 flex-error          = { version = "0.4.4", default-features = false }
 tracing-subscriber  = { version = "0.3.18" }
