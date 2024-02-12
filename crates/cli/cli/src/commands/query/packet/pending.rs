@@ -2,7 +2,7 @@ use super::util::CollatedPendingPackets;
 use crate::Result;
 use core::fmt;
 use hermes_cli_framework::command::Runnable;
-use hermes_cli_framework::output::Output;
+use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
@@ -105,8 +105,8 @@ impl fmt::Display for Summary<CollatedPendingPackets> {
     }
 }
 
-impl Runnable for QueryPendingPackets {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl QueryPendingPackets {
+    async fn execute(&self, builder: CosmosBuilder) -> Result<Summary<PendingPackets>> {
         let chain_id = self.chain_id.clone();
         let port_id = self.port_id.clone();
         let channel_id = self.channel_id.clone();
@@ -142,10 +142,9 @@ impl Runnable for QueryPendingPackets {
         )
         .map_err(|e| BaseError::generic(eyre!("failed channel_on_destination: {}", e)))?
         .ok_or_else(|| {
-            eyre!(
-                "Failed to find channel {} on destination chain",
-                &self.channel_id.clone()
-            )
+            BaseError::generic(eyre!(
+                "failed channel_on_destination: missing counterparty channel"
+            ))
         })?;
 
         let dst_summary = pending_packet_summary(
@@ -157,15 +156,20 @@ impl Runnable for QueryPendingPackets {
             BaseError::generic(eyre!("failed pending_packet_summary on destination: {}", e))
         })?;
 
-        Ok(Output::success_msg(
-            Summary {
-                src_chain: chain_id,
-                dst_chain: counterparty_chain_id,
-                src: src_summary,
-                dst: dst_summary,
-            }
-            .collate()
-            .to_string(),
-        ))
+        Ok(Summary {
+            src_chain: chain_id,
+            dst_chain: counterparty_chain_id,
+            src: src_summary,
+            dst: dst_summary,
+        })
+    }
+}
+impl Runnable for QueryPendingPackets {
+    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+        match self.execute(builder).await {
+            Ok(summary) if json() => Ok(Output::success(summary)),
+            Ok(summary) => Ok(Output::success_msg(summary.collate().to_string())),
+            Err(e) => Ok(Output::error(e)),
+        }
     }
 }

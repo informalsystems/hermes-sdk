@@ -1,6 +1,6 @@
 use crate::Result;
 use hermes_cli_framework::command::Runnable;
-use hermes_cli_framework::output::Output;
+use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
@@ -54,10 +54,7 @@ impl Runnable for QueryPendingAcks {
                     })?;
                 Ok(chan_conn_cli)
             })
-            .await
-            .map_err(|e| {
-                BaseError::generic(eyre!("failed pending_packet_summary on source: {}", e))
-            })?;
+            .await?;
 
         let counterparty_chain_id = chan_conn_cli.client.client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
@@ -68,15 +65,23 @@ impl Runnable for QueryPendingAcks {
                 BaseError::generic(eyre!("failed to get the path identifiers from channel"))
             })?;
 
-        let acks = unreceived_acknowledgements(
+        let acks_result = unreceived_acknowledgements(
             &chain.handle,
             &counterparty_chain.handle,
             &path_identifiers,
-        )
-        .map_err(|e| BaseError::generic(eyre!("failed unreceived_acknowledgements: {}", e)))?;
+        );
 
-        let seqs = acks.map_or(vec![], |(sns, _)| sns);
-        let seqs_collated = seqs.into_iter().collated().collect::<Vec<_>>();
-        Ok(Output::success(seqs_collated))
+        match acks_result {
+            Ok(packet_seqs) => {
+                let seqs = packet_seqs.map_or(vec![], |(sns, _)| sns);
+                if json() {
+                    return Ok(Output::success(seqs));
+                }
+                Ok(Output::success(
+                    seqs.into_iter().collated().collect::<Vec<_>>(),
+                ))
+            }
+            Err(e) => Ok(Output::error(e)),
+        }
     }
 }

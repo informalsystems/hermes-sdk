@@ -3,10 +3,8 @@ use crate::Result;
 use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
 use ibc_relayer::chain::counterparty::commitments_on_chain;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
-use oneline_eyre::eyre::eyre;
 
 #[derive(Debug, clap::Parser)]
 pub struct QueryPacketCommitments {
@@ -44,17 +42,18 @@ impl Runnable for QueryPacketCommitments {
         let channel_id = self.channel_id.clone();
         let chain = builder.build_chain(&self.chain_id).await?;
 
-        let commitments_result = commitments_on_chain(&chain.handle, &port_id, &channel_id)
-            .map_err(|e| BaseError::generic(eyre!("failed commitments_on_chain: {}", e)))
-            .map(|(seqs_vec, height)| PacketSeqs {
-                height,
-                seqs: seqs_vec,
+        let commitments_result =
+            commitments_on_chain(&chain.handle, &port_id, &channel_id).map(|(seqs_vec, height)| {
+                PacketSeqs {
+                    height,
+                    seqs: seqs_vec,
+                }
             });
 
         match commitments_result {
             Ok(packet_seqs) if json() => Ok(Output::success(packet_seqs)),
             Ok(packet_seqs) => Ok(Output::success(packet_seqs.collated())),
-            Err(e) => Err(BaseError::generic(eyre!("failed commitments_on_chain: {}", e)).into()),
+            Err(e) => Ok(Output::error(e)),
         }
     }
 }
