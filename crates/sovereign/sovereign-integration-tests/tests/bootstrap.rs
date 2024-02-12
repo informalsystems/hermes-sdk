@@ -60,7 +60,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
             let amount = rollup_driver
-                .query_balance(&wallet.address, &transfer_denom)
+                .query_balance(&wallet.address, transfer_denom)
                 .await?;
 
             assert_eq!(amount.quantity, 1_000_000_000_000);
