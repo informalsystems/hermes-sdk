@@ -11,6 +11,7 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use jsonrpsee::core::params::ArrayParams;
 use tokio::runtime::Builder;
 
 #[test]
@@ -44,9 +45,13 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
         let bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
-        let _rollup_driver = sovereign_bootstrap
+        let rollup_driver = sovereign_bootstrap
             .bootstrap_rollup(&chain_driver, &bridge_driver, "test-rollup")
             .await?;
+
+        let mut params = ArrayParams::new();
+
+        params.insert(None::<u64>)?;
 
         // tokio::time::sleep(core::time::Duration::from_secs(99999)).await;
 

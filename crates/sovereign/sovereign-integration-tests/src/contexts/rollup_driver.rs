@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::HasComponents;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGenesisConfig;
@@ -9,8 +10,9 @@ use tokio::process::Child;
 
 pub struct SovereignRollupDriver {
     pub rollup: SovereignRollup,
-    pub rollup_node_config: SovereignRollupNodeConfig,
+    pub node_config: SovereignRollupNodeConfig,
     pub genesis_config: SovereignGenesisConfig,
+    pub wallets: BTreeMap<String, SovereignWallet>,
     pub rollup_process: Child,
 }
 

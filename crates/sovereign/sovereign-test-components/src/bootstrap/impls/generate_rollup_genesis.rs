@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -32,15 +33,14 @@ where
     async fn generate_rollup_genesis(
         bootstrap: &Bootstrap,
         sequencer_da_address: &ChainDriver::Address,
-        rollup_wallets: &[RollupDriver::Wallet],
+        rollup_wallets: &BTreeMap<String, RollupDriver::Wallet>,
     ) -> Result<Bootstrap::RollupGenesisConfig, Bootstrap::Error> {
         let sequencer_wallet = rollup_wallets
-            .iter()
-            .find(|wallet| &wallet.wallet_id == "sequencer")
+            .get("sequencer")
             .ok_or_else(|| Bootstrap::raise_error("expect sequencer wallet to be present"))?;
 
         let address_and_balances = rollup_wallets
-            .iter()
+            .values()
             .map(|wallet| (wallet.address.clone(), 1_000_000_000_000))
             .collect::<Vec<_>>();
 
