@@ -2,7 +2,7 @@ mod state;
 use hermes_cli_framework::output::Output;
 pub use state::QueryClientState;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use crate::Result;
@@ -13,7 +13,7 @@ pub enum ClientCommands {
     State(QueryClientState),
 }
 
-impl Runnable for ClientCommands {
+impl CommandRunner for ClientCommands {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         match self {
             Self::State(cmd) => cmd.run(builder).await,

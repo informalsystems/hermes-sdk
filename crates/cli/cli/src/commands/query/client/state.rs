@@ -1,6 +1,6 @@
 use std::error::Error as StdError;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
@@ -46,7 +46,7 @@ pub struct QueryClientState {
     height: Option<u64>,
 }
 
-impl Runnable for QueryClientState {
+impl CommandRunner for QueryClientState {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
 

@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -54,7 +54,7 @@ pub struct ConnectionCreate {
     client_id_b: ClientId,
 }
 
-impl Runnable for ConnectionCreate {
+impl CommandRunner for ConnectionCreate {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let relay = BuildRelayFromChains::build_relay(
             &builder,

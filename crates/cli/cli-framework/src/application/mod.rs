@@ -8,7 +8,7 @@ use std::path::Path;
 use cgp_core::async_trait;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
-use crate::command::Runnable;
+use crate::command::CommandRunner;
 use crate::config::Config;
 use crate::output::Output;
 use crate::Result;
@@ -16,7 +16,7 @@ use crate::Result;
 #[async_trait]
 pub trait Application: Sized {
     type Config: Config;
-    type Command: Runnable;
+    type Command: CommandRunner;
 
     fn parse_from_env() -> Self;
 

@@ -1,4 +1,4 @@
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
@@ -19,7 +19,7 @@ pub enum ClientCommands {
     Update(ClientUpdate),
 }
 
-impl Runnable for ClientCommands {
+impl CommandRunner for ClientCommands {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,

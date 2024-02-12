@@ -5,6 +5,6 @@ use crate::output::Output;
 use crate::Result;
 
 #[async_trait]
-pub trait Runnable {
+pub trait CommandRunner {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output>;
 }

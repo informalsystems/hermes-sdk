@@ -1,5 +1,5 @@
 use cgp_core::CanRun;
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
@@ -48,7 +48,7 @@ pub struct Start {
     client_id_b: ClientId,
 }
 
-impl Runnable for Start {
+impl CommandRunner for Start {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         info!("Starting relayer...");
 
