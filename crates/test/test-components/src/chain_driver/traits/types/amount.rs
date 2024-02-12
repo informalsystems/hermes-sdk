@@ -6,7 +6,7 @@ use crate::chain_driver::traits::types::denom::HasDenomType;
 
 pub type AmountOf<Chain> = <Chain as HasAmountType>::Amount;
 
-#[derive_component(AmountTypeComponent, AmountTypeProvider<Chain>)]
+#[derive_component(AmountTypeComponent, ProvideAmountType<Chain>)]
 pub trait HasAmountType: HasDenomType {
     type Amount: Debug + Display + Eq + PartialOrd + Clone + Async;
 

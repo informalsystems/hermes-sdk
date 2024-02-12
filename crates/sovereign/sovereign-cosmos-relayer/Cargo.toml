@@ -22,3 +22,5 @@ hermes-relayer-components           = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-celestia-chain               = { workspace = true }
 hermes-sovereign-client-components  = { workspace = true }
+
+jsonrpsee       = { workspace = true, features = ["http-client"] }

@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use hermes_test_components::chain_driver::traits::types::wallet::{HasWalletType, WalletOf};
 
@@ -11,5 +12,5 @@ where
 {
     async fn generate_rollup_wallets(
         &self,
-    ) -> Result<Vec<WalletOf<Self::RollupDriver>>, Self::Error>;
+    ) -> Result<BTreeMap<String, WalletOf<Self::RollupDriver>>, Self::Error>;
 }
