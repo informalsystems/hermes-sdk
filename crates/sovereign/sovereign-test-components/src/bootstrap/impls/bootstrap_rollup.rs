@@ -84,7 +84,12 @@ where
         let rollup_process = bootstrap.start_rollup(&rollup_home_dir).await?;
 
         let rollup_driver = bootstrap
-            .build_rollup_driver(rollup_node_config, rollup_genesis, rollup_process)
+            .build_rollup_driver(
+                rollup_node_config,
+                rollup_genesis,
+                rollup_wallets,
+                rollup_process,
+            )
             .await?;
 
         // TODO: spawn rollup child process
