@@ -1,12 +1,15 @@
+use core::fmt::Debug;
 use std::error::Error as StdError;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
+use hermes_relayer_components::build::traits::components::chain_builder::CanBuildChain;
+use hermes_relayer_components::build::traits::target::chain::ChainATarget;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -14,6 +17,7 @@ use ibc_relayer::chain::requests::{IncludeProof, QueryClientStateRequest, QueryH
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::Context;
+use serde::Serialize;
 use tracing::info;
 
 use crate::Result;
@@ -46,16 +50,33 @@ pub struct QueryClientState {
     height: Option<u64>,
 }
 
-impl CommandRunner<CosmosBuilder> for QueryClientState {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
+impl<Build, ChainA, ChainB> CommandRunner<Build> for QueryClientState
+where
+    Build: CanBuildChain<ChainATarget>,
+    Build::BiRelay: HasTwoWayRelayTypes<ChainA = ChainA, ChainB = ChainB>,
+    ChainA: HasIbcChainTypes<ChainB, ChainId = ChainId, ClientId = ClientId>
+        + CanQueryClientState<ChainB>,
+    ChainB: HasIbcChainTypes<ChainA, ChainId = ChainId, ClientId = ClientId>
+        + HasClientStateType<ChainA>,
+    ChainA::Error: From<BaseError> + StdError,
+    Build::Error: From<BaseError> + StdError,
+    ChainB::ClientState: Serialize,
+{
+    async fn run(&self, builder: &Build) -> Result<Output> {
+        let chain_id = &self.chain_id;
+        let client_id = &self.client_id;
+
+        let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
 
         let height = self.height.map_or(QueryHeight::Latest, |height| {
             QueryHeight::Specific(Height::new(self.chain_id.version(), height).unwrap())
         });
 
-        do_query_client_state::<_, CosmosChain>(chain, &self.chain_id, &self.client_id, height)
-            .await
+        let client_state = chain.query_client_state(&self.client_id).await?;
+
+        info!("Found client state for client `{client_id}` on chain `{chain_id}`!");
+
+        Ok(Output::success(client_state))
     }
 }
 
