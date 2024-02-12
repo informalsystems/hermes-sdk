@@ -26,10 +26,10 @@ members = [
     "crates/wasm/wasm-client-components",
     "crates/test/test-components",
     "crates/test/test-suite",
-    "crates/cli/cli-framework", 
+    "crates/cli/cli-framework",
     "crates/cli/cli",
     "tools/integration-test",
-    "tools/test-framework", 
+    "tools/test-framework",
 ]
 
 [workspace.package]
@@ -76,6 +76,7 @@ http                = { version = "0.2.11" }
 humantime           = { version = "2.1.0" }
 flex-error          = { version = "0.4.4", default-features = false }
 tracing-subscriber  = { version = "0.3.18" }
+jsonrpsee           = { version = "0.21.0", default-features = false }
 
 hermes-cli                          = { version = "0.1.0", path = "./crates/cli/cli" }
 hermes-cli-framework                = { version = "0.1.0", path = "./crates/cli/cli-framework" }
