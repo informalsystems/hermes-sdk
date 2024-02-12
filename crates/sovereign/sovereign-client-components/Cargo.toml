@@ -28,7 +28,7 @@ ibc-core              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5
 sov-ibc-mocks           = { git = "https://github.com/informalsystems/sovereign-ibc.git", branch = "main", default-features = false }
 base64 = "0.21.6"
 
-ed25519-dalek   = { version = "2.1.0" }
+ed25519-dalek   = { version = "2.1.1" }
 eyre            = { workspace = true }
 jsonrpsee       = { workspace = true, features = ["http-client"] }
 prost           = { workspace = true }
