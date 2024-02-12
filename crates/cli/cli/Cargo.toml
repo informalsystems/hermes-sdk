@@ -32,4 +32,4 @@ oneline-eyre              = { workspace = true }
 humantime                 = { workspace = true }
 tracing                   = { workspace = true }
 serde_json                = { workspace = true }
-serde = { version = "1.0.196", features = ["derive"] }
+serde = { workspace = true, features = ["derive"] }
