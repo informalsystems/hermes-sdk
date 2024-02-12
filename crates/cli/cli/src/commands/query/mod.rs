@@ -7,6 +7,9 @@ pub use connection::QueryConnection;
 mod connections;
 pub use connections::QueryConnections;
 
+mod channel;
+pub use channel::QueryChannel;
+
 use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
