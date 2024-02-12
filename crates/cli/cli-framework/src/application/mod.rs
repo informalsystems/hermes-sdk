@@ -16,7 +16,10 @@ use crate::Result;
 #[async_trait]
 pub trait Application: Sized {
     type Config: Config;
-    type Command: CommandRunner;
+
+    type Build;
+
+    type Command: CommandRunner<Self::Build>;
 
     fn parse_from_env() -> Self;
 

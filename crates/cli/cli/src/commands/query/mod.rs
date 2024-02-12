@@ -27,8 +27,8 @@ pub enum QueryCommands {
     Connection(QueryConnection),
 }
 
-impl CommandRunner for QueryCommands {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryCommands {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::Client(cmd) => cmd.run(builder).await,
             Self::Connections(cmd) => cmd.run(builder).await,

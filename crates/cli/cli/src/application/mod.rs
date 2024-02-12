@@ -24,6 +24,7 @@ pub struct HermesCli {
 
 impl Application for HermesCli {
     type Config = HermesConfig;
+    type Build = CosmosBuilder;
     type Command = HermesCommand;
 
     fn config_path(&self) -> &Path {
@@ -48,6 +49,6 @@ impl Application for HermesCli {
             Default::default(),
         );
 
-        self.command.run(builder).await
+        self.command.run(&builder).await
     }
 }

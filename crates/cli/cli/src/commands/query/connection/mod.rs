@@ -13,8 +13,8 @@ pub enum QueryConnection {
     End(QueryConnectionEnd),
 }
 
-impl QueryConnection {
-    pub async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryConnection {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::End(cmd) => cmd.run(builder).await,
         }

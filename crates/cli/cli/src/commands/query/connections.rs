@@ -39,8 +39,8 @@ pub struct QueryConnections {
     verbose: bool,
 }
 
-impl CommandRunner for QueryConnections {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryConnections {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let counterparty_chain_id = self.counterparty_chain_id.clone();

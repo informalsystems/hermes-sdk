@@ -48,8 +48,8 @@ pub struct Start {
     client_id_b: ClientId,
 }
 
-impl CommandRunner for Start {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for Start {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         info!("Starting relayer...");
 
         let birelay = builder

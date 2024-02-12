@@ -13,8 +13,8 @@ pub enum ConnectionCommands {
     Create(ConnectionCreate),
 }
 
-impl CommandRunner for ConnectionCommands {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ConnectionCommands {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
         }

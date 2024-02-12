@@ -42,8 +42,8 @@ pub struct ClientUpdate {
     target_height: Option<u64>,
 }
 
-impl CommandRunner for ClientUpdate {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ClientUpdate {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let host_chain = builder.build_chain(&self.host_chain_id).await?;
         let client_state = host_chain.query_client_state(&self.client_id).await?;
         let reference_chain_id = client_state.chain_id;

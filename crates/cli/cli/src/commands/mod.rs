@@ -32,8 +32,8 @@ pub enum HermesCommand {
     Query(query::QueryCommands),
 }
 
-impl CommandRunner for HermesCommand {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for HermesCommand {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::Start(cmd) => cmd.run(builder).await,
             Self::Client(cmd) => cmd.run(builder).await,

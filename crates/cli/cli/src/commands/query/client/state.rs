@@ -46,8 +46,8 @@ pub struct QueryClientState {
     height: Option<u64>,
 }
 
-impl CommandRunner for QueryClientState {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryClientState {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
 
         let height = self.height.map_or(QueryHeight::Latest, |height| {

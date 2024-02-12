@@ -13,8 +13,8 @@ pub enum ClientCommands {
     State(QueryClientState),
 }
 
-impl CommandRunner for ClientCommands {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ClientCommands {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::State(cmd) => cmd.run(builder).await,
         }

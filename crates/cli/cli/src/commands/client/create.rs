@@ -64,8 +64,8 @@ pub struct ClientCreate {
     trust_threshold: Option<TrustThreshold>,
 }
 
-impl CommandRunner for ClientCreate {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ClientCreate {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let host_chain_config =
             builder
                 .config

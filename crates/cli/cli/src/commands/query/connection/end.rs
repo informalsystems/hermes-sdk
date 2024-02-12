@@ -46,8 +46,8 @@ pub struct QueryConnectionEnd {
     height: Option<u64>,
 }
 
-impl CommandRunner for QueryConnectionEnd {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryConnectionEnd {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let connection_id = self.connection_id.clone();

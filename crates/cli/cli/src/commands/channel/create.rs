@@ -2,8 +2,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_relayer_components::build::components::relay::build_from_chain::BuildRelayFromChains;
-use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilder;
+use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use ibc_relayer::channel::version::Version;
@@ -94,18 +93,18 @@ pub struct ChannelCreate {
     version: Version,
 }
 
-impl CommandRunner for ChannelCreate {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
-        let relay = BuildRelayFromChains::build_relay(
-            &builder,
-            RelayAToBTarget,
-            &self.chain_id_a,
-            &self.chain_id_b,
-            &self.client_id_a,
-            &self.client_id_b,
-        )
-        .await
-        .map_err(|e| eyre!("Failed to build relay: {e}"))?;
+impl CommandRunner<CosmosBuilder> for ChannelCreate {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+        let relay = builder
+            .build_relay(
+                RelayAToBTarget,
+                &self.chain_id_a,
+                &self.chain_id_b,
+                &self.client_id_a,
+                &self.client_id_b,
+            )
+            .await
+            .map_err(|e| eyre!("Failed to build relay: {e}"))?;
 
         let options = CosmosInitChannelOptions {
             ordering: self.ordering,

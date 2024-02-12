@@ -13,8 +13,8 @@ pub enum ChannelCommands {
     Create(ChannelCreate),
 }
 
-impl CommandRunner for ChannelCommands {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ChannelCommands {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
         }

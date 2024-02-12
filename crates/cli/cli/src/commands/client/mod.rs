@@ -19,8 +19,8 @@ pub enum ClientCommands {
     Update(ClientUpdate),
 }
 
-impl CommandRunner for ClientCommands {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ClientCommands {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::Create(cmd) => cmd.run(builder).await,
             Self::Update(cmd) => cmd.run(builder).await,
