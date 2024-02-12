@@ -62,7 +62,7 @@ where
         height: &Height,
     ) -> Result<TendermintClientState, Chain::Error> {
         let client_id = client_id.clone();
-        let height = height.clone();
+        let height = *height;
 
         chain
             .with_blocking_chain_handle(move |chain_handle| {
