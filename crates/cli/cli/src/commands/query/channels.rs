@@ -48,6 +48,7 @@ impl Runnable for QueryChannels {
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let dst_chain_id = self.counterparty_chain_id.clone();
+        let show_counterparty = self.show_counterparty;
 
         let channels = chain
             .with_blocking_chain_handle(move |chain_handle| {
@@ -85,7 +86,7 @@ impl Runnable for QueryChannels {
                         return false;
                     };
 
-                    if self.show_counterparty || dst_chain_id.is_some() {
+                    if show_counterparty || dst_chain_id.is_some() {
                         let connection_id = connection_id.clone();
 
                         let Ok((connection_end, _)) = chain_handle.query_connection(
