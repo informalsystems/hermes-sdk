@@ -42,13 +42,6 @@ pub struct QueryPendingPackets {
         help_heading = "REQUIRED"
     )]
     channel_id: ChannelId,
-
-    #[clap(
-        long = "height",
-        value_name = "HEIGHT",
-        help = "The height at which to query the client state. If not specified, the latest height is used."
-    )]
-    height: Option<u64>,
 }
 
 /// A structure to display pending packet commitment sequence IDs
@@ -121,20 +114,20 @@ impl Runnable for QueryPendingPackets {
 
         let chan_conn_cli = chain
             .with_blocking_chain_handle(move |handle| {
-                let chan_conn_cli_result =
-                    channel_connection_client(&handle, &port_id, &channel_id);
-                let chan_conn_cli = chan_conn_cli_result.map_err(|e| {
-                    BaseError::generic(eyre!("failed channel_connection_client: {}", e))
-                })?;
+                let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
+                    .map_err(|e| {
+                        BaseError::generic(eyre!("failed channel_connection_client: {}", e))
+                    })?;
                 Ok(chan_conn_cli)
             })
             .await
             .map_err(|e| {
                 BaseError::generic(eyre!("failed pending_packet_summary on source: {}", e))
             })?;
-        //let chan_conn_cli = channel_connection_client(&chain, &port_id, &channel_id)?;
+
         let counterparty_chain_id = chan_conn_cli.client.client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
+
         let src_summary = pending_packet_summary(
             &chain.handle,
             &counterparty_chain.handle,
