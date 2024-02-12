@@ -3,7 +3,8 @@ use crate::Result;
 use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use ibc_relayer::chain::counterparty::commitments_on_chain;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 
 #[derive(Debug, clap::Parser)]
@@ -42,18 +43,23 @@ impl Runnable for QueryPacketCommitments {
         let channel_id = self.channel_id.clone();
         let chain = builder.build_chain(&self.chain_id).await?;
 
-        let commitments_result =
-            commitments_on_chain(&chain.handle, &port_id, &channel_id).map(|(seqs_vec, height)| {
-                PacketSeqs {
-                    height,
-                    seqs: seqs_vec,
-                }
-            });
+        let (sequences, height) =
+            <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
+                &chain,
+                &channel_id,
+                &port_id,
+            )
+            .await?;
 
-        match commitments_result {
-            Ok(packet_seqs) if json() => Ok(Output::success(packet_seqs)),
-            Ok(packet_seqs) => Ok(Output::success(packet_seqs.collated())),
-            Err(e) => Ok(Output::error(e)),
+        let packet_sequences = PacketSeqs {
+            height,
+            seqs: sequences,
+        };
+
+        if json() {
+            Ok(Output::success(packet_sequences))
+        } else {
+            Ok(Output::success(packet_sequences.collated()))
         }
     }
 }
