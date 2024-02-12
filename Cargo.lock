@@ -2326,6 +2326,7 @@ dependencies = [
  "hermes-sovereign-client-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "jsonrpsee",
 ]
 
 [[package]]
@@ -2348,6 +2349,7 @@ dependencies = [
  "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
+ "jsonrpsee",
  "stable-eyre",
  "tokio",
 ]

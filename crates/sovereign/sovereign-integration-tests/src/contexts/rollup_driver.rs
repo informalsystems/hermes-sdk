@@ -1,4 +1,5 @@
 use cgp_core::HasComponents;
+use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGenesisConfig;
 use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollupNodeConfig;
 use hermes_sovereign_test_components::types::wallet::SovereignWallet;
@@ -7,6 +8,7 @@ use hermes_test_components::chain_driver::traits::types::wallet::ProvideWalletTy
 use tokio::process::Child;
 
 pub struct SovereignRollupDriver {
+    pub rollup: SovereignRollup,
     pub rollup_node_config: SovereignRollupNodeConfig,
     pub genesis_config: SovereignGenesisConfig,
     pub rollup_process: Child,
