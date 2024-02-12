@@ -1,8 +1,14 @@
+use std::error::Error as StdError;
+
 use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryClientStateRequest, QueryHeight};
 use ibc_relayer_types::core::ics02_client::height::Height;
@@ -48,32 +54,41 @@ impl Runnable for QueryClientState {
             QueryHeight::Specific(Height::new(self.chain_id.version(), height).unwrap())
         });
 
-        let client_id = self.client_id.clone();
-
-        let client_state = chain
-            .with_blocking_chain_handle(move |handle| {
-                let (client_state, _) = handle
-                    .query_client_state(
-                        QueryClientStateRequest { client_id, height },
-                        IncludeProof::No,
-                    )
-                    .map_err(BaseError::relayer)?;
-
-                Ok(client_state)
-            })
+        do_query_client_state::<_, CosmosChain>(chain, &self.chain_id, &self.client_id, height)
             .await
-            .wrap_err_with(|| {
-                format!(
-                    "Failed to query client state for client `{}` on chain `{}`",
-                    self.client_id, self.chain_id
-                )
-            })?;
-
-        info!(
-            "Found client state for client `{}` on chain `{}`:",
-            self.client_id, self.chain_id
-        );
-
-        Ok(Output::success(client_state))
     }
+}
+
+async fn do_query_client_state<Chain, Counterparty>(
+    chain: Chain,
+    chain_id: &ChainId,
+    client_id: &ClientId,
+    height: QueryHeight,
+) -> Result<Output>
+where
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + HasBlockingChainHandle,
+    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
+    Chain::Error: From<BaseError> + StdError,
+{
+    let client_state = {
+        let client_id = client_id.clone();
+        chain.with_blocking_chain_handle(move |handle| {
+            let (client_state, _) = handle
+                .query_client_state(
+                    QueryClientStateRequest { client_id, height },
+                    IncludeProof::No,
+                )
+                .map_err(BaseError::relayer)?;
+
+            Ok(client_state)
+        })
+    }
+    .await
+    .wrap_err_with(|| {
+        format!("Failed to query client state for client `{client_id}` on chain `{chain_id}`")
+    })?;
+
+    info!("Found client state for client `{client_id}` on chain `{chain_id}`!");
+
+    Ok(Output::success(client_state))
 }
