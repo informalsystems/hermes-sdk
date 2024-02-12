@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 pub use jsonrpsee::core::client::error::Error as JsonRpcClientError;
 use jsonrpsee::core::client::ClientT;
 
@@ -9,6 +8,6 @@ pub trait HasJsonRpcClientType: Async {
 }
 
 #[derive_component(JsonRpcClientGetterComponent, JsonRpcClientGetter<Chain>)]
-pub trait HasJsonRpcClient: HasJsonRpcClientType + CanRaiseError<JsonRpcClientError> {
+pub trait HasJsonRpcClient: HasJsonRpcClientType {
     fn json_rpc_client(&self) -> &Self::JsonRpcClient;
 }

@@ -11,8 +11,7 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::params::ArrayParams;
+use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
 
 #[test]
@@ -57,19 +56,10 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
         let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
-        let mut params = ArrayParams::new();
-
-        params.insert(None::<u64>)?;
-        params.insert(&wallet.address)?;
-        params.insert(transfer_denom)?;
-
-        let rpc_client = &rollup_driver.rollup.rpc_client;
-
-        let response: serde_json::Value = rpc_client.request("bank_balanceOf", params).await?;
-
-        println!("query balance response: {}", response);
-
-        // tokio::time::sleep(core::time::Duration::from_secs(99999)).await;
+        let amount = rollup_driver
+            .query_balance(&wallet.address, &transfer_denom)
+            .await?;
+        println!("wallet balance: {}", amount);
 
         <Result<(), Error>>::Ok(())
     })?;
