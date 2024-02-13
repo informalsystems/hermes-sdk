@@ -10,14 +10,9 @@ use hermes_cosmos_relayer::types::error::BaseError;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 use hermes_relayer_components::build::traits::components::chain_builder::CanBuildChain;
 use hermes_relayer_components::build::traits::target::chain::ChainATarget;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    CanQueryClientState, CanQueryClientStateWithHeight,
-};
 use hermes_relayer_components::chain::traits::queries::client_status::{
     CanQueryClientStatus, ClientStatus,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
@@ -56,10 +51,7 @@ where
     Build: CanBuildChain<ChainATarget>,
     Build::BiRelay: HasTwoWayRelayTypes<ChainA = Chain, ChainB = Counterparty>,
     Chain: HasIbcChainTypes<Counterparty, ChainId = ChainId, ClientId = ClientId, Height = Height>
-        + CanQueryClientState<Counterparty>
-        + CanQueryClientStateWithHeight<Counterparty>
-        + CanQueryChainStatus
-        + CanQueryConsensusState<Counterparty>,
+        + CanQueryClientStatus<Counterparty>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasClientStateFields<Chain>
@@ -67,7 +59,6 @@ where
         + HasConsensusStateFields<Chain>,
     Chain::Error: From<BaseError> + StdError,
     Build::Error: From<BaseError> + StdError,
-    Counterparty::ClientState: Serialize,
 {
     async fn run(&self, builder: &Build) -> Result<Output> {
         let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
