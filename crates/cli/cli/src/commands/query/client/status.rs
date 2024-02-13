@@ -84,9 +84,7 @@ where
             }
         }
 
-        Ok(Output::success(serde_json::json!({
-            "status": client_status
-        })))
+        Ok(Output::success(client_status))
     }
 }
 
