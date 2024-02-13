@@ -1,3 +1,4 @@
+use alloc::format;
 use cgp_core::async_trait;
 
 use crate::chain::traits::queries::packet_acknowledgements::CanQueryPacketAcknowledgements;
@@ -5,6 +6,7 @@ use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments
 use crate::chain::traits::queries::send_packets::CanQuerySendPackets;
 use crate::chain::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
+use crate::logger::traits::log::CanLog;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
@@ -24,17 +26,21 @@ where
 #[async_trait]
 impl<Relay> Task for RelayPacketTask<Relay>
 where
-    Relay: CanRelayPacket,
+    Relay: CanRelayPacket + CanLog,
 {
     async fn run(self) {
-        let _ = self.relay.relay_packet(&self.packet).await;
+        if let Err(e) = self.relay.relay_packet(&self.packet).await {
+            self.relay.log_error(&format!(
+                "failed to relay packet during ack packet clearing: {e:#?}"
+            ));
+        }
     }
 }
 
 #[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
-    Relay: Clone + CanRelayPacket + HasRuntime + CanRaiseRelayChainErrors,
+    Relay: Clone + CanRelayPacket + HasRuntime + CanRaiseRelayChainErrors + CanLog,
     Relay::DstChain: CanQueryUnreceivedAcksSequences<Relay::SrcChain>
         + CanQueryPacketAcknowledgements<Relay::SrcChain>,
     Relay::SrcChain:
