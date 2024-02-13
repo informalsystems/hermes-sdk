@@ -7,11 +7,11 @@ pub use connection::QueryConnection;
 mod connections;
 pub use connections::QueryConnections;
 
-mod packet;
-pub use packet::PacketCommands;
-
 mod channels;
 pub use channels::QueryChannels;
+
+mod packet;
+pub use packet::PacketCommands;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
