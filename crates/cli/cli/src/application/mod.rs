@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use hermes_cli_framework::application::Application;
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -24,6 +24,7 @@ pub struct HermesCli {
 
 impl Application for HermesCli {
     type Config = HermesConfig;
+    type Build = CosmosBuilder;
     type Command = HermesCommand;
 
     fn config_path(&self) -> &Path {
@@ -48,6 +49,6 @@ impl Application for HermesCli {
             Default::default(),
         );
 
-        self.command.run(builder).await
+        self.command.run(&builder).await
     }
 }

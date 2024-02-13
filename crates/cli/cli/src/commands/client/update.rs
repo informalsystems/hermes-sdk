@@ -1,4 +1,4 @@
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
@@ -42,8 +42,8 @@ pub struct ClientUpdate {
     target_height: Option<u64>,
 }
 
-impl Runnable for ClientUpdate {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ClientUpdate {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let host_chain = builder.build_chain(&self.host_chain_id).await?;
         let client_state = host_chain.query_client_state(&self.client_id).await?;
         let reference_chain_id = client_state.chain_id;
