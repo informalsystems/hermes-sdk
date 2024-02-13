@@ -89,7 +89,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
             QueryHeight::Latest
         };
 
-        chain
+        let channel_ends_summary= chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let (channel_end , _)= chain_handle
                     .query_channel(
@@ -157,7 +157,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
 
                 let counterparty_chain_id = client_state.chain_id();
 
-                Ok(Output::success(ChannelEndsSummary {
+                Ok(ChannelEndsSummary {
                     chain_id: chain_id.clone(),
                     client_id,
                     connection_id: connection_id.clone(),
@@ -168,10 +168,14 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                     counterparty_connection_id,
                     counterparty_channel_id,
                     counterparty_port_id,
-                }))        
+                })        
             })
-            .await
-            .map_err(|e| e.into())
+            .await;
+
+        match channel_ends_summary {
+            Ok(summary) => Ok(Output::success(summary)),
+            Err(e) => Err(e.into()),
+        }
     }
 }
 
