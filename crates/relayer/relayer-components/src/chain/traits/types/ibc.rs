@@ -3,7 +3,7 @@
   [`HasCounterpartyMessageHeight`].
 */
 
-use core::fmt::Display;
+use core::fmt::{Debug, Display};
 
 use cgp_core::prelude::*;
 
@@ -52,25 +52,25 @@ pub trait HasIbcChainTypes<Counterparty>: HasChainTypes {
        The client ID of the counterparty chain, that is stored on the self
        chain.
     */
-    type ClientId: Display + Async;
+    type ClientId: Debug + Display + Async;
 
     /**
        The connection ID of the counterparty chain, that is stored on the self
        chain.
     */
-    type ConnectionId: Display + Async;
+    type ConnectionId: Debug + Display + Async;
 
     /**
        The channel ID of the counterparty chain, that is stored on the self
        chain.
     */
-    type ChannelId: Display + Async;
+    type ChannelId: Debug + Display + Async;
 
     /**
        The port ID of the counterparty chain, that is stored on the self
        chain.
     */
-    type PortId: Display + Async;
+    type PortId: Debug + Display + Async;
 
     /**
        The IBC packet sequence for the packet that is sent from the self chain
@@ -79,7 +79,7 @@ pub trait HasIbcChainTypes<Counterparty>: HasChainTypes {
        Note that for sequences of packets that are sent from the counterparty
        chain to self, the `Counterparty::Sequence` will be used.
     */
-    type Sequence: Display + Async;
+    type Sequence: Debug + Display + Async;
 }
 
 pub trait HasCounterpartyMessageHeight<Counterparty>: HasMessageType
