@@ -1,7 +1,7 @@
 mod end;
 pub use end::QueryConnectionEnd;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
@@ -13,8 +13,8 @@ pub enum QueryConnection {
     End(QueryConnectionEnd),
 }
 
-impl QueryConnection {
-    pub async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryConnection {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::End(cmd) => cmd.run(builder).await,
         }

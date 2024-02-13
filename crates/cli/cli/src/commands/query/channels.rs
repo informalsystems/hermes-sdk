@@ -1,7 +1,7 @@
+use hermes_cli_framework::command::CommandRunner;
 use oneline_eyre::eyre::Context;
 use tracing::{info, warn};
 
-use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -43,8 +43,8 @@ pub struct QueryChannels {
     show_counterparty: bool,
 }
 
-impl Runnable for QueryChannels {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryChannels {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let dst_chain_id = self.counterparty_chain_id.clone();

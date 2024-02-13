@@ -2056,6 +2056,7 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "oneline-eyre",
+ "serde",
  "serde_json",
  "tracing",
 ]

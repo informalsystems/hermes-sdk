@@ -3,7 +3,7 @@ use oneline_eyre::eyre::eyre;
 use tracing::error;
 use tracing::info;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError as RelayerError;
@@ -46,8 +46,8 @@ pub struct QueryConnectionEnd {
     height: Option<u64>,
 }
 
-impl Runnable for QueryConnectionEnd {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryConnectionEnd {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let connection_id = self.connection_id.clone();

@@ -1,13 +1,20 @@
-use hermes_cli_framework::command::Runnable;
+use core::fmt::Debug;
+use std::error::Error as StdError;
+
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{IncludeProof, QueryClientStateRequest, QueryHeight};
+use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
+use hermes_relayer_components::build::traits::components::chain_builder::CanBuildChain;
+use hermes_relayer_components::build::traits::target::chain::ChainATarget;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    CanQueryClientState, CanQueryClientStateWithHeight,
+};
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
-use oneline_eyre::eyre::Context;
+use serde::Serialize;
 use tracing::info;
 
 use crate::Result;
@@ -40,39 +47,35 @@ pub struct QueryClientState {
     height: Option<u64>,
 }
 
-impl Runnable for QueryClientState {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
+impl<Build, ChainA, ChainB> CommandRunner<Build> for QueryClientState
+where
+    Build: CanBuildChain<ChainATarget>,
+    Build::BiRelay: HasTwoWayRelayTypes<ChainA = ChainA, ChainB = ChainB>,
+    ChainA: HasIbcChainTypes<ChainB, ChainId = ChainId, ClientId = ClientId, Height = Height>
+        + CanQueryClientState<ChainB>
+        + CanQueryClientStateWithHeight<ChainB>,
+    ChainB: HasIbcChainTypes<ChainA> + HasClientStateType<ChainA>,
+    ChainA::Error: From<BaseError> + StdError,
+    Build::Error: From<BaseError> + StdError,
+    ChainB::ClientState: Serialize,
+{
+    async fn run(&self, builder: &Build) -> Result<Output> {
+        let chain_id = &self.chain_id;
+        let client_id = &self.client_id;
 
-        let height = self.height.map_or(QueryHeight::Latest, |height| {
-            QueryHeight::Specific(Height::new(self.chain_id.version(), height).unwrap())
-        });
+        let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
 
-        let client_id = self.client_id.clone();
+        let client_state = match self.height {
+            Some(height) => {
+                let height = Height::new(self.chain_id.version(), height).unwrap();
+                chain
+                    .query_client_state_with_height(&self.client_id, &height)
+                    .await?
+            }
+            None => chain.query_client_state(&self.client_id).await?,
+        };
 
-        let client_state = chain
-            .with_blocking_chain_handle(move |handle| {
-                let (client_state, _) = handle
-                    .query_client_state(
-                        QueryClientStateRequest { client_id, height },
-                        IncludeProof::No,
-                    )
-                    .map_err(BaseError::relayer)?;
-
-                Ok(client_state)
-            })
-            .await
-            .wrap_err_with(|| {
-                format!(
-                    "Failed to query client state for client `{}` on chain `{}`",
-                    self.client_id, self.chain_id
-                )
-            })?;
-
-        info!(
-            "Found client state for client `{}` on chain `{}`:",
-            self.client_id, self.chain_id
-        );
+        info!("Found client state for client `{client_id}` on chain `{chain_id}`!");
 
         Ok(Output::success(client_state))
     }
