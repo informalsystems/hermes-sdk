@@ -4,6 +4,7 @@ use std::fmt::Debug;
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     HasConsensusStateFields, HasConsensusStateType,
 };
+use oneline_eyre::eyre::Context;
 use serde::Serialize;
 
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -98,7 +99,10 @@ where
         + HasConsensusStateFields<Chain>,
     Chain::Error: From<BaseError> + StdError,
 {
-    let client_state = chain.query_client_state(client_id).await?;
+    let client_state = chain
+        .query_client_state(client_id)
+        .await
+        .wrap_err_with(|| "Failed to query client state for client `{client_id}`")?;
 
     if Counterparty::client_state_is_frozen(&client_state) {
         return Ok(Status::Frozen);
@@ -108,17 +112,24 @@ where
 
     let latest_consensus_state = chain
         .query_consensus_state(client_id, client_latest_height)
-        .await?;
+        .await
+        .wrap_err_with(|| {
+            format!("Failed to query consensus state at height {client_latest_height}")
+        })?;
 
     let latest_consensus_state_timestamp =
         Counterparty::consensus_state_timestamp(&latest_consensus_state);
 
-    let chain_status = chain.query_chain_status().await?;
+    let chain_status = chain
+        .query_chain_status()
+        .await
+        .wrap_err("Failed to query chain status")?;
+
     let current_network_time = Chain::chain_status_timestamp(&chain_status);
 
     let elapsed = Chain::timestamp_duration_since(
         latest_consensus_state_timestamp.as_ref(),
-        &current_network_time,
+        current_network_time,
     );
 
     let has_expired = elapsed.map_or(false, |elapsed| {
