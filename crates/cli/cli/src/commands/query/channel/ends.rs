@@ -91,7 +91,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
 
         let channel_ends_summary= chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let (channel_end , _)= chain_handle
+                let (channel_end , _) = chain_handle
                     .query_channel(
                         QueryChannelRequest {
                             port_id,
