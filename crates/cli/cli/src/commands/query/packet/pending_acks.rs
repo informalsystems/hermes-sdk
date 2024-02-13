@@ -1,5 +1,4 @@
-use crate::Result;
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -9,6 +8,8 @@ use ibc_relayer::path::PathIdentifiers;
 use ibc_relayer::util::collate::CollatedIterExt;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use oneline_eyre::eyre::eyre;
+
+use crate::Result;
 
 #[derive(Debug, clap::Parser)]
 pub struct QueryPendingAcks {
@@ -40,8 +41,8 @@ pub struct QueryPendingAcks {
     channel_id: ChannelId,
 }
 
-impl Runnable for QueryPendingAcks {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for QueryPendingAcks {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let port_id = self.port_id.clone();
         let channel_id = self.channel_id.clone();
         let chain = builder.build_chain(&self.chain_id).await?;

@@ -1,6 +1,6 @@
 use crate::commands::query::packet::util::PacketSeqs;
 use crate::Result;
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -37,17 +37,15 @@ pub struct QueryPacketCommitments {
     channel_id: ChannelId,
 }
 
-impl Runnable for QueryPacketCommitments {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
-        let port_id = self.port_id.clone();
-        let channel_id = self.channel_id.clone();
+impl CommandRunner<CosmosBuilder> for QueryPacketCommitments {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
 
         let (sequences, height) =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
                 &chain,
-                &channel_id,
-                &port_id,
+                &self.channel_id,
+                &self.port_id,
             )
             .await?;
 

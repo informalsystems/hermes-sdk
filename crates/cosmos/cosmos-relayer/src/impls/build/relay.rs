@@ -21,7 +21,7 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildCompon
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
     ) -> Result<CosmosRelay, Error> {
-        let relay = build.build_relay(
+        let relay = build.build_cosmos_relay(
             src_client_id,
             dst_client_id,
             src_chain,
@@ -45,7 +45,7 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayBToATarget> for CosmosBuildCompon
         src_batch_sender: CosmosBatchSender,
         dst_batch_sender: CosmosBatchSender,
     ) -> Result<CosmosRelay, Error> {
-        let relay = build.build_relay(
+        let relay = build.build_cosmos_relay(
             src_client_id,
             dst_client_id,
             src_chain,
