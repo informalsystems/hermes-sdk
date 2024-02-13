@@ -25,6 +25,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use tracing::info;
 
 use crate::Result;
 
@@ -71,11 +72,26 @@ where
         let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
         let client_status = query_client_status(&chain, &self.client_id).await?;
 
-        Ok(Output::success(client_status))
+        match client_status {
+            Status::Frozen => {
+                info!("Client `{}` is frozen", self.client_id);
+            }
+            Status::Expired => {
+                info!("Client `{}` has expired", self.client_id);
+            }
+            Status::Active => {
+                info!("Client `{}` is active", self.client_id);
+            }
+        }
+
+        Ok(Output::success(serde_json::json!({
+            "status": client_status
+        })))
     }
 }
 
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "lowercase")]
 enum Status {
     Frozen,
     Expired,
