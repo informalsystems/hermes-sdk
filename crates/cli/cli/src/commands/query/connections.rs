@@ -1,9 +1,8 @@
-use hermes_cli_framework::output::Output;
 use oneline_eyre::eyre::eyre;
-use tracing::info;
-use tracing::warn;
+use tracing::{info, warn};
 
 use hermes_cli_framework::command::CommandRunner;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use ibc_relayer::chain::handle::ChainHandle;
