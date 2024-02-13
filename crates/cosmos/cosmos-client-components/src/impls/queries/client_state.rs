@@ -1,11 +1,13 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    ClientStateQuerier, ClientStateWithHeightQuerier,
+    ClientStateQuerier, ClientStateWithHeightQuerier, ClientStatesQuerier,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{IncludeProof, QueryClientStateRequest, QueryHeight};
+use ibc_relayer::chain::requests::{
+    IncludeProof, PageRequest, QueryClientStateRequest, QueryClientStatesRequest, QueryHeight,
+};
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
@@ -14,6 +16,39 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 use crate::types::tendermint::TendermintClientState;
 
 pub struct QueryCosmosClientStateFromChainHandle;
+
+#[async_trait]
+impl<Chain, Counterparty> ClientStatesQuerier<Chain, Counterparty>
+    for QueryCosmosClientStateFromChainHandle
+where
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + HasBlockingChainHandle,
+    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
+{
+    async fn query_client_states(
+        chain: &Chain,
+    ) -> Result<Vec<(ClientId, TendermintClientState)>, Chain::Error> {
+        chain
+            .with_blocking_chain_handle(move |chain_handle| {
+                let clients = chain_handle
+                    .query_clients(QueryClientStatesRequest {
+                        pagination: Some(PageRequest::all()),
+                    })
+                    .map_err(Chain::raise_error)?;
+
+                let clients = clients
+                    .into_iter()
+                    .map(|client| match client.client_state {
+                        AnyClientState::Tendermint(client_state) => {
+                            (client.client_id, client_state)
+                        }
+                    })
+                    .collect::<Vec<_>>();
+
+                Ok(clients)
+            })
+            .await
+    }
+}
 
 #[async_trait]
 impl<Chain, Counterparty> ClientStateQuerier<Chain, Counterparty>

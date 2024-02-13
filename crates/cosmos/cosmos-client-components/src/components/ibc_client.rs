@@ -3,6 +3,7 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithHeightQuerierComponent,
+    ClientStatesQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 
@@ -17,6 +18,7 @@ delegate_components! {
     #[mark_component(IsCosmosIbcClientComponents)]
     CosmosIbcClientComponents {
         [
+            ClientStatesQuerierComponent,
             ClientStateQuerierComponent,
             ClientStateWithHeightQuerierComponent,
         ]:

@@ -1,13 +1,11 @@
-use hermes_cosmos_relayer::types::error::BaseError;
 use oneline_eyre::eyre::Context;
 use tracing::info;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStates;
+use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::Result;
@@ -43,20 +41,14 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
         let chain_id = self.host_chain_id.clone();
 
         let mut clients = chain
-            .with_blocking_chain_handle(move |handle| {
-                handle
-                    .query_clients(QueryClientStatesRequest {
-                        pagination: Some(PageRequest::all()),
-                    })
-                    .map_err(|e| BaseError::relayer(e).into())
-            })
+            .query_client_states()
             .await
             .wrap_err("Failed to query clients")?;
 
         info!("Found {} clients on chain `{chain_id}`", clients.len());
 
         if let Some(reference_chain_id) = &self.reference_chain_id {
-            clients.retain(|client| &client.client_state.chain_id() == reference_chain_id);
+            clients.retain(|(_, state)| &state.chain_id() == reference_chain_id);
 
             info!(
                 "Found {} clients that reference `{reference_chain_id}`",
@@ -65,24 +57,30 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
         }
 
         if !json() {
-            clients.iter().for_each(|client| {
+            clients.iter().for_each(|(id, state)| {
                 if self.verbose {
-                    info!("- {client:#?}",);
+                    info!("- {id}: {state:#?}",);
                 } else {
-                    info!("- {}", client.client_id);
+                    info!("- {id}");
                 }
             });
         }
 
         if json() {
             if self.verbose {
-                Ok(Output::success(clients))
-            } else {
-                let client_ids = clients
-                    .iter()
-                    .map(|c| c.client_id.clone())
+                let clients = clients
+                    .into_iter()
+                    .map(|(id, state)| {
+                        serde_json::json!({
+                            "client_id": id,
+                            "client_state": state,
+                        })
+                    })
                     .collect::<Vec<_>>();
 
+                Ok(Output::success(clients))
+            } else {
+                let client_ids = clients.into_iter().map(|(id, _)| id).collect::<Vec<_>>();
                 Ok(Output::success(client_ids))
             }
         } else {

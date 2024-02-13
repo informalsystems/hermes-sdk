@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComponents;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    ClientStateQuerier, ClientStateWithHeightQuerier,
+    ClientStateQuerier, ClientStateWithHeightQuerier, ClientStatesQuerier,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -11,6 +11,21 @@ use crate::contexts::chain::CosmosChain;
 use crate::types::error::Error;
 
 pub struct DelegateCosmosClientStateQuerier;
+
+#[async_trait]
+impl<Counterparty, Delegate> ClientStatesQuerier<CosmosChain, Counterparty>
+    for DelegateCosmosClientStateQuerier
+where
+    Counterparty: HasClientStateType<CosmosChain>,
+    Delegate: ClientStatesQuerier<CosmosChain, Counterparty>,
+    Self: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
+    async fn query_client_states(
+        chain: &CosmosChain,
+    ) -> Result<Vec<(ClientId, Counterparty::ClientState)>, Error> {
+        Delegate::query_client_states(chain).await
+    }
+}
 
 #[async_trait]
 impl<Counterparty, Delegate> ClientStateQuerier<CosmosChain, Counterparty>

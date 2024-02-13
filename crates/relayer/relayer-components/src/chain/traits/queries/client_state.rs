@@ -1,7 +1,20 @@
+use alloc::vec::Vec;
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+
+#[derive_component(ClientStatesQuerierComponent, ClientStatesQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryClientStates<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
+where
+    Counterparty: HasClientStateType<Self>,
+{
+    async fn query_client_states(
+        &self,
+    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
+}
 
 #[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]
 #[async_trait]

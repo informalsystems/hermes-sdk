@@ -22,6 +22,7 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateWithHeightQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
@@ -160,6 +161,7 @@ delegate_components! {
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
         [
+            ClientStatesQuerierComponent,
             ClientStateQuerierComponent,
             ClientStateWithHeightQuerierComponent,
         ]:
