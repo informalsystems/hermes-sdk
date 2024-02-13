@@ -64,7 +64,7 @@ pub struct QueryChannelEnds {
         long = "verbose",
         help = "Enable verbose output, displaying details about all channels, connections, and clients"
     )]
-    verbose: bool,
+    verbose: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -93,184 +93,170 @@ pub struct ChannelEndsSummary {
 
 impl Runnable for QueryChannelEnds {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();
-        let channel_id = self.channel_id.clone();
-
-        let query_height = if let Some(height) = self.height {
-            let specified_height = Height::new(chain_id.version(), height)
-            .map_err(|e| BaseError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain_id.version())))?;
-
-            QueryHeight::Specific(specified_height)
+        let height = self.height;
+        let verbose = if let Some(verbose) = self.verbose {
+            verbose
         } else {
-            QueryHeight::Latest
+            false
         };
 
-        let (channel_end, _) = chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                chain_handle
-                    .query_channel(
-                        QueryChannelRequest {
-                            port_id,
-                            channel_id,
-                            height: query_height,
-                        },
-                        IncludeProof::No,
-                    )
-                    .map_err(|e| BaseError::relayer(e).into())
-            })
-            .await?;
-
-        if channel_end.state_matches(&State::Uninitialized) {
-            return Err(BaseError::generic(eyre!(
-                "{port_id}/{channel_id} on chain {chain_id} @ {query_height:?} is uninitialized",
-            ))
-            .into());
-        }
-
-        let Some(connection_id) = channel_end.connection_hops.first() else {
-            return Err(BaseError::generic(eyre!(
-                "missing connection hops for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}",
-            )).into());
-        };
-
-        let (connection_end, _) = chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                chain_handle
-                    .query_connection(
-                        QueryConnectionRequest {
-                            connection_id: connection_id.clone(),
-                            height: query_height,
-                        },
-                        IncludeProof::No,
-                    )
-                    .map_err(|e| BaseError::relayer(e).into())
-            })
-            .await?;
-
-        let client_id = connection_end.client_id().clone();
-
-        let (client_state, _) = chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                chain_handle
-                    .query_client_state(
-                        QueryClientStateRequest {
-                            client_id: client_id.clone(),
-                            height: query_height,
-                        },
-                        IncludeProof::No,
-                    )
-                    .map_err(|e| BaseError::relayer(e).into())
-            })
-            .await?;
-
-        let channel_counterparty = channel_end.counterparty().clone();
-        let connection_counterparty = connection_end.counterparty().clone();
-        let counterparty_client_id = connection_counterparty.client_id().clone();
-
-        let Some(counterparty_connection_id) = connection_counterparty.connection_id else {
-            return Err(BaseError::generic(eyre!(
-                "connection end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?} does not have counterparty connection id {connection_end:?}",
-            )).into());
-        };
-
-        let counterparty_port_id = channel_counterparty.port_id().clone();
-
-        let Some(counterparty_channel_id) = channel_counterparty.channel_id else {
-            return Err(BaseError::generic(eyre!(
-                "channel end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?} does not have counterparty channel id {channel_end:?}",
-            )).into());
-        };
-
-        let counterparty_chain_id = client_state.chain_id();
-        // let counterparty_chain = builder.build_chain(&counterparty_chain_id).await?;
-        // let counterparty_chain_height_query = QueryHeight::Specific(
-        //     counterparty_chain
-        //         .query_chain_height()
-        //         .await
-        //         .wrap_err("Failed to query latest chain height")?,
-        // );
-
-        // let (counterparty_connection_end, _) = chain
-        //     .with_blocking_chain_handle(move |chain_handle| {
-        //         chain_handle
-        //             .query_connection(
-        //                 QueryConnectionRequest {
-        //                     connection_id: counterparty_connection_id.clone(),
-        //                     height: counterparty_chain_height_query,
-        //                 },
-        //                 IncludeProof::No,
-        //             )
-        //             .map_err(|e| BaseError::relayer(e).into())
-        //     })
-        //     .await?;
-
-        // let (counterparty_client_state, _) = chain
-        //     .with_blocking_chain_handle(move |chain_handle| {
-        //         chain_handle
-        //             .query_client_state(
-        //                 QueryClientStateRequest {
-        //                     client_id: counterparty_client_id.clone(),
-        //                     height: counterparty_chain_height_query,
-        //                 },
-        //                 IncludeProof::No,
-        //             )
-        //             .map_err(|e| BaseError::relayer(e).into())
-        //     })
-        //     .await?;
-
-        // let (counterparty_channel_end, _) = chain
-        //     .with_blocking_chain_handle(move |chain_handle| {
-        //         chain_handle
-        //             .query_channel(
-        //                 QueryChannelRequest {
-        //                     port_id: counterparty_port_id.clone(),
-        //                     channel_id: counterparty_channel_id.clone(),
-        //                     height: counterparty_chain_height_query,
-        //                 },
-        //                 IncludeProof::No,
-        //             )
-        //             .map_err(|e| BaseError::relayer(e).into())
-        //     })
-        //     .await?;
-
-        // if self.verbose {
-        //     Ok(Output::success(ChannelEnds {
-        //         channel_end,
-        //         connection_end,
-        //         client_state,
-        //         counterparty_channel_end,
-        //         counterparty_connection_end,
-        //         counterparty_client_state,
-        //     }))
-        // } else {
-        //     Ok(Output::success(ChannelEndsSummary {
-        //         chain_id: chain_id.clone(),
-        //         client_id,
-        //         connection_id: connection_id.clone(),
-        //         channel_id: channel_id.clone(),
-        //         port_id: port_id.clone(),
-        //         counterparty_chain_id,
-        //         counterparty_client_id,
-        //         counterparty_connection_id,
-        //         counterparty_channel_id,
-        //         counterparty_port_id,
-        //     }))
-        // }
-
-        Ok(Output::success(ChannelEndsSummary {
-            chain_id: chain_id.clone(),
-            client_id: connection_end.client_id().clone(),
-            connection_id: connection_id.clone(),
-            channel_id: self.channel_id.clone(),
-            port_id: self.port_id.clone(),
-            counterparty_chain_id,
-            counterparty_client_id,
-            counterparty_connection_id,
-            counterparty_channel_id,
-            counterparty_port_id,
-        }))
+        do_run(builder, chain_id, channel_id, port_id, height, verbose).await
     }
 }
+
+async fn do_run(
+    builder: CosmosBuilder,
+    chain_id: ChainId,
+    channel_id: ChannelId,
+    port_id: PortId,
+    height: Option<u64>,
+    verbose: bool,
+) -> Result<Output> {
+    let chain = builder.build_chain(&chain_id).await?;
+
+    let query_height = if let Some(height) = height {
+        let specified_height = Height::new(chain_id.version(), height)
+        .map_err(|e| BaseError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain_id.version())))?;
+
+        QueryHeight::Specific(specified_height)
+    } else {
+        QueryHeight::Latest
+    };
+
+    chain
+        .with_blocking_chain_handle(move |chain_handle| {
+            let (channel_end , _)= chain_handle
+                .query_channel(
+                    QueryChannelRequest {
+                        port_id,
+                        channel_id,
+                        height: query_height,
+                    },
+                    IncludeProof::No,
+                )
+                .map_err(|e| BaseError::relayer(e).into())?;
+
+            if channel_end.state_matches(&State::Uninitialized) {
+                return Err(BaseError::generic(eyre!(
+                    "{port_id}/{channel_id} on chain {chain_id} @ {query_height:?} is uninitialized",
+                ))
+                .into());
+            }
+
+            let Some(connection_id) = channel_end.connection_hops.first() else {
+                return Err(BaseError::generic(eyre!(
+                    "missing connection hops for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}",
+                )).into());
+            };        
+
+            let (connection_end, _) = chain_handle
+                .query_connection(
+                    QueryConnectionRequest {
+                        connection_id: connection_id.clone(),
+                        height: query_height,
+                    },
+                    IncludeProof::No,
+                )
+                .map_err(|e| BaseError::relayer(e).into())?;
+
+            let client_id = connection_end.client_id().clone();
+
+            let (client_state, _) = chain_handle
+                .query_client_state(
+                    QueryClientStateRequest {
+                        client_id: client_id.clone(),
+                        height: query_height,
+                    },
+                    IncludeProof::No,
+                )
+                .map_err(|e| BaseError::relayer(e).into())?;
+
+            let channel_counterparty = channel_end.counterparty().clone();
+            let connection_counterparty = connection_end.counterparty().clone();
+            let counterparty_client_id = connection_counterparty.client_id().clone();
+
+            let Some(counterparty_connection_id) = connection_counterparty.connection_id else {
+                return Err(BaseError::generic(eyre!(
+                    "connection end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?} does not have counterparty connection id {connection_end:?}",
+                )).into());
+            };
+
+            let counterparty_port_id = channel_counterparty.port_id().clone();
+
+            let Some(counterparty_channel_id) = channel_counterparty.channel_id else {
+                return Err(BaseError::generic(eyre!(
+                    "channel end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?} does not have counterparty channel id {channel_end:?}",
+                )).into());
+            };
+
+            let counterparty_chain_id = client_state.chain_id();
+            let counterparty_chain = builder.build_chain(&counterparty_chain_id).await?;
+            let counterparty_chain_height_query = QueryHeight::Specific(
+                counterparty_chain
+                    .query_chain_height()
+                    .await
+                    .wrap_err("Failed to query latest chain height")?,
+            );        
+
+            let (counterparty_connection_end, _) = chain_handle
+                .query_connection(
+                    QueryConnectionRequest {
+                        connection_id: counterparty_connection_id.clone(),
+                        height: counterparty_chain_height_query,
+                    },
+                    IncludeProof::No,
+                )
+                .map_err(|e| BaseError::relayer(e).into())?;
+
+            let (counterparty_client_state, _) = chain_handle
+                .query_client_state(
+                    QueryClientStateRequest {
+                        client_id: counterparty_client_id.clone(),
+                        height: counterparty_chain_height_query,
+                    },
+                    IncludeProof::No,
+                )
+                .map_err(|e| BaseError::relayer(e).into())?;
+            
+            let (counterparty_channel_end, _) = chain_handle
+                .query_channel(
+                    QueryChannelRequest {
+                        port_id: counterparty_port_id.clone(),
+                        channel_id: counterparty_channel_id.clone(),
+                        height: counterparty_chain_height_query,
+                    },
+                    IncludeProof::No,
+                )
+                .map_err(|e| BaseError::relayer(e).into())?;
+
+            
+            if verbose {
+                Ok(Output::success(ChannelEnds {
+                    channel_end,
+                    connection_end,
+                    client_state,
+                    counterparty_channel_end,
+                    counterparty_connection_end,
+                    counterparty_client_state,
+                }))
+            } else {
+                Ok(Output::success(ChannelEndsSummary {
+                    chain_id: chain_id.clone(),
+                    client_id,
+                    connection_id: connection_id.clone(),
+                    channel_id: channel_id.clone(),
+                    port_id: port_id.clone(),
+                    counterparty_chain_id,
+                    counterparty_client_id,
+                    counterparty_connection_id,
+                    counterparty_channel_id,
+                    counterparty_port_id,
+                }))
+            }
+        })
+        .await
+}
+

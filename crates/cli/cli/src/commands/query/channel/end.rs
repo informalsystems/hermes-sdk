@@ -70,16 +70,14 @@ impl Runnable for QueryChannelEnd {
 
         let channel_end = chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let res = chain_handle.query_channel(
+                match chain_handle.query_channel(
                     QueryChannelRequest {
                         port_id,
                         channel_id,
                         height: query_height,
                     },
                     IncludeProof::No,
-                );
-
-                match res {
+                ) {
                     Ok((channel_end, _)) => Ok(channel_end),
                     Err(e) => Err(BaseError::relayer(e).into()),
                 }

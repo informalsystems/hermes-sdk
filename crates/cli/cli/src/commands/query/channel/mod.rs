@@ -1,10 +1,10 @@
+mod client;
 mod end;
-mod ends;
-// mod client;
+// mod ends;
 
+pub use client::QueryChannelClient;
 pub use end::QueryChannelEnd;
-pub use ends::QueryChannelEnds;
-// pub use client::QueryClientEnds;
+// pub use ends::QueryChannelEnds;
 
 use hermes_cli_framework::command::Runnable;
 use hermes_cli_framework::output::Output;
@@ -15,16 +15,16 @@ use crate::Result;
 #[derive(Debug, clap::Subcommand)]
 pub enum QueryChannel {
     End(QueryChannelEnd),
-    Ends(QueryChannelEnds),
-    // Client(QueryClientEnd),
+    // Ends(QueryChannelEnds),
+    Client(QueryChannelClient),
 }
 
 impl QueryChannel {
     pub async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         match self {
             Self::End(cmd) => cmd.run(builder).await,
-            Self::Ends(cmd) => cmd.run(builder).await,
-            // Self::Client(cmd) => cmd.run(builder).await,
+            // Self::Ends(cmd) => cmd.run(builder).await,
+            Self::Client(cmd) => cmd.run(builder).await,
         }
     }
 }
