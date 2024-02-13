@@ -17,6 +17,7 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::send_packets::{
@@ -73,6 +74,7 @@ use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
+use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
@@ -159,6 +161,8 @@ delegate_components! {
             QueryUnreceivedCosmosPacketSequences,
         UnreceivedAcksSequencesQuerierComponent:
             QueryUnreceivedCosmosAcksSequences,
+        PacketAcknowledgementsQuerierComponent:
+            QueryCosmosPacketAcknowledgements,
         SendPacketQuerierComponent:
             QueryCosmosSendPacket,
         SendPacketsQuerierComponent:

@@ -4,6 +4,7 @@ pub mod chain_status;
 pub mod client_state;
 pub mod consensus_state;
 pub mod consensus_state_height;
+pub mod packet_acknowledgements;
 pub mod packet_commitments;
 pub mod received_packet;
 pub mod send_packet;
