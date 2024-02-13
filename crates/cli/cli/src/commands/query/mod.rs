@@ -1,6 +1,9 @@
 mod client;
 pub use client::ClientCommands;
 
+mod clients;
+pub use clients::QueryClients;
+
 mod connection;
 pub use connection::QueryConnection;
 
@@ -22,9 +25,12 @@ use crate::Result;
 /// All subcommands for querying IBC-related objects and data.
 #[derive(Debug, clap::Subcommand)]
 pub enum QueryCommands {
-    /// Query information about IBC clients
+    /// Query information about an IBC client
     #[clap(subcommand)]
     Client(ClientCommands),
+
+    /// Query information about IBC clients
+    Clients(QueryClients),
 
     /// Query all connections
     Connections(QueryConnections),
@@ -45,6 +51,7 @@ impl CommandRunner<CosmosBuilder> for QueryCommands {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::Client(cmd) => cmd.run(builder).await,
+            Self::Clients(cmd) => cmd.run(builder).await,
             Self::Connections(cmd) => cmd.run(builder).await,
             Self::Channels(cmd) => cmd.run(builder).await,
             Self::Connection(cmd) => cmd.run(builder).await,
