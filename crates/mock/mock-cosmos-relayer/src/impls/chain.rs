@@ -144,6 +144,14 @@ impl<Chain: BasecoinEndpoint> ProvideTimestampType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Timestamp = Timestamp;
+
+    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
+        Timestamp::from_nanoseconds(nanos).expect("Timestamp::from_nanoseconds is infallible")
+    }
+
+    fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
+        later.duration_since(earlier)
+    }
 }
 
 impl<Chain: BasecoinEndpoint> ProvideMessageType<MockCosmosContext<Chain>>
@@ -284,6 +292,14 @@ where
 {
     fn client_state_latest_height(client_state: &TmClientState) -> &Self::Height {
         &client_state.latest_height
+    }
+
+    fn client_state_is_frozen(client_state: &TmClientState) -> bool {
+        client_state.is_frozen()
+    }
+
+    fn client_state_has_expired(client_state: &TmClientState, elapsed: Duration) -> bool {
+        elapsed > client_state.trusting_period
     }
 }
 
