@@ -53,7 +53,7 @@ pub struct QueryChannelEnd {
 }
 
 impl CommandRunner<CosmosBuilder> for QueryChannelEnd {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();

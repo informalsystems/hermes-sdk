@@ -42,7 +42,7 @@ pub struct QueryChannelClient {
 }
 
 impl CommandRunner<CosmosBuilder> for QueryChannelClient {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();
