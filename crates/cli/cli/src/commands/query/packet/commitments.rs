@@ -1,4 +1,4 @@
-use crate::commands::query::packet::util::PacketSeqs;
+use crate::commands::query::packet::util::PacketSequences;
 use crate::Result;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
@@ -49,10 +49,7 @@ impl CommandRunner<CosmosBuilder> for QueryPacketCommitments {
             )
             .await?;
 
-        let packet_sequences = PacketSeqs {
-            height,
-            seqs: sequences,
-        };
+        let packet_sequences = PacketSequences::new(height, sequences);
 
         if json() {
             Ok(Output::success(packet_sequences))

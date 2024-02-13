@@ -5,13 +5,14 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
 use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
 use ibc_relayer::path::PathIdentifiers;
-use ibc_relayer::util::collate::CollatedIterExt;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use ibc_relayer_types::Height;
 use oneline_eyre::eyre::{eyre, Context};
 
 use crate::Result;
+
+use super::util::PacketSequences;
 
 #[derive(Debug, clap::Parser)]
 pub struct QueryPendingAcks {
@@ -83,16 +84,17 @@ impl QueryPendingAcks {
 impl CommandRunner<CosmosBuilder> for QueryPendingAcks {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self.execute(builder).await {
-            Ok(packet_seqs) => {
-                let seqs = packet_seqs.map_or(vec![], |(sns, _)| sns);
-                if json() {
-                    return Ok(Output::success(seqs));
-                }
-                Ok(Output::success(
-                    seqs.into_iter().collated().collect::<Vec<_>>(),
-                ))
-            }
             Err(e) => Ok(Output::error(e)),
+            Ok(None) => Ok(Output::success_msg("No unreceived acknowledgements")),
+            Ok(Some((sequences, height))) => {
+                let packet_sequences = PacketSequences::new(height, sequences);
+
+                if json() {
+                    Ok(Output::success(packet_sequences))
+                } else {
+                    Ok(Output::success(packet_sequences.collated()))
+                }
+            }
         }
     }
 }
