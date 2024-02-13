@@ -22,6 +22,7 @@ use hermes_relayer_components::chain::traits::queries::packet_is_received::Recei
 use hermes_relayer_components::chain::traits::queries::send_packets::{
     SendPacketQuerierComponent, SendPacketsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
@@ -76,6 +77,7 @@ use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
 use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
+use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
@@ -155,6 +157,8 @@ delegate_components! {
             BuildCosmosTimeoutPacketMessage,
         UnreceivedPacketSequencesQuerierComponent:
             QueryUnreceivedCosmosPacketSequences,
+        UnreceivedAcksSequencesQuerierComponent:
+            QueryUnreceivedCosmosAcksSequences,
         SendPacketQuerierComponent:
             QueryCosmosSendPacket,
         SendPacketsQuerierComponent:

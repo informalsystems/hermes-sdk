@@ -8,5 +8,6 @@ pub mod packet_commitments;
 pub mod received_packet;
 pub mod send_packet;
 pub mod send_packets;
+pub mod unreceived_acks;
 pub mod unreceived_packet;
 pub mod write_ack_event;
