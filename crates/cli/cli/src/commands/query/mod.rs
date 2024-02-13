@@ -10,6 +10,9 @@ pub use connections::QueryConnections;
 mod channels;
 pub use channels::QueryChannels;
 
+mod packet;
+pub use packet::PacketCommands;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -32,6 +35,10 @@ pub enum QueryCommands {
     /// Query connection information
     #[clap(subcommand)]
     Connection(QueryConnection),
+
+    /// Query information about IBC packets
+    #[clap(subcommand)]
+    Packet(PacketCommands),
 }
 
 impl CommandRunner<CosmosBuilder> for QueryCommands {
@@ -41,6 +48,7 @@ impl CommandRunner<CosmosBuilder> for QueryCommands {
             Self::Connections(cmd) => cmd.run(builder).await,
             Self::Channels(cmd) => cmd.run(builder).await,
             Self::Connection(cmd) => cmd.run(builder).await,
+            Self::Packet(cmd) => cmd.run(builder).await,
         }
     }
 }

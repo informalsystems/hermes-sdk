@@ -57,7 +57,7 @@ where
     ChainB: HasIbcChainTypes<ChainA> + HasClientStateType<ChainA>,
     ChainA::Error: From<BaseError> + StdError,
     Build::Error: From<BaseError> + StdError,
-    ChainB::ClientState: Serialize,
+    ChainB::ClientState: Debug + Serialize,
 {
     async fn run(&self, builder: &Build) -> Result<Output> {
         let chain_id = &self.chain_id;

@@ -55,7 +55,7 @@
 //! Output::success(h).with_result(end).exit();
 //! ```
 
-use core::fmt;
+use core::fmt::{self, Debug};
 use std::sync::OnceLock;
 
 use serde::Serialize;
@@ -116,6 +116,7 @@ pub fn exit_with_unrecoverable_error<T, E: fmt::Display>(err: E) -> T {
 pub enum Result {
     Json(serde_json::Value),
     Text(String),
+    Value(Box<dyn fmt::Debug>),
     Nothing,
 }
 
@@ -124,6 +125,7 @@ impl fmt::Display for Result {
         match self {
             Result::Json(v) => write!(f, "{}", serde_json::to_string_pretty(v).unwrap()),
             Result::Text(t) => write!(f, "{t}"),
+            Result::Value(v) => write!(f, "{v:#?}"),
             Result::Nothing => Ok(()),
         }
     }
@@ -163,9 +165,14 @@ impl Output {
     /// Builder-style method for attaching a result to an output object.
     pub fn with_result<R>(mut self, result: R) -> Self
     where
-        R: Serialize + 'static,
+        R: Serialize + Debug + 'static,
     {
-        self.result = Result::Json(serde_json::to_value(result).unwrap());
+        if json() {
+            self.result = Result::Json(serde_json::to_value(result).unwrap());
+        } else {
+            self.result = Result::Value(Box::new(result));
+        }
+
         self
     }
 
@@ -179,7 +186,7 @@ impl Output {
     /// input `result`.
     pub fn success<R>(result: R) -> Self
     where
-        R: Serialize + 'static,
+        R: Serialize + Debug + 'static,
     {
         Output::with_success().with_result(result)
     }
@@ -223,6 +230,7 @@ impl Output {
         let value = match self.result {
             Result::Json(v) => v,
             Result::Text(v) => serde_json::Value::String(v),
+            Result::Value(v) => serde_json::Value::String(format!("{v:#?}")),
             Result::Nothing => serde_json::Value::String("no output".to_string()),
         };
 
