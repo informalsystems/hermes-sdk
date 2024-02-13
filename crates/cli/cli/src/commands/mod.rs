@@ -5,6 +5,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use crate::Result;
 
 pub mod channel;
+pub mod clear;
 pub mod client;
 pub mod connection;
 pub mod query;
@@ -30,6 +31,10 @@ pub enum HermesCommand {
     /// Query information about IBC objects
     #[clap(subcommand)]
     Query(query::QueryCommands),
+
+    /// Clear subcommands
+    #[clap(subcommand)]
+    Clear(clear::ClearCommands),
 }
 
 impl Runnable for HermesCommand {
@@ -40,6 +45,7 @@ impl Runnable for HermesCommand {
             Self::Connection(cmd) => cmd.run(builder).await,
             Self::Channel(cmd) => cmd.run(builder).await,
             Self::Query(cmd) => cmd.run(builder).await,
+            Self::Clear(cmd) => cmd.run(builder).await,
         }
     }
 }
