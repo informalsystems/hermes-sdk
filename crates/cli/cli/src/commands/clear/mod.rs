@@ -1,7 +1,7 @@
 mod packets;
 pub use packets::PacketsClear;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
@@ -13,8 +13,8 @@ pub enum ClearCommands {
     Packets(PacketsClear),
 }
 
-impl Runnable for ClearCommands {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for ClearCommands {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         match self {
             Self::Packets(cmd) => cmd.run(builder).await,
         }

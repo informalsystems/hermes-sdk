@@ -1,6 +1,6 @@
 use oneline_eyre::eyre::Context;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
@@ -93,8 +93,8 @@ pub struct PacketsClear {
     counterparty_channel_id: ChannelId,
 }
 
-impl Runnable for PacketsClear {
-    async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
+impl CommandRunner<CosmosBuilder> for PacketsClear {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
 
         let relayer = builder
