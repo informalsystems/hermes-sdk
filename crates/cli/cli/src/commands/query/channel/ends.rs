@@ -1,7 +1,7 @@
 use oneline_eyre::eyre::eyre;
 use serde::{Deserialize, Serialize};
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
@@ -71,7 +71,7 @@ pub struct ChannelEndsSummary {
     counterparty_port_id: PortId,
 }
 
-impl Runnable for QueryChannelEnds {
+impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let chain_id = self.chain_id.clone();
         let channel_id = self.channel_id.clone();
@@ -82,14 +82,14 @@ impl Runnable for QueryChannelEnds {
 
         let query_height = if let Some(height) = height {
             let specified_height = Height::new(chain_id.version(), height)
-            .map_err(|e| BaseError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{height}`: {e}", chain_id.version())))?;
+                .map_err(|e| BaseError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{height}`: {e}", chain_id.version())))?;
 
             QueryHeight::Specific(specified_height)
         } else {
             QueryHeight::Latest
         };
 
-        let res = chain
+        chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let (channel_end , _)= chain_handle
                     .query_channel(
@@ -170,12 +170,8 @@ impl Runnable for QueryChannelEnds {
                     counterparty_port_id,
                 }))        
             })
-            .await;
-
-        match res {
-            Ok(output) => Ok(output),
-            Err(e) => Err(e.into()),
-        }
+            .await
+            .map_err(|e| e.into())
     }
 }
 

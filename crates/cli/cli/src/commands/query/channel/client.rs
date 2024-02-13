@@ -1,4 +1,4 @@
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
@@ -41,13 +41,13 @@ pub struct QueryChannelClient {
     channel_id: ChannelId,
 }
 
-impl Runnable for QueryChannelClient {
+impl CommandRunner<CosmosBuilder> for QueryChannelClient {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();
 
-        let res = chain
+        match chain
             .with_blocking_chain_handle(move |chain_handle| {
                 match chain_handle.query_channel_client_state(QueryChannelClientStateRequest {
                     port_id,
@@ -57,9 +57,8 @@ impl Runnable for QueryChannelClient {
                     Err(e) => Err(BaseError::relayer(e).into()),
                 }
             })
-            .await;
-
-        match res {
+            .await
+        {
             Ok(client_state) => Ok(Output::success(client_state)),
             Err(e) => Err(e.into()),
         }

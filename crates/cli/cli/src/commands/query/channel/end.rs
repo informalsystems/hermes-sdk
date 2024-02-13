@@ -1,6 +1,6 @@
 use oneline_eyre::eyre::eyre;
 
-use hermes_cli_framework::command::Runnable;
+use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
@@ -52,7 +52,7 @@ pub struct QueryChannelEnd {
     height: Option<u64>,
 }
 
-impl Runnable for QueryChannelEnd {
+impl CommandRunner<CosmosBuilder> for QueryChannelEnd {
     async fn run(&self, builder: CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let channel_id = self.channel_id.clone();
@@ -61,7 +61,7 @@ impl Runnable for QueryChannelEnd {
 
         let query_height = if let Some(height) = height {
             let specified_height = Height::new(chain.chain_id.version(), height)
-            .map_err(|e| BaseError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain.chain_id.version())))?;
+                .map_err(|e| BaseError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain.chain_id.version())))?;
 
             QueryHeight::Specific(specified_height)
         } else {
