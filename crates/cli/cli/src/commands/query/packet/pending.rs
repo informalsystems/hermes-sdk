@@ -119,14 +119,14 @@ impl QueryPendingPackets {
             .with_blocking_chain_handle(move |handle| {
                 let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
                     .map_err(|e| {
-                        BaseError::generic(eyre!("failed channel_connection_client: {}", e))
+                        BaseError::generic(eyre!(
+                            "failed to get channel connection and client: {}",
+                            e
+                        ))
                     })?;
                 Ok(chan_conn_cli)
             })
-            .await
-            .map_err(|e| {
-                BaseError::generic(eyre!("failed pending_packet_summary on source: {}", e))
-            })?;
+            .await?;
 
         let counterparty_chain_id = chan_conn_cli.client.client_state.chain_id();
         let counterparty_chain = builder.build_chain(&counterparty_chain_id.clone()).await?;
@@ -136,17 +136,19 @@ impl QueryPendingPackets {
             &counterparty_chain.handle,
             &chan_conn_cli.channel,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed pending_packet_summary on source: {}", e)))?;
+        .map_err(|e| BaseError::generic(eyre!("failed to get pending packet summary: {}", e)))?;
 
         let counterparty_channel = channel_on_destination(
             &chan_conn_cli.channel,
             &chan_conn_cli.connection,
             &counterparty_chain.handle,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed channel_on_destination: {}", e)))?
+        .map_err(|e| BaseError::generic(eyre!("failed to get channel on destination: {}", e)))?
         .ok_or_else(|| {
             BaseError::generic(eyre!(
-                "failed channel_on_destination: missing counterparty channel"
+                "missing counterparty channel for ({}, {})",
+                chan_conn_cli.channel.channel_id,
+                chan_conn_cli.channel.port_id
             ))
         })?;
 
@@ -155,9 +157,7 @@ impl QueryPendingPackets {
             &chain.handle,
             &counterparty_channel,
         )
-        .map_err(|e| {
-            BaseError::generic(eyre!("failed pending_packet_summary on destination: {}", e))
-        })?;
+        .map_err(|e| BaseError::generic(eyre!("failed to get pending packet summary: {}", e)))?;
 
         Ok(Summary {
             src_chain: chain_id,

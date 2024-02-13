@@ -6,8 +6,10 @@ use hermes_cosmos_relayer::types::error::BaseError;
 use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
 use ibc_relayer::path::PathIdentifiers;
 use ibc_relayer::util::collate::CollatedIterExt;
+use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
-use oneline_eyre::eyre::eyre;
+use ibc_relayer_types::Height;
+use oneline_eyre::eyre::{eyre, Context};
 
 use crate::Result;
 
@@ -41,8 +43,8 @@ pub struct QueryPendingAcks {
     channel_id: ChannelId,
 }
 
-impl CommandRunner<CosmosBuilder> for QueryPendingAcks {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl QueryPendingAcks {
+    async fn execute(&self, builder: &CosmosBuilder) -> Result<Option<(Vec<Sequence>, Height)>> {
         let port_id = self.port_id.clone();
         let channel_id = self.channel_id.clone();
         let chain = builder.build_chain(&self.chain_id).await?;
@@ -51,7 +53,10 @@ impl CommandRunner<CosmosBuilder> for QueryPendingAcks {
             .with_blocking_chain_handle(move |handle| {
                 let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
                     .map_err(|e| {
-                        BaseError::generic(eyre!("failed channel_connection_client: {}", e))
+                        BaseError::generic(eyre!(
+                            "failed to get channel connection and client: {}",
+                            e
+                        ))
                     })?;
                 Ok(chan_conn_cli)
             })
@@ -63,16 +68,21 @@ impl CommandRunner<CosmosBuilder> for QueryPendingAcks {
         let channel = chan_conn_cli.channel.clone();
         let path_identifiers =
             PathIdentifiers::from_channel_end(channel.clone()).ok_or_else(|| {
-                BaseError::generic(eyre!("failed to get the path identifiers from channel"))
+                BaseError::generic(eyre!(
+                    "failed to get the path identifiers for channel ({}, {})",
+                    channel.channel_id,
+                    channel.port_id
+                ))
             })?;
 
-        let acks_result = unreceived_acknowledgements(
-            &chain.handle,
-            &counterparty_chain.handle,
-            &path_identifiers,
-        );
+        unreceived_acknowledgements(&chain.handle, &counterparty_chain.handle, &path_identifiers)
+            .wrap_err("failed to get the unreceived acknowledgments")
+    }
+}
 
-        match acks_result {
+impl CommandRunner<CosmosBuilder> for QueryPendingAcks {
+    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+        match self.execute(builder).await {
             Ok(packet_seqs) => {
                 let seqs = packet_seqs.map_or(vec![], |(sns, _)| sns);
                 if json() {
