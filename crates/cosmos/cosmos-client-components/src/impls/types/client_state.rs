@@ -23,6 +23,7 @@ where
 
 pub const TENDERMINT_CLIENT_STATE_TYPE_URL: &str = "/ibc.lightclients.tendermint.v1.ClientState";
 
+#[derive(Debug)]
 pub struct TypeUrlMismatchError {
     pub expected_url: String,
     pub actual_url: String,
@@ -39,6 +40,13 @@ where
         client_state_bytes: &[u8],
     ) -> Result<TendermintClientState, Counterparty::Error> {
         let any = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+
+        if any.type_url != TENDERMINT_CLIENT_STATE_TYPE_URL {
+            return Err(Counterparty::raise_error(TypeUrlMismatchError {
+                expected_url: TENDERMINT_CLIENT_STATE_TYPE_URL.into(),
+                actual_url: any.type_url.clone(),
+            }));
+        }
 
         let client_state = Protobuf::<ProtoClientState>::decode_vec(&any.value)
             .map_err(Counterparty::raise_error)?;
