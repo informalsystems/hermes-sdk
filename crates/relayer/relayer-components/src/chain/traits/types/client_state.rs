@@ -16,6 +16,7 @@ pub trait HasClientStateFields<Counterparty>:
     fn client_state_latest_height(client_state: &Self::ClientState) -> &Self::Height;
 }
 
+#[derive_component(ClientStateDecoderComponent, ClientStateDecoder<Chain>)]
 pub trait CanDecodeClientState<Counterparty>:
     HasClientStateType<Counterparty> + HasErrorType
 {

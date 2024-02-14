@@ -32,7 +32,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateDecoderComponent, ClientStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
@@ -119,7 +121,10 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
-        ClientStateTypeComponent:
+        [
+            ClientStateTypeComponent,
+            ClientStateDecoderComponent,
+        ]:
             ProvideTendermintClientState,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
