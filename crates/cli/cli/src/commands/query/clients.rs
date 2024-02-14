@@ -11,7 +11,10 @@ use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStates;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    HasClientStateFields, HasClientStateType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
@@ -60,7 +63,9 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
                 } else {
                     info!(
                         "- {}: {} -> {}",
-                        client.client_id, self.host_chain_id, client.client_state.chain_id
+                        client.client_id,
+                        self.host_chain_id,
+                        client.chain_id()
                     );
                 }
             });
@@ -76,7 +81,7 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
                         serde_json::json!({
                             "client_id": client.client_id,
                             "host_chain_id": self.host_chain_id,
-                            "reference_chain_id": client.client_state.chain_id,
+                            "reference_chain_id": client.chain_id(),
                         })
                     })
                     .collect::<Vec<_>>();
@@ -100,6 +105,16 @@ where
 {
     client_id: Chain::ClientId,
     client_state: Counterparty::ClientState,
+}
+
+impl<Chain, Counterparty> Client<Chain, Counterparty>
+where
+    Chain: HasIbcChainTypes<Counterparty>,
+    Counterparty: HasChainIdType + HasClientStateType<Chain> + HasClientStateFields<Chain>,
+{
+    fn chain_id(&self) -> &Counterparty::ChainId {
+        Counterparty::client_state_chain_id(&self.client_state)
+    }
 }
 
 impl<Chain, Counterparty> fmt::Debug for Client<Chain, Counterparty>

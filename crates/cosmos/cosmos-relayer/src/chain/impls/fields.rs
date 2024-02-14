@@ -54,6 +54,10 @@ where
 }
 
 impl<Counterparty> HasClientStateFields<Counterparty> for CosmosChain {
+    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
+        &client_state.chain_id
+    }
+
     fn client_state_latest_height(client_state: &TendermintClientState) -> &Height {
         &client_state.latest_height
     }
