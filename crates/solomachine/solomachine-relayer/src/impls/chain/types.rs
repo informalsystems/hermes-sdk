@@ -2,7 +2,7 @@ use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
@@ -69,7 +69,8 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasClientStateType<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideClientStateType<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

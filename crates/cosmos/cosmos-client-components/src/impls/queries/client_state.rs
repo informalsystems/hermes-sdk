@@ -10,7 +10,6 @@ use ibc_relayer_types::Height;
 use tendermint_proto::Error as ProtoError;
 
 use crate::traits::abci_query::CanQueryAbci;
-
 use crate::types::tendermint::TendermintClientState;
 
 pub struct QueryCosmosClientStateFromChainHandle;

@@ -32,6 +32,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
@@ -81,6 +82,7 @@ use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequenc
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
+use crate::impls::types::client_state::ProvideTendermintClientState;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 use crate::traits::abci_query::AbciQuerierComponent;
@@ -115,6 +117,8 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
+        ClientStateTypeComponent:
+            ProvideTendermintClientState,
         MessageSenderComponent:
             SendMessagesToTxContext,
         PacketFieldsReaderComponent:

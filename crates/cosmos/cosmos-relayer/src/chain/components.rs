@@ -38,6 +38,7 @@ use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
@@ -111,6 +112,7 @@ delegate_components! {
             ChainIdTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
+            ClientStateTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
