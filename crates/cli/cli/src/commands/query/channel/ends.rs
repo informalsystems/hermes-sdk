@@ -103,7 +103,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                         return Err(BaseError::generic(eyre!(
                             "failed to query channel end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}"
                         )).into());
-                    };
+                };
 
                 if channel_end.state_matches(&State::Uninitialized) {
                     return Err(BaseError::generic(eyre!(
