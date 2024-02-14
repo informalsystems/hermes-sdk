@@ -1,5 +1,6 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use cgp_core::{async_trait, HasErrorType};
 
@@ -97,6 +98,17 @@ where
     Target: ChainTarget<Relay>,
 {
     type Timestamp = <Target::TargetChain as HasTimestampType>::Timestamp;
+
+    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
+        Target::TargetChain::timestamp_from_nanos(nanos)
+    }
+
+    fn timestamp_duration_since(
+        earlier: &Self::Timestamp,
+        later: &Self::Timestamp,
+    ) -> Option<Duration> {
+        Target::TargetChain::timestamp_duration_since(earlier, later)
+    }
 }
 
 #[async_trait]
