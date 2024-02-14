@@ -22,6 +22,7 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateWithHeightQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
@@ -38,6 +39,7 @@ use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
@@ -112,6 +114,7 @@ delegate_components! {
             MessageTypeComponent,
             EventTypeComponent,
             IbcChainTypesComponent,
+            ConnectionEndTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
@@ -152,6 +155,7 @@ delegate_components! {
             InitConnectionOptionsTypeComponent,
             InitChannelOptionsTypeComponent,
             BlockQuerierComponent,
+            ConnectionEndQuerierComponent,
         ]:
             CosmosClientComponents,
         [

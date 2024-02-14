@@ -15,6 +15,7 @@ use hermes_relayer_components::chain::traits::payload_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
@@ -33,7 +34,8 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
+    ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
+    InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
@@ -71,6 +73,7 @@ use crate::impls::packet::timeout_packet_payload::BuildCosmosTimeoutPacketPayloa
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
@@ -97,6 +100,7 @@ delegate_components! {
             MessageTypeComponent,
             EventTypeComponent,
             IbcChainTypesComponent,
+            ConnectionEndTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
@@ -169,5 +173,7 @@ delegate_components! {
             ProvideCosmosInitChannelOptionsType,
         BlockQuerierComponent:
             QueryCometBlock,
+        ConnectionEndQuerierComponent:
+            QueryCosmosConnectionEndFromChainHandle,
     }
 }
