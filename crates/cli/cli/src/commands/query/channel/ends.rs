@@ -89,18 +89,21 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
             QueryHeight::Latest
         };
 
-        let channel_ends_summary= chain
+        let channel_ends_summary = chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let (channel_end , _) = chain_handle
+                let Ok((channel_end , _)) = chain_handle
                     .query_channel(
                         QueryChannelRequest {
-                            port_id,
-                            channel_id,
+                            port_id: port_id.clone(),
+                            channel_id: channel_id.clone(),
                             height: query_height,
                         },
                         IncludeProof::No,
-                    )
-                    .map_err(|e| BaseError::relayer(e).into())?;
+                    ) else {
+                        return Err(BaseError::generic(eyre!(
+                            "failed to query channel end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}"
+                        )).into());
+                    };
 
                 if channel_end.state_matches(&State::Uninitialized) {
                     return Err(BaseError::generic(eyre!(
@@ -115,27 +118,33 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                     )).into());
                 };        
 
-                let (connection_end, _) = chain_handle
+                let Ok((connection_end, _)) = chain_handle
                     .query_connection(
                         QueryConnectionRequest {
                             connection_id: connection_id.clone(),
                             height: query_height,
                         },
                         IncludeProof::No,
-                    )
-                    .map_err(|e| BaseError::relayer(e).into())?;
+                    ) else {
+                        return Err(BaseError::generic(eyre!(
+                            "failed to query connection end for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}"
+                        )).into());
+                };
 
                 let client_id = connection_end.client_id().clone();
 
-                let (client_state, _) = chain_handle
+                let Ok((client_state, _)) = chain_handle
                     .query_client_state(
                         QueryClientStateRequest {
                             client_id: client_id.clone(),
                             height: query_height,
                         },
                         IncludeProof::No,
-                    )
-                    .map_err(|e| BaseError::relayer(e).into())?;
+                    ) else {
+                        return Err(BaseError::generic(eyre!(
+                            "failed to query client state for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}"
+                        )).into());
+                };
 
                 let channel_counterparty = channel_end.counterparty().clone();
                 let connection_counterparty = connection_end.counterparty().clone();
@@ -158,11 +167,11 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                 let counterparty_chain_id = client_state.chain_id();
 
                 Ok(ChannelEndsSummary {
-                    chain_id: chain_id.clone(),
+                    chain_id,
                     client_id,
                     connection_id: connection_id.clone(),
-                    channel_id: channel_id.clone(),
-                    port_id: port_id.clone(),
+                    channel_id,
+                    port_id,
                     counterparty_chain_id,
                     counterparty_client_id,
                     counterparty_connection_id,
