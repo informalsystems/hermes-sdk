@@ -31,7 +31,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ProvideChainIdType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::HeightIncrementer;
 use hermes_relayer_components::chain::traits::types::height::ProvideHeightType;
@@ -198,7 +198,7 @@ impl HasWriteAckEvent<MockChainContext> for MockChainContext {
     }
 }
 
-impl HasConsensusStateType<MockChainContext> for MockChainContext {
+impl ProvideConsensusStateType<MockChainContext, MockChainContext> for MockChainComponents {
     type ConsensusState = ConsensusState;
 }
 

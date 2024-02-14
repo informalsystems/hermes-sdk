@@ -1,5 +1,6 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
+#[derive_component(ConsensusStateTypeComponent, ProvideConsensusStateType<Chain>)]
 pub trait HasConsensusStateType<Counterparty>: Async {
     /**
         The consensus state of the `Self` chain's client on the `Counterparty` chain

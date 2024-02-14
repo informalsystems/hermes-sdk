@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::types::client_state::ProvideClient
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
@@ -77,7 +77,8 @@ where
     type ClientState = SolomachineClientState;
 }
 
-impl<Chain, Counterparty> HasConsensusStateType<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideConsensusStateType<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {

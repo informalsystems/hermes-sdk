@@ -41,6 +41,7 @@ use hermes_relayer_components::chain::traits::types::channel::InitChannelOptions
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
@@ -82,12 +83,6 @@ impl HasComponents for CosmosChain {
     type Components = CosmosChainComponents;
 }
 
-// delegate_all!(
-//     IsCosmosClientComponents,
-//     CosmosClientComponents,
-//     CosmosChainComponents,
-// );
-
 impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
 delegate_components! {
@@ -113,6 +108,7 @@ delegate_components! {
             MessageTypeComponent,
             EventTypeComponent,
             ClientStateTypeComponent,
+            ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,

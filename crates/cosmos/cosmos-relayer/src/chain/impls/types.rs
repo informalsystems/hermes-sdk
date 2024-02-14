@@ -1,5 +1,3 @@
-use hermes_cosmos_client_components::types::tendermint::TendermintConsensusState;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -20,8 +18,4 @@ impl HasTelemetry for CosmosChain {
     fn telemetry(&self) -> &CosmosTelemetry {
         &self.telemetry
     }
-}
-
-impl<Counterparty> HasConsensusStateType<Counterparty> for CosmosChain {
-    type ConsensusState = TendermintConsensusState;
 }
