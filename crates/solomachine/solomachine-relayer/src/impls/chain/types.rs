@@ -2,7 +2,9 @@ use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateDecoder, ProvideClientStateType,
+};
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
@@ -19,11 +21,12 @@ use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use prost::DecodeError;
 
 use crate::impls::chain::component::SolomachineChainComponents;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
-use crate::types::client_state::SolomachineClientState;
+use crate::types::client_state::{decode_client_state, SolomachineClientState};
 use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
@@ -75,6 +78,20 @@ where
     Chain: Async,
 {
     type ClientState = SolomachineClientState;
+}
+
+impl<Chain, Counterparty> ClientStateDecoder<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
+    type DecodeClientStateError = DecodeError;
+
+    fn decode_client_state_bytes(
+        client_state_bytes: &[u8],
+    ) -> Result<SolomachineClientState, Self::DecodeClientStateError> {
+        decode_client_state(client_state_bytes)
+    }
 }
 
 impl<Chain, Counterparty> ProvideConsensusStateType<SolomachineChain<Chain>, Counterparty>

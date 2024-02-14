@@ -69,7 +69,6 @@ use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
-use crate::chain::impls::query_client_state::DelegateCosmosClientStateQuerier;
 use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;
@@ -129,6 +128,7 @@ delegate_components! {
             PacketFieldsReaderComponent,
             ConsensusStateHeightQuerierComponent,
             WriteAckQuerierComponent,
+            ClientStateQuerierComponent,
             CreateClientOptionsTypeComponent,
             CreateClientPayloadBuilderComponent,
             UpdateClientPayloadBuilderComponent,
@@ -160,8 +160,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        ClientStateQuerierComponent:
-            DelegateCosmosClientStateQuerier,
         CreateClientMessageBuilderComponent:
             DelegateCosmosCreateClientMessageBuilder,
         ConnectionHandshakeMessageBuilderComponent:

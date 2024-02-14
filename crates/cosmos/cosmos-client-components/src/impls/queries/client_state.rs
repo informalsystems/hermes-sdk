@@ -8,12 +8,11 @@ use ibc_relayer_types::Height;
 
 use crate::traits::abci_query::CanQueryAbci;
 
-pub struct QueryCosmosClientStateFromChainHandle;
+pub struct QueryCosmosClientStateFromAbci;
 
 pub const IBC_QUERY_PATH: &str = "store/ibc/key";
 
-impl<Chain, Counterparty> ClientStateQuerier<Chain, Counterparty>
-    for QueryCosmosClientStateFromChainHandle
+impl<Chain, Counterparty> ClientStateQuerier<Chain, Counterparty> for QueryCosmosClientStateFromAbci
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + CanQueryAbci
