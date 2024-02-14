@@ -35,9 +35,7 @@ where
 
     let rt = HermesRuntime::new(Arc::new(rt));
 
-    rt.runtime
-        .block_on(run(rt.clone(), app, config))
-        .map_err(|e| eyre!("Hermes command exited with an error: {e}"))?;
+    rt.runtime.block_on(run(rt.clone(), app, config))?;
 
     Ok(())
 }
