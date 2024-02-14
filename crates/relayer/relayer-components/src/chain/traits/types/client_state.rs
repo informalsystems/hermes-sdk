@@ -17,10 +17,10 @@ pub trait HasClientStateFields<Counterparty>:
 }
 
 #[derive_component(ClientStateDecoderComponent, ClientStateDecoder<Chain>)]
-pub trait CanDecodeClientState<Counterparty>:
-    HasClientStateType<Counterparty> + HasErrorType
-{
+pub trait CanDecodeClientState<Counterparty>: HasClientStateType<Counterparty> {
+    type DecodeClientStateError: Async;
+
     fn decode_client_state_bytes(
         client_state_bytes: &[u8],
-    ) -> Result<Self::ClientState, Self::Error>;
+    ) -> Result<Self::ClientState, Self::DecodeClientStateError>;
 }

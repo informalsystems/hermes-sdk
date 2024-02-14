@@ -1,5 +1,4 @@
 use cgp_core::prelude::Async;
-use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateDecoder, HasClientStateType, ProvideClientStateType,
 };
@@ -21,15 +20,13 @@ where
 
 impl<Chain, Counterparty> ClientStateDecoder<Chain, Counterparty> for ProvideTendermintClientState
 where
-    Chain: HasClientStateType<Counterparty, ClientState = TendermintClientState>
-        + CanRaiseError<ProtoError>,
+    Chain: HasClientStateType<Counterparty, ClientState = TendermintClientState>,
 {
+    type DecodeClientStateError = ProtoError;
+
     fn decode_client_state_bytes(
         client_state_bytes: &[u8],
-    ) -> Result<TendermintClientState, Chain::Error> {
-        let client_state = Protobuf::<ProtoClientState>::decode_vec(&client_state_bytes)
-            .map_err(Chain::raise_error)?;
-
-        Ok(client_state)
+    ) -> Result<TendermintClientState, ProtoError> {
+        Protobuf::<ProtoClientState>::decode_vec(&client_state_bytes)
     }
 }
