@@ -1,4 +1,3 @@
-use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::types::client_state::CanDecodeClientState;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -14,9 +13,7 @@ pub const IBC_QUERY_PATH: &str = "store/ibc/key";
 
 impl<Chain, Counterparty> ClientStateQuerier<Chain, Counterparty> for QueryCosmosClientStateFromAbci
 where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
-        + CanQueryAbci
-        + CanRaiseError<Counterparty::DecodeClientStateError>,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height> + CanQueryAbci,
     Counterparty: CanDecodeClientState<Chain>,
 {
     async fn query_client_state(
@@ -30,8 +27,7 @@ where
             .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), height)
             .await?;
 
-        let client_state = Counterparty::decode_client_state_bytes(&client_state_bytes)
-            .map_err(Chain::raise_error)?;
+        let client_state = Counterparty::decode_client_state_bytes(&client_state_bytes)?;
 
         Ok(client_state)
     }

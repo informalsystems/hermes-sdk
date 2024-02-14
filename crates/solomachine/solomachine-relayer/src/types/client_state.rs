@@ -4,7 +4,7 @@ use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoClientSta
 use ibc_proto::Protobuf;
 use ibc_relayer_types::keys::ROUTER_KEY;
 use ibc_relayer_types::tx_msg::Msg;
-use prost::{DecodeError, Message};
+use prost::Message;
 
 use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::error::{BaseError, Error};
@@ -77,18 +77,4 @@ impl From<SolomachineClientState> for ProtoClientState {
             //allow_update_after_proposal: true,
         }
     }
-}
-
-pub enum DecodeClientStateError {
-    Decode(DecodeError),
-}
-
-pub fn decode_client_state(buf: &[u8]) -> Result<SolomachineClientState, DecodeError> {
-    let any_value = Any::decode(buf)?;
-    let proto_state = ProtoClientState::decode(any_value.value.as_ref())?;
-
-    // TODO: handle TryInto error
-    let client_state = proto_state.try_into().unwrap();
-
-    Ok(client_state)
 }

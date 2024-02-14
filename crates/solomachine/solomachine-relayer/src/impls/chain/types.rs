@@ -1,4 +1,4 @@
-use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
+use cgp_core::{Async, CanRaiseError, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
@@ -20,13 +20,14 @@ use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdat
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use ibc_proto::google::protobuf::Any;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use prost::DecodeError;
+use prost::{DecodeError, Message};
 
 use crate::impls::chain::component::SolomachineChainComponents;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
-use crate::types::client_state::{decode_client_state, SolomachineClientState};
+use crate::types::client_state::SolomachineClientState;
 use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
@@ -46,6 +47,7 @@ use crate::types::payloads::packet::{
     SolomachineAckPacketPayload, SolomachineReceivePacketPayload,
     SolomachineTimeoutUnorderedPacketPayload,
 };
+use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoClientState;
 
 impl<Chain> ProvideErrorType<SolomachineChain<Chain>> for SolomachineChainComponents
 where
@@ -84,13 +86,20 @@ impl<Chain, Counterparty> ClientStateDecoder<SolomachineChain<Chain>, Counterpar
     for SolomachineChainComponents
 where
     Chain: Async,
+    Counterparty: CanRaiseError<DecodeError>,
 {
-    type DecodeClientStateError = DecodeError;
-
     fn decode_client_state_bytes(
         client_state_bytes: &[u8],
-    ) -> Result<SolomachineClientState, Self::DecodeClientStateError> {
-        decode_client_state(client_state_bytes)
+    ) -> Result<SolomachineClientState, Counterparty::Error> {
+        let any_value = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+
+        let proto_state = ProtoClientState::decode(any_value.value.as_ref())
+            .map_err(Counterparty::raise_error)?;
+
+        // TODO: handle TryInto error
+        let client_state = proto_state.try_into().unwrap();
+
+        Ok(client_state)
     }
 }
 

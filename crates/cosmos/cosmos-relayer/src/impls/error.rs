@@ -1,10 +1,12 @@
 use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
 use eyre::eyre;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
+use hermes_cosmos_client_components::impls::types::client_state::TypeUrlMismatchError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
+use prost::DecodeError;
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
 
@@ -91,11 +93,34 @@ where
     }
 }
 
+impl<Context> ErrorRaiser<Context, TypeUrlMismatchError> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: TypeUrlMismatchError) -> Error {
+        BaseError::generic(eyre!(
+            "type url mismatch. expected: {}, actual: {}",
+            e.expected_url,
+            e.actual_url
+        ))
+        .into()
+    }
+}
+
+impl<Context> ErrorRaiser<Context, DecodeError> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: DecodeError) -> Error {
+        BaseError::generic(e.into()).into()
+    }
+}
+
 impl<Context> ErrorRaiser<Context, eyre::Report> for HandleCosmosError
 where
     Context: HasErrorType<Error = Error>,
 {
-    fn raise_error(err: eyre::Report) -> Error {
-        BaseError::generic(err).into()
+    fn raise_error(e: eyre::Report) -> Error {
+        BaseError::generic(e).into()
     }
 }
