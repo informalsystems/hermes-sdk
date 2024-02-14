@@ -7,6 +7,7 @@ use hermes_relayer_components::chain::traits::types::create_client::HasCreateCli
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_wasm_client_components::wasm::types::messages::client::consensus::WasmConsensusState;
 use hermes_wasm_client_components::wasm::types::messages::client::state::WasmClientState;
+use ibc_core::primitives::ToProto;
 use prost::Message;
 
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
@@ -27,10 +28,9 @@ where
         _chain: &Chain,
         payload: SovereignCreateClientPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        let raw_client_state =
-            <sov_celestia_client::types::proto::v1::ClientState as std::convert::From<
-                sov_celestia_client::types::client_state::ClientState,
-            >>::from(payload.client_state);
+        let raw_client_state = <sov_celestia_client::types::client_state::ClientState as ToProto<
+            sov_celestia_client::types::proto::v1::ClientState,
+        >>::to_any(payload.client_state);
         let client_state = WasmClientState {
             data: raw_client_state.encode_to_vec(),
             checksum: payload.code_hash.clone(),
@@ -39,9 +39,9 @@ where
         let any_client_state = client_state.encode_protobuf().map_err(BaseError::encode)?;
 
         let raw_consensus_state =
-            <sov_celestia_client::types::proto::v1::ConsensusState as std::convert::From<
-                sov_celestia_client::types::consensus_state::ConsensusState,
-            >>::from(payload.consensus_state);
+            <sov_celestia_client::types::consensus_state::ConsensusState as ToProto<
+                sov_celestia_client::types::proto::v1::ConsensusState,
+            >>::to_any(payload.consensus_state);
         let consensus_state: WasmConsensusState = WasmConsensusState {
             data: raw_consensus_state.encode_to_vec(),
         };
