@@ -97,6 +97,7 @@ impl<Chain, Counterparty> fmt::Debug for Client<Chain, Counterparty>
 where
     Chain: HasIbcChainTypes<Counterparty>,
     Counterparty: HasClientStateType<Chain>,
+    Counterparty::ClientState: fmt::Debug,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Client")
