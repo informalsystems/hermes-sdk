@@ -58,7 +58,10 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
                 if self.verbose {
                     info!("- {client:#?}",);
                 } else {
-                    info!("- {}", client.client_id);
+                    info!(
+                        "- {}: {} -> {}",
+                        client.client_id, self.host_chain_id, client.client_state.chain_id
+                    );
                 }
             });
         }
@@ -69,7 +72,13 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
             } else {
                 let client_ids = clients
                     .into_iter()
-                    .map(|client| client.client_id)
+                    .map(|client| {
+                        serde_json::json!({
+                            "client_id": client.client_id,
+                            "host_chain_id": self.host_chain_id,
+                            "reference_chain_id": client.client_state.chain_id,
+                        })
+                    })
                     .collect::<Vec<_>>();
 
                 Ok(Output::success(client_ids))
@@ -98,11 +107,12 @@ where
     Chain: HasIbcChainTypes<Counterparty>,
     Counterparty: HasClientStateType<Chain>,
     Counterparty::ClientState: fmt::Debug,
+    for<'a> Pretty<'a, Counterparty::ClientState>: fmt::Debug,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Client")
             .field("client_id", &self.client_id)
-            .field("client_state", &self.client_state)
+            .field("client_state", &Pretty(&self.client_state))
             .finish()
     }
 }
@@ -142,4 +152,23 @@ where
     }
 
     Ok(clients)
+}
+
+pub struct Pretty<'a, A: ?Sized>(&'a A);
+
+impl<'a> fmt::Debug for Pretty<'a, TendermintClientState> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let client_state = self.0;
+
+        f.debug_struct("ClientState")
+            .field("chain_id", &client_state.chain_id.to_string())
+            .field("client_type", &client_state.client_type())
+            .field("latest_height", &client_state.latest_height.to_string())
+            .field("trust_threshold", &client_state.trust_threshold.to_string())
+            .field("trusting_period", &client_state.trusting_period)
+            .field("unbonding_period", &client_state.unbonding_period)
+            .field("max_clock_drift", &client_state.max_clock_drift)
+            .field("frozen_height", &client_state.frozen_height)
+            .finish()
+    }
 }
