@@ -4,7 +4,7 @@ use hermes_test_components::chain_driver::traits::fields::amount::{
     ProvideAmountMethods, RandomAmountGenerator,
 };
 use hermes_test_components::chain_driver::traits::types::amount::{
-    AmountTypeProvider, HasAmountType,
+    HasAmountType, ProvideAmountType,
 };
 use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
 use hermes_test_components::runtime::traits::random::CanGenerateRandom;
@@ -14,7 +14,7 @@ use crate::chain_driver::types::denom::Denom;
 
 pub struct ProvideU128AmountWithDenom;
 
-impl<ChainDriver> AmountTypeProvider<ChainDriver> for ProvideU128AmountWithDenom
+impl<ChainDriver> ProvideAmountType<ChainDriver> for ProvideU128AmountWithDenom
 where
     ChainDriver: HasDenomType<Denom = Denom>,
 {

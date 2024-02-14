@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,

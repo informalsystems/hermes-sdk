@@ -1,8 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
-use hermes_relayer_components::chain::traits::components::message_sender::{
-    CanSendMessages, MessageSender,
-};
+use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 

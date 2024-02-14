@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::relay::traits::components::packet_filter::PacketFilter;
+use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 
 use crate::contexts::relay::CosmosRelay;

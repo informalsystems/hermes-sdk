@@ -27,7 +27,6 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
         chain_store_dir: "./test-data".into(),
         chain_command_path: "simd".into(),
         account_prefix: "cosmos".into(),
-        compat_mode: None,
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),

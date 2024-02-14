@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::RunnerComponent;
 
-use crate::relay::components::auto_relayers::both_ways::RelayBothWays;
+use crate::relay::impls::auto_relayers::both_ways::RelayBothWays;
 
 pub struct DefaultBiRelayComponents;
 

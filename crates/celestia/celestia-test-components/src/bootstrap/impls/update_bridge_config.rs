@@ -1,7 +1,7 @@
 use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
-use hermes_relayer_components::chain::traits::components::block_querier::CanQueryBlock;
+use hermes_relayer_components::chain::traits::queries::block::CanQueryBlock;
 use hermes_relayer_components::chain::traits::types::block::HasBlockHash;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasGenesisHeight;

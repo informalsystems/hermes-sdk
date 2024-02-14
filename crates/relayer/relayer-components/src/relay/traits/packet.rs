@@ -1,6 +1,6 @@
 use cgp_core::HasErrorType;
 
-use crate::chain::traits::components::packet_fields_reader::CanReadPacketFields;
+use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::types::aliases::{ChannelIdOf, HeightOf, PortIdOf, SequenceOf, TimestampOf};
 use crate::relay::traits::chains::HasRelayChains;
 

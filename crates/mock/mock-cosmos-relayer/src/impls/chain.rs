@@ -1,58 +1,42 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use cgp_core::prelude::*;
 use basecoin_app::modules::ibc::AnyConsensusState;
+use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
-use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};
-use ibc::clients::ics07_tendermint::consensus_state::ConsensusState as TmConsensusState;
-use ibc::clients::ics07_tendermint::header::Header;
-use ibc::core::events::IbcEvent;
-use ibc::core::ics02_client::events::CreateClient;
-use ibc::core::ics02_client::msgs::create_client::MsgCreateClient;
-use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
-use ibc::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
-use ibc::core::ics04_channel::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
-use ibc::core::ics04_channel::packet::{Packet, Sequence};
-use ibc::core::ics04_channel::timeout::TimeoutHeight;
-use ibc::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
-use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath};
-use ibc::core::timestamp::Timestamp;
-use ibc::core::{Msg, ValidationContext};
-use ibc::proto::Any;
-use ibc::Height;
-use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::AckPacketMessageBuilder;
-use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::AckPacketPayloadBuilder;
-use hermes_relayer_components::chain::traits::components::chain_status_querier::ChainStatusQuerier;
-use hermes_relayer_components::chain::traits::components::client_state_querier::ClientStateQuerier;
-use hermes_relayer_components::chain::traits::components::consensus_state_height_querier::ConsensusStateHeightQuerier;
-use hermes_relayer_components::chain::traits::components::consensus_state_querier::ConsensusStateQuerier;
-use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
-use hermes_relayer_components::chain::traits::components::message_sender::MessageSender;
-use hermes_relayer_components::chain::traits::components::packet_fields_reader::PacketFieldsReader;
-use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::ReceivePacketMessageBuilder;
-use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::ReceivePacketPayloadBuilder;
-use hermes_relayer_components::chain::traits::components::received_packet_querier::ReceivedPacketQuerier;
-use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
-    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
-};
-use hermes_relayer_components::chain::traits::components::update_client_message_builder::UpdateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::components::update_client_payload_builder::UpdateClientPayloadBuilder;
-use hermes_relayer_components::chain::traits::components::write_ack_querier::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
-use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, ProvideChainIdType};
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader;
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerier;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
+use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
+use hermes_relayer_components::chain::traits::send_message::MessageSender;
+use hermes_relayer_components::chain::traits::types::chain_id::{
+    ChainIdGetter, ProvideChainIdType,
+};
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType
+    HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightIncrementer, ProvideHeightType
+    HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, ProvideIbcChainTypes,
@@ -73,6 +57,23 @@ use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::log::value::LogValue;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};
+use ibc::clients::ics07_tendermint::consensus_state::ConsensusState as TmConsensusState;
+use ibc::clients::ics07_tendermint::header::Header;
+use ibc::core::events::IbcEvent;
+use ibc::core::ics02_client::events::CreateClient;
+use ibc::core::ics02_client::msgs::create_client::MsgCreateClient;
+use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
+use ibc::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
+use ibc::core::ics04_channel::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
+use ibc::core::ics04_channel::packet::{Packet, Sequence};
+use ibc::core::ics04_channel::timeout::TimeoutHeight;
+use ibc::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
+use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath};
+use ibc::core::timestamp::Timestamp;
+use ibc::core::{Msg, ValidationContext};
+use ibc::proto::Any;
+use ibc::Height;
 
 use crate::components::chain::MockCosmosChainComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -618,7 +619,7 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    async fn query_is_packet_received(
+    async fn query_packet_is_received(
         chain: &MockCosmosContext<Chain>,
         port_id: &PortId,
         channel_id: &ChannelId,

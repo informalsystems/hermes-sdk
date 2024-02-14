@@ -4,7 +4,7 @@ use cgp_core::async_trait;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::clear_interval::HasClearInterval;
-use hermes_relayer_components::relay::traits::components::packet_clearer::CanClearPackets;
+use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_relayer_components::runtime::traits::task::Task;

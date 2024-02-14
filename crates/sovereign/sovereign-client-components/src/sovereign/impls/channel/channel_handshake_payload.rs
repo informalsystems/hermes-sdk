@@ -1,5 +1,5 @@
 use cgp_core::HasErrorType;
-use hermes_relayer_components::chain::traits::components::channel_handshake_payload_builder::ChannelHandshakePayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilder;
 use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

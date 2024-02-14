@@ -1,8 +1,8 @@
 use cgp_core::{ErrorRaiser, HasComponents};
 
-use crate::chain::traits::components::counterparty_chain_id_querier::CanQueryCounterpartyChainId;
-use crate::chain::traits::components::packet_from_write_ack_builder::CanBuildPacketFromWriteAck;
 use crate::chain::traits::logs::packet::CanLogChainPacket;
+use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
+use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::components::default::closures::relay::ack_packet_relayer::UseDefaultAckPacketRelayer;
@@ -11,9 +11,9 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use crate::relay::traits::components::event_relayer::CanRelayEvent;
-use crate::relay::traits::components::packet_filter::PacketFilter;
+use crate::relay::traits::event_relayer::CanRelayEvent;
 use crate::relay::traits::packet::HasRelayPacketFields;
+use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 

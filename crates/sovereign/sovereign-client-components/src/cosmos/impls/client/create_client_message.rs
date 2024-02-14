@@ -2,7 +2,7 @@ use cgp_core::HasErrorType;
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_cosmos_relayer::types::error::{BaseError, Error};
-use hermes_relayer_components::chain::traits::components::create_client_message_builder::CreateClientMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_wasm_client_components::wasm::types::messages::client::consensus::WasmConsensusState;

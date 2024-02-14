@@ -1,5 +1,5 @@
 use cgp_core::{async_trait, HasErrorType};
-use hermes_relayer_components::chain::traits::components::chain_status_querier::*;
+use hermes_relayer_components::chain::traits::queries::chain_status::*;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 
 use crate::telemetry::traits::metrics::{HasMetric, TelemetryCounter};

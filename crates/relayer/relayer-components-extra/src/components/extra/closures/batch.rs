@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::message::CanEstimateMessage
 use hermes_relayer_components::logger::traits::has_logger::HasLogger;
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use hermes_relayer_components::relay::traits::components::ibc_message_sender::CanSendIbcMessages;
+use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::runtime::traits::mutex::HasMutex;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;

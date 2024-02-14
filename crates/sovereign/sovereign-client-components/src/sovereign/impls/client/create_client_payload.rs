@@ -1,5 +1,5 @@
 use cgp_core::HasErrorType;
-use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CreateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptionsType, HasCreateClientPayloadType,
 };

@@ -4,6 +4,9 @@ use core::time::Duration;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use serde_json::Value as JsonValue;
 use std::env::var;
 use std::sync::Arc;
@@ -16,9 +19,6 @@ use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::CanUploadWasmClientCode;
-use hermes_relayer_components::chain::traits::components::create_client_message_builder::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::components::create_client_payload_builder::CanBuildCreateClientPayload;
-use hermes_relayer_components::chain::traits::components::message_sender::CanSendSingleMessage;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -46,8 +46,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
         chain_command_path: "simd".into(),
-        account_prefix: "cosmos".into(),
-        compat_mode: None,
+        account_prefix: "sov".into(),
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|genesis| {

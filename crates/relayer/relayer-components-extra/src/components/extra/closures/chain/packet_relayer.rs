@@ -1,27 +1,29 @@
 use cgp_core::HasComponents;
-use hermes_relayer_components::chain::traits::components::ack_packet_message_builder::{
+use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
 };
-use hermes_relayer_components::chain::traits::components::ack_packet_payload_builder::{
-    AckPacketPayloadBuilder, CanBuildAckPacketPayload,
-};
-use hermes_relayer_components::chain::traits::components::packet_fields_reader::{
-    CanReadPacketFields, PacketFieldsReader,
-};
-use hermes_relayer_components::chain::traits::components::receive_packet_message_builder::{
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
     CanBuildReceivePacketMessage, ReceivePacketMessageBuilder,
 };
-use hermes_relayer_components::chain::traits::components::receive_packet_payload_builder::{
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilder,
+};
+use hermes_relayer_components::chain::traits::packet::fields::{
+    CanReadPacketFields, PacketFieldsReader,
+};
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
+    AckPacketPayloadBuilder, CanBuildAckPacketPayload,
+};
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::{
     CanBuildReceivePacketPayload, ReceivePacketPayloadBuilder,
 };
-use hermes_relayer_components::chain::traits::components::received_packet_querier::{
-    CanQueryReceivedPacket, ReceivedPacketQuerier,
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketPayload, TimeoutUnorderedPacketPayloadBuilder,
 };
-use hermes_relayer_components::chain::traits::components::timeout_unordered_packet_message_builder::{
-    CanBuildTimeoutUnorderedPacketMessage, CanBuildTimeoutUnorderedPacketPayload,
-    TimeoutUnorderedPacketMessageBuilder, TimeoutUnorderedPacketPayloadBuilder,
+use hermes_relayer_components::chain::traits::queries::packet_is_received::{
+    CanQueryPacketIsReceived, ReceivedPacketQuerier,
 };
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -37,7 +39,7 @@ use crate::components::extra::closures::chain::message_sender::UseExtraChainComp
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
     CanLogChainPacket<Counterparty>
-    + CanQueryReceivedPacket<Counterparty>
+    + CanQueryPacketIsReceived<Counterparty>
     + CanReadPacketFields<Counterparty>
     + CanBuildReceivePacketPayload<Counterparty>
     + CanBuildReceivePacketMessage<Counterparty>
