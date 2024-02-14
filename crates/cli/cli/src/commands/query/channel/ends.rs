@@ -116,7 +116,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                     return Err(BaseError::generic(eyre!(
                         "missing connection hops for {port_id}/{channel_id} on chain {chain_id} @ {query_height:?}",
                     )).into());
-                };        
+                };
 
                 let Ok((connection_end, _)) = chain_handle
                     .query_connection(
@@ -177,7 +177,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                     counterparty_connection_id,
                     counterparty_channel_id,
                     counterparty_port_id,
-                })        
+                })
             })
             .await;
 
@@ -187,4 +187,3 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
         }
     }
 }
-
