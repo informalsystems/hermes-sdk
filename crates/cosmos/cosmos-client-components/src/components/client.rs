@@ -68,6 +68,7 @@ use crate::impls::packet::receive_packet_message::BuildCosmosReceivePacketMessag
 use crate::impls::packet::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::packet::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::impls::packet::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
+use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
@@ -82,6 +83,7 @@ use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
+use crate::traits::abci_query::AbciQuerierComponent;
 
 pub struct CosmosClientComponents;
 
@@ -169,5 +171,7 @@ delegate_components! {
             ProvideCosmosInitChannelOptionsType,
         BlockQuerierComponent:
             QueryCometBlock,
+        AbciQuerierComponent:
+            QueryAbci,
     }
 }

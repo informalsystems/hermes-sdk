@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
+use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -152,6 +153,7 @@ delegate_components! {
             InitConnectionOptionsTypeComponent,
             InitChannelOptionsTypeComponent,
             BlockQuerierComponent,
+            AbciQuerierComponent,
         ]:
             CosmosClientComponents,
         [
