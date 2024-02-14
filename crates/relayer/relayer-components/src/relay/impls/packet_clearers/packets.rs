@@ -1,7 +1,9 @@
+use alloc::format;
 use alloc::vec;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
+use crate::logger::traits::log::CanLog;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::runtime::traits::runtime::HasRuntime;
@@ -31,12 +33,12 @@ where
 
 impl<Relay> Task for RunPacketClearer<Relay>
 where
-    Relay: HasRelayChains,
+    Relay: HasRelayChains + CanLog,
     ClearReceivePackets: PacketClearer<Relay>,
     ClearAckPackets: PacketClearer<Relay>,
 {
     async fn run(self) {
-        let _ = match self.clear_option {
+        let result = match self.clear_option {
             ClearOption::Receive => {
                 ClearReceivePackets::clear_packets(
                     &self.relay,
@@ -58,12 +60,16 @@ where
                 .await
             }
         };
+        if let Err(e) = result {
+            self.relay
+                .log_error(&format!("failed during packet clearing: {e:#?}"));
+        }
     }
 }
 
 impl<Relay, SrcChain, DstChain> PacketClearer<Relay> for ClearAllPackets
 where
-    Relay: Clone + HasRuntime + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>,
+    Relay: Clone + HasRuntime + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanLog,
     SrcChain: HasIbcChainTypes<DstChain>,
     DstChain: HasIbcChainTypes<SrcChain>,
     Relay::Runtime: CanRunConcurrentTasks,
