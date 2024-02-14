@@ -17,7 +17,7 @@ pub struct QueryUnreceivedCosmosAcksSequences;
 impl<Chain, Counterparty> UnreceivedAcksSequencesQuerier<Chain, Counterparty>
     for QueryUnreceivedCosmosAcksSequences
 where
-    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
+    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId, Sequence = Sequence>
         + HasIbcPacketTypes<Counterparty>
         + HasErrorType
         + HasGrpcAddress
@@ -28,7 +28,7 @@ where
         chain: &Chain,
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
-        sequences: &[Counterparty::Sequence],
+        sequences: &[Chain::Sequence],
     ) -> Result<Vec<Counterparty::Sequence>, Chain::Error> {
         let mut client = ChannelQueryClient::connect(chain.grpc_address().clone())
             .await

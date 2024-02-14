@@ -36,7 +36,7 @@ where
         channel_id: &Chain::ChannelId,
         port_id: &Chain::PortId,
         sequences: &[Counterparty::Sequence],
-    ) -> Result<Option<(Vec<Counterparty::Sequence>, Counterparty::Height)>, Chain::Error> {
+    ) -> Result<Option<(Vec<Counterparty::Sequence>, Chain::Height)>, Chain::Error> {
         let mut client = ChannelQueryClient::connect(chain.grpc_address().clone())
             .await
             .map_err(|e| Chain::raise_error(e.into()))?;

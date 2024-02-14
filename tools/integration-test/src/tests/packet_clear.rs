@@ -183,10 +183,10 @@ impl BinaryChannelTest for IbcClearPacketTest {
 
             let _ = relay_b_to_a
                 .clear_packets(
-                    channel.channel_id_a.value(),
-                    channel.port_a.value(),
                     channel.channel_id_b.value(),
                     channel.port_b.value(),
+                    channel.channel_id_a.value(),
+                    channel.port_a.value(),
                 )
                 .await;
 
@@ -271,6 +271,7 @@ impl BinaryChannelTest for IbcClearAckTest {
 
         let relay_a_to_b = relay_context.relay_a_to_b();
         let chain_a = relay_a_to_b.src_chain();
+        let chain_b = relay_a_to_b.dst_chain();
 
         let runtime = chains.node_a.value().chain_driver.runtime.as_ref();
 
@@ -323,9 +324,9 @@ impl BinaryChannelTest for IbcClearAckTest {
                 <CosmosChain as CanQueryUnreceivedPacketSequences<
                     CosmosChain,
                 >>::query_unreceived_packet_sequences(
-                    chain_a,
-                    channel.channel_id_a.value(),
-                    channel.port_a.value(),
+                    chain_b,
+                    channel.channel_id_b.value(),
+                    channel.port_b.value(),
                     &src_commitments,
                 )
                 .await
@@ -394,16 +395,27 @@ impl BinaryChannelTest for IbcClearAckTest {
 
             assert_eq!(src_commitments, vec!(Sequence::from(1)));
 
+            info!("Assert packet clearing clear the pending acks");
+
+            let acks_and_height_on_counterparty = <CosmosChain as CanQueryPacketAcknowledgements<CosmosChain>>::query_packet_acknowlegements(
+                chain_b,
+                channel.channel_id_b.value(),
+                channel.port_b.value(),
+                &src_commitments
+            ).await.unwrap();
+
+            assert!(acks_and_height_on_counterparty.is_some());
+
             info!("Assert query unreceived acknowledgment sequences works as expected");
 
-            let unreceived_ack_sequences: Vec<Sequence> =
+            let unreceived_ack_sequences =
                 <CosmosChain as CanQueryUnreceivedAcksSequences<
                     CosmosChain,
                 >>::query_unreceived_acknowledgments_sequences(
                     chain_a,
                     channel.channel_id_a.value(),
                     channel.port_a.value(),
-                    &src_commitments,
+                    &acks_and_height_on_counterparty.clone().unwrap().0,
                 )
                 .await
                 .unwrap();
@@ -419,27 +431,21 @@ impl BinaryChannelTest for IbcClearAckTest {
                 )
                 .await;
 
-            info!("Assert packet clearing clear the pending acks");
-
             let acks_and_height_on_counterparty = <CosmosChain as CanQueryPacketAcknowledgements<CosmosChain>>::query_packet_acknowlegements(
-                chain_a,
+                chain_b,
                 channel.channel_id_b.value(),
                 channel.port_b.value(),
                 &src_commitments
             ).await.unwrap();
 
-            assert!(acks_and_height_on_counterparty.is_some());
-
-            let acks_on_counterparty = acks_and_height_on_counterparty.unwrap().0;
-
-            let unreceived_ack_sequences: Vec<Sequence> =
+            let unreceived_ack_sequences =
                 <CosmosChain as CanQueryUnreceivedAcksSequences<
                     CosmosChain,
                 >>::query_unreceived_acknowledgments_sequences(
                     chain_a,
                     channel.channel_id_a.value(),
                     channel.port_a.value(),
-                    &acks_on_counterparty,
+                    &acks_and_height_on_counterparty.clone().unwrap().0,
                 )
                 .await
                 .unwrap();

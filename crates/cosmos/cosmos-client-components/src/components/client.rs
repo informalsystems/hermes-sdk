@@ -13,6 +13,9 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::ack_packets::{
+    AckPacketQuerierComponent, AckPacketsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
@@ -70,6 +73,8 @@ use crate::impls::packet::receive_packet_message::BuildCosmosReceivePacketMessag
 use crate::impls::packet::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::packet::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::impls::packet::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
+use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
+use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
@@ -167,6 +172,10 @@ delegate_components! {
             QueryCosmosSendPacket,
         SendPacketsQuerierComponent:
             QuerySendPacketsConcurrently,
+        AckPacketQuerierComponent:
+            QueryCosmosAckPacket,
+        AckPacketsQuerierComponent:
+            QueryAckPacketsConcurrently,
         PacketFromWriteAckBuilderComponent:
             BuildCosmosPacketFromWriteAck,
         ChainStatusQuerierComponent:

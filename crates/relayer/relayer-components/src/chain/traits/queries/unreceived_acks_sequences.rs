@@ -23,6 +23,6 @@ where
         &self,
         channel_id: &Self::ChannelId,
         port_id: &Self::PortId,
-        packet_ack_sequences: &[Counterparty::Sequence],
+        packet_ack_sequences: &[Self::Sequence],
     ) -> Result<Vec<Counterparty::Sequence>, Self::Error>;
 }

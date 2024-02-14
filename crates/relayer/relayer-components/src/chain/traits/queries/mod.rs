@@ -1,3 +1,4 @@
+pub mod ack_packets;
 pub mod block;
 pub mod chain_status;
 pub mod client_state;
