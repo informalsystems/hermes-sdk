@@ -1,5 +1,6 @@
 use alloc::format;
 use cgp_core::async_trait;
+use core::fmt::Display;
 
 use crate::chain::traits::queries::packet_acknowledgements::CanQueryPacketAcknowledgements;
 use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
@@ -27,11 +28,13 @@ where
 impl<Relay> Task for RelayPacketTask<Relay>
 where
     Relay: CanRelayPacket + CanLog,
+    Relay::Packet: Display,
 {
     async fn run(self) {
         if let Err(e) = self.relay.relay_packet(&self.packet).await {
             self.relay.log_error(&format!(
-                "failed to relay packet during ack packet clearing: {e:#?}"
+                "failed to relay packet the packet {} during ack packet clearing: {e:#?}",
+                self.packet
             ));
         }
     }
@@ -46,6 +49,7 @@ where
     Relay::SrcChain:
         CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
+    Relay::Packet: Display,
 {
     async fn clear_packets(
         relay: &Relay,
