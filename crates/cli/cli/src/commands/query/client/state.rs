@@ -1,5 +1,8 @@
-use core::fmt::Debug;
 use std::error::Error as StdError;
+use std::fmt::Debug;
+
+use serde::Serialize;
+use tracing::info;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -14,8 +17,6 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
-use serde::Serialize;
-use tracing::info;
 
 use crate::Result;
 

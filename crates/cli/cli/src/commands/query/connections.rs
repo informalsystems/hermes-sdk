@@ -1,5 +1,10 @@
+use hermes_cli_framework::output::json;
 use hermes_cli_framework::output::Output;
-use oneline_eyre::eyre::eyre;
+use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use ibc_relayer::chain::requests::PageRequest;
+use ibc_relayer_types::core::ics02_client::client_state::ClientState;
+use oneline_eyre::eyre::Context;
 use tracing::info;
 use tracing::warn;
 
@@ -7,9 +12,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{
-    IncludeProof, QueryClientStateRequest, QueryConnectionsRequest, QueryHeight,
-};
+use ibc_relayer::chain::requests::QueryConnectionsRequest;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::Result;
@@ -46,54 +49,81 @@ impl CommandRunner<CosmosBuilder> for QueryConnections {
         let counterparty_chain_id = self.counterparty_chain_id.clone();
         let verbose = self.verbose;
 
-        let connections = chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let mut connections =
-                    chain_handle.query_connections(QueryConnectionsRequest { pagination: None }).unwrap();
-
-                if let Some(filter_chain_id) = counterparty_chain_id {
-                    connections.retain(|connection| {
-                        let client_id = connection.end().client_id().to_owned();
-                        let chain_height = chain_handle.query_latest_height();
-
-                        let client_state = chain_handle.query_client_state(
-                            QueryClientStateRequest {
-                                client_id: client_id.clone(),
-                                height: QueryHeight::Specific(chain_height.unwrap()),
-                            },
-                            IncludeProof::No,
-                        );
-
-                        match client_state {
-                            Ok((client_state, _)) => {
-                                let counterparty_chain_id = client_state.chain_id();
-                                counterparty_chain_id == filter_chain_id
-                            }
-                            Err(e) => {
-                                warn!("failed to query client state for client {client_id}, skipping...");
-                                warn!("reason: {e}");
-
-                                false
-                            }
-                        }
-                    });
-                };
-
-                info!("Successfully queried connections on chain `{chain_id}`");
-
-                connections.iter().for_each(|connection| {
-                    if verbose {
-                        info!("{connection:#?}",);
-                    } else {
-                        info!("{}", connection.connection_id);
-                    }
-                });
-
-                Ok(connections)
+        let all_connections = chain
+            .with_blocking_chain_handle(move |handle| {
+                handle
+                    .query_connections(QueryConnectionsRequest {
+                        pagination: Some(PageRequest::all()),
+                    })
+                    .map_err(|e| BaseError::relayer(e).into())
             })
             .await
-            .map_err(|e| eyre!("Failed to query connections for host chain: {e}"))?;
+            .wrap_err("Failed to query connections for host chain")?;
 
-        Ok(Output::success(connections))
+        info!(
+            "Found {} connections on chain `{chain_id}`",
+            all_connections.len()
+        );
+
+        let connections = if let Some(filter_chain_id) = counterparty_chain_id {
+            let mut connections = Vec::new();
+
+            for connection in all_connections {
+                let client_id = connection.end().client_id().to_owned();
+                let client_state = chain.query_client_state(&client_id).await;
+
+                let include = match client_state {
+                    Ok(client_state) => {
+                        let counterparty_chain_id = client_state.chain_id();
+                        counterparty_chain_id == filter_chain_id
+                    }
+                    Err(e) => {
+                        warn!("failed to query client state for client `{client_id}`, skipping...");
+                        warn!("reason: {e}");
+
+                        false
+                    }
+                };
+
+                if include {
+                    connections.push(connection);
+                }
+            }
+
+            info!(
+                "Found {} connections on chain `{chain_id}` with counterparty chain `{filter_chain_id}`",
+                connections.len()
+            );
+
+            connections
+        } else {
+            all_connections
+        };
+
+        if json() {
+            if verbose {
+                Ok(Output::success(connections))
+            } else {
+                let connection_ids = connections
+                    .into_iter()
+                    .map(|connection| connection.connection_id)
+                    .collect::<Vec<_>>();
+
+                Ok(Output::success(connection_ids))
+            }
+        } else {
+            connections.iter().for_each(|connection| {
+                if verbose {
+                    info!("- {connection:#?}",);
+                } else {
+                    info!("- {}", connection.connection_id);
+                }
+            });
+
+            Ok(Output::success_msg(format!(
+                "Total: {} connections",
+                connections.len()
+            )))
+        }
     }
 }
