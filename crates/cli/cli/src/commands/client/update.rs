@@ -4,7 +4,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
 use ibc_relayer_types::core::ics02_client::height::Height;
@@ -45,7 +45,9 @@ pub struct ClientUpdate {
 impl CommandRunner<CosmosBuilder> for ClientUpdate {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let host_chain = builder.build_chain(&self.host_chain_id).await?;
-        let client_state = host_chain.query_client_state(&self.client_id).await?;
+        let client_state = host_chain
+            .query_client_state_with_latest_height(&self.client_id)
+            .await?;
         let reference_chain_id = client_state.chain_id;
         let reference_chain = builder.build_chain(&reference_chain_id).await?;
 

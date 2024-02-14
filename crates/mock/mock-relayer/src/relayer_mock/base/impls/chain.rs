@@ -323,6 +323,7 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainCompone
     async fn query_client_state(
         _chain: &MockChainContext,
         _client_id: &ClientId,
+        _height: &MockHeight,
     ) -> Result<(), Error> {
         Ok(())
     }

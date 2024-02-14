@@ -1,9 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    ClientStateQuerierComponent, ClientStateWithHeightQuerierComponent,
-};
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 
 use crate::impls::client::create_client_message::BuildCosmosCreateClientMessage;
@@ -16,10 +14,7 @@ pub struct CosmosIbcClientComponents;
 delegate_components! {
     #[mark_component(IsCosmosIbcClientComponents)]
     CosmosIbcClientComponents {
-        [
-            ClientStateQuerierComponent,
-            ClientStateWithHeightQuerierComponent,
-        ]:
+        ClientStateQuerierComponent:
             QueryCosmosClientStateFromChainHandle,
         CreateClientMessageBuilderComponent:
             BuildCosmosCreateClientMessage,

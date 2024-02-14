@@ -298,6 +298,7 @@ where
     async fn query_client_state(
         chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
+        _height: &Height,
     ) -> Result<TmClientState, Error> {
         chain
             .ibc_context()

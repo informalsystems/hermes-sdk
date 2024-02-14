@@ -39,6 +39,7 @@ where
     async fn query_client_state(
         chain: &Chain,
         client_id: &ClientId,
+        _height: &Height,
     ) -> Result<SolomachineClientState, Chain::Error> {
         let data = ClientStatePath(client_id.clone());
 
