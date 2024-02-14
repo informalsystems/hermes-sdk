@@ -1,4 +1,5 @@
 use alloc::sync::Arc;
+use core::time::Duration;
 
 use cgp_core::{Async, HasErrorType};
 use hermes_relayer_components::chain::traits::types::block::{
@@ -63,6 +64,14 @@ where
     Chain: Async,
 {
     type Timestamp = Timestamp;
+
+    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
+        Timestamp::from_nanoseconds(nanos).expect("Timestamp::from_nanoseconds is infallible")
+    }
+
+    fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
+        later.duration_since(earlier)
+    }
 }
 
 impl<Chain> ProvideMessageType<Chain> for ProvideCosmosChainTypes

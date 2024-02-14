@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::convert::From;
 use std::fmt::{self, Display};
+use std::time::Duration;
 
 use super::height::Height;
 use crate::relayer_mock::base::types::chain::MockChainStatus;
@@ -18,6 +19,12 @@ pub type StateStore = HashMap<Height, ChainState>;
 
 #[derive(Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct MockTimestamp(pub u128);
+
+impl MockTimestamp {
+    pub fn duration_since(&self, earlier: &MockTimestamp) -> Option<Duration> {
+        Some(Duration::from_millis((self.0 - earlier.0) as u64))
+    }
+}
 
 impl Display for MockTimestamp {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
