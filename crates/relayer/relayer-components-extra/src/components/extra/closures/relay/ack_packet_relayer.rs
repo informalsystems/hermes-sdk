@@ -51,6 +51,7 @@ where
         + HasRuntime
         + HasChainId
         + CanSendMessages
+        + CanQueryChainStatus
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
         + CanReadPacketFields<DstChain, OutgoingPacket = Relay::Packet>

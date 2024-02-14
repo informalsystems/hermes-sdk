@@ -2,7 +2,7 @@ use cgp_core::{async_trait, Async};
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientState;
+use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -21,7 +21,7 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>
         + CanRaiseRelayChainErrors,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
-    SrcChain: CanQueryClientState<DstChain>
+    SrcChain: CanQueryClientStateWithLatestHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Packet>,
     DstChain: HasClientStateType<SrcChain>
@@ -37,7 +37,7 @@ where
     ) -> Result<(), Relay::Error> {
         let src_client_state = relay
             .src_chain()
-            .query_client_state(relay.src_client_id())
+            .query_client_state_with_latest_height(relay.src_client_id())
             .await
             .map_err(Relay::raise_error)?;
 

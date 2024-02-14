@@ -3,7 +3,7 @@ use cgp_core::async_trait;
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
-use crate::chain::traits::queries::client_state::CanQueryClientState;
+use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
@@ -32,7 +32,8 @@ where
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildChannelHandshakePayloads<DstChain>,
-    DstChain: CanQueryClientState<SrcChain> + CanBuildChannelHandshakeMessages<SrcChain>,
+    DstChain:
+        CanQueryClientStateWithLatestHeight<SrcChain> + CanBuildChannelHandshakeMessages<SrcChain>,
 {
     async fn relay_channel_open_confirm(
         relay: &Relay,
@@ -50,7 +51,7 @@ where
             .map_err(Relay::raise_error)?;
 
         let src_client_state = dst_chain
-            .query_client_state(relay.dst_client_id())
+            .query_client_state_with_latest_height(relay.dst_client_id())
             .await
             .map_err(Relay::raise_error)?;
 

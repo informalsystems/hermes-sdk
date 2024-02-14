@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
+use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -21,7 +22,6 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::U
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateWithHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
@@ -38,8 +38,11 @@ use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::client_state::ClientStateDecoderComponent;
+use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
@@ -66,7 +69,6 @@ use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
-use crate::chain::impls::query_client_state::DelegateCosmosClientStateQuerier;
 use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;
@@ -80,12 +82,6 @@ impl HasComponents for CosmosChainComponents {
 impl HasComponents for CosmosChain {
     type Components = CosmosChainComponents;
 }
-
-// delegate_all!(
-//     IsCosmosClientComponents,
-//     CosmosClientComponents,
-//     CosmosChainComponents,
-// );
 
 impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
@@ -111,6 +107,9 @@ delegate_components! {
             ChainIdTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
+            ClientStateTypeComponent,
+            ClientStateDecoderComponent,
+            ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
@@ -129,6 +128,7 @@ delegate_components! {
             PacketFieldsReaderComponent,
             ConsensusStateHeightQuerierComponent,
             WriteAckQuerierComponent,
+            ClientStateQuerierComponent,
             CreateClientOptionsTypeComponent,
             CreateClientPayloadBuilderComponent,
             UpdateClientPayloadBuilderComponent,
@@ -152,6 +152,7 @@ delegate_components! {
             InitConnectionOptionsTypeComponent,
             InitChannelOptionsTypeComponent,
             BlockQuerierComponent,
+            AbciQuerierComponent,
         ]:
             CosmosClientComponents,
         [
@@ -159,11 +160,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        [
-            ClientStateQuerierComponent,
-            ClientStateWithHeightQuerierComponent,
-        ]:
-            DelegateCosmosClientStateQuerier,
         CreateClientMessageBuilderComponent:
             DelegateCosmosCreateClientMessageBuilder,
         ConnectionHandshakeMessageBuilderComponent:

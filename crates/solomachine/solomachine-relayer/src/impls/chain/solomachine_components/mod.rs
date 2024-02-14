@@ -5,6 +5,7 @@ pub mod connection_handshake_payload;
 pub mod create_client_message;
 pub mod create_client_payload;
 pub mod process_message;
+pub mod query_chain_status;
 pub mod query_client_state;
 pub mod query_consensus_state;
 pub mod receive_packet_payload;
