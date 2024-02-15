@@ -6,6 +6,7 @@ use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
+use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
 use prost::DecodeError;
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
@@ -90,6 +91,15 @@ where
 {
     fn raise_error(err: Ics02Error) -> Error {
         BaseError::ics02(err).into()
+    }
+}
+
+impl<Context> ErrorRaiser<Context, Ics24ValidationError> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(err: Ics24ValidationError) -> Error {
+        BaseError::ics24_validation(err).into()
     }
 }
 

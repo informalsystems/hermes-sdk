@@ -14,7 +14,34 @@ where
 {
     async fn query_client_states(
         &self,
+        height: &Self::Height,
     ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
+}
+
+#[async_trait]
+pub trait CanQueryClientStatesWithLatestHeight<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
+where
+    Counterparty: HasClientStateType<Self>,
+{
+    async fn query_client_states_with_latest_height(
+        &self,
+    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
+}
+
+impl<Chain, Counterparty> CanQueryClientStatesWithLatestHeight<Counterparty> for Chain
+where
+    Chain: CanQueryClientStates<Counterparty> + CanQueryChainStatus,
+    Counterparty: HasClientStateType<Chain>,
+{
+    async fn query_client_states_with_latest_height(
+        &self,
+    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Chain::Error> {
+        let status = self.query_chain_status().await?;
+
+        self.query_client_states(Chain::chain_status_height(&status))
+            .await
+    }
 }
 
 #[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]

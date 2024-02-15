@@ -41,6 +41,7 @@ use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePa
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateDecoderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::client_state::ClientStatesDecoderComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
@@ -110,6 +111,7 @@ delegate_components! {
             EventTypeComponent,
             ClientStateTypeComponent,
             ClientStateDecoderComponent,
+            ClientStatesDecoderComponent,
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,

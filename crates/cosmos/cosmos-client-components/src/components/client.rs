@@ -35,7 +35,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ClientStateTypeComponent,
+    ClientStateDecoderComponent, ClientStateTypeComponent, ClientStatesDecoderComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
@@ -127,6 +127,7 @@ delegate_components! {
         [
             ClientStateTypeComponent,
             ClientStateDecoderComponent,
+            ClientStatesDecoderComponent,
         ]:
             ProvideTendermintClientState,
         ConsensusStateTypeComponent:

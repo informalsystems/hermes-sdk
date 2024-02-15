@@ -11,7 +11,7 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStates;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStatesWithLatestHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
@@ -140,13 +140,13 @@ async fn query_client_states<Chain, Counterparty>(
 ) -> Result<Vec<Client<Chain, Counterparty>>>
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + CanQueryClientStates<Counterparty>
+        + CanQueryClientStatesWithLatestHeight<Counterparty>
         + HasErrorType,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
     Chain::Error: From<BaseError> + StdError,
 {
     let mut clients = chain
-        .query_client_states()
+        .query_client_states_with_latest_height()
         .await
         .wrap_err("Failed to query clients")?
         .into_iter()
