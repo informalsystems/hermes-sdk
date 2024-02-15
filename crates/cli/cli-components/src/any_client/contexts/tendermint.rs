@@ -5,16 +5,16 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateDecoderComponent, ClientStateTypeComponent,
 };
 
-pub struct TendermintCounterparty;
+pub struct TendermintChain;
 
-pub struct TendermintCounterpartyComponents;
+pub struct TendermintChainComponents;
 
-impl HasComponents for TendermintCounterparty {
-    type Components = TendermintCounterpartyComponents;
+impl HasComponents for TendermintChain {
+    type Components = TendermintChainComponents;
 }
 
 delegate_components! {
-    TendermintCounterpartyComponents {
+    TendermintChainComponents {
         ClientStateTypeComponent:
             ProvideTendermintClientState,
         ClientStateDecoderComponent:

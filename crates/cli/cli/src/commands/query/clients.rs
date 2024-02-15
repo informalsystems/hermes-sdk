@@ -2,11 +2,11 @@ use std::error::Error as StdError;
 use std::fmt;
 
 use cgp_core::HasErrorType;
+use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
+use hermes_cli_components::any_client::types::client_state::AnyClientState;
 use oneline_eyre::eyre::Context;
 use tracing::info;
 
-use hermes_cli_components::any::client_state::AnyClientState;
-use hermes_cli_components::any::counterparty::AnyCounterparty;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;

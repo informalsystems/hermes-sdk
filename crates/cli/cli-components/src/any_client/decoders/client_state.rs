@@ -6,8 +6,8 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use ibc_proto::google::protobuf::Any;
 use prost::{DecodeError, Message};
 
-use crate::any::client_state::AnyClientState;
-use crate::counterparties::tendermint::TendermintCounterparty;
+use crate::any_client::contexts::tendermint::TendermintChain;
+use crate::any_client::types::client_state::AnyClientState;
 
 #[derive(Debug)]
 pub struct UnknownClientStateType {
@@ -20,7 +20,7 @@ impl<Chain, Counterparty> ClientStateDecoder<Chain, Counterparty> for DecodeAnyC
 where
     Chain: HasClientStateType<Counterparty, ClientState = AnyClientState>,
     Counterparty: CanRaiseError<DecodeError> + CanRaiseError<UnknownClientStateType>,
-    DecodeTendermintClientStateProto: ClientStateDecoder<TendermintCounterparty, Counterparty>,
+    DecodeTendermintClientStateProto: ClientStateDecoder<TendermintChain, Counterparty>,
 {
     fn decode_client_state_bytes(
         client_state_bytes: &[u8],
