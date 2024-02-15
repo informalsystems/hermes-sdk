@@ -40,8 +40,6 @@ pub enum HermesCommand {
     /// Manage keys in the relayer for each chain
     #[clap(subcommand)]
     Keys(keys::KeysCmd),
-
-
 }
 
 impl CommandRunner<CosmosBuilder> for HermesCommand {
