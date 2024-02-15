@@ -36,7 +36,7 @@ pub struct TypeUrlMismatchError {
     pub actual_url: String,
 }
 
-fn decode_client_state_any<Counterparty>(
+pub fn decode_tendermint_client_state<Counterparty>(
     any: &Any,
 ) -> Result<TendermintClientState, Counterparty::Error>
 where
@@ -69,7 +69,7 @@ where
     ) -> Result<TendermintClientState, Counterparty::Error> {
         let any = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
 
-        decode_client_state_any::<Counterparty>(&any)
+        decode_tendermint_client_state::<Counterparty>(&any)
     }
 }
 
@@ -97,7 +97,7 @@ where
 
                 if let Some(client_state_any) = &client_state.client_state {
                     if let Ok(client_state) =
-                        decode_client_state_any::<Counterparty>(client_state_any)
+                        decode_tendermint_client_state::<Counterparty>(client_state_any)
                     {
                         acc.push((client_id, client_state))
                     } else {

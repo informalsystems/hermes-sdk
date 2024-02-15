@@ -29,7 +29,7 @@ members = [
     "crates/cli/cli-framework",
     "crates/cli/cli",
     "tools/integration-test",
-    "tools/test-framework",
+    "tools/test-framework", "crates/cli/cli-components",
 ]
 
 [workspace.package]
@@ -80,6 +80,7 @@ tracing-subscriber  = { version = "0.3.18" }
 jsonrpsee           = { version = "0.21.0", default-features = false }
 
 hermes-cli                          = { version = "0.1.0", path = "./crates/cli/cli" }
+hermes-cli-components               = { version = "0.1.0", path = "./crates/cli/cli-components" }
 hermes-cli-framework                = { version = "0.1.0", path = "./crates/cli/cli-framework" }
 hermes-relayer-components           = { version = "0.1.0", path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { version = "0.1.0", path = "./crates/relayer/relayer-components-extra" }
@@ -102,6 +103,9 @@ hermes-relayer-runtime              = { version = "0.1.0", path = "./crates/runt
 hermes-solomachine-relayer          = { version = "0.1.0", path = "./crates/solomachine/solomachine-relayer" }
 hermes-test-components              = { version = "0.1.0", path = "./crates/test/test-components" }
 hermes-ibc-test-suite               = { version = "0.1.0", path = "./crates/test/test-suite" }
+
+[profile.dev]
+debug = 1
 
 [profile.release]
 overflow-checks = true
