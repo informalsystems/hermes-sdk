@@ -8,6 +8,8 @@
 //!   have been sent, received, acknowledged, and timed out.
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
+use core::time::Duration;
+
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -30,8 +32,8 @@ use hermes_relayer_components::chain::traits::send_message::MessageSender;
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ProvideChainIdType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::HeightIncrementer;
 use hermes_relayer_components::chain::traits::types::height::ProvideHeightType;
@@ -101,6 +103,17 @@ impl ProvideEventType<MockChainContext> for MockChainComponents {
 
 impl ProvideTimestampType<MockChainContext> for MockChainComponents {
     type Timestamp = MockTimestamp;
+
+    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
+        MockTimestamp(u128::from(nanos))
+    }
+
+    fn timestamp_duration_since(
+        earlier: &MockTimestamp,
+        later: &MockTimestamp,
+    ) -> Option<Duration> {
+        later.duration_since(earlier)
+    }
 }
 
 impl ProvideMessageType<MockChainContext> for MockChainComponents {
@@ -198,11 +211,11 @@ impl HasWriteAckEvent<MockChainContext> for MockChainContext {
     }
 }
 
-impl HasConsensusStateType<MockChainContext> for MockChainContext {
+impl ProvideConsensusStateType<MockChainContext, MockChainContext> for MockChainComponents {
     type ConsensusState = ConsensusState;
 }
 
-impl HasClientStateType<MockChainContext> for MockChainContext {
+impl ProvideClientStateType<MockChainContext, MockChainContext> for MockChainComponents {
     // TODO
     type ClientState = ();
 }
@@ -323,6 +336,7 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainCompone
     async fn query_client_state(
         _chain: &MockChainContext,
         _client_id: &ClientId,
+        _height: &MockHeight,
     ) -> Result<(), Error> {
         Ok(())
     }
