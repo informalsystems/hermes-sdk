@@ -185,13 +185,12 @@ fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str
 
 impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
     async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
-        //let chain = builder.build_chain(&self.chain_id).await?;
         let chain_config = builder
             .config
             .find_chain(&self.chain_id)
             .ok_or_else(|| eyre!("No chain configuration found for chain `{}`", self.chain_id))?;
 
-        let opts = match self.options(&chain_config) {
+        let opts = match self.options(chain_config) {
             Err(err) => Output::error(err).exit(),
             Ok(result) => result,
         };
