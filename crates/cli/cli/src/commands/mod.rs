@@ -5,6 +5,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use crate::Result;
 
 pub mod channel;
+pub mod clear;
 pub mod client;
 pub mod connection;
 pub mod query;
@@ -32,9 +33,15 @@ pub enum HermesCommand {
     #[clap(subcommand)]
     Query(query::QueryCommands),
 
+    /// Clear subcommands
+    #[clap(subcommand)]
+    Clear(clear::ClearCommands),
+
     /// Manage keys in the relayer for each chain
     #[clap(subcommand)]
     Keys(keys::KeysCmd),
+
+
 }
 
 impl CommandRunner<CosmosBuilder> for HermesCommand {
@@ -45,6 +52,7 @@ impl CommandRunner<CosmosBuilder> for HermesCommand {
             Self::Connection(cmd) => cmd.run(builder).await,
             Self::Channel(cmd) => cmd.run(builder).await,
             Self::Query(cmd) => cmd.run(builder).await,
+            Self::Clear(cmd) => cmd.run(builder).await,
             Self::Keys(cmd) => cmd.run(builder).await,
         }
     }

@@ -426,7 +426,7 @@ dependencies = [
  "tendermint-proto 0.34.0",
  "tendermint-rpc",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
  "tonic",
  "tonic-reflection",
  "tower",
@@ -461,7 +461,7 @@ dependencies = [
  "tendermint-proto 0.34.0",
  "tendermint-rpc",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
  "tonic",
  "tonic-reflection",
  "tower",
@@ -1520,9 +1520,9 @@ dependencies = [
 
 [[package]]
 name = "ed25519-dalek"
-version = "2.1.0"
+version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f628eaec48bfd21b865dc2950cfa014450c01d2fa2b69a86c2fd5844ec523c0"
+checksum = "4a3daa8e81a3963a60642bcc1f90a670680bd4a77535faa384e9d1c79d620871"
 dependencies = [
  "curve25519-dalek",
  "ed25519",
@@ -2023,7 +2023,7 @@ dependencies = [
  "subtle-encoding",
  "tendermint-rpc",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
 ]
 
 [[package]]
@@ -2038,7 +2038,7 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "tendermint 0.34.0",
- "toml 0.8.8",
+ "toml 0.8.10",
 ]
 
 [[package]]
@@ -2047,6 +2047,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "clap",
+ "futures",
  "hdpath",
  "hermes-cli-framework",
  "hermes-cosmos-client-components",
@@ -2127,7 +2128,7 @@ dependencies = [
  "stable-eyre",
  "tendermint-rpc",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
 ]
 
 [[package]]
@@ -2181,7 +2182,7 @@ dependencies = [
  "serde_json",
  "sha2 0.10.8",
  "subtle-encoding",
- "toml 0.8.8",
+ "toml 0.8.10",
 ]
 
 [[package]]
@@ -2379,7 +2380,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2 0.10.8",
- "toml 0.8.8",
+ "toml 0.8.10",
 ]
 
 [[package]]
@@ -3064,7 +3065,7 @@ dependencies = [
  "serde_json",
  "time",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
 ]
 
 [[package]]
@@ -3303,7 +3304,7 @@ dependencies = [
  "subtle-encoding",
  "tendermint-rpc",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
  "tonic",
  "tracing",
  "tracing-subscriber",
@@ -5039,6 +5040,7 @@ version = "1.0.104"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "076066c5f1078eac5b722a31827a8832fe108bed65dfa75e233c89f8206e976c"
 dependencies = [
+ "indexmap 2.2.1",
  "itoa",
  "ryu",
  "serde",
@@ -5067,9 +5069,9 @@ dependencies = [
 
 [[package]]
 name = "serde_spanned"
-version = "0.6.4"
+version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "12022b835073e5b11e90a14f86838ceb1c8fb0325b72416845c487ac0fa95e80"
+checksum = "eb3622f419d1296904700073ea6cc23ad690adbd66f13ea683df73298736f0c1"
 dependencies = [
  "serde",
 ]
@@ -5376,7 +5378,7 @@ dependencies = [
  "tendermint 0.34.0",
  "tendermint-testgen",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
  "tower",
  "tower-abci",
  "tracing",
@@ -6016,9 +6018,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.34.0"
+version = "1.36.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0c014766411e834f7af5b8f4cf46257aab4036ca95e9d2c144a10f59ad6f5b9"
+checksum = "61285f6515fa018fb2d1e46eb21223fff441ee8db5d0f1435e8ab4f5cdb80931"
 dependencies = [
  "backtrace",
  "bytes",
@@ -6126,14 +6128,14 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.8.8"
+version = "0.8.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1a195ec8c9da26928f773888e0742ca3ca1040c6cd859c919c9f59c1954ab35"
+checksum = "9a9aad4a3066010876e8dcf5a8a06e70a558751117a145c6ce2b82c2e2054290"
 dependencies = [
  "serde",
  "serde_spanned",
  "toml_datetime",
- "toml_edit 0.21.0",
+ "toml_edit 0.22.4",
 ]
 
 [[package]]
@@ -6171,9 +6173,9 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.21.0"
+version = "0.22.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d34d383cd00a163b4a5b85053df514d45bc330f6de7737edfe0a93311d1eaa03"
+checksum = "0c9ffdf896f8daaabf9b66ba8e77ea1ed5ed0f72821b398aba62352e95062951"
 dependencies = [
  "indexmap 2.2.1",
  "serde",

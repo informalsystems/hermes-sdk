@@ -13,16 +13,23 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::ack_packets::{
+    AckPacketQuerierComponent, AckPacketsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::send_packets::{
     SendPacketQuerierComponent, SendPacketsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
@@ -34,10 +41,11 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ClientStateTypeComponent,
+    ClientStateDecoderComponent, ClientStateTypeComponent, ClientStatesDecoderComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
+    ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
+    InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -74,15 +82,20 @@ use crate::impls::packet::receive_packet_payload::BuildCosmosReceivePacketPayloa
 use crate::impls::packet::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::impls::packet::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::queries::abci::QueryAbci;
+use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
+use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
+use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
+use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
 use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
+use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
@@ -107,6 +120,7 @@ delegate_components! {
             MessageTypeComponent,
             EventTypeComponent,
             IbcChainTypesComponent,
+            ConnectionEndTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
@@ -126,6 +140,7 @@ delegate_components! {
         [
             ClientStateTypeComponent,
             ClientStateDecoderComponent,
+            ClientStatesDecoderComponent,
         ]:
             ProvideTendermintClientState,
         ConsensusStateTypeComponent:
@@ -138,7 +153,10 @@ delegate_components! {
             QueryConsensusStateHeightFromChainHandle,
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
-        ClientStateQuerierComponent:
+        [
+            ClientStateQuerierComponent,
+            ClientStatesQuerierComponent,
+        ]:
             QueryCosmosClientStateFromAbci,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
@@ -174,10 +192,18 @@ delegate_components! {
             BuildCosmosTimeoutPacketMessage,
         UnreceivedPacketSequencesQuerierComponent:
             QueryUnreceivedCosmosPacketSequences,
+        UnreceivedAcksSequencesQuerierComponent:
+            QueryUnreceivedCosmosAcksSequences,
+        PacketAcknowledgementsQuerierComponent:
+            QueryCosmosPacketAcknowledgements,
         SendPacketQuerierComponent:
             QueryCosmosSendPacket,
         SendPacketsQuerierComponent:
             QuerySendPacketsConcurrently,
+        AckPacketQuerierComponent:
+            QueryCosmosAckPacket,
+        AckPacketsQuerierComponent:
+            QueryAckPacketsConcurrently,
         PacketFromWriteAckBuilderComponent:
             BuildCosmosPacketFromWriteAck,
         ChainStatusQuerierComponent:
@@ -190,5 +216,7 @@ delegate_components! {
             QueryCometBlock,
         AbciQuerierComponent:
             QueryAbci,
+        ConnectionEndQuerierComponent:
+            QueryCosmosConnectionEndFromChainHandle,
     }
 }

@@ -291,6 +291,10 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
+    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
+        &client_state.chain_id
+    }
+
     fn client_state_latest_height(client_state: &TmClientState) -> &Self::Height {
         &client_state.latest_height
     }

@@ -7,6 +7,7 @@ use hermes_relayer_components::chain::traits::types::block::{
 };
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
+use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetter, HasHeightType, HeightIncrementer, ProvideHeightType,
@@ -19,6 +20,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, ProvideTimestampType,
 };
 use ibc_relayer::chain::endpoint::ChainStatus;
+use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
@@ -148,4 +150,11 @@ where
     fn block_hash((block_id, _): &(BlockId, Block)) -> &Hash {
         &block_id.hash
     }
+}
+
+impl<Chain, Counterparty> ProvideConnectionEndType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type ConnectionEnd = ConnectionEnd;
 }

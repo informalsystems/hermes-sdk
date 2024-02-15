@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display};
 
-#[derive(Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct RollupHeight {
     pub slot_number: u128,
     // TODO: determine if we also need to include DA height here

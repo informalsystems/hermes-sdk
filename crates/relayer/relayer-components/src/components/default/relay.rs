@@ -17,7 +17,7 @@ use crate::relay::impls::create_client::CreateClientWithChains;
 use crate::relay::impls::event_relayers::packet_event::PacketEventRelayer;
 use crate::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use crate::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
-use crate::relay::impls::packet_clearers::receive_packet::ClearReceivePackets;
+use crate::relay::impls::packet_clearers::packets::ClearAllPackets;
 use crate::relay::impls::packet_relayers::ack::base_ack_packet::BaseAckPacketRelayer;
 use crate::relay::impls::packet_relayers::general::filter_relayer::FilterRelayer;
 use crate::relay::impls::packet_relayers::general::full_relay::FullCycleRelayer;
@@ -66,7 +66,7 @@ delegate_components! {
         RunnerComponent: RelayBothTargets,
         AutoRelayerComponent: RelayEvents,
         ClientCreatorComponent: CreateClientWithChains,
-        PacketClearerComponent: ClearReceivePackets,
+        PacketClearerComponent: ClearAllPackets,
         ChannelInitializerComponent: InitializeChannel,
         ChannelOpenTryRelayerComponent: RelayChannelOpenTry,
         ChannelOpenAckRelayerComponent: RelayChannelOpenAck,

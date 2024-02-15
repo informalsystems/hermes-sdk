@@ -10,6 +10,7 @@ use ibc_relayer::supervisor::error::Error as SupervisorError;
 use ibc_relayer_types::core::ics02_client::error::Error as ClientError;
 use ibc_relayer_types::core::ics04_channel::error::Error as ChannelError;
 use ibc_relayer_types::core::ics23_commitment;
+use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
 use ibc_relayer_types::proofs::ProofError;
 use prost::EncodeError;
 use tendermint::Hash as TxHash;
@@ -108,5 +109,10 @@ define_error! {
         Ics02
             [ ClientError ]
             |e| { format!("ICS 02 error: {}", e.source) },
+
+        Ics24Validation
+            [ Ics24ValidationError ]
+            |e| { format!("ICS 24 validation error: {}", e.source) },
+
     }
 }
