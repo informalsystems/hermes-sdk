@@ -22,7 +22,7 @@ pub trait HasHeightType: Async {
        `u8` or `u128` as the `Height` type during testing, and use the
        more complex Cosmos height type during production.
     */
-    type Height: Ord + Display + Async;
+    type Height: Ord + Display + Async + Clone;
 }
 
 #[derive_component(HeightIncrementerComponent, HeightIncrementer<Chain>)]

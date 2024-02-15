@@ -1,18 +1,18 @@
-use hermes_cli_framework::output::json;
-use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::types::error::BaseError;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use ibc_relayer::chain::requests::PageRequest;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use oneline_eyre::eyre::Context;
-use tracing::info;
-use tracing::warn;
+use tracing::{info, warn};
 
 use hermes_cli_framework::command::CommandRunner;
+use hermes_cli_framework::output::json;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use ibc_relayer::chain::handle::ChainHandle;
+use ibc_relayer::chain::requests::PageRequest;
 use ibc_relayer::chain::requests::QueryConnectionsRequest;
+use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::Result;
@@ -70,7 +70,13 @@ impl CommandRunner<CosmosBuilder> for QueryConnections {
 
             for connection in all_connections {
                 let client_id = connection.end().client_id().to_owned();
-                let client_state = chain.query_client_state(&client_id).await;
+
+                let client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<
+                    CosmosChain,
+                >>::query_client_state_with_latest_height(
+                    &chain, &client_id
+                )
+                .await;
 
                 let include = match client_state {
                     Ok(client_state) => {

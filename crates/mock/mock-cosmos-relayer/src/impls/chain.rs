@@ -28,9 +28,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ProvideChainIdType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, HasClientStateType,
+    HasClientStateFields, ProvideClientStateType,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
@@ -275,8 +275,9 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasClientStateType<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideClientStateType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
@@ -290,6 +291,10 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
+    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
+        &client_state.chain_id
+    }
+
     fn client_state_latest_height(client_state: &TmClientState) -> &Self::Height {
         &client_state.latest_height
     }
@@ -314,6 +319,7 @@ where
     async fn query_client_state(
         chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
+        _height: &Height,
     ) -> Result<TmClientState, Error> {
         chain
             .ibc_context()
@@ -322,8 +328,9 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasConsensusStateType<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideConsensusStateType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
@@ -331,7 +338,6 @@ where
     type ConsensusState = TmConsensusState;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ConsensusStateHeightQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents

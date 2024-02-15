@@ -23,6 +23,7 @@ where
         height: &Chain::Height,
     ) -> Result<Vec<Chain::OutgoingPacket>, Chain::Error> {
         let send_packets = stream::iter(sequences)
+            // TODO: use `flat_map_unordered`
             .then(|sequence| {
                 chain.query_send_packet_from_sequence(
                     channel_id,

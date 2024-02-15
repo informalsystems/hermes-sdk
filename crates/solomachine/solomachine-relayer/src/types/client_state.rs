@@ -78,12 +78,3 @@ impl From<SolomachineClientState> for ProtoClientState {
         }
     }
 }
-
-pub fn decode_client_state(buf: &[u8]) -> SolomachineClientState {
-    let any_value = Any::decode(buf).unwrap();
-    let proto_state = ProtoClientState::decode(any_value.value.as_ref()).unwrap();
-
-    let client_state = proto_state.try_into().unwrap();
-
-    client_state
-}
