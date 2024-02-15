@@ -2047,6 +2047,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "clap",
+ "futures",
  "hermes-cli-framework",
  "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",

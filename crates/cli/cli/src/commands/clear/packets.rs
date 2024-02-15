@@ -1,7 +1,8 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
+
+use futures::stream::{self, StreamExt};
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -98,23 +99,24 @@ impl CommandRunner<CosmosBuilder> for PacketsClear {
             )
             .await?;
 
-        <CosmosRelay as CanClearPackets>::clear_packets(
-            &relayer.relay_a_to_b,
-            &self.channel_id,
-            &self.port_id,
-            &self.counterparty_channel_id,
-            &self.counterparty_port_id,
-        )
-        .await?;
-
-        <CosmosRelay as CanClearPackets>::clear_packets(
-            &relayer.relay_b_to_a,
-            &self.counterparty_channel_id,
-            &self.counterparty_port_id,
-            &self.channel_id,
-            &self.port_id,
-        )
-        .await?;
+        stream::iter(vec![
+            relayer.relay_a_to_b.clear_packets(
+                &self.channel_id,
+                &self.port_id,
+                &self.counterparty_channel_id,
+                &self.counterparty_port_id,
+            ),
+            relayer.relay_b_to_a.clear_packets(
+                &self.counterparty_channel_id,
+                &self.counterparty_port_id,
+                &self.channel_id,
+                &self.port_id,
+            ),
+        ])
+        .for_each_concurrent(None, |x| async {
+            let _ = x.await;
+        })
+        .await;
 
         Ok(Output::success("Packet clear"))
     }
