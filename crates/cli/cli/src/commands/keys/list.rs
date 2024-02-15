@@ -8,6 +8,7 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use ibc_relayer::config::{ChainConfig, Config};
+use ibc_relayer::keyring::list_keys;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::Result;
@@ -43,14 +44,14 @@ impl KeysListCmd {
 
 impl CommandRunner<CosmosBuilder> for KeysListCmd {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let config = builder.config;
+        let config = &builder.config;
 
-        let opts = match self.options(&config) {
+        let opts = match self.options(config) {
             Err(e) => Output::error(e).exit(),
             Ok(opts) => opts,
         };
 
-        match opts.chain_config.list_keys() {
+        match list_keys(&opts.chain_config) {
             Ok(keys) if json() => {
                 let keys = keys.into_iter().collect::<BTreeMap<_, _>>();
                 Ok(Output::success(keys))
@@ -62,7 +63,7 @@ impl CommandRunner<CosmosBuilder> for KeysListCmd {
                 }
                 Ok(Output::success_msg(msg))
             }
-            Err(e) => Err(e.wrap_err("`keys list` command failed")),
+            Err(e) => Err(e.1.wrap_err("`keys list` command failed")),
         }
     }
 }
