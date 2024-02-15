@@ -26,10 +26,11 @@ members = [
     "crates/wasm/wasm-client-components",
     "crates/test/test-components",
     "crates/test/test-suite",
+    "crates/cli/cli-components",
     "crates/cli/cli-framework",
     "crates/cli/cli",
     "tools/integration-test",
-    "tools/test-framework", "crates/cli/cli-components",
+    "tools/test-framework", 
 ]
 
 [workspace.package]
