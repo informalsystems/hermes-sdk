@@ -1,7 +1,7 @@
 use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
 use eyre::eyre;
+use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
-use hermes_cosmos_client_components::impls::types::client_state::TypeUrlMismatchError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
