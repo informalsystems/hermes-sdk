@@ -25,6 +25,7 @@ where
     ) -> Result<Vec<(Chain::OutgoingPacket, WriteAckEventOf<Chain, Counterparty>)>, Chain::Error>
     {
         let ack_packets = stream::iter(sequences)
+            // TODO: use `flat_map_unordered`
             .then(|sequence| {
                 chain.query_ack_packet_from_sequence(
                     channel_id,
