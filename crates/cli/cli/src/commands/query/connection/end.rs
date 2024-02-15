@@ -46,7 +46,10 @@ pub struct QueryConnectionEnd {
 impl CommandRunner<CosmosBuilder> for QueryConnectionEnd {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
-        let height = self.height.map(|h| Height::new(chain.chain_id().version(), h).map_err(|e| RelayerError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{h}`. Error: {e}", chain.chain_id().version()))).unwrap());
+        let height = self.height.map(|h|
+            Height::new(chain.chain_id().version(), h)
+                .map_err(|e| RelayerError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{h}`. Error: {e}", chain.chain_id().version())))
+        ).transpose()?;
 
         let connection_end =
             <CosmosChain as CanQueryConnectionEnd<CosmosChain>>::query_connection_end(
