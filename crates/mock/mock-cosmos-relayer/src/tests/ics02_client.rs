@@ -1,7 +1,7 @@
 use basecoin_store::impls::InMemoryStore;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
@@ -67,9 +67,9 @@ async fn test_update_client() -> Result<(), Error> {
     relayer.dst_chain().send_messages(msg_update_client).await?;
 
     let latest_client_state =
-        <MockCosmosContext<MockBasecoin<InMemoryStore>> as CanQueryClientState<
+        <MockCosmosContext<MockBasecoin<InMemoryStore>> as CanQueryClientStateWithLatestHeight<
             MockCosmosContext<MockBasecoin<InMemoryStore>>,
-        >>::query_client_state(relayer.dst_chain(), &ClientId::default())
+        >>::query_client_state_with_latest_height(relayer.dst_chain(), &ClientId::default())
         .await?;
 
     assert_eq!(latest_client_state.latest_height, src_current_height);

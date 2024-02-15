@@ -28,9 +28,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ProvideChainIdType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, HasClientStateType,
+    HasClientStateFields, ProvideClientStateType,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
@@ -144,6 +144,14 @@ impl<Chain: BasecoinEndpoint> ProvideTimestampType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Timestamp = Timestamp;
+
+    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
+        Timestamp::from_nanoseconds(nanos).expect("Timestamp::from_nanoseconds is infallible")
+    }
+
+    fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
+        later.duration_since(earlier)
+    }
 }
 
 impl<Chain: BasecoinEndpoint> ProvideMessageType<MockCosmosContext<Chain>>
@@ -267,8 +275,9 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasClientStateType<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideClientStateType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
@@ -285,6 +294,14 @@ where
     fn client_state_latest_height(client_state: &TmClientState) -> &Self::Height {
         &client_state.latest_height
     }
+
+    fn client_state_is_frozen(client_state: &TmClientState) -> bool {
+        client_state.is_frozen()
+    }
+
+    fn client_state_has_expired(client_state: &TmClientState, elapsed: Duration) -> bool {
+        elapsed > client_state.trusting_period
+    }
 }
 
 #[async_trait]
@@ -298,6 +315,7 @@ where
     async fn query_client_state(
         chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
+        _height: &Height,
     ) -> Result<TmClientState, Error> {
         chain
             .ibc_context()
@@ -306,8 +324,9 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasConsensusStateType<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideConsensusStateType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
@@ -315,7 +334,6 @@ where
     type ConsensusState = TmConsensusState;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ConsensusStateHeightQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents

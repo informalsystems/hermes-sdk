@@ -1,5 +1,8 @@
-use core::fmt::Debug;
 use std::error::Error as StdError;
+use std::fmt::Debug;
+
+use serde::Serialize;
+use tracing::info;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -8,14 +11,12 @@ use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 use hermes_relayer_components::build::traits::components::chain_builder::CanBuildChain;
 use hermes_relayer_components::build::traits::target::chain::ChainATarget;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    CanQueryClientState, CanQueryClientStateWithHeight,
+    CanQueryClientState, CanQueryClientStateWithLatestHeight,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
-use serde::Serialize;
-use tracing::info;
 
 use crate::Result;
 
@@ -53,11 +54,11 @@ where
     Build::BiRelay: HasTwoWayRelayTypes<ChainA = ChainA, ChainB = ChainB>,
     ChainA: HasIbcChainTypes<ChainB, ChainId = ChainId, ClientId = ClientId, Height = Height>
         + CanQueryClientState<ChainB>
-        + CanQueryClientStateWithHeight<ChainB>,
+        + CanQueryClientStateWithLatestHeight<ChainB>,
     ChainB: HasIbcChainTypes<ChainA> + HasClientStateType<ChainA>,
     ChainA::Error: From<BaseError> + StdError,
     Build::Error: From<BaseError> + StdError,
-    ChainB::ClientState: Serialize,
+    ChainB::ClientState: Debug + Serialize,
 {
     async fn run(&self, builder: &Build) -> Result<Output> {
         let chain_id = &self.chain_id;
@@ -68,11 +69,13 @@ where
         let client_state = match self.height {
             Some(height) => {
                 let height = Height::new(self.chain_id.version(), height).unwrap();
+                chain.query_client_state(&self.client_id, &height).await?
+            }
+            None => {
                 chain
-                    .query_client_state_with_height(&self.client_id, &height)
+                    .query_client_state_with_latest_height(&self.client_id)
                     .await?
             }
-            None => chain.query_client_state(&self.client_id).await?,
         };
 
         info!("Found client state for client `{client_id}` on chain `{chain_id}`!");

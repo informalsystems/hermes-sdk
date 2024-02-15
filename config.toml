@@ -26,15 +26,15 @@ host = '127.0.0.1'
 port = 3001
 
 [[chains]]
-id = 'ibc0'
+id = 'ibc-0'
 type = 'CosmosSdk'
-rpc_addr = 'http://localhost:27000'
-grpc_addr = 'http://localhost:27002'
-event_source = { mode = 'push', url = 'ws://localhost:27000/websocket', batch_delay = '200ms' }
+rpc_addr = 'http://localhost:26657'
+grpc_addr = 'http://localhost:9090'
+event_source = { mode = 'push', url = 'ws://localhost:26657/websocket', batch_delay = '200ms' }
 rpc_timeout = '15s'
 trusted_node = true
 account_prefix = 'cosmos'
-key_name = 'wallet'
+key_name = 'testkey'
 store_prefix = 'ibc'
 gas_price = { price = 0.001, denom = 'stake' }
 gas_multiplier = 1.2
@@ -55,15 +55,15 @@ trust_threshold = { numerator = '2', denominator = '3' }
 # ]
 
 [[chains]]
-id = 'ibc1'
+id = 'ibc-1'
 type = 'CosmosSdk'
-rpc_addr = 'http://localhost:28000'
-grpc_addr = 'http://localhost:28002'
-event_source = { mode = 'push', url = 'ws://localhost:28000/websocket', batch_delay = '200ms' }
+rpc_addr = 'http://localhost:26557'
+grpc_addr = 'http://localhost:9091'
+event_source = { mode = 'push', url = 'ws://localhost:26557/websocket', batch_delay = '200ms' }
 rpc_timeout = '15s'
 trusted_node = true
 account_prefix = 'cosmos'
-key_name = 'wallet'
+key_name = 'testkey'
 store_prefix = 'ibc'
 gas_price = { price = 0.001, denom = 'stake' }
 gas_multiplier = 1.2
