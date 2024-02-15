@@ -2,6 +2,7 @@ use std::error::Error as StdError;
 use std::fmt;
 
 use cgp_core::HasErrorType;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use oneline_eyre::eyre::Context;
 use tracing::info;
 
@@ -49,7 +50,7 @@ pub struct QueryClients {
 impl CommandRunner<CosmosBuilder> for QueryClients {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.host_chain_id).await?;
-        let clients = query_client_states(
+        let clients = query_client_states::<CosmosChain, CosmosChain>(
             &chain,
             &self.host_chain_id,
             self.reference_chain_id.as_ref(),

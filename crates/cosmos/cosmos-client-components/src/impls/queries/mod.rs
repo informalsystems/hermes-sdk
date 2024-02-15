@@ -1,3 +1,4 @@
+pub mod abci;
 pub mod block;
 pub mod chain_id;
 pub mod chain_status;
