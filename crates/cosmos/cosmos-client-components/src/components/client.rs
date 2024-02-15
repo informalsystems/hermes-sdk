@@ -19,6 +19,7 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
@@ -39,7 +40,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ClientStateTypeComponent,
+    ClientStateDecoderComponent, ClientStateTypeComponent, ClientStatesDecoderComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
@@ -135,6 +136,7 @@ delegate_components! {
         [
             ClientStateTypeComponent,
             ClientStateDecoderComponent,
+            ClientStatesDecoderComponent,
         ]:
             ProvideTendermintClientState,
         ConsensusStateTypeComponent:
@@ -147,7 +149,10 @@ delegate_components! {
             QueryConsensusStateHeightFromChainHandle,
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
-        ClientStateQuerierComponent:
+        [
+            ClientStateQuerierComponent,
+            ClientStatesQuerierComponent,
+        ]:
             QueryCosmosClientStateFromAbci,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,

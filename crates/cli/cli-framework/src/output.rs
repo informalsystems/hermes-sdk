@@ -220,23 +220,17 @@ impl Output {
 
     /// Convert this output value to a JSON value
     pub fn into_json(self) -> serde_json::Value {
-        let mut map = serde_json::Map::new();
-
-        map.insert(
-            "status".to_string(),
-            serde_json::to_value(self.status).unwrap(),
-        );
-
-        let value = match self.result {
+        let result = match self.result {
             Result::Json(v) => v,
             Result::Text(v) => serde_json::Value::String(v),
             Result::Value(v) => serde_json::Value::String(format!("{v:#?}")),
             Result::Nothing => serde_json::Value::String("no output".to_string()),
         };
 
-        map.insert("result".to_string(), value);
-
-        serde_json::Value::Object(map)
+        serde_json::json!({
+            "status": self.status,
+            "result": result,
+        })
     }
 }
 
