@@ -8,8 +8,9 @@ pub mod channel;
 pub mod client;
 pub mod connection;
 pub mod query;
-pub mod start;
 
+pub mod keys;
+pub mod start;
 #[derive(Debug, clap::Parser)]
 pub enum HermesCommand {
     /// Start the Hermes relayer
@@ -30,6 +31,10 @@ pub enum HermesCommand {
     /// Query information about IBC objects
     #[clap(subcommand)]
     Query(query::QueryCommands),
+
+    /// Manage keys in the relayer for each chain
+    #[clap(subcommand)]
+    Keys(keys::KeysCmd),
 }
 
 impl CommandRunner<CosmosBuilder> for HermesCommand {
@@ -40,6 +45,7 @@ impl CommandRunner<CosmosBuilder> for HermesCommand {
             Self::Connection(cmd) => cmd.run(builder).await,
             Self::Channel(cmd) => cmd.run(builder).await,
             Self::Query(cmd) => cmd.run(builder).await,
+            Self::Keys(cmd) => cmd.run(builder).await,
         }
     }
 }

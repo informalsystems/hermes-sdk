@@ -17,6 +17,7 @@ name = "hermes"
 path = "bin/hermes.rs"
 
 [dependencies]
+hdpath                          = { workspace = true }
 hermes-cli-framework            = { workspace = true }
 hermes-relayer-runtime          = { workspace = true }
 hermes-relayer-components       = { workspace = true }
