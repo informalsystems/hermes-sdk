@@ -1,15 +1,10 @@
-use oneline_eyre::eyre::Context;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
-use hermes_relayer_components::relay::traits::target::DestinationTarget;
-use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -95,8 +90,6 @@ pub struct PacketsClear {
 
 impl CommandRunner<CosmosBuilder> for PacketsClear {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
-
         let relayer = builder
             .build_relay(
                 RelayAToBTarget,
@@ -106,13 +99,6 @@ impl CommandRunner<CosmosBuilder> for PacketsClear {
                 &self.counterparty_client_id, // nothing to pass here
             )
             .await?;
-
-        let target_height = chain.query_chain_height().await?;
-
-        relayer
-            .send_update_client_messages(DestinationTarget, &target_height)
-            .await
-            .wrap_err("Failed to send update client message")?;
 
         <CosmosRelay as CanClearPackets>::clear_packets(
             &relayer,
