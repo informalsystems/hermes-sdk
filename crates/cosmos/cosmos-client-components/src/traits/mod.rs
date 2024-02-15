@@ -1,3 +1,4 @@
+pub mod abci_query;
 pub mod chain_handle;
 pub mod grpc_address;
 pub mod has_tx_context;

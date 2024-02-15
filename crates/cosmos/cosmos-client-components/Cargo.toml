@@ -21,6 +21,7 @@ hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
 tendermint                          = { workspace = true, features = ["secp256k1"] }
+tendermint-proto                    = { workspace = true }
 tendermint-rpc                      = { workspace = true, features = ["http-client", "websocket-client"] }
 
 flex-error      = { workspace = true }

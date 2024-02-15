@@ -1,9 +1,9 @@
 use alloc::borrow::Cow;
+use cgp_core::prelude::*;
 
-use cgp_core::Async;
+use crate::chain::traits::types::timestamp::HasTimestampType;
 
-use super::timestamp::HasTimestampType;
-
+#[derive_component(ConsensusStateTypeComponent, ProvideConsensusStateType<Chain>)]
 pub trait HasConsensusStateType<Counterparty>: Async {
     /**
         The consensus state of the `Self` chain's client on the `Counterparty` chain

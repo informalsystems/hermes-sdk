@@ -15,6 +15,7 @@ use hermes_relayer_components::chain::traits::payload_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
@@ -33,10 +34,14 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateDecoderComponent, ClientStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
     InitConnectionOptionsTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
@@ -70,9 +75,11 @@ use crate::impls::packet::receive_packet_message::BuildCosmosReceivePacketMessag
 use crate::impls::packet::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::packet::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::impls::packet::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
+use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
@@ -83,8 +90,11 @@ use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequenc
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
+use crate::impls::types::client_state::ProvideTendermintClientState;
+use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
+use crate::traits::abci_query::AbciQuerierComponent;
 
 pub struct CosmosClientComponents;
 
@@ -117,6 +127,13 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
+        [
+            ClientStateTypeComponent,
+            ClientStateDecoderComponent,
+        ]:
+            ProvideTendermintClientState,
+        ConsensusStateTypeComponent:
+            ProvideTendermintConsensusState,
         MessageSenderComponent:
             SendMessagesToTxContext,
         PacketFieldsReaderComponent:
@@ -125,6 +142,8 @@ delegate_components! {
             QueryConsensusStateHeightFromChainHandle,
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
+        ClientStateQuerierComponent:
+            QueryCosmosClientStateFromAbci,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:
@@ -173,6 +192,8 @@ delegate_components! {
             ProvideCosmosInitChannelOptionsType,
         BlockQuerierComponent:
             QueryCometBlock,
+        AbciQuerierComponent:
+            QueryAbci,
         ConnectionEndQuerierComponent:
             QueryCosmosConnectionEndFromChainHandle,
     }

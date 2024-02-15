@@ -1,9 +1,9 @@
+use cgp_core::prelude::*;
 use core::time::Duration;
-
-use cgp_core::Async;
 
 use crate::chain::traits::types::height::HasHeightType;
 
+#[derive_component(ClientStateTypeComponent, ProvideClientStateType<Chain>)]
 pub trait HasClientStateType<Counterparty>: Async {
     /**
         The client state of the `Self` chain's client on the `Counterparty` chain
@@ -23,4 +23,14 @@ pub trait HasClientStateFields<Counterparty>:
     /// Check if the client state will expired when `elapsed` time has passed
     /// since the latest consensus state
     fn client_state_has_expired(client_state: &Self::ClientState, elapsed: Duration) -> bool;
+}
+
+#[derive_component(ClientStateDecoderComponent, ClientStateDecoder<Chain>)]
+pub trait CanDecodeClientState<Counterparty>: HasClientStateType<Counterparty>
+where
+    Counterparty: HasErrorType,
+{
+    fn decode_client_state_bytes(
+        client_state_bytes: &[u8],
+    ) -> Result<Self::ClientState, Counterparty::Error>;
 }
