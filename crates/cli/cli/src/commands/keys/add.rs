@@ -11,6 +11,7 @@ use oneline_eyre::eyre;
 use oneline_eyre::eyre::eyre;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use tracing::warn;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
