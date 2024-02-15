@@ -2356,7 +2356,7 @@ dependencies = [
  "serde_json",
  "stable-eyre",
  "tokio",
- "toml 0.8.8",
+ "toml 0.8.10",
 ]
 
 [[package]]
