@@ -2,7 +2,6 @@ use core::time::Duration;
 
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::client_state::{
@@ -49,33 +48,7 @@ where
     type ClientState = AnyClientState;
 }
 
-impl HasClientStateFields<CosmosChain> for AnyCounterparty {
-    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
-        match client_state {
-            AnyClientState::Tendermint(cs) => &cs.chain_id,
-        }
-    }
-
-    fn client_state_latest_height(client_state: &Self::ClientState) -> &Self::Height {
-        match client_state {
-            AnyClientState::Tendermint(cs) => &cs.latest_height,
-        }
-    }
-
-    fn client_state_is_frozen(client_state: &Self::ClientState) -> bool {
-        match client_state {
-            AnyClientState::Tendermint(cs) => cs.frozen_height.is_some(),
-        }
-    }
-
-    fn client_state_has_expired(client_state: &Self::ClientState, elapsed: Duration) -> bool {
-        match client_state {
-            AnyClientState::Tendermint(cs) => cs.expired(elapsed),
-        }
-    }
-}
-
-impl HasClientStateFields<AnyCounterparty> for AnyCounterparty {
+impl<Chain> HasClientStateFields<Chain> for AnyCounterparty {
     fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
         match client_state {
             AnyClientState::Tendermint(cs) => &cs.chain_id,
