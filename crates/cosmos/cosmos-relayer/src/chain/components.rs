@@ -25,6 +25,7 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
@@ -46,6 +47,7 @@ use hermes_relayer_components::chain::traits::types::channel::InitChannelOptions
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateDecoderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStatesDecoderComponent;
+use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
@@ -118,6 +120,8 @@ delegate_components! {
             ClientStatesDecoderComponent,
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
+            ConnectionEndQuerierComponent,
+            ConnectionEndTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
