@@ -20,6 +20,7 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
@@ -43,7 +44,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateDecoderComponent, ClientStateTypeComponent, ClientStatesDecoderComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
+    ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
+    InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -86,6 +88,7 @@ use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
+use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
@@ -117,6 +120,7 @@ delegate_components! {
             MessageTypeComponent,
             EventTypeComponent,
             IbcChainTypesComponent,
+            ConnectionEndTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
@@ -212,5 +216,7 @@ delegate_components! {
             QueryCometBlock,
         AbciQuerierComponent:
             QueryAbci,
+        ConnectionEndQuerierComponent:
+            QueryCosmosConnectionEndFromChainHandle,
     }
 }

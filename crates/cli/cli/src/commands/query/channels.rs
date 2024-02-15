@@ -7,7 +7,6 @@ use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandl
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{
     IncludeProof, PageRequest, QueryChannelsRequest, QueryClientStateRequest,
