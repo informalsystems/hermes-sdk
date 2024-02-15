@@ -19,6 +19,8 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
@@ -26,11 +28,13 @@ use hermes_relayer_components::chain::traits::queries::connection_end::Connectio
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::send_packets::{
     SendPacketQuerierComponent, SendPacketsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
@@ -142,6 +146,7 @@ delegate_components! {
             ChannelHandshakePayloadBuilderComponent,
             ChannelHandshakeMessageBuilderComponent,
             PacketCommitmentsQuerierComponent,
+            PacketAcknowledgementsQuerierComponent,
             ReceivedPacketQuerierComponent,
             ReceivePacketPayloadBuilderComponent,
             ReceivePacketMessageBuilderComponent,
@@ -150,6 +155,9 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadBuilderComponent,
             TimeoutUnorderedPacketMessageBuilderComponent,
             UnreceivedPacketSequencesQuerierComponent,
+            UnreceivedAcksSequencesQuerierComponent,
+            AckPacketQuerierComponent,
+            AckPacketsQuerierComponent,
             SendPacketQuerierComponent,
             SendPacketsQuerierComponent,
             PacketFromWriteAckBuilderComponent,

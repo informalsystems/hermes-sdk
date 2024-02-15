@@ -7,6 +7,9 @@ pub use connection::QueryConnection;
 mod connections;
 pub use connections::QueryConnections;
 
+mod channel;
+pub use channel::QueryChannel;
+
 mod channels;
 pub use channels::QueryChannels;
 
@@ -36,6 +39,10 @@ pub enum QueryCommands {
     #[clap(subcommand)]
     Connection(QueryConnection),
 
+    /// Query channel information
+    #[clap(subcommand)]
+    Channel(QueryChannel),
+
     /// Query information about IBC packets
     #[clap(subcommand)]
     Packet(PacketCommands),
@@ -48,6 +55,7 @@ impl CommandRunner<CosmosBuilder> for QueryCommands {
             Self::Connections(cmd) => cmd.run(builder).await,
             Self::Channels(cmd) => cmd.run(builder).await,
             Self::Connection(cmd) => cmd.run(builder).await,
+            Self::Channel(cmd) => cmd.run(builder).await,
             Self::Packet(cmd) => cmd.run(builder).await,
         }
     }
