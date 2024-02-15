@@ -1,4 +1,5 @@
 use core::iter::Iterator;
+use core::str::FromStr;
 
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::client_state::{
@@ -17,7 +18,6 @@ use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 use prost::{DecodeError, Message};
-use tendermint_proto::Error as ProtoError;
 
 use crate::traits::abci_query::CanQueryAbci;
 
@@ -95,12 +95,26 @@ where
 
 impl<Chain, Counterparty> CanParseClientStateEntry<Counterparty> for Chain
 where
-    Chain: HasIbcChainTypes<Counterparty> + CanRaiseError<&'static str>,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + CanRaiseError<&'static str>,
     Counterparty: CanDecodeClientState<Chain>,
 {
     fn parse_client_state_entry(
         entry: IdentifiedClientState,
-    ) -> Result<(Chain::ClientId, Counterparty::ClientState), Chain::Error> {
-        todo!()
+    ) -> Result<(ClientId, Counterparty::ClientState), Chain::Error> {
+        // TODO: handle errors
+
+        let client_id = ClientId::from_str(&entry.client_id).unwrap();
+
+        let client_state_any = entry.client_state.unwrap();
+
+        let client_state_bytes = {
+            let mut buf = Vec::new();
+            Message::encode(&client_state_any, &mut buf).unwrap();
+            buf
+        };
+
+        let client_state = Counterparty::decode_client_state_bytes(&client_state_bytes)?;
+
+        Ok((client_id, client_state))
     }
 }
