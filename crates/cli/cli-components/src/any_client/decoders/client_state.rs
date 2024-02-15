@@ -19,7 +19,7 @@ pub struct DecodeAnyClientState;
 impl<Chain, Counterparty> ClientStateDecoder<Chain, Counterparty> for DecodeAnyClientState
 where
     Chain: HasClientStateType<Counterparty, ClientState = AnyClientState>,
-    Counterparty: CanRaiseError<DecodeError> + CanRaiseError<UnknownClientStateType>,
+    Counterparty: CanRaiseError<DecodeError> + for<'a> CanRaiseError<&'a str>, // + CanRaiseError<UnknownClientStateType>
     DecodeTendermintClientStateProto: ClientStateDecoder<TendermintChain, Counterparty>,
 {
     fn decode_client_state_bytes(
@@ -33,9 +33,12 @@ where
                     DecodeTendermintClientStateProto::decode_client_state_bytes(&any.value)?;
                 Ok(AnyClientState::Tendermint(client_state))
             }
-            type_url => Err(Counterparty::raise_error(UnknownClientStateType {
-                type_url: type_url.to_string(),
-            })),
+            type_url => Err(Counterparty::raise_error(
+                format!("unknown client state type: {type_url}").as_ref(),
+            )),
+            // type_url => Err(Counterparty::raise_error(UnknownClientStateType {
+            //     type_url: type_url.to_string(),
+            // })),
         }
     }
 }

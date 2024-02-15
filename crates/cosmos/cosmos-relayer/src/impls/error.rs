@@ -117,12 +117,34 @@ where
     }
 }
 
+// impl<Context> ErrorRaiser<Context, UnknownClientStateType> for HandleCosmosError
+// where
+//     Context: HasErrorType<Error = Error>,
+// {
+//     fn raise_error(e: UnknownClientStateType) -> Error {
+//         BaseError::generic(eyre!(
+//             "unknown client state type: {}",
+//             e.type_url,
+//         ))
+//         .into()
+//     }
+// }
+
 impl<Context> ErrorRaiser<Context, DecodeError> for HandleCosmosError
 where
     Context: HasErrorType<Error = Error>,
 {
     fn raise_error(e: DecodeError) -> Error {
         BaseError::generic(e.into()).into()
+    }
+}
+
+impl<'a, Context> ErrorRaiser<Context, &'a str> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: &'a str) -> Error {
+        BaseError::generic(eyre!("{e}")).into()
     }
 }
 
