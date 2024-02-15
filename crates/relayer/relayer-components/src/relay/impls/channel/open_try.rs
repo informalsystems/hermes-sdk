@@ -3,7 +3,7 @@ use cgp_core::async_trait;
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
-use crate::chain::traits::queries::client_state::CanQueryClientState;
+use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenTryEvent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -42,7 +42,7 @@ where
         + CanRaiseMissingChannelTryEventError
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildChannelHandshakePayloads<DstChain>,
-    DstChain: CanQueryClientState<SrcChain>
+    DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
         + CanBuildChannelHandshakeMessages<SrcChain>
         + HasChannelOpenTryEvent<SrcChain>,
     DstChain::ChannelId: Clone,
@@ -62,7 +62,7 @@ where
             .map_err(Relay::raise_error)?;
 
         let src_client_state = dst_chain
-            .query_client_state(relay.dst_client_id())
+            .query_client_state_with_latest_height(relay.dst_client_id())
             .await
             .map_err(Relay::raise_error)?;
 

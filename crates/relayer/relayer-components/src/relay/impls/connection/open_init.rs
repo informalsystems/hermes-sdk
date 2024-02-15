@@ -4,7 +4,7 @@ use cgp_core::async_trait;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
-use crate::chain::traits::queries::client_state::CanQueryClientState;
+use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
@@ -32,7 +32,7 @@ where
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>
         + CanBuildConnectionHandshakeMessages<DstChain>
-        + CanQueryClientState<DstChain>
+        + CanQueryClientStateWithLatestHeight<DstChain>
         + HasConnectionOpenInitEvent<DstChain>,
     DstChain: CanBuildConnectionHandshakePayloads<SrcChain>,
     SrcChain::ConnectionId: Clone,
@@ -48,7 +48,7 @@ where
         let dst_client_id = relay.dst_client_id();
 
         let dst_client_state = src_chain
-            .query_client_state(src_client_id)
+            .query_client_state_with_latest_height(src_client_id)
             .await
             .map_err(Relay::raise_error)?;
 

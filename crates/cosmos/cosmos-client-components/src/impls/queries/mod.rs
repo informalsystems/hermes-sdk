@@ -1,3 +1,4 @@
+pub mod abci;
 pub mod ack_packet;
 pub mod ack_packets;
 pub mod block;

@@ -4,7 +4,7 @@ use cgp_core::async_trait;
 
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use crate::chain::traits::queries::client_state::CanQueryClientState;
+use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::relay::traits::chains::HasRelayChains;
@@ -19,7 +19,7 @@ impl<Relay, Target, TargetChain, CounterpartyChain> UpdateClientMessageBuilder<R
 where
     Relay: HasRelayChains,
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
-    TargetChain: CanQueryClientState<CounterpartyChain>
+    TargetChain: CanQueryClientStateWithLatestHeight<CounterpartyChain>
         + CanBuildUpdateClientMessage<CounterpartyChain>
         + CanQueryConsensusStateHeight<CounterpartyChain>,
     CounterpartyChain: CanBuildUpdateClientPayload<TargetChain> + HasClientStateFields<TargetChain>,
@@ -36,7 +36,7 @@ where
         let counterparty_chain = Target::counterparty_chain(relay);
 
         let client_state = target_chain
-            .query_client_state(target_client_id)
+            .query_client_state_with_latest_height(target_client_id)
             .await
             .map_err(Target::target_chain_error)?;
 

@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 
+use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::client_state::{HasClientStateFields, HasClientStateType};
 use crate::chain::traits::types::consensus_state::{
     HasConsensusStateFields, HasConsensusStateType,
@@ -7,7 +8,7 @@ use crate::chain::traits::types::consensus_state::{
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 use super::chain_status::CanQueryChainStatus;
-use super::client_state::{CanQueryClientState, CanQueryClientStateWithHeight};
+use super::client_state::CanQueryClientState;
 use super::consensus_state::CanQueryConsensusState;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -22,7 +23,7 @@ pub trait CanQueryClientStatus<Counterparty>:
     HasIbcChainTypes<Counterparty>
     + HasErrorType
     + CanQueryClientState<Counterparty>
-    + CanQueryClientStateWithHeight<Counterparty>
+    + CanQueryClientStateWithLatestHeight<Counterparty>
     + CanQueryChainStatus
     + CanQueryConsensusState<Counterparty>
 where
@@ -44,7 +45,7 @@ where
     Chain: HasIbcChainTypes<Counterparty>
         + HasErrorType
         + CanQueryClientState<Counterparty>
-        + CanQueryClientStateWithHeight<Counterparty>
+        + CanQueryClientStateWithLatestHeight<Counterparty>
         + CanQueryChainStatus
         + CanQueryConsensusState<Counterparty>,
     Counterparty: HasIbcChainTypes<Chain>
@@ -57,7 +58,9 @@ where
         &self,
         client_id: &Self::ClientId,
     ) -> Result<ClientStatus, Self::Error> {
-        let client_state = self.query_client_state(client_id).await?;
+        let client_state = self
+            .query_client_state_with_latest_height(client_id)
+            .await?;
         // .wrap_err_with(|e| "Failed to query client state for client `{client_id}`")?;
 
         if Counterparty::client_state_is_frozen(&client_state) {
