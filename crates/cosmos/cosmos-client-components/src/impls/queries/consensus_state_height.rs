@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -56,6 +57,37 @@ where
                     })?;
 
                 Ok(height)
+            })
+            .await
+    }
+}
+
+pub struct QueryConsensusStateHeightsFromChainHandle;
+
+#[async_trait]
+impl<Chain, Counterparty> ConsensusStateHeightsQuerier<Chain, Counterparty>
+    for QueryConsensusStateHeightsFromChainHandle
+where
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
+        + HasHeightType<Height = Height>
+        + HasBlockingChainHandle
+        + CanRaiseError<eyre::Report>,
+    Counterparty: HasHeightType<Height = Height>,
+{
+    async fn query_consensus_state_heights(
+        chain: &Chain,
+        client_id: &ClientId,
+    ) -> Result<Vec<Height>, Chain::Error> {
+        let client_id = client_id.clone();
+
+        chain
+            .with_blocking_chain_handle(move |chain_handle| {
+                chain_handle
+                    .query_consensus_state_heights(QueryConsensusStateHeightsRequest {
+                        client_id: client_id.clone(),
+                        pagination: Some(PageRequest::all()),
+                    })
+                    .map_err(Chain::raise_error)
             })
             .await
     }

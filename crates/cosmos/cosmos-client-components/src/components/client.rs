@@ -21,7 +21,9 @@ use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatus
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
+    ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
@@ -90,6 +92,7 @@ use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
+use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromChainHandle;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
@@ -151,6 +154,8 @@ delegate_components! {
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightFromChainHandle,
+        ConsensusStateHeightsQuerierComponent:
+            QueryConsensusStateHeightsFromChainHandle,
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
         [
