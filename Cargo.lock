@@ -2049,6 +2049,7 @@ dependencies = [
  "clap",
  "futures",
  "hdpath",
+ "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
@@ -2060,6 +2061,22 @@ dependencies = [
  "oneline-eyre",
  "serde",
  "serde_json",
+ "tracing",
+]
+
+[[package]]
+name = "hermes-cli-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-cosmos-client-components",
+ "hermes-relayer-components",
+ "ibc-proto 0.38.0",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "prost",
+ "serde",
+ "tendermint-proto 0.34.0",
  "tracing",
 ]
 
@@ -2140,6 +2157,7 @@ dependencies = [
  "flex-error",
  "futures",
  "hermes-async-runtime-components",
+ "hermes-cli-components",
  "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",

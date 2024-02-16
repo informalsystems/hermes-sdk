@@ -24,12 +24,15 @@ where
     async fn query_consensus_state(
         chain: &Chain,
         client_id: &Chain::ClientId,
-        height: &Counterparty::Height,
+        consensus_height: &Counterparty::Height,
+        query_height: &Chain::Height,
     ) -> Result<Counterparty::ConsensusState, Chain::Error> {
         let telemetry = chain.telemetry();
         let label = Telemetry::new_label("query_type", "consensus_state");
         telemetry.update_metric("query", &[label], 1u64.into(), None, None);
-        let status = InQuerier::query_consensus_state(chain, client_id, height).await?;
+        let status =
+            InQuerier::query_consensus_state(chain, client_id, consensus_height, query_height)
+                .await?;
         Ok(status)
     }
 }
