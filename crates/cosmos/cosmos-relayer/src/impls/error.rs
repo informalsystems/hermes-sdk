@@ -1,5 +1,6 @@
 use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
 use eyre::eyre;
+use hermes_cli_components::any_client::decoders::client_state::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
@@ -117,18 +118,14 @@ where
     }
 }
 
-// impl<Context> ErrorRaiser<Context, UnknownClientStateType> for HandleCosmosError
-// where
-//     Context: HasErrorType<Error = Error>,
-// {
-//     fn raise_error(e: UnknownClientStateType) -> Error {
-//         BaseError::generic(eyre!(
-//             "unknown client state type: {}",
-//             e.type_url,
-//         ))
-//         .into()
-//     }
-// }
+impl<Context> ErrorRaiser<Context, UnknownClientStateType> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: UnknownClientStateType) -> Error {
+        BaseError::generic(eyre!("unknown client state type: {}", e.type_url,)).into()
+    }
+}
 
 impl<Context> ErrorRaiser<Context, DecodeError> for HandleCosmosError
 where

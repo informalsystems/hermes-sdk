@@ -46,7 +46,7 @@ where
     fn decode_client_state_bytes(
         client_state_bytes: &[u8],
     ) -> Result<TendermintClientState, Counterparty::Error> {
-        let client_state = Protobuf::<ProtoClientState>::decode_vec(&client_state_bytes)
+        let client_state = Protobuf::<ProtoClientState>::decode_vec(client_state_bytes)
             .map_err(Counterparty::raise_error)?;
 
         Ok(client_state)
