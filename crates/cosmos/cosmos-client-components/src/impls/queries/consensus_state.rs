@@ -21,6 +21,7 @@ impl<Chain, Counterparty> ConsensusStateQuerier<Chain, Counterparty>
     for QueryCosmosConsensusStateFromChainHandle
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
+        + HasHeightType<Height = Height>
         + HasBlockingChainHandle
         + CanRaiseError<eyre::Report>,
     Counterparty: HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
@@ -29,10 +30,12 @@ where
     async fn query_consensus_state(
         chain: &Chain,
         client_id: &ClientId,
-        height: &Height,
+        consensus_height: &Height,
+        query_height: &Height,
     ) -> Result<TendermintConsensusState, Chain::Error> {
         let client_id = client_id.clone();
-        let height = *height;
+        let consensus_height = *consensus_height;
+        let query_height = QueryHeight::Specific(*query_height);
 
         chain
             .with_blocking_chain_handle(move |chain_handle| {
@@ -40,8 +43,8 @@ where
                     .query_consensus_state(
                         QueryConsensusStateRequest {
                             client_id: client_id.clone(),
-                            consensus_height: height,
-                            query_height: QueryHeight::Latest,
+                            consensus_height,
+                            query_height,
                         },
                         IncludeProof::No,
                     )

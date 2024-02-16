@@ -9,7 +9,7 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 use super::chain_status::CanQueryChainStatus;
 use super::client_state::CanQueryClientState;
-use super::consensus_state::CanQueryConsensusState;
+use super::consensus_state::{CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum ClientStatus {
@@ -70,7 +70,7 @@ where
         let client_latest_height = Counterparty::client_state_latest_height(&client_state);
 
         let latest_consensus_state = self
-            .query_consensus_state(client_id, client_latest_height)
+            .query_consensus_state_with_latest_height(client_id, client_latest_height)
             .await?;
         // .wrap_err_with(|| {
         //     format!("Failed to query consensus state at height {client_latest_height}")
