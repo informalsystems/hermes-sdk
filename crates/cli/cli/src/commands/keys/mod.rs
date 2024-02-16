@@ -7,6 +7,9 @@ pub use list::KeysListCmd;
 mod delete;
 pub use delete::KeysDeleteCmd;
 
+mod balance;
+pub use balance::KeysBalanceCmd;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -24,6 +27,9 @@ pub enum KeysCmd {
 
     /// Delete key(s) from a configured chain
     Delete(KeysDeleteCmd),
+
+    /// Retrieve the balance for a key from a configured chain
+    Balance(KeysBalanceCmd),
 }
 
 impl CommandRunner<CosmosBuilder> for KeysCmd {
@@ -32,6 +38,7 @@ impl CommandRunner<CosmosBuilder> for KeysCmd {
             Self::Add(cmd) => cmd.run(builder).await,
             Self::List(cmd) => cmd.run(builder).await,
             Self::Delete(cmd) => cmd.run(builder).await,
+            Self::Balance(cmd) => cmd.run(builder).await,
         }
     }
 }
