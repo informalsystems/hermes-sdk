@@ -323,10 +323,11 @@ impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComp
     async fn query_consensus_state(
         chain: &MockChainContext,
         client_id: &ClientId,
-        height: &MockHeight,
+        consensus_height: &MockHeight,
+        _query_height: &MockHeight,
     ) -> Result<ConsensusState, Error> {
         let client_consensus =
-            chain.query_consensus_state_at_height(client_id.to_string(), *height)?;
+            chain.query_consensus_state_at_height(client_id.to_string(), *consensus_height)?;
         Ok(client_consensus)
     }
 }

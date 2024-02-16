@@ -620,9 +620,10 @@ where
     async fn query_consensus_state(
         chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
-        height: &Height,
+        consensus_height: &Height,
+        _query_height: &Height,
     ) -> Result<TmConsensusState, Error> {
-        let path = ClientConsensusStatePath::new(client_id, height);
+        let path = ClientConsensusStatePath::new(client_id, consensus_height);
 
         let any_cons_state: AnyConsensusState = chain.ibc_context().consensus_state(&path)?;
 

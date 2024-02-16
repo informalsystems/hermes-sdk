@@ -22,8 +22,12 @@ where
     async fn query_consensus_state(
         chain: &SolomachineChain<Chain>,
         client_id: &ClientId,
-        height: &Height,
+        consensus_height: &Height,
+        _query_height: &Height,
     ) -> Result<TendermintConsensusState, Chain::Error> {
-        chain.chain.query_consensus_state(client_id, *height).await
+        chain
+            .chain
+            .query_consensus_state(client_id, *consensus_height)
+            .await
     }
 }

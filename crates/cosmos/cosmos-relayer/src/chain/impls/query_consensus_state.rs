@@ -3,6 +3,7 @@ use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComp
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::chain::CosmosChain;
@@ -21,9 +22,10 @@ where
     async fn query_consensus_state(
         chain: &CosmosChain,
         client_id: &ClientId,
-        height: &Counterparty::Height,
+        consensus_height: &Counterparty::Height,
+        query_height: &Height,
     ) -> Result<Counterparty::ConsensusState, Error> {
-        Delegate::query_consensus_state(chain, client_id, height).await
+        Delegate::query_consensus_state(chain, client_id, consensus_height, query_height).await
     }
 }
 
