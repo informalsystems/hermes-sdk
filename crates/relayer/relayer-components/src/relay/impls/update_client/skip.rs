@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 
 use cgp_core::async_trait;
 
-use crate::chain::traits::queries::consensus_state::CanQueryConsensusState;
+use crate::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::types::aliases::HeightOf;
@@ -23,7 +23,7 @@ where
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
     InUpdateClient: UpdateClientMessageBuilder<Relay, Target>,
     CounterpartyChain: HasConsensusStateType<TargetChain> + HasHeightType,
-    TargetChain: CanQueryConsensusState<CounterpartyChain>,
+    TargetChain: CanQueryConsensusStateWithLatestHeight<CounterpartyChain>,
 {
     async fn build_update_client_messages(
         relay: &Relay,
@@ -34,7 +34,7 @@ where
         let target_client_id = Target::target_client_id(relay);
 
         let consensus_state = target_chain
-            .query_consensus_state(target_client_id, height)
+            .query_consensus_state_with_latest_height(target_client_id, height)
             .await;
 
         match consensus_state {

@@ -7,11 +7,12 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::BaseError;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight,
+};
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::PageRequest;
-use ibc_relayer::chain::requests::{
-    IncludeProof, QueryConsensusStateHeightsRequest, QueryConsensusStateRequest, QueryHeight,
-};
+use ibc_relayer::chain::requests::QueryConsensusStateHeightsRequest;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use ibc_relayer_types::Height;
 
@@ -66,42 +67,29 @@ impl CommandRunner<CosmosBuilder> for QueryClientConsensus {
         .wrap_err("failed to query counterparty chain from client state")?;
 
         if let Some(consensus_height) = self.consensus_height {
-            let client_id = self.client_id.clone();
-            let height = self.height;
-
             let consensus_height = Height::new(counterparty_chain_id.version(), consensus_height)
                 .wrap_err_with(|| format!(
                     "failed to create Height with revision number `{}` and revision height `{consensus_height}`",
                     counterparty_chain_id.version()
                 ))?;
 
-            let query_height = if let Some(height) = height {
-                let specified_height = Height::new(self.chain_id.version(), height)
+            let query_height = self.height.map(|height| {
+                Height::new(self.chain_id.version(), height)
                     .wrap_err_with(|| format!(
                         "Failed to create Height with revision number `{}` and revision height `{height}`", 
                         self.chain_id.version()
-                    ))?;
+                    ))
+            }).transpose()?;
 
-                QueryHeight::Specific(specified_height)
+            let consensus_state = if let Some(query_height) = query_height {
+                chain
+                    .query_consensus_state(&self.client_id, &consensus_height, &query_height)
+                    .await?
             } else {
-                QueryHeight::Latest
+                chain
+                    .query_consensus_state_with_latest_height(&self.client_id, &consensus_height)
+                    .await?
             };
-
-            let consensus_state = chain
-                .with_blocking_chain_handle(move |chain_handle| {
-                    chain_handle
-                        .query_consensus_state(
-                            QueryConsensusStateRequest {
-                                client_id,
-                                consensus_height,
-                                query_height,
-                            },
-                            IncludeProof::No,
-                        )
-                        .map(|(cs, _)| cs)
-                        .map_err(|e| BaseError::relayer(e).into())
-                })
-                .await?;
 
             Ok(Output::success(consensus_state))
         } else {
