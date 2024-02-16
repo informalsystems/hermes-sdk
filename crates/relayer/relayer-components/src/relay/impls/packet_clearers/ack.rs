@@ -35,6 +35,7 @@ impl<Relay> Task for RelayPacketTask<Relay>
 where
     Relay: CanRelayAckPacket + CanLog,
     Relay::Packet: Display,
+    Relay::Error: Display,
     Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
 {
     async fn run(self) {
@@ -44,7 +45,7 @@ where
             .await
         {
             self.relay.log_error(&format!(
-                "failed to relay packet the packet {} during ack packet clearing: {e:#?}",
+                "failed to relay packet the packet {} during ack packet clearing: {e}",
                 self.packet
             ));
         }
@@ -62,6 +63,7 @@ where
         + CanQueryUnreceivedAcksSequences<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
     Relay::Packet: Display,
+    Relay::Error: Display,
 {
     async fn clear_packets(
         relay: &Relay,

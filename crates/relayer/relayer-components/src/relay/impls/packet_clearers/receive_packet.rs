@@ -28,11 +28,12 @@ impl<Relay> Task for RelayPacketTask<Relay>
 where
     Relay: CanRelayPacket + CanLog,
     Relay::Packet: Display,
+    Relay::Error: Display,
 {
     async fn run(self) {
         if let Err(e) = self.relay.relay_packet(&self.packet).await {
             self.relay.log_error(&format!(
-                "failed to relay packet the packet {} during recv packet clearing: {e:#?}",
+                "failed to relay packet the packet {} during recv packet clearing: {e}",
                 self.packet
             ));
         }
@@ -48,6 +49,7 @@ where
         CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
     Relay::Packet: Display,
+    Relay::Error: Display,
 {
     async fn clear_packets(
         relay: &Relay,
