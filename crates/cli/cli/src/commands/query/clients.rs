@@ -2,7 +2,8 @@ use std::error::Error as StdError;
 use std::fmt;
 
 use cgp_core::HasErrorType;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
+use hermes_cli_components::any_client::types::client_state::AnyClientState;
 use oneline_eyre::eyre::Context;
 use tracing::info;
 
@@ -50,7 +51,7 @@ pub struct QueryClients {
 impl CommandRunner<CosmosBuilder> for QueryClients {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.host_chain_id).await?;
-        let clients = query_client_states::<CosmosChain, CosmosChain>(
+        let clients = query_client_states::<_, AnyCounterparty>(
             &chain,
             &self.host_chain_id,
             self.reference_chain_id.as_ref(),
@@ -142,7 +143,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
         + CanQueryClientStatesWithLatestHeight<Counterparty>
         + HasErrorType,
-    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
+    Counterparty: HasClientStateType<Chain, ClientState = AnyClientState>,
     Chain::Error: From<BaseError> + StdError,
 {
     let mut clients = chain
@@ -159,7 +160,7 @@ where
     info!("Found {} clients on chain `{host_chain_id}`", clients.len());
 
     if let Some(reference_chain_id) = reference_chain_id {
-        clients.retain(|client| &client.client_state.chain_id() == reference_chain_id);
+        clients.retain(|client| client.client_state.chain_id() == reference_chain_id);
 
         info!(
             "Found {} clients that reference `{reference_chain_id}`",
@@ -186,5 +187,14 @@ impl<'a> fmt::Debug for Pretty<'a, TendermintClientState> {
             .field("max_clock_drift", &client_state.max_clock_drift)
             .field("frozen_height", &client_state.frozen_height)
             .finish()
+    }
+}
+
+impl<'a> fmt::Debug for Pretty<'a, AnyClientState> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self.0 {
+            AnyClientState::Tendermint(ref client_state) => Pretty(client_state).fmt(f),
+            // AnyClientState::Sovereign(ref client_state) => Pretty(client_state).fmt(f),
+        }
     }
 }
