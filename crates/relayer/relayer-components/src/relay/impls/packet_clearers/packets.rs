@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 use alloc::format;
 use alloc::vec;
 
@@ -34,6 +36,7 @@ where
 impl<Relay> Task for RunPacketClearer<Relay>
 where
     Relay: HasRelayChains + CanLog,
+    Relay::Error: Display,
     ClearReceivePackets: PacketClearer<Relay>,
     ClearAckPackets: PacketClearer<Relay>,
 {
@@ -62,7 +65,7 @@ where
         };
         if let Err(e) = result {
             self.relay
-                .log_error(&format!("failed during packet clearing: {e:#?}"));
+                .log_error(&format!("failed during packet clearing: {e}"));
         }
     }
 }
@@ -70,6 +73,7 @@ where
 impl<Relay, SrcChain, DstChain> PacketClearer<Relay> for ClearAllPackets
 where
     Relay: Clone + HasRuntime + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanLog,
+    Relay::Error: Display,
     SrcChain: HasIbcChainTypes<DstChain>,
     DstChain: HasIbcChainTypes<SrcChain>,
     Relay::Runtime: CanRunConcurrentTasks,

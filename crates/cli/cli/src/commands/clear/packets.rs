@@ -2,13 +2,13 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
-use futures::stream::{self, StreamExt};
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use tracing::error;
 
 use crate::Result;
 
@@ -99,25 +99,40 @@ impl CommandRunner<CosmosBuilder> for PacketsClear {
             )
             .await?;
 
-        stream::iter(vec![
-            relayer.relay_a_to_b.clear_packets(
-                &self.channel_id,
-                &self.port_id,
-                &self.counterparty_channel_id,
-                &self.counterparty_port_id,
-            ),
-            relayer.relay_b_to_a.clear_packets(
-                &self.counterparty_channel_id,
-                &self.counterparty_port_id,
-                &self.channel_id,
-                &self.port_id,
-            ),
-        ])
-        .for_each_concurrent(None, |x| async {
-            let _ = x.await;
-        })
-        .await;
+        let task_a_to_b = relayer.relay_a_to_b.clear_packets(
+            &self.channel_id,
+            &self.port_id,
+            &self.counterparty_channel_id,
+            &self.counterparty_port_id,
+        );
 
-        Ok(Output::success("Packet clear"))
+        let task_b_to_a = relayer.relay_b_to_a.clear_packets(
+            &self.counterparty_channel_id,
+            &self.counterparty_port_id,
+            &self.channel_id,
+            &self.port_id,
+        );
+
+        let (result_a_to_b, result_b_to_a) = futures::join!(task_a_to_b, task_b_to_a);
+
+        if let Err(e) = &result_a_to_b {
+            error!(
+                "failed to clear packets from `{}` to `{}`: {e}",
+                self.chain_id, self.counterparty_port_id
+            );
+        }
+
+        if let Err(e) = &result_b_to_a {
+            error!(
+                "failed to clear packets from `{}` to `{}`: {e}",
+                self.counterparty_port_id, self.chain_id
+            );
+        }
+
+        if result_a_to_b.is_err() || result_b_to_a.is_err() {
+            Ok(Output::error("failed to clear packets"))
+        } else {
+            Ok(Output::success_msg("successfully cleared packets"))
+        }
     }
 }
