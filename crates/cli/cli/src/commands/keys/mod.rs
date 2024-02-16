@@ -4,6 +4,9 @@ pub use add::KeysAddCmd;
 mod list;
 pub use list::KeysListCmd;
 
+mod delete;
+pub use delete::KeysDeleteCmd;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -18,6 +21,9 @@ pub enum KeysCmd {
 
     /// List the private key file that was added to a chain
     List(KeysListCmd),
+
+    /// Delete key(s) from a configured chain
+    Delete(KeysDeleteCmd),
 }
 
 impl CommandRunner<CosmosBuilder> for KeysCmd {
@@ -25,6 +31,7 @@ impl CommandRunner<CosmosBuilder> for KeysCmd {
         match self {
             Self::Add(cmd) => cmd.run(builder).await,
             Self::List(cmd) => cmd.run(builder).await,
+            Self::Delete(cmd) => cmd.run(builder).await,
         }
     }
 }
