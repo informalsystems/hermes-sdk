@@ -3,9 +3,6 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
-use hermes_relayer_components::chain::types::aliases::{
-    ChannelIdOf, HeightOf, MessageOf, PortIdOf, TimestampOf,
-};
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;

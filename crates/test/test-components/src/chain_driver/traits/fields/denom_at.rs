@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 
-use crate::chain_driver::traits::types::denom::HasDenomType;
+use crate::chain::traits::types::denom::{DenomOf, HasDenomType};
+use crate::chain_driver::traits::types::chain::HasChainType;
 use crate::types::index::Index;
 
 #[derive(Clone, Copy, Default)]
@@ -10,6 +11,9 @@ pub struct TransferDenom;
 pub struct StakingDenom;
 
 #[derive_component(DenomGetterComponent, DenomGetterAt<ChainDriver>)]
-pub trait HasDenomAt<DenomKind, const I: usize>: HasDenomType {
-    fn denom_at(&self, kind: DenomKind, index: Index<I>) -> &Self::Denom;
+pub trait HasDenomAt<DenomKind, const I: usize>: HasChainType
+where
+    Self::Chain: HasDenomType,
+{
+    fn denom_at(&self, kind: DenomKind, index: Index<I>) -> &DenomOf<Self::Chain>;
 }

@@ -12,3 +12,16 @@ pub trait HasAmountType: HasDenomType {
 
     fn amount_denom(amount: &Self::Amount) -> &Self::Denom;
 }
+
+#[derive_component(AmountMethodsComponent, ProvideAmountMethods<Chain>)]
+pub trait HasAmountMethods: HasAmountType + HasErrorType {
+    fn add_amount(
+        current: &Self::Amount,
+        amount: &Self::Amount,
+    ) -> Result<Self::Amount, Self::Error>;
+
+    fn subtract_amount(
+        current: &Self::Amount,
+        amount: &Self::Amount,
+    ) -> Result<Self::Amount, Self::Error>;
+}
