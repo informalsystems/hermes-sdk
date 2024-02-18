@@ -15,22 +15,3 @@ where
     async fn random_amount(&self, min: usize, max: &AmountOf<Self::Chain>)
         -> AmountOf<Self::Chain>;
 }
-
-#[derive_component(IbcTransferredAmountConverterComponent, IbcTransferredAmountConverter<Chain>)]
-pub trait CanConvertIbcTransferredAmount<CounterpartyDriver>:
-    HasAmountType + HasChainType + HasErrorType
-where
-    Self::Chain: HasIbcChainTypes<CounterpartyDriver::Chain>,
-    CounterpartyDriver: HasChainType + HasAmountType,
-{
-    fn ibc_transfer_amount_from(
-        counterparty_amount: &CounterpartyDriver::Amount,
-        channel_id: &ChannelIdOf<Self::Chain, CounterpartyDriver::Chain>,
-        port_id: &PortIdOf<Self::Chain, CounterpartyDriver::Chain>,
-    ) -> Result<Self::Amount, Self::Error>;
-
-    fn transmute_counterparty_amount(
-        counterparty_amount: &CounterpartyDriver::Amount,
-        denom: &Self::Denom,
-    ) -> Self::Amount;
-}
