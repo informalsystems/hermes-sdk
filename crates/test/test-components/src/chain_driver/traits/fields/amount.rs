@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 
-use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain::traits::types::amount::{AmountOf, HasAmountType};
 use crate::chain::traits::types::denom::HasDenomType;
 use crate::chain_driver::traits::types::chain::HasChainType;
 
@@ -12,7 +12,8 @@ pub trait CanGenerateRandomAmount: HasChainType
 where
     Self::Chain: HasDenomType + HasAmountType,
 {
-    async fn random_amount(&self, min: usize, max: &Self::Amount) -> Self::Amount;
+    async fn random_amount(&self, min: usize, max: &AmountOf<Self::Chain>)
+        -> AmountOf<Self::Chain>;
 }
 
 #[derive_component(IbcTransferredAmountConverterComponent, IbcTransferredAmountConverter<Chain>)]
