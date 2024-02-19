@@ -6,6 +6,7 @@ pub struct BankMessage(pub BankFields);
 
 #[derive(BorshSerialize)]
 pub enum BankFields {
+    CreateToken {},
     Transfer {
         to: SovereignAddressBytes,
         coins: CoinFields,
