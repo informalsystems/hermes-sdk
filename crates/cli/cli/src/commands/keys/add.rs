@@ -9,6 +9,7 @@ use ibc_relayer::keyring::{
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::eyre;
+use oneline_eyre::eyre::WrapErr;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
