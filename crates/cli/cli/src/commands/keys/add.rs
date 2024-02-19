@@ -1,3 +1,7 @@
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::str::FromStr;
+
 use hdpath::StandardHDPath;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -10,9 +14,6 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::eyre;
 use oneline_eyre::eyre::WrapErr;
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::str::FromStr;
 use tracing::warn;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
@@ -179,7 +180,7 @@ fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str
         if overwrite {
             warn!("key '{key_name}' will be overwritten");
         } else {
-            Output::error(format!("A key with name '{key_name}' already exists")).exit();
+            Output::error(format!("key with name '{key_name}' already exists")).exit();
         }
     }
 }
@@ -249,7 +250,7 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
             // The 'required' parameter for the flags will trigger an error if both flags have not been given.
             // And the 'group' parameter for the flags will trigger an error if both flags are given.
             _ => Output::error(
-                "--mnemonic-file and --key-file can't both be set or both None".to_string(),
+                "exactly one of --mnemonic-file and --key-file must be given".to_string(),
             )
             .exit(),
         }
