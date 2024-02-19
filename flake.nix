@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = github:nixos/nixpkgs/nixpkgs-unstable;
     flake-utils.url = github:numtide/flake-utils;
-    cosmos-nix.url = github:informalsystems/cosmos.nix;
+    cosmos-nix.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
     sovereign-nix.url = github:informalsystems/sov-rollup-starter;
   };
 
@@ -30,6 +30,7 @@
         inherit
           (cosmos-nix)
           ibc-go-v7-simapp
+          ibc-go-v7-wasm-simapp
           ibc-go-v8-simapp
         ;
 
