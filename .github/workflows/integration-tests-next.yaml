@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     steps:
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SOVEREIGN_SDK_PRIVATE_SSH_KEY }}
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v25
         with:
