@@ -41,7 +41,7 @@ where
 
         let address_and_balances = rollup_wallets
             .values()
-            .map(|wallet| (wallet.address.clone(), 1_000_000_000_000))
+            .map(|wallet| (wallet.address.address.clone(), 1_000_000_000_000))
             .collect::<Vec<_>>();
 
         // The token address is derived based on the code `get_genesis_token_address` at
@@ -81,11 +81,11 @@ where
                 minimum_gas_price: (0, 0),
             },
             sequencer_registry: SequencerRegistryGenesis {
-                seq_rollup_address: sequencer_wallet.address.clone(),
+                seq_rollup_address: sequencer_wallet.address.address.clone(),
                 seq_da_address: sequencer_da_address.to_string(),
                 coins_to_lock: CoinsToLock {
                     amount: 1,
-                    token_address: staking_token_address.clone(),
+                    token_address: staking_token_address.address.clone(),
                 },
                 is_preferred_sequencer: true,
             },

@@ -10,8 +10,9 @@ use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBoo
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
-use hermes_sovereign_client_components::sovereign::types::messages::transfer::{
-    BankMessage, CoinFields, SovereignMessage,
+use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
+use hermes_sovereign_client_components::sovereign::types::messages::bank::{
+    BankMessage, CoinFields,
 };
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
@@ -73,16 +74,20 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
             let amount = rollup
-                .query_balance(&wallet_a.address, transfer_denom)
+                .query_balance(&wallet_a.address, &transfer_denom.address)
                 .await?;
 
             assert_eq!(amount.quantity, 1_000_000_000_000);
 
             let message = SovereignMessage::bank(BankMessage::Transfer {
-                to: wallet_b.address.clone(),
+                to: wallet_b.address.address_bytes.clone(),
                 coins: CoinFields {
                     amount: 1000,
-                    token_address: rollup_driver.genesis_config.transfer_token_address.clone(),
+                    token_address: rollup_driver
+                        .genesis_config
+                        .transfer_token_address
+                        .address_bytes
+                        .clone(),
                 },
             });
 

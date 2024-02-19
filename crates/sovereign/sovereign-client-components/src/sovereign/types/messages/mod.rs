@@ -1,1 +1,1 @@
-pub mod transfer;
+pub mod bank;

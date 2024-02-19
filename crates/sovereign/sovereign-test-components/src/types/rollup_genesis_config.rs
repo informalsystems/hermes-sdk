@@ -1,13 +1,13 @@
+use hermes_sovereign_client_components::sovereign::types::address::SovereignAddress;
 use serde::Serialize;
 
-#[derive(Serialize)]
 pub struct SovereignGenesisConfig {
     pub accounts: AccountsGenesis,
     pub bank: BankGenesis,
     pub chain_state: ChainStateGenesis,
     pub sequencer_registry: SequencerRegistryGenesis,
-    pub staking_token_address: String,
-    pub transfer_token_address: String,
+    pub staking_token_address: SovereignAddress,
+    pub transfer_token_address: SovereignAddress,
 }
 
 #[derive(Serialize)]

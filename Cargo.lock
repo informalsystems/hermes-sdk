@@ -1938,6 +1938,7 @@ name = "hermes-sovereign-client-components"
 version = "0.1.0"
 dependencies = [
  "base64 0.21.7",
+ "bech32",
  "borsh",
  "cgp-core",
  "ed25519-dalek",
@@ -1959,6 +1960,7 @@ dependencies = [
  "serde",
  "serde-json-wasm",
  "serde_json",
+ "sha2 0.10.8",
  "sov-celestia-client",
 ]
 
