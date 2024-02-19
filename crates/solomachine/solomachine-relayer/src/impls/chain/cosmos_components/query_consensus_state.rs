@@ -30,19 +30,23 @@ where
 impl<Chain, Counterparty> ConsensusStateQuerier<Chain, Counterparty>
     for QuerySolomachineConsensusStateFromCosmos
 where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + HasErrorType + HasRpcClient,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
+        + HasHeightType<Height = Height>
+        + HasErrorType
+        + HasRpcClient,
     Counterparty: HasConsensusStateType<Chain, ConsensusState = SolomachineConsensusState>
         + HasHeightType<Height = Height>,
 {
     async fn query_consensus_state(
         chain: &Chain,
         client_id: &ClientId,
-        height: &Height,
+        consensus_height: &Height,
+        query_height: &Height,
     ) -> Result<SolomachineConsensusState, Chain::Error> {
         let data = ClientConsensusStatePath {
             client_id: client_id.clone(),
-            epoch: height.revision_number(),
-            height: height.revision_height(),
+            epoch: consensus_height.revision_number(),
+            height: consensus_height.revision_height(),
         };
 
         let response = abci_query(
@@ -50,7 +54,7 @@ where
             chain.rpc_address(),
             IBC_QUERY_PATH.to_string(),
             data.to_string(),
-            (*height).into(),
+            (*query_height).into(),
             false,
         )
         .await

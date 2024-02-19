@@ -1,11 +1,13 @@
 use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
 use eyre::eyre;
+use hermes_cli_components::any_client::decoders::client_state::UnknownClientStateType;
+use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
-use hermes_cosmos_client_components::impls::types::client_state::TypeUrlMismatchError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
+use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
 use prost::DecodeError;
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
@@ -93,6 +95,15 @@ where
     }
 }
 
+impl<Context> ErrorRaiser<Context, Ics24ValidationError> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(err: Ics24ValidationError) -> Error {
+        BaseError::ics24_validation(err).into()
+    }
+}
+
 impl<Context> ErrorRaiser<Context, TypeUrlMismatchError> for HandleCosmosError
 where
     Context: HasErrorType<Error = Error>,
@@ -107,12 +118,30 @@ where
     }
 }
 
+impl<Context> ErrorRaiser<Context, UnknownClientStateType> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: UnknownClientStateType) -> Error {
+        BaseError::generic(eyre!("unknown client state type: {}", e.type_url,)).into()
+    }
+}
+
 impl<Context> ErrorRaiser<Context, DecodeError> for HandleCosmosError
 where
     Context: HasErrorType<Error = Error>,
 {
     fn raise_error(e: DecodeError) -> Error {
         BaseError::generic(e.into()).into()
+    }
+}
+
+impl<'a, Context> ErrorRaiser<Context, &'a str> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: &'a str) -> Error {
+        BaseError::generic(eyre!("{e}")).into()
     }
 }
 

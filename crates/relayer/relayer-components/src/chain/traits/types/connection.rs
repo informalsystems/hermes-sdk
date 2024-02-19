@@ -22,3 +22,8 @@ pub trait HasConnectionHandshakePayloadTypes<Counterparty>: Async {
 
     type ConnectionOpenConfirmPayload: Async;
 }
+
+#[derive_component(ConnectionEndTypeComponent, ProvideConnectionEndType<Chain>)]
+pub trait HasConnectionEndType<Counterparty>: Async {
+    type ConnectionEnd: Async;
+}

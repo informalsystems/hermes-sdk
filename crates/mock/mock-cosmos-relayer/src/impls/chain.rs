@@ -291,6 +291,10 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
+    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
+        &client_state.chain_id
+    }
+
     fn client_state_latest_height(client_state: &TmClientState) -> &Self::Height {
         &client_state.latest_height
     }
@@ -616,9 +620,10 @@ where
     async fn query_consensus_state(
         chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
-        height: &Height,
+        consensus_height: &Height,
+        _query_height: &Height,
     ) -> Result<TmConsensusState, Error> {
-        let path = ClientConsensusStatePath::new(client_id, height);
+        let path = ClientConsensusStatePath::new(client_id, consensus_height);
 
         let any_cons_state: AnyConsensusState = chain.ibc_context().consensus_state(&path)?;
 
