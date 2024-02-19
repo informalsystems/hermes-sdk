@@ -1,7 +1,6 @@
 use bech32::ToBase32;
 use bech32::Variant::Bech32m;
 use borsh::BorshSerialize;
-use sha2::{Digest, Sha256};
 
 #[derive(Clone, BorshSerialize)]
 pub struct SovereignAddressBytes {
