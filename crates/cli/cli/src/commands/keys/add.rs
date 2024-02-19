@@ -131,7 +131,7 @@ pub fn add_key(
 
     check_key_exists(&keyring, key_name, overwrite);
 
-    let key_contents = fs::read_to_string(file).map_err(|_| eyre!("error reading the key file"))?;
+    let key_contents = fs::read_to_string(file).wrap_err("error reading the key file")?;
     let key_pair = Secp256k1KeyPair::from_seed_file(&key_contents, hd_path)?;
 
     keyring.add_key(key_name, key_pair.clone())?;
@@ -147,7 +147,7 @@ pub fn restore_key(
     overwrite: bool,
 ) -> eyre::Result<AnySigningKeyPair> {
     let mnemonic_content =
-        fs::read_to_string(mnemonic).map_err(|_| eyre!("error reading the mnemonic file"))?;
+        fs::read_to_string(mnemonic).wrap_err("error reading the mnemonic file")?;
 
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
@@ -176,7 +176,7 @@ pub fn restore_key(
 fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str, overwrite: bool) {
     if keyring.get_key(key_name).is_ok() {
         if overwrite {
-            warn!("key {} will be overwritten", key_name);
+            warn!("key '{key_name}' will be overwritten");
         } else {
             Output::error(format!("A key with name '{key_name}' already exists")).exit();
         }
@@ -188,7 +188,7 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
         let chain_config = builder
             .config
             .find_chain(&self.chain_id)
-            .ok_or_else(|| eyre!("No chain configuration found for chain `{}`", self.chain_id))?;
+            .ok_or_else(|| eyre!("no chain configuration found for chain `{}`", self.chain_id))?;
 
         let opts = match self.options(chain_config) {
             Err(err) => Output::error(err).exit(),
@@ -207,14 +207,14 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
                 );
                 match key {
                     Ok(key) => Output::success_msg(format!(
-                        "Added key '{}' ({}) on chain {}",
+                        "added key '{}' ({}) on chain `{}`",
                         opts.name,
                         key.account(),
                         opts.config.id,
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(
-                        "An error occurred adding the key on chain {} from file {:?}: {}",
+                        "an error occurred adding the key on chain `{}` from file {:?}: {}",
                         self.chain_id, key_file, e
                     ))
                     .exit(),
@@ -231,14 +231,14 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
 
                 match key {
                     Ok(key) => Output::success_msg(format!(
-                        "Restored key '{}' ({}) on chain {}",
+                        "restored key '{}' ({}) on chain `{}`",
                         opts.name,
                         key.account(),
                         opts.config.id
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(
-                        "An error occurred restoring the key on chain {} from file {:?}: {}",
+                        "failed to restore the key on chain `{}` from file {:?}: {}",
                         self.chain_id, mnemonic_file, e
                     ))
                     .exit(),
