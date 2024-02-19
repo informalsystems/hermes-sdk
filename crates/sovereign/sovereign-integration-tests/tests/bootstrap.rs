@@ -10,9 +10,8 @@ use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBoo
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
-use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
 use hermes_sovereign_client_components::sovereign::types::messages::bank::{
-    BankMessage, CoinFields,
+    BankFields, BankMessage, CoinFields,
 };
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
@@ -79,7 +78,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             assert_eq!(amount.quantity, 1_000_000_000_000);
 
-            let message = SovereignMessage::bank(BankMessage::Transfer {
+            let message = BankMessage(BankFields::Transfer {
                 to: wallet_b.address.address_bytes.clone(),
                 coins: CoinFields {
                     amount: 1000,
