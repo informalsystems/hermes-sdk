@@ -6,7 +6,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use ibc_core::client::types::Height;
 use ibc_core::host::types::identifiers::ChainId;
 use ibc_relayer::chain::client::ClientSettings;
-use sov_ibc_mocks::sovereign::{dummy_sov_client_state, dummy_sov_consensus_state};
+use sov_celestia_client::types::client_state::test_util::{
+    dummy_sov_client_state, dummy_sov_consensus_state,
+};
 
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
@@ -43,7 +45,7 @@ where
                 .unwrap();
 
         Ok(SovereignCreateClientPayload {
-            client_state: client_state.inner().clone(),
+            client_state: client_state.clone(),
             consensus_state,
             code_hash,
             latest_height,

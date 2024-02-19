@@ -8,6 +8,7 @@ use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_wasm_client_components::wasm::types::messages::client::consensus::WasmConsensusState;
 use hermes_wasm_client_components::wasm::types::messages::client::state::WasmClientState;
 use ibc_core::primitives::ToProto;
+use ibc_proto::google::protobuf::Any;
 use prost::Message;
 
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
@@ -36,7 +37,12 @@ where
             checksum: payload.code_hash.clone(),
             latest_height: payload.latest_height,
         };
-        let any_client_state = client_state.encode_protobuf().map_err(BaseError::encode)?;
+        let new_any_client_state = client_state.encode_protobuf().map_err(BaseError::encode)?;
+
+        let any_client_state = Any {
+            type_url: new_any_client_state.type_url,
+            value: new_any_client_state.value,
+        };
 
         let raw_consensus_state =
             <sov_celestia_client::types::consensus_state::ConsensusState as ToProto<
@@ -45,9 +51,14 @@ where
         let consensus_state: WasmConsensusState = WasmConsensusState {
             data: raw_consensus_state.encode_to_vec(),
         };
-        let any_consensus_state = consensus_state
+        let new_any_consensus_state = consensus_state
             .encode_protobuf()
             .map_err(BaseError::encode)?;
+
+        let any_consensus_state = Any {
+            type_url: new_any_consensus_state.type_url,
+            value: new_any_consensus_state.value,
+        };
 
         let message = CosmosCreateClientMessage {
             client_state: any_client_state,
