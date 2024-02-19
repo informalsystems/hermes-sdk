@@ -125,8 +125,10 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         trust_threshold: TrustThreshold::ONE_THIRD,
     });
 
-    let wasm_client_code_path =
-        <HermesRuntime as HasFilePathType>::file_path_from_string(&var("WASM_FILE_PATH").unwrap());
+    let wasm_client_code_path = <HermesRuntime as HasFilePathType>::file_path_from_string(
+        &var("WASM_FILE_PATH")
+            .unwrap_or_else(|_| "tests/utils/sov_celestia_client_cw.wasm".to_string()),
+    );
 
     tokio_runtime.block_on(async move {
         let cosmos_chain_driver = bootstrap.bootstrap_chain("cosmos-1").await?;

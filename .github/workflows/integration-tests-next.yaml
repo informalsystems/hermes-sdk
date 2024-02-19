@@ -83,9 +83,10 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: run integration tests
         env:
+          CHAIN_COMMAND_PATHS: simd
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#celestia-node .#sovereign-rollup -c \
+            nix shell .#cargo-nextest .#protobuf .#ibc-go-v7-wasm-simapp .#celestia-app .#celestia-node .#sovereign-rollup -c \
               cargo nextest run -p hermes-sovereign-integration-tests \
               --test-threads=2 \
               --failure-output final
