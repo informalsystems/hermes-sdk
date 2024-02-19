@@ -30,8 +30,11 @@ pub struct TokenGenesis {
 
 #[derive(Serialize)]
 pub struct ChainStateGenesis {
-    pub initial_slot_height: u64,
     pub current_time: TimeGenesis,
+    pub gas_price_blocks_depth: u64,
+    pub gas_price_maximum_elasticity: u64,
+    pub initial_gas_price: (u64, u64),
+    pub minimum_gas_price: (u64, u64),
 }
 
 #[derive(Serialize)]
