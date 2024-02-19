@@ -1695,7 +1695,7 @@ dependencies = [
  "ibc-relayer-types",
  "prost",
  "serde",
- "tendermint-proto 0.34.0",
+ "tendermint-proto",
  "tracing",
 ]
 
