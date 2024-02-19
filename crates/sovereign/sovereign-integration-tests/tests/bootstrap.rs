@@ -9,8 +9,9 @@ use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::types::messages::transfer::{
-    BankMessage, CoinFields,
+    BankMessage, CoinFields, SovereignMessage,
 };
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
@@ -57,6 +58,8 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
         {
             // Temporary test to check that rollup driver is bootstrapped properly
 
+            let rollup = &rollup_driver.rollup;
+
             let wallet_a = rollup_driver
                 .wallets
                 .get("user-a")
@@ -69,25 +72,26 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
-            let amount = rollup_driver
-                .rollup
+            let amount = rollup
                 .query_balance(&wallet_a.address, transfer_denom)
                 .await?;
 
             assert_eq!(amount.quantity, 1_000_000_000_000);
 
-            let message = BankMessage::Transfer {
+            let message = SovereignMessage::bank(BankMessage::Transfer {
                 to: wallet_b.address.clone(),
                 coins: CoinFields {
                     amount: 1000,
                     token_address: rollup_driver.genesis_config.transfer_token_address.clone(),
                 },
-            };
+            });
 
             let message_bytes = message.try_to_vec()?;
 
             let tx_bytes =
                 encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
+
+            rollup.publish_transaction_batch(&[tx_bytes]).await?;
         }
         <Result<(), Error>>::Ok(())
     })?;

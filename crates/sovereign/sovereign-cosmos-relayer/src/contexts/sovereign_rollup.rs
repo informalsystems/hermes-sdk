@@ -6,10 +6,16 @@ use cgp_core::HasComponents;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::transaction::traits::types::NonceTypeComponent;
+use hermes_relayer_components::transaction::traits::types::TransactionTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
-use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::{
-    JsonRpcClientGetter, ProvideJsonRpcClientType,
-};
+use hermes_sovereign_client_components::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
+use hermes_sovereign_client_components::sovereign::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
+use hermes_sovereign_client_components::sovereign::impls::types::transaction::ProvideSovereignTransactionTypes;
+use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientGetter;
+use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
+use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
+use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::TransactionBatchPublisherComponent;
 use hermes_sovereign_test_components::rollup::components::IsSovereignRollupTestComponent;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
@@ -39,11 +45,16 @@ delegate_components! {
             RaiseDebugError,
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
+        [
+            TransactionTypeComponent,
+            NonceTypeComponent,
+        ]:
+            ProvideSovereignTransactionTypes,
+        JsonRpcClientTypeComponent:
+            ProvideJsonRpseeClient,
+        TransactionBatchPublisherComponent:
+            PublishSovereignTransactionBatch,
     }
-}
-
-impl ProvideJsonRpcClientType<SovereignRollup> for SovereignRollupComponents {
-    type JsonRpcClient = HttpClient;
 }
 
 impl JsonRpcClientGetter<SovereignRollup> for SovereignRollupComponents {
@@ -52,4 +63,6 @@ impl JsonRpcClientGetter<SovereignRollup> for SovereignRollupComponents {
     }
 }
 
-pub trait CheckSovereignRollupImpls: CanQueryBalance {}
+pub trait CheckSovereignRollupImpls: CanQueryBalance + CanPublishTransactionBatch {}
+
+impl CheckSovereignRollupImpls for SovereignRollup {}

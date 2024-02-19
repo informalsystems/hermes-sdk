@@ -1,7 +1,6 @@
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::transaction::traits::types::HasTransactionType;
 use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::params::ArrayParams;
 use jsonrpsee::core::ClientError;
 
 use crate::sovereign::traits::rollup::json_rpc_client::HasJsonRpcClient;
@@ -22,12 +21,8 @@ where
     ) -> Result<(), Chain::Error> {
         let rpc_client = chain.json_rpc_client();
 
-        let mut params = ArrayParams::new();
-
-        params.insert(transactions).map_err(Chain::raise_error)?;
-
-        let _response: String = rpc_client
-            .request("sequencer_publishBatch", params)
+        let _response: serde_json::Value = rpc_client
+            .request("sequencer_publishBatch", transactions)
             .await
             .map_err(Chain::raise_error)?;
 
