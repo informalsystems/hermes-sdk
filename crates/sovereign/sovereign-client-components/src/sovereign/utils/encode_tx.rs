@@ -1,4 +1,9 @@
-use crate::sovereign::types::transaction::SovereignTransaction;
+use borsh::ser::BorshSerialize;
+use ed25519_dalek::{Signer, SigningKey};
+
+use crate::sovereign::types::transaction::{
+    SerializePublicKey, SerializeSignature, SovereignTransaction,
+};
 
 pub fn encode_sovereign_tx_sign_bytes(
     mut message: Vec<u8>,
@@ -18,7 +23,7 @@ pub fn encode_sovereign_tx_sign_bytes(
     message
 }
 
-pub fn encode_and_sign_sovereign_tx(
+pub fn sign_sovereign_tx(
     signing_key: &SigningKey,
     message: Vec<u8>,
     chain_id: u64,
@@ -37,9 +42,22 @@ pub fn encode_and_sign_sovereign_tx(
         pub_key: SerializePublicKey(public_key),
         runtime_msg: message,
         chain_id,
-        gas_top,
+        gas_tip,
         gas_limit,
         max_gas_price: None,
         nonce,
     }
+}
+
+pub fn encode_and_sign_sovereign_tx(
+    signing_key: &SigningKey,
+    message: Vec<u8>,
+    chain_id: u64,
+    gas_tip: u64,
+    gas_limit: u64,
+    nonce: u64,
+) -> Result<Vec<u8>, std::io::Error> {
+    let transaction = sign_sovereign_tx(signing_key, message, chain_id, gas_tip, gas_limit, nonce);
+
+    transaction.try_to_vec()
 }

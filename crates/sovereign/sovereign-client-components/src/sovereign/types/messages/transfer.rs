@@ -1,17 +1,11 @@
-use serde::Serialize;
+use borsh::BorshSerialize;
 
-#[derive(Serialize)]
-pub enum TransferMessage {
-    Transfer(TransferFields),
+#[derive(BorshSerialize)]
+pub enum BankMessage {
+    Transfer { to: String, coins: CoinFields },
 }
 
-#[derive(Serialize)]
-pub struct TransferFields {
-    pub to: String,
-    pub coins: CoinFields,
-}
-
-#[derive(Serialize)]
+#[derive(BorshSerialize)]
 pub struct CoinFields {
     pub amount: u64,
     pub token_address: String,

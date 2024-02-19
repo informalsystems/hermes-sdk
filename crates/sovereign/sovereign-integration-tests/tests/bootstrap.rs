@@ -3,14 +3,16 @@
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use borsh::BorshSerialize;
 use eyre::{eyre, Error};
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::types::messages::transfer::{
-    CoinFields, TransferFields, TransferMessage,
+    BankMessage, CoinFields,
 };
+use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -74,13 +76,18 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             assert_eq!(amount.quantity, 1_000_000_000_000);
 
-            let message = TransferMessage::Transfer(TransferFields {
+            let message = BankMessage::Transfer {
                 to: wallet_b.address.clone(),
                 coins: CoinFields {
                     amount: 1000,
                     token_address: rollup_driver.genesis_config.transfer_token_address.clone(),
                 },
-            });
+            };
+
+            let message_bytes = message.try_to_vec()?;
+
+            let tx_bytes =
+                encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
         }
         <Result<(), Error>>::Ok(())
     })?;

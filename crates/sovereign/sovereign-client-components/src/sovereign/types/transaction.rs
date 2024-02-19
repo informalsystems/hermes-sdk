@@ -3,14 +3,14 @@ use ed25519_dalek::{Signature, VerifyingKey};
 
 #[derive(BorshSerialize)]
 pub struct SovereignTransaction {
-    signature: SerializeSignature,
-    pub_key: SerializePublicKey,
-    runtime_msg: Vec<u8>,
-    chain_id: u64,
-    gas_tip: u64,
-    gas_limit: u64,
-    max_gas_price: Option<[u64; 2]>,
-    nonce: u64,
+    pub signature: SerializeSignature,
+    pub pub_key: SerializePublicKey,
+    pub runtime_msg: Vec<u8>,
+    pub chain_id: u64,
+    pub gas_tip: u64,
+    pub gas_limit: u64,
+    pub max_gas_price: Option<[u64; 2]>,
+    pub nonce: u64,
 }
 
 pub struct SerializePublicKey(pub VerifyingKey);
