@@ -9,8 +9,9 @@ pub mod clear;
 pub mod client;
 pub mod connection;
 pub mod query;
-pub mod start;
 
+pub mod keys;
+pub mod start;
 #[derive(Debug, clap::Parser)]
 pub enum HermesCommand {
     /// Start the Hermes relayer
@@ -35,6 +36,10 @@ pub enum HermesCommand {
     /// Clear subcommands
     #[clap(subcommand)]
     Clear(clear::ClearCommands),
+
+    /// Manage keys in the relayer for each chain
+    #[clap(subcommand)]
+    Keys(keys::KeysCmd),
 }
 
 impl CommandRunner<CosmosBuilder> for HermesCommand {
@@ -46,6 +51,7 @@ impl CommandRunner<CosmosBuilder> for HermesCommand {
             Self::Channel(cmd) => cmd.run(builder).await,
             Self::Query(cmd) => cmd.run(builder).await,
             Self::Clear(cmd) => cmd.run(builder).await,
+            Self::Keys(cmd) => cmd.run(builder).await,
         }
     }
 }

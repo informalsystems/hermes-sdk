@@ -2048,6 +2048,7 @@ dependencies = [
  "cgp-core",
  "clap",
  "futures",
+ "hdpath",
  "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-cosmos-client-components",
