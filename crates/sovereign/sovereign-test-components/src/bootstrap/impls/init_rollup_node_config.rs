@@ -69,6 +69,7 @@ where
                     bind_host: "127.0.0.1".into(),
                     bind_port: rollup_rpc_port,
                 },
+                da_polling_interval_ms: 10000,
             },
             prover_service: SovereignProverConfig {
                 aggregated_proof_block_jump: 1,
