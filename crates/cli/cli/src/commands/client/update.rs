@@ -1,3 +1,6 @@
+use oneline_eyre::eyre::Context;
+use tracing::info;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -8,10 +11,9 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
+
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
-use oneline_eyre::eyre::Context;
-use tracing::info;
 
 use crate::Result;
 
@@ -45,15 +47,22 @@ pub struct ClientUpdate {
 
 impl CommandRunner<CosmosBuilder> for ClientUpdate {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let host_chain = builder.build_chain(&self.host_chain_id).await?;
+        let host_chain = builder
+            .build_chain(&self.host_chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.host_chain_id))?;
 
         let client_state =
             <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::
             query_client_state_with_latest_height(&host_chain, &self.client_id)
-            .await?;
+            .await
+            .wrap_err_with(|| format!("failed to query client `{}`", self.client_id))?;
 
         let reference_chain_id = client_state.chain_id;
-        let reference_chain = builder.build_chain(&reference_chain_id).await?;
+        let reference_chain = builder
+            .build_chain(&reference_chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", reference_chain_id))?;
 
         let relayer = builder
             .build_relay(
@@ -63,12 +72,13 @@ impl CommandRunner<CosmosBuilder> for ClientUpdate {
                 &self.client_id,
                 &self.client_id, // nothing to pass here
             )
-            .await?;
+            .await
+            .wrap_err("relayer failed to start")?;
 
         let target_height = match self.target_height {
             Some(height) => {
                 let height = Height::new(reference_chain_id.version(), height)
-                    .wrap_err("Invalid value for --target-height")?;
+                    .wrap_err_with(|| format!("invalid value for --target-height `{height}`"))?;
 
                 info!("Updating client using specified target height: {height}");
                 height
@@ -76,7 +86,7 @@ impl CommandRunner<CosmosBuilder> for ClientUpdate {
             None => {
                 let height = reference_chain.query_chain_height().await?;
 
-                info!("Updating client using specified target height: {height}");
+                info!("Updating client using specified target height: `{height}`");
                 height
             }
         };
@@ -84,7 +94,7 @@ impl CommandRunner<CosmosBuilder> for ClientUpdate {
         relayer
             .send_update_client_messages(SourceTarget, &target_height)
             .await
-            .wrap_err("Failed to send update client message")?;
+            .wrap_err("failed to send update client message")?;
 
         Ok(Output::success_msg("Client successfully updated!"))
     }
