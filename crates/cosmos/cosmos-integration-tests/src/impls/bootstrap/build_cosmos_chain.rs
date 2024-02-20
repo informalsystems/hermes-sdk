@@ -7,9 +7,7 @@ use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfig;
 use crate::traits::bootstrap::cosmos_builder::HasCosmosBuilder;

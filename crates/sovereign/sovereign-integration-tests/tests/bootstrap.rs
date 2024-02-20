@@ -11,7 +11,7 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
 
 #[test]
@@ -60,6 +60,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
             let amount = rollup_driver
+                .rollup
                 .query_balance(&wallet.address, transfer_denom)
                 .await?;
 

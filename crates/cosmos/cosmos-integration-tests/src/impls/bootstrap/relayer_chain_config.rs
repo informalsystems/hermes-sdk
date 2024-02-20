@@ -8,7 +8,6 @@ use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosCh
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use ibc_relayer::chain::ChainType;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::config::{self, AddressType, ChainConfig};

@@ -1,5 +1,4 @@
 use cgp_core::CanRaiseError;
-use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::HasJsonRpcClient;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
@@ -24,17 +23,16 @@ where
     Rollup: HasAddressType
         + HasDenomType<Denom = String>
         + HasAmountType<Amount = SovereignAmount>
-        + HasRollup<Rollup = Rollup>
         + CanRaiseError<ClientError>
         + CanRaiseError<serde_json::Error>
         + HasJsonRpcClient,
 {
     async fn query_balance(
-        rollup_driver: &Rollup,
+        rollup: &Rollup,
         address: &Rollup::Address,
         denom: &Rollup::Denom,
     ) -> Result<SovereignAmount, Rollup::Error> {
-        let rpc_client = rollup_driver.rollup().json_rpc_client();
+        let rpc_client = rollup.json_rpc_client();
 
         let mut params = ArrayParams::new();
 

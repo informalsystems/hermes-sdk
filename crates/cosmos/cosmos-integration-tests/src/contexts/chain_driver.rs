@@ -1,16 +1,13 @@
 use alloc::collections::BTreeMap;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
-use hermes_test_components::chain::traits::types::tx_context::{
-    ProvideTxContextType, TxContextGetter,
-};
+
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::transaction::CosmosTxContext;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain::types::denom::Denom;

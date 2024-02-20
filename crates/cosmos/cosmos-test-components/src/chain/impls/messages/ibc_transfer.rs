@@ -5,7 +5,6 @@ use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTrans
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::memo::HasMemoType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
@@ -30,7 +29,7 @@ where
             Timestamp = Timestamp,
             Message = CosmosMessage,
         >,
-    Counterparty: HasAddressType + HasChainType,
+    Counterparty: HasAddressType,
 {
     async fn build_ibc_token_transfer_message(
         _chain: &Chain,

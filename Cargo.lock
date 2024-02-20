@@ -2347,6 +2347,8 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-sovereign-client-components",
+ "hermes-sovereign-test-components",
+ "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",

@@ -14,7 +14,7 @@ use crate::rollup::impls::types::wallet::ProvideSovereignWalletType;
 pub struct SovereignRollupTestComponents;
 
 delegate_components! {
-    #[mark_component(IsSovereignTestComponent)]
+    #[mark_component(IsSovereignRollupTestComponent)]
     SovereignRollupTestComponents {
         AddressTypeComponent: ProvideStringAddress,
         DenomTypeComponent: ProvideSovereignDenomType,
