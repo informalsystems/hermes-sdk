@@ -97,7 +97,6 @@ jobs:
         if: failure()
         run: |
           sudo apt install librust-sha2-dev
-          pwd
-          ls -lh
           ls -lh crates/sovereign/sovereign-integration-tests/ibc_08-wasm_client_data/state/wasm
-          sha256sum crates/sovereign/sovereign-integration-tests/tests/utils/sov_celestia_client_cw.wasm
+          sha256sum -b crates/sovereign/sovereign-integration-tests/tests/utils/sov_celestia_client_cw.wasm
+          sha256sum -t crates/sovereign/sovereign-integration-tests/tests/utils/sov_celestia_client_cw.wasm
