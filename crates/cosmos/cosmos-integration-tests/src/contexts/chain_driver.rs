@@ -80,22 +80,9 @@ where
     type Chain = CosmosChain;
 }
 
-impl<Driver> ProvideTxContextType<Driver> for CosmosChainDriverComponents
-where
-    Driver: Async,
-{
-    type TxContext = CosmosTxContext;
-}
-
 impl ChainGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn chain(driver: &CosmosChainDriver) -> &CosmosChain {
         &driver.chain
-    }
-}
-
-impl TxContextGetter<CosmosChainDriver> for CosmosChainDriverComponents {
-    fn tx_context(driver: &CosmosChainDriver) -> &CosmosTxContext {
-        &driver.chain.tx_context
     }
 }
 
