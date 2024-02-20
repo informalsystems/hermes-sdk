@@ -54,15 +54,13 @@ pub struct KeysBalanceCmd {
 
 impl CommandRunner<CosmosBuilder> for KeysBalanceCmd {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let config = &builder.config;
         let chain = builder.build_chain(&self.chain_id).await?;
-
         let key_name = self.key_name.clone();
 
         if self.all {
-            get_balances(chain, key_name)
+            get_balances(chain.handle, key_name)
         } else {
-            get_balance(chain, key_name, self.denom.clone())
+            get_balance(chain.handle, key_name, self.denom.clone())
         }
     }
 }
@@ -77,9 +75,9 @@ fn get_balance(
         Ok(balance) => {
             // Retrieve the key name string to output
             let key_name = key_name.unwrap_or_else(|| {
-                let chain_config = chain.config().map_err(|e| {
-                    eyre!("`keys balance` command failed due to an error retrieving chain config: {e}")
-                })?;
+                let chain_config = chain.config().expect(
+                    "`keys balance` command failed due to an error retrieving chain config",
+                );
                 chain_config.key_name
             });
 
@@ -88,7 +86,7 @@ fn get_balance(
                 balance.amount, balance.denom
             )))
         }
-        Err(e) => Err(e.wrap_err("`keys balance` command failed")),
+        Err(e) => Err(e.1.wrap_err("`keys balance` command failed")),
     }
 }
 
@@ -98,9 +96,9 @@ fn get_balances(chain: impl ChainHandle, key_name: Option<String>) -> Result<Out
         Ok(balances) => {
             // Retrieve the key name string to output.
             let key_name = key_name.unwrap_or_else(|| {
-                let chain_config = chain.config().map_err(|e| {
-                    eyre!("`keys balance` command failed due to an error retrieving chain config; {e}")
-                })?;
+                let chain_config = chain.config().expect(
+                    "`keys balance` command failed due to an error retrieving chain config",
+                );
                 chain_config.key_name
             });
 
@@ -108,13 +106,13 @@ fn get_balances(chain: impl ChainHandle, key_name: Option<String>) -> Result<Out
 
             for balance in balances {
                 write!(pretty_output, "\n\t{} {}", balance.amount, balance.denom)
-                    .map_err(|e| eyre!("failed to write balance output"));
+                    .map_err(|_| eyre!("failed to write balance output"))?;
             }
 
             Ok(Output::success_msg(pretty_output))
         }
-        Err(e) => {
-            Err(e.wrap_err("`keys balance` command failed due to a problem querying the balance"))
-        }
+        Err(e) => Err(e
+            .1
+            .wrap_err("`keys balance` command failed due to a problem querying the balance")),
     }
 }
