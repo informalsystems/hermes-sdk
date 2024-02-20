@@ -4,7 +4,6 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverter;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
 use subtle_encoding::hex;
@@ -14,22 +13,21 @@ use crate::chain::types::denom::Denom;
 
 pub struct ConvertCosmosIbcAmount;
 
-impl<ChainDriver, CounterpartyDriver> IbcTransferredAmountConverter<ChainDriver, CounterpartyDriver>
+impl<Chain, Counterparty> IbcTransferredAmountConverter<Chain, Counterparty>
     for ConvertCosmosIbcAmount
 where
-    ChainDriver:
-        HasAmountType<Amount = Amount, Denom = Denom> + HasChainType + CanRaiseError<FromUtf8Error>,
-    ChainDriver::Chain:
-        HasIbcChainTypes<CounterpartyDriver::Chain, ChannelId = ChannelId, PortId = PortId>,
-    CounterpartyDriver: HasChainType + HasAmountType<Amount = Amount>,
+    Chain: HasAmountType<Amount = Amount, Denom = Denom>
+        + CanRaiseError<FromUtf8Error>
+        + HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>,
+    Counterparty: HasAmountType<Amount = Amount>,
 {
     fn ibc_transfer_amount_from(
         counterparty_amount: &Amount,
         channel_id: &ChannelId,
         port_id: &PortId,
-    ) -> Result<Amount, ChainDriver::Error> {
+    ) -> Result<Amount, Chain::Error> {
         let denom = derive_ibc_denom(port_id, channel_id, &counterparty_amount.denom)
-            .map_err(ChainDriver::raise_error)?;
+            .map_err(Chain::raise_error)?;
 
         Ok(Amount {
             quantity: counterparty_amount.quantity,

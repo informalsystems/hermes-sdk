@@ -15,35 +15,33 @@ use crate::chain::types::messages::token_transfer::TokenTransferMessage;
 
 pub struct BuildCosmosIbcTransferMessage;
 
-impl<ChainDriver, CounterpartyDriver>
-    IbcTokenTransferMessageBuilder<ChainDriver, CounterpartyDriver>
+impl<Chain, Counterparty> IbcTokenTransferMessageBuilder<Chain, Counterparty>
     for BuildCosmosIbcTransferMessage
 where
-    ChainDriver: HasErrorType
-        + HasChainType
+    Chain: HasErrorType
         + HasAddressType
         + HasAmountType<Amount = Amount>
-        + HasMemoType<Memo = Option<String>>,
-    ChainDriver::Chain: HasIbcChainTypes<
-        CounterpartyDriver::Chain,
-        ChannelId = ChannelId,
-        PortId = PortId,
-        Height = Height,
-        Timestamp = Timestamp,
-        Message = CosmosMessage,
-    >,
-    CounterpartyDriver: HasAddressType + HasChainType,
+        + HasMemoType<Memo = Option<String>>
+        + HasIbcChainTypes<
+            Counterparty,
+            ChannelId = ChannelId,
+            PortId = PortId,
+            Height = Height,
+            Timestamp = Timestamp,
+            Message = CosmosMessage,
+        >,
+    Counterparty: HasAddressType + HasChainType,
 {
     async fn build_ibc_token_transfer_message(
-        _chain_driver: &ChainDriver,
+        _chain: &Chain,
         channel_id: &ChannelId,
         port_id: &PortId,
-        recipient_address: &CounterpartyDriver::Address,
+        recipient_address: &Counterparty::Address,
         amount: &Amount,
         memo: &Option<String>,
         timeout_height: Option<&Height>,
         timeout_time: Option<&Timestamp>,
-    ) -> Result<CosmosMessage, ChainDriver::Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let message = TokenTransferMessage {
             channel_id: channel_id.clone(),
             port_id: port_id.clone(),

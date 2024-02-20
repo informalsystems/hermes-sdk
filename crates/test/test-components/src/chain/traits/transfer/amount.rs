@@ -2,11 +2,10 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use crate::chain::traits::types::amount::HasAmountType;
-use crate::chain_driver::traits::types::chain::HasChainType;
 
 #[derive_component(IbcTransferredAmountConverterComponent, IbcTransferredAmountConverter<Chain>)]
 pub trait CanConvertIbcTransferredAmount<Counterparty>:
-    HasAmountType + HasChainType + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasAmountType + HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasAmountType,
 {
