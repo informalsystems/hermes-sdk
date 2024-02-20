@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
@@ -17,7 +16,6 @@ use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdder;
 */
 pub struct AddCosmosGenesisAccount;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> GenesisAccountAdder<Bootstrap> for AddCosmosGenesisAccount
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

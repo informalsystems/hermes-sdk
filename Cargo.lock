@@ -2158,6 +2158,7 @@ dependencies = [
  "hermes-async-runtime-components",
  "hermes-cli-components",
  "hermes-cosmos-client-components",
+ "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
