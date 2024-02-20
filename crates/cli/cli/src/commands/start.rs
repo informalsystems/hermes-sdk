@@ -63,7 +63,7 @@ impl CommandRunner<CosmosBuilder> for Start {
                 &self.client_id_b,
             )
             .await
-            .wrap_err("Relayer failed to start")?;
+            .wrap_err("relayer failed to start")?;
 
         info!(
             "Relaying between {} and {}...",
@@ -73,8 +73,8 @@ impl CommandRunner<CosmosBuilder> for Start {
         birelay
             .run()
             .await
-            .wrap_err("Relayed exited because of error")?;
+            .wrap_err("relayer exited because of error")?;
 
-        Ok(Output::success_msg("Relayer exited successfully."))
+        Ok(Output::success_msg("relayer exited successfully"))
     }
 }

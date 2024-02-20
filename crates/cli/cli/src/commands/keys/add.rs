@@ -178,9 +178,9 @@ pub fn restore_key(
 fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str, overwrite: bool) {
     if keyring.get_key(key_name).is_ok() {
         if overwrite {
-            warn!("key '{key_name}' will be overwritten");
+            warn!("key `{key_name}` will be overwritten");
         } else {
-            Output::error(format!("key with name '{key_name}' already exists")).exit();
+            Output::error(format!("key with name `{key_name}` already exists")).exit();
         }
     }
 }
@@ -209,7 +209,7 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
                 );
                 match key {
                     Ok(key) => Output::success_msg(format!(
-                        "added key '{}' ({}) on chain `{}`",
+                        "added key `{}` ({}) on chain `{}`",
                         opts.name,
                         key.account(),
                         opts.config.id,
@@ -233,7 +233,7 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
 
                 match key {
                     Ok(key) => Output::success_msg(format!(
-                        "restored key '{}' ({}) on chain `{}`",
+                        "restored key `{}` ({}) on chain `{}`",
                         opts.name,
                         key.account(),
                         opts.config.id
