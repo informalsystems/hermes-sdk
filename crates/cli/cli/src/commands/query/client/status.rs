@@ -1,6 +1,7 @@
 use std::error::Error as StdError;
 use std::fmt::Debug;
 
+use oneline_eyre::eyre::Context;
 use serde::Serialize;
 use tracing::info;
 
@@ -20,6 +21,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     HasConsensusStateFields, HasConsensusStateType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 
@@ -61,8 +63,15 @@ where
     Build::Error: From<BaseError> + StdError,
 {
     async fn run(&self, builder: &Build) -> Result<Output> {
-        let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
-        let client_status = chain.query_client_status(&self.client_id).await?;
+        let chain = builder
+            .build_chain(ChainATarget, &self.chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.chain_id))?;
+
+        let client_status = chain
+            .query_client_status(&self.client_id)
+            .await
+            .wrap_err_with(|| format!("failed to query client `{}`", self.client_id))?;
 
         match client_status {
             ClientStatus::Frozen => {
