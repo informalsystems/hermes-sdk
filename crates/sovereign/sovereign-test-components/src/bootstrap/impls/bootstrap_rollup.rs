@@ -1,9 +1,11 @@
 use cgp_core::CanRaiseError;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
-use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
+use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
+use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::wallet::HasWallets;
-use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
@@ -21,13 +23,15 @@ use crate::bootstrap::traits::write_rollup_genesis::CanWriteRollupGenesis;
 
 pub struct BootstrapSovereignRollup;
 
-impl<Bootstrap, ChainDriver, RollupDriver, Runtime> RollupBootstrapper<Bootstrap>
+impl<Bootstrap, Chain, ChainDriver, Rollup, Runtime> RollupBootstrapper<Bootstrap>
     for BootstrapSovereignRollup
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
+        + HasChainType<Chain = Chain>
+        + HasRollupType<Rollup = Rollup>
         + HasChainDriverType<ChainDriver = ChainDriver>
         + HasBridgeDriverType
-        + HasRollupDriverType<RollupDriver = RollupDriver>
+        + HasRollupDriverType
         + HasRollupStoreDir
         + CanInitRollupNodeConfig
         + CanGenerateRollupWallets
@@ -37,8 +41,9 @@ where
         + CanBuildRollupDriver
         + CanRaiseError<&'static str>
         + CanRaiseError<Runtime::Error>,
-    ChainDriver: HasWallets<Wallet = CosmosTestWallet>,
-    RollupDriver: HasWalletType,
+    Chain: HasWalletType<Wallet = CosmosTestWallet>,
+    ChainDriver: HasChainType<Chain = Chain> + HasWallets,
+    Rollup: HasWalletType,
     Runtime: HasFilePathType + HasChildProcessType + CanCreateDir,
 {
     async fn bootstrap_rollup(
@@ -46,7 +51,7 @@ where
         chain_driver: &ChainDriver,
         bridge_driver: &Bootstrap::BridgeDriver,
         rollup_id: &str,
-    ) -> Result<RollupDriver, Bootstrap::Error> {
+    ) -> Result<Bootstrap::RollupDriver, Bootstrap::Error> {
         let rollup_home_dir = Runtime::join_file_path(
             bootstrap.rollup_store_dir(),
             &Runtime::file_path_from_string(rollup_id),
@@ -71,10 +76,7 @@ where
         let rollup_wallets = bootstrap.generate_rollup_wallets().await?;
 
         let rollup_genesis = bootstrap
-            .generate_rollup_genesis(
-                ChainDriver::wallet_address(sequencer_wallet),
-                &rollup_wallets,
-            )
+            .generate_rollup_genesis(Chain::wallet_address(sequencer_wallet), &rollup_wallets)
             .await?;
 
         bootstrap

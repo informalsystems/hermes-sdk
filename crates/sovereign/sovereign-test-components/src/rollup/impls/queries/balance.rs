@@ -1,10 +1,10 @@
 use cgp_core::CanRaiseError;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::HasJsonRpcClient;
-use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
-use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
-use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
-use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
+use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::params::ArrayParams;
 use jsonrpsee::core::ClientError;
@@ -19,41 +19,39 @@ pub struct Response {
 
 pub struct QuerySovereignBalance;
 
-impl<RollupDriver, Rollup> BalanceQuerier<RollupDriver> for QuerySovereignBalance
+impl<Rollup> BalanceQuerier<Rollup> for QuerySovereignBalance
 where
-    RollupDriver: HasAddressType
+    Rollup: HasAddressType
         + HasDenomType<Denom = String>
         + HasAmountType<Amount = SovereignAmount>
         + HasRollup<Rollup = Rollup>
         + CanRaiseError<ClientError>
-        + CanRaiseError<serde_json::Error>,
-    Rollup: HasJsonRpcClient,
+        + CanRaiseError<serde_json::Error>
+        + HasJsonRpcClient,
 {
     async fn query_balance(
-        rollup_driver: &RollupDriver,
-        address: &RollupDriver::Address,
-        denom: &RollupDriver::Denom,
-    ) -> Result<SovereignAmount, RollupDriver::Error> {
+        rollup_driver: &Rollup,
+        address: &Rollup::Address,
+        denom: &Rollup::Denom,
+    ) -> Result<SovereignAmount, Rollup::Error> {
         let rpc_client = rollup_driver.rollup().json_rpc_client();
 
         let mut params = ArrayParams::new();
 
-        params
-            .insert(None::<u64>)
-            .map_err(RollupDriver::raise_error)?;
+        params.insert(None::<u64>).map_err(Rollup::raise_error)?;
 
         params
             .insert(address.to_string())
-            .map_err(RollupDriver::raise_error)?;
+            .map_err(Rollup::raise_error)?;
 
         params
             .insert(denom.to_string())
-            .map_err(RollupDriver::raise_error)?;
+            .map_err(Rollup::raise_error)?;
 
         let response: Response = rpc_client
             .request("bank_balanceOf", params)
             .await
-            .map_err(RollupDriver::raise_error)?;
+            .map_err(Rollup::raise_error)?;
 
         let amount = SovereignAmount {
             quantity: response.amount,
