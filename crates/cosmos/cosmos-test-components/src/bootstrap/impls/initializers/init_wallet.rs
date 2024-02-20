@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 
 use cgp_core::{Async, CanRaiseError};
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::runtime::traits::exec_command::{CanExecCommand, ExecOutput};
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
@@ -14,7 +14,7 @@ use serde_json as json;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::fields::hd_path::HasWalletHdPath;
 use crate::bootstrap::traits::initializers::init_wallet::WalletInitializer;
-use crate::chain_driver::types::wallet::CosmosTestWallet;
+use crate::chain::types::wallet::CosmosTestWallet;
 
 pub struct InitCosmosTestWallet<OutputGetter>(pub PhantomData<OutputGetter>);
 
@@ -42,11 +42,11 @@ impl ExecOutputGetter for GetStdOutOrElseStdErr {
     }
 }
 
-impl<Bootstrap, Runtime, ChainDriver, OutputGetter> WalletInitializer<Bootstrap>
+impl<Bootstrap, Runtime, Chain, OutputGetter> WalletInitializer<Bootstrap>
     for InitCosmosTestWallet<OutputGetter>
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
-        + HasChainDriverType<ChainDriver = ChainDriver>
+        + HasChainType<Chain = Chain>
         + HasWalletHdPath
         + HasChainCommandPath
         + CanRaiseError<Runtime::Error>
@@ -54,14 +54,14 @@ where
         + CanRaiseError<json::Error>
         + CanRaiseError<KeyringError>,
     Runtime: HasFilePathType + CanExecCommand + CanWriteStringToFile,
-    ChainDriver: HasWalletType<Wallet = CosmosTestWallet>,
+    Chain: HasWalletType<Wallet = CosmosTestWallet>,
     OutputGetter: ExecOutputGetter,
 {
     async fn initialize_wallet(
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         wallet_id: &str,
-    ) -> Result<ChainDriver::Wallet, Bootstrap::Error> {
+    ) -> Result<Chain::Wallet, Bootstrap::Error> {
         let add_wallet_output = bootstrap
             .runtime()
             .exec_command(

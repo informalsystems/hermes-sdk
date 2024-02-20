@@ -13,7 +13,7 @@ use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
+use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;

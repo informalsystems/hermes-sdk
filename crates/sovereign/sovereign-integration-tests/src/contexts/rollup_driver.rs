@@ -1,5 +1,4 @@
 use alloc::collections::BTreeMap;
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
@@ -10,8 +9,6 @@ use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::RollupGetter;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::RollupTypeComponent;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
-use hermes_sovereign_test_components::rollup_driver::components::IsSovereignTestComponent;
-use hermes_sovereign_test_components::rollup_driver::components::SovereignTestComponents;
 use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGenesisConfig;
 use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollupNodeConfig;
 use hermes_sovereign_test_components::types::wallet::SovereignWallet;
@@ -32,12 +29,6 @@ pub struct SovereignRollupDriverComponents;
 impl HasComponents for SovereignRollupDriver {
     type Components = SovereignRollupDriverComponents;
 }
-
-delegate_all!(
-    IsSovereignTestComponent,
-    SovereignTestComponents,
-    SovereignRollupDriverComponents,
-);
 
 delegate_components! {
     SovereignRollupDriverComponents {

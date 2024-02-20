@@ -11,7 +11,7 @@ use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisCon
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use crate::chain_driver::types::denom::Denom;
+use crate::chain::types::denom::Denom;
 
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;

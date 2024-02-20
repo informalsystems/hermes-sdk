@@ -11,6 +11,8 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::Ac
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_sovereign_client_components::sovereign::traits::chain::rollup::ProvideRollupType;
+use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::components::{
     IsSovereignBootstrapComponent, SovereignBootstrapComponents as BaseSovereignBootstrapComponents,
 };
@@ -20,7 +22,6 @@ use hermes_sovereign_test_components::bootstrap::traits::rollup_command_path::Ro
 use hermes_sovereign_test_components::bootstrap::traits::rollup_store_dir::RollupStoreDirGetter;
 use hermes_sovereign_test_components::bootstrap::traits::types::rollup_driver::ProvideRollupDriverType;
 use hermes_test_components::chain_driver::traits::types::chain::ProvideChainType;
-use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;
 
 use crate::contexts::rollup_driver::SovereignRollupDriver;
@@ -66,6 +67,10 @@ impl ProvideBridgeDriverType<SovereignBootstrap> for SovereignBootstrapComponent
     type BridgeDriver = CelestiaBridgeDriver;
 }
 
+impl ProvideRollupType<SovereignBootstrap> for SovereignBootstrapComponents {
+    type Rollup = SovereignRollup;
+}
+
 impl ProvideRollupDriverType<SovereignBootstrap> for SovereignBootstrapComponents {
     type RollupDriver = SovereignRollupDriver;
 }
@@ -94,10 +99,6 @@ impl RollupCommandPathGetter<SovereignBootstrap> for SovereignBootstrapComponent
     }
 }
 
-pub trait CheckCanBootstrapRollup: CanBootstrapRollup
-where
-    Self::RollupDriver: HasWalletType,
-{
-}
+pub trait CheckCanBootstrapRollup: CanBootstrapRollup {}
 
 impl CheckCanBootstrapRollup for SovereignBootstrap {}

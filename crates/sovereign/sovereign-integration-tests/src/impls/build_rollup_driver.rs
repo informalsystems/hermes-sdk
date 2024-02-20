@@ -1,6 +1,7 @@
 use alloc::collections::BTreeMap;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
+use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::traits::build_rollup_driver::RollupDriverBuilder;
 use hermes_sovereign_test_components::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
@@ -21,6 +22,7 @@ pub struct BuildSovereignRollupDriver;
 impl<Bootstrap, Runtime> RollupDriverBuilder<Bootstrap> for BuildSovereignRollupDriver
 where
     Bootstrap: HasRuntimeType<Runtime = Runtime>
+        + HasRollupType<Rollup = SovereignRollup>
         + HasRollupDriverType<RollupDriver = SovereignRollupDriver>
         + HasRollupNodeConfigType<RollupNodeConfig = SovereignRollupNodeConfig>
         + HasRollupGenesisConfigType<RollupGenesisConfig = SovereignGenesisConfig>
