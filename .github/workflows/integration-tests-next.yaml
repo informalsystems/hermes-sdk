@@ -96,6 +96,8 @@ jobs:
       - name: List directory contents
         if: failure()
         run: |
+          sudo apt install librust-sha2-dev
           pwd
           ls -lh
           ls -lh crates/sovereign/sovereign-integration-tests
+          sha256sum crates/sovereign/sovereign-integration-tests/tests/utils/sov_celestia_client_cw.wasm
