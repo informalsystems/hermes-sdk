@@ -8,10 +8,10 @@ pub mod channel;
 pub mod clear;
 pub mod client;
 pub mod connection;
-pub mod query;
-
 pub mod keys;
+pub mod query;
 pub mod start;
+
 #[derive(Debug, clap::Parser)]
 pub enum HermesCommand {
     /// Start the Hermes relayer
