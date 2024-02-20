@@ -3,6 +3,7 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
 use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
+use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -75,6 +76,26 @@ use hermes_relayer_components_extra::components::extra::chain::ExtraChainCompone
 use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_test_components::chain::impls::default_memo::ProvideDefaultMemo;
+use hermes_test_components::chain::impls::ibc_transfer::SendIbcTransferMessage;
+use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
+use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
+use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
+use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
+use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
+use hermes_test_components::chain::traits::transfer::string_memo::ProvideStringMemoType;
+use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
+use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
+use hermes_test_components::chain::traits::types::amount::{
+    AmountMethodsComponent, AmountTypeComponent,
+};
+use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
+use hermes_test_components::chain::traits::types::memo::{
+    DefaultMemoGetterComponent, MemoTypeComponent,
+};
+use hermes_test_components::chain::traits::types::wallet::{
+    WalletSignerComponent, WalletTypeComponent,
+};
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
@@ -182,6 +203,23 @@ delegate_components! {
             DelegateCosmosCreateClientMessageBuilder,
         ConnectionHandshakeMessageBuilderComponent:
             DelegateCosmosConnectionHandshakeBuilder,
+        [
+            WalletTypeComponent,
+            WalletSignerComponent,
+            ChainIdFromStringBuilderComponent,
+            AmountTypeComponent,
+            AmountMethodsComponent,
+            DenomTypeComponent,
+            AddressTypeComponent,
+            MemoTypeComponent,
+            DefaultMemoGetterComponent,
+            TokenIbcTransferrerComponent,
+            IbcTransferTimeoutCalculatorComponent,
+            IbcTokenTransferMessageBuilderComponent,
+            IbcTransferredAmountConverterComponent,
+            BalanceQuerierComponent,
+        ]:
+            CosmmosChainTestComponents,
     }
 }
 
