@@ -2,11 +2,11 @@ use std::error::Error as StdError;
 use std::fmt;
 
 use cgp_core::HasErrorType;
-use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
-use hermes_cli_components::any_client::types::client_state::AnyClientState;
 use oneline_eyre::eyre::Context;
 use tracing::info;
 
+use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
+use hermes_cli_components::any_client::types::client_state::AnyClientState;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
@@ -18,6 +18,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 
@@ -50,13 +51,18 @@ pub struct QueryClients {
 
 impl CommandRunner<CosmosBuilder> for QueryClients {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.host_chain_id).await?;
+        let chain = builder
+            .build_chain(&self.host_chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.host_chain_id))?;
+
         let clients = query_client_states::<_, AnyCounterparty>(
             &chain,
             &self.host_chain_id,
             self.reference_chain_id.as_ref(),
         )
-        .await?;
+        .await
+        .wrap_err_with(|| format!("failed to query clients for chain `{}`", self.host_chain_id))?;
 
         if !json() {
             clients.iter().for_each(|client| {
@@ -149,7 +155,7 @@ where
     let mut clients = chain
         .query_client_states_with_latest_height()
         .await
-        .wrap_err("Failed to query clients")?
+        .wrap_err("failed to query clients")?
         .into_iter()
         .map(|(client_id, client_state)| Client::<Chain, Counterparty> {
             client_id,
