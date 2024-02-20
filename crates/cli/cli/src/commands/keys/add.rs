@@ -1,17 +1,22 @@
-use hdpath::StandardHDPath;
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::str::FromStr;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+
 use ibc_relayer::config::ChainConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
 };
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::eyre;
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::str::FromStr;
+use oneline_eyre::eyre::WrapErr;
+
+use hdpath::StandardHDPath;
 use tracing::warn;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
@@ -131,7 +136,11 @@ pub fn add_key(
 
     check_key_exists(&keyring, key_name, overwrite);
 
+<<<<<<< HEAD
     let key_contents = fs::read_to_string(file).map_err(|_| eyre!("error reading the key file"))?;
+=======
+    let key_contents = fs::read_to_string(file).wrap_err("error reading the key file")?;
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
     let key_pair = Secp256k1KeyPair::from_seed_file(&key_contents, hd_path)?;
 
     keyring.add_key(key_name, key_pair.clone())?;
@@ -147,7 +156,11 @@ pub fn restore_key(
     overwrite: bool,
 ) -> eyre::Result<AnySigningKeyPair> {
     let mnemonic_content =
+<<<<<<< HEAD
         fs::read_to_string(mnemonic).map_err(|_| eyre!("error reading the mnemonic file"))?;
+=======
+        fs::read_to_string(mnemonic).wrap_err("error reading the mnemonic file")?;
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
 
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
@@ -176,9 +189,15 @@ pub fn restore_key(
 fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str, overwrite: bool) {
     if keyring.get_key(key_name).is_ok() {
         if overwrite {
+<<<<<<< HEAD
             warn!("key {} will be overwritten", key_name);
         } else {
             Output::error(format!("A key with name '{key_name}' already exists")).exit();
+=======
+            warn!("key '{key_name}' will be overwritten");
+        } else {
+            Output::error(format!("key with name '{key_name}' already exists")).exit();
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
         }
     }
 }
@@ -188,7 +207,11 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
         let chain_config = builder
             .config
             .find_chain(&self.chain_id)
+<<<<<<< HEAD
             .ok_or_else(|| eyre!("No chain configuration found for chain `{}`", self.chain_id))?;
+=======
+            .ok_or_else(|| eyre!("no chain configuration found for chain `{}`", self.chain_id))?;
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
 
         let opts = match self.options(chain_config) {
             Err(err) => Output::error(err).exit(),
@@ -207,14 +230,22 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
                 );
                 match key {
                     Ok(key) => Output::success_msg(format!(
+<<<<<<< HEAD
                         "Added key '{}' ({}) on chain {}",
+=======
+                        "added key '{}' ({}) on chain `{}`",
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
                         opts.name,
                         key.account(),
                         opts.config.id,
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(
+<<<<<<< HEAD
                         "An error occurred adding the key on chain {} from file {:?}: {}",
+=======
+                        "an error occurred adding the key on chain `{}` from file {:?}: {}",
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
                         self.chain_id, key_file, e
                     ))
                     .exit(),
@@ -231,14 +262,22 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
 
                 match key {
                     Ok(key) => Output::success_msg(format!(
+<<<<<<< HEAD
                         "Restored key '{}' ({}) on chain {}",
+=======
+                        "restored key '{}' ({}) on chain `{}`",
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
                         opts.name,
                         key.account(),
                         opts.config.id
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(
+<<<<<<< HEAD
                         "An error occurred restoring the key on chain {} from file {:?}: {}",
+=======
+                        "failed to restore the key on chain `{}` from file {:?}: {}",
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
                         self.chain_id, mnemonic_file, e
                     ))
                     .exit(),
@@ -248,7 +287,11 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
             // The 'required' parameter for the flags will trigger an error if both flags have not been given.
             // And the 'group' parameter for the flags will trigger an error if both flags are given.
             _ => Output::error(
+<<<<<<< HEAD
                 "--mnemonic-file and --key-file can't both be set or both None".to_string(),
+=======
+                "exactly one of --mnemonic-file and --key-file must be given".to_string(),
+>>>>>>> 42a21976e1d53c76b4b5e5c2f90d53655012f4aa
             )
             .exit(),
         }

@@ -2,7 +2,7 @@ use oneline_eyre::eyre::Context;
 use tracing::{info, warn};
 
 use hermes_cli_framework::command::CommandRunner;
-use hermes_cli_framework::output::Output;
+use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
@@ -13,7 +13,7 @@ use ibc_relayer::chain::requests::{
     QueryConnectionRequest, QueryHeight,
 };
 use ibc_relayer_types::core::ics04_channel::channel::State;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, PortChannelId};
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 
 use crate::Result;
 
@@ -73,21 +73,22 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
             let channel_end = &channel.channel_end;
 
             if channel_end.state_matches(&State::Uninitialized) {
-                warn!("{port_id}/{channel_id} on chain {chain_id} at {chain_height:?} is uninitialized");
+                warn!(
+                    "channel `{port_id}/{channel_id}` on chain `{chain_id}` at {chain_height} is uninitialized"
+                );
 
                 continue;
             }
 
             let Some(connection_id) = channel.channel_end.connection_hops.first() else {
                 warn!(
-                    "missing connection hops for {}/{} on chain {} @ {:?}",
-                    port_id, channel_id, chain_id, chain_height,
+                    "missing connection hops for `{port_id}/{channel_id}` on chain `{chain_id}` at `{chain_height}`"
                 );
 
                 continue;
             };
 
-            if show_counterparty || dst_chain_id.is_some() {
+            let counterparty = if show_counterparty || dst_chain_id.is_some() {
                 let connection_id = connection_id.clone();
                 let connection_end = chain
                     .with_blocking_chain_handle(move |handle| {
@@ -105,8 +106,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
 
                 let Ok((connection_end, _)) = connection_end else {
                     warn!(
-                        "missing connection end for {}/{} on chain {} @ {:?}",
-                        port_id, channel_id, chain_id, chain_height,
+                        "missing connection end for `{port_id}/{channel_id}` on chain `{chain_id}` at {chain_height}"
                     );
 
                     continue;
@@ -128,7 +128,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                     .await;
 
                 let Ok((client_state, _)) = client_state else {
-                    warn!("missing client state for {port_id}/{channel_id} on chain {chain_id} at {chain_height:?}");
+                    warn!("missing client state for {port_id}/{channel_id} on chain {chain_id} at {chain_height}");
 
                     continue;
                 };
@@ -143,25 +143,70 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                     continue;
                 }
 
-                channels.push(channel);
-            }
+                let counterparty = channel_end.counterparty();
+
+                Some(Counterparty {
+                    chain_id: client_state_chain_id.clone(),
+                    port_id: counterparty.port_id.clone(),
+                    channel_id: counterparty.channel_id.clone(),
+                })
+            } else {
+                None
+            };
+
+            channels.push((channel, counterparty));
         }
 
-        info!("Successfully queried channels on chain `{chain_id}`");
+        info!("Found {} channels on chain `{chain_id}`", channels.len());
 
-        channels.iter().for_each(|channel| {
-            let port_id = &channel.port_id;
-            let channel_id = &channel.channel_id;
+        if json() {
+            let channels = channels
+                .into_iter()
+                .map(|(channel, counterparty)| {
+                    let (port_id, channel_id) = (channel.port_id, channel.channel_id);
 
-            info!(
-                "{:?}",
-                PortChannelId {
-                    channel_id: channel_id.clone(),
-                    port_id: port_id.clone(),
-                }
-            );
+                    let mut result = serde_json::json!({
+                        "port_id": port_id,
+                        "channel_id": channel_id,
+                    });
+
+                    if let Some(counterparty) = counterparty {
+                        result["counterparty"] = serde_json::to_value(counterparty).unwrap();
+                    }
+
+                    result
+                })
+                .collect::<Vec<_>>();
+
+            return Ok(Output::success(channels));
+        }
+
+        channels.iter().for_each(|(channel, counterparty)| {
+            info!("- {}/{}", channel.port_id, channel.channel_id);
+
+            if let Some(counterparty) = counterparty {
+                info!(
+                    "  - counterparty: {}/{} on chain {}",
+                    counterparty.port_id,
+                    counterparty
+                        .channel_id
+                        .as_ref()
+                        .map_or("unknown".to_string(), |c| c.to_string()),
+                    counterparty.chain_id
+                );
+            }
         });
 
-        Ok(Output::success(channels))
+        Ok(Output::success_msg(format!(
+            "Total: {} channels",
+            channels.len()
+        )))
     }
+}
+
+#[derive(Debug, serde::Serialize)]
+struct Counterparty {
+    chain_id: ChainId,
+    port_id: PortId,
+    channel_id: Option<ChannelId>,
 }
