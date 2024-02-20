@@ -1,4 +1,4 @@
-use oneline_eyre::eyre::eyre;
+use oneline_eyre::eyre::{eyre, Context};
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -7,6 +7,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::BaseError as RelayerError;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+
 use ibc_relayer_types::core::ics03_connection::connection::State;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
@@ -45,11 +46,22 @@ pub struct QueryConnectionEnd {
 
 impl CommandRunner<CosmosBuilder> for QueryConnectionEnd {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
-        let height = self.height.map(|h|
-            Height::new(chain.chain_id().version(), h)
-                .map_err(|e| RelayerError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{h}`. Error: {e}", chain.chain_id().version())))
-        ).transpose()?;
+        let chain = builder
+            .build_chain(&self.chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.chain_id))?;
+
+        let height = self
+            .height
+            .map(|h| {
+                Height::new(chain.chain_id().version(), h).wrap_err_with(|| {
+                    format!(
+                        "failed to create Height with revision number `{}` and revision height `{h}`",
+                        chain.chain_id().version()
+                    )
+                })
+            })
+            .transpose()?;
 
         let connection_end =
             <CosmosChain as CanQueryConnectionEnd<CosmosChain>>::query_connection_end(
@@ -57,7 +69,8 @@ impl CommandRunner<CosmosBuilder> for QueryConnectionEnd {
                 &self.connection_id,
                 height.as_ref(),
             )
-            .await?;
+            .await
+            .wrap_err_with(|| format!("failed to query connection `{}`", self.connection_id))?;
 
         if connection_end.state_matches(&State::Uninitialized) {
             return Ok(Output::error(format!(
