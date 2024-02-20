@@ -1,5 +1,5 @@
 use cgp_core::Async;
-use hermes_test_components::chain_driver::traits::types::address::ProvideAddressType;
+use hermes_test_components::chain::traits::types::address::ProvideAddressType;
 
 pub struct ProvideStringAddress;
 

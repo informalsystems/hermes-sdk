@@ -1,7 +1,7 @@
 use core::cmp::Ordering;
 use core::fmt::{self, Display};
 
-use crate::chain_driver::types::denom::Denom;
+use crate::chain::types::denom::Denom;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Amount {

@@ -1,17 +1,17 @@
 use cgp_core::prelude::HasErrorType;
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_test_components::chain_driver::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
-use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
-use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
+use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use hermes_test_components::chain::traits::types::memo::HasMemoType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::chain_driver::traits::types::memo::HasMemoType;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
 
-use crate::chain_driver::types::amount::Amount;
-use crate::chain_driver::types::messages::token_transfer::TokenTransferMessage;
+use crate::chain::types::amount::Amount;
+use crate::chain::types::messages::token_transfer::TokenTransferMessage;
 
 pub struct BuildCosmosIbcTransferMessage;
 

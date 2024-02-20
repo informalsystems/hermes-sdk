@@ -2,15 +2,15 @@ use std::string::FromUtf8Error;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_test_components::chain_driver::traits::fields::amount::IbcTransferredAmountConverter;
-use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
+use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverter;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use sha2::{Digest, Sha256};
 use subtle_encoding::hex;
 
-use crate::chain_driver::types::amount::Amount;
-use crate::chain_driver::types::denom::Denom;
+use crate::chain::types::amount::Amount;
+use crate::chain::types::denom::Denom;
 
 pub struct ConvertCosmosIbcAmount;
 

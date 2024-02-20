@@ -2,7 +2,7 @@ use core::time::Duration;
 
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
-use hermes_test_components::chain_driver::traits::fields::timeout::IbcTransferTimeoutCalculator;
+use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculator;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer_types::timestamp::Timestamp;
 

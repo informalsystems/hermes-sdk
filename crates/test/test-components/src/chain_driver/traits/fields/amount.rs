@@ -1,6 +1,4 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 
 use crate::chain::traits::types::amount::{AmountOf, HasAmountType};
 use crate::chain::traits::types::denom::HasDenomType;

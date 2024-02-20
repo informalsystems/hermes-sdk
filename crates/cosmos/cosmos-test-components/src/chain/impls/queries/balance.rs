@@ -2,15 +2,15 @@ use core::num::ParseIntError;
 
 use cgp_core::CanRaiseError;
 use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
-use hermes_test_components::chain_driver::traits::queries::balance::BalanceQuerier;
-use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
-use hermes_test_components::chain_driver::traits::types::amount::HasAmountType;
+use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc_relayer::chain::cosmos::query::balance::query_balance;
 use ibc_relayer::error::Error as RelayerError;
 
-use crate::chain_driver::types::amount::Amount;
-use crate::chain_driver::types::denom::Denom;
+use crate::chain::types::amount::Amount;
+use crate::chain::types::denom::Denom;
 
 pub struct QueryCosmosBalance;
 

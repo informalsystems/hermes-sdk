@@ -9,7 +9,7 @@ use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
 use prost::EncodeError;
 
-use crate::chain_driver::types::amount::Amount;
+use crate::chain::types::amount::Amount;
 
 #[derive(Debug)]
 pub struct TokenTransferMessage {
