@@ -30,6 +30,7 @@ ibc-relayer-types         = { workspace = true }
 
 clap                      = { workspace = true, features = ["derive"] }
 oneline-eyre              = { workspace = true }
+hdpath                    = { workspace = true }
 humantime                 = { workspace = true }
 tracing                   = { workspace = true }
 serde_json                = { workspace = true }
