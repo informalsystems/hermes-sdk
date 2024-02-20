@@ -1,4 +1,5 @@
-use oneline_eyre::eyre::eyre;
+use oneline_eyre::eyre::{eyre, Context};
+use tracing::warn;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -132,10 +133,15 @@ fn delete_all_keys(config: &ChainConfig) -> Result<()> {
         &config.key_store_folder,
     )?;
 
-    let keys = keyring.keys()?;
+    let keys = keyring
+        .keys()
+        .wrap_err("failed to fetch keys from keyring")?;
 
     for (key_name, _) in keys {
-        keyring.remove_key(&key_name)?;
+        if let Err(e) = keyring.remove_key(&key_name) {
+            warn!("failed to remove key `{key_name}` from keyring: {e}");
+            continue;
+        }
     }
 
     Ok(())

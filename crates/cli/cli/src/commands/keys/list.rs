@@ -1,7 +1,7 @@
 use core::fmt::Write;
 use std::collections::BTreeMap;
 
-use oneline_eyre::eyre::eyre;
+use oneline_eyre::eyre::{eyre, Context};
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
@@ -63,7 +63,7 @@ impl CommandRunner<CosmosBuilder> for KeysListCmd {
                 }
                 Ok(Output::success_msg(msg))
             }
-            Err(e) => Err(e.1.wrap_err("`keys list` command failed")),
+            Err(e) => Err(eyre!("`keys list` command failed: {e}")),
         }
     }
 }
