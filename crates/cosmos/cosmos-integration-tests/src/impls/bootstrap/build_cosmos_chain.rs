@@ -17,17 +17,14 @@ use crate::traits::bootstrap::relayer_chain_config::CanBuildRelayerChainConfig;
 
 pub struct BuildCosmosChainWithNodeConfig;
 
-impl<Bootstrap, ChainDriver> ChainBuilderWithNodeConfig<Bootstrap>
-    for BuildCosmosChainWithNodeConfig
+impl<Bootstrap> ChainBuilderWithNodeConfig<Bootstrap> for BuildCosmosChainWithNodeConfig
 where
     Bootstrap: HasChainType<Chain = CosmosChain>
-        + HasChainDriverType<ChainDriver = ChainDriver>
         + HasChainNodeConfigType
         + CanBuildRelayerChainConfig
         + HasCosmosBuilder
         + HasRuntime
         + CanRaiseError<CosmosError>,
-    ChainDriver: HasWalletType<Wallet = CosmosTestWallet>,
     Bootstrap::Runtime: CanSleep,
 {
     async fn build_chain_with_node_config(

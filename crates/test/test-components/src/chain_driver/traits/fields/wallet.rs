@@ -22,6 +22,9 @@ where
 }
 
 #[derive_component(WalletsGetterComponent, WalletsGetter<ChainDriver>)]
-pub trait HasWallets: HasWalletType {
-    fn wallets(&self) -> &BTreeMap<String, Self::Wallet>;
+pub trait HasWallets: HasChainType
+where
+    Self::Chain: HasWalletType,
+{
+    fn wallets(&self) -> &BTreeMap<String, WalletOf<Self::Chain>>;
 }
