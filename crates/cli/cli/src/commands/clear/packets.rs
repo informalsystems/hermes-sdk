@@ -1,10 +1,12 @@
+use futures::stream::{self, StreamExt};
+use oneline_eyre::eyre::Context;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-
-use futures::stream::{self, StreamExt};
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
+
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -97,7 +99,8 @@ impl CommandRunner<CosmosBuilder> for PacketsClear {
                 &self.client_id,
                 &self.counterparty_client_id, // nothing to pass here
             )
-            .await?;
+            .await
+            .wrap_err("relayer failed to start")?;
 
         stream::iter(vec![
             relayer.relay_a_to_b.clear_packets(
