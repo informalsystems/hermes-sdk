@@ -3,18 +3,18 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use hdpath::StandardHDPath;
+use oneline_eyre::eyre::{self, eyre, Context};
+use tracing::warn;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+
 use ibc_relayer::config::ChainConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
 };
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use oneline_eyre::eyre;
-use oneline_eyre::eyre::eyre;
-use oneline_eyre::eyre::WrapErr;
-use tracing::warn;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
 ///
