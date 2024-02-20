@@ -1,3 +1,6 @@
+use oneline_eyre::eyre::{eyre, Context};
+use tracing::info;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
@@ -5,11 +8,10 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
+
 use ibc_relayer::channel::version::Version;
 use ibc_relayer_types::core::ics04_channel::channel::Ordering;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId, ConnectionId, PortId};
-use oneline_eyre::eyre::eyre;
-use tracing::info;
 
 use crate::Result;
 
@@ -104,7 +106,7 @@ impl CommandRunner<CosmosBuilder> for ChannelCreate {
                 &self.client_id_b,
             )
             .await
-            .map_err(|e| eyre!("Failed to build relay: {e}"))?;
+            .wrap_err("relayer failed to start")?;
 
         let options = CosmosInitChannelOptions {
             ordering: self.ordering,
@@ -114,7 +116,7 @@ impl CommandRunner<CosmosBuilder> for ChannelCreate {
 
         info!(
             ?options,
-            "Creating channel between {}:{} and {}:{} on connection {}...",
+            "Creating channel between `{}`:`{}` and `{}`:`{}` on connection `{}`...",
             self.chain_id_a,
             self.client_id_a,
             self.chain_id_b,
@@ -125,11 +127,11 @@ impl CommandRunner<CosmosBuilder> for ChannelCreate {
         let (channel_id_a, channel_id_b) = relay
             .bootstrap_channel(&self.port_id_a, &self.port_id_b, &options)
             .await
-            .map_err(|e| eyre!("Failed to create channel: channel handshake failed: {e}"))?;
+            .wrap_err("failed to create channel; channel handshake failed")?;
 
         info!(
             %channel_id_a, %channel_id_b,
-            "Channel successfully created between {} and {}",
+            "Channel successfully created between `{}` and `{}`",
             self.chain_id_a, self.chain_id_b,
         );
 
