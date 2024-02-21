@@ -4,7 +4,8 @@
   inputs = {
     nixpkgs.url = github:nixos/nixpkgs/nixpkgs-unstable;
     flake-utils.url = github:numtide/flake-utils;
-    cosmos-nix.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
+    cosmos-nix.url = github:informalsystems/cosmos.nix;
+    cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
     sovereign-nix.url = github:informalsystems/sov-rollup-starter;
   };
 
@@ -24,14 +25,19 @@
       };
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
+      cosmos-nix-wasm = inputs.cosmos-nix-wasm.packages.${system};
       sovereign-nix = inputs.sovereign-nix.packages.${system};
     in {
       packages = {
         inherit
           (cosmos-nix)
           ibc-go-v7-simapp
-          ibc-go-v7-wasm-simapp
           ibc-go-v8-simapp
+        ;
+
+        inherit
+          (cosmos-nix-wasm)
+          ibc-go-v7-wasm-simapp
         ;
 
         inherit
