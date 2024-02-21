@@ -1,8 +1,11 @@
 use alloc::sync::Arc;
 
+use cgp_core::Async;
 use hermes_async_runtime_components::subscription::impls::empty::EmptySubscription;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_test_components::chain::traits::types::tx_context::ProvideTxContextType;
+use hermes_test_components::chain::traits::types::tx_context::TxContextGetter;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::{ChainConfig, EventSourceMode};
@@ -14,6 +17,7 @@ use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::HttpClient;
 
+use crate::chain::components::CosmosChainComponents;
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::subscription::CanCreateAbciEventSubscription;
 use crate::types::telemetry::CosmosTelemetry;
@@ -78,5 +82,18 @@ impl CosmosChain {
         };
 
         chain
+    }
+}
+
+impl<Chain> ProvideTxContextType<Chain> for CosmosChainComponents
+where
+    Chain: Async,
+{
+    type TxContext = CosmosTxContext;
+}
+
+impl TxContextGetter<CosmosChain> for CosmosChainComponents {
+    fn tx_context(driver: &CosmosChain) -> &CosmosTxContext {
+        &driver.tx_context
     }
 }

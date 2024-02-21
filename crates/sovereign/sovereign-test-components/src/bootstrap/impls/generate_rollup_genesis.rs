@@ -2,12 +2,12 @@ use alloc::collections::BTreeMap;
 use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::chain_driver::traits::types::address::HasAddressType;
-use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::bootstrap::traits::generate_rollup_genesis::RollupGenesisGenerator;
-use crate::bootstrap::traits::types::rollup_driver::HasRollupDriverType;
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;
 use crate::types::rollup_genesis_config::{
     AccountsGenesis, BankGenesis, ChainStateGenesis, CoinsToLock, SequencerRegistryGenesis,
@@ -17,23 +17,23 @@ use crate::types::wallet::{encode_token_address, SovereignWallet};
 
 pub struct GenerateSovereignGenesis;
 
-impl<Bootstrap, Runtime, ChainDriver, RollupDriver> RollupGenesisGenerator<Bootstrap>
+impl<Bootstrap, Runtime, Chain, Rollup> RollupGenesisGenerator<Bootstrap>
     for GenerateSovereignGenesis
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasRollupGenesisConfigType<RollupGenesisConfig = SovereignGenesisConfig>
         + HasAccountPrefix
-        + HasChainDriverType<ChainDriver = ChainDriver>
-        + HasRollupDriverType<RollupDriver = RollupDriver>
+        + HasChainType<Chain = Chain>
+        + HasRollupType<Rollup = Rollup>
         + CanRaiseError<bech32::Error>
         + CanRaiseError<&'static str>,
-    ChainDriver: HasAddressType,
-    RollupDriver: HasWalletType<Wallet = SovereignWallet>,
+    Chain: HasAddressType,
+    Rollup: HasWalletType<Wallet = SovereignWallet>,
 {
     async fn generate_rollup_genesis(
         bootstrap: &Bootstrap,
-        sequencer_da_address: &ChainDriver::Address,
-        rollup_wallets: &BTreeMap<String, RollupDriver::Wallet>,
+        sequencer_da_address: &Chain::Address,
+        rollup_wallets: &BTreeMap<String, Rollup::Wallet>,
     ) -> Result<Bootstrap::RollupGenesisConfig, Bootstrap::Error> {
         let sequencer_wallet = rollup_wallets
             .get("sequencer")

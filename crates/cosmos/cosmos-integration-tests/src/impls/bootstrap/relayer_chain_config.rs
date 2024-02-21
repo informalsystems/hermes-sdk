@@ -5,9 +5,9 @@ use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
-use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
-use hermes_test_components::chain_driver::traits::types::wallet::HasWalletType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer::chain::ChainType;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::config::{self, AddressType, ChainConfig};
@@ -20,15 +20,15 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilder;
 
 pub struct BuildRelayerChainConfig;
 
-impl<Bootstrap, ChainDriver> RelayerChainConfigBuilder<Bootstrap> for BuildRelayerChainConfig
+impl<Bootstrap, Chain> RelayerChainConfigBuilder<Bootstrap> for BuildRelayerChainConfig
 where
     Bootstrap: HasAccountPrefix
         + HasCompatMode
         + HasGasDenom
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
-        + HasChainDriverType<ChainDriver = ChainDriver>
+        + HasChainType<Chain = Chain>
         + CanRaiseError<TendermintRpcError>,
-    ChainDriver: HasWalletType<Wallet = CosmosTestWallet>,
+    Chain: HasWalletType<Wallet = CosmosTestWallet>,
 {
     fn build_relayer_chain_config(
         bootstrap: &Bootstrap,
