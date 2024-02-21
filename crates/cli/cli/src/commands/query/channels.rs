@@ -1,12 +1,15 @@
 use oneline_eyre::eyre::Context;
 use tracing::{info, warn};
 
+use cgp_core::CanRaiseError;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{
     IncludeProof, PageRequest, QueryChannelsRequest, QueryClientStateRequest,
@@ -42,12 +45,22 @@ pub struct QueryChannels {
     show_counterparty: bool,
 }
 
+#[derive(Debug, serde::Serialize)]
+struct Counterparty {
+    chain_id: ChainId,
+    port_id: PortId,
+    channel_id: Option<ChannelId>,
+}
+
 impl CommandRunner<CosmosBuilder> for QueryChannels {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let dst_chain_id = self.counterparty_chain_id.clone();
         let show_counterparty = self.show_counterparty;
+        let chain = builder
+            .build_chain(&self.chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.chain_id))?;
 
         let all_channels = chain
             .with_blocking_chain_handle(move |chain_handle| {
@@ -55,14 +68,16 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                     .query_channels(QueryChannelsRequest {
                         pagination: Some(PageRequest::all()),
                     })
-                    .map_err(|e| BaseError::relayer(e).into())
+                    .map_err(|e| {
+                        CosmosChain::raise_error(e.1.wrap_err("failed to query all channel ends"))
+                    })
             })
             .await?;
 
         let chain_height = chain
             .query_chain_height()
             .await
-            .wrap_err("Failed to query latest chain height")?;
+            .wrap_err("failed to query latest chain height")?;
 
         let mut channels = Vec::new();
 
@@ -74,7 +89,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
 
             if channel_end.state_matches(&State::Uninitialized) {
                 warn!(
-                    "channel `{port_id}/{channel_id}` on chain `{chain_id}` at {chain_height} is uninitialized"
+                    "channel `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}` is uninitialized"
                 );
 
                 continue;
@@ -82,7 +97,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
 
             let Some(connection_id) = channel.channel_end.connection_hops.first() else {
                 warn!(
-                    "missing connection hops for `{port_id}/{channel_id}` on chain `{chain_id}` at `{chain_height}`"
+                    "missing connection hops for `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}`"
                 );
 
                 continue;
@@ -100,13 +115,15 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                                 },
                                 IncludeProof::No,
                             )
-                            .map_err(|e| BaseError::relayer(e).into())
+                            .map_err(|e| {
+                                CosmosChain::raise_error(e.1.wrap_err("failed to query connection"))
+                            })
                     })
                     .await;
 
                 let Ok((connection_end, _)) = connection_end else {
                     warn!(
-                        "missing connection end for `{port_id}/{channel_id}` on chain `{chain_id}` at {chain_height}"
+                        "missing connection end for `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}`"
                     );
 
                     continue;
@@ -123,12 +140,16 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                                 },
                                 IncludeProof::No,
                             )
-                            .map_err(|e| BaseError::relayer(e).into())
+                            .map_err(|e| {
+                                CosmosChain::raise_error(
+                                    e.1.wrap_err("failed to query client state"),
+                                )
+                            })
                     })
                     .await;
 
                 let Ok((client_state, _)) = client_state else {
-                    warn!("missing client state for {port_id}/{channel_id} on chain {chain_id} at {chain_height}");
+                    warn!("missing client state for `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}`");
 
                     continue;
                 };
@@ -182,11 +203,11 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
         }
 
         channels.iter().for_each(|(channel, counterparty)| {
-            info!("- {}/{}", channel.port_id, channel.channel_id);
+            info!("- `{}`/`{}`", channel.port_id, channel.channel_id);
 
             if let Some(counterparty) = counterparty {
                 info!(
-                    "  - counterparty: {}/{} on chain {}",
+                    "  - counterparty: `{}`/`{}` on chain `{}`",
                     counterparty.port_id,
                     counterparty
                         .channel_id
@@ -202,11 +223,4 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
             channels.len()
         )))
     }
-}
-
-#[derive(Debug, serde::Serialize)]
-struct Counterparty {
-    chain_id: ChainId,
-    port_id: PortId,
-    channel_id: Option<ChannelId>,
 }

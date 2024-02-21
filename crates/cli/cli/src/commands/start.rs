@@ -1,11 +1,14 @@
+use oneline_eyre::eyre::Context;
+use tracing::info;
+
 use cgp_core::CanRun;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
+
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
-use oneline_eyre::eyre::eyre;
-use tracing::info;
 
 use crate::Result;
 
@@ -60,7 +63,7 @@ impl CommandRunner<CosmosBuilder> for Start {
                 &self.client_id_b,
             )
             .await
-            .map_err(|e| eyre!("Relayer failed to start: {e}"))?;
+            .wrap_err("relayer failed to start")?;
 
         info!(
             "Relaying between {} and {}...",
@@ -70,8 +73,8 @@ impl CommandRunner<CosmosBuilder> for Start {
         birelay
             .run()
             .await
-            .map_err(|e| eyre!("Relayed exited because of error: {e}"))?;
+            .wrap_err("relayer exited because of error")?;
 
-        Ok(Output::success_msg("Relayer exited successfully."))
+        Ok(Output::success_msg("Relayer exited successfully"))
     }
 }

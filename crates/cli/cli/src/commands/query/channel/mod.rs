@@ -1,9 +1,10 @@
 mod client;
-mod end;
-mod ends;
-
 pub use client::QueryChannelClient;
+
+mod end;
 pub use end::QueryChannelEnd;
+
+mod ends;
 pub use ends::QueryChannelEnds;
 
 use hermes_cli_framework::command::CommandRunner;

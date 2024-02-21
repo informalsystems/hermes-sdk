@@ -1,15 +1,17 @@
+use oneline_eyre::eyre::{eyre, Context};
+use tracing::info;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
+
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use oneline_eyre::eyre::eyre;
-use tracing::info;
 
 use crate::Result;
 
@@ -72,7 +74,7 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
                 .find_chain(&self.host_chain_id)
                 .ok_or_else(|| {
                     eyre!(
-                        "No chain configuration found for chain `{}`",
+                        "no chain configuration found for chain `{}`",
                         self.host_chain_id
                     )
                 })?;
@@ -82,13 +84,19 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
             .find_chain(&self.reference_chain_id)
             .ok_or_else(|| {
                 eyre!(
-                    "No chain configuration found for chain `{}`",
+                    "no chain configuration found for chain `{}`",
                     self.reference_chain_id
                 )
             })?;
 
-        let host_chain = builder.build_chain(&self.host_chain_id).await?;
-        let reference_chain = builder.build_chain(&self.reference_chain_id).await?;
+        let host_chain = builder
+            .build_chain(&self.host_chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.host_chain_id))?;
+        let reference_chain = builder
+            .build_chain(&self.reference_chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.reference_chain_id))?;
 
         let options = CreateOptions {
             max_clock_drift: self.clock_drift.map(|d| d.into()),
@@ -109,7 +117,7 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
         let client_id_on_host =
             CosmosRelay::create_client(DestinationTarget, &host_chain, &reference_chain, &settings)
                 .await
-                .map_err(|e| eyre!("Failed to create client on host chain: {e}"))?;
+                .wrap_err("failed to create client on host chain")?;
 
         info!(
             %client_id_on_host,
@@ -129,12 +137,12 @@ fn parse_trust_threshold(input: &str) -> Result<TrustThreshold> {
     let numerator = num_part
         .trim()
         .parse()
-        .map_err(|_| eyre!("invalid trust threshold numerator"))?;
+        .wrap_err("invalid trust threshold numerator")?;
 
     let denominator = denom_part
         .trim()
         .parse()
-        .map_err(|_| eyre!("invalid trust threshold denominator"))?;
+        .wrap_err("invalid trust threshold denominator")?;
 
-    TrustThreshold::new(numerator, denominator).map_err(|e| eyre!("invalid trust threshold: {e}"))
+    TrustThreshold::new(numerator, denominator).wrap_err("invalid trust threshold")
 }

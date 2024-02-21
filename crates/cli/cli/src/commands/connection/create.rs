@@ -1,5 +1,8 @@
 use std::time::Duration;
 
+use oneline_eyre::eyre::Context;
+use tracing::info;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
@@ -7,10 +10,9 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
-use oneline_eyre::eyre::eyre;
-use tracing::info;
 
 use crate::Result;
 
@@ -64,7 +66,7 @@ impl CommandRunner<CosmosBuilder> for ConnectionCreate {
                 &self.client_id_b,
             )
             .await
-            .map_err(|e| eyre!("Failed to build relay: {e}"))?;
+            .wrap_err("relayer failed to start")?;
 
         let options = CosmosInitConnectionOptions {
             delay_period: Duration::from_secs(0),
@@ -73,7 +75,7 @@ impl CommandRunner<CosmosBuilder> for ConnectionCreate {
 
         info!(
             ?options,
-            "Creating connection between {}:{} and {}:{}...",
+            "Creating connection between `{}`:`{}` and `{}`:`{}`...",
             self.chain_id_a,
             self.client_id_a,
             self.chain_id_b,
@@ -83,7 +85,7 @@ impl CommandRunner<CosmosBuilder> for ConnectionCreate {
         let (connection_id_a, connection_id_b) = relay
             .bootstrap_connection(&options)
             .await
-            .map_err(|e| eyre!("Failed to create connection: connection handshake failed: {e}"))?;
+            .wrap_err("failed to create connection; connection handshake failed")?;
 
         info!(
             %connection_id_a, %connection_id_b,

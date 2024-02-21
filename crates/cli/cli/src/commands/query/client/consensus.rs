@@ -51,7 +51,10 @@ pub struct QueryClientConsensus {
 
 impl CommandRunner<CosmosBuilder> for QueryClientConsensus {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
+        let chain = builder
+            .build_chain(&self.chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.chain_id))?;
 
         let counterparty_chain_id = <CosmosChain as CanQueryClientStateWithLatestHeight<
             CosmosChain,
@@ -72,7 +75,7 @@ impl CommandRunner<CosmosBuilder> for QueryClientConsensus {
             let query_height = self.height.map(|height| {
                 Height::new(self.chain_id.version(), height)
                     .wrap_err_with(|| format!(
-                        "Failed to create Height with revision number `{}` and revision height `{height}`", 
+                        "failed to create Height with revision number `{}` and revision height `{height}`", 
                         self.chain_id.version()
                     ))
             }).transpose()?;

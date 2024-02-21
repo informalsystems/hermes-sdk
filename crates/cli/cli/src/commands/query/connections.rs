@@ -9,6 +9,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::BaseError;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::PageRequest;
 use ibc_relayer::chain::requests::QueryConnectionsRequest;

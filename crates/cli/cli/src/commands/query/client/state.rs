@@ -1,6 +1,7 @@
 use std::error::Error as StdError;
 use std::fmt::Debug;
 
+use oneline_eyre::eyre::Context;
 use serde::Serialize;
 use tracing::info;
 
@@ -15,6 +16,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 
@@ -64,18 +66,23 @@ where
         let chain_id = &self.chain_id;
         let client_id = &self.client_id;
 
-        let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
+        let chain = builder
+            .build_chain(ChainATarget, &self.chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.chain_id))?;
 
         let client_state = match self.height {
             Some(height) => {
                 let height = Height::new(self.chain_id.version(), height).unwrap();
-                chain.query_client_state(&self.client_id, &height).await?
-            }
-            None => {
                 chain
-                    .query_client_state_with_latest_height(&self.client_id)
-                    .await?
+                    .query_client_state(&self.client_id, &height)
+                    .await
+                    .wrap_err_with(|| format!("failed to query client `{}`", self.client_id))?
             }
+            None => chain
+                .query_client_state_with_latest_height(&self.client_id)
+                .await
+                .wrap_err_with(|| format!("failed to query client `{}`", self.client_id))?,
         };
 
         info!("Found client state for client `{client_id}` on chain `{chain_id}`!");
