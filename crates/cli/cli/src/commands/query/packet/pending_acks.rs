@@ -1,11 +1,12 @@
-use cgp_core::CanRaiseError;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use oneline_eyre::eyre::{eyre, Context};
+
+use cgp_core::CanRaiseError;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 
 use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
 use ibc_relayer::path::PathIdentifiers;
