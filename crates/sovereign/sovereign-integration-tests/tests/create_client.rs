@@ -78,20 +78,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
                 )
                 .unwrap();
 
-            /*let expedited_voting_period = genesis
-                .get_mut("app_state")
-                .and_then(|app_state| app_state.get_mut("gov"))
-                .and_then(|gov| gov.get_mut("params"))
-                .and_then(|voting_params| voting_params.as_object_mut())
-                .unwrap();
-
-            expedited_voting_period
-                .insert(
-                    "expedited_voting_period".to_owned(),
-                    serde_json::Value::String("9s".to_owned()),
-                )
-                .unwrap();*/
-
             let allowed_clients = genesis
                 .get_mut("app_state")
                 .and_then(|app_state| app_state.get_mut("ibc"))

@@ -95,10 +95,3 @@ jobs:
               cargo nextest run -p hermes-sovereign-integration-tests \
               --test-threads=2 \
               --failure-output final
-      - name: List directory contents
-        if: failure()
-        run: |
-          sudo apt install librust-sha2-dev
-          ls -lh crates/sovereign/sovereign-integration-tests/ibc_08-wasm_client_data/state/wasm
-          sha256sum -b crates/sovereign/sovereign-integration-tests/tests/utils/sov_celestia_client_cw.wasm
-          sha256sum -t crates/sovereign/sovereign-integration-tests/tests/utils/sov_celestia_client_cw.wasm
