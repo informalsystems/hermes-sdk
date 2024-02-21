@@ -1818,6 +1818,7 @@ dependencies = [
  "ibc-relayer-types",
  "itertools 0.11.0",
  "prost",
+ "serde",
  "serde_json",
  "sha2 0.10.8",
  "subtle-encoding",

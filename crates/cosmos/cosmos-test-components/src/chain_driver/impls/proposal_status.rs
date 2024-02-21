@@ -1,10 +1,9 @@
-use std::collections::HashMap;
-
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use serde::Deserialize;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerier;
@@ -12,14 +11,20 @@ use crate::chain_driver::traits::rpc_port::HasRpcPort;
 
 pub struct QueryGovernanceProposalStatusWithChainCommand;
 
+#[derive(Deserialize)]
+pub struct Response {
+    pub status: String,
+}
+
 impl<ChainDriver, Runtime> GovernanceProposalStatusQuerier<ChainDriver>
     for QueryGovernanceProposalStatusWithChainCommand
 where
     ChainDriver: HasRuntime<Runtime = Runtime>
-        + CanRaiseError<Runtime::Error>
         + HasChainCommandPath
         + HasChainHomeDir
-        + HasRpcPort,
+        + HasRpcPort
+        + CanRaiseError<Runtime::Error>
+        + CanRaiseError<serde_json::Error>,
     Runtime: CanExecCommand + CanWriteStringToFile,
 {
     async fn query_proposal_status(
@@ -46,11 +51,9 @@ where
             .await
             .map_err(ChainDriver::raise_error)?;
 
-        let json: HashMap<String, serde_json::Value> =
-            serde_json::from_str(&output.stdout).unwrap();
+        let response: Response =
+            serde_json::from_str(&output.stdout).map_err(ChainDriver::raise_error)?;
 
-        let status_str = json.get("status").unwrap().as_str().unwrap();
-
-        Ok(status_str.to_owned())
+        Ok(response.status)
     }
 }
