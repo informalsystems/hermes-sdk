@@ -1,11 +1,15 @@
-use crate::commands::query::packet::util::PacketSequences;
-use crate::Result;
+use oneline_eyre::eyre::Context;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
+
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+
+use crate::commands::query::packet::util::PacketSequences;
+use crate::Result;
 
 #[derive(Debug, clap::Parser)]
 pub struct QueryPacketCommitments {
@@ -39,7 +43,10 @@ pub struct QueryPacketCommitments {
 
 impl CommandRunner<CosmosBuilder> for QueryPacketCommitments {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
+        let chain = builder
+            .build_chain(&self.chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to bu;ild chain `{}`", self.chain_id))?;
 
         let (sequences, height) =
             <CosmosChain as CanQueryPacketCommitments<CosmosChain>>::query_packet_commitments(
@@ -47,7 +54,8 @@ impl CommandRunner<CosmosBuilder> for QueryPacketCommitments {
                 &self.channel_id,
                 &self.port_id,
             )
-            .await?;
+            .await
+            .wrap_err("failed to query packet commitments")?;
 
         let packet_sequences = PacketSequences::new(height, sequences);
 

@@ -1,12 +1,12 @@
 use core::fmt;
 
 use cgp_core::CanRaiseError;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::BaseError;
 
 use ibc_relayer::chain::counterparty::pending_packet_summary;
 use ibc_relayer::chain::counterparty::{
