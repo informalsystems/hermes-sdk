@@ -1,4 +1,5 @@
 #![recursion_limit = "256"]
+use eyre::eyre;
 
 use core::time::Duration;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
@@ -55,28 +56,36 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
                 .and_then(|app_state| app_state.get_mut("gov"))
                 .and_then(|gov| gov.get_mut("params"))
                 .and_then(|deposit_params| deposit_params.as_object_mut())
-                .unwrap();
+                .ok_or_else(|| {
+                    eyre!("Failed to retrieve `deposit_params` in genesis configuration")
+                })?;
 
             max_deposit_period
                 .insert(
                     "max_deposit_period".to_owned(),
                     JsonValue::String("10s".to_owned()),
                 )
-                .unwrap();
+                .ok_or_else(|| {
+                    eyre!("Failed to update `max_deposit_period` in genesis configuration")
+                })?;
 
             let voting_period = genesis
                 .get_mut("app_state")
                 .and_then(|app_state| app_state.get_mut("gov"))
                 .and_then(|gov| gov.get_mut("params"))
                 .and_then(|voting_params| voting_params.as_object_mut())
-                .unwrap();
+                .ok_or_else(|| {
+                    eyre!("Failed to retrieve `voting_params` in genesis configuration")
+                })?;
 
             voting_period
                 .insert(
                     "voting_period".to_owned(),
                     serde_json::Value::String("10s".to_owned()),
                 )
-                .unwrap();
+                .ok_or_else(|| {
+                    eyre!("Failed to update `voting_period` in genesis configuration")
+                })?;
 
             let allowed_clients = genesis
                 .get_mut("app_state")
@@ -85,7 +94,9 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
                 .and_then(|client_genesis| client_genesis.get_mut("params"))
                 .and_then(|params| params.get_mut("allowed_clients"))
                 .and_then(|allowed_clients| allowed_clients.as_array_mut())
-                .unwrap();
+                .ok_or_else(|| {
+                    eyre!("Failed to retrieve `allowed_clients` in genesis configuration")
+                })?;
 
             allowed_clients.push(JsonValue::String("08-wasm".to_string()));
 
@@ -94,9 +105,8 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         comet_config_modifier: Box::new(|config| {
             config
                 .get_mut("rpc")
-                .unwrap()
-                .as_table_mut()
-                .unwrap()
+                .and_then(|rpc| rpc.as_table_mut())
+                .ok_or_else(|| eyre!("Failed to retrieve `rpc` in app configuration"))?
                 .insert(
                     "max_body_bytes".to_string(),
                     TomlValue::Integer(10001048576),
@@ -132,39 +142,15 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         // Wait for the governance proposal to be created before starting the queries
         sleep(Duration::from_secs(1));
 
-        let mut i = 1;
-        while i < 10 {
-            let exec_output = <CosmosChainDriver as CanQueryGovernanceProposalStatus>::query_proposal_status(&cosmos_chain_driver, "1").await?;
-            sleep(Duration::from_secs(3));
-            if &exec_output == "PROPOSAL_STATUS_DEPOSIT_PERIOD" {
-                break;
-            }
-            i += 1;
-        }
+        assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
 
         <CosmosChainDriver as CanDepositProposal>::deposit_proposal(&cosmos_chain_driver, "1", "100000000stake", "validator").await?;
 
-        i = 0;
-        while i < 10 {
-            let exec_output = <CosmosChainDriver as CanQueryGovernanceProposalStatus>::query_proposal_status(&cosmos_chain_driver, "1").await?;
-            sleep(Duration::from_secs(3));
-            if &exec_output == "PROPOSAL_STATUS_VOTING_PERIOD" {
-                break;
-            }
-            i += 1;
-        }
+        assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_VOTING_PERIOD").await?;
 
         <CosmosChainDriver as CanVoteProposal>::vote_proposal(&cosmos_chain_driver, "1", "validator").await?;
 
-        i = 0;
-        while i < 10 {
-            let exec_output = <CosmosChainDriver as CanQueryGovernanceProposalStatus>::query_proposal_status(&cosmos_chain_driver, "1").await?;
-            sleep(Duration::from_secs(3));
-            if &exec_output == "PROPOSAL_STATUS_PASSED" {
-                break;
-            }
-            i += 1;
-        }
+        assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_PASSED").await?;
 
         let sovereign_chain = SovereignChain {
             runtime: runtime.clone(),
@@ -186,4 +172,26 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     })?;
 
     Ok(())
+}
+
+async fn assert_eventual_governance_status(
+    cosmos_chain_driver: &CosmosChainDriver,
+    governance_id: &str,
+    expected_status: &str,
+) -> Result<(), Error> {
+    for _ in 0..10 {
+        let exec_output =
+            <CosmosChainDriver as CanQueryGovernanceProposalStatus>::query_proposal_status(
+                cosmos_chain_driver,
+                governance_id,
+            )
+            .await?;
+        sleep(Duration::from_secs(3));
+        if exec_output == expected_status {
+            return Ok(());
+        }
+    }
+    Err(eyre!(
+        "Governance proposal `{governance_id}` was not in status `{expected_status}`"
+    ))
 }
