@@ -1,5 +1,6 @@
 #![recursion_limit = "256"]
 use eyre::eyre;
+use tokio::time::sleep;
 
 use core::time::Duration;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
@@ -11,7 +12,6 @@ use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage
 use serde_json::Value as JsonValue;
 use std::env::var;
 use std::sync::Arc;
-use std::thread::sleep;
 use toml::Value as TomlValue;
 
 use eyre::Error;
@@ -136,9 +136,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             "validator",
         ).await?;
 
-        // Wait for the governance proposal to be created before starting the queries
-        sleep(Duration::from_secs(1));
-
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
 
         cosmos_chain_driver.deposit_proposal("1", "100000000stake", "validator").await?;
@@ -176,13 +173,14 @@ async fn assert_eventual_governance_status(
     governance_id: &str,
     expected_status: &str,
 ) -> Result<(), Error> {
-    for _ in 0..10 {
+    for _ in 0..15 {
         let exec_output = cosmos_chain_driver
             .query_proposal_status(governance_id)
             .await?;
-        sleep(Duration::from_secs(3));
         if exec_output == expected_status {
             return Ok(());
+        } else {
+            sleep(Duration::from_secs(1)).await;
         }
     }
     Err(eyre!(
