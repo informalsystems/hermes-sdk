@@ -55,7 +55,7 @@ impl CommandRunner<CosmosBuilder> for QueryPacketCommitments {
                 &self.port_id,
             )
             .await
-            .wrap_err("failed to query packet commitments")?;
+            .wrap_err("`query packet commitments` command failed")?;
 
         let packet_sequences = PacketSequences::new(height, sequences);
 
