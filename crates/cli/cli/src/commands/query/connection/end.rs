@@ -1,10 +1,9 @@
-use oneline_eyre::eyre::{eyre, Context};
+use oneline_eyre::eyre::Context;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::BaseError as RelayerError;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 

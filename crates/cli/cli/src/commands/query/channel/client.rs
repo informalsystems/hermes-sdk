@@ -1,13 +1,14 @@
+use cgp_core::CanRaiseError;
+
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_cosmos_relayer::contexts::{builder::CosmosBuilder, chain::CosmosChain};
 
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::QueryChannelClientStateRequest;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use oneline_eyre::eyre::Context;
 
 use crate::Result;
 
@@ -43,24 +44,29 @@ pub struct QueryChannelClient {
 
 impl CommandRunner<CosmosBuilder> for QueryChannelClient {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let chain = builder.build_chain(&self.chain_id).await?;
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();
+        let chain = builder
+            .build_chain(&self.chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.chain_id))?;
 
-        match chain
+        let client_state = chain
             .with_blocking_chain_handle(move |chain_handle| {
-                match chain_handle.query_channel_client_state(QueryChannelClientStateRequest {
-                    port_id,
-                    channel_id,
-                }) {
-                    Ok(maybe_client_state) => Ok(maybe_client_state),
-                    Err(e) => Err(BaseError::relayer(e).into()),
-                }
+                chain_handle
+                    .query_channel_client_state(QueryChannelClientStateRequest {
+                        port_id,
+                        channel_id,
+                    })
+                    .map_err(|e| {
+                        CosmosChain::raise_error(
+                            e.1.wrap_err("failed to query client state for channel"),
+                        )
+                    })
             })
             .await
-        {
-            Ok(client_state) => Ok(Output::success(client_state)),
-            Err(e) => Err(e.into()),
-        }
+            .wrap_err("`query channel client` command failed")?;
+
+        Ok(Output::success(client_state))
     }
 }

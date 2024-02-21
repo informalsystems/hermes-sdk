@@ -89,8 +89,14 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
                 )
             })?;
 
-        let host_chain = builder.build_chain(&self.host_chain_id).await?;
-        let reference_chain = builder.build_chain(&self.reference_chain_id).await?;
+        let host_chain = builder
+            .build_chain(&self.host_chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.host_chain_id))?;
+        let reference_chain = builder
+            .build_chain(&self.reference_chain_id)
+            .await
+            .wrap_err_with(|| format!("failed to build chain `{}`", self.reference_chain_id))?;
 
         let options = CreateOptions {
             max_clock_drift: self.clock_drift.map(|d| d.into()),
