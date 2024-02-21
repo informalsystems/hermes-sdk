@@ -8,6 +8,9 @@ use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_sovereign_client_components::sovereign::types::messages::transfer::{
+    CoinFields, TransferFields, TransferMessage,
+};
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -52,19 +55,32 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
         {
             // Temporary test to check that rollup driver is bootstrapped properly
 
-            let wallet = rollup_driver
+            let wallet_a = rollup_driver
                 .wallets
                 .get("user-a")
+                .ok_or_else(|| eyre!("expect user-a wallet"))?;
+
+            let wallet_b = rollup_driver
+                .wallets
+                .get("user-b")
                 .ok_or_else(|| eyre!("expect user-a wallet"))?;
 
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
             let amount = rollup_driver
                 .rollup
-                .query_balance(&wallet.address, transfer_denom)
+                .query_balance(&wallet_a.address, transfer_denom)
                 .await?;
 
             assert_eq!(amount.quantity, 1_000_000_000_000);
+
+            let message = TransferMessage::Transfer(TransferFields {
+                to: wallet_b.address.clone(),
+                coins: CoinFields {
+                    amount: 1000,
+                    token_address: rollup_driver.genesis_config.transfer_token_address.clone(),
+                },
+            });
         }
         <Result<(), Error>>::Ok(())
     })?;

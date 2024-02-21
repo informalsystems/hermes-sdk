@@ -7,3 +7,4 @@ pub mod messages;
 pub mod payloads;
 pub mod rollup_id;
 pub mod status;
+pub mod transaction;

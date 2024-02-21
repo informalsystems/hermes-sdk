@@ -1,4 +1,6 @@
-pub fn encode_sovereign_tx(
+use crate::sovereign::types::transaction::SovereignTransaction;
+
+pub fn encode_sovereign_tx_sign_bytes(
     mut message: Vec<u8>,
     chain_id: u64,
     gas_tip: u64,
@@ -14,4 +16,30 @@ pub fn encode_sovereign_tx(
     message.push(0);
 
     message
+}
+
+pub fn encode_and_sign_sovereign_tx(
+    signing_key: &SigningKey,
+    message: Vec<u8>,
+    chain_id: u64,
+    gas_tip: u64,
+    gas_limit: u64,
+    nonce: u64,
+) -> SovereignTransaction {
+    let sign_bytes =
+        encode_sovereign_tx_sign_bytes(message.clone(), chain_id, gas_tip, gas_limit, nonce);
+
+    let signature = signing_key.sign(&sign_bytes);
+    let public_key = signing_key.verifying_key();
+
+    SovereignTransaction {
+        signature: SerializeSignature(signature),
+        pub_key: SerializePublicKey(public_key),
+        runtime_msg: message,
+        chain_id,
+        gas_top,
+        gas_limit,
+        max_gas_price: None,
+        nonce,
+    }
 }
