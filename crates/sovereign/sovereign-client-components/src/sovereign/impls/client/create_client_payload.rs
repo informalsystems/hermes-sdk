@@ -6,7 +6,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use ibc_core::client::types::Height;
 use ibc_core::host::types::identifiers::ChainId;
 use ibc_relayer::chain::client::ClientSettings;
-use sov_ibc_mocks::sovereign::{dummy_sov_client_state, dummy_sov_consensus_state};
+use sov_celestia_client::types::client_state::test_util::{
+    dummy_sov_client_state, dummy_sov_consensus_state,
+};
 
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
@@ -33,17 +35,17 @@ where
         //let latest_height = chain.query_chain_height().await?;
 
         let chain_id = ChainId::new("private").unwrap();
-        let latest_height = Height::new(10, 1).unwrap();
+        let latest_height = Height::new(1, 10).unwrap();
 
         let client_state = dummy_sov_client_state(chain_id.clone(), latest_height);
         let consensus_state = dummy_sov_consensus_state();
 
         let code_hash =
-            hex::decode("2469f43c3ca20d476442bd3d98cbd97a180776ab37332aa7b02cae5a620acfc6")
+            hex::decode("0eafd07eb8455de811afb68f9c58fdd5db000111587bf800411836f31e494413")
                 .unwrap();
 
         Ok(SovereignCreateClientPayload {
-            client_state: client_state.inner().clone(),
+            client_state: client_state.clone(),
             consensus_state,
             code_hash,
             latest_height,

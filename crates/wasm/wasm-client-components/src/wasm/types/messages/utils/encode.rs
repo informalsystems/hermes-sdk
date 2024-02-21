@@ -1,0 +1,26 @@
+use ibc_proto::google::protobuf::Any;
+use prost::EncodeError;
+use prost::Message as ProstMessage;
+
+pub fn encode_to_any<Message>(type_url: &str, message: &Message) -> Result<Any, EncodeError>
+where
+    Message: ProstMessage,
+{
+    let encoded_message = encode_protobuf(message)?;
+
+    let any_message = Any {
+        type_url: type_url.to_string(),
+        value: encoded_message,
+    };
+
+    Ok(any_message)
+}
+
+pub fn encode_protobuf<Message>(message: &Message) -> Result<Vec<u8>, EncodeError>
+where
+    Message: ProstMessage,
+{
+    let mut buf = Vec::new();
+    Message::encode(message, &mut buf)?;
+    Ok(buf)
+}

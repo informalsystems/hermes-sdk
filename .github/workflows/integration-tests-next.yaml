@@ -21,8 +21,9 @@ jobs:
             experimental-features = nix-command flakes
       - uses: cachix/cachix-action@v14
         with:
-          name: cosmos
-          extraPullNames: informal-sovereign
+          name: hermes-sdk
+          extraPullNames: cosmos,informal-sovereign
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -47,8 +48,9 @@ jobs:
             experimental-features = nix-command flakes
       - uses: cachix/cachix-action@v14
         with:
-          name: cosmos
-          extraPullNames: informal-sovereign
+          name: hermes-sdk
+          extraPullNames: cosmos,informal-sovereign
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -71,14 +73,17 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SOVEREIGN_SDK_PRIVATE_SSH_KEY }}
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: cachix/install-nix-action@v25
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
       - uses: cachix/cachix-action@v14
         with:
-          name: cosmos
-          extraPullNames: informal-sovereign
+          name: hermes-sdk
+          extraPullNames: cosmos,informal-sovereign
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -86,9 +91,10 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: run integration tests
         env:
+          CHAIN_COMMAND_PATHS: simd
           RUST_BACKTRACE: 1
         run: |
-            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#celestia-node .#sovereign-rollup -c \
+            nix shell .#cargo-nextest .#protobuf .#ibc-go-v7-wasm-simapp .#celestia-app .#celestia-node .#sovereign-rollup -c \
               cargo nextest run -p hermes-sovereign-integration-tests \
               --test-threads=2 \
               --failure-output final

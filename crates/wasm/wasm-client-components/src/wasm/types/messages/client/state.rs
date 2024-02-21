@@ -1,8 +1,9 @@
-use hermes_cosmos_client_components::methods::encode::encode_to_any;
 use ibc_core::client::types::Height;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
 use prost::EncodeError;
+
+use crate::wasm::types::messages::utils::encode::encode_to_any;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

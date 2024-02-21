@@ -1,6 +1,9 @@
+use core::time::Duration;
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
@@ -21,7 +24,7 @@ where
         + HasChainCommandPath
         + HasChainHomeDir
         + HasRpcPort,
-    Runtime: CanExecCommand + CanWriteStringToFile,
+    Runtime: CanExecCommand + CanWriteStringToFile + CanSleep,
     Chain: HasChainId,
 {
     async fn store_wasm_client_code(
@@ -31,8 +34,9 @@ where
         summary: &str,
         sender: &str,
     ) -> Result<String, ChainDriver::Error> {
-        let output = chain_driver
-            .runtime()
+        let runtime = chain_driver.runtime();
+
+        let output = runtime
             .exec_command(
                 chain_driver.chain_command_path(),
                 &[
@@ -47,7 +51,7 @@ where
                     "--chain-id",
                     &chain_driver.chain().chain_id().to_string(),
                     "--node",
-                    &chain_driver.rpc_port().to_string(),
+                    &format!("tcp://localhost:{}", chain_driver.rpc_port()),
                     "--home",
                     &Runtime::file_path_to_string(chain_driver.chain_home_dir()),
                     "--from",
@@ -58,11 +62,16 @@ where
                     "auto",
                     "--fees",
                     "1000016stake",
+                    "--deposit",
+                    "200000stake",
                     "-y",
                 ],
             )
             .await
             .map_err(ChainDriver::raise_error)?;
+
+        // Wait for the governance proposal to be created
+        runtime.sleep(Duration::from_secs(1)).await;
 
         Ok(output.stdout)
     }

@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
 
@@ -11,9 +12,12 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
+use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::GovernanceProposalDepositerComponent;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerierComponent;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::WasmClientCodeUploaderComponent;
+use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -65,6 +69,9 @@ delegate_components! {
             EventualAmountAsserterComponent,
             PollAssertDurationGetterComponent,
             WasmClientCodeUploaderComponent,
+            GovernanceProposalStatusQuerierComponent,
+            GovernanceProposalDepositerComponent,
+            GovernanceProposalVoterComponent,
         ]:
             BaseCosmosChainDriverComponents,
     }
@@ -149,5 +156,11 @@ impl DenomGetterAt<CosmosChainDriver, TransferDenom, 0> for CosmosChainDriverCom
 impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComponents {
     fn denom_at(driver: &CosmosChainDriver, _kind: StakingDenom, _index: Index<0>) -> &Denom {
         &driver.genesis_config.staking_denom
+    }
+}
+
+impl ChainCommandPathGetter<CosmosChainDriver> for CosmosChainDriverComponents {
+    fn chain_command_path(driver: &CosmosChainDriver) -> &PathBuf {
+        &driver.chain_command_path
     }
 }
