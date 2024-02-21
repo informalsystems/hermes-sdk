@@ -2,19 +2,21 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
-use hdpath::StandardHDPath;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+
 use ibc_relayer::config::ChainConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
 };
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use oneline_eyre::eyre;
-use oneline_eyre::eyre::eyre;
-use oneline_eyre::eyre::WrapErr;
+
+use hdpath::StandardHDPath;
+use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
+
+use crate::Result;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
 ///
@@ -93,7 +95,7 @@ pub struct KeysAddCmd {
 }
 
 impl KeysAddCmd {
-    fn options(&self, chain_config: &ChainConfig) -> eyre::Result<KeysAddOptions> {
+    fn options(&self, chain_config: &ChainConfig) -> Result<KeysAddOptions> {
         let name = self
             .key_name
             .clone()
@@ -123,7 +125,7 @@ pub fn add_key(
     file: &Path,
     hd_path: &StandardHDPath,
     overwrite: bool,
-) -> eyre::Result<AnySigningKeyPair> {
+) -> Result<AnySigningKeyPair> {
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &config.account_prefix,
@@ -147,7 +149,7 @@ pub fn restore_key(
     hdpath: &StandardHDPath,
     config: &ChainConfig,
     overwrite: bool,
-) -> eyre::Result<AnySigningKeyPair> {
+) -> Result<AnySigningKeyPair> {
     let mnemonic_content =
         fs::read_to_string(mnemonic).wrap_err("error reading the mnemonic file")?;
 
@@ -178,14 +180,14 @@ pub fn restore_key(
 fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str, overwrite: bool) {
     if keyring.get_key(key_name).is_ok() {
         if overwrite {
-            warn!("key '{key_name}' will be overwritten");
+            warn!("key {} will be overwritten", key_name);
         } else {
             Output::error(format!("key with name '{key_name}' already exists")).exit();
         }
     }
 }
 
-impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
+impl CommandRunner<CosmosBuilder> for KeysAddCmd {
     async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
         let chain_config = builder
             .config
