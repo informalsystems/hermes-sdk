@@ -89,7 +89,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
 
             if channel_end.state_matches(&State::Uninitialized) {
                 warn!(
-                    "channel `{channel_id}`:`{port_id}` on chain `{chain_id}` at height `{chain_height}` is uninitialized"
+                    "channel `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}` is uninitialized"
                 );
 
                 continue;
@@ -97,7 +97,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
 
             let Some(connection_id) = channel.channel_end.connection_hops.first() else {
                 warn!(
-                    "missing connection hops for `{channel_id}`:`{port_id}` on chain `{chain_id}` at height `{chain_height}`"
+                    "missing connection hops for `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}`"
                 );
 
                 continue;
@@ -123,7 +123,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
 
                 let Ok((connection_end, _)) = connection_end else {
                     warn!(
-                        "missing connection end for `{channel_id}`:`{port_id}` on chain `{chain_id}` at height `{chain_height}`"
+                        "missing connection end for `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}`"
                     );
 
                     continue;
@@ -149,7 +149,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                     .await;
 
                 let Ok((client_state, _)) = client_state else {
-                    warn!("missing client state for `{channel_id}`:`{port_id}` on chain `{chain_id}` at height `{chain_height}`");
+                    warn!("missing client state for `{port_id}`/`{channel_id}` on chain `{chain_id}` at height `{chain_height}`");
 
                     continue;
                 };

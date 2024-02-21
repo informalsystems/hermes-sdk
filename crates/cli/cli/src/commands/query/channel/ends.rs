@@ -105,17 +105,17 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                         IncludeProof::No,
                     ) else {
                         return Err(CosmosChain::raise_error(
-                            "failed to query channel end for `{channel_id}`:`{port_id}` on chain {chain_id} @ {query_height:?}"
+                            "failed to query channel end for `{port_id}`/`{channel_id}` on chain {chain_id} @ {query_height:?}"
                         ));
                 };
 
                 if channel_end.state_matches(&State::Uninitialized) {
-                    return Err(CosmosChain::raise_error("`{channel_id}`:`{port_id}` on chain `{chain_id}` @ `{query_height:?}` is uninitialized"));
+                    return Err(CosmosChain::raise_error("`{port_id}`/`{channel_id}` on chain `{chain_id}` @ `{query_height:?}` is uninitialized"));
                 }
 
                 let Some(connection_id) = channel_end.connection_hops.first() else {
                     return Err(CosmosChain::raise_error(
-                        "missing connection hops for `{channel_id}`:`{port_id}` on chain `{chain_id}` @ `{query_height:?}`",
+                        "missing connection hops for `{port_id}`/`{channel_id}` on chain `{chain_id}` @ `{query_height:?}`",
                     ));
                 };
 
@@ -128,7 +128,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                         IncludeProof::No,
                     ) else {
                         return Err(CosmosChain::raise_error(
-                            "failed to query connection end for `{channel_id}`:`{port_id}` on chain `{chain_id}` @ `{query_height:?}`"
+                            "failed to query connection end for `{port_id}`/`{channel_id}` on chain `{chain_id}` @ `{query_height:?}`"
                         ));
                 };
 
@@ -143,7 +143,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
                         IncludeProof::No,
                     ) else {
                         return Err(CosmosChain::raise_error(
-                            "failed to query client state for `{channel_id}`:`{port_id}` on chain `{chain_id}` @ `{query_height:?}`"
+                            "failed to query client state for `{port_id}`/`{channel_id}` on chain `{chain_id}` @ `{query_height:?}`"
                         ));
                 };
 
@@ -153,7 +153,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
 
                 let Some(counterparty_connection_id) = connection_counterparty.connection_id else {
                     return Err(CosmosChain::raise_error(
-                        "connection end for `{channel_id}`:`{port_id}` on chain `{chain_id}` @ `{query_height:?}` does not have counterparty connection id `{connection_end:?}`",
+                        "connection end for `{port_id}`/`{channel_id}` on chain `{chain_id}` @ `{query_height:?}` does not have counterparty connection id `{connection_end:?}`",
                     ));
                 };
 
@@ -161,7 +161,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
 
                 let Some(counterparty_channel_id) = channel_counterparty.channel_id else {
                     return Err(CosmosChain::raise_error(
-                        "channel end for `{channel_id}`:`{port_id}` on chain `{chain_id}` @ `{query_height:?}` does not have counterparty channel id `{channel_end:?}`",
+                        "channel end for `{port_id}`/`{channel_id}` on chain `{chain_id}` @ `{query_height:?}` does not have counterparty channel id `{channel_end:?}`",
                     ));
                 };
 

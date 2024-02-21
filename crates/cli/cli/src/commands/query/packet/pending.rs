@@ -159,7 +159,7 @@ impl QueryPendingPackets {
         })?
         .ok_or_else(|| {
             CosmosChain::raise_error(eyre!(
-                "missing counterparty channel for ({}, {})",
+                "missing counterparty channel for (`{}`, `{}`)",
                 chan_conn_cli.channel.channel_id,
                 chan_conn_cli.channel.port_id
             ))
