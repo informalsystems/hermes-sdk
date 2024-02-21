@@ -24,7 +24,6 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -121,18 +120,16 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         trust_threshold: TrustThreshold::ONE_THIRD,
     });
 
-    let wasm_client_code_path = <HermesRuntime as HasFilePathType>::file_path_from_string(
-        &var("WASM_FILE_PATH")
-            .unwrap_or_else(|_| "tests/utils/sov_celestia_client_cw.wasm".to_string()),
-    );
+    let wasm_client_code_path = var("WASM_FILE_PATH")
+        .unwrap_or_else(|_| "tests/utils/sov_celestia_client_cw.wasm".to_string())
+        .into();
 
     tokio_runtime.block_on(async move {
         let cosmos_chain_driver = bootstrap.bootstrap_chain("cosmos-1").await?;
 
         let cosmos_chain = cosmos_chain_driver.chain();
 
-        <CosmosChainDriver as CanUploadWasmClientCode>::store_wasm_client_code(
-            &cosmos_chain_driver,
+        cosmos_chain_driver.store_wasm_client_code(
             &wasm_client_code_path,
             "tmp",
             "tmp",
@@ -144,11 +141,11 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
 
-        <CosmosChainDriver as CanDepositProposal>::deposit_proposal(&cosmos_chain_driver, "1", "100000000stake", "validator").await?;
+        cosmos_chain_driver.deposit_proposal("1", "100000000stake", "validator").await?;
 
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_VOTING_PERIOD").await?;
 
-        <CosmosChainDriver as CanVoteProposal>::vote_proposal(&cosmos_chain_driver, "1", "validator").await?;
+        cosmos_chain_driver.vote_proposal("1", "validator").await?;
 
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_PASSED").await?;
 
@@ -180,11 +177,8 @@ async fn assert_eventual_governance_status(
     expected_status: &str,
 ) -> Result<(), Error> {
     for _ in 0..10 {
-        let exec_output =
-            <CosmosChainDriver as CanQueryGovernanceProposalStatus>::query_proposal_status(
-                cosmos_chain_driver,
-                governance_id,
-            )
+        let exec_output = cosmos_chain_driver
+            .query_proposal_status(governance_id)
             .await?;
         sleep(Duration::from_secs(3));
         if exec_output == expected_status {
