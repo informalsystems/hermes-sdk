@@ -1955,7 +1955,9 @@ dependencies = [
  "ibc-relayer-types",
  "jsonrpsee",
  "prost",
+ "serde",
  "serde-json-wasm",
+ "serde_json",
  "sov-celestia-client",
 ]
 
