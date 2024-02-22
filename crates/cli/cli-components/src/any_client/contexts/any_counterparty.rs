@@ -3,9 +3,9 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
+use hermes_relayer_components::chain::traits::types::client_state::ClientStateDecoderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ProvideClientStateType,
+    ClientStateTypeComponent, HasClientStateFields,
 };
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
@@ -14,7 +14,8 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComp
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 
-use crate::any_client::decoders::client_state::DecodeAnyClientState;
+use crate::any_client::impls::decoders::client_state::DecodeAnyClientState;
+use crate::any_client::impls::types::client_state::ProvideAnyClientState;
 use crate::any_client::types::client_state::AnyClientState;
 
 pub struct AnyCounterparty;
@@ -36,16 +37,11 @@ delegate_components! {
             ChainStatusTypeComponent,
         ]:
             ProvideCosmosChainTypes,
+        ClientStateTypeComponent:
+            ProvideAnyClientState,
         ClientStateDecoderComponent:
             DecodeAnyClientState,
     }
-}
-
-impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty> for AnyCounterpartyComponents
-where
-    Chain: Async,
-{
-    type ClientState = AnyClientState;
 }
 
 impl<Chain> HasClientStateFields<Chain> for AnyCounterparty {

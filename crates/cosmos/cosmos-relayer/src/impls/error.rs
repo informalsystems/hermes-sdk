@@ -3,7 +3,7 @@ use std::string::FromUtf8Error;
 
 use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
 use eyre::eyre;
-use hermes_cli_components::any_client::decoders::client_state::UnknownClientStateType;
+use hermes_cli_components::any_client::impls::decoders::client_state::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
