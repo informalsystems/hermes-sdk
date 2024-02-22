@@ -7,7 +7,7 @@ use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
 use ibc_proto::Protobuf;
 use prost::EncodeError;
 
-use crate::wasm::types::messages::utils::encode::encode_to_any;
+use crate::utils::encode::encode_to_any;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

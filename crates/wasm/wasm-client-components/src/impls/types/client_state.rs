@@ -1,7 +1,7 @@
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
 
-use crate::wasm::types::messages::client::state::WasmClientState;
+use crate::types::client_state::WasmClientState;
 
 pub struct ProvideWasmClientState;
 

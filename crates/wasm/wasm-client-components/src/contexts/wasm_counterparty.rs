@@ -10,8 +10,8 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
-use crate::wasm::impls::decoders::client_state::DecodeWasmClientStateFromAnyProto;
-use crate::wasm::impls::types::client_state::ProvideWasmClientState;
+use crate::impls::decoders::client_state::DecodeWasmClientStateFromAnyProto;
+use crate::impls::types::client_state::ProvideWasmClientState;
 
 pub struct WasmCounterparty;
 

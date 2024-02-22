@@ -1,5 +1,5 @@
-use crate::wasm::types::messages::client::state::ProtoClientState;
-use crate::wasm::types::messages::client::state::WasmClientState;
+use crate::types::client_state::ProtoClientState;
+use crate::types::client_state::WasmClientState;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateDecoder, HasClientStateType,
