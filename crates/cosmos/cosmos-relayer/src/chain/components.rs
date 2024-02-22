@@ -24,8 +24,9 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQue
 use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    ClientStateBytesQuerierComponent, ClientStateQuerierComponent, ClientStatesQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
@@ -162,6 +163,7 @@ delegate_components! {
             ConsensusStateHeightsQuerierComponent,
             WriteAckQuerierComponent,
             ClientStateQuerierComponent,
+            ClientStateBytesQuerierComponent,
             ClientStatesQuerierComponent,
             CreateClientOptionsTypeComponent,
             CreateClientPayloadBuilderComponent,
