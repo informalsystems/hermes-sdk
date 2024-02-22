@@ -3,11 +3,9 @@ use core::str::FromStr;
 
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerier, AllClientStatesQuerier, ClientStateBytesQuerier,
+    AllClientStatesBytesQuerier, ClientStateBytesQuerier,
 };
-use hermes_relayer_components::chain::traits::types::client_state::{
-    CanDecodeClientState, HasClientStateType,
-};
+use hermes_relayer_components::chain::traits::types::client_state::CanDecodeClientState;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use ibc_proto::ibc::core::client::v1::{
@@ -81,42 +79,6 @@ where
     }
 }
 
-impl<Chain, Counterparty> AllClientStatesQuerier<Chain, Counterparty>
-    for QueryCosmosClientStateFromAbci
-where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
-        + CanQueryAbci
-        + CanRaiseError<DecodeError>
-        + CanParseClientStateEntry<Counterparty>,
-    Counterparty: CanDecodeClientState<Chain>,
-{
-    async fn query_all_client_states(
-        chain: &Chain,
-        height: &Height,
-    ) -> Result<Vec<(ClientId, Counterparty::ClientState)>, Chain::Error> {
-        let request = ProtoQueryClientStatesRequest::from(QueryClientStatesRequest {
-            pagination: Some(PageRequest::all()),
-        });
-
-        let data = prost::Message::encode_to_vec(&request);
-
-        let response = chain
-            .query_abci("/ibc.core.client.v1.Query/ClientStates", &data, height)
-            .await?;
-
-        let response: QueryClientStatesResponse =
-            QueryClientStatesResponse::decode(response.as_ref()).map_err(Chain::raise_error)?;
-
-        let client_states = response
-            .client_states
-            .into_iter()
-            .filter_map(|entry| Chain::parse_client_state_entry(entry).ok())
-            .collect();
-
-        Ok(client_states)
-    }
-}
-
 pub trait CanParseClientStateEntryBytes<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 {
@@ -146,41 +108,5 @@ where
         };
 
         Ok((client_id, client_state_bytes))
-    }
-}
-
-pub trait CanParseClientStateEntry<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
-where
-    Counterparty: HasClientStateType<Self>,
-{
-    fn parse_client_state_entry(
-        entry: IdentifiedClientState,
-    ) -> Result<(Self::ClientId, Counterparty::ClientState), Self::Error>;
-}
-
-impl<Chain, Counterparty> CanParseClientStateEntry<Counterparty> for Chain
-where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + CanRaiseError<&'static str>,
-    Counterparty: CanDecodeClientState<Chain>,
-{
-    fn parse_client_state_entry(
-        entry: IdentifiedClientState,
-    ) -> Result<(ClientId, Counterparty::ClientState), Chain::Error> {
-        // TODO: handle errors
-
-        let client_id = ClientId::from_str(&entry.client_id).unwrap();
-
-        let client_state_any = entry.client_state.unwrap();
-
-        let client_state_bytes = {
-            let mut buf = Vec::new();
-            Message::encode(&client_state_any, &mut buf).unwrap();
-            buf
-        };
-
-        let client_state = Counterparty::decode_client_state_bytes(&client_state_bytes)?;
-
-        Ok((client_id, client_state))
     }
 }

@@ -167,11 +167,13 @@ delegate_components! {
             QueryWriteAckEventFromChainHandle,
         [
             ClientStateBytesQuerierComponent,
-            AllClientStatesQuerierComponent,
             AllClientStatesBytesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
-        ClientStateQuerierComponent:
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesQuerierComponent,
+        ]:
             QueryAndDecodeClientState,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
