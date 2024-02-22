@@ -13,9 +13,10 @@ use ibc_proto::ibc::core::client::v1::{
     QueryClientStatesResponse,
 };
 use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
+use ibc_relayer_types::core::ics24_host::error::ValidationError;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
-use prost::{DecodeError, Message};
+use prost::{DecodeError, EncodeError, Message};
 
 use crate::traits::abci_query::CanQueryAbci;
 
@@ -89,7 +90,10 @@ pub trait CanParseClientStateEntryBytes<Counterparty>:
 
 impl<Chain, Counterparty> CanParseClientStateEntryBytes<Counterparty> for Chain
 where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + CanRaiseError<&'static str>,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
+        + CanRaiseError<ValidationError>
+        + CanRaiseError<EncodeError>
+        + CanRaiseError<&'static str>,
     Counterparty: CanDecodeClientState<Chain>,
 {
     fn parse_client_state_entry_bytes(
@@ -97,13 +101,15 @@ where
     ) -> Result<(ClientId, Vec<u8>), Chain::Error> {
         // TODO: handle errors
 
-        let client_id = ClientId::from_str(&entry.client_id).unwrap();
+        let client_id = ClientId::from_str(&entry.client_id).map_err(Chain::raise_error)?;
 
-        let client_state_any = entry.client_state.unwrap();
+        let client_state_any = entry
+            .client_state
+            .ok_or_else(|| Chain::raise_error("expect client state field to be non-empty"))?;
 
         let client_state_bytes = {
             let mut buf = Vec::new();
-            Message::encode(&client_state_any, &mut buf).unwrap();
+            Message::encode(&client_state_any, &mut buf).map_err(Chain::raise_error)?;
             buf
         };
 

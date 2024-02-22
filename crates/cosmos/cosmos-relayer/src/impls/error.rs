@@ -12,7 +12,7 @@ use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
-use prost::DecodeError;
+use prost::{DecodeError, EncodeError};
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
 
@@ -155,6 +155,15 @@ where
 {
     fn raise_error(e: UnknownClientStateType) -> Error {
         BaseError::generic(eyre!("unknown client state type: {}", e.type_url,)).into()
+    }
+}
+
+impl<Context> ErrorRaiser<Context, EncodeError> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: EncodeError) -> Error {
+        BaseError::generic(e.into()).into()
     }
 }
 
