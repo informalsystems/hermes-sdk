@@ -1784,6 +1784,7 @@ dependencies = [
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "hermes-test-components",
+ "hermes-wasm-client-components",
  "http 0.2.11",
  "ibc-proto 0.38.0",
  "ibc-relayer",
@@ -2056,12 +2057,14 @@ name = "hermes-wasm-client-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "eyre",
  "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "ibc-core",
  "ibc-proto 0.41.0",
  "ibc-relayer-types",
  "prost",
+ "tendermint-proto",
 ]
 
 [[package]]

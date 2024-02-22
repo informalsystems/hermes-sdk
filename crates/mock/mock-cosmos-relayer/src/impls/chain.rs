@@ -28,7 +28,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ProvideChainIdType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, ProvideClientStateType,
+    ClientStateFieldsGetter, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -285,17 +285,18 @@ where
     type ClientState = TmClientState;
 }
 
-impl<Chain, Counterparty> HasClientStateFields<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ClientStateFieldsGetter<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
+    fn client_state_chain_id(client_state: &TmClientState) -> &ChainId {
         &client_state.chain_id
     }
 
-    fn client_state_latest_height(client_state: &TmClientState) -> &Self::Height {
+    fn client_state_latest_height(client_state: &TmClientState) -> &Height {
         &client_state.latest_height
     }
 
