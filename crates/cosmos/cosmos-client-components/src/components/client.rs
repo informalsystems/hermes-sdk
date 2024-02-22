@@ -19,7 +19,9 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 };
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::AllClientStatesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
 };
@@ -166,6 +168,7 @@ delegate_components! {
         [
             ClientStateBytesQuerierComponent,
             AllClientStatesQuerierComponent,
+            AllClientStatesBytesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
         ClientStateQuerierComponent:

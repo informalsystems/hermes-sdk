@@ -43,6 +43,17 @@ where
     ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
 }
 
+#[derive_component(AllClientStatesBytesQuerierComponent, AllClientStatesBytesQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryAllClientStatesBytes<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
+{
+    async fn query_all_client_states_bytes(
+        &self,
+        height: &Self::Height,
+    ) -> Result<Vec<(Self::ClientId, Vec<u8>)>, Self::Error>;
+}
+
 #[async_trait]
 pub trait CanQueryClientStateWithLatestHeight<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
