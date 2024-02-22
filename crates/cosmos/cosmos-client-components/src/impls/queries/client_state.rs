@@ -3,7 +3,7 @@ use core::str::FromStr;
 
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    ClientStateBytesQuerier, ClientStatesQuerier,
+    AllClientStatesQuerier, ClientStateBytesQuerier,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     CanDecodeClientState, HasClientStateType,
@@ -45,7 +45,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> ClientStatesQuerier<Chain, Counterparty>
+impl<Chain, Counterparty> AllClientStatesQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromAbci
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
@@ -54,7 +54,7 @@ where
         + CanParseClientStateEntry<Counterparty>,
     Counterparty: CanDecodeClientState<Chain>,
 {
-    async fn query_client_states(
+    async fn query_all_client_states(
         chain: &Chain,
         height: &Height,
     ) -> Result<Vec<(ClientId, Counterparty::ClientState)>, Chain::Error> {

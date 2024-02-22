@@ -5,32 +5,6 @@ use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
-#[async_trait]
-pub trait CanQueryClientStatesWithLatestHeight<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
-where
-    Counterparty: HasClientStateType<Self>,
-{
-    async fn query_client_states_with_latest_height(
-        &self,
-    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
-}
-
-impl<Chain, Counterparty> CanQueryClientStatesWithLatestHeight<Counterparty> for Chain
-where
-    Chain: CanQueryClientStates<Counterparty> + CanQueryChainStatus,
-    Counterparty: HasClientStateType<Chain>,
-{
-    async fn query_client_states_with_latest_height(
-        &self,
-    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Chain::Error> {
-        let status = self.query_chain_status().await?;
-
-        self.query_client_states(Chain::chain_status_height(&status))
-            .await
-    }
-}
-
 #[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryClientState<Counterparty>: HasIbcChainTypes<Counterparty> + HasErrorType
@@ -56,14 +30,14 @@ pub trait CanQueryClientStateBytes<Counterparty>:
     ) -> Result<Vec<u8>, Self::Error>;
 }
 
-#[derive_component(ClientStatesQuerierComponent, ClientStatesQuerier<Chain>)]
+#[derive_component(AllClientStatesQuerierComponent, AllClientStatesQuerier<Chain>)]
 #[async_trait]
-pub trait CanQueryClientStates<Counterparty>:
+pub trait CanQueryAllClientStates<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
-    async fn query_client_states(
+    async fn query_all_client_states(
         &self,
         height: &Self::Height,
     ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
@@ -93,6 +67,32 @@ where
         let status = self.query_chain_status().await?;
 
         self.query_client_state(client_id, Chain::chain_status_height(&status))
+            .await
+    }
+}
+
+#[async_trait]
+pub trait CanQueryAllClientStatesWithLatestHeight<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
+where
+    Counterparty: HasClientStateType<Self>,
+{
+    async fn query_all_client_states_with_latest_height(
+        &self,
+    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
+}
+
+impl<Chain, Counterparty> CanQueryAllClientStatesWithLatestHeight<Counterparty> for Chain
+where
+    Chain: CanQueryAllClientStates<Counterparty> + CanQueryChainStatus,
+    Counterparty: HasClientStateType<Chain>,
+{
+    async fn query_all_client_states_with_latest_height(
+        &self,
+    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Chain::Error> {
+        let status = self.query_chain_status().await?;
+
+        self.query_all_client_states(Chain::chain_status_height(&status))
             .await
     }
 }
