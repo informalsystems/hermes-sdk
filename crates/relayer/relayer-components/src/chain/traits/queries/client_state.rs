@@ -5,19 +5,6 @@ use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
-#[derive_component(ClientStatesQuerierComponent, ClientStatesQuerier<Chain>)]
-#[async_trait]
-pub trait CanQueryClientStates<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
-where
-    Counterparty: HasClientStateType<Self>,
-{
-    async fn query_client_states(
-        &self,
-        height: &Self::Height,
-    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
-}
-
 #[async_trait]
 pub trait CanQueryClientStatesWithLatestHeight<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
@@ -55,6 +42,31 @@ where
         client_id: &Self::ClientId,
         height: &Self::Height,
     ) -> Result<Counterparty::ClientState, Self::Error>;
+}
+
+#[derive_component(ClientStateBytesQuerierComponent, ClientStateBytesQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryClientStateBytes<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
+{
+    async fn query_client_state_bytes(
+        &self,
+        client_id: &Self::ClientId,
+        height: &Self::Height,
+    ) -> Result<Vec<u8>, Self::Error>;
+}
+
+#[derive_component(ClientStatesQuerierComponent, ClientStatesQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryClientStates<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasErrorType
+where
+    Counterparty: HasClientStateType<Self>,
+{
+    async fn query_client_states(
+        &self,
+        height: &Self::Height,
+    ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
 }
 
 #[async_trait]
