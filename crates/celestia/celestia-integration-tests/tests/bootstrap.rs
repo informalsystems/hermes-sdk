@@ -34,12 +34,13 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
         let chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
         // Bootstrap twice to ensure that there is no conflict such as listening port
-        let bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
-        // let _bridge_driver_b = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
+        let _bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
+        let _bridge_driver_b = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
-        println!("bridge auth token: {}", bridge_driver.bridge_auth_token);
+        // println!("RPC port: {}", bridge_driver.bridge_config.bridge_rpc_port);
+        // println!("bridge auth token: {}", bridge_driver.bridge_auth_token);
 
-        tokio::time::sleep(core::time::Duration::from_secs(9999999)).await;
+        // tokio::time::sleep(core::time::Duration::from_secs(9999999)).await;
 
         <Result<(), Error>>::Ok(())
     })?;

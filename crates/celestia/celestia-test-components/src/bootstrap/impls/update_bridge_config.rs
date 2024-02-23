@@ -65,6 +65,9 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
+        let node_rpc_port = chain_driver.rpc_port();
+        let node_grpc_port = chain_driver.grpc_port();
+
         let mut bridge_config =
             toml::from_str(&bridge_config_str).map_err(Bootstrap::raise_error)?;
 
@@ -73,11 +76,9 @@ where
 
         set_chain_ip(&mut bridge_config, "127.0.0.1").map_err(Bootstrap::raise_error)?;
 
-        set_chain_rpc_port(&mut bridge_config, chain_driver.rpc_port())
-            .map_err(Bootstrap::raise_error)?;
+        set_chain_rpc_port(&mut bridge_config, node_rpc_port).map_err(Bootstrap::raise_error)?;
 
-        set_chain_grpc_port(&mut bridge_config, chain_driver.grpc_port())
-            .map_err(Bootstrap::raise_error)?;
+        set_chain_grpc_port(&mut bridge_config, node_grpc_port).map_err(Bootstrap::raise_error)?;
 
         let bridge_rpc_port = runtime
             .reserve_tcp_port()
@@ -96,6 +97,8 @@ where
 
         let config = CelestiaBridgeConfig {
             config: bridge_config,
+            node_rpc_port,
+            node_grpc_port,
             bridge_rpc_port,
         };
 
