@@ -3143,16 +3143,15 @@
         "sovereign-sdk-src": "sovereign-sdk-src"
       },
       "locked": {
-        "lastModified": 1708408104,
-        "narHash": "sha256-G6VGP7Wu5mxTOu8fNWulSHj6wEPNV4ksISGkmtsQDao=",
+        "lastModified": 1708719293,
+        "narHash": "sha256-Fu2LQtPg12X3GTUGrBq9nDe8/v5naON0eET9PVeb0GU=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "5fd9fa0de30f385116fffe7c24e16087bfbd8bcf",
+        "rev": "4ab031d6defe5d38eebc7f0108cc3af995123995",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
-        "ref": "soares/update-celestia-node-0.13",
         "repo": "sov-rollup-starter",
         "type": "github"
       }
