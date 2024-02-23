@@ -21,7 +21,6 @@ hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
-hermes-cosmos-relayer               = { workspace = true }
 ibc-proto                           = { workspace = true }
 ibc-proto-new                       = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "d1daaab", package = "ibc-proto" }
 sov-celestia-client                 = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "a04ab5f", features = ["test-util"] }

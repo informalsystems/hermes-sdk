@@ -1945,7 +1945,6 @@ dependencies = [
  "ed25519-dalek",
  "eyre",
  "hermes-cosmos-client-components",
- "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-wasm-client-components",
