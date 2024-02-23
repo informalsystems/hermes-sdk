@@ -1658,6 +1658,7 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "tendermint",
+ "tokio",
  "toml 0.8.10",
 ]
 

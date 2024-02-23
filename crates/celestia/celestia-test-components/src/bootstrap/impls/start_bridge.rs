@@ -40,24 +40,33 @@ where
             &Runtime::file_path_from_string("stderr.log"),
         );
 
+        let args = [
+            "bridge",
+            "start",
+            "--core.ip",
+            "127.0.0.1",
+            "--core.grpc.port",
+            &bridge_config.node_grpc_port.to_string(),
+            "--core.rpc.port",
+            &bridge_config.node_rpc_port.to_string(),
+            "--keyring.accname",
+            "bridge",
+            "--keyring.backend",
+            "test",
+            "--p2p.network",
+            &chain_driver.chain().chain_id().to_string(),
+        ];
+
+        // println!("running command: HOME={} celestia {}",
+        //     Runtime::file_path_to_string(bridge_home_dir),
+        //     args.join(" ")
+        // );
+
         let child = bootstrap
             .runtime()
             .start_child_process(
                 &Runtime::file_path_from_string("celestia"),
-                &[
-                    "bridge",
-                    "start",
-                    "--core.ip",
-                    "127.0.0.1",
-                    "--core.grpc.port",
-                    &bridge_config.node_grpc_port.to_string(),
-                    "--core.rpc.port",
-                    &bridge_config.node_rpc_port.to_string(),
-                    "--keyring.accname",
-                    "bridge",
-                    "--p2p.network",
-                    &chain_driver.chain().chain_id().to_string(),
-                ],
+                &args,
                 &[("HOME", &Runtime::file_path_to_string(bridge_home_dir))],
                 Some(&stdout_path),
                 Some(&stderr_path),

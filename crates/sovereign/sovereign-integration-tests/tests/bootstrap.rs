@@ -33,11 +33,13 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
     let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
 
+    let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
+
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
-        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
-        bridge_store_dir: format!("./test-data/{store_postfix}/bridges").into(),
+        chain_store_dir: store_dir.join("chains"),
+        bridge_store_dir: store_dir.join("bridges"),
     };
 
     let sovereign_bootstrap = SovereignBootstrap {

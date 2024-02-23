@@ -36,6 +36,7 @@ where
         let output = Command::new(command_path)
             .args(args)
             .envs(Vec::from(envs))
+            .kill_on_drop(true)
             .output()
             .await
             .map_err(Runtime::raise_error)?;

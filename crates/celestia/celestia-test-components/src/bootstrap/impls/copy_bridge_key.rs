@@ -1,3 +1,7 @@
+use std::path::PathBuf;
+use std::io::Error as IoError;
+
+use tokio::fs;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
@@ -15,13 +19,15 @@ impl<Bootstrap, Chain, ChainDriver, Runtime> BridgeKeyImporter<Bootstrap> for Co
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainDriverType<ChainDriver = ChainDriver>
-        + CanRaiseError<Runtime::Error>,
-    Runtime: HasFilePathType + CanCopyFile,
+        + CanRaiseError<Runtime::Error>
+        + CanRaiseError<IoError>
+        ,
+    Runtime: HasFilePathType<FilePath = PathBuf> + CanCopyFile,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasChainHomeDir,
     Chain: HasChainId,
 {
     async fn import_bridge_key(
-        bootstrap: &Bootstrap,
+        _bootstrap: &Bootstrap,
         bridge_home_dir: &Runtime::FilePath,
         chain_driver: &ChainDriver,
     ) -> Result<(), Bootstrap::Error> {
@@ -29,23 +35,18 @@ where
         let chain_id = chain_driver.chain().chain_id();
         let chain_id_str = chain_id.to_string();
 
-        let bridge_key_source_path = Runtime::join_file_path(
-            chain_home_dir,
-            &Runtime::file_path_from_string("keyring-test/bridge.info"),
-        );
+        let keyring_source_dir = chain_home_dir.join("keyring-test");
+        let keyring_dest_dir = bridge_home_dir.join(format!(".celestia-bridge-{chain_id_str}/keys/keyring-test"));
 
-        let bridge_key_destination_path = Runtime::join_file_path(
-            bridge_home_dir,
-            &Runtime::file_path_from_string(&format!(
-                ".celestia-bridge-{chain_id_str}/keys/keyring-test/bridge.info"
-            )),
-        );
+        // We need to somehow share the bridge's private key from the chain keyring store to the
+        // bridge keyring store. There are two files required: one is `bridge.info` and the other is
+        // named after the hex of the raw address bytes. I haven't figured how to determine which is
+        // the correct file to copy, and it is a bit tedious to copy all files, so we will just use a
+        // symlink here as a quick hack.
+        // TODO: properly copy over the bridge private key to the bridge keyring store.
 
-        bootstrap
-            .runtime()
-            .copy_file(&bridge_key_source_path, &bridge_key_destination_path)
-            .await
-            .map_err(Bootstrap::raise_error)?;
+        fs::remove_dir_all(&keyring_dest_dir).await.map_err(Bootstrap::raise_error)?;
+        fs::symlink(&keyring_source_dir, &keyring_dest_dir).await.map_err(Bootstrap::raise_error)?;
 
         Ok(())
     }
