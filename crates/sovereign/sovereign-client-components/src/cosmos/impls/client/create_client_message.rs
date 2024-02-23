@@ -1,7 +1,6 @@
-use cgp_core::HasErrorType;
+use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
-use hermes_cosmos_relayer::types::error::{BaseError, Error};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -9,7 +8,7 @@ use hermes_wasm_client_components::types::client_state::WasmClientState;
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use ibc_core::primitives::ToProto;
 use ibc_proto::google::protobuf::Any;
-use prost::Message;
+use prost::{EncodeError, Message};
 
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
@@ -21,7 +20,7 @@ pub struct BuildCreateSovereignClientMessageOnCosmos;
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateSovereignClientMessageOnCosmos
 where
-    Chain: HasMessageType<Message = CosmosMessage> + HasErrorType<Error = Error>,
+    Chain: HasMessageType<Message = CosmosMessage> + HasErrorType + CanRaiseError<EncodeError>,
     Counterparty:
         HasCreateClientPayloadType<Chain, CreateClientPayload = SovereignCreateClientPayload>,
 {
@@ -37,7 +36,7 @@ where
             checksum: payload.code_hash.clone(),
             latest_height: payload.latest_height,
         };
-        let new_any_client_state = client_state.encode_protobuf().map_err(BaseError::encode)?;
+        let new_any_client_state = client_state.encode_protobuf().map_err(Chain::raise_error)?;
 
         let any_client_state = Any {
             type_url: new_any_client_state.type_url,
@@ -53,7 +52,7 @@ where
         };
         let new_any_consensus_state = consensus_state
             .encode_protobuf()
-            .map_err(BaseError::encode)?;
+            .map_err(Chain::raise_error)?;
 
         let any_consensus_state = Any {
             type_url: new_any_consensus_state.type_url,

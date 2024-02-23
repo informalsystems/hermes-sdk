@@ -1,5 +1,10 @@
 #![recursion_limit = "256"]
 use eyre::eyre;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
+use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
+use hermes_wasm_client_components::types::client_state::WasmClientState;
+use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use tokio::time::sleep;
 
 use core::time::Duration;
@@ -11,6 +16,7 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use serde_json::Value as JsonValue;
 use std::env::var;
+use std::str::FromStr;
 use std::sync::Arc;
 use toml::Value as TomlValue;
 
@@ -161,6 +167,12 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         ).await?;
 
         let _events = cosmos_chain.send_message(create_client_message).await?;
+
+        let wasm_client_id = ClientId::from_str("08-wasm-0").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
+
+        let _wasm_client_state: WasmClientState = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
+        let _sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
