@@ -1996,6 +1996,7 @@ dependencies = [
  "hermes-sovereign-cosmos-relayer",
  "hermes-sovereign-test-components",
  "hermes-test-components",
+ "hermes-wasm-client-components",
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
@@ -2064,6 +2065,7 @@ dependencies = [
  "ibc-proto 0.41.0",
  "ibc-relayer-types",
  "prost",
+ "sov-celestia-client",
  "tendermint-proto",
 ]
 
