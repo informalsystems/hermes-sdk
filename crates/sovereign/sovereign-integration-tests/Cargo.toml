@@ -28,6 +28,7 @@ hermes-celestia-integration-tests   = { workspace = true }
 hermes-sovereign-test-components    = { workspace = true }
 hermes-sovereign-client-components  = { workspace = true }
 hermes-sovereign-cosmos-relayer     = { workspace = true }
+hermes-wasm-client-components       = { workspace = true }
 
 eyre            = { workspace = true }
 tokio           = { workspace = true }
