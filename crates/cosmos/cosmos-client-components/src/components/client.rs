@@ -1,4 +1,5 @@
 use cgp_core::prelude::delegate_components;
+use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientState;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
@@ -18,8 +19,12 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 };
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStatesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
+};
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
@@ -43,7 +48,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ClientStateTypeComponent,
+    ClientStateDecoderComponent, ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
@@ -141,7 +146,10 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
-        ClientStateTypeComponent:
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
             ProvideTendermintClientState,
         ClientStateDecoderComponent:
             DecodeTendermintClientStateFromAnyProto,
@@ -158,10 +166,15 @@ delegate_components! {
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
         [
-            ClientStateQuerierComponent,
-            ClientStatesQuerierComponent,
+            ClientStateBytesQuerierComponent,
+            AllClientStatesBytesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesQuerierComponent,
+        ]:
+            QueryAndDecodeClientState,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:

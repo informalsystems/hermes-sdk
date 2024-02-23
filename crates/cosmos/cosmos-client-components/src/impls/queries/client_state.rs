@@ -3,11 +3,9 @@ use core::str::FromStr;
 
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    ClientStateQuerier, ClientStatesQuerier,
+    AllClientStatesBytesQuerier, ClientStateBytesQuerier,
 };
-use hermes_relayer_components::chain::traits::types::client_state::{
-    CanDecodeClientState, HasClientStateType,
-};
+use hermes_relayer_components::chain::traits::types::client_state::CanDecodeClientState;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use ibc_proto::ibc::core::client::v1::{
@@ -15,9 +13,10 @@ use ibc_proto::ibc::core::client::v1::{
     QueryClientStatesResponse,
 };
 use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
+use ibc_relayer_types::core::ics24_host::error::ValidationError;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
-use prost::{DecodeError, Message};
+use prost::{DecodeError, EncodeError, Message};
 
 use crate::traits::abci_query::CanQueryAbci;
 
@@ -25,41 +24,39 @@ pub struct QueryCosmosClientStateFromAbci;
 
 pub const IBC_QUERY_PATH: &str = "store/ibc/key";
 
-impl<Chain, Counterparty> ClientStateQuerier<Chain, Counterparty> for QueryCosmosClientStateFromAbci
+impl<Chain, Counterparty> ClientStateBytesQuerier<Chain, Counterparty>
+    for QueryCosmosClientStateFromAbci
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height> + CanQueryAbci,
-    Counterparty: CanDecodeClientState<Chain>,
 {
-    async fn query_client_state(
+    async fn query_client_state_bytes(
         chain: &Chain,
         client_id: &ClientId,
         height: &Height,
-    ) -> Result<Counterparty::ClientState, Chain::Error> {
+    ) -> Result<Vec<u8>, Chain::Error> {
         let client_state_path = format!("clients/{client_id}/clientState");
 
         let client_state_bytes = chain
             .query_abci(IBC_QUERY_PATH, client_state_path.as_bytes(), height)
             .await?;
 
-        let client_state = Counterparty::decode_client_state_bytes(&client_state_bytes)?;
-
-        Ok(client_state)
+        Ok(client_state_bytes)
     }
 }
 
-impl<Chain, Counterparty> ClientStatesQuerier<Chain, Counterparty>
+impl<Chain, Counterparty> AllClientStatesBytesQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromAbci
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
         + CanQueryAbci
         + CanRaiseError<DecodeError>
-        + CanParseClientStateEntry<Counterparty>,
+        + CanParseClientStateEntryBytes<Counterparty>,
     Counterparty: CanDecodeClientState<Chain>,
 {
-    async fn query_client_states(
+    async fn query_all_client_states_bytes(
         chain: &Chain,
         height: &Height,
-    ) -> Result<Vec<(ClientId, Counterparty::ClientState)>, Chain::Error> {
+    ) -> Result<Vec<(ClientId, Vec<u8>)>, Chain::Error> {
         let request = ProtoQueryClientStatesRequest::from(QueryClientStatesRequest {
             pagination: Some(PageRequest::all()),
         });
@@ -76,45 +73,46 @@ where
         let client_states = response
             .client_states
             .into_iter()
-            .filter_map(|entry| Chain::parse_client_state_entry(entry).ok())
+            .filter_map(|entry| Chain::parse_client_state_entry_bytes(entry).ok())
             .collect();
 
         Ok(client_states)
     }
 }
 
-pub trait CanParseClientStateEntry<Counterparty>:
+pub trait CanParseClientStateEntryBytes<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
-where
-    Counterparty: HasClientStateType<Self>,
 {
-    fn parse_client_state_entry(
+    fn parse_client_state_entry_bytes(
         entry: IdentifiedClientState,
-    ) -> Result<(Self::ClientId, Counterparty::ClientState), Self::Error>;
+    ) -> Result<(Self::ClientId, Vec<u8>), Self::Error>;
 }
 
-impl<Chain, Counterparty> CanParseClientStateEntry<Counterparty> for Chain
+impl<Chain, Counterparty> CanParseClientStateEntryBytes<Counterparty> for Chain
 where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId> + CanRaiseError<&'static str>,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
+        + CanRaiseError<ValidationError>
+        + CanRaiseError<EncodeError>
+        + CanRaiseError<&'static str>,
     Counterparty: CanDecodeClientState<Chain>,
 {
-    fn parse_client_state_entry(
+    fn parse_client_state_entry_bytes(
         entry: IdentifiedClientState,
-    ) -> Result<(ClientId, Counterparty::ClientState), Chain::Error> {
+    ) -> Result<(ClientId, Vec<u8>), Chain::Error> {
         // TODO: handle errors
 
-        let client_id = ClientId::from_str(&entry.client_id).unwrap();
+        let client_id = ClientId::from_str(&entry.client_id).map_err(Chain::raise_error)?;
 
-        let client_state_any = entry.client_state.unwrap();
+        let client_state_any = entry
+            .client_state
+            .ok_or_else(|| Chain::raise_error("expect client state field to be non-empty"))?;
 
         let client_state_bytes = {
             let mut buf = Vec::new();
-            Message::encode(&client_state_any, &mut buf).unwrap();
+            Message::encode(&client_state_any, &mut buf).map_err(Chain::raise_error)?;
             buf
         };
 
-        let client_state = Counterparty::decode_client_state_bytes(&client_state_bytes)?;
-
-        Ok((client_id, client_state))
+        Ok((client_id, client_state_bytes))
     }
 }

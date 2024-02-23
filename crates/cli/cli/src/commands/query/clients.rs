@@ -12,7 +12,7 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::BaseError;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStatesWithLatestHeight;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
@@ -51,7 +51,7 @@ pub struct QueryClients {
 impl CommandRunner<CosmosBuilder> for QueryClients {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.host_chain_id).await?;
-        let clients = query_client_states::<_, AnyCounterparty>(
+        let clients = query_all_client_states::<_, AnyCounterparty>(
             &chain,
             &self.host_chain_id,
             self.reference_chain_id.as_ref(),
@@ -134,20 +134,20 @@ where
     }
 }
 
-async fn query_client_states<Chain, Counterparty>(
+async fn query_all_client_states<Chain, Counterparty>(
     chain: &Chain,
     host_chain_id: &ChainId,
     reference_chain_id: Option<&ChainId>,
 ) -> Result<Vec<Client<Chain, Counterparty>>>
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + CanQueryClientStatesWithLatestHeight<Counterparty>
+        + CanQueryAllClientStatesWithLatestHeight<Counterparty>
         + HasErrorType,
     Counterparty: HasClientStateType<Chain, ClientState = AnyClientState>,
     Chain::Error: From<BaseError> + StdError,
 {
     let mut clients = chain
-        .query_client_states_with_latest_height()
+        .query_all_client_states_with_latest_height()
         .await
         .wrap_err("Failed to query clients")?
         .into_iter()

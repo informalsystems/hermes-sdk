@@ -29,6 +29,7 @@ hermes-async-runtime-components     = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 hermes-cli-components               = { workspace = true }
+hermes-wasm-client-components       = { workspace = true }
 tendermint                          = { workspace = true, features = ["secp256k1"] }
 tendermint-proto                    = { workspace = true }
 tendermint-rpc                      = { workspace = true, features = ["http-client", "websocket-client"] }

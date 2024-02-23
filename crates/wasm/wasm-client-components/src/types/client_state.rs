@@ -1,9 +1,13 @@
+use eyre::eyre;
+use eyre::Error;
+
 use ibc_core::client::types::Height;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
+use ibc_proto::Protobuf;
 use prost::EncodeError;
 
-use crate::wasm::types::messages::utils::encode::encode_to_any;
+use crate::utils::encode::encode_to_any;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -20,7 +24,7 @@ pub struct ProtoClientState {
 
 const TYPE_URL: &str = "/ibc.lightclients.wasm.v1.ClientState";
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct WasmClientState {
     pub data: Vec<u8>,
     pub checksum: Vec<u8>,
@@ -40,5 +44,34 @@ impl WasmClientState {
         };
 
         encode_to_any(TYPE_URL, &proto_message)
+    }
+}
+
+impl Protobuf<ProtoClientState> for WasmClientState {}
+
+impl TryFrom<ProtoClientState> for WasmClientState {
+    type Error = Error;
+
+    fn try_from(value: ProtoClientState) -> Result<Self, Self::Error> {
+        let maybe_height = value
+            .latest_height
+            .ok_or_else(|| eyre!("Empty 'latest_height' in proto Wasm client state"))?;
+        let height = Height::try_from(maybe_height)?;
+        Ok(Self {
+            data: value.data,
+            checksum: value.checksum,
+            latest_height: height,
+        })
+    }
+}
+
+impl From<WasmClientState> for ProtoClientState {
+    fn from(value: WasmClientState) -> Self {
+        let height = ProtoHeight::from(value.latest_height);
+        Self {
+            data: value.data,
+            checksum: value.checksum,
+            latest_height: Some(height),
+        }
     }
 }
