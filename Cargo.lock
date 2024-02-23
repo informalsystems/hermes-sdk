@@ -1658,6 +1658,7 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "tendermint",
+ "tokio",
  "toml 0.8.10",
 ]
 
@@ -1939,11 +1940,12 @@ name = "hermes-sovereign-client-components"
 version = "0.1.0"
 dependencies = [
  "base64 0.21.7",
+ "bech32",
+ "borsh",
  "cgp-core",
  "ed25519-dalek",
  "eyre",
  "hermes-cosmos-client-components",
- "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-wasm-client-components",
@@ -1956,7 +1958,10 @@ dependencies = [
  "ibc-relayer-types",
  "jsonrpsee",
  "prost",
+ "serde",
  "serde-json-wasm",
+ "serde_json",
+ "sha2 0.10.8",
  "sov-celestia-client",
 ]
 
@@ -1982,6 +1987,7 @@ dependencies = [
 name = "hermes-sovereign-integration-tests"
 version = "0.1.0"
 dependencies = [
+ "borsh",
  "cgp-core",
  "cgp-error-eyre",
  "eyre",

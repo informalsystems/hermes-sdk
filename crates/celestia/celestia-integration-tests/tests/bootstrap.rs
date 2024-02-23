@@ -23,19 +23,26 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
 
     let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
 
+    let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
+
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
-        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
-        bridge_store_dir: format!("./test-data/{store_postfix}/bridges").into(),
+        chain_store_dir: store_dir.join("chains"),
+        bridge_store_dir: store_dir.join("bridges"),
     };
 
     tokio_runtime.block_on(async move {
         let chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
         // Bootstrap twice to ensure that there is no conflict such as listening port
-        let _bridge_driver_a = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
+        let _bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
         let _bridge_driver_b = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
+
+        // println!("RPC port: {}", _bridge_driver.bridge_config.bridge_rpc_port);
+        // println!("bridge auth token: {}", _bridge_driver.bridge_auth_token);
+
+        // tokio::time::sleep(core::time::Duration::from_secs(9999999)).await;
 
         <Result<(), Error>>::Ok(())
     })?;

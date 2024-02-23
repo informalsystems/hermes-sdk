@@ -30,7 +30,7 @@ members = [
     "crates/cli/cli-framework",
     "crates/cli/cli",
     "tools/integration-test",
-    "tools/test-framework", 
+    "tools/test-framework",
 ]
 
 [workspace.package]
@@ -80,6 +80,7 @@ flex-error          = { version = "0.4.4", default-features = false }
 tracing-subscriber  = { version = "0.3.18" }
 jsonrpsee           = { version = "0.21.0", default-features = false }
 hdpath              = { version = "0.6.3" }
+borsh               = { version = "0.10.3" }
 
 hermes-cli                          = { version = "0.1.0", path = "./crates/cli/cli" }
 hermes-cli-components               = { version = "0.1.0", path = "./crates/cli/cli-components" }

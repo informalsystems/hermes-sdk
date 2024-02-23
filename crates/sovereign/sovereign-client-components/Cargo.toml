@@ -21,7 +21,6 @@ hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
-hermes-cosmos-relayer               = { workspace = true }
 ibc-proto                           = { workspace = true }
 ibc-proto-new                       = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "d1daaab", package = "ibc-proto" }
 sov-celestia-client                 = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "a04ab5f", features = ["test-util"] }
@@ -33,4 +32,9 @@ ed25519-dalek   = { version = "2.1.1" }
 eyre            = { workspace = true }
 jsonrpsee       = { workspace = true, features = ["http-client"] }
 prost           = { workspace = true }
-hex             = "0.4.3"
+serde           = { workspace = true }
+serde_json      = { workspace = true }
+hex             = { version = "0.4.3" }
+bech32          = { version = "0.9.1" }
+sha2            = { version = "0.10.8" }
+borsh           = { workspace = true }

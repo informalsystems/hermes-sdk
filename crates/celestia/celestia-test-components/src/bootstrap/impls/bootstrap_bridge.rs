@@ -66,7 +66,7 @@ where
             .await?;
 
         let bridge_process = bootstrap
-            .start_bridge(&bridge_home_dir, chain_driver)
+            .start_bridge(&bridge_home_dir, &bridge_config, chain_driver)
             .await?;
 
         let bridge_driver = bootstrap

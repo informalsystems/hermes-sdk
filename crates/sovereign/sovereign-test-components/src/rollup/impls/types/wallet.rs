@@ -12,6 +12,6 @@ where
     type Wallet = SovereignWallet;
 
     fn wallet_address(wallet: &SovereignWallet) -> &String {
-        &wallet.address
+        &wallet.address.address
     }
 }
