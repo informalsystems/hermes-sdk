@@ -124,6 +124,13 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             let tx_hash = format!("0x{}", tx_hash_bytes.encode_hex::<String>());
 
+            let response: serde_json::Value = rollup
+                .rpc_client
+                .request("ledger_getTransactionByHash", (&tx_hash,))
+                .await?;
+
+            println!("querty tx hash {} response: {}", tx_hash, response);
+
             rollup.publish_transaction_batch(&[tx_bytes]).await?;
 
             rollup
