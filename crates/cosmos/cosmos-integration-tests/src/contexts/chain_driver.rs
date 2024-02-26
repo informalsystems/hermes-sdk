@@ -21,8 +21,6 @@ use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::Governan
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::chain_driver::traits::assert::eventual_amount::EventualAmountAsserterComponent;
-use hermes_test_components::chain_driver::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{
@@ -66,8 +64,6 @@ delegate_components! {
             ProvideTokioRuntimeType,
         [
             RandomAmountGeneratorComponent,
-            EventualAmountAsserterComponent,
-            PollAssertDurationGetterComponent,
             WasmClientCodeUploaderComponent,
             GovernanceProposalStatusQuerierComponent,
             GovernanceProposalDepositerComponent,

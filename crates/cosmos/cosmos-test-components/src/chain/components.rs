@@ -1,6 +1,10 @@
 use cgp_core::prelude::*;
+use hermes_test_components::chain::impls::assert::default_assert_duration::ProvideDefaultPollAssertDuration;
+use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::PollAssertEventualAmount;
 use hermes_test_components::chain::impls::default_memo::ProvideDefaultMemo;
 use hermes_test_components::chain::impls::ibc_transfer::SendIbcTransferMessage;
+use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
+use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
@@ -64,5 +68,9 @@ delegate_components! {
             ConvertCosmosIbcAmount,
         BalanceQuerierComponent:
             QueryCosmosBalance,
+        EventualAmountAsserterComponent:
+            PollAssertEventualAmount,
+        PollAssertDurationGetterComponent:
+            ProvideDefaultPollAssertDuration,
     }
 }

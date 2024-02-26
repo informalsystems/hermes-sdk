@@ -50,7 +50,7 @@ where
             "--core.rpc.port",
             &bridge_config.node_rpc_port.to_string(),
             "--keyring.accname",
-            "bridge",
+            "sequencer",
             "--keyring.backend",
             "test",
             "--p2p.network",

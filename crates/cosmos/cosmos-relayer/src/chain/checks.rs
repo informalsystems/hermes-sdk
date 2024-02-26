@@ -1,5 +1,6 @@
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
@@ -13,6 +14,7 @@ pub trait CheckCosmosChainImpls:
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<WasmCounterparty>
     + CanQueryClientState<AnyCounterparty>
+    + CanAssertEventualAmount
 {
 }
 

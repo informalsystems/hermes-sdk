@@ -79,6 +79,8 @@ use hermes_relayer_components_extra::components::extra::chain::ExtraChainCompone
 use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
+use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
@@ -223,6 +225,8 @@ delegate_components! {
             IbcTokenTransferMessageBuilderComponent,
             IbcTransferredAmountConverterComponent,
             BalanceQuerierComponent,
+            EventualAmountAsserterComponent,
+            PollAssertDurationGetterComponent,
         ]:
             CosmmosChainTestComponents,
     }
