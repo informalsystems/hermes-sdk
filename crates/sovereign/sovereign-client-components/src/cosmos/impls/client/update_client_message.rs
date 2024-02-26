@@ -13,10 +13,10 @@ use sov_celestia_client::types::client_message::test_util::dummy_sov_header;
 use crate::sovereign::traits::chain::data_chain::HasDataChain;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
-pub struct BuildUpdateUpdateSovereignClientMessageOnCosmos;
+pub struct BuildUpdateSovereignClientMessageOnCosmos;
 
 impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
-    for BuildUpdateUpdateSovereignClientMessageOnCosmos
+    for BuildUpdateSovereignClientMessageOnCosmos
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Message = CosmosMessage>
         + HasErrorType

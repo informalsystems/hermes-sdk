@@ -100,6 +100,7 @@ use hermes_test_components::chain::traits::types::wallet::{
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
+use crate::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::error::HandleCosmosError;
 
@@ -170,7 +171,6 @@ delegate_components! {
             CreateClientOptionsTypeComponent,
             CreateClientPayloadBuilderComponent,
             UpdateClientPayloadBuilderComponent,
-            UpdateClientMessageBuilderComponent,
             CounterpartyChainIdQuerierComponent,
             ConnectionHandshakePayloadBuilderComponent,
             ChannelHandshakePayloadBuilderComponent,
@@ -204,6 +204,8 @@ delegate_components! {
             ExtraChainComponents<CosmosBaseChainComponents>,
         CreateClientMessageBuilderComponent:
             DelegateCosmosCreateClientMessageBuilder,
+        UpdateClientMessageBuilderComponent:
+            DelegateCosmosUpdateClientMessageBuilder,
         ConnectionHandshakeMessageBuilderComponent:
             DelegateCosmosConnectionHandshakeBuilder,
         [

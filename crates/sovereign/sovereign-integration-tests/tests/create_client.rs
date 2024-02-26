@@ -3,6 +3,7 @@ use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
+use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -14,7 +15,9 @@ use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDe
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use serde_json::Value as JsonValue;
 use std::env::var;
@@ -188,7 +191,27 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let _wasm_client_state: WasmClientState = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
 
-        let _sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+        let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
+        let dummy_trusted_height = RollupHeight { slot_number: 10 };
+        let dummy_target_height = RollupHeight { slot_number: 10 };
+
+        let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
+            &sovereign_chain,
+            &dummy_trusted_height,
+            &dummy_target_height,
+            &sovereign_client_state
+        ).await?;
+
+        let update_client_messages = <CosmosChain as CanBuildUpdateClientMessage<SovereignChain>>::build_update_client_message(
+            cosmos_chain,
+            &wasm_client_id,
+            update_client_payload,
+        ).await?;
+
+        for update_message in update_client_messages.into_iter() {
+            let _events = cosmos_chain.send_message(update_message).await?;
+        }
 
         <Result<(), Error>>::Ok(())
     })?;

@@ -3,6 +3,7 @@ use std::str::FromStr;
 
 use cgp_core::HasErrorType;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
@@ -40,6 +41,7 @@ where
     Chain::DataChain: CanQueryClientState<Counterparty>
         + HasIbcChainTypes<Counterparty, ClientId = RelayerClientId, Height = Height>
         + HasBlockingChainHandle,
+    Counterparty: HasClientStateType<Chain::DataChain, ClientState = TendermintClientState>,
     // TODO: Add dependencies for update client payload here
 {
     async fn build_update_client_payload(
