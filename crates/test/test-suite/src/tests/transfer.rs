@@ -5,11 +5,11 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::logger::traits::log::CanLog;
+use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
-use hermes_test_components::chain_driver::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
@@ -41,12 +41,8 @@ where
         + HasDenomAt<TransferDenom, 0>
         + HasWalletAt<UserWallet, 0>
         + HasWalletAt<UserWallet, 1>
-        + CanGenerateRandomAmount
-        + CanAssertEventualAmount,
-    ChainDriverB: HasChain<Chain = ChainB>
-        + HasWalletAt<UserWallet, 0>
-        + CanGenerateRandomAmount
-        + CanAssertEventualAmount,
+        + CanGenerateRandomAmount,
+    ChainDriverB: HasChain<Chain = ChainB> + HasWalletAt<UserWallet, 0> + CanGenerateRandomAmount,
     RelayDriver: CanRunRelayerInBackground,
     ChainA: HasIbcChainTypes<ChainB>
         + HasChainId
@@ -54,19 +50,17 @@ where
         + CanQueryBalance
         + HasAmountMethods
         + CanConvertIbcTransferredAmount<ChainB>
-        + CanIbcTransferToken<ChainB>,
+        + CanIbcTransferToken<ChainB>
+        + CanAssertEventualAmount,
     ChainB: HasIbcChainTypes<ChainA>
         + HasChainId
         + HasIbcPacketTypes<ChainA>
         + HasAmountMethods
         + CanQueryBalance
         + CanIbcTransferToken<ChainA>
-        + CanConvertIbcTransferredAmount<ChainA>,
-    Driver::Error: From<ChainDriverA::Error>
-        + From<ChainDriverB::Error>
-        + From<RelayDriver::Error>
-        + From<ChainA::Error>
-        + From<ChainB::Error>,
+        + CanConvertIbcTransferredAmount<ChainA>
+        + CanAssertEventualAmount,
+    Driver::Error: From<RelayDriver::Error> + From<ChainA::Error> + From<ChainB::Error>,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
         let chain_driver_a = driver.chain_driver_at(Index::<0>);
@@ -135,7 +129,7 @@ where
             balance_b1
         ));
 
-        chain_driver_b
+        chain_b
             .assert_eventual_amount(address_b, &balance_b1)
             .await?;
 
@@ -175,7 +169,7 @@ where
             &ChainA::transmute_counterparty_amount(&b_to_a_amount, denom_a),
         )?;
 
-        chain_driver_a
+        chain_a
             .assert_eventual_amount(address_a2, &balance_a5)
             .await?;
 
