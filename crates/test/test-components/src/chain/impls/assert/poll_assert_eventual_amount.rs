@@ -58,7 +58,7 @@ where
 
 pub struct EventualAmountTimeoutError<'a, Chain>
 where
-    Chain: HasAddressType + HasAmountType + HasErrorType,
+    Chain: HasAddressType + HasAmountType,
 {
     pub chain: &'a Chain,
     pub address: &'a Chain::Address,
@@ -68,7 +68,7 @@ where
 
 impl<'a, Chain> Debug for EventualAmountTimeoutError<'a, Chain>
 where
-    Chain: HasAddressType + HasAmountType + HasErrorType,
+    Chain: HasAddressType + HasAmountType,
     Chain::Address: Debug,
     Chain::Amount: Debug,
 {
