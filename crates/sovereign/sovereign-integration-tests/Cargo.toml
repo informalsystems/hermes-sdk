@@ -20,6 +20,7 @@ cgp-error-eyre                      = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 hermes-cosmos-integration-tests     = { workspace = true }
