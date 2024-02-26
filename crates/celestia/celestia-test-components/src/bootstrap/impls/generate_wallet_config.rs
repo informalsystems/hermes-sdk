@@ -46,15 +46,6 @@ where
             )),
         };
 
-        let bridge = CosmosWalletConfig {
-            wallet_id: "bridge".to_owned(),
-            genesis_balances: vec![
-                Amount::new(2_000_000_000_000_000_000, denom_for_staking.clone()),
-                Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
-            ],
-            validator_staked_amount: None,
-        };
-
         let sequencer = CosmosWalletConfig {
             wallet_id: "sequencer".to_owned(),
             genesis_balances: vec![
@@ -93,7 +84,6 @@ where
 
         Ok(BTreeMap::from([
             ("validator".into(), validator),
-            ("bridge".into(), bridge),
             ("sequencer".into(), sequencer),
             ("user1".into(), user1),
             ("user2".into(), user2),

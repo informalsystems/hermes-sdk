@@ -17,7 +17,9 @@ use hermes_sovereign_client_components::sovereign::types::messages::bank::{
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
+use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
 
@@ -52,6 +54,9 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
     tokio_runtime.block_on(async move {
         let chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
+        // println!("chain home dir: {:?}", chain_driver.chain_node_config.chain_home_dir);
+        // tokio::time::sleep(core::time::Duration::from_secs(30)).await;
+
         let bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
         let rollup_driver = sovereign_bootstrap
@@ -75,11 +80,21 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
-            let amount = rollup
-                .query_balance(&wallet_a.address.address, &transfer_denom.address)
-                .await?;
+            let address_a = &wallet_a.address.address;
+            let address_b = &wallet_b.address.address;
+            let transfer_denom = &transfer_denom.address;
 
-            assert_eq!(amount.quantity, 1_000_000_000_000);
+            {
+                let amount = rollup.query_balance(address_a, transfer_denom).await?;
+
+                assert_eq!(amount.quantity, 1_000_000_000_000);
+            }
+
+            {
+                let amount = rollup.query_balance(address_b, transfer_denom).await?;
+
+                assert_eq!(amount.quantity, 1_000_000_000_000);
+            }
 
             let message = SovereignMessage::Bank(BankMessage::Transfer {
                 to: wallet_b.address.address_bytes.clone(),
@@ -99,6 +114,26 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                 encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
 
             rollup.publish_transaction_batch(&[tx_bytes]).await?;
+
+            rollup
+                .assert_eventual_amount(
+                    address_a,
+                    &SovereignAmount {
+                        quantity: 999_999_999_000,
+                        denom: transfer_denom.clone(),
+                    },
+                )
+                .await?;
+
+            rollup
+                .assert_eventual_amount(
+                    address_b,
+                    &SovereignAmount {
+                        quantity: 1_000_000_001_000,
+                        denom: transfer_denom.clone(),
+                    },
+                )
+                .await?;
         }
         <Result<(), Error>>::Ok(())
     })?;

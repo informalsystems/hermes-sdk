@@ -1,14 +1,15 @@
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_core::HasComponents;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::TransactionTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
 use hermes_sovereign_client_components::sovereign::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
 use hermes_sovereign_client_components::sovereign::impls::types::transaction::ProvideSovereignTransactionTypes;
@@ -16,12 +17,20 @@ use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_clie
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::TransactionBatchPublisherComponent;
-use hermes_sovereign_test_components::rollup::components::IsSovereignRollupTestComponent;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
+use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
+use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
+use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
+use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
+use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
+use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
+use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
 
 pub struct SovereignRollup {
+    pub runtime: HermesRuntime,
     pub rpc_client: HttpClient,
 }
 
@@ -30,12 +39,6 @@ pub struct SovereignRollupComponents;
 impl HasComponents for SovereignRollup {
     type Components = SovereignRollupComponents;
 }
-
-delegate_all!(
-    IsSovereignRollupTestComponent,
-    SovereignRollupTestComponents,
-    SovereignRollupComponents,
-);
 
 delegate_components! {
     SovereignRollupComponents {
@@ -50,10 +53,26 @@ delegate_components! {
             NonceTypeComponent,
         ]:
             ProvideSovereignTransactionTypes,
+        [
+            AddressTypeComponent,
+            DenomTypeComponent,
+            AmountTypeComponent,
+            WalletTypeComponent,
+            BalanceQuerierComponent,
+            EventualAmountAsserterComponent,
+            PollAssertDurationGetterComponent,
+        ]:
+            SovereignRollupTestComponents,
         JsonRpcClientTypeComponent:
             ProvideJsonRpseeClient,
         TransactionBatchPublisherComponent:
             PublishSovereignTransactionBatch,
+    }
+}
+
+impl ProvideRuntime<SovereignRollup> for SovereignRollupComponents {
+    fn runtime(rollup: &SovereignRollup) -> &HermesRuntime {
+        &rollup.runtime
     }
 }
 
@@ -63,6 +82,9 @@ impl JsonRpcClientGetter<SovereignRollup> for SovereignRollupComponents {
     }
 }
 
-pub trait CheckSovereignRollupImpls: CanQueryBalance + CanPublishTransactionBatch {}
+pub trait CheckSovereignRollupImpls:
+    CanQueryBalance + CanPublishTransactionBatch + CanAssertEventualAmount
+{
+}
 
 impl CheckSovereignRollupImpls for SovereignRollup {}

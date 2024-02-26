@@ -7,6 +7,7 @@ use hermes_cli_components::any_client::impls::decoders::client_state::UnknownCli
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
@@ -16,6 +17,7 @@ use prost::{DecodeError, EncodeError};
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
 
+use crate::contexts::chain::CosmosChain;
 use crate::types::error::{BaseError, Error};
 
 pub struct HandleCosmosError;
@@ -155,6 +157,16 @@ where
 {
     fn raise_error(e: UnknownClientStateType) -> Error {
         BaseError::generic(eyre!("unknown client state type: {}", e.type_url,)).into()
+    }
+}
+
+impl<'a, Context> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
+    for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: EventualAmountTimeoutError<'a, CosmosChain>) -> Error {
+        BaseError::generic(eyre!("{:?}", e)).into()
     }
 }
 
