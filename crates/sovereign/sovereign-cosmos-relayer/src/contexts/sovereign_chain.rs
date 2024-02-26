@@ -5,6 +5,14 @@ use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCr
 use hermes_cosmos_relayer::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    CanDecodeClientState, HasClientStateType,
+};
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -18,8 +26,11 @@ use hermes_sovereign_client_components::sovereign::components::{
     IsSovereignClientComponent, SovereignClientComponents,
 };
 use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
-    DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, ProvideDataChainType,
+    DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
+    ProvideDataChainType,
 };
+use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
@@ -89,6 +100,23 @@ impl ProvideRuntime<SovereignChain> for SovereignChainComponents {
     }
 }
 
-pub trait CheckCanBuildCreateClientMessage: CanBuildCreateClientMessage<SovereignChain> {}
+pub trait CheckSovereignChainImpls:
+    HasDataChain
+    + HasUpdateClientPayloadType<CosmosChain>
+    + HasHeightType<Height = RollupHeight>
+    + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
+    + CanBuildUpdateClientPayload<CosmosChain>
+    + CanDecodeClientState<CosmosChain>
+{
+}
 
-impl CheckCanBuildCreateClientMessage for CosmosChain {}
+impl CheckSovereignChainImpls for SovereignChain {}
+
+pub trait CheckCosmosChainImpls:
+    CanQueryClientState<SovereignChain>
+    + CanBuildCreateClientMessage<SovereignChain>
+    + CanBuildUpdateClientMessage<SovereignChain>
+{
+}
+
+impl CheckCosmosChainImpls for CosmosChain {}

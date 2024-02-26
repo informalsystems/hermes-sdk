@@ -1,6 +1,7 @@
 #![recursion_limit = "256"]
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
+use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
 use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
@@ -15,7 +16,6 @@ use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDe
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
@@ -200,7 +200,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             &sovereign_chain,
             &dummy_trusted_height,
             &dummy_target_height,
-            &sovereign_client_state
+            sovereign_client_state
         ).await?;
 
         let update_client_messages = <CosmosChain as CanBuildUpdateClientMessage<SovereignChain>>::build_update_client_message(
