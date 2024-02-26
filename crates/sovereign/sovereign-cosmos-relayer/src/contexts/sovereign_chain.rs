@@ -15,10 +15,11 @@ use hermes_sovereign_client_components::cosmos::impls::client::create_client_mes
 use hermes_sovereign_client_components::sovereign::components::{
     IsSovereignClientComponent, SovereignClientComponents,
 };
+use hermes_sovereign_client_components::sovereign::traits::data_chain::HasDataChain;
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
-    // pub celestia_chain: CelestiaChain,
+    pub data_chain: CosmosChain,
     // TODO: fields such as rollup JSON RPC address
 }
 
@@ -26,6 +27,14 @@ pub struct SovereignChainComponents;
 
 impl HasComponents for SovereignChain {
     type Components = SovereignChainComponents;
+}
+
+impl HasDataChain for SovereignChain {
+    type DataChain = CosmosChain;
+
+    fn data_chain(&self) -> &CosmosChain {
+        &self.data_chain
+    }
 }
 
 delegate_all!(
