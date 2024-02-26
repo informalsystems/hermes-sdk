@@ -21,6 +21,9 @@ use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hex::ToHex;
+use jsonrpsee::core::client::ClientT;
+use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 
 #[test]
@@ -113,6 +116,14 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             let tx_bytes =
                 encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
 
+            let tx_hash_bytes: [u8; 32] = {
+                let mut hasher = Sha256::new();
+                hasher.update(&tx_bytes);
+                hasher.finalize().into()
+            };
+
+            let tx_hash = format!("0x{}", tx_hash_bytes.encode_hex::<String>());
+
             rollup.publish_transaction_batch(&[tx_bytes]).await?;
 
             rollup
@@ -134,6 +145,13 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     },
                 )
                 .await?;
+
+            let response: serde_json::Value = rollup
+                .rpc_client
+                .request("ledger_getTransactionByHash", (&tx_hash,))
+                .await?;
+
+            println!("querty tx hash {} response: {}", tx_hash, response);
         }
         <Result<(), Error>>::Ok(())
     })?;
