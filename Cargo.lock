@@ -1993,6 +1993,7 @@ dependencies = [
  "eyre",
  "hermes-celestia-integration-tests",
  "hermes-celestia-test-components",
+ "hermes-cosmos-client-components",
  "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",

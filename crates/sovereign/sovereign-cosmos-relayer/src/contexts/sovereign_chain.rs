@@ -18,7 +18,7 @@ use hermes_sovereign_client_components::sovereign::components::{
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
-    // pub celestia_chain: CelestiaChain,
+    pub data_chain: CosmosChain,
     // TODO: fields such as rollup JSON RPC address
 }
 

@@ -1,10 +1,12 @@
 #![recursion_limit = "256"]
 use eyre::eyre;
+use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::time::sleep;
 
 use core::time::Duration;
@@ -48,7 +50,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
-        builder,
+        builder: builder.clone(),
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
         chain_command_path: "simd".into(),
@@ -120,6 +122,15 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         }),
     });
 
+    let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+
+    let celestia_bootstrap = CelestiaBootstrap {
+        runtime: runtime.clone(),
+        builder,
+        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
+        bridge_store_dir: format!("./test-data/{store_postfix}/bridges").into(),
+    };
+
     let create_client_settings = ClientSettings::Tendermint(Settings {
         max_clock_drift: Duration::from_secs(40),
         trusting_period: None,
@@ -134,6 +145,10 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         let cosmos_chain_driver = bootstrap.bootstrap_chain("cosmos-1").await?;
 
         let cosmos_chain = cosmos_chain_driver.chain();
+
+        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("datachain").await?;
+
+        let celestia_chain = celestia_chain_driver.chain();
 
         cosmos_chain_driver.store_wasm_client_code(
             &wasm_client_code_path,
@@ -154,6 +169,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let sovereign_chain = SovereignChain {
             runtime: runtime.clone(),
+            data_chain: celestia_chain.clone(),
         };
 
         let create_client_payload = <SovereignChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
