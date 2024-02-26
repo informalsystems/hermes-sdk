@@ -115,7 +115,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             {
                 let amount = rollup.query_balance(address_a, transfer_denom).await?;
 
-                assert_eq!(amount.quantity, 999_999_999_0000);
+                assert_eq!(amount.quantity, 999_999_999_000);
             }
 
             {
