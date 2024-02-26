@@ -1,6 +1,9 @@
+use core::time::Duration;
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
@@ -22,7 +25,7 @@ where
         + CanRaiseError<Runtime::Error>,
     ChainDriver: HasChain<Chain = Chain> + HasRuntime<Runtime = Runtime>,
     Chain: HasChainId<ChainId = ChainId>,
-    Runtime: HasFilePathType + CanStartChildProcess,
+    Runtime: HasFilePathType + CanStartChildProcess + CanSleep,
 {
     async fn start_bridge(
         bootstrap: &Bootstrap,
@@ -73,6 +76,9 @@ where
             )
             .await
             .map_err(Bootstrap::raise_error)?;
+
+        // Wait for the bridge node to start
+        bootstrap.runtime().sleep(Duration::from_secs(1)).await;
 
         Ok(child)
     }

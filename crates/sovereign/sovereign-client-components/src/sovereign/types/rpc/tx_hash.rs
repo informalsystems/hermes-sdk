@@ -1,4 +1,4 @@
-use core::fmt::Display;
+use core::fmt::{Debug, Display};
 
 use hex::{FromHex, ToHex};
 use serde::{de::Error as _, Deserialize, Deserializer, Serialize, Serializer};
@@ -19,6 +19,13 @@ impl Display for TxHash {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "0x")?;
         write!(f, "{}", self.0.encode_hex::<String>())?;
+        Ok(())
+    }
+}
+
+impl Debug for TxHash {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_string())?;
         Ok(())
     }
 }
