@@ -17,6 +17,9 @@ use hermes_sovereign_client_components::cosmos::impls::client::update_client_mes
 use hermes_sovereign_client_components::sovereign::components::{
     IsSovereignClientComponent, SovereignClientComponents,
 };
+use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
+    DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, ProvideDataChainType,
+};
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
@@ -36,6 +39,21 @@ delegate_all!(
     SovereignChainComponents,
 );
 
+pub struct SovereignDataChainType;
+
+impl<Chain> ProvideDataChainType<Chain> for SovereignDataChainType
+where
+    Chain: Async,
+{
+    type DataChain = CosmosChain;
+}
+
+impl DataChainGetter<SovereignChain> for SovereignDataChainType {
+    fn data_chain(chain: &SovereignChain) -> &CosmosChain {
+        &chain.data_chain
+    }
+}
+
 delegate_components! {
     SovereignChainComponents {
         ErrorTypeComponent: ProvideEyreError,
@@ -45,7 +63,11 @@ delegate_components! {
             LoggerTypeComponent,
             LoggerFieldComponent,
         ]:
-            ProvideTracingLogger,
+        ProvideTracingLogger,
+        [
+            DataChainTypeComponent,
+            DataChainGetterComponent,
+        ]: SovereignDataChainType,
     }
 }
 
