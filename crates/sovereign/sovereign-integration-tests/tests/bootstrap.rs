@@ -75,11 +75,21 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
-            let amount = rollup
-                .query_balance(&wallet_a.address.address, &transfer_denom.address)
-                .await?;
+            let address_a = &wallet_a.address.address;
+            let address_b = &wallet_b.address.address;
+            let transfer_denom = &transfer_denom.address;
 
-            assert_eq!(amount.quantity, 1_000_000_000_000);
+            {
+                let amount = rollup.query_balance(address_a, transfer_denom).await?;
+
+                assert_eq!(amount.quantity, 1_000_000_000_000);
+            }
+
+            {
+                let amount = rollup.query_balance(address_b, transfer_denom).await?;
+
+                assert_eq!(amount.quantity, 1_000_000_000_000);
+            }
 
             let message = SovereignMessage::Bank(BankMessage::Transfer {
                 to: wallet_b.address.address_bytes.clone(),
@@ -99,6 +109,40 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                 encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
 
             rollup.publish_transaction_batch(&[tx_bytes]).await?;
+
+            tokio::time::sleep(core::time::Duration::from_secs(10)).await;
+
+            {
+                let amount = rollup.query_balance(address_a, transfer_denom).await?;
+
+                assert_eq!(amount.quantity, 999_999_999_0000);
+            }
+
+            {
+                let amount = rollup.query_balance(address_b, transfer_denom).await?;
+
+                assert_eq!(amount.quantity, 1_000_000_001_000);
+            }
+
+            // rollup
+            //     .assert_eventual_amount(
+            //         address_a,
+            //         &SovereignAmount {
+            //             quantity: 999_999_999_0000,
+            //             denom: transfer_denom.clone(),
+            //         },
+            //     )
+            //     .await?;
+
+            // rollup
+            //     .assert_eventual_amount(
+            //         address_a,
+            //         &SovereignAmount {
+            //             quantity: 1_000_000_001_000,
+            //             denom: transfer_denom.clone(),
+            //         },
+            //     )
+            //     .await?;
         }
         <Result<(), Error>>::Ok(())
     })?;
