@@ -12,8 +12,8 @@ use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::cosmos::impls::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
-use hermes_sovereign_client_components::sovereign::components::{
-    IsSovereignClientComponent, SovereignClientComponents,
+use hermes_sovereign_client_components::sovereign::components::chain::{
+    IsSovereignChainClientComponent, SovereignChainClientComponents,
 };
 
 pub struct SovereignChain {
@@ -29,8 +29,8 @@ impl HasComponents for SovereignChain {
 }
 
 delegate_all!(
-    IsSovereignClientComponent,
-    SovereignClientComponents,
+    IsSovereignChainClientComponent,
+    SovereignChainClientComponents,
     SovereignChainComponents,
 );
 

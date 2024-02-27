@@ -8,12 +8,14 @@ use eyre::{eyre, Error};
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
 use hermes_sovereign_client_components::sovereign::types::messages::bank::{
     BankMessage, CoinFields,
 };
+use hermes_sovereign_client_components::sovereign::types::rpc::tx_hash::TxHash;
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
@@ -113,6 +115,14 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             let tx_bytes =
                 encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
 
+            let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
+
+            {
+                let response = rollup.query_tx_response(&tx_hash).await?;
+
+                assert!(response.is_none());
+            }
+
             rollup.publish_transaction_batch(&[tx_bytes]).await?;
 
             rollup
@@ -134,6 +144,12 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     },
                 )
                 .await?;
+
+            {
+                let response = rollup.query_tx_response(&tx_hash).await?;
+
+                println!("querty tx hash {} response: {:?}", tx_hash, response);
+            }
         }
         <Result<(), Error>>::Ok(())
     })?;

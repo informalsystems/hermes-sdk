@@ -14,6 +14,7 @@ where
         + HasTransactionType<Transaction = Vec<u8>>
         + CanRaiseError<ClientError>
         + CanRaiseError<serde_json::Error>,
+    Chain::JsonRpcClient: ClientT,
 {
     async fn publish_transaction_batch(
         chain: &Chain,
