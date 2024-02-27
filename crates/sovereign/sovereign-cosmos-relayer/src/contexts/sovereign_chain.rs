@@ -29,7 +29,7 @@ use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
     DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
     ProvideDataChainType,
 };
-use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_client_components::sovereign::types::client_state::SovTmClientState;
 use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 
 pub struct SovereignChain {
@@ -104,7 +104,7 @@ pub trait CheckSovereignChainImpls:
     HasDataChain
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
-    + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
+    + HasClientStateType<CosmosChain, ClientState = SovTmClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + CanDecodeClientState<CosmosChain>
 {

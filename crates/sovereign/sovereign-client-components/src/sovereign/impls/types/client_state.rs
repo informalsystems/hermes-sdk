@@ -1,7 +1,7 @@
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
 
-use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::client_state::SovTmClientState;
 
 pub struct ProvideSovereignClientState;
 
@@ -10,5 +10,5 @@ impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty>
 where
     Chain: Async,
 {
-    type ClientState = SovereignClientState;
+    type ClientState = SovTmClientState;
 }

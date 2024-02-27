@@ -20,10 +20,10 @@ use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold as RelayerTrustThreshold;
 use ibc_relayer_types::core::ics23_commitment::specs::ProofSpecs;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
-use sov_celestia_client::types::client_state::TendermintParams;
+use sov_celestia_client::types::client_state::TmClientParams;
 
 use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
-use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::client_state::SovTmClientState;
 use crate::sovereign::types::height::RollupHeight;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
@@ -38,7 +38,7 @@ impl<Chain, Counterparty, DataChain> UpdateClientPayloadBuilder<Chain, Counterpa
 where
     Chain: HasHeightType<Height = RollupHeight>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
-        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasClientStateType<Counterparty, ClientState = SovTmClientState>
         + HasDataChain
         + HasDataChainType<DataChain = DataChain>
         + HasErrorType<Error = ReportError>,
@@ -61,7 +61,7 @@ where
 
         let data_chain = chain.data_chain();
 
-        let da_client_state = convert_tm_params_to_client_state(client_state.tendermint_params)?;
+        let da_client_state = convert_tm_params_to_client_state(client_state.da_params)?;
 
         let headers = data_chain
             .with_blocking_chain_handle(move |chain_handle| {
@@ -115,7 +115,7 @@ where
 /// half the Tendermint ClientState value are mocked.
 /// See issue: https://github.com/informalsystems/hermes-sdk/issues/204
 fn convert_tm_params_to_client_state(
-    tm_params: TendermintParams,
+    tm_params: TmClientParams,
 ) -> Result<TendermintClientState, ReportError> {
     let dummy_latest_height =
         Height::new(1, 8).map_err(|e| eyre!("Error creating dummy Height: {e}"))?;

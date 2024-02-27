@@ -184,9 +184,12 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let _events = cosmos_chain.send_message(create_client_message).await?;
 
+        //assert!(false, "Sov CS: {sovereign_client_state:#?}");
+
         let wasm_client_id = ClientId::from_str("08-wasm-0").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
 
         let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
 
         let create_celestia_client_payload = <CosmosChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
             celestia_chain,
