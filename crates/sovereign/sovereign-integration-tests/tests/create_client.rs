@@ -2,6 +2,7 @@
 use core::time::Duration;
 use eyre::eyre;
 use eyre::Error;
+use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use serde_json::Value as JsonValue;
 use std::env::var;
 use std::str::FromStr;
@@ -190,7 +191,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
 
-
         let create_celestia_client_payload = <CosmosChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
             celestia_chain,
             &create_client_settings
@@ -203,8 +203,11 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let _events = cosmos_chain.send_message(create_celestia_client_message).await?;
 
-        let dummy_trusted_height = RollupHeight { slot_number: 5 };
-        let dummy_target_height = RollupHeight { slot_number: 10 };
+        tokio::time::sleep(Duration::from_secs(3)).await;
+        let wasm_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
+        let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u128 };
+        let dummy_target_height = RollupHeight { slot_number: (wasm_client_state.latest_height.revision_height()+1) as u128 };
 
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
             &sovereign_chain,

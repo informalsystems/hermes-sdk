@@ -50,13 +50,13 @@ where
         target_height: &RollupHeight,
         client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
-        let tm_trusted_height = Height::new(1, trusted_height.slot_number as u64)
+        let tm_trusted_height = Height::new(0, trusted_height.slot_number as u64)
             .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
-        let tm_target_height = Height::new(1, target_height.slot_number as u64)
+        let tm_target_height = Height::new(0, target_height.slot_number as u64)
             .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
-        let da_trusted_height = DataChainHeight::new(1, trusted_height.slot_number as u64)
+        let da_trusted_height = DataChainHeight::new(0, trusted_height.slot_number as u64)
             .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
-        let da_target_height = DataChainHeight::new(1, target_height.slot_number as u64)
+        let da_target_height = DataChainHeight::new(0, target_height.slot_number as u64)
             .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
 
         let data_chain = chain.data_chain();
@@ -118,7 +118,7 @@ fn convert_tm_params_to_client_state(
     tm_params: TmClientParams,
 ) -> Result<TendermintClientState, ReportError> {
     let dummy_latest_height =
-        Height::new(1, 8).map_err(|e| eyre!("Error creating dummy Height: {e}"))?;
+        Height::new(0, 10).map_err(|e| eyre!("Error creating dummy Height: {e}"))?;
     let relayer_chain_id = RelayerChainId::from_str(&tm_params.chain_id.to_string())
         .map_err(|e| eyre!("Error converting ChainId to Relayer Chain Id: {e}"))?;
     let relayer_trust_threshold = RelayerTrustThreshold::new(

@@ -35,13 +35,13 @@ where
         //let latest_height = chain.query_chain_height().await?;
 
         let chain_id = ChainId::new("private").unwrap();
-        let latest_height = Height::new(1, 10).unwrap();
+        let latest_height = Height::new(0, 10).unwrap();
 
         let client_state = dummy_sov_client_state(chain_id.clone(), latest_height);
         let consensus_state = dummy_sov_consensus_state();
 
         let code_hash =
-            hex::decode("df46d8f511495cae8794c26fef52b2d449c511e75bf61fc7bbbce2e96025bec0")
+            hex::decode("739d72e762a60f65e26f1848422c8f514ce4d2c6fe052d405765f0796e3e3ad3")
                 .unwrap();
 
         Ok(SovereignCreateClientPayload {
