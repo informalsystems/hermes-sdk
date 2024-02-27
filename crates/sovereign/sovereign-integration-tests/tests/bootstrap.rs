@@ -117,9 +117,11 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
 
-            let response = rollup.query_tx_response(&tx_hash).await?;
+            {
+                let response = rollup.query_tx_response(&tx_hash).await?;
 
-            println!("querty tx hash {} response: {:?}", tx_hash, response);
+                assert!(response.is_none());
+            }
 
             rollup.publish_transaction_batch(&[tx_bytes]).await?;
 
@@ -143,9 +145,11 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                 )
                 .await?;
 
-            let response = rollup.query_tx_response(&tx_hash).await?;
+            {
+                let response = rollup.query_tx_response(&tx_hash).await?;
 
-            println!("querty tx hash {} response: {:?}", tx_hash, response);
+                println!("querty tx hash {} response: {:?}", tx_hash, response);
+            }
         }
         <Result<(), Error>>::Ok(())
     })?;
