@@ -18,6 +18,7 @@ where
         + HasTransactionHashType<TxHash = TxHash>
         + HasJsonRpcClient
         + CanRaiseError<ClientError>,
+    Chain::JsonRpcClient: ClientT,
 {
     async fn query_tx_response(
         chain: &Chain,

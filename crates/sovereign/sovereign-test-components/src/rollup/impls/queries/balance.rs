@@ -25,6 +25,7 @@ where
         + CanRaiseError<ClientError>
         + CanRaiseError<serde_json::Error>
         + HasJsonRpcClient,
+    Rollup::JsonRpcClient: ClientT,
 {
     async fn query_balance(
         rollup: &Rollup,
