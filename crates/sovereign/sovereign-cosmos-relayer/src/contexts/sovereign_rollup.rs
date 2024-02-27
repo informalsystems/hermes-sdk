@@ -6,13 +6,16 @@ use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::types::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::NonceTypeComponent;
+use hermes_relayer_components::transaction::traits::types::SignerTypeComponent;
+use hermes_relayer_components::transaction::traits::types::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::TransactionTypeComponent;
+use hermes_relayer_components::transaction::traits::types::TxResponseTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_sovereign_client_components::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
-use hermes_sovereign_client_components::sovereign::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
-use hermes_sovereign_client_components::sovereign::impls::types::transaction::ProvideSovereignTransactionTypes;
+use hermes_sovereign_client_components::sovereign::components::SovereignClientComponents;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientGetter;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
@@ -51,8 +54,15 @@ delegate_components! {
         [
             TransactionTypeComponent,
             NonceTypeComponent,
+            FeeTypeComponent,
+            SignerTypeComponent,
+            TransactionHashTypeComponent,
+            TxResponseTypeComponent,
+            JsonRpcClientTypeComponent,
+            TransactionBatchPublisherComponent,
+            TxResponseQuerierComponent,
         ]:
-            ProvideSovereignTransactionTypes,
+            SovereignClientComponents,
         [
             AddressTypeComponent,
             DenomTypeComponent,
@@ -63,10 +73,6 @@ delegate_components! {
             PollAssertDurationGetterComponent,
         ]:
             SovereignRollupTestComponents,
-        JsonRpcClientTypeComponent:
-            ProvideJsonRpseeClient,
-        TransactionBatchPublisherComponent:
-            PublishSovereignTransactionBatch,
     }
 }
 

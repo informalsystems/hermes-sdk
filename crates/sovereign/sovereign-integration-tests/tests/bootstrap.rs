@@ -8,6 +8,7 @@ use eyre::{eyre, Error};
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
@@ -15,7 +16,6 @@ use hermes_sovereign_client_components::sovereign::types::messages::bank::{
     BankMessage, CoinFields,
 };
 use hermes_sovereign_client_components::sovereign::types::rpc::tx_hash::TxHash;
-use hermes_sovereign_client_components::sovereign::types::rpc::tx_response::TxResponse;
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
@@ -23,7 +23,6 @@ use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use jsonrpsee::core::client::ClientT;
 use tokio::runtime::Builder;
 
 #[test]
@@ -118,10 +117,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
 
-            let response: Option<TxResponse> = rollup
-                .rpc_client
-                .request("ledger_getTransactionByHash", (&tx_hash,))
-                .await?;
+            let response = rollup.query_tx_response(&tx_hash).await?;
 
             println!("querty tx hash {} response: {:?}", tx_hash, response);
 
@@ -147,10 +143,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                 )
                 .await?;
 
-            let response: TxResponse = rollup
-                .rpc_client
-                .request("ledger_getTransactionByHash", (&tx_hash,))
-                .await?;
+            let response = rollup.query_tx_response(&tx_hash).await?;
 
             println!("querty tx hash {} response: {:?}", tx_hash, response);
         }
