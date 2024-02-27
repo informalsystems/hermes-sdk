@@ -15,7 +15,7 @@ use hermes_relayer_components::transaction::traits::types::TransactionTypeCompon
 use hermes_relayer_components::transaction::traits::types::TxResponseTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_sovereign_client_components::sovereign::components::SovereignClientComponents;
+use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientGetter;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
@@ -62,7 +62,7 @@ delegate_components! {
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
         ]:
-            SovereignClientComponents,
+            SovereignRollupClientComponents,
         [
             AddressTypeComponent,
             DenomTypeComponent,

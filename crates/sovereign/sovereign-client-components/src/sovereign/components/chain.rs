@@ -20,7 +20,6 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::types::{
     FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
     TransactionTypeComponent, TxResponseTypeComponent,
@@ -30,20 +29,15 @@ use crate::sovereign::impls::client::create_client_message::BuildCreateCosmosCli
 use crate::sovereign::impls::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::sovereign::impls::client::update_client_payload::BuildSovereignUpdateClientPayload;
-use crate::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
-use crate::sovereign::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
-use crate::sovereign::impls::transaction::query_tx_response::QuerySovereignTxResponse;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 use crate::sovereign::impls::types::transaction::ProvideSovereignTransactionTypes;
-use crate::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
-use crate::sovereign::traits::rollup::publish_batch::TransactionBatchPublisherComponent;
 
-pub struct SovereignClientComponents;
+pub struct SovereignChainClientComponents;
 
 delegate_components! {
-    #[mark_component(IsSovereignClientComponent)]
-    SovereignClientComponents {
+    #[mark_component(IsSovereignChainClientComponent)]
+    SovereignChainClientComponents {
         [
             HeightTypeComponent,
             TimestampTypeComponent,
@@ -81,11 +75,5 @@ delegate_components! {
             BuildSovereignUpdateClientPayload,
         UpdateClientMessageBuilderComponent:
             BuildUpdateCosmosClientMessageOnSovereign,
-        JsonRpcClientTypeComponent:
-            ProvideJsonRpseeClient,
-        TransactionBatchPublisherComponent:
-            PublishSovereignTransactionBatch,
-        TxResponseQuerierComponent:
-            QuerySovereignTxResponse,
     }
 }
