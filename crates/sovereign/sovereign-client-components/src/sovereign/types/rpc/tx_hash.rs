@@ -9,7 +9,7 @@ pub struct TxHash(pub [u8; 32]);
 impl TxHash {
     pub fn from_signed_tx_bytes(tx_bytes: &[u8]) -> Self {
         let mut hasher = Sha256::new();
-        hasher.update(&tx_bytes);
+        hasher.update(tx_bytes);
         let hash_bytes = hasher.finalize().into();
         Self(hash_bytes)
     }
@@ -25,7 +25,7 @@ impl Display for TxHash {
 
 impl Debug for TxHash {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.to_string())?;
+        write!(f, "{}", self)?;
         Ok(())
     }
 }
