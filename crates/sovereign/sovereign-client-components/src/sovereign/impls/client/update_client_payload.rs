@@ -1,3 +1,5 @@
+use eyre::eyre;
+use eyre::Error as ReportError;
 use std::iter;
 use std::str::FromStr;
 
@@ -5,18 +7,20 @@ use cgp_core::HasErrorType;
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::clients::tendermint::types::Header;
 use ibc_core::client::types::Height as DataChainHeight;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
+use ibc_relayer_types::clients::ics07_tendermint::client_state::AllowUpdate;
 use ibc_relayer_types::core::ics02_client::header::AnyHeader;
 use ibc_relayer_types::core::ics02_client::height::Height;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId as RelayerClientId;
+use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold as RelayerTrustThreshold;
+use ibc_relayer_types::core::ics23_commitment::specs::ProofSpecs;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
+use sov_celestia_client::types::client_state::TendermintParams;
 
 use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
 use crate::sovereign::types::client_state::SovereignClientState;
@@ -37,32 +41,27 @@ where
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>
         + HasDataChain
         + HasDataChainType<DataChain = DataChain>
-        + HasErrorType,
-    Chain::DataChain: CanQueryClientState<Counterparty>
-        + HasIbcChainTypes<Counterparty, ClientId = RelayerClientId, Height = Height>
-        + HasBlockingChainHandle,
-    Counterparty: HasClientStateType<Chain::DataChain, ClientState = TendermintClientState>,
-    // TODO: Add dependencies for update client payload here
+        + HasErrorType<Error = ReportError>,
+    Chain::DataChain: HasErrorType + HasBlockingChainHandle,
 {
     async fn build_update_client_payload(
         chain: &Chain,
         trusted_height: &RollupHeight,
         target_height: &RollupHeight,
-        _client_state: Chain::ClientState,
+        client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
-        let tm_trusted_height = Height::new(1, trusted_height.slot_number as u64).unwrap();
-        let tm_target_height = Height::new(1, target_height.slot_number as u64).unwrap();
-        let da_trusted_height = DataChainHeight::new(1, trusted_height.slot_number as u64).unwrap();
-        let da_target_height = DataChainHeight::new(1, target_height.slot_number as u64).unwrap();
-
-        let dummy_da_client_id = RelayerClientId::from_str("07-tendermint-1").unwrap();
+        let tm_trusted_height = Height::new(1, trusted_height.slot_number as u64)
+            .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
+        let tm_target_height = Height::new(1, target_height.slot_number as u64)
+            .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
+        let da_trusted_height = DataChainHeight::new(1, trusted_height.slot_number as u64)
+            .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+        let da_target_height = DataChainHeight::new(1, target_height.slot_number as u64)
+            .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
 
         let data_chain = chain.data_chain();
 
-        let da_client_state = data_chain
-            .query_client_state(&dummy_da_client_id, &tm_target_height)
-            .await
-            .unwrap();
+        let da_client_state = convert_tm_params_to_client_state(client_state.tendermint_params)?;
 
         let headers = data_chain
             .with_blocking_chain_handle(move |chain_handle| {
@@ -82,6 +81,7 @@ where
                                 header.trusted_height.revision_number(),
                                 header.trusted_height.revision_height(),
                             )
+                            .map_err(|e| eyre!("Error creating DA Height: {e}"))
                             .unwrap();
                             let da_header = Header {
                                 signed_header: header.signed_header.clone(),
@@ -106,4 +106,39 @@ where
             final_state_height: da_target_height,
         })
     }
+}
+
+/// This is a temporary solution which converts the TendermintParams to Tendermint ClientState.
+/// The Sovereign client state only has a TendermintParams field, but in order to build the
+/// client update payload, the DA chain's client state is required.
+/// Until the Light client is decoupled from the Cosmos SDK in order to build the DA header
+/// half the Tendermint ClientState value are mocked.
+/// See issue: https://github.com/informalsystems/hermes-sdk/issues/204
+fn convert_tm_params_to_client_state(
+    tm_params: TendermintParams,
+) -> Result<TendermintClientState, ReportError> {
+    let dummy_latest_height =
+        Height::new(1, 8).map_err(|e| eyre!("Error creating dummy Height: {e}"))?;
+    let relayer_chain_id = RelayerChainId::from_str(&tm_params.chain_id.to_string())
+        .map_err(|e| eyre!("Error converting ChainId to Relayer Chain Id: {e}"))?;
+    let relayer_trust_threshold = RelayerTrustThreshold::new(
+        tm_params.trust_level.numerator(),
+        tm_params.trust_level.denominator(),
+    )
+    .map_err(|e| eyre!("Error converting TrustThreshold to Relayer TrustThreshold: {e}"))?;
+    Ok(TendermintClientState {
+        chain_id: relayer_chain_id,
+        trust_threshold: relayer_trust_threshold,
+        trusting_period: tm_params.trusting_period,
+        unbonding_period: tm_params.unbonding_period,
+        max_clock_drift: tm_params.max_clock_drift,
+        latest_height: dummy_latest_height,
+        proof_specs: ProofSpecs::default(),
+        upgrade_path: vec![],
+        allow_update: AllowUpdate {
+            after_expiry: false,
+            after_misbehaviour: false,
+        },
+        frozen_height: None,
+    })
 }
