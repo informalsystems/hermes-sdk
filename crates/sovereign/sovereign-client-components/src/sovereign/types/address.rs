@@ -1,10 +1,20 @@
+use core::fmt::Debug;
+
 use bech32::ToBase32;
 use bech32::Variant::Bech32m;
 use borsh::{BorshDeserialize, BorshSerialize};
+use hex::ToHex;
 
-#[derive(Debug, Clone, BorshSerialize, BorshDeserialize)]
+#[derive(Clone, BorshSerialize, BorshDeserialize)]
 pub struct SovereignAddressBytes {
     pub addr: [u8; 32],
+}
+
+impl Debug for SovereignAddressBytes {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "SovAddressBytes({})", self.addr.encode_hex::<String>())?;
+        Ok(())
+    }
 }
 
 #[derive(Clone)]
