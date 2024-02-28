@@ -14,6 +14,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::SignerTypeComponent;
@@ -79,6 +80,7 @@ delegate_components! {
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
             EventsByEventIdsQuerierComponent,
+            TxResponseAsEventsParserComponent,
         ]:
             SovereignRollupClientComponents,
         [

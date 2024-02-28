@@ -10,6 +10,7 @@ use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
+use hermes_relayer_components::transaction::traits::event::CanParseTxResponseAsEvents;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
@@ -18,6 +19,7 @@ use hermes_sovereign_client_components::sovereign::types::messages::bank::{
 };
 use hermes_sovereign_client_components::sovereign::types::rpc::tx_hash::TxHash;
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
+use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::types::amount::SovereignAmount;
@@ -191,9 +193,16 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
                 sleep(Duration::from_secs(2)).await;
 
-                let response = rollup.query_tx_response(&tx_hash).await?.unwrap();
+                let response = rollup
+                    .query_tx_response(&tx_hash)
+                    .await?
+                    .ok_or_else(|| eyre!("expect tx response to be present"))?;
 
                 println!("querty tx hash {} response: {:?}", tx_hash, response);
+
+                let events = SovereignRollup::parse_tx_response_as_events(response)?;
+
+                println!("events: {:?}", events);
             }
         }
         <Result<(), Error>>::Ok(())

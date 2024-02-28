@@ -17,6 +17,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::{
     FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
     TransactionTypeComponent, TxResponseTypeComponent,
@@ -24,6 +25,7 @@ use hermes_relayer_components::transaction::traits::types::{
 
 use crate::sovereign::impls::queries::events::QuerySovereignEvents;
 use crate::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
+use crate::sovereign::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::sovereign::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
 use crate::sovereign::impls::transaction::query_tx_response::QuerySovereignTxResponse;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
@@ -77,5 +79,7 @@ delegate_components! {
             QuerySovereignTxResponse,
         EventsByEventIdsQuerierComponent:
             QuerySovereignEvents,
+        TxResponseAsEventsParserComponent:
+            ParseSovTxResponseAsEvents,
     }
 }
