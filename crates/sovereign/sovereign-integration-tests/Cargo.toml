@@ -33,6 +33,7 @@ hermes-wasm-client-components       = { workspace = true }
 
 eyre            = { workspace = true }
 tokio           = { workspace = true }
+serde           = { workspace = true }
 serde_json      = { workspace = true }
 toml            = { workspace = true }
 stable-eyre     = { version = "0.2.2" }

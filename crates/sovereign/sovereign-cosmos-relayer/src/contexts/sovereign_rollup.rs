@@ -4,9 +4,17 @@ use cgp_core::ErrorTypeComponent;
 use cgp_core::HasComponents;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
+use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::SignerTypeComponent;
@@ -52,6 +60,13 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
+            HeightTypeComponent,
+            TimestampTypeComponent,
+            ChainIdTypeComponent,
+            MessageTypeComponent,
+            EventTypeComponent,
+            IbcChainTypesComponent,
+            IbcPacketTypesProviderComponent,
             TransactionTypeComponent,
             NonceTypeComponent,
             FeeTypeComponent,
@@ -61,6 +76,7 @@ delegate_components! {
             JsonRpcClientTypeComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
+            TxResponseAsEventsParserComponent,
         ]:
             SovereignRollupClientComponents,
         [
