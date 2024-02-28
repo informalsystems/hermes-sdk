@@ -194,16 +194,6 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             let response = rollup.query_tx_response(&tx_hash).await?.unwrap();
 
             println!("querty tx hash {} response: {:?}", tx_hash, response);
-
-            let event_numbers: Vec<u64> = response.event_range.collect();
-
-            println!("event numbers: {:?}", event_numbers);
-
-            {
-                let events = rollup.query_events_by_event_ids(&event_numbers).await?;
-
-                println!("querty events response: {:?}", events);
-            }
         }
         <Result<(), Error>>::Ok(())
     })?;

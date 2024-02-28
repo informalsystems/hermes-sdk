@@ -1,3 +1,5 @@
+use core::ops::Range;
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerier;
 use hermes_relayer_components::transaction::traits::types::{
@@ -5,10 +7,12 @@ use hermes_relayer_components::transaction::traits::types::{
 };
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
+use serde::Deserialize;
 
 use crate::sovereign::traits::rollup::json_rpc_client::HasJsonRpcClient;
+use crate::sovereign::types::event::RawEvent;
 use crate::sovereign::types::rpc::tx_hash::TxHash;
-use crate::sovereign::types::rpc::tx_response::TxResponse;
+use crate::sovereign::types::rpc::tx_response::{TxEffect, TxResponse};
 
 pub struct QuerySovereignTxResponse;
 
@@ -24,12 +28,37 @@ where
         chain: &Chain,
         tx_hash: &TxHash,
     ) -> Result<Option<TxResponse>, Chain::Error> {
-        let response = chain
+        let response: Option<QueryTxResponse> = chain
             .json_rpc_client()
             .request("ledger_getTransactionByHash", (&tx_hash,))
             .await
             .map_err(Chain::raise_error)?;
 
-        Ok(response)
+        if let Some(response) = response {
+            let event_ids: Vec<u64> = response.event_range.collect();
+
+            let events: Vec<RawEvent> = chain
+                .json_rpc_client()
+                .request("ledger_getEvents", (event_ids,))
+                .await
+                .map_err(Chain::raise_error)?;
+
+            let response = TxResponse {
+                hash: response.hash,
+                events,
+                custom_receipt: response.custom_receipt,
+            };
+
+            Ok(Some(response))
+        } else {
+            Ok(None)
+        }
     }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct QueryTxResponse {
+    pub hash: TxHash,
+    pub event_range: Range<u64>,
+    pub custom_receipt: TxEffect,
 }

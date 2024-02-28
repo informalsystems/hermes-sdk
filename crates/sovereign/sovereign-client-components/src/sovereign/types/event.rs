@@ -1,6 +1,13 @@
 use borsh::BorshDeserialize;
+use serde::Deserialize;
 
 use crate::sovereign::types::events::bank::BankEvent;
+
+#[derive(Debug, Deserialize)]
+pub struct RawEvent {
+    pub key: Vec<u8>,
+    pub value: Vec<u8>,
+}
 
 #[derive(Debug)]
 pub struct SovereignEvent {

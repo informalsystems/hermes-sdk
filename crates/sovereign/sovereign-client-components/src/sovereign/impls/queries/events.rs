@@ -6,53 +6,46 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
-use serde::Deserialize;
+use serde::Serialize;
 
 use crate::sovereign::traits::rollup::json_rpc_client::HasJsonRpcClient;
 use crate::sovereign::traits::rollup::queries::events::EventsByEventIdsQuerier;
 use crate::sovereign::traits::rollup::types::event_id::HasEventIdType;
-use crate::sovereign::types::event::{SovereignEvent, SovereignEventDetail};
+use crate::sovereign::types::event::{RawEvent, SovereignEvent, SovereignEventDetail};
 
 pub struct QuerySovereignEvents;
 
 impl<Rollup> EventsByEventIdsQuerier<Rollup> for QuerySovereignEvents
 where
     Rollup: HasEventType<Event = SovereignEvent>
-        + HasEventIdType<EventId = u64>
+        + HasEventIdType
         + HasJsonRpcClient
         + CanRaiseError<ClientError>
         + CanRaiseError<Utf8Error>
         + CanRaiseError<IoError>,
     Rollup::JsonRpcClient: ClientT,
+    Rollup::EventId: Serialize,
 {
     async fn query_events_by_event_ids(
         rollup: &Rollup,
-        event_ids: &[u64],
+        event_ids: &[Rollup::EventId],
     ) -> Result<Vec<SovereignEvent>, Rollup::Error> {
-        let response: Vec<EventResponse> = rollup
+        let response: Vec<RawEvent> = rollup
             .json_rpc_client()
             .request("ledger_getEvents", (event_ids,))
             .await
             .map_err(Rollup::raise_error)?;
 
         let events = response
-            .into_iter()
-            .filter_map(|event| parse_event_response::<Rollup>(&event).ok())
+            .iter()
+            .filter_map(|event| parse_event_response::<Rollup>(event).ok())
             .collect();
 
         Ok(events)
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct EventResponse {
-    key: Vec<u8>,
-    value: Vec<u8>,
-}
-
-pub fn parse_event_response<Rollup>(
-    response: &EventResponse,
-) -> Result<SovereignEvent, Rollup::Error>
+pub fn parse_event_response<Rollup>(response: &RawEvent) -> Result<SovereignEvent, Rollup::Error>
 where
     Rollup: CanRaiseError<Utf8Error> + CanRaiseError<IoError>,
 {
