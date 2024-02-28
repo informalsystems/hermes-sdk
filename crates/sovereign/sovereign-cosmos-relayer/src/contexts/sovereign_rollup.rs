@@ -4,6 +4,13 @@ use cgp_core::ErrorTypeComponent;
 use cgp_core::HasComponents;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
+use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
@@ -20,6 +27,8 @@ use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_clie
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::TransactionBatchPublisherComponent;
+use hermes_sovereign_client_components::sovereign::traits::rollup::queries::events::EventsByEventIdsQuerierComponent;
+use hermes_sovereign_client_components::sovereign::traits::rollup::types::event_id::EventIdTypeComponent;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
@@ -52,6 +61,14 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
+            HeightTypeComponent,
+            TimestampTypeComponent,
+            ChainIdTypeComponent,
+            MessageTypeComponent,
+            EventTypeComponent,
+            EventIdTypeComponent,
+            IbcChainTypesComponent,
+            IbcPacketTypesProviderComponent,
             TransactionTypeComponent,
             NonceTypeComponent,
             FeeTypeComponent,
@@ -61,6 +78,7 @@ delegate_components! {
             JsonRpcClientTypeComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
+            EventsByEventIdsQuerierComponent,
         ]:
             SovereignRollupClientComponents,
         [

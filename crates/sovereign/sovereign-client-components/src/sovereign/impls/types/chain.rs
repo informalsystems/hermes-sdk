@@ -12,6 +12,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
 };
 use ibc_relayer_types::timestamp::Timestamp;
 
+use crate::sovereign::traits::rollup::types::event_id::ProvideEventIdType;
 use crate::sovereign::types::event::SovereignEvent;
 use crate::sovereign::types::height::RollupHeight;
 use crate::sovereign::types::message::SovereignMessage;
@@ -39,6 +40,13 @@ where
     Chain: Async,
 {
     type Message = SovereignMessage;
+}
+
+impl<Chain> ProvideEventIdType<Chain> for ProvideSovereignChainTypes
+where
+    Chain: Async,
+{
+    type EventId = u64;
 }
 
 impl<Chain> ProvideEventType<Chain> for ProvideSovereignChainTypes

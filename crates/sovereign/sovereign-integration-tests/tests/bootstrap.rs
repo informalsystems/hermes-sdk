@@ -4,7 +4,7 @@ use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use borsh::{BorshDeserialize, BorshSerialize};
+use borsh::BorshSerialize;
 use eyre::{eyre, Error};
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
@@ -12,7 +12,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
-use hermes_sovereign_client_components::sovereign::types::event::SovereignEventDetail;
+use hermes_sovereign_client_components::sovereign::traits::rollup::queries::events::CanQueryEventsByEventIds;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
 use hermes_sovereign_client_components::sovereign::types::messages::bank::{
     BankMessage, CoinFields,
@@ -25,8 +25,6 @@ use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use jsonrpsee::core::client::ClientT;
-use serde::{Deserialize, Serialize};
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 
@@ -202,27 +200,13 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
             println!("event numbers: {:?}", event_numbers);
 
             {
-                let response: Vec<Event> = rollup
-                    .rpc_client
-                    .request("ledger_getEvents", (event_numbers,))
-                    .await?;
+                let events = rollup.query_events_by_event_ids(&event_numbers).await?;
 
-                let event = &response[0];
-
-                let key = core::str::from_utf8(&event.key)?;
-                let value = SovereignEventDetail::deserialize(&mut event.value.as_slice())?;
-
-                println!("querty events response: {key}: {:?}", value);
+                println!("querty events response: {:?}", events);
             }
         }
         <Result<(), Error>>::Ok(())
     })?;
 
     Ok(())
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Event {
-    key: Vec<u8>,
-    value: Vec<u8>,
 }
