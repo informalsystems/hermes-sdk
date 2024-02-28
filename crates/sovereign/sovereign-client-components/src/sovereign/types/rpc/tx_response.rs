@@ -1,5 +1,3 @@
-use core::ops::Range;
-
 use serde::Deserialize;
 
 use crate::sovereign::types::event::RawEvent;
