@@ -2,7 +2,6 @@
 use core::time::Duration;
 use eyre::eyre;
 use eyre::Error;
-use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use serde_json::Value as JsonValue;
 use std::env::var;
 use std::str::FromStr;
@@ -33,6 +32,7 @@ use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -203,11 +203,13 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let _events = cosmos_chain.send_message(create_celestia_client_message).await?;
 
-        tokio::time::sleep(Duration::from_secs(3)).await;
+        let celestia_client_id = ClientId::from_str("07-tendermint-1").unwrap();
+
         let wasm_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+        let celestia_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(cosmos_chain, &celestia_client_id).await?;
 
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u128 };
-        let dummy_target_height = RollupHeight { slot_number: (wasm_client_state.latest_height.revision_height()+1) as u128 };
+        let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u128 };
 
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
             &sovereign_chain,
