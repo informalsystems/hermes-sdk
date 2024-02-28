@@ -12,7 +12,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
-use hermes_sovereign_client_components::sovereign::types::address::SovereignAddressBytes;
+use hermes_sovereign_client_components::sovereign::types::event::SovereignEventDetail;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
 use hermes_sovereign_client_components::sovereign::types::messages::bank::{
     BankMessage, CoinFields,
@@ -207,8 +207,10 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     .request("ledger_getEvents", (event_numbers,))
                     .await?;
 
-                let key = core::str::from_utf8(&response[0].key)?;
-                let value = SovereignEvent::deserialize(&mut response[0].value.as_slice())?;
+                let event = &response[0];
+
+                let key = core::str::from_utf8(&event.key)?;
+                let value = SovereignEventDetail::deserialize(&mut event.value.as_slice())?;
 
                 println!("querty events response: {key}: {:?}", value);
             }
@@ -223,17 +225,4 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 pub struct Event {
     key: Vec<u8>,
     value: Vec<u8>,
-}
-
-#[derive(Debug, BorshDeserialize)]
-pub enum SovereignEvent {
-    Accounts,
-    Bank(BankEvent),
-}
-
-#[derive(Debug, BorshDeserialize)]
-pub enum BankEvent {
-    TokenCreated {
-        token_address: SovereignAddressBytes,
-    },
 }
