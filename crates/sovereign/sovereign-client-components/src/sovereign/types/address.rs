@@ -1,8 +1,8 @@
 use bech32::ToBase32;
 use bech32::Variant::Bech32m;
-use borsh::BorshSerialize;
+use borsh::{BorshDeserialize, BorshSerialize};
 
-#[derive(Clone, BorshSerialize)]
+#[derive(Debug, Clone, BorshSerialize, BorshDeserialize)]
 pub struct SovereignAddressBytes {
     pub addr: [u8; 32],
 }

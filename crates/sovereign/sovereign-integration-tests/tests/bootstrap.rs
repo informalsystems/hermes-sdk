@@ -1,9 +1,10 @@
 #![recursion_limit = "256"]
 
+use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use borsh::BorshSerialize;
+use borsh::{BorshDeserialize, BorshSerialize};
 use eyre::{eyre, Error};
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
@@ -11,6 +12,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
+use hermes_sovereign_client_components::sovereign::types::address::SovereignAddressBytes;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
 use hermes_sovereign_client_components::sovereign::types::messages::bank::{
     BankMessage, CoinFields,
@@ -23,7 +25,10 @@ use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use jsonrpsee::core::client::ClientT;
+use serde::{Deserialize, Serialize};
 use tokio::runtime::Builder;
+use tokio::time::sleep;
 
 #[test]
 fn test_sovereign_bootstrap() -> Result<(), Error> {
@@ -112,8 +117,14 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
             let message_bytes = message.try_to_vec()?;
 
-            let tx_bytes =
-                encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
+            let tx_bytes = encode_and_sign_sovereign_tx(
+                &wallet_a.signing_key,
+                message_bytes.clone(),
+                0,
+                0,
+                0,
+                0,
+            )?;
 
             let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
 
@@ -150,9 +161,79 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
                 println!("querty tx hash {} response: {:?}", tx_hash, response);
             }
+
+            let message = SovereignMessage::Bank(BankMessage::CreateToken {
+                salt: 0,
+                token_name: "test".into(),
+                initial_balance: 1000,
+                minter_address: wallet_a.address.address_bytes.clone(),
+                authorized_minters: Vec::new(),
+            });
+
+            let message_bytes = message.try_to_vec()?;
+
+            let tx_bytes = encode_and_sign_sovereign_tx(
+                &wallet_a.signing_key,
+                message_bytes.clone(),
+                0,
+                0,
+                0,
+                1,
+            )?;
+
+            let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
+
+            {
+                let response = rollup.query_tx_response(&tx_hash).await?;
+
+                assert!(response.is_none());
+            }
+
+            rollup.publish_transaction_batch(&[tx_bytes]).await?;
+
+            sleep(Duration::from_secs(2)).await;
+
+            let response = rollup.query_tx_response(&tx_hash).await?.unwrap();
+
+            println!("querty tx hash {} response: {:?}", tx_hash, response);
+
+            let event_numbers: Vec<u64> = response.event_range.collect();
+
+            println!("event numbers: {:?}", event_numbers);
+
+            {
+                let response: Vec<Event> = rollup
+                    .rpc_client
+                    .request("ledger_getEvents", (event_numbers,))
+                    .await?;
+
+                let key = core::str::from_utf8(&response[0].key)?;
+                let value = SovereignEvent::deserialize(&mut response[0].value.as_slice())?;
+
+                println!("querty events response: {key}: {:?}", value);
+            }
         }
         <Result<(), Error>>::Ok(())
     })?;
 
     Ok(())
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Event {
+    key: Vec<u8>,
+    value: Vec<u8>,
+}
+
+#[derive(Debug, BorshDeserialize)]
+pub enum SovereignEvent {
+    Accounts,
+    Bank(BankEvent),
+}
+
+#[derive(Debug, BorshDeserialize)]
+pub enum BankEvent {
+    TokenCreated {
+        token_address: SovereignAddressBytes,
+    },
 }

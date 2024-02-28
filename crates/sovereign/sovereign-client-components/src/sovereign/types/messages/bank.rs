@@ -4,7 +4,13 @@ use crate::sovereign::types::address::SovereignAddressBytes;
 
 #[derive(BorshSerialize)]
 pub enum BankMessage {
-    CreateToken {},
+    CreateToken {
+        salt: u64,
+        token_name: String,
+        initial_balance: u64,
+        minter_address: SovereignAddressBytes,
+        authorized_minters: Vec<SovereignAddressBytes>,
+    },
     Transfer {
         to: SovereignAddressBytes,
         coins: CoinFields,
