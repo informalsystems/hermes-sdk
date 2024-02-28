@@ -23,7 +23,6 @@ use hermes_relayer_components::transaction::traits::types::{
     TransactionTypeComponent, TxResponseTypeComponent,
 };
 
-use crate::sovereign::impls::queries::events::QuerySovereignEvents;
 use crate::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
 use crate::sovereign::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::sovereign::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
@@ -33,8 +32,6 @@ use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 use crate::sovereign::impls::types::transaction::ProvideSovereignTransactionTypes;
 use crate::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
 use crate::sovereign::traits::rollup::publish_batch::TransactionBatchPublisherComponent;
-use crate::sovereign::traits::rollup::queries::events::EventsByEventIdsQuerierComponent;
-use crate::sovereign::traits::rollup::types::event_id::EventIdTypeComponent;
 
 pub struct SovereignRollupClientComponents;
 
@@ -47,7 +44,6 @@ delegate_components! {
             ChainIdTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
-            EventIdTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
         ]:
@@ -77,8 +73,6 @@ delegate_components! {
             PublishSovereignTransactionBatch,
         TxResponseQuerierComponent:
             QuerySovereignTxResponse,
-        EventsByEventIdsQuerierComponent:
-            QuerySovereignEvents,
         TxResponseAsEventsParserComponent:
             ParseSovTxResponseAsEvents,
     }
