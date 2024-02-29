@@ -6,6 +6,7 @@ use eyre::eyre;
 use hermes_cli_components::any_client::impls::decoders::client_state::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
+use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
@@ -166,6 +167,16 @@ where
     Context: HasErrorType<Error = Error>,
 {
     fn raise_error(e: EventualAmountTimeoutError<'a, CosmosChain>) -> Error {
+        BaseError::generic(eyre!("{:?}", e)).into()
+    }
+}
+
+impl<'a, Context> ErrorRaiser<Context, MissingCreateClientEventError<'a, CosmosChain, CosmosChain>>
+    for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: MissingCreateClientEventError<'a, CosmosChain, CosmosChain>) -> Error {
         BaseError::generic(eyre!("{:?}", e)).into()
     }
 }

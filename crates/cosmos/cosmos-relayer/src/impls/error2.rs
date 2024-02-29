@@ -7,6 +7,8 @@ use eyre::Report;
 use hermes_cli_components::any_client::impls::decoders::client_state::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
@@ -90,6 +92,15 @@ impl<'a> DelegateComponent<&'a str> for HandleCosmosError {
 impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for HandleCosmosError
 where
     Chain: HasAddressType + HasAmountType,
+{
+    type Delegate = DebugNonRetryableError;
+}
+
+impl<'a, Chain, Counterparty>
+    DelegateComponent<MissingCreateClientEventError<'a, Chain, Counterparty>> for HandleCosmosError
+where
+    Chain: HasChainIdType,
+    Counterparty: HasChainIdType,
 {
     type Delegate = DebugNonRetryableError;
 }
