@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
-use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
+use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };

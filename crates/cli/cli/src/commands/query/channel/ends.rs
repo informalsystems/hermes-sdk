@@ -182,7 +182,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
 
         match channel_ends_summary {
             Ok(summary) => Ok(Output::success(summary)),
-            Err(e) => Err(e.into()),
+            Err(e) => Err(e),
         }
     }
 }

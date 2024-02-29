@@ -3,7 +3,7 @@ use core::num::ParseIntError;
 use crate::types::error::ProvideCosmosError;
 use alloc::string::FromUtf8Error;
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, ErrorTypeComponent, ProvideErrorType};
+use cgp_core::{ErrorRaiser, ErrorTypeComponent};
 use eyre::Report;
 use hermes_cli_components::any_client::impls::decoders::client_state::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;

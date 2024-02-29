@@ -6,7 +6,7 @@ use hermes_celestia_integration_tests::contexts::bridge_driver::CelestiaBridgeDr
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
+use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;

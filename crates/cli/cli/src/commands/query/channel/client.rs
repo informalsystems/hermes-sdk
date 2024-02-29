@@ -59,7 +59,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelClient {
             .await
         {
             Ok(client_state) => Ok(Output::success(client_state)),
-            Err(e) => Err(e.into()),
+            Err(e) => Err(e),
         }
     }
 }

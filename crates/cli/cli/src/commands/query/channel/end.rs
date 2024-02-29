@@ -96,7 +96,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnd {
                     Ok(Output::success(channel_end))
                 }
             }
-            Err(e) => Err(e.into()),
+            Err(e) => Err(e),
         }
     }
 }
