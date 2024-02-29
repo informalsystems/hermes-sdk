@@ -1,4 +1,3 @@
-use oneline_eyre::eyre::Context;
 use tracing::{info, warn};
 
 use hermes_cli_framework::command::CommandRunner;

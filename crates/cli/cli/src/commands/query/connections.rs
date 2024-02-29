@@ -1,5 +1,4 @@
 use hermes_cosmos_relayer::types::error::ErrorWrapper;
-use oneline_eyre::eyre::Context;
 use tracing::{info, warn};
 
 use hermes_cli_framework::command::CommandRunner;

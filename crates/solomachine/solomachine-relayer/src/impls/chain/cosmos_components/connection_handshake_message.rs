@@ -66,26 +66,20 @@ where
         counterparty_connection_id: &ConnectionId,
         payload: SolomachineConnectionOpenTryPayload,
     ) -> Result<CosmosMessage, Error> {
-        let counterparty_commitment_prefix = Vec::from(payload.commitment_prefix)
-            .try_into()
-            .map_err(BaseError::ics23)?;
+        let counterparty_commitment_prefix = Vec::from(payload.commitment_prefix).try_into()?;
 
         let proof_init: ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes = timestamped_sign_data_to_bytes(&payload.proof_init).unwrap()
-            .try_into()
-            .map_err(BaseError::proofs)?;
+            .try_into()?;
 
         let proof_client = timestamped_sign_data_to_bytes(&payload.proof_client)
             .unwrap()
-            .try_into()
-            .map_err(BaseError::proofs)?;
+            .try_into()?;
 
         let consensus_signature = timestamped_sign_data_to_bytes(&payload.proof_consensus)
             .unwrap()
-            .try_into()
-            .map_err(BaseError::proofs)?;
+            .try_into()?;
 
-        let proof_consensus = ConsensusProof::new(consensus_signature, payload.update_height)
-            .map_err(BaseError::proofs)?;
+        let proof_consensus = ConsensusProof::new(consensus_signature, payload.update_height)?;
 
         let message = CosmosConnectionOpenTryMessage {
             client_id: client_id.clone(),

@@ -109,9 +109,7 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenAckPayload,
     ) -> Result<CosmosMessage, Error> {
-        let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact())
-            .try_into()
-            .map_err(BaseError::proofs)?;
+        let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact()).try_into()?;
 
         let message = CosmosChannelOpenAckMessage {
             port_id: port_id.clone(),

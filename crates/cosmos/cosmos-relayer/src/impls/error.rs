@@ -1,8 +1,9 @@
 use core::num::ParseIntError;
 
+use crate::types::error::ProvideCosmosError;
 use alloc::string::FromUtf8Error;
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, ProvideErrorType};
+use cgp_core::{ErrorRaiser, ErrorTypeComponent, ProvideErrorType};
 use eyre::Report;
 use hermes_cli_components::any_client::impls::decoders::client_state::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
@@ -23,18 +24,9 @@ use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
 
 use crate::contexts::chain::CosmosChain;
-use crate::types::error::{
-    DebugNonRetryableError, DisplayNonRetryableError, Error, ReportNonRetryableError, ReturnError,
-};
+use crate::types::error::{DebugError, DisplayError, Error, ReportError, ReturnError};
 
 pub struct HandleCosmosError;
-
-impl<Context> ProvideErrorType<Context> for HandleCosmosError
-where
-    Context: Async,
-{
-    type Error = Error;
-}
 
 pub trait CheckErrorRaiser<Context>:
     ErrorRaiser<Context, TokioRuntimeError>
@@ -63,6 +55,7 @@ where
 
 delegate_components! {
     HandleCosmosError {
+        ErrorTypeComponent: ProvideCosmosError,
         Error: ReturnError,
         [
             Report,
@@ -77,26 +70,26 @@ delegate_components! {
             FromUtf8Error,
             EncodeError,
             DecodeError,
-        ]: ReportNonRetryableError,
+        ]: ReportError,
         [
             TypeUrlMismatchError,
             UnknownClientStateType,
             AbciQueryError,
             MissingSendPacketEventError,
         ]:
-            DebugNonRetryableError,
+            DebugError,
     }
 }
 
 impl<'a> DelegateComponent<&'a str> for HandleCosmosError {
-    type Delegate = DisplayNonRetryableError;
+    type Delegate = DisplayError;
 }
 
 impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for HandleCosmosError
 where
     Chain: HasAddressType + HasAmountType,
 {
-    type Delegate = DebugNonRetryableError;
+    type Delegate = DebugError;
 }
 
 impl<'a, Chain, Counterparty>
@@ -105,5 +98,5 @@ where
     Chain: HasChainIdType,
     Counterparty: HasChainIdType,
 {
-    type Delegate = DebugNonRetryableError;
+    type Delegate = DebugError;
 }

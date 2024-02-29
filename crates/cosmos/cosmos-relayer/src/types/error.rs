@@ -1,10 +1,8 @@
 use alloc::sync::Arc;
 use core::fmt::Display;
 use core::fmt::{self, Debug, Formatter};
-use std::error::Error as StdError;
 
-use cgp_core::ErrorRaiser;
-use cgp_core::HasErrorType;
+use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
 use eyre::{eyre, Report};
 
 #[derive(Clone)]
@@ -105,6 +103,15 @@ impl Debug for ErrorDetail {
     }
 }
 
+pub struct ProvideCosmosError;
+
+impl<Context> ProvideErrorType<Context> for ProvideCosmosError
+where
+    Context: Async,
+{
+    type Error = Error;
+}
+
 pub struct ReturnError;
 
 impl<Context> ErrorRaiser<Context, Error> for ReturnError
@@ -116,12 +123,12 @@ where
     }
 }
 
-pub struct DebugError<const RETRYABLE: bool>;
+pub struct DebugErrorWithRetry<const RETRYABLE: bool>;
 
-pub type DebugRetryableError = DebugError<true>;
-pub type DebugNonRetryableError = DebugError<false>;
+pub type DebugRetryableError = DebugErrorWithRetry<true>;
+pub type DebugError = DebugErrorWithRetry<false>;
 
-impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DebugError<RETRYABLE>
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DebugErrorWithRetry<RETRYABLE>
 where
     Context: HasErrorType<Error = Error>,
     E: Debug,
@@ -134,12 +141,12 @@ where
     }
 }
 
-pub struct DisplayError<const RETRYABLE: bool>;
+pub struct DisplayErrorWithRetry<const RETRYABLE: bool>;
 
-pub type DisplayRetryableError = DisplayError<true>;
-pub type DisplayNonRetryableError = DisplayError<false>;
+pub type DisplayRetryableError = DisplayErrorWithRetry<true>;
+pub type DisplayError = DisplayErrorWithRetry<false>;
 
-impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DisplayError<RETRYABLE>
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DisplayErrorWithRetry<RETRYABLE>
 where
     Context: HasErrorType<Error = Error>,
     E: Display,
@@ -152,12 +159,12 @@ where
     }
 }
 
-pub struct ReportError<const RETRYABLE: bool>;
+pub struct ReportErrorWithRetry<const RETRYABLE: bool>;
 
-pub type ReportRetryableError = ReportError<true>;
-pub type ReportNonRetryableError = ReportError<false>;
+pub type ReportRetryableError = ReportErrorWithRetry<true>;
+pub type ReportError = ReportErrorWithRetry<false>;
 
-impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for ReportError<RETRYABLE>
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for ReportErrorWithRetry<RETRYABLE>
 where
     Context: HasErrorType<Error = Error>,
     Report: From<E>,

@@ -22,11 +22,11 @@ use std::str::FromStr;
 use std::sync::Arc;
 use toml::Value as TomlValue;
 
-use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::CanUploadWasmClientCode;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
@@ -211,7 +211,5 @@ async fn assert_eventual_governance_status(
             sleep(Duration::from_secs(1)).await;
         }
     }
-    Err(eyre!(
-        "Governance proposal `{governance_id}` was not in status `{expected_status}`"
-    ))
+    Err(eyre!("Governance proposal `{governance_id}` was not in status `{expected_status}`").into())
 }

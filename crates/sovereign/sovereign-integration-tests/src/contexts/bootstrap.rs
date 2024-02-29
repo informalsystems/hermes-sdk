@@ -2,11 +2,11 @@ use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_celestia_integration_tests::contexts::bridge_driver::CelestiaBridgeDriver;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::ProvideBridgeDriverType;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
@@ -44,8 +44,8 @@ delegate_all!(
 
 delegate_components! {
     SovereignBootstrapComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: ProvideTokioRuntimeType,
         RollupDriverBuilderComponent: BuildSovereignRollupDriver,
     }
