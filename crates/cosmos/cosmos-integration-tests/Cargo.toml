@@ -14,7 +14,6 @@ description  = """
 
 [dependencies]
 cgp-core                            = { workspace = true }
-cgp-error-eyre                      = { workspace = true }
 ibc-proto                           = { workspace = true }
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }

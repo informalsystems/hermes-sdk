@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use eyre::eyre;
 use hermes_relayer_components::transaction::traits::components::tx_submitter::TxSubmitter;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;
 use ibc_relayer::chain::cosmos::tx::broadcast_tx_sync;
@@ -7,7 +8,7 @@ use tendermint::Hash as TxHash;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 #[async_trait]
 impl TxSubmitter<CosmosTxContext> for CosmosTxComponents {
@@ -17,12 +18,10 @@ impl TxSubmitter<CosmosTxContext> for CosmosTxComponents {
         let tx_config = &context.tx_config;
         let rpc_client = &context.rpc_client;
 
-        let response = broadcast_tx_sync(rpc_client, &tx_config.rpc_address, data)
-            .await
-            .map_err(BaseError::relayer)?;
+        let response = broadcast_tx_sync(rpc_client, &tx_config.rpc_address, data).await?;
 
         if response.code.is_err() {
-            return Err(BaseError::check_tx(response).into());
+            return Err(eyre!("check tx return error response: {:?}", response).into());
         }
 
         Ok(response.hash)
@@ -37,7 +36,7 @@ fn encode_tx_raw(signed_tx: &SignedTx) -> Result<Vec<u8>, Error> {
     };
 
     let mut tx_bytes = Vec::new();
-    prost::Message::encode(&tx_raw, &mut tx_bytes).map_err(BaseError::encode)?;
+    prost::Message::encode(&tx_raw, &mut tx_bytes)?;
 
     Ok(tx_bytes)
 }

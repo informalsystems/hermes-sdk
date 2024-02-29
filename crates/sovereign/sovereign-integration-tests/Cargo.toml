@@ -16,7 +16,6 @@ description  = """
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }
-cgp-error-eyre                      = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }

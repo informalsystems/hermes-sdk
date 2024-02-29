@@ -1,4 +1,5 @@
 use eyre::eyre;
+use hermes_cosmos_relayer::types::error::Error;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoClientState;
 use ibc_proto::Protobuf;
@@ -7,7 +8,6 @@ use ibc_relayer_types::tx_msg::Msg;
 use prost::Message;
 
 use crate::types::consensus_state::SolomachineConsensusState;
-use crate::types::error::{BaseError, Error};
 
 const TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.ClientState";
 
@@ -28,13 +28,13 @@ impl TryFrom<Any> for SolomachineClientState {
 
         fn decode_client_state<B: Buf>(buf: B) -> Result<SolomachineClientState, Error> {
             ProtoClientState::decode(buf)
-                .map_err(|e| BaseError::generic(eyre!("error decoding client state: {e}")))?
+                .map_err(|e| eyre!("error decoding client state: {e}"))?
                 .try_into()
         }
 
         match raw.type_url.as_str() {
             TYPE_URL => decode_client_state(raw.value.deref()).map_err(Into::into),
-            _ => Err(BaseError::generic(eyre!("unknown client state: {}", raw.type_url)).into()),
+            _ => Err(eyre!("unknown client state: {}", raw.type_url).into()),
         }
     }
 }

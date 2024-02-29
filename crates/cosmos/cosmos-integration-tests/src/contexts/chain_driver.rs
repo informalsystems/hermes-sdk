@@ -7,8 +7,8 @@ use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
@@ -56,10 +56,8 @@ impl HasComponents for CosmosChainDriver {
 
 delegate_components! {
     CosmosChainDriverComponents {
-        ErrorTypeComponent:
-            ProvideEyreError,
-        ErrorRaiserComponent:
-            RaiseDebugError,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [

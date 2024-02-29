@@ -9,7 +9,7 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::transaction::CosmosTxContext;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 impl HasTxContext for CosmosChain {
     type TxContext = CosmosTxContext;
@@ -51,7 +51,6 @@ impl HasBlockingChainHandle for CosmosChain {
         self.runtime
             .runtime
             .spawn_blocking(move || cont(chain_handle))
-            .await
-            .map_err(BaseError::join)?
+            .await?
     }
 }

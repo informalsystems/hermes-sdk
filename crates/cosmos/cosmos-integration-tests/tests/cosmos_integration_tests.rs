@@ -3,10 +3,10 @@
 use core::time::Duration;
 use std::sync::Arc;
 
-use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::setup::traits::run_test::CanRunTest;

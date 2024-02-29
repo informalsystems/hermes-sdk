@@ -1,3 +1,4 @@
+use hermes_cosmos_relayer::types::error::Error;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::solomachine::v3::ConsensusState as ProtoConsensusState;
 use ibc_proto::Protobuf;
@@ -8,7 +9,6 @@ use prost::Message;
 use crate::methods::encode::public_key::{
     decode_public_key_from_any, encode_public_key, PublicKey,
 };
-use crate::types::error::Error;
 
 const TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.ConsensusState";
 

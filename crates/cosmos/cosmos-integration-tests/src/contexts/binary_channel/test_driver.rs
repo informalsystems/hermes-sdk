@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -42,8 +42,8 @@ impl HasComponents for CosmosBinaryChannelTestDriver {
 
 delegate_components! {
     CosmosBinaryChannelTestDriverComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
         [
             LoggerTypeComponent,
             LoggerFieldComponent,

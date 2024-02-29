@@ -1,11 +1,11 @@
 use alloc::sync::Arc;
 
 use hermes_cosmos_client_components::traits::message::CosmosMessage;
+use hermes_cosmos_relayer::types::error::Error;
 use tendermint::abci::Event as AbciEvent;
 use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender};
 use tokio::sync::oneshot::Sender as SenderOnce;
 
-use crate::types::error::Error;
 use crate::types::event::SolomachineEvent;
 use crate::types::message::SolomachineMessage;
 

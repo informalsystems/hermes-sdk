@@ -20,7 +20,7 @@ use tokio::task;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::types::batch::CosmosBatchSender;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 use crate::types::telemetry::CosmosTelemetry;
 
 pub struct CosmosBuilder {
@@ -70,10 +70,11 @@ impl CosmosBuilder {
     }
 
     pub async fn build_chain(&self, chain_id: &ChainId) -> Result<CosmosChain, Error> {
-        let chain_config =
-            self.config.find_chain(chain_id).cloned().ok_or_else(|| {
-                BaseError::spawn(SpawnError::missing_chain_config(chain_id.clone()))
-            })?;
+        let chain_config = self
+            .config
+            .find_chain(chain_id)
+            .cloned()
+            .ok_or_else(|| SpawnError::missing_chain_config(chain_id.clone()))?;
 
         self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
             .await
@@ -88,32 +89,27 @@ impl CosmosBuilder {
         let chain_id = chain_config.id.clone();
 
         let (handle, key, chain_config) = task::block_in_place(|| -> Result<_, Error> {
-            let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(chain_config, runtime)
-                .map_err(BaseError::spawn)?;
+            let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(chain_config, runtime)?;
 
             let key = get_keypair(&chain_id, &handle, m_keypair)?;
 
-            let chain_config = handle.config().map_err(BaseError::relayer)?;
+            let chain_config = handle.config()?;
 
             Ok((handle, key, chain_config))
         })?;
 
         let event_source_mode = chain_config.event_source.clone();
 
-        let tx_config = TxConfig::try_from(&chain_config).map_err(BaseError::relayer)?;
+        let tx_config = TxConfig::try_from(&chain_config)?;
 
-        let mut rpc_client =
-            HttpClient::new(tx_config.rpc_address.clone()).map_err(BaseError::tendermint_rpc)?;
+        let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
             compat_mode.clone().into()
         } else {
-            let status = rpc_client
-                .status()
-                .await
-                .map_err(BaseError::tendermint_rpc)?;
+            let status = rpc_client.status().await?;
 
-            CompatMode::from_version(status.node_info.version).map_err(BaseError::tendermint_rpc)?
+            CompatMode::from_version(status.node_info.version)?
         };
 
         rpc_client.set_compat_mode(compat_mode);
@@ -163,7 +159,7 @@ pub fn get_keypair(
     m_keypair: Option<&Secp256k1KeyPair>,
 ) -> Result<Secp256k1KeyPair, Error> {
     if let Some(keypair) = m_keypair {
-        let chain_config = handle.config().map_err(BaseError::relayer)?;
+        let chain_config = handle.config()?;
 
         // try add the key to the chain handle, in case if it is only in the key map,
         // as for the case of integration tests.
@@ -175,12 +171,10 @@ pub fn get_keypair(
         return Ok(keypair.clone());
     }
 
-    let keypair = handle.get_key().map_err(BaseError::relayer)?;
+    let keypair = handle.get_key()?;
 
     let AnySigningKeyPair::Secp256k1(key) = keypair else {
-        return Err(
-            BaseError::generic(eyre!("no Secp256k1 key pair for chain {}", chain_id)).into(),
-        );
+        return Err(eyre!("no Secp256k1 key pair for chain {}", chain_id).into());
     };
 
     Ok(key)

@@ -3,9 +3,8 @@ use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::Error;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
     CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
     LegacyCosmosSdkBootstrapComponents,
@@ -75,8 +74,8 @@ delegate_all!(
 
 delegate_components! {
     LegacyCosmosBootstrapComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: ProvideTokioRuntimeType,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         [
