@@ -26,6 +26,7 @@ where
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<Report> for Error {
     fn into(self) -> Report {
         eyre!("{}", self)
