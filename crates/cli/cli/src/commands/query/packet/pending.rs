@@ -130,20 +130,20 @@ impl QueryPendingPackets {
             &counterparty_chain.handle,
             &chan_conn_cli.channel,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed to get pending packet summary: {}", e)))?;
+        .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
 
         let counterparty_channel = channel_on_destination(
             &chan_conn_cli.channel,
             &chan_conn_cli.connection,
             &counterparty_chain.handle,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed to get channel on destination: {}", e)))?
+        .map_err(|e| eyre!("failed to get channel on destination: {}", e))?
         .ok_or_else(|| {
-            BaseError::generic(eyre!(
+            eyre!(
                 "missing counterparty channel for ({}, {})",
                 chan_conn_cli.channel.channel_id,
                 chan_conn_cli.channel.port_id
-            ))
+            )
         })?;
 
         let dst_summary = pending_packet_summary(
@@ -151,7 +151,7 @@ impl QueryPendingPackets {
             &chain.handle,
             &counterparty_channel,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed to get pending packet summary: {}", e)))?;
+        .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
 
         Ok(Summary {
             src_chain: chain_id,

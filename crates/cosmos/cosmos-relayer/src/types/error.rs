@@ -19,8 +19,6 @@ pub enum ErrorDetail {
     Wrapped(String, Arc<ErrorDetail>),
 }
 
-impl StdError for Error {}
-
 impl<E> From<E> for Error
 where
     Report: From<E>,

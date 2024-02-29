@@ -8,7 +8,6 @@ use crate::contexts::chain::CosmosChain;
 use crate::impls::build::components::CosmosBaseBuildComponents;
 use crate::types::error::Error;
 
-#[async_trait]
 impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,
@@ -21,7 +20,6 @@ impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBaseBuildComponents {
     }
 }
 
-#[async_trait]
 impl ChainBuilder<CosmosBuilder, ChainBTarget> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,

@@ -1668,6 +1668,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "clap",
+ "eyre",
  "futures",
  "hdpath",
  "hermes-cli-components",
