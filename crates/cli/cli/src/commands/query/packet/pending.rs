@@ -4,7 +4,6 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
 use ibc_relayer::chain::counterparty::pending_packet_summary;
 use ibc_relayer::chain::counterparty::{
     channel_connection_client, channel_on_destination, PendingPackets,
@@ -118,12 +117,7 @@ impl QueryPendingPackets {
         let chan_conn_cli = chain
             .with_blocking_chain_handle(move |handle| {
                 let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
-                    .map_err(|e| {
-                        BaseError::generic(eyre!(
-                            "failed to get channel connection and client: {}",
-                            e
-                        ))
-                    })?;
+                    .map_err(|e| eyre!("failed to get channel connection and client: {}", e))?;
                 Ok(chan_conn_cli)
             })
             .await?;

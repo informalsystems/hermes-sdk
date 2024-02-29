@@ -1,12 +1,11 @@
-use std::error::Error as StdError;
 use std::fmt::Debug;
 
+use hermes_cosmos_relayer::types::error::Error;
 use serde::Serialize;
 use tracing::info;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::types::error::BaseError;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 use hermes_relayer_components::build::traits::components::chain_builder::CanBuildChain;
 use hermes_relayer_components::build::traits::target::chain::ChainATarget;
@@ -57,8 +56,7 @@ where
         + HasClientStateFields<Chain>
         + HasConsensusStateType<Chain>
         + HasConsensusStateFields<Chain>,
-    Chain::Error: From<BaseError> + StdError,
-    Build::Error: From<BaseError> + StdError,
+    Error: From<Chain::Error> + From<Build::Error>,
 {
     async fn run(&self, builder: &Build) -> Result<Output> {
         let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;

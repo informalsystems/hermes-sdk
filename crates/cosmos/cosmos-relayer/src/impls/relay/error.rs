@@ -7,7 +7,7 @@ use hermes_relayer_components_extra::relay::components::packet_relayers::retry::
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId};
 
 use crate::contexts::relay::CosmosRelay;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 impl SupportsPacketRetry for CosmosRelay {
     const MAX_RETRY: usize = 3;
@@ -23,28 +23,24 @@ impl SupportsPacketRetry for CosmosRelay {
 
 impl CanRaiseMissingConnectionInitEventError for CosmosRelay {
     fn missing_connection_init_event_error(&self) -> Error {
-        BaseError::generic(eyre!("missing_connection_init_event_error")).into()
+        eyre!("missing_connection_init_event_error").into()
     }
 }
 
 impl CanRaiseMissingConnectionTryEventError for CosmosRelay {
     fn missing_connection_try_event_error(&self, src_connection_id: &ConnectionId) -> Error {
-        BaseError::generic(eyre!(
-            "missing_connection_try_event_error: {}",
-            src_connection_id
-        ))
-        .into()
+        eyre!("missing_connection_try_event_error: {}", src_connection_id).into()
     }
 }
 
 impl CanRaiseMissingChannelInitEventError for CosmosRelay {
     fn missing_channel_init_event_error(&self) -> Error {
-        BaseError::generic(eyre!("missing_channel_init_event_error")).into()
+        eyre!("missing_channel_init_event_error").into()
     }
 }
 
 impl CanRaiseMissingChannelTryEventError for CosmosRelay {
     fn missing_channel_try_event_error(&self, src_channel_id: &ChannelId) -> Error {
-        BaseError::generic(eyre!("missing_channel_try_event_error: {}", src_channel_id)).into()
+        eyre!("missing_channel_try_event_error: {}", src_channel_id).into()
     }
 }

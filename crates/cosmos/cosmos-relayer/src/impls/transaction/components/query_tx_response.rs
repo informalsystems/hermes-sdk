@@ -6,7 +6,7 @@ use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 #[async_trait]
 impl TxResponseQuerier<CosmosTxContext> for CosmosTxComponents {
@@ -17,9 +17,7 @@ impl TxResponseQuerier<CosmosTxContext> for CosmosTxComponents {
         let tx_config = &context.tx_config;
         let rpc_client = &context.rpc_client;
 
-        let response = query_tx_response(rpc_client, &tx_config.rpc_address, tx_hash)
-            .await
-            .map_err(BaseError::relayer)?;
+        let response = query_tx_response(rpc_client, &tx_config.rpc_address, tx_hash).await?;
 
         Ok(response)
     }

@@ -2,13 +2,13 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
 use ibc_relayer::path::PathIdentifiers;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use ibc_relayer_types::Height;
-use oneline_eyre::eyre::{eyre, Context};
+use oneline_eyre::eyre::eyre;
 
 use crate::Result;
 
@@ -53,12 +53,7 @@ impl QueryPendingAcks {
         let chan_conn_cli = chain
             .with_blocking_chain_handle(move |handle| {
                 let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
-                    .map_err(|e| {
-                        BaseError::generic(eyre!(
-                            "failed to get channel connection and client: {}",
-                            e
-                        ))
-                    })?;
+                    .map_err(|e| eyre!("failed to get channel connection and client: {}", e))?;
                 Ok(chan_conn_cli)
             })
             .await?;
@@ -69,15 +64,15 @@ impl QueryPendingAcks {
         let channel = chan_conn_cli.channel.clone();
         let path_identifiers =
             PathIdentifiers::from_channel_end(channel.clone()).ok_or_else(|| {
-                BaseError::generic(eyre!(
+                eyre!(
                     "failed to get the path identifiers for channel ({}, {})",
                     channel.channel_id,
                     channel.port_id
-                ))
+                )
             })?;
 
         unreceived_acknowledgements(&chain.handle, &counterparty_chain.handle, &path_identifiers)
-            .wrap_err("failed to get the unreceived acknowledgments")
+            .wrap_error("failed to get the unreceived acknowledgments")
     }
 }
 

@@ -5,7 +5,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{
@@ -55,14 +55,14 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                     .query_channels(QueryChannelsRequest {
                         pagination: Some(PageRequest::all()),
                     })
-                    .map_err(|e| BaseError::relayer(e).into())
+                    .map_err(From::from)
             })
             .await?;
 
         let chain_height = chain
             .query_chain_height()
             .await
-            .wrap_err("Failed to query latest chain height")?;
+            .wrap_error("Failed to query latest chain height")?;
 
         let mut channels = Vec::new();
 
@@ -100,7 +100,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                                 },
                                 IncludeProof::No,
                             )
-                            .map_err(|e| BaseError::relayer(e).into())
+                            .map_err(From::from)
                     })
                     .await;
 
@@ -123,7 +123,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannels {
                                 },
                                 IncludeProof::No,
                             )
-                            .map_err(|e| BaseError::relayer(e).into())
+                            .map_err(From::from)
                     })
                     .await;
 

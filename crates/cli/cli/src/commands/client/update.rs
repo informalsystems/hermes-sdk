@@ -2,6 +2,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
 use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
@@ -84,7 +85,7 @@ impl CommandRunner<CosmosBuilder> for ClientUpdate {
         relayer
             .send_update_client_messages(SourceTarget, &target_height)
             .await
-            .wrap_err("Failed to send update client message")?;
+            .wrap_error("Failed to send update client message")?;
 
         Ok(Output::success_msg("Client successfully updated!"))
     }

@@ -3,7 +3,6 @@ use hermes_cli_framework::output::Output;
 
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
 
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::QueryChannelClientStateRequest;
@@ -54,7 +53,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelClient {
                     channel_id,
                 }) {
                     Ok(maybe_client_state) => Ok(maybe_client_state),
-                    Err(e) => Err(BaseError::relayer(e).into()),
+                    Err(e) => Err(e.into()),
                 }
             })
             .await

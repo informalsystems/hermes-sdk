@@ -1,118 +1,188 @@
 use alloc::sync::Arc;
+use core::fmt::Display;
+use core::fmt::{self, Debug, Formatter};
+use std::error::Error as StdError;
 
-use eyre::Report;
-use flex_error::{define_error, DisplayError, TraceError};
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use ibc_relayer::error::Error as RelayerError;
-use ibc_relayer::foreign_client::ForeignClientError;
-use ibc_relayer::spawn::SpawnError;
-use ibc_relayer::supervisor::error::Error as SupervisorError;
-use ibc_relayer_types::core::ics02_client::error::Error as ClientError;
-use ibc_relayer_types::core::ics04_channel::error::Error as ChannelError;
-use ibc_relayer_types::core::ics23_commitment;
-use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
-use ibc_relayer_types::proofs::ProofError;
-use prost::EncodeError;
-use tendermint::Hash as TxHash;
-use tendermint_rpc::endpoint::broadcast::tx_sync::Response;
-use tendermint_rpc::Error as TendermintRpcError;
-use tokio::task::JoinError;
-use tonic::transport::Error as TransportError;
-use tonic::Status as GrpcStatus;
+use cgp_core::ErrorRaiser;
+use cgp_core::HasErrorType;
+use eyre::{eyre, Report};
 
-pub type Error = Arc<BaseError>;
+#[derive(Clone)]
+pub struct Error {
+    pub is_retryable: bool,
+    pub detail: ErrorDetail,
+}
 
-define_error! {
-    #[derive(Debug)]
-    BaseError {
-        Generic
-            [ TraceError<Report> ]
-            | _ | { "generic error" },
+#[derive(Clone)]
+pub enum ErrorDetail {
+    Report(Arc<Report>),
+    Wrapped(String, Arc<ErrorDetail>),
+}
 
-        Tokio
-            [ DisplayError<TokioRuntimeError> ]
-            | _ | { "tokio runtime error" },
+impl StdError for Error {}
 
-        Channel
-            [ ChannelError ]
-            | _ | { "channel error" },
+impl<E> From<E> for Error
+where
+    Report: From<E>,
+{
+    fn from(e: E) -> Self {
+        Self::report(e)
+    }
+}
 
-        Relayer
-            [ RelayerError ]
-            | _ | { "ibc-relayer error" },
+impl Into<Report> for Error {
+    fn into(self) -> Report {
+        eyre!("{}", self)
+    }
+}
 
-        ForeignClient
-            [ ForeignClientError ]
-            | _ | { "foreign client error" },
+impl Error {
+    pub fn report<E>(e: E) -> Self
+    where
+        Report: From<E>,
+    {
+        Self {
+            is_retryable: false,
+            detail: ErrorDetail::Report(Arc::new(e.into())),
+        }
+    }
 
-        Spawn
-            [ SpawnError ]
-            | _ | { "failed to spawn chain runtime" },
+    pub fn wrap<M>(self, message: M) -> Self
+    where
+        M: Display,
+    {
+        Self {
+            is_retryable: self.is_retryable,
+            detail: ErrorDetail::Wrapped(message.to_string(), Arc::new(self.detail)),
+        }
+    }
+}
 
-        Supervisor
-            [ SupervisorError ]
-            | _ | { "supervisor error" },
+pub trait ErrorWrapper {
+    type Value;
 
-        Encode
-            [ TraceError<EncodeError> ]
-            | _ | { "protobuf encode error" },
+    fn wrap_error<M>(self, message: M) -> Result<Self::Value, Error>
+    where
+        M: Display;
+}
 
-        Ics23
-            [ ics23_commitment::error::Error ]
-            | _ | { "ICS23 error" },
+impl<T, E> ErrorWrapper for Result<T, E>
+where
+    Error: From<E>,
+{
+    type Value = T;
 
-        Proofs
-            [ ProofError ]
-            | _ | { "proofs error" },
+    fn wrap_error<M>(self, message: M) -> Result<Self::Value, Error>
+    where
+        M: Display,
+    {
+        self.map_err(|e| Error::from(e).wrap(message))
+    }
+}
 
-        TendermintRpc
-            [ TendermintRpcError ]
-            | _ | { "tendermint rpc error" },
+impl Debug for Error {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        if self.is_retryable {
+            write!(f, "retryable error: ")?;
+        }
 
-        MismatchConsensusState
-            | _ | { "consensus state of a cosmos chain on the counterparty chain must be a tendermint consensus state" },
+        Debug::fmt(&self.detail, f)
+    }
+}
 
-        MismatchEventType
-            { expected: String, actual: String }
-            | e | { format_args!("mismatch event type, expected: {}, actual: {}", e.expected, e.actual) },
+impl Display for Error {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        Debug::fmt(self, f)
+    }
+}
 
-        TxNoResponse
-            { tx_hash: TxHash }
-            | e | { format_args!("failed to receive tx response for tx hash: {}", e.tx_hash) },
+impl Debug for ErrorDetail {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            ErrorDetail::Report(report) => Debug::fmt(report, f),
+            ErrorDetail::Wrapped(message, detail) => {
+                write!(f, "{}: {:?}", message, detail)
+            }
+        }
+    }
+}
 
-        MissingSimulateGasInfo
-            | _ | { "missing gas info returned from send_tx_simulate" },
+pub struct ReturnError;
 
-        MissingSendPacket
-            | _ | { "missing send packet" },
+impl<Context> ErrorRaiser<Context, Error> for ReturnError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn raise_error(e: Error) -> Error {
+        e
+    }
+}
 
-        CheckTx
-            { response: Response }
-            | e | { format_args!("check tx error: {:?}", e.response) },
+pub struct DebugError<const RETRYABLE: bool>;
 
-        Join
-            [ TraceError<JoinError> ]
-            | _ | { "error joining tokio tasks" },
+pub type DebugRetryableError = DebugError<true>;
+pub type DebugNonRetryableError = DebugError<false>;
 
-        GrpcTransport
-            [ TraceError<TransportError> ]
-            |_| { "error in underlying transport when making gRPC call" },
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DebugError<RETRYABLE>
+where
+    Context: HasErrorType<Error = Error>,
+    E: Debug,
+{
+    fn raise_error(e: E) -> Error {
+        Error {
+            is_retryable: RETRYABLE,
+            detail: ErrorDetail::Report(Arc::new(eyre!("{:?}", e))),
+        }
+    }
+}
 
-        GrpcStatus
-            { status: GrpcStatus, query: String }
-            |e| { format!("gRPC call `{}` failed with status: {1}", e.query, e.status) },
+pub struct DisplayError<const RETRYABLE: bool>;
 
-        MissingHeight
-            { query: String }
-            | e | { format_args!("height from query `{}` is missing", e.query) },
+pub type DisplayRetryableError = DisplayError<true>;
+pub type DisplayNonRetryableError = DisplayError<false>;
 
-        Ics02
-            [ ClientError ]
-            |e| { format!("ICS 02 error: {}", e.source) },
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DisplayError<RETRYABLE>
+where
+    Context: HasErrorType<Error = Error>,
+    E: Display,
+{
+    fn raise_error(e: E) -> Error {
+        Error {
+            is_retryable: RETRYABLE,
+            detail: ErrorDetail::Report(Arc::new(eyre!("{}", e))),
+        }
+    }
+}
 
-        Ics24Validation
-            [ Ics24ValidationError ]
-            |e| { format!("ICS 24 validation error: {}", e.source) },
+pub struct ReportError<const RETRYABLE: bool>;
 
+pub type ReportRetryableError = ReportError<true>;
+pub type ReportNonRetryableError = ReportError<false>;
+
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for ReportError<RETRYABLE>
+where
+    Context: HasErrorType<Error = Error>,
+    Report: From<E>,
+{
+    fn raise_error(e: E) -> Error {
+        Error {
+            is_retryable: RETRYABLE,
+            detail: ErrorDetail::Report(Arc::new(e.into())),
+        }
+    }
+}
+
+pub struct WrapErrorDetail;
+
+impl<Context, Detail> ErrorRaiser<Context, (Detail, Error)> for WrapErrorDetail
+where
+    Context: HasErrorType<Error = Error>,
+    Detail: Debug,
+{
+    fn raise_error((detail, e): (Detail, Error)) -> Error {
+        Error {
+            is_retryable: e.is_retryable,
+            detail: ErrorDetail::Wrapped(format!("{:?}", detail), Arc::new(e.detail)),
+        }
     }
 }
