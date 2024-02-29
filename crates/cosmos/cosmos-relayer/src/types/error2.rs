@@ -50,12 +50,30 @@ where
     }
 }
 
-pub struct MessageError<const RETRYABLE: bool>;
+pub struct DebugError<const RETRYABLE: bool>;
 
-pub type MessageRetryableError = MessageError<true>;
-pub type MessageNonRetryableError = MessageError<false>;
+pub type DebugRetryableError = DebugError<true>;
+pub type DebugNonRetryableError = DebugError<false>;
 
-impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for MessageError<RETRYABLE>
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DebugError<RETRYABLE>
+where
+    Context: HasErrorType<Error = Error>,
+    E: Debug,
+{
+    fn raise_error(e: E) -> Error {
+        Error {
+            is_retryable: RETRYABLE,
+            detail: ErrorDetail::Report(Arc::new(eyre!("{:?}", e))),
+        }
+    }
+}
+
+pub struct DisplayError<const RETRYABLE: bool>;
+
+pub type DisplayRetryableError = DisplayError<true>;
+pub type DisplayNonRetryableError = DisplayError<false>;
+
+impl<Context, E, const RETRYABLE: bool> ErrorRaiser<Context, E> for DisplayError<RETRYABLE>
 where
     Context: HasErrorType<Error = Error>,
     E: Display,

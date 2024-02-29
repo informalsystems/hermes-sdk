@@ -8,7 +8,10 @@ use hermes_cli_components::any_client::impls::decoders::client_state::UnknownCli
 use hermes_cosmos_client_components::impls::decoders::type_url::TypeUrlMismatchError;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
@@ -17,7 +20,10 @@ use prost::{DecodeError, EncodeError};
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
 
-use crate::types::error2::{Error, MessageNonRetryableError, ReportNonRetryableError, ReturnError};
+use crate::contexts::chain::CosmosChain;
+use crate::types::error2::{
+    DebugNonRetryableError, DisplayNonRetryableError, Error, ReportNonRetryableError, ReturnError,
+};
 
 pub struct HandleCosmosError;
 
@@ -29,7 +35,9 @@ where
 }
 
 pub trait CheckErrorRaiser<Context>:
-    ErrorRaiser<Context, TokioRuntimeError> + for<'a> ErrorRaiser<Context, &'a str>
+    ErrorRaiser<Context, TokioRuntimeError>
+    + for<'a> ErrorRaiser<Context, &'a str>
+    + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
 where
     Context: HasErrorType<Error = Error>,
 {
@@ -76,5 +84,12 @@ delegate_components! {
 }
 
 impl<'a> DelegateComponent<&'a str> for HandleCosmosError {
-    type Delegate = MessageNonRetryableError;
+    type Delegate = DisplayNonRetryableError;
+}
+
+impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for HandleCosmosError
+where
+    Chain: HasAddressType + HasAmountType,
+{
+    type Delegate = DebugNonRetryableError;
 }
