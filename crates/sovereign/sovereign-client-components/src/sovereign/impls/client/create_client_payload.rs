@@ -41,7 +41,7 @@ where
         let consensus_state = dummy_sov_consensus_state();
 
         let code_hash =
-            hex::decode("739d72e762a60f65e26f1848422c8f514ce4d2c6fe052d405765f0796e3e3ad3")
+            hex::decode("8c9f52018cae6ca99eacc1a5e3e16e677c33172618f89b3ab706cdd715a8a0f0")
                 .unwrap();
 
         Ok(SovereignCreateClientPayload {
