@@ -3143,11 +3143,11 @@
         "sovereign-sdk-src": "sovereign-sdk-src"
       },
       "locked": {
-        "lastModified": 1708719293,
-        "narHash": "sha256-Fu2LQtPg12X3GTUGrBq9nDe8/v5naON0eET9PVeb0GU=",
+        "lastModified": 1709134386,
+        "narHash": "sha256-/O9TNbsJZ/2U/tJC4sF5Avk8dSYdqz0ybnu3R3QQfJU=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "4ab031d6defe5d38eebc7f0108cc3af995123995",
+        "rev": "e3ee5c99c976fc76957e048a8672c4d18cdaa595",
         "type": "github"
       },
       "original": {
