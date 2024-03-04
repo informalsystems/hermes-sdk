@@ -1,5 +1,9 @@
 use cgp_core::delegate_all;
 use cgp_core::prelude::*;
+use cgp_core::ErrorRaiserComponent;
+use cgp_core::ErrorTypeComponent;
+use hermes_cosmos_relayer::types::error::DebugError;
+use hermes_cosmos_relayer::types::error::ProvideCosmosError;
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
@@ -25,7 +29,8 @@ where
 
 delegate_components! {
     SolomachineRelayComponents {
-        RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
     }
 }

@@ -1668,6 +1668,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "clap",
+ "eyre",
  "futures",
  "hdpath",
  "hermes-cli-components",
@@ -1747,7 +1748,6 @@ name = "hermes-cosmos-integration-tests"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
- "cgp-error-eyre",
  "eyre",
  "hermes-async-runtime-components",
  "hermes-cosmos-client-components",
@@ -1989,7 +1989,6 @@ version = "0.1.0"
 dependencies = [
  "borsh",
  "cgp-core",
- "cgp-error-eyre",
  "eyre",
  "hermes-celestia-integration-tests",
  "hermes-celestia-test-components",
@@ -2004,10 +2003,13 @@ dependencies = [
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "hermes-wasm-client-components",
+ "hex 0.4.3",
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
+ "serde",
  "serde_json",
+ "sha2 0.10.8",
  "stable-eyre",
  "tokio",
  "toml 0.8.10",

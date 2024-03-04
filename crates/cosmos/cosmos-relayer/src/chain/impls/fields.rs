@@ -18,14 +18,14 @@ use tendermint::abci::Event as AbciEvent;
 
 use crate::chain::components::CosmosChainComponents;
 use crate::contexts::chain::CosmosChain;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 impl CanEstimateMessageSize for CosmosChain {
     fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Error> {
         let raw = message
             .message
             .encode_protobuf(&Signer::dummy())
-            .map_err(BaseError::encode)?;
+            .map_err(Error::report)?;
 
         Ok(raw.encoded_len())
     }

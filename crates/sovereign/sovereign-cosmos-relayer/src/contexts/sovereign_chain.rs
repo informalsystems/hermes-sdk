@@ -22,8 +22,8 @@ use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::cosmos::impls::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
 use hermes_sovereign_client_components::cosmos::impls::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
-use hermes_sovereign_client_components::sovereign::components::{
-    IsSovereignClientComponent, SovereignClientComponents,
+use hermes_sovereign_client_components::sovereign::components::chain::{
+    IsSovereignChainClientComponent, SovereignChainClientComponents,
 };
 use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
     DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
@@ -45,8 +45,8 @@ impl HasComponents for SovereignChain {
 }
 
 delegate_all!(
-    IsSovereignClientComponent,
-    SovereignClientComponents,
+    IsSovereignChainClientComponent,
+    SovereignChainClientComponents,
     SovereignChainComponents,
 );
 
@@ -74,7 +74,7 @@ delegate_components! {
             LoggerTypeComponent,
             LoggerFieldComponent,
         ]:
-        ProvideTracingLogger,
+            ProvideTracingLogger,
         [
             DataChainTypeComponent,
             DataChainGetterComponent,

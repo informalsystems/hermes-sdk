@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
@@ -6,7 +5,7 @@ use hermes_cosmos_client_components::types::messages::channel::open_ack::CosmosC
 use hermes_cosmos_client_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
 use hermes_cosmos_client_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_cosmos_client_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
-use hermes_cosmos_relayer::types::error::{BaseError, Error};
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
@@ -24,7 +23,6 @@ use crate::types::payloads::channel::{
 
 pub struct BuildSolomachineChannelHandshakeMessagesForCosmos;
 
-#[async_trait]
 impl<Chain, Counterparty> ChannelHandshakeMessageBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakeMessagesForCosmos
 where
@@ -76,9 +74,8 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenTryPayload,
     ) -> Result<CosmosMessage, Error> {
-        let proof_init = Vec::from(counterparty_payload.proof_init.serialize_compact())
-            .try_into()
-            .map_err(BaseError::proofs)?;
+        let proof_init =
+            Vec::from(counterparty_payload.proof_init.serialize_compact()).try_into()?;
 
         let counterparty = ChannelCounterparty::new(
             counterparty_port_id.clone(),
@@ -111,9 +108,7 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenAckPayload,
     ) -> Result<CosmosMessage, Error> {
-        let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact())
-            .try_into()
-            .map_err(BaseError::proofs)?;
+        let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact()).try_into()?;
 
         let message = CosmosChannelOpenAckMessage {
             port_id: port_id.clone(),
@@ -133,9 +128,7 @@ where
         channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenConfirmPayload,
     ) -> Result<CosmosMessage, Error> {
-        let proof_ack = Vec::from(counterparty_payload.proof_ack.serialize_compact())
-            .try_into()
-            .map_err(BaseError::proofs)?;
+        let proof_ack = Vec::from(counterparty_payload.proof_ack.serialize_compact()).try_into()?;
 
         let message = CosmosChannelOpenConfirmMessage {
             port_id: port_id.clone(),

@@ -121,7 +121,7 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
     }
 }
 
-fn parse_trust_threshold(input: &str) -> Result<TrustThreshold> {
+fn parse_trust_threshold(input: &str) -> eyre::Result<TrustThreshold> {
     let (num_part, denom_part) = input
         .split_once('/')
         .ok_or_else(|| eyre!("expected a fractional argument, eg. '2/3'"))?;
@@ -136,5 +136,8 @@ fn parse_trust_threshold(input: &str) -> Result<TrustThreshold> {
         .parse()
         .map_err(|_| eyre!("invalid trust threshold denominator"))?;
 
-    TrustThreshold::new(numerator, denominator).map_err(|e| eyre!("invalid trust threshold: {e}"))
+    let trust_threshold = TrustThreshold::new(numerator, denominator)
+        .map_err(|e| eyre!("invalid trust threshold: {e}"))?;
+
+    Ok(trust_threshold)
 }

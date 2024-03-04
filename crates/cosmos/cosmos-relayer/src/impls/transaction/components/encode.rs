@@ -10,7 +10,7 @@ use ibc_relayer::keyring::Secp256k1KeyPair;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 #[async_trait]
 impl TxEncoder<CosmosTxContext> for CosmosTxComponents {
@@ -23,20 +23,14 @@ impl TxEncoder<CosmosTxContext> for CosmosTxComponents {
     ) -> Result<SignedTx, Error> {
         let tx_config = &context.tx_config;
         let memo = Memo::default();
-        let signer = key_pair_to_signer(key_pair).map_err(BaseError::relayer)?;
+        let signer = key_pair_to_signer(key_pair)?;
 
         let raw_messages = messages
             .iter()
-            .map(|message| {
-                message
-                    .message
-                    .encode_protobuf(&signer)
-                    .map_err(BaseError::encode)
-            })
+            .map(|message| message.message.encode_protobuf(&signer))
             .collect::<Result<Vec<_>, _>>()?;
 
-        let signed_tx = sign_tx(tx_config, key_pair, account, &memo, &raw_messages, fee)
-            .map_err(BaseError::relayer)?;
+        let signed_tx = sign_tx(tx_config, key_pair, account, &memo, &raw_messages, fee)?;
 
         Ok(signed_tx)
     }

@@ -2,9 +2,9 @@
 
 use std::sync::Arc;
 
-use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use tokio::runtime::Builder;

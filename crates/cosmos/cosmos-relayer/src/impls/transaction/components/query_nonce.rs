@@ -6,7 +6,7 @@ use ibc_relayer::keyring::{Secp256k1KeyPair, SigningKeyPair};
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::component::CosmosTxComponents;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 #[async_trait]
 impl NonceQuerier<CosmosTxContext> for CosmosTxComponents {
@@ -17,9 +17,7 @@ impl NonceQuerier<CosmosTxContext> for CosmosTxComponents {
         let tx_config = &context.tx_config;
         let address = key_pair.account();
 
-        let account = query_account(&tx_config.grpc_address, &address)
-            .await
-            .map_err(BaseError::relayer)?;
+        let account = query_account(&tx_config.grpc_address, &address).await?;
 
         Ok(account.into())
     }

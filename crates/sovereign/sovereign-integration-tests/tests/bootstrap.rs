@@ -1,20 +1,26 @@
 #![recursion_limit = "256"]
 
+use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use borsh::BorshSerialize;
-use eyre::{eyre, Error};
+use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
+use hermes_relayer_components::transaction::traits::event::CanParseTxResponseAsEvents;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
 use hermes_sovereign_client_components::sovereign::types::messages::bank::{
     BankMessage, CoinFields,
 };
+use hermes_sovereign_client_components::sovereign::types::rpc::tx_hash::TxHash;
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
+use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::types::amount::SovereignAmount;
@@ -22,6 +28,7 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
+use tokio::time::sleep;
 
 #[test]
 fn test_sovereign_bootstrap() -> Result<(), Error> {
@@ -96,44 +103,108 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                 assert_eq!(amount.quantity, 1_000_000_000_000);
             }
 
-            let message = SovereignMessage::Bank(BankMessage::Transfer {
-                to: wallet_b.address.address_bytes.clone(),
-                coins: CoinFields {
-                    amount: 1000,
-                    token_address: rollup_driver
-                        .genesis_config
-                        .transfer_token_address
-                        .address_bytes
-                        .clone(),
-                },
-            });
-
-            let message_bytes = message.try_to_vec()?;
-
-            let tx_bytes =
-                encode_and_sign_sovereign_tx(&wallet_a.signing_key, message_bytes, 0, 0, 0, 0)?;
-
-            rollup.publish_transaction_batch(&[tx_bytes]).await?;
-
-            rollup
-                .assert_eventual_amount(
-                    address_a,
-                    &SovereignAmount {
-                        quantity: 999_999_999_000,
-                        denom: transfer_denom.clone(),
+            {
+                let message = SovereignMessage::Bank(BankMessage::Transfer {
+                    to: wallet_b.address.address_bytes.clone(),
+                    coins: CoinFields {
+                        amount: 1000,
+                        token_address: rollup_driver
+                            .genesis_config
+                            .transfer_token_address
+                            .address_bytes
+                            .clone(),
                     },
-                )
-                .await?;
+                });
 
-            rollup
-                .assert_eventual_amount(
-                    address_b,
-                    &SovereignAmount {
-                        quantity: 1_000_000_001_000,
-                        denom: transfer_denom.clone(),
-                    },
-                )
-                .await?;
+                let message_bytes = message.try_to_vec()?;
+
+                let tx_bytes = encode_and_sign_sovereign_tx(
+                    &wallet_a.signing_key,
+                    message_bytes.clone(),
+                    0,
+                    0,
+                    0,
+                    0,
+                )?;
+
+                let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
+
+                {
+                    let response = rollup.query_tx_response(&tx_hash).await?;
+
+                    assert!(response.is_none());
+                }
+
+                rollup.publish_transaction_batch(&[tx_bytes]).await?;
+
+                rollup
+                    .assert_eventual_amount(
+                        address_a,
+                        &SovereignAmount {
+                            quantity: 999_999_999_000,
+                            denom: transfer_denom.clone(),
+                        },
+                    )
+                    .await?;
+
+                rollup
+                    .assert_eventual_amount(
+                        address_b,
+                        &SovereignAmount {
+                            quantity: 1_000_000_001_000,
+                            denom: transfer_denom.clone(),
+                        },
+                    )
+                    .await?;
+
+                let response = rollup.query_tx_response(&tx_hash).await?;
+
+                println!("querty tx hash {} response: {:?}", tx_hash, response);
+            }
+
+            {
+                let message = SovereignMessage::Bank(BankMessage::CreateToken {
+                    salt: 0,
+                    token_name: "test".into(),
+                    initial_balance: 1000,
+                    minter_address: wallet_a.address.address_bytes.clone(),
+                    authorized_minters: Vec::new(),
+                });
+
+                let message_bytes = message.try_to_vec()?;
+
+                let tx_bytes = encode_and_sign_sovereign_tx(
+                    &wallet_a.signing_key,
+                    message_bytes.clone(),
+                    0,
+                    0,
+                    0,
+                    1,
+                )?;
+
+                let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
+
+                {
+                    let response = rollup.query_tx_response(&tx_hash).await?;
+
+                    assert!(response.is_none());
+                }
+
+                rollup.publish_transaction_batch(&[tx_bytes]).await?;
+
+                sleep(Duration::from_secs(2)).await;
+
+                let response = rollup
+                    .query_tx_response(&tx_hash)
+                    .await?
+                    .ok_or_else(|| eyre!("expect tx response to be present"))?;
+
+                println!("querty tx hash {} response: {:?}", tx_hash, response);
+
+                let events = SovereignRollup::parse_tx_response_as_events(response)?;
+
+                println!("events: {:?}", events);
+            }
         }
         <Result<(), Error>>::Ok(())
     })?;

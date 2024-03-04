@@ -5,7 +5,6 @@ use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::params::ArrayParams;
 use jsonrpsee::core::ClientError;
 use serde::Deserialize;
 
@@ -26,6 +25,7 @@ where
         + CanRaiseError<ClientError>
         + CanRaiseError<serde_json::Error>
         + HasJsonRpcClient,
+    Rollup::JsonRpcClient: ClientT,
 {
     async fn query_balance(
         rollup: &Rollup,
@@ -34,20 +34,11 @@ where
     ) -> Result<SovereignAmount, Rollup::Error> {
         let rpc_client = rollup.json_rpc_client();
 
-        let mut params = ArrayParams::new();
-
-        params.insert(None::<u64>).map_err(Rollup::raise_error)?;
-
-        params
-            .insert(address.to_string())
-            .map_err(Rollup::raise_error)?;
-
-        params
-            .insert(denom.to_string())
-            .map_err(Rollup::raise_error)?;
-
         let response: Response = rpc_client
-            .request("bank_balanceOf", params)
+            .request(
+                "bank_balanceOf",
+                (None::<u64>, address.to_string(), denom.to_string()),
+            )
             .await
             .map_err(Rollup::raise_error)?;
 

@@ -1,42 +1,44 @@
 #![recursion_limit = "256"]
-use core::time::Duration;
 use eyre::eyre;
-use eyre::Error;
+use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
+use hermes_cosmos_client_components::methods::event::try_extract_create_client_event;
+use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
+use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
+use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
+use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use std::time::{SystemTime, UNIX_EPOCH};
+use tokio::time::sleep;
+
+use core::time::Duration;
+use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
+use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use serde_json::Value as JsonValue;
 use std::env::var;
 use std::str::FromStr;
 use std::sync::Arc;
-use std::time::{SystemTime, UNIX_EPOCH};
-use tokio::runtime::Builder;
-use tokio::time::sleep;
 use toml::Value as TomlValue;
 
-use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
-use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::CanUploadWasmClientCode;
-use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
-use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use tokio::runtime::Builder;
 
 #[test]
 pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
@@ -151,21 +153,17 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let celestia_chain = celestia_chain_driver.chain();
 
+        // Upload Wasm contract on Cosmos chain
         cosmos_chain_driver.store_wasm_client_code(
             &wasm_client_code_path,
             "tmp",
             "tmp",
             "validator",
         ).await?;
-
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
-
         cosmos_chain_driver.deposit_proposal("1", "100000000stake", "validator").await?;
-
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_VOTING_PERIOD").await?;
-
         cosmos_chain_driver.vote_proposal("1", "validator").await?;
-
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_PASSED").await?;
 
         let sovereign_chain = SovereignChain {
@@ -173,37 +171,33 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             data_chain: celestia_chain.clone(),
         };
 
+        // Create Sovereign client on Cosmos chain
         let create_client_payload = <SovereignChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
             &sovereign_chain,
             &create_client_settings
         ).await?;
-
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<SovereignChain>>::build_create_client_message(
             cosmos_chain,
             create_client_payload,
         ).await?;
-
         let _events = cosmos_chain.send_message(create_client_message).await?;
-
-        //assert!(false, "Sov CS: {sovereign_client_state:#?}");
 
         let wasm_client_id = ClientId::from_str("08-wasm-0").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
 
         let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
 
+        // Create Celestia client (DA client) on Cosmos chain
         let create_celestia_client_payload = <CosmosChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
             celestia_chain,
             &create_client_settings
         ).await?;
-
         let create_celestia_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
             cosmos_chain,
             create_celestia_client_payload,
         ).await?;
-
-        let _events = cosmos_chain.send_message(create_celestia_client_message).await?;
-
-        let celestia_client_id = ClientId::from_str("07-tendermint-1").unwrap();
+        let events = cosmos_chain.send_message(create_celestia_client_message).await?;
+        let create_client_event = events.into_iter().find_map(try_extract_create_client_event).ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+        let celestia_client_id = create_client_event.client_id;
 
         let wasm_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
         let celestia_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(cosmos_chain, &celestia_client_id).await?;
@@ -211,19 +205,18 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u128 };
         let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u128 };
 
+        // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
             &sovereign_chain,
             &dummy_trusted_height,
             &dummy_target_height,
             sovereign_client_state
         ).await?;
-
         let update_client_messages = <CosmosChain as CanBuildUpdateClientMessage<SovereignChain>>::build_update_client_message(
             cosmos_chain,
             &wasm_client_id,
             update_client_payload,
         ).await?;
-
         for update_message in update_client_messages.into_iter() {
             let _events = cosmos_chain.send_message(update_message).await?;
         }
@@ -249,7 +242,5 @@ async fn assert_eventual_governance_status(
             sleep(Duration::from_secs(1)).await;
         }
     }
-    Err(eyre!(
-        "Governance proposal `{governance_id}` was not in status `{expected_status}`"
-    ))
+    Err(eyre!("Governance proposal `{governance_id}` was not in status `{expected_status}`").into())
 }

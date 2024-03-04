@@ -23,6 +23,10 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::transaction::traits::types::{
+    FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
+    TransactionTypeComponent, TxResponseTypeComponent,
+};
 use hermes_wasm_client_components::impls::decoders::client_state::DecodeSovereignClientStateFromAnyProto;
 
 use crate::sovereign::impls::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
@@ -32,12 +36,13 @@ use crate::sovereign::impls::client::update_client_payload::BuildSovereignUpdate
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
+use crate::sovereign::impls::types::transaction::ProvideSovereignTransactionTypes;
 
-pub struct SovereignClientComponents;
+pub struct SovereignChainClientComponents;
 
 delegate_components! {
-    #[mark_component(IsSovereignClientComponent)]
-    SovereignClientComponents {
+    #[mark_component(IsSovereignChainClientComponent)]
+    SovereignChainClientComponents {
         [
             HeightTypeComponent,
             TimestampTypeComponent,
@@ -62,9 +67,22 @@ delegate_components! {
             ProvideSovereignClientState,
         ClientStateDecoderComponent:
             DecodeSovereignClientStateFromAnyProto,
-        CreateClientPayloadBuilderComponent: BuildSovereignCreateClientPayload,
-        CreateClientMessageBuilderComponent: BuildCreateCosmosClientMessageOnSovereign,
-        UpdateClientPayloadBuilderComponent: BuildSovereignUpdateClientPayload,
-        UpdateClientMessageBuilderComponent: BuildUpdateCosmosClientMessageOnSovereign,
+        [
+            TransactionTypeComponent,
+            NonceTypeComponent,
+            FeeTypeComponent,
+            SignerTypeComponent,
+            TransactionHashTypeComponent,
+            TxResponseTypeComponent,
+        ]:
+            ProvideSovereignTransactionTypes,
+        CreateClientPayloadBuilderComponent:
+            BuildSovereignCreateClientPayload,
+        CreateClientMessageBuilderComponent:
+            BuildCreateCosmosClientMessageOnSovereign,
+        UpdateClientPayloadBuilderComponent:
+            BuildSovereignUpdateClientPayload,
+        UpdateClientMessageBuilderComponent:
+            BuildUpdateCosmosClientMessageOnSovereign,
     }
 }
