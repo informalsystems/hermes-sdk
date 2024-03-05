@@ -7,6 +7,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateDecoderComponent, ClientStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
@@ -24,12 +27,14 @@ use hermes_relayer_components::transaction::traits::types::{
     FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
     TransactionTypeComponent, TxResponseTypeComponent,
 };
+use hermes_wasm_client_components::impls::decoders::client_state::DecodeSovereignClientStateFromAnyProto;
 
 use crate::sovereign::impls::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::sovereign::impls::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::sovereign::impls::client::update_client_payload::BuildSovereignUpdateClientPayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
+use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 use crate::sovereign::impls::types::transaction::ProvideSovereignTransactionTypes;
 
@@ -58,6 +63,10 @@ delegate_components! {
             ChannelHandshakePayloadTypeComponent,
         ]:
             ProvideSovereignPayloadTypes,
+        ClientStateTypeComponent:
+            ProvideSovereignClientState,
+        ClientStateDecoderComponent:
+            DecodeSovereignClientStateFromAnyProto,
         [
             TransactionTypeComponent,
             NonceTypeComponent,

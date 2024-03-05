@@ -9,7 +9,7 @@ use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::sovereign::tendermint::v1::ClientState as ProtoSovereignClientState;
 use ibc_proto::Protobuf;
 use prost::{DecodeError, Message};
-use sov_celestia_client::types::client_state::ClientState as SovereignClientState;
+use sov_celestia_client::types::client_state::SovTmClientState;
 use tendermint_proto::Error as ProtoError;
 
 pub struct DecodeSovereignClientStateFromAnyProto;
@@ -17,14 +17,14 @@ pub struct DecodeSovereignClientStateFromAnyProto;
 impl<Chain, Counterparty> ClientStateDecoder<Chain, Counterparty>
     for DecodeSovereignClientStateFromAnyProto
 where
-    Chain: HasClientStateType<Counterparty, ClientState = SovereignClientState>,
+    Chain: HasClientStateType<Counterparty, ClientState = SovTmClientState>,
     Counterparty: CanRaiseError<DecodeError>,
     DecodeWasmClientStateFromProto: ClientStateDecoder<WasmCounterparty, Counterparty>,
     DecodeSovereignClientStateFromProto: ClientStateDecoder<Chain, Counterparty>,
 {
     fn decode_client_state_bytes(
         client_state_bytes: &[u8],
-    ) -> Result<SovereignClientState, Counterparty::Error> {
+    ) -> Result<SovTmClientState, Counterparty::Error> {
         let any = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
 
         let wasm_client_state: WasmClientState =
@@ -47,12 +47,12 @@ pub struct DecodeSovereignClientStateFromProto;
 impl<Chain, Counterparty> ClientStateDecoder<Chain, Counterparty>
     for DecodeSovereignClientStateFromProto
 where
-    Chain: HasClientStateType<Counterparty, ClientState = SovereignClientState>,
+    Chain: HasClientStateType<Counterparty, ClientState = SovTmClientState>,
     Counterparty: CanRaiseError<ProtoError>,
 {
     fn decode_client_state_bytes(
         client_state_bytes: &[u8],
-    ) -> Result<SovereignClientState, Counterparty::Error> {
+    ) -> Result<SovTmClientState, Counterparty::Error> {
         let client_state = Protobuf::<ProtoSovereignClientState>::decode_vec(client_state_bytes)
             .map_err(Counterparty::raise_error)?;
 

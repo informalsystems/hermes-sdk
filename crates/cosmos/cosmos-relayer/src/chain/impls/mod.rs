@@ -6,3 +6,4 @@ pub mod fields;
 pub mod log;
 pub mod query_consensus_state;
 pub mod types;
+pub mod update_client_message;

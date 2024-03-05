@@ -1,10 +1,13 @@
 #![recursion_limit = "256"]
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
+use hermes_cosmos_client_components::methods::event::try_extract_create_client_event;
+use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
+use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
-use hermes_wasm_client_components::types::client_state::WasmClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::time::sleep;
@@ -150,21 +153,17 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let celestia_chain = celestia_chain_driver.chain();
 
+        // Upload Wasm contract on Cosmos chain
         cosmos_chain_driver.store_wasm_client_code(
             &wasm_client_code_path,
             "tmp",
             "tmp",
             "validator",
         ).await?;
-
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
-
         cosmos_chain_driver.deposit_proposal("1", "100000000stake", "validator").await?;
-
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_VOTING_PERIOD").await?;
-
         cosmos_chain_driver.vote_proposal("1", "validator").await?;
-
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_PASSED").await?;
 
         let sovereign_chain = SovereignChain {
@@ -172,23 +171,55 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             data_chain: celestia_chain.clone(),
         };
 
+        // Create Sovereign client on Cosmos chain
         let create_client_payload = <SovereignChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
             &sovereign_chain,
             &create_client_settings
         ).await?;
-
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<SovereignChain>>::build_create_client_message(
             cosmos_chain,
             create_client_payload,
         ).await?;
-
         let _events = cosmos_chain.send_message(create_client_message).await?;
 
         let wasm_client_id = ClientId::from_str("08-wasm-0").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
 
-        let _wasm_client_state: WasmClientState = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+        let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
 
-        let _sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+        // Create Celestia client (DA client) on Cosmos chain
+        let create_celestia_client_payload = <CosmosChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
+            celestia_chain,
+            &create_client_settings
+        ).await?;
+        let create_celestia_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
+            cosmos_chain,
+            create_celestia_client_payload,
+        ).await?;
+        let events = cosmos_chain.send_message(create_celestia_client_message).await?;
+        let create_client_event = events.into_iter().find_map(try_extract_create_client_event).ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+        let celestia_client_id = create_client_event.client_id;
+
+        let wasm_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+        let celestia_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(cosmos_chain, &celestia_client_id).await?;
+
+        let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u128 };
+        let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u128 };
+
+        // Update Sovereign client state
+        let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
+            &sovereign_chain,
+            &dummy_trusted_height,
+            &dummy_target_height,
+            sovereign_client_state
+        ).await?;
+        let update_client_messages = <CosmosChain as CanBuildUpdateClientMessage<SovereignChain>>::build_update_client_message(
+            cosmos_chain,
+            &wasm_client_id,
+            update_client_payload,
+        ).await?;
+        for update_message in update_client_messages.into_iter() {
+            let _events = cosmos_chain.send_message(update_message).await?;
+        }
 
         <Result<(), Error>>::Ok(())
     })?;

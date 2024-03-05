@@ -1,3 +1,1 @@
-pub struct SovereignClientState {
-    // TODO: add fields
-}
+pub use sov_celestia_client::types::client_state::SovTmClientState;
