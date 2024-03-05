@@ -97,14 +97,14 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         sleep(Duration::from_secs(2)).await;
 
         let create_client_payload = <CosmosChain as CanBuildCreateClientPayload<SovereignChain>>::build_create_client_payload(
-            &cosmos_chain,
+            cosmos_chain,
             &create_client_settings,
         ).await?;
 
         println!("create client payload: {:?}", create_client_payload);
 
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
-            &cosmos_chain,
+            cosmos_chain,
             create_client_payload
         ).await?;
 
