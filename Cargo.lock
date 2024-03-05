@@ -1726,6 +1726,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
