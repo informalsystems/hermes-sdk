@@ -125,7 +125,11 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         }),
     });
 
-    let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+    let store_postfix = format!(
+        "{}-{}",
+        SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis(),
+        rand::random::<u64>()
+    );
 
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
