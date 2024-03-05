@@ -29,6 +29,7 @@ hermes-sovereign-test-components    = { workspace = true }
 hermes-sovereign-client-components  = { workspace = true }
 hermes-sovereign-cosmos-relayer     = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
+ibc-proto-new                       = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "d1daaab", package = "ibc-proto" }
 
 eyre            = { workspace = true }
 tokio           = { workspace = true }
