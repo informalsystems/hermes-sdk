@@ -1,5 +1,5 @@
-use hermes_relayer_components::encode::decoder::{CanDecode, Decoder};
-use hermes_relayer_components::encode::encoder::{CanEncode, Encoder};
+use hermes_relayer_components::encode::traits::decoder::{CanDecode, Decoder};
+use hermes_relayer_components::encode::traits::encoder::{CanEncode, Encoder};
 pub struct EncodeFromContext;
 
 impl<Encoding, Value> Encoder<Encoding, Value> for EncodeFromContext

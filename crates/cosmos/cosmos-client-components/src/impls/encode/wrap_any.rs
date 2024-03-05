@@ -1,7 +1,7 @@
 use cgp_core::HasErrorType;
-use hermes_relayer_components::encode::decoder::Decoder;
-use hermes_relayer_components::encode::encoded::HasEncodedType;
-use hermes_relayer_components::encode::encoder::Encoder;
+use hermes_relayer_components::encode::traits::decoder::Decoder;
+use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
+use hermes_relayer_components::encode::traits::encoder::Encoder;
 
 use crate::impls::encode::any::EncodeAsAnyProtobuf;
 use crate::impls::encode::from_context::EncodeFromContext;

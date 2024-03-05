@@ -1,10 +1,7 @@
 use alloc::vec::Vec;
-use cgp_core::prelude::*;
+use cgp_core::prelude::Async;
 
-#[derive_component(EncodedTypeComponent, ProvideEncodedType<Encoding>)]
-pub trait HasEncodedType: Async {
-    type Encoded: Async;
-}
+use crate::encode::traits::encoded::ProvideEncodedType;
 
 pub struct ProvideEncodedBytesType;
 
