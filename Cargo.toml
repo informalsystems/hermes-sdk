@@ -8,6 +8,7 @@ members = [
     "crates/runtime/async-runtime-components",
     "crates/runtime/tokio-runtime-components",
     "crates/runtime/relayer-runtime",
+    "crates/encoding/protobuf-components",
     "crates/cosmos/cosmos-client-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
@@ -61,6 +62,7 @@ cgp-error-std       = { version = "0.1.0" }
 clap                = { version = "4.5.1" }
 oneline-eyre        = { version = "0.1.0" }
 prost               = { version = "0.12.3" }
+prost-types         = { version = "0.12.3" }
 serde               = { version = "1.0" }
 serde_derive        = { version = "1.0" }
 serde_json          = { version = "1.0" }
@@ -104,6 +106,7 @@ hermes-wasm-client-components       = { version = "0.1.0", path = "./crates/wasm
 hermes-async-runtime-components     = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
+hermes-protobuf-components          = { version = "0.1.0", path = "./crates/encoding/protobuf-components" }
 hermes-solomachine-relayer          = { version = "0.1.0", path = "./crates/solomachine/solomachine-relayer" }
 hermes-test-components              = { version = "0.1.0", path = "./crates/test/test-components" }
 hermes-ibc-test-suite               = { version = "0.1.0", path = "./crates/test/test-suite" }
