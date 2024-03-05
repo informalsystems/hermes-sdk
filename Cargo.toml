@@ -81,6 +81,7 @@ tracing-subscriber  = { version = "0.3.18" }
 jsonrpsee           = { version = "0.21.0", default-features = false }
 hdpath              = { version = "0.6.3" }
 borsh               = { version = "0.10.3" }
+rand                = { version = "0.8.5" }
 
 hermes-cli                          = { version = "0.1.0", path = "./crates/cli/cli" }
 hermes-cli-components               = { version = "0.1.0", path = "./crates/cli/cli-components" }

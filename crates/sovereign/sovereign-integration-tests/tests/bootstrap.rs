@@ -40,7 +40,11 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+    let store_postfix = format!(
+        "{}-{}",
+        SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis(),
+        rand::random::<u64>()
+    );
 
     let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
 
