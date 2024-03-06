@@ -4,6 +4,7 @@
 extern crate alloc;
 
 pub mod components;
+pub mod encoding;
 pub mod impls;
 pub mod methods;
 pub mod traits;
