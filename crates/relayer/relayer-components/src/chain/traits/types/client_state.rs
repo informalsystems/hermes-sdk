@@ -2,10 +2,8 @@ use alloc::vec::Vec;
 use cgp_core::prelude::*;
 use core::time::Duration;
 
+use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::height::HasHeightType;
-
-use super::chain_id::HasChainIdType;
-use super::ibc::HasIbcChainTypes;
 
 #[derive_component(ClientStateTypeComponent, ProvideClientStateType<Chain>)]
 pub trait HasClientStateType<Counterparty>: Async {
@@ -41,14 +39,4 @@ where
     fn decode_client_state_bytes(
         client_state_bytes: Vec<u8>,
     ) -> Result<Self::ClientState, Counterparty::Error>;
-}
-
-#[derive_component(ClientStatesDecoderComponent, ClientStatesDecoder<Chain>)]
-pub trait CanDecodeClientStates<Counterparty>: HasClientStateType<Counterparty>
-where
-    Counterparty: HasIbcChainTypes<Self> + HasErrorType,
-{
-    fn decode_client_states_bytes(
-        client_states_bytes: &[u8],
-    ) -> Result<Vec<(Counterparty::ClientId, Self::ClientState)>, Counterparty::Error>;
 }
