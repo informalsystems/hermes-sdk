@@ -1,20 +1,20 @@
 use core::marker::PhantomData;
 
-pub struct Wrap<Wrapper, Value> {
+pub struct Via<Wrapper, Value> {
     pub value: Value,
     pub phantom: PhantomData<Wrapper>,
 }
 
-impl<Wrapper, Value> From<Value> for Wrap<Wrapper, Value> {
+impl<Wrapper, Value> From<Value> for Via<Wrapper, Value> {
     fn from(value: Value) -> Self {
-        Wrap {
+        Via {
             value,
             phantom: PhantomData,
         }
     }
 }
 
-impl<Wrapper, Value> Default for Wrap<Wrapper, Value>
+impl<Wrapper, Value> Default for Via<Wrapper, Value>
 where
     Value: Default,
 {

@@ -9,7 +9,7 @@ use hermes_protobuf_components::traits::encoding::ProtobufEncodingGetter;
 use hermes_protobuf_components::traits::encoding::ProvideProtobufEncodingType;
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
-use hermes_relayer_components::encode::types::wrap::Wrap;
+use hermes_relayer_components::encode::types::via::Via;
 use hermes_sovereign_client_components::encoding::components::IsSovereignEncodingComponent;
 use hermes_sovereign_client_components::encoding::components::SovereignEncodingComponents as BaseSovereignEncodingComponents;
 use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
@@ -59,10 +59,10 @@ where
 pub trait CanUseSovereignEncoding:
     CanDecode<ProtoWasmClientState>
     + CanDecode<WasmClientState>
-    + CanDecode<Wrap<Any, WasmClientState>>
+    + CanDecode<Via<Any, WasmClientState>>
     + CanDecode<ProtoSovereignClientState>
     + CanDecode<SovereignClientState>
-    + CanDecode<Wrap<WasmClientState, SovereignClientState>>
+    + CanDecode<Via<WasmClientState, SovereignClientState>>
 {
 }
 

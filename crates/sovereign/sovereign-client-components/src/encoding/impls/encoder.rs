@@ -3,7 +3,7 @@ use hermes_protobuf_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::encode::impls::convert_and_encode::ConvertAndEncode;
 use hermes_relayer_components::encode::impls::delegate::DelegateEncoding;
-use hermes_relayer_components::encode::types::wrap::Wrap;
+use hermes_relayer_components::encode::types::via::Via;
 use hermes_wasm_client_components::impls::encoding::encoder::{
     EncodeWrapWasmClientState, WasmEncoderComponents,
 };
@@ -16,11 +16,11 @@ pub struct SovereignEncoderComponents;
 
 delegate_components! {
     SovereignEncoderComponents {
-        Wrap<WasmClientState, SovereignClientState>: EncodeWrapWasmClientState,
+        Via<WasmClientState, SovereignClientState>: EncodeWrapWasmClientState,
         SovereignClientState: ConvertAndEncode<ProtoSovereignClientState>,
         ProtoSovereignClientState: EncodeAsProtobuf,
         [
-            Wrap<Any, WasmClientState>,
+            Via<Any, WasmClientState>,
             WasmClientState,
             ProtoWasmClientState,
         ]:
