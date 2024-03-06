@@ -15,6 +15,7 @@ description  = """
 [dependencies]
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
+ibc-proto-new                       = { workspace = true }
 cgp-core                            = { workspace = true }
 cgp-error-eyre                      = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
@@ -23,6 +24,8 @@ hermes-test-components              = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-celestia-chain               = { workspace = true }
 hermes-sovereign-client-components  = { workspace = true }
+hermes-wasm-client-components       = { workspace = true }
 hermes-sovereign-test-components    = { workspace = true }
+hermes-protobuf-components          = { workspace = true }
 
 jsonrpsee       = { workspace = true, features = ["http-client"] }

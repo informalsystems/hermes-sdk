@@ -5,7 +5,6 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 
-use crate::sovereign::types::client_state::SovTmClientState;
 use crate::sovereign::types::height::RollupHeight;
 use crate::sovereign::types::payloads::channel::{
     SovereignChannelOpenAckPayload, SovereignChannelOpenConfirmPayload,
@@ -27,7 +26,7 @@ where
             Height = RollupHeight,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasClientStateType<Counterparty, ClientState = SovTmClientState>
+        > + HasClientStateType<Counterparty>
         + HasErrorType,
 {
     async fn build_channel_open_try_payload(

@@ -11,6 +11,8 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
@@ -40,6 +42,8 @@ use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
 
+use crate::contexts::encoding::ProvideSovereignEncoding;
+
 pub struct SovereignRollup {
     pub runtime: HermesRuntime,
     pub rpc_client: HttpClient,
@@ -59,6 +63,11 @@ delegate_components! {
             RaiseDebugError,
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
+        [
+            EncodingTypeComponent,
+            EncodingGetterComponent,
+        ]:
+            ProvideSovereignEncoding,
         [
             HeightTypeComponent,
             TimestampTypeComponent,

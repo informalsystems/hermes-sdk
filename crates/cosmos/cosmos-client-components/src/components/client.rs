@@ -48,7 +48,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
@@ -80,7 +80,6 @@ use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::impls::connection::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
-use crate::impls::decoders::client_state::DecodeTendermintClientStateFromAnyProto;
 use crate::impls::packet::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::packet::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -151,8 +150,6 @@ delegate_components! {
             ClientStateFieldsGetterComponent,
         ]:
             ProvideTendermintClientState,
-        ClientStateDecoderComponent:
-            DecodeTendermintClientStateFromAnyProto,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
         MessageSenderComponent:

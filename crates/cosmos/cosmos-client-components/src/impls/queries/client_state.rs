@@ -5,7 +5,6 @@ use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerier, ClientStateBytesQuerier,
 };
-use hermes_relayer_components::chain::traits::types::client_state::CanDecodeClientState;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use ibc_proto::ibc::core::client::v1::{
@@ -51,7 +50,6 @@ where
         + CanQueryAbci
         + CanRaiseError<DecodeError>
         + CanParseClientStateEntryBytes<Counterparty>,
-    Counterparty: CanDecodeClientState<Chain>,
 {
     async fn query_all_client_states_bytes(
         chain: &Chain,
@@ -94,13 +92,10 @@ where
         + CanRaiseError<ValidationError>
         + CanRaiseError<EncodeError>
         + CanRaiseError<&'static str>,
-    Counterparty: CanDecodeClientState<Chain>,
 {
     fn parse_client_state_entry_bytes(
         entry: IdentifiedClientState,
     ) -> Result<(ClientId, Vec<u8>), Chain::Error> {
-        // TODO: handle errors
-
         let client_id = ClientId::from_str(&entry.client_id).map_err(Chain::raise_error)?;
 
         let client_state_any = entry

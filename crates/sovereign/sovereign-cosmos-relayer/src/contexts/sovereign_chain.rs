@@ -8,11 +8,14 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::C
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    CanDecodeClientState, HasClientStateType,
-};
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_relayer_components::encode::traits::has_encoding::HasEncoding;
+use hermes_relayer_components::encode::traits::has_encoding::{
+    EncodingGetterComponent, EncodingTypeComponent,
+};
+use hermes_relayer_components::encode::types::via::Via;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -29,8 +32,11 @@ use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
     DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
     ProvideDataChainType,
 };
-use hermes_sovereign_client_components::sovereign::types::client_state::SovTmClientState;
+use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
 use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
+use hermes_wasm_client_components::types::client_state::WasmClientState;
+
+use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
@@ -79,6 +85,11 @@ delegate_components! {
             DataChainTypeComponent,
             DataChainGetterComponent,
         ]: SovereignDataChainType,
+        [
+            EncodingTypeComponent,
+            EncodingGetterComponent,
+        ]:
+            ProvideSovereignEncoding,
     }
 }
 
@@ -104,9 +115,9 @@ pub trait CheckSovereignChainImpls:
     HasDataChain
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
-    + HasClientStateType<CosmosChain, ClientState = SovTmClientState>
+    + HasClientStateType<CosmosChain, ClientState = Via<WasmClientState, SovereignClientState>>
     + CanBuildUpdateClientPayload<CosmosChain>
-    + CanDecodeClientState<CosmosChain>
+    + HasEncoding<Encoding = SovereignEncoding>
 {
 }
 

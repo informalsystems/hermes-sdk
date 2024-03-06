@@ -1,11 +1,8 @@
-use alloc::vec::Vec;
 use cgp_core::prelude::*;
 use core::time::Duration;
 
+use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::height::HasHeightType;
-
-use super::chain_id::HasChainIdType;
-use super::ibc::HasIbcChainTypes;
 
 #[derive_component(ClientStateTypeComponent, ProvideClientStateType<Chain>)]
 pub trait HasClientStateType<Counterparty>: Async {
@@ -31,24 +28,4 @@ pub trait HasClientStateFields<Counterparty>:
     /// Check if the client state will expired when `elapsed` time has passed
     /// since the latest consensus state
     fn client_state_has_expired(client_state: &Self::ClientState, elapsed: Duration) -> bool;
-}
-
-#[derive_component(ClientStateDecoderComponent, ClientStateDecoder<Chain>)]
-pub trait CanDecodeClientState<Counterparty>: HasClientStateType<Counterparty>
-where
-    Counterparty: HasErrorType,
-{
-    fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
-    ) -> Result<Self::ClientState, Counterparty::Error>;
-}
-
-#[derive_component(ClientStatesDecoderComponent, ClientStatesDecoder<Chain>)]
-pub trait CanDecodeClientStates<Counterparty>: HasClientStateType<Counterparty>
-where
-    Counterparty: HasIbcChainTypes<Self> + HasErrorType,
-{
-    fn decode_client_states_bytes(
-        client_states_bytes: &[u8],
-    ) -> Result<Vec<(Counterparty::ClientId, Self::ClientState)>, Counterparty::Error>;
 }

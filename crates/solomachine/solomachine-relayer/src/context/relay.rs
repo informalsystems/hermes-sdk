@@ -1,7 +1,11 @@
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
+use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
+use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 
 pub struct SolomachineRelay<Chain> {
@@ -28,4 +32,15 @@ impl<Chain> SolomachineRelay<Chain> {
             dst_client_id,
         }
     }
+}
+
+pub trait CanUseSolomachineRelay: CanInitConnection
+where
+    Self::SrcChain: HasInitConnectionOptionsType<Self::DstChain>,
+{
+}
+
+impl<Chain> CanUseSolomachineRelay for SolomachineRelay<Chain> where
+    Chain: Solomachine<Error = Error>
+{
 }

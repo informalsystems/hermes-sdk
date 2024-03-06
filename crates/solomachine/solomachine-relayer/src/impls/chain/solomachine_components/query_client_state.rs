@@ -15,13 +15,15 @@ impl<Chain, Counterparty> ClientStateQuerier<SolomachineChain<Chain>, Counterpar
     for QueryCosmosClientStateFromSolomachine
 where
     Chain: Solomachine,
-    Counterparty: HasClientStateType<SolomachineChain<Chain>, ClientState = TendermintClientState>,
+    Counterparty: HasClientStateType<SolomachineChain<Chain>>,
+    Counterparty::ClientState: From<TendermintClientState>,
 {
     async fn query_client_state(
         chain: &SolomachineChain<Chain>,
         client_id: &ClientId,
         _height: &Height,
-    ) -> Result<TendermintClientState, Chain::Error> {
-        chain.chain.query_client_state(client_id).await
+    ) -> Result<Counterparty::ClientState, Chain::Error> {
+        let client_state = chain.chain.query_client_state(client_id).await?;
+        Ok(client_state.into())
     }
 }

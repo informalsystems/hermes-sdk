@@ -1,6 +1,8 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::methods::encode::encode_protobuf;
+use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
+use hermes_relayer_components::encode::types::via::Via;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::path::CommitmentsPath;
 use ibc_relayer_types::Height;
@@ -24,7 +26,7 @@ where
 {
     async fn build_receive_packet_payload(
         chain: &SolomachineChain<Chain>,
-        client_state: &SolomachineClientState,
+        client_state: &Via<Any, SolomachineClientState>,
         height: &Height,
         packet: &Packet,
     ) -> Result<SolomachineReceivePacketPayload, Chain::Error> {
@@ -48,7 +50,7 @@ where
 
         let new_diversifier = chain.chain.current_diversifier();
         let secret_key = chain.chain.secret_key();
-        let consensus_timestamp = client_state.consensus_state.timestamp;
+        let consensus_timestamp = client_state.value.consensus_state.timestamp;
 
         let sign_data = SolomachineSignData {
             sequence: u64::from(packet.sequence),

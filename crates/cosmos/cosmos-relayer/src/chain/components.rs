@@ -49,8 +49,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ClientStateFieldsGetterComponent, ClientStateTypeComponent,
-    ClientStatesDecoderComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
@@ -71,12 +70,13 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUn
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
-use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
@@ -104,6 +104,7 @@ use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessag
 use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use crate::contexts::chain::CosmosChain;
+use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
@@ -115,8 +116,6 @@ impl HasComponents for CosmosChainComponents {
 impl HasComponents for CosmosChain {
     type Components = CosmosChainComponents;
 }
-
-impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
 delegate_components! {
     CosmosChainComponents {
@@ -133,6 +132,11 @@ delegate_components! {
         ]:
             ProvideTracingLogger,
         [
+            EncodingTypeComponent,
+            EncodingGetterComponent,
+        ]:
+            ProvideCosmosEncoding,
+        [
             HeightTypeComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
@@ -142,8 +146,6 @@ delegate_components! {
             EventTypeComponent,
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
-            ClientStateDecoderComponent,
-            ClientStatesDecoderComponent,
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndQuerierComponent,

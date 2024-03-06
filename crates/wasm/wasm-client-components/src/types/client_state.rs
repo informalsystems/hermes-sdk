@@ -11,7 +11,7 @@ use crate::utils::encode::encode_to_any;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProtoClientState {
+pub struct ProtoWasmClientState {
     /// bytes encoding the client state of the underlying light client
     /// implemented as a Wasm contract.
     #[prost(bytes = "vec", tag = "1")]
@@ -37,7 +37,7 @@ impl WasmClientState {
             revision_number: self.latest_height.revision_number(),
             revision_height: self.latest_height.revision_height(),
         };
-        let proto_message = ProtoClientState {
+        let proto_message = ProtoWasmClientState {
             data: self.data.clone(),
             checksum: self.checksum.clone(),
             latest_height: Some(latest_height),
@@ -47,12 +47,12 @@ impl WasmClientState {
     }
 }
 
-impl Protobuf<ProtoClientState> for WasmClientState {}
+impl Protobuf<ProtoWasmClientState> for WasmClientState {}
 
-impl TryFrom<ProtoClientState> for WasmClientState {
+impl TryFrom<ProtoWasmClientState> for WasmClientState {
     type Error = Error;
 
-    fn try_from(value: ProtoClientState) -> Result<Self, Self::Error> {
+    fn try_from(value: ProtoWasmClientState) -> Result<Self, Self::Error> {
         let maybe_height = value
             .latest_height
             .ok_or_else(|| eyre!("Empty 'latest_height' in proto Wasm client state"))?;
@@ -65,7 +65,7 @@ impl TryFrom<ProtoClientState> for WasmClientState {
     }
 }
 
-impl From<WasmClientState> for ProtoClientState {
+impl From<WasmClientState> for ProtoWasmClientState {
     fn from(value: WasmClientState) -> Self {
         let height = ProtoHeight::from(value.latest_height);
         Self {

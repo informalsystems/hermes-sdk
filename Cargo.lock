@@ -1691,7 +1691,9 @@ name = "hermes-cli-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
  "hermes-cosmos-client-components",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "ibc-proto 0.38.0",
  "ibc-relayer",
@@ -1726,6 +1728,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "futures",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1735,6 +1738,7 @@ dependencies = [
  "ibc-relayer-types",
  "itertools 0.11.0",
  "prost",
+ "prost-types",
  "tendermint",
  "tendermint-proto",
  "tendermint-rpc",
@@ -1781,6 +1785,7 @@ dependencies = [
  "hermes-cli-components",
  "hermes-cosmos-client-components",
  "hermes-cosmos-test-components",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1795,6 +1800,7 @@ dependencies = [
  "moka",
  "opentelemetry 0.17.0",
  "prost",
+ "prost-types",
  "serde",
  "serde_derive",
  "tendermint",
@@ -1875,10 +1881,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-protobuf-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "prost",
+ "prost-types",
+]
+
+[[package]]
 name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "serde",
 ]
 
 [[package]]
@@ -1911,12 +1928,14 @@ version = "0.1.0"
 dependencies = [
  "bytes",
  "cgp-core",
+ "cgp-error-eyre",
  "crypto-hash",
  "eyre",
  "flex-error",
  "futures",
  "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1946,6 +1965,7 @@ dependencies = [
  "ed25519-dalek",
  "eyre",
  "hermes-cosmos-client-components",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-wasm-client-components",
@@ -1973,11 +1993,14 @@ dependencies = [
  "cgp-error-eyre",
  "hermes-celestia-chain",
  "hermes-cosmos-relayer",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-sovereign-client-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
+ "hermes-wasm-client-components",
+ "ibc-proto 0.41.0",
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
@@ -2069,8 +2092,10 @@ name = "hermes-wasm-client-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
  "eyre",
  "hermes-cosmos-client-components",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "ibc-core",
  "ibc-proto 0.41.0",
@@ -3771,9 +3796,9 @@ dependencies = [
 
 [[package]]
 name = "prost-types"
-version = "0.12.1"
+version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e081b29f63d83a4bc75cfc9f3fe424f9156cf92d8a4f0c9407cce9a1b67327cf"
+checksum = "193898f59edcf43c26227dcd4c8427f00d99d61e95dcde58dabd49fa291d470e"
 dependencies = [
  "prost",
 ]

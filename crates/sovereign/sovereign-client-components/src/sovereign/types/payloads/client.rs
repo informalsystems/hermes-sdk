@@ -2,10 +2,10 @@ use ibc::clients::tendermint::types::Header;
 use ibc_core::client::types::Height;
 use sov_celestia_client::types::consensus_state::SovTmConsensusState;
 
-use crate::sovereign::types::client_state::SovTmClientState;
+use crate::sovereign::types::client_state::SovereignClientState;
 
 pub struct SovereignCreateClientPayload {
-    pub client_state: SovTmClientState,
+    pub client_state: SovereignClientState,
     pub consensus_state: SovTmConsensusState,
     // TODO: Add rollup payloads
     pub code_hash: Vec<u8>,

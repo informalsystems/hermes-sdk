@@ -8,6 +8,7 @@ members = [
     "crates/runtime/async-runtime-components",
     "crates/runtime/tokio-runtime-components",
     "crates/runtime/relayer-runtime",
+    "crates/encoding/protobuf-components",
     "crates/cosmos/cosmos-client-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
@@ -46,6 +47,7 @@ rust-version    = "1.72"
 async-trait         = { version = "0.1.56" }
 ibc                 = { version = "0.47.0" }
 ibc-proto           = { version = "0.38.0" }
+ibc-proto-new       = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "1b1d7a9", package = "ibc-proto" }
 ibc-relayer         = { version = "0.26.4" }
 ibc-relayer-types   = { version = "0.26.4" }
 ibc-telemetry       = { version = "0.26.4" }
@@ -61,6 +63,7 @@ cgp-error-std       = { version = "0.1.0" }
 clap                = { version = "4.5.1" }
 oneline-eyre        = { version = "0.1.0" }
 prost               = { version = "0.12.3" }
+prost-types         = { version = "0.12.3" }
 serde               = { version = "1.0" }
 serde_derive        = { version = "1.0" }
 serde_json          = { version = "1.0" }
@@ -104,6 +107,7 @@ hermes-wasm-client-components       = { version = "0.1.0", path = "./crates/wasm
 hermes-async-runtime-components     = { version = "0.1.0", path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { version = "0.1.0", path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { version = "0.1.0", path = "./crates/runtime/relayer-runtime" }
+hermes-protobuf-components          = { version = "0.1.0", path = "./crates/encoding/protobuf-components" }
 hermes-solomachine-relayer          = { version = "0.1.0", path = "./crates/solomachine/solomachine-relayer" }
 hermes-test-components              = { version = "0.1.0", path = "./crates/test/test-components" }
 hermes-ibc-test-suite               = { version = "0.1.0", path = "./crates/test/test-suite" }

@@ -1,4 +1,5 @@
 use alloc::sync::Arc;
+use core::convert::Infallible;
 use core::fmt::Display;
 use core::fmt::{self, Debug, Formatter};
 
@@ -190,5 +191,16 @@ where
             is_retryable: e.is_retryable,
             detail: ErrorDetail::Wrapped(format!("{:?}", detail), Arc::new(e.detail)),
         }
+    }
+}
+
+pub struct HandleInfallible;
+
+impl<Context> ErrorRaiser<Context, Infallible> for HandleInfallible
+where
+    Context: HasErrorType,
+{
+    fn raise_error(e: Infallible) -> Context::Error {
+        match e {}
     }
 }
