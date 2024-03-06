@@ -23,7 +23,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
 use sov_celestia_client::types::client_state::TmClientParams;
 
 use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
-use crate::sovereign::types::client_state::SovTmClientState;
+use crate::sovereign::types::client_state::SovereignClientState;
 use crate::sovereign::types::height::RollupHeight;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
@@ -38,7 +38,7 @@ impl<Chain, Counterparty, DataChain> UpdateClientPayloadBuilder<Chain, Counterpa
 where
     Chain: HasHeightType<Height = RollupHeight>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
-        + HasClientStateType<Counterparty, ClientState = SovTmClientState>
+        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
         + HasDataChain
         + HasDataChainType<DataChain = DataChain>
         + HasErrorType<Error = ReportError>,

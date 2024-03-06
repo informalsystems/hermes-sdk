@@ -10,6 +10,7 @@ use ibc_core::primitives::ToProto;
 use ibc_proto::google::protobuf::Any;
 use prost::{EncodeError, Message};
 
+use crate::sovereign::types::client_state::SovereignClientState;
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
 /**
@@ -28,10 +29,9 @@ where
         _chain: &Chain,
         payload: SovereignCreateClientPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        let raw_client_state =
-            <crate::sovereign::types::client_state::SovTmClientState as ToProto<
-                sov_celestia_client::types::proto::v1::ClientState,
-            >>::to_any(payload.client_state);
+        let raw_client_state = <SovereignClientState as ToProto<
+            sov_celestia_client::types::proto::v1::ClientState,
+        >>::to_any(payload.client_state);
         let client_state = WasmClientState {
             data: raw_client_state.encode_to_vec(),
             checksum: payload.code_hash.clone(),

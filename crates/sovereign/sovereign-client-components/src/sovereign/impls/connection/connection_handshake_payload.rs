@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::types::connection::HasConnectionHa
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
-use crate::sovereign::types::client_state::SovTmClientState;
+use crate::sovereign::types::client_state::SovereignClientState;
 use crate::sovereign::types::height::RollupHeight;
 use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
@@ -28,7 +28,7 @@ where
             Height = RollupHeight,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasClientStateType<Counterparty, ClientState = SovTmClientState>
+        > + HasClientStateType<Counterparty, ClientState = SovereignClientState>
         + HasErrorType,
 {
     async fn build_connection_open_init_payload(

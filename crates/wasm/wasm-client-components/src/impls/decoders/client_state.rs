@@ -1,5 +1,5 @@
 use crate::contexts::wasm_counterparty::WasmCounterparty;
-use crate::types::client_state::ProtoClientState;
+use crate::types::client_state::ProtoWasmClientState;
 use crate::types::client_state::WasmClientState;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::client_state::{
@@ -13,15 +13,6 @@ use sov_celestia_client::types::client_state::SovTmClientState;
 use tendermint_proto::Error as ProtoError;
 
 pub struct DecodeSovereignClientStateFromAnyProto;
-
-// impl<Encoding> Decoder<Encoding, SovTmClientState> for DecodeSovereignClientStateFromAnyProto
-// where
-//     Encoding:
-//         CanDecode<WasmClientState>
-//         ,
-// {
-
-// }
 
 impl<Chain, Counterparty> ClientStateDecoder<Chain, Counterparty>
     for DecodeSovereignClientStateFromAnyProto
@@ -100,8 +91,9 @@ where
     fn decode_client_state_bytes(
         client_state_bytes: Vec<u8>,
     ) -> Result<WasmClientState, Counterparty::Error> {
-        let client_state = Protobuf::<ProtoClientState>::decode_vec(client_state_bytes.as_ref())
-            .map_err(Counterparty::raise_error)?;
+        let client_state =
+            Protobuf::<ProtoWasmClientState>::decode_vec(client_state_bytes.as_ref())
+                .map_err(Counterparty::raise_error)?;
 
         Ok(client_state)
     }

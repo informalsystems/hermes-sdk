@@ -4,6 +4,9 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_protobuf_components::traits::encoding::{
+    ProtobufEncodingGetterComponent, ProtobufEncodingTypeComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
@@ -29,8 +32,10 @@ use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
     DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
     ProvideDataChainType,
 };
-use hermes_sovereign_client_components::sovereign::types::client_state::SovTmClientState;
+use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
 use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
+
+use crate::contexts::encoding::ProvideSovereignEncoding;
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
@@ -79,6 +84,11 @@ delegate_components! {
             DataChainTypeComponent,
             DataChainGetterComponent,
         ]: SovereignDataChainType,
+        [
+            ProtobufEncodingTypeComponent,
+            ProtobufEncodingGetterComponent,
+        ]:
+            ProvideSovereignEncoding,
     }
 }
 
@@ -104,7 +114,7 @@ pub trait CheckSovereignChainImpls:
     HasDataChain
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
-    + HasClientStateType<CosmosChain, ClientState = SovTmClientState>
+    + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + CanDecodeClientState<CosmosChain>
 {

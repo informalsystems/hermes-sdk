@@ -4,6 +4,8 @@ use cgp_core::ErrorTypeComponent;
 use cgp_core::HasComponents;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use hermes_protobuf_components::traits::encoding::ProtobufEncodingGetterComponent;
+use hermes_protobuf_components::traits::encoding::ProtobufEncodingTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -40,6 +42,8 @@ use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
 
+use crate::contexts::encoding::ProvideSovereignEncoding;
+
 pub struct SovereignRollup {
     pub runtime: HermesRuntime,
     pub rpc_client: HttpClient,
@@ -59,6 +63,11 @@ delegate_components! {
             RaiseDebugError,
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
+        [
+            ProtobufEncodingTypeComponent,
+            ProtobufEncodingGetterComponent,
+        ]:
+            ProvideSovereignEncoding,
         [
             HeightTypeComponent,
             TimestampTypeComponent,
