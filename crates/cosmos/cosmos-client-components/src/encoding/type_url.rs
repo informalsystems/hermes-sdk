@@ -1,24 +1,16 @@
-use core::marker::PhantomData;
-
 use crate::types::tendermint::TendermintClientState;
-use hermes_relayer_components::encode::traits::schema::{HasSchemaType, SchemaGetter};
+use cgp_core::prelude::*;
+use hermes_protobuf_components::impl_type_url;
 
 pub struct CosmosTypeUrlSchemas;
 
-macro_rules! impl_type_url {
-    ($type:ty, $type_url:literal) => {
-        impl<Encoding> SchemaGetter<Encoding, $type> for CosmosTypeUrlSchemas
-        where
-            Encoding: HasSchemaType<Schema = &'static str>,
-        {
-            fn schema(_encoding: &Encoding, _phantom: PhantomData<$type>) -> &&'static str {
-                &$type_url
-            }
-        }
-    };
+delegate_components! {
+    CosmosTypeUrlSchemas {
+        TendermintClientState: TendermintClientStateUrl,
+    }
 }
 
 impl_type_url!(
-    TendermintClientState,
+    TendermintClientStateUrl,
     "/ibc.lightclients.tendermint.v1.ClientState"
 );

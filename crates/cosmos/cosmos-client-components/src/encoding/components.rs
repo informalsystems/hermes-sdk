@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::encode::impls::delegate::DelegateEncoding;
 use hermes_relayer_components::encode::impls::encoded::ProvideEncodedBytes;
 use hermes_relayer_components::encode::impls::schema::ProvideStringSchema;
 use hermes_relayer_components::encode::traits::convert::ConverterComponent;
@@ -18,18 +19,18 @@ pub struct CosmosEncodingComponents;
 delegate_components! {
     #[mark_component(IsCosmosEncodingComponent)]
     CosmosEncodingComponents {
-        ConverterComponent:
-            CosmosConverterComponents,
         EncodedTypeComponent:
             ProvideEncodedBytes,
+        SchemaTypeComponent:
+            ProvideStringSchema,
+        ConverterComponent:
+            DelegateEncoding<CosmosConverterComponents>,
         [
             EncoderComponent,
             DecoderComponent,
         ]:
-            CosmosEncoderComponents,
-        SchemaTypeComponent:
-            ProvideStringSchema,
+            DelegateEncoding<CosmosEncoderComponents>,
         SchemaGetterComponent:
-            CosmosTypeUrlSchemas,
+            DelegateEncoding<CosmosTypeUrlSchemas>,
     }
 }
