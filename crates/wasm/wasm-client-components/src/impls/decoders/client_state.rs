@@ -23,12 +23,12 @@ where
     DecodeSovereignClientStateFromProto: ClientStateDecoder<Chain, Counterparty>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<SovTmClientState, Counterparty::Error> {
-        let any = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+        let any = Any::decode(client_state_bytes.as_ref()).map_err(Counterparty::raise_error)?;
 
         let wasm_client_state: WasmClientState =
-            DecodeWasmClientStateFromProto::decode_client_state_bytes(&any.value)?;
+            DecodeWasmClientStateFromProto::decode_client_state_bytes(any.value)?;
 
         let raw_sovereign = wasm_client_state.data;
 
@@ -36,7 +36,7 @@ where
             Any::decode(raw_sovereign.as_slice()).map_err(Counterparty::raise_error)?;
 
         let sovereign_client_state =
-            DecodeSovereignClientStateFromProto::decode_client_state_bytes(&any_sovereign.value)?;
+            DecodeSovereignClientStateFromProto::decode_client_state_bytes(any_sovereign.value)?;
 
         Ok(sovereign_client_state)
     }
@@ -51,10 +51,11 @@ where
     Counterparty: CanRaiseError<ProtoError>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<SovTmClientState, Counterparty::Error> {
-        let client_state = Protobuf::<ProtoSovereignClientState>::decode_vec(client_state_bytes)
-            .map_err(Counterparty::raise_error)?;
+        let client_state =
+            Protobuf::<ProtoSovereignClientState>::decode_vec(client_state_bytes.as_ref())
+                .map_err(Counterparty::raise_error)?;
 
         Ok(client_state)
     }
@@ -70,11 +71,11 @@ where
     DecodeWasmClientStateFromProto: ClientStateDecoder<Chain, Counterparty>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<WasmClientState, Counterparty::Error> {
-        let any = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+        let any = Any::decode(client_state_bytes.as_ref()).map_err(Counterparty::raise_error)?;
 
-        let client_state = DecodeWasmClientStateFromProto::decode_client_state_bytes(&any.value)?;
+        let client_state = DecodeWasmClientStateFromProto::decode_client_state_bytes(any.value)?;
 
         Ok(client_state)
     }
@@ -88,9 +89,9 @@ where
     Counterparty: CanRaiseError<ProtoError>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<WasmClientState, Counterparty::Error> {
-        let client_state = Protobuf::<ProtoClientState>::decode_vec(client_state_bytes)
+        let client_state = Protobuf::<ProtoClientState>::decode_vec(client_state_bytes.as_ref())
             .map_err(Counterparty::raise_error)?;
 
         Ok(client_state)

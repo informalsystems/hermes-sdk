@@ -20,7 +20,7 @@ where
     ) -> Result<Counterparty::ClientState, Chain::Error> {
         let client_state_bytes = chain.query_client_state_bytes(client_id, height).await?;
 
-        let client_state = Counterparty::decode_client_state_bytes(&client_state_bytes)?;
+        let client_state = Counterparty::decode_client_state_bytes(client_state_bytes)?;
 
         Ok(client_state)
     }
@@ -41,7 +41,7 @@ where
             .into_iter()
             .filter_map(|(client_id, client_state_bytes)| {
                 let client_state =
-                    Counterparty::decode_client_state_bytes(&client_state_bytes).ok()?;
+                    Counterparty::decode_client_state_bytes(client_state_bytes).ok()?;
 
                 Some((client_id, client_state))
             })

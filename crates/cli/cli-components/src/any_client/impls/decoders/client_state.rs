@@ -23,14 +23,14 @@ where
     DecodeTendermintClientStateProto: ClientStateDecoder<TendermintChain, Counterparty>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<AnyClientState, Counterparty::Error> {
-        let any = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+        let any = Any::decode(client_state_bytes.as_ref()).map_err(Counterparty::raise_error)?;
 
         match any.type_url.as_str() {
             TENDERMINT_CLIENT_STATE_TYPE_URL => {
                 let client_state =
-                    DecodeTendermintClientStateProto::decode_client_state_bytes(&any.value)?;
+                    DecodeTendermintClientStateProto::decode_client_state_bytes(any.value)?;
                 Ok(AnyClientState::Tendermint(client_state))
             }
             type_url => Err(Counterparty::raise_error(UnknownClientStateType {

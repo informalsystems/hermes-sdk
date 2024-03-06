@@ -23,13 +23,13 @@ where
     DecodeTendermintClientStateProto: ClientStateDecoder<Chain, Counterparty>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<TendermintClientState, Counterparty::Error> {
-        let any = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+        let any = Any::decode(client_state_bytes.as_ref()).map_err(Counterparty::raise_error)?;
 
         Counterparty::assert_type_url_matches(TENDERMINT_CLIENT_STATE_TYPE_URL, &any.type_url)?;
 
-        let client_state = DecodeTendermintClientStateProto::decode_client_state_bytes(&any.value)?;
+        let client_state = DecodeTendermintClientStateProto::decode_client_state_bytes(any.value)?;
 
         Ok(client_state)
     }
@@ -44,9 +44,9 @@ where
     Counterparty: CanRaiseError<ProtoError>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<TendermintClientState, Counterparty::Error> {
-        let client_state = Protobuf::<ProtoClientState>::decode_vec(client_state_bytes)
+        let client_state = Protobuf::<ProtoClientState>::decode_vec(&client_state_bytes)
             .map_err(Counterparty::raise_error)?;
 
         Ok(client_state)

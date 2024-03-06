@@ -39,7 +39,7 @@ where
     Counterparty: HasErrorType,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<Self::ClientState, Counterparty::Error>;
 }
 

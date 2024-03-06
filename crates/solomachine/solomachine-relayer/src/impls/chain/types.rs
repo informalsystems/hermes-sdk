@@ -89,9 +89,10 @@ where
     Counterparty: CanRaiseError<DecodeError>,
 {
     fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
+        client_state_bytes: Vec<u8>,
     ) -> Result<SolomachineClientState, Counterparty::Error> {
-        let any_value = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+        let any_value =
+            Any::decode(client_state_bytes.as_ref()).map_err(Counterparty::raise_error)?;
 
         let proto_state = ProtoClientState::decode(any_value.value.as_ref())
             .map_err(Counterparty::raise_error)?;
