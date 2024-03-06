@@ -19,12 +19,13 @@ delegate_components! {
     }
 }
 
-pub struct EncodeWrapWasmClientState;
+pub struct EncodeViaWasmClientState;
 
-impl<Encoding, Value> Decoder<Encoding, Via<WasmClientState, Value>> for EncodeWrapWasmClientState
+impl<Encoding, Value> Decoder<Encoding, Via<WasmClientState, Value>> for EncodeViaWasmClientState
 where
-    Encoding:
-        HasEncodedType<Encoded = Vec<u8>> + CanDecode<Via<Any, WasmClientState>> + CanDecode<Value>,
+    Encoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanDecode<Via<Any, WasmClientState>>
+        + CanDecode<Via<Any, Value>>,
 {
     fn decode(
         encoding: &Encoding,
@@ -32,8 +33,8 @@ where
     ) -> Result<Via<WasmClientState, Value>, Encoding::Error> {
         let wasm_client_state: Via<Any, WasmClientState> = encoding.decode(encoded)?;
 
-        let value: Value = encoding.decode(&wasm_client_state.value.data)?;
+        let value: Via<Any, Value> = encoding.decode(&wasm_client_state.value.data)?;
 
-        Ok(value.into())
+        Ok(value.value.into())
     }
 }

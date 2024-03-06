@@ -63,6 +63,7 @@ pub trait CanUseSovereignEncoding:
     + CanDecode<Via<Any, WasmClientState>>
     + CanDecode<ProtoSovereignClientState>
     + CanDecode<SovereignClientState>
+    + CanDecode<Via<Any, SovereignClientState>>
     + CanDecode<Via<WasmClientState, SovereignClientState>>
 {
 }

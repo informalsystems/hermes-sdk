@@ -49,12 +49,18 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
+    let store_postfix = format!(
+        "{}-{}",
+        SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis(),
+        rand::random::<u64>()
+    );
+
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
-        chain_store_dir: "./test-data".into(),
+        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
         chain_command_path: "simd".into(),
         account_prefix: "sov".into(),
         staking_denom: "stake".into(),
@@ -124,12 +130,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         }),
     });
 
-    let store_postfix = format!(
-        "{}-{}",
-        SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis(),
-        rand::random::<u64>()
-    );
-
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
         builder,
@@ -163,10 +163,15 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             "tmp",
             "validator",
         ).await?;
+
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
+
         cosmos_chain_driver.deposit_proposal("1", "100000000stake", "validator").await?;
+
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_VOTING_PERIOD").await?;
+
         cosmos_chain_driver.vote_proposal("1", "validator").await?;
+
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_PASSED").await?;
 
         let sovereign_chain = SovereignChain {
@@ -179,10 +184,12 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             &sovereign_chain,
             &create_client_settings
         ).await?;
+
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<SovereignChain>>::build_create_client_message(
             cosmos_chain,
             create_client_payload,
         ).await?;
+
         let _events = cosmos_chain.send_message(create_client_message).await?;
 
         let wasm_client_id = ClientId::from_str("08-wasm-0").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
@@ -194,15 +201,20 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             celestia_chain,
             &create_client_settings
         ).await?;
+
         let create_celestia_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
             cosmos_chain,
             create_celestia_client_payload,
         ).await?;
+
         let events = cosmos_chain.send_message(create_celestia_client_message).await?;
+
         let create_client_event = events.into_iter().find_map(try_extract_create_client_event).ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+
         let celestia_client_id = create_client_event.client_id;
 
         let wasm_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
         let celestia_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(cosmos_chain, &celestia_client_id).await?;
 
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.value.latest_height.revision_height() as u128 };
@@ -215,11 +227,13 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             &dummy_target_height,
             sovereign_client_state
         ).await?;
+
         let update_client_messages = <CosmosChain as CanBuildUpdateClientMessage<SovereignChain>>::build_update_client_message(
             cosmos_chain,
             &wasm_client_id,
             update_client_payload,
         ).await?;
+
         for update_message in update_client_messages.into_iter() {
             let _events = cosmos_chain.send_message(update_message).await?;
         }
