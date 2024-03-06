@@ -50,7 +50,7 @@ where
 
         let any: Any = Message::decode(encoded.as_ref()).map_err(Encoding::raise_error)?;
 
-        if &any.type_url != &type_url {
+        if any.type_url != type_url {
             return Err(Encoding::raise_error(TypeUrlMismatchError {
                 expected_url: type_url.to_owned(),
                 actual_url: any.type_url,
