@@ -1,10 +1,8 @@
-use cgp_core::{Async, CanRaiseError, ErrorRaiser, ProvideErrorType};
+use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoder, ProvideClientStateType,
-};
+use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
@@ -20,9 +18,7 @@ use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdat
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_proto::google::protobuf::Any;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use prost::{DecodeError, Message};
 
 use crate::impls::chain::component::SolomachineChainComponents;
 use crate::traits::solomachine::Solomachine;
@@ -82,27 +78,27 @@ where
     type ClientState = SolomachineClientState;
 }
 
-impl<Chain, Counterparty> ClientStateDecoder<SolomachineChain<Chain>, Counterparty>
-    for SolomachineChainComponents
-where
-    Chain: Async,
-    Counterparty: CanRaiseError<DecodeError>,
-{
-    fn decode_client_state_bytes(
-        client_state_bytes: Vec<u8>,
-    ) -> Result<SolomachineClientState, Counterparty::Error> {
-        let any_value =
-            Any::decode(client_state_bytes.as_ref()).map_err(Counterparty::raise_error)?;
+// impl<Chain, Counterparty> ClientStateDecoder<SolomachineChain<Chain>, Counterparty>
+//     for SolomachineChainComponents
+// where
+//     Chain: Async,
+//     Counterparty: CanRaiseError<DecodeError>,
+// {
+//     fn decode_client_state_bytes(
+//         client_state_bytes: Vec<u8>,
+//     ) -> Result<SolomachineClientState, Counterparty::Error> {
+//         let any_value =
+//             Any::decode(client_state_bytes.as_ref()).map_err(Counterparty::raise_error)?;
 
-        let proto_state = ProtoClientState::decode(any_value.value.as_ref())
-            .map_err(Counterparty::raise_error)?;
+//         let proto_state = ProtoClientState::decode(any_value.value.as_ref())
+//             .map_err(Counterparty::raise_error)?;
 
-        // TODO: handle TryInto error
-        let client_state = proto_state.try_into().unwrap();
+//         // TODO: handle TryInto error
+//         let client_state = proto_state.try_into().unwrap();
 
-        Ok(client_state)
-    }
-}
+//         Ok(client_state)
+//     }
+// }
 
 impl<Chain, Counterparty> ProvideConsensusStateType<SolomachineChain<Chain>, Counterparty>
     for SolomachineChainComponents

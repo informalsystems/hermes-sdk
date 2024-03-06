@@ -1,7 +1,6 @@
 pub mod channel;
 pub mod client;
 pub mod connection;
-pub mod decoders;
 pub mod encode;
 pub mod packet;
 pub mod queries;

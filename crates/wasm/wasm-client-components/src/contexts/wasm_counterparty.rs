@@ -3,31 +3,20 @@ use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use hermes_cosmos_client_components::encoding::components::CosmosEncodingComponents;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ClientStateTypeComponent,
-};
+use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
-use hermes_relayer_components::encode::impls::delegate::DelegateEncoding;
-use hermes_relayer_components::encode::traits::convert::ConverterComponent;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
-use hermes_relayer_components::encode::traits::decoder::DecoderComponent;
-use hermes_relayer_components::encode::traits::encoded::EncodedTypeComponent;
-use hermes_relayer_components::encode::traits::encoder::EncoderComponent;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
-use hermes_relayer_components::encode::traits::schema::SchemaGetterComponent;
-use hermes_relayer_components::encode::traits::schema::SchemaTypeComponent;
 use hermes_relayer_components::encode::types::via::Via;
 
-use crate::impls::decoders::client_state::DecodeWasmClientStateFromAnyProto;
 use crate::impls::encoding::components::IsWasmEncodingComponent;
 use crate::impls::encoding::components::WasmEncodingComponents;
 use crate::impls::types::client_state::ProvideWasmClientState;
@@ -63,7 +52,7 @@ impl ProvideEncodingType<WasmCounterparty> for WasmCounterpartyComponents {
 }
 
 impl EncodingGetter<WasmCounterparty> for WasmCounterpartyComponents {
-    fn encoding(context: &WasmCounterparty) -> &WasmClientEncoding {
+    fn encoding(_context: &WasmCounterparty) -> &WasmClientEncoding {
         &WasmClientEncoding
     }
 }

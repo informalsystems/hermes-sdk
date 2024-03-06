@@ -1,4 +1,3 @@
-use alloc::vec::Vec;
 use cgp_core::prelude::*;
 use core::time::Duration;
 
@@ -29,14 +28,4 @@ pub trait HasClientStateFields<Counterparty>:
     /// Check if the client state will expired when `elapsed` time has passed
     /// since the latest consensus state
     fn client_state_has_expired(client_state: &Self::ClientState, elapsed: Duration) -> bool;
-}
-
-#[derive_component(ClientStateDecoderComponent, ClientStateDecoder<Chain>)]
-pub trait CanDecodeClientState<Counterparty>: HasClientStateType<Counterparty>
-where
-    Counterparty: HasErrorType,
-{
-    fn decode_client_state_bytes(
-        client_state_bytes: Vec<u8>,
-    ) -> Result<Self::ClientState, Counterparty::Error>;
 }
