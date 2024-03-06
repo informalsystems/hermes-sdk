@@ -1691,7 +1691,9 @@ name = "hermes-cli-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
  "hermes-cosmos-client-components",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "ibc-proto 0.38.0",
  "ibc-relayer",

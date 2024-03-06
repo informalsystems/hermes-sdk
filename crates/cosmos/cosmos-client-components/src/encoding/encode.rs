@@ -15,6 +15,7 @@ delegate_components! {
 
         TendermintClientState: ConvertAndEncode<ProtoTendermintClientState>,
 
+        Any: EncodeAsProtobuf,
         ProtoTendermintClientState: EncodeAsProtobuf,
     }
 }
