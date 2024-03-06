@@ -4,8 +4,6 @@ use cgp_core::ErrorTypeComponent;
 use cgp_core::HasComponents;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
-use hermes_protobuf_components::traits::encoding::ProtobufEncodingGetterComponent;
-use hermes_protobuf_components::traits::encoding::ProtobufEncodingTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -13,6 +11,8 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
@@ -64,8 +64,8 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
-            ProtobufEncodingTypeComponent,
-            ProtobufEncodingGetterComponent,
+            EncodingTypeComponent,
+            EncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
         [

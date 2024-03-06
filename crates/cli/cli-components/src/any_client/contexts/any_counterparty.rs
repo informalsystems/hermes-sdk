@@ -6,8 +6,6 @@ use cgp_error_eyre::RaiseDebugError;
 use hermes_cosmos_client_components::encoding::components::CosmosEncodingComponents;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
-use hermes_protobuf_components::traits::encoding::ProtobufEncodingGetter;
-use hermes_protobuf_components::traits::encoding::ProvideProtobufEncodingType;
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateDecoderComponent;
@@ -24,6 +22,8 @@ use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::decoder::DecoderComponent;
 use hermes_relayer_components::encode::traits::encoded::EncodedTypeComponent;
 use hermes_relayer_components::encode::traits::encoder::EncoderComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
 use hermes_relayer_components::encode::traits::schema::SchemaGetterComponent;
 use hermes_relayer_components::encode::traits::schema::SchemaTypeComponent;
 
@@ -61,11 +61,11 @@ delegate_components! {
     }
 }
 
-impl ProvideProtobufEncodingType<AnyCounterparty> for AnyCounterpartyComponents {
+impl ProvideEncodingType<AnyCounterparty> for AnyCounterpartyComponents {
     type Encoding = AnyClientEncoding;
 }
 
-impl ProtobufEncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
+impl EncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
     fn encoding(_context: &AnyCounterparty) -> &AnyClientEncoding {
         &AnyClientEncoding
     }

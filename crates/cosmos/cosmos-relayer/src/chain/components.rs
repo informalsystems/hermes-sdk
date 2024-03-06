@@ -4,8 +4,6 @@ use cgp_core::ErrorTypeComponent;
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
 use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
-use hermes_protobuf_components::traits::encoding::ProtobufEncodingGetterComponent;
-use hermes_protobuf_components::traits::encoding::ProtobufEncodingTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -72,6 +70,8 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUn
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -135,8 +135,8 @@ delegate_components! {
         ]:
             ProvideTracingLogger,
         [
-            ProtobufEncodingTypeComponent,
-            ProtobufEncodingGetterComponent,
+            EncodingTypeComponent,
+            EncodingGetterComponent,
         ]:
             ProvideCosmosEncoding,
         [

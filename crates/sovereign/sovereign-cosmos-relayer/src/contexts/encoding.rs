@@ -4,11 +4,11 @@ use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
-use hermes_protobuf_components::traits::encoding::HasProtobufEncoding;
-use hermes_protobuf_components::traits::encoding::ProtobufEncodingGetter;
-use hermes_protobuf_components::traits::encoding::ProvideProtobufEncodingType;
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::HasEncoding;
+use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
 use hermes_relayer_components::encode::types::via::Via;
 use hermes_sovereign_client_components::encoding::components::IsSovereignEncodingComponent;
 use hermes_sovereign_client_components::encoding::components::SovereignEncodingComponents as BaseSovereignEncodingComponents;
@@ -40,16 +40,16 @@ delegate_components! {
 
 pub struct ProvideSovereignEncoding;
 
-impl<Context> ProvideProtobufEncodingType<Context> for ProvideSovereignEncoding
+impl<Context> ProvideEncodingType<Context> for ProvideSovereignEncoding
 where
     Context: Async,
 {
     type Encoding = SovereignEncoding;
 }
 
-impl<Context> ProtobufEncodingGetter<Context> for ProvideSovereignEncoding
+impl<Context> EncodingGetter<Context> for ProvideSovereignEncoding
 where
-    Context: HasProtobufEncoding<Encoding = SovereignEncoding>,
+    Context: HasEncoding<Encoding = SovereignEncoding>,
 {
     fn encoding(_context: &Context) -> &SovereignEncoding {
         &SovereignEncoding
