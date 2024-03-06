@@ -5,11 +5,7 @@ use hermes_relayer_components::encode::traits::encoder::Encoder;
 
 use crate::impls::any::EncodeAsAnyProtobuf;
 use crate::impls::from_context::EncodeFromContext;
-
-#[derive(Default, Clone)]
-pub struct Any<Value> {
-    pub value: Value,
-}
+use crate::types::any::Any;
 
 pub struct EncodeWrapAny;
 

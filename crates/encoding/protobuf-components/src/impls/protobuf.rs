@@ -8,7 +8,7 @@ pub struct EncodeAsProtobuf;
 
 impl<Encoding, Value> Encoder<Encoding, Value> for EncodeAsProtobuf
 where
-    Value: Message + Default,
+    Value: Message,
     Encoding: HasEncodedType<Encoded = Vec<u8>> + HasErrorType,
 {
     fn encode(_encoding: &Encoding, value: &Value) -> Result<Vec<u8>, Encoding::Error> {

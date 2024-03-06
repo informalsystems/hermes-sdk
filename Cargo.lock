@@ -1782,6 +1782,7 @@ dependencies = [
  "hermes-cli-components",
  "hermes-cosmos-client-components",
  "hermes-cosmos-test-components",
+ "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",

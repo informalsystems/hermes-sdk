@@ -3,9 +3,9 @@ use cgp_core::prelude::Async;
 
 use crate::encode::traits::encoded::ProvideEncodedType;
 
-pub struct ProvideEncodedBytesType;
+pub struct ProvideEncodedBytes;
 
-impl<Encode> ProvideEncodedType<Encode> for ProvideEncodedBytesType
+impl<Encode> ProvideEncodedType<Encode> for ProvideEncodedBytes
 where
     Encode: Async,
 {

@@ -1,4 +1,4 @@
-use cgp_core::CanRaiseError;
+use cgp_core::{CanRaiseError, HasErrorType};
 
 use crate::encode::traits::convert::Converter;
 
@@ -11,5 +11,17 @@ where
 {
     fn convert(_encoding: &Encoding, from: &From) -> Result<To, Encoding::Error> {
         from.clone().try_into().map_err(Encoding::raise_error)
+    }
+}
+
+pub struct ConvertFrom;
+
+impl<Encoding, From, To> Converter<Encoding, From, To> for ConvertFrom
+where
+    Encoding: HasErrorType,
+    From: Clone + Into<To>,
+{
+    fn convert(_encoding: &Encoding, from: &From) -> Result<To, Encoding::Error> {
+        Ok(from.clone().into())
     }
 }

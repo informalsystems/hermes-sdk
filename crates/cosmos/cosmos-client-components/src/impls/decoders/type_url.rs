@@ -1,10 +1,5 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-
-#[derive(Debug)]
-pub struct TypeUrlMismatchError {
-    pub expected_url: String,
-    pub actual_url: String,
-}
+use hermes_protobuf_components::impls::any::TypeUrlMismatchError;
 
 pub trait CanAssertTypeUrlMatches: HasErrorType {
     fn assert_type_url_matches(expected: &str, actual: &str) -> Result<(), Self::Error>;

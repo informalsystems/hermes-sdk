@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_protobuf_components::impls::protobuf::EncodeAsProtobuf;
-use hermes_protobuf_components::impls::wrap_any::{Any, EncodeWrapAny};
+use hermes_protobuf_components::impls::wrap_any::EncodeWrapAny;
+use hermes_protobuf_components::types::any::Any;
 use hermes_relayer_components::encode::impls::convert_and_encode::ConvertAndEncode;
 use hermes_relayer_components::encode::traits::decoder::Decoder;
 use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
