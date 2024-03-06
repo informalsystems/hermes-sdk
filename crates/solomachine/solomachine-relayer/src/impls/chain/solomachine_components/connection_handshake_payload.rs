@@ -1,5 +1,7 @@
 use cgp_core::prelude::*;
+use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
+use hermes_relayer_components::encode::types::via::Via;
 use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
@@ -25,7 +27,7 @@ where
 {
     async fn build_connection_open_init_payload(
         chain: &SolomachineChain<Chain>,
-        _client_state: &SolomachineClientState,
+        _client_state: &Via<Any, SolomachineClientState>,
     ) -> Result<SolomachineConnectionOpenInitPayload, Chain::Error> {
         let commitment_prefix = chain.chain.commitment_prefix();
 
@@ -38,7 +40,7 @@ where
 
     async fn build_connection_open_try_payload(
         chain: &SolomachineChain<Chain>,
-        solo_client_state: &SolomachineClientState,
+        solo_client_state: &Via<Any, SolomachineClientState>,
         height: &Height,
         client_id: &ClientId,
         connection_id: &ConnectionId,
@@ -64,7 +66,7 @@ where
         let connection_proof = connection_proof_data(
             public_key,
             secret_key,
-            solo_client_state,
+            &solo_client_state.value,
             commitment_prefix,
             connection_id,
             connection,
@@ -76,7 +78,7 @@ where
         let client_state_proof = client_state_proof_data(
             public_key,
             secret_key,
-            solo_client_state,
+            &solo_client_state.value,
             commitment_prefix,
             client_id,
             &cosmos_client_state,
@@ -90,7 +92,7 @@ where
 
         let consensus_state_proof = consensus_state_proof_data(
             secret_key,
-            solo_client_state,
+            &solo_client_state.value,
             commitment_prefix,
             client_id,
             *height,
@@ -114,7 +116,7 @@ where
 
     async fn build_connection_open_ack_payload(
         chain: &SolomachineChain<Chain>,
-        client_state: &SolomachineClientState,
+        client_state: &Via<Any, SolomachineClientState>,
         height: &Height,
         client_id: &ClientId,
         connection_id: &ConnectionId,
@@ -144,7 +146,7 @@ where
         let client_state_proof = client_state_proof_data(
             public_key,
             secret_key,
-            client_state,
+            &client_state.value,
             commitment_prefix,
             client_id,
             &cosmos_client_state,
@@ -155,7 +157,7 @@ where
             connection_proof_data(
                 public_key,
                 secret_key,
-                client_state,
+                client_state.as_ref(),
                 commitment_prefix,
                 connection_id,
                 connection,
@@ -169,7 +171,7 @@ where
 
         let consensus_state_proof = consensus_state_proof_data(
             secret_key,
-            client_state,
+            client_state.as_ref(),
             commitment_prefix,
             client_id,
             *height,
@@ -191,7 +193,7 @@ where
 
     async fn build_connection_open_confirm_payload(
         chain: &SolomachineChain<Chain>,
-        client_state: &SolomachineClientState,
+        client_state: &Via<Any, SolomachineClientState>,
         height: &Height,
         client_id: &ClientId,
         connection_id: &ConnectionId,
@@ -215,7 +217,7 @@ where
             connection_proof_data(
                 public_key,
                 secret_key,
-                client_state,
+                client_state.as_ref(),
                 commitment_prefix,
                 connection_id,
                 connection,
