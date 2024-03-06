@@ -5,6 +5,7 @@ use cgp_core::ErrorTypeComponent;
 use hermes_cosmos_client_components::encoding::components::{
     CosmosEncodingComponents as BaseCosmosEncodingComponents, IsCosmosEncodingComponent,
 };
+use hermes_protobuf_components::traits::encoding::ProvideProtobufEncoding;
 use hermes_protobuf_components::types::any::Any;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
@@ -35,6 +36,19 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleCosmosError,
+    }
+}
+
+pub struct ProvideCosmosEncoding;
+
+impl<Context> ProvideProtobufEncoding<Context> for ProvideCosmosEncoding
+where
+    Context: Async,
+{
+    type Encoding = CosmosEncoding;
+
+    fn encoding(_context: &Context) -> &CosmosEncoding {
+        &CosmosEncoding
     }
 }
 

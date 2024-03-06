@@ -4,6 +4,7 @@ use cgp_core::ErrorTypeComponent;
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
 use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
+use hermes_protobuf_components::traits::encoding::ProtobufEncodingComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -104,6 +105,7 @@ use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessag
 use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use crate::contexts::chain::CosmosChain;
+use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
@@ -132,6 +134,8 @@ delegate_components! {
             LoggerFieldComponent,
         ]:
             ProvideTracingLogger,
+        ProtobufEncodingComponent:
+            ProvideCosmosEncoding,
         [
             HeightTypeComponent,
             HeightIncrementerComponent,
