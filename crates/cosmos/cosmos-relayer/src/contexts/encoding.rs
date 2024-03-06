@@ -8,12 +8,13 @@ use hermes_cosmos_client_components::encoding::components::{
 use hermes_protobuf_components::traits::encoding::HasProtobufEncodingType;
 use hermes_protobuf_components::traits::encoding::ProtobufEncodingGetter;
 use hermes_protobuf_components::traits::encoding::ProvideProtobufEncodingType;
-use hermes_protobuf_components::types::any::Any;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
 use hermes_relayer_components::encode::traits::encoder::CanEncode;
+use hermes_relayer_components::encode::types::wrap::Wrap;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
+use prost_types::Any;
 
 use crate::impls::error::HandleCosmosError;
 
@@ -66,8 +67,8 @@ pub trait CheckCosmosEncoding:
     + CanDecode<ProtoTendermintClientState>
     + CanEncode<TendermintClientState>
     + CanDecode<TendermintClientState>
-    + CanEncode<Any<TendermintClientState>>
-    + CanDecode<Any<TendermintClientState>>
+    + CanEncode<Wrap<Any, TendermintClientState>>
+    + CanDecode<Wrap<Any, TendermintClientState>>
 {
 }
 

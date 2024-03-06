@@ -27,6 +27,7 @@ tendermint-rpc                      = { workspace = true, features = ["http-clie
 
 flex-error      = { workspace = true }
 prost           = { workspace = true }
+prost-types     = { workspace = true }
 eyre            = { workspace = true }
 tokio           = { workspace = true }
 itertools       = { workspace = true }

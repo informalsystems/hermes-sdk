@@ -14,6 +14,15 @@ use tendermint_proto::Error as ProtoError;
 
 pub struct DecodeSovereignClientStateFromAnyProto;
 
+// impl<Encoding> Decoder<Encoding, SovTmClientState> for DecodeSovereignClientStateFromAnyProto
+// where
+//     Encoding:
+//         CanDecode<WasmClientState>
+//         ,
+// {
+
+// }
+
 impl<Chain, Counterparty> ClientStateDecoder<Chain, Counterparty>
     for DecodeSovereignClientStateFromAnyProto
 where

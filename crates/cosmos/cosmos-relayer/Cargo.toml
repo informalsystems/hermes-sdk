@@ -38,6 +38,7 @@ tendermint-rpc                      = { workspace = true, features = ["http-clie
 eyre            = { workspace = true }
 flex-error      = { workspace = true }
 prost           = { workspace = true }
+prost-types     = { workspace = true }
 tracing         = { workspace = true }
 tokio           = { workspace = true }
 tonic           = { workspace = true, features = ["tls", "tls-roots"] }
