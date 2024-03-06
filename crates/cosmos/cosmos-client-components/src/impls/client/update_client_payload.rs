@@ -4,10 +4,12 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::U
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_relayer_components::encode::types::via::Via;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer_types::core::ics02_client::header::AnyHeader;
 use ibc_relayer_types::Height;
+use prost_types::Any;
 
 use crate::traits::chain_handle::HasBlockingChainHandle;
 use crate::types::payloads::client::CosmosUpdateClientPayload;
@@ -20,14 +22,14 @@ impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
 where
     Chain: HasHeightType<Height = Height>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
-        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+        + HasClientStateType<Counterparty, ClientState = Via<Any, TendermintClientState>>
         + HasBlockingChainHandle,
 {
     async fn build_update_client_payload(
         chain: &Chain,
         trusted_height: &Height,
         target_height: &Height,
-        client_state: TendermintClientState,
+        client_state: Chain::ClientState,
     ) -> Result<CosmosUpdateClientPayload, Chain::Error> {
         let trusted_height = *trusted_height;
         let target_height = *target_height;
@@ -38,7 +40,7 @@ where
                     .build_header(
                         trusted_height,
                         target_height,
-                        AnyClientState::Tendermint(client_state),
+                        AnyClientState::Tendermint(client_state.value),
                     )
                     .map_err(Chain::raise_error)?;
 

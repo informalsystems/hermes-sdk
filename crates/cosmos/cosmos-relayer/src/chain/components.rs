@@ -77,7 +77,6 @@ use hermes_relayer_components::logger::traits::has_logger::{
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
-use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
@@ -117,8 +116,6 @@ impl HasComponents for CosmosChainComponents {
 impl HasComponents for CosmosChain {
     type Components = CosmosChainComponents;
 }
-
-impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
 delegate_components! {
     CosmosChainComponents {

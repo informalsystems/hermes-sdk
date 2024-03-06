@@ -16,6 +16,7 @@ description  = """
 
 [dependencies]
 cgp-core                            = { workspace = true }
+cgp-error-eyre                      = { workspace = true }
 eyre                                = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 hermes-relayer-components           = { workspace = true }

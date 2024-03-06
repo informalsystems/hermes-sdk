@@ -8,7 +8,6 @@ use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainType
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::client_state::ClientStateDecoderComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateFieldsGetterComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -27,7 +26,6 @@ use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType
 use hermes_relayer_components::encode::traits::schema::SchemaGetterComponent;
 use hermes_relayer_components::encode::traits::schema::SchemaTypeComponent;
 
-use crate::any_client::impls::decoders::client_state::DecodeAnyClientState;
 use crate::any_client::impls::encoding::encode::AnyClientEncoderComponents;
 use crate::any_client::impls::types::client_state::ProvideAnyClientState;
 use crate::any_client::types::client_state::AnyClientState;
@@ -56,8 +54,6 @@ delegate_components! {
             ClientStateFieldsGetterComponent,
         ]:
             ProvideAnyClientState,
-        ClientStateDecoderComponent:
-            DecodeAnyClientState,
     }
 }
 
@@ -71,6 +67,7 @@ impl EncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
     }
 }
 
+#[derive(Default)]
 pub struct AnyClientEncoding;
 
 pub struct AnyClientEncodingComponents;

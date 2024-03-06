@@ -10,6 +10,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
@@ -50,7 +51,7 @@ pub struct QueryClients {
 impl CommandRunner<CosmosBuilder> for QueryClients {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.host_chain_id).await?;
-        let clients = query_all_client_states::<_, AnyCounterparty>(
+        let clients = query_all_client_states::<CosmosChain, AnyCounterparty>(
             &chain,
             &self.host_chain_id,
             self.reference_chain_id.as_ref(),

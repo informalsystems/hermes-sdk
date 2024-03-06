@@ -5,7 +5,6 @@ use hermes_cosmos_client_components::methods::event::try_extract_create_client_e
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use hermes_sovereign_client_components::sovereign::context::sovereign_counterparty::SovereignCounterparty;
 use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -188,7 +187,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let wasm_client_id = ClientId::from_str("08-wasm-0").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
 
-        let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+        let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
 
         // Create Celestia client (DA client) on Cosmos chain
         let create_celestia_client_payload = <CosmosChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
@@ -207,7 +206,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         let celestia_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(cosmos_chain, &celestia_client_id).await?;
 
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u128 };
-        let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u128 };
+        let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.value.latest_height.revision_height()) as u128 };
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(

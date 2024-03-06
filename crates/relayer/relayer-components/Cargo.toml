@@ -14,3 +14,4 @@ description  = """
 
 [dependencies]
 cgp-core    = { workspace = true }
+serde       = { workspace = true }

@@ -13,6 +13,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_relayer_components::encode::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::encode::traits::has_encoding::{
     EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -35,7 +36,7 @@ use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
 use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
 use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 
-use crate::contexts::encoding::ProvideSovereignEncoding;
+use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
@@ -116,7 +117,7 @@ pub trait CheckSovereignChainImpls:
     + HasHeightType<Height = RollupHeight>
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
-    + CanDecodeClientState<CosmosChain>
+    + HasEncoding<Encoding = SovereignEncoding>
 {
 }
 

@@ -1,6 +1,7 @@
-use crate::types::tendermint::TendermintClientState;
 use cgp_core::prelude::*;
 use hermes_protobuf_components::impl_type_url;
+
+use crate::types::tendermint::TendermintClientState;
 
 pub struct CosmosTypeUrlSchemas;
 

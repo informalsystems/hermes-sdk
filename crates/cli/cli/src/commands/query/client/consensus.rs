@@ -60,7 +60,7 @@ impl CommandRunner<CosmosBuilder> for QueryClientConsensus {
             &chain, &self.client_id
         )
         .await
-        .map(|cs| cs.chain_id)
+        .map(|cs| cs.value.chain_id)
         .wrap_error("failed to query counterparty chain from client state")?;
 
         if let Some(consensus_height) = self.consensus_height {
