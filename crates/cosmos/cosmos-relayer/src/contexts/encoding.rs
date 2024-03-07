@@ -18,7 +18,6 @@ use prost_types::Any;
 
 use crate::impls::error::HandleCosmosError;
 
-#[derive(Default)]
 pub struct CosmosEncoding;
 
 pub struct CosmosEncodingComponents;

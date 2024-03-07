@@ -81,7 +81,6 @@ impl DefaultEncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
     }
 }
 
-#[derive(Default)]
 pub struct AnyClientEncoding;
 
 pub struct AnyClientEncodingComponents;

@@ -69,7 +69,6 @@ impl DefaultEncodingGetter<WasmCounterparty> for WasmCounterpartyComponents {
     }
 }
 
-#[derive(Default)]
 pub struct WasmClientEncoding;
 
 pub struct WasmClientEncodingComponents;

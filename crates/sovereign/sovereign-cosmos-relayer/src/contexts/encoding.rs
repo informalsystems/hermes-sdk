@@ -17,7 +17,6 @@ use hermes_wasm_client_components::types::client_state::ProtoWasmClientState;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use ibc_proto_new::ibc::lightclients::sovereign::tendermint::v1::ClientState as ProtoSovereignClientState;
 
-#[derive(Default)]
 pub struct SovereignEncoding;
 
 pub struct SovereignEncodingComponents;

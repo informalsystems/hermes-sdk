@@ -12,7 +12,6 @@ use crate::encoding::components::IsSolomachineEncodingComponent;
 use crate::encoding::components::SolomachineEncodingComponents as BaseSolomachineEncodingComponents;
 use crate::types::client_state::SolomachineClientState;
 
-#[derive(Default)]
 pub struct SolomachineEncoding;
 
 pub struct SolomachineEncodingComponents;
