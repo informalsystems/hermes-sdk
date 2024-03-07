@@ -1,8 +1,6 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use serde::Serialize;
-
 pub struct Via<Wrapper, Value> {
     pub value: Value,
     pub phantom: PhantomData<Wrapper>,
@@ -38,17 +36,5 @@ where
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         self.value.fmt(f)
-    }
-}
-
-impl<Wrapper, Value> Serialize for Via<Wrapper, Value>
-where
-    Value: Serialize,
-{
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        self.value.serialize(serializer)
     }
 }

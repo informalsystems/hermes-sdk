@@ -9,3 +9,8 @@ pub trait HasEncodingType: Async {
 pub trait HasEncoding: HasEncodingType {
     fn encoding(&self) -> &Self::Encoding;
 }
+
+#[derive_component(DefaultEncodingGetterComponent, DefaultEncodingGetter<Context>)]
+pub trait HasDefaultEncoding: HasEncodingType {
+    fn default_encoding() -> &'static Self::Encoding;
+}

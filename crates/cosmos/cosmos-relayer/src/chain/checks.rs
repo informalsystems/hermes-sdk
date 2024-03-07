@@ -12,14 +12,16 @@ use crate::contexts::chain::CosmosChain;
 
 impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
-pub trait CheckCosmosChainImpls:
+pub trait CanUseCosmosChain:
     CanQueryBalance
     + CanIbcTransferToken<CosmosChain>
     + CanBuildIbcTokenTransferMessage<CosmosChain>
+    + CanQueryClientState<CosmosChain>
+    + CanQueryAllClientStates<CosmosChain>
     + CanQueryClientState<AnyCounterparty>
     + CanQueryAllClientStates<AnyCounterparty>
     + CanAssertEventualAmount
 {
 }
 
-impl CheckCosmosChainImpls for CosmosChain {}
+impl CanUseCosmosChain for CosmosChain {}

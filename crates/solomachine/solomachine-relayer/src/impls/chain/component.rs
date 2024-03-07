@@ -1,7 +1,10 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_client_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_client_components::impls::packet::packet_fields::CosmosPacketFieldReader;
+use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_protobuf_components::types::Any;
+use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
@@ -25,6 +28,8 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -57,6 +62,10 @@ where
     type Components = SolomachineChainComponents;
 }
 
+impl<Chain> DelegateComponent<SolomachineChain<Chain>> for CosmosQueryClientStateComponents {
+    type Delegate = QueryAndDecodeClientStateVia<Any>;
+}
+
 delegate_components! {
     SolomachineChainComponents {
         RuntimeTypeComponent:
@@ -80,6 +89,8 @@ delegate_components! {
             EventTypeComponent,
         ]:
             ProvideSolomachineChainTypes,
+        EncodingGetterComponent:
+            GetDefaultEncoding,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         MessageSenderComponent:

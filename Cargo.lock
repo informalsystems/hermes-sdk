@@ -1895,7 +1895,6 @@ name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
- "serde",
 ]
 
 [[package]]
@@ -1992,6 +1991,7 @@ dependencies = [
  "cgp-core",
  "cgp-error-eyre",
  "hermes-celestia-chain",
+ "hermes-cosmos-client-components",
  "hermes-cosmos-relayer",
  "hermes-protobuf-components",
  "hermes-relayer-components",

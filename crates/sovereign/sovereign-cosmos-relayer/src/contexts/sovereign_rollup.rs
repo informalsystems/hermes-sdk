@@ -11,6 +11,7 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
@@ -66,6 +67,7 @@ delegate_components! {
         [
             EncodingTypeComponent,
             EncodingGetterComponent,
+            DefaultEncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
         [

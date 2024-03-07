@@ -7,7 +7,7 @@ pub struct SolomachineConverterComponents;
 
 delegate_components! {
     SolomachineConverterComponents {
-        (SolomachineClientState, ProtoSolomachineClientState): TryConvertFrom,
-        (ProtoSolomachineClientState, SolomachineClientState): ConvertFrom,
+        (SolomachineClientState, ProtoSolomachineClientState): ConvertFrom,
+        (ProtoSolomachineClientState, SolomachineClientState): TryConvertFrom,
     }
 }

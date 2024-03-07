@@ -8,9 +8,10 @@ use hermes_cosmos_client_components::encoding::components::{
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
 use hermes_relayer_components::encode::traits::encoder::CanEncode;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetter;
 use hermes_relayer_components::encode::traits::has_encoding::HasEncodingType;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
+use hermes_relayer_components::encode::traits::schema::HasSchema;
 use hermes_relayer_components::encode::types::via::Via;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
@@ -18,7 +19,6 @@ use prost_types::Any;
 
 use crate::impls::error::HandleCosmosError;
 
-#[derive(Default)]
 pub struct CosmosEncoding;
 
 pub struct CosmosEncodingComponents;
@@ -52,11 +52,11 @@ where
     type Encoding = CosmosEncoding;
 }
 
-impl<Context> EncodingGetter<Context> for ProvideCosmosEncoding
+impl<Context> DefaultEncodingGetter<Context> for ProvideCosmosEncoding
 where
     Context: HasEncodingType<Encoding = CosmosEncoding>,
 {
-    fn encoding(_context: &Context) -> &CosmosEncoding {
+    fn default_encoding() -> &'static CosmosEncoding {
         &CosmosEncoding
     }
 }
@@ -69,6 +69,7 @@ pub trait CheckCosmosEncoding:
     + CanDecode<TendermintClientState>
     + CanEncode<Via<Any, TendermintClientState>>
     + CanDecode<Via<Any, TendermintClientState>>
+    + HasSchema<TendermintClientState>
 {
 }
 

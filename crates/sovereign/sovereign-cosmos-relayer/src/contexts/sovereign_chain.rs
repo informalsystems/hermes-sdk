@@ -1,9 +1,11 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
@@ -11,11 +13,13 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use hermes_relayer_components::encode::traits::has_encoding::HasEncoding;
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
+use hermes_relayer_components::encode::traits::has_encoding::{
+    DefaultEncodingGetterComponent, HasEncoding,
+};
 use hermes_relayer_components::encode::traits::has_encoding::{
     EncodingGetterComponent, EncodingTypeComponent,
 };
-use hermes_relayer_components::encode::types::via::Via;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -87,9 +91,16 @@ delegate_components! {
         ]: SovereignDataChainType,
         [
             EncodingTypeComponent,
-            EncodingGetterComponent,
+            DefaultEncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
+        EncodingGetterComponent: GetDefaultEncoding,
+    }
+}
+
+delegate_components! {
+    CosmosQueryClientStateComponents {
+        SovereignChain: QueryAndDecodeClientStateVia<WasmClientState>,
     }
 }
 
@@ -115,7 +126,7 @@ pub trait CheckSovereignChainImpls:
     HasDataChain
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
-    + HasClientStateType<CosmosChain, ClientState = Via<WasmClientState, SovereignClientState>>
+    + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
 {

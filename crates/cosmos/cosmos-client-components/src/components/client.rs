@@ -1,5 +1,5 @@
 use cgp_core::prelude::delegate_components;
-use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientState;
+use hermes_relayer_components::chain::impls::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
@@ -94,7 +94,9 @@ use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
-use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
+use crate::impls::queries::client_state::{
+    CosmosQueryClientStateComponents, QueryCosmosClientStateFromAbci,
+};
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromChainHandle;
@@ -171,7 +173,7 @@ delegate_components! {
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,
         ]:
-            QueryAndDecodeClientState,
+            DelegateQueryClientState<CosmosQueryClientStateComponents>,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:

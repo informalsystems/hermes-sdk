@@ -1,5 +1,4 @@
 use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
-use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
@@ -17,9 +16,8 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_relayer_components::encode::traits::has_encoding::{
-    EncodingGetter, ProvideEncodingType,
+    DefaultEncodingGetter, ProvideEncodingType,
 };
-use hermes_relayer_components::encode::types::via::Via;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -82,11 +80,11 @@ where
     type Encoding = SolomachineEncoding;
 }
 
-impl<Chain> EncodingGetter<SolomachineChain<Chain>> for SolomachineChainComponents
+impl<Chain> DefaultEncodingGetter<SolomachineChain<Chain>> for SolomachineChainComponents
 where
     Chain: Async,
 {
-    fn encoding(_context: &SolomachineChain<Chain>) -> &SolomachineEncoding {
+    fn default_encoding() -> &'static SolomachineEncoding {
         &SolomachineEncoding
     }
 }
@@ -96,7 +94,7 @@ impl<Chain, Counterparty> ProvideClientStateType<SolomachineChain<Chain>, Counte
 where
     Chain: Async,
 {
-    type ClientState = Via<Any, SolomachineClientState>;
+    type ClientState = SolomachineClientState;
 }
 
 impl<Chain, Counterparty> ProvideConsensusStateType<SolomachineChain<Chain>, Counterparty>

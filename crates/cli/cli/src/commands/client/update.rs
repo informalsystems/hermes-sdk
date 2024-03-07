@@ -53,7 +53,7 @@ impl CommandRunner<CosmosBuilder> for ClientUpdate {
             query_client_state_with_latest_height(&host_chain, &self.client_id)
             .await?;
 
-        let reference_chain_id = client_state.value.chain_id;
+        let reference_chain_id = client_state.chain_id;
         let reference_chain = builder.build_chain(&reference_chain_id).await?;
 
         let relayer = builder

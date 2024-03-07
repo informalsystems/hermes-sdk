@@ -34,11 +34,11 @@ where
     }
 }
 
-impl<Encoding, To, From, Components, Delegate> Converter<Encoding, From, To>
+impl<Encoding, From, To, Components, Delegate> Converter<Encoding, From, To>
     for DelegateEncoding<Components>
 where
     Encoding: HasErrorType,
-    Components: DelegateComponent<(To, From), Delegate = Delegate>,
+    Components: DelegateComponent<(From, To), Delegate = Delegate>,
     Delegate: Converter<Encoding, From, To>,
 {
     fn convert(encoding: &Encoding, from: &From) -> Result<To, Encoding::Error> {
