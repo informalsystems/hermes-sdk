@@ -11,6 +11,7 @@ use hermes_relayer_components::encode::traits::encoder::CanEncode;
 use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetter;
 use hermes_relayer_components::encode::traits::has_encoding::HasEncodingType;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
+use hermes_relayer_components::encode::traits::schema::HasSchema;
 use hermes_relayer_components::encode::types::via::Via;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
@@ -68,6 +69,7 @@ pub trait CheckCosmosEncoding:
     + CanDecode<TendermintClientState>
     + CanEncode<Via<Any, TendermintClientState>>
     + CanDecode<Via<Any, TendermintClientState>>
+    + HasSchema<TendermintClientState>
 {
 }
 
