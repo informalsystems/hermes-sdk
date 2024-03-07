@@ -89,11 +89,10 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                 .get("user-b")
                 .ok_or_else(|| eyre!("expect user-a wallet"))?;
 
-            let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
+            let transfer_denom = &rollup_driver.genesis_config.transfer_token_address.address;
 
             let address_a = &wallet_a.address.address;
             let address_b = &wallet_b.address.address;
-            let transfer_denom = &transfer_denom.address;
 
             {
                 let amount = rollup.query_balance(address_a, transfer_denom).await?;
