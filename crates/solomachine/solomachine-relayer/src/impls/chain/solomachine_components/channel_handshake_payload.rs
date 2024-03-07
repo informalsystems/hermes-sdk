@@ -45,7 +45,7 @@ where
         let commitment_prefix: &str = chain.chain.commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(&client_state, commitment_prefix, channel_id, channel)
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
                 .map_err(Chain::encode_error)?;
 
         let secret_key = chain.chain.secret_key();
@@ -85,7 +85,7 @@ where
         let commitment_prefix = chain.chain.commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(&client_state, commitment_prefix, channel_id, channel)
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
                 .map_err(Chain::encode_error)?;
 
         let secret_key = chain.chain.secret_key();
@@ -121,7 +121,7 @@ where
         let commitment_prefix = chain.chain.commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(&client_state, commitment_prefix, channel_id, channel)
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
                 .map_err(Chain::encode_error)?;
 
         let secret_key = chain.chain.secret_key();

@@ -64,7 +64,7 @@ where
         let connection_proof = connection_proof_data(
             public_key,
             secret_key,
-            &solo_client_state,
+            solo_client_state,
             commitment_prefix,
             connection_id,
             connection,
@@ -76,7 +76,7 @@ where
         let client_state_proof = client_state_proof_data(
             public_key,
             secret_key,
-            &solo_client_state,
+            solo_client_state,
             commitment_prefix,
             client_id,
             &cosmos_client_state,
@@ -90,7 +90,7 @@ where
 
         let consensus_state_proof = consensus_state_proof_data(
             secret_key,
-            &solo_client_state,
+            solo_client_state,
             commitment_prefix,
             client_id,
             *height,
@@ -144,7 +144,7 @@ where
         let client_state_proof = client_state_proof_data(
             public_key,
             secret_key,
-            &client_state,
+            client_state,
             commitment_prefix,
             client_id,
             &cosmos_client_state,
