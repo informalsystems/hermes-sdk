@@ -17,8 +17,8 @@ delegate_components! {
         ]:
             DelegateEncoding<WasmConverterComponents>,
         (SovereignClientState, ProtoSovereignClientState):
-            TryConvertFrom,
-        (ProtoSovereignClientState, SovereignClientState):
             ConvertFrom,
+        (ProtoSovereignClientState, SovereignClientState):
+            TryConvertFrom,
     }
 }

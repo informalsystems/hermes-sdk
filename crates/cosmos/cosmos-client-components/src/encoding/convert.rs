@@ -7,7 +7,7 @@ pub struct CosmosConverterComponents;
 
 delegate_components! {
     CosmosConverterComponents {
-        (TendermintClientState, ProtoTendermintClientState): TryConvertFrom,
-        (ProtoTendermintClientState, TendermintClientState): ConvertFrom,
+        (TendermintClientState, ProtoTendermintClientState): ConvertFrom,
+        (ProtoTendermintClientState, TendermintClientState): TryConvertFrom,
     }
 }

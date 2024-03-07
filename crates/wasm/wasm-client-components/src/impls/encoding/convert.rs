@@ -7,7 +7,7 @@ pub struct WasmConverterComponents;
 
 delegate_components! {
     WasmConverterComponents {
-        (WasmClientState, ProtoWasmClientState): TryConvertFrom,
-        (ProtoWasmClientState, WasmClientState): ConvertFrom,
+        (WasmClientState, ProtoWasmClientState): ConvertFrom,
+        (ProtoWasmClientState, WasmClientState): TryConvertFrom,
     }
 }
