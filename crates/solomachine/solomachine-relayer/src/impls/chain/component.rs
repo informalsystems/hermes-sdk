@@ -28,6 +28,8 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -87,6 +89,8 @@ delegate_components! {
             EventTypeComponent,
         ]:
             ProvideSolomachineChainTypes,
+        EncodingGetterComponent:
+            GetDefaultEncoding,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         MessageSenderComponent:

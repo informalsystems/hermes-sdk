@@ -6,7 +6,7 @@ use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetter;
 use hermes_relayer_components::encode::traits::has_encoding::HasEncodingType;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
 use hermes_relayer_components::encode::types::via::Via;
@@ -48,11 +48,11 @@ where
     type Encoding = SovereignEncoding;
 }
 
-impl<Context> EncodingGetter<Context> for ProvideSovereignEncoding
+impl<Context> DefaultEncodingGetter<Context> for ProvideSovereignEncoding
 where
     Context: HasEncodingType<Encoding = SovereignEncoding>,
 {
-    fn encoding(_context: &Context) -> &SovereignEncoding {
+    fn default_encoding() -> &'static SovereignEncoding {
         &SovereignEncoding
     }
 }

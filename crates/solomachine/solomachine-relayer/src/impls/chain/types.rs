@@ -16,7 +16,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_relayer_components::encode::traits::has_encoding::{
-    EncodingGetter, ProvideEncodingType,
+    DefaultEncodingGetter, ProvideEncodingType,
 };
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
@@ -80,11 +80,11 @@ where
     type Encoding = SolomachineEncoding;
 }
 
-impl<Chain> EncodingGetter<SolomachineChain<Chain>> for SolomachineChainComponents
+impl<Chain> DefaultEncodingGetter<SolomachineChain<Chain>> for SolomachineChainComponents
 where
     Chain: Async,
 {
-    fn encoding(_context: &SolomachineChain<Chain>) -> &SolomachineEncoding {
+    fn default_encoding() -> &'static SolomachineEncoding {
         &SolomachineEncoding
     }
 }

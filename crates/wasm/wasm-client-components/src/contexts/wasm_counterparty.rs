@@ -14,8 +14,10 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
 use hermes_relayer_components::encode::types::via::Via;
 
@@ -46,6 +48,8 @@ delegate_components! {
             ProvideCosmosChainTypes,
         ClientStateTypeComponent:
             ProvideWasmClientState,
+        EncodingGetterComponent:
+            GetDefaultEncoding,
     }
 }
 
@@ -59,8 +63,8 @@ impl ProvideEncodingType<WasmCounterparty> for WasmCounterpartyComponents {
     type Encoding = WasmClientEncoding;
 }
 
-impl EncodingGetter<WasmCounterparty> for WasmCounterpartyComponents {
-    fn encoding(_context: &WasmCounterparty) -> &WasmClientEncoding {
+impl DefaultEncodingGetter<WasmCounterparty> for WasmCounterpartyComponents {
+    fn default_encoding() -> &'static WasmClientEncoding {
         &WasmClientEncoding
     }
 }

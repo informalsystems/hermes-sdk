@@ -72,6 +72,8 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUn
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
+use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
 use hermes_relayer_components::logger::traits::has_logger::{
@@ -136,9 +138,10 @@ delegate_components! {
             ProvideTracingLogger,
         [
             EncodingTypeComponent,
-            EncodingGetterComponent,
+            DefaultEncodingGetterComponent,
         ]:
             ProvideCosmosEncoding,
+        EncodingGetterComponent: GetDefaultEncoding,
         [
             HeightTypeComponent,
             HeightIncrementerComponent,

@@ -17,6 +17,7 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::impls::delegate::DelegateEncoding;
 use hermes_relayer_components::encode::impls::via_identity::Identity;
 use hermes_relayer_components::encode::traits::convert::ConverterComponent;
@@ -24,7 +25,8 @@ use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::decoder::DecoderComponent;
 use hermes_relayer_components::encode::traits::encoded::EncodedTypeComponent;
 use hermes_relayer_components::encode::traits::encoder::EncoderComponent;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
 use hermes_relayer_components::encode::traits::schema::SchemaGetterComponent;
 use hermes_relayer_components::encode::traits::schema::SchemaTypeComponent;
@@ -58,6 +60,8 @@ delegate_components! {
             ClientStateFieldsGetterComponent,
         ]:
             ProvideAnyClientState,
+        EncodingGetterComponent:
+            GetDefaultEncoding,
     }
 }
 
@@ -71,8 +75,8 @@ impl ProvideEncodingType<AnyCounterparty> for AnyCounterpartyComponents {
     type Encoding = AnyClientEncoding;
 }
 
-impl EncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
-    fn encoding(_context: &AnyCounterparty) -> &AnyClientEncoding {
+impl DefaultEncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
+    fn default_encoding() -> &'static AnyClientEncoding {
         &AnyClientEncoding
     }
 }

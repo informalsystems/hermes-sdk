@@ -13,7 +13,10 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use hermes_relayer_components::encode::traits::has_encoding::HasEncoding;
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
+use hermes_relayer_components::encode::traits::has_encoding::{
+    DefaultEncodingGetterComponent, HasEncoding,
+};
 use hermes_relayer_components::encode::traits::has_encoding::{
     EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -88,9 +91,10 @@ delegate_components! {
         ]: SovereignDataChainType,
         [
             EncodingTypeComponent,
-            EncodingGetterComponent,
+            DefaultEncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
+        EncodingGetterComponent: GetDefaultEncoding,
     }
 }
 

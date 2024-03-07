@@ -8,7 +8,7 @@ use hermes_cosmos_client_components::encoding::components::{
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
 use hermes_relayer_components::encode::traits::encoder::CanEncode;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
+use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetter;
 use hermes_relayer_components::encode::traits::has_encoding::HasEncodingType;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
 use hermes_relayer_components::encode::types::via::Via;
@@ -52,11 +52,11 @@ where
     type Encoding = CosmosEncoding;
 }
 
-impl<Context> EncodingGetter<Context> for ProvideCosmosEncoding
+impl<Context> DefaultEncodingGetter<Context> for ProvideCosmosEncoding
 where
     Context: HasEncodingType<Encoding = CosmosEncoding>,
 {
-    fn encoding(_context: &Context) -> &CosmosEncoding {
+    fn default_encoding() -> &'static CosmosEncoding {
         &CosmosEncoding
     }
 }
