@@ -1,7 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilder;
-use hermes_relayer_components::encode::types::via::Via;
 use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::Height;
@@ -26,7 +24,7 @@ where
 {
     async fn build_channel_open_try_payload(
         chain: &SolomachineChain<Chain>,
-        client_state: &Via<Any, SolomachineClientState>,
+        client_state: &SolomachineClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
@@ -47,7 +45,7 @@ where
         let commitment_prefix: &str = chain.chain.commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(&client_state.value, commitment_prefix, channel_id, channel)
+            channel_proof_data(&client_state, commitment_prefix, channel_id, channel)
                 .map_err(Chain::encode_error)?;
 
         let secret_key = chain.chain.secret_key();
@@ -68,7 +66,7 @@ where
 
     async fn build_channel_open_ack_payload(
         chain: &SolomachineChain<Chain>,
-        client_state: &Via<Any, SolomachineClientState>,
+        client_state: &SolomachineClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
@@ -87,7 +85,7 @@ where
         let commitment_prefix = chain.chain.commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(&client_state.value, commitment_prefix, channel_id, channel)
+            channel_proof_data(&client_state, commitment_prefix, channel_id, channel)
                 .map_err(Chain::encode_error)?;
 
         let secret_key = chain.chain.secret_key();
@@ -106,7 +104,7 @@ where
 
     async fn build_channel_open_confirm_payload(
         chain: &SolomachineChain<Chain>,
-        client_state: &Via<Any, SolomachineClientState>,
+        client_state: &SolomachineClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
@@ -123,7 +121,7 @@ where
         let commitment_prefix = chain.chain.commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(&client_state.value, commitment_prefix, channel_id, channel)
+            channel_proof_data(&client_state, commitment_prefix, channel_id, channel)
                 .map_err(Chain::encode_error)?;
 
         let secret_key = chain.chain.secret_key();

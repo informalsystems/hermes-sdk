@@ -38,12 +38,11 @@ impl<Chain, Counterparty, DataChain> UpdateClientPayloadBuilder<Chain, Counterpa
 where
     Chain: HasHeightType<Height = RollupHeight>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
-        + HasClientStateType<Counterparty>
+        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
         + HasDataChain
         + HasDataChainType<DataChain = DataChain>
         + HasErrorType<Error = ReportError>,
     Chain::DataChain: HasErrorType + HasBlockingChainHandle,
-    Chain::ClientState: AsRef<SovereignClientState>,
 {
     async fn build_update_client_payload(
         chain: &Chain,
@@ -62,7 +61,7 @@ where
 
         let data_chain = chain.data_chain();
 
-        let da_client_state = convert_tm_params_to_client_state(&client_state.as_ref().da_params)?;
+        let da_client_state = convert_tm_params_to_client_state(&client_state.da_params)?;
 
         let headers = data_chain
             .with_blocking_chain_handle(move |chain_handle| {

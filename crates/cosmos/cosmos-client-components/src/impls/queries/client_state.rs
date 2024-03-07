@@ -1,7 +1,8 @@
 use core::iter::Iterator;
 use core::str::FromStr;
 
-use cgp_core::{CanRaiseError, HasErrorType};
+use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerier, ClientStateBytesQuerier,
 };
@@ -18,6 +19,8 @@ use ibc_relayer_types::Height;
 use prost::{DecodeError, EncodeError, Message};
 
 use crate::traits::abci_query::CanQueryAbci;
+
+pub struct CosmosQueryClientStateComponents;
 
 pub struct QueryCosmosClientStateFromAbci;
 

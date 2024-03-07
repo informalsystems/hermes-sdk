@@ -2,8 +2,10 @@ use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
+use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
+use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -98,6 +100,7 @@ use hermes_test_components::chain::traits::types::memo::{
 use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
+use prost_types::Any;
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
@@ -242,5 +245,11 @@ delegate_components! {
             CosmosClientComponents,
         ConsensusStateQuerierComponent:
             DelegateCosmosConsensusStateQuerier,
+    }
+}
+
+delegate_components! {
+    CosmosQueryClientStateComponents {
+        CosmosChain: QueryAndDecodeClientStateVia<Any>,
     }
 }

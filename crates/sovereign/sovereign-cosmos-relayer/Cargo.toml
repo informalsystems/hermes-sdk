@@ -25,6 +25,7 @@ hermes-cosmos-relayer               = { workspace = true }
 hermes-celestia-chain               = { workspace = true }
 hermes-sovereign-client-components  = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
+hermes-cosmos-client-components     = { workspace = true }
 hermes-sovereign-test-components    = { workspace = true }
 hermes-protobuf-components          = { workspace = true }
 

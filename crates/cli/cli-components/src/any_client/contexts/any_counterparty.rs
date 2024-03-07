@@ -4,9 +4,11 @@ use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
 use hermes_cosmos_client_components::encoding::components::CosmosEncodingComponents;
+use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_protobuf_components::types::Any;
+use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateFieldsGetterComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
@@ -16,6 +18,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::encode::impls::delegate::DelegateEncoding;
+use hermes_relayer_components::encode::impls::via_identity::Identity;
 use hermes_relayer_components::encode::traits::convert::ConverterComponent;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::decoder::DecoderComponent;
@@ -25,6 +28,7 @@ use hermes_relayer_components::encode::traits::has_encoding::EncodingGetter;
 use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
 use hermes_relayer_components::encode::traits::schema::SchemaGetterComponent;
 use hermes_relayer_components::encode::traits::schema::SchemaTypeComponent;
+use hermes_relayer_components::encode::types::via::Via;
 
 use crate::any_client::impls::encoding::encode::AnyClientEncoderComponents;
 use crate::any_client::impls::types::client_state::ProvideAnyClientState;
@@ -54,6 +58,12 @@ delegate_components! {
             ClientStateFieldsGetterComponent,
         ]:
             ProvideAnyClientState,
+    }
+}
+
+delegate_components! {
+    CosmosQueryClientStateComponents {
+        AnyCounterparty: QueryAndDecodeClientStateVia<Identity>
     }
 }
 
@@ -96,7 +106,10 @@ delegate_components! {
 }
 
 pub trait CheckAnyClientEncoding:
-    CanDecode<TendermintClientState> + CanDecode<Any> + CanDecode<AnyClientState>
+    CanDecode<TendermintClientState>
+    + CanDecode<Any>
+    + CanDecode<AnyClientState>
+    + CanDecode<Via<Identity, AnyClientState>>
 {
 }
 

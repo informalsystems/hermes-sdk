@@ -3,8 +3,10 @@ use cgp_core::prelude::*;
 use cgp_core::ErrorRaiserComponent;
 use cgp_core::ErrorTypeComponent;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_protobuf_components::types::Any;
+use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -44,6 +46,12 @@ delegate_components! {
             ProvideCosmosChainTypes,
         ClientStateTypeComponent:
             ProvideWasmClientState,
+    }
+}
+
+delegate_components! {
+    CosmosQueryClientStateComponents {
+        WasmCounterparty: QueryAndDecodeClientStateVia<Any>
     }
 }
 

@@ -1,7 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
-use hermes_relayer_components::encode::types::via::Via;
 use ibc_relayer_types::Height;
 
 use crate::methods::encode::header_data::sign_header_data;
@@ -23,13 +21,13 @@ where
         chain: &SolomachineChain<Chain>,
         _trusted_height: &Height,
         _target_height: &Height,
-        client_state: Via<Any, SolomachineClientState>,
+        client_state: SolomachineClientState,
     ) -> Result<SolomachineUpdateClientPayload, Chain::Error> {
         // TODO: check that the public key is the same in the consensus state.
         // We currently only support updating the diversifier but not the public key.
 
         let public_key = chain.chain.public_key();
-        let current_diversifier = &client_state.value.consensus_state.diversifier;
+        let current_diversifier = &client_state.consensus_state.diversifier;
 
         let next_diversifier = chain.chain.current_diversifier();
 
@@ -43,7 +41,7 @@ where
 
         let sign_data = SolomachineSignHeaderData {
             header_data,
-            sequence: client_state.value.sequence,
+            sequence: client_state.sequence,
             timestamp,
             diversifier: current_diversifier.clone(),
         };
