@@ -3,6 +3,7 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentPrefix;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::sovereign::types::height::RollupHeight;
@@ -34,7 +35,10 @@ where
         _chain: &Chain,
         _client_state: &Chain::ClientState,
     ) -> Result<Chain::ConnectionOpenInitPayload, Chain::Error> {
-        todo!()
+        // TODO: retrieve commimtment prefix
+        let commitment_prefix =
+            CommitmentPrefix::try_from("ibc".to_string().as_bytes().to_vec()).unwrap();
+        Ok(SovereignConnectionOpenInitPayload { commitment_prefix })
     }
 
     async fn build_connection_open_try_payload(
