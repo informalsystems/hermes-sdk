@@ -2,12 +2,15 @@ use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
+use hermes_cosmos_relayer::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
@@ -29,6 +32,7 @@ use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::cosmos::impls::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
 use hermes_sovereign_client_components::cosmos::impls::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
+use hermes_sovereign_client_components::cosmos::impls::connection_handshake_message::BuildSovereignConnectionHandshakeMessageOnCosmos;
 use hermes_sovereign_client_components::sovereign::components::chain::{
     IsSovereignChainClientComponent, SovereignChainClientComponents,
 };
@@ -116,6 +120,12 @@ delegate_components! {
     }
 }
 
+delegate_components! {
+    DelegateCosmosConnectionHandshakeBuilder {
+        SovereignChain: BuildSovereignConnectionHandshakeMessageOnCosmos,
+    }
+}
+
 impl ProvideRuntime<SovereignChain> for SovereignChainComponents {
     fn runtime(chain: &SovereignChain) -> &HermesRuntime {
         &chain.runtime
@@ -129,6 +139,7 @@ pub trait CheckSovereignChainImpls:
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
+    + CanBuildConnectionHandshakePayloads<CosmosChain>
 {
 }
 
@@ -138,6 +149,7 @@ pub trait CheckCosmosChainImpls:
     CanQueryClientState<SovereignChain>
     + CanBuildCreateClientMessage<SovereignChain>
     + CanBuildUpdateClientMessage<SovereignChain>
+    + CanBuildConnectionHandshakeMessages<SovereignChain>
 {
 }
 

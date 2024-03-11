@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -30,6 +31,7 @@ use crate::sovereign::impls::client::create_client_message::BuildCreateCosmosCli
 use crate::sovereign::impls::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::sovereign::impls::client::update_client_payload::BuildSovereignUpdateClientPayload;
+use crate::sovereign::impls::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
@@ -79,5 +81,7 @@ delegate_components! {
             BuildSovereignUpdateClientPayload,
         UpdateClientMessageBuilderComponent:
             BuildUpdateCosmosClientMessageOnSovereign,
+        ConnectionHandshakePayloadBuilderComponent:
+            BuildSovereignConnectionHandshakePayload,
     }
 }
