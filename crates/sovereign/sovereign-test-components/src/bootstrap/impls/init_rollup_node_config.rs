@@ -64,7 +64,7 @@ where
                 path: Runtime::file_path_to_string(&data_path),
             },
             runner: SovereignRunnerConfig {
-                start_height: 1,
+                genesis_height: 1,
                 rpc_config: SovereignRpcConfig {
                     bind_host: "127.0.0.1".into(),
                     bind_port: rollup_rpc_port,
