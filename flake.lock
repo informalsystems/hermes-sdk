@@ -3143,11 +3143,11 @@
         "sovereign-sdk-src": "sovereign-sdk-src"
       },
       "locked": {
-        "lastModified": 1709134386,
-        "narHash": "sha256-/O9TNbsJZ/2U/tJC4sF5Avk8dSYdqz0ybnu3R3QQfJU=",
+        "lastModified": 1710252359,
+        "narHash": "sha256-t3jP7cFDa3o9p+aqt/5WoYGa4pHlaxZQMYbS8r6eLbM=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "e3ee5c99c976fc76957e048a8672c4d18cdaa595",
+        "rev": "26a8cce999d44d87a9e99715d20baf8eaa7fa491",
         "type": "github"
       },
       "original": {
@@ -3159,16 +3159,16 @@
     "sovereign-sdk-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1707405267,
-        "narHash": "sha256-Gz4JUsPoJW5t7u7Ahuf5qMkLtQhXbT6ySi6KDSSn8Qs=",
+        "lastModified": 1709835864,
+        "narHash": "sha256-k9jWxhyIaYYS7tFe2el3g3t323oT3JZJPpm69DEz8oM=",
         "ref": "refs/heads/nightly",
-        "rev": "a1d9ed80af46a0ea6e173204ca708c40ce592d3f",
-        "revCount": 800,
+        "rev": "3f94ceccae8f84eb191deeb97ce65a1af3c9fd1b",
+        "revCount": 859,
         "type": "git",
         "url": "ssh://git@github.com/informalsystems/sovereign-sdk-wip"
       },
       "original": {
-        "rev": "a1d9ed80af46a0ea6e173204ca708c40ce592d3f",
+        "rev": "3f94ceccae8f84eb191deeb97ce65a1af3c9fd1b",
         "type": "git",
         "url": "ssh://git@github.com/informalsystems/sovereign-sdk-wip"
       }
