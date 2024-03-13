@@ -23,7 +23,7 @@ pub struct SovereignStorageConfig {
 
 #[derive(Serialize)]
 pub struct SovereignRunnerConfig {
-    pub genesis_height: u64,
+    pub start_height: u64,
     pub rpc_config: SovereignRpcConfig,
     pub da_polling_interval_ms: u64,
 }
