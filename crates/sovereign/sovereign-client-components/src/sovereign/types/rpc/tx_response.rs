@@ -1,12 +1,12 @@
 use serde::Deserialize;
 
-use crate::sovereign::types::event::RawEvent;
+use crate::sovereign::types::event::SovereignEvent;
 use crate::sovereign::types::rpc::tx_hash::TxHash;
 
 #[derive(Debug, Deserialize)]
 pub struct TxResponse {
     pub hash: TxHash,
-    pub events: Vec<RawEvent>,
+    pub events: Vec<SovereignEvent>,
     pub custom_receipt: TxEffect,
 }
 

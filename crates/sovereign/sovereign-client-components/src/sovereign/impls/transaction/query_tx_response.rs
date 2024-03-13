@@ -10,7 +10,7 @@ use jsonrpsee::core::ClientError;
 use serde::Deserialize;
 
 use crate::sovereign::traits::rollup::json_rpc_client::HasJsonRpcClient;
-use crate::sovereign::types::event::RawEvent;
+use crate::sovereign::types::event::SovereignEvent;
 use crate::sovereign::types::rpc::tx_hash::TxHash;
 use crate::sovereign::types::rpc::tx_response::{TxEffect, TxResponse};
 
@@ -37,7 +37,7 @@ where
         if let Some(response) = response {
             let event_ids: Vec<u64> = response.event_range.collect();
 
-            let events: Vec<RawEvent> = chain
+            let events: Vec<SovereignEvent> = chain
                 .json_rpc_client()
                 .request("ledger_getEvents", (event_ids,))
                 .await

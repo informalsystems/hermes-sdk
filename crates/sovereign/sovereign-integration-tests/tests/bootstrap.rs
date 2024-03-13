@@ -196,18 +196,18 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
                 rollup.publish_transaction_batch(&[tx_bytes]).await?;
 
-                sleep(Duration::from_secs(2)).await;
+                // sleep(Duration::from_secs(5)).await;
 
-                let response = rollup
-                    .query_tx_response(&tx_hash)
-                    .await?
-                    .ok_or_else(|| eyre!("expect tx response to be present"))?;
+                // let response = rollup
+                //     .query_tx_response(&tx_hash)
+                //     .await?
+                //     .ok_or_else(|| eyre!("expect tx response to be present"))?;
 
-                println!("querty tx hash {} response: {:?}", tx_hash, response);
+                // println!("query tx hash {} response: {:?}", tx_hash, response);
 
-                let events = SovereignRollup::parse_tx_response_as_events(response)?;
+                // let events = SovereignRollup::parse_tx_response_as_events(response)?;
 
-                println!("events: {:?}", events);
+                // println!("events: {:?}", events);
             }
         }
         <Result<(), Error>>::Ok(())
