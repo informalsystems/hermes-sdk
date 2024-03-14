@@ -161,7 +161,7 @@ pub fn get_keypair(
     m_keypair: Option<&Secp256k1KeyPair>,
 ) -> Result<Secp256k1KeyPair, Error> {
     if let Some(keypair) = m_keypair {
-        let chain_config = handle.config()?;
+        let ChainConfig::CosmosSdk(chain_config) = handle.config()?;
 
         // try add the key to the chain handle, in case if it is only in the key map,
         // as for the case of integration tests.

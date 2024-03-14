@@ -27,7 +27,13 @@ impl TxFeeEstimator<CosmosTxContext> for CosmosTxComponents {
             .gas_info
             .ok_or_else(|| eyre!("missing simulate gas info"))?;
 
-        let fee = gas_amount_to_fee(&tx_config.gas_config, gas_info.gas_used);
+        let fee = gas_amount_to_fee(
+            &tx_config.gas_config,
+            gas_info.gas_used,
+            &tx_config.chain_id,
+            &tx_config.rpc_address,
+        )
+        .await;
 
         Ok(fee)
     }
