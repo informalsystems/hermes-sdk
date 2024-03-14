@@ -131,7 +131,7 @@ pub fn add_key(
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
         &sdk_config.account_prefix,
-        &config.id(),
+        config.id(),
         &sdk_config.key_store_folder,
     )?;
 
