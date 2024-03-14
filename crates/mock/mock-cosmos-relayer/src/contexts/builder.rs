@@ -1,9 +1,9 @@
 use alloc::sync::Arc;
+use ibc::core::host::types::identifiers::ChainId;
 use std::fmt::Debug;
 
 use basecoin_store::context::ProvableStore;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc::core::ics24_host::identifier::ChainId;
 use tendermint_testgen::Validator;
 use tokio::runtime::Runtime as TokioRuntime;
 

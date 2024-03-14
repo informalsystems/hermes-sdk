@@ -17,8 +17,10 @@ description  = """
 [dependencies]
 basecoin-app                        = { workspace = true }
 basecoin-store                      = { workspace = true }
-ibc                                 = { workspace = true, features = ["mocks"] }
+basecoin-modules                    = { workspace = true }
+ibc                                 = { workspace = true }
 ibc-proto                           = { workspace = true }
+ibc-client-tendermint-types         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }
 hermes-relayer-components           = { workspace = true }

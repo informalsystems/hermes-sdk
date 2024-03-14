@@ -34,6 +34,7 @@ pub fn gas_config_for_test() -> GasConfig {
         gas_price,
         max_fee,
         fee_granter,
+        dynamic_gas_price: Default::default(),
     }
 }
 

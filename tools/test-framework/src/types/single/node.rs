@@ -6,8 +6,9 @@ use core::str::FromStr;
 use core::time::Duration;
 use std::sync::{Arc, RwLock};
 
+use alloc::collections::BTreeMap;
 use eyre::{eyre, Report as Error};
-use ibc_relayer::chain::ChainType;
+use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::config;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::keyring::Store;
@@ -133,9 +134,8 @@ impl FullNode {
             .display()
             .to_string();
 
-        Ok(config::ChainConfig {
+        Ok(config::ChainConfig::CosmosSdk(CosmosSdkConfig {
             id: self.chain_driver.chain_id.clone(),
-            r#type: ChainType::CosmosSdk,
             rpc_addr: Url::from_str(&self.chain_driver.rpc_address())?,
             grpc_addr: Url::from_str(&self.chain_driver.grpc_address())?,
             event_source: config::EventSourceMode::Push {
@@ -172,7 +172,12 @@ impl FullNode {
             sequential_batch_tx: false,
             compat_mode: None,
             clear_interval: None,
-        })
+            query_packets_chunk_size: config::default::query_packets_chunk_size(),
+            client_refresh_rate: config::default::client_refresh_rate(),
+            memo_overwrite: None,
+            dynamic_gas_price: Default::default(),
+            excluded_sequences: BTreeMap::new(),
+        }))
     }
 
     /**

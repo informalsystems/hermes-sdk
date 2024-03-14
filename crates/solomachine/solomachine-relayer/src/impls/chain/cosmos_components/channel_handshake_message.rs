@@ -57,6 +57,7 @@ where
             counterparty,
             connection_hops,
             channel_version,
+            0,
         );
 
         let message = CosmosChannelOpenInitMessage {
@@ -88,6 +89,7 @@ where
             counterparty,
             counterparty_payload.connection_hops,
             counterparty_payload.version.clone(),
+            0,
         );
 
         let message = CosmosChannelOpenTryMessage {

@@ -6,8 +6,9 @@ use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use ibc::core::ics24_host::identifier::ClientId;
-use ibc::core::ValidationContext;
+use ibc::core::client::context::client_state::ClientStateCommon;
+use ibc::core::client::context::ClientValidationContext;
+use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::basecoin::MockBasecoin;
 use crate::contexts::chain::MockCosmosContext;
@@ -72,7 +73,7 @@ async fn test_update_client() -> Result<(), Error> {
         >>::query_client_state_with_latest_height(relayer.dst_chain(), &ClientId::default())
         .await?;
 
-    assert_eq!(latest_client_state.latest_height, src_current_height);
+    assert_eq!(latest_client_state.latest_height(), src_current_height);
 
     Ok(())
 }

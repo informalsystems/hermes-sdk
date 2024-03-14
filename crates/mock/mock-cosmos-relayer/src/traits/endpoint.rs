@@ -1,16 +1,16 @@
 use std::fmt::Debug;
 use std::sync::Arc;
 
-use basecoin_app::modules::ibc::Ibc;
+use basecoin_modules::ibc::Ibc;
 use basecoin_store::context::ProvableStore;
 use basecoin_store::impls::RevertibleStore;
 use cgp_core::prelude::*;
 use cgp_core::Async;
-use ibc::core::ics23_commitment::commitment::CommitmentProofBytes;
-use ibc::core::ics24_host::identifier::ChainId;
-use ibc::core::ics24_host::path::Path;
-use ibc::core::timestamp::Timestamp;
-use ibc::Height;
+use ibc::core::client::types::Height;
+use ibc::core::commitment_types::commitment::CommitmentProofBytes;
+use ibc::core::host::types::identifiers::ChainId;
+use ibc::core::host::types::path::Path;
+use ibc::primitives::Timestamp;
 use tendermint_testgen::light_block::TmLightBlock;
 
 use crate::types::error::Error;

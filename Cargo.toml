@@ -44,46 +44,48 @@ authors         = ["Informal Systems <hello@informal.systems>"]
 rust-version    = "1.72"
 
 [workspace.dependencies]
-async-trait         = { version = "0.1.56" }
-ibc                 = { version = "0.47.0" }
-ibc-proto           = { version = "0.42.0" }
-ibc-proto-new       = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "1b1d7a9", package = "ibc-proto" }
-ibc-relayer         = { version = "0.27.2" }
-ibc-relayer-types   = { version = "0.27.2" }
-ibc-telemetry       = { version = "0.27.2" }
-tendermint          = { version = "0.34" }
-tendermint-proto    = { version = "0.34" }
-tendermint-rpc      = { version = "0.34" }
-tendermint-testgen  = { version = "0.34" }
-basecoin-app        = { version = "0.1.0" }
-basecoin-store      = { version = "0.1.0" }
-cgp-core            = { version = "0.1.0" }
-cgp-error-eyre      = { version = "0.1.0" }
-clap                = { version = "4.5.1" }
-oneline-eyre        = { version = "0.1.0" }
-prost               = { version = "0.12.3" }
-prost-types         = { version = "0.12.3" }
-serde               = { version = "1.0" }
-serde_derive        = { version = "1.0" }
-serde_json          = { version = "1.0" }
-tokio               = { version = "1.36" }
-tracing             = { version = "0.1.40" }
-tonic               = { version = "0.10" }
-toml                = { version = "0.8.10" }
-futures             = { version = "0.3.29", default-features = false }
-futures-core        = { version = "0.3.30", default-features = false }
-futures-util        = { version = "0.3.29", default-features = false }
-futures-channel     = { version = "0.3.30", default-features = false }
-eyre                = { version = "0.6.8" }
-itertools           = { version = "0.11" }
-http                = { version = "0.2.11" }
-humantime           = { version = "2.1.0" }
-flex-error          = { version = "0.4.4", default-features = false }
-tracing-subscriber  = { version = "0.3.18" }
-jsonrpsee           = { version = "0.21.0", default-features = false }
-hdpath              = { version = "0.6.3" }
-borsh               = { version = "0.10.3" }
-rand                = { version = "0.8.5" }
+async-trait                     = { version = "0.1.56" }
+ibc                             = { version = "0.50.0" }
+ibc-client-tendermint-types     = { version = "0.50.0" }
+ibc-proto                       = { version = "0.42.0" }
+ibc-proto-new                   = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "1b1d7a9", package = "ibc-proto" }
+ibc-relayer                     = { version = "0.27.2" }
+ibc-relayer-types               = { version = "0.27.2" }
+ibc-telemetry                   = { version = "0.27.2" }
+tendermint                      = { version = "0.34" }
+tendermint-proto                = { version = "0.34" }
+tendermint-rpc                  = { version = "0.34" }
+tendermint-testgen              = { version = "0.34" }
+basecoin-app                    = { version = "0.1.0" }
+basecoin-modules                = { version = "0.1.0" }
+basecoin-store                  = { version = "0.1.0" }
+cgp-core                        = { version = "0.1.0" }
+cgp-error-eyre                  = { version = "0.1.0" }
+clap                            = { version = "4.5.1" }
+oneline-eyre                    = { version = "0.1.0" }
+prost                           = { version = "0.12.3" }
+prost-types                     = { version = "0.12.3" }
+serde                           = { version = "1.0" }
+serde_derive                    = { version = "1.0" }
+serde_json                      = { version = "1.0" }
+tokio                           = { version = "1.36" }
+tracing                         = { version = "0.1.40" }
+tonic                           = { version = "0.10" }
+toml                            = { version = "0.8.10" }
+futures                         = { version = "0.3.29", default-features = false }
+futures-core                    = { version = "0.3.30", default-features = false }
+futures-util                    = { version = "0.3.29", default-features = false }
+futures-channel                 = { version = "0.3.30", default-features = false }
+eyre                            = { version = "0.6.8" }
+itertools                       = { version = "0.11" }
+http                            = { version = "0.2.11" }
+humantime                       = { version = "2.1.0" }
+flex-error                      = { version = "0.4.4", default-features = false }
+tracing-subscriber              = { version = "0.3.18" }
+jsonrpsee                       = { version = "0.21.0", default-features = false }
+hdpath                          = { version = "0.6.3" }
+borsh                           = { version = "0.10.3" }
+rand                            = { version = "0.8.5" }
 
 hermes-cli                          = { version = "0.1.0" }
 hermes-cli-components               = { version = "0.1.0" }
@@ -118,11 +120,13 @@ debug = 1
 overflow-checks = true
 
 [patch.crates-io]
-ibc                 = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
-ibc-query           = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
-ibc-derive          = { git = "https://github.com/cosmos/ibc-rs.git", branch = "main" }
-basecoin-app        = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
-basecoin-store      = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "main" }
+ibc                             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
+ibc-query                       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
+ibc-derive                      = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
+ibc-client-tendermint-types     = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
+basecoin-app                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "7c2b2d" }
+basecoin-modules                = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "7c2b2d" }
+basecoin-store                  = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "7c2b2d" }
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

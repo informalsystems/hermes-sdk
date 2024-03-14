@@ -120,10 +120,6 @@ where
         self.value().add_key(key_name, key)
     }
 
-    fn ibc_version(&self) -> Result<Option<semver::Version>, Error> {
-        self.value().ibc_version()
-    }
-
     fn query_application_status(&self) -> Result<ChainStatus, Error> {
         self.value().query_application_status()
     }
@@ -432,5 +428,9 @@ where
 
     fn query_consumer_chains(&self) -> Result<Vec<(ChainId, ClientId)>, Error> {
         self.value().query_consumer_chains()
+    }
+
+    fn version_specs(&self) -> Result<ibc_relayer::chain::cosmos::version::Specs, Error> {
+        self.value().version_specs()
     }
 }

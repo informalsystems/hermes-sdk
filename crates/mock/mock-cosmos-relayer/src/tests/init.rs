@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use basecoin_store::impls::InMemoryStore;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use ibc::core::ics24_host::identifier::ChainId;
+use ibc::core::host::types::identifiers::ChainId;
 use tendermint_testgen::Validator;
 use tokio::runtime::Runtime as TokioRuntime;
 

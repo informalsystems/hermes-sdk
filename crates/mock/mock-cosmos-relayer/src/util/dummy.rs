@@ -1,4 +1,4 @@
-use ibc::Signer;
+use ibc::primitives::Signer;
 
 pub fn genesis_app_state() -> serde_json::Value {
     serde_json::json!({

@@ -10,14 +10,16 @@ use hermes_relayer_components::relay::traits::update_client_message_builder::Upd
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc::clients::ics07_tendermint::client_type;
-use ibc::clients::ics07_tendermint::header::Header;
-use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
-use ibc::core::ics04_channel::packet::Packet;
-use ibc::core::ics24_host::identifier::ClientId;
-use ibc::core::{Msg, ValidationContext};
-use ibc::proto::Any;
-use ibc::Height;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::context::client_state::ClientStateCommon;
+use ibc::core::client::context::ClientValidationContext;
+use ibc::core::client::types::msgs::MsgUpdateClient;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ClientId;
+use ibc::core::host::ValidationContext;
+use ibc::primitives::proto::Any;
+use ibc::primitives::ToProto;
+use ibc_client_tendermint_types::{client_type, Header};
 
 use crate::components::relay::MockCosmosRelayComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -127,21 +129,27 @@ where
         _target: SourceTarget,
         height: &Height,
     ) -> Result<Vec<Any>, Error> {
-        let client_counter = context.dst_chain().ibc_context().client_counter()?;
+        let client_counter = context
+            .dst_chain()
+            .ibc_context()
+            .client_counter()
+            .map_err(Error::source)?;
 
-        let client_id = ClientId::new(client_type(), client_counter)?;
+        let client_id =
+            ClientId::new(client_type().as_str(), client_counter).map_err(Error::source)?;
 
         let client_state = context
             .dst_chain()
             .ibc_context()
-            .client_state(&ClientId::default())?;
+            .client_state(&ClientId::default())
+            .map_err(Error::source)?;
 
         let light_block = context.src_chain().get_light_block(height)?;
 
         let header = Header {
             signed_header: light_block.signed_header,
             validator_set: light_block.validators,
-            trusted_height: client_state.latest_height,
+            trusted_height: client_state.latest_height(),
             trusted_next_validator_set: light_block.next_validators,
         };
 
@@ -168,21 +176,27 @@ where
         _target: DestinationTarget,
         height: &Height,
     ) -> Result<Vec<Any>, Error> {
-        let client_counter = context.src_chain().ibc_context().client_counter()?;
+        let client_counter = context
+            .src_chain()
+            .ibc_context()
+            .client_counter()
+            .map_err(Error::source)?;
 
-        let client_id = ClientId::new(client_type(), client_counter)?;
+        let client_id =
+            ClientId::new(client_type().as_str(), client_counter).map_err(Error::source)?;
 
         let client_state = context
             .src_chain()
             .ibc_context()
-            .client_state(&ClientId::default())?;
+            .client_state(&ClientId::default())
+            .map_err(Error::source)?;
 
         let light_block = context.dst_chain().get_light_block(height)?;
 
         let header = Header {
             signed_header: light_block.signed_header,
             validator_set: light_block.validators,
-            trusted_height: client_state.latest_height,
+            trusted_height: client_state.latest_height(),
             trusted_next_validator_set: light_block.next_validators,
         };
 
