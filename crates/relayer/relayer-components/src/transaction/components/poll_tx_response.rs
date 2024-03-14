@@ -1,6 +1,7 @@
 use core::fmt::Debug;
 use core::time::Duration;
 
+use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 
 use crate::logger::traits::level::HasBaseLogLevels;
@@ -32,6 +33,7 @@ where
     }
 }
 
+#[derive_component(PollTimeoutGetterComponent, PollTimeoutGetter<Chain>)]
 pub trait HasPollTimeout {
     fn poll_timeout(&self) -> Duration;
 

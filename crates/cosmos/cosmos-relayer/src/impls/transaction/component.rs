@@ -3,6 +3,7 @@ use cgp_core::{
     HasComponents,
 };
 use hermes_cosmos_client_components::impls::transaction::event::ParseCosmosTxResponseAsEvents;
+use hermes_cosmos_client_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_client_components::impls::types::transaction::ProvideCosmosTransactionTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -15,6 +16,7 @@ use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::{
     FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
@@ -69,6 +71,8 @@ delegate_components! {
             LoggerFieldComponent,
         ]:
             ProvideTracingLogger,
+        PollTimeoutGetterComponent:
+            DefaultPollTimeout,
         TxResponseAsEventsParserComponent:
             ParseCosmosTxResponseAsEvents,
     }

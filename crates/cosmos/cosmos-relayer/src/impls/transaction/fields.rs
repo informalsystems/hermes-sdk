@@ -1,9 +1,6 @@
-use core::time::Duration;
-
 use futures::lock::Mutex;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
-use hermes_relayer_components::transaction::components::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::fee::HasFeeForSimulation;
 use hermes_relayer_components::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
 use hermes_relayer_components::transaction::traits::signer::HasDefaultSigner;
@@ -29,16 +26,6 @@ impl HasDefaultSigner for CosmosTxContext {
 impl HasFeeForSimulation for CosmosTxContext {
     fn fee_for_simulation(&self) -> &Fee {
         &self.tx_config.gas_config.max_fee
-    }
-}
-
-impl HasPollTimeout for CosmosTxContext {
-    fn poll_timeout(&self) -> Duration {
-        Duration::from_secs(300)
-    }
-
-    fn poll_backoff(&self) -> Duration {
-        Duration::from_millis(200)
     }
 }
 

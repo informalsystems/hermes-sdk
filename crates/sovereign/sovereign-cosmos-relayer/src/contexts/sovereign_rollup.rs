@@ -16,6 +16,7 @@ use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterCompo
 use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::FeeTypeComponent;
@@ -115,9 +116,9 @@ impl JsonRpcClientGetter<SovereignRollup> for SovereignRollupComponents {
     }
 }
 
-pub trait CheckSovereignRollupImpls:
-    CanQueryBalance + CanPublishTransactionBatch + CanAssertEventualAmount
+pub trait CanUseSovereignRollup:
+    CanQueryBalance + CanPublishTransactionBatch + CanQueryTxResponse + CanAssertEventualAmount
 {
 }
 
-impl CheckSovereignRollupImpls for SovereignRollup {}
+impl CanUseSovereignRollup for SovereignRollup {}
