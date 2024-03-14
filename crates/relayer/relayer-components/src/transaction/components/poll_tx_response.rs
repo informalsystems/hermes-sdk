@@ -1,6 +1,8 @@
+use core::fmt::Debug;
 use core::time::Duration;
 
-use cgp_core::HasErrorType;
+use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::runtime::HasRuntime;
@@ -11,57 +13,77 @@ use crate::transaction::traits::components::tx_response_querier::CanQueryTxRespo
 use crate::transaction::traits::logs::logger::CanLogTx;
 use crate::transaction::traits::types::HasTransactionHashType;
 
-pub trait CanRaiseNoTxResponseError: HasTransactionHashType + HasErrorType {
-    fn tx_no_response_error(tx_hash: &Self::TxHash) -> Self::Error;
+pub struct PollTxResponse;
+
+pub struct TxNoResponseError<'a, Chain>
+where
+    Chain: HasTransactionHashType,
+{
+    pub chain: &'a Chain,
+    pub tx_hash: &'a Chain::TxHash,
 }
 
+impl<'a, Chain> Debug for TxNoResponseError<'a, Chain>
+where
+    Chain: HasTransactionHashType,
+    Chain::TxHash: Debug,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("TxNoResponseError")
+            .field("tx_hash", &self.tx_hash)
+            .finish()
+    }
+}
+
+#[derive_component(PollTimeoutGetterComponent, PollTimeoutGetter<Chain>)]
 pub trait HasPollTimeout {
     fn poll_timeout(&self) -> Duration;
 
     fn poll_backoff(&self) -> Duration;
 }
 
-pub struct PollTxResponse;
-
-impl<Context> TxResponsePoller<Context> for PollTxResponse
+impl<Chain> TxResponsePoller<Chain> for PollTxResponse
 where
-    Context:
-        CanLogTx + CanQueryTxResponse + HasPollTimeout + HasRuntime + CanRaiseNoTxResponseError,
-    Context::Runtime: HasTime + CanSleep,
+    Chain: CanLogTx
+        + CanQueryTxResponse
+        + HasPollTimeout
+        + HasRuntime
+        + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>,
+    Chain::Runtime: HasTime + CanSleep,
 {
     async fn poll_tx_response(
-        context: &Context,
-        tx_hash: &Context::TxHash,
-    ) -> Result<Context::TxResponse, Context::Error> {
-        let runtime = context.runtime();
-        let wait_timeout = context.poll_timeout();
-        let wait_backoff = context.poll_backoff();
+        chain: &Chain,
+        tx_hash: &Chain::TxHash,
+    ) -> Result<Chain::TxResponse, Chain::Error> {
+        let runtime = chain.runtime();
+        let wait_timeout = chain.poll_timeout();
+        let wait_backoff = chain.poll_backoff();
 
         let start_time = runtime.now();
 
         loop {
-            let response = context.query_tx_response(tx_hash).await;
+            let response = chain.query_tx_response(tx_hash).await;
 
             match response {
                 Ok(None) => {
-                    let elapsed = Context::Runtime::duration_since(&start_time, &runtime.now());
+                    let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
                     if elapsed > wait_timeout {
-                        context.log_tx(
-                            Context::Logger::LEVEL_ERROR,
+                        chain.log_tx(
+                            Chain::Logger::LEVEL_ERROR,
                             "no tx response received, and poll timeout has recached. returning error",
                             |log| {
                                 log.debug("elapsed", &elapsed).debug("wait_timeout", &wait_timeout);
                             }
                         );
 
-                        return Err(Context::tx_no_response_error(tx_hash));
+                        return Err(Chain::raise_error(TxNoResponseError { chain, tx_hash }));
                     } else {
                         runtime.sleep(wait_backoff).await;
                     }
                 }
                 Ok(Some(response)) => {
-                    context.log_tx(
-                        Context::Logger::LEVEL_TRACE,
+                    chain.log_tx(
+                        Chain::Logger::LEVEL_TRACE,
                         "received tx response, finish polling",
                         |_| {},
                     );
@@ -69,8 +91,8 @@ where
                     return Ok(response);
                 }
                 Err(e) => {
-                    context.log_tx(
-                        Context::Logger::LEVEL_ERROR,
+                    chain.log_tx(
+                        Chain::Logger::LEVEL_ERROR,
                         "query_tx_response returned error",
                         |log| {
                             log.debug("error", &e);
@@ -85,9 +107,11 @@ where
 
                         However, if the query still returns error after the wait timeout exceeded,
                         we return the error we get from the query.
+
+                        TODO: check whether the error is retryable before re-polling.
                     */
 
-                    let elapsed = Context::Runtime::duration_since(&start_time, &runtime.now());
+                    let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
                     if elapsed > wait_timeout {
                         return Err(e);
                     } else {

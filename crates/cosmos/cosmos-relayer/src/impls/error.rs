@@ -1,6 +1,7 @@
 use core::convert::Infallible;
 use core::num::ParseIntError;
 
+use crate::contexts::transaction::CosmosTxContext;
 use crate::types::error::{HandleInfallible, ProvideCosmosError};
 use alloc::string::FromUtf8Error;
 use cgp_core::prelude::*;
@@ -11,6 +12,8 @@ use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
 use hermes_protobuf_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
+use hermes_relayer_components::transaction::components::poll_tx_response::TxNoResponseError;
+use hermes_relayer_components::transaction::traits::types::HasTransactionHashType;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
@@ -34,6 +37,7 @@ pub trait CheckErrorRaiser<Context>:
     ErrorRaiser<Context, TokioRuntimeError>
     + for<'a> ErrorRaiser<Context, &'a str>
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
+    + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosTxContext>>
 where
     Context: HasErrorType<Error = Error>,
 {
@@ -92,6 +96,13 @@ impl<'a> DelegateComponent<&'a str> for HandleCosmosError {
 impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for HandleCosmosError
 where
     Chain: HasAddressType + HasAmountType,
+{
+    type Delegate = DebugError;
+}
+
+impl<'a, Chain> DelegateComponent<TxNoResponseError<'a, Chain>> for HandleCosmosError
+where
+    Chain: HasTransactionHashType,
 {
     type Delegate = DebugError;
 }

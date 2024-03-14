@@ -6,7 +6,7 @@
     flake-utils.url = github:numtide/flake-utils;
     cosmos-nix.url = github:informalsystems/cosmos.nix;
     cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
-    sovereign-nix.url = github:informalsystems/sov-rollup-starter;
+    sovereign-nix.url = github:informalsystems/sov-rollup-starter?rev=0ca6b94f9275be5efc5a685b164101e9e831b130;
   };
 
   outputs = inputs: let

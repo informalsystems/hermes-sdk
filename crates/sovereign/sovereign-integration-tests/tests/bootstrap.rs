@@ -1,6 +1,5 @@
 #![recursion_limit = "256"]
 
-use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -10,6 +9,7 @@ use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::transaction::traits::components::tx_response_poller::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::event::CanParseTxResponseAsEvents;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
@@ -28,7 +28,6 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
-use tokio::time::sleep;
 
 #[test]
 fn test_sovereign_bootstrap() -> Result<(), Error> {
@@ -161,7 +160,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     )
                     .await?;
 
-                let response = rollup.query_tx_response(&tx_hash).await?;
+                let response = rollup.poll_tx_response(&tx_hash).await?;
 
                 println!("querty tx hash {} response: {:?}", tx_hash, response);
             }
@@ -196,14 +195,9 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
                 rollup.publish_transaction_batch(&[tx_bytes]).await?;
 
-                sleep(Duration::from_secs(2)).await;
+                let response = rollup.poll_tx_response(&tx_hash).await?;
 
-                let response = rollup
-                    .query_tx_response(&tx_hash)
-                    .await?
-                    .ok_or_else(|| eyre!("expect tx response to be present"))?;
-
-                println!("querty tx hash {} response: {:?}", tx_hash, response);
+                println!("query tx hash {} response: {:?}", tx_hash, response);
 
                 let events = SovereignRollup::parse_tx_response_as_events(response)?;
 
