@@ -23,7 +23,7 @@ members = [
     "crates/sovereign/sovereign-integration-tests",
     "crates/solomachine/solomachine-relayer",
     "crates/mock/mock-relayer",
-    "crates/mock/mock-cosmos-relayer",
+    # "crates/mock/mock-cosmos-relayer",
     "crates/wasm/wasm-client-components",
     "crates/test/test-components",
     "crates/test/test-suite",
