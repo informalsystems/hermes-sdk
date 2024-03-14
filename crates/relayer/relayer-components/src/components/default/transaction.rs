@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::send_message::{CanSendMessages, MessageSenderComponent};
 use crate::chain::traits::types::chain_id::HasChainId;
@@ -13,7 +14,7 @@ use crate::transaction::components::allocate_nonce_and_send_messages::AllocateNo
 use crate::transaction::components::allocate_nonce_with_mutex::AllocateNonceWithMutex;
 use crate::transaction::components::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
 use crate::transaction::components::poll_tx_response::{
-    CanRaiseNoTxResponseError, HasPollTimeout, PollTxResponse,
+    HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
 use crate::transaction::components::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
 use crate::transaction::traits::components::nonce_allocater::{
@@ -96,7 +97,7 @@ where
         + HasLogger
         + CanLogNonce
         + CanParseTxResponseAsEvents
-        + CanRaiseNoTxResponseError
+        + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
     Chain::Runtime: HasMutex + HasTime + CanSleep,
     Chain::Logger: HasBaseLogLevels,
