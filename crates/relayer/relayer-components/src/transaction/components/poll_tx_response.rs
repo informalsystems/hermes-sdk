@@ -13,6 +13,8 @@ use crate::transaction::traits::components::tx_response_querier::CanQueryTxRespo
 use crate::transaction::traits::logs::logger::CanLogTx;
 use crate::transaction::traits::types::HasTransactionHashType;
 
+pub struct PollTxResponse;
+
 pub struct TxNoResponseError<'a, Chain>
 where
     Chain: HasTransactionHashType,
@@ -39,8 +41,6 @@ pub trait HasPollTimeout {
 
     fn poll_backoff(&self) -> Duration;
 }
-
-pub struct PollTxResponse;
 
 impl<Chain> TxResponsePoller<Chain> for PollTxResponse
 where

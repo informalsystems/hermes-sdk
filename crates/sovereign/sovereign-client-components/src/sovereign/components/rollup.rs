@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_client_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
@@ -16,6 +17,10 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::transaction::components::poll_tx_response::{
+    PollTimeoutGetterComponent, PollTxResponse,
+};
+use hermes_relayer_components::transaction::traits::components::tx_response_poller::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::{
@@ -73,6 +78,10 @@ delegate_components! {
             PublishSovereignTransactionBatch,
         TxResponseQuerierComponent:
             QuerySovereignTxResponse,
+        TxResponsePollerComponent:
+            PollTxResponse,
+        PollTimeoutGetterComponent:
+            DefaultPollTimeout,
         TxResponseAsEventsParserComponent:
             ParseSovTxResponseAsEvents,
     }

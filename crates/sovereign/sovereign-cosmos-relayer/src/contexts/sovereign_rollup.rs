@@ -4,6 +4,7 @@ use cgp_core::ErrorTypeComponent;
 use cgp_core::HasComponents;
 use cgp_error_eyre::ProvideEyreError;
 use cgp_error_eyre::RaiseDebugError;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -14,8 +15,13 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
+use hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
+use hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::traits::components::tx_response_poller::CanPollTxResponse;
+use hermes_relayer_components::transaction::traits::components::tx_response_poller::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
@@ -25,6 +31,7 @@ use hermes_relayer_components::transaction::traits::types::SignerTypeComponent;
 use hermes_relayer_components::transaction::traits::types::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::TransactionTypeComponent;
 use hermes_relayer_components::transaction::traits::types::TxResponseTypeComponent;
+use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
@@ -32,6 +39,7 @@ use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_clie
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::TransactionBatchPublisherComponent;
+use hermes_sovereign_client_components::sovereign::types::rollup_id::RollupId;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
@@ -66,6 +74,11 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+        [
             EncodingTypeComponent,
             EncodingGetterComponent,
             DefaultEncodingGetterComponent,
@@ -88,6 +101,8 @@ delegate_components! {
             JsonRpcClientTypeComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
+            TxResponsePollerComponent,
+            PollTimeoutGetterComponent,
             TxResponseAsEventsParserComponent,
         ]:
             SovereignRollupClientComponents,
@@ -116,8 +131,20 @@ impl JsonRpcClientGetter<SovereignRollup> for SovereignRollupComponents {
     }
 }
 
+impl ChainIdGetter<SovereignRollup> for SovereignRollupComponents {
+    fn chain_id(_chain: &SovereignRollup) -> &RollupId {
+        static DUMMY_ROLLUP_ID: RollupId = RollupId(0);
+
+        &DUMMY_ROLLUP_ID
+    }
+}
+
 pub trait CanUseSovereignRollup:
-    CanQueryBalance + CanPublishTransactionBatch + CanQueryTxResponse + CanAssertEventualAmount
+    CanQueryBalance
+    + CanPublishTransactionBatch
+    + CanQueryTxResponse
+    + CanPollTxResponse
+    + CanAssertEventualAmount
 {
 }
 
