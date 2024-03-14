@@ -5,6 +5,7 @@ use hermes_relayer_components::transaction::traits::components::tx_response_quer
 use hermes_relayer_components::transaction::traits::types::{
     HasTransactionHashType, HasTxResponseType,
 };
+use hex::ToHex;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
 use serde::Deserialize;
@@ -35,11 +36,11 @@ where
             .map_err(Chain::raise_error)?;
 
         if let Some(response) = response {
-            let event_ids: Vec<u64> = response.event_range.collect();
+            let tx_hash_str = tx_hash.0.encode_hex::<String>();
 
             let events: Vec<SovereignEvent> = chain
                 .json_rpc_client()
-                .request("ledger_getEvents", (event_ids,))
+                .request("ledger_getEventsByTxnHash", (tx_hash_str,))
                 .await
                 .map_err(Chain::raise_error)?;
 

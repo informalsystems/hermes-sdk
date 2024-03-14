@@ -107,6 +107,8 @@ where
 
                         However, if the query still returns error after the wait timeout exceeded,
                         we return the error we get from the query.
+
+                        TODO: check whether the error is retryable before re-polling.
                     */
 
                     let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
