@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use basecoin_store::context::ProvableStore;
+use basecoin::store::context::ProvableStore;
 use cgp_core::prelude::*;
 
 /// Defines the interface for running a mock Cosmos chain.

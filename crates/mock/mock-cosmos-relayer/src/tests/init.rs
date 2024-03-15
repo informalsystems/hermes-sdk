@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use std::sync::Arc;
 
-use basecoin_store::impls::InMemoryStore;
+use basecoin::store::impls::InMemoryStore;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use ibc::core::host::types::identifiers::ChainId;
 use tendermint_testgen::Validator;

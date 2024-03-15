@@ -23,7 +23,7 @@ members = [
     "crates/sovereign/sovereign-integration-tests",
     "crates/solomachine/solomachine-relayer",
     "crates/mock/mock-relayer",
-    # "crates/mock/mock-cosmos-relayer",
+    "crates/mock/mock-cosmos-relayer",
     "crates/wasm/wasm-client-components",
     "crates/test/test-components",
     "crates/test/test-suite",
@@ -47,7 +47,7 @@ rust-version    = "1.72"
 async-trait                     = { version = "0.1.56" }
 ibc                             = { version = "0.50.0" }
 ibc-client-tendermint-types     = { version = "0.50.0" }
-ibc-proto                       = { version = "0.42.0" }
+ibc-proto                       = { version = "0.42.2" }
 ibc-proto-new                   = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "1b1d7a9", package = "ibc-proto" }
 ibc-relayer                     = { version = "0.27.2" }
 ibc-relayer-types               = { version = "0.27.2" }
@@ -56,9 +56,7 @@ tendermint                      = { version = "0.34" }
 tendermint-proto                = { version = "0.34" }
 tendermint-rpc                  = { version = "0.34" }
 tendermint-testgen              = { version = "0.34" }
-basecoin-app                    = { version = "0.1.0" }
-basecoin-modules                = { version = "0.1.0" }
-basecoin-store                  = { version = "0.1.0" }
+basecoin                        = { version = "0.1.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
 clap                            = { version = "4.5.1" }
@@ -120,13 +118,11 @@ debug = 1
 overflow-checks = true
 
 [patch.crates-io]
-ibc                             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
-ibc-query                       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
-ibc-derive                      = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
-ibc-client-tendermint-types     = { git = "https://github.com/cosmos/ibc-rs.git", rev = "4f0ab6a" }
-basecoin-app                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "7c2b2d" }
-basecoin-modules                = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "7c2b2d" }
-basecoin-store                  = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "7c2b2d" }
+ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "3b11b12" }
+ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "3b11b12" }
+ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "3b11b12" }
+ibc-client-tendermint-types = { git = "https://github.com/cosmos/ibc-rs.git", rev = "3b11b12" }
+basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "6e94621" }
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use basecoin_modules::ibc::AnyConsensusState;
+use basecoin::modules::ibc::AnyConsensusState;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
@@ -60,15 +60,16 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::clients::tendermint::client_state::ClientState as TmClientState;
 use ibc::clients::tendermint::consensus_state::ConsensusState as TmConsensusState;
 use ibc::clients::tendermint::types::AllowUpdate;
+use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::events::{SendPacket, WriteAcknowledgement};
 use ibc::core::channel::types::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::channel::types::timeout::TimeoutHeight;
-use ibc::core::client::context::client_state::ClientStateCommon;
 use ibc::core::client::context::ClientValidationContext;
 use ibc::core::client::types::events::CreateClient;
 use ibc::core::client::types::msgs::{MsgCreateClient, MsgUpdateClient};
 use ibc::core::client::types::Height;
+use ibc::core::commitment_types::specs::ProofSpecs;
 use ibc::core::handler::types::events::IbcEvent;
 use ibc::core::host::types::identifiers::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId, Sequence,
@@ -77,7 +78,7 @@ use ibc::core::host::types::path::{AckPath, ClientConsensusStatePath, ReceiptPat
 use ibc::core::host::ValidationContext;
 use ibc::primitives::proto::Any;
 use ibc::primitives::{Timestamp, ToProto};
-use ibc_client_tendermint_types::Header;
+use ibc_client_tendermint_types::{Header, TrustThreshold};
 
 use crate::components::chain::MockCosmosChainComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -301,7 +302,7 @@ where
     }
 
     fn client_state_latest_height(client_state: &TmClientState) -> &Height {
-        &client_state.latest_height()
+        &client_state.inner().latest_height
     }
 
     fn client_state_is_frozen(client_state: &TmClientState) -> bool {
@@ -437,13 +438,13 @@ where
     ) -> Result<Any, Error> {
         let tm_client_state: TmClientState = ibc_client_tendermint_types::ClientState::new(
             chain.get_chain_id().clone(),
-            Default::default(),
+            TrustThreshold::ONE_THIRD,
             Duration::from_secs(64000),
             Duration::from_secs(128000),
             Duration::from_millis(3000),
             chain.get_current_height(),
-            Default::default(),
-            Default::default(),
+            ProofSpecs::cosmos(),
+            Vec::new(),
             AllowUpdate {
                 after_expiry: false,
                 after_misbehaviour: false,
@@ -516,7 +517,7 @@ where
             trusted_next_validator_set: light_block.next_validators,
         };
 
-        let default_client_id = ClientId::default();
+        let default_client_id = ClientId::new(TENDERMINT_CLIENT_TYPE, 0).map_err(Error::source)?;
 
         let msg_update_client = MsgUpdateClient {
             client_id: default_client_id,

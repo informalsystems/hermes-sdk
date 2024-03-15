@@ -15,7 +15,7 @@ use super::dummy::dummy_signer;
 pub fn build_msg_transfer() -> MsgTransfer {
     MsgTransfer {
         port_id_on_a: PortId::transfer(),
-        chan_id_on_a: ChannelId::default(),
+        chan_id_on_a: ChannelId::zero(),
         packet_data: PacketData {
             token: BaseCoin {
                 denom: "uatom".parse().unwrap(),
@@ -42,7 +42,7 @@ pub fn build_transfer_packet(sequence: u64) -> Packet {
         port_id_on_a: msg.port_id_on_a.clone(),
         chan_id_on_a: msg.chan_id_on_a.clone(),
         port_id_on_b: PortId::transfer(),
-        chan_id_on_b: ChannelId::default(),
+        chan_id_on_b: ChannelId::zero(),
         data,
         timeout_height_on_b: msg.timeout_height_on_b,
         timeout_timestamp_on_b: msg.timeout_timestamp_on_b,

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
-use basecoin_modules::ibc::IbcContext;
-use basecoin_store::impls::RevertibleStore;
+use basecoin::modules::ibc::IbcContext;
+use basecoin::store::impls::RevertibleStore;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::core::handler::types::events::IbcEvent;
 use ibc::core::host::ValidationContext;

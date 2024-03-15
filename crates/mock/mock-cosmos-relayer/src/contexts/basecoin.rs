@@ -2,12 +2,12 @@ use std::fmt::Debug;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
-use basecoin_app::{BaseCoinApp, Builder};
-use basecoin_modules::auth::Auth;
-use basecoin_modules::bank::Bank;
-use basecoin_modules::context::{prefix, Identifiable};
-use basecoin_modules::ibc::Ibc;
-use basecoin_store::context::ProvableStore;
+use basecoin::app::{BaseCoinApp, Builder};
+use basecoin::modules::auth::Auth;
+use basecoin::modules::bank::Bank;
+use basecoin::modules::context::{prefix, Identifiable};
+use basecoin::modules::ibc::Ibc;
+use basecoin::store::context::ProvableStore;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;

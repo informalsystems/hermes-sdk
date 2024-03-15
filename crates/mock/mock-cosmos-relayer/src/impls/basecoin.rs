@@ -1,10 +1,10 @@
 use std::fmt::Debug;
 
-use basecoin_modules::ibc::Ibc;
-use basecoin_modules::types::IdentifiedModule;
-use basecoin_store::context::{ProvableStore, Store};
-use basecoin_store::impls::RevertibleStore;
-use basecoin_store::utils::SharedRwExt;
+use basecoin::modules::ibc::Ibc;
+use basecoin::modules::types::IdentifiedModule;
+use basecoin::store::context::{ProvableStore, Store};
+use basecoin::store::impls::RevertibleStore;
+use basecoin::store::utils::SharedRwExt;
 use cgp_core::prelude::*;
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::commitment::CommitmentProofBytes;
@@ -133,7 +133,7 @@ impl<S: ProvableStore + Default + Debug> BasecoinEndpoint for MockBasecoin<S> {
     }
 
     fn ibc(&self) -> Ibc<RevertibleStore<S>> {
-        self.app.ibc()
+        basecoin::helper::ibc(self.app.clone())
     }
 
     fn get_chain_id(&self) -> &ChainId {

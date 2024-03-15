@@ -10,6 +10,7 @@ use hermes_relayer_components::relay::traits::update_client_message_builder::Upd
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::context::client_state::ClientStateCommon;
 use ibc::core::client::context::ClientValidationContext;
@@ -19,7 +20,7 @@ use ibc::core::host::types::identifiers::ClientId;
 use ibc::core::host::ValidationContext;
 use ibc::primitives::proto::Any;
 use ibc::primitives::ToProto;
-use ibc_client_tendermint_types::{client_type, Header};
+use ibc_client_tendermint_types::Header;
 
 use crate::components::relay::MockCosmosRelayComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -136,12 +137,12 @@ where
             .map_err(Error::source)?;
 
         let client_id =
-            ClientId::new(client_type().as_str(), client_counter).map_err(Error::source)?;
+            ClientId::new(TENDERMINT_CLIENT_TYPE, client_counter).map_err(Error::source)?;
 
         let client_state = context
             .dst_chain()
             .ibc_context()
-            .client_state(&ClientId::default())
+            .client_state(&client_id)
             .map_err(Error::source)?;
 
         let light_block = context.src_chain().get_light_block(height)?;
@@ -183,12 +184,12 @@ where
             .map_err(Error::source)?;
 
         let client_id =
-            ClientId::new(client_type().as_str(), client_counter).map_err(Error::source)?;
+            ClientId::new(TENDERMINT_CLIENT_TYPE, client_counter).map_err(Error::source)?;
 
         let client_state = context
             .src_chain()
             .ibc_context()
-            .client_state(&ClientId::default())
+            .client_state(&client_id)
             .map_err(Error::source)?;
 
         let light_block = context.dst_chain().get_light_block(height)?;

@@ -15,11 +15,8 @@ description  = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-basecoin-app                        = { workspace = true }
-basecoin-store                      = { workspace = true }
-basecoin-modules                    = { workspace = true }
+basecoin                            = { workspace = true }
 ibc                                 = { workspace = true }
-ibc-proto                           = { workspace = true }
 ibc-client-tendermint-types         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }

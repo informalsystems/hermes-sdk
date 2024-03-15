@@ -1,9 +1,9 @@
 use std::fmt::Debug;
 use std::sync::Arc;
 
-use basecoin_modules::ibc::Ibc;
-use basecoin_store::context::ProvableStore;
-use basecoin_store::impls::RevertibleStore;
+use basecoin::modules::ibc::Ibc;
+use basecoin::store::context::ProvableStore;
+use basecoin::store::impls::RevertibleStore;
 use cgp_core::prelude::*;
 use cgp_core::Async;
 use ibc::core::client::types::Height;
