@@ -17,7 +17,6 @@ description  = """
 [dependencies]
 basecoin                            = { workspace = true }
 ibc                                 = { workspace = true }
-ibc-client-tendermint-types         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }
 hermes-relayer-components           = { workspace = true }

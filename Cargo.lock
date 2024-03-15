@@ -1901,7 +1901,6 @@ dependencies = [
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=3b11b12)",
- "ibc-client-tendermint-types 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=3b11b12)",
  "ibc-relayer-types",
  "primitive-types",
  "prost",

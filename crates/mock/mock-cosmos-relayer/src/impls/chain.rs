@@ -60,6 +60,7 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::clients::tendermint::client_state::ClientState as TmClientState;
 use ibc::clients::tendermint::consensus_state::ConsensusState as TmConsensusState;
 use ibc::clients::tendermint::types::AllowUpdate;
+use ibc::clients::tendermint::types::{Header, TrustThreshold};
 use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::events::{SendPacket, WriteAcknowledgement};
 use ibc::core::channel::types::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
@@ -78,7 +79,6 @@ use ibc::core::host::types::path::{AckPath, ClientConsensusStatePath, ReceiptPat
 use ibc::core::host::ValidationContext;
 use ibc::primitives::proto::Any;
 use ibc::primitives::{Timestamp, ToProto};
-use ibc_client_tendermint_types::{Header, TrustThreshold};
 
 use crate::components::chain::MockCosmosChainComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -436,7 +436,7 @@ where
         chain: &MockCosmosContext<Chain>,
         _create_client_options: &(),
     ) -> Result<Any, Error> {
-        let tm_client_state: TmClientState = ibc_client_tendermint_types::ClientState::new(
+        let tm_client_state: TmClientState = ibc::clients::tendermint::types::ClientState::new(
             chain.get_chain_id().clone(),
             TrustThreshold::ONE_THIRD,
             Duration::from_secs(64000),

@@ -10,6 +10,7 @@ use hermes_relayer_components::relay::traits::update_client_message_builder::Upd
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use ibc::clients::tendermint::types::Header;
 use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::packet::Packet;
 use ibc::core::client::context::client_state::ClientStateCommon;
@@ -20,7 +21,6 @@ use ibc::core::host::types::identifiers::ClientId;
 use ibc::core::host::ValidationContext;
 use ibc::primitives::proto::Any;
 use ibc::primitives::ToProto;
-use ibc_client_tendermint_types::Header;
 
 use crate::components::relay::MockCosmosRelayComponents;
 use crate::contexts::chain::MockCosmosContext;
