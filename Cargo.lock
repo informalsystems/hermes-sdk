@@ -345,6 +345,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "98f7eed2b2781a6f0b5c903471d48e15f56fb4e1165df8a9a2337fd1a59d45ea"
 
 [[package]]
+name = "bech32"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d965446196e3b7decd44aa7ee49e31d630118f90ef12f97900f262eb915c951d"
+
+[[package]]
 name = "beef"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2004,7 +2010,7 @@ name = "hermes-sovereign-client-components"
 version = "0.1.0"
 dependencies = [
  "base64",
- "bech32 0.9.1",
+ "bech32 0.11.0",
  "borsh",
  "cgp-core",
  "ed25519-dalek",
@@ -2091,7 +2097,7 @@ dependencies = [
 name = "hermes-sovereign-test-components"
 version = "0.1.0"
 dependencies = [
- "bech32 0.9.1",
+ "bech32 0.11.0",
  "cgp-core",
  "ed25519-dalek",
  "hermes-celestia-test-components",
