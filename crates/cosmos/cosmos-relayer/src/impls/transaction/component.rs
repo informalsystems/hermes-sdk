@@ -2,11 +2,7 @@ use cgp_core::{
     delegate_all, delegate_components, DelegateComponent, ErrorRaiserComponent, ErrorTypeComponent,
     HasComponents,
 };
-use hermes_cosmos_client_components::impls::transaction::event::ParseCosmosTxResponseAsEvents;
-use hermes_cosmos_client_components::impls::transaction::poll_timeout::DefaultPollTimeout;
-use hermes_cosmos_client_components::impls::transaction::query_tx_response::QueryCosmosTxResponse;
-use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
-use hermes_cosmos_client_components::impls::types::transaction::ProvideCosmosTransactionTypes;
+use hermes_cosmos_client_components::components::transaction::CosmosTxComponents as BaseCosmosTxComponents;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
@@ -54,30 +50,24 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
+            LoggerTypeComponent,
+            LoggerFieldComponent,
+        ]:
+            ProvideTracingLogger,
+        [
             ChainIdTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
-        ]:
-            ProvideCosmosChainTypes,
-        [
             SignerTypeComponent,
             NonceTypeComponent,
             TransactionTypeComponent,
             TransactionHashTypeComponent,
             FeeTypeComponent,
             TxResponseTypeComponent,
+            PollTimeoutGetterComponent,
+            TxResponseAsEventsParserComponent,
+            TxResponseQuerierComponent,
         ]:
-            ProvideCosmosTransactionTypes,
-        [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
-        PollTimeoutGetterComponent:
-            DefaultPollTimeout,
-        TxResponseAsEventsParserComponent:
-            ParseCosmosTxResponseAsEvents,
-        TxResponseQuerierComponent:
-            QueryCosmosTxResponse,
+            BaseCosmosTxComponents,
     }
 }
