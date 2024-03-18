@@ -11,7 +11,7 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::clients::tendermint::types::Header;
-use ibc_core::client::types::Height as DataChainHeight;
+use ibc::core::client::types::Height as DataChainHeight;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::AllowUpdate;

@@ -3,7 +3,7 @@ use hermes_relayer_components::encode::impls::convert::{ConvertFrom, TryConvertF
 use hermes_relayer_components::encode::impls::delegate::DelegateEncoding;
 use hermes_wasm_client_components::impls::encoding::convert::WasmConverterComponents;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
-use ibc_proto_new::ibc::lightclients::sovereign::tendermint::v1::ClientState as ProtoSovereignClientState;
+use ibc_proto_sov::ibc::lightclients::sovereign::tendermint::v1::ClientState as ProtoSovereignClientState;
 
 use crate::sovereign::types::client_state::SovereignClientState;
 

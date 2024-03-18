@@ -1,5 +1,5 @@
-use ibc::core::timestamp::Timestamp;
-use ibc::Height;
+use ibc::core::client::types::Height;
+use ibc::primitives::Timestamp;
 
 /// Defines the type that tracks the current status of a mock Cosmos chain.
 #[derive(Clone, Debug)]

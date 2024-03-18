@@ -58,6 +58,7 @@ where
             counterparty,
             connection_hops,
             channel_version,
+            0,
         );
 
         let message = CosmosChannelOpenInitMessage { port_id, channel };
@@ -87,6 +88,7 @@ where
             counterparty,
             connection_hops,
             version.clone(),
+            0,
         );
 
         let message = CosmosChannelOpenTryMessage {

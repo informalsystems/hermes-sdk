@@ -3,8 +3,8 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptionsType, HasCreateClientPayloadType,
 };
-use ibc_core::client::types::Height;
-use ibc_core::host::types::identifiers::ChainId;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::ChainId;
 use ibc_relayer::chain::client::ClientSettings;
 use sov_celestia_client::types::client_state::test_util::{
     dummy_sov_client_state, dummy_sov_consensus_state,
