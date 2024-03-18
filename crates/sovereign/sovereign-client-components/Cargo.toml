@@ -25,7 +25,6 @@ hermes-protobuf-components          = { workspace = true }
 ibc-proto                           = { workspace = true }
 ibc-proto-new                       = { workspace = true }
 sov-celestia-client                 = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "3f37508241f21bb36e6706d6a458dd6e70afb8ab", features = ["test-util"] }
-ibc-core                            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "552863ec93", default-features = false, features = ["borsh","schema","serde"] }
 base64 = "0.21.6"
 serde-json-wasm = "1.0.1"
 

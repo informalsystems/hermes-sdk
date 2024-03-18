@@ -2016,7 +2016,6 @@ dependencies = [
  "hermes-wasm-client-components",
  "hex 0.4.3",
  "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
- "ibc-core 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
  "ibc-proto 0.41.0",
  "ibc-proto 0.42.2",
  "ibc-relayer",
