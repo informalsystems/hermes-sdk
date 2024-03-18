@@ -23,7 +23,7 @@ hermes-cosmos-client-components     = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
 hermes-protobuf-components          = { workspace = true }
 ibc-proto                           = { workspace = true }
-ibc-proto-new                       = { workspace = true }
+ibc-proto-sov                       = { workspace = true }
 sov-celestia-client                 = { workspace = true, features = ["test-util"] }
 base64 = "0.21.6"
 serde-json-wasm = "1.0.1"

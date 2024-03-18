@@ -47,7 +47,7 @@ rust-version    = "1.72"
 async-trait                     = { version = "0.1.56" }
 ibc                             = { version = "0.50.0" }
 ibc-proto                       = { version = "0.42.2" }
-ibc-proto-new                   = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "1b1d7a9", package = "ibc-proto" }
+ibc-proto-sov                   = { version = "0.41.0", default-features = false, package = "ibc-proto" }
 sov-celestia-client             = { version = "0.1.0" }
 
 ibc-relayer                     = { version = "0.27.2" }
@@ -125,6 +125,7 @@ ibc-query               = { git = "https://github.com/cosmos/ibc-rs.git", rev = 
 ibc-derive              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "3b11b12" }
 basecoin                = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "6e94621" }
 
+ibc-proto-sov           = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "1b1d7a9", package = "ibc-proto" }
 sov-celestia-client     = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "3f37508241f21bb36e6706d6a458dd6e70afb8ab" }
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
