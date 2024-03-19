@@ -21,6 +21,7 @@ use hermes_relayer_components::transaction::components::poll_tx_response::PollTi
 use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::components::tx_fee_estimater::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::components::tx_submitter::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::{
     FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
@@ -79,6 +80,7 @@ delegate_components! {
             TxResponseQuerierComponent,
             TxEncoderComponent,
             TxFeeEstimatorComponent,
+            TxSubmitterComponent,
         ]:
             BaseCosmosTxComponents,
     }

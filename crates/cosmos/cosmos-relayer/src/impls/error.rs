@@ -9,6 +9,7 @@ use cgp_core::{ErrorRaiser, ErrorTypeComponent};
 use eyre::Report;
 use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
+use hermes_cosmos_client_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_protobuf_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
@@ -43,6 +44,7 @@ pub trait CheckErrorRaiser<Context>:
     + ErrorRaiser<Context, TransportError>
     + for<'a> ErrorRaiser<Context, &'a str>
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
+    + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosTxContext>>
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosTxContext>>
 where
     Context: HasErrorType<Error = Error>,
@@ -109,6 +111,10 @@ impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for Han
 where
     Chain: HasAddressType + HasAmountType,
 {
+    type Delegate = DebugError;
+}
+
+impl<'a, Chain> DelegateComponent<BroadcastTxError<'a, Chain>> for HandleCosmosError {
     type Delegate = DebugError;
 }
 
