@@ -33,28 +33,3 @@ pub trait HasTransactionHashType: Async {
 pub trait HasTxResponseType: Async {
     type TxResponse: Async;
 }
-
-// pub trait HasTxTypes:
-//     HasMessageType
-//     + HasEventType
-//     + HasTransactionType
-//     + HasNonceType
-//     + HasFeeType
-//     + HasSignerType
-//     + HasTransactionHashType
-//     + HasErrorType
-// {
-// }
-
-// impl<Chain> HasTxTypes for Chain where
-//     Chain: HasMessageType
-//         + HasEventType
-//         + HasTransactionType
-//         + HasNonceType
-//         + HasFeeType
-//         + HasSignerType
-//         + HasTransactionHashType
-//         + HasTxResponseType
-//         + HasErrorType
-// {
-// }

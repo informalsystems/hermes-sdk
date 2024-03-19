@@ -1,5 +1,3 @@
-pub mod nonce_allocater;
-pub mod nonce_querier;
 pub mod send_messages_with_signer;
 pub mod send_messages_with_signer_and_nonce;
 pub mod tx_encoder;

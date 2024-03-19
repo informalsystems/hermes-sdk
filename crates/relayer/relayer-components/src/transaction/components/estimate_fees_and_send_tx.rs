@@ -30,7 +30,7 @@ where
             Context::Logger::LEVEL_TRACE,
             "encoding tx for simulation",
             |log| {
-                log.field("none", Context::log_nonce(nonce));
+                log.field("nonce", Context::log_nonce(nonce));
             },
         );
 

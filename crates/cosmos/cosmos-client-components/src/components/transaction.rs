@@ -3,13 +3,13 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
-use hermes_relayer_components::transaction::traits::components::nonce_querier::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::components::tx_fee_estimater::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::components::tx_submitter::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::nonce::guard::NonceGuardComponent;
+use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::types::{
     FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
     TransactionTypeComponent, TxResponseTypeComponent,

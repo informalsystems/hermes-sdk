@@ -17,10 +17,6 @@ use crate::transaction::components::poll_tx_response::{
     HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
 use crate::transaction::components::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
-use crate::transaction::traits::components::nonce_allocater::{
-    CanAllocateNonce, NonceAllocatorComponent,
-};
-use crate::transaction::traits::components::nonce_querier::{CanQueryNonce, NonceQuerier};
 use crate::transaction::traits::components::send_messages_with_signer::{
     CanSendMessagesWithSigner, MessagesWithSignerSenderComponent,
 };
@@ -39,8 +35,12 @@ use crate::transaction::traits::components::tx_submitter::{CanSubmitTx, TxSubmit
 use crate::transaction::traits::event::CanParseTxResponseAsEvents;
 use crate::transaction::traits::fee::HasFeeForSimulation;
 use crate::transaction::traits::logs::nonce::CanLogNonce;
+use crate::transaction::traits::nonce::allocate_nonce::{
+    CanAllocateNonce, NonceAllocatorComponent,
+};
 use crate::transaction::traits::nonce::guard::HasNonceGuard;
 use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
+use crate::transaction::traits::nonce::query_nonce::{CanQueryNonce, NonceQuerier};
 use crate::transaction::traits::signer::HasDefaultSigner;
 use crate::transaction::traits::types::{
     HasFeeType, HasNonceType, HasSignerType, HasTransactionHashType, HasTransactionType,

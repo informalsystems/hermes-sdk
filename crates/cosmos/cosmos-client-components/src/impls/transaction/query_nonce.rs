@@ -1,5 +1,5 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::transaction::traits::components::nonce_querier::NonceQuerier;
+use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerier;
 use hermes_relayer_components::transaction::traits::types::{HasNonceType, HasSignerType};
 use ibc_relayer::chain::cosmos::query::account::query_account;
 use ibc_relayer::chain::cosmos::types::account::Account;

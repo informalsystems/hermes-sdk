@@ -1,10 +1,10 @@
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
-use crate::transaction::traits::components::nonce_allocater::NonceAllocator;
-use crate::transaction::traits::components::nonce_querier::CanQueryNonce;
 use crate::transaction::traits::logs::logger::CanLogTx;
 use crate::transaction::traits::logs::nonce::CanLogNonce;
+use crate::transaction::traits::nonce::allocate_nonce::NonceAllocator;
 use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
+use crate::transaction::traits::nonce::query_nonce::CanQueryNonce;
 
 pub struct AllocateNonceWithMutex;
 
