@@ -85,6 +85,7 @@ jsonrpsee                       = { version = "0.21.0", default-features = false
 hdpath                          = { version = "0.6.3" }
 borsh                           = { version = "0.10.3" }
 rand                            = { version = "0.8.5" }
+bech32                          = { version = "0.9.1" }
 
 hermes-cli                          = { version = "0.1.0" }
 hermes-cli-components               = { version = "0.1.0" }
