@@ -1,8 +1,9 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::message::HasMessageType;
+use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::{
-    HasFeeType, HasNonceType, HasSignerType, HasTransactionType,
+    fee::HasFeeType, signer::HasSignerType, transaction::HasTransactionType,
 };
 
 #[derive_component(TxEncoderComponent, TxEncoder<TxContext>)]

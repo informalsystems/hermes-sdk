@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::HasSignerType;
+use crate::transaction::traits::types::signer::HasSignerType;
 
 /**
    A simplified accessor for a transaction context to provide

@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::HasFeeType;
+use crate::transaction::traits::types::fee::HasFeeType;
 
 #[derive_component(FeeForSimulationGetterComponent, FeeForSimulationGetter<Chain>)]
 pub trait HasFeeForSimulation: HasFeeType {

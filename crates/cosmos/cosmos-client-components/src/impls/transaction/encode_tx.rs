@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoder;
 use hermes_relayer_components::transaction::traits::types::{
-    HasFeeType, HasNonceType, HasSignerType, HasTransactionType,
+    fee::HasFeeType, nonce::HasNonceType, signer::HasSignerType, transaction::HasTransactionType,
 };
 use ibc_proto::cosmos::tx::v1beta1::mode_info::{Single, Sum};
 use ibc_proto::cosmos::tx::v1beta1::{AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, TxBody};

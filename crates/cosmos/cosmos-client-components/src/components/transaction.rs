@@ -11,8 +11,9 @@ use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsPar
 use hermes_relayer_components::transaction::traits::nonce::guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::types::{
-    FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
-    TransactionTypeComponent, TxResponseTypeComponent,
+    fee::FeeTypeComponent, nonce::NonceTypeComponent, signer::SignerTypeComponent,
+    transaction::TransactionTypeComponent, tx_hash::TransactionHashTypeComponent,
+    tx_response::TxResponseTypeComponent,
 };
 
 use crate::impls::transaction::encode_tx::EncodeCosmosTx;

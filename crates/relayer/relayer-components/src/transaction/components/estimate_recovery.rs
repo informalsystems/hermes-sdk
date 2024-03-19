@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp_core::HasErrorType;
 
 use crate::transaction::traits::components::tx_fee_estimater::TxFeeEstimator;
-use crate::transaction::traits::types::{HasFeeType, HasTransactionType};
+use crate::transaction::traits::types::{fee::HasFeeType, transaction::HasTransactionType};
 
 pub trait CanRecoverEstimateError: HasFeeType + HasErrorType {
     fn try_recover_estimate_error(&self, e: Self::Error) -> Result<Self::Fee, Self::Error>;

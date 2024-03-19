@@ -1,4 +1,4 @@
-use hermes_relayer_components::transaction::traits::types::HasSignerType;
+use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::tx_context::HasTxContextType;
 use hermes_test_components::chain::traits::types::wallet::{

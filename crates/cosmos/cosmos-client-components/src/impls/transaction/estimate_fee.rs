@@ -1,7 +1,9 @@
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::transaction::traits::components::tx_fee_estimater::TxFeeEstimator;
-use hermes_relayer_components::transaction::traits::types::{HasFeeType, HasTransactionType};
+use hermes_relayer_components::transaction::traits::types::{
+    fee::HasFeeType, transaction::HasTransactionType,
+};
 use ibc_proto::cosmos::tx::v1beta1::service_client::ServiceClient;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, SimulateRequest, SimulateResponse, Tx};
 use ibc_relayer::chain::cosmos::gas::gas_amount_to_fee;

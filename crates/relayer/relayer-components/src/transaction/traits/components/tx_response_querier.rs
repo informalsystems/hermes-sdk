@@ -1,6 +1,8 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::{HasTransactionHashType, HasTxResponseType};
+use crate::transaction::traits::types::{
+    tx_hash::HasTransactionHashType, tx_response::HasTxResponseType,
+};
 
 #[derive_component(TxResponseQuerierComponent, TxResponseQuerier<TxContext>)]
 #[async_trait]

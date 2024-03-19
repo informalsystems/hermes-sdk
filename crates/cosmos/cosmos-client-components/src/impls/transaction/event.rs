@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParser;
-use hermes_relayer_components::transaction::traits::types::HasTxResponseType;
+use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 

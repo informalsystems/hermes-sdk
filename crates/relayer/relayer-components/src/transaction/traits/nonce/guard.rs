@@ -2,7 +2,7 @@ use core::ops::Deref;
 
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::HasNonceType;
+use crate::transaction::traits::types::nonce::HasNonceType;
 
 #[derive_component(NonceGuardComponent, ProvideNonceGuard<Chain>)]
 pub trait HasNonceGuard: HasNonceType {

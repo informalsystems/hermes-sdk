@@ -23,8 +23,9 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::transaction::traits::types::{
-    FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
-    TransactionTypeComponent, TxResponseTypeComponent,
+    fee::FeeTypeComponent, nonce::NonceTypeComponent, signer::SignerTypeComponent,
+    transaction::TransactionTypeComponent, tx_hash::TransactionHashTypeComponent,
+    tx_response::TxResponseTypeComponent,
 };
 
 use crate::sovereign::impls::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;

@@ -11,7 +11,7 @@ use crate::runtime::traits::time::HasTime;
 use crate::transaction::traits::components::tx_response_poller::TxResponsePoller;
 use crate::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use crate::transaction::traits::logs::logger::CanLogTx;
-use crate::transaction::traits::types::HasTransactionHashType;
+use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 
 pub struct PollTxResponse;
 

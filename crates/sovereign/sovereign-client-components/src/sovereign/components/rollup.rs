@@ -24,8 +24,9 @@ use hermes_relayer_components::transaction::traits::components::tx_response_poll
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::{
-    FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
-    TransactionTypeComponent, TxResponseTypeComponent,
+    fee::FeeTypeComponent, nonce::NonceTypeComponent, signer::SignerTypeComponent,
+    transaction::TransactionTypeComponent, tx_hash::TransactionHashTypeComponent,
+    tx_response::TxResponseTypeComponent,
 };
 
 use crate::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;

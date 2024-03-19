@@ -5,7 +5,7 @@ use cgp_core::prelude::*;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::components::send_messages_with_signer::CanSendMessagesWithSigner;
-use crate::transaction::traits::types::HasSignerType;
+use crate::transaction::traits::types::signer::HasSignerType;
 
 #[async_trait]
 pub trait CanSendSingleMessageWithSigner:

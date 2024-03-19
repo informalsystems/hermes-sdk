@@ -11,8 +11,9 @@ use cgp_core::CanRaiseError;
 
 use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::components::tx_encoder::TxEncoder;
+use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::{
-    HasFeeType, HasNonceType, HasSignerType, HasTransactionType,
+    fee::HasFeeType, signer::HasSignerType, transaction::HasTransactionType,
 };
 
 #[derive(Debug)]

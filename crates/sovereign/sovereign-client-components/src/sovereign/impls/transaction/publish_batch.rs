@@ -1,5 +1,5 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::transaction::traits::types::HasTransactionType;
+use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
 

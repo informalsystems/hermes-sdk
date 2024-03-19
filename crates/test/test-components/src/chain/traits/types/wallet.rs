@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::transaction::traits::types::{HasSignerType, SignerOf};
+use hermes_relayer_components::transaction::traits::types::signer::{HasSignerType, SignerOf};
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::tx_context::HasTxContextType;

@@ -42,9 +42,10 @@ use crate::transaction::traits::nonce::guard::HasNonceGuard;
 use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::nonce::query_nonce::{CanQueryNonce, NonceQuerier};
 use crate::transaction::traits::signer::HasDefaultSigner;
+use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::{
-    HasFeeType, HasNonceType, HasSignerType, HasTransactionHashType, HasTransactionType,
-    HasTxResponseType,
+    fee::HasFeeType, signer::HasSignerType, transaction::HasTransactionType,
+    tx_hash::HasTransactionHashType, tx_response::HasTxResponseType,
 };
 
 pub struct DefaultTxComponents;
