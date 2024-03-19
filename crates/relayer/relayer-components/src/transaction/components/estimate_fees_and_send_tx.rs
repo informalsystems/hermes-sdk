@@ -1,12 +1,12 @@
 use crate::logger::traits::level::HasBaseLogLevels;
-use crate::transaction::traits::components::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSender;
-use crate::transaction::traits::components::tx_encoder::CanEncodeTx;
-use crate::transaction::traits::components::tx_fee_estimater::CanEstimateTxFee;
-use crate::transaction::traits::components::tx_response_poller::CanPollTxResponse;
-use crate::transaction::traits::components::tx_submitter::CanSubmitTx;
-use crate::transaction::traits::fee::HasFeeForSimulation;
+use crate::transaction::traits::encode_tx::CanEncodeTx;
+use crate::transaction::traits::estimate_tx_fee::CanEstimateTxFee;
 use crate::transaction::traits::logs::logger::CanLogTx;
 use crate::transaction::traits::logs::nonce::CanLogNonce;
+use crate::transaction::traits::poll_tx_response::CanPollTxResponse;
+use crate::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSender;
+use crate::transaction::traits::simulation_fee::HasFeeForSimulation;
+use crate::transaction::traits::submit_tx::CanSubmitTx;
 
 pub struct EstimateFeesAndSendTx;
 

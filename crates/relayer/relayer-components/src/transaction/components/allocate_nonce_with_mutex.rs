@@ -3,7 +3,7 @@ use crate::runtime::traits::mutex::HasMutex;
 use crate::transaction::traits::logs::logger::CanLogTx;
 use crate::transaction::traits::logs::nonce::CanLogNonce;
 use crate::transaction::traits::nonce::allocate_nonce::NonceAllocator;
-use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
+use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::nonce::query_nonce::CanQueryNonce;
 
 pub struct AllocateNonceWithMutex;

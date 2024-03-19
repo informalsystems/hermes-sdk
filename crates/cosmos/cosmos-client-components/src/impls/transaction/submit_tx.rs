@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::transaction::traits::components::tx_submitter::TxSubmitter;
+use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitter;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use ibc_proto::cosmos::tx::v1beta1::TxRaw;

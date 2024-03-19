@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp_core::HasErrorType;
 
-use crate::transaction::traits::components::tx_fee_estimater::TxFeeEstimator;
+use crate::transaction::traits::estimate_tx_fee::TxFeeEstimator;
 use crate::transaction::traits::types::fee::HasFeeType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 

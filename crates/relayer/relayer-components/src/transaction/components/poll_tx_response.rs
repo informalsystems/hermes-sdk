@@ -8,9 +8,9 @@ use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
-use crate::transaction::traits::components::tx_response_poller::TxResponsePoller;
-use crate::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
 use crate::transaction::traits::logs::logger::CanLogTx;
+use crate::transaction::traits::poll_tx_response::TxResponsePoller;
+use crate::transaction::traits::query_tx_response::CanQueryTxResponse;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 
 pub struct PollTxResponse;

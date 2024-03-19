@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::nonce::guard::HasNonceGuard;
+use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
 use crate::transaction::traits::types::signer::HasSignerType;
 
 #[derive_component(NonceAllocatorComponent, NonceAllocator<TxContext>)]

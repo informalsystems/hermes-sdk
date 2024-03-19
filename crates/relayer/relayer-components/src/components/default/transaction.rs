@@ -17,31 +17,27 @@ use crate::transaction::components::poll_tx_response::{
     HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
 use crate::transaction::components::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
-use crate::transaction::traits::components::send_messages_with_signer::{
-    CanSendMessagesWithSigner, MessagesWithSignerSenderComponent,
-};
-use crate::transaction::traits::components::send_messages_with_signer_and_nonce::{
-    CanSendMessagesWithSignerAndNonce, MessagesWithSignerAndNonceSenderComponent,
-};
-use crate::transaction::traits::components::tx_encoder::{CanEncodeTx, TxEncoder};
-use crate::transaction::traits::components::tx_fee_estimater::{CanEstimateTxFee, TxFeeEstimator};
-use crate::transaction::traits::components::tx_response_poller::{
-    CanPollTxResponse, TxResponsePollerComponent,
-};
-use crate::transaction::traits::components::tx_response_querier::{
-    CanQueryTxResponse, TxResponseQuerier,
-};
-use crate::transaction::traits::components::tx_submitter::{CanSubmitTx, TxSubmitter};
-use crate::transaction::traits::event::CanParseTxResponseAsEvents;
-use crate::transaction::traits::fee::HasFeeForSimulation;
+use crate::transaction::traits::default_signer::HasDefaultSigner;
+use crate::transaction::traits::encode_tx::{CanEncodeTx, TxEncoder};
+use crate::transaction::traits::estimate_tx_fee::{CanEstimateTxFee, TxFeeEstimator};
 use crate::transaction::traits::logs::nonce::CanLogNonce;
 use crate::transaction::traits::nonce::allocate_nonce::{
     CanAllocateNonce, NonceAllocatorComponent,
 };
-use crate::transaction::traits::nonce::guard::HasNonceGuard;
-use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
+use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
+use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::nonce::query_nonce::{CanQueryNonce, NonceQuerier};
-use crate::transaction::traits::signer::HasDefaultSigner;
+use crate::transaction::traits::parse_events::CanParseTxResponseAsEvents;
+use crate::transaction::traits::poll_tx_response::{CanPollTxResponse, TxResponsePollerComponent};
+use crate::transaction::traits::query_tx_response::{CanQueryTxResponse, TxResponseQuerier};
+use crate::transaction::traits::send_messages_with_signer::{
+    CanSendMessagesWithSigner, MessagesWithSignerSenderComponent,
+};
+use crate::transaction::traits::send_messages_with_signer_and_nonce::{
+    CanSendMessagesWithSignerAndNonce, MessagesWithSignerAndNonceSenderComponent,
+};
+use crate::transaction::traits::simulation_fee::HasFeeForSimulation;
+use crate::transaction::traits::submit_tx::{CanSubmitTx, TxSubmitter};
 use crate::transaction::traits::types::fee::HasFeeType;
 use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::signer::HasSignerType;

@@ -1,9 +1,9 @@
 use alloc::vec::Vec;
 
-use crate::transaction::traits::components::send_messages_with_signer::MessagesWithSignerSender;
-use crate::transaction::traits::components::send_messages_with_signer_and_nonce::CanSendMessagesWithSignerAndNonce;
-use crate::transaction::traits::event::CanParseTxResponseAsEvents;
 use crate::transaction::traits::nonce::allocate_nonce::CanAllocateNonce;
+use crate::transaction::traits::parse_events::CanParseTxResponseAsEvents;
+use crate::transaction::traits::send_messages_with_signer::MessagesWithSignerSender;
+use crate::transaction::traits::send_messages_with_signer_and_nonce::CanSendMessagesWithSignerAndNonce;
 
 pub struct AllocateNonceAndSendMessages;
 

@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 
 use crate::runtime::traits::mutex::{HasMutex, MutexGuardOf, MutexOf};
 use crate::runtime::traits::runtime::HasRuntime;
-use crate::transaction::traits::nonce::guard::HasNonceGuard;
+use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
 use crate::transaction::traits::types::signer::HasSignerType;
 
 /**

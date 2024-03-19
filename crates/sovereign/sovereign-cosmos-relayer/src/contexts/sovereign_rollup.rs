@@ -18,13 +18,13 @@ use hermes_relayer_components::logger::traits::has_logger::{
 };
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
-use hermes_relayer_components::transaction::traits::components::tx_response_poller::{
+use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::{
     CanPollTxResponse, TxResponsePollerComponent,
 };
-use hermes_relayer_components::transaction::traits::components::tx_response_querier::{
+use hermes_relayer_components::transaction::traits::query_tx_response::{
     CanQueryTxResponse, TxResponseQuerierComponent,
 };
-use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;

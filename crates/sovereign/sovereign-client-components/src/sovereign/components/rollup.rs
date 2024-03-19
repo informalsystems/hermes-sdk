@@ -20,9 +20,9 @@ use hermes_relayer_components::chain::traits::types::update_client::UpdateClient
 use hermes_relayer_components::transaction::components::poll_tx_response::{
     PollTimeoutGetterComponent, PollTxResponse,
 };
-use hermes_relayer_components::transaction::traits::components::tx_response_poller::TxResponsePollerComponent;
-use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
-use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
+use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
