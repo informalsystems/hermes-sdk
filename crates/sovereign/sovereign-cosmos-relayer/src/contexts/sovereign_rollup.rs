@@ -17,7 +17,7 @@ use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
-use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::{
     CanPollTxResponse, TxResponsePollerComponent,

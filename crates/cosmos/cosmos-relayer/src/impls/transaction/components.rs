@@ -17,7 +17,7 @@ use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;

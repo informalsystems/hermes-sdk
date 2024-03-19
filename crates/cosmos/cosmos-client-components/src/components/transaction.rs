@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
-use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;

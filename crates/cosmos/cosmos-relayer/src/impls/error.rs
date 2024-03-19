@@ -11,7 +11,7 @@ use hermes_cosmos_client_components::impls::transaction::submit_tx::BroadcastTxE
 use hermes_protobuf_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
-use hermes_relayer_components::transaction::components::poll_tx_response::TxNoResponseError;
+use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;

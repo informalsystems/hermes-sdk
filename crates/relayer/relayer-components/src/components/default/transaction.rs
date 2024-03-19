@@ -10,13 +10,13 @@ use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
-use crate::transaction::components::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
-use crate::transaction::components::allocate_nonce_with_mutex::AllocateNonceWithMutex;
-use crate::transaction::components::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
-use crate::transaction::components::poll_tx_response::{
+use crate::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
+use crate::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
+use crate::transaction::impls::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
+use crate::transaction::impls::poll_tx_response::{
     HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
-use crate::transaction::components::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
+use crate::transaction::impls::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
 use crate::transaction::traits::default_signer::HasDefaultSigner;
 use crate::transaction::traits::encode_tx::{CanEncodeTx, TxEncoder};
 use crate::transaction::traits::estimate_tx_fee::{CanEstimateTxFee, TxFeeEstimator};

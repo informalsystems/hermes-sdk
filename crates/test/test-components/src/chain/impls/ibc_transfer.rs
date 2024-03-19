@@ -6,7 +6,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::transaction::components::send_single_message_with_signer::CanSendSingleMessageWithSigner;
+use hermes_relayer_components::transaction::impls::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
 use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
 use crate::chain::traits::transfer::ibc_transfer::TokenIbcTransferrer;

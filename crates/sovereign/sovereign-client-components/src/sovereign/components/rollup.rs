@@ -17,7 +17,7 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::transaction::components::poll_tx_response::{
+use hermes_relayer_components::transaction::impls::poll_tx_response::{
     PollTimeoutGetterComponent, PollTxResponse,
 };
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
