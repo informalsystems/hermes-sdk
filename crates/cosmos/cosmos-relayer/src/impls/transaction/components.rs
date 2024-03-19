@@ -18,6 +18,7 @@ use hermes_relayer_components::logger::traits::has_logger::{
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::traits::components::nonce_querier::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::components::tx_fee_estimater::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
@@ -81,6 +82,7 @@ delegate_components! {
             TxEncoderComponent,
             TxFeeEstimatorComponent,
             TxSubmitterComponent,
+            NonceQuerierComponent,
         ]:
             BaseCosmosTxComponents,
     }

@@ -9,7 +9,7 @@ use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::transaction::CosmosTxContext;
-use crate::impls::transaction::component::CosmosTxComponents;
+use crate::impls::transaction::components::CosmosTxComponents;
 
 impl ChainIdGetter<CosmosTxContext> for CosmosTxComponents {
     fn chain_id(context: &CosmosTxContext) -> &ChainId {

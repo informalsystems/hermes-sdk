@@ -3,6 +3,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::traits::components::nonce_querier::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::components::tx_fee_estimater::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
@@ -17,6 +18,7 @@ use crate::impls::transaction::encode_tx::EncodeCosmosTx;
 use crate::impls::transaction::estimate_fee::EstimateCosmosTxFee;
 use crate::impls::transaction::event::ParseCosmosTxResponseAsEvents;
 use crate::impls::transaction::poll_timeout::DefaultPollTimeout;
+use crate::impls::transaction::query_nonce::QueryCosmosAccount;
 use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
 use crate::impls::transaction::submit_tx::BroadcastCosmosTx;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
@@ -53,5 +55,7 @@ delegate_components! {
             EstimateCosmosTxFee,
         TxSubmitterComponent:
             BroadcastCosmosTx,
+        NonceQuerierComponent:
+            QueryCosmosAccount,
     }
 }

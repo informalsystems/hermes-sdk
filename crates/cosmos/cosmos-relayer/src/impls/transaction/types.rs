@@ -5,7 +5,7 @@ use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::account::Account;
 
 use crate::contexts::transaction::CosmosTxContext;
-use crate::impls::transaction::component::CosmosTxComponents;
+use crate::impls::transaction::components::CosmosTxComponents;
 
 impl ProvideRuntime<CosmosTxContext> for CosmosTxComponents {
     fn runtime(chain: &CosmosTxContext) -> &HermesRuntime {
