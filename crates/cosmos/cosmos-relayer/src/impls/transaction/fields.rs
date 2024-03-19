@@ -10,6 +10,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::components::CosmosTxComponents;
+use crate::impls::transaction::types::NonceGuard;
 
 impl ChainIdGetter<CosmosTxContext> for CosmosTxComponents {
     fn chain_id(context: &CosmosTxContext) -> &ChainId {
@@ -36,8 +37,11 @@ impl HasMutexForNonceAllocation for CosmosTxContext {
 
     fn mutex_to_nonce_guard<'a>(
         mutex_guard: MutexGuardOf<'a, Self::Runtime, ()>,
-        nonce: Self::Nonce,
+        account: Self::Nonce,
     ) -> Self::NonceGuard<'a> {
-        (mutex_guard, nonce)
+        NonceGuard {
+            mutex_guard,
+            account,
+        }
     }
 }

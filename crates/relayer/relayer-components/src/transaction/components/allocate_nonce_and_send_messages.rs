@@ -19,7 +19,7 @@ where
         let nonce = chain.allocate_nonce(signer).await?;
 
         let response = chain
-            .send_messages_with_signer_and_nonce(signer, Chain::deref_nonce(&nonce), messages)
+            .send_messages_with_signer_and_nonce(signer, &nonce, messages)
             .await?;
 
         let events = Chain::parse_tx_response_as_events(response)?;
