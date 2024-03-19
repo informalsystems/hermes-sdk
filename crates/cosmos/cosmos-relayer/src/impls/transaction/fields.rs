@@ -4,10 +4,11 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::transaction::traits::fee::FeeForSimulationGetter;
-use hermes_relayer_components::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
+use hermes_relayer_components::transaction::traits::nonce::mutex::ProvideMutexForNonceAllocation;
 use hermes_relayer_components::transaction::traits::signer::DefaultSignerGetter;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
+use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
@@ -38,15 +39,18 @@ impl FeeForSimulationGetter<CosmosTxContext> for CosmosTxComponents {
     }
 }
 
-impl HasMutexForNonceAllocation for CosmosTxContext {
-    fn mutex_for_nonce_allocation(&self, _signer: &Secp256k1KeyPair) -> &Mutex<()> {
-        &self.nonce_mutex
+impl ProvideMutexForNonceAllocation<CosmosTxContext> for CosmosTxComponents {
+    fn mutex_for_nonce_allocation<'a>(
+        chain: &'a CosmosTxContext,
+        _signer: &Secp256k1KeyPair,
+    ) -> &'a Mutex<()> {
+        &chain.nonce_mutex
     }
 
     fn mutex_to_nonce_guard<'a>(
-        mutex_guard: MutexGuardOf<'a, Self::Runtime, ()>,
-        account: Self::Nonce,
-    ) -> Self::NonceGuard<'a> {
+        mutex_guard: MutexGuardOf<'a, HermesRuntime, ()>,
+        account: Account,
+    ) -> NonceGuard<'a> {
         NonceGuard {
             mutex_guard,
             account,
