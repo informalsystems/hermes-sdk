@@ -1,16 +1,14 @@
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_client_components::encoding::components::{
     CosmosEncodingComponents as BaseCosmosEncodingComponents, IsCosmosEncodingComponent,
 };
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
 use hermes_relayer_components::encode::traits::encoder::CanEncode;
-use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetter;
-use hermes_relayer_components::encode::traits::has_encoding::HasEncodingType;
-use hermes_relayer_components::encode::traits::has_encoding::ProvideEncodingType;
+use hermes_relayer_components::encode::traits::has_encoding::{
+    DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
+};
 use hermes_relayer_components::encode::traits::schema::HasSchema;
 use hermes_relayer_components::encode::types::via::Via;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;

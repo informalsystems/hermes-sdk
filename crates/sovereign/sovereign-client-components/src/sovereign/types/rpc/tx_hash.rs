@@ -1,7 +1,8 @@
 use core::fmt::{Debug, Display};
 
 use hex::{FromHex, ToHex};
-use serde::{de::Error as _, Deserialize, Deserializer, Serialize, Serializer};
+use serde::de::Error as _;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use sha2::{Digest, Sha256};
 
 pub struct TxHash(pub [u8; 32]);

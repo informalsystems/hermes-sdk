@@ -17,11 +17,10 @@ mod channels;
 pub use channels::QueryChannels;
 
 mod packet;
-pub use packet::PacketCommands;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+pub use packet::PacketCommands;
 
 use crate::Result;
 

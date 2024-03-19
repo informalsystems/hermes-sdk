@@ -1,6 +1,6 @@
+use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use alloc::vec::Vec;
 use cgp_core::{Async, CanRaiseError, DelegateComponent, HasErrorType};
 
 use crate::chain::traits::queries::client_state::{

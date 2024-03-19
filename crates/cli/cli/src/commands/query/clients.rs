@@ -3,15 +3,12 @@ use std::fmt;
 use cgp_core::HasErrorType;
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::any_client::types::client_state::AnyClientState;
-use hermes_cosmos_relayer::types::error::Error;
-use tracing::info;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::ErrorWrapper;
+use hermes_cosmos_relayer::types::error::{Error, ErrorWrapper};
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
@@ -20,6 +17,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use tracing::info;
 
 use crate::Result;
 

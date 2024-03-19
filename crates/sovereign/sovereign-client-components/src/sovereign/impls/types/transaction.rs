@@ -1,10 +1,11 @@
 use cgp_core::Async;
 use ed25519_dalek::SigningKey;
-use hermes_relayer_components::transaction::traits::types::{
-    fee::ProvideFeeType, nonce::ProvideNonceType, signer::ProvideSignerType,
-    transaction::ProvideTransactionType, tx_hash::ProvideTransactionHashType,
-    tx_response::ProvideTxResponseType,
-};
+use hermes_relayer_components::transaction::traits::types::fee::ProvideFeeType;
+use hermes_relayer_components::transaction::traits::types::nonce::ProvideNonceType;
+use hermes_relayer_components::transaction::traits::types::signer::ProvideSignerType;
+use hermes_relayer_components::transaction::traits::types::transaction::ProvideTransactionType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::ProvideTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_response::ProvideTxResponseType;
 
 use crate::sovereign::types::rpc::tx_hash::TxHash;
 use crate::sovereign::types::rpc::tx_response::TxResponse;

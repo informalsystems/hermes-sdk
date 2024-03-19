@@ -11,10 +11,10 @@ use cgp_core::CanRaiseError;
 
 use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::components::tx_encoder::TxEncoder;
+use crate::transaction::traits::types::fee::HasFeeType;
 use crate::transaction::traits::types::nonce::HasNonceType;
-use crate::transaction::traits::types::{
-    fee::HasFeeType, signer::HasSignerType, transaction::HasTransactionType,
-};
+use crate::transaction::traits::types::signer::HasSignerType;
+use crate::transaction::traits::types::transaction::HasTransactionType;
 
 #[derive(Debug)]
 pub struct MaxTxSizeExceededError {

@@ -1,11 +1,12 @@
-use crate::commands::query::packet::util::PacketSequences;
-use crate::Result;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+
+use crate::commands::query::packet::util::PacketSequences;
+use crate::Result;
 
 #[derive(Debug, clap::Parser)]
 pub struct QueryPacketCommitments {

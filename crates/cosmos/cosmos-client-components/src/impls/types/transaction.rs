@@ -1,10 +1,13 @@
 use cgp_core::Async;
 use hermes_relayer_components::transaction::traits::nonce::guard::ProvideNonceGuard;
-use hermes_relayer_components::transaction::traits::types::{
-    fee::ProvideFeeType, nonce::HasNonceType, nonce::ProvideNonceType, signer::ProvideSignerType,
-    transaction::ProvideTransactionType, tx_hash::ProvideTransactionHashType,
-    tx_response::ProvideTxResponseType,
+use hermes_relayer_components::transaction::traits::types::fee::ProvideFeeType;
+use hermes_relayer_components::transaction::traits::types::nonce::{
+    HasNonceType, ProvideNonceType,
 };
+use hermes_relayer_components::transaction::traits::types::signer::ProvideSignerType;
+use hermes_relayer_components::transaction::traits::types::transaction::ProvideTransactionType;
+use hermes_relayer_components::transaction::traits::types::tx_hash::ProvideTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_response::ProvideTxResponseType;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, TxRaw};
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;

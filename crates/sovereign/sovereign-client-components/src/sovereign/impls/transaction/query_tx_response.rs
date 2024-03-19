@@ -2,9 +2,8 @@ use core::ops::Range;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerier;
-use hermes_relayer_components::transaction::traits::types::{
-    tx_hash::HasTransactionHashType, tx_response::HasTxResponseType,
-};
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 use hex::ToHex;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;

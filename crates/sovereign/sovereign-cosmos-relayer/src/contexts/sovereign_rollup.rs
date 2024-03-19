@@ -1,29 +1,29 @@
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_core::HasComponents;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent, HasComponents};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_relayer_components::chain::traits::types::chain_id::{
+    ChainIdGetter, ChainIdTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
-use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetterComponent;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
-use hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent;
-use hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::encode::traits::has_encoding::{
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+};
+use hermes_relayer_components::logger::traits::has_logger::{
+    LoggerFieldComponent, LoggerTypeComponent,
+};
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
-use hermes_relayer_components::transaction::traits::components::tx_response_poller::CanPollTxResponse;
-use hermes_relayer_components::transaction::traits::components::tx_response_poller::TxResponsePollerComponent;
-use hermes_relayer_components::transaction::traits::components::tx_response_querier::CanQueryTxResponse;
-use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::components::tx_response_poller::{
+    CanPollTxResponse, TxResponsePollerComponent,
+};
+use hermes_relayer_components::transaction::traits::components::tx_response_querier::{
+    CanQueryTxResponse, TxResponseQuerierComponent,
+};
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
@@ -35,17 +35,21 @@ use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
-use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientGetter;
-use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::JsonRpcClientTypeComponent;
-use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
-use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::TransactionBatchPublisherComponent;
+use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::{
+    JsonRpcClientGetter, JsonRpcClientTypeComponent,
+};
+use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::{
+    CanPublishTransactionBatch, TransactionBatchPublisherComponent,
+};
 use hermes_sovereign_client_components::sovereign::types::rollup_id::RollupId;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
-use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
+use hermes_test_components::chain::traits::assert::eventual_amount::{
+    CanAssertEventualAmount, EventualAmountAsserterComponent,
+};
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
-use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
-use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain::traits::queries::balance::{
+    BalanceQuerierComponent, CanQueryBalance,
+};
 use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;

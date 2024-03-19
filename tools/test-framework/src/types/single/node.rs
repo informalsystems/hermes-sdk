@@ -2,11 +2,11 @@
    Type definition for a single running full node.
 */
 
+use alloc::collections::BTreeMap;
 use core::str::FromStr;
 use core::time::Duration;
 use std::sync::{Arc, RwLock};
 
-use alloc::collections::BTreeMap;
 use eyre::{eyre, Report as Error};
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::config;

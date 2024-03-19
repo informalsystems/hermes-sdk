@@ -1,15 +1,14 @@
 use cgp_core::prelude::*;
 
+use super::chain_status::CanQueryChainStatus;
+use super::client_state::CanQueryClientState;
+use super::consensus_state::{CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight};
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::client_state::{HasClientStateFields, HasClientStateType};
 use crate::chain::traits::types::consensus_state::{
     HasConsensusStateFields, HasConsensusStateType,
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-
-use super::chain_status::CanQueryChainStatus;
-use super::client_state::CanQueryClientState;
-use super::consensus_state::{CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum ClientStatus {

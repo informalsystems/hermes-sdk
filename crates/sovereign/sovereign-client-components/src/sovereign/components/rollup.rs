@@ -23,11 +23,12 @@ use hermes_relayer_components::transaction::components::poll_tx_response::{
 use hermes_relayer_components::transaction::traits::components::tx_response_poller::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
-use hermes_relayer_components::transaction::traits::types::{
-    fee::FeeTypeComponent, nonce::NonceTypeComponent, signer::SignerTypeComponent,
-    transaction::TransactionTypeComponent, tx_hash::TransactionHashTypeComponent,
-    tx_response::TxResponseTypeComponent,
-};
+use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
+use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
+use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
+use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
 use crate::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
 use crate::sovereign::impls::transaction::event::ParseSovTxResponseAsEvents;

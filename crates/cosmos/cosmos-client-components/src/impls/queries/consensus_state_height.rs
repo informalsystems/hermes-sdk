@@ -1,8 +1,9 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerier;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
+    ConsensusStateHeightQuerier, ConsensusStateHeightsQuerier,
+};
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;

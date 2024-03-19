@@ -1,14 +1,13 @@
 use eyre::eyre;
 use hermes_cosmos_relayer::types::error::Error;
 use ibc_proto::google::protobuf::Any;
+pub use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoSolomachineClientState;
 use ibc_proto::Protobuf;
 use ibc_relayer_types::keys::ROUTER_KEY;
 use ibc_relayer_types::tx_msg::Msg;
 use prost::Message;
 
 use crate::types::consensus_state::SolomachineConsensusState;
-
-pub use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoSolomachineClientState;
 
 const TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.ClientState";
 

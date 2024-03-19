@@ -1,15 +1,14 @@
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_protobuf_components::types::Any;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::types::via::Via;
 
-use crate::encoding::components::IsSolomachineEncodingComponent;
-use crate::encoding::components::SolomachineEncodingComponents as BaseSolomachineEncodingComponents;
+use crate::encoding::components::{
+    IsSolomachineEncodingComponent,
+    SolomachineEncodingComponents as BaseSolomachineEncodingComponents,
+};
 use crate::types::client_state::SolomachineClientState;
 
 pub struct SolomachineEncoding;

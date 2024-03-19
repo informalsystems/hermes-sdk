@@ -4,11 +4,10 @@ mod commitments;
 mod pending_acks;
 mod util;
 
-use hermes_cli_framework::output::Output;
-pub use pending::QueryPendingPackets;
-
 use hermes_cli_framework::command::CommandRunner;
+use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+pub use pending::QueryPendingPackets;
 
 use crate::commands::query::packet::pending_acks::QueryPendingAcks;
 use crate::Result;

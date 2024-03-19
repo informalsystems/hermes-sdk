@@ -10,11 +10,12 @@ use hermes_relayer_components::transaction::traits::components::tx_submitter::Tx
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::nonce::guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
-use hermes_relayer_components::transaction::traits::types::{
-    fee::FeeTypeComponent, nonce::NonceTypeComponent, signer::SignerTypeComponent,
-    transaction::TransactionTypeComponent, tx_hash::TransactionHashTypeComponent,
-    tx_response::TxResponseTypeComponent,
-};
+use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
+use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
+use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
+use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
 use crate::impls::transaction::encode_tx::EncodeCosmosTx;
 use crate::impls::transaction::estimate_fee::EstimateCosmosTxFee;

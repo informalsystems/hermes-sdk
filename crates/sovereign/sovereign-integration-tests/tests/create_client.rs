@@ -1,49 +1,47 @@
 #![recursion_limit = "256"]
 use core::time::Duration;
-use eyre::eyre;
-use serde_json::Value as JsonValue;
 use std::env::var;
 use std::str::FromStr;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
-use tokio::runtime::Builder;
-use tokio::time::sleep;
-use toml::Value as TomlValue;
-use tracing::info;
 
+use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_cosmos_client_components::methods::event::try_extract_create_client_event;
 use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
-use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
-use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
-use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-
-use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
-use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
-use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
-
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::CanUploadWasmClientCode;
+use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
+use ibc_relayer_types::core::ics03_connection::version::Version;
+use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use serde_json::Value as JsonValue;
+use tokio::runtime::Builder;
+use tokio::time::sleep;
+use toml::Value as TomlValue;
+use tracing::info;
 
 #[tracing::instrument]
 #[test]

@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
 use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
@@ -22,8 +21,9 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::ack_packets::{
+    AckPacketQuerierComponent, AckPacketsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
@@ -32,8 +32,9 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
+    ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
@@ -45,24 +46,28 @@ use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
-use hermes_relayer_components::chain::traits::types::block::BlockHashComponent;
-use hermes_relayer_components::chain::traits::types::block::BlockTypeComponent;
+use hermes_relayer_components::chain::traits::types::block::{
+    BlockHashComponent, BlockTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::channel::{
+    ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
-use hermes_relayer_components::chain::traits::types::connection::ConnectionHandshakePayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::connection::InitConnectionOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::{
+    ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
+    InitConnectionOptionsTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::create_client::CreateClientOptionsTypeComponent;
-use hermes_relayer_components::chain::traits::types::create_client::CreateClientPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::GenesisHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightIncrementerComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -73,9 +78,9 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComp
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
-use hermes_relayer_components::encode::traits::has_encoding::DefaultEncodingGetterComponent;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingTypeComponent;
+use hermes_relayer_components::encode::traits::has_encoding::{
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+};
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };

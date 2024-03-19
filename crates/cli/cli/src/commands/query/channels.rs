@@ -1,5 +1,3 @@
-use tracing::{info, warn};
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
@@ -13,6 +11,7 @@ use ibc_relayer::chain::requests::{
 };
 use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
+use tracing::{info, warn};
 
 use crate::Result;
 

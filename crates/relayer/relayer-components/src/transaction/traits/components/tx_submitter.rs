@@ -1,8 +1,7 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::{
-    transaction::HasTransactionType, tx_hash::HasTransactionHashType,
-};
+use crate::transaction::traits::types::transaction::HasTransactionType;
+use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 
 #[derive_component(TxSubmitterComponent, TxSubmitter<TxContext>)]
 #[async_trait]

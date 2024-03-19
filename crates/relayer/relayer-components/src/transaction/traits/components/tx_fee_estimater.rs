@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 
-use crate::transaction::traits::types::{fee::HasFeeType, transaction::HasTransactionType};
+use crate::transaction::traits::types::fee::HasFeeType;
+use crate::transaction::traits::types::transaction::HasTransactionType;
 
 #[derive_component(TxFeeEstimatorComponent, TxFeeEstimator<TxContext>)]
 #[async_trait]

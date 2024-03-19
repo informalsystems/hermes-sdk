@@ -3,9 +3,7 @@ use hermes_relayer_components::chain::traits::queries::connection_end::Connectio
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::IncludeProof;
-use ibc_relayer::chain::requests::QueryConnectionRequest;
-use ibc_relayer::chain::requests::QueryHeight;
+use ibc_relayer::chain::requests::{IncludeProof, QueryConnectionRequest, QueryHeight};
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::Height;

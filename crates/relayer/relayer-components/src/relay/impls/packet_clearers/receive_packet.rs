@@ -1,6 +1,7 @@
 use alloc::format;
-use cgp_core::async_trait;
 use core::fmt::Display;
+
+use cgp_core::async_trait;
 
 use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use crate::chain::traits::queries::send_packets::CanQuerySendPackets;

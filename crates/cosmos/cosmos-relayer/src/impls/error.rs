@@ -1,9 +1,7 @@
+use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 
-use crate::contexts::transaction::CosmosTxContext;
-use crate::types::error::{HandleInfallible, ProvideCosmosError};
-use alloc::string::FromUtf8Error;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorTypeComponent};
 use eyre::Report;
@@ -34,7 +32,10 @@ use tonic::transport::Error as TransportError;
 use tonic::Status;
 
 use crate::contexts::chain::CosmosChain;
-use crate::types::error::{DebugError, DisplayError, Error, ReportError, ReturnError};
+use crate::contexts::transaction::CosmosTxContext;
+use crate::types::error::{
+    DebugError, DisplayError, Error, HandleInfallible, ProvideCosmosError, ReportError, ReturnError,
+};
 
 pub struct HandleCosmosError;
 

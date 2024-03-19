@@ -2,7 +2,8 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::types::nonce::HasNonceType;
-use crate::transaction::traits::types::{signer::HasSignerType, tx_response::HasTxResponseType};
+use crate::transaction::traits::types::signer::HasSignerType;
+use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
 #[derive_component(MessagesWithSignerAndNonceSenderComponent, MessagesWithSignerAndNonceSender<TxContext>)]
 #[async_trait]

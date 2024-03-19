@@ -21,8 +21,6 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
@@ -98,8 +96,9 @@ use crate::impls::queries::client_state::{
     CosmosQueryClientStateComponents, QueryCosmosClientStateFromAbci,
 };
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
-use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
-use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromChainHandle;
+use crate::impls::queries::consensus_state_height::{
+    QueryConsensusStateHeightFromChainHandle, QueryConsensusStateHeightsFromChainHandle,
+};
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;

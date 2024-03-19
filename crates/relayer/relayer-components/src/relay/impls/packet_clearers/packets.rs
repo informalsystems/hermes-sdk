@@ -1,6 +1,7 @@
-use alloc::format;
-use alloc::vec;
+use alloc::{format, vec};
 
+use super::ack::ClearAckPackets;
+use super::receive_packet::ClearReceivePackets;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::logger::traits::log::CanLog;
@@ -8,9 +9,6 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
-
-use super::ack::ClearAckPackets;
-use super::receive_packet::ClearReceivePackets;
 
 pub struct ClearAllPackets;
 
