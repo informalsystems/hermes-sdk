@@ -20,10 +20,12 @@ use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventEr
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use ibc_relayer::error::Error as RelayerError;
+use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
+use ibc_relayer_types::signer::SignerError;
 use prost::{DecodeError, EncodeError};
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
@@ -68,6 +70,8 @@ delegate_components! {
             Report,
             TokioRuntimeError,
             RelayerError,
+            SignerError,
+            KeyringError,
             SupervisorError,
             TendermintProtoError,
             TendermintRpcError,

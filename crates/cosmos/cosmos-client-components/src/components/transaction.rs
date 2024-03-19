@@ -3,6 +3,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::traits::components::tx_encoder::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::types::{
@@ -10,6 +11,7 @@ use hermes_relayer_components::transaction::traits::types::{
     TransactionTypeComponent, TxResponseTypeComponent,
 };
 
+use crate::impls::transaction::encode_tx::EncodeCosmosTx;
 use crate::impls::transaction::event::ParseCosmosTxResponseAsEvents;
 use crate::impls::transaction::poll_timeout::DefaultPollTimeout;
 use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
@@ -41,5 +43,7 @@ delegate_components! {
             ParseCosmosTxResponseAsEvents,
         TxResponseQuerierComponent:
             QueryCosmosTxResponse,
+        TxEncoderComponent:
+            EncodeCosmosTx,
     }
 }

@@ -13,7 +13,6 @@ use ibc_relayer::chain::cosmos::types::account::AccountNumber;
 use ibc_relayer::chain::cosmos::types::account::AccountSequence;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::config::types::Memo;
-use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer::keyring::SigningKeyPair;
@@ -36,7 +35,6 @@ where
         + HasTransactionType<Transaction = SignedTx>
         + HasTxExtensionOptions
         + HasChainId<ChainId = ChainId>
-        + CanRaiseError<RelayerError>
         + CanRaiseError<EncodeError>
         + CanRaiseError<SignerError>
         + CanRaiseError<KeyringError>,
@@ -82,7 +80,7 @@ pub fn sign_tx(
     tx_memo: &Memo,
     messages: &[Any],
     fee: &Fee,
-    extension_options: Vec<Any>,
+    extension_options: &Vec<Any>,
 ) -> Result<SignedTx, KeyringError> {
     let key_bytes = Message::encode_to_vec(&key_pair.public_key.serialize().to_vec());
 
@@ -123,7 +121,6 @@ pub fn encode_sign_doc(
         account_number: account_number.to_u64(),
     };
 
-    // A protobuf serialization of a SignDoc
     let signdoc_buf = Message::encode_to_vec(&sign_doc);
 
     let signed = key_pair.sign(&signdoc_buf)?;
@@ -149,16 +146,6 @@ pub fn encode_signer_info(sequence: AccountSequence, key_bytes: Vec<u8>) -> Sign
     signer_info
 }
 
-// pub fn encode_to_bech32(address: &str, account_prefix: &str) -> Result<String, RelayerError> {
-//     let account = AccountId::from_str(address)
-//         .map_err(|e| RelayerError::invalid_key_address(address.to_string(), e))?;
-
-//     let encoded = bech32::encode(account_prefix, account.to_base32(), Variant::Bech32)
-//         .map_err(RelayerError::bech32_encoding)?;
-
-//     Ok(encoded)
-// }
-
 pub fn auth_info_and_bytes(signer_info: SignerInfo, fee: Fee) -> (AuthInfo, Vec<u8>) {
     let auth_info = AuthInfo {
         signer_infos: vec![signer_info],
@@ -168,7 +155,6 @@ pub fn auth_info_and_bytes(signer_info: SignerInfo, fee: Fee) -> (AuthInfo, Vec<
         tip: None,
     };
 
-    // A protobuf serialization of a AuthInfo
     let auth_buf = Message::encode_to_vec(&auth_info);
 
     (auth_info, auth_buf)
@@ -177,14 +163,13 @@ pub fn auth_info_and_bytes(signer_info: SignerInfo, fee: Fee) -> (AuthInfo, Vec<
 pub fn tx_body_and_bytes(
     proto_msgs: &[Any],
     memo: &Memo,
-    extension_options: Vec<Any>,
+    extension_options: &Vec<Any>,
 ) -> (TxBody, Vec<u8>) {
-    // Create TxBody
     let body = TxBody {
         messages: proto_msgs.to_vec(),
         memo: memo.to_string(),
         timeout_height: 0_u64,
-        extension_options,
+        extension_options: extension_options.clone(),
         non_critical_extension_options: Vec::<Any>::new(),
     };
 
