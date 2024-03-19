@@ -1,16 +1,24 @@
 use futures::lock::Mutex;
+use hermes_cosmos_client_components::types::nonce_guard::NonceGuard;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
+use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_components::transaction::traits::fee::FeeForSimulationGetter;
 use hermes_relayer_components::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
 use hermes_relayer_components::transaction::traits::signer::DefaultSignerGetter;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::transaction::components::CosmosTxComponents;
-use crate::impls::transaction::types::NonceGuard;
+
+impl ProvideRuntime<CosmosTxContext> for CosmosTxComponents {
+    fn runtime(chain: &CosmosTxContext) -> &HermesRuntime {
+        &chain.runtime
+    }
+}
 
 impl ChainIdGetter<CosmosTxContext> for CosmosTxComponents {
     fn chain_id(context: &CosmosTxContext) -> &ChainId {

@@ -9,6 +9,7 @@ use hermes_relayer_components::transaction::traits::components::tx_fee_estimater
 use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::components::tx_submitter::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::nonce::guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::types::{
     FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
     TransactionTypeComponent, TxResponseTypeComponent,
@@ -37,6 +38,7 @@ delegate_components! {
         [
             SignerTypeComponent,
             NonceTypeComponent,
+            NonceGuardComponent,
             TransactionTypeComponent,
             TransactionHashTypeComponent,
             FeeTypeComponent,
