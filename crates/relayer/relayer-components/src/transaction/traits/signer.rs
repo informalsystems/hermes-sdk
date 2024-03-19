@@ -1,3 +1,5 @@
+use cgp_core::prelude::*;
+
 use crate::transaction::traits::types::HasSignerType;
 
 /**
@@ -19,6 +21,7 @@ use crate::transaction::traits::types::HasSignerType;
    where there is no need to implement the logic to support parallel
    transactions or multiple signers.
 */
+#[derive_component(DefaultSignerGetterComponent, DefaultSignerGetter<Chain>)]
 pub trait HasDefaultSigner: HasSignerType {
     fn get_default_signer(&self) -> &Self::Signer;
 }

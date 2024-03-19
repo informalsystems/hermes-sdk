@@ -1,9 +1,9 @@
 use futures::lock::Mutex;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
-use hermes_relayer_components::transaction::traits::fee::HasFeeForSimulation;
+use hermes_relayer_components::transaction::traits::fee::FeeForSimulationGetter;
 use hermes_relayer_components::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
-use hermes_relayer_components::transaction::traits::signer::HasDefaultSigner;
+use hermes_relayer_components::transaction::traits::signer::DefaultSignerGetter;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -17,15 +17,15 @@ impl ChainIdGetter<CosmosTxContext> for CosmosTxComponents {
     }
 }
 
-impl HasDefaultSigner for CosmosTxContext {
-    fn get_default_signer(&self) -> &Secp256k1KeyPair {
-        &self.key_entry
+impl DefaultSignerGetter<CosmosTxContext> for CosmosTxComponents {
+    fn get_default_signer(chain: &CosmosTxContext) -> &Secp256k1KeyPair {
+        &chain.key_entry
     }
 }
 
-impl HasFeeForSimulation for CosmosTxContext {
-    fn fee_for_simulation(&self) -> &Fee {
-        &self.tx_config.gas_config.max_fee
+impl FeeForSimulationGetter<CosmosTxContext> for CosmosTxComponents {
+    fn fee_for_simulation(chain: &CosmosTxContext) -> &Fee {
+        &chain.tx_config.gas_config.max_fee
     }
 }
 
