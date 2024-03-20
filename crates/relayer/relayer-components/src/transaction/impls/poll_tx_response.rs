@@ -4,6 +4,7 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 
+use crate::log::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
@@ -21,6 +22,8 @@ where
 {
     pub chain: &'a Chain,
     pub tx_hash: &'a Chain::TxHash,
+    pub wait_timeout: &'a Duration,
+    pub elapsed: &'a Duration,
 }
 
 impl<'a, Chain> Debug for TxNoResponseError<'a, Chain>
@@ -44,10 +47,10 @@ pub trait HasPollTimeout {
 
 impl<Chain> TxResponsePoller<Chain> for PollTxResponse
 where
-    Chain: CanLogTx
-        + CanQueryTxResponse
+    Chain: CanQueryTxResponse
         + HasPollTimeout
         + HasRuntime
+        // + HasLogger
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>,
     Chain::Runtime: HasTime + CanSleep,
 {
@@ -68,36 +71,41 @@ where
                 Ok(None) => {
                     let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
                     if elapsed > wait_timeout {
-                        chain.log_tx(
-                            Chain::Logger::LEVEL_ERROR,
-                            "no tx response received, and poll timeout has recached. returning error",
-                            |log| {
-                                log.debug("elapsed", &elapsed).debug("wait_timeout", &wait_timeout);
-                            }
-                        );
+                        // chain.log_tx(
+                        //     Chain::Logger::LEVEL_ERROR,
+                        //     "no tx response received, and poll timeout has recached. returning error",
+                        //     |log| {
+                        //         log.debug("elapsed", &elapsed).debug("wait_timeout", &wait_timeout);
+                        //     }
+                        // );
 
-                        return Err(Chain::raise_error(TxNoResponseError { chain, tx_hash }));
+                        return Err(Chain::raise_error(TxNoResponseError {
+                            chain,
+                            tx_hash,
+                            elapsed: &elapsed,
+                            wait_timeout: &wait_timeout,
+                        }));
                     } else {
                         runtime.sleep(wait_backoff).await;
                     }
                 }
                 Ok(Some(response)) => {
-                    chain.log_tx(
-                        Chain::Logger::LEVEL_TRACE,
-                        "received tx response, finish polling",
-                        |_| {},
-                    );
+                    // chain.log_tx(
+                    //     Chain::Logger::LEVEL_TRACE,
+                    //     "received tx response, finish polling",
+                    //     |_| {},
+                    // );
 
                     return Ok(response);
                 }
                 Err(e) => {
-                    chain.log_tx(
-                        Chain::Logger::LEVEL_ERROR,
-                        "query_tx_response returned error",
-                        |log| {
-                            log.debug("error", &e);
-                        },
-                    );
+                    // chain.log_tx(
+                    //     Chain::Logger::LEVEL_ERROR,
+                    //     "query_tx_response returned error",
+                    //     |log| {
+                    //         log.debug("error", &e);
+                    //     },
+                    // );
 
                     /*
                         If querying the TX response returns failure, it might be a temporary network

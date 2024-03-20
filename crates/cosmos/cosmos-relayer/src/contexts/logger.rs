@@ -1,10 +1,12 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_client_components::impls::logger::HandleCosmosLogs;
+use hermes_relayer_components::log::impls::delegate::DelegateLogger;
+use hermes_relayer_components::log::impls::global::GetGlobalLogger;
 use hermes_relayer_components::log::traits::has_logger::{
-    GlobalLoggerGetter, HasLoggerType, LoggerGetter, ProvideLoggerType,
+    GlobalLoggerGetter, HasLoggerType, LoggerGetter, LoggerGetterComponent, ProvideLoggerType,
 };
-use hermes_relayer_components::log::traits::logger::Logger;
+use hermes_relayer_components::log::traits::logger::LoggerComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
-use tracing::trace;
 
 use crate::contexts::chain::CosmosChain;
 
@@ -12,10 +14,30 @@ pub struct CosmosLogger;
 
 pub struct CosmosLoggerComponents;
 
-pub struct ProvideCosmosLogger;
+pub struct CosmosLogHandlers;
 
 impl HasComponents for CosmosLogger {
     type Components = CosmosLoggerComponents;
+}
+
+delegate_components! {
+    CosmosLoggerComponents {
+        LoggerComponent: DelegateLogger<CosmosLogHandlers>,
+    }
+}
+
+impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
+    for CosmosLogHandlers
+{
+    type Delegate = HandleCosmosLogs;
+}
+
+pub struct ProvideCosmosLogger;
+
+delegate_components! {
+    ProvideCosmosLogger {
+        LoggerGetterComponent: GetGlobalLogger,
+    }
 }
 
 impl<Context> ProvideLoggerType<Context> for ProvideCosmosLogger
@@ -25,39 +47,11 @@ where
     type Logger = CosmosLogger;
 }
 
-impl<Context> LoggerGetter<Context> for ProvideCosmosLogger
-where
-    Context: HasLoggerType<Logger = CosmosLogger>,
-{
-    fn logger(_context: &Context) -> &CosmosLogger {
-        &CosmosLogger
-    }
-}
-
 impl<Context> GlobalLoggerGetter<Context> for ProvideCosmosLogger
 where
     Context: HasLoggerType<Logger = CosmosLogger>,
 {
     fn global_logger() -> &'static CosmosLogger {
         &CosmosLogger
-    }
-}
-
-impl<'a, Logging> Logger<Logging, LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
-    for CosmosLoggerComponents
-where
-    Logging: Async,
-{
-    async fn log(
-        _logging: &Logging,
-        message: &str,
-        details: &LogSendMessagesWithSignerAndNonce<'a, CosmosChain>,
-    ) {
-        trace!(
-            chain_id = %details.chain.chain_id,
-            nonce = ?details.nonce,
-            signer = ?details.signer,
-            "{message}",
-        );
     }
 }
