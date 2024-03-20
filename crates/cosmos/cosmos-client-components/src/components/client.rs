@@ -37,7 +37,6 @@ use hermes_relayer_components::chain::traits::queries::send_packets::{
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
-use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent,
 };
@@ -107,7 +106,6 @@ use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
 use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
-use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::ProvideTendermintClientState;
 use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
@@ -153,8 +151,6 @@ delegate_components! {
             ProvideTendermintClientState,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
-        MessageSenderComponent:
-            SendMessagesToTxContext,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:

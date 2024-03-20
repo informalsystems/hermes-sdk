@@ -206,7 +206,6 @@ delegate_components! {
             AckPacketPayloadTypeComponent,
             TimeoutUnorderedPacketPayloadTypeComponent,
 
-            MessageSenderComponent,
             PacketFieldsReaderComponent,
             ConsensusStateHeightQuerierComponent,
             ConsensusStateHeightsQuerierComponent,
@@ -263,6 +262,7 @@ delegate_components! {
             TransactionHashTypeComponent,
             FeeTypeComponent,
             TxResponseTypeComponent,
+            MessageSenderComponent,
             MessagesWithSignerSenderComponent,
             MessagesWithSignerAndNonceSenderComponent,
             NonceAllocatorComponent,
