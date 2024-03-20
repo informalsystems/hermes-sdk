@@ -13,8 +13,8 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::encode::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
+use hermes_relayer_components::log::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
@@ -57,6 +57,7 @@ use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
 
 use crate::contexts::encoding::ProvideSovereignEncoding;
+use crate::contexts::logger::ProvideSovereignLogger;
 
 pub struct SovereignRollup {
     pub runtime: HermesRuntime,
@@ -78,10 +79,16 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
         ]:
             ProvideTracingLogger,
+        [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideSovereignLogger,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,

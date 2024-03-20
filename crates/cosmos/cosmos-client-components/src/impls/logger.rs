@@ -1,12 +1,14 @@
 use cgp_core::Async;
-use core::fmt::Debug;
+use core::fmt::{Debug, Display};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::log::traits::logger::Logger;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
+use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
-use tracing::trace;
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
+use tracing::{error, trace};
 
 pub struct HandleCosmosLogs;
 
@@ -27,6 +29,23 @@ where
             chain_id = %details.chain.chain_id(),
             nonce = ?details.nonce,
             signer = ?details.signer,
+            "{message}",
+        );
+    }
+}
+
+impl<'a, Logging, Chain> Logger<Logging, TxNoResponseError<'a, Chain>> for HandleCosmosLogs
+where
+    Logging: Async,
+    Chain: HasTransactionHashType + HasChainId,
+    Chain::TxHash: Display,
+{
+    async fn log(_logging: &Logging, message: &str, details: &TxNoResponseError<'a, Chain>) {
+        error!(
+            chain_id = %details.chain.chain_id(),
+            tx_hash = %details.tx_hash,
+            wait_timeout = ?details.wait_timeout,
+            elapsed = ?details.elapsed,
             "{message}",
         );
     }

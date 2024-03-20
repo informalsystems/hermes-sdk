@@ -5,11 +5,10 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 
 use crate::log::traits::has_logger::HasLogger;
-use crate::logger::traits::level::HasBaseLogLevels;
+use crate::log::traits::logger::CanLog;
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
-use crate::transaction::traits::logs::logger::CanLogTx;
 use crate::transaction::traits::poll_tx_response::TxResponsePoller;
 use crate::transaction::traits::query_tx_response::CanQueryTxResponse;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
@@ -50,9 +49,10 @@ where
     Chain: CanQueryTxResponse
         + HasPollTimeout
         + HasRuntime
-        // + HasLogger
+        + HasLogger
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>,
     Chain::Runtime: HasTime + CanSleep,
+    Chain::Logger: for<'a> CanLog<TxNoResponseError<'a, Chain>>,
 {
     async fn poll_tx_response(
         chain: &Chain,
@@ -64,6 +64,8 @@ where
 
         let start_time = runtime.now();
 
+        let logger = chain.logger();
+
         loop {
             let response = chain.query_tx_response(tx_hash).await;
 
@@ -71,20 +73,16 @@ where
                 Ok(None) => {
                     let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
                     if elapsed > wait_timeout {
-                        // chain.log_tx(
-                        //     Chain::Logger::LEVEL_ERROR,
-                        //     "no tx response received, and poll timeout has recached. returning error",
-                        //     |log| {
-                        //         log.debug("elapsed", &elapsed).debug("wait_timeout", &wait_timeout);
-                        //     }
-                        // );
-
-                        return Err(Chain::raise_error(TxNoResponseError {
+                        let e = TxNoResponseError {
                             chain,
                             tx_hash,
                             elapsed: &elapsed,
                             wait_timeout: &wait_timeout,
-                        }));
+                        };
+
+                        logger.log("no tx response received, and poll timeout has recached. returning error", &e).await;
+
+                        return Err(Chain::raise_error(e));
                     } else {
                         runtime.sleep(wait_backoff).await;
                     }

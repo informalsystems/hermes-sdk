@@ -3,10 +3,11 @@ use hermes_cosmos_client_components::impls::logger::HandleCosmosLogs;
 use hermes_relayer_components::log::impls::delegate::DelegateLogger;
 use hermes_relayer_components::log::impls::global::GetGlobalLogger;
 use hermes_relayer_components::log::traits::has_logger::{
-    GlobalLoggerGetter, HasLoggerType, LoggerGetter, LoggerGetterComponent, ProvideLoggerType,
+    GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
-use hermes_relayer_components::log::traits::logger::LoggerComponent;
+use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
+use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 
 use crate::contexts::chain::CosmosChain;
 
@@ -26,9 +27,21 @@ delegate_components! {
     }
 }
 
+pub trait CanUseCosmosLogger:
+    for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
+    + for<'a> CanLog<TxNoResponseError<'a, CosmosChain>>
+{
+}
+
+impl CanUseCosmosLogger for CosmosLogger {}
+
 impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
     for CosmosLogHandlers
 {
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<TxNoResponseError<'a, CosmosChain>> for CosmosLogHandlers {
     type Delegate = HandleCosmosLogs;
 }
 

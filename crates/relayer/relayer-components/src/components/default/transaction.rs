@@ -102,7 +102,8 @@ where
         + HasComponents<Components = Components>,
     Chain::Runtime: HasMutex + HasTime + CanSleep,
     OldLogger: HasBaseLogLevels,
-    Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>,
+    Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>
+        + for<'a> CanLog<TxNoResponseError<'a, Chain>>,
     Components: DelegatesToDefaultTxComponents
         + TxEncoder<Chain>
         + TxFeeEstimator<Chain>
