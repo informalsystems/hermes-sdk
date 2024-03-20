@@ -32,7 +32,6 @@ use tonic::transport::Error as TransportError;
 use tonic::Status;
 
 use crate::contexts::chain::CosmosChain;
-use crate::contexts::transaction::CosmosTxContext;
 use crate::types::error::{
     DebugError, DisplayError, Error, HandleInfallible, ProvideCosmosError, ReportError, ReturnError,
 };
@@ -45,8 +44,7 @@ pub trait CheckErrorRaiser<Context>:
     + ErrorRaiser<Context, TransportError>
     + for<'a> ErrorRaiser<Context, &'a str>
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
-    + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosTxContext>>
-    + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosTxContext>>
+    + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosChain>>
 where
     Context: HasErrorType<Error = Error>,
