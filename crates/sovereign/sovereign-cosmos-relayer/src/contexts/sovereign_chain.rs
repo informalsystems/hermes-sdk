@@ -25,7 +25,7 @@ use hermes_relayer_components::logger::traits::has_logger::{
 };
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::cosmos::impls::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
 use hermes_sovereign_client_components::cosmos::impls::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
@@ -80,7 +80,7 @@ delegate_components! {
     SovereignChainComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
-        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideHermesRuntime,
         [
             LoggerTypeComponent,
             LoggerFieldComponent,

@@ -1,5 +1,7 @@
-use cgp_core::HasComponents;
+use cgp_core::{CanRaiseError, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
+use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -10,7 +12,6 @@ use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use crate::components::extra::closures::chain::packet_relayer::UseExtraChainComponentsForPacketRelayer;
 use crate::components::extra::closures::relay::message_sender::UseExtraIbcMessageSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
-use crate::relay::components::packet_relayers::retry::SupportsPacketRetry;
 
 pub trait CanUseExtraPacketRelayer: UseExtraPacketRelayer {}
 
@@ -21,8 +22,10 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasLogger
         + HasPacketLock
-        + SupportsPacketRetry
         + UseExtraIbcMessageSender
+        + HasRetryableError
+        + HasMaxErrorRetry
+        + for<'a> CanRaiseError<MaxRetryExceededError<'a, Relay>>
         + HasComponents<Components = Components>,
     SrcChain: HasLoggerType<Logger = Relay::Logger>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>

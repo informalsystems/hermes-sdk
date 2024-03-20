@@ -1,6 +1,10 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_relayer_components::error::impls::error::{
+    MaxRetryExceededError, UnwrapMaxRetryExceededError,
+};
+use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorTypeComponent};
@@ -46,6 +50,7 @@ pub trait CheckErrorRaiser<Context>:
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosChain>>
+    + for<'a> ErrorRaiser<Context, MaxRetryExceededError<'a, Context>>
 where
     Context: HasErrorType<Error = Error>,
 {
@@ -54,6 +59,15 @@ where
 impl<Context> CheckErrorRaiser<Context> for HandleCosmosError where
     Context: HasErrorType<Error = Error>
 {
+}
+
+impl<Context> ProvideRetryableError<Context> for HandleCosmosError
+where
+    Context: HasErrorType<Error = Error>,
+{
+    fn is_retryable_error(e: &Error) -> bool {
+        e.is_retryable
+    }
 }
 
 impl<Context, E, Delegate> ErrorRaiser<Context, E> for HandleCosmosError
@@ -132,4 +146,11 @@ where
     Counterparty: HasChainIdType,
 {
     type Delegate = DebugError;
+}
+
+impl<'a, Context> DelegateComponent<MaxRetryExceededError<'a, Context>> for HandleCosmosError
+where
+    Context: HasErrorType,
+{
+    type Delegate = UnwrapMaxRetryExceededError;
 }

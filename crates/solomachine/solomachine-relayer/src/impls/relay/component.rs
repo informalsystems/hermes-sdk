@@ -5,7 +5,7 @@ use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 
 use crate::context::relay::SolomachineRelay;
 
@@ -26,7 +26,7 @@ where
 
 delegate_components! {
     SolomachineRelayComponents {
-        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideHermesRuntime,
         ErrorTypeComponent: ProvideCosmosError,
         ErrorRaiserComponent: DebugError,
     }

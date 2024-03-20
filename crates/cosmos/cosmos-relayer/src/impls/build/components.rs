@@ -8,7 +8,7 @@ use hermes_relayer_components_extra::components::extra::build::{
     CanUseExtraBuildComponents, ExtraBuildComponents, IsExtraBuildComponent,
 };
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 
 use crate::contexts::builder::CosmosBuilder;
 use crate::impls::error::HandleCosmosError;
@@ -41,7 +41,7 @@ delegate_components! {
         ]:
             HandleCosmosError,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             LoggerTypeComponent,
             LoggerFieldComponent,

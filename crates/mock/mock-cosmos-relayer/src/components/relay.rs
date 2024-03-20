@@ -9,7 +9,7 @@ use hermes_relayer_components::relay::impls::packet_filters::allow_all::AllowAll
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 
 pub struct MockCosmosRelayComponents;
 
@@ -23,7 +23,7 @@ delegate_components! {
     MockCosmosRelayComponents {
         PacketFilterComponent: AllowAll,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             LoggerTypeComponent,
             LoggerFieldComponent,

@@ -35,7 +35,7 @@ use hermes_relayer_components::logger::traits::has_logger::{
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
@@ -69,7 +69,7 @@ impl<Chain> DelegateComponent<SolomachineChain<Chain>> for CosmosQueryClientStat
 delegate_components! {
     SolomachineChainComponents {
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             HeightTypeComponent,
             TimestampTypeComponent,

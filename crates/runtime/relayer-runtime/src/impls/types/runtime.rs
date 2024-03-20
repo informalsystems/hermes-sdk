@@ -3,9 +3,9 @@ use hermes_relayer_components::runtime::traits::runtime::ProvideRuntimeType;
 
 use crate::types::runtime::HermesRuntime;
 
-pub struct ProvideTokioRuntimeType;
+pub struct ProvideHermesRuntime;
 
-impl<Context> ProvideRuntimeType<Context> for ProvideTokioRuntimeType
+impl<Context> ProvideRuntimeType<Context> for ProvideHermesRuntime
 where
     Context: Async,
 {

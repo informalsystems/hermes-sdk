@@ -85,6 +85,7 @@ use hermes_relayer_components::chain::traits::types::update_client::UpdateClient
 use hermes_relayer_components::encode::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::log::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -113,7 +114,7 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionH
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
@@ -164,10 +165,11 @@ delegate_components! {
         [
             ErrorTypeComponent,
             ErrorRaiserComponent,
+            RetryableErrorComponent,
         ]:
             HandleCosmosError,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
             hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,

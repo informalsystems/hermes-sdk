@@ -32,7 +32,7 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::{
@@ -77,7 +77,7 @@ delegate_components! {
         ErrorRaiserComponent:
             RaiseDebugError,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
             hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
