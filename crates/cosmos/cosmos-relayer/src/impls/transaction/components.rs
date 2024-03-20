@@ -1,18 +1,13 @@
-use cgp_core::{
-    delegate_all, delegate_components, DelegateComponent, ErrorRaiserComponent, ErrorTypeComponent,
-    HasComponents,
-};
+use cgp_core::{delegate_components, ErrorRaiserComponent, ErrorTypeComponent, HasComponents};
 use hermes_cosmos_client_components::components::transaction::CosmosTxComponents as BaseCosmosTxComponents;
 use hermes_cosmos_client_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_client_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_client_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_client_components::traits::tx_extension_options::TxExtensionOptionsGetter;
+use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
-use hermes_relayer_components::components::default::transaction::{
-    CanUseDefaultTxComponents, DefaultTxComponents, IsDefaultTxComponents,
-};
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
@@ -20,10 +15,14 @@ use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
+use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
 use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
@@ -46,14 +45,6 @@ pub struct CosmosTxComponents;
 impl HasComponents for CosmosTxContext {
     type Components = CosmosTxComponents;
 }
-
-delegate_all!(
-    IsDefaultTxComponents,
-    DefaultTxComponents,
-    CosmosTxComponents,
-);
-
-impl CanUseDefaultTxComponents for CosmosTxContext {}
 
 delegate_components! {
     CosmosTxComponents {
@@ -80,6 +71,11 @@ delegate_components! {
             TransactionHashTypeComponent,
             FeeTypeComponent,
             TxResponseTypeComponent,
+            MessageSenderComponent,
+            MessagesWithSignerSenderComponent,
+            MessagesWithSignerAndNonceSenderComponent,
+            NonceAllocatorComponent,
+            TxResponsePollerComponent,
             PollTimeoutGetterComponent,
             TxResponseAsEventsParserComponent,
             TxResponseQuerierComponent,

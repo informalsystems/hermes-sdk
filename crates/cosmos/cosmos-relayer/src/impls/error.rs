@@ -47,6 +47,7 @@ pub trait CheckErrorRaiser<Context>:
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosTxContext>>
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosTxContext>>
+    + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosChain>>
 where
     Context: HasErrorType<Error = Error>,
 {

@@ -1,8 +1,13 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use futures::lock::Mutex;
 use hermes_cosmos_client_components::components::client::CosmosClientComponents;
+use hermes_cosmos_client_components::components::transaction::CosmosTxComponents;
 use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
+use hermes_cosmos_client_components::traits::gas_config::GasConfigGetter;
+use hermes_cosmos_client_components::traits::tx_extension_options::TxExtensionOptionsGetter;
+use hermes_cosmos_client_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
@@ -84,10 +89,33 @@ use hermes_relayer_components::encode::traits::has_encoding::{
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
+use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
+use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
+use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
+use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
+use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
+use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::ProvideMutexForNonceAllocation;
+use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
+use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
+use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
+use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetter;
+use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
+use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
+use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
+use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
+use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
@@ -107,6 +135,10 @@ use hermes_test_components::chain::traits::types::memo::{
 use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
+use ibc_proto::cosmos::tx::v1beta1::Fee;
+use ibc_relayer::chain::cosmos::types::account::Account;
+use ibc_relayer::chain::cosmos::types::gas::GasConfig;
+use ibc_relayer::keyring::Secp256k1KeyPair;
 use prost_types::Any;
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
@@ -224,6 +256,27 @@ delegate_components! {
         ConnectionHandshakeMessageBuilderComponent:
             DelegateCosmosConnectionHandshakeBuilder,
         [
+            SignerTypeComponent,
+            NonceTypeComponent,
+            NonceGuardComponent,
+            TransactionTypeComponent,
+            TransactionHashTypeComponent,
+            FeeTypeComponent,
+            TxResponseTypeComponent,
+            MessagesWithSignerSenderComponent,
+            MessagesWithSignerAndNonceSenderComponent,
+            NonceAllocatorComponent,
+            TxResponsePollerComponent,
+            PollTimeoutGetterComponent,
+            TxResponseAsEventsParserComponent,
+            TxResponseQuerierComponent,
+            TxEncoderComponent,
+            TxFeeEstimatorComponent,
+            TxSubmitterComponent,
+            NonceQuerierComponent,
+        ]:
+            CosmosTxComponents,
+        [
             WalletTypeComponent,
             WalletSignerComponent,
             ChainIdFromStringBuilderComponent,
@@ -259,5 +312,48 @@ delegate_components! {
 delegate_components! {
     CosmosQueryClientStateComponents {
         CosmosChain: QueryAndDecodeClientStateVia<Any>,
+    }
+}
+
+impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainComponents {
+    fn tx_extension_options(chain: &CosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
+        &chain.tx_context.tx_config.extension_options
+    }
+}
+
+impl GasConfigGetter<CosmosChain> for CosmosChainComponents {
+    fn gas_config(chain: &CosmosChain) -> &GasConfig {
+        &chain.tx_context.tx_config.gas_config
+    }
+}
+
+impl DefaultSignerGetter<CosmosChain> for CosmosChainComponents {
+    fn get_default_signer(chain: &CosmosChain) -> &Secp256k1KeyPair {
+        &chain.tx_context.key_entry
+    }
+}
+
+impl FeeForSimulationGetter<CosmosChain> for CosmosChainComponents {
+    fn fee_for_simulation(chain: &CosmosChain) -> &Fee {
+        &chain.tx_context.tx_config.gas_config.max_fee
+    }
+}
+
+impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainComponents {
+    fn mutex_for_nonce_allocation<'a>(
+        chain: &'a CosmosChain,
+        _signer: &Secp256k1KeyPair,
+    ) -> &'a Mutex<()> {
+        &chain.tx_context.nonce_mutex
+    }
+
+    fn mutex_to_nonce_guard<'a>(
+        mutex_guard: MutexGuardOf<'a, HermesRuntime, ()>,
+        account: Account,
+    ) -> NonceGuard<'a> {
+        NonceGuard {
+            mutex_guard,
+            account,
+        }
     }
 }

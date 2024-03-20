@@ -1,14 +1,20 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
+use hermes_relayer_components::components::default::transaction::DefaultTxComponents;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
+use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
 use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
@@ -47,6 +53,14 @@ delegate_components! {
             TxResponseTypeComponent,
         ]:
             ProvideCosmosTransactionTypes,
+        [
+            MessageSenderComponent,
+            MessagesWithSignerSenderComponent,
+            MessagesWithSignerAndNonceSenderComponent,
+            NonceAllocatorComponent,
+            TxResponsePollerComponent,
+        ]:
+            DefaultTxComponents,
         PollTimeoutGetterComponent:
             DefaultPollTimeout,
         TxResponseAsEventsParserComponent:
