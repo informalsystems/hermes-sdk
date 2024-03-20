@@ -4,6 +4,7 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 
+use crate::error::traits::retry::HasRetryableError;
 use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
 use crate::runtime::traits::runtime::HasRuntime;
@@ -23,6 +24,16 @@ where
     pub tx_hash: &'a Chain::TxHash,
     pub wait_timeout: &'a Duration,
     pub elapsed: &'a Duration,
+}
+
+pub struct LogRetryQueryTxResponse<'a, Chain>
+where
+    Chain: HasTransactionHashType + HasErrorType,
+{
+    pub chain: &'a Chain,
+    pub tx_hash: &'a Chain::TxHash,
+    pub elapsed: &'a Duration,
+    pub error: &'a Chain::Error,
 }
 
 impl<'a, Chain> Debug for TxNoResponseError<'a, Chain>
@@ -50,9 +61,11 @@ where
         + HasPollTimeout
         + HasRuntime
         + HasLogger
+        + HasRetryableError
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>,
     Chain::Runtime: HasTime + CanSleep,
-    Chain::Logger: for<'a> CanLog<TxNoResponseError<'a, Chain>>,
+    Chain::Logger: for<'a> CanLog<TxNoResponseError<'a, Chain>>
+        + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,
 {
     async fn poll_tx_response(
         chain: &Chain,
@@ -70,6 +83,9 @@ where
             let response = chain.query_tx_response(tx_hash).await;
 
             match response {
+                Ok(Some(response)) => {
+                    return Ok(response);
+                }
                 Ok(None) => {
                     let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
                     if elapsed > wait_timeout {
@@ -80,30 +96,17 @@ where
                             wait_timeout: &wait_timeout,
                         };
 
-                        logger.log("no tx response received, and poll timeout has recached. returning error", &e).await;
+                        logger.log("no tx response received, and poll timeout has reached. returning error", &e).await;
 
                         return Err(Chain::raise_error(e));
                     } else {
                         runtime.sleep(wait_backoff).await;
                     }
                 }
-                Ok(Some(response)) => {
-                    // chain.log_tx(
-                    //     Chain::Logger::LEVEL_TRACE,
-                    //     "received tx response, finish polling",
-                    //     |_| {},
-                    // );
-
-                    return Ok(response);
-                }
                 Err(e) => {
-                    // chain.log_tx(
-                    //     Chain::Logger::LEVEL_ERROR,
-                    //     "query_tx_response returned error",
-                    //     |log| {
-                    //         log.debug("error", &e);
-                    //     },
-                    // );
+                    if !Chain::is_retryable_error(&e) {
+                        return Err(e);
+                    }
 
                     /*
                         If querying the TX response returns failure, it might be a temporary network
@@ -113,14 +116,24 @@ where
 
                         However, if the query still returns error after the wait timeout exceeded,
                         we return the error we get from the query.
-
-                        TODO: check whether the error is retryable before re-polling.
                     */
 
                     let elapsed = Chain::Runtime::duration_since(&start_time, &runtime.now());
                     if elapsed > wait_timeout {
                         return Err(e);
                     } else {
+                        logger
+                            .log(
+                                "retry polling with query_tx_response returning retryable error",
+                                &LogRetryQueryTxResponse {
+                                    chain,
+                                    tx_hash,
+                                    elapsed: &elapsed,
+                                    error: &e,
+                                },
+                            )
+                            .await;
+
                         runtime.sleep(wait_backoff).await;
                     }
                 }

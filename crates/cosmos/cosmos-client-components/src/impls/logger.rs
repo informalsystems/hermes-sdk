@@ -1,14 +1,16 @@
-use cgp_core::Async;
+use cgp_core::{Async, HasErrorType};
 use core::fmt::{Debug, Display};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::log::traits::logger::Logger;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
-use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
+use hermes_relayer_components::transaction::impls::poll_tx_response::{
+    LogRetryQueryTxResponse, TxNoResponseError,
+};
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
-use tracing::{error, trace};
+use tracing::{debug, error, trace};
 
 pub struct HandleCosmosLogs;
 
@@ -46,6 +48,24 @@ where
             tx_hash = %details.tx_hash,
             wait_timeout = ?details.wait_timeout,
             elapsed = ?details.elapsed,
+            "{message}",
+        );
+    }
+}
+
+impl<'a, Logging, Chain> Logger<Logging, LogRetryQueryTxResponse<'a, Chain>> for HandleCosmosLogs
+where
+    Logging: Async,
+    Chain: HasTransactionHashType + HasChainId + HasErrorType,
+    Chain::TxHash: Display,
+    Chain::Error: Debug,
+{
+    async fn log(_logging: &Logging, message: &str, details: &LogRetryQueryTxResponse<'a, Chain>) {
+        debug!(
+            chain_id = %details.chain.chain_id(),
+            tx_hash = %details.tx_hash,
+            elapsed = ?details.elapsed,
+            error = ?details.error,
             "{message}",
         );
     }

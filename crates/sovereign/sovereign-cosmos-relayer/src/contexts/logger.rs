@@ -6,7 +6,9 @@ use hermes_relayer_components::log::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
 use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
-use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
+use hermes_relayer_components::transaction::impls::poll_tx_response::{
+    LogRetryQueryTxResponse, TxNoResponseError,
+};
 
 use crate::contexts::sovereign_rollup::SovereignRollup;
 
@@ -31,6 +33,10 @@ pub trait CanUseSovereignLogger: for<'a> CanLog<TxNoResponseError<'a, SovereignR
 impl CanUseSovereignLogger for SovereignLogger {}
 
 impl<'a> DelegateComponent<TxNoResponseError<'a, SovereignRollup>> for SovereignLogHandlers {
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogRetryQueryTxResponse<'a, SovereignRollup>> for SovereignLogHandlers {
     type Delegate = HandleCosmosLogs;
 }
 

@@ -7,7 +7,9 @@ use hermes_relayer_components::log::traits::has_logger::{
 };
 use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
-use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
+use hermes_relayer_components::transaction::impls::poll_tx_response::{
+    LogRetryQueryTxResponse, TxNoResponseError,
+};
 
 use crate::contexts::chain::CosmosChain;
 
@@ -42,6 +44,10 @@ impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
 }
 
 impl<'a> DelegateComponent<TxNoResponseError<'a, CosmosChain>> for CosmosLogHandlers {
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogRetryQueryTxResponse<'a, CosmosChain>> for CosmosLogHandlers {
     type Delegate = HandleCosmosLogs;
 }
 

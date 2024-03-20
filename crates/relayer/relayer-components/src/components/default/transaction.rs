@@ -5,6 +5,7 @@ use crate::chain::traits::send_message::{CanSendMessages, MessageSenderComponent
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
+use crate::error::traits::retry::HasRetryableError;
 use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
 use crate::logger::traits::level::HasBaseLogLevels;
@@ -15,6 +16,7 @@ use crate::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAn
 use crate::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
 use crate::transaction::impls::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
 use crate::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
+use crate::transaction::impls::poll_tx_response::LogRetryQueryTxResponse;
 use crate::transaction::impls::poll_tx_response::{
     HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
@@ -94,6 +96,7 @@ where
         + HasFeeForSimulation
         + HasMutexForNonceAllocation
         + HasPollTimeout
+        + HasRetryableError
         + crate::logger::traits::has_logger::HasLogger<Logger = OldLogger>
         + HasLogger<Logger = Logger>
         + CanLogNonce
@@ -103,7 +106,8 @@ where
     Chain::Runtime: HasMutex + HasTime + CanSleep,
     OldLogger: HasBaseLogLevels,
     Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>
-        + for<'a> CanLog<TxNoResponseError<'a, Chain>>,
+        + for<'a> CanLog<TxNoResponseError<'a, Chain>>
+        + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,
     Components: DelegatesToDefaultTxComponents
         + TxEncoder<Chain>
         + TxFeeEstimator<Chain>

@@ -13,6 +13,8 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::encode::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
+use hermes_relayer_components::error::impls::retry::ReturnRetryable;
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::log::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -76,6 +78,8 @@ delegate_components! {
             ProvideEyreError,
         ErrorRaiserComponent:
             RaiseDebugError,
+        RetryableErrorComponent:
+            ReturnRetryable<false>,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
         [
