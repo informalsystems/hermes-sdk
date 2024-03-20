@@ -82,12 +82,11 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUn
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
+use hermes_relayer_components::log::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
@@ -147,6 +146,7 @@ use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuer
 use crate::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::encoding::ProvideCosmosEncoding;
+use crate::contexts::logger::ProvideCosmosLogger;
 use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
@@ -169,16 +169,22 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideTokioRuntimeType,
         [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
         ]:
             ProvideTracingLogger,
         [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideCosmosLogger,
+        [
             EncodingTypeComponent,
+            EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:
             ProvideCosmosEncoding,
-        EncodingGetterComponent: GetDefaultEncoding,
         [
             HeightTypeComponent,
             HeightIncrementerComponent,

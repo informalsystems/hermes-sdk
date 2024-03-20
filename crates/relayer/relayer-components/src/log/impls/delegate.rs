@@ -14,7 +14,7 @@ where
     Components: DelegateComponent<Details, Delegate = Delegate>,
     Delegate: Logger<Logging, Details>,
 {
-    async fn log(logging: &Logging, message: &str, details: Details) {
+    async fn log(logging: &Logging, message: &str, details: &Details) {
         Delegate::log(logging, message, details).await
     }
 }

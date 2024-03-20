@@ -5,7 +5,8 @@ use crate::chain::traits::send_message::{CanSendMessages, MessageSenderComponent
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
-use crate::logger::traits::has_logger::HasLogger;
+use crate::log::traits::has_logger::HasLogger;
+use crate::log::traits::logger::CanLog;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::sleep::CanSleep;
@@ -13,6 +14,7 @@ use crate::runtime::traits::time::HasTime;
 use crate::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
 use crate::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
 use crate::transaction::impls::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
+use crate::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use crate::transaction::impls::poll_tx_response::{
     HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
@@ -75,7 +77,7 @@ pub trait UseDefaultTxComponents:
 {
 }
 
-impl<Chain, Components> UseDefaultTxComponents for Chain
+impl<Chain, Components, Logger, OldLogger> UseDefaultTxComponents for Chain
 where
     Chain: HasErrorType
         + HasMessageType
@@ -92,13 +94,15 @@ where
         + HasFeeForSimulation
         + HasMutexForNonceAllocation
         + HasPollTimeout
-        + HasLogger
+        + crate::logger::traits::has_logger::HasLogger<Logger = OldLogger>
+        + HasLogger<Logger = Logger>
         + CanLogNonce
         + CanParseTxResponseAsEvents
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
     Chain::Runtime: HasMutex + HasTime + CanSleep,
-    Chain::Logger: HasBaseLogLevels,
+    OldLogger: HasBaseLogLevels,
+    Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>,
     Components: DelegatesToDefaultTxComponents
         + TxEncoder<Chain>
         + TxFeeEstimator<Chain>

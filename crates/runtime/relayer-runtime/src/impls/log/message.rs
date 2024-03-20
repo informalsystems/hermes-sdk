@@ -13,7 +13,7 @@ where
     Logging: Async,
     Details: Send + Sync,
 {
-    async fn log(_logging: &Logging, message: &str, _details: Details) {
+    async fn log(_logging: &Logging, message: &str, _details: &Details) {
         error!("{message}");
     }
 }
@@ -23,7 +23,7 @@ where
     Logging: Async,
     Details: Send + Sync,
 {
-    async fn log(_logging: &Logging, message: &str, _details: Details) {
+    async fn log(_logging: &Logging, message: &str, _details: &Details) {
         warn!("{message}");
     }
 }
@@ -33,7 +33,7 @@ where
     Logging: Async,
     Details: Send + Sync,
 {
-    async fn log(_logging: &Logging, message: &str, _details: Details) {
+    async fn log(_logging: &Logging, message: &str, _details: &Details) {
         info!("{message}");
     }
 }
@@ -43,7 +43,7 @@ where
     Logging: Async,
     Details: Send + Sync,
 {
-    async fn log(_logging: &Logging, message: &str, _details: Details) {
+    async fn log(_logging: &Logging, message: &str, _details: &Details) {
         debug!("{message}");
     }
 }
@@ -53,7 +53,7 @@ where
     Logging: Async,
     Details: Send + Sync,
 {
-    async fn log(_logging: &Logging, message: &str, _details: Details) {
+    async fn log(_logging: &Logging, message: &str, _details: &Details) {
         trace!("{message}");
     }
 }

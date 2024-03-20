@@ -15,7 +15,7 @@ where
     Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(logging: &Logging, message: &str, details: Details) {
+    async fn log(logging: &Logging, message: &str, details: &Details) {
         error!(context:serde = logging, details:serde; "{message}");
     }
 }
@@ -25,7 +25,7 @@ where
     Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(logging: &Logging, message: &str, details: Details) {
+    async fn log(logging: &Logging, message: &str, details: &Details) {
         warn!(context:serde = logging, details:serde; "{message}");
     }
 }
@@ -35,7 +35,7 @@ where
     Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(logging: &Logging, message: &str, details: Details) {
+    async fn log(logging: &Logging, message: &str, details: &Details) {
         info!(context:serde = logging, details:serde; "{message}");
     }
 }
@@ -45,7 +45,7 @@ where
     Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(logging: &Logging, message: &str, details: Details) {
+    async fn log(logging: &Logging, message: &str, details: &Details) {
         debug!(context:serde = logging, details:serde; "{message}");
     }
 }
@@ -55,7 +55,7 @@ where
     Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(logging: &Logging, message: &str, details: Details) {
+    async fn log(logging: &Logging, message: &str, details: &Details) {
         trace!(context:serde = logging, details:serde; "{message}");
     }
 }

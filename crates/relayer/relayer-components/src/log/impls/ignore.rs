@@ -9,5 +9,5 @@ where
     Logging: Async,
     Details: Send + Sync,
 {
-    async fn log(_logging: &Logging, _message: &str, _details: Details) {}
+    async fn log(_logging: &Logging, _message: &str, _details: &Details) {}
 }

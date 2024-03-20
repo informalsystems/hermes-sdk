@@ -6,5 +6,5 @@ pub trait CanLog<Details>: Async
 where
     Details: Send + Sync,
 {
-    async fn log(&self, message: &str, details: Details);
+    async fn log(&self, message: &str, details: &Details);
 }

@@ -1,92 +1,79 @@
-use crate::logger::traits::level::HasBaseLogLevels;
+use crate::chain::traits::types::message::HasMessageType;
+use crate::log::traits::has_logger::HasLogger;
+use crate::log::traits::logger::CanLog;
 use crate::transaction::traits::encode_tx::CanEncodeTx;
 use crate::transaction::traits::estimate_tx_fee::CanEstimateTxFee;
-use crate::transaction::traits::logs::logger::CanLogTx;
-use crate::transaction::traits::logs::nonce::CanLogNonce;
 use crate::transaction::traits::poll_tx_response::CanPollTxResponse;
 use crate::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSender;
 use crate::transaction::traits::simulation_fee::HasFeeForSimulation;
 use crate::transaction::traits::submit_tx::CanSubmitTx;
+use crate::transaction::traits::types::nonce::HasNonceType;
+use crate::transaction::traits::types::signer::HasSignerType;
 
 pub struct EstimateFeesAndSendTx;
 
-impl<Context> MessagesWithSignerAndNonceSender<Context> for EstimateFeesAndSendTx
+pub struct LogSendMessagesWithSignerAndNonce<'a, Chain>
 where
-    Context: HasFeeForSimulation
+    Chain: HasSignerType + HasNonceType + HasMessageType,
+{
+    pub chain: &'a Chain,
+    pub signer: &'a Chain::Signer,
+    pub nonce: &'a Chain::Nonce,
+    pub messages: &'a [Chain::Message],
+}
+
+impl<Chain> MessagesWithSignerAndNonceSender<Chain> for EstimateFeesAndSendTx
+where
+    Chain: HasFeeForSimulation
         + CanEncodeTx
         + CanEstimateTxFee
         + CanSubmitTx
         + CanPollTxResponse
-        + CanLogTx
-        + CanLogNonce,
+        + HasLogger,
+    Chain::Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>,
 {
     async fn send_messages_with_signer_and_nonce(
-        context: &Context,
-        signer: &Context::Signer,
-        nonce: &Context::Nonce,
-        messages: &[Context::Message],
-    ) -> Result<Context::TxResponse, Context::Error> {
-        context.log_tx(
-            Context::Logger::LEVEL_TRACE,
-            "encoding tx for simulation",
-            |log| {
-                log.field("nonce", Context::log_nonce(nonce));
-            },
-        );
+        chain: &Chain,
+        signer: &Chain::Signer,
+        nonce: &Chain::Nonce,
+        messages: &[Chain::Message],
+    ) -> Result<Chain::TxResponse, Chain::Error> {
+        let logger = chain.logger();
 
-        let fee_for_simulation = context.fee_for_simulation();
+        let details = LogSendMessagesWithSignerAndNonce {
+            chain,
+            signer,
+            nonce,
+            messages,
+        };
 
-        let simulate_tx = context
+        logger.log("encoding tx for simulation", &details).await;
+
+        let fee_for_simulation = chain.fee_for_simulation();
+
+        let simulate_tx = chain
             .encode_tx(signer, nonce, fee_for_simulation, messages)
             .await?;
 
-        context.log_tx(
-            Context::Logger::LEVEL_TRACE,
-            "estimating fee with tx for simulation",
-            |log| {
-                log.field("none", Context::log_nonce(nonce));
-            },
-        );
+        logger
+            .log("estimating fee with tx for simulation", &details)
+            .await;
 
-        let tx_fee = context.estimate_tx_fee(&simulate_tx).await?;
+        let tx_fee = chain.estimate_tx_fee(&simulate_tx).await?;
 
-        context.log_tx(
-            Context::Logger::LEVEL_TRACE,
-            "encoding tx for submission",
-            |log| {
-                log.field("none", Context::log_nonce(nonce));
-            },
-        );
+        logger.log("encoding tx for submission", &details).await;
 
-        let tx = context.encode_tx(signer, nonce, &tx_fee, messages).await?;
+        let tx = chain.encode_tx(signer, nonce, &tx_fee, messages).await?;
 
-        context.log_tx(
-            Context::Logger::LEVEL_TRACE,
-            "submitting tx to chain",
-            |log| {
-                log.field("none", Context::log_nonce(nonce));
-            },
-        );
+        logger.log("submitting tx to chain", &details).await;
 
-        let tx_hash = context.submit_tx(&tx).await?;
+        let tx_hash = chain.submit_tx(&tx).await?;
 
-        context.log_tx(
-            Context::Logger::LEVEL_TRACE,
-            "waiting for tx hash response",
-            |log| {
-                log.field("none", Context::log_nonce(nonce));
-            },
-        );
+        logger.log("waiting for tx hash response", &details).await;
 
-        let response = context.poll_tx_response(&tx_hash).await?;
+        let response = chain.poll_tx_response(&tx_hash).await?;
 
-        context.log_tx(
-            Context::Logger::LEVEL_TRACE,
-            "received tx hash response",
-            |log| {
-                log.field("none", Context::log_nonce(nonce));
-            },
-        );
+        logger.log("received tx hash response", &details).await;
 
         Ok(response)
     }
