@@ -65,8 +65,8 @@ where
         let fee = gas_amount_to_fee(
             chain.gas_config(),
             gas_info.gas_used,
-            &chain.chain_id(),
-            &chain.rpc_address(),
+            chain.chain_id(),
+            chain.rpc_address(),
         )
         .await;
 

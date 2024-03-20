@@ -1,3 +1,5 @@
+#![allow(clippy::ptr_arg)]
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -88,7 +90,7 @@ pub fn sign_tx(
     let (auth_info, auth_info_bytes) = auth_info_and_bytes(signer, fee.clone());
 
     let signed_doc = encode_sign_doc(
-        &chain_id,
+        chain_id,
         key_pair,
         account.number,
         auth_info_bytes.clone(),
@@ -134,13 +136,12 @@ pub fn encode_signer_info(sequence: AccountSequence, key_bytes: Vec<u8>) -> Sign
     let single = Single { mode: 1 };
     let sum_single = Some(Sum::Single(single));
     let mode = Some(ModeInfo { sum: sum_single });
-    let signer_info = SignerInfo {
+
+    SignerInfo {
         public_key: Some(pk_any),
         mode_info: mode,
         sequence: sequence.to_u64(),
-    };
-
-    signer_info
+    }
 }
 
 pub fn auth_info_and_bytes(signer_info: SignerInfo, fee: Fee) -> (AuthInfo, Vec<u8>) {
