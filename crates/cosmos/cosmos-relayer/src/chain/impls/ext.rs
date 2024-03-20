@@ -11,17 +11,17 @@ use crate::types::error::Error;
 
 impl GrpcAddressGetter<CosmosChain> for CosmosChainComponents {
     fn grpc_address(chain: &CosmosChain) -> &Uri {
-        &chain.tx_context.tx_config.grpc_address
+        &chain.tx_config.grpc_address
     }
 }
 
 impl RpcClientGetter<CosmosChain> for CosmosChainComponents {
     fn rpc_client(chain: &CosmosChain) -> &HttpClient {
-        &chain.tx_context.rpc_client
+        &chain.rpc_client
     }
 
     fn rpc_address(chain: &CosmosChain) -> &Url {
-        &chain.tx_context.tx_config.rpc_address
+        &chain.tx_config.rpc_address
     }
 }
 

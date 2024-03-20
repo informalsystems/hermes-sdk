@@ -317,25 +317,25 @@ delegate_components! {
 
 impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainComponents {
     fn tx_extension_options(chain: &CosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
-        &chain.tx_context.tx_config.extension_options
+        &chain.tx_config.extension_options
     }
 }
 
 impl GasConfigGetter<CosmosChain> for CosmosChainComponents {
     fn gas_config(chain: &CosmosChain) -> &GasConfig {
-        &chain.tx_context.tx_config.gas_config
+        &chain.tx_config.gas_config
     }
 }
 
 impl DefaultSignerGetter<CosmosChain> for CosmosChainComponents {
     fn get_default_signer(chain: &CosmosChain) -> &Secp256k1KeyPair {
-        &chain.tx_context.key_entry
+        &chain.key_entry
     }
 }
 
 impl FeeForSimulationGetter<CosmosChain> for CosmosChainComponents {
     fn fee_for_simulation(chain: &CosmosChain) -> &Fee {
-        &chain.tx_context.tx_config.gas_config.max_fee
+        &chain.tx_config.gas_config.max_fee
     }
 }
 
@@ -344,7 +344,7 @@ impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainComponents {
         chain: &'a CosmosChain,
         _signer: &Secp256k1KeyPair,
     ) -> &'a Mutex<()> {
-        &chain.tx_context.nonce_mutex
+        &chain.nonce_mutex
     }
 
     fn mutex_to_nonce_guard<'a>(
