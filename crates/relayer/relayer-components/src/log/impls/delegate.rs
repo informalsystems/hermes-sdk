@@ -7,14 +7,14 @@ use crate::log::traits::logger::Logger;
 
 pub struct DelegateLogger<Components>(pub PhantomData<Components>);
 
-impl<Context, Components, Delegate, Details> Logger<Context, Details> for DelegateLogger<Components>
+impl<Logging, Components, Delegate, Details> Logger<Logging, Details> for DelegateLogger<Components>
 where
-    Context: Async,
+    Logging: Async,
     Details: Send + Sync,
     Components: DelegateComponent<Details, Delegate = Delegate>,
-    Delegate: Logger<Context, Details>,
+    Delegate: Logger<Logging, Details>,
 {
-    async fn log(context: &Context, message: &str, details: Details) {
-        Delegate::log(context, message, details).await
+    async fn log(logging: &Logging, message: &str, details: Details) {
+        Delegate::log(logging, message, details).await
     }
 }

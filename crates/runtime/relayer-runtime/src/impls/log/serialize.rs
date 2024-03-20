@@ -10,52 +10,52 @@ use serde::Serialize;
 
 pub struct LogSerialize<Level>(pub PhantomData<Level>);
 
-impl<Context, Details> Logger<Context, Details> for LogSerialize<LevelError>
+impl<Logging, Details> Logger<Logging, Details> for LogSerialize<LevelError>
 where
-    Context: Async,
+    Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(_context: &Context, message: &str, details: Details) {
-        error!(details:serde; "{message}");
+    async fn log(logging: &Logging, message: &str, details: Details) {
+        error!(context:serde = logging, details:serde; "{message}");
     }
 }
 
-impl<Context, Details> Logger<Context, Details> for LogSerialize<LevelWarn>
+impl<Logging, Details> Logger<Logging, Details> for LogSerialize<LevelWarn>
 where
-    Context: Async,
+    Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(_context: &Context, message: &str, details: Details) {
-        warn!(details:serde; "{message}");
+    async fn log(logging: &Logging, message: &str, details: Details) {
+        warn!(context:serde = logging, details:serde; "{message}");
     }
 }
 
-impl<Context, Details> Logger<Context, Details> for LogSerialize<LevelInfo>
+impl<Logging, Details> Logger<Logging, Details> for LogSerialize<LevelInfo>
 where
-    Context: Async,
+    Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(_context: &Context, message: &str, details: Details) {
-        info!(details:serde; "{message}");
+    async fn log(logging: &Logging, message: &str, details: Details) {
+        info!(context:serde = logging, details:serde; "{message}");
     }
 }
 
-impl<Context, Details> Logger<Context, Details> for LogSerialize<LevelDebug>
+impl<Logging, Details> Logger<Logging, Details> for LogSerialize<LevelDebug>
 where
-    Context: Async,
+    Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(_context: &Context, message: &str, details: Details) {
-        debug!(details:serde; "{message}");
+    async fn log(logging: &Logging, message: &str, details: Details) {
+        debug!(context:serde = logging, details:serde; "{message}");
     }
 }
 
-impl<Context, Details> Logger<Context, Details> for LogSerialize<LevelTrace>
+impl<Logging, Details> Logger<Logging, Details> for LogSerialize<LevelTrace>
 where
-    Context: Async,
+    Logging: Serialize + Async,
     Details: Serialize + Send + Sync,
 {
-    async fn log(_context: &Context, message: &str, details: Details) {
-        trace!(details:serde; "{message}");
+    async fn log(logging: &Logging, message: &str, details: Details) {
+        trace!(context:serde = logging, details:serde; "{message}");
     }
 }

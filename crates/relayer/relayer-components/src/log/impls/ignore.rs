@@ -4,10 +4,10 @@ use crate::log::traits::logger::Logger;
 
 pub struct IgnoreLog;
 
-impl<Context, Details> Logger<Context, Details> for IgnoreLog
+impl<Logging, Details> Logger<Logging, Details> for IgnoreLog
 where
-    Context: Async,
+    Logging: Async,
     Details: Send + Sync,
 {
-    async fn log(_context: &Context, _message: &str, _details: Details) {}
+    async fn log(_logging: &Logging, _message: &str, _details: Details) {}
 }
