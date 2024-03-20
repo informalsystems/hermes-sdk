@@ -10,6 +10,7 @@ pub mod build;
 pub mod chain;
 pub mod components;
 pub mod encode;
+pub mod log;
 pub mod logger;
 pub mod relay;
 pub mod runtime;
