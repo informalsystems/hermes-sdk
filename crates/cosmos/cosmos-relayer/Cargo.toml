@@ -36,7 +36,6 @@ tendermint-proto                    = { workspace = true }
 tendermint-rpc                      = { workspace = true, features = ["http-client", "websocket-client"] }
 
 eyre            = { workspace = true }
-flex-error      = { workspace = true }
 prost           = { workspace = true }
 prost-types     = { workspace = true }
 tracing         = { workspace = true }

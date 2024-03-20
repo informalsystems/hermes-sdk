@@ -4,7 +4,7 @@ use hermes_relayer_components::log::traits::has_logger::{
 };
 use hermes_relayer_components::log::traits::logger::Logger;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
-use tracing::info;
+use tracing::trace;
 
 use crate::contexts::chain::CosmosChain;
 
@@ -53,7 +53,7 @@ where
         message: &str,
         details: &LogSendMessagesWithSignerAndNonce<'a, CosmosChain>,
     ) {
-        info!(
+        trace!(
             chain_id = %details.chain.chain_id,
             nonce = ?details.nonce,
             signer = ?details.signer,

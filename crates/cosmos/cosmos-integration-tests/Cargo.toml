@@ -28,10 +28,12 @@ hermes-cosmos-client-components     = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 tendermint-rpc                      = { workspace = true }
 
-eyre            = { workspace = true }
-tokio           = { workspace = true }
-toml            = { workspace = true }
-serde_json      = { workspace = true }
-prost           = { workspace = true }
+eyre                = { workspace = true }
+tokio               = { workspace = true }
+toml                = { workspace = true }
+serde_json          = { workspace = true }
+prost               = { workspace = true }
+tracing             = { workspace = true }
+tracing-subscriber  = { workspace = true }
 
 stable-eyre         = { version = "0.2.2" }

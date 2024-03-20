@@ -27,7 +27,6 @@ hermes-protobuf-components          = { workspace = true }
 
 serde           = { workspace = true }
 serde_derive    = { workspace = true }
-flex-error      = { workspace = true }
 prost           = { workspace = true }
 eyre            = { workspace = true }
 tokio           = { workspace = true }
