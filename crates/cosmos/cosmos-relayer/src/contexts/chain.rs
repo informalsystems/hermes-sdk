@@ -1,3 +1,5 @@
+use core::ops::Deref;
+
 use alloc::sync::Arc;
 
 use futures::lock::Mutex;
@@ -20,6 +22,18 @@ use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
 pub struct CosmosChain {
+    pub base_chain: Arc<BaseCosmosChain>,
+}
+
+impl Deref for CosmosChain {
+    type Target = BaseCosmosChain;
+
+    fn deref(&self) -> &BaseCosmosChain {
+        &self.base_chain
+    }
+}
+
+pub struct BaseCosmosChain {
     pub handle: BaseChainHandle,
     pub chain_config: ChainConfig,
     pub chain_id: ChainId,
@@ -30,7 +44,7 @@ pub struct CosmosChain {
     pub tx_config: TxConfig,
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
-    pub nonce_mutex: Arc<Mutex<()>>,
+    pub nonce_mutex: Mutex<()>,
 }
 
 impl CosmosChain {
@@ -63,17 +77,19 @@ impl CosmosChain {
         let chain_id = tx_config.chain_id.clone();
 
         let chain = Self {
-            handle,
-            chain_config,
-            chain_id,
-            compat_mode,
-            runtime,
-            telemetry,
-            subscription,
-            tx_config,
-            rpc_client,
-            key_entry,
-            nonce_mutex: Arc::new(Mutex::new(())),
+            base_chain: Arc::new(BaseCosmosChain {
+                handle,
+                chain_config,
+                chain_id,
+                compat_mode,
+                runtime,
+                telemetry,
+                subscription,
+                tx_config,
+                rpc_client,
+                key_entry,
+                nonce_mutex: Mutex::new(()),
+            }),
         };
 
         chain
