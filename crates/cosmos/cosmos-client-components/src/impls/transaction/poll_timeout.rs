@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use hermes_relayer_components::transaction::components::poll_tx_response::PollTimeoutGetter;
+use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetter;
 
 pub struct DefaultPollTimeout;
 

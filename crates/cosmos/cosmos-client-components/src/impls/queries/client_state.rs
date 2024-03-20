@@ -7,7 +7,6 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerier, ClientStateBytesQuerier,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-
 use ibc_proto::ibc::core::client::v1::{
     IdentifiedClientState, QueryClientStatesRequest as ProtoQueryClientStatesRequest,
     QueryClientStatesResponse,

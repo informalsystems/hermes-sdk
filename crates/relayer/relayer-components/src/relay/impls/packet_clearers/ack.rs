@@ -1,6 +1,7 @@
 use alloc::format;
-use cgp_core::async_trait;
 use core::fmt::Display;
+
+use cgp_core::async_trait;
 
 use crate::chain::traits::queries::ack_packets::CanQueryAckPackets;
 use crate::chain::traits::queries::packet_acknowledgements::CanQueryPacketAcknowledgements;
@@ -8,8 +9,7 @@ use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments
 use crate::chain::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
-use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
-use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
+use crate::chain::types::aliases::{ChannelIdOf, HeightOf, PortIdOf, WriteAckEventOf};
 use crate::logger::traits::log::CanLog;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::packet_clearer::PacketClearer;

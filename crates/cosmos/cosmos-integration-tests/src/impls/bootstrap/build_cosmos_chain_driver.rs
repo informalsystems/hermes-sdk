@@ -1,6 +1,5 @@
-use std::path::PathBuf;
-
 use alloc::collections::BTreeMap;
+use std::path::PathBuf;
 
 use cgp_core::CanRaiseError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;

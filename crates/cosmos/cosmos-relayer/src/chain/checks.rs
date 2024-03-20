@@ -2,6 +2,9 @@ use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterpar
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryAllClientStates, CanQueryClientState,
 };
+use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
+use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
+use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
@@ -20,6 +23,9 @@ pub trait CanUseCosmosChain:
     + CanQueryAllClientStates<CosmosChain>
     + CanQueryClientState<AnyCounterparty>
     + CanQueryAllClientStates<AnyCounterparty>
+    + CanSubmitTx
+    + CanPollTxResponse
+    + CanQueryTxResponse
     + CanAssertEventualAmount
 {
 }

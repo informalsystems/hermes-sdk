@@ -10,42 +10,40 @@ use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
-use crate::transaction::components::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
-use crate::transaction::components::allocate_nonce_with_mutex::AllocateNonceWithMutex;
-use crate::transaction::components::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
-use crate::transaction::components::poll_tx_response::{
+use crate::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
+use crate::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
+use crate::transaction::impls::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
+use crate::transaction::impls::poll_tx_response::{
     HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
-use crate::transaction::components::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
-use crate::transaction::traits::components::nonce_allocater::{
+use crate::transaction::impls::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
+use crate::transaction::traits::default_signer::HasDefaultSigner;
+use crate::transaction::traits::encode_tx::{CanEncodeTx, TxEncoder};
+use crate::transaction::traits::estimate_tx_fee::{CanEstimateTxFee, TxFeeEstimator};
+use crate::transaction::traits::logs::nonce::CanLogNonce;
+use crate::transaction::traits::nonce::allocate_nonce::{
     CanAllocateNonce, NonceAllocatorComponent,
 };
-use crate::transaction::traits::components::nonce_querier::{CanQueryNonce, NonceQuerier};
-use crate::transaction::traits::components::send_messages_with_signer::{
+use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
+use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
+use crate::transaction::traits::nonce::query_nonce::{CanQueryNonce, NonceQuerier};
+use crate::transaction::traits::parse_events::CanParseTxResponseAsEvents;
+use crate::transaction::traits::poll_tx_response::{CanPollTxResponse, TxResponsePollerComponent};
+use crate::transaction::traits::query_tx_response::{CanQueryTxResponse, TxResponseQuerier};
+use crate::transaction::traits::send_messages_with_signer::{
     CanSendMessagesWithSigner, MessagesWithSignerSenderComponent,
 };
-use crate::transaction::traits::components::send_messages_with_signer_and_nonce::{
+use crate::transaction::traits::send_messages_with_signer_and_nonce::{
     CanSendMessagesWithSignerAndNonce, MessagesWithSignerAndNonceSenderComponent,
 };
-use crate::transaction::traits::components::tx_encoder::{CanEncodeTx, TxEncoder};
-use crate::transaction::traits::components::tx_fee_estimater::{CanEstimateTxFee, TxFeeEstimator};
-use crate::transaction::traits::components::tx_response_poller::{
-    CanPollTxResponse, TxResponsePollerComponent,
-};
-use crate::transaction::traits::components::tx_response_querier::{
-    CanQueryTxResponse, TxResponseQuerier,
-};
-use crate::transaction::traits::components::tx_submitter::{CanSubmitTx, TxSubmitter};
-use crate::transaction::traits::event::CanParseTxResponseAsEvents;
-use crate::transaction::traits::fee::HasFeeForSimulation;
-use crate::transaction::traits::logs::nonce::CanLogNonce;
-use crate::transaction::traits::nonce::guard::HasNonceGuard;
-use crate::transaction::traits::nonce::mutex::HasMutexForNonceAllocation;
-use crate::transaction::traits::signer::HasDefaultSigner;
-use crate::transaction::traits::types::{
-    HasFeeType, HasNonceType, HasSignerType, HasTransactionHashType, HasTransactionType,
-    HasTxResponseType,
-};
+use crate::transaction::traits::simulation_fee::HasFeeForSimulation;
+use crate::transaction::traits::submit_tx::{CanSubmitTx, TxSubmitter};
+use crate::transaction::traits::types::fee::HasFeeType;
+use crate::transaction::traits::types::nonce::HasNonceType;
+use crate::transaction::traits::types::signer::HasSignerType;
+use crate::transaction::traits::types::transaction::HasTransactionType;
+use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
+use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
 pub struct DefaultTxComponents;
 

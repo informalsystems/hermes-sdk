@@ -1,9 +1,8 @@
-use eyre::eyre;
-use eyre::Error as ReportError;
 use std::iter;
 use std::str::FromStr;
 
 use cgp_core::HasErrorType;
+use eyre::{eyre, Error as ReportError};
 use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;

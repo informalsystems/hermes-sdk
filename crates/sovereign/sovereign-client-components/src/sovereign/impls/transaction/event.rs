@@ -3,8 +3,8 @@ use std::io::Error as IoError;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
-use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParser;
-use hermes_relayer_components::transaction::traits::types::HasTxResponseType;
+use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParser;
+use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 
 use crate::sovereign::types::event::SovereignEvent;
 use crate::sovereign::types::rpc::tx_response::TxResponse;

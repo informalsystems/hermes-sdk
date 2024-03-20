@@ -1,11 +1,11 @@
+use core::ops::Deref;
+
 use alloc::sync::Arc;
 
-use cgp_core::Async;
+use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::impls::empty::EmptySubscription;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_test_components::chain::traits::types::tx_context::ProvideTxContextType;
-use hermes_test_components::chain::traits::types::tx_context::TxContextGetter;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::{ChainConfig, EventSourceMode};
@@ -17,13 +17,23 @@ use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::HttpClient;
 
-use crate::chain::components::CosmosChainComponents;
-use crate::contexts::transaction::CosmosTxContext;
 use crate::impls::subscription::CanCreateAbciEventSubscription;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]
 pub struct CosmosChain {
+    pub base_chain: Arc<BaseCosmosChain>,
+}
+
+impl Deref for CosmosChain {
+    type Target = BaseCosmosChain;
+
+    fn deref(&self) -> &BaseCosmosChain {
+        &self.base_chain
+    }
+}
+
+pub struct BaseCosmosChain {
     pub handle: BaseChainHandle,
     pub chain_config: ChainConfig,
     pub chain_id: ChainId,
@@ -31,7 +41,10 @@ pub struct CosmosChain {
     pub runtime: HermesRuntime,
     pub telemetry: CosmosTelemetry,
     pub subscription: Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>,
-    pub tx_context: Arc<CosmosTxContext>,
+    pub tx_config: TxConfig,
+    pub rpc_client: HttpClient,
+    pub key_entry: Secp256k1KeyPair,
+    pub nonce_mutex: Mutex<()>,
 }
 
 impl CosmosChain {
@@ -63,37 +76,22 @@ impl CosmosChain {
 
         let chain_id = tx_config.chain_id.clone();
 
-        let tx_context = Arc::new(CosmosTxContext::new(
-            tx_config,
-            rpc_client,
-            key_entry,
-            runtime.clone(),
-        ));
-
         let chain = Self {
-            handle,
-            chain_config,
-            chain_id,
-            compat_mode,
-            runtime,
-            telemetry,
-            subscription,
-            tx_context,
+            base_chain: Arc::new(BaseCosmosChain {
+                handle,
+                chain_config,
+                chain_id,
+                compat_mode,
+                runtime,
+                telemetry,
+                subscription,
+                tx_config,
+                rpc_client,
+                key_entry,
+                nonce_mutex: Mutex::new(()),
+            }),
         };
 
         chain
-    }
-}
-
-impl<Chain> ProvideTxContextType<Chain> for CosmosChainComponents
-where
-    Chain: Async,
-{
-    type TxContext = CosmosTxContext;
-}
-
-impl TxContextGetter<CosmosChain> for CosmosChainComponents {
-    fn tx_context(driver: &CosmosChain) -> &CosmosTxContext {
-        &driver.tx_context
     }
 }

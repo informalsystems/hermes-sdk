@@ -10,9 +10,8 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId
 use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
 
-use crate::Result;
-
 use super::util::PacketSequences;
+use crate::Result;
 
 #[derive(Debug, clap::Parser)]
 pub struct QueryPendingAcks {

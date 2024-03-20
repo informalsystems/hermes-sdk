@@ -11,8 +11,7 @@
 use core::time::Duration;
 
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
 use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
@@ -35,8 +34,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
 use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
-use hermes_relayer_components::chain::traits::types::height::HeightIncrementer;
-use hermes_relayer_components::chain::traits::types::height::ProvideHeightType;
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightIncrementer, ProvideHeightType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::{
     HasCounterpartyMessageHeight, ProvideIbcChainTypes,
 };
@@ -51,8 +51,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntimeType;
+use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
 use hermes_relayer_runtime::types::log::value::LogValue;
 
 use crate::relayer_mock::base::error::{BaseError, Error};

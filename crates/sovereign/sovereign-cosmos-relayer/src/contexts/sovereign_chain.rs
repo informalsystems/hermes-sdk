@@ -18,10 +18,7 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::traits::has_encoding::{
-    DefaultEncodingGetterComponent, HasEncoding,
-};
-use hermes_relayer_components::encode::traits::has_encoding::{
-    EncodingGetterComponent, EncodingTypeComponent,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
 use hermes_relayer_components::logger::traits::has_logger::{
     LoggerFieldComponent, LoggerTypeComponent,

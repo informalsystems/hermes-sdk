@@ -1,10 +1,9 @@
 use cgp_core::prelude::*;
 
+use super::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-
-use super::chain_status::CanQueryChainStatus;
 
 #[derive_component(ConsensusStateQuerierComponent, ConsensusStateQuerier<Chain>)]
 #[async_trait]

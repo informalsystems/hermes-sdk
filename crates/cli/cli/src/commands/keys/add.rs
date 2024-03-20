@@ -12,8 +12,7 @@ use ibc_relayer::keyring::{
 };
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre;
-use oneline_eyre::eyre::eyre;
-use oneline_eyre::eyre::WrapErr;
+use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.

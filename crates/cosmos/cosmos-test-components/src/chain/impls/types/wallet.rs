@@ -1,6 +1,5 @@
-use hermes_relayer_components::transaction::traits::types::HasSignerType;
+use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
-use hermes_test_components::chain::traits::types::tx_context::HasTxContextType;
 use hermes_test_components::chain::traits::types::wallet::{
     HasWalletType, ProvideWalletType, WalletSignerProvider,
 };
@@ -21,10 +20,9 @@ where
     }
 }
 
-impl<ChainDriver, TxContext> WalletSignerProvider<ChainDriver> for ProvideCosmosTestWallet
+impl<Chain> WalletSignerProvider<Chain> for ProvideCosmosTestWallet
 where
-    ChainDriver: HasTxContextType<TxContext = TxContext> + HasWalletType<Wallet = CosmosTestWallet>,
-    TxContext: HasSignerType<Signer = Secp256k1KeyPair>,
+    Chain: HasWalletType<Wallet = CosmosTestWallet> + HasSignerType<Signer = Secp256k1KeyPair>,
 {
     fn wallet_signer(wallet: &CosmosTestWallet) -> &Secp256k1KeyPair {
         &wallet.keypair

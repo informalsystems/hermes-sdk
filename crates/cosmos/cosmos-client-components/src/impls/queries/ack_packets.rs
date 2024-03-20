@@ -1,7 +1,8 @@
 use cgp_core::prelude::*;
 use futures::stream::{self, StreamExt, TryStreamExt};
-use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketsQuerier;
-use hermes_relayer_components::chain::traits::queries::ack_packets::CanQueryAckPacket;
+use hermes_relayer_components::chain::traits::queries::ack_packets::{
+    AckPacketsQuerier, CanQueryAckPacket,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::types::aliases::WriteAckEventOf;

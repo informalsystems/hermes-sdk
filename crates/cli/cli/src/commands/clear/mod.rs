@@ -1,9 +1,8 @@
 mod packets;
-pub use packets::PacketsClear;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+pub use packets::PacketsClear;
 
 use crate::Result;
 

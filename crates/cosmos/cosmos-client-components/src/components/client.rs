@@ -21,8 +21,6 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
-};
-use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
@@ -39,7 +37,6 @@ use hermes_relayer_components::chain::traits::queries::send_packets::{
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
-use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent,
 };
@@ -98,8 +95,9 @@ use crate::impls::queries::client_state::{
     CosmosQueryClientStateComponents, QueryCosmosClientStateFromAbci,
 };
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
-use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightFromChainHandle;
-use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromChainHandle;
+use crate::impls::queries::consensus_state_height::{
+    QueryConsensusStateHeightFromChainHandle, QueryConsensusStateHeightsFromChainHandle,
+};
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
@@ -108,7 +106,6 @@ use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
 use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
-use crate::impls::send_messages_as_tx::SendMessagesToTxContext;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::ProvideTendermintClientState;
 use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
@@ -154,8 +151,6 @@ delegate_components! {
             ProvideTendermintClientState,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
-        MessageSenderComponent:
-            SendMessagesToTxContext,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:

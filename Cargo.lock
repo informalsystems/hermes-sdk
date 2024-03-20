@@ -1772,6 +1772,7 @@ dependencies = [
 name = "hermes-cosmos-client-components"
 version = "0.1.0"
 dependencies = [
+ "bech32 0.9.1",
  "cgp-core",
  "eyre",
  "flex-error",
