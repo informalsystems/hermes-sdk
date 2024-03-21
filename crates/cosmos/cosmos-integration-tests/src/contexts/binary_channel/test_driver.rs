@@ -1,6 +1,10 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
+use hermes_relayer_components::log::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+};
 use hermes_test_components::driver::traits::channel_at::ChannelGetterAt;
 use hermes_test_components::driver::traits::types::birelay_at::BiRelayTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_at::ChainTypeAtComponent;
@@ -48,6 +52,12 @@ delegate_components! {
             RelayDriverTypeAtComponent,
         ]:
             ProvideCosmosTestTypes,
+        [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideCosmosLogger,
     }
 }
 

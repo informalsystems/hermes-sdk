@@ -46,6 +46,12 @@ pub trait CanUseCosmosLogger:
 
 impl CanUseCosmosLogger for CosmosLogger {}
 
+delegate_components! {
+    CosmosLogHandlers {
+        (): HandleCosmosLogs,
+    }
+}
+
 impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
     for CosmosLogHandlers
 {
