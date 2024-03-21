@@ -5,7 +5,7 @@ use hermes_relayer_components::log::traits::logger::Logger;
 use hermes_relayer_components::log::types::level::{
     LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };
-use log::{debug, error, info, trace, warn};
+use tracing::{debug, error, info, trace, warn};
 pub struct LogMessageOnly<Level>(pub PhantomData<Level>);
 
 impl<Logging, Details> Logger<Logging, Details> for LogMessageOnly<LevelError>

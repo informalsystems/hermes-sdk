@@ -2,6 +2,7 @@ use cgp_core::Async;
 use core::fmt::Display;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::log::traits::logger::Logger;
+use hermes_relayer_components::log::types::level::LogLevel;
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
@@ -191,11 +192,23 @@ where
     Target::CounterpartyChain: HasChainId,
 {
     async fn log(_logging: &Logging, message: &str, details: &LogBatchWorker<'a, Relay, Target>) {
-        trace!(
-            target_chain_id = %Target::target_chain(details.relay).chain_id(),
-            counterparty_chain_id = %Target::counterparty_chain(details.relay).chain_id(),
-            details = %details.details,
-            "{message}",
-        );
+        match details.log_level {
+            LogLevel::Error => {
+                error!(
+                    target_chain_id = %Target::target_chain(details.relay).chain_id(),
+                    counterparty_chain_id = %Target::counterparty_chain(details.relay).chain_id(),
+                    details = %details.details,
+                    "{message}",
+                );
+            }
+            _ => {
+                trace!(
+                    target_chain_id = %Target::target_chain(details.relay).chain_id(),
+                    counterparty_chain_id = %Target::counterparty_chain(details.relay).chain_id(),
+                    details = %details.details,
+                    "{message}",
+                );
+            }
+        }
     }
 }

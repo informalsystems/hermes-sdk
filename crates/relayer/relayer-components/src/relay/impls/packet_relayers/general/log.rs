@@ -61,14 +61,6 @@ where
                     },
                 )
                 .await;
-            // relay.log_relay(
-            //     Relay::Logger::LEVEL_ERROR,
-            //     "failed to relay packet",
-            //     |log| {
-            //         log.field("packet", Relay::log_packet(packet))
-            //             .debug("error", e);
-            //     },
-            // );
         } else {
             logger
                 .log(
