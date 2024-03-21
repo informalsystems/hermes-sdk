@@ -19,7 +19,6 @@ use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
-use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use crate::relay::traits::chains::HasRelayChains;
@@ -40,10 +39,9 @@ where
 {
 }
 
-impl<Relay, SrcChain, DstChain, Components, OldLogger, Logger> UseDefaultAckPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components, Logger> UseDefaultAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + crate::logger::traits::has_logger::HasLogger<Logger = OldLogger>
         + HasLogger<Logger = Logger>
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType
@@ -71,7 +69,6 @@ where
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     DstChain::Runtime: CanSleep,
-    OldLogger: HasBaseLogLevels,
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
     Components: DelegatesToDefaultRelayComponents

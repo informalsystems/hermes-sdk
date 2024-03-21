@@ -17,7 +17,6 @@ use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessage
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::log::traits::has_logger::HasLogger;
 use hermes_relayer_components::log::traits::logger::CanLog;
-use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -44,10 +43,9 @@ where
 {
 }
 
-impl<Relay, SrcChain, DstChain, Components, OldLogger, Logger> UseExtraAckPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + hermes_relayer_components::logger::traits::has_logger::HasLogger<Logger = OldLogger>
         + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasComponents<Components = Components>,
@@ -80,7 +78,6 @@ where
     DstChain::Height: Clone,
     SrcChain::Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep,
-    OldLogger: HasBaseLogLevels,
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
     Components: DelegatesToExtraRelayComponents

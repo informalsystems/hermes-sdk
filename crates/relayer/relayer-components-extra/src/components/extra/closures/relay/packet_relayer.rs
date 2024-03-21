@@ -4,7 +4,6 @@ use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::log::traits::has_logger::HasLogger;
 use hermes_relayer_components::log::traits::logger::CanLog;
-use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
@@ -21,10 +20,9 @@ pub trait CanUseExtraPacketRelayer: UseExtraPacketRelayer {}
 
 pub trait UseExtraPacketRelayer: CanRelayPacket {}
 
-impl<Relay, SrcChain, DstChain, Components, OldLogger, Logger> UseExtraPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + hermes_relayer_components::logger::traits::has_logger::HasLogger<Logger = OldLogger>
         + HasLogger<Logger = Logger>
         + HasPacketLock
         + UseExtraIbcMessageSender
@@ -32,12 +30,10 @@ where
         + HasMaxErrorRetry
         + for<'a> CanRaiseError<MaxRetryExceededError<'a, Relay>>
         + HasComponents<Components = Components>,
-    SrcChain: hermes_relayer_components::logger::traits::has_logger::HasLoggerType<Logger = OldLogger>
-        + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
+    SrcChain: HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
         + UseExtraChainComponentsForPacketRelayer<DstChain>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
         + UseExtraChainComponentsForPacketRelayer<SrcChain>,
-    OldLogger: HasBaseLogLevels,
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,

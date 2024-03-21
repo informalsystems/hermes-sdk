@@ -2,7 +2,6 @@ use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::log::traits::has_logger::HasLogger;
 use hermes_relayer_components::log::traits::logger::CanLog;
-use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -28,16 +27,14 @@ pub trait UseExtraIbcMessageSender:
 {
 }
 
-impl<Relay, SrcChain, DstChain, Components, OldLogger, Logger> UseExtraIbcMessageSender for Relay
+impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraIbcMessageSender for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + hermes_relayer_components::logger::traits::has_logger::HasLogger<Logger = OldLogger>
         + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasMessageBatchSender<DestinationTarget>
         + HasComponents<Components = Components>,
-    SrcChain: hermes_relayer_components::logger::traits::has_logger::HasLoggerType<Logger = OldLogger>
-        + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
+    SrcChain: HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
         + UseExtraChainComponentsForIbcMessageSender<DstChain>
         + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
@@ -47,7 +44,6 @@ where
     DstChain::Height: Clone,
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
-    OldLogger: HasBaseLogLevels,
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, DestinationTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>

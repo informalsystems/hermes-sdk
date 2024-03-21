@@ -1,10 +1,7 @@
-use alloc::format;
-
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::logger::traits::log::CanLog;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
@@ -35,8 +32,7 @@ where
         + HasChainDriverAt<1, ChainDriver = ChainDriverB>
         + HasRelayDriverAt<0, 1, RelayDriver = RelayDriver>
         + HasChannelAt<0, 1>
-        + HasChannelAt<1, 0>
-        + CanLog,
+        + HasChannelAt<1, 0>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenomAt<TransferDenom, 0>
         + HasWalletAt<UserWallet, 0>
@@ -101,10 +97,10 @@ where
 
         let _relayer = relay_driver.run_relayer_in_background().await?;
 
-        driver.log_info(&format!(
-            "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
-            chain_id_a, chain_id_b, a_to_b_amount, denom_a
-        ));
+        // driver.log_info(&format!(
+        //     "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
+        //     chain_id_a, chain_id_b, a_to_b_amount, denom_a
+        // ));
 
         chain_a
             .ibc_transfer_token(
@@ -124,10 +120,10 @@ where
 
         let balance_b1 = ChainB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b)?;
 
-        driver.log_info(&format!(
-            "Waiting for user on chain B to receive IBC transferred amount of {}",
-            balance_b1
-        ));
+        // driver.log_info(&format!(
+        //     "Waiting for user on chain B to receive IBC transferred amount of {}",
+        //     balance_b1
+        // ));
 
         chain_b
             .assert_eventual_amount(address_b, &balance_b1)
@@ -139,10 +135,10 @@ where
 
         let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
 
-        driver.log_info(&format!(
-            "Sending IBC transfer from chain {} to chain {} with amount of {}",
-            chain_id_b, chain_id_a, b_to_a_amount,
-        ));
+        // driver.log_info(&format!(
+        //     "Sending IBC transfer from chain {} to chain {} with amount of {}",
+        //     chain_id_b, chain_id_a, b_to_a_amount,
+        // ));
 
         chain_b
             .ibc_transfer_token(
@@ -173,10 +169,10 @@ where
             .assert_eventual_amount(address_a2, &balance_a5)
             .await?;
 
-        driver.log_info(&format!(
-            "successfully performed reverse IBC transfer from chain {} back to chain {}",
-            chain_id_b, chain_id_a,
-        ));
+        // driver.log_info(&format!(
+        //     "successfully performed reverse IBC transfer from chain {} back to chain {}",
+        //     chain_id_b, chain_id_a,
+        // ));
 
         Ok(())
     }
