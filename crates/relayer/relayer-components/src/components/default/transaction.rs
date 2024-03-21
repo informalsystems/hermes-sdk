@@ -8,7 +8,6 @@ use crate::chain::traits::types::message::HasMessageType;
 use crate::error::traits::retry::HasRetryableError;
 use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
-use crate::logger::traits::level::HasBaseLogLevels;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
@@ -24,7 +23,6 @@ use crate::transaction::impls::send_messages_with_default_signer::SendMessagesWi
 use crate::transaction::traits::default_signer::HasDefaultSigner;
 use crate::transaction::traits::encode_tx::{CanEncodeTx, TxEncoder};
 use crate::transaction::traits::estimate_tx_fee::{CanEstimateTxFee, TxFeeEstimator};
-use crate::transaction::traits::logs::nonce::CanLogNonce;
 use crate::transaction::traits::nonce::allocate_nonce::{
     CanAllocateNonce, NonceAllocatorComponent,
 };
@@ -79,7 +77,7 @@ pub trait UseDefaultTxComponents:
 {
 }
 
-impl<Chain, Components, Logger, OldLogger> UseDefaultTxComponents for Chain
+impl<Chain, Components, Logger> UseDefaultTxComponents for Chain
 where
     Chain: HasErrorType
         + HasMessageType
@@ -97,14 +95,11 @@ where
         + HasMutexForNonceAllocation
         + HasPollTimeout
         + HasRetryableError
-        + crate::logger::traits::has_logger::HasLogger<Logger = OldLogger>
         + HasLogger<Logger = Logger>
-        + CanLogNonce
         + CanParseTxResponseAsEvents
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
     Chain::Runtime: HasMutex + HasTime + CanSleep,
-    OldLogger: HasBaseLogLevels,
     Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>
         + for<'a> CanLog<TxNoResponseError<'a, Chain>>
         + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,
