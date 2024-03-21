@@ -153,7 +153,7 @@ where
                             .log(
                                 "received message batch",
                                 &LogBatchWorker {
-                                    relay: &self,
+                                    relay: self,
                                     details: &format!("batch_size = {batch_size}"),
                                     log_level: LogLevel::Trace,
                                     phantom: PhantomData,
@@ -184,7 +184,7 @@ where
                         .log(
                             "error in try_receive, terminating worker",
                             &LogBatchWorker {
-                                relay: &self,
+                                relay: self,
                                 details: &format!("error = {:?}", e),
                                 log_level: LogLevel::Error,
                                 phantom: PhantomData,
@@ -249,7 +249,7 @@ where
                 .log(
                     "sending ready batches",
                     &LogBatchWorker {
-                        relay: &self,
+                        relay: self,
                         details: &format!("batch_size = {batch_size}"),
                         log_level: LogLevel::Trace,
                         phantom: PhantomData,
@@ -404,7 +404,7 @@ where
             .log(
                 "sending batched messages to inner sender",
                 &LogBatchWorker {
-                    relay: &self,
+                    relay: self,
                     details: &format!("message_count = {message_count}"),
                     log_level: LogLevel::Trace,
                     phantom: PhantomData,
@@ -420,7 +420,7 @@ where
                     .log(
                         "inner sender returned error result, sending error back to caller",
                         &LogBatchWorker {
-                            relay: &self,
+                            relay: self,
                             details: &format!("error = {:?}", e),
                             log_level: LogLevel::Trace,
                             phantom: PhantomData,
@@ -440,7 +440,7 @@ where
                     .log(
                         "inner sender returned result events, sending events back to caller",
                         &LogBatchWorker {
-                            relay: &self,
+                            relay: self,
                             details: &format!("events_count = {events_count}"),
                             log_level: LogLevel::Trace,
                             phantom: PhantomData,
