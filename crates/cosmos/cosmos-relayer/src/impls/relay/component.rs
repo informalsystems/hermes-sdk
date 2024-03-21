@@ -4,8 +4,8 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
+use hermes_relayer_components::log::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
@@ -15,6 +15,7 @@ use hermes_relayer_components_extra::components::extra::relay::{
 use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 
+use crate::contexts::logger::ProvideCosmosLogger;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::error::HandleCosmosError;
 
@@ -31,10 +32,16 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideHermesRuntime,
         [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
         ]:
             ProvideTracingLogger,
+        [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideCosmosLogger,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
     }

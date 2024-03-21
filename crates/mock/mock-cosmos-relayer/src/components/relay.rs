@@ -2,8 +2,9 @@ use cgp_core::{delegate_all, delegate_components, DelegateComponent};
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
+use hermes_relayer_components::log::contexts::no_logger::ProvideNoLogger;
+use hermes_relayer_components::log::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::relay::impls::packet_filters::allow_all::AllowAll;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
@@ -25,9 +26,15 @@ delegate_components! {
         RuntimeTypeComponent:
             ProvideHermesRuntime,
         [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
+            hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
         ]:
             ProvideTracingLogger,
+        [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideNoLogger,
     }
 }

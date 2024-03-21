@@ -23,7 +23,7 @@ use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
-use crate::logger::traits::has_logger::{HasLogger, HasLoggerType};
+use crate::log::traits::has_logger::HasLogger;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_filter::PacketFilter;
@@ -36,10 +36,11 @@ pub trait CanUseDefaultPacketRelayer: UseDefaultPacketRelayer {}
 
 pub trait UseDefaultPacketRelayer: CanRelayPacket {}
 
-impl<Relay, SrcChain, DstChain, Components> UseDefaultPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components, OldLogger, Logger> UseDefaultPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + HasLogger
+        + crate::logger::traits::has_logger::HasLogger<Logger = OldLogger>
+        + HasLogger<Logger = Logger>
         + HasPacketLock
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType
@@ -48,7 +49,7 @@ where
         + CanSendMessages
         + CanIncrementHeight
         + CanQueryChainStatus
-        + HasLoggerType<Logger = Relay::Logger>
+        + crate::logger::traits::has_logger::HasLoggerType<Logger = OldLogger>
         + HasClientStateFields<DstChain>
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
@@ -86,7 +87,7 @@ where
     DstChain::Height: Clone,
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
-    Relay::Logger: HasBaseLogLevels,
+    OldLogger: HasBaseLogLevels,
     Components: DelegatesToDefaultRelayComponents
         + PacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
