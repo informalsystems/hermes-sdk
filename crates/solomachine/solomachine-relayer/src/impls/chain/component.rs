@@ -30,11 +30,7 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComp
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
-};
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
@@ -79,11 +75,6 @@ delegate_components! {
             ChainStatusTypeComponent,
         ]:
             ProvideCosmosChainTypes,
-        [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
         [
             MessageTypeComponent,
             EventTypeComponent,

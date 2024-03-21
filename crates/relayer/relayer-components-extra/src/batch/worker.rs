@@ -1,6 +1,5 @@
 use alloc::collections::VecDeque;
 use alloc::format;
-use alloc::string::String;
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 use core::mem;

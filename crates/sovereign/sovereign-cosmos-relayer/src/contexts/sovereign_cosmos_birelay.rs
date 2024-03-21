@@ -5,11 +5,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::birelay::traits::two_way::{
     ProvideTwoChainTypes, ProvideTwoWayRelayTypes, TwoWayRelayGetter,
 };
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
-};
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
@@ -34,11 +30,6 @@ delegate_components! {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
-        [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
     }
 }
 

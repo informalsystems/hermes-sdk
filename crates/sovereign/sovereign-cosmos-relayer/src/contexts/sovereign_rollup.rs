@@ -33,7 +33,6 @@ use hermes_relayer_components::transaction::traits::types::signer::SignerTypeCom
 use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
@@ -82,11 +81,6 @@ delegate_components! {
             ReturnRetryable<false>,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
-        [
-            hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
-            hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,

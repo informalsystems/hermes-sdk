@@ -12,7 +12,6 @@ pub mod components;
 pub mod encode;
 pub mod error;
 pub mod log;
-pub mod logger;
 pub mod relay;
 pub mod runtime;
 pub mod transaction;

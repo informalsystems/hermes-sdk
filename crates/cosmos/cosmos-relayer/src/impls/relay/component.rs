@@ -12,7 +12,6 @@ use hermes_relayer_components_extra::components::extra::closures::relay::auto_re
 use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayComponents, IsExtraRelayComponent,
 };
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 
 use crate::contexts::logger::ProvideCosmosLogger;
@@ -31,11 +30,6 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
-        [
-            hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
-            hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,

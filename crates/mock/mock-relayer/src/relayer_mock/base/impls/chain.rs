@@ -13,8 +13,6 @@ use core::time::Duration;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -52,7 +50,6 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTi
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
-use hermes_relayer_runtime::types::log::value::LogValue;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -248,12 +245,6 @@ impl HasSendPacketEvent<MockChainContext> for MockChainContext {
     }
 }
 
-impl CanLogChainEvent for MockChainContext {
-    fn log_event<'a>(event: &Event) -> LogValue<'_> {
-        LogValue::Debug(event)
-    }
-}
-
 impl HeightIncrementer<MockChainContext> for MockChainComponents {
     fn increment_height(height: &MockHeight) -> Result<MockHeight, Error> {
         Ok(height.increment())
@@ -293,16 +284,6 @@ impl ChainStatusQuerier<MockChainContext> for MockChainComponents {
         chain.new_block()?;
         let time = chain.runtime.get_time();
         Ok(MockChainStatus::from((height, time, state)))
-    }
-}
-
-impl CanLogChainPacket<MockChainContext> for MockChainContext {
-    fn log_incoming_packet(packet: &PacketKey) -> LogValue<'_> {
-        LogValue::Display(packet)
-    }
-
-    fn log_outgoing_packet(packet: &PacketKey) -> LogValue<'_> {
-        LogValue::Display(packet)
     }
 }
 

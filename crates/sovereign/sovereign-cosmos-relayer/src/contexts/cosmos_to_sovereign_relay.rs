@@ -2,12 +2,8 @@ use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
-};
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
@@ -35,11 +31,6 @@ delegate_components! {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
-        [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
     }
 }
 

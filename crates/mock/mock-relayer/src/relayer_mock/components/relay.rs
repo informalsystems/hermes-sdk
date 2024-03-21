@@ -16,7 +16,6 @@ use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerCompo
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
 
@@ -24,11 +23,6 @@ pub struct MockRelayComponents;
 
 delegate_components! {
     MockRelayComponents {
-        [
-            hermes_relayer_components::logger::traits::has_logger::LoggerTypeComponent,
-            hermes_relayer_components::logger::traits::has_logger::LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,

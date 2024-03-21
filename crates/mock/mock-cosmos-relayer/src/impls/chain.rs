@@ -4,8 +4,6 @@ use std::time::Duration;
 use basecoin::modules::ibc::AnyConsensusState;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
-use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
@@ -55,7 +53,6 @@ use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestamp
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::log::value::LogValue;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use ibc::clients::tendermint::client_state::ClientState as TmClientState;
 use ibc::clients::tendermint::consensus_state::ConsensusState as TmConsensusState;
@@ -136,12 +133,6 @@ impl<Chain: BasecoinEndpoint> ProvideEventType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Event = IbcEvent;
-}
-
-impl<Chain: BasecoinEndpoint> CanLogChainEvent for MockCosmosContext<Chain> {
-    fn log_event<'a>(event: &Self::Event) -> LogValue<'_> {
-        LogValue::Debug(event)
-    }
 }
 
 impl<Chain: BasecoinEndpoint> ProvideTimestampType<MockCosmosContext<Chain>>
@@ -261,21 +252,6 @@ where
 
     fn outgoing_packet_timeout_timestamp(packet: &Packet) -> &Timestamp {
         &packet.timeout_timestamp_on_b
-    }
-}
-
-impl<Chain, Counterparty> CanLogChainPacket<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
-where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
-{
-    fn log_incoming_packet(packet: &Packet) -> LogValue<'_> {
-        LogValue::Display(packet)
-    }
-
-    fn log_outgoing_packet(packet: &Packet) -> LogValue<'_> {
-        LogValue::Display(packet)
     }
 }
 
