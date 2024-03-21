@@ -5,30 +5,25 @@ use std::sync::Arc;
 
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
+use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::setup::traits::run_test::CanRunTest;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
-use tokio::runtime::Builder;
 
 #[test]
 fn cosmos_integration_tests() -> Result<(), Error> {
-    let _ = stable_eyre::install();
-
-    let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
-
-    let runtime = HermesRuntime::new(tokio_runtime.clone());
+    let runtime = init_test_runtime();
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(LegacyCosmosBootstrap {
-        runtime,
+        runtime: runtime.clone(),
         builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
@@ -57,7 +52,7 @@ fn cosmos_integration_tests() -> Result<(), Error> {
     };
 
     // TODO: Use a test suite entry point for running multiple tests
-    tokio_runtime.block_on(async move {
+    runtime.runtime.clone().block_on(async move {
         setup.run_test(&TestIbcTransfer).await?;
 
         <Result<(), Error>>::Ok(())

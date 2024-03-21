@@ -3,11 +3,12 @@ use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_client_components::encoding::components::{
     CosmosEncodingComponents as BaseCosmosEncodingComponents, IsCosmosEncodingComponent,
 };
+use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::traits::decoder::CanDecode;
 use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
 use hermes_relayer_components::encode::traits::encoder::CanEncode;
 use hermes_relayer_components::encode::traits::has_encoding::{
-    DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
+    DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_relayer_components::encode::traits::schema::HasSchema;
 use hermes_relayer_components::encode::types::via::Via;
@@ -42,6 +43,12 @@ delegate_components! {
 }
 
 pub struct ProvideCosmosEncoding;
+
+delegate_components! {
+    ProvideCosmosEncoding {
+        EncodingGetterComponent: GetDefaultEncoding,
+    }
+}
 
 impl<Context> ProvideEncodingType<Context> for ProvideCosmosEncoding
 where

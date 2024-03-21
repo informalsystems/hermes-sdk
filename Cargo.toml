@@ -9,6 +9,7 @@ members = [
     "crates/runtime/tokio-runtime-components",
     "crates/runtime/relayer-runtime",
     "crates/encoding/protobuf-components",
+    "crates/logging/tracing-components",
     "crates/cosmos/cosmos-client-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
@@ -69,6 +70,7 @@ serde_derive                    = { version = "1.0" }
 serde_json                      = { version = "1.0" }
 tokio                           = { version = "1.36" }
 tracing                         = { version = "0.1.40" }
+tracing-subscriber              = { version = "0.3.18" }
 tonic                           = { version = "0.10" }
 toml                            = { version = "0.8.10" }
 futures                         = { version = "0.3.29", default-features = false }
@@ -80,7 +82,6 @@ itertools                       = { version = "0.11" }
 http                            = { version = "0.2.11" }
 humantime                       = { version = "2.1.0" }
 flex-error                      = { version = "0.4.4", default-features = false }
-tracing-subscriber              = { version = "0.3.18" }
 jsonrpsee                       = { version = "0.21.0", default-features = false }
 hdpath                          = { version = "0.6.3" }
 borsh                           = { version = "0.10.3" }
@@ -109,6 +110,7 @@ hermes-async-runtime-components     = { version = "0.1.0" }
 hermes-tokio-runtime-components     = { version = "0.1.0" }
 hermes-relayer-runtime              = { version = "0.1.0" }
 hermes-protobuf-components          = { version = "0.1.0" }
+hermes-tracing-components          = { version = "0.1.0" }
 hermes-solomachine-relayer          = { version = "0.1.0" }
 hermes-test-components              = { version = "0.1.0" }
 hermes-ibc-test-suite               = { version = "0.1.0" }
@@ -165,6 +167,7 @@ hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-c
 hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { path = "./crates/runtime/relayer-runtime" }
 hermes-protobuf-components          = { path = "./crates/encoding/protobuf-components" }
+hermes-tracing-components           = { path = "./crates/logging/tracing-components" }
 hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
 hermes-test-components              = { path = "./crates/test/test-components" }
 hermes-ibc-test-suite               = { path = "./crates/test/test-suite" }

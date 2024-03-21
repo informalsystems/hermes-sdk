@@ -82,12 +82,12 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUn
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
+use hermes_relayer_components::log::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
 use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
@@ -113,8 +113,7 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
@@ -147,6 +146,7 @@ use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuer
 use crate::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::encoding::ProvideCosmosEncoding;
+use crate::contexts::logger::ProvideCosmosLogger;
 use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosChainComponents;
@@ -164,21 +164,23 @@ delegate_components! {
         [
             ErrorTypeComponent,
             ErrorRaiserComponent,
+            RetryableErrorComponent,
         ]:
             HandleCosmosError,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             LoggerTypeComponent,
-            LoggerFieldComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
         ]:
-            ProvideTracingLogger,
+            ProvideCosmosLogger,
         [
             EncodingTypeComponent,
+            EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:
             ProvideCosmosEncoding,
-        EncodingGetterComponent: GetDefaultEncoding,
         [
             HeightTypeComponent,
             HeightIncrementerComponent,

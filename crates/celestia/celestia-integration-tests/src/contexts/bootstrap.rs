@@ -43,7 +43,7 @@ use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
@@ -89,7 +89,7 @@ delegate_components! {
             BaseCelestiaBootstrapComponents,
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
-        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideHermesRuntime,
         [
             ChainTypeComponent,
             ChainDriverTypeComponent,

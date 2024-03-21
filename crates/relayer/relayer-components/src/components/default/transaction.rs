@@ -5,14 +5,17 @@ use crate::chain::traits::send_message::{CanSendMessages, MessageSenderComponent
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::message::HasMessageType;
-use crate::logger::traits::has_logger::HasLogger;
-use crate::logger::traits::level::HasBaseLogLevels;
+use crate::error::traits::retry::HasRetryableError;
+use crate::log::traits::has_logger::HasLogger;
+use crate::log::traits::logger::CanLog;
 use crate::runtime::traits::mutex::HasMutex;
 use crate::runtime::traits::sleep::CanSleep;
 use crate::runtime::traits::time::HasTime;
 use crate::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
 use crate::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
 use crate::transaction::impls::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
+use crate::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
+use crate::transaction::impls::poll_tx_response::LogRetryQueryTxResponse;
 use crate::transaction::impls::poll_tx_response::{
     HasPollTimeout, PollTxResponse, TxNoResponseError,
 };
@@ -20,7 +23,6 @@ use crate::transaction::impls::send_messages_with_default_signer::SendMessagesWi
 use crate::transaction::traits::default_signer::HasDefaultSigner;
 use crate::transaction::traits::encode_tx::{CanEncodeTx, TxEncoder};
 use crate::transaction::traits::estimate_tx_fee::{CanEstimateTxFee, TxFeeEstimator};
-use crate::transaction::traits::logs::nonce::CanLogNonce;
 use crate::transaction::traits::nonce::allocate_nonce::{
     CanAllocateNonce, NonceAllocatorComponent,
 };
@@ -75,7 +77,7 @@ pub trait UseDefaultTxComponents:
 {
 }
 
-impl<Chain, Components> UseDefaultTxComponents for Chain
+impl<Chain, Components, Logger> UseDefaultTxComponents for Chain
 where
     Chain: HasErrorType
         + HasMessageType
@@ -92,13 +94,15 @@ where
         + HasFeeForSimulation
         + HasMutexForNonceAllocation
         + HasPollTimeout
-        + HasLogger
-        + CanLogNonce
+        + HasRetryableError
+        + HasLogger<Logger = Logger>
         + CanParseTxResponseAsEvents
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
     Chain::Runtime: HasMutex + HasTime + CanSleep,
-    Chain::Logger: HasBaseLogLevels,
+    Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>
+        + for<'a> CanLog<TxNoResponseError<'a, Chain>>
+        + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,
     Components: DelegatesToDefaultTxComponents
         + TxEncoder<Chain>
         + TxFeeEstimator<Chain>

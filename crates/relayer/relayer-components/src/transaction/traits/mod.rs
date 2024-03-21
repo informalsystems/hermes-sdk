@@ -1,7 +1,6 @@
 pub mod default_signer;
 pub mod encode_tx;
 pub mod estimate_tx_fee;
-pub mod logs;
 pub mod nonce;
 pub mod parse_events;
 pub mod poll_tx_response;

@@ -2,10 +2,9 @@ use core::marker::PhantomData;
 
 use cgp_core::async_trait;
 
-use crate::logger::traits::level::HasBaseLogLevels;
+use crate::log::traits::has_logger::HasLogger;
+use crate::log::traits::logger::CanLog;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::logs::logger::CanLogRelay;
-use crate::relay::traits::logs::packet::CanLogRelayPacket;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::PacketRelayer;
 
@@ -18,11 +17,20 @@ use crate::relay::traits::packet_relayer::PacketRelayer;
 */
 pub struct LockPacketRelayer<InRelayer>(pub PhantomData<InRelayer>);
 
+pub struct LogSkipRelayLockedPacket<'a, Relay>
+where
+    Relay: HasRelayChains,
+{
+    pub relay: &'a Relay,
+    pub packet: &'a Relay::Packet,
+}
+
 #[async_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LockPacketRelayer<InRelayer>
 where
-    Relay: HasRelayChains + HasPacketLock + CanLogRelay + CanLogRelayPacket,
+    Relay: HasRelayChains + HasPacketLock + HasLogger,
     InRelayer: PacketRelayer<Relay>,
+    Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
         let m_lock = relay.try_acquire_packet_lock(packet).await;
@@ -30,13 +38,12 @@ where
         match m_lock {
             Some(_lock) => InRelayer::relay_packet(relay, packet).await,
             None => {
-                relay.log_relay(
-                    Relay::Logger::LEVEL_TRACE,
+                relay.logger().log(
                     "skip relaying packet, as another packet relayer has acquired the packet lock",
-                    |log| {
-                        log.field("packet", Relay::log_packet(packet));
-                    },
-                );
+                    &LogSkipRelayLockedPacket {
+                        relay,
+                        packet,
+                    }).await;
 
                 Ok(())
             }

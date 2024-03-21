@@ -9,7 +9,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::ProvideRollupType;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
@@ -46,7 +46,7 @@ delegate_components! {
     SovereignBootstrapComponents {
         ErrorTypeComponent: ProvideCosmosError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideHermesRuntime,
         RollupDriverBuilderComponent: BuildSovereignRollupDriver,
     }
 }

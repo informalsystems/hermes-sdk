@@ -1,5 +1,4 @@
 use cgp_core::HasComponents;
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
 };
@@ -38,8 +37,7 @@ use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
-    CanLogChainPacket<Counterparty>
-    + CanQueryPacketIsReceived<Counterparty>
+    CanQueryPacketIsReceived<Counterparty>
     + CanReadPacketFields<Counterparty>
     + CanBuildReceivePacketPayload<Counterparty>
     + CanBuildReceivePacketMessage<Counterparty>
@@ -62,8 +60,7 @@ where
 impl<Chain, Counterparty, Components, BaseComponents>
     UseExtraChainComponentsForPacketRelayer<Counterparty> for Chain
 where
-    Chain: CanLogChainPacket<Counterparty>
-        + HasIbcPacketTypes<Counterparty>
+    Chain: HasIbcPacketTypes<Counterparty>
         + HasReceivePacketPayloadType<Counterparty>
         + HasWriteAckEvent<Counterparty>
         + HasAckPacketPayloadType<Counterparty>

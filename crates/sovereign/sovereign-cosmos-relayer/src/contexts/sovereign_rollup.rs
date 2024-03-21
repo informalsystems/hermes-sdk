@@ -13,8 +13,10 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::encode::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
+use hermes_relayer_components::error::impls::retry::ReturnRetryable;
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
+use hermes_relayer_components::log::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
@@ -31,8 +33,7 @@ use hermes_relayer_components::transaction::traits::types::signer::SignerTypeCom
 use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::{
@@ -57,6 +58,7 @@ use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
 
 use crate::contexts::encoding::ProvideSovereignEncoding;
+use crate::contexts::logger::ProvideSovereignLogger;
 
 pub struct SovereignRollup {
     pub runtime: HermesRuntime,
@@ -75,13 +77,16 @@ delegate_components! {
             ProvideEyreError,
         ErrorRaiserComponent:
             RaiseDebugError,
+        RetryableErrorComponent:
+            ReturnRetryable<false>,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             LoggerTypeComponent,
-            LoggerFieldComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
         ]:
-            ProvideTracingLogger,
+            ProvideSovereignLogger,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,

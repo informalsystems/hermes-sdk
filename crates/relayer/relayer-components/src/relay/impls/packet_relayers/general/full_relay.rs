@@ -1,11 +1,10 @@
-use cgp_core::async_trait;
+use cgp_core::{async_trait, CanRaiseError};
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::traits::types::status::HasChainStatusType;
-use crate::relay::traits::chains::CanRaiseRelayChainErrors;
-use crate::relay::traits::logs::logger::CanLogRelay;
-use crate::relay::traits::logs::packet::CanLogRelayPacket;
+use crate::log::traits::has_logger::HasLogger;
+use crate::log::traits::logger::CanLog;
+use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet::HasRelayPacketFields;
 use crate::relay::traits::packet_relayer::PacketRelayer;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
@@ -15,28 +14,50 @@ use crate::relay::types::aliases::Packet;
 
 pub struct FullCycleRelayer;
 
-#[async_trait]
-impl<Relay> PacketRelayer<Relay> for FullCycleRelayer
+pub struct LogRelayPacketAction<'a, Relay>
 where
-    Relay: CanLogRelay
-        + CanLogRelayPacket
-        + CanRelayAckPacket
+    Relay: HasRelayChains,
+{
+    pub relay: &'a Relay,
+    pub packet: &'a Relay::Packet,
+    pub relay_progress: RelayPacketProgress,
+}
+
+#[derive(Debug)]
+pub enum RelayPacketProgress {
+    RelayRecvPacket,
+    RelayAckPacket,
+    RelayTimeoutUnorderedPacket,
+    SkipRelayAckPacket,
+}
+
+#[async_trait]
+impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for FullCycleRelayer
+where
+    Relay: CanRelayAckPacket
         + CanRelayReceivePacket
         + CanRelayTimeoutUnorderedPacket
         + HasRelayPacketFields
-        + CanRaiseRelayChainErrors,
-    Relay::SrcChain: CanQueryChainStatus,
-    Relay::DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain>,
+        + HasLogger
+        + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
+        + CanRaiseError<SrcChain::Error>
+        + CanRaiseError<DstChain::Error>,
+    SrcChain: CanQueryChainStatus,
+    DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain>,
+    Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Packet<Relay>) -> Result<(), Relay::Error> {
-        let destination_status = relay
-            .dst_chain()
+        let src_chain = relay.src_chain();
+        let dst_chain = relay.dst_chain();
+        let logger = relay.logger();
+
+        let destination_status = dst_chain
             .query_chain_status()
             .await
             .map_err(Relay::raise_error)?;
 
-        let destination_height = Relay::DstChain::chain_status_height(&destination_status);
-        let destination_timestamp = Relay::DstChain::chain_status_timestamp(&destination_status);
+        let destination_height = DstChain::chain_status_height(&destination_status);
+        let destination_timestamp = DstChain::chain_status_timestamp(&destination_status);
 
         let packet_timeout_height = Relay::packet_timeout_height(packet);
         let packet_timeout_timestamp = Relay::packet_timeout_timestamp(packet);
@@ -49,27 +70,36 @@ where
         };
 
         if has_packet_timed_out {
-            relay.log_relay(
-                Default::default(),
-                "relaying timeout unordered packet",
-                |log| {
-                    log.field("packet", Relay::log_packet(packet));
-                },
-            );
+            logger
+                .log(
+                    "relaying timeout unordered packet",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
+                    },
+                )
+                .await;
 
             relay
                 .relay_timeout_unordered_packet(destination_height, packet)
                 .await?;
         } else {
-            let src_chain_status = relay
-                .src_chain()
+            let src_chain_status = src_chain
                 .query_chain_status()
                 .await
                 .map_err(Relay::raise_error)?;
 
-            relay.log_relay(Default::default(), "relaying receive packet", |log| {
-                log.field("packet", Relay::log_packet(packet));
-            });
+            logger
+                .log(
+                    "relaying receive packet",
+                    &LogRelayPacketAction {
+                        relay,
+                        packet,
+                        relay_progress: RelayPacketProgress::RelayRecvPacket,
+                    },
+                )
+                .await;
 
             let write_ack = relay
                 .relay_receive_packet(
@@ -78,30 +108,39 @@ where
                 )
                 .await?;
 
-            let destination_status = relay
-                .dst_chain()
+            let destination_status = dst_chain
                 .query_chain_status()
                 .await
                 .map_err(Relay::raise_error)?;
 
-            let destination_height = Relay::DstChain::chain_status_height(&destination_status);
+            let destination_height = DstChain::chain_status_height(&destination_status);
 
             if let Some(ack) = write_ack {
-                relay.log_relay(Default::default(), "relaying ack packet", |log| {
-                    log.field("packet", Relay::log_packet(packet));
-                });
+                logger
+                    .log(
+                        "relaying ack packet",
+                        &LogRelayPacketAction {
+                            relay,
+                            packet,
+                            relay_progress: RelayPacketProgress::RelayAckPacket,
+                        },
+                    )
+                    .await;
 
                 relay
                     .relay_ack_packet(destination_height, packet, &ack)
                     .await?;
             } else {
-                relay.log_relay(
-                    Default::default(),
-                    "skip relaying ack packet due to lack of ack event",
-                    |log| {
-                        log.field("packet", Relay::log_packet(packet));
-                    },
-                );
+                logger
+                    .log(
+                        "skip relaying ack packet due to lack of ack event",
+                        &LogRelayPacketAction {
+                            relay,
+                            packet,
+                            relay_progress: RelayPacketProgress::SkipRelayAckPacket,
+                        },
+                    )
+                    .await;
             }
         }
 

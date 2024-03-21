@@ -1,9 +1,14 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_relayer_components::error::impls::delegate::DelegateErrorRaiser;
+use hermes_relayer_components::error::impls::error::{
+    MaxRetryExceededError, UnwrapMaxRetryExceededError,
+};
+use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
 
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, ErrorTypeComponent};
+use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::Report;
 use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
@@ -38,7 +43,9 @@ use crate::types::error::{
 
 pub struct HandleCosmosError;
 
-pub trait CheckErrorRaiser<Context>:
+pub struct CosmosErrorHandlers;
+
+pub trait CanHandleCosmosError<Context>:
     ErrorRaiser<Context, TokioRuntimeError>
     + ErrorRaiser<Context, Status>
     + ErrorRaiser<Context, TransportError>
@@ -46,30 +53,36 @@ pub trait CheckErrorRaiser<Context>:
     + for<'a> ErrorRaiser<Context, EventualAmountTimeoutError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, BroadcastTxError<'a, CosmosChain>>
     + for<'a> ErrorRaiser<Context, TxNoResponseError<'a, CosmosChain>>
+    + for<'a> ErrorRaiser<Context, MaxRetryExceededError<'a, Context>>
 where
     Context: HasErrorType<Error = Error>,
 {
 }
 
-impl<Context> CheckErrorRaiser<Context> for HandleCosmosError where
+impl<Context> CanHandleCosmosError<Context> for HandleCosmosError where
     Context: HasErrorType<Error = Error>
 {
 }
 
-impl<Context, E, Delegate> ErrorRaiser<Context, E> for HandleCosmosError
+impl<Context> ProvideRetryableError<Context> for HandleCosmosError
 where
-    Context: HasErrorType,
-    Self: DelegateComponent<E, Delegate = Delegate>,
-    Delegate: ErrorRaiser<Context, E>,
+    Context: HasErrorType<Error = Error>,
 {
-    fn raise_error(e: E) -> Context::Error {
-        Delegate::raise_error(e)
+    fn is_retryable_error(e: &Error) -> bool {
+        e.is_retryable
     }
 }
 
 delegate_components! {
     HandleCosmosError {
         ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent:
+            DelegateErrorRaiser<CosmosErrorHandlers>,
+    }
+}
+
+delegate_components! {
+    CosmosErrorHandlers {
         Error: ReturnError,
         Infallible: HandleInfallible,
         [
@@ -103,22 +116,22 @@ delegate_components! {
     }
 }
 
-impl<'a> DelegateComponent<&'a str> for HandleCosmosError {
+impl<'a> DelegateComponent<&'a str> for CosmosErrorHandlers {
     type Delegate = DisplayError;
 }
 
-impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for HandleCosmosError
+impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for CosmosErrorHandlers
 where
     Chain: HasAddressType + HasAmountType,
 {
     type Delegate = DebugError;
 }
 
-impl<'a, Chain> DelegateComponent<BroadcastTxError<'a, Chain>> for HandleCosmosError {
+impl<'a, Chain> DelegateComponent<BroadcastTxError<'a, Chain>> for CosmosErrorHandlers {
     type Delegate = DebugError;
 }
 
-impl<'a, Chain> DelegateComponent<TxNoResponseError<'a, Chain>> for HandleCosmosError
+impl<'a, Chain> DelegateComponent<TxNoResponseError<'a, Chain>> for CosmosErrorHandlers
 where
     Chain: HasTransactionHashType,
 {
@@ -126,10 +139,18 @@ where
 }
 
 impl<'a, Chain, Counterparty>
-    DelegateComponent<MissingCreateClientEventError<'a, Chain, Counterparty>> for HandleCosmosError
+    DelegateComponent<MissingCreateClientEventError<'a, Chain, Counterparty>>
+    for CosmosErrorHandlers
 where
     Chain: HasChainIdType,
     Counterparty: HasChainIdType,
 {
     type Delegate = DebugError;
+}
+
+impl<'a, Context> DelegateComponent<MaxRetryExceededError<'a, Context>> for CosmosErrorHandlers
+where
+    Context: HasErrorType,
+{
+    type Delegate = UnwrapMaxRetryExceededError;
 }
