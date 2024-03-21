@@ -14,7 +14,7 @@ use crate::relay::types::aliases::Packet;
 
 pub struct FullCycleRelayer;
 
-pub struct LogRelayPacketProgress<'a, Relay>
+pub struct LogRelayPacketAction<'a, Relay>
 where
     Relay: HasRelayChains,
 {
@@ -44,7 +44,7 @@ where
         + CanRaiseError<DstChain::Error>,
     SrcChain: CanQueryChainStatus,
     DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain>,
-    Relay::Logger: for<'a> CanLog<LogRelayPacketProgress<'a, Relay>>,
+    Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Packet<Relay>) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
@@ -73,7 +73,7 @@ where
             logger
                 .log(
                     "relaying timeout unordered packet",
-                    &LogRelayPacketProgress {
+                    &LogRelayPacketAction {
                         relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayTimeoutUnorderedPacket,
@@ -93,7 +93,7 @@ where
             logger
                 .log(
                     "relaying receive packet",
-                    &LogRelayPacketProgress {
+                    &LogRelayPacketAction {
                         relay,
                         packet,
                         relay_progress: RelayPacketProgress::RelayRecvPacket,
@@ -119,7 +119,7 @@ where
                 logger
                     .log(
                         "relaying ack packet",
-                        &LogRelayPacketProgress {
+                        &LogRelayPacketAction {
                             relay,
                             packet,
                             relay_progress: RelayPacketProgress::RelayAckPacket,
@@ -134,7 +134,7 @@ where
                 logger
                     .log(
                         "skip relaying ack packet due to lack of ack event",
-                        &LogRelayPacketProgress {
+                        &LogRelayPacketAction {
                             relay,
                             packet,
                             relay_progress: RelayPacketProgress::SkipRelayAckPacket,

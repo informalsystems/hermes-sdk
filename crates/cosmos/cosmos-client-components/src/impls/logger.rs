@@ -4,8 +4,11 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::log::traits::logger::Logger;
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
-use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketProgress;
+use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
+use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
+    LogRelayPacketStatus, RelayPacketStatus,
+};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
@@ -93,7 +96,7 @@ where
     }
 }
 
-impl<'a, Logging, Relay> Logger<Logging, LogRelayPacketProgress<'a, Relay>> for HandleCosmosLogs
+impl<'a, Logging, Relay> Logger<Logging, LogRelayPacketAction<'a, Relay>> for HandleCosmosLogs
 where
     Logging: Async,
     Relay: HasRelayChains,
@@ -101,7 +104,7 @@ where
     Relay::SrcChain: HasChainId,
     Relay::DstChain: HasChainId,
 {
-    async fn log(_logging: &Logging, message: &str, details: &LogRelayPacketProgress<'a, Relay>) {
+    async fn log(_logging: &Logging, message: &str, details: &LogRelayPacketAction<'a, Relay>) {
         trace!(
             packet = %details.packet,
             src_chain_id = %details.relay.src_chain().chain_id(),
@@ -121,7 +124,7 @@ where
     Relay::DstChain: HasChainId,
 {
     async fn log(_logging: &Logging, message: &str, details: &LogClearPacketError<'a, Relay>) {
-        trace!(
+        error!(
             packet = %details.packet,
             src_chain_id = %details.relay.src_chain().chain_id(),
             dst_chain_id = %details.relay.dst_chain().chain_id(),
@@ -129,5 +132,46 @@ where
             error = ?details.error,
             "{message}",
         );
+    }
+}
+
+impl<'a, Logging, Relay> Logger<Logging, LogRelayPacketStatus<'a, Relay>> for HandleCosmosLogs
+where
+    Logging: Async,
+    Relay: HasRelayChains,
+    Relay::Packet: Display,
+    Relay::SrcChain: HasChainId,
+    Relay::DstChain: HasChainId,
+{
+    async fn log(_logging: &Logging, message: &str, details: &LogRelayPacketStatus<'a, Relay>) {
+        match details.relay_status {
+            RelayPacketStatus::Start => {
+                trace!(
+                    packet = %details.packet,
+                    src_chain_id = %details.relay.src_chain().chain_id(),
+                    dst_chain_id = %details.relay.dst_chain().chain_id(),
+                    relay_status = "start",
+                    "{message}",
+                );
+            }
+            RelayPacketStatus::Successful => {
+                trace!(
+                    packet = %details.packet,
+                    src_chain_id = %details.relay.src_chain().chain_id(),
+                    dst_chain_id = %details.relay.dst_chain().chain_id(),
+                    relay_status = "successful",
+                    "{message}",
+                );
+            }
+            RelayPacketStatus::Error { error } => {
+                error!(
+                    packet = %details.packet,
+                    src_chain_id = %details.relay.src_chain().chain_id(),
+                    dst_chain_id = %details.relay.dst_chain().chain_id(),
+                    ?error,
+                    "{message}",
+                );
+            }
+        }
     }
 }
