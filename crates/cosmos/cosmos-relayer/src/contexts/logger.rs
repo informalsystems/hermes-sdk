@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::impls::logger::HandleCosmosLogs;
 use hermes_relayer_components::log::impls::delegate::DelegateLogger;
 use hermes_relayer_components::log::impls::global::GetGlobalLogger;
 use hermes_relayer_components::log::traits::has_logger::{
@@ -18,6 +17,7 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
+use hermes_tracing_components::contexts::logger::TracingLogger;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
@@ -48,72 +48,72 @@ impl CanUseCosmosLogger for CosmosLogger {}
 
 delegate_components! {
     CosmosLogHandlers {
-        (): HandleCosmosLogs,
+        (): TracingLogger,
     }
 }
 
 impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
     for CosmosLogHandlers
 {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<TxNoResponseError<'a, CosmosChain>> for CosmosLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogRetryQueryTxResponse<'a, CosmosChain>> for CosmosLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogSkipRelayLockedPacket<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogRelayPacketAction<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogClearPacketError<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogRelayPacketStatus<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, SourceTarget>>
     for CosmosLogHandlers
 {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, DestinationTarget>>
     for CosmosLogHandlers
 {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, SourceTarget>>
     for CosmosLogHandlers
 {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, DestinationTarget>>
     for CosmosLogHandlers
 {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogBatchWorker<'a, CosmosRelay, SourceTarget>> for CosmosLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogBatchWorker<'a, CosmosRelay, DestinationTarget>>
     for CosmosLogHandlers
 {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 pub struct ProvideCosmosLogger;

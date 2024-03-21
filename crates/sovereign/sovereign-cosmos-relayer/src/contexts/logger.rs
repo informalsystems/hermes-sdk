@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::impls::logger::HandleCosmosLogs;
 use hermes_relayer_components::log::impls::delegate::DelegateLogger;
 use hermes_relayer_components::log::impls::global::GetGlobalLogger;
 use hermes_relayer_components::log::traits::has_logger::{
@@ -9,6 +8,7 @@ use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
+use hermes_tracing_components::contexts::logger::TracingLogger;
 
 use crate::contexts::sovereign_rollup::SovereignRollup;
 
@@ -33,11 +33,11 @@ pub trait CanUseSovereignLogger: for<'a> CanLog<TxNoResponseError<'a, SovereignR
 impl CanUseSovereignLogger for SovereignLogger {}
 
 impl<'a> DelegateComponent<TxNoResponseError<'a, SovereignRollup>> for SovereignLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 impl<'a> DelegateComponent<LogRetryQueryTxResponse<'a, SovereignRollup>> for SovereignLogHandlers {
-    type Delegate = HandleCosmosLogs;
+    type Delegate = TracingLogger;
 }
 
 pub struct ProvideSovereignLogger;

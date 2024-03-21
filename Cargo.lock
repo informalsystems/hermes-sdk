@@ -1849,6 +1849,7 @@ dependencies = [
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
  "hermes-test-components",
+ "hermes-tracing-components",
  "hermes-wasm-client-components",
  "http 0.2.11",
  "ibc-proto 0.42.2",
@@ -2057,6 +2058,7 @@ dependencies = [
  "hermes-sovereign-client-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
+ "hermes-tracing-components",
  "hermes-wasm-client-components",
  "ibc-proto 0.41.0",
  "ibc-relayer",
@@ -2145,6 +2147,16 @@ dependencies = [
  "rand",
  "tokio",
  "tokio-stream",
+]
+
+[[package]]
+name = "hermes-tracing-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "tracing",
 ]
 
 [[package]]
