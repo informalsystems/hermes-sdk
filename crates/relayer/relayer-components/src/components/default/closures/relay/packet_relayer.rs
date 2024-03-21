@@ -26,6 +26,7 @@ use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
 use crate::logger::traits::level::HasBaseLogLevels;
+use crate::relay::impls::packet_relayers::general::full_relay::LogRelayPacketProgress;
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_filter::PacketFilter;
@@ -90,7 +91,8 @@ where
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
     OldLogger: HasBaseLogLevels,
-    Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
+    Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
+        + for<'a> CanLog<LogRelayPacketProgress<'a, Relay>>,
     Components: DelegatesToDefaultRelayComponents
         + PacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>

@@ -5,6 +5,7 @@ use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetry
 use hermes_relayer_components::log::traits::has_logger::HasLogger;
 use hermes_relayer_components::log::traits::logger::CanLog;
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketProgress;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
@@ -36,7 +37,8 @@ where
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
         + UseExtraChainComponentsForPacketRelayer<SrcChain>,
     OldLogger: HasBaseLogLevels,
-    Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
+    Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
+        + for<'a> CanLog<LogRelayPacketProgress<'a, Relay>>,
     Components: DelegatesToExtraRelayComponents + PacketFilter<Relay>,
 {
 }
