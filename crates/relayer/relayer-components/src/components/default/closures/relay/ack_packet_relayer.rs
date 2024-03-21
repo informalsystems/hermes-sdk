@@ -21,6 +21,7 @@ use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
 use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
+use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::target::SourceTarget;
@@ -71,7 +72,8 @@ where
     DstChain::Height: Clone,
     DstChain::Runtime: CanSleep,
     OldLogger: HasBaseLogLevels,
-    Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>,
+    Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
+        + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
     Components: DelegatesToDefaultRelayComponents
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,

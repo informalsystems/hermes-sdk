@@ -10,6 +10,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
     LogRelayPacketStatus, RelayPacketStatus,
 };
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
+use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
@@ -198,5 +199,48 @@ where
             target_height = %details.target_height,
             "{message}",
         );
+    }
+}
+
+impl<'a, Logging, Relay, Target> Logger<Logging, LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
+    for HandleCosmosLogs
+where
+    Logging: Async,
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasChainId,
+    Target::CounterpartyChain: HasChainId,
+{
+    async fn log(
+        _logging: &Logging,
+        message: &str,
+        details: &LogWaitUpdateClientHeightStatus<'a, Relay, Target>,
+    ) {
+        match details {
+            LogWaitUpdateClientHeightStatus::Waiting {
+                relay,
+                target_height,
+            } => {
+                trace!(
+                    target_chain_id = %Target::target_chain(relay).chain_id(),
+                    counterparty_chain_id = %Target::counterparty_chain(relay).chain_id(),
+                    %target_height,
+                    "{message}",
+                );
+            }
+            LogWaitUpdateClientHeightStatus::HeightReached {
+                relay,
+                target_height,
+                current_height,
+            } => {
+                trace!(
+                    target_chain_id = %Target::target_chain(relay).chain_id(),
+                    counterparty_chain_id = %Target::counterparty_chain(relay).chain_id(),
+                    %target_height,
+                    %current_height,
+                    "{message}",
+                );
+            }
+        }
     }
 }

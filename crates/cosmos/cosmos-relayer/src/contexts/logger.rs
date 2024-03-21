@@ -11,6 +11,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::full_rela
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
+use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
@@ -81,6 +82,18 @@ impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, Sour
 }
 
 impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, DestinationTarget>>
+    for CosmosLogHandlers
+{
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, SourceTarget>>
+    for CosmosLogHandlers
+{
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, DestinationTarget>>
     for CosmosLogHandlers
 {
     type Delegate = HandleCosmosLogs;
