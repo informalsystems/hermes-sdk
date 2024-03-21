@@ -20,9 +20,19 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
 use hermes_relayer_components::transaction::traits::types::nonce::HasNonceType;
 use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
-use tracing::{debug, error, trace};
+use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
+use tracing::{debug, error, info, trace};
 
 pub struct HandleCosmosLogs;
+
+impl<Logging> Logger<Logging, ()> for HandleCosmosLogs
+where
+    Logging: Async,
+{
+    async fn log(_logging: &Logging, message: &str, _details: &()) {
+        info!("{message}");
+    }
+}
 
 impl<'a, Logging, Chain> Logger<Logging, LogSendMessagesWithSignerAndNonce<'a, Chain>>
     for HandleCosmosLogs
@@ -242,5 +252,24 @@ where
                 );
             }
         }
+    }
+}
+
+impl<'a, Logging, Relay, Target> Logger<Logging, LogBatchWorker<'a, Relay, Target>>
+    for HandleCosmosLogs
+where
+    Logging: Async,
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+    Target::TargetChain: HasChainId,
+    Target::CounterpartyChain: HasChainId,
+{
+    async fn log(_logging: &Logging, message: &str, details: &LogBatchWorker<'a, Relay, Target>) {
+        trace!(
+            target_chain_id = %Target::target_chain(details.relay).chain_id(),
+            counterparty_chain_id = %Target::counterparty_chain(details.relay).chain_id(),
+            details = %details.details,
+            "{message}",
+        );
     }
 }

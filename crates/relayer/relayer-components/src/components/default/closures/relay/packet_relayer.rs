@@ -1,6 +1,5 @@
 use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
 
-use crate::chain::traits::logs::packet::CanLogChainPacket;
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
 use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
@@ -58,7 +57,6 @@ where
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
         + CanReadPacketFields<DstChain, OutgoingPacket = Relay::Packet>
-        + CanLogChainPacket<DstChain>
         + CanQueryClientState<DstChain>
         + CanQueryConsensusState<DstChain>
         + CanQueryConsensusStateHeight<DstChain>

@@ -1796,6 +1796,7 @@ dependencies = [
  "itertools 0.11.0",
  "prost",
  "prost-types",
+ "serde_json",
  "tendermint",
  "tendermint-proto",
  "tendermint-rpc",

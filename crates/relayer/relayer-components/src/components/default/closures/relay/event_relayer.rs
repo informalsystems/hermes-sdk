@@ -1,6 +1,5 @@
 use cgp_core::{ErrorRaiser, HasComponents};
 
-use crate::chain::traits::logs::packet::CanLogChainPacket;
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
@@ -35,7 +34,6 @@ where
         + UseDefaultPacketRelayer
         + HasComponents<Components = Components>,
     SrcChain: HasChainId
-        + CanLogChainPacket<Relay::DstChain>
         + HasSendPacketEvent<Relay::DstChain>
         + CanQueryCounterpartyChainId<Relay::DstChain>,
     DstChain: HasChainId

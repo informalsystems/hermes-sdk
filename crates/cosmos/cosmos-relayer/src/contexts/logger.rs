@@ -17,6 +17,7 @@ use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::Lo
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
+use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
@@ -94,6 +95,16 @@ impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, Sour
 }
 
 impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, DestinationTarget>>
+    for CosmosLogHandlers
+{
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogBatchWorker<'a, CosmosRelay, SourceTarget>> for CosmosLogHandlers {
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogBatchWorker<'a, CosmosRelay, DestinationTarget>>
     for CosmosLogHandlers
 {
     type Delegate = HandleCosmosLogs;
