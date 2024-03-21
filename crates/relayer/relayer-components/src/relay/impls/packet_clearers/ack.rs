@@ -1,6 +1,3 @@
-use alloc::format;
-use core::fmt::Display;
-
 use cgp_core::async_trait;
 
 use crate::chain::traits::queries::ack_packets::CanQueryAckPackets;
@@ -10,7 +7,11 @@ use crate::chain::traits::queries::unreceived_acks_sequences::CanQueryUnreceived
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::types::aliases::{ChannelIdOf, HeightOf, PortIdOf, WriteAckEventOf};
-use crate::logger::traits::log::CanLog;
+use crate::log::traits::has_logger::HasLogger;
+use crate::log::traits::logger::CanLog;
+use crate::relay::impls::packet_clearers::receive_packet::{
+    ClearPacketAction, LogClearPacketError,
+};
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
@@ -33,20 +34,29 @@ where
 #[async_trait]
 impl<Relay> Task for RelayPacketTask<Relay>
 where
-    Relay: CanRelayAckPacket + CanLog,
-    Relay::Packet: Display,
+    Relay: CanRelayAckPacket + HasLogger,
     Relay::DstChain: HasWriteAckEvent<Relay::SrcChain>,
+    Relay::Logger: for<'a> CanLog<LogClearPacketError<'a, Relay>>,
 {
     async fn run(self) {
-        if let Err(e) = self
+        let res = self
             .relay
             .relay_ack_packet(&self.height, &self.packet, &self.ack)
-            .await
-        {
-            self.relay.log_error(&format!(
-                "failed to relay packet the packet {} during ack packet clearing: {e:#?}",
-                self.packet
-            ));
+            .await;
+
+        if let Err(e) = res {
+            self.relay
+                .logger()
+                .log(
+                    "failed to relay packet during ack packet clearing",
+                    &LogClearPacketError {
+                        relay: &self.relay,
+                        packet: &self.packet,
+                        clear_action: ClearPacketAction::ClearReceivePacket,
+                        error: &e,
+                    },
+                )
+                .await;
         }
     }
 }
@@ -54,14 +64,14 @@ where
 #[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
-    Relay: Clone + CanRelayAckPacket + HasRuntime + CanRaiseRelayChainErrors + CanLog,
+    Relay: Clone + HasRuntime + CanRaiseRelayChainErrors + HasLogger,
     Relay::DstChain: CanQueryAckPackets<Relay::SrcChain>
         + HasIbcPacketTypes<Relay::SrcChain, OutgoingPacket = Relay::Packet>
         + CanQueryPacketAcknowledgements<Relay::SrcChain>,
     Relay::SrcChain: CanQueryPacketCommitments<Relay::DstChain>
         + CanQueryUnreceivedAcksSequences<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
-    Relay::Packet: Display,
+    RelayPacketTask<Relay>: Task,
 {
     async fn clear_packets(
         relay: &Relay,
@@ -81,7 +91,7 @@ where
         let acks_and_height_on_counterparty = dst_chain
             .query_packet_acknowlegements(dst_channel_id, dst_port_id, &commitment_sequences)
             .await
-            .unwrap();
+            .map_err(Relay::raise_error)?;
 
         if let Some((acks_on_counterparty, height)) = acks_and_height_on_counterparty {
             let unreceived_ack_sequences = src_chain

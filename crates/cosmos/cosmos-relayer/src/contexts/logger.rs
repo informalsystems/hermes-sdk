@@ -6,6 +6,7 @@ use hermes_relayer_components::log::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
 use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
+use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketProgress;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
@@ -59,6 +60,10 @@ impl<'a> DelegateComponent<LogSkipRelayLockedPacket<'a, CosmosRelay>> for Cosmos
 }
 
 impl<'a> DelegateComponent<LogRelayPacketProgress<'a, CosmosRelay>> for CosmosLogHandlers {
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogClearPacketError<'a, CosmosRelay>> for CosmosLogHandlers {
     type Delegate = HandleCosmosLogs;
 }
 

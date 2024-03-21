@@ -3,6 +3,7 @@ use core::fmt::{Debug, Display};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::log::traits::logger::Logger;
+use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketProgress;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -106,6 +107,26 @@ where
             src_chain_id = %details.relay.src_chain().chain_id(),
             dst_chain_id = %details.relay.dst_chain().chain_id(),
             relay_progress = ?details.relay_progress,
+            "{message}",
+        );
+    }
+}
+
+impl<'a, Logging, Relay> Logger<Logging, LogClearPacketError<'a, Relay>> for HandleCosmosLogs
+where
+    Logging: Async,
+    Relay: HasRelayChains,
+    Relay::Packet: Display,
+    Relay::SrcChain: HasChainId,
+    Relay::DstChain: HasChainId,
+{
+    async fn log(_logging: &Logging, message: &str, details: &LogClearPacketError<'a, Relay>) {
+        trace!(
+            packet = %details.packet,
+            src_chain_id = %details.relay.src_chain().chain_id(),
+            dst_chain_id = %details.relay.dst_chain().chain_id(),
+            clear_action = ?details.clear_action,
+            error = ?details.error,
             "{message}",
         );
     }
