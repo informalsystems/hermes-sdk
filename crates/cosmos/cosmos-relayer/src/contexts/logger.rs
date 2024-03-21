@@ -10,6 +10,8 @@ use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::Lo
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
+use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
@@ -69,6 +71,18 @@ impl<'a> DelegateComponent<LogClearPacketError<'a, CosmosRelay>> for CosmosLogHa
 }
 
 impl<'a> DelegateComponent<LogRelayPacketStatus<'a, CosmosRelay>> for CosmosLogHandlers {
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, SourceTarget>>
+    for CosmosLogHandlers
+{
+    type Delegate = HandleCosmosLogs;
+}
+
+impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, DestinationTarget>>
+    for CosmosLogHandlers
+{
     type Delegate = HandleCosmosLogs;
 }
 

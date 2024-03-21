@@ -29,10 +29,12 @@ use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
+use crate::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
+use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 use crate::runtime::traits::runtime::HasRuntime;
 use crate::runtime::traits::sleep::CanSleep;
 
@@ -94,7 +96,9 @@ where
     OldLogger: HasBaseLogLevels,
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
-        + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,
+        + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>
+        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
+        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, DestinationTarget>>,
     Components: DelegatesToDefaultRelayComponents
         + PacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>

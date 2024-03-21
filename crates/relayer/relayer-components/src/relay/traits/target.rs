@@ -31,6 +31,10 @@ pub trait ChainTarget<Relay: HasRelayChains>: Async + Default + Copy + private::
     ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain>;
 }
 
+pub type TargetChainOf<Relay, Target> = <Target as ChainTarget<Relay>>::TargetChain;
+
+pub type CounterpartyChainOf<Relay, Target> = <Target as ChainTarget<Relay>>::CounterpartyChain;
+
 impl private::Sealed for SourceTarget {}
 impl private::Sealed for DestinationTarget {}
 
