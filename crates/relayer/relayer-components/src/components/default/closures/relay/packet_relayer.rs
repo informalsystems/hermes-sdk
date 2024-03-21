@@ -24,7 +24,9 @@ use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::log::traits::has_logger::HasLogger;
+use crate::log::traits::logger::CanLog;
 use crate::logger::traits::level::HasBaseLogLevels;
+use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
@@ -88,6 +90,7 @@ where
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
     OldLogger: HasBaseLogLevels,
+    Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
     Components: DelegatesToDefaultRelayComponents
         + PacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>

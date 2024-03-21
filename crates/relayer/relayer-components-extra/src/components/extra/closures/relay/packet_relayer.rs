@@ -2,8 +2,10 @@ use cgp_core::{CanRaiseError, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
-use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
+use hermes_relayer_components::log::traits::has_logger::HasLogger;
+use hermes_relayer_components::log::traits::logger::CanLog;
 use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
@@ -17,22 +19,24 @@ pub trait CanUseExtraPacketRelayer: UseExtraPacketRelayer {}
 
 pub trait UseExtraPacketRelayer: CanRelayPacket {}
 
-impl<Relay, SrcChain, DstChain, Components> UseExtraPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components, OldLogger, Logger> UseExtraPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + HasLogger
+        + hermes_relayer_components::logger::traits::has_logger::HasLogger<Logger = OldLogger>
+        + HasLogger<Logger = Logger>
         + HasPacketLock
         + UseExtraIbcMessageSender
         + HasRetryableError
         + HasMaxErrorRetry
         + for<'a> CanRaiseError<MaxRetryExceededError<'a, Relay>>
         + HasComponents<Components = Components>,
-    SrcChain: HasLoggerType<Logger = Relay::Logger>
+    SrcChain: hermes_relayer_components::logger::traits::has_logger::HasLoggerType<Logger = OldLogger>
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
         + UseExtraChainComponentsForPacketRelayer<DstChain>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
         + UseExtraChainComponentsForPacketRelayer<SrcChain>,
-    Relay::Logger: HasBaseLogLevels,
+    OldLogger: HasBaseLogLevels,
+    Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
     Components: DelegatesToExtraRelayComponents + PacketFilter<Relay>,
 {
 }
