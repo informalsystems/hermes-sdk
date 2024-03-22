@@ -1,4 +1,4 @@
-use hermes_sovereign_client_components::sovereign::types::address::SovereignAddress;
+use hermes_sovereign_chain_components::sovereign::types::address::SovereignAddress;
 use serde::Serialize;
 
 pub struct SovereignGenesisConfig {

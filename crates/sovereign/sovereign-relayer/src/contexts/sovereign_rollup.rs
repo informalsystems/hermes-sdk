@@ -35,14 +35,14 @@ use hermes_relayer_components::transaction::traits::types::tx_response::TxRespon
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
-use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
-use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::{
+use hermes_sovereign_chain_components::sovereign::components::rollup::SovereignRollupClientComponents;
+use hermes_sovereign_chain_components::sovereign::traits::rollup::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
 };
-use hermes_sovereign_client_components::sovereign::traits::rollup::publish_batch::{
+use hermes_sovereign_chain_components::sovereign::traits::rollup::publish_batch::{
     CanPublishTransactionBatch, TransactionBatchPublisherComponent,
 };
-use hermes_sovereign_client_components::sovereign::types::rollup_id::RollupId;
+use hermes_sovereign_chain_components::sovereign::types::rollup_id::RollupId;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
 use hermes_test_components::chain::traits::assert::eventual_amount::{
     CanAssertEventualAmount, EventualAmountAsserterComponent,

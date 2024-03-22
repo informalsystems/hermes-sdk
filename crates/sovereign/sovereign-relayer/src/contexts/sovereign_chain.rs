@@ -23,18 +23,18 @@ use hermes_relayer_components::chain::traits::types::update_client::HasUpdateCli
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
-use hermes_sovereign_client_components::cosmos::impls::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
-use hermes_sovereign_client_components::cosmos::impls::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
-use hermes_sovereign_client_components::cosmos::impls::connection_handshake_message::BuildSovereignConnectionHandshakeMessageOnCosmos;
-use hermes_sovereign_client_components::sovereign::components::chain::{
+use hermes_sovereign_chain_components::cosmos::impls::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
+use hermes_sovereign_chain_components::cosmos::impls::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
+use hermes_sovereign_chain_components::cosmos::impls::connection_handshake_message::BuildSovereignConnectionHandshakeMessageOnCosmos;
+use hermes_sovereign_chain_components::sovereign::components::chain::{
     IsSovereignChainClientComponent, SovereignChainClientComponents,
 };
-use hermes_sovereign_client_components::sovereign::traits::chain::data_chain::{
+use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
     DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
     ProvideDataChainType,
 };
-use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
-use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
+use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_chain_components::sovereign::types::height::RollupHeight;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};

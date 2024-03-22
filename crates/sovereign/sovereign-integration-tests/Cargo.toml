@@ -25,7 +25,7 @@ hermes-cosmos-integration-tests     = { workspace = true }
 hermes-celestia-test-components     = { workspace = true }
 hermes-celestia-integration-tests   = { workspace = true }
 hermes-sovereign-test-components    = { workspace = true }
-hermes-sovereign-client-components  = { workspace = true }
+hermes-sovereign-chain-components  = { workspace = true }
 hermes-sovereign-relayer     = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
 

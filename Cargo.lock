@@ -2038,7 +2038,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-sovereign-client-components"
+name = "hermes-sovereign-chain-components"
 version = "0.1.0"
 dependencies = [
  "base64",
@@ -2084,7 +2084,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
  "hermes-sovereign-relayer",
  "hermes-sovereign-test-components",
  "hermes-test-components",
@@ -2120,7 +2120,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "hermes-tracing-logging-components",
@@ -2143,7 +2143,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
  "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
