@@ -2077,6 +2077,7 @@ dependencies = [
  "hermes-celestia-chain",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
+ "hermes-encoding-components",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
