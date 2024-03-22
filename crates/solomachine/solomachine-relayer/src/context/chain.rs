@@ -5,13 +5,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgp_core::prelude::*;
 use eyre::eyre;
-use hermes_cosmos_client_components::types::tendermint::{
+use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer_types::core::ics03_connection::connection::{
     ConnectionEnd, State as ConnectionState,
 };

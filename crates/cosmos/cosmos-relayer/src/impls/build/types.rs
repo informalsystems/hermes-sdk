@@ -1,6 +1,6 @@
 use hermes_relayer_components::build::traits::birelay::ProvideBiRelayType;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeGetter;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::builder::CosmosBuilder;
@@ -10,7 +10,7 @@ impl ProvideBiRelayType<CosmosBuilder> for CosmosBuildComponents {
     type BiRelay = CosmosBiRelay;
 }
 
-impl ProvideRuntime<CosmosBuilder> for CosmosBuildComponents {
+impl RuntimeGetter<CosmosBuilder> for CosmosBuildComponents {
     fn runtime(build: &CosmosBuilder) -> &HermesRuntime {
         &build.runtime
     }

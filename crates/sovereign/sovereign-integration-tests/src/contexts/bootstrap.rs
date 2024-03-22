@@ -8,11 +8,11 @@ use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
-use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::ProvideRollupType;
-use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::components::{
     IsSovereignBootstrapComponent, SovereignBootstrapComponents as BaseSovereignBootstrapComponents,
 };
@@ -46,7 +46,7 @@ delegate_components! {
     SovereignBootstrapComponents {
         ErrorTypeComponent: ProvideCosmosError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideHermesRuntime,
         RollupDriverBuilderComponent: BuildSovereignRollupDriver,
     }
 }
@@ -75,7 +75,7 @@ impl ProvideRollupDriverType<SovereignBootstrap> for SovereignBootstrapComponent
     type RollupDriver = SovereignRollupDriver;
 }
 
-impl ProvideRuntime<SovereignBootstrap> for SovereignBootstrapComponents {
+impl RuntimeGetter<SovereignBootstrap> for SovereignBootstrapComponents {
     fn runtime(bootstrap: &SovereignBootstrap) -> &HermesRuntime {
         &bootstrap.runtime
     }

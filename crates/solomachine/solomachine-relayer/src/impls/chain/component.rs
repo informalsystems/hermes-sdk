@@ -1,9 +1,11 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
-use hermes_cosmos_client_components::impls::packet::packet_fields::CosmosPacketFieldReader;
-use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
-use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
-use hermes_protobuf_components::types::Any;
+use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
+use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
+use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
+use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
+use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
+use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -28,14 +30,8 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
-use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
-};
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
@@ -69,7 +65,7 @@ impl<Chain> DelegateComponent<SolomachineChain<Chain>> for CosmosQueryClientStat
 delegate_components! {
     SolomachineChainComponents {
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         [
             HeightTypeComponent,
             TimestampTypeComponent,
@@ -79,11 +75,6 @@ delegate_components! {
             ChainStatusTypeComponent,
         ]:
             ProvideCosmosChainTypes,
-        [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
         [
             MessageTypeComponent,
             EventTypeComponent,

@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use eyre::eyre;
 use futures::lock::Mutex;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
@@ -85,10 +85,12 @@ impl CosmosBuilder {
         chain_config: ChainConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
     ) -> Result<CosmosChain, Error> {
-        let runtime = self.runtime.runtime.clone();
-        let chain_id = chain_config.id.clone();
+        let ChainConfig::CosmosSdk(sdk_chain_config) = chain_config.clone();
 
-        let (handle, key, chain_config) = task::block_in_place(|| -> Result<_, Error> {
+        let runtime = self.runtime.runtime.clone();
+        let chain_id = sdk_chain_config.id.clone();
+
+        let (handle, key, chain_config) = task::block_in_place(move || -> Result<_, Error> {
             let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(chain_config, runtime)?;
 
             let key = get_keypair(&chain_id, &handle, m_keypair)?;
@@ -98,13 +100,13 @@ impl CosmosBuilder {
             Ok((handle, key, chain_config))
         })?;
 
-        let event_source_mode = chain_config.event_source.clone();
+        let event_source_mode = sdk_chain_config.event_source.clone();
 
-        let tx_config = TxConfig::try_from(&chain_config)?;
+        let tx_config = TxConfig::try_from(&sdk_chain_config)?;
 
         let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
-        let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
+        let compat_mode = if let Some(compat_mode) = &sdk_chain_config.compat_mode {
             compat_mode.clone().into()
         } else {
             let status = rpc_client.status().await?;
@@ -159,7 +161,7 @@ pub fn get_keypair(
     m_keypair: Option<&Secp256k1KeyPair>,
 ) -> Result<Secp256k1KeyPair, Error> {
     if let Some(keypair) = m_keypair {
-        let chain_config = handle.config()?;
+        let ChainConfig::CosmosSdk(chain_config) = handle.config()?;
 
         // try add the key to the chain handle, in case if it is only in the key map,
         // as for the case of integration tests.

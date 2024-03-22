@@ -1,5 +1,5 @@
 use ibc::clients::tendermint::types::Header;
-use ibc_core::client::types::Height;
+use ibc::core::client::types::Height;
 use sov_celestia_client::types::consensus_state::SovTmConsensusState;
 
 use crate::sovereign::types::client_state::SovereignClientState;

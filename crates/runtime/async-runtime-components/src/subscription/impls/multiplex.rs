@@ -8,13 +8,13 @@ use core::pin::Pin;
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
-use hermes_relayer_components::runtime::traits::mutex::{HasMutex, MutexOf};
-use hermes_relayer_components::runtime::traits::stream::HasStreamType;
-use hermes_relayer_components::runtime::traits::task::Task;
-use hermes_relayer_components_extra::runtime::traits::channel::{
+use hermes_runtime_components::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };
-use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
+use hermes_runtime_components::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::stream::HasStreamType;
+use hermes_runtime_components::traits::task::Task;
 
 use crate::stream::traits::boxed::HasBoxedStreamType;
 use crate::subscription::traits::subscription::Subscription;

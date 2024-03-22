@@ -1,12 +1,12 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
+use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
-use ibc_core::primitives::ToProto;
+use ibc::core::primitives::ToProto;
 use ibc_proto::google::protobuf::Any;
 use prost::{EncodeError, Message};
 

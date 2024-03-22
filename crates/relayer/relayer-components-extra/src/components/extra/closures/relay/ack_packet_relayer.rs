@@ -1,4 +1,6 @@
 use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents, HasErrorType};
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
@@ -15,19 +17,19 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use hermes_relayer_components::logger::traits::has_logger::HasLogger;
-use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::error::types::ErrorOf;
+use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
+use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_relayer_components::runtime::types::aliases::ErrorOf;
+use hermes_runtime_components::traits::channel::CanUseChannels;
+use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
-use crate::runtime::traits::channel::CanUseChannels;
-use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 
 pub trait CanUseExtraAckPacketRelayer: UseExtraAckPacketRelayer
 where
@@ -41,10 +43,10 @@ where
 {
 }
 
-impl<Relay, SrcChain, DstChain, Components> UseExtraAckPacketRelayer for Relay
+impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraAckPacketRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + HasLogger
+        + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasComponents<Components = Components>,
     SrcChain: HasErrorType
@@ -76,7 +78,8 @@ where
     DstChain::Height: Clone,
     SrcChain::Runtime: CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep,
-    Relay::Logger: HasBaseLogLevels,
+    Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
+        + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
     Components: DelegatesToExtraRelayComponents
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,

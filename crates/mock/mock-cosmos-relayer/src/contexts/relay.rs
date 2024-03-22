@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc::clients::ics07_tendermint::client_type;
-use ibc::core::ics24_host::identifier::ClientId;
-use ibc::core::ValidationContext;
+use hermes_runtime::types::runtime::HermesRuntime;
+use ibc::clients::tendermint::types::client_type;
+use ibc::core::host::types::identifiers::ClientId;
+use ibc::core::host::ValidationContext;
 
 use super::chain::MockCosmosContext;
 use crate::traits::endpoint::BasecoinEndpoint;
@@ -39,11 +39,11 @@ where
     ) -> Result<MockCosmosRelay<SrcChain, DstChain>, Error> {
         let src_client_counter = src_chain.ibc_context().client_counter()?;
 
-        let src_client_id = ClientId::new(client_type(), src_client_counter)?;
+        let src_client_id = ClientId::new(client_type().as_str(), src_client_counter)?;
 
         let dst_client_counter = dst_chain.ibc_context().client_counter()?;
 
-        let dst_client_id = ClientId::new(client_type(), dst_client_counter)?;
+        let dst_client_id = ClientId::new(client_type().as_str(), dst_client_counter)?;
 
         Ok(Self {
             runtime,

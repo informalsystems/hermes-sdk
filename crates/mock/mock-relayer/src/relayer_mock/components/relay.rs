@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::logger::traits::has_logger::{LoggerTypeComponent, LoggerFieldComponent};
+use hermes_logging_components::contexts::no_logger::ProvideNoLogger;
+use hermes_logging_components::traits::has_logger::{GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent};
 use hermes_relayer_components::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use hermes_relayer_components::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
 use hermes_relayer_components::relay::impls::update_client::skip::SkipUpdateClient;
@@ -15,7 +16,6 @@ use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerCompo
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 
 use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
 
@@ -25,9 +25,10 @@ delegate_components! {
     MockRelayComponents {
         [
             LoggerTypeComponent,
-            LoggerFieldComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
         ]:
-            ProvideTracingLogger,
+            ProvideNoLogger,
         IbcMessageSenderComponent<MainSink>:
             SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         PacketRelayerComponent: FullCycleRelayer,

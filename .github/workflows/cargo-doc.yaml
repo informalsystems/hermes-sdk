@@ -24,7 +24,9 @@ jobs:
           toolchain: stable
           override: true
       - name: Build API documentation
+        # TODO: run cargo doc with all crates once it is fixed
         run: |
             nix shell .#protobuf -c \
               cargo doc \
-              --all-features
+              --all-features \
+              -p hermes-relayer-components

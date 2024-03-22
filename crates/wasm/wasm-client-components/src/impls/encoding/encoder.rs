@@ -1,11 +1,11 @@
 use cgp_core::prelude::*;
-use hermes_protobuf_components::impls::protobuf::EncodeAsProtobuf;
-use hermes_protobuf_components::impls::via_any::EncodeViaAny;
-use hermes_protobuf_components::types::Any;
-use hermes_relayer_components::encode::impls::convert_and_encode::ConvertAndEncode;
-use hermes_relayer_components::encode::traits::decoder::{CanDecode, Decoder};
-use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
-use hermes_relayer_components::encode::types::via::Via;
+use hermes_encoding_components::impls::convert_and_encode::ConvertAndEncode;
+use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::types::via::Via;
+use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
+use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
+use hermes_protobuf_encoding_components::types::Any;
 
 use crate::types::client_state::{ProtoWasmClientState, WasmClientState};
 

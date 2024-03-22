@@ -13,13 +13,15 @@ description = """
 """
 
 [dependencies]
-cgp-core           = { workspace = true }
-ibc-relayer-types  = { workspace = true }
-ibc-relayer        = { workspace = true }
-hermes-cosmos-relayer = { workspace = true }
-hermes-relayer-components  = { workspace = true }
-ibc-proto               = { workspace = true, features = ["serde"] }
-tendermint-rpc          = { workspace = true, features = ["http-client", "websocket-client"] }
+cgp-core                    = { workspace = true }
+hermes-runtime-components   = { workspace = true }
+hermes-relayer-components   = { workspace = true }
+hermes-cosmos-relayer       = { workspace = true }
+
+ibc-relayer-types           = { workspace = true }
+ibc-relayer                 = { workspace = true }
+ibc-proto                   = { workspace = true, features = ["serde"] }
+tendermint-rpc              = { workspace = true, features = ["http-client", "websocket-client"] }
 
 http        = { workspace = true }
 tokio       = { workspace = true, features = ["full"] }

@@ -1,6 +1,7 @@
 use cgp_core::CanRaiseError;
-use hermes_test_components::chain::traits::types::amount::ProvideAmountMethods;
-use hermes_test_components::chain::traits::types::amount::{HasAmountType, ProvideAmountType};
+use hermes_test_components::chain::traits::types::amount::{
+    HasAmountType, ProvideAmountMethods, ProvideAmountType,
+};
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 
 use crate::chain::types::amount::Amount;

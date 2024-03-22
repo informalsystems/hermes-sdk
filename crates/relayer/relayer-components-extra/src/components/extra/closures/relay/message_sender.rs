@@ -1,20 +1,22 @@
 use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents};
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
-use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_relayer_components::error::types::ErrorOf;
+use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
+use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_relayer_components::runtime::types::aliases::ErrorOf;
+use hermes_runtime_components::traits::channel::CanUseChannels;
+use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
+use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
-use crate::runtime::traits::channel::CanUseChannels;
-use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 
 pub trait UseExtraIbcMessageSender:
     CanSendIbcMessages<MainSink, SourceTarget>
@@ -25,15 +27,14 @@ pub trait UseExtraIbcMessageSender:
 {
 }
 
-impl<Relay, SrcChain, DstChain, Components> UseExtraIbcMessageSender for Relay
+impl<Relay, SrcChain, DstChain, Components, Logger> UseExtraIbcMessageSender for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + HasLogger
+        + HasLogger<Logger = Logger>
         + HasMessageBatchSender<SourceTarget>
         + HasMessageBatchSender<DestinationTarget>
         + HasComponents<Components = Components>,
-    SrcChain: HasLoggerType<Logger = Relay::Logger>
-        + HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
+    SrcChain: HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
         + UseExtraChainComponentsForIbcMessageSender<DstChain>
         + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
@@ -43,7 +44,10 @@ where
     DstChain::Height: Clone,
     SrcChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
     DstChain::Runtime: CanSleep + CanCreateChannelsOnce + CanUseChannels + CanUseChannelsOnce,
-    Relay::Logger: HasBaseLogLevels,
+    Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
+        + for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, DestinationTarget>>
+        + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>
+        + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, DestinationTarget>>,
     Components: DelegatesToExtraRelayComponents
         + PacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>

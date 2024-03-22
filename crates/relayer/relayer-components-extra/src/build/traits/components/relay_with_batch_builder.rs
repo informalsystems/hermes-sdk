@@ -4,7 +4,7 @@ use hermes_relayer_components::build::traits::target::relay::RelayBuildTarget;
 use hermes_relayer_components::build::types::aliases::{
     TargetDstChain, TargetDstClientId, TargetRelay, TargetSrcChain, TargetSrcClientId,
 };
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::batch::traits::channel::HasMessageBatchSenderTypes;
 

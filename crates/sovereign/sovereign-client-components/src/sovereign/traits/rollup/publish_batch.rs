@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::transaction::traits::types::HasTransactionType;
+use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 
 #[derive_component(TransactionBatchPublisherComponent, TransactionBatchPublisher<Chain>)]
 #[async_trait]

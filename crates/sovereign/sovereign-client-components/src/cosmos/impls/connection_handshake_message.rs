@@ -1,11 +1,13 @@
 use cgp_core::HasErrorType;
-use hermes_cosmos_client_components::traits::message::CosmosMessage;
-use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::sovereign::types::payloads::connection::{
@@ -38,12 +40,26 @@ where
 {
     async fn build_connection_open_init_message(
         _chain: &Chain,
-        _client_id: &Chain::ClientId,
-        _counterparty_client_id: &Counterparty::ClientId,
-        _init_connection_options: &Chain::InitConnectionOptions,
-        _counterparty_payload: SovereignConnectionOpenInitPayload,
+        client_id: &Chain::ClientId,
+        counterparty_client_id: &Counterparty::ClientId,
+        init_connection_options: &Chain::InitConnectionOptions,
+        counterparty_payload: SovereignConnectionOpenInitPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        todo!()
+        // TODO: Retrieve version and delay period
+        let version = Version::default();
+        let delay_period = init_connection_options.delay_period;
+
+        let counterparty_commitment_prefix = counterparty_payload.commitment_prefix;
+
+        let message = CosmosConnectionOpenInitMessage {
+            client_id: client_id.clone(),
+            counterparty_client_id: counterparty_client_id.clone(),
+            counterparty_commitment_prefix,
+            version,
+            delay_period,
+        };
+
+        Ok(message.to_cosmos_message())
     }
 
     async fn build_connection_open_try_message(

@@ -1,10 +1,8 @@
-use hermes_cosmos_relayer::types::error::ErrorWrapper;
-use oneline_eyre::eyre::Context;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight,
@@ -12,6 +10,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use ibc_relayer_types::Height;
+use oneline_eyre::eyre::Context;
 
 use crate::Result;
 

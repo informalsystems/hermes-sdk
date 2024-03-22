@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::random::CanGenerateRandom;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use hermes_test_components::runtime::traits::random::CanGenerateRandom;
 
 use crate::bootstrap::traits::fields::random_id::HasRandomIdFlag;
 use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;

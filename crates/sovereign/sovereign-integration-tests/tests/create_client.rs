@@ -1,46 +1,55 @@
 #![recursion_limit = "256"]
-use eyre::eyre;
-use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
-use hermes_cosmos_client_components::methods::event::try_extract_create_client_event;
-use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
-use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use std::time::{SystemTime, UNIX_EPOCH};
-use tokio::time::sleep;
-
 use core::time::Duration;
-use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
-use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
-use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
-use serde_json::Value as JsonValue;
 use std::env::var;
 use std::str::FromStr;
 use std::sync::Arc;
-use toml::Value as TomlValue;
+use std::time::{SystemTime, UNIX_EPOCH};
 
+use eyre::eyre;
+use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
+use hermes_cosmos_chain_components::methods::event::try_extract_create_client_event;
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::CanUploadWasmClientCode;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
+use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
+use ibc_relayer_types::core::ics03_connection::version::Version;
+use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use serde_json::Value as JsonValue;
 use tokio::runtime::Builder;
+use tokio::time::sleep;
+use toml::Value as TomlValue;
+use tracing::info;
 
+#[tracing::instrument]
 #[test]
 pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::INFO)
+        .init();
+
     let _ = stable_eyre::install();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
@@ -237,6 +246,37 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         for update_message in update_client_messages.into_iter() {
             let _events = cosmos_chain.send_message(update_message).await?;
         }
+
+        let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
+        let connection_init_payload = <SovereignChain as CanBuildConnectionHandshakePayloads<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
+
+        let options = CosmosInitConnectionOptions {
+            delay_period: Duration::from_secs(0),
+            connection_version: Version::default(),
+        };
+
+        // Placeholder for Sovereign client ID
+        let sovereign_client_id = ClientId::from_str("sovereign-1").unwrap();
+
+        // Assert that the connection Init fails with an invalid client
+        {
+            let connection_init_payload = <SovereignChain as CanBuildConnectionHandshakePayloads<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
+
+            let wrong_wasm_client_id = ClientId::from_str("08-wasm-12").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
+
+            let connection_init_message = <CosmosChain as CanBuildConnectionHandshakeMessages<SovereignChain>>::build_connection_open_init_message(cosmos_chain, &wrong_wasm_client_id, &sovereign_client_id, &options, connection_init_payload).await?;
+
+            let connection_init_event = cosmos_chain.send_message(connection_init_message).await;
+
+            assert!(connection_init_event.is_err());
+        }
+
+        let connection_init_message = <CosmosChain as CanBuildConnectionHandshakeMessages<SovereignChain>>::build_connection_open_init_message(cosmos_chain, &wasm_client_id, &sovereign_client_id, &options, connection_init_payload).await?;
+
+        let connection_init_event = cosmos_chain.send_message(connection_init_message).await?;
+
+        info!("{:#?}", connection_init_event);
 
         <Result<(), Error>>::Ok(())
     })?;

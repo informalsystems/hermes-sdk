@@ -1,9 +1,9 @@
 use alloc::string::String;
 
-use basecoin_app::types::error::Error as AppError;
-use ibc::clients::ics07_tendermint::error::Error as ClientError;
-use ibc::core::ics24_host::identifier::IdentifierError;
-use ibc::core::ContextError;
+use basecoin::modules::ibc::AppError;
+use ibc::core::client::types::error::ClientError;
+use ibc::core::handler::types::error::ContextError;
+use ibc::core::host::types::error::IdentifierError;
 
 /// Defines the error type for errors can occur when relaying between two mock
 /// Cosmos chains.

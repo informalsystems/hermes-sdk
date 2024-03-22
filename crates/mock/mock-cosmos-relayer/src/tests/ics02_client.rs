@@ -1,13 +1,15 @@
-use basecoin_store::impls::InMemoryStore;
+use basecoin::store::impls::InMemoryStore;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use ibc::core::ics24_host::identifier::ClientId;
-use ibc::core::ValidationContext;
+use hermes_runtime_components::traits::sleep::CanSleep;
+use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
+use ibc::core::client::context::client_state::ClientStateCommon;
+use ibc::core::client::context::ClientValidationContext;
+use ibc::core::host::types::identifiers::ClientId;
 
 use crate::contexts::basecoin::MockBasecoin;
 use crate::contexts::chain::MockCosmosContext;
@@ -32,7 +34,7 @@ async fn test_create_client() -> Result<(), Error> {
     assert!(relayer
         .dst_chain()
         .ibc_context()
-        .client_state(&ClientId::default())
+        .client_state(&ClientId::new(TENDERMINT_CLIENT_TYPE, 0).expect("never fails"))
         .is_ok());
 
     Ok(())
@@ -69,10 +71,13 @@ async fn test_update_client() -> Result<(), Error> {
     let latest_client_state =
         <MockCosmosContext<MockBasecoin<InMemoryStore>> as CanQueryClientStateWithLatestHeight<
             MockCosmosContext<MockBasecoin<InMemoryStore>>,
-        >>::query_client_state_with_latest_height(relayer.dst_chain(), &ClientId::default())
+        >>::query_client_state_with_latest_height(
+            relayer.dst_chain(),
+            &ClientId::new(TENDERMINT_CLIENT_TYPE, 0).expect("never fails"),
+        )
         .await?;
 
-    assert_eq!(latest_client_state.latest_height, src_current_height);
+    assert_eq!(latest_client_state.latest_height(), src_current_height);
 
     Ok(())
 }

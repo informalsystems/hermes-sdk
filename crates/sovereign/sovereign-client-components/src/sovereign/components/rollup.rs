@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
@@ -16,12 +17,18 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::transaction::traits::components::tx_response_querier::TxResponseQuerierComponent;
-use hermes_relayer_components::transaction::traits::event::TxResponseAsEventsParserComponent;
-use hermes_relayer_components::transaction::traits::types::{
-    FeeTypeComponent, NonceTypeComponent, SignerTypeComponent, TransactionHashTypeComponent,
-    TransactionTypeComponent, TxResponseTypeComponent,
+use hermes_relayer_components::transaction::impls::poll_tx_response::{
+    PollTimeoutGetterComponent, PollTxResponse,
 };
+use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
+use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
+use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
+use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
+use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
+use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
 use crate::sovereign::impls::rpc::json_rpc_client::ProvideJsonRpseeClient;
 use crate::sovereign::impls::transaction::event::ParseSovTxResponseAsEvents;
@@ -73,6 +80,10 @@ delegate_components! {
             PublishSovereignTransactionBatch,
         TxResponseQuerierComponent:
             QuerySovereignTxResponse,
+        TxResponsePollerComponent:
+            PollTxResponse,
+        PollTimeoutGetterComponent:
+            DefaultPollTimeout,
         TxResponseAsEventsParserComponent:
             ParseSovTxResponseAsEvents,
     }

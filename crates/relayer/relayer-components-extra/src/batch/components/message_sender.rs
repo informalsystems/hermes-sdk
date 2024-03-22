@@ -7,12 +7,12 @@ use hermes_relayer_components::relay::traits::ibc_message_sender::{
     CanSendIbcMessages, IbcMessageSender,
 };
 use hermes_relayer_components::relay::traits::target::ChainTarget;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::channel::CanUseChannels;
+use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
-use crate::runtime::traits::channel::CanUseChannels;
-use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 
 pub struct SendMessagesToBatchWorker;
 

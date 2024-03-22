@@ -6,7 +6,6 @@ pub use status::QueryClientStatus;
 
 mod consensus;
 pub use consensus::QueryClientConsensus;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;

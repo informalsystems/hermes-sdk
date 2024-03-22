@@ -1,5 +1,3 @@
-use oneline_eyre::eyre::eyre;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -7,9 +5,9 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use ibc_relayer_types::core::ics03_connection::connection::State;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ConnectionId};
 use ibc_relayer_types::Height;
+use oneline_eyre::eyre::eyre;
 
 use crate::Result;
 

@@ -1,10 +1,11 @@
 use alloc::format;
 
 use cgp_core::prelude::*;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::logger::traits::log::CanLog;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
@@ -25,18 +26,18 @@ use hermes_test_components::types::index::{Index, Twindex};
 pub struct TestIbcTransfer;
 
 #[async_trait]
-impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver> TestCase<Driver>
+impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver, Logger> TestCase<Driver>
     for TestIbcTransfer
 where
     Driver: HasErrorType
+        + HasLogger<Logger = Logger>
         + HasChainTypeAt<0, Chain = ChainA>
         + HasChainTypeAt<1, Chain = ChainB>
         + HasChainDriverAt<0, ChainDriver = ChainDriverA>
         + HasChainDriverAt<1, ChainDriver = ChainDriverB>
         + HasRelayDriverAt<0, 1, RelayDriver = RelayDriver>
         + HasChannelAt<0, 1>
-        + HasChannelAt<1, 0>
-        + CanLog,
+        + HasChannelAt<1, 0>,
     ChainDriverA: HasChain<Chain = ChainA>
         + HasDenomAt<TransferDenom, 0>
         + HasWalletAt<UserWallet, 0>
@@ -60,9 +61,12 @@ where
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>
         + CanAssertEventualAmount,
+    Logger: CanLogMessage,
     Driver::Error: From<RelayDriver::Error> + From<ChainA::Error> + From<ChainB::Error>,
 {
     async fn run_test(&self, driver: &Driver) -> Result<(), Driver::Error> {
+        let logger = driver.logger();
+
         let chain_driver_a = driver.chain_driver_at(Index::<0>);
 
         let chain_driver_b = driver.chain_driver_at(Index::<1>);
@@ -101,10 +105,12 @@ where
 
         let _relayer = relay_driver.run_relayer_in_background().await?;
 
-        driver.log_info(&format!(
-            "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
-            chain_id_a, chain_id_b, a_to_b_amount, denom_a
-        ));
+        logger
+            .log_message(&format!(
+                "Sending IBC transfer from chain {} to chain {} with amount of {} {}",
+                chain_id_a, chain_id_b, a_to_b_amount, denom_a
+            ))
+            .await;
 
         chain_a
             .ibc_transfer_token(
@@ -124,10 +130,12 @@ where
 
         let balance_b1 = ChainB::ibc_transfer_amount_from(&a_to_b_amount, channel_id_b, port_id_b)?;
 
-        driver.log_info(&format!(
-            "Waiting for user on chain B to receive IBC transferred amount of {}",
-            balance_b1
-        ));
+        logger
+            .log_message(&format!(
+                "Waiting for user on chain B to receive IBC transferred amount of {}",
+                balance_b1
+            ))
+            .await;
 
         chain_b
             .assert_eventual_amount(address_b, &balance_b1)
@@ -139,10 +147,12 @@ where
 
         let b_to_a_amount = chain_driver_b.random_amount(500, &balance_b1).await;
 
-        driver.log_info(&format!(
-            "Sending IBC transfer from chain {} to chain {} with amount of {}",
-            chain_id_b, chain_id_a, b_to_a_amount,
-        ));
+        logger
+            .log_message(&format!(
+                "Sending IBC transfer from chain {} to chain {} with amount of {}",
+                chain_id_b, chain_id_a, b_to_a_amount,
+            ))
+            .await;
 
         chain_b
             .ibc_transfer_token(
@@ -173,10 +183,12 @@ where
             .assert_eventual_amount(address_a2, &balance_a5)
             .await?;
 
-        driver.log_info(&format!(
-            "successfully performed reverse IBC transfer from chain {} back to chain {}",
-            chain_id_b, chain_id_a,
-        ));
+        logger
+            .log_message(&format!(
+                "successfully performed reverse IBC transfer from chain {} back to chain {}",
+                chain_id_b, chain_id_a,
+            ))
+            .await;
 
         Ok(())
     }

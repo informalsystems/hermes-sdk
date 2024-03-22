@@ -5,8 +5,8 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error as CosmosError;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfig;

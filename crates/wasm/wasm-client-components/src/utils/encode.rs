@@ -1,6 +1,5 @@
 use ibc_proto::google::protobuf::Any;
-use prost::EncodeError;
-use prost::Message as ProstMessage;
+use prost::{EncodeError, Message as ProstMessage};
 
 pub fn encode_to_any<Message>(type_url: &str, message: &Message) -> Result<Any, EncodeError>
 where

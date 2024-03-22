@@ -1,11 +1,9 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use basecoin_app::modules::ibc::AnyConsensusState;
+use basecoin::modules::ibc::AnyConsensusState;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
-use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
@@ -53,27 +51,30 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTi
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::log::value::LogValue;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc::clients::ics07_tendermint::client_state::{AllowUpdate, ClientState as TmClientState};
-use ibc::clients::ics07_tendermint::consensus_state::ConsensusState as TmConsensusState;
-use ibc::clients::ics07_tendermint::header::Header;
-use ibc::core::events::IbcEvent;
-use ibc::core::ics02_client::events::CreateClient;
-use ibc::core::ics02_client::msgs::create_client::MsgCreateClient;
-use ibc::core::ics02_client::msgs::update_client::MsgUpdateClient;
-use ibc::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
-use ibc::core::ics04_channel::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
-use ibc::core::ics04_channel::packet::{Packet, Sequence};
-use ibc::core::ics04_channel::timeout::TimeoutHeight;
-use ibc::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, ConnectionId, PortId};
-use ibc::core::ics24_host::path::{AckPath, ClientConsensusStatePath, ReceiptPath};
-use ibc::core::timestamp::Timestamp;
-use ibc::core::{Msg, ValidationContext};
-use ibc::proto::Any;
-use ibc::Height;
+use hermes_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeGetter;
+use ibc::clients::tendermint::client_state::ClientState as TmClientState;
+use ibc::clients::tendermint::consensus_state::ConsensusState as TmConsensusState;
+use ibc::clients::tendermint::types::{AllowUpdate, Header, TrustThreshold};
+use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
+use ibc::core::channel::types::events::{SendPacket, WriteAcknowledgement};
+use ibc::core::channel::types::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::channel::types::timeout::TimeoutHeight;
+use ibc::core::client::context::ClientValidationContext;
+use ibc::core::client::types::events::CreateClient;
+use ibc::core::client::types::msgs::{MsgCreateClient, MsgUpdateClient};
+use ibc::core::client::types::Height;
+use ibc::core::commitment_types::specs::ProofSpecs;
+use ibc::core::handler::types::events::IbcEvent;
+use ibc::core::host::types::identifiers::{
+    ChainId, ChannelId, ClientId, ConnectionId, PortId, Sequence,
+};
+use ibc::core::host::types::path::{AckPath, ClientConsensusStatePath, ReceiptPath};
+use ibc::core::host::ValidationContext;
+use ibc::primitives::proto::Any;
+use ibc::primitives::{Timestamp, ToProto};
 
 use crate::components::chain::MockCosmosChainComponents;
 use crate::contexts::chain::MockCosmosContext;
@@ -92,7 +93,7 @@ impl<Chain: BasecoinEndpoint> ProvideErrorType<MockCosmosContext<Chain>>
     type Error = Error;
 }
 
-impl<Chain: BasecoinEndpoint> ProvideRuntime<MockCosmosContext<Chain>>
+impl<Chain: BasecoinEndpoint> RuntimeGetter<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     fn runtime(chain: &MockCosmosContext<Chain>) -> &HermesRuntime {
@@ -132,12 +133,6 @@ impl<Chain: BasecoinEndpoint> ProvideEventType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Event = IbcEvent;
-}
-
-impl<Chain: BasecoinEndpoint> CanLogChainEvent for MockCosmosContext<Chain> {
-    fn log_event<'a>(event: &Self::Event) -> LogValue<'_> {
-        LogValue::Debug(event)
-    }
 }
 
 impl<Chain: BasecoinEndpoint> ProvideTimestampType<MockCosmosContext<Chain>>
@@ -260,21 +255,6 @@ where
     }
 }
 
-impl<Chain, Counterparty> CanLogChainPacket<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
-where
-    Chain: BasecoinEndpoint,
-    Counterparty: BasecoinEndpoint,
-{
-    fn log_incoming_packet(packet: &Packet) -> LogValue<'_> {
-        LogValue::Display(packet)
-    }
-
-    fn log_outgoing_packet(packet: &Packet) -> LogValue<'_> {
-        LogValue::Display(packet)
-    }
-}
-
 impl<Chain, Counterparty>
     ProvideClientStateType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -293,19 +273,19 @@ where
     Counterparty: BasecoinEndpoint,
 {
     fn client_state_chain_id(client_state: &TmClientState) -> &ChainId {
-        &client_state.chain_id
+        &client_state.inner().chain_id
     }
 
     fn client_state_latest_height(client_state: &TmClientState) -> &Height {
-        &client_state.latest_height
+        &client_state.inner().latest_height
     }
 
     fn client_state_is_frozen(client_state: &TmClientState) -> bool {
-        client_state.is_frozen()
+        client_state.inner().frozen_height.is_some()
     }
 
     fn client_state_has_expired(client_state: &TmClientState, elapsed: Duration) -> bool {
-        elapsed > client_state.trusting_period
+        elapsed > client_state.inner().trusting_period
     }
 }
 
@@ -431,26 +411,29 @@ where
         chain: &MockCosmosContext<Chain>,
         _create_client_options: &(),
     ) -> Result<Any, Error> {
-        let tm_client_state = TmClientState::new(
+        let tm_client_state: TmClientState = ibc::clients::tendermint::types::ClientState::new(
             chain.get_chain_id().clone(),
-            Default::default(),
+            TrustThreshold::ONE_THIRD,
             Duration::from_secs(64000),
             Duration::from_secs(128000),
             Duration::from_millis(3000),
             chain.get_current_height(),
-            Default::default(),
-            Default::default(),
+            ProofSpecs::cosmos(),
+            Vec::new(),
             AllowUpdate {
                 after_expiry: false,
                 after_misbehaviour: false,
             },
-        )?;
+        )
+        .map_err(Error::source)?
+        .into();
 
         let current_height = chain.get_current_height();
 
-        let any_consensus_state = chain.ibc_context().host_consensus_state(&current_height)?;
-
-        let AnyConsensusState::Tendermint(tm_consensus_state) = any_consensus_state;
+        let tm_consensus_state = chain
+            .ibc_context()
+            .host_consensus_state(&current_height)
+            .map_err(Error::source)?;
 
         let msg_create_client = MsgCreateClient {
             client_state: tm_client_state.into(),
@@ -509,7 +492,7 @@ where
             trusted_next_validator_set: light_block.next_validators,
         };
 
-        let default_client_id = ClientId::default();
+        let default_client_id = ClientId::new(TENDERMINT_CLIENT_TYPE, 0).map_err(Error::source)?;
 
         let msg_update_client = MsgUpdateClient {
             client_id: default_client_id,
@@ -624,9 +607,16 @@ where
         consensus_height: &Height,
         _query_height: &Height,
     ) -> Result<TmConsensusState, Error> {
-        let path = ClientConsensusStatePath::new(client_id, consensus_height);
+        let path = ClientConsensusStatePath::new(
+            client_id.clone(),
+            consensus_height.revision_number(),
+            consensus_height.revision_height(),
+        );
 
-        let any_cons_state: AnyConsensusState = chain.ibc_context().consensus_state(&path)?;
+        let any_cons_state: AnyConsensusState = chain
+            .ibc_context()
+            .consensus_state(&path)
+            .map_err(Error::source)?;
 
         let tm_consensus_state =
             TmConsensusState::try_from(any_cons_state).map_err(Error::source)?;
@@ -723,7 +713,10 @@ where
         chain: &MockCosmosContext<Chain>,
         packet: &Packet,
     ) -> Result<Option<WriteAcknowledgement>, Error> {
-        let chan_counter = chain.ibc_context().channel_counter()?;
+        let chan_counter = chain
+            .ibc_context()
+            .channel_counter()
+            .map_err(Error::source)?;
 
         let chan_id = ChannelId::new(chan_counter);
 
@@ -731,7 +724,10 @@ where
 
         let ack_path = AckPath::new(&port_id, &chan_id, packet.seq_on_a);
 
-        chain.ibc_context().get_packet_acknowledgement(&ack_path)?;
+        chain
+            .ibc_context()
+            .get_packet_acknowledgement(&ack_path)
+            .map_err(Error::source)?;
 
         let events = chain.ibc_context().events();
 

@@ -12,8 +12,7 @@ use ibc_relayer::keyring::{
 };
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre;
-use oneline_eyre::eyre::eyre;
-use oneline_eyre::eyre::WrapErr;
+use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
@@ -94,10 +93,12 @@ pub struct KeysAddCmd {
 
 impl KeysAddCmd {
     fn options(&self, chain_config: &ChainConfig) -> eyre::Result<KeysAddOptions> {
+        let ChainConfig::CosmosSdk(sdk_config) = &chain_config;
+
         let name = self
             .key_name
             .clone()
-            .unwrap_or_else(|| chain_config.key_name.to_string());
+            .unwrap_or_else(|| sdk_config.key_name.to_string());
 
         let hd_path = StandardHDPath::from_str(&self.hd_path)
             .map_err(|_| eyre!("invalid derivation path: {}", self.hd_path))?;
@@ -124,11 +125,13 @@ pub fn add_key(
     hd_path: &StandardHDPath,
     overwrite: bool,
 ) -> eyre::Result<AnySigningKeyPair> {
+    let ChainConfig::CosmosSdk(sdk_config) = config;
+
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &config.account_prefix,
-        &config.id,
-        &config.key_store_folder,
+        &sdk_config.account_prefix,
+        config.id(),
+        &sdk_config.key_store_folder,
     )?;
 
     check_key_exists(&keyring, key_name, overwrite);
@@ -148,14 +151,16 @@ pub fn restore_key(
     config: &ChainConfig,
     overwrite: bool,
 ) -> eyre::Result<AnySigningKeyPair> {
+    let ChainConfig::CosmosSdk(sdk_config) = config;
+
     let mnemonic_content =
         fs::read_to_string(mnemonic).wrap_err("error reading the mnemonic file")?;
 
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &config.account_prefix,
-        &config.id,
-        &config.key_store_folder,
+        &sdk_config.account_prefix,
+        &sdk_config.id,
+        &sdk_config.key_store_folder,
     )?;
 
     check_key_exists(&keyring, key_name, overwrite);
@@ -163,7 +168,7 @@ pub fn restore_key(
     let key_pair = Secp256k1KeyPair::from_mnemonic(
         &mnemonic_content,
         hdpath,
-        &config.address_type,
+        &sdk_config.address_type,
         keyring.account_prefix(),
     )?;
 
@@ -212,7 +217,7 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
                         "added key '{}' ({}) on chain `{}`",
                         opts.name,
                         key.account(),
-                        opts.config.id,
+                        opts.config.id(),
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(
@@ -236,7 +241,7 @@ impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
                         "restored key '{}' ({}) on chain `{}`",
                         opts.name,
                         key.account(),
-                        opts.config.id
+                        opts.config.id()
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(

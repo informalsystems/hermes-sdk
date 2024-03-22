@@ -1,3 +1,4 @@
+use alloc::collections::BTreeMap;
 use core::str::FromStr;
 use core::time::Duration;
 
@@ -8,7 +9,8 @@ use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosCh
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
-use ibc_relayer::chain::ChainType;
+use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
+use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::config::{self, AddressType, ChainConfig};
 use ibc_relayer::keyring::Store;
@@ -35,9 +37,8 @@ where
         chain_node_config: &CosmosChainNodeConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<ChainConfig, Bootstrap::Error> {
-        let relayer_chain_config = ChainConfig {
+        let relayer_chain_config = ChainConfig::CosmosSdk(CosmosSdkConfig {
             id: chain_node_config.chain_id.clone(),
-            r#type: ChainType::CosmosSdk,
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
                 .map_err(Bootstrap::raise_error)?,
             grpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.grpc_port))
@@ -62,25 +63,30 @@ where
             max_gas: Some(3000000),
             gas_adjustment: None,
             gas_multiplier: Some(GasMultiplier::unsafe_new(1.2)),
+            dynamic_gas_price: DynamicGasPrice::default(),
             fee_granter: None,
             max_msg_num: Default::default(),
             max_tx_size: Default::default(),
             max_grpc_decoding_size: config::default::max_grpc_decoding_size(),
+            query_packets_chunk_size: config::default::query_packets_chunk_size(),
             max_block_time: Duration::from_secs(30),
             clock_drift: Duration::from_secs(5),
             trusting_period: Some(Duration::from_secs(14 * 24 * 3600)),
+            client_refresh_rate: config::default::client_refresh_rate(),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
             gas_price: config::GasPrice::new(0.1, bootstrap.gas_denom().into()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),
+            memo_overwrite: None,
             proof_specs: Default::default(),
             extension_options: Default::default(),
             sequential_batch_tx: false,
             compat_mode: bootstrap.compat_mode().cloned(),
             clear_interval: None,
-        };
+            excluded_sequences: BTreeMap::new(),
+        });
 
         Ok(relayer_chain_config)
     }

@@ -1,8 +1,7 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::transaction::traits::types::{HasSignerType, SignerOf};
+use hermes_relayer_components::transaction::traits::types::signer::HasSignerType;
 
 use crate::chain::traits::types::address::HasAddressType;
-use crate::chain::traits::types::tx_context::HasTxContextType;
 
 pub type Wallet<Chain> = <Chain as HasWalletType>::Wallet;
 
@@ -16,9 +15,6 @@ pub trait HasWalletType: HasAddressType {
 pub type WalletOf<ChainDriver> = <ChainDriver as HasWalletType>::Wallet;
 
 #[derive_component(WalletSignerComponent, WalletSignerProvider<Chain>)]
-pub trait HasWalletSigner: HasWalletType + HasTxContextType
-where
-    Self::TxContext: HasSignerType,
-{
-    fn wallet_signer(wallet: &Self::Wallet) -> &SignerOf<Self::TxContext>;
+pub trait HasWalletSigner: HasWalletType + HasSignerType {
+    fn wallet_signer(wallet: &Self::Wallet) -> &Self::Signer;
 }

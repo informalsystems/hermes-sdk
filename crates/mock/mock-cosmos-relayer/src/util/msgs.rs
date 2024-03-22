@@ -1,21 +1,21 @@
 use std::ops::Add;
 use std::time::Duration;
 
-use ibc::applications::transfer::msgs::transfer::MsgTransfer;
-use ibc::applications::transfer::packet::PacketData;
-use ibc::applications::transfer::BaseCoin;
-use ibc::core::ics04_channel::packet::{Packet, Sequence};
-use ibc::core::ics24_host::identifier::{ChannelId, PortId};
-use ibc::core::timestamp::Timestamp;
-use ibc::Height;
+use ibc::apps::transfer::types::msgs::transfer::MsgTransfer;
+use ibc::apps::transfer::types::packet::PacketData;
+use ibc::apps::transfer::types::BaseCoin;
+use ibc::core::channel::types::packet::Packet;
+use ibc::core::client::types::Height;
+use ibc::core::host::types::identifiers::{ChannelId, PortId, Sequence};
+use ibc::primitives::Timestamp;
 use primitive_types::U256;
 
 use super::dummy::dummy_signer;
 
 pub fn build_msg_transfer() -> MsgTransfer {
     MsgTransfer {
-        port_id_on_a: PortId::default(),
-        chan_id_on_a: ChannelId::default(),
+        port_id_on_a: PortId::transfer(),
+        chan_id_on_a: ChannelId::zero(),
         packet_data: PacketData {
             token: BaseCoin {
                 denom: "uatom".parse().unwrap(),
@@ -41,8 +41,8 @@ pub fn build_transfer_packet(sequence: u64) -> Packet {
         seq_on_a: Sequence::from(sequence),
         port_id_on_a: msg.port_id_on_a.clone(),
         chan_id_on_a: msg.chan_id_on_a.clone(),
-        port_id_on_b: PortId::default(),
-        chan_id_on_b: ChannelId::default(),
+        port_id_on_b: PortId::transfer(),
+        chan_id_on_b: ChannelId::zero(),
         data,
         timeout_height_on_b: msg.timeout_height_on_b,
         timeout_timestamp_on_b: msg.timeout_timestamp_on_b,

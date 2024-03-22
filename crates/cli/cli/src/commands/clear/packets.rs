@@ -1,14 +1,10 @@
+use futures::stream::{self, StreamExt};
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-
-use futures::stream::{self, StreamExt};
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
 
 use crate::Result;
 

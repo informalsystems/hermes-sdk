@@ -1,11 +1,11 @@
 use std::sync::Arc;
 
-use basecoin_app::modules::ibc::IbcContext;
-use basecoin_store::impls::RevertibleStore;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc::core::events::IbcEvent;
-use ibc::core::ValidationContext;
-use ibc::proto::Any;
+use basecoin::modules::ibc::IbcContext;
+use basecoin::store::impls::RevertibleStore;
+use hermes_runtime::types::runtime::HermesRuntime;
+use ibc::core::handler::types::events::IbcEvent;
+use ibc::core::host::ValidationContext;
+use ibc::primitives::proto::Any;
 
 use crate::traits::endpoint::BasecoinEndpoint;
 use crate::types::error::Error;

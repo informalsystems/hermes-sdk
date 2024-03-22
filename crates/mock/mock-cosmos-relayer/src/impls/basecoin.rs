@@ -1,17 +1,17 @@
 use std::fmt::Debug;
 
-use basecoin_app::modules::ibc::Ibc;
-use basecoin_app::modules::types::IdentifiedModule;
-use basecoin_store::context::{ProvableStore, Store};
-use basecoin_store::impls::RevertibleStore;
-use basecoin_store::utils::SharedRwExt;
+use basecoin::modules::ibc::Ibc;
+use basecoin::modules::types::IdentifiedModule;
+use basecoin::store::context::{ProvableStore, Store};
+use basecoin::store::impls::RevertibleStore;
+use basecoin::store::utils::SharedRwExt;
 use cgp_core::prelude::*;
-use ibc::core::ics23_commitment::commitment::CommitmentProofBytes;
-use ibc::core::ics24_host::identifier::ChainId;
-use ibc::core::ics24_host::path::Path;
-use ibc::core::timestamp::Timestamp;
-use ibc::hosts::tendermint::IBC_QUERY_PATH;
-use ibc::Height;
+use ibc::core::client::types::Height;
+use ibc::core::commitment_types::commitment::CommitmentProofBytes;
+use ibc::core::host::types::identifiers::ChainId;
+use ibc::core::host::types::path::Path;
+use ibc::cosmos_host::IBC_QUERY_PATH;
+use ibc::primitives::Timestamp;
 use tendermint::block::Height as TmHeight;
 use tendermint::time::Time;
 use tendermint::v0_37::abci::request::{InitChain, Query};
@@ -133,7 +133,7 @@ impl<S: ProvableStore + Default + Debug> BasecoinEndpoint for MockBasecoin<S> {
     }
 
     fn ibc(&self) -> Ibc<RevertibleStore<S>> {
-        self.app.ibc()
+        basecoin::helper::ibc(self.app.clone())
     }
 
     fn get_chain_id(&self) -> &ChainId {

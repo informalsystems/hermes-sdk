@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_protobuf_components::impl_type_url;
+use hermes_protobuf_encoding_components::impl_type_url;
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 

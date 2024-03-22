@@ -13,15 +13,17 @@ description  = """
 """
 
 [dependencies]
-ibc-relayer                         = { workspace = true }
-ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }
-hermes-relayer-runtime              = { workspace = true }
+hermes-runtime-components           = { workspace = true }
+hermes-runtime                      = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 hermes-celestia-test-components     = { workspace = true }
 hermes-sovereign-client-components  = { workspace = true }
+
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
 
 serde           = { workspace = true }
 serde_json      = { workspace = true }
@@ -29,5 +31,5 @@ toml            = { workspace = true }
 ed25519-dalek   = { version = "2.1.1" }
 sha2            = { version = "0.10.8" }
 rand            = { workspace = true }
-bech32          = { version = "0.9.1" }
+bech32          = { workspace = true }
 jsonrpsee       = { workspace = true, features = ["http-client"] }

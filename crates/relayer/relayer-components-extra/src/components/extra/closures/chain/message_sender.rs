@@ -29,8 +29,7 @@ use hermes_relayer_components::chain::traits::types::ibc::{
 };
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use hermes_relayer_components::logger::traits::has_logger::HasLoggerType;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::telemetry::traits::metrics::HasBasicMetrics;
@@ -39,7 +38,6 @@ use crate::telemetry::traits::telemetry::HasTelemetry;
 pub trait UseExtraChainComponentsForIbcMessageSender<Counterparty>:
     HasRuntime
     + HasChainId
-    + HasLoggerType
     + CanIncrementHeight
     + CanSendMessages
     + CanQueryChainStatus
@@ -64,7 +62,6 @@ impl<Chain, Counterparty, Components, BaseComponents>
 where
     Chain: HasRuntime
         + HasChainId
-        + HasLoggerType
         + CanIncrementHeight
         + HasTelemetry
         + HasChainStatusType

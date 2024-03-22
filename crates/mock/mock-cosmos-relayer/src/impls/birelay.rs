@@ -2,9 +2,9 @@ use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::birelay::traits::two_way::{
     HasTwoChainTypes, HasTwoWayRelay, HasTwoWayRelayTypes,
 };
-use hermes_relayer_components::runtime::traits::runtime::{HasRuntime, HasRuntimeType};
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{HasRuntime, HasRuntimeType};
 
 use crate::contexts::birelay::MockCosmosBiRelay;
 use crate::contexts::chain::MockCosmosContext;

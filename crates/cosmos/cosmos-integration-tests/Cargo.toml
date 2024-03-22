@@ -14,24 +14,29 @@ description  = """
 
 [dependencies]
 cgp-core                            = { workspace = true }
-ibc-proto                           = { workspace = true }
-ibc-relayer                         = { workspace = true }
-ibc-relayer-types                   = { workspace = true }
-hermes-relayer-runtime              = { workspace = true }
+hermes-runtime                      = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-test-components              = { workspace = true }
 hermes-ibc-test-suite               = { workspace = true }
 hermes-async-runtime-components     = { workspace = true }
-hermes-cosmos-client-components     = { workspace = true }
+hermes-cosmos-chain-components      = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
+hermes-runtime-components           = { workspace = true }
+hermes-logging-components           = { workspace = true }
+
+ibc-proto                           = { workspace = true }
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
 tendermint-rpc                      = { workspace = true }
 
-eyre            = { workspace = true }
-tokio           = { workspace = true }
-toml            = { workspace = true }
-serde_json      = { workspace = true }
-prost           = { workspace = true }
+eyre                = { workspace = true }
+tokio               = { workspace = true }
+toml                = { workspace = true }
+serde_json          = { workspace = true }
+prost               = { workspace = true }
+tracing             = { workspace = true }
+tracing-subscriber  = { workspace = true }
 
 stable-eyre         = { version = "0.2.2" }

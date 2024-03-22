@@ -2,7 +2,7 @@ use core::time::Duration;
 use std::time::Instant;
 
 use cgp_core::prelude::Async;
-use hermes_relayer_components::runtime::traits::time::ProvideTime;
+use hermes_runtime_components::traits::time::ProvideTime;
 
 pub struct ProvideStdTime;
 

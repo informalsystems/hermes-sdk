@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 
 use super::relay::MockCosmosRelay;
 use crate::traits::endpoint::BasecoinEndpoint;

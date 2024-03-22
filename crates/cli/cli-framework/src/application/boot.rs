@@ -1,14 +1,12 @@
 use std::sync::Arc;
 
+use hermes_runtime::types::runtime::HermesRuntime;
 use oneline_eyre::eyre::eyre;
-
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
 
 use crate::application::log::{enable_ansi, install_logger};
 use crate::application::Application;
 use crate::config::Config;
-use crate::output;
-use crate::Result;
+use crate::{output, Result};
 
 pub fn boot<A>() -> Result<()>
 where

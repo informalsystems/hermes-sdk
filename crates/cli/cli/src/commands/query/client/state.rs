@@ -1,11 +1,8 @@
 use std::fmt::Debug;
 
-use hermes_cosmos_relayer::types::error::Error;
-use serde::Serialize;
-use tracing::info;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 use hermes_relayer_components::build::traits::components::chain_builder::CanBuildChain;
 use hermes_relayer_components::build::traits::target::chain::ChainATarget;
@@ -16,6 +13,8 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use serde::Serialize;
+use tracing::info;
 
 use crate::Result;
 
