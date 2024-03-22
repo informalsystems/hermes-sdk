@@ -10,7 +10,7 @@ use hermes_relayer_components::runtime::traits::mutex::HasMutex;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_relayer_components::runtime::traits::time::HasTime;
-use hermes_relayer_components::runtime::types::aliases::RuntimeOf;
+use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
 
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::batch::worker::{CanSpawnBatchMessageWorker, LogBatchWorker};

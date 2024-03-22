@@ -2,7 +2,7 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-use hermes_relayer_components::runtime::types::aliases::ErrorOf;
+use hermes_relayer_components::error::types::ErrorOf;
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;

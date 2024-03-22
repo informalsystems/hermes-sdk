@@ -24,7 +24,7 @@ use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRe
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_relayer_components::runtime::types::aliases::ErrorOf;
+use hermes_relayer_components::error::types::ErrorOf;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;

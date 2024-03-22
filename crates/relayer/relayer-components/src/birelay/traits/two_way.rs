@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
 use crate::relay::traits::chains::HasRelayChains;
-use crate::runtime::types::aliases::ErrorOf;
+use crate::error::types::ErrorOf;
 
 #[derive_component(TwoChainTypesComponent, ProvideTwoChainTypes<BiRelay>)]
 pub trait HasTwoChainTypes: Async {

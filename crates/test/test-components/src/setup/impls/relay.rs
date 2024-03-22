@@ -3,7 +3,7 @@ use hermes_relayer_components::build::traits::components::relay_from_chains_buil
 use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-use hermes_relayer_components::runtime::types::aliases::ErrorOf;
+use hermes_relayer_components::error::types::ErrorOf;
 
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::driver::traits::types::relay_at::{HasRelayTypeAt, RelayTypeAt};

@@ -8,10 +8,11 @@ use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::error::types::ErrorOf;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::runtime::traits::mutex::MutexOf;
 use crate::runtime::traits::runtime::HasRuntimeType;
-use crate::runtime::types::aliases::{ErrorOf, RuntimeOf};
+use crate::runtime::traits::runtime::RuntimeOf;
 
 pub type ChainA<Build> = <BiRelayOf<Build> as HasTwoChainTypes>::ChainA;
 

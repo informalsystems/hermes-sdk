@@ -3,7 +3,7 @@ use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::types::aliases::RuntimeOf;
+use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
 
 use crate::batch::types::aliases::MessageBatchSender;
 use crate::runtime::traits::channel::HasChannelTypes;

@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOpti
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
-use hermes_relayer_components::runtime::types::aliases::ErrorOf;
+use hermes_relayer_components::error::types::ErrorOf;
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;

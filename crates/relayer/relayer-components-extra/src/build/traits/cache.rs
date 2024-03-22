@@ -8,7 +8,7 @@ use hermes_relayer_components::build::types::aliases::{
 };
 use hermes_relayer_components::runtime::traits::mutex::{HasMutex, MutexOf};
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::types::aliases::RuntimeOf;
+use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
 
 use crate::batch::traits::channel::HasMessageBatchSenderType;
 

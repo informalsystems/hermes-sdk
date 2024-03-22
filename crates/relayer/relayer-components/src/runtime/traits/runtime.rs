@@ -9,3 +9,5 @@ pub trait HasRuntimeType: Async {
 pub trait HasRuntime: HasRuntimeType {
     fn runtime(&self) -> &Self::Runtime;
 }
+
+pub type RuntimeOf<Context> = <Context as HasRuntimeType>::Runtime;
