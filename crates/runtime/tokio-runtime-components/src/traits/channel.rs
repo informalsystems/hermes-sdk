@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components_extra::runtime::traits::channel::{
+use hermes_runtime_components::traits::channel::{
     ChannelTypeComponent, HasChannelTypes, ProvideChannelType,
 };
 use tokio::sync::mpsc;

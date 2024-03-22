@@ -1,6 +1,6 @@
 use cgp_core::{ErrorRaiser, HasComponents};
-use hermes_relayer_components::log::traits::has_logger::HasLogger;
-use hermes_relayer_components::log::traits::logger::CanLog;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::event_relayer::CanRelayEvent;

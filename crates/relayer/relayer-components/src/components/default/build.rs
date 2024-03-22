@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp_core::prelude::*;
+use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::birelay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 use crate::build::components::birelay::BuildBiRelayFromRelays;
@@ -19,7 +20,6 @@ use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use crate::build::types::aliases::{ChainA, ChainB};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::runtime::traits::mutex::HasMutex;
 
 pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 

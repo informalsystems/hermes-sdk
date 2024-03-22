@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
 use cgp_core::{async_trait, HasErrorType};
+use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::cache::HasChainCache;
 use crate::build::traits::components::chain_builder::ChainBuilder;
 use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::types::aliases::{TargetChain, TargetChainId};
-use crate::runtime::traits::mutex::HasMutex;
 
 pub struct BuildChainWithCache<InBuilder>(pub PhantomData<InBuilder>);
 

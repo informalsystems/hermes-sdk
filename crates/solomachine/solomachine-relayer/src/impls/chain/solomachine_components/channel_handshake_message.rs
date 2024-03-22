@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
-use hermes_cosmos_client_components::types::payloads::channel::{
+use hermes_cosmos_chain_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;

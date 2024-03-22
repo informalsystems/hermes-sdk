@@ -1,6 +1,6 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;

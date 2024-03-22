@@ -17,23 +17,23 @@ name = "hermes"
 path = "bin/hermes.rs"
 
 [dependencies]
+cgp-core                        = { workspace = true }
 hermes-cli-components           = { workspace = true }
 hermes-cli-framework            = { workspace = true }
-hermes-relayer-runtime          = { workspace = true }
+hermes-runtime                  = { workspace = true }
 hermes-relayer-components       = { workspace = true }
 hermes-cosmos-relayer           = { workspace = true }
-hermes-cosmos-client-components = { workspace = true }
+hermes-cosmos-chain-components  = { workspace = true }
 
-cgp-core                  = { workspace = true }
-ibc-relayer               = { workspace = true }
-ibc-relayer-types         = { workspace = true }
+ibc-relayer                     = { workspace = true }
+ibc-relayer-types               = { workspace = true }
 
-clap                      = { workspace = true, features = ["derive"] }
-eyre              = { workspace = true }
-oneline-eyre              = { workspace = true }
-hdpath                    = { workspace = true }
-humantime                 = { workspace = true }
-tracing                   = { workspace = true }
-serde_json                = { workspace = true }
-futures                   = { workspace = true }
-serde                     = { workspace = true, features = ["derive"] }
+clap                        = { workspace = true, features = ["derive"] }
+eyre                        = { workspace = true }
+oneline-eyre                = { workspace = true }
+hdpath                      = { workspace = true }
+humantime                   = { workspace = true }
+tracing                     = { workspace = true }
+serde_json                  = { workspace = true }
+futures                     = { workspace = true }
+serde                       = { workspace = true, features = ["derive"] }

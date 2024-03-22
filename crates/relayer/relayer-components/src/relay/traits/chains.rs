@@ -4,7 +4,7 @@ use cgp_core::CanRaiseError;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::types::aliases::ClientIdOf;
-use crate::runtime::types::aliases::ErrorOf;
+use crate::error::types::ErrorOf;
 
 /**
     This covers the minimal abstract types that are used inside a relay context.

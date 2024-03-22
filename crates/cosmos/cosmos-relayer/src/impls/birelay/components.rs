@@ -3,8 +3,8 @@ use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_relayer_components::components::default::birelay::{
     DefaultBiRelayComponents, IsDefaultBiRelayComponent,
 };
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::impls::error::HandleCosmosError;

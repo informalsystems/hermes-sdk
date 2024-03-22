@@ -6,7 +6,7 @@ use cgp_core::CanRaiseError;
 use futures_channel::mpsc;
 use futures_util::lock::Mutex;
 use futures_util::stream::StreamExt;
-use hermes_relayer_components_extra::runtime::traits::channel::{
+use hermes_runtime_components::traits::channel::{
     ChannelCreator, ChannelUser, ProvideChannelType, ReceiverStreamer, SenderCloner,
 };
 

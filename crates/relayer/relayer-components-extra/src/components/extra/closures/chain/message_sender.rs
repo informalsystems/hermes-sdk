@@ -29,7 +29,7 @@ use hermes_relayer_components::chain::traits::types::ibc::{
 };
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::telemetry::traits::metrics::HasBasicMetrics;

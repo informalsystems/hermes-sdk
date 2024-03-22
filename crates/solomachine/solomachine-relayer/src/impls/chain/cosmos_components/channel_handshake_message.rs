@@ -1,10 +1,10 @@
 use cgp_core::HasErrorType;
-use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use hermes_cosmos_client_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
-use hermes_cosmos_client_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
-use hermes_cosmos_client_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
-use hermes_cosmos_client_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
+use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
+use hermes_cosmos_chain_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
+use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
+use hermes_cosmos_chain_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{

@@ -1,5 +1,5 @@
 use cgp_core::Async;
-use hermes_test_components::runtime::traits::random::RandomGenerator;
+use hermes_runtime_components::traits::random::RandomGenerator;
 use rand::distributions::uniform::SampleUniform;
 use rand::distributions::Standard;
 use rand::prelude::*;

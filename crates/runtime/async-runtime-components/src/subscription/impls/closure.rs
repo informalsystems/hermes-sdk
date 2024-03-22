@@ -5,7 +5,7 @@ use core::pin::Pin;
 
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
-use hermes_relayer_components::runtime::traits::mutex::{HasMutex, MutexOf};
+use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
 
 use crate::subscription::traits::subscription::Subscription;
 

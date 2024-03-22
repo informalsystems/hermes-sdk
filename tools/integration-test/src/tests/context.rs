@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::Config;

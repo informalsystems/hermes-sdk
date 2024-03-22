@@ -1,9 +1,7 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::types::child_process::{
-    ChildProcessOf, HasChildProcessType,
-};
-use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
+use hermes_runtime_components::traits::fs::file_path::{FilePathOf, HasFilePathType};
+use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 

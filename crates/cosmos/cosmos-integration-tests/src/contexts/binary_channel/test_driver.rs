@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
-use hermes_relayer_components::log::traits::has_logger::{
+use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_test_components::driver::traits::channel_at::ChannelGetterAt;

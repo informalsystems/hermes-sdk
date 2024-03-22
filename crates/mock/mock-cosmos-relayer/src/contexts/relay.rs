@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::clients::tendermint::types::client_type;
 use ibc::core::host::types::identifiers::ClientId;
 use ibc::core::host::ValidationContext;

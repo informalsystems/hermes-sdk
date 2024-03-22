@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use eyre::eyre;
 use futures::lock::Mutex;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;

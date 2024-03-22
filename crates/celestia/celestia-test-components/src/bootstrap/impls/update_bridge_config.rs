@@ -5,12 +5,12 @@ use hermes_relayer_components::chain::traits::queries::block::CanQueryBlock;
 use hermes_relayer_components::chain::traits::types::block::HasBlockHash;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasGenesisHeight;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
+use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
+use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
-use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use toml::Value;
 

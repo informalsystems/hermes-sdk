@@ -2,8 +2,8 @@ use cgp_core::{Async, HasErrorType};
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::ClientIdOf;
+use crate::error::types::ErrorOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use crate::runtime::types::aliases::ErrorOf;
 
 #[derive(Default, Clone, Copy)]
 pub struct SourceTarget;

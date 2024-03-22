@@ -1,7 +1,7 @@
 use core::num::ParseIntError;
 
 use cgp_core::CanRaiseError;
-use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
+use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;

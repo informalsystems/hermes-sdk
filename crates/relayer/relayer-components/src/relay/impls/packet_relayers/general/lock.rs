@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
 use cgp_core::async_trait;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
-use crate::log::traits::has_logger::HasLogger;
-use crate::log::traits::logger::CanLog;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::PacketRelayer;

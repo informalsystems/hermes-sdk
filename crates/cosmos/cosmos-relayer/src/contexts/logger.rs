@@ -1,10 +1,10 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::log::impls::delegate::DelegateLogger;
-use hermes_relayer_components::log::impls::global::GetGlobalLogger;
-use hermes_relayer_components::log::traits::has_logger::{
+use hermes_logging_components::impls::delegate::DelegateLogger;
+use hermes_logging_components::impls::global::GetGlobalLogger;
+use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
-use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
+use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
@@ -17,7 +17,7 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
-use hermes_tracing_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;

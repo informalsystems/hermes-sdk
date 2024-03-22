@@ -1,13 +1,14 @@
 use alloc::vec;
 
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
+
 use super::ack::ClearAckPackets;
 use super::receive_packet::ClearReceivePackets;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_clearer::PacketClearer;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 
 pub struct ClearAllPackets;
 

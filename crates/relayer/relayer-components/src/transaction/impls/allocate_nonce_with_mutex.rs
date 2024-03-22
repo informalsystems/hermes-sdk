@@ -1,4 +1,5 @@
-use crate::runtime::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::mutex::HasMutex;
+
 use crate::transaction::traits::nonce::allocate_nonce::NonceAllocator;
 use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::nonce::query_nonce::CanQueryNonce;

@@ -1,9 +1,9 @@
 use cgp_core::{async_trait, CanRaiseError};
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::log::traits::has_logger::HasLogger;
-use crate::log::traits::logger::CanLog;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet::HasRelayPacketFields;
 use crate::relay::traits::packet_relayer::PacketRelayer;

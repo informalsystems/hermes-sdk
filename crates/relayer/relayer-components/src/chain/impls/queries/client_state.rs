@@ -2,6 +2,10 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp_core::{Async, CanRaiseError, DelegateComponent, HasErrorType};
+use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
+use hermes_encoding_components::types::via::Via;
 
 use crate::chain::traits::queries::client_state::{
     AllClientStatesQuerier, CanQueryAllClientStatesBytes, CanQueryClientStateBytes,
@@ -9,10 +13,6 @@ use crate::chain::traits::queries::client_state::{
 };
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::encode::traits::decoder::CanDecode;
-use crate::encode::traits::encoded::HasEncodedType;
-use crate::encode::traits::has_encoding::HasDefaultEncoding;
-use crate::encode::types::via::Via;
 
 pub struct DelegateQueryClientState<Components>(pub PhantomData<Components>);
 

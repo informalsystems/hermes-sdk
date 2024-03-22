@@ -1,5 +1,5 @@
-use hermes_cosmos_client_components::methods::encode::encode_to_any;
-use hermes_cosmos_client_components::traits::message::DynCosmosMessage;
+use hermes_cosmos_chain_components::methods::encode::encode_to_any;
+use hermes_cosmos_chain_components::traits::message::DynCosmosMessage;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::apps::transfer::v1::MsgTransfer;

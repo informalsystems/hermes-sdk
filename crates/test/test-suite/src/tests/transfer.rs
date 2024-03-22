@@ -1,10 +1,11 @@
 use alloc::format;
+
 use cgp_core::prelude::*;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::log::traits::has_logger::HasLogger;
-use hermes_relayer_components::log::traits::logger::CanLogMessage;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;

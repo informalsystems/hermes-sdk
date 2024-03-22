@@ -1,24 +1,24 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
-use hermes_relayer_components::error::impls::delegate::DelegateErrorRaiser;
-use hermes_relayer_components::error::impls::error::{
-    MaxRetryExceededError, UnwrapMaxRetryExceededError,
-};
-use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::Report;
 use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
-use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
-use hermes_cosmos_client_components::impls::transaction::submit_tx::BroadcastTxError;
-use hermes_protobuf_components::impls::any::TypeUrlMismatchError;
+use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
+use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
+use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::error::impls::delegate::DelegateErrorRaiser;
+use hermes_relayer_components::error::impls::error::{
+    MaxRetryExceededError, UnwrapMaxRetryExceededError,
+};
+use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
 use hermes_test_components::chain::traits::types::address::HasAddressType;

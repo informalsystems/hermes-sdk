@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::impls::transaction::poll_timeout::DefaultPollTimeout;
+use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,

@@ -3,7 +3,7 @@ use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_solomachine_relayer::context::chain::MockSolomachine;
 use hermes_solomachine_relayer::context::relay::SolomachineRelay;
 use hermes_solomachine_relayer::types::chain::SolomachineChain;

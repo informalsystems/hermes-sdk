@@ -4,9 +4,9 @@ use cgp_core::CanRaiseError;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 use hermes_celestia_test_components::bridge_driver::traits::bridge_auth_token::HasBridgeAuthToken;
 use hermes_celestia_test_components::bridge_driver::traits::bridge_rpc_port::HasBridgeRpcPort;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
+use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
+use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::init_rollup_node_config::RollupNodeConfigInitializer;
 use crate::bootstrap::traits::types::rollup_node_config::HasRollupNodeConfigType;

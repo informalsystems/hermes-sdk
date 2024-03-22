@@ -3,14 +3,14 @@ use cgp_core::{CanRun, ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::stream::CanMapStream;
-use hermes_relayer_components::runtime::traits::subscription::HasSubscription;
-use hermes_relayer_components::runtime::traits::task::CanRunConcurrentTasks;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::stream::CanMapStream;
+use hermes_runtime_components::traits::subscription::HasSubscription;
+use hermes_runtime_components::traits::task::CanRunConcurrentTasks;
 
 use crate::components::extra::closures::relay::event_relayer::UseExtraEventRelayer;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
-use crate::runtime::traits::spawn::CanSpawnTask;
 
 pub trait CanUseExtraAutoRelayer: UseExtraAutoRelayer {}
 

@@ -1,14 +1,20 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
-use hermes_cosmos_client_components::components::client::CosmosClientComponents;
-use hermes_cosmos_client_components::components::transaction::CosmosTxComponents;
-use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
-use hermes_cosmos_client_components::traits::abci_query::AbciQuerierComponent;
-use hermes_cosmos_client_components::traits::gas_config::GasConfigGetter;
-use hermes_cosmos_client_components::traits::tx_extension_options::TxExtensionOptionsGetter;
-use hermes_cosmos_client_components::types::nonce_guard::NonceGuard;
+use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
+use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
+use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
+use hermes_cosmos_chain_components::traits::abci_query::AbciQuerierComponent;
+use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
+use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
+use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
+use hermes_encoding_components::traits::has_encoding::{
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+};
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+};
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
@@ -82,15 +88,7 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUn
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::encode::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
-};
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
-use hermes_relayer_components::log::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
-};
-use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
@@ -113,8 +111,10 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::mutex::MutexGuardOf;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;

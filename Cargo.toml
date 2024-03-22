@@ -5,32 +5,47 @@ resolver = "2"
 members = [
     "crates/relayer/relayer-components",
     "crates/relayer/relayer-components-extra",
+
+    "crates/runtime/runtime-components",
     "crates/runtime/async-runtime-components",
     "crates/runtime/tokio-runtime-components",
-    "crates/runtime/relayer-runtime",
-    "crates/encoding/protobuf-components",
-    "crates/logging/tracing-components",
-    "crates/cosmos/cosmos-client-components",
+    "crates/runtime/runtime",
+
+    "crates/test/test-components",
+    "crates/test/test-suite",
+
+    "crates/cli/cli-components",
+    "crates/cli/cli-framework",
+    "crates/cli/cli",
+
+    "crates/encoding/encoding-components",
+    "crates/encoding/protobuf-encoding-components",
+
+    "crates/logging/logging-components",
+    "crates/logging/tracing-logging-components",
+
+    "crates/cosmos/cosmos-chain-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
+
     "crates/celestia/celestia-chain",
     "crates/celestia/celestia-client-components",
     "crates/celestia/celestia-test-components",
     "crates/celestia/celestia-integration-tests",
+
+    "crates/wasm/wasm-client-components",
+
     "crates/sovereign/sovereign-client-components",
-    "crates/sovereign/sovereign-cosmos-relayer",
+    "crates/sovereign/sovereign-relayer",
     "crates/sovereign/sovereign-test-components",
     "crates/sovereign/sovereign-integration-tests",
+
     "crates/solomachine/solomachine-relayer",
+
     "crates/mock/mock-relayer",
     "crates/mock/mock-cosmos-relayer",
-    "crates/wasm/wasm-client-components",
-    "crates/test/test-components",
-    "crates/test/test-suite",
-    "crates/cli/cli-components",
-    "crates/cli/cli-framework",
-    "crates/cli/cli",
+
     "tools/integration-test",
     "tools/test-framework",
 ]
@@ -50,7 +65,6 @@ ibc                             = { version = "0.50.0" }
 ibc-proto                       = { version = "0.42.2" }
 ibc-proto-sov                   = { version = "0.41.0", default-features = false, package = "ibc-proto" }
 sov-celestia-client             = { version = "0.1.0" }
-
 ibc-relayer                     = { version = "0.27.2" }
 ibc-relayer-types               = { version = "0.27.2" }
 ibc-telemetry                   = { version = "0.27.2" }
@@ -88,32 +102,45 @@ borsh                           = { version = "0.10.3" }
 rand                            = { version = "0.8.5" }
 bech32                          = { version = "0.9.1" }
 
-hermes-cli                          = { version = "0.1.0" }
-hermes-cli-components               = { version = "0.1.0" }
-hermes-cli-framework                = { version = "0.1.0" }
-hermes-relayer-components           = { version = "0.1.0" }
-hermes-relayer-components-extra     = { version = "0.1.0" }
-hermes-cosmos-client-components     = { version = "0.1.0" }
-hermes-cosmos-relayer               = { version = "0.1.0" }
-hermes-cosmos-test-components       = { version = "0.1.0" }
-hermes-cosmos-integration-tests     = { version = "0.1.0" }
-hermes-celestia-client-components   = { version = "0.1.0" }
-hermes-celestia-chain               = { version = "0.1.0" }
-hermes-celestia-test-components     = { version = "0.1.0" }
-hermes-celestia-integration-tests   = { version = "0.1.0" }
-hermes-sovereign-client-components  = { version = "0.1.0" }
-hermes-sovereign-cosmos-relayer     = { version = "0.1.0" }
-hermes-sovereign-test-components    = { version = "0.1.0" }
-hermes-sovereign-integration-tests  = { version = "0.1.0" }
-hermes-wasm-client-components       = { version = "0.1.0" }
-hermes-async-runtime-components     = { version = "0.1.0" }
-hermes-tokio-runtime-components     = { version = "0.1.0" }
-hermes-relayer-runtime              = { version = "0.1.0" }
-hermes-protobuf-components          = { version = "0.1.0" }
-hermes-tracing-components          = { version = "0.1.0" }
-hermes-solomachine-relayer          = { version = "0.1.0" }
-hermes-test-components              = { version = "0.1.0" }
-hermes-ibc-test-suite               = { version = "0.1.0" }
+hermes-runtime-components               = { version = "0.1.0" }
+hermes-async-runtime-components         = { version = "0.1.0" }
+hermes-tokio-runtime-components         = { version = "0.1.0" }
+hermes-runtime                          = { version = "0.1.0" }
+
+hermes-encoding-components              = { version = "0.1.0" }
+hermes-protobuf-encoding-components     = { version = "0.1.0" }
+
+hermes-logging-components               = { version = "0.1.0" }
+hermes-tracing-logging-components       = { version = "0.1.0" }
+
+hermes-relayer-components               = { version = "0.1.0" }
+hermes-relayer-components-extra         = { version = "0.1.0" }
+
+hermes-test-components                  = { version = "0.1.0" }
+hermes-ibc-test-suite                   = { version = "0.1.0" }
+
+hermes-cli                              = { version = "0.1.0" }
+hermes-cli-components                   = { version = "0.1.0" }
+hermes-cli-framework                    = { version = "0.1.0" }
+
+hermes-cosmos-chain-components          = { version = "0.1.0" }
+hermes-cosmos-relayer                   = { version = "0.1.0" }
+hermes-cosmos-test-components           = { version = "0.1.0" }
+hermes-cosmos-integration-tests         = { version = "0.1.0" }
+
+hermes-celestia-client-components       = { version = "0.1.0" }
+hermes-celestia-chain                   = { version = "0.1.0" }
+hermes-celestia-test-components         = { version = "0.1.0" }
+hermes-celestia-integration-tests       = { version = "0.1.0" }
+
+hermes-sovereign-client-components      = { version = "0.1.0" }
+hermes-sovereign-relayer         = { version = "0.1.0" }
+hermes-sovereign-test-components        = { version = "0.1.0" }
+hermes-sovereign-integration-tests      = { version = "0.1.0" }
+
+hermes-wasm-client-components           = { version = "0.1.0" }
+
+hermes-solomachine-relayer              = { version = "0.1.0" }
 
 [profile.dev]
 debug = 1
@@ -145,33 +172,45 @@ ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git
 ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 
+hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
+hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }
+
+hermes-runtime-components           = { path = "./crates/runtime/runtime-components" }
+hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-components" }
+hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
+hermes-runtime                      = { path = "./crates/runtime/runtime" }
+
+hermes-encoding-components          = { path = "./crates/encoding/encoding-components" }
+hermes-protobuf-encoding-components = { path = "./crates/encoding/protobuf-encoding-components" }
+
+hermes-logging-components           = { path = "./crates/logging/logging-components" }
+hermes-tracing-logging-components   = { path = "./crates/logging/tracing-logging-components" }
+
+hermes-test-components              = { path = "./crates/test/test-components" }
+hermes-ibc-test-suite               = { path = "./crates/test/test-suite" }
+
 hermes-cli                          = { path = "./crates/cli/cli" }
 hermes-cli-components               = { path = "./crates/cli/cli-components" }
 hermes-cli-framework                = { path = "./crates/cli/cli-framework" }
-hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
-hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }
-hermes-cosmos-client-components     = { path = "./crates/cosmos/cosmos-client-components" }
+
+hermes-cosmos-chain-components      = { path = "./crates/cosmos/cosmos-chain-components" }
 hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" }
 hermes-cosmos-test-components       = { path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-integration-tests     = { path = "./crates/cosmos/cosmos-integration-tests" }
+
 hermes-celestia-client-components   = { path = "./crates/celestia/celestia-client-components" }
 hermes-celestia-chain               = { path = "./crates/celestia/celestia-chain" }
 hermes-celestia-test-components     = { path = "./crates/celestia/celestia-test-components" }
 hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integration-tests" }
+
+hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-components" }
+
 hermes-sovereign-client-components  = { path = "./crates/sovereign/sovereign-client-components" }
-hermes-sovereign-cosmos-relayer     = { path = "./crates/sovereign/sovereign-cosmos-relayer" }
+hermes-sovereign-relayer     = { path = "./crates/sovereign/sovereign-relayer" }
 hermes-sovereign-test-components    = { path = "./crates/sovereign/sovereign-test-components" }
 hermes-sovereign-integration-tests  = { path = "./crates/sovereign/sovereign-integration-tests" }
-hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-components" }
-hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-components" }
-hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
-hermes-relayer-runtime              = { path = "./crates/runtime/relayer-runtime" }
-hermes-protobuf-components          = { path = "./crates/encoding/protobuf-components" }
-hermes-tracing-components           = { path = "./crates/logging/tracing-components" }
-hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
-hermes-test-components              = { path = "./crates/test/test-components" }
-hermes-ibc-test-suite               = { path = "./crates/test/test-suite" }
 
+hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
 
 # ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
 # ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }

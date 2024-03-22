@@ -1,18 +1,18 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+};
 use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
-use hermes_relayer_components::log::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
-};
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayComponents, IsExtraRelayComponent,
 };
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::contexts::logger::ProvideCosmosLogger;
 use crate::contexts::relay::CosmosRelay;

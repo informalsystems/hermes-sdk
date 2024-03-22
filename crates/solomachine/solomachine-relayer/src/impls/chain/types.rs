@@ -1,4 +1,7 @@
 use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
+use hermes_encoding_components::traits::has_encoding::{
+    DefaultEncodingGetter, ProvideEncodingType,
+};
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
@@ -15,12 +18,9 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use hermes_relayer_components::encode::traits::has_encoding::{
-    DefaultEncodingGetter, ProvideEncodingType,
-};
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::context::encoding::SolomachineEncoding;
@@ -64,7 +64,7 @@ where
     }
 }
 
-impl<Chain> ProvideRuntime<SolomachineChain<Chain>> for SolomachineChainComponents
+impl<Chain> RuntimeGetter<SolomachineChain<Chain>> for SolomachineChainComponents
 where
     Chain: Solomachine,
 {

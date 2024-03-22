@@ -7,8 +7,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
-use hermes_cosmos_client_components::methods::event::try_extract_create_client_event;
-use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::methods::event::try_extract_create_client_event;
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
@@ -26,9 +26,9 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::types::height::RollupHeight;
-use hermes_sovereign_cosmos_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;

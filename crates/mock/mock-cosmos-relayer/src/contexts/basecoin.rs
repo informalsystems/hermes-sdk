@@ -8,7 +8,7 @@ use basecoin::modules::bank::Bank;
 use basecoin::modules::context::{prefix, Identifiable};
 use basecoin::modules::ibc::Ibc;
 use basecoin::store::context::ProvableStore;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
 use tendermint::{AppHash, Time};

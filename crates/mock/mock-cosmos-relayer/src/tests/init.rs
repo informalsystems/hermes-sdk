@@ -2,7 +2,7 @@ use std::str::FromStr;
 use std::sync::Arc;
 
 use basecoin::store::impls::InMemoryStore;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::sleep::CanSleep;
 use ibc::core::host::types::identifiers::ChainId;
 use tendermint_testgen::Validator;
 use tokio::runtime::Runtime as TokioRuntime;

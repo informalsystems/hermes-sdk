@@ -1,6 +1,7 @@
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+
 use crate::chain::traits::types::message::HasMessageType;
-use crate::log::traits::has_logger::HasLogger;
-use crate::log::traits::logger::CanLog;
 use crate::transaction::traits::encode_tx::CanEncodeTx;
 use crate::transaction::traits::estimate_tx_fee::CanEstimateTxFee;
 use crate::transaction::traits::poll_tx_response::CanPollTxResponse;

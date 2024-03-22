@@ -1,5 +1,5 @@
 #![allow(non_snake_case)]
-use hermes_cosmos_client_components::methods::encode::encode_to_any;
+use hermes_cosmos_chain_components::methods::encode::encode_to_any;
 use hermes_cosmos_relayer::types::error::Error;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::Protobuf;
