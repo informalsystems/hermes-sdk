@@ -1953,6 +1953,7 @@ name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-runtime-components",
 ]
 
 [[package]]
@@ -1980,6 +1981,13 @@ dependencies = [
  "tokio",
  "tracing",
  "value-bag",
+]
+
+[[package]]
+name = "hermes-runtime-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
 ]
 
 [[package]]

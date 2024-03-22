@@ -1,5 +1,5 @@
 [package]
-name         = "hermes-relayer-components"
+name         = "hermes-runtime-components"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }
@@ -13,5 +13,4 @@ description  = """
 """
 
 [dependencies]
-cgp-core                    = { workspace = true }
-hermes-runtime-components   = { workspace = true }
+cgp-core    = { workspace = true }

@@ -15,6 +15,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::error::types::ErrorOf;
 use hermes_relayer_components::log::traits::has_logger::HasLogger;
 use hermes_relayer_components::log::traits::logger::CanLog;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
@@ -24,7 +25,6 @@ use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRe
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_relayer_components::error::types::ErrorOf;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;

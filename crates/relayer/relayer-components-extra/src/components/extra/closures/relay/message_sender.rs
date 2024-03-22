@@ -1,5 +1,6 @@
 use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents};
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::error::types::ErrorOf;
 use hermes_relayer_components::log::traits::has_logger::HasLogger;
 use hermes_relayer_components::log::traits::logger::CanLog;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
@@ -9,7 +10,6 @@ use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMes
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_relayer_components::error::types::ErrorOf;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;

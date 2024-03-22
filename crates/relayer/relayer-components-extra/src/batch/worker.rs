@@ -17,10 +17,10 @@ use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMess
 use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components::runtime::traits::mutex::HasMutex;
 use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
 use hermes_relayer_components::runtime::traits::sleep::CanSleep;
 use hermes_relayer_components::runtime::traits::task::Task;
 use hermes_relayer_components::runtime::traits::time::HasTime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
 
 use crate::batch::types::aliases::{BatchSubmission, EventResultSender, MessageBatchReceiver};
 use crate::batch::types::config::BatchConfig;

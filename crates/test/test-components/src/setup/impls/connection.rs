@@ -3,8 +3,8 @@ use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
-use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::error::types::ErrorOf;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
 use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use crate::driver::traits::types::chain_at::ChainTypeAt;
