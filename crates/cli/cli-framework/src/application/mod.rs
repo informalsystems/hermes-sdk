@@ -5,7 +5,7 @@ use std::path::Path;
 
 pub use boot::boot;
 use cgp_core::async_trait;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 
 use crate::command::CommandRunner;
 use crate::config::Config;

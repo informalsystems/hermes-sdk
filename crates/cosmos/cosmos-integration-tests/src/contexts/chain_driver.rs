@@ -17,8 +17,8 @@ use hermes_cosmos_test_components::chain_driver::traits::proposal_status::Govern
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::WasmClientCodeUploaderComponent;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;

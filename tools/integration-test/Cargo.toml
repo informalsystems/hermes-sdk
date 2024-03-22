@@ -17,7 +17,7 @@ ibc-relayer-types                   = { workspace = true }
 ibc-relayer                         = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
-hermes-relayer-runtime              = { workspace = true }
+hermes-runtime                      = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }
 hermes-cosmos-chain-components      = { workspace = true }
 hermes-solomachine-relayer          = { workspace = true }

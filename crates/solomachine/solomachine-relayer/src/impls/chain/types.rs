@@ -18,8 +18,8 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 

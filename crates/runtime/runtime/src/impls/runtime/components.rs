@@ -6,14 +6,14 @@ use hermes_tokio_runtime_components::components::parallel::{
 
 use crate::types::runtime::HermesRuntime;
 
-pub struct RelayerRuntimeComponents;
+pub struct HermesRuntimeComponents;
 
 impl HasComponents for HermesRuntime {
-    type Components = RelayerRuntimeComponents;
+    type Components = HermesRuntimeComponents;
 }
 
 delegate_all!(
     IsTokioParallelRuntimeComponent,
     TokioParallelRuntimeComponents,
-    RelayerRuntimeComponents,
+    HermesRuntimeComponents,
 );

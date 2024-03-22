@@ -18,7 +18,7 @@ use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::EventualAmountTimeoutError;
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
 use hermes_test_components::chain::traits::types::address::HasAddressType;

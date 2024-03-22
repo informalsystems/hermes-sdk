@@ -3,7 +3,7 @@ use core::time::Duration;
 
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;
 

@@ -14,7 +14,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_client_components::sovereign::types::message::SovereignMessage;
 use hermes_sovereign_client_components::sovereign::types::messages::ibc::IbcMessage;

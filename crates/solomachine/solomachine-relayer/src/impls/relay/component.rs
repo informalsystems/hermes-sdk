@@ -4,7 +4,7 @@ use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::context::relay::SolomachineRelay;

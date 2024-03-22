@@ -1,7 +1,7 @@
 use hermes_relayer_components::birelay::traits::two_way::{
     ProvideTwoChainTypes, ProvideTwoWayRelayTypes, TwoWayRelayGetter,
 };
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeGetter;
 
 use crate::contexts::birelay::CosmosBiRelay;

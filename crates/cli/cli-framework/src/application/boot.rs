@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use oneline_eyre::eyre::eyre;
 
 use crate::application::log::{enable_ansi, install_logger};

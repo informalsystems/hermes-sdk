@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use std::collections::HashSet;
 
 use futures::lock::Mutex;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};

@@ -9,7 +9,7 @@ members = [
     "crates/runtime/runtime-components",
     "crates/runtime/async-runtime-components",
     "crates/runtime/tokio-runtime-components",
-    "crates/runtime/relayer-runtime",
+    "crates/runtime/runtime",
 
     "crates/test/test-components",
     "crates/test/test-suite",
@@ -105,7 +105,7 @@ bech32                          = { version = "0.9.1" }
 hermes-runtime-components               = { version = "0.1.0" }
 hermes-async-runtime-components         = { version = "0.1.0" }
 hermes-tokio-runtime-components         = { version = "0.1.0" }
-hermes-relayer-runtime                  = { version = "0.1.0" }
+hermes-runtime                          = { version = "0.1.0" }
 
 hermes-encoding-components              = { version = "0.1.0" }
 hermes-protobuf-encoding-components     = { version = "0.1.0" }
@@ -178,7 +178,7 @@ hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-compone
 hermes-runtime-components           = { path = "./crates/runtime/runtime-components" }
 hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
-hermes-relayer-runtime              = { path = "./crates/runtime/relayer-runtime" }
+hermes-runtime                      = { path = "./crates/runtime/runtime" }
 
 hermes-encoding-components          = { path = "./crates/encoding/encoding-components" }
 hermes-protobuf-encoding-components = { path = "./crates/encoding/protobuf-encoding-components" }

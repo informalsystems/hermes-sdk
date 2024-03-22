@@ -3,7 +3,7 @@ use alloc::collections::BTreeMap;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::{
     RollupGetter, RollupTypeComponent,

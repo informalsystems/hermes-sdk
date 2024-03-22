@@ -111,8 +111,8 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;

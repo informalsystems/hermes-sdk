@@ -1,5 +1,5 @@
 use hermes_relayer_components::build::traits::birelay::ProvideBiRelayType;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeGetter;
 
 use crate::contexts::birelay::CosmosBiRelay;

@@ -11,7 +11,7 @@ use hermes_relayer_components_extra::components::extra::closures::relay::auto_re
 use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayComponents, IsExtraRelayComponent,
 };
-use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::contexts::logger::ProvideCosmosLogger;

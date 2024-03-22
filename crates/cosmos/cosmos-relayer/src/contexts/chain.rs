@@ -4,7 +4,7 @@ use core::ops::Deref;
 use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::impls::empty::EmptySubscription;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::{ChainConfig, EventSourceMode};

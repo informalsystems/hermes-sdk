@@ -13,7 +13,7 @@ description  = """
 """
 
 [dependencies]
-hermes-relayer-runtime = { workspace = true }
+hermes-runtime = { workspace = true }
 hermes-cosmos-relayer  = { workspace = true }
 
 cgp-core           = { workspace = true }
