@@ -3,6 +3,8 @@ use hermes_cosmos_chain_components::impls::client::update_client_message::BuildC
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
+use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
@@ -28,8 +30,6 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
-use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
-use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 

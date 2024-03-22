@@ -1,8 +1,8 @@
 use cgp_core::HasErrorType;
-use hermes_relayer_components::encode::traits::decoder::Decoder;
-use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
-use hermes_relayer_components::encode::traits::encoder::Encoder;
-use hermes_relayer_components::encode::types::via::Via;
+use hermes_encoding_components::traits::decoder::Decoder;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::Encoder;
+use hermes_encoding_components::types::via::Via;
 use prost_types::Any;
 
 use crate::impls::any::EncodeAsAnyProtobuf;

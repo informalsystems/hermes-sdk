@@ -1,7 +1,7 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_relayer_components::encode::traits::decoder::Decoder;
-use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
-use hermes_relayer_components::encode::traits::encoder::Encoder;
+use hermes_encoding_components::traits::decoder::Decoder;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::Encoder;
 use prost::{DecodeError, Message};
 
 pub struct EncodeAsProtobuf;

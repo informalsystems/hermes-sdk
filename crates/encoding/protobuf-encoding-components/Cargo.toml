@@ -14,7 +14,7 @@ description  = """
 
 [dependencies]
 cgp-core                    = { workspace = true }
-hermes-relayer-components   = { workspace = true }
+hermes-encoding-components  = { workspace = true }
 
 prost                       = { workspace = true }
 prost-types                 = { workspace = true }

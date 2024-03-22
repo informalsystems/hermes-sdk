@@ -1,4 +1,4 @@
-use crate::encode::traits::has_encoding::{EncodingGetter, HasDefaultEncoding};
+use crate::traits::has_encoding::{EncodingGetter, HasDefaultEncoding};
 
 pub struct GetDefaultEncoding;
 

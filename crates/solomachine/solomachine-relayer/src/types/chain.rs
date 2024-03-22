@@ -1,9 +1,9 @@
 use cgp_core::Async;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::encode::traits::has_encoding::HasEncoding;
 
 use crate::context::encoding::SolomachineEncoding;
 use crate::traits::solomachine::Solomachine;

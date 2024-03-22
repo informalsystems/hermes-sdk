@@ -18,6 +18,7 @@ hermes-relayer-runtime                  = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-wasm-client-components           = { workspace = true }
+hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 
 ibc-proto                               = { workspace = true }

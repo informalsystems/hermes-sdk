@@ -3,15 +3,15 @@ use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_chain_components::encoding::components::{
     CosmosEncodingComponents as BaseCosmosEncodingComponents, IsCosmosEncodingComponent,
 };
-use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
-use hermes_relayer_components::encode::traits::decoder::CanDecode;
-use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
-use hermes_relayer_components::encode::traits::encoder::CanEncode;
-use hermes_relayer_components::encode::traits::has_encoding::{
+use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
+use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
-use hermes_relayer_components::encode::traits::schema::HasSchema;
-use hermes_relayer_components::encode::types::via::Via;
+use hermes_encoding_components::traits::schema::HasSchema;
+use hermes_encoding_components::types::via::Via;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;

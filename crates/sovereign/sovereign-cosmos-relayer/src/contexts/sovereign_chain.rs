@@ -6,6 +6,10 @@ use hermes_cosmos_relayer::chain::impls::connection_handshake_message::DelegateC
 use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
+use hermes_encoding_components::traits::has_encoding::{
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
+};
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
@@ -16,10 +20,6 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
-use hermes_relayer_components::encode::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
-};
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};

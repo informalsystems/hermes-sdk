@@ -1,1 +1,1 @@
-pub use hermes_relayer_components::encode::traits::schema::{HasSchemaType, SchemaGetter};
+pub use hermes_encoding_components::traits::schema::{HasSchemaType, SchemaGetter};

@@ -1741,6 +1741,7 @@ dependencies = [
  "cgp-core",
  "cgp-error-eyre",
  "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "ibc-proto 0.42.2",
@@ -1776,6 +1777,7 @@ dependencies = [
  "cgp-core",
  "eyre",
  "futures",
+ "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1837,6 +1839,7 @@ dependencies = [
  "hermes-cli-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
+ "hermes-encoding-components",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1958,7 +1961,7 @@ name = "hermes-protobuf-encoding-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
- "hermes-relayer-components",
+ "hermes-encoding-components",
  "prost",
  "prost-types",
 ]
@@ -1968,6 +1971,7 @@ name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-encoding-components",
  "hermes-logging-components",
  "hermes-runtime-components",
 ]
@@ -2012,6 +2016,7 @@ dependencies = [
  "futures",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
+ "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -2043,6 +2048,7 @@ dependencies = [
  "ed25519-dalek",
  "eyre",
  "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
@@ -2190,6 +2196,7 @@ dependencies = [
  "cgp-error-eyre",
  "eyre",
  "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "ibc-core 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",

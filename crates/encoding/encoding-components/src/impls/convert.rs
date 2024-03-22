@@ -1,6 +1,6 @@
 use cgp_core::{CanRaiseError, HasErrorType};
 
-use crate::encode::traits::convert::Converter;
+use crate::traits::convert::Converter;
 
 pub struct TryConvertFrom;
 

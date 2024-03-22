@@ -1,6 +1,6 @@
-use crate::encode::traits::decoder::{CanDecode, Decoder};
-use crate::encode::traits::encoder::{CanEncode, Encoder};
-use crate::encode::types::via::Via;
+use crate::traits::decoder::{CanDecode, Decoder};
+use crate::traits::encoder::{CanEncode, Encoder};
+use crate::types::via::Via;
 
 pub struct Identity;
 

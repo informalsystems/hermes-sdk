@@ -2,13 +2,13 @@ use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_encoding_components::traits::schema::HasSchema;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
-use hermes_relayer_components::encode::traits::encoder::CanEncode;
-use hermes_relayer_components::encode::traits::has_encoding::HasEncoding;
-use hermes_relayer_components::encode::traits::schema::HasSchema;
 use ibc_proto::google::protobuf::Any;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};

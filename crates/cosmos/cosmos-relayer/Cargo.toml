@@ -19,6 +19,9 @@ all-features = true
 cgp-core                                = { workspace = true }
 hermes-runtime-components               = { workspace = true }
 hermes-logging-components               = { workspace = true }
+hermes-tracing-logging-components       = { workspace = true }
+hermes-encoding-components              = { workspace = true }
+hermes-protobuf-encoding-components     = { workspace = true }
 hermes-relayer-runtime                  = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-relayer-components-extra         = { workspace = true }
@@ -26,10 +29,8 @@ hermes-test-components                  = { workspace = true }
 hermes-async-runtime-components         = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-cosmos-test-components           = { workspace = true }
-hermes-protobuf-encoding-components     = { workspace = true }
 hermes-cli-components                   = { workspace = true }
 hermes-wasm-client-components           = { workspace = true }
-hermes-tracing-logging-components       = { workspace = true }
 
 ibc-proto                               = { workspace = true }
 ibc-relayer                             = { workspace = true }

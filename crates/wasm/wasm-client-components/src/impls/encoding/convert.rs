@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::encode::impls::convert::{ConvertFrom, TryConvertFrom};
+use hermes_encoding_components::impls::convert::{ConvertFrom, TryConvertFrom};
 
 use crate::types::client_state::{ProtoWasmClientState, WasmClientState};
 

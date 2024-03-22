@@ -1,14 +1,12 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::encode::impls::delegate::DelegateEncoding;
-use hermes_relayer_components::encode::impls::encoded::ProvideEncodedBytes;
-use hermes_relayer_components::encode::impls::schema::ProvideStringSchema;
-use hermes_relayer_components::encode::traits::convert::ConverterComponent;
-use hermes_relayer_components::encode::traits::decoder::DecoderComponent;
-use hermes_relayer_components::encode::traits::encoded::EncodedTypeComponent;
-use hermes_relayer_components::encode::traits::encoder::EncoderComponent;
-use hermes_relayer_components::encode::traits::schema::{
-    SchemaGetterComponent, SchemaTypeComponent,
-};
+use hermes_encoding_components::impls::delegate::DelegateEncoding;
+use hermes_encoding_components::impls::encoded::ProvideEncodedBytes;
+use hermes_encoding_components::impls::schema::ProvideStringSchema;
+use hermes_encoding_components::traits::convert::ConverterComponent;
+use hermes_encoding_components::traits::decoder::DecoderComponent;
+use hermes_encoding_components::traits::encoded::EncodedTypeComponent;
+use hermes_encoding_components::traits::encoder::EncoderComponent;
+use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
 
 use crate::impls::encoding::convert::WasmConverterComponents;
 use crate::impls::encoding::encoder::WasmEncoderComponents;

@@ -3,13 +3,13 @@ use core::marker::PhantomData;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
+use hermes_encoding_components::impls::via_identity::{EncodeViaIdentity, Identity};
+use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::schema::HasSchema;
+use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
-use hermes_relayer_components::encode::impls::via_identity::{EncodeViaIdentity, Identity};
-use hermes_relayer_components::encode::traits::decoder::{CanDecode, Decoder};
-use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
-use hermes_relayer_components::encode::traits::schema::HasSchema;
-use hermes_relayer_components::encode::types::via::Via;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 

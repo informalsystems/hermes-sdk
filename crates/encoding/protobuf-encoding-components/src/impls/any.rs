@@ -2,10 +2,10 @@ use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_relayer_components::encode::traits::decoder::Decoder;
-use hermes_relayer_components::encode::traits::encoded::HasEncodedType;
-use hermes_relayer_components::encode::traits::encoder::Encoder;
-use hermes_relayer_components::encode::traits::schema::HasSchema;
+use hermes_encoding_components::traits::decoder::Decoder;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::Encoder;
+use hermes_encoding_components::traits::schema::HasSchema;
 use prost::{DecodeError, Message};
 use prost_types::Any;
 

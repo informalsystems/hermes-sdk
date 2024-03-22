@@ -9,6 +9,9 @@ use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
+use hermes_encoding_components::traits::has_encoding::{
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+};
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -85,9 +88,6 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUn
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::encode::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
-};
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
