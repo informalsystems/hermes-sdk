@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::components::ibc_client::CosmosIbcClientComponents;
-use hermes_cosmos_client_components::traits::message::CosmosMessage;
+use hermes_cosmos_chain_components::components::ibc_client::CosmosIbcClientComponents;
+use hermes_cosmos_chain_components::traits::message::CosmosMessage;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 

@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{HasHeightType, ProvideHeightType};

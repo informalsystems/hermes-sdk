@@ -1,5 +1,5 @@
 [package]
-name         = "hermes-cosmos-client-components"
+name         = "hermes-cosmos-chain-components"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }

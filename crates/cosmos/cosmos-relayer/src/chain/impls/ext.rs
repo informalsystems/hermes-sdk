@@ -1,6 +1,6 @@
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_client_components::traits::grpc_address::GrpcAddressGetter;
-use hermes_cosmos_client_components::traits::rpc_client::RpcClientGetter;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
+use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use http::Uri;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use tendermint_rpc::{HttpClient, Url};

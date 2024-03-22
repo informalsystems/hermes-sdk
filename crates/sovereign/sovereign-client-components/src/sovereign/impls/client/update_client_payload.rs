@@ -3,8 +3,8 @@ use std::str::FromStr;
 
 use cgp_core::HasErrorType;
 use eyre::{eyre, Error as ReportError};
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;

@@ -1,7 +1,7 @@
 use cgp_core::HasErrorType;
-use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
-use hermes_cosmos_client_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
+use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,

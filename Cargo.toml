@@ -22,7 +22,7 @@ members = [
 
     "crates/logging/tracing-logging-components",
 
-    "crates/cosmos/cosmos-client-components",
+    "crates/cosmos/cosmos-chain-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
@@ -116,7 +116,7 @@ hermes-async-runtime-components     = { version = "0.1.0" }
 hermes-tokio-runtime-components     = { version = "0.1.0" }
 hermes-relayer-runtime              = { version = "0.1.0" }
 
-hermes-cosmos-client-components     = { version = "0.1.0" }
+hermes-cosmos-chain-components     = { version = "0.1.0" }
 hermes-cosmos-relayer               = { version = "0.1.0" }
 hermes-cosmos-test-components       = { version = "0.1.0" }
 hermes-cosmos-integration-tests     = { version = "0.1.0" }
@@ -187,7 +187,7 @@ hermes-cli                          = { path = "./crates/cli/cli" }
 hermes-cli-components               = { path = "./crates/cli/cli-components" }
 hermes-cli-framework                = { path = "./crates/cli/cli-framework" }
 
-hermes-cosmos-client-components     = { path = "./crates/cosmos/cosmos-client-components" }
+hermes-cosmos-chain-components     = { path = "./crates/cosmos/cosmos-chain-components" }
 hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" }
 hermes-cosmos-test-components       = { path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-integration-tests     = { path = "./crates/cosmos/cosmos-integration-tests" }

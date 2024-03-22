@@ -1,4 +1,4 @@
-use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use ibc_relayer::client_state::AnyClientState as RelayerAnyClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use serde::Serialize;

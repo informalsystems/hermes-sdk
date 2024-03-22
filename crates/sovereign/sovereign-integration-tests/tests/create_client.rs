@@ -7,8 +7,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
-use hermes_cosmos_client_components::methods::event::try_extract_create_client_event;
-use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::methods::event::try_extract_create_client_event;
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;

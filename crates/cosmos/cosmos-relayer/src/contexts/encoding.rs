@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use hermes_cosmos_client_components::encoding::components::{
+use hermes_cosmos_chain_components::encoding::components::{
     CosmosEncodingComponents as BaseCosmosEncodingComponents, IsCosmosEncodingComponent,
 };
 use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;

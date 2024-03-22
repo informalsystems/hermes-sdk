@@ -1669,7 +1669,7 @@ dependencies = [
  "eyre",
  "hermes-async-runtime-components",
  "hermes-celestia-test-components",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
@@ -1721,7 +1721,7 @@ dependencies = [
  "hdpath",
  "hermes-cli-components",
  "hermes-cli-framework",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
@@ -1740,7 +1740,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cgp-error-eyre",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "ibc-proto 0.42.2",
@@ -1769,7 +1769,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-cosmos-client-components"
+name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
  "bech32 0.9.1",
@@ -1803,7 +1803,7 @@ dependencies = [
  "cgp-core",
  "eyre",
  "hermes-async-runtime-components",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
  "hermes-ibc-test-suite",
@@ -1834,7 +1834,7 @@ dependencies = [
  "futures",
  "hermes-async-runtime-components",
  "hermes-cli-components",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1870,7 +1870,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "hdpath",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-runtime-components",
@@ -1902,7 +1902,7 @@ version = "0.1.0"
 dependencies = [
  "basecoin",
  "cgp-core",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1926,7 +1926,7 @@ dependencies = [
  "cgp-core",
  "eyre",
  "flex-error",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-runtime-components",
@@ -1989,7 +1989,7 @@ dependencies = [
  "crypto-hash",
  "eyre",
  "futures",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -2021,7 +2021,7 @@ dependencies = [
  "cgp-core",
  "ed25519-dalek",
  "eyre",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
@@ -2048,7 +2048,7 @@ dependencies = [
  "cgp-core",
  "cgp-error-eyre",
  "hermes-celestia-chain",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -2074,7 +2074,7 @@ dependencies = [
  "eyre",
  "hermes-celestia-integration-tests",
  "hermes-celestia-test-components",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
@@ -2166,7 +2166,7 @@ dependencies = [
  "cgp-core",
  "cgp-error-eyre",
  "eyre",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "ibc-core 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
@@ -3184,7 +3184,7 @@ name = "ibc-integration-test"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
- "hermes-cosmos-client-components",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",

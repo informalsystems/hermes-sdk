@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::{DelegateComponent, HasErrorType};
-use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_client_components::types::messages::client::create::CosmosCreateClientMessage;
+use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
