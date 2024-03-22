@@ -2052,6 +2052,7 @@ dependencies = [
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-runtime",
+ "hermes-sovereign-rollup-components",
  "hermes-wasm-client-components",
  "hex 0.4.3",
  "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",

@@ -1,6 +1,2 @@
-pub mod channel;
-pub mod client;
-pub mod connection;
-pub mod rpc;
-pub mod transaction;
+pub mod sovereign_to_cosmos;
 pub mod types;

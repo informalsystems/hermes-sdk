@@ -1,14 +1,9 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
+use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
@@ -22,6 +17,12 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::transaction::impls::poll_tx_response::{
+    PollTimeoutGetterComponent, PollTxResponse,
+};
+use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
+use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
@@ -29,19 +30,21 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
-use crate::sovereign::impls::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
-use crate::sovereign::impls::client::create_client_payload::BuildSovereignCreateClientPayload;
-use crate::sovereign::impls::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
-use crate::sovereign::impls::client::update_client_payload::BuildSovereignUpdateClientPayload;
-use crate::sovereign::impls::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
-use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
-use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
+use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
+use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
+use crate::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
+use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
+use crate::impls::types::chain::ProvideSovereignChainTypes;
+use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
+use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
+use crate::traits::json_rpc_client::JsonRpcClientTypeComponent;
+use crate::traits::publish_batch::TransactionBatchPublisherComponent;
 
-pub struct SovereignChainClientComponents;
+pub struct SovereignRollupClientComponents;
 
 delegate_components! {
-    #[mark_component(IsSovereignChainClientComponent)]
-    SovereignChainClientComponents {
+    #[mark_component(IsSovereignRollupClientComponent)]
+    SovereignRollupClientComponents {
         [
             HeightTypeComponent,
             TimestampTypeComponent,
@@ -61,9 +64,7 @@ delegate_components! {
             InitChannelOptionsTypeComponent,
             ChannelHandshakePayloadTypeComponent,
         ]:
-            ProvideSovereignPayloadTypes,
-        ClientStateTypeComponent:
-            ProvideSovereignClientState,
+            ProvideSovereignRollupPayloadTypes,
         [
             TransactionTypeComponent,
             NonceTypeComponent,
@@ -73,15 +74,17 @@ delegate_components! {
             TxResponseTypeComponent,
         ]:
             ProvideSovereignTransactionTypes,
-        CreateClientPayloadBuilderComponent:
-            BuildSovereignCreateClientPayload,
-        CreateClientMessageBuilderComponent:
-            BuildCreateCosmosClientMessageOnSovereign,
-        UpdateClientPayloadBuilderComponent:
-            BuildSovereignUpdateClientPayload,
-        UpdateClientMessageBuilderComponent:
-            BuildUpdateCosmosClientMessageOnSovereign,
-        ConnectionHandshakePayloadBuilderComponent:
-            BuildSovereignConnectionHandshakePayload,
+        JsonRpcClientTypeComponent:
+            ProvideJsonRpseeClient,
+        TransactionBatchPublisherComponent:
+            PublishSovereignTransactionBatch,
+        TxResponseQuerierComponent:
+            QuerySovereignTxResponse,
+        TxResponsePollerComponent:
+            PollTxResponse,
+        PollTimeoutGetterComponent:
+            DefaultPollTimeout,
+        TxResponseAsEventsParserComponent:
+            ParseSovTxResponseAsEvents,
     }
 }
