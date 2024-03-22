@@ -4,8 +4,8 @@ use std::io::Error as IoError;
 
 use cgp_core::{ErrorRaiser, ProvideErrorType};
 use hermes_async_runtime_components::channel::types::ChannelClosedError;
-use hermes_tokio_runtime_components::impls::child_process::PrematureChildProcessExitError;
-use hermes_tokio_runtime_components::impls::exec_command::ExecCommandFailure;
+use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
+use hermes_tokio_runtime_components::impls::os::exec_command::ExecCommandFailure;
 
 use crate::impls::runtime::components::RelayerRuntimeComponents;
 use crate::types::error::TokioRuntimeError;

@@ -13,18 +13,9 @@ description  = """
 """
 
 [dependencies]
+cgp-core                            = { workspace = true }
 hermes-runtime-components           = { workspace = true }
-hermes-relayer-components           = { workspace = true }
-hermes-relayer-components-extra     = { workspace = true }
-hermes-test-components              = { workspace = true }
 hermes-async-runtime-components     = { workspace = true }
 hermes-tokio-runtime-components     = { workspace = true }
 
-async-trait     = { workspace = true }
-cgp-core        = { workspace = true }
-tokio           = { workspace = true }
-tracing         = { workspace = true }
-futures         = { workspace = true }
-serde           = { workspace = true }
-value-bag       = { version = "1.0.0-alpha.9" }
-log             = { version = "0.4.21", features = ["kv_serde"] }
+tokio                               = { workspace = true }

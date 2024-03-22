@@ -5,6 +5,7 @@ use std::process::{ExitStatus, Stdio};
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_runtime_components::traits::os::child_process::ProvideChildProcessType;
 use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
@@ -16,6 +17,14 @@ use tokio::fs::OpenOptions;
 use tokio::io::{copy, AsyncRead};
 use tokio::process::{Child, Command};
 
+pub struct ProvideTokioChildProcessType;
+
+impl<Runtime> ProvideChildProcessType<Runtime> for ProvideTokioChildProcessType
+where
+    Runtime: Async,
+{
+    type ChildProcess = Child;
+}
 pub struct StartTokioChildProcess;
 
 pub struct PrematureChildProcessExitError {
@@ -23,7 +32,6 @@ pub struct PrematureChildProcessExitError {
     pub output: String,
 }
 
-#[async_trait]
 impl<Runtime> ChildProcessStarter<Runtime> for StartTokioChildProcess
 where
     Runtime: HasChildProcessType<ChildProcess = Child>
@@ -98,7 +106,6 @@ pub trait CanPipeReaderToFile: HasFilePathType + HasErrorType {
     ) -> Result<(), Self::Error>;
 }
 
-#[async_trait]
 impl<Runtime> CanPipeReaderToFile for Runtime
 where
     Runtime: HasFilePathType + CanSpawnTask + CanRaiseError<IoError>,

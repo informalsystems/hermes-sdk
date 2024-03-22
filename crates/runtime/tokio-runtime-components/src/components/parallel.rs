@@ -33,20 +33,20 @@ use hermes_runtime_components::traits::subscription::SubscriptionComponent;
 use hermes_runtime_components::traits::task::ConcurrentTaskRunnerComponent;
 use hermes_runtime_components::traits::time::TimeComponent;
 
-use crate::impls::child_process::StartTokioChildProcess;
-use crate::impls::copy_file::TokioCopyFile;
-use crate::impls::create_dir::TokioCreateDir;
-use crate::impls::exec_command::TokioExecCommand;
+use crate::impls::os::child_process::StartTokioChildProcess;
+use crate::impls::fs::copy_file::TokioCopyFile;
+use crate::impls::fs::create_dir::TokioCreateDir;
+use crate::impls::os::exec_command::TokioExecCommand;
 use crate::impls::parallel_task::TokioRunParallelTasks;
 use crate::impls::random::ThreadRandomGenerator;
-use crate::impls::read_file::TokioReadFileAsString;
-use crate::impls::reserve_port::TokioReserveTcpPort;
+use crate::impls::fs::read_file::TokioReadFileAsString;
+use crate::impls::os::reserve_port::TokioReserveTcpPort;
 use crate::impls::sleep::TokioSleep;
 use crate::impls::spawn::TokioSpawnTask;
 use crate::impls::time::ProvideStdTime;
-use crate::impls::types::child_process::ProvideTokioChildProcessType;
-use crate::impls::types::file_path::ProvideStdPathType;
-use crate::impls::write_file::TokioWriteStringToFile;
+use crate::impls::os::child_process::ProvideTokioChildProcessType;
+use crate::impls::fs::file_path::ProvideStdPathType;
+use crate::impls::fs::write_file::TokioWriteStringToFile;
 
 pub struct TokioParallelRuntimeComponents;
 
