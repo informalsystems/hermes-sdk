@@ -20,8 +20,8 @@ use hermes_sovereign_client_components::sovereign::types::message::SovereignMess
 use hermes_sovereign_client_components::sovereign::types::messages::ibc::IbcMessage;
 use hermes_sovereign_client_components::sovereign::types::rpc::tx_hash::TxHash;
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
-use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
+use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
