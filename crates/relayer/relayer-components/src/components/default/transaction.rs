@@ -1,5 +1,8 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_runtime_components::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::time::HasTime;
 
 use crate::chain::traits::send_message::{CanSendMessages, MessageSenderComponent};
 use crate::chain::traits::types::chain_id::HasChainId;
@@ -10,11 +13,11 @@ use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
 use crate::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
 use crate::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
-use crate::transaction::impls::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
-use crate::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
-use crate::transaction::impls::poll_tx_response::LogRetryQueryTxResponse;
+use crate::transaction::impls::estimate_fees_and_send_tx::{
+    EstimateFeesAndSendTx, LogSendMessagesWithSignerAndNonce,
+};
 use crate::transaction::impls::poll_tx_response::{
-    HasPollTimeout, PollTxResponse, TxNoResponseError,
+    HasPollTimeout, LogRetryQueryTxResponse, PollTxResponse, TxNoResponseError,
 };
 use crate::transaction::impls::send_messages_with_default_signer::SendMessagesWithDefaultSigner;
 use crate::transaction::traits::default_signer::HasDefaultSigner;
@@ -43,9 +46,6 @@ use crate::transaction::traits::types::signer::HasSignerType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
-use hermes_runtime_components::traits::mutex::HasMutex;
-use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_runtime_components::traits::time::HasTime;
 
 pub struct DefaultTxComponents;
 

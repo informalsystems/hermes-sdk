@@ -1,13 +1,13 @@
 use cgp_core::{CanRun, ErrorRaiser, HasComponents, HasErrorType};
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::stream::CanMapStream;
+use hermes_runtime_components::traits::subscription::HasSubscription;
+use hermes_runtime_components::traits::task::CanRunConcurrentTasks;
 
 use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::traits::chains::HasRelayChains;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::stream::CanMapStream;
-use hermes_runtime_components::traits::subscription::HasSubscription;
-use hermes_runtime_components::traits::task::CanRunConcurrentTasks;
 
 pub trait CanUseDefaultAutoRelayer: UseDefaultAutoRelayer {}
 

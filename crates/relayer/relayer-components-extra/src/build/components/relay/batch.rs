@@ -11,6 +11,10 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_runtime_components::traits::channel::{
+    CanCloneSender, CanCreateChannels, HasChannelTypes,
+};
+use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
@@ -19,10 +23,6 @@ use crate::batch::types::aliases::{MessageBatchReceiver, MessageBatchSender};
 use crate::batch::worker::CanSpawnBatchMessageWorker;
 use crate::build::traits::cache::HasBatchSenderCache;
 use crate::build::traits::components::relay_with_batch_builder::CanBuildRelayWithBatch;
-use hermes_runtime_components::traits::channel::{
-    CanCloneSender, CanCreateChannels, HasChannelTypes,
-};
-use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 
 pub struct BuildRelayWithBatchWorker;
 

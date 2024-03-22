@@ -1,5 +1,6 @@
-use cgp_core::Async;
 use core::fmt::Display;
+
+use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::log::traits::logger::Logger;
 use hermes_relayer_components::log::types::level::LogLevel;

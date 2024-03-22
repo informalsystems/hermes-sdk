@@ -6,17 +6,16 @@ use hermes_relayer_components::log::traits::logger::CanLog;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_runtime_components::traits::channel::{CanCloneSender, CanUseChannels, HasChannelTypes};
+use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
 use hermes_runtime_components::traits::mutex::HasMutex;
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeOf;
+use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::time::HasTime;
 
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::batch::worker::{CanSpawnBatchMessageWorker, LogBatchWorker};
-use hermes_runtime_components::traits::channel::{CanCloneSender, CanUseChannels, HasChannelTypes};
-use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
-use hermes_runtime_components::traits::spawn::CanSpawnTask;
 
 pub trait CanUseBatchMessageWorkerSpawner: UseBatchMessageWorkerSpawner
 where

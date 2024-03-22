@@ -7,8 +7,7 @@ use hermes_relayer_components::build::types::aliases::{
     CounterpartyChainId, CounterpartyClientId, TargetChain, TargetChainId, TargetClientId,
 };
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeOf;
+use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 
 use crate::batch::traits::channel::HasMessageBatchSenderType;
 

@@ -1,6 +1,5 @@
-use core::ops::Deref;
-
 use alloc::sync::Arc;
+use core::ops::Deref;
 
 use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::impls::empty::EmptySubscription;

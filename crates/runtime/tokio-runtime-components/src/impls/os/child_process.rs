@@ -5,12 +5,12 @@ use std::process::{ExitStatus, Stdio};
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_runtime_components::traits::os::child_process::ProvideChildProcessType;
 use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
-use hermes_runtime_components::traits::os::child_process::ChildProcessStarter;
-use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
+use hermes_runtime_components::traits::os::child_process::{
+    ChildProcessStarter, HasChildProcessType, ProvideChildProcessType,
+};
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use tokio::fs::OpenOptions;

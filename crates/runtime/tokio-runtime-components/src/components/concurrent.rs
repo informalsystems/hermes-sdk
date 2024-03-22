@@ -13,8 +13,9 @@ use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
 use hermes_runtime_components::traits::fs::read_file::FileAsStringReaderComponent;
 use hermes_runtime_components::traits::fs::write_file::StringToFileWriterComponent;
 use hermes_runtime_components::traits::mutex::MutexComponent;
-use hermes_runtime_components::traits::os::child_process::ChildProcessStarterComponent;
-use hermes_runtime_components::traits::os::child_process::ChildProcessTypeComponent;
+use hermes_runtime_components::traits::os::child_process::{
+    ChildProcessStarterComponent, ChildProcessTypeComponent,
+};
 use hermes_runtime_components::traits::os::exec_command::{
     CommandExecutorComponent, CommandWithEnvsExecutorComponent,
 };

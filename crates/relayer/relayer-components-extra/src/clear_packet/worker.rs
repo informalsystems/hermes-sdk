@@ -7,9 +7,8 @@ use hermes_relayer_components::relay::traits::clear_interval::HasClearInterval;
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
-use hermes_runtime_components::traits::task::Task;
-
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::task::Task;
 
 #[async_trait]
 pub trait CanSpawnClearPacketWorker: HasRelayChains {

@@ -1,12 +1,12 @@
 use alloc::vec;
 
 use cgp_core::{async_trait, Runner};
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use crate::relay::traits::auto_relayer::CanAutoRelay;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 pub struct RelayBothTargets;
 

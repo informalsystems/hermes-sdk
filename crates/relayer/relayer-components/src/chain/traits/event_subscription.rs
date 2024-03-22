@@ -1,7 +1,8 @@
-use crate::chain::traits::types::event::HasEventType;
-use crate::chain::traits::types::height::HasHeightType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::subscription::HasSubscription;
+
+use crate::chain::traits::types::event::HasEventType;
+use crate::chain::traits::types::height::HasHeightType;
 
 pub trait HasEventSubscription: HasHeightType + HasEventType + HasRuntime
 where
