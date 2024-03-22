@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::sleep::CanSleep;
 use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::client::context::client_state::ClientStateCommon;
 use ibc::core::client::context::ClientValidationContext;

@@ -30,8 +30,8 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComp
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::encode::impls::default_encoding::GetDefaultEncoding;
 use hermes_relayer_components::encode::traits::has_encoding::EncodingGetterComponent;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;

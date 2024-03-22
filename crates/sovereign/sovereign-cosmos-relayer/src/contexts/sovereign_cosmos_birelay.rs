@@ -5,9 +5,9 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::birelay::traits::two_way::{
     ProvideTwoChainTypes, ProvideTwoWayRelayTypes, TwoWayRelayGetter,
 };
-use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 
 use crate::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use crate::contexts::sovereign_chain::SovereignChain;

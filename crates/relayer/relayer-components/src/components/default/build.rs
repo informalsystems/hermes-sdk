@@ -19,7 +19,7 @@ use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use crate::build::types::aliases::{ChainA, ChainB};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::runtime::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::mutex::HasMutex;
 
 pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 

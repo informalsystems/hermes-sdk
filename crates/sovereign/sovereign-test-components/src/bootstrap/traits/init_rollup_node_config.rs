@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
+use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_test_components::runtime::traits::types::file_path::{FilePathOf, HasFilePathType};
 
 use crate::bootstrap::traits::types::rollup_node_config::HasRollupNodeConfigType;

@@ -13,9 +13,8 @@ description  = """
 """
 
 [dependencies]
-ibc-relayer                         = { workspace = true }
-ibc-relayer-types                   = { workspace = true }
 cgp-core                            = { workspace = true }
+hermes-runtime-components           = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }
@@ -29,6 +28,9 @@ hermes-sovereign-test-components    = { workspace = true }
 hermes-sovereign-client-components  = { workspace = true }
 hermes-sovereign-cosmos-relayer     = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
+
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
 ibc-proto-sov                       = { workspace = true }
 
 eyre               = { workspace = true }

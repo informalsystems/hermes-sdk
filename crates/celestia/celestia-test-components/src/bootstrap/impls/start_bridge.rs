@@ -2,8 +2,8 @@ use core::time::Duration;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;

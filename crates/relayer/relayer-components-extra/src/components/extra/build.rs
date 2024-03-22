@@ -20,16 +20,16 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::components::default::build::DefaultBuildComponents;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
-use hermes_relayer_components::runtime::traits::mutex::HasMutex;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::batch::traits::config::HasBatchConfig;
 use crate::build::components::relay::batch::BuildRelayWithBatchWorker;
 use crate::build::traits::cache::HasBatchSenderCache;
 use crate::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 use crate::components::extra::closures::batch::UseBatchMessageWorkerSpawner;
-use crate::runtime::traits::channel::{CanCloneSender, CanCreateChannels};
-use crate::runtime::traits::channel_once::CanUseChannelsOnce;
+use hermes_runtime_components::traits::channel::{CanCloneSender, CanCreateChannels};
+use hermes_runtime_components::traits::channel_once::CanUseChannelsOnce;
 
 pub struct ExtraBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
 

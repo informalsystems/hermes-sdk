@@ -49,7 +49,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
-use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
+use hermes_runtime_components::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;

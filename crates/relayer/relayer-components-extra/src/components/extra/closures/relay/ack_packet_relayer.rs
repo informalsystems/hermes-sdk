@@ -23,13 +23,13 @@ use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateC
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
-use crate::runtime::traits::channel::CanUseChannels;
-use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
+use hermes_runtime_components::traits::channel::CanUseChannels;
+use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 
 pub trait CanUseExtraAckPacketRelayer: UseExtraAckPacketRelayer
 where

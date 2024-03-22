@@ -89,8 +89,6 @@ use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::log::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::runtime::traits::mutex::MutexGuardOf;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
@@ -115,6 +113,8 @@ use hermes_relayer_components::transaction::traits::types::tx_response::TxRespon
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::mutex::MutexGuardOf;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;

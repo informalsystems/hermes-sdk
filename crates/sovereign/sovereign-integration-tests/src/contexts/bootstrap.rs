@@ -8,9 +8,9 @@ use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
-use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::ProvideRollupType;
 use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::components::{

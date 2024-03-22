@@ -15,19 +15,19 @@ use hermes_relayer_components::chain::traits::types::message::{
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::ibc_message_sender::CanSendIbcMessages;
 use hermes_relayer_components::relay::traits::target::ChainTarget;
-use hermes_relayer_components::runtime::traits::mutex::HasMutex;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
-use hermes_relayer_components::runtime::traits::task::Task;
-use hermes_relayer_components::runtime::traits::time::HasTime;
+use hermes_runtime_components::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeOf;
+use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::task::Task;
+use hermes_runtime_components::traits::time::HasTime;
 
 use crate::batch::types::aliases::{BatchSubmission, EventResultSender, MessageBatchReceiver};
 use crate::batch::types::config::BatchConfig;
 use crate::batch::types::sink::BatchWorkerSink;
-use crate::runtime::traits::channel::{CanUseChannels, HasChannelTypes};
-use crate::runtime::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
-use crate::runtime::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::channel::{CanUseChannels, HasChannelTypes};
+use hermes_runtime_components::traits::channel_once::{CanUseChannelsOnce, HasChannelOnceTypes};
+use hermes_runtime_components::traits::spawn::CanSpawnTask;
 
 pub struct LogBatchWorker<'a, Relay, Target>
 where

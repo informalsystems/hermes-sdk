@@ -8,7 +8,7 @@ use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     TargetDstChainId, TargetDstClientId, TargetRelay, TargetSrcChainId, TargetSrcClientId,
 };
-use crate::runtime::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::mutex::HasMutex;
 
 pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
 

@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 
 use cgp_core::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;

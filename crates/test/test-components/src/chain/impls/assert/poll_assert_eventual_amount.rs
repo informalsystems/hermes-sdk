@@ -3,8 +3,8 @@ use core::time::Duration;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::chain::traits::assert::eventual_amount::EventualAmountAsserter;
 use crate::chain::traits::assert::poll_assert::HasPollAssertDuration;

@@ -7,12 +7,12 @@ use hermes_relayer_components::error::traits::retry::{
 use hermes_relayer_components::log::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayComponents, IsExtraRelayComponent,
 };
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::contexts::logger::ProvideCosmosLogger;
 use crate::contexts::relay::CosmosRelay;

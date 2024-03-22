@@ -14,9 +14,6 @@ description  = """
 
 [dependencies]
 cgp-core                            = { workspace = true }
-ibc-proto                           = { workspace = true }
-ibc-relayer                         = { workspace = true }
-ibc-relayer-types                   = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
@@ -26,6 +23,11 @@ hermes-ibc-test-suite               = { workspace = true }
 hermes-async-runtime-components     = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
+hermes-runtime-components           = { workspace = true }
+
+ibc-proto                           = { workspace = true }
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
 tendermint-rpc                      = { workspace = true }
 
 eyre                = { workspace = true }

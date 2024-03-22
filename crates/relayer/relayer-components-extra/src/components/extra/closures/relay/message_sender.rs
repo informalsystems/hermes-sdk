@@ -9,14 +9,14 @@ use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors,
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::batch::traits::channel::HasMessageBatchSender;
 use crate::batch::types::sink::BatchWorkerSink;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 use crate::components::extra::relay::DelegatesToExtraRelayComponents;
-use crate::runtime::traits::channel::CanUseChannels;
-use crate::runtime::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
+use hermes_runtime_components::traits::channel::CanUseChannels;
+use hermes_runtime_components::traits::channel_once::{CanCreateChannelsOnce, CanUseChannelsOnce};
 
 pub trait UseExtraIbcMessageSender:
     CanSendIbcMessages<MainSink, SourceTarget>

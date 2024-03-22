@@ -24,8 +24,8 @@ use crate::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::target::SourceTarget;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 
 pub trait CanUseDefaultAckPacketRelayer: UseDefaultAckPacketRelayer
 where

@@ -3,8 +3,8 @@ use alloc::vec;
 use cgp_core::{async_trait, CanRun, HasErrorType, Runner};
 
 use crate::birelay::traits::two_way::HasTwoWayRelay;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 /// A concurrent two-way relay context that is composed of a `BiRelay` type that
 /// can auto-relay between two connected targets.

@@ -16,11 +16,8 @@ description  = """
 all-features = true
 
 [dependencies]
-ibc-proto                           = { workspace = true }
-ibc-relayer                         = { workspace = true }
-ibc-relayer-types                   = { workspace = true }
-ibc-telemetry                       = { workspace = true }
 cgp-core                            = { workspace = true }
+hermes-runtime-components           = { workspace = true }
 hermes-relayer-runtime              = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
@@ -32,6 +29,11 @@ hermes-protobuf-components          = { workspace = true }
 hermes-cli-components               = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
 hermes-tracing-components           = { workspace = true }
+
+ibc-proto                           = { workspace = true }
+ibc-relayer                         = { workspace = true }
+ibc-relayer-types                   = { workspace = true }
+ibc-telemetry                       = { workspace = true }
 tendermint                          = { workspace = true, features = ["secp256k1"] }
 tendermint-proto                    = { workspace = true }
 tendermint-rpc                      = { workspace = true, features = ["http-client", "websocket-client"] }

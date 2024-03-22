@@ -15,8 +15,8 @@ use crate::relay::impls::packet_clearers::receive_packet::{
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 pub struct ClearAckPackets;
 

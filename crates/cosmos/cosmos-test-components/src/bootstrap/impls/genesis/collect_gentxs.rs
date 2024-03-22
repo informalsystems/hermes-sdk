@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 

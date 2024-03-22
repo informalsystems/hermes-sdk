@@ -1,6 +1,6 @@
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::ProvideRuntime;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 

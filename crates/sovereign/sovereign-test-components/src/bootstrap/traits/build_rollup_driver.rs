@@ -1,7 +1,7 @@
 use alloc::collections::BTreeMap;
 
 use cgp_core::prelude::*;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
+use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
 use hermes_test_components::runtime::traits::types::child_process::{

@@ -18,7 +18,6 @@ use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::log::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::{
@@ -35,6 +34,7 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionH
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,

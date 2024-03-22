@@ -9,10 +9,10 @@ use crate::relay::traits::auto_relayer::AutoRelayer;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::event_relayer::CanRelayEvent;
 use crate::relay::traits::target::ChainTarget;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::stream::CanMapStream;
-use crate::runtime::traits::subscription::HasSubscription;
-use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::stream::CanMapStream;
+use hermes_runtime_components::traits::subscription::HasSubscription;
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 /// A one-way auto-relayer type that is responsible for listening for a
 /// particular event subscription and relaying messages to a target

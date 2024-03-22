@@ -1,7 +1,7 @@
 use cgp_core::CanRaiseError;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::wallet::HasWallets;

@@ -4,10 +4,10 @@ use crate::chain::traits::event_subscription::HasEventSubscription;
 use crate::components::default::closures::relay::event_relayer::UseDefaultEventRelayer;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::stream::CanMapStream;
-use crate::runtime::traits::subscription::HasSubscription;
-use crate::runtime::traits::task::CanRunConcurrentTasks;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::stream::CanMapStream;
+use hermes_runtime_components::traits::subscription::HasSubscription;
+use hermes_runtime_components::traits::task::CanRunConcurrentTasks;
 
 pub trait CanUseDefaultAutoRelayer: UseDefaultAutoRelayer {}
 

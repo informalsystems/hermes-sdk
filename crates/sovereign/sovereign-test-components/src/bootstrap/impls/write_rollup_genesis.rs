@@ -1,5 +1,5 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
 use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;

@@ -8,9 +8,6 @@ use crate::chain::traits::types::message::HasMessageType;
 use crate::error::traits::retry::HasRetryableError;
 use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
-use crate::runtime::traits::mutex::HasMutex;
-use crate::runtime::traits::sleep::CanSleep;
-use crate::runtime::traits::time::HasTime;
 use crate::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
 use crate::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
 use crate::transaction::impls::estimate_fees_and_send_tx::EstimateFeesAndSendTx;
@@ -46,6 +43,9 @@ use crate::transaction::traits::types::signer::HasSignerType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
+use hermes_runtime_components::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::time::HasTime;
 
 pub struct DefaultTxComponents;
 

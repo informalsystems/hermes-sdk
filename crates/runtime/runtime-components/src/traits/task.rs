@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 
 use cgp_core::prelude::*;
 
-use crate::runtime::traits::stream::HasStreamType;
+use crate::traits::stream::HasStreamType;
 
 #[async_trait]
 pub trait Task: Async {

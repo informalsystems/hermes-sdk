@@ -1,5 +1,5 @@
+use crate::traits::task::Task;
 use cgp_core::prelude::*;
-use hermes_relayer_components::runtime::traits::task::Task;
 
 #[derive_component(TaskSpawnerComponent, TaskSpawner<Runtime>)]
 pub trait CanSpawnTask: Async {

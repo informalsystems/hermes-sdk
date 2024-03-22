@@ -1645,6 +1645,7 @@ dependencies = [
  "futures-util",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-runtime-components",
  "hermes-test-components",
 ]
 
@@ -1688,6 +1689,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-test-components",
  "ibc-proto 0.42.2",
  "ibc-relayer",
@@ -1711,6 +1713,7 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
@@ -1819,6 +1822,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-test-components",
  "ibc-proto 0.42.2",
  "ibc-relayer",
@@ -1848,6 +1852,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-test-components",
  "hermes-tracing-components",
  "hermes-wasm-client-components",
@@ -1880,6 +1885,7 @@ dependencies = [
  "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-test-components",
  "ibc-proto 0.42.2",
  "ibc-relayer",
@@ -1912,6 +1918,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=3b11b12)",
  "ibc-relayer-types",
  "primitive-types",
@@ -1934,6 +1941,7 @@ dependencies = [
  "hermes-cosmos-client-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "tokio",
  "tracing",
 ]
@@ -1962,6 +1970,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "hermes-relayer-components",
+ "hermes-runtime-components",
 ]
 
 [[package]]
@@ -1974,6 +1983,7 @@ dependencies = [
  "hermes-async-runtime-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-runtime-components",
  "hermes-test-components",
  "hermes-tokio-runtime-components",
  "log",
@@ -2006,6 +2016,7 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "ibc-proto 0.42.2",
  "ibc-relayer",
  "ibc-relayer-types",
@@ -2063,6 +2074,7 @@ dependencies = [
  "hermes-protobuf-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-sovereign-client-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
@@ -2089,6 +2101,7 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-sovereign-client-components",
  "hermes-sovereign-cosmos-relayer",
  "hermes-sovereign-test-components",
@@ -2121,6 +2134,7 @@ dependencies = [
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
+ "hermes-runtime-components",
  "hermes-sovereign-client-components",
  "hermes-test-components",
  "ibc-relayer",
@@ -2140,6 +2154,7 @@ dependencies = [
  "cgp-core",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-runtime-components",
 ]
 
 [[package]]
@@ -2151,6 +2166,7 @@ dependencies = [
  "hermes-async-runtime-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
+ "hermes-runtime-components",
  "hermes-test-components",
  "rand",
  "tokio",
@@ -3424,6 +3440,7 @@ dependencies = [
  "hdpath",
  "hermes-cosmos-relayer",
  "hermes-relayer-components",
+ "hermes-runtime-components",
  "hex 0.4.3",
  "http 0.2.11",
  "ibc-proto 0.42.2",

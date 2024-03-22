@@ -15,3 +15,4 @@ description  = """
 [dependencies]
 cgp-core                    = { workspace = true }
 hermes-relayer-components   = { workspace = true }
+hermes-runtime-components   = { workspace = true }

@@ -1,5 +1,5 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
 use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;

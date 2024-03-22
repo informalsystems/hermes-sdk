@@ -2,8 +2,8 @@ use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{TargetChainCache, TargetRelayCache};
-use crate::runtime::traits::mutex::HasMutex;
-use crate::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 pub trait HasChainCache<Target>: HasBiRelayType + HasRuntime
 where

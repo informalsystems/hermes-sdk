@@ -8,8 +8,8 @@ use hermes_relayer_components::log::traits::has_logger::{
 };
 use hermes_relayer_components::relay::impls::packet_filters::allow_all::AllowAll;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 pub struct MockCosmosRelayComponents;
 

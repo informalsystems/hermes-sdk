@@ -7,12 +7,12 @@ use cgp_core::CanRaiseError;
 use crate::error::traits::retry::HasRetryableError;
 use crate::log::traits::has_logger::HasLogger;
 use crate::log::traits::logger::CanLog;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::sleep::CanSleep;
-use crate::runtime::traits::time::HasTime;
 use crate::transaction::traits::poll_tx_response::TxResponsePoller;
 use crate::transaction::traits::query_tx_response::CanQueryTxResponse;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::time::HasTime;
 
 pub struct PollTxResponse;
 

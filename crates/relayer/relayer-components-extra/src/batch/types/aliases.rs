@@ -2,10 +2,10 @@ use alloc::vec::Vec;
 
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
+use hermes_runtime_components::traits::runtime::RuntimeOf;
 
-use crate::runtime::traits::channel::HasChannelTypes;
-use crate::runtime::traits::channel_once::HasChannelOnceTypes;
+use hermes_runtime_components::traits::channel::HasChannelTypes;
+use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 
 pub type Sender<Chain, Payload> = <RuntimeOf<Chain> as HasChannelTypes>::Sender<Payload>;
 

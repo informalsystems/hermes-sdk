@@ -51,9 +51,9 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTi
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::ProvideRuntime;
 use ibc::clients::tendermint::client_state::ClientState as TmClientState;
 use ibc::clients::tendermint::consensus_state::ConsensusState as TmConsensusState;
 use ibc::clients::tendermint::types::{AllowUpdate, Header, TrustThreshold};

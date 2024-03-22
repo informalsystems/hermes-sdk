@@ -13,5 +13,4 @@ pub mod encode;
 pub mod error;
 pub mod log;
 pub mod relay;
-pub mod runtime;
 pub mod transaction;

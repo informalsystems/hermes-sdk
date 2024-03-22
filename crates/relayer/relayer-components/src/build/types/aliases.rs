@@ -10,9 +10,9 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::error::types::ErrorOf;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::runtime::traits::mutex::MutexOf;
-use crate::runtime::traits::runtime::HasRuntimeType;
-use crate::runtime::traits::runtime::RuntimeOf;
+use hermes_runtime_components::traits::mutex::MutexOf;
+use hermes_runtime_components::traits::runtime::HasRuntimeType;
+use hermes_runtime_components::traits::runtime::RuntimeOf;
 
 pub type ChainA<Build> = <BiRelayOf<Build> as HasTwoChainTypes>::ChainA;
 

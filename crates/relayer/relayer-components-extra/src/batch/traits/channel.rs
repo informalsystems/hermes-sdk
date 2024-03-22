@@ -2,12 +2,12 @@ use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::target::ChainTarget;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeOf;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeOf;
 
 use crate::batch::types::aliases::MessageBatchSender;
-use crate::runtime::traits::channel::HasChannelTypes;
-use crate::runtime::traits::channel_once::HasChannelOnceTypes;
+use hermes_runtime_components::traits::channel::HasChannelTypes;
+use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 
 pub trait HasMessageBatchSender<Target>: HasRelayChains
 where

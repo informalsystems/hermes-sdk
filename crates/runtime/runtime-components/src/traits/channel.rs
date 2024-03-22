@@ -8,7 +8,8 @@
 */
 
 use cgp_core::prelude::*;
-use hermes_relayer_components::runtime::traits::stream::HasStreamType;
+
+use crate::traits::stream::HasStreamType;
 
 /**
    Provides the abstract `Sender` and `Receiver` types for messsage-passing.

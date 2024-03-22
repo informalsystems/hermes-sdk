@@ -3,7 +3,7 @@ use core::pin::Pin;
 
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
-use hermes_relayer_components::runtime::traits::stream::{
+use hermes_runtime_components::traits::stream::{
     HasStreamType, ProvideStreamType, StreamTypeComponent,
 };
 

@@ -1,21 +1,19 @@
 use cgp_core::prelude::*;
 use hermes_async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
-use hermes_relayer_components::runtime::traits::mutex::MutexComponent;
-use hermes_relayer_components::runtime::traits::sleep::SleeperComponent;
-use hermes_relayer_components::runtime::traits::stream::{
-    StreamMapperComponent, StreamTypeComponent,
-};
-use hermes_relayer_components::runtime::traits::subscription::SubscriptionComponent;
-use hermes_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
-use hermes_relayer_components::runtime::traits::time::TimeComponent;
-use hermes_relayer_components_extra::runtime::traits::channel::{
+use hermes_runtime_components::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
     SenderClonerComponent,
 };
-use hermes_relayer_components_extra::runtime::traits::channel_once::{
+use hermes_runtime_components::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
-use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
+use hermes_runtime_components::traits::mutex::MutexComponent;
+use hermes_runtime_components::traits::sleep::SleeperComponent;
+use hermes_runtime_components::traits::spawn::TaskSpawnerComponent;
+use hermes_runtime_components::traits::stream::{StreamMapperComponent, StreamTypeComponent};
+use hermes_runtime_components::traits::subscription::SubscriptionComponent;
+use hermes_runtime_components::traits::task::ConcurrentTaskRunnerComponent;
+use hermes_runtime_components::traits::time::TimeComponent;
 use hermes_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
 use hermes_test_components::runtime::traits::copy_file::FileCopierComponent;
 use hermes_test_components::runtime::traits::create_dir::DirCreatorComponent;

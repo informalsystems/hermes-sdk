@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
 
-use crate::runtime::traits::mutex::{HasMutex, MutexGuardOf, MutexOf};
-use crate::runtime::traits::runtime::HasRuntime;
 use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
 use crate::transaction::traits::types::signer::HasSignerType;
+use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf, MutexOf};
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 /**
    A naive nonce allocator that simply query the current nonce from the context

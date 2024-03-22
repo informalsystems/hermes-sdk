@@ -3,9 +3,9 @@ use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
-use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 

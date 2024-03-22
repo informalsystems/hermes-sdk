@@ -1,5 +1,5 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGenerator;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;

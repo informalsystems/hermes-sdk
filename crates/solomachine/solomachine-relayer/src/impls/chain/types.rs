@@ -18,9 +18,9 @@ use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdat
 use hermes_relayer_components::encode::traits::has_encoding::{
     DefaultEncodingGetter, ProvideEncodingType,
 };
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::ProvideRuntime;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::context::encoding::SolomachineEncoding;
