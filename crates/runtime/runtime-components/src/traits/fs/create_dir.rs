@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::runtime::traits::types::file_path::HasFilePathType;
+use crate::traits::fs::file_path::HasFilePathType;
 
 #[derive_component(DirCreatorComponent, DirCreator<Runtime>)]
 #[async_trait]

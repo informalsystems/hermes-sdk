@@ -2,13 +2,13 @@ use alloc::collections::BTreeMap;
 
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::chain::ChainBootstrapper;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::chain::build_chain_driver::CanBuildChainDriver;
 use crate::bootstrap::traits::chain::start_chain::CanStartChainFullNode;

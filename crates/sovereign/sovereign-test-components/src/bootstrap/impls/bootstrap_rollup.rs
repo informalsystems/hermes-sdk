@@ -1,15 +1,15 @@
 use cgp_core::CanRaiseError;
 use hermes_celestia_test_components::bootstrap::traits::types::bridge_driver::HasBridgeDriverType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::wallet::HasWallets;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
-use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::bootstrap_rollup::RollupBootstrapper;
 use crate::bootstrap::traits::build_rollup_driver::CanBuildRollupDriver;

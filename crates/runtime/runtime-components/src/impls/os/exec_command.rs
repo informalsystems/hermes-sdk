@@ -1,4 +1,4 @@
-use crate::runtime::traits::exec_command::{CanExecCommandWithEnvs, CommandExecutor, ExecOutput};
+use crate::traits::os::exec_command::{CanExecCommandWithEnvs, CommandExecutor, ExecOutput};
 
 pub struct ExecCommandWithNoEnv;
 

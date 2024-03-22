@@ -5,8 +5,8 @@ use std::io::Error as IoError;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_test_components::runtime::traits::exec_command::{CommandWithEnvsExecutor, ExecOutput};
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::exec_command::{CommandWithEnvsExecutor, ExecOutput};
 use tokio::process::Command;
 
 pub struct TokioExecCommand;

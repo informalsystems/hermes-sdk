@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
+use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use serde_json::{Error as JsonError, Value};
 
 use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasDenomPrefix};

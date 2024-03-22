@@ -1,7 +1,7 @@
 use cgp_core::CanRaiseError;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::rollup_command_path::HasRollupCommandPath;
 use crate::bootstrap::traits::start_rollup::RollupStarter;

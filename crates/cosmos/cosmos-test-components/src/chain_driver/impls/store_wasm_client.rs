@@ -2,12 +2,12 @@ use core::time::Duration;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
+use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;

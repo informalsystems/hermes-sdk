@@ -1,8 +1,8 @@
 use cgp_core::CanRaiseError;
+use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::create_dir::CanCreateDir;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use serde_json as json;
 
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;

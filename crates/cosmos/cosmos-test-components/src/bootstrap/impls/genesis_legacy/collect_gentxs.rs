@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::exec_command::CanExecCommand;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollector;

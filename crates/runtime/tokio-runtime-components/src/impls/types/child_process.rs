@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_test_components::runtime::traits::types::child_process::ProvideChildProcessType;
+use hermes_runtime_components::traits::os::child_process::ProvideChildProcessType;
 use tokio::process::Child;
 
 pub struct ProvideTokioChildProcessType;

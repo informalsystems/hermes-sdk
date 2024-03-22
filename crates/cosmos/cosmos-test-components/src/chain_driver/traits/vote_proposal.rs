@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 #[derive_component(GovernanceProposalVoterComponent, GovernanceProposalVoter<ChainDriver>)]
 #[async_trait]
