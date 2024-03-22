@@ -18,6 +18,7 @@ members = [
     "crates/cli/cli-framework",
     "crates/cli/cli",
 
+    "crates/encoding/encoding-components",
     "crates/encoding/protobuf-encoding-components",
 
     "crates/logging/logging-components",
@@ -107,6 +108,7 @@ hermes-async-runtime-components     = { version = "0.1.0" }
 hermes-tokio-runtime-components     = { version = "0.1.0" }
 hermes-relayer-runtime              = { version = "0.1.0" }
 
+hermes-encoding-components = { version = "0.1.0" }
 hermes-protobuf-encoding-components = { version = "0.1.0" }
 
 hermes-logging-components           = { version = "0.1.0" }
@@ -179,6 +181,7 @@ hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-c
 hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { path = "./crates/runtime/relayer-runtime" }
 
+hermes-encoding-components          = { path = "./crates/encoding/encoding-components" }
 hermes-protobuf-encoding-components = { path = "./crates/encoding/protobuf-encoding-components" }
 
 hermes-logging-components           = { path = "./crates/logging/logging-components" }

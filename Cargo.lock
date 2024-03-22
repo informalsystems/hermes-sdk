@@ -1890,6 +1890,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-encoding-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+]
+
+[[package]]
 name = "hermes-ibc-test-suite"
 version = "0.1.0"
 dependencies = [
