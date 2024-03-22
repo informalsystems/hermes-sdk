@@ -1,8 +1,8 @@
 use core::marker::PhantomData;
 
 use cgp_core::Async;
-use hermes_relayer_components::log::traits::logger::Logger;
-use hermes_relayer_components::log::types::level::{
+use hermes_logging_components::traits::logger::Logger;
+use hermes_logging_components::types::level::{
     LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };
 use tracing::{debug, error, info, trace, warn};

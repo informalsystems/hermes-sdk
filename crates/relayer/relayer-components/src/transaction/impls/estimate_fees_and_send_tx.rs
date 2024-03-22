@@ -1,6 +1,4 @@
 use crate::chain::traits::types::message::HasMessageType;
-use crate::log::traits::has_logger::HasLogger;
-use crate::log::traits::logger::CanLog;
 use crate::transaction::traits::encode_tx::CanEncodeTx;
 use crate::transaction::traits::estimate_tx_fee::CanEstimateTxFee;
 use crate::transaction::traits::poll_tx_response::CanPollTxResponse;
@@ -9,6 +7,8 @@ use crate::transaction::traits::simulation_fee::HasFeeForSimulation;
 use crate::transaction::traits::submit_tx::CanSubmitTx;
 use crate::transaction::traits::types::nonce::HasNonceType;
 use crate::transaction::traits::types::signer::HasSignerType;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 pub struct EstimateFeesAndSendTx;
 

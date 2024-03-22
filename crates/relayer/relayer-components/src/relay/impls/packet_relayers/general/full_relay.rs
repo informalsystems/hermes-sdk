@@ -2,8 +2,6 @@ use cgp_core::{async_trait, CanRaiseError};
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::log::traits::has_logger::HasLogger;
-use crate::log::traits::logger::CanLog;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet::HasRelayPacketFields;
 use crate::relay::traits::packet_relayer::PacketRelayer;
@@ -11,6 +9,8 @@ use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
 use crate::relay::types::aliases::Packet;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 pub struct FullCycleRelayer;
 

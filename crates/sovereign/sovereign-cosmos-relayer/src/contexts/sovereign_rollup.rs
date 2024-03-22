@@ -1,6 +1,9 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent, HasComponents};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent,
 };
@@ -15,9 +18,6 @@ use hermes_relayer_components::encode::traits::has_encoding::{
 };
 use hermes_relayer_components::error::impls::retry::ReturnRetryable;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
-use hermes_relayer_components::log::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
-};
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::{

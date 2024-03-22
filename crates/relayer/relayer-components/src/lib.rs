@@ -11,6 +11,5 @@ pub mod chain;
 pub mod components;
 pub mod encode;
 pub mod error;
-pub mod log;
 pub mod relay;
 pub mod transaction;

@@ -1807,6 +1807,7 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
  "hermes-ibc-test-suite",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1836,6 +1837,7 @@ dependencies = [
  "hermes-cli-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
+ "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1892,6 +1894,7 @@ name = "hermes-ibc-test-suite"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-test-components",
 ]
@@ -1910,6 +1913,7 @@ dependencies = [
  "basecoin",
  "cgp-core",
  "hermes-cosmos-chain-components",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-relayer-runtime",
@@ -1934,6 +1938,7 @@ dependencies = [
  "eyre",
  "flex-error",
  "hermes-cosmos-chain-components",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
  "hermes-runtime-components",
@@ -1956,6 +1961,7 @@ name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-logging-components",
  "hermes-runtime-components",
 ]
 
@@ -1964,6 +1970,7 @@ name = "hermes-relayer-components-extra"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime-components",
 ]
@@ -2057,6 +2064,7 @@ dependencies = [
  "hermes-celestia-chain",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
+ "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-runtime",
@@ -2161,6 +2169,7 @@ name = "hermes-tracing-logging-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "tracing",

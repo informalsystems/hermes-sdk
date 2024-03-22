@@ -7,11 +7,11 @@ use crate::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLa
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::types::aliases::HeightOf;
-use crate::log::traits::has_logger::HasLogger;
-use crate::log::traits::logger::CanLog;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::{ChainTarget, CounterpartyChainOf};
 use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 pub struct SkipUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 

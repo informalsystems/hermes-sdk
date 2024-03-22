@@ -16,4 +16,6 @@ description  = """
 cgp-core                            = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-relayer-components-extra     = { workspace = true }
+hermes-logging-components           = { workspace = true }
+
 tracing                             = { workspace = true }

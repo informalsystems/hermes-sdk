@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp_core::prelude::Async;
 use cgp_core::DelegateComponent;
 
-use crate::log::traits::logger::Logger;
+use crate::traits::logger::Logger;
 
 pub struct DelegateLogger<Components>(pub PhantomData<Components>);
 

@@ -1,11 +1,11 @@
 use cgp_core::prelude::*;
 
-use crate::log::impls::global::GetGlobalLogger;
-use crate::log::impls::ignore::IgnoreLog;
-use crate::log::traits::has_logger::{
+use crate::impls::global::GetGlobalLogger;
+use crate::impls::ignore::IgnoreLog;
+use crate::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
-use crate::log::traits::logger::{CanLog, LoggerComponent};
+use crate::traits::logger::{CanLog, LoggerComponent};
 
 pub struct ProvideNoLogger;
 

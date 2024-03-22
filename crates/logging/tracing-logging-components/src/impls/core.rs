@@ -1,5 +1,5 @@
 use cgp_core::Async;
-use hermes_relayer_components::log::traits::logger::Logger;
+use hermes_logging_components::traits::logger::Logger;
 use tracing::info;
 
 use crate::contexts::logger::TracingLogger;

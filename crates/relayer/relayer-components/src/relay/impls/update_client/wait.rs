@@ -6,11 +6,11 @@ use cgp_core::async_trait;
 use crate::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::HeightOf;
-use crate::log::traits::has_logger::HasLogger;
-use crate::log::traits::logger::CanLog;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::{ChainTarget, CounterpartyChainOf};
 use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 /**
    Wait for the chain to reach a height that is greater than or equal the required height,

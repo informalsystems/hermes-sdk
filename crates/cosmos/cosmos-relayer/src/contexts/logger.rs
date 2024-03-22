@@ -1,10 +1,10 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::log::impls::delegate::DelegateLogger;
-use hermes_relayer_components::log::impls::global::GetGlobalLogger;
-use hermes_relayer_components::log::traits::has_logger::{
+use hermes_logging_components::impls::delegate::DelegateLogger;
+use hermes_logging_components::impls::global::GetGlobalLogger;
+use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
-use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
+use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;

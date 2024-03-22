@@ -1,9 +1,9 @@
 use core::fmt::Display;
 
 use cgp_core::Async;
+use hermes_logging_components::traits::logger::Logger;
+use hermes_logging_components::types::level::LogLevel;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::log::traits::logger::Logger;
-use hermes_relayer_components::log::types::level::LogLevel;
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;

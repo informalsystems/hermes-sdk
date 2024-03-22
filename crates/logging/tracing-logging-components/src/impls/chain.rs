@@ -1,9 +1,9 @@
 use core::fmt::{Debug, Display};
 
 use cgp_core::{Async, HasErrorType};
+use hermes_logging_components::traits::logger::Logger;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::log::traits::logger::Logger;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,

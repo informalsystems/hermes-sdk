@@ -1,8 +1,8 @@
 use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents};
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::error::types::ErrorOf;
-use hermes_relayer_components::log::traits::has_logger::HasLogger;
-use hermes_relayer_components::log::traits::logger::CanLog;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};

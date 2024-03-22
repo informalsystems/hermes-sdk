@@ -1,6 +1,6 @@
 use cgp_core::Async;
 
-use crate::log::traits::logger::Logger;
+use crate::traits::logger::Logger;
 
 pub struct IgnoreLog;
 

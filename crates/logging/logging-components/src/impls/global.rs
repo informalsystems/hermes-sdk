@@ -1,4 +1,4 @@
-use crate::log::traits::has_logger::{HasGlobalLogger, LoggerGetter};
+use crate::traits::has_logger::{HasGlobalLogger, LoggerGetter};
 
 pub struct GetGlobalLogger;
 
