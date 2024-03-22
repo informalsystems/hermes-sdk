@@ -20,7 +20,7 @@ use hermes_sovereign_client_components::sovereign::types::messages::bank::{
 };
 use hermes_sovereign_client_components::sovereign::types::rpc::tx_hash::TxHash;
 use hermes_sovereign_client_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
-use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::types::amount::SovereignAmount;

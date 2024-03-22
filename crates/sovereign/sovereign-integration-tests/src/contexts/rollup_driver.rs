@@ -8,7 +8,7 @@ use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 use hermes_sovereign_client_components::sovereign::traits::chain::rollup::{
     RollupGetter, RollupTypeComponent,
 };
-use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGenesisConfig;
 use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollupNodeConfig;
 use hermes_sovereign_test_components::types::wallet::SovereignWallet;
