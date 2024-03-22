@@ -8,7 +8,7 @@ use hermes_relayer_components::log::traits::logger::{CanLog, LoggerComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
-use hermes_tracing_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
 use crate::contexts::sovereign_rollup::SovereignRollup;
 

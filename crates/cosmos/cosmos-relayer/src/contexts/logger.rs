@@ -17,7 +17,7 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
-use hermes_tracing_components::contexts::logger::TracingLogger;
+use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
