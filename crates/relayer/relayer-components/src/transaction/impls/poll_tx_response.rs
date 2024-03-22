@@ -3,6 +3,8 @@ use core::time::Duration;
 
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;
@@ -11,8 +13,6 @@ use crate::error::traits::retry::HasRetryableError;
 use crate::transaction::traits::poll_tx_response::TxResponsePoller;
 use crate::transaction::traits::query_tx_response::CanQueryTxResponse;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
-use hermes_logging_components::traits::has_logger::HasLogger;
-use hermes_logging_components::traits::logger::CanLog;
 
 pub struct PollTxResponse;
 

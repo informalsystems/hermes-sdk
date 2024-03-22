@@ -1,4 +1,6 @@
 use cgp_core::async_trait;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
@@ -15,8 +17,6 @@ use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_logging_components::traits::has_logger::HasLogger;
-use hermes_logging_components::traits::logger::CanLog;
 
 /**
    A packet event relayer that performs packet relaying based on chain events

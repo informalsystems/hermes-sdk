@@ -1,5 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;
@@ -44,8 +46,6 @@ use crate::transaction::traits::types::signer::HasSignerType;
 use crate::transaction::traits::types::transaction::HasTransactionType;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
-use hermes_logging_components::traits::has_logger::HasLogger;
-use hermes_logging_components::traits::logger::CanLog;
 
 pub struct DefaultTxComponents;
 

@@ -1,4 +1,6 @@
 use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
@@ -34,8 +36,6 @@ use crate::relay::traits::packet_filter::PacketFilter;
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_logging_components::traits::has_logger::HasLogger;
-use hermes_logging_components::traits::logger::CanLog;
 
 pub trait CanUseDefaultPacketRelayer: UseDefaultPacketRelayer {}
 

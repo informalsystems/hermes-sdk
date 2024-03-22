@@ -1,4 +1,6 @@
 use cgp_core::async_trait;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -9,8 +11,6 @@ use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
-use hermes_logging_components::traits::has_logger::HasLogger;
-use hermes_logging_components::traits::logger::CanLog;
 
 pub struct ClearReceivePackets;
 

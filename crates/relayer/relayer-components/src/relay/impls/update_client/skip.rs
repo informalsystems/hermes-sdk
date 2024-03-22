@@ -2,6 +2,8 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 
 use cgp_core::async_trait;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -10,8 +12,6 @@ use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::{ChainTarget, CounterpartyChainOf};
 use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
-use hermes_logging_components::traits::has_logger::HasLogger;
-use hermes_logging_components::traits::logger::CanLog;
 
 pub struct SkipUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 
