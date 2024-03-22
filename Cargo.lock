@@ -2132,6 +2132,37 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-sovereign-rollup-components"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "bech32 0.9.1",
+ "borsh",
+ "cgp-core",
+ "ed25519-dalek",
+ "eyre",
+ "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "hermes-relayer-components",
+ "hermes-runtime",
+ "hermes-wasm-client-components",
+ "hex 0.4.3",
+ "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
+ "ibc-proto 0.41.0",
+ "ibc-proto 0.42.2",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "jsonrpsee",
+ "prost",
+ "serde",
+ "serde-json-wasm",
+ "serde_json",
+ "sha2 0.10.8",
+ "sov-celestia-client",
+]
+
+[[package]]
 name = "hermes-sovereign-test-components"
 version = "0.1.0"
 dependencies = [

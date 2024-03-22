@@ -37,6 +37,7 @@ members = [
     "crates/wasm/wasm-client-components",
 
     "crates/sovereign/sovereign-chain-components",
+    "crates/sovereign/sovereign-rollup-components",
     "crates/sovereign/sovereign-relayer",
     "crates/sovereign/sovereign-test-components",
     "crates/sovereign/sovereign-integration-tests",
@@ -133,8 +134,9 @@ hermes-celestia-chain                   = { version = "0.1.0" }
 hermes-celestia-test-components         = { version = "0.1.0" }
 hermes-celestia-integration-tests       = { version = "0.1.0" }
 
-hermes-sovereign-chain-components      = { version = "0.1.0" }
-hermes-sovereign-relayer         = { version = "0.1.0" }
+hermes-sovereign-chain-components       = { version = "0.1.0" }
+hermes-sovereign-rollup-components       = { version = "0.1.0" }
+hermes-sovereign-relayer                = { version = "0.1.0" }
 hermes-sovereign-test-components        = { version = "0.1.0" }
 hermes-sovereign-integration-tests      = { version = "0.1.0" }
 
@@ -206,6 +208,7 @@ hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integ
 hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-components" }
 
 hermes-sovereign-chain-components   = { path = "./crates/sovereign/sovereign-chain-components" }
+hermes-sovereign-rollup-components   = { path = "./crates/sovereign/sovereign-rollup-components" }
 hermes-sovereign-relayer            = { path = "./crates/sovereign/sovereign-relayer" }
 hermes-sovereign-test-components    = { path = "./crates/sovereign/sovereign-test-components" }
 hermes-sovereign-integration-tests  = { path = "./crates/sovereign/sovereign-integration-tests" }
