@@ -7,7 +7,7 @@ use hermes_relayer_components::birelay::traits::two_way::{
 };
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 
 use crate::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use crate::contexts::sovereign_chain::SovereignChain;
@@ -33,7 +33,7 @@ delegate_components! {
     }
 }
 
-impl ProvideRuntime<SovereignCosmosBiRelay> for SovereignCosmosBiRelayComponents {
+impl RuntimeGetter<SovereignCosmosBiRelay> for SovereignCosmosBiRelayComponents {
     fn runtime(relay: &SovereignCosmosBiRelay) -> &HermesRuntime {
         &relay.runtime
     }

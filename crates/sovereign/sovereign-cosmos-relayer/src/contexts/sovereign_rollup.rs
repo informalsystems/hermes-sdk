@@ -34,7 +34,7 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionH
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_client_components::sovereign::components::rollup::SovereignRollupClientComponents;
 use hermes_sovereign_client_components::sovereign::traits::rollup::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
@@ -128,7 +128,7 @@ delegate_components! {
     }
 }
 
-impl ProvideRuntime<SovereignRollup> for SovereignRollupComponents {
+impl RuntimeGetter<SovereignRollup> for SovereignRollupComponents {
     fn runtime(rollup: &SovereignRollup) -> &HermesRuntime {
         &rollup.runtime
     }

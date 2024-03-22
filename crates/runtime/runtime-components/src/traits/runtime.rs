@@ -5,7 +5,7 @@ pub trait HasRuntimeType: Async {
     type Runtime: HasErrorType;
 }
 
-#[derive_component(RuntimeComponent, ProvideRuntime<Context>)]
+#[derive_component(RuntimeGetterComponent, RuntimeGetter<Context>)]
 pub trait HasRuntime: HasRuntimeType {
     fn runtime(&self) -> &Self::Runtime;
 }

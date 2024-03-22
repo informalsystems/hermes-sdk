@@ -2,7 +2,7 @@ use hermes_relayer_components::birelay::traits::two_way::{
     ProvideTwoChainTypes, ProvideTwoWayRelayTypes, TwoWayRelayGetter,
 };
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::ProvideRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeGetter;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::chain::CosmosChain;
@@ -31,7 +31,7 @@ impl TwoWayRelayGetter<CosmosBiRelay> for CosmosBiRelayComponents {
     }
 }
 
-impl ProvideRuntime<CosmosBiRelay> for CosmosBiRelayComponents {
+impl RuntimeGetter<CosmosBiRelay> for CosmosBiRelayComponents {
     fn runtime(birelay: &CosmosBiRelay) -> &HermesRuntime {
         &birelay.runtime
     }

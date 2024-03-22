@@ -20,7 +20,7 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTi
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_relayer_runtime::types::error::TokioRuntimeError;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::ProvideRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::context::encoding::SolomachineEncoding;
@@ -64,7 +64,7 @@ where
     }
 }
 
-impl<Chain> ProvideRuntime<SolomachineChain<Chain>> for SolomachineChainComponents
+impl<Chain> RuntimeGetter<SolomachineChain<Chain>> for SolomachineChainComponents
 where
     Chain: Solomachine,
 {

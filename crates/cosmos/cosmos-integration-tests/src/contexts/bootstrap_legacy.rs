@@ -23,7 +23,7 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_co
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use ibc_relayer::config::compat_mode::CompatMode;
@@ -92,7 +92,7 @@ delegate_components! {
     }
 }
 
-impl ProvideRuntime<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
+impl RuntimeGetter<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
     fn runtime(bootstrap: &LegacyCosmosBootstrap) -> &HermesRuntime {
         &bootstrap.runtime
     }

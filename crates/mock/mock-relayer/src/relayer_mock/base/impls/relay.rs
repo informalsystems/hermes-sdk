@@ -8,7 +8,7 @@ use hermes_relayer_components::relay::traits::chains::{HasRelayChains, ProvideRe
 use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
-use hermes_runtime_components::traits::runtime::{ProvideRuntime, ProvideRuntimeType};
+use hermes_runtime_components::traits::runtime::{ProvideRuntimeType, RuntimeGetter};
 
 use crate::relayer_mock::base::error::Error;
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -39,7 +39,7 @@ impl ProvideRuntimeType<MockRelayContext> for MockRelayComponents {
     type Runtime = MockRuntimeContext;
 }
 
-impl ProvideRuntime<MockRelayContext> for MockRelayComponents {
+impl RuntimeGetter<MockRelayContext> for MockRelayComponents {
     fn runtime(relay: &MockRelayContext) -> &MockRuntimeContext {
         &relay.runtime
     }

@@ -5,7 +5,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
@@ -34,7 +34,7 @@ delegate_components! {
     }
 }
 
-impl ProvideRuntime<SovereignToCosmosRelay> for SovereignToCosmosRelayComponents {
+impl RuntimeGetter<SovereignToCosmosRelay> for SovereignToCosmosRelayComponents {
     fn runtime(relay: &SovereignToCosmosRelay) -> &HermesRuntime {
         &relay.runtime
     }
