@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use hermes_protobuf_components::impls::protobuf::EncodeAsProtobuf;
-use hermes_protobuf_components::impls::via_any::EncodeViaAny;
+use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
+use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
 use hermes_relayer_components::encode::impls::convert_and_encode::ConvertAndEncode;
 use hermes_relayer_components::encode::impls::via_identity::{EncodeViaIdentity, Identity};
 use hermes_relayer_components::encode::types::via::Via;

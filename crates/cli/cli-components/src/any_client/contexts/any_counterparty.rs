@@ -5,7 +5,7 @@ use hermes_cosmos_client_components::encoding::components::CosmosEncodingCompone
 use hermes_cosmos_client_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
-use hermes_protobuf_components::types::Any;
+use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{

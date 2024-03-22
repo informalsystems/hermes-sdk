@@ -8,7 +8,7 @@ use eyre::Report;
 use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_client_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_client_components::impls::transaction::submit_tx::BroadcastTxError;
-use hermes_protobuf_components::impls::any::TypeUrlMismatchError;
+use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::error::impls::delegate::DelegateErrorRaiser;
 use hermes_relayer_components::error::impls::error::{

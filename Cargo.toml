@@ -18,7 +18,7 @@ members = [
     "crates/cli/cli-framework",
     "crates/cli/cli",
 
-    "crates/encoding/protobuf-components",
+    "crates/encoding/protobuf-encoding-components",
 
     "crates/logging/tracing-components",
 
@@ -133,7 +133,7 @@ hermes-sovereign-integration-tests  = { version = "0.1.0" }
 
 hermes-wasm-client-components       = { version = "0.1.0" }
 
-hermes-protobuf-components          = { version = "0.1.0" }
+hermes-protobuf-encoding-components          = { version = "0.1.0" }
 
 hermes-tracing-components           = { version = "0.1.0" }
 hermes-solomachine-relayer          = { version = "0.1.0" }
@@ -176,7 +176,7 @@ hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-c
 hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
 hermes-relayer-runtime              = { path = "./crates/runtime/relayer-runtime" }
 
-hermes-protobuf-components          = { path = "./crates/encoding/protobuf-components" }
+hermes-protobuf-encoding-components          = { path = "./crates/encoding/protobuf-encoding-components" }
 
 hermes-tracing-components           = { path = "./crates/logging/tracing-components" }
 

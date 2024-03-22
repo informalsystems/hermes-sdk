@@ -25,7 +25,7 @@ hermes-sovereign-client-components  = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
 hermes-cosmos-client-components     = { workspace = true }
 hermes-sovereign-test-components    = { workspace = true }
-hermes-protobuf-components          = { workspace = true }
+hermes-protobuf-encoding-components          = { workspace = true }
 hermes-tracing-components           = { workspace = true }
 
 ibc-relayer                         = { workspace = true }
