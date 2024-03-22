@@ -1897,6 +1897,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-logging-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+]
+
+[[package]]
 name = "hermes-mock-cosmos-relayer"
 version = "0.1.0"
 dependencies = [
