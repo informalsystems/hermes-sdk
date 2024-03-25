@@ -4,9 +4,11 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::C
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use prost_types::Any;
 
 use crate::impls::client::create_client_message::BuildCosmosCreateClientMessage;
+use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromChainHandle;
 
 pub struct CosmosToCosmosComponents;
 
@@ -19,5 +21,7 @@ delegate_components! {
             QueryAndDecodeClientStateVia<Any>,
         CreateClientMessageBuilderComponent:
             BuildCosmosCreateClientMessage,
+        ConsensusStateQuerierComponent:
+            QueryCosmosConsensusStateFromChainHandle,
     }
 }

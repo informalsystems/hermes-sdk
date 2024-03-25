@@ -140,7 +140,6 @@ use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
-use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::encoding::ProvideCosmosEncoding;
@@ -301,10 +300,11 @@ pub struct CosmosBaseChainComponents;
 
 delegate_components! {
     CosmosBaseChainComponents {
-        ChainStatusQuerierComponent:
+        [
+            ChainStatusQuerierComponent,
+            ConsensusStateQuerierComponent,
+        ]:
             CosmosClientComponents,
-        ConsensusStateQuerierComponent:
-            DelegateCosmosConsensusStateQuerier,
     }
 }
 

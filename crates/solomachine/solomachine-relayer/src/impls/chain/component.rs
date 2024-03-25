@@ -36,6 +36,7 @@ use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
+use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
@@ -70,6 +71,8 @@ delegate_components! {
             AllClientStatesBytesQuerierComponent,
         ]:
             QueryAndDecodeClientStateVia<Any>,
+        ConsensusStateQuerierComponent:
+            QuerySolomachineConsensusStateFromCosmos,
         CreateClientMessageBuilderComponent:
             BuildCreateSolomachineClientMessage,
     }

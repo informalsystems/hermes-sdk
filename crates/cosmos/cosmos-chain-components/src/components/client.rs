@@ -1,6 +1,7 @@
 use cgp_core::prelude::delegate_components;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
+use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
@@ -26,6 +27,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
@@ -230,6 +232,8 @@ delegate_components! {
             AllClientStatesQuerierComponent,
         ]:
             DelegateQueryClientState<DelegateCosmosChainComponents>,
+        ConsensusStateQuerierComponent:
+            DelegateQueryConsensusState<DelegateCosmosChainComponents>,
         CreateClientMessageBuilderComponent:
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
     }
