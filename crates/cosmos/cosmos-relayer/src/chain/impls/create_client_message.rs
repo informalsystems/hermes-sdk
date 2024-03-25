@@ -15,7 +15,6 @@ delegate_components! {
     }
 }
 
-#[async_trait]
 impl<Counterparty, Delegate> CreateClientMessageBuilder<CosmosChain, Counterparty>
     for DelegateCosmosCreateClientMessageBuilder
 where

@@ -308,6 +308,8 @@ delegate_components! {
             CosmosClientComponents,
         ConsensusStateQuerierComponent:
             DelegateCosmosConsensusStateQuerier,
+        ClientStateQuerierComponent:
+            QueryAndDecodeClientStateVia<Any>,
     }
 }
 
