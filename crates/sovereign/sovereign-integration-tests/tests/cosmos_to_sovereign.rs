@@ -20,7 +20,7 @@ use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
-use hermes_sovereign_rollup_components::types::transaction::tx_hash::TxHash;
+use hermes_sovereign_rollup_components::types::tx::tx_hash::TxHash;
 use hermes_sovereign_rollup_components::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;

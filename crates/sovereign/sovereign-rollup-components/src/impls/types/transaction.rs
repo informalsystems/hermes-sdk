@@ -7,8 +7,8 @@ use hermes_relayer_components::transaction::traits::types::transaction::ProvideT
 use hermes_relayer_components::transaction::traits::types::tx_hash::ProvideTransactionHashType;
 use hermes_relayer_components::transaction::traits::types::tx_response::ProvideTxResponseType;
 
-use crate::types::transaction::tx_hash::TxHash;
-use crate::types::transaction::tx_response::TxResponse;
+use crate::types::tx::tx_hash::TxHash;
+use crate::types::tx::tx_response::TxResponse;
 
 pub struct ProvideSovereignTransactionTypes;
 

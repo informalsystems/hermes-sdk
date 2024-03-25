@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 use crate::types::event::SovereignEvent;
-use crate::types::transaction::tx_hash::TxHash;
+use crate::types::tx::tx_hash::TxHash;
 
 #[derive(Debug, Deserialize)]
 pub struct TxResponse {

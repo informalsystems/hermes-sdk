@@ -7,7 +7,7 @@ use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEv
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 
 use crate::types::event::SovereignEvent;
-use crate::types::transaction::tx_response::TxResponse;
+use crate::types::tx::tx_response::TxResponse;
 
 pub struct ParseSovTxResponseAsEvents;
 

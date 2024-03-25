@@ -1,9 +1,7 @@
 use borsh::ser::BorshSerialize;
 use ed25519_dalek::{Signer, SigningKey};
 
-use crate::types::transaction::transaction::{
-    SerializePublicKey, SerializeSignature, SovereignTransaction,
-};
+use crate::types::tx::transaction::{SerializePublicKey, SerializeSignature, SovereignTransaction};
 
 pub fn encode_sovereign_tx_sign_bytes(
     mut message: Vec<u8>,

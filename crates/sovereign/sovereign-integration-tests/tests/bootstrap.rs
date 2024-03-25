@@ -18,7 +18,7 @@ use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_rollup_components::traits::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::bank::{BankMessage, CoinFields};
-use hermes_sovereign_rollup_components::types::transaction::tx_hash::TxHash;
+use hermes_sovereign_rollup_components::types::tx::tx_hash::TxHash;
 use hermes_sovereign_rollup_components::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::types::amount::SovereignAmount;

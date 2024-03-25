@@ -11,8 +11,8 @@ use serde::Deserialize;
 
 use crate::traits::json_rpc_client::HasJsonRpcClient;
 use crate::types::event::SovereignEvent;
-use crate::types::transaction::tx_hash::TxHash;
-use crate::types::transaction::tx_response::{TxEffect, TxResponse};
+use crate::types::tx::tx_hash::TxHash;
+use crate::types::tx::tx_response::{TxEffect, TxResponse};
 
 pub struct QuerySovereignTxResponse;
 
