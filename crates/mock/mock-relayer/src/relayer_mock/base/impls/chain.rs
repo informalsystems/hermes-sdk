@@ -41,7 +41,7 @@ use hermes_relayer_components::chain::traits::types::ibc::{
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, ProvideMessageType,
+    MessageSizeEstimator, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
@@ -251,8 +251,8 @@ impl HeightIncrementer<MockChainContext> for MockChainComponents {
     }
 }
 
-impl CanEstimateMessageSize for MockChainContext {
-    fn estimate_message_size(_message: &Self::Message) -> Result<usize, Self::Error> {
+impl MessageSizeEstimator<MockChainContext> for MockChainComponents {
+    fn estimate_message_size(_message: &MockMessage) -> Result<usize, Error> {
         // Only single messages are sent by the Mock Chain
         Ok(1)
     }

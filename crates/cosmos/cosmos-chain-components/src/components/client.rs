@@ -67,7 +67,9 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
-use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
+use hermes_relayer_components::chain::traits::types::message::{
+    MessageSizeEstimatorComponent, MessageTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
@@ -130,6 +132,7 @@ delegate_components! {
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
+            MessageSizeEstimatorComponent,
             EventTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndTypeComponent,
