@@ -6,7 +6,7 @@ use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
 use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::impls::delegate::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;

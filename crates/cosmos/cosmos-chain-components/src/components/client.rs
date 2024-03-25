@@ -1,5 +1,5 @@
 use cgp_core::prelude::delegate_components;
-use hermes_relayer_components::chain::impls::queries::client_state::DelegateQueryClientState;
+use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;

@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::impls::delegate::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
