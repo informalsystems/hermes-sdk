@@ -35,6 +35,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
+use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
 use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
@@ -75,6 +76,8 @@ delegate_components! {
             QuerySolomachineConsensusStateFromCosmos,
         CreateClientMessageBuilderComponent:
             BuildCreateSolomachineClientMessage,
+        ConnectionHandshakeMessageBuilderComponent:
+            BuildSolomachineConnectionHandshakeMessagesForCosmos,
     }
 }
 

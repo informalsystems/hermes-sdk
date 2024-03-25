@@ -1,10 +1,12 @@
 use cgp_core::prelude::delegate_components;
+use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::update_client::DelegateBuildUpdateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
@@ -236,5 +238,7 @@ delegate_components! {
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
         UpdateClientMessageBuilderComponent:
             DelegateBuildUpdateClientMessage<DelegateCosmosChainComponents>,
+        ConnectionHandshakeMessageBuilderComponent:
+            DelegateBuildConnectionHandshakeMessage<DelegateCosmosChainComponents>,
     }
 }

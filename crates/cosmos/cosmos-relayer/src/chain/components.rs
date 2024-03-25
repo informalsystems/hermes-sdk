@@ -139,7 +139,6 @@ use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 
-use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::contexts::logger::ProvideCosmosLogger;
@@ -218,6 +217,7 @@ delegate_components! {
             UpdateClientMessageBuilderComponent,
             UpdateClientPayloadBuilderComponent,
             CounterpartyChainIdQuerierComponent,
+            ConnectionHandshakeMessageBuilderComponent,
             ConnectionHandshakePayloadBuilderComponent,
             ChannelHandshakePayloadBuilderComponent,
             ChannelHandshakeMessageBuilderComponent,
@@ -248,8 +248,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        ConnectionHandshakeMessageBuilderComponent:
-            DelegateCosmosConnectionHandshakeBuilder,
         [
             SignerTypeComponent,
             NonceTypeComponent,
