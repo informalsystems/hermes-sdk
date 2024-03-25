@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 use core::time::Duration;
 
-use cgp_core::{Async, HasErrorType};
+use cgp_core::{Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::types::block::{
     HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
@@ -13,7 +13,9 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetter, HasHeightType, HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::ProvideIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
+use hermes_relayer_components::chain::traits::types::message::{
+    HasMessageType, MessageSizeEstimator, ProvideMessageType,
+};
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
@@ -25,8 +27,10 @@ use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
+use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
+use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
 use tendermint::Hash;
@@ -79,6 +83,20 @@ where
     Chain: Async,
 {
     type Message = CosmosMessage;
+}
+
+impl<Chain> MessageSizeEstimator<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasMessageType<Message = CosmosMessage> + CanRaiseError<EncodeError>,
+{
+    fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Chain::Error> {
+        let raw = message
+            .message
+            .encode_protobuf(&Signer::dummy())
+            .map_err(Chain::raise_error)?;
+
+        Ok(raw.encoded_len())
+    }
 }
 
 impl<Chain> ProvideEventType<Chain> for ProvideCosmosChainTypes

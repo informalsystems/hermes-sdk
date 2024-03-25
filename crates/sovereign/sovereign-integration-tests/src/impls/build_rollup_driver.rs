@@ -3,7 +3,7 @@ use alloc::collections::BTreeMap;
 use cgp_core::CanRaiseError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
+use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollupType;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::traits::build_rollup_driver::RollupDriverBuilder;
 use hermes_sovereign_test_components::bootstrap::traits::types::rollup_driver::HasRollupDriverType;

@@ -1,7 +1,7 @@
 use alloc::collections::BTreeMap;
 
 use cgp_core::prelude::*;
-use hermes_sovereign_client_components::sovereign::traits::chain::rollup::HasRollupType;
+use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollupType;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
 
 #[derive_component(RollupWalletGeneratorComponent, RollupWalletGenerator<Bootstrap>)]

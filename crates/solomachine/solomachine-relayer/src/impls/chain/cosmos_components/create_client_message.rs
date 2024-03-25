@@ -1,26 +1,16 @@
-use cgp_core::prelude::*;
-use cgp_core::{DelegateComponent, HasErrorType};
+use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
-use hermes_cosmos_relayer::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_types::tx_msg::Msg;
 
-use crate::types::chain::SolomachineChain;
 use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildCreateSolomachineClientMessage;
 
-impl<Counterparty> DelegateComponent<SolomachineChain<Counterparty>>
-    for DelegateCosmosCreateClientMessageBuilder
-{
-    type Delegate = BuildCreateSolomachineClientMessage;
-}
-
-#[async_trait]
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateSolomachineClientMessage
 where

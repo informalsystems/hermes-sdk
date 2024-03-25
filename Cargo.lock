@@ -2038,7 +2038,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-sovereign-client-components"
+name = "hermes-sovereign-chain-components"
 version = "0.1.0"
 dependencies = [
  "base64",
@@ -2052,6 +2052,7 @@ dependencies = [
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-runtime",
+ "hermes-sovereign-rollup-components",
  "hermes-wasm-client-components",
  "hex 0.4.3",
  "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
@@ -2084,8 +2085,9 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
  "hermes-sovereign-relayer",
+ "hermes-sovereign-rollup-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "hermes-wasm-client-components",
@@ -2120,7 +2122,8 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
+ "hermes-sovereign-rollup-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "hermes-tracing-logging-components",
@@ -2129,6 +2132,37 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
+]
+
+[[package]]
+name = "hermes-sovereign-rollup-components"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "bech32 0.9.1",
+ "borsh",
+ "cgp-core",
+ "ed25519-dalek",
+ "eyre",
+ "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "hermes-relayer-components",
+ "hermes-runtime",
+ "hermes-wasm-client-components",
+ "hex 0.4.3",
+ "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
+ "ibc-proto 0.41.0",
+ "ibc-proto 0.42.2",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "jsonrpsee",
+ "prost",
+ "serde",
+ "serde-json-wasm",
+ "serde_json",
+ "sha2 0.10.8",
+ "sov-celestia-client",
 ]
 
 [[package]]
@@ -2143,7 +2177,8 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
+ "hermes-sovereign-rollup-components",
  "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",
