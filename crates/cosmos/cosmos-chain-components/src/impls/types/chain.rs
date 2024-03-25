@@ -1,7 +1,5 @@
 use alloc::sync::Arc;
 use core::time::Duration;
-use ibc_relayer_types::signer::Signer;
-use prost::EncodeError;
 
 use cgp_core::{Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::types::block::{
@@ -29,9 +27,10 @@ use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
 };
+use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
-use prost::Message;
+use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
 use tendermint::Hash;

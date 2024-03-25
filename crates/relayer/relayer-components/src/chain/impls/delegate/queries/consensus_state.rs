@@ -1,6 +1,7 @@
+use core::marker::PhantomData;
+
 use cgp_core::prelude::HasErrorType;
 use cgp_core::DelegateComponent;
-use core::marker::PhantomData;
 
 use crate::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
