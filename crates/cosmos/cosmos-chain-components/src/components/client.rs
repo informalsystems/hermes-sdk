@@ -1,5 +1,6 @@
 use cgp_core::prelude::delegate_components;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
+use hermes_relayer_components::chain::impls::delegate::message_builders::update_client::DelegateBuildUpdateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
@@ -78,7 +79,6 @@ use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshak
 use crate::impls::channel::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
-use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::impls::connection::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
@@ -173,8 +173,6 @@ delegate_components! {
             BuildCreateClientPayloadWithChainHandle,
         UpdateClientPayloadBuilderComponent:
             BuildUpdateClientPayloadWithChainHandle,
-        UpdateClientMessageBuilderComponent:
-            BuildCosmosUpdateClientMessage,
         CounterpartyChainIdQuerierComponent:
             QueryChainIdWithChainHandle,
         ConnectionHandshakePayloadBuilderComponent:
@@ -236,5 +234,7 @@ delegate_components! {
             DelegateQueryConsensusState<DelegateCosmosChainComponents>,
         CreateClientMessageBuilderComponent:
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
+        UpdateClientMessageBuilderComponent:
+            DelegateBuildUpdateClientMessage<DelegateCosmosChainComponents>,
     }
 }
