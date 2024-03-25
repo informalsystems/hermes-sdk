@@ -35,6 +35,7 @@ use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovere
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
+use crate::sovereign::impls::sovereign_to_cosmos::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
 use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 
@@ -82,5 +83,7 @@ delegate_components! {
             BuildSovereignUpdateClientPayload,
         UpdateClientMessageBuilderComponent:
             BuildUpdateCosmosClientMessageOnSovereign,
+        ConnectionHandshakePayloadBuilderComponent:
+            BuildSovereignConnectionHandshakePayload,
     }
 }

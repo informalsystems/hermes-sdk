@@ -127,6 +127,7 @@ pub trait CheckSovereignChainImpls:
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
+    + CanBuildConnectionHandshakePayloads<CosmosChain>
 {
 }
 
