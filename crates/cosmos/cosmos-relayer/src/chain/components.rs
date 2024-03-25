@@ -140,7 +140,6 @@ use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
-use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
 use crate::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use crate::chain::impls::update_client_message::DelegateCosmosUpdateClientMessageBuilder;
 use crate::contexts::chain::CosmosChain;
@@ -216,6 +215,7 @@ delegate_components! {
             AllClientStatesQuerierComponent,
             AllClientStatesBytesQuerierComponent,
             CreateClientOptionsTypeComponent,
+            CreateClientMessageBuilderComponent,
             CreateClientPayloadBuilderComponent,
             UpdateClientPayloadBuilderComponent,
             CounterpartyChainIdQuerierComponent,
@@ -249,8 +249,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        CreateClientMessageBuilderComponent:
-            DelegateCosmosCreateClientMessageBuilder,
         UpdateClientMessageBuilderComponent:
             DelegateCosmosUpdateClientMessageBuilder,
         ConnectionHandshakeMessageBuilderComponent:
