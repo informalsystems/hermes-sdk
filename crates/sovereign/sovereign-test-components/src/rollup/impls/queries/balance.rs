@@ -1,5 +1,5 @@
 use cgp_core::CanRaiseError;
-use hermes_sovereign_chain_components::sovereign::traits::rollup::json_rpc_client::HasJsonRpcClient;
+use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerier;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;

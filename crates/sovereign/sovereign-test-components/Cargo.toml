@@ -20,7 +20,8 @@ hermes-relayer-components           = { workspace = true }
 hermes-test-components              = { workspace = true }
 hermes-cosmos-test-components       = { workspace = true }
 hermes-celestia-test-components     = { workspace = true }
-hermes-sovereign-chain-components  = { workspace = true }
+hermes-sovereign-chain-components   = { workspace = true }
+hermes-sovereign-rollup-components  = { workspace = true }
 
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }

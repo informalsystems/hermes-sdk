@@ -13,15 +13,13 @@ use hermes_relayer_components::transaction::traits::parse_events::CanParseTxResp
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_sovereign_chain_components::sovereign::traits::rollup::publish_batch::CanPublishTransactionBatch;
-use hermes_sovereign_chain_components::sovereign::types::message::SovereignMessage;
-use hermes_sovereign_chain_components::sovereign::types::messages::bank::{
-    BankMessage, CoinFields,
-};
-use hermes_sovereign_chain_components::sovereign::types::rpc::tx_hash::TxHash;
-use hermes_sovereign_chain_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
+use hermes_sovereign_rollup_components::traits::publish_batch::CanPublishTransactionBatch;
+use hermes_sovereign_rollup_components::types::message::SovereignMessage;
+use hermes_sovereign_rollup_components::types::messages::bank::{BankMessage, CoinFields};
+use hermes_sovereign_rollup_components::types::transaction::tx_hash::TxHash;
+use hermes_sovereign_rollup_components::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;

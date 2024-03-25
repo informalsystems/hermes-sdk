@@ -34,7 +34,7 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
     ProvideDataChainType,
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
-use hermes_sovereign_chain_components::sovereign::types::height::RollupHeight;
+use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
@@ -127,7 +127,6 @@ pub trait CheckSovereignChainImpls:
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
-    + CanBuildConnectionHandshakePayloads<CosmosChain>
 {
 }
 

@@ -1,9 +1,7 @@
 use bech32::ToBase32;
 use bech32::Variant::Bech32m;
 use ed25519_dalek::{SigningKey, VerifyingKey};
-use hermes_sovereign_chain_components::sovereign::types::address::{
-    SovereignAddress, SovereignAddressBytes,
-};
+use hermes_sovereign_rollup_components::types::address::{SovereignAddress, SovereignAddressBytes};
 use sha2::{Digest, Sha256};
 
 pub struct SovereignWallet {

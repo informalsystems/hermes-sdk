@@ -21,10 +21,11 @@ hermes-relayer-components               = { workspace = true }
 hermes-test-components                  = { workspace = true }
 hermes-cosmos-relayer                   = { workspace = true }
 hermes-celestia-chain                   = { workspace = true }
-hermes-sovereign-chain-components      = { workspace = true }
+hermes-sovereign-chain-components       = { workspace = true }
+hermes-sovereign-rollup-components      = { workspace = true }
+hermes-sovereign-test-components        = { workspace = true }
 hermes-wasm-client-components           = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
-hermes-sovereign-test-components        = { workspace = true }
 hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 hermes-tracing-logging-components       = { workspace = true }

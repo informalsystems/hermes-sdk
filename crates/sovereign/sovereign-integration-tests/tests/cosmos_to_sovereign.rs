@@ -16,12 +16,12 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
-use hermes_sovereign_chain_components::sovereign::types::message::SovereignMessage;
-use hermes_sovereign_chain_components::sovereign::types::messages::ibc::IbcMessage;
-use hermes_sovereign_chain_components::sovereign::types::rpc::tx_hash::TxHash;
-use hermes_sovereign_chain_components::sovereign::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_sovereign_rollup_components::types::message::SovereignMessage;
+use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
+use hermes_sovereign_rollup_components::types::transaction::tx_hash::TxHash;
+use hermes_sovereign_rollup_components::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
