@@ -69,6 +69,7 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComp
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
+use crate::components::delegate::DelegateCosmosChainComponents;
 use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::channel::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
@@ -91,9 +92,7 @@ use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
-use crate::impls::queries::client_state::{
-    CosmosQueryClientStateComponents, QueryCosmosClientStateFromAbci,
-};
+use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state_height::{
     QueryConsensusStateHeightFromChainHandle, QueryConsensusStateHeightsFromChainHandle,
@@ -164,11 +163,6 @@ delegate_components! {
             AllClientStatesBytesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
-        [
-            ClientStateQuerierComponent,
-            AllClientStatesQuerierComponent,
-        ]:
-            DelegateQueryClientState<CosmosQueryClientStateComponents>,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:
@@ -229,5 +223,10 @@ delegate_components! {
             QueryAbci,
         ConnectionEndQuerierComponent:
             QueryCosmosConnectionEndFromChainHandle,
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesQuerierComponent,
+        ]:
+            DelegateQueryClientState<DelegateCosmosChainComponents>,
     }
 }

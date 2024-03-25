@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
-use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
@@ -19,6 +19,9 @@ use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTy
 use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesQuerierComponent, ClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent,
@@ -62,9 +65,20 @@ delegate_components! {
     }
 }
 
+pub struct AnyCounterpartyCosmosComponents;
+
 delegate_components! {
-    CosmosQueryClientStateComponents {
-        AnyCounterparty: QueryAndDecodeClientStateVia<Identity>
+    AnyCounterpartyCosmosComponents {
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesQuerierComponent,
+        ]: QueryAndDecodeClientStateVia<Identity>,
+    }
+}
+
+delegate_components! {
+    DelegateCosmosChainComponents {
+        AnyCounterparty: AnyCounterpartyCosmosComponents,
     }
 }
 

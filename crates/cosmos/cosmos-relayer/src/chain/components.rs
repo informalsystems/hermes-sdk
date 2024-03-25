@@ -2,8 +2,9 @@ use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
 use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
+use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
-use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_chain_components::traits::abci_query::AbciQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
@@ -15,7 +16,6 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -138,7 +138,6 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use prost_types::Any;
 
 use crate::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use crate::chain::impls::create_client_message::DelegateCosmosCreateClientMessageBuilder;
@@ -308,14 +307,12 @@ delegate_components! {
             CosmosClientComponents,
         ConsensusStateQuerierComponent:
             DelegateCosmosConsensusStateQuerier,
-        ClientStateQuerierComponent:
-            QueryAndDecodeClientStateVia<Any>,
     }
 }
 
 delegate_components! {
-    CosmosQueryClientStateComponents {
-        CosmosChain: QueryAndDecodeClientStateVia<Any>,
+    DelegateCosmosChainComponents {
+        CosmosChain: CosmosToCosmosComponents,
     }
 }
 

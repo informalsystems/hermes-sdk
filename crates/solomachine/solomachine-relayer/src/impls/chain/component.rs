@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
-use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
@@ -19,7 +19,9 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -58,8 +60,20 @@ where
     type Components = SolomachineChainComponents;
 }
 
-impl<Chain> DelegateComponent<SolomachineChain<Chain>> for CosmosQueryClientStateComponents {
-    type Delegate = QueryAndDecodeClientStateVia<Any>;
+pub struct SolomachineCosmosComponents;
+
+delegate_components! {
+    SolomachineCosmosComponents {
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesBytesQuerierComponent,
+        ]:
+            QueryAndDecodeClientStateVia<Any>,
+    }
+}
+
+impl<Chain> DelegateComponent<SolomachineChain<Chain>> for DelegateCosmosChainComponents {
+    type Delegate = SolomachineCosmosComponents;
 }
 
 delegate_components! {

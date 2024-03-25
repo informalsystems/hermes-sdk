@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::{
@@ -10,6 +10,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
@@ -80,9 +83,21 @@ delegate_components! {
     }
 }
 
+pub struct SovereignCosmosComponents;
+
 delegate_components! {
-    CosmosQueryClientStateComponents {
-        SovereignChain: QueryAndDecodeClientStateVia<WasmClientState>,
+    SovereignCosmosComponents {
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesBytesQuerierComponent,
+        ]:
+            QueryAndDecodeClientStateVia<WasmClientState>,
+    }
+}
+
+delegate_components! {
+    DelegateCosmosChainComponents {
+        SovereignChain: SovereignCosmosComponents,
     }
 }
 

@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::decoder::CanDecode;
@@ -11,6 +11,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -49,9 +52,20 @@ delegate_components! {
     }
 }
 
+pub struct WasmCounterpartyCosmosComponents;
+
 delegate_components! {
-    CosmosQueryClientStateComponents {
-        WasmCounterparty: QueryAndDecodeClientStateVia<Any>
+    WasmCounterpartyCosmosComponents {
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesBytesQuerierComponent,
+        ]: QueryAndDecodeClientStateVia<Any>,
+    }
+}
+
+delegate_components! {
+    DelegateCosmosChainComponents {
+        WasmCounterparty: WasmCounterpartyCosmosComponents,
     }
 }
 
