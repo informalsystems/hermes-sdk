@@ -1,8 +1,8 @@
 use cgp_core::CanRaiseError;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
-use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::rollup_command_path::HasRollupCommandPath;
 use crate::bootstrap::traits::start_rollup::RollupStarter;
@@ -43,7 +43,9 @@ where
 
         let runtime = bootstrap.runtime();
 
-        let metrics_port = runtime.reserve_tcp_port().await
+        let metrics_port = runtime
+            .reserve_tcp_port()
+            .await
             .map_err(Bootstrap::raise_error)?;
 
         let child = bootstrap
