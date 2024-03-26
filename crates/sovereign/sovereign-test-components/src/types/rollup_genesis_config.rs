@@ -23,6 +23,7 @@ pub struct BankGenesis {
 #[derive(Serialize)]
 pub struct TokenGenesis {
     pub token_name: String,
+    pub token_address: String,
     pub address_and_balances: Vec<(String, u128)>,
     pub authorized_minters: Vec<String>,
     pub salt: u128,
