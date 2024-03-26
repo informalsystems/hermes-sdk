@@ -63,20 +63,22 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        let rollup_node_config = bootstrap
-            .init_rollup_node_config(&rollup_home_dir, bridge_driver)
-            .await?;
-
         // TODO: Use `HasWalletAt<SequencerWallet, 0>` instead once we define a
         // `CelestiaChainDriver` context that implements that.
         let sequencer_wallet = chain_driver.wallets().get("sequencer").ok_or_else(|| {
             Bootstrap::raise_error("expected chain driver to contain sequencer wallet")
         })?;
 
+        let sequencer_address = Chain::wallet_address(sequencer_wallet);
+
+        let rollup_node_config = bootstrap
+            .init_rollup_node_config(&rollup_home_dir, bridge_driver, sequencer_address)
+            .await?;
+
         let rollup_wallets = bootstrap.generate_rollup_wallets().await?;
 
         let rollup_genesis = bootstrap
-            .generate_rollup_genesis(Chain::wallet_address(sequencer_wallet), &rollup_wallets)
+            .generate_rollup_genesis(sequencer_address, &rollup_wallets)
             .await?;
 
         bootstrap

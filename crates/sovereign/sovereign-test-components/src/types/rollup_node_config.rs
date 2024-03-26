@@ -14,6 +14,7 @@ pub struct SovereignDaConfig {
     pub celestia_rpc_address: String,
     pub max_celestia_response_body_size: u64,
     pub celestia_rpc_timeout_seconds: u64,
+    pub own_celestia_address: String,
 }
 
 #[derive(Serialize)]
@@ -23,7 +24,7 @@ pub struct SovereignStorageConfig {
 
 #[derive(Serialize)]
 pub struct SovereignRunnerConfig {
-    pub start_height: u64,
+    pub genesis_height: u64,
     pub rpc_config: SovereignRpcConfig,
     pub da_polling_interval_ms: u64,
 }
