@@ -36,7 +36,8 @@ members = [
 
     "crates/wasm/wasm-client-components",
 
-    "crates/sovereign/sovereign-client-components",
+    "crates/sovereign/sovereign-chain-components",
+    "crates/sovereign/sovereign-rollup-components",
     "crates/sovereign/sovereign-relayer",
     "crates/sovereign/sovereign-test-components",
     "crates/sovereign/sovereign-integration-tests",
@@ -75,7 +76,7 @@ tendermint-testgen              = { version = "0.34" }
 basecoin                        = { version = "0.1.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
-clap                            = { version = "4.5.1" }
+clap                            = { version = "4.5.3" }
 oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.12.3" }
 prost-types                     = { version = "0.12.3" }
@@ -89,7 +90,7 @@ tonic                           = { version = "0.10" }
 toml                            = { version = "0.8.10" }
 futures                         = { version = "0.3.29", default-features = false }
 futures-core                    = { version = "0.3.30", default-features = false }
-futures-util                    = { version = "0.3.29", default-features = false }
+futures-util                    = { version = "0.3.30", default-features = false }
 futures-channel                 = { version = "0.3.30", default-features = false }
 eyre                            = { version = "0.6.8" }
 itertools                       = { version = "0.11" }
@@ -133,8 +134,9 @@ hermes-celestia-chain                   = { version = "0.1.0" }
 hermes-celestia-test-components         = { version = "0.1.0" }
 hermes-celestia-integration-tests       = { version = "0.1.0" }
 
-hermes-sovereign-client-components      = { version = "0.1.0" }
-hermes-sovereign-relayer         = { version = "0.1.0" }
+hermes-sovereign-chain-components       = { version = "0.1.0" }
+hermes-sovereign-rollup-components       = { version = "0.1.0" }
+hermes-sovereign-relayer                = { version = "0.1.0" }
 hermes-sovereign-test-components        = { version = "0.1.0" }
 hermes-sovereign-integration-tests      = { version = "0.1.0" }
 
@@ -205,8 +207,9 @@ hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integ
 
 hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-components" }
 
-hermes-sovereign-client-components  = { path = "./crates/sovereign/sovereign-client-components" }
-hermes-sovereign-relayer     = { path = "./crates/sovereign/sovereign-relayer" }
+hermes-sovereign-chain-components   = { path = "./crates/sovereign/sovereign-chain-components" }
+hermes-sovereign-rollup-components   = { path = "./crates/sovereign/sovereign-rollup-components" }
+hermes-sovereign-relayer            = { path = "./crates/sovereign/sovereign-relayer" }
 hermes-sovereign-test-components    = { path = "./crates/sovereign/sovereign-test-components" }
 hermes-sovereign-integration-tests  = { path = "./crates/sovereign/sovereign-integration-tests" }
 

@@ -8,28 +8,13 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateFields;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
-use hermes_relayer_components::chain::traits::types::message::CanEstimateMessageSize;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
-use prost::Message;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::chain::components::CosmosChainComponents;
 use crate::contexts::chain::CosmosChain;
-use crate::types::error::Error;
-
-impl CanEstimateMessageSize for CosmosChain {
-    fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Error> {
-        let raw = message
-            .message
-            .encode_protobuf(&Signer::dummy())
-            .map_err(Error::report)?;
-
-        Ok(raw.encoded_len())
-    }
-}
 
 impl ChainIdGetter<CosmosChain> for CosmosChainComponents {
     fn chain_id(chain: &CosmosChain) -> &ChainId {
