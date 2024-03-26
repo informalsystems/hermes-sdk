@@ -2894,23 +2894,6 @@
         "type": "github"
       }
     },
-    "risc0-cycle-macros-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1707815844,
-        "narHash": "sha256-tl6TvAUghcJvlnbD1iYH4mHjgSEtNKsAYN9ZZP69pyc=",
-        "owner": "Sovereign-Labs",
-        "repo": "risc0-cycle-macros",
-        "rev": "98948b8ee0e3edffcee7f3bd95a9d93c5c0941af",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Sovereign-Labs",
-        "repo": "risc0-cycle-macros",
-        "rev": "98948b8ee0e3edffcee7f3bd95a9d93c5c0941af",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "cosmos-nix": "cosmos-nix",
@@ -3156,37 +3139,36 @@
         "flake-utils": "flake-utils_12",
         "gaia-src": "gaia-src",
         "nixpkgs": "nixpkgs_12",
-        "risc0-cycle-macros-src": "risc0-cycle-macros-src",
         "rust-overlay": "rust-overlay_3",
         "sovereign-sdk-src": "sovereign-sdk-src"
       },
       "locked": {
-        "lastModified": 1709935770,
-        "narHash": "sha256-Yj5zfVZ7qEAPZIqeMDKeSUav+wc7qvy/NY87Eczt1hw=",
+        "lastModified": 1711476538,
+        "narHash": "sha256-dAC2TX+73sO6Xd6le7n82s4Wq73LHC/Aqmes3gfRydg=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "0ca6b94f9275be5efc5a685b164101e9e831b130",
+        "rev": "94f06e8b8100b97a8c7807f8b7f49b2e02e364a0",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
+        "ref": "ibc-rollup",
         "repo": "sov-rollup-starter",
-        "rev": "0ca6b94f9275be5efc5a685b164101e9e831b130",
         "type": "github"
       }
     },
     "sovereign-sdk-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1708644201,
-        "narHash": "sha256-NN1uomkyqAxRyXkAvOl809gUhwXJON0WPFe1WZAinMI=",
-        "rev": "5a144d60eefaf9ce166bbfd66324b959aa4ae82b",
-        "revCount": 818,
+        "lastModified": 1711047242,
+        "narHash": "sha256-mL/226hWuFEpnaiK/NhnCnjGwqpxT0MejQAz4M4fFe0=",
+        "rev": "cf048cd59789209bb9c37effddd20efe19375bca",
+        "revCount": 886,
         "type": "git",
         "url": "ssh://git@github.com/informalsystems/sovereign-sdk-wip"
       },
       "original": {
-        "rev": "5a144d60eefaf9ce166bbfd66324b959aa4ae82b",
+        "rev": "cf048cd59789209bb9c37effddd20efe19375bca",
         "type": "git",
         "url": "ssh://git@github.com/informalsystems/sovereign-sdk-wip"
       }
