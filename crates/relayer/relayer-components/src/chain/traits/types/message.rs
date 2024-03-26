@@ -53,6 +53,7 @@ pub trait HasMessageType: Async {
     type Message: Async;
 }
 
+#[derive_component(MessageSizeEstimatorComponent, MessageSizeEstimator<Chain>)]
 pub trait CanEstimateMessageSize: HasMessageType + HasErrorType {
     /**
        Estimate the size of a message after it is encoded into raw bytes

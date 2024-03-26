@@ -7,10 +7,10 @@ use hermes_encoding_components::traits::has_encoding::{
 };
 use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
-use hermes_sovereign_client_components::encoding::components::{
+use hermes_sovereign_chain_components::encoding::components::{
     IsSovereignEncodingComponent, SovereignEncodingComponents as BaseSovereignEncodingComponents,
 };
-use hermes_sovereign_client_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use ibc_proto_sov::ibc::lightclients::sovereign::tendermint::v1::ClientState as ProtoSovereignClientState;
 

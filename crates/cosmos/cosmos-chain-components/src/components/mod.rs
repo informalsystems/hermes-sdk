@@ -1,3 +1,4 @@
 pub mod client;
-pub mod ibc_client;
+pub mod cosmos_to_cosmos;
+pub mod delegate;
 pub mod transaction;

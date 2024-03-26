@@ -42,7 +42,7 @@ use hermes_relayer_components::chain::traits::types::ibc::{
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, ProvideMessageType,
+    MessageSizeEstimator, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
@@ -563,8 +563,10 @@ impl<Chain: BasecoinEndpoint> HeightIncrementer<MockCosmosContext<Chain>>
     }
 }
 
-impl<Chain: BasecoinEndpoint> CanEstimateMessageSize for MockCosmosContext<Chain> {
-    fn estimate_message_size(_message: &Self::Message) -> Result<usize, Self::Error> {
+impl<Chain: BasecoinEndpoint> MessageSizeEstimator<MockCosmosContext<Chain>>
+    for MockCosmosChainComponents
+{
+    fn estimate_message_size(_message: &Any) -> Result<usize, Error> {
         // Only single messages are sent by the Mock Chain
         Ok(1)
     }

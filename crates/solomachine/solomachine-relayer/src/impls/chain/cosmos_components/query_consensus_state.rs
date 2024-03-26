@@ -1,7 +1,6 @@
 use cgp_core::prelude::*;
-use cgp_core::{DelegateComponent, HasErrorType};
+use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::rpc_client::HasRpcClient;
-use hermes_cosmos_relayer::chain::impls::query_consensus_state::DelegateCosmosConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -12,19 +11,9 @@ use ibc_relayer_types::core::ics24_host::path::ClientConsensusStatePath;
 use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
 
-use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 use crate::types::consensus_state::{decode_client_consensus_state, SolomachineConsensusState};
 
 pub struct QuerySolomachineConsensusStateFromCosmos;
-
-impl<Counterparty> DelegateComponent<SolomachineChain<Counterparty>>
-    for DelegateCosmosConsensusStateQuerier
-where
-    Counterparty: Solomachine,
-{
-    type Delegate = QuerySolomachineConsensusStateFromCosmos;
-}
 
 #[async_trait]
 impl<Chain, Counterparty> ConsensusStateQuerier<Chain, Counterparty>
