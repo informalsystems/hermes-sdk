@@ -7,6 +7,8 @@ use hermes_celestia_test_components::bridge_driver::traits::bridge_rpc_port::Has
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
 use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 use crate::bootstrap::traits::init_rollup_node_config::RollupNodeConfigInitializer;
 use crate::bootstrap::traits::types::rollup_node_config::HasRollupNodeConfigType;
@@ -17,15 +19,17 @@ use crate::types::rollup_node_config::{
 
 pub struct InitSovereignRollupNodeConfig;
 
-impl<Bootstrap, BridgeDriver, Runtime> RollupNodeConfigInitializer<Bootstrap>
+impl<Bootstrap, Chain, BridgeDriver, Runtime> RollupNodeConfigInitializer<Bootstrap>
     for InitSovereignRollupNodeConfig
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
+        + HasChainType<Chain = Chain>
         + HasBridgeDriverType<BridgeDriver = BridgeDriver>
         + HasRollupNodeConfigType
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<toml::ser::Error>,
     Runtime: CanReserveTcpPort + CanWriteStringToFile,
+    Chain: HasAddressType,
     BridgeDriver: HasBridgeRpcPort + HasBridgeAuthToken,
     BridgeDriver::BridgeAuthToken: Display,
     Bootstrap::RollupNodeConfig: From<SovereignRollupNodeConfig>,
@@ -34,6 +38,7 @@ where
         bootstrap: &Bootstrap,
         rollup_home_dir: &Runtime::FilePath,
         bridge_driver: &BridgeDriver,
+        sequencer_da_address: &Chain::Address,
     ) -> Result<Bootstrap::RollupNodeConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
@@ -59,12 +64,13 @@ where
                 celestia_rpc_address: format!("http://127.0.0.1:{bridge_rpc_port}"),
                 max_celestia_response_body_size: 104_857_600,
                 celestia_rpc_timeout_seconds: 60,
+                own_celestia_address: sequencer_da_address.to_string(),
             },
             storage: SovereignStorageConfig {
                 path: Runtime::file_path_to_string(&data_path),
             },
             runner: SovereignRunnerConfig {
-                start_height: 1,
+                genesis_height: 1,
                 rpc_config: SovereignRpcConfig {
                     bind_host: "127.0.0.1".into(),
                     bind_port: rollup_rpc_port,

@@ -35,7 +35,7 @@ where
         bootstrap: &Bootstrap,
         sequencer_da_address: &Chain::Address,
         rollup_wallets: &BTreeMap<String, Rollup::Wallet>,
-    ) -> Result<Bootstrap::RollupGenesisConfig, Bootstrap::Error> {
+    ) -> Result<SovereignGenesisConfig, Bootstrap::Error> {
         let sequencer_wallet = rollup_wallets
             .get("sequencer")
             .ok_or_else(|| Bootstrap::raise_error("expect sequencer wallet to be present"))?;
@@ -62,12 +62,14 @@ where
                 tokens: vec![
                     TokenGenesis {
                         token_name: "stake".to_owned(),
+                        token_address: staking_token_address.address.clone(),
                         address_and_balances: address_and_balances.clone(),
                         authorized_minters: vec![],
                         salt: 0,
                     },
                     TokenGenesis {
                         token_name: "coin".to_owned(),
+                        token_address: transfer_token_address.address.clone(),
                         address_and_balances,
                         authorized_minters: vec![],
                         salt: 0,
