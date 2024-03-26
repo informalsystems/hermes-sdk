@@ -1,8 +1,6 @@
 use cgp_core::prelude::*;
-use cgp_core::{DelegateComponent, HasErrorType};
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
-use hermes_cosmos_relayer::chain::impls::connection_handshake_message::DelegateCosmosConnectionHandshakeBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -13,22 +11,12 @@ use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::ConsensusProof;
 
 use crate::methods::encode::sign_data::timestamped_sign_data_to_bytes;
-use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 use crate::types::payloads::connection::{
     SolomachineConnectionOpenAckPayload, SolomachineConnectionOpenConfirmPayload,
     SolomachineConnectionOpenInitPayload, SolomachineConnectionOpenTryPayload,
 };
 
 pub struct BuildSolomachineConnectionHandshakeMessagesForCosmos;
-
-impl<Counterparty> DelegateComponent<SolomachineChain<Counterparty>>
-    for DelegateCosmosConnectionHandshakeBuilder
-where
-    Counterparty: Solomachine,
-{
-    type Delegate = BuildSolomachineConnectionHandshakeMessagesForCosmos;
-}
 
 #[async_trait]
 impl<Chain, Counterparty> ConnectionHandshakeMessageBuilder<Chain, Counterparty>

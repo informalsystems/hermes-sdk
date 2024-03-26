@@ -1442,15 +1442,15 @@ dependencies = [
 
 [[package]]
 name = "futures-io"
-version = "0.3.29"
+version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8bf34a163b5c4c52d0478a4d757da8fb65cabef42ba90515efee0f6f9fa45aaa"
+checksum = "a44623e20b9681a318efdd71c299b6b222ed6f231972bfe2f224ebad6311f0c1"
 
 [[package]]
 name = "futures-macro"
-version = "0.3.29"
+version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53b153fd91e4b0147f4aced87be237c98248656bb01050b96bf3ee89220a8ddb"
+checksum = "87750cf4b7a4c0625b1529e4c543c2182106e4dedc60a2a6455e00d212c489ac"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1465,15 +1465,15 @@ checksum = "9fb8e00e87438d937621c1c6269e53f536c14d3fbd6a042bb24879e57d474fb5"
 
 [[package]]
 name = "futures-task"
-version = "0.3.29"
+version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "efd193069b0ddadc69c46389b740bbccdd97203899b48d09c5f7969591d6bae2"
+checksum = "38d84fa142264698cdce1a9f9172cf383a0c82de1bddcf3092901442c4097004"
 
 [[package]]
 name = "futures-util"
-version = "0.3.29"
+version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a19526d624e703a3179b3d322efec918b6246ea0fa51d41124525f00f1cc8104"
+checksum = "3d6401deb83407ab3da39eba7e33987a73c3df0c82b4bb5813ee871c19c41d48"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -2044,7 +2044,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-sovereign-client-components"
+name = "hermes-sovereign-chain-components"
 version = "0.1.0"
 dependencies = [
  "base64",
@@ -2058,6 +2058,7 @@ dependencies = [
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-runtime",
+ "hermes-sovereign-rollup-components",
  "hermes-wasm-client-components",
  "hex 0.4.3",
  "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
@@ -2090,8 +2091,9 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
  "hermes-sovereign-relayer",
+ "hermes-sovereign-rollup-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "hermes-wasm-client-components",
@@ -2126,7 +2128,8 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
+ "hermes-sovereign-rollup-components",
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "hermes-tracing-logging-components",
@@ -2135,6 +2138,37 @@ dependencies = [
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
+]
+
+[[package]]
+name = "hermes-sovereign-rollup-components"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "bech32 0.9.1",
+ "borsh",
+ "cgp-core",
+ "ed25519-dalek",
+ "eyre",
+ "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "hermes-relayer-components",
+ "hermes-runtime",
+ "hermes-wasm-client-components",
+ "hex 0.4.3",
+ "ibc 0.50.0 (git+https://github.com/cosmos/ibc-rs.git?rev=552863ec93)",
+ "ibc-proto 0.41.0",
+ "ibc-proto 0.42.2",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "jsonrpsee",
+ "prost",
+ "serde",
+ "serde-json-wasm",
+ "serde_json",
+ "sha2 0.10.8",
+ "sov-celestia-client",
 ]
 
 [[package]]
@@ -2149,7 +2183,8 @@ dependencies = [
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-sovereign-client-components",
+ "hermes-sovereign-chain-components",
+ "hermes-sovereign-rollup-components",
  "hermes-test-components",
  "ibc-relayer",
  "ibc-relayer-types",

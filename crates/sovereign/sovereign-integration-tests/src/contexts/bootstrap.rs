@@ -11,7 +11,7 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::Ac
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
-use hermes_sovereign_client_components::sovereign::traits::chain::rollup::ProvideRollupType;
+use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::ProvideRollupType;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::components::{
     IsSovereignBootstrapComponent, SovereignBootstrapComponents as BaseSovereignBootstrapComponents,

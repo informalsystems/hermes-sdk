@@ -19,8 +19,6 @@ use prost::{DecodeError, EncodeError, Message};
 
 use crate::traits::abci_query::CanQueryAbci;
 
-pub struct CosmosQueryClientStateComponents;
-
 pub struct QueryCosmosClientStateFromAbci;
 
 pub const IBC_QUERY_PATH: &str = "store/ibc/key";

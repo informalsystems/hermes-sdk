@@ -78,18 +78,22 @@ impl CommandRunner<CosmosBuilder> for QueryClientConsensus {
             }).transpose()?;
 
             let consensus_state = if let Some(query_height) = query_height {
-                chain
-                    .query_consensus_state(&self.client_id, &consensus_height, &query_height)
-                    .await
-                    .map_err(|e| {
-                        e.wrap(format!(
-                            "failed to query consensus state at height `{}` for client `{}`",
-                            consensus_height, self.client_id
-                        ))
-                    })?
+                <CosmosChain as CanQueryConsensusState<CosmosChain>>::query_consensus_state(
+                    &chain,
+                    &self.client_id,
+                    &consensus_height,
+                    &query_height,
+                )
+                .await
+                .map_err(|e| {
+                    e.wrap(format!(
+                        "failed to query consensus state at height `{}` for client `{}`",
+                        consensus_height, self.client_id
+                    ))
+                })?
             } else {
-                chain
-                    .query_consensus_state_with_latest_height(&self.client_id, &consensus_height)
+                <CosmosChain as CanQueryConsensusStateWithLatestHeight<CosmosChain>>
+                    ::query_consensus_state_with_latest_height(&chain, &self.client_id, &consensus_height)
                     .await
                     .map_err(|e| {
                         e.wrap(format!(

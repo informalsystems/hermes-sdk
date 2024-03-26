@@ -1,12 +1,12 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
-use hermes_cosmos_chain_components::impls::queries::client_state::CosmosQueryClientStateComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
 use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::impls::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::impls::delegate::queries::client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
@@ -19,7 +19,9 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -33,6 +35,9 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
+use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
+use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
+use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
@@ -58,8 +63,26 @@ where
     type Components = SolomachineChainComponents;
 }
 
-impl<Chain> DelegateComponent<SolomachineChain<Chain>> for CosmosQueryClientStateComponents {
-    type Delegate = QueryAndDecodeClientStateVia<Any>;
+pub struct SolomachineCosmosComponents;
+
+delegate_components! {
+    SolomachineCosmosComponents {
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesBytesQuerierComponent,
+        ]:
+            QueryAndDecodeClientStateVia<Any>,
+        ConsensusStateQuerierComponent:
+            QuerySolomachineConsensusStateFromCosmos,
+        CreateClientMessageBuilderComponent:
+            BuildCreateSolomachineClientMessage,
+        ConnectionHandshakeMessageBuilderComponent:
+            BuildSolomachineConnectionHandshakeMessagesForCosmos,
+    }
+}
+
+impl<Chain> DelegateComponent<SolomachineChain<Chain>> for DelegateCosmosChainComponents {
+    type Delegate = SolomachineCosmosComponents;
 }
 
 delegate_components! {
