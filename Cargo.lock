@@ -1053,16 +1053,6 @@ dependencies = [
 
 [[package]]
 name = "dashmap"
-version = "4.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e77a43b28d0668df09411cb0bc9a8c2adc40f9a048afe863e05fd43251e8e39c"
-dependencies = [
- "cfg-if 1.0.0",
- "num_cpus",
-]
-
-[[package]]
-name = "dashmap"
 version = "5.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6943ae99c34386c84a470c499d3414f66502a41340aa895406e0d2e4a207b91d"
@@ -1862,7 +1852,7 @@ dependencies = [
  "ibc-telemetry",
  "itertools 0.11.0",
  "moka",
- "opentelemetry 0.17.0",
+ "opentelemetry",
  "prost",
  "prost-types",
  "serde",
@@ -3461,11 +3451,11 @@ version = "0.27.2"
 source = "git+https://github.com/informalsystems/hermes.git?branch=master#06dfbafb4893255a79043ec4032034a83ebd53df"
 dependencies = [
  "axum",
- "dashmap 5.5.0",
+ "dashmap",
  "ibc-relayer-types",
  "moka",
  "once_cell",
- "opentelemetry 0.19.0",
+ "opentelemetry",
  "opentelemetry-prometheus",
  "prometheus",
  "serde",
@@ -4000,27 +3990,6 @@ dependencies = [
 
 [[package]]
 name = "opentelemetry"
-version = "0.17.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6105e89802af13fdf48c49d7646d3b533a70e536d818aae7e78ba0433d01acb8"
-dependencies = [
- "async-trait",
- "crossbeam-channel 0.5.11",
- "dashmap 4.0.2",
- "fnv",
- "futures-channel",
- "futures-executor",
- "futures-util",
- "js-sys",
- "lazy_static",
- "percent-encoding",
- "pin-project",
- "rand",
- "thiserror",
-]
-
-[[package]]
-name = "opentelemetry"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5f4b8347cc26099d3aeee044065ecc3ae11469796b4d65d065a23a584ed92a6f"
@@ -4035,7 +4004,7 @@ version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a9f186f6293ebb693caddd0595e66b74a6068fa51048e26e0bf9c95478c639c"
 dependencies = [
- "opentelemetry 0.19.0",
+ "opentelemetry",
  "prometheus",
  "protobuf",
 ]
@@ -4064,7 +4033,7 @@ checksum = "8b3a2a91fdbfdd4d212c0dcc2ab540de2c2bcbbd90be17de7a7daf8822d010c1"
 dependencies = [
  "async-trait",
  "crossbeam-channel 0.5.11",
- "dashmap 5.5.0",
+ "dashmap",
  "fnv",
  "futures-channel",
  "futures-executor",
