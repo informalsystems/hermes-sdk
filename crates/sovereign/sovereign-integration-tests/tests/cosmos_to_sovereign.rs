@@ -14,10 +14,12 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_sovereign_rollup_components::traits::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
 use hermes_sovereign_rollup_components::types::tx::tx_hash::TxHash;
@@ -90,7 +92,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             .await?;
 
         let cosmos_chain = cosmos_chain_driver.chain();
-        let _rollup = rollup_driver.rollup();
+        let rollup = rollup_driver.rollup();
 
         let create_client_settings = ClientSettings::Tendermint(Settings {
             max_clock_drift: Duration::from_secs(40),
@@ -135,21 +137,21 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             0,
         )?;
 
-        let _tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
+        let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
 
         // TODO: publishing a create client message currently fails, because
         // ibc-rs expects the absence of frozen height to be encoded as `None`,
         // but ibc-relayer-types encode it as a zero height here:
         // https://github.com/informalsystems/hermes/blob/master/crates/relayer-types/src/clients/ics07_tendermint/client_state.rs#L308-L313
 
-        // rollup.publish_transaction_batch(&[tx_bytes]).await?;
-        // sleep(Duration::from_secs(2)).await;
+        rollup.publish_transaction_batch(&[tx_bytes]).await?;
+        sleep(Duration::from_secs(2)).await;
 
-        // {
-        //     let response = rollup.query_tx_response(&tx_hash).await?;
+        {
+            let response = rollup.query_tx_response(&tx_hash).await?;
 
-        //     println!("querty tx hash {} response: {:?}", tx_hash, response);
-        // }
+            println!("querty tx hash {} response: {:?}", tx_hash, response);
+        }
 
         <Result<(), Error>>::Ok(())
     })?;
