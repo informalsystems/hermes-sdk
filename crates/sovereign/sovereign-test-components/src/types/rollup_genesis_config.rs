@@ -17,13 +17,14 @@ pub struct AccountsGenesis {
 
 #[derive(Serialize)]
 pub struct BankGenesis {
+    pub gas_token_config: TokenGenesis,
     pub tokens: Vec<TokenGenesis>,
 }
 
 #[derive(Serialize)]
 pub struct TokenGenesis {
     pub token_name: String,
-    pub token_address: String,
+    pub token_id: String,
     pub address_and_balances: Vec<(String, u128)>,
     pub authorized_minters: Vec<String>,
     pub salt: u128,
@@ -55,5 +56,5 @@ pub struct SequencerRegistryGenesis {
 #[derive(Serialize)]
 pub struct CoinsToLock {
     pub amount: u64,
-    pub token_address: String,
+    pub token_id: String,
 }

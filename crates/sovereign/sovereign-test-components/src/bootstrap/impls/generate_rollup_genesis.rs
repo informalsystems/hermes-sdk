@@ -32,7 +32,7 @@ where
     Rollup: HasWalletType<Wallet = SovereignWallet>,
 {
     async fn generate_rollup_genesis(
-        bootstrap: &Bootstrap,
+        _bootstrap: &Bootstrap,
         sequencer_da_address: &Chain::Address,
         rollup_wallets: &BTreeMap<String, Rollup::Wallet>,
     ) -> Result<SovereignGenesisConfig, Bootstrap::Error> {
@@ -48,33 +48,32 @@ where
         // The token address is derived based on the code `get_genesis_token_address` at
         // <https://github.com/Sovereign-Labs/sovereign-sdk/blob/c9f56b479c6ea17893e282099fcb8ab804c2feb1/module-system/module-implementations/sov-bank/src/utils.rs#L21>.
         // At the moment of writing, the sender (deployer) address is all zeroes.
+        //
+        // NOTE: The gas token address is _hardcoded_ as a constant in the rollup starter.
+        // So if we use a different address, the rollup bootstrapping would fail.
         let staking_token_address =
-            encode_token_address("stake", &[0; 32], 0, bootstrap.account_prefix())
-                .map_err(Bootstrap::raise_error)?;
+            encode_token_address("stake", &[0; 32], 0, "token_").map_err(Bootstrap::raise_error)?;
 
         let transfer_token_address =
-            encode_token_address("coin", &[0; 32], 0, bootstrap.account_prefix())
-                .map_err(Bootstrap::raise_error)?;
+            encode_token_address("coin", &[0; 32], 0, "token_").map_err(Bootstrap::raise_error)?;
 
         let rollup_genesis = SovereignGenesisConfig {
             accounts: AccountsGenesis { pub_keys: vec![] },
             bank: BankGenesis {
-                tokens: vec![
-                    TokenGenesis {
-                        token_name: "stake".to_owned(),
-                        token_address: staking_token_address.address.clone(),
-                        address_and_balances: address_and_balances.clone(),
-                        authorized_minters: vec![],
-                        salt: 0,
-                    },
-                    TokenGenesis {
-                        token_name: "coin".to_owned(),
-                        token_address: transfer_token_address.address.clone(),
-                        address_and_balances,
-                        authorized_minters: vec![],
-                        salt: 0,
-                    },
-                ],
+                gas_token_config: TokenGenesis {
+                    token_name: "stake".to_owned(),
+                    token_id: staking_token_address.address.clone(),
+                    address_and_balances: address_and_balances.clone(),
+                    authorized_minters: vec![],
+                    salt: 0,
+                },
+                tokens: vec![TokenGenesis {
+                    token_name: "coin".to_owned(),
+                    token_id: transfer_token_address.address.clone(),
+                    address_and_balances,
+                    authorized_minters: vec![],
+                    salt: 0,
+                }],
             },
             chain_state: ChainStateGenesis {
                 current_time: TimeGenesis { secs: 0, nanos: 0 },
@@ -88,7 +87,7 @@ where
                 seq_da_address: sequencer_da_address.to_string(),
                 coins_to_lock: CoinsToLock {
                     amount: 1,
-                    token_address: staking_token_address.address.clone(),
+                    token_id: staking_token_address.address.clone(),
                 },
                 is_preferred_sequencer: true,
             },
