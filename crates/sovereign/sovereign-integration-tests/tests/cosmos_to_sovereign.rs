@@ -15,6 +15,7 @@ use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
@@ -107,8 +108,6 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             &create_client_settings,
         ).await?;
 
-        println!("create client payload: {:?}", create_client_payload);
-
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
             cosmos_chain,
             create_client_payload
@@ -128,30 +127,12 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             .get("user-a")
             .ok_or_else(|| eyre!("expect user-a wallet"))?;
 
-        let tx_bytes = encode_and_sign_sovereign_tx(
+        let events = rollup.send_messages_with_signer(
             &wallet_a.signing_key,
-            message.try_to_vec()?,
-            0,
-            0,
-            0,
-            0,
-        )?;
+            &[message],
+        ).await?;
 
-        let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
-
-        // TODO: publishing a create client message currently fails, because
-        // ibc-rs expects the absence of frozen height to be encoded as `None`,
-        // but ibc-relayer-types encode it as a zero height here:
-        // https://github.com/informalsystems/hermes/blob/master/crates/relayer-types/src/clients/ics07_tendermint/client_state.rs#L308-L313
-
-        rollup.publish_transaction_batch(&[tx_bytes]).await?;
-        sleep(Duration::from_secs(2)).await;
-
-        {
-            let response = rollup.query_tx_response(&tx_hash).await?;
-
-            println!("querty tx hash {} response: {:?}", tx_hash, response);
-        }
+        println!("CreateClient events: {:?}", events);
 
         <Result<(), Error>>::Ok(())
     })?;
