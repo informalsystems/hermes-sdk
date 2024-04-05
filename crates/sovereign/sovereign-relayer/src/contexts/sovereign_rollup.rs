@@ -20,6 +20,9 @@ use hermes_relayer_components::error::impls::retry::ReturnRetryable;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::encode_tx::{CanEncodeTx, TxEncoderComponent};
+use hermes_relayer_components::transaction::traits::estimate_tx_fee::{
+    CanEstimateTxFee, TxFeeEstimatorComponent,
+};
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::{
     CanPollTxResponse, TxResponsePollerComponent,
@@ -110,6 +113,7 @@ delegate_components! {
             TxResponseTypeComponent,
             JsonRpcClientTypeComponent,
             TxEncoderComponent,
+            TxFeeEstimatorComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
             TxResponsePollerComponent,
@@ -152,8 +156,9 @@ impl ChainIdGetter<SovereignRollup> for SovereignRollupComponents {
 
 pub trait CanUseSovereignRollup:
     CanQueryBalance
-    + CanEncodeTx
     + HasChainId
+    + CanEncodeTx
+    + CanEstimateTxFee
     + CanPublishTransactionBatch
     + CanQueryTxResponse
     + CanPollTxResponse

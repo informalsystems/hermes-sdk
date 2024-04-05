@@ -21,6 +21,7 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
     PollTimeoutGetterComponent, PollTxResponse,
 };
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
+use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
@@ -33,6 +34,7 @@ use hermes_relayer_components::transaction::traits::types::tx_response::TxRespon
 
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
+use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
 use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
@@ -90,5 +92,7 @@ delegate_components! {
             ParseSovTxResponseAsEvents,
         TxEncoderComponent:
             EncodeSovereignTx,
+        TxFeeEstimatorComponent:
+            ReturnSovereignTxFee<0>,
     }
 }
