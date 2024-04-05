@@ -9,6 +9,7 @@ use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBoo
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::transaction::traits::encode_tx::CanEncodeTx;
+use hermes_relayer_components::transaction::traits::nonce::query_nonce::CanQueryNonce;
 use hermes_relayer_components::transaction::traits::parse_events::CanParseTxResponseAsEvents;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
@@ -117,6 +118,10 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     },
                 });
 
+                let nonce = rollup.query_nonce(&wallet_a.signing_key).await?;
+
+                assert_eq!(nonce, 0);
+
                 let tx_bytes = rollup
                     .encode_tx(&wallet_a.signing_key, &0, &0, &[message])
                     .await?;
@@ -156,6 +161,10 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     minter_address: wallet_a.address.address_bytes.clone(),
                     authorized_minters: Vec::new(),
                 });
+
+                let nonce = rollup.query_nonce(&wallet_a.signing_key).await?;
+
+                assert_eq!(nonce, 1);
 
                 let tx_bytes = rollup
                     .encode_tx(&wallet_a.signing_key, &1, &0, &[message])

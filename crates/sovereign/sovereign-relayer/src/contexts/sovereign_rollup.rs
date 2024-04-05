@@ -25,11 +25,17 @@ use hermes_relayer_components::transaction::traits::encode_tx::{CanEncodeTx, TxE
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::{
     CanEstimateTxFee, TxFeeEstimatorComponent,
 };
+use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::{
+    CanAllocateNonce, NonceAllocatorComponent,
+};
 use hermes_relayer_components::transaction::traits::nonce::nonce_guard::{
     HasNonceGuard, NonceGuardComponent,
 };
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::{
     HasMutexForNonceAllocation, ProvideMutexForNonceAllocation,
+};
+use hermes_relayer_components::transaction::traits::nonce::query_nonce::{
+    CanQueryNonce, NonceQuerierComponent,
 };
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::{
@@ -38,6 +44,7 @@ use hermes_relayer_components::transaction::traits::poll_tx_response::{
 use hermes_relayer_components::transaction::traits::query_tx_response::{
     CanQueryTxResponse, TxResponseQuerierComponent,
 };
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
 use hermes_relayer_components::transaction::traits::simulation_fee::{
     FeeForSimulationGetterComponent, HasFeeForSimulation,
 };
@@ -144,9 +151,12 @@ delegate_components! {
             TxFeeEstimatorComponent,
             FeeForSimulationGetterComponent,
             TxSubmitterComponent,
+            NonceQuerierComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
             TxResponsePollerComponent,
+            NonceAllocatorComponent,
+            MessagesWithSignerSenderComponent,
             PollTimeoutGetterComponent,
             TxResponseAsEventsParserComponent,
         ]:
@@ -209,6 +219,8 @@ pub trait CanUseSovereignRollup:
     + CanSubmitTx
     + HasNonceGuard
     + HasMutexForNonceAllocation
+    + CanQueryNonce
+    + CanAllocateNonce
     + CanPublishTransactionBatch
     + CanQueryTxResponse
     + CanPollTxResponse

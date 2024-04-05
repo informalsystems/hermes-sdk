@@ -17,15 +17,20 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
+use hermes_relayer_components::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     PollTimeoutGetterComponent, PollTxResponse,
 };
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
+use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
+use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetterComponent;
 use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
@@ -40,6 +45,7 @@ use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
+use crate::impls::transaction::query_nonce::QuerySovereignNonce;
 use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
 use crate::impls::transaction::submit_tx::SubmitSovereignTransaction;
 use crate::impls::types::chain::ProvideSovereignChainTypes;
@@ -93,6 +99,10 @@ delegate_components! {
             PollTxResponse,
         PollTimeoutGetterComponent:
             DefaultPollTimeout,
+        NonceAllocatorComponent:
+            AllocateNonceWithMutex,
+        MessagesWithSignerSenderComponent:
+            AllocateNonceAndSendMessages,
         TxResponseAsEventsParserComponent:
             ParseSovTxResponseAsEvents,
         TxEncoderComponent:
@@ -104,5 +114,7 @@ delegate_components! {
             ReturnSovereignTxFee<0>,
         TxSubmitterComponent:
             SubmitSovereignTransaction,
+        NonceQuerierComponent:
+            QuerySovereignNonce,
     }
 }
