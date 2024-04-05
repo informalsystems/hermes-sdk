@@ -3,12 +3,12 @@
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use borsh::BorshSerialize;
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::transaction::traits::encode_tx::CanEncodeTx;
 use hermes_relayer_components::transaction::traits::parse_events::CanParseTxResponseAsEvents;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
@@ -19,7 +19,6 @@ use hermes_sovereign_rollup_components::traits::publish_batch::CanPublishTransac
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::bank::{BankMessage, CoinFields};
 use hermes_sovereign_rollup_components::types::tx::tx_hash::TxHash;
-use hermes_sovereign_rollup_components::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -117,16 +116,9 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     },
                 });
 
-                let message_bytes = message.try_to_vec()?;
-
-                let tx_bytes = encode_and_sign_sovereign_tx(
-                    &wallet_a.signing_key,
-                    message_bytes.clone(),
-                    0,
-                    0,
-                    0,
-                    0,
-                )?;
+                let tx_bytes = rollup
+                    .encode_tx(&wallet_a.signing_key, &0, &0, &[message])
+                    .await?;
 
                 let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
 
@@ -172,16 +164,9 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     authorized_minters: Vec::new(),
                 });
 
-                let message_bytes = message.try_to_vec()?;
-
-                let tx_bytes = encode_and_sign_sovereign_tx(
-                    &wallet_a.signing_key,
-                    message_bytes.clone(),
-                    0,
-                    0,
-                    0,
-                    1,
-                )?;
+                let tx_bytes = rollup
+                    .encode_tx(&wallet_a.signing_key, &1, &0, &[message])
+                    .await?;
 
                 let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
 

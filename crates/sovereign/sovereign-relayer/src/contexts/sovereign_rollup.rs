@@ -8,7 +8,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::chain_id::{
-    ChainIdGetter, ChainIdTypeComponent,
+    ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -19,6 +19,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::error::impls::retry::ReturnRetryable;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::traits::encode_tx::{CanEncodeTx, TxEncoderComponent};
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::{
     CanPollTxResponse, TxResponsePollerComponent,
@@ -108,6 +109,7 @@ delegate_components! {
             TransactionHashTypeComponent,
             TxResponseTypeComponent,
             JsonRpcClientTypeComponent,
+            TxEncoderComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
             TxResponsePollerComponent,
@@ -150,6 +152,8 @@ impl ChainIdGetter<SovereignRollup> for SovereignRollupComponents {
 
 pub trait CanUseSovereignRollup:
     CanQueryBalance
+    + CanEncodeTx
+    + HasChainId
     + CanPublishTransactionBatch
     + CanQueryTxResponse
     + CanPollTxResponse
