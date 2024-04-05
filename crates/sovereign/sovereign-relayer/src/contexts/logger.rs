@@ -5,6 +5,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
 use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
+use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
@@ -37,6 +38,12 @@ impl<'a> DelegateComponent<TxNoResponseError<'a, SovereignRollup>> for Sovereign
 }
 
 impl<'a> DelegateComponent<LogRetryQueryTxResponse<'a, SovereignRollup>> for SovereignLogHandlers {
+    type Delegate = TracingLogger;
+}
+
+impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, SovereignRollup>>
+    for SovereignLogHandlers
+{
     type Delegate = TracingLogger;
 }
 

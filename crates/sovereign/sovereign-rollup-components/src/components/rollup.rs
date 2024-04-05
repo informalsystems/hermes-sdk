@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
+use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
@@ -17,11 +18,8 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::transaction::impls::allocate_nonce_and_send_messages::AllocateNonceAndSendMessages;
-use hermes_relayer_components::transaction::impls::allocate_nonce_with_mutex::AllocateNonceWithMutex;
-use hermes_relayer_components::transaction::impls::poll_tx_response::{
-    PollTimeoutGetterComponent, PollTxResponse,
-};
+use hermes_relayer_components::components::default::transaction::DefaultTxComponents;
+use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
 use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
@@ -31,6 +29,7 @@ use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEv
 use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetterComponent;
 use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
@@ -89,20 +88,22 @@ delegate_components! {
             NonceGuardComponent,
         ]:
             ProvideSovereignTransactionTypes,
+        [
+            NonceAllocatorComponent,
+            MessageSenderComponent,
+            MessagesWithSignerSenderComponent,
+            MessagesWithSignerAndNonceSenderComponent,
+            TxResponsePollerComponent,
+        ]:
+            DefaultTxComponents,
         JsonRpcClientTypeComponent:
             ProvideJsonRpseeClient,
         TransactionBatchPublisherComponent:
             PublishSovereignTransactionBatch,
         TxResponseQuerierComponent:
             QuerySovereignTxResponse,
-        TxResponsePollerComponent:
-            PollTxResponse,
         PollTimeoutGetterComponent:
             DefaultPollTimeout,
-        NonceAllocatorComponent:
-            AllocateNonceWithMutex,
-        MessagesWithSignerSenderComponent:
-            AllocateNonceAndSendMessages,
         TxResponseAsEventsParserComponent:
             ParseSovTxResponseAsEvents,
         TxEncoderComponent:

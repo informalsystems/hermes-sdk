@@ -7,8 +7,9 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+    GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
@@ -44,7 +45,12 @@ use hermes_relayer_components::transaction::traits::poll_tx_response::{
 use hermes_relayer_components::transaction::traits::query_tx_response::{
     CanQueryTxResponse, TxResponseQuerierComponent,
 };
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::{
+    CanSendMessagesWithSigner, MessagesWithSignerSenderComponent,
+};
+use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::{
+    CanSendMessagesWithSignerAndNonce, MessagesWithSignerAndNonceSenderComponent,
+};
 use hermes_relayer_components::transaction::traits::simulation_fee::{
     FeeForSimulationGetterComponent, HasFeeForSimulation,
 };
@@ -146,6 +152,13 @@ delegate_components! {
             SignerTypeComponent,
             TransactionHashTypeComponent,
             TxResponseTypeComponent,
+
+            NonceAllocatorComponent,
+            MessageSenderComponent,
+            MessagesWithSignerSenderComponent,
+            MessagesWithSignerAndNonceSenderComponent,
+            TxResponsePollerComponent,
+
             JsonRpcClientTypeComponent,
             TxEncoderComponent,
             TxFeeEstimatorComponent,
@@ -154,9 +167,6 @@ delegate_components! {
             NonceQuerierComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
-            TxResponsePollerComponent,
-            NonceAllocatorComponent,
-            MessagesWithSignerSenderComponent,
             PollTimeoutGetterComponent,
             TxResponseAsEventsParserComponent,
         ]:
@@ -221,10 +231,13 @@ pub trait CanUseSovereignRollup:
     + HasMutexForNonceAllocation
     + CanQueryNonce
     + CanAllocateNonce
+    + CanSendMessagesWithSigner
+    + CanSendMessagesWithSignerAndNonce
     + CanPublishTransactionBatch
     + CanQueryTxResponse
     + CanPollTxResponse
     + CanAssertEventualAmount
+    + HasLogger
 where
     Self::Runtime: HasMutex,
 {
