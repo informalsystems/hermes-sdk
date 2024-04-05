@@ -43,10 +43,7 @@ where
             .build(rpc_url)
             .map_err(Bootstrap::raise_error)?;
 
-        let rollup = SovereignRollup {
-            runtime: bootstrap.runtime().clone(),
-            rpc_client,
-        };
+        let rollup = SovereignRollup::new(bootstrap.runtime().clone(), rpc_client);
 
         Ok(SovereignRollupDriver {
             rollup,

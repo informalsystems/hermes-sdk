@@ -4,7 +4,6 @@ use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use borsh::BorshSerialize;
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
@@ -14,16 +13,13 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
-use hermes_sovereign_rollup_components::traits::publish_batch::CanPublishTransactionBatch;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
-use hermes_sovereign_rollup_components::types::tx::tx_hash::TxHash;
-use hermes_sovereign_rollup_components::utils::encode_tx::encode_and_sign_sovereign_tx;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
@@ -107,8 +103,6 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             &create_client_settings,
         ).await?;
 
-        println!("create client payload: {:?}", create_client_payload);
-
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
             cosmos_chain,
             create_client_payload
@@ -128,30 +122,12 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             .get("user-a")
             .ok_or_else(|| eyre!("expect user-a wallet"))?;
 
-        let tx_bytes = encode_and_sign_sovereign_tx(
+        let events = rollup.send_messages_with_signer(
             &wallet_a.signing_key,
-            message.try_to_vec()?,
-            0,
-            0,
-            0,
-            0,
-        )?;
+            &[message],
+        ).await?;
 
-        let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
-
-        // TODO: publishing a create client message currently fails, because
-        // ibc-rs expects the absence of frozen height to be encoded as `None`,
-        // but ibc-relayer-types encode it as a zero height here:
-        // https://github.com/informalsystems/hermes/blob/master/crates/relayer-types/src/clients/ics07_tendermint/client_state.rs#L308-L313
-
-        rollup.publish_transaction_batch(&[tx_bytes]).await?;
-        sleep(Duration::from_secs(2)).await;
-
-        {
-            let response = rollup.query_tx_response(&tx_hash).await?;
-
-            println!("querty tx hash {} response: {:?}", tx_hash, response);
-        }
+        println!("CreateClient events: {:?}", events);
 
         <Result<(), Error>>::Ok(())
     })?;
