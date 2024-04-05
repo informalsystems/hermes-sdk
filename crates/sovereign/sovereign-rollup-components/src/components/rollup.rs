@@ -26,6 +26,7 @@ use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEv
 use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetterComponent;
+use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
@@ -39,6 +40,7 @@ use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
 use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
+use crate::impls::transaction::submit_tx::SubmitSovereignTransaction;
 use crate::impls::types::chain::ProvideSovereignChainTypes;
 use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
 use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
@@ -98,5 +100,7 @@ delegate_components! {
             FeeForSimulationGetterComponent,
         ]:
             ReturnSovereignTxFee<0>,
+        TxSubmitterComponent:
+            SubmitSovereignTransaction,
     }
 }

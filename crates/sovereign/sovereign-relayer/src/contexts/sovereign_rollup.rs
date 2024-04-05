@@ -33,6 +33,9 @@ use hermes_relayer_components::transaction::traits::query_tx_response::{
 use hermes_relayer_components::transaction::traits::simulation_fee::{
     FeeForSimulationGetterComponent, HasFeeForSimulation,
 };
+use hermes_relayer_components::transaction::traits::submit_tx::{
+    CanSubmitTx, TxSubmitterComponent,
+};
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
@@ -118,6 +121,7 @@ delegate_components! {
             TxEncoderComponent,
             TxFeeEstimatorComponent,
             FeeForSimulationGetterComponent,
+            TxSubmitterComponent,
             TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
             TxResponsePollerComponent,
@@ -164,6 +168,7 @@ pub trait CanUseSovereignRollup:
     + CanEncodeTx
     + CanEstimateTxFee
     + HasFeeForSimulation
+    + CanSubmitTx
     + CanPublishTransactionBatch
     + CanQueryTxResponse
     + CanPollTxResponse
