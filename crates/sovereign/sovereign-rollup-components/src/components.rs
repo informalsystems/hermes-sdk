@@ -43,7 +43,6 @@ use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
-use crate::impls::transaction::publish_batch::PublishSovereignTransactionBatch;
 use crate::impls::transaction::query_nonce::QuerySovereignNonce;
 use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
 use crate::impls::transaction::submit_tx::SubmitSovereignTransaction;
@@ -51,7 +50,6 @@ use crate::impls::types::chain::ProvideSovereignChainTypes;
 use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
 use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
 use crate::traits::json_rpc_client::JsonRpcClientTypeComponent;
-use crate::traits::publish_batch::TransactionBatchPublisherComponent;
 
 pub struct SovereignRollupClientComponents;
 
@@ -98,8 +96,6 @@ delegate_components! {
             DefaultTxComponents,
         JsonRpcClientTypeComponent:
             ProvideJsonRpseeClient,
-        TransactionBatchPublisherComponent:
-            PublishSovereignTransactionBatch,
         TxResponseQuerierComponent:
             QuerySovereignTxResponse,
         PollTimeoutGetterComponent:

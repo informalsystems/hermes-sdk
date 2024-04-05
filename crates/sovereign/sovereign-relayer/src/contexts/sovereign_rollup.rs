@@ -71,9 +71,6 @@ use hermes_sovereign_rollup_components::components::SovereignRollupClientCompone
 use hermes_sovereign_rollup_components::traits::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
 };
-use hermes_sovereign_rollup_components::traits::publish_batch::{
-    CanPublishTransactionBatch, TransactionBatchPublisherComponent,
-};
 use hermes_sovereign_rollup_components::types::rollup_id::RollupId;
 use hermes_sovereign_rollup_components::types::tx::nonce_guard::SovereignNonceGuard;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
@@ -165,7 +162,6 @@ delegate_components! {
             FeeForSimulationGetterComponent,
             TxSubmitterComponent,
             NonceQuerierComponent,
-            TransactionBatchPublisherComponent,
             TxResponseQuerierComponent,
             PollTimeoutGetterComponent,
             TxResponseAsEventsParserComponent,
@@ -233,7 +229,6 @@ pub trait CanUseSovereignRollup:
     + CanAllocateNonce
     + CanSendMessagesWithSigner
     + CanSendMessagesWithSignerAndNonce
-    + CanPublishTransactionBatch
     + CanQueryTxResponse
     + CanPollTxResponse
     + CanAssertEventualAmount
