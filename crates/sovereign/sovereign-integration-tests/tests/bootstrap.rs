@@ -12,6 +12,7 @@ use hermes_relayer_components::transaction::traits::encode_tx::CanEncodeTx;
 use hermes_relayer_components::transaction::traits::parse_events::CanParseTxResponseAsEvents;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
+use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
@@ -120,15 +121,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     .encode_tx(&wallet_a.signing_key, &0, &0, &[message])
                     .await?;
 
-                let tx_hash = TxHash::from_signed_tx_bytes(&tx_bytes);
-
-                {
-                    let response = rollup.query_tx_response(&tx_hash).await?;
-
-                    assert!(response.is_none());
-                }
-
-                rollup.publish_transaction_batch(&[tx_bytes]).await?;
+                let tx_hash = rollup.submit_tx(&tx_bytes).await?;
 
                 rollup
                     .assert_eventual_amount(

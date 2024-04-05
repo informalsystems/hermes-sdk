@@ -35,4 +35,6 @@ ibc-relayer                             = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
 ibc-proto-sov                           = { workspace = true }
 
+futures         = { workspace = true }
+ed25519-dalek   = { workspace = true }
 jsonrpsee       = { workspace = true, features = ["http-client"] }

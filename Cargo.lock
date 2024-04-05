@@ -2119,6 +2119,8 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cgp-error-eyre",
+ "ed25519-dalek",
+ "futures",
  "hermes-celestia-chain",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
@@ -2150,6 +2152,7 @@ dependencies = [
  "cgp-core",
  "ed25519-dalek",
  "eyre",
+ "futures",
  "hermes-cosmos-chain-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",

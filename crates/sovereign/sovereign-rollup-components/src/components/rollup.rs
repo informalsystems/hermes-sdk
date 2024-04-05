@@ -22,6 +22,7 @@ use hermes_relayer_components::transaction::impls::poll_tx_response::{
 };
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
+use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
 use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
@@ -79,6 +80,7 @@ delegate_components! {
             SignerTypeComponent,
             TransactionHashTypeComponent,
             TxResponseTypeComponent,
+            NonceGuardComponent,
         ]:
             ProvideSovereignTransactionTypes,
         JsonRpcClientTypeComponent:
