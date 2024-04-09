@@ -92,6 +92,7 @@ jobs:
       - name: run integration tests
         env:
           CHAIN_COMMAND_PATHS: simd
+          WASM_CODE_HASH: 8c9f52018cae6ca99eacc1a5e3e16e677c33172618f89b3ab706cdd715a8a0f0
           RUST_BACKTRACE: 1
         run: |
             nix shell .#cargo-nextest .#protobuf .#ibc-go-v7-wasm-simapp .#celestia-app .#celestia-node .#sovereign-rollup -c \

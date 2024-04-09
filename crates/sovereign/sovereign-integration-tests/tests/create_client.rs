@@ -27,6 +27,7 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::C
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -156,6 +157,24 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         .unwrap_or_else(|_| "tests/utils/sov_celestia_client_cw.wasm".to_string())
         .into();
 
+    let wasm_client_code_hash_str = var("WASM_CODE_HASH").expect("Wasm code hash is required");
+    if wasm_client_code_hash_str.len() % 2 != 0 {
+        return Err(
+            eyre!("Given Wasm code hash is of odd length: {wasm_client_code_hash_str}").into(),
+        );
+    }
+    let mut wasm_code_hash = Vec::new();
+    for i in (0..wasm_client_code_hash_str.len()).step_by(2) {
+        let byte_str = &wasm_client_code_hash_str[i..i + 2];
+
+        let byte = u8::from_str_radix(byte_str, 16)?;
+        wasm_code_hash.push(byte);
+    }
+
+    let sovereign_create_client_options = SovereignCreateClientOptions {
+        code_hash: wasm_code_hash,
+    };
+
     tokio_runtime.block_on(async move {
         let cosmos_chain_driver = bootstrap.bootstrap_chain("cosmos-1").await?;
 
@@ -191,7 +210,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         // Create Sovereign client on Cosmos chain
         let create_client_payload = <SovereignChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
             &sovereign_chain,
-            &create_client_settings
+            &sovereign_create_client_options
         ).await?;
 
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<SovereignChain>>::build_create_client_message(

@@ -18,3 +18,7 @@ pub struct SovereignUpdateClientPayload {
     pub final_state_height: Height,
     // TODO: Add rollup payloads
 }
+
+pub struct SovereignCreateClientOptions {
+    pub code_hash: Vec<u8>,
+}
