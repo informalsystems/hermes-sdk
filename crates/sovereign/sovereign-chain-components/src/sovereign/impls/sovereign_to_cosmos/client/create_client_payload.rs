@@ -5,6 +5,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
+use ibc::primitives::Timestamp;
 use sov_celestia_client::types::client_state::test_util::{
     dummy_sov_client_state, dummy_sov_consensus_state,
 };
@@ -39,7 +40,8 @@ where
         let latest_height = Height::new(0, 10).unwrap();
 
         let client_state = dummy_sov_client_state(chain_id.clone(), latest_height);
-        let consensus_state = dummy_sov_consensus_state();
+        let tm = Timestamp::now();
+        let consensus_state = dummy_sov_consensus_state(tm);
 
         let code_hash = create_client_options.code_hash.clone();
 

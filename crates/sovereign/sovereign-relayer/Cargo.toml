@@ -33,7 +33,8 @@ hermes-logging-components               = { workspace = true }
 
 ibc-relayer                             = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
-ibc-proto-sov                           = { workspace = true }
+ibc-proto                               = { workspace = true }
+sov-celestia-client                     = { workspace = true }
 
 futures         = { workspace = true }
 ed25519-dalek   = { workspace = true }

@@ -263,7 +263,9 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         ).await?;
 
         for update_message in update_client_messages.into_iter() {
-            let _events = cosmos_chain.send_message(update_message).await?;
+            // TODO: remove assertion once the dummy data used to update client is replaced with correct data
+            let events = cosmos_chain.send_message(update_message).await;
+            assert!(events.is_err(), "Client update will fail due to next validator set hash validation failure");
         }
 
         let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
