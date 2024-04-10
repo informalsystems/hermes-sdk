@@ -164,8 +164,8 @@ ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", re
 
 basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "feat/sov-support" }
 
-sov-celestia-client         = { git = "https://github.com/informalsystems/sovereign-ibc.git", branch = "soares/remove-sov-dependency" }
-sov-celestia-client-types   = { git = "https://github.com/informalsystems/sovereign-ibc.git", branch = "soares/remove-sov-dependency" }
+sov-celestia-client         = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
+sov-celestia-client-types   = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
