@@ -32,7 +32,7 @@ hermes-wasm-client-components       = { workspace = true }
 
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
-ibc-proto-sov                       = { workspace = true }
+ibc-proto                           = { workspace = true }
 
 eyre               = { workspace = true }
 tokio              = { workspace = true }

@@ -30,7 +30,7 @@ where
         payload: SovereignCreateClientPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
         let raw_client_state = <SovereignClientState as ToProto<
-            sov_celestia_client::types::proto::v1::ClientState,
+            sov_celestia_client::types::proto::tendermint::v1::ClientState,
         >>::to_any(payload.client_state);
         let client_state = WasmClientState {
             data: raw_client_state.encode_to_vec(),
@@ -46,7 +46,7 @@ where
 
         let raw_consensus_state =
             <sov_celestia_client::types::consensus_state::SovTmConsensusState as ToProto<
-                sov_celestia_client::types::proto::v1::ConsensusState,
+                sov_celestia_client::types::proto::tendermint::v1::ConsensusState,
             >>::to_any(payload.consensus_state);
         let consensus_state: WasmConsensusState = WasmConsensusState {
             data: raw_consensus_state.encode_to_vec(),

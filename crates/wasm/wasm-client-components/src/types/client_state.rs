@@ -1,5 +1,5 @@
 use eyre::{eyre, Error};
-use ibc_core::client::types::Height;
+use ibc::core::client::types::Height;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
 use ibc_proto::Protobuf;

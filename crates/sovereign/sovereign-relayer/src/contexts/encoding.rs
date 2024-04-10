@@ -12,7 +12,8 @@ use hermes_sovereign_chain_components::encoding::components::{
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
-use ibc_proto_sov::ibc::lightclients::sovereign::tendermint::v1::ClientState as ProtoSovereignClientState;
+//use sov_celestia_client:: as ProtoSovereignClientState;
+use sov_celestia_client::types::proto::tendermint::v1::ClientState as ProtoSovereignClientState;
 
 pub struct SovereignEncoding;
 

@@ -27,7 +27,7 @@ basecoin                            = { workspace = true }
 ibc                                 = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 tendermint                          = { workspace = true, features = ["rust-crypto"] }
-tendermint-testgen                  =  { workspace = true }
+tendermint-testgen                  = { workspace = true }
 
 prost       = { workspace = true }
 tokio       = { workspace = true, features = ["full"] }

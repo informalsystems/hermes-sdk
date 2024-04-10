@@ -24,9 +24,8 @@ hermes-protobuf-encoding-components     = { workspace = true }
 
 ibc-relayer-types                       = { workspace = true }
 tendermint-proto                        = { workspace = true }
-sov-celestia-client                     = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "3f37508241f21bb36e6706d6a458dd6e70afb8ab", features = ["test-util"] }
-ibc-proto                               = { git = "https://github.com/cosmos/ibc-proto-rs.git", rev = "1b1d7a9" }
-ibc-core                                = { git = "https://github.com/cosmos/ibc-rs.git", rev = "552863ec93", default-features = false, features = ["borsh","schema","serde"] }
+ibc-proto                               = { workspace = true }
+ibc                                     = { workspace = true, features = ["borsh","schema","serde"] }
 
 eyre                                    = { workspace = true }
 prost                                   = { workspace = true }

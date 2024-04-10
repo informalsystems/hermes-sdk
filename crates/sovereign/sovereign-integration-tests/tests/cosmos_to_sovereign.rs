@@ -23,7 +23,7 @@ use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use ibc_proto_sov::google::protobuf::Any;
+use ibc_proto::google::protobuf::Any;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
