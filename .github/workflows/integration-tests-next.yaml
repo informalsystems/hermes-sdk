@@ -26,7 +26,7 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.77.1
+          toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@v2
       - name: run integration tests

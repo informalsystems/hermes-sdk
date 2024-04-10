@@ -151,13 +151,14 @@ debug = 1
 overflow-checks = true
 
 [patch.crates-io]
-ibc                     = { git = "https://github.com/cosmos/ibc-rs.git", rev = "c579628c67" }
-ibc-query               = { git = "https://github.com/cosmos/ibc-rs.git", rev = "c579628c67" }
+ibc                     = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d4c36554ba" }
+ibc-query               = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d4c36554ba" }
+ibc-derive              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d4c36554ba" }
 
-ibc-derive              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "c579628c67" }
-basecoin                = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "90886ab" }
+basecoin                = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "98462589" }
 
-sov-celestia-client     = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "2214dbee441ff005083841f4cd5983229d08d306" }
+sov-celestia-client         = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "5967c70f" }
+sov-celestia-client-types   = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "5967c70f" }
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
@@ -214,15 +215,15 @@ hermes-sovereign-integration-tests  = { path = "./crates/sovereign/sovereign-int
 
 hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
 
-# ibc-relayer-types   = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-# ibc-relayer         = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-# ibc-telemetry       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-# ibc-proto                        = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "main" }
+# ibc-relayer-types                 = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-relayer                       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-telemetry                     = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+# ibc-proto                         = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "main" }
 
-# tendermint                       = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-rpc                   = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-proto                 = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-light-client          = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-light-client-verifier = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-light-client-detector = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-testgen               = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
+# tendermint                        = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
+# tendermint-rpc                    = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
+# tendermint-proto                  = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
+# tendermint-light-client           = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
+# tendermint-light-client-verifier  = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
+# tendermint-light-client-detector  = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
+# tendermint-testgen                = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
