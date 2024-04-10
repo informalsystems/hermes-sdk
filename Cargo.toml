@@ -135,7 +135,7 @@ hermes-celestia-test-components         = { version = "0.1.0" }
 hermes-celestia-integration-tests       = { version = "0.1.0" }
 
 hermes-sovereign-chain-components       = { version = "0.1.0" }
-hermes-sovereign-rollup-components       = { version = "0.1.0" }
+hermes-sovereign-rollup-components      = { version = "0.1.0" }
 hermes-sovereign-relayer                = { version = "0.1.0" }
 hermes-sovereign-test-components        = { version = "0.1.0" }
 hermes-sovereign-integration-tests      = { version = "0.1.0" }
@@ -157,7 +157,6 @@ ibc-query               = { git = "https://github.com/cosmos/ibc-rs.git", rev = 
 ibc-derive              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "c579628c67" }
 basecoin                = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "90886ab" }
 
-#sov-celestia-client     = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "3f37508241f21bb36e6706d6a458dd6e70afb8ab" }
 sov-celestia-client     = { git = "https://github.com/informalsystems/sovereign-ibc.git", rev = "2214dbee441ff005083841f4cd5983229d08d306" }
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

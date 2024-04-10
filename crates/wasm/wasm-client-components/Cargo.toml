@@ -26,7 +26,7 @@ ibc-relayer-types                       = { workspace = true }
 tendermint-proto                        = { workspace = true }
 sov-celestia-client                     = { workspace = true, features = ["test-util"] }
 ibc-proto                               = { workspace = true }
-ibc                                     = { workspace = true, default-features = false, features = ["borsh","schema","serde"] }
+ibc                                     = { workspace = true, features = ["borsh","schema","serde"] }
 
 eyre                                    = { workspace = true }
 prost                                   = { workspace = true }
