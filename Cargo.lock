@@ -2261,7 +2261,6 @@ dependencies = [
  "ibc-proto",
  "ibc-relayer-types",
  "prost",
- "sov-celestia-client 0.1.0 (git+https://github.com/informalsystems/sovereign-ibc.git?rev=2214dbee441ff005083841f4cd5983229d08d306)",
  "tendermint-proto",
 ]
 
