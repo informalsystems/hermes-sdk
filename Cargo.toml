@@ -207,7 +207,7 @@ hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integ
 hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-components" }
 
 hermes-sovereign-chain-components   = { path = "./crates/sovereign/sovereign-chain-components" }
-hermes-sovereign-rollup-components   = { path = "./crates/sovereign/sovereign-rollup-components" }
+hermes-sovereign-rollup-components  = { path = "./crates/sovereign/sovereign-rollup-components" }
 hermes-sovereign-relayer            = { path = "./crates/sovereign/sovereign-relayer" }
 hermes-sovereign-test-components    = { path = "./crates/sovereign/sovereign-test-components" }
 hermes-sovereign-integration-tests  = { path = "./crates/sovereign/sovereign-integration-tests" }
