@@ -34,6 +34,6 @@ where
         let value =
             <DecodeAsAnyProtobuf<InStrategy, EncodeFromContext>>::decode(encoding, encoded)?;
 
-        Ok(value.into())
+        Ok(value)
     }
 }
