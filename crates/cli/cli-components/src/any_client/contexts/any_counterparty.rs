@@ -18,7 +18,7 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
 use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::impls::delegate::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientStateVia;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
