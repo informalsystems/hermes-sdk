@@ -16,6 +16,7 @@ use ibc_proto::google::protobuf::Any as ProtoAny;
 use prost::{EncodeError, Message};
 
 use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::consensus_state::SovereignConsensusState;
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
 /**
@@ -34,7 +35,8 @@ where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + CanConvert<WasmClientState, Any>
         + CanEncode<WasmClientState>
-        + CanEncode<SovereignClientState>,
+        + CanEncode<SovereignClientState>
+        + CanEncode<SovereignConsensusState>,
 {
     async fn build_create_client_message(
         _chain: &Chain,
@@ -60,6 +62,7 @@ where
             <sov_celestia_client::types::consensus_state::SovTmConsensusState as ToProto<
                 sov_celestia_client::types::proto::tendermint::v1::ConsensusState,
             >>::to_any(payload.consensus_state);
+
         let consensus_state: WasmConsensusState = WasmConsensusState {
             data: raw_consensus_state.encode_to_vec(),
         };

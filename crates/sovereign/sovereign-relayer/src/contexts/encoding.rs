@@ -13,9 +13,9 @@ use hermes_sovereign_chain_components::encoding::components::{
     IsSovereignEncodingComponent, SovereignEncodingComponents as BaseSovereignEncodingComponents,
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_chain_components::sovereign::types::consensus_state::SovereignConsensusState;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
-use sov_celestia_client::types::proto::tendermint::v1::ClientState as ProtoSovereignClientState;
 
 pub struct SovereignEncoding;
 
@@ -61,10 +61,12 @@ pub trait CanUseSovereignEncoding:
     + CanEncodeAndDecode<WasmClientState>
     + CanEncodeAndDecode<Via<Any, WasmClientState>>
     + CanEncodeAndDecode<Via<Any, WasmConsensusState>>
-    + CanEncodeAndDecode<ProtoSovereignClientState>
     + CanEncodeAndDecode<SovereignClientState>
+    + CanEncodeAndDecode<SovereignConsensusState>
     + CanEncodeAndDecode<Via<Any, SovereignClientState>>
+    + CanEncodeAndDecode<Via<Any, SovereignConsensusState>>
     + CanDecode<Via<WasmClientState, SovereignClientState>>
+    + CanEncodeAndDecode<Via<WasmConsensusState, SovereignConsensusState>>
     + CanConvertBothWays<WasmClientState, Any>
     + CanConvertBothWays<WasmConsensusState, Any>
 {

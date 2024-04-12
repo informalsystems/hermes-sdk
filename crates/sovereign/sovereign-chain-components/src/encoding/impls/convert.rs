@@ -6,9 +6,11 @@ use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, W
 use hermes_wasm_client_components::types::consensus_state::{
     ProtoWasmConsensusState, WasmConsensusState,
 };
-use sov_celestia_client::types::proto::tendermint::v1::ClientState as ProtoSovereignClientState;
 
-use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::client_state::{ProtoSovereignClientState, SovereignClientState};
+use crate::sovereign::types::consensus_state::{
+    ProtoSovereignConsensusState, SovereignConsensusState,
+};
 
 pub struct SovereignConverterComponents;
 
@@ -17,17 +19,28 @@ delegate_components! {
         [
             (WasmClientState, ProtoWasmClientState),
             (ProtoWasmClientState, WasmClientState),
+
             (WasmConsensusState, ProtoWasmConsensusState),
             (ProtoWasmConsensusState, WasmConsensusState),
+
             (WasmClientState, Any),
             (Any, WasmClientState),
+
             (WasmConsensusState, Any),
             (Any, WasmConsensusState),
         ]:
             WasmEncodingComponents,
+
         (SovereignClientState, ProtoSovereignClientState):
             ConvertFrom,
+
         (ProtoSovereignClientState, SovereignClientState):
+            TryConvertFrom,
+
+        (SovereignConsensusState, ProtoSovereignConsensusState):
+            ConvertFrom,
+
+        (ProtoSovereignConsensusState, SovereignConsensusState):
             TryConvertFrom,
     }
 }

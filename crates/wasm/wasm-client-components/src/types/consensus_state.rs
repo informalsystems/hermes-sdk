@@ -1,6 +1,11 @@
 use cgp_core::HasErrorType;
 use hermes_encoding_components::traits::convert::Converter;
-use ibc_proto::google::protobuf::Any;
+use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::{CanEncode, Encoder};
+use hermes_encoding_components::types::via::Via;
+use hermes_protobuf_encoding_components::types::Any;
+use ibc_proto::google::protobuf::Any as ProtoAny;
 use prost::EncodeError;
 
 use crate::utils::encode::encode_to_any;
@@ -53,8 +58,49 @@ where
     }
 }
 
+pub struct EncodeViaWasmConsensusState;
+
+impl<Encoding, Value> Encoder<Encoding, Via<WasmConsensusState, Value>>
+    for EncodeViaWasmConsensusState
+where
+    Encoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanEncode<Via<Any, WasmConsensusState>>
+        + CanEncode<Via<Any, Value>>,
+    Value: Clone,
+{
+    fn encode(
+        encoding: &Encoding,
+        value: &Via<WasmConsensusState, Value>,
+    ) -> Result<Vec<u8>, Encoding::Error> {
+        let data = encoding.encode(&<Via<Any, Value>>::from(value.value.clone()))?;
+
+        let consensus_state = WasmConsensusState { data };
+
+        encoding.encode(&<Via<Any, WasmConsensusState>>::from(consensus_state))
+    }
+}
+
+impl<Encoding, Value> Decoder<Encoding, Via<WasmConsensusState, Value>>
+    for EncodeViaWasmConsensusState
+where
+    Encoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanDecode<Via<Any, WasmConsensusState>>
+        + CanDecode<Via<Any, Value>>,
+{
+    fn decode(
+        encoding: &Encoding,
+        encoded: &Vec<u8>,
+    ) -> Result<Via<WasmConsensusState, Value>, Encoding::Error> {
+        let wasm_client_state: Via<Any, WasmConsensusState> = encoding.decode(encoded)?;
+
+        let value: Via<Any, Value> = encoding.decode(&wasm_client_state.value.data)?;
+
+        Ok(value.value.into())
+    }
+}
+
 impl WasmConsensusState {
-    pub fn encode_protobuf(&self) -> Result<Any, EncodeError> {
+    pub fn encode_protobuf(&self) -> Result<ProtoAny, EncodeError> {
         let proto_message = ProtoWasmConsensusState {
             data: self.data.clone(),
         };

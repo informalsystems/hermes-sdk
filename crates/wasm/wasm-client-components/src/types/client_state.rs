@@ -74,9 +74,9 @@ where
     }
 }
 
-pub struct EncodeViaWasmClientState;
+pub struct DecodeViaWasmClientState;
 
-impl<Encoding, Value> Decoder<Encoding, Via<WasmClientState, Value>> for EncodeViaWasmClientState
+impl<Encoding, Value> Decoder<Encoding, Via<WasmClientState, Value>> for DecodeViaWasmClientState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + CanDecode<Via<Any, WasmClientState>>

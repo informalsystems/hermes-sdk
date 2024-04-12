@@ -1,3 +1,4 @@
+use crate::sovereign::types::consensus_state::SovereignConsensusState;
 use cgp_core::prelude::*;
 use hermes_protobuf_encoding_components::impl_type_url;
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
@@ -17,10 +18,17 @@ delegate_components! {
             WasmEncodingComponents,
         SovereignClientState:
             SovereignClientStateUrl,
+        SovereignConsensusState:
+            SovereignConsensusStateUrl,
     }
 }
 
 impl_type_url!(
     SovereignClientStateUrl,
-    "/ibc.lightclients.sovereign.tendermint.v1.ClientState"
+    "/ibc.lightclients.sovereign.tendermint.v1.ClientState",
+);
+
+impl_type_url!(
+    SovereignConsensusStateUrl,
+    "/ibc.lightclients.sovereign.tendermint.v1.ConsensusState",
 );
