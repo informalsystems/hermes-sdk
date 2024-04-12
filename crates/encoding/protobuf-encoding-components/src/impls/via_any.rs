@@ -1,39 +1,39 @@
+use core::marker::PhantomData;
+
+use cgp_core::prelude::Async;
 use cgp_core::HasErrorType;
 use hermes_encoding_components::traits::decoder::Decoder;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::Encoder;
-use hermes_encoding_components::types::via::Via;
-use prost_types::Any;
 
-use crate::impls::any::EncodeAsAnyProtobuf;
+use crate::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 use crate::impls::from_context::EncodeFromContext;
 
-pub struct EncodeViaAny;
+pub struct EncodeViaAny<InStrategy>(pub PhantomData<InStrategy>);
 
-impl<Encoding, Value> Encoder<Encoding, Via<Any, Value>> for EncodeViaAny
+impl<Encoding, Strategy, InStrategy, Value> Encoder<Encoding, Strategy, Value>
+    for EncodeViaAny<InStrategy>
 where
     Encoding: HasEncodedType + HasErrorType,
-    EncodeAsAnyProtobuf<EncodeFromContext>: Encoder<Encoding, Value>,
+    EncodeAsAnyProtobuf<InStrategy, EncodeFromContext>: Encoder<Encoding, Strategy, Value>,
+    InStrategy: Async,
 {
-    fn encode(
-        encoding: &Encoding,
-        value: &Via<Any, Value>,
-    ) -> Result<Encoding::Encoded, Encoding::Error> {
-        <EncodeAsAnyProtobuf<EncodeFromContext>>::encode(encoding, &value.value)
+    fn encode(encoding: &Encoding, value: &Value) -> Result<Encoding::Encoded, Encoding::Error> {
+        <EncodeAsAnyProtobuf<InStrategy, EncodeFromContext>>::encode(encoding, value)
     }
 }
 
-impl<Encoding, Value> Decoder<Encoding, Via<Any, Value>> for EncodeViaAny
+impl<Encoding, Strategy, InStrategy, Value> Decoder<Encoding, Strategy, Value>
+    for EncodeViaAny<InStrategy>
 where
     Encoding: HasEncodedType + HasErrorType,
-    EncodeAsAnyProtobuf<EncodeFromContext>: Decoder<Encoding, Value>,
+    DecodeAsAnyProtobuf<InStrategy, EncodeFromContext>: Decoder<Encoding, InStrategy, Value>,
+    InStrategy: Async,
 {
-    fn decode(
-        encoding: &Encoding,
-        encoded: &Encoding::Encoded,
-    ) -> Result<Via<Any, Value>, Encoding::Error> {
-        let value = <EncodeAsAnyProtobuf<EncodeFromContext>>::decode(encoding, encoded)?;
+    fn decode(encoding: &Encoding, encoded: &Encoding::Encoded) -> Result<Value, Encoding::Error> {
+        let value =
+            <DecodeAsAnyProtobuf<InStrategy, EncodeFromContext>>::decode(encoding, encoded)?;
 
-        Ok(value.into())
+        Ok(value)
     }
 }
