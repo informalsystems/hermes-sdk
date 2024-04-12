@@ -42,6 +42,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateBytesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
@@ -212,6 +213,7 @@ delegate_components! {
             WriteAckQuerierComponent,
             ClientStateQuerierComponent,
             ClientStateBytesQuerierComponent,
+            ConsensusStateBytesQuerierComponent,
             AllClientStatesQuerierComponent,
             AllClientStatesBytesQuerierComponent,
             CreateClientOptionsTypeComponent,

@@ -30,7 +30,9 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateBytesQuerierComponent, ConsensusStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
@@ -102,6 +104,7 @@ use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
+use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
 use crate::impls::queries::consensus_state_height::{
     QueryConsensusStateHeightFromChainHandle, QueryConsensusStateHeightsFromChainHandle,
 };
@@ -172,6 +175,8 @@ delegate_components! {
             AllClientStatesBytesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
+        ConsensusStateBytesQuerierComponent:
+            QueryCosmosConsensusStateFromAbci,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:
