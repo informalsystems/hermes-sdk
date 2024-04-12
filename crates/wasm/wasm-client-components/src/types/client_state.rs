@@ -2,7 +2,6 @@ use eyre::{eyre, Error};
 use ibc::core::client::types::Height;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
-use ibc_proto::Protobuf;
 use prost::EncodeError;
 
 use crate::utils::encode::encode_to_any;
@@ -44,8 +43,6 @@ impl WasmClientState {
         encode_to_any(TYPE_URL, &proto_message)
     }
 }
-
-impl Protobuf<ProtoWasmClientState> for WasmClientState {}
 
 impl TryFrom<ProtoWasmClientState> for WasmClientState {
     type Error = Error;

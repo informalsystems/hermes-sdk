@@ -12,3 +12,7 @@ delegate_components! {
 }
 
 impl_type_url!(WasmClientStateUrl, "/ibc.lightclients.wasm.v1.ClientState");
+impl_type_url!(
+    WasmConsensusStateUrl,
+    "/ibc.lightclients.wasm.v1.ConsensusState"
+);

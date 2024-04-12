@@ -5,7 +5,7 @@ use hermes_encoding_components::traits::encoder::Encoder;
 use hermes_encoding_components::types::via::Via;
 use prost_types::Any;
 
-use crate::impls::any::EncodeAsAnyProtobuf;
+use crate::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 use crate::impls::from_context::EncodeFromContext;
 
 pub struct EncodeViaAny;
@@ -26,13 +26,13 @@ where
 impl<Encoding, Value> Decoder<Encoding, Via<Any, Value>> for EncodeViaAny
 where
     Encoding: HasEncodedType + HasErrorType,
-    EncodeAsAnyProtobuf<EncodeFromContext>: Decoder<Encoding, Value>,
+    DecodeAsAnyProtobuf<EncodeFromContext>: Decoder<Encoding, Value>,
 {
     fn decode(
         encoding: &Encoding,
         encoded: &Encoding::Encoded,
     ) -> Result<Via<Any, Value>, Encoding::Error> {
-        let value = <EncodeAsAnyProtobuf<EncodeFromContext>>::decode(encoding, encoded)?;
+        let value = <DecodeAsAnyProtobuf<EncodeFromContext>>::decode(encoding, encoded)?;
 
         Ok(value.into())
     }

@@ -1,7 +1,9 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
 };
@@ -56,12 +58,14 @@ where
 
 pub trait CanUseSovereignEncoding:
     CanDecode<ProtoWasmClientState>
-    + CanDecode<WasmClientState>
-    + CanDecode<Via<Any, WasmClientState>>
-    + CanDecode<ProtoSovereignClientState>
-    + CanDecode<SovereignClientState>
-    + CanDecode<Via<Any, SovereignClientState>>
+    + CanEncodeAndDecode<WasmClientState>
+    + CanEncodeAndDecode<Via<Any, WasmClientState>>
+    + CanEncodeAndDecode<ProtoSovereignClientState>
+    + CanEncodeAndDecode<SovereignClientState>
+    + CanEncodeAndDecode<Via<Any, SovereignClientState>>
     + CanDecode<Via<WasmClientState, SovereignClientState>>
+    + CanConvert<WasmClientState, Any>
+    + CanConvert<Any, WasmClientState>
 {
 }
 
