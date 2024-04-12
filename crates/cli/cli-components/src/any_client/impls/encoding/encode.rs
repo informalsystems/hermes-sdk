@@ -6,8 +6,7 @@ use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponen
 use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::schema::HasSchema;
-use hermes_protobuf_encoding_components::types::Any;
-use hermes_protobuf_encoding_components::types::Protobuf;
+use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;

@@ -1,4 +1,5 @@
 use alloc::vec::Vec;
+
 use cgp_core::prelude::*;
 
 use super::chain_status::CanQueryChainStatus;
