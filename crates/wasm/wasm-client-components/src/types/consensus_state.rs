@@ -5,10 +5,6 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::{CanEncode, Encoder};
 use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
-use ibc_proto::google::protobuf::Any as ProtoAny;
-use prost::EncodeError;
-
-use crate::utils::encode::encode_to_any;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -18,8 +14,6 @@ pub struct ProtoWasmConsensusState {
     #[prost(bytes = "vec", tag = "1")]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
-
-const TYPE_URL: &str = "/ibc.lightclients.wasm.v1.ConsensusState";
 
 #[derive(Debug)]
 pub struct WasmConsensusState {
@@ -96,15 +90,5 @@ where
         let value: Via<Any, Value> = encoding.decode(&wasm_client_state.value.data)?;
 
         Ok(value.value.into())
-    }
-}
-
-impl WasmConsensusState {
-    pub fn encode_protobuf(&self) -> Result<ProtoAny, EncodeError> {
-        let proto_message = ProtoWasmConsensusState {
-            data: self.data.clone(),
-        };
-
-        encode_to_any(TYPE_URL, &proto_message)
     }
 }
