@@ -7,8 +7,7 @@ use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
 };
-use hermes_encoding_components::types::via::Via;
-use hermes_protobuf_encoding_components::types::Any;
+use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_sovereign_chain_components::encoding::components::{
     IsSovereignEncodingComponent, SovereignEncodingComponents as BaseSovereignEncodingComponents,
 };
@@ -57,16 +56,16 @@ where
 }
 
 pub trait CanUseSovereignEncoding:
-    CanDecode<ProtoWasmClientState>
-    + CanEncodeAndDecode<WasmClientState>
-    + CanEncodeAndDecode<Via<Any, WasmClientState>>
-    + CanEncodeAndDecode<Via<Any, WasmConsensusState>>
-    + CanEncodeAndDecode<SovereignClientState>
-    + CanEncodeAndDecode<SovereignConsensusState>
-    + CanEncodeAndDecode<Via<Any, SovereignClientState>>
-    + CanEncodeAndDecode<Via<Any, SovereignConsensusState>>
-    + CanDecode<Via<WasmClientState, SovereignClientState>>
-    + CanEncodeAndDecode<Via<WasmConsensusState, SovereignConsensusState>>
+    CanDecode<Protobuf, ProtoWasmClientState>
+    + CanEncodeAndDecode<Protobuf, WasmClientState>
+    + CanEncodeAndDecode<Any, WasmClientState>
+    + CanEncodeAndDecode<Any, WasmConsensusState>
+    + CanEncodeAndDecode<Protobuf, SovereignClientState>
+    + CanEncodeAndDecode<Protobuf, SovereignConsensusState>
+    + CanEncodeAndDecode<Any, SovereignClientState>
+    + CanEncodeAndDecode<Any, SovereignConsensusState>
+    + CanDecode<WasmClientState, SovereignClientState>
+    + CanEncodeAndDecode<WasmConsensusState, SovereignConsensusState>
     + CanConvertBothWays<WasmClientState, Any>
     + CanConvertBothWays<WasmConsensusState, Any>
 {

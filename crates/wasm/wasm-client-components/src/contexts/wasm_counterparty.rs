@@ -8,9 +8,8 @@ use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
-use hermes_encoding_components::types::via::Via;
-use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientStateVia;
+use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
 };
@@ -59,7 +58,7 @@ delegate_components! {
         [
             ClientStateQuerierComponent,
             AllClientStatesBytesQuerierComponent,
-        ]: QueryAndDecodeClientStateVia<Any>,
+        ]: QueryAndDecodeClientState<Any>,
     }
 }
 
@@ -101,7 +100,9 @@ delegate_components! {
 }
 
 pub trait CanUseWasmClientEncoding:
-    CanDecode<ProtoWasmClientState> + CanDecode<WasmClientState> + CanDecode<Via<Any, WasmClientState>>
+    CanDecode<Protobuf, ProtoWasmClientState>
+    + CanDecode<Protobuf, WasmClientState>
+    + CanDecode<Any, WasmClientState>
 {
 }
 

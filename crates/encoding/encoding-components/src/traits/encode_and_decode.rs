@@ -1,9 +1,12 @@
 use crate::traits::decoder::CanDecode;
 use crate::traits::encoder::CanEncode;
 
-pub trait CanEncodeAndDecode<Value>: CanEncode<Value> + CanDecode<Value> {}
+pub trait CanEncodeAndDecode<Strategy, Value>:
+    CanEncode<Strategy, Value> + CanDecode<Strategy, Value>
+{
+}
 
-impl<Encoding, Value> CanEncodeAndDecode<Value> for Encoding where
-    Encoding: CanEncode<Value> + CanDecode<Value>
+impl<Encoding, Strategy, Value> CanEncodeAndDecode<Strategy, Value> for Encoding where
+    Encoding: CanEncode<Strategy, Value> + CanDecode<Strategy, Value>
 {
 }

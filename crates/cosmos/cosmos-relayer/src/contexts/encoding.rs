@@ -10,7 +10,7 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
-use hermes_encoding_components::types::via::Via;
+use hermes_protobuf_encoding_components::types::Protobuf;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
 
@@ -66,10 +66,10 @@ where
 
 pub trait CheckCosmosEncoding:
     HasEncodedType<Encoded = Vec<u8>>
-    + CanEncodeAndDecode<TendermintClientState>
-    + CanEncodeAndDecode<Via<Any, TendermintClientState>>
-    + CanEncodeAndDecode<TendermintConsensusState>
-    + CanEncodeAndDecode<Via<Any, TendermintConsensusState>>
+    + CanEncodeAndDecode<Protobuf, TendermintClientState>
+    + CanEncodeAndDecode<Any, TendermintClientState>
+    + CanEncodeAndDecode<Protobuf, TendermintConsensusState>
+    + CanEncodeAndDecode<Any, TendermintConsensusState>
 {
 }
 

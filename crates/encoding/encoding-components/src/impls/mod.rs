@@ -4,4 +4,3 @@ pub mod default_encoding;
 pub mod delegate;
 pub mod encoded;
 pub mod schema;
-pub mod via_identity;

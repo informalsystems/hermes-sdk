@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientStateVia;
-use hermes_relayer_components::chain::impls::queries::query_and_decode_consensus_state::QueryAndDecodeConsensusStateVia;
+use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_decode_consensus_state::QueryAndDecodeConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
@@ -22,9 +22,9 @@ delegate_components! {
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,
         ]:
-            QueryAndDecodeClientStateVia<Any>,
+            QueryAndDecodeClientState<Any>,
         ConsensusStateQuerierComponent:
-            QueryAndDecodeConsensusStateVia<Any>,
+            QueryAndDecodeConsensusState<Any>,
         CreateClientMessageBuilderComponent:
             BuildCosmosCreateClientMessage,
         UpdateClientMessageBuilderComponent:

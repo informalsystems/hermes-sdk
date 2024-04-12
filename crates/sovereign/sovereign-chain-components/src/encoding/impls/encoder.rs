@@ -1,9 +1,8 @@
 use cgp_core::prelude::*;
 use hermes_encoding_components::impls::convert_and_encode::ConvertAndEncode;
-use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
-use hermes_protobuf_encoding_components::types::Any;
+use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
 use hermes_wasm_client_components::types::client_state::{
     DecodeViaWasmClientState, ProtoWasmClientState, WasmClientState,
@@ -22,32 +21,32 @@ pub struct SovereignEncoderComponents;
 delegate_components! {
     SovereignEncoderComponents {
         [
-            Via<Any, WasmClientState>,
-            WasmClientState,
-            ProtoWasmClientState,
-            Via<Any, WasmConsensusState>,
-            WasmConsensusState,
-            ProtoWasmConsensusState,
+            (Any, WasmClientState),
+            (Protobuf, WasmClientState),
+            (Protobuf, ProtoWasmClientState),
+            (Any, WasmConsensusState),
+            (Protobuf, WasmConsensusState),
+            (Protobuf, ProtoWasmConsensusState),
         ]:
             WasmEncodingComponents,
 
-        Via<Any, SovereignClientState>:
-            EncodeViaAny,
-        SovereignClientState:
+        (Any, SovereignClientState):
+            EncodeViaAny<Protobuf>,
+        (Protobuf, SovereignClientState):
             ConvertAndEncode<ProtoSovereignClientState>,
-        ProtoSovereignClientState:
+        (Protobuf, ProtoSovereignClientState):
             EncodeAsProtobuf,
 
-        Via<Any, SovereignConsensusState>:
-            EncodeViaAny,
-        SovereignConsensusState:
+        (Any, SovereignConsensusState):
+            EncodeViaAny<Protobuf>,
+        (Protobuf, SovereignConsensusState):
             ConvertAndEncode<ProtoSovereignConsensusState>,
-        ProtoSovereignConsensusState:
+        (Protobuf, ProtoSovereignConsensusState):
             EncodeAsProtobuf,
 
-        Via<WasmClientState, SovereignClientState>:
+        (WasmClientState, SovereignClientState):
             DecodeViaWasmClientState,
-        Via<WasmConsensusState, SovereignConsensusState>:
+        (WasmConsensusState, SovereignConsensusState):
             EncodeViaWasmConsensusState,
     }
 }

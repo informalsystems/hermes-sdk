@@ -6,6 +6,7 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_encoding_components::traits::schema::HasSchema;
+use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -27,7 +28,7 @@ where
     Counterparty:
         HasCreateClientPayloadType<Chain, CreateClientPayload = CosmosCreateClientPayload>,
     Encoding: HasEncodedType<Encoded = Vec<u8>>
-        + CanEncode<TendermintClientState>
+        + CanEncode<Protobuf, TendermintClientState>
         + HasSchema<TendermintClientState>,
     Encoding::Schema: Display,
 {

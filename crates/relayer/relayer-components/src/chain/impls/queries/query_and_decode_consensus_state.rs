@@ -5,7 +5,6 @@ use cgp_core::{Async, CanRaiseError};
 use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
-use hermes_encoding_components::types::via::Via;
 
 use crate::chain::traits::queries::consensus_state::{
     CanQueryConsensusStateBytes, ConsensusStateQuerier,
@@ -13,17 +12,16 @@ use crate::chain::traits::queries::consensus_state::{
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::HasHeightType;
 
-pub struct QueryAndDecodeConsensusStateVia<Wrapper>(pub PhantomData<Wrapper>);
+pub struct QueryAndDecodeConsensusState<Strategy>(pub PhantomData<Strategy>);
 
-impl<Chain, Counterparty, Encoding, Wrapper> ConsensusStateQuerier<Chain, Counterparty>
-    for QueryAndDecodeConsensusStateVia<Wrapper>
+impl<Chain, Counterparty, Encoding, Strategy> ConsensusStateQuerier<Chain, Counterparty>
+    for QueryAndDecodeConsensusState<Strategy>
 where
     Chain: CanQueryConsensusStateBytes<Counterparty> + CanRaiseError<Encoding::Error>,
     Counterparty:
         HasConsensusStateType<Chain> + HasHeightType + HasDefaultEncoding<Encoding = Encoding>,
-    Encoding:
-        HasEncodedType<Encoded = Vec<u8>> + CanDecode<Via<Wrapper, Counterparty::ConsensusState>>,
-    Wrapper: Async,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanDecode<Strategy, Counterparty::ConsensusState>,
+    Strategy: Async,
 {
     async fn query_consensus_state(
         chain: &Chain,
@@ -39,6 +37,6 @@ where
             .decode(&consensus_state_bytes)
             .map_err(Chain::raise_error)?;
 
-        Ok(consensus_state.value)
+        Ok(consensus_state)
     }
 }

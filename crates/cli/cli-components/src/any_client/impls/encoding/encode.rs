@@ -3,12 +3,11 @@ use core::marker::PhantomData;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
-use hermes_encoding_components::impls::via_identity::{EncodeViaIdentity, Identity};
 use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::schema::HasSchema;
-use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
+use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
@@ -25,25 +24,25 @@ pub struct AnyClientEncoderComponents;
 delegate_components! {
     AnyClientEncoderComponents {
         [
-            Via<Any, TendermintClientState>,
-            TendermintClientState,
-            Any,
-            ProtoTendermintClientState,
+            (Any, TendermintClientState),
+            (Protobuf, TendermintClientState),
+            (Protobuf, Any),
+            (Protobuf, ProtoTendermintClientState),
         ]:
             CosmosEncodingComponents,
-        AnyClientState: AnyClientStateEncoder,
-        Via<Identity, AnyClientState>: EncodeViaIdentity,
+        (Protobuf, AnyClientState): AnyClientStateEncoder,
     }
 }
 
 pub struct AnyClientStateEncoder;
 
-impl<Encoding, ClientState> Decoder<Encoding, ClientState> for AnyClientStateEncoder
+impl<Encoding, Strategy, ClientState> Decoder<Encoding, Strategy, ClientState>
+    for AnyClientStateEncoder
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + HasSchemaType<Schema = &'static str>
-        + CanDecode<TendermintClientState>
-        + CanDecode<Any>
+        + CanDecode<Strategy, TendermintClientState>
+        + CanDecode<Strategy, Any>
         + HasSchema<TendermintClientState>
         + CanRaiseError<UnknownClientStateType>,
     ClientState: From<AnyClientState>,

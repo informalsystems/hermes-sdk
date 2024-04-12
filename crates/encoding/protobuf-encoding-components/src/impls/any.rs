@@ -1,6 +1,7 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
 
+use cgp_core::prelude::Async;
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decoder::Decoder;
@@ -16,14 +17,15 @@ pub struct TypeUrlMismatchError {
     pub actual_url: String,
 }
 
-pub struct EncodeAsAnyProtobuf<InEncoder>(pub PhantomData<InEncoder>);
+pub struct EncodeAsAnyProtobuf<InStrategy, InEncoder>(pub PhantomData<(InStrategy, InEncoder)>);
 
-pub struct DecodeAsAnyProtobuf<InEncoder>(pub PhantomData<InEncoder>);
+pub struct DecodeAsAnyProtobuf<InStrategy, InEncoder>(pub PhantomData<(InStrategy, InEncoder)>);
 
-impl<InEncoder, Encoding, Value> Encoder<Encoding, Value> for EncodeAsAnyProtobuf<InEncoder>
+impl<InEncoder, Encoding, Strategy, InStrategy, Value> Encoder<Encoding, Strategy, Value>
+    for EncodeAsAnyProtobuf<InStrategy, InEncoder>
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + HasErrorType,
-    InEncoder: Encoder<Encoding, Value>,
+    InEncoder: Encoder<Encoding, InStrategy, Value>,
     Encoding::Schema: Display,
     Self: Converter<Encoding, Value, Any>,
 {
@@ -34,11 +36,13 @@ where
     }
 }
 
-impl<InEncoder, Encoding, Value> Converter<Encoding, Value, Any> for EncodeAsAnyProtobuf<InEncoder>
+impl<InEncoder, Encoding, InStrategy, Value> Converter<Encoding, Value, Any>
+    for EncodeAsAnyProtobuf<InStrategy, InEncoder>
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + HasErrorType,
-    InEncoder: Encoder<Encoding, Value>,
+    InEncoder: Encoder<Encoding, InStrategy, Value>,
     Encoding::Schema: Display,
+    InStrategy: Async,
 {
     fn convert(encoding: &Encoding, value: &Value) -> Result<Any, Encoding::Error> {
         let encoded = InEncoder::encode(encoding, value)?;
@@ -53,7 +57,8 @@ where
     }
 }
 
-impl<InEncoder, Encoding, Value> Decoder<Encoding, Value> for DecodeAsAnyProtobuf<InEncoder>
+impl<InEncoder, Encoding, Strategy, InStrategy, Value> Decoder<Encoding, Strategy, Value>
+    for DecodeAsAnyProtobuf<InStrategy, InEncoder>
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>> + CanRaiseError<DecodeError>,
     Self: Converter<Encoding, Any, Value>,
@@ -65,12 +70,14 @@ where
     }
 }
 
-impl<InEncoder, Encoding, Value> Converter<Encoding, Any, Value> for DecodeAsAnyProtobuf<InEncoder>
+impl<InEncoder, Encoding, InStrategy, Value> Converter<Encoding, Any, Value>
+    for DecodeAsAnyProtobuf<InStrategy, InEncoder>
 where
     Encoding:
         HasEncodedType<Encoded = Vec<u8>> + HasSchema<Value> + CanRaiseError<TypeUrlMismatchError>,
-    InEncoder: Decoder<Encoding, Value>,
+    InEncoder: Decoder<Encoding, InStrategy, Value>,
     Encoding::Schema: Display,
+    InStrategy: Async,
 {
     fn convert(encoding: &Encoding, any: &Any) -> Result<Value, Encoding::Error> {
         let type_url = encoding.schema(PhantomData::<Value>).to_string();

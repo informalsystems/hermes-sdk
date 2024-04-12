@@ -5,7 +5,6 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
-use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
@@ -35,8 +34,8 @@ where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + CanConvert<WasmClientState, Any>
         + CanConvert<WasmConsensusState, Any>
-        + CanEncode<Via<Any, SovereignClientState>>
-        + CanEncode<Via<Any, SovereignConsensusState>>,
+        + CanEncode<Any, SovereignClientState>
+        + CanEncode<Any, SovereignConsensusState>,
 {
     async fn build_create_client_message(
         _chain: &Chain,
@@ -45,9 +44,7 @@ where
         let encoding = Counterparty::default_encoding();
 
         let sov_client_state_bytes = encoding
-            .encode(&<Via<Any, SovereignClientState>>::from(
-                payload.client_state,
-            ))
+            .encode(&payload.client_state)
             .map_err(Chain::raise_error)?;
 
         let wasm_client_state = WasmClientState {
@@ -61,9 +58,7 @@ where
             .map_err(Chain::raise_error)?;
 
         let sov_consensus_state_bytes = encoding
-            .encode(&<Via<Any, SovereignConsensusState>>::from(
-                payload.consensus_state,
-            ))
+            .encode(&payload.consensus_state)
             .map_err(Chain::raise_error)?;
 
         let wasm_consensus_state = WasmConsensusState {

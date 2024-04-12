@@ -3,7 +3,6 @@ use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::{CanEncode, Encoder};
-use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::types::Any;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -54,41 +53,32 @@ where
 
 pub struct EncodeViaWasmConsensusState;
 
-impl<Encoding, Value> Encoder<Encoding, Via<WasmConsensusState, Value>>
-    for EncodeViaWasmConsensusState
+impl<Encoding, Value> Encoder<Encoding, WasmConsensusState, Value> for EncodeViaWasmConsensusState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
-        + CanEncode<Via<Any, WasmConsensusState>>
-        + CanEncode<Via<Any, Value>>,
-    Value: Clone,
+        + CanEncode<Any, WasmConsensusState>
+        + CanEncode<Any, Value>,
 {
-    fn encode(
-        encoding: &Encoding,
-        value: &Via<WasmConsensusState, Value>,
-    ) -> Result<Vec<u8>, Encoding::Error> {
-        let data = encoding.encode(&<Via<Any, Value>>::from(value.value.clone()))?;
+    fn encode(encoding: &Encoding, value: &Value) -> Result<Vec<u8>, Encoding::Error> {
+        let data = encoding.encode(value)?;
 
         let consensus_state = WasmConsensusState { data };
 
-        encoding.encode(&<Via<Any, WasmConsensusState>>::from(consensus_state))
+        encoding.encode(&consensus_state)
     }
 }
 
-impl<Encoding, Value> Decoder<Encoding, Via<WasmConsensusState, Value>>
-    for EncodeViaWasmConsensusState
+impl<Encoding, Value> Decoder<Encoding, WasmConsensusState, Value> for EncodeViaWasmConsensusState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
-        + CanDecode<Via<Any, WasmConsensusState>>
-        + CanDecode<Via<Any, Value>>,
+        + CanDecode<Any, WasmConsensusState>
+        + CanDecode<Any, Value>,
 {
-    fn decode(
-        encoding: &Encoding,
-        encoded: &Vec<u8>,
-    ) -> Result<Via<WasmConsensusState, Value>, Encoding::Error> {
-        let wasm_client_state: Via<Any, WasmConsensusState> = encoding.decode(encoded)?;
+    fn decode(encoding: &Encoding, encoded: &Vec<u8>) -> Result<Value, Encoding::Error> {
+        let wasm_client_state: WasmConsensusState = encoding.decode(encoded)?;
 
-        let value: Via<Any, Value> = encoding.decode(&wasm_client_state.value.data)?;
+        let value: Value = encoding.decode(&wasm_client_state.data)?;
 
-        Ok(value.value.into())
+        Ok(value)
     }
 }
