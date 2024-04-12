@@ -1,6 +1,6 @@
 #[macro_export]
 macro_rules! impl_type_url {
-    ($component:ident, $type_url:literal) => {
+    ($component:ident, $type_url:literal $(,)?) => {
         pub struct $component;
 
         impl<Encoding, Value> $crate::vendor::SchemaGetter<Encoding, Value> for $component
