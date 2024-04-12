@@ -4,9 +4,12 @@ use hermes_encoding_components::impls::via_identity::{EncodeViaIdentity, Identit
 use hermes_encoding_components::types::via::Via;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
-use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
-use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
+
+use crate::types::tendermint::{
+    ProtoTendermintClientState, ProtoTendermintConsensusState, TendermintClientState,
+    TendermintConsensusState,
+};
 
 pub struct CosmosEncoderComponents;
 
@@ -16,8 +19,14 @@ delegate_components! {
         Via<Identity, TendermintClientState>: EncodeViaIdentity,
 
         TendermintClientState: ConvertAndEncode<ProtoTendermintClientState>,
+        ProtoTendermintClientState: EncodeAsProtobuf,
+
+        Via<Any, TendermintConsensusState>: EncodeViaAny,
+        Via<Identity, TendermintConsensusState>: EncodeViaIdentity,
+
+        TendermintConsensusState: ConvertAndEncode<ProtoTendermintConsensusState>,
+        ProtoTendermintConsensusState: EncodeAsProtobuf,
 
         Any: EncodeAsProtobuf,
-        ProtoTendermintClientState: EncodeAsProtobuf,
     }
 }
