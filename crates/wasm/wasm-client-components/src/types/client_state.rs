@@ -1,10 +1,8 @@
-use eyre::{eyre, Error};
+use cgp_core::{CanRaiseError, HasErrorType};
+use hermes_encoding_components::traits::convert::Converter;
+use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
-use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
-use prost::EncodeError;
-
-use crate::utils::encode::encode_to_any;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -19,8 +17,6 @@ pub struct ProtoWasmClientState {
     pub latest_height: ::core::option::Option<ProtoHeight>,
 }
 
-const TYPE_URL: &str = "/ibc.lightclients.wasm.v1.ClientState";
-
 #[derive(Clone, Debug)]
 pub struct WasmClientState {
     pub data: Vec<u8>,
@@ -28,45 +24,48 @@ pub struct WasmClientState {
     pub latest_height: Height,
 }
 
-impl WasmClientState {
-    pub fn encode_protobuf(&self) -> Result<Any, EncodeError> {
-        let latest_height = ProtoHeight {
-            revision_number: self.latest_height.revision_number(),
-            revision_height: self.latest_height.revision_height(),
-        };
-        let proto_message = ProtoWasmClientState {
-            data: self.data.clone(),
-            checksum: self.checksum.clone(),
-            latest_height: Some(latest_height),
-        };
+pub struct ProtoConvertWasmClientState;
 
-        encode_to_any(TYPE_URL, &proto_message)
-    }
-}
+impl<Encoding> Converter<Encoding, WasmClientState, ProtoWasmClientState>
+    for ProtoConvertWasmClientState
+where
+    Encoding: HasErrorType,
+{
+    fn convert(
+        _encoding: &Encoding,
+        client_state: &WasmClientState,
+    ) -> Result<ProtoWasmClientState, Encoding::Error> {
+        let height = ProtoHeight::from(client_state.latest_height);
 
-impl TryFrom<ProtoWasmClientState> for WasmClientState {
-    type Error = Error;
-
-    fn try_from(value: ProtoWasmClientState) -> Result<Self, Self::Error> {
-        let maybe_height = value
-            .latest_height
-            .ok_or_else(|| eyre!("Empty 'latest_height' in proto Wasm client state"))?;
-        let height = Height::try_from(maybe_height)?;
-        Ok(Self {
-            data: value.data,
-            checksum: value.checksum,
-            latest_height: height,
+        Ok(ProtoWasmClientState {
+            data: client_state.data.clone(),
+            checksum: client_state.checksum.clone(),
+            latest_height: Some(height),
         })
     }
 }
 
-impl From<WasmClientState> for ProtoWasmClientState {
-    fn from(value: WasmClientState) -> Self {
-        let height = ProtoHeight::from(value.latest_height);
-        Self {
-            data: value.data,
-            checksum: value.checksum,
-            latest_height: Some(height),
-        }
+impl<Encoding> Converter<Encoding, ProtoWasmClientState, WasmClientState>
+    for ProtoConvertWasmClientState
+where
+    Encoding: CanRaiseError<&'static str> + CanRaiseError<ClientError>,
+{
+    fn convert(
+        _encoding: &Encoding,
+        proto_client_state: &ProtoWasmClientState,
+    ) -> Result<WasmClientState, Encoding::Error> {
+        let proto_client_state = proto_client_state.clone();
+
+        let maybe_height = proto_client_state.latest_height.ok_or_else(|| {
+            Encoding::raise_error("Empty 'latest_height' in proto Wasm client state")
+        })?;
+
+        let height = Height::try_from(maybe_height).map_err(Encoding::raise_error)?;
+
+        Ok(WasmClientState {
+            data: proto_client_state.data,
+            checksum: proto_client_state.checksum,
+            latest_height: height,
+        })
     }
 }
