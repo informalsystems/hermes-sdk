@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use hermes_encoding_components::traits::convert::CanConvert;
+use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
@@ -14,7 +14,7 @@ use hermes_sovereign_chain_components::encoding::components::{
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
-//use sov_celestia_client:: as ProtoSovereignClientState;
+use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use sov_celestia_client::types::proto::tendermint::v1::ClientState as ProtoSovereignClientState;
 
 pub struct SovereignEncoding;
@@ -60,12 +60,13 @@ pub trait CanUseSovereignEncoding:
     CanDecode<ProtoWasmClientState>
     + CanEncodeAndDecode<WasmClientState>
     + CanEncodeAndDecode<Via<Any, WasmClientState>>
+    + CanEncodeAndDecode<Via<Any, WasmConsensusState>>
     + CanEncodeAndDecode<ProtoSovereignClientState>
     + CanEncodeAndDecode<SovereignClientState>
     + CanEncodeAndDecode<Via<Any, SovereignClientState>>
     + CanDecode<Via<WasmClientState, SovereignClientState>>
-    + CanConvert<WasmClientState, Any>
-    + CanConvert<Any, WasmClientState>
+    + CanConvertBothWays<WasmClientState, Any>
+    + CanConvertBothWays<WasmConsensusState, Any>
 {
 }
 

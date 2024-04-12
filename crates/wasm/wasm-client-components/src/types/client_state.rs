@@ -1,8 +1,19 @@
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::convert::Converter;
+use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::types::via::Via;
+use hermes_protobuf_encoding_components::types::Any;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
+
+#[derive(Clone, Debug)]
+pub struct WasmClientState {
+    pub data: Vec<u8>,
+    pub checksum: Vec<u8>,
+    pub latest_height: Height,
+}
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -15,13 +26,6 @@ pub struct ProtoWasmClientState {
     pub checksum: ::prost::alloc::vec::Vec<u8>,
     #[prost(message, optional, tag = "3")]
     pub latest_height: ::core::option::Option<ProtoHeight>,
-}
-
-#[derive(Clone, Debug)]
-pub struct WasmClientState {
-    pub data: Vec<u8>,
-    pub checksum: Vec<u8>,
-    pub latest_height: Height,
 }
 
 pub struct ProtoConvertWasmClientState;
@@ -67,5 +71,25 @@ where
             checksum: proto_client_state.checksum,
             latest_height: height,
         })
+    }
+}
+
+pub struct EncodeViaWasmClientState;
+
+impl<Encoding, Value> Decoder<Encoding, Via<WasmClientState, Value>> for EncodeViaWasmClientState
+where
+    Encoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanDecode<Via<Any, WasmClientState>>
+        + CanDecode<Via<Any, Value>>,
+{
+    fn decode(
+        encoding: &Encoding,
+        encoded: &Vec<u8>,
+    ) -> Result<Via<WasmClientState, Value>, Encoding::Error> {
+        let wasm_client_state: Via<Any, WasmClientState> = encoding.decode(encoded)?;
+
+        let value: Via<Any, Value> = encoding.decode(&wasm_client_state.value.data)?;
+
+        Ok(value.value.into())
     }
 }
