@@ -25,3 +25,10 @@ pub struct CosmosChannelOpenConfirmPayload {
     pub update_height: Height,
     pub proof_ack: CommitmentProofBytes,
 }
+
+
+pub struct CosmosChannelEnd {
+    pub port_id: String,
+    pub channel_id: String,
+    pub update_height: Height,
+}

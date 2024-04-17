@@ -16,3 +16,4 @@ pub mod send_packets;
 pub mod unreceived_acks;
 pub mod unreceived_packet;
 pub mod write_ack_event;
+pub mod channel;

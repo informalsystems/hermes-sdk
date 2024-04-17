@@ -14,3 +14,4 @@ pub mod send_packets;
 pub mod unreceived_acks_sequences;
 pub mod unreceived_packet_sequences;
 pub mod write_ack;
+pub mod channel;

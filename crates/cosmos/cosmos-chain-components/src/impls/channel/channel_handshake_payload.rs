@@ -1,5 +1,6 @@
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::queries::channel::CanQueryChannel;
+use hermes_relayer_components::chain::traits::types::channel::{HasChannelEndsType, HasChannelHandshakePayloadTypes};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -24,7 +25,9 @@ where
             ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload,
         > + HasIbcChainTypes<Counterparty, Height = Height, PortId = PortId, ChannelId = ChannelId>
         + HasClientStateType<Counterparty>
-        + HasBlockingChainHandle,
+        + HasBlockingChainHandle
+        // + HasChannelEndsType<Counterparty>
+        // + CanQueryChannel<Counterparty>, 
 {
     async fn build_channel_open_try_payload(
         chain: &Chain,
@@ -37,6 +40,7 @@ where
         let port_id = port_id.clone();
         let channel_id = channel_id.clone();
 
+        //TODO: replace this
         chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let (channel_end, _) = chain_handle
