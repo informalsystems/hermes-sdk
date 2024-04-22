@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::iter::Iterator;
 
-use cgp_core::{async_trait, CanRaiseError};
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
@@ -12,16 +12,6 @@ use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEv
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
 
-pub struct MissingConnectionInitEventError<'a, Relay> {
-    pub relay: &'a Relay,
-}
-
-impl<'a, Relay> Debug for MissingConnectionInitEventError<'a, Relay> {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "missing connection init event")
-    }
-}
-
 /**
    A base implementation for [`ConnectionInitializer`] which submits a
    `ConnectionOpenInit` message to the source chain.
@@ -30,7 +20,10 @@ impl<'a, Relay> Debug for MissingConnectionInitEventError<'a, Relay> {
 */
 pub struct InitializeConnection;
 
-#[async_trait]
+pub struct MissingConnectionInitEventError<'a, Relay> {
+    pub relay: &'a Relay,
+}
+
 impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConnection
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
@@ -88,5 +81,11 @@ where
             SrcChain::connection_open_init_event_connection_id(&open_init_event);
 
         Ok(src_connection_id.clone())
+    }
+}
+
+impl<'a, Relay> Debug for MissingConnectionInitEventError<'a, Relay> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "missing connection init event")
     }
 }

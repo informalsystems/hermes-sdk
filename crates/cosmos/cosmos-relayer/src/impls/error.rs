@@ -2,6 +2,8 @@ use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
+use hermes_relayer_components::relay::impls::connection::open_try::MissingConnectionTryEventError;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -117,6 +119,8 @@ delegate_components! {
     }
 }
 
+// TODO: improve delegate_components to allow HRTB
+
 impl<'a> DelegateComponent<&'a str> for CosmosErrorHandlers {
     type Delegate = DisplayError;
 }
@@ -151,6 +155,13 @@ where
 
 impl<'a, Relay> DelegateComponent<MissingConnectionInitEventError<'a, Relay>>
     for CosmosErrorHandlers
+{
+    type Delegate = DebugError;
+}
+
+impl<'a, Relay> DelegateComponent<MissingConnectionTryEventError<'a, Relay>> for CosmosErrorHandlers
+where
+    Relay: HasRelayChains,
 {
     type Delegate = DebugError;
 }
