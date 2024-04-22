@@ -1,6 +1,6 @@
 use cgp_core::{CanRaiseError, HasComponents};
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
-use hermes_relayer_components::relay::impls::channel::open_init::CanRaiseMissingChannelInitEventError;
+use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::channel::open_ack::ChannelOpenAckRelayer;
@@ -25,7 +25,7 @@ impl<Relay, SrcChain, DstChain, Components> UseExtraChannelHandshakeRelayer for 
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasComponents<Components = Components>
-        + CanRaiseMissingChannelInitEventError
+        + for<'a> CanRaiseError<MissingChannelInitEventError<'a, Relay>>
         + for<'a> CanRaiseError<MissingChannelTryEventError<'a, Relay>>
         + UseExtraIbcMessageSender,
     Components: DelegatesToExtraRelayComponents

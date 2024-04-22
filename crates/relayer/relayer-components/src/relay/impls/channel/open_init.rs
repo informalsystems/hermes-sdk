@@ -1,4 +1,6 @@
-use cgp_core::async_trait;
+use core::fmt::Debug;
+
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
@@ -7,10 +9,6 @@ use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::channel::open_init::ChannelInitializer;
-
-pub trait CanRaiseMissingChannelInitEventError: HasRelayChains {
-    fn missing_channel_init_event_error(&self) -> Self::Error;
-}
 
 /**
    A base implementation for [`ChannelInitializer`] which submits a
@@ -21,11 +19,14 @@ pub trait CanRaiseMissingChannelInitEventError: HasRelayChains {
 
 pub struct InitializeChannel;
 
-#[async_trait]
+pub struct MissingChannelInitEventError<'a, Relay> {
+    pub relay: &'a Relay,
+}
+
 impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanRaiseMissingChannelInitEventError
+        + for<'a> CanRaiseError<MissingChannelInitEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitChannelOptionsType<DstChain>
@@ -55,10 +56,16 @@ where
         let open_init_event = events
             .into_iter()
             .find_map(|event| SrcChain::try_extract_channel_open_init_event(event))
-            .ok_or_else(|| relay.missing_channel_init_event_error())?;
+            .ok_or_else(|| Relay::raise_error(MissingChannelInitEventError { relay }))?;
 
         let src_channel_id = SrcChain::channel_open_init_event_channel_id(&open_init_event);
 
         Ok(src_channel_id.clone())
+    }
+}
+
+impl<'a, Relay> Debug for MissingChannelInitEventError<'a, Relay> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "missing channel open init event")
     }
 }
