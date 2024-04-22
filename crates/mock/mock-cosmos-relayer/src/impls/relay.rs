@@ -4,7 +4,7 @@ use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
-use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
+use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 use hermes_runtime::types::error::TokioRuntimeError;
@@ -212,14 +212,18 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> HasPacketLock for MockCosmosRelay<SrcChain, DstChain>
+impl<SrcChain, DstChain> ProvidePacketLock<MockCosmosRelay<SrcChain, DstChain>>
+    for MockCosmosRelayComponents
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
     type PacketLock<'a> = ();
 
-    async fn try_acquire_packet_lock<'a>(&'a self, _packet: &'a Packet) -> Option<()> {
+    async fn try_acquire_packet_lock<'a>(
+        _relay: &'a MockCosmosRelay<SrcChain, DstChain>,
+        _packet: &'a Packet,
+    ) -> Option<()> {
         Some(())
     }
 }

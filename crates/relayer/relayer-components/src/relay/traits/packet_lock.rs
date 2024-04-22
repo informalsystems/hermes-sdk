@@ -1,4 +1,4 @@
-use cgp_core::async_trait;
+use cgp_core::prelude::*;
 
 use crate::relay::traits::chains::HasRelayChains;
 
@@ -14,6 +14,7 @@ use crate::relay::traits::chains::HasRelayChains;
    packet.
 */
 #[async_trait]
+#[derive_component(PacketLockComponent, ProvidePacketLock<Relay>)]
 pub trait HasPacketLock: HasRelayChains {
     /**
        The mutex guard for a locked packet. This should be kept alive while
