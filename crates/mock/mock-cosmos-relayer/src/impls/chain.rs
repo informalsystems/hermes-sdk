@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use basecoin::modules::ibc::AnyConsensusState;
+use basecoin::modules::ibc::{AnyClientState, AnyConsensusState};
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
@@ -54,9 +54,9 @@ use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdat
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeGetter;
-use ibc::clients::tendermint::client_state::ClientState as TmClientState;
-use ibc::clients::tendermint::consensus_state::ConsensusState as TmConsensusState;
-use ibc::clients::tendermint::types::{AllowUpdate, Header, TrustThreshold};
+use ibc::clients::tendermint::types::{
+    AllowUpdate, ConsensusState as TmConsensusState, Header, TrustThreshold,
+};
 use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::events::{SendPacket, WriteAcknowledgement};
 use ibc::core::channel::types::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
@@ -262,7 +262,7 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    type ClientState = TmClientState;
+    type ClientState = AnyClientState;
 }
 
 impl<Chain, Counterparty>
@@ -272,20 +272,37 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    fn client_state_chain_id(client_state: &TmClientState) -> &ChainId {
-        &client_state.inner().chain_id
+    fn client_state_chain_id(client_state: &AnyClientState) -> &ChainId {
+        match client_state {
+            AnyClientState::Tendermint(client_state) => &client_state.inner().chain_id,
+            AnyClientState::Sovereign(client_state) => client_state.inner().chain_id(),
+        }
     }
 
-    fn client_state_latest_height(client_state: &TmClientState) -> &Height {
-        &client_state.inner().latest_height
+    fn client_state_latest_height(client_state: &AnyClientState) -> &Height {
+        match client_state {
+            AnyClientState::Tendermint(client_state) => &client_state.inner().latest_height,
+            AnyClientState::Sovereign(client_state) => &client_state.inner().latest_height,
+        }
     }
 
-    fn client_state_is_frozen(client_state: &TmClientState) -> bool {
-        client_state.inner().frozen_height.is_some()
+    fn client_state_is_frozen(client_state: &AnyClientState) -> bool {
+        match client_state {
+            AnyClientState::Tendermint(client_state) => {
+                client_state.inner().frozen_height.is_some()
+            }
+            AnyClientState::Sovereign(client_state) => client_state.inner().frozen_height.is_some(),
+        }
     }
 
-    fn client_state_has_expired(client_state: &TmClientState, elapsed: Duration) -> bool {
-        elapsed > client_state.inner().trusting_period
+    fn client_state_has_expired(client_state: &AnyClientState, elapsed: Duration) -> bool {
+        match client_state {
+            AnyClientState::Tendermint(client_state) => {
+                elapsed > client_state.inner().trusting_period
+            }
+            // TODO: no trusting period for Sovereign client_state, should this default to false?
+            AnyClientState::Sovereign(_) => false,
+        }
     }
 }
 
@@ -301,7 +318,7 @@ where
         chain: &MockCosmosContext<Chain>,
         client_id: &ClientId,
         _height: &Height,
-    ) -> Result<TmClientState, Error> {
+    ) -> Result<AnyClientState, Error> {
         chain
             .ibc_context()
             .client_state(client_id)
@@ -411,7 +428,7 @@ where
         chain: &MockCosmosContext<Chain>,
         _create_client_options: &(),
     ) -> Result<Any, Error> {
-        let tm_client_state: TmClientState = ibc::clients::tendermint::types::ClientState::new(
+        let tm_client_state: AnyClientState = ibc::clients::tendermint::types::ClientState::new(
             chain.get_chain_id().clone(),
             TrustThreshold::ONE_THIRD,
             Duration::from_secs(64000),
@@ -481,7 +498,7 @@ where
         chain: &MockCosmosContext<Chain>,
         trusted_height: &Height,
         target_height: &Height,
-        _client_state: TmClientState,
+        _client_state: AnyClientState,
     ) -> Result<MsgUpdateClient, Error> {
         let light_block = chain.get_light_block(target_height)?;
 
@@ -667,7 +684,7 @@ where
 {
     async fn build_receive_packet_payload(
         chain: &MockCosmosContext<Chain>,
-        _client_state: &TmClientState,
+        _client_state: &AnyClientState,
         height: &Height,
         packet: &Packet,
     ) -> Result<Any, Error> {
@@ -782,7 +799,7 @@ where
 {
     async fn build_ack_packet_payload(
         chain: &MockCosmosContext<Chain>,
-        _client_state: &TmClientState,
+        _client_state: &AnyClientState,
         height: &Height,
         packet: &Packet,
         ack: &WriteAcknowledgement,
@@ -838,7 +855,7 @@ where
 {
     async fn build_timeout_unordered_packet_payload(
         chain: &MockCosmosContext<Chain>,
-        _client_state: &TmClientState,
+        _client_state: &AnyClientState,
         height: &Height,
         packet: &Packet,
     ) -> Result<Any, Error> {

@@ -14,6 +14,7 @@ description  = """
 
 [dependencies]
 cgp-core                                = { workspace = true }
+cgp-error-eyre                          = { workspace = true }
 hermes-runtime                          = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-sovereign-rollup-components      = { workspace = true }
@@ -23,11 +24,10 @@ hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 
 ibc-proto                               = { workspace = true }
-ibc-proto-sov                           = { workspace = true }
 ibc-relayer                             = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
 sov-celestia-client                     = { workspace = true, features = ["test-util"] }
-ibc                                     = { git = "https://github.com/cosmos/ibc-rs.git", rev = "552863ec93" }
+ibc                                     = { workspace = true }
 
 eyre                = { workspace = true }
 jsonrpsee           = { workspace = true, features = ["http-client"] }

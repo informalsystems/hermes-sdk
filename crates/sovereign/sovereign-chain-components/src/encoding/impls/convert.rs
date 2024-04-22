@@ -1,11 +1,16 @@
 use cgp_core::prelude::*;
 use hermes_encoding_components::impls::convert::{ConvertFrom, TryConvertFrom};
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
-use hermes_wasm_client_components::impls::encoding::convert::WasmConverterComponents;
+use hermes_protobuf_encoding_components::types::Any;
+use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
-use ibc_proto_sov::ibc::lightclients::sovereign::tendermint::v1::ClientState as ProtoSovereignClientState;
+use hermes_wasm_client_components::types::consensus_state::{
+    ProtoWasmConsensusState, WasmConsensusState,
+};
 
-use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::client_state::{ProtoSovereignClientState, SovereignClientState};
+use crate::sovereign::types::consensus_state::{
+    ProtoSovereignConsensusState, SovereignConsensusState,
+};
 
 pub struct SovereignConverterComponents;
 
@@ -14,11 +19,28 @@ delegate_components! {
         [
             (WasmClientState, ProtoWasmClientState),
             (ProtoWasmClientState, WasmClientState),
+
+            (WasmConsensusState, ProtoWasmConsensusState),
+            (ProtoWasmConsensusState, WasmConsensusState),
+
+            (WasmClientState, Any),
+            (Any, WasmClientState),
+
+            (WasmConsensusState, Any),
+            (Any, WasmConsensusState),
         ]:
-            DelegateEncoding<WasmConverterComponents>,
+            WasmEncodingComponents,
+
         (SovereignClientState, ProtoSovereignClientState):
             ConvertFrom,
+
         (ProtoSovereignClientState, SovereignClientState):
+            TryConvertFrom,
+
+        (SovereignConsensusState, ProtoSovereignConsensusState):
+            ConvertFrom,
+
+        (ProtoSovereignConsensusState, SovereignConsensusState):
             TryConvertFrom,
     }
 }

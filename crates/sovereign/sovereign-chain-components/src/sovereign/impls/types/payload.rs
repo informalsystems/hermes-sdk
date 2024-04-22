@@ -12,14 +12,13 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use ibc_relayer::chain::client::ClientSettings;
 
 use crate::sovereign::types::payloads::channel::{
     SovereignChannelOpenAckPayload, SovereignChannelOpenConfirmPayload,
     SovereignChannelOpenTryPayload, SovereignInitChannelOptions,
 };
 use crate::sovereign::types::payloads::client::{
-    SovereignCreateClientPayload, SovereignUpdateClientPayload,
+    SovereignCreateClientOptions, SovereignCreateClientPayload, SovereignUpdateClientPayload,
 };
 use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
@@ -38,7 +37,7 @@ impl<Chain, Counterparty> ProvideCreateClientOptionsType<Chain, Counterparty>
 where
     Chain: Async,
 {
-    type CreateClientOptions = ClientSettings;
+    type CreateClientOptions = SovereignCreateClientOptions;
 }
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>

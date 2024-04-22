@@ -6,13 +6,11 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use ibc::clients::wasm_types::client_message::{ClientMessage, WASM_CLIENT_MESSAGE_TYPE_URL};
 use ibc_proto::google::protobuf::Any;
-use ibc_proto_sov::google::protobuf::Any as NewAny;
-use ibc_proto_sov::ibc::lightclients::wasm::v1::ClientMessage as RawClientMessage;
-use ibc_proto_sov::Protobuf;
+use ibc_proto::ibc::lightclients::wasm::v1::ClientMessage as RawClientMessage;
+use ibc_proto::Protobuf;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use prost::Message;
 use sov_celestia_client::types::client_message::test_util::dummy_sov_header;
-use sov_celestia_client::types::client_message::SOV_TENDERMINT_HEADER_TYPE_URL;
 
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
@@ -39,13 +37,11 @@ where
                     da_header.clone(),
                     payload.initial_state_height,
                     payload.final_state_height,
+                    // Dummy Root data
+                    vec![0; 32].try_into().unwrap(),
                 );
                 // Convert Sovereign header to Any
-                let new_any_header = NewAny::from(header);
-                let any_header = Any {
-                    type_url: SOV_TENDERMINT_HEADER_TYPE_URL.to_owned(),
-                    value: new_any_header.value,
-                };
+                let any_header = Any::from(header);
 
                 // Create Wasm ClientMessage containing the Sovereign
                 // header converted to Any
