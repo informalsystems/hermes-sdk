@@ -11,8 +11,9 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
-use hermes_relayer_components::relay::impls::packet_lock::PacketMutexGetter;
-use hermes_relayer_components::relay::impls::packet_lock::ProvidePacketLockWithMutex;
+use hermes_relayer_components::relay::impls::packet_lock::{
+    PacketMutexGetter, ProvidePacketLockWithMutex,
+};
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
@@ -24,20 +25,16 @@ use hermes_relayer_components_extra::components::extra::relay::{
 };
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeGetter;
-use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
+use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics04_channel::packet::Sequence;
+use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
 
-use crate::types::error::Error;
-
+use crate::contexts::chain::CosmosChain;
 use crate::contexts::logger::ProvideCosmosLogger;
 use crate::impls::error::HandleCosmosError;
-
-use crate::contexts::chain::CosmosChain;
 use crate::types::batch::CosmosBatchSender;
+use crate::types::error::Error;
 
 #[derive(Clone)]
 pub struct CosmosRelay {

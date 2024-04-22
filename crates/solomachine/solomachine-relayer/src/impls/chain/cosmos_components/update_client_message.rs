@@ -27,7 +27,7 @@ where
         client_id: &ClientId,
         payload: SolomachineUpdateClientPayload,
     ) -> Result<Vec<CosmosMessage>, Error> {
-        let header = encode_header(&payload.header)?;
+        let header = encode_header(&payload.header);
 
         let message = CosmosUpdateClientMessage {
             client_id: client_id.clone(),

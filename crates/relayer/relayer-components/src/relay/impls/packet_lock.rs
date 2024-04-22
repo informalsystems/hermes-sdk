@@ -2,9 +2,8 @@ use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 
 use cgp_core::prelude::*;
-use hermes_runtime_components::traits::channel_once::CanUseChannelsOnce;
 use hermes_runtime_components::traits::channel_once::{
-    CanCreateChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
+    CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
 };
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
 use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};

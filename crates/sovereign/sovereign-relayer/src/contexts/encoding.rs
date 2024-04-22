@@ -1,11 +1,15 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_chain_components::types::tendermint::{
+    TendermintClientState, TendermintConsensusState,
+};
+use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
+    DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_sovereign_chain_components::encoding::components::{
@@ -55,6 +59,12 @@ where
     }
 }
 
+delegate_components! {
+    ProvideSovereignEncoding {
+        EncodingGetterComponent: GetDefaultEncoding,
+    }
+}
+
 pub trait CanUseSovereignEncoding:
     CanDecode<Protobuf, ProtoWasmClientState>
     + CanEncodeAndDecode<Protobuf, WasmClientState>
@@ -68,6 +78,12 @@ pub trait CanUseSovereignEncoding:
     + CanEncodeAndDecode<WasmConsensusState, SovereignConsensusState>
     + CanConvertBothWays<WasmClientState, Any>
     + CanConvertBothWays<WasmConsensusState, Any>
+    + CanEncodeAndDecode<Protobuf, TendermintClientState>
+    + CanEncodeAndDecode<Any, TendermintClientState>
+    + CanEncodeAndDecode<Protobuf, TendermintConsensusState>
+    + CanEncodeAndDecode<Any, TendermintConsensusState>
+    + CanConvertBothWays<Any, TendermintClientState>
+    + CanConvertBothWays<Any, TendermintConsensusState>
 {
 }
 

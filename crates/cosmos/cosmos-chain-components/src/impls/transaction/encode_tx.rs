@@ -50,8 +50,7 @@ where
         let raw_messages = messages
             .iter()
             .map(|message| message.message.encode_protobuf(&signer))
-            .collect::<Result<Vec<_>, _>>()
-            .map_err(Chain::raise_error)?;
+            .collect::<Vec<_>>();
 
         let memo = Memo::default();
         let chain_id = chain.chain_id();

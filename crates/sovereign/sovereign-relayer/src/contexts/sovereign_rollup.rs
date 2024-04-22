@@ -3,12 +3,17 @@ use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent, HasComponents};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use ed25519_dalek::SigningKey;
 use futures::lock::Mutex;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::traits::message_builders::create_client::{
+    CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
@@ -165,6 +170,9 @@ delegate_components! {
             TxResponseQuerierComponent,
             PollTimeoutGetterComponent,
             TxResponseAsEventsParserComponent,
+
+            CreateClientMessageBuilderComponent,
+            UpdateClientMessageBuilderComponent,
         ]:
             SovereignRollupClientComponents,
         [
@@ -233,6 +241,7 @@ pub trait CanUseSovereignRollup:
     + CanPollTxResponse
     + CanAssertEventualAmount
     + HasLogger
+    + CanBuildCreateClientMessage<CosmosChain>
 where
     Self::Runtime: HasMutex,
 {

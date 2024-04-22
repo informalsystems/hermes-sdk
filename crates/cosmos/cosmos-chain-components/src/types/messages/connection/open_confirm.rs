@@ -4,7 +4,6 @@ use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
-use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -23,7 +22,7 @@ impl DynCosmosMessage for CosmosConnectionOpenConfirmMessage {
         Some(self.update_height)
     }
 
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgConnectionOpenConfirm {
             connection_id: self.connection_id.as_str().to_string(),
             proof_height: Some(self.update_height.into()),

@@ -68,8 +68,7 @@ where
             commitment_prefix,
             connection_id,
             connection,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let cosmos_client_state = chain.chain.query_client_state(client_id).await?;
 
@@ -80,8 +79,7 @@ where
             commitment_prefix,
             client_id,
             &cosmos_client_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let cosmos_consensus_state = chain
             .chain
@@ -95,8 +93,7 @@ where
             client_id,
             *height,
             &cosmos_consensus_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let payload = SolomachineConnectionOpenTryPayload {
             commitment_prefix: commitment_prefix.to_string(),
@@ -148,8 +145,7 @@ where
             commitment_prefix,
             client_id,
             &cosmos_client_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let connection_proof: crate::types::sign_data::SolomachineTimestampedSignData =
             connection_proof_data(
@@ -159,8 +155,7 @@ where
                 commitment_prefix,
                 connection_id,
                 connection,
-            )
-            .map_err(Chain::encode_error)?;
+            );
 
         let cosmos_consensus_state = chain
             .chain
@@ -174,8 +169,7 @@ where
             client_id,
             *height,
             &cosmos_consensus_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let payload = SolomachineConnectionOpenAckPayload {
             client_state: cosmos_client_state,
@@ -219,8 +213,7 @@ where
                 commitment_prefix,
                 connection_id,
                 connection,
-            )
-            .map_err(Chain::encode_error)?;
+            );
 
         let payload = SolomachineConnectionOpenConfirmPayload {
             update_height: *height,
