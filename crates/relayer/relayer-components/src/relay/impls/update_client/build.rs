@@ -9,12 +9,12 @@ use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStat
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
-use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 
 pub struct BuildUpdateClientMessages;
 
 #[async_trait]
-impl<Relay, Target, TargetChain, CounterpartyChain> UpdateClientMessageBuilder<Relay, Target>
+impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBuilder<Relay, Target>
     for BuildUpdateClientMessages
 where
     Relay: HasRelayChains,
@@ -25,7 +25,7 @@ where
     CounterpartyChain: CanBuildUpdateClientPayload<TargetChain> + HasClientStateFields<TargetChain>,
     CounterpartyChain::Height: Clone,
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         relay: &Relay,
         _target: Target,
         target_height: &CounterpartyChain::Height,

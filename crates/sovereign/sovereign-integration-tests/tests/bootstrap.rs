@@ -55,9 +55,6 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
     tokio_runtime.block_on(async move {
         let chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
-        // println!("chain home dir: {:?}", chain_driver.chain_node_config.chain_home_dir);
-        // tokio::time::sleep(core::time::Duration::from_secs(30)).await;
-
         let bridge_driver = celestia_bootstrap.bootstrap_bridge(&chain_driver).await?;
 
         let rollup_driver = sovereign_bootstrap

@@ -1,23 +1,18 @@
-use cgp_core::async_trait;
+use core::fmt::Debug;
+
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenTryEvent;
+use crate::chain::types::aliases::ChannelIdOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::channel::open_try::ChannelOpenTryRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::DestinationTarget;
 use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPortId};
-
-pub trait CanRaiseMissingChannelTryEventError: HasRelayChains {
-    fn missing_channel_try_event_error(
-        &self,
-        src_channel_id: &<Self::SrcChain as HasIbcChainTypes<Self::DstChain>>::ChannelId,
-    ) -> Self::Error;
-}
 
 /**
    A base implementation of [`ChannelOpenTryRelayer`] that relays a new channel
@@ -34,12 +29,19 @@ pub trait CanRaiseMissingChannelTryEventError: HasRelayChains {
 
 pub struct RelayChannelOpenTry;
 
-#[async_trait]
+pub struct MissingChannelTryEventError<'a, Relay>
+where
+    Relay: HasRelayChains,
+{
+    pub relay: &'a Relay,
+    pub src_channel_id: &'a ChannelIdOf<Relay::SrcChain, Relay::DstChain>,
+}
+
 impl<Relay, SrcChain, DstChain> ChannelOpenTryRelayer<Relay> for RelayChannelOpenTry
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + CanRaiseMissingChannelTryEventError
+        + for<'a> CanRaiseError<MissingChannelTryEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildChannelHandshakePayloads<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
@@ -88,10 +90,26 @@ where
         let open_try_event = events
             .into_iter()
             .find_map(|event| DstChain::try_extract_channel_open_try_event(event))
-            .ok_or_else(|| relay.missing_channel_try_event_error(src_channel_id))?;
+            .ok_or_else(|| {
+                Relay::raise_error(MissingChannelTryEventError {
+                    relay,
+                    src_channel_id,
+                })
+            })?;
 
         let dst_channel_id = DstChain::channel_open_try_event_channel_id(&open_try_event);
 
         Ok(dst_channel_id.clone())
+    }
+}
+
+impl<'a, Relay> Debug for MissingChannelTryEventError<'a, Relay>
+where
+    Relay: HasRelayChains,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("MissingChannelTryEventError")
+            .field("src_channel_id", &self.src_channel_id)
+            .finish()
     }
 }

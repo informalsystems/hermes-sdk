@@ -11,7 +11,7 @@ use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::{ChainTarget, CounterpartyChainOf};
-use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 
 pub struct SkipUpdateClient<InUpdateClient>(PhantomData<InUpdateClient>);
 
@@ -26,16 +26,16 @@ where
 
 #[async_trait]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
-    UpdateClientMessageBuilder<Relay, Target> for SkipUpdateClient<InUpdateClient>
+    TargetUpdateClientMessageBuilder<Relay, Target> for SkipUpdateClient<InUpdateClient>
 where
     Relay: HasRelayChains + HasLogger,
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
-    InUpdateClient: UpdateClientMessageBuilder<Relay, Target>,
+    InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
     CounterpartyChain: HasConsensusStateType<TargetChain> + HasHeightType,
     TargetChain: CanQueryConsensusStateWithLatestHeight<CounterpartyChain>,
     Relay::Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>,
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         relay: &Relay,
         target: Target,
         target_height: &HeightOf<Target::CounterpartyChain>,
@@ -60,7 +60,8 @@ where
                 Ok(Vec::new())
             }
             Err(_) => {
-                InUpdateClient::build_update_client_messages(relay, target, target_height).await
+                InUpdateClient::build_target_update_client_messages(relay, target, target_height)
+                    .await
             }
         }
     }

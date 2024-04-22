@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
-use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
+use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::client::context::client_state::ClientStateCommon;
@@ -63,7 +63,7 @@ async fn test_update_client() -> Result<(), Error> {
     let src_current_height = relayer.src_chain().query_chain_status().await?.height;
 
     let msg_update_client = relayer
-        .build_update_client_messages(DestinationTarget, &src_current_height)
+        .build_target_update_client_messages(DestinationTarget, &src_current_height)
         .await?;
 
     relayer.dst_chain().send_messages(msg_update_client).await?;

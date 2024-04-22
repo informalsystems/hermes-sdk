@@ -81,6 +81,10 @@ pub trait HasRelayChains: HasErrorType {
     fn dst_client_id(&self) -> &ClientIdOf<Self::DstChain, Self::SrcChain>;
 }
 
+pub type SrcChainOf<Relay> = <Relay as HasRelayChains>::SrcChain;
+
+pub type DstChainOf<Relay> = <Relay as HasRelayChains>::DstChain;
+
 pub trait CanRaiseRelayChainErrors:
     HasRelayChains + CanRaiseError<ErrorOf<Self::SrcChain>> + CanRaiseError<ErrorOf<Self::DstChain>>
 {
