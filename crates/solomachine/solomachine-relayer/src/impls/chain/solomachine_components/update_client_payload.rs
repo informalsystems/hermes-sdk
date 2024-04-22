@@ -48,7 +48,7 @@ where
 
         let secret_key = chain.chain.secret_key();
 
-        let signature = sign_header_data(secret_key, &sign_data).map_err(Chain::encode_error)?;
+        let signature = sign_header_data(secret_key, &sign_data);
 
         let header = SolomachineHeader {
             timestamp,

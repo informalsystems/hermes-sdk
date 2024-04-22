@@ -110,7 +110,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         let any_message = create_client_message.message.encode_protobuf(
             &Signer::dummy(),
-        )?;
+        );
 
         let message = SovereignMessage::Ibc(IbcMessage::Core(Any {
             type_url: any_message.type_url,

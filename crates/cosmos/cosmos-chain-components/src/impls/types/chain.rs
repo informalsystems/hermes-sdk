@@ -90,10 +90,7 @@ where
     Chain: HasMessageType<Message = CosmosMessage> + CanRaiseError<EncodeError>,
 {
     fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Chain::Error> {
-        let raw = message
-            .message
-            .encode_protobuf(&Signer::dummy())
-            .map_err(Chain::raise_error)?;
+        let raw = message.message.encode_protobuf(&Signer::dummy());
 
         Ok(raw.encoded_len())
     }

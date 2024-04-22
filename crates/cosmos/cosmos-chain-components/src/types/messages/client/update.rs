@@ -2,7 +2,6 @@ use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::MsgUpdateClient as ProtoMsgUpdateClient;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::signer::Signer;
-use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -16,7 +15,7 @@ pub struct CosmosUpdateClientMessage {
 }
 
 impl DynCosmosMessage for CosmosUpdateClientMessage {
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgUpdateClient {
             client_id: self.client_id.to_string(),
             client_message: Some(self.header.clone()),
