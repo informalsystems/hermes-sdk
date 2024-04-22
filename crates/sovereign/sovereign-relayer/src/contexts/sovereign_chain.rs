@@ -2,10 +2,10 @@ use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
+use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
@@ -70,10 +70,10 @@ delegate_components! {
         ]: SovereignDataChainType,
         [
             EncodingTypeComponent,
+            EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
-        EncodingGetterComponent: GetDefaultEncoding,
     }
 }
 
@@ -91,6 +91,7 @@ pub trait CheckSovereignChainImpls:
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildConnectionHandshakePayloads<CosmosChain>
+    + CanBuildCreateClientMessage<CosmosChain>
 {
 }
 

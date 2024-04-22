@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
+use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -39,6 +40,7 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
+use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
@@ -113,5 +115,7 @@ delegate_components! {
             SubmitSovereignTransaction,
         NonceQuerierComponent:
             QuerySovereignNonce,
+        CreateClientMessageBuilderComponent:
+            BuildCreateCosmosClientMessageOnSovereign,
     }
 }

@@ -4,11 +4,12 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
+    DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_sovereign_chain_components::encoding::components::{
@@ -55,6 +56,12 @@ where
 {
     fn default_encoding() -> &'static SovereignEncoding {
         &SovereignEncoding
+    }
+}
+
+delegate_components! {
+    ProvideSovereignEncoding {
+        EncodingGetterComponent: GetDefaultEncoding,
     }
 }
 

@@ -16,6 +16,7 @@ use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_types::signer::Signer;
 
 use crate::types::message::SovereignMessage;
+use crate::types::messages::ibc::IbcMessage;
 
 /**
    Build a message to create a Cosmos client on a Sovereign rollup
@@ -54,6 +55,8 @@ where
 
         let any_message = encode_to_any(TYPE_URL, &proto_message);
 
-        todo!()
+        let message = SovereignMessage::Ibc(IbcMessage::Core(any_message));
+
+        Ok(message)
     }
 }
