@@ -1,5 +1,6 @@
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_relayer_types::signer::Signer;
+use prost::Message;
 use prost_types::Any;
 
 use crate::methods::encode::encode_to_any;
@@ -13,7 +14,7 @@ pub struct CosmosCreateClientMessage {
     pub consensus_state: Any,
 }
 
-#[derive(::prost::Message)]
+#[derive(Message)]
 pub struct ProtoMsgCreateClient {
     /// light client state
     #[prost(message, optional, tag = "1")]
