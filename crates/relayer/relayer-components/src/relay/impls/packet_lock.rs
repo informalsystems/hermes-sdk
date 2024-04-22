@@ -1,6 +1,7 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
-use cgp_core::Async;
+
+use cgp_core::prelude::*;
 use hermes_runtime_components::traits::channel_once::CanUseChannelsOnce;
 use hermes_runtime_components::traits::channel_once::{
     CanCreateChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
@@ -35,6 +36,7 @@ pub type PacketKey<Relay> = (
 
 pub type PacketMutex<Relay> = Arc<MutexOf<RuntimeOf<Relay>, BTreeSet<PacketKey<Relay>>>>;
 
+#[derive_component(PacketMutexGetterComponent, PacketMutexGetter<Relay>)]
 pub trait HasPacketMutex: HasRuntime + HasRelayChains
 where
     Self::Runtime: HasMutex,

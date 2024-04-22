@@ -7,6 +7,8 @@ use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
+use hermes_relayer_components::relay::impls::packet_lock::ProvidePacketLockWithMutex;
+use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayComponents, IsExtraRelayComponent,
@@ -38,6 +40,8 @@ delegate_components! {
             ProvideCosmosLogger,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
+        PacketLockComponent:
+            ProvidePacketLockWithMutex,
     }
 }
 

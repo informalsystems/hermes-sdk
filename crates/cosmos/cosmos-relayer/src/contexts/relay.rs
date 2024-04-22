@@ -1,5 +1,5 @@
+use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
-use std::collections::HashSet;
 
 use futures::lock::Mutex;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -18,7 +18,7 @@ pub struct CosmosRelay {
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilter,
-    pub packet_lock_mutex: Arc<Mutex<HashSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
+    pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
     pub src_chain_message_batch_sender: CosmosBatchSender,
     pub dst_chain_message_batch_sender: CosmosBatchSender,
 }
@@ -43,7 +43,7 @@ impl CosmosRelay {
             packet_filter,
             src_chain_message_batch_sender,
             dst_chain_message_batch_sender,
-            packet_lock_mutex: Arc::new(Mutex::new(HashSet::new())),
+            packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
         };
 
         relay
