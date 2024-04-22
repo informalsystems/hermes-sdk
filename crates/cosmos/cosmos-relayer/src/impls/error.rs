@@ -1,6 +1,7 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
 use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
 use hermes_relayer_components::relay::impls::connection::open_try::MissingConnectionTryEventError;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -160,6 +161,13 @@ impl<'a, Relay> DelegateComponent<MissingConnectionInitEventError<'a, Relay>>
 }
 
 impl<'a, Relay> DelegateComponent<MissingConnectionTryEventError<'a, Relay>> for CosmosErrorHandlers
+where
+    Relay: HasRelayChains,
+{
+    type Delegate = DebugError;
+}
+
+impl<'a, Relay> DelegateComponent<MissingChannelTryEventError<'a, Relay>> for CosmosErrorHandlers
 where
     Relay: HasRelayChains,
 {
