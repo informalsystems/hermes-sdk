@@ -16,12 +16,10 @@ where
 {
     let encoded_message = Message::encode_to_vec(message);
 
-    let any_message = Any {
+    Any {
         type_url: type_url.to_string(),
         value: encoded_message,
-    };
-
-    any_message
+    }
 }
 
 pub fn encode_any_to_bytes<Message>(type_url: &str, message: &Message) -> Vec<u8>
@@ -30,7 +28,5 @@ where
 {
     let any = encode_to_any(type_url, message);
 
-    let bytes = encode_protobuf(&any);
-
-    bytes
+    encode_protobuf(&any)
 }
