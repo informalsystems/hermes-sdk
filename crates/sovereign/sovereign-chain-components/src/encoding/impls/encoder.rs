@@ -1,4 +1,9 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
+use hermes_cosmos_chain_components::types::tendermint::{
+    ProtoTendermintClientState, ProtoTendermintConsensusState, TendermintClientState,
+    TendermintConsensusState,
+};
 use hermes_encoding_components::impls::convert_and_encode::ConvertAndEncode;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
@@ -20,6 +25,17 @@ pub struct SovereignEncoderComponents;
 
 delegate_components! {
     SovereignEncoderComponents {
+        [
+            (Any, TendermintClientState),
+            (Protobuf, TendermintClientState),
+            (Protobuf, ProtoTendermintClientState),
+            (Any, TendermintConsensusState),
+            (Protobuf, TendermintConsensusState),
+            (Protobuf, ProtoTendermintConsensusState),
+            (Protobuf, Any),
+        ]:
+            CosmosEncodingComponents,
+
         [
             (Any, WasmClientState),
             (Protobuf, WasmClientState),
@@ -48,5 +64,6 @@ delegate_components! {
             DecodeViaWasmClientState,
         (WasmConsensusState, SovereignConsensusState):
             EncodeViaWasmConsensusState,
+
     }
 }

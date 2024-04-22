@@ -5,7 +5,7 @@ use hermes_cosmos_chain_components::encoding::components::{
 };
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::traits::convert::CanConvert;
+use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::has_encoding::{
@@ -71,10 +71,8 @@ pub trait CheckCosmosEncoding:
     + CanEncodeAndDecode<Any, TendermintClientState>
     + CanEncodeAndDecode<Protobuf, TendermintConsensusState>
     + CanEncodeAndDecode<Any, TendermintConsensusState>
-    + CanConvert<Any, TendermintClientState>
-    + CanConvert<TendermintClientState, Any>
-    + CanConvert<Any, TendermintConsensusState>
-    + CanConvert<TendermintConsensusState, Any>
+    + CanConvertBothWays<Any, TendermintClientState>
+    + CanConvertBothWays<Any, TendermintConsensusState>
 {
 }
 

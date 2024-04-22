@@ -17,7 +17,7 @@ pub struct CosmosCreateClientMessage {
 
 impl DynCosmosMessage for CosmosCreateClientMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Result<IbcProtoAny, EncodeError> {
-        let proto_message = ProtoMsgCreateClient {
+        let proto_message: ProtoMsgCreateClient = ProtoMsgCreateClient {
             client_state: Some(IbcProtoAny {
                 type_url: self.client_state.type_url.clone(),
                 value: self.client_state.value.clone(),
