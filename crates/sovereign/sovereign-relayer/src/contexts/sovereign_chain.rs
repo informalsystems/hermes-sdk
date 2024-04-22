@@ -2,13 +2,15 @@ use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
+use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -70,10 +72,10 @@ delegate_components! {
         ]: SovereignDataChainType,
         [
             EncodingTypeComponent,
+            EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
-        EncodingGetterComponent: GetDefaultEncoding,
     }
 }
 
@@ -83,7 +85,7 @@ impl RuntimeGetter<SovereignChain> for SovereignChainComponents {
     }
 }
 
-pub trait CheckSovereignChainImpls:
+pub trait CanUseSovereignChain:
     HasDataChain
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
@@ -91,7 +93,10 @@ pub trait CheckSovereignChainImpls:
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildConnectionHandshakePayloads<CosmosChain>
+    + CanBuildCreateClientMessage<CosmosChain>
+    + HasCreateClientOptionsType<CosmosChain>
+    + HasChainIdType
 {
 }
 
-impl CheckSovereignChainImpls for SovereignChain {}
+impl CanUseSovereignChain for SovereignChain {}

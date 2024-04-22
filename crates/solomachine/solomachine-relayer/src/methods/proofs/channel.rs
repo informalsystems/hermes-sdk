@@ -17,7 +17,7 @@ pub fn channel_proof_data(
 ) -> Result<SolomachineSignData, EncodeError> {
     let proto_channel_end: ProtoChannelEnd = channel_end.into();
 
-    let channel_end_bytes = encode_protobuf(&proto_channel_end)?;
+    let channel_end_bytes = encode_protobuf(&proto_channel_end);
 
     let path = format!("{commitment_prefix}channel/{channel_id}");
 

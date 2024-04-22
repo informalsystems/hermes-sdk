@@ -2,7 +2,7 @@
 
 use hermes_cosmos_chain_components::methods::encode::encode_to_any;
 use ibc_proto::google::protobuf::Any;
-use prost::{EncodeError, Message};
+use prost::Message;
 
 use super::public_key::encode_public_key;
 use crate::types::consensus_state::SolomachineConsensusState;
@@ -34,9 +34,7 @@ pub fn to_proto_consensus_state(
     }
 }
 
-pub fn encode_consensus_state(
-    consensus_state: &SolomachineConsensusState,
-) -> Result<Any, EncodeError> {
+pub fn encode_consensus_state(consensus_state: &SolomachineConsensusState) -> Any {
     let proto_consensus_state = to_proto_consensus_state(consensus_state);
     encode_to_any(TYPE_URL, &proto_consensus_state)
 }

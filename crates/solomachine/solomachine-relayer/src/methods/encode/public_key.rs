@@ -47,7 +47,7 @@ const TYPE_URL: &str = "/cosmos.crypto.secp256k1.PubKey";
 pub fn encode_public_key(public_key: &PublicKey) -> Any {
     let key = PubKey::from(public_key);
 
-    encode_to_any(TYPE_URL, &key).unwrap()
+    encode_to_any(TYPE_URL, &key)
 }
 
 impl Protobuf<PubKey> for PublicKey {}

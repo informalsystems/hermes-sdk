@@ -9,7 +9,6 @@ use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentPrefix;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::signer::Signer;
-use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -26,7 +25,7 @@ pub struct CosmosConnectionOpenInitMessage {
 }
 
 impl DynCosmosMessage for CosmosConnectionOpenInitMessage {
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let counterparty = Counterparty {
             client_id: self.counterparty_client_id.as_str().to_string(),
             prefix: Some(MerklePrefix {

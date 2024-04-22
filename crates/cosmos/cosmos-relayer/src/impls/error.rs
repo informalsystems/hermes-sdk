@@ -1,11 +1,6 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
-use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
-use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
-use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
-use hermes_relayer_components::relay::impls::connection::open_try::MissingConnectionTryEventError;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -20,7 +15,12 @@ use hermes_relayer_components::error::impls::error::{
     MaxRetryExceededError, UnwrapMaxRetryExceededError,
 };
 use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
+use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
+use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
+use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
+use hermes_relayer_components::relay::impls::connection::open_try::MissingConnectionTryEventError;
 use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use hermes_runtime::types::error::TokioRuntimeError;

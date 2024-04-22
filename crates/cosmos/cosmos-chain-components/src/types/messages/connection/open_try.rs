@@ -13,7 +13,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
-use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -40,7 +39,7 @@ impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
         Some(self.update_height)
     }
 
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let counterparty = Counterparty {
             client_id: self.counterparty_client_id.as_str().to_string(),
             prefix: Some(MerklePrefix {
