@@ -8,7 +8,7 @@ use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
-use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
+use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::Context;
@@ -83,7 +83,7 @@ impl CommandRunner<CosmosBuilder> for ClientUpdate {
         };
 
         relayer
-            .send_update_client_messages(SourceTarget, &target_height)
+            .send_target_update_client_messages(SourceTarget, &target_height)
             .await
             .wrap_error("Failed to send update client message")?;
 

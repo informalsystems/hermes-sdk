@@ -8,7 +8,7 @@ use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::DestinationTarget;
-use crate::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
+use crate::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 
 /**
    A base implementation of [`ConnectionOpenConfirmRelayer`] that relays a new connection
@@ -27,7 +27,7 @@ pub struct RelayConnectionOpenConfirm;
 impl<Relay, SrcChain, DstChain> ConnectionOpenConfirmRelayer<Relay> for RelayConnectionOpenConfirm
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanBuildUpdateClientMessage<DestinationTarget>
+        + CanBuildTargetUpdateClientMessage<DestinationTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + CanRaiseRelayChainErrors,
     SrcChain: CanQueryChainHeight + CanBuildConnectionHandshakePayloads<DstChain>,

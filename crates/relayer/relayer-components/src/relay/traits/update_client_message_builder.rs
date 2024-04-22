@@ -7,13 +7,13 @@ use crate::chain::types::aliases::{HeightOf, MessageOf};
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 
-#[derive_component(UpdateClientMessageBuilderComponent, UpdateClientMessageBuilder<Relay>)]
+#[derive_component(TargetUpdateClientMessageBuilderComponent, TargetUpdateClientMessageBuilder<Relay>)]
 #[async_trait]
-pub trait CanBuildUpdateClientMessage<Target>: HasRelayChains
+pub trait CanBuildTargetUpdateClientMessage<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         &self,
         _target: Target,
         height: &HeightOf<Target::CounterpartyChain>,
@@ -21,11 +21,11 @@ where
 }
 
 #[async_trait]
-pub trait CanSendUpdateClientMessage<Target>: HasRelayChains
+pub trait CanSendTargetUpdateClientMessage<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
 {
-    async fn send_update_client_messages(
+    async fn send_target_update_client_messages(
         &self,
         target: Target,
         height: &HeightOf<Target::CounterpartyChain>,
@@ -33,18 +33,20 @@ where
 }
 
 #[async_trait]
-impl<Relay, Target> CanSendUpdateClientMessage<Target> for Relay
+impl<Relay, Target> CanSendTargetUpdateClientMessage<Target> for Relay
 where
-    Relay: CanBuildUpdateClientMessage<Target>,
+    Relay: CanBuildTargetUpdateClientMessage<Target>,
     Target: ChainTarget<Relay>,
     Target::TargetChain: CanSendMessages,
 {
-    async fn send_update_client_messages(
+    async fn send_target_update_client_messages(
         &self,
         target: Target,
         height: &HeightOf<Target::CounterpartyChain>,
     ) -> Result<(), Self::Error> {
-        let messages = self.build_update_client_messages(target, height).await?;
+        let messages = self
+            .build_target_update_client_messages(target, height)
+            .await?;
 
         // If there are no UpdateClient messages returned, it means that the IBC client is
         // already up to date.
