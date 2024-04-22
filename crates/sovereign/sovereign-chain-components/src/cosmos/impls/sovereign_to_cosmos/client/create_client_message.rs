@@ -11,7 +11,6 @@ use hermes_relayer_components::chain::traits::types::create_client::HasCreateCli
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
-use ibc_proto::google::protobuf::Any as ProtoAny;
 use prost::EncodeError;
 
 use crate::sovereign::types::client_state::SovereignClientState;
@@ -70,14 +69,8 @@ where
             .map_err(Chain::raise_error)?;
 
         let message = CosmosCreateClientMessage {
-            client_state: ProtoAny {
-                type_url: wasm_client_state_any.type_url,
-                value: wasm_client_state_any.value,
-            },
-            consensus_state: ProtoAny {
-                type_url: wasm_consensus_state_any.type_url,
-                value: wasm_consensus_state_any.value,
-            },
+            client_state: wasm_client_state_any,
+            consensus_state: wasm_consensus_state_any,
         };
 
         Ok(message.to_cosmos_message())
