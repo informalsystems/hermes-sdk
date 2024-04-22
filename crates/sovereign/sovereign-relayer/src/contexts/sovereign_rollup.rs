@@ -10,8 +10,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::create_client::{
+    CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::{
