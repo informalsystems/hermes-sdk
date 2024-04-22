@@ -8,7 +8,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -83,7 +85,7 @@ impl RuntimeGetter<SovereignChain> for SovereignChainComponents {
     }
 }
 
-pub trait CheckSovereignChainImpls:
+pub trait CanUseSovereignChain:
     HasDataChain
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
@@ -92,7 +94,9 @@ pub trait CheckSovereignChainImpls:
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildConnectionHandshakePayloads<CosmosChain>
     + CanBuildCreateClientMessage<CosmosChain>
+    + HasCreateClientOptionsType<CosmosChain>
+    + HasChainIdType
 {
 }
 
-impl CheckSovereignChainImpls for SovereignChain {}
+impl CanUseSovereignChain for SovereignChain {}
