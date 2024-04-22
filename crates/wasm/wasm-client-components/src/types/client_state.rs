@@ -1,11 +1,18 @@
-use eyre::{eyre, Error};
+use cgp_core::{CanRaiseError, HasErrorType};
+use hermes_encoding_components::traits::convert::Converter;
+use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_protobuf_encoding_components::types::Any;
+use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
-use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
-use ibc_proto::Protobuf;
-use prost::EncodeError;
 
-use crate::utils::encode::encode_to_any;
+#[derive(Clone, Debug)]
+pub struct WasmClientState {
+    pub data: Vec<u8>,
+    pub checksum: Vec<u8>,
+    pub latest_height: Height,
+}
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -20,56 +27,64 @@ pub struct ProtoWasmClientState {
     pub latest_height: ::core::option::Option<ProtoHeight>,
 }
 
-const TYPE_URL: &str = "/ibc.lightclients.wasm.v1.ClientState";
+pub struct ProtoConvertWasmClientState;
 
-#[derive(Clone, Debug)]
-pub struct WasmClientState {
-    pub data: Vec<u8>,
-    pub checksum: Vec<u8>,
-    pub latest_height: Height,
-}
+impl<Encoding> Converter<Encoding, WasmClientState, ProtoWasmClientState>
+    for ProtoConvertWasmClientState
+where
+    Encoding: HasErrorType,
+{
+    fn convert(
+        _encoding: &Encoding,
+        client_state: &WasmClientState,
+    ) -> Result<ProtoWasmClientState, Encoding::Error> {
+        let height = ProtoHeight::from(client_state.latest_height);
 
-impl WasmClientState {
-    pub fn encode_protobuf(&self) -> Result<Any, EncodeError> {
-        let latest_height = ProtoHeight {
-            revision_number: self.latest_height.revision_number(),
-            revision_height: self.latest_height.revision_height(),
-        };
-        let proto_message = ProtoWasmClientState {
-            data: self.data.clone(),
-            checksum: self.checksum.clone(),
-            latest_height: Some(latest_height),
-        };
-
-        encode_to_any(TYPE_URL, &proto_message)
+        Ok(ProtoWasmClientState {
+            data: client_state.data.clone(),
+            checksum: client_state.checksum.clone(),
+            latest_height: Some(height),
+        })
     }
 }
 
-impl Protobuf<ProtoWasmClientState> for WasmClientState {}
+impl<Encoding> Converter<Encoding, ProtoWasmClientState, WasmClientState>
+    for ProtoConvertWasmClientState
+where
+    Encoding: CanRaiseError<&'static str> + CanRaiseError<ClientError>,
+{
+    fn convert(
+        _encoding: &Encoding,
+        proto_client_state: &ProtoWasmClientState,
+    ) -> Result<WasmClientState, Encoding::Error> {
+        let proto_client_state = proto_client_state.clone();
 
-impl TryFrom<ProtoWasmClientState> for WasmClientState {
-    type Error = Error;
+        let maybe_height = proto_client_state.latest_height.ok_or_else(|| {
+            Encoding::raise_error("Empty 'latest_height' in proto Wasm client state")
+        })?;
 
-    fn try_from(value: ProtoWasmClientState) -> Result<Self, Self::Error> {
-        let maybe_height = value
-            .latest_height
-            .ok_or_else(|| eyre!("Empty 'latest_height' in proto Wasm client state"))?;
-        let height = Height::try_from(maybe_height)?;
-        Ok(Self {
-            data: value.data,
-            checksum: value.checksum,
+        let height = Height::try_from(maybe_height).map_err(Encoding::raise_error)?;
+
+        Ok(WasmClientState {
+            data: proto_client_state.data,
+            checksum: proto_client_state.checksum,
             latest_height: height,
         })
     }
 }
 
-impl From<WasmClientState> for ProtoWasmClientState {
-    fn from(value: WasmClientState) -> Self {
-        let height = ProtoHeight::from(value.latest_height);
-        Self {
-            data: value.data,
-            checksum: value.checksum,
-            latest_height: Some(height),
-        }
+pub struct DecodeViaWasmClientState;
+
+impl<Encoding, Value> Decoder<Encoding, WasmClientState, Value> for DecodeViaWasmClientState
+where
+    Encoding:
+        HasEncodedType<Encoded = Vec<u8>> + CanDecode<Any, WasmClientState> + CanDecode<Any, Value>,
+{
+    fn decode(encoding: &Encoding, encoded: &Vec<u8>) -> Result<Value, Encoding::Error> {
+        let wasm_client_state: WasmClientState = encoding.decode(encoded)?;
+
+        let value: Value = encoding.decode(&wasm_client_state.data)?;
+
+        Ok(value)
     }
 }

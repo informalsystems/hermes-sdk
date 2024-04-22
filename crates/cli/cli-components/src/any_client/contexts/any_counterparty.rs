@@ -7,7 +7,6 @@ use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
-use hermes_encoding_components::impls::via_identity::Identity;
 use hermes_encoding_components::traits::convert::ConverterComponent;
 use hermes_encoding_components::traits::decoder::{CanDecode, DecoderComponent};
 use hermes_encoding_components::traits::encoded::EncodedTypeComponent;
@@ -16,9 +15,8 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
 use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
-use hermes_encoding_components::types::via::Via;
-use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::impls::delegate::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
@@ -72,7 +70,7 @@ delegate_components! {
         [
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,
-        ]: QueryAndDecodeClientStateVia<Identity>,
+        ]: QueryAndDecodeClientState<Protobuf>,
     }
 }
 
@@ -120,10 +118,9 @@ delegate_components! {
 }
 
 pub trait CheckAnyClientEncoding:
-    CanDecode<TendermintClientState>
-    + CanDecode<Any>
-    + CanDecode<AnyClientState>
-    + CanDecode<Via<Identity, AnyClientState>>
+    CanDecode<Protobuf, TendermintClientState>
+    + CanDecode<Protobuf, Any>
+    + CanDecode<Protobuf, AnyClientState>
 {
 }
 

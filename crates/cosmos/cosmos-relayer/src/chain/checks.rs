@@ -3,7 +3,9 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::C
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryAllClientStates, CanQueryClientState,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusState, CanQueryConsensusStateBytes,
+};
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
@@ -23,6 +25,7 @@ pub trait CanUseCosmosChain:
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
+    + CanQueryConsensusStateBytes<CosmosChain>
     + CanQueryAllClientStates<CosmosChain>
     + CanQueryClientState<AnyCounterparty>
     + CanQueryAllClientStates<AnyCounterparty>

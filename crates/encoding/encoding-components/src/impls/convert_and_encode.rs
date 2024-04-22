@@ -8,9 +8,9 @@ use crate::traits::encoder::{CanEncode, Encoder};
 
 pub struct ConvertAndEncode<Raw>(pub PhantomData<Raw>);
 
-impl<Encoding, Value, Raw> Encoder<Encoding, Value> for ConvertAndEncode<Raw>
+impl<Encoding, Strategy, Value, Raw> Encoder<Encoding, Strategy, Value> for ConvertAndEncode<Raw>
 where
-    Encoding: CanEncode<Raw> + CanConvert<Value, Raw>,
+    Encoding: CanEncode<Strategy, Raw> + CanConvert<Value, Raw>,
     Raw: Async,
 {
     fn encode(encoding: &Encoding, value: &Value) -> Result<Encoding::Encoded, Encoding::Error> {
@@ -20,9 +20,9 @@ where
     }
 }
 
-impl<Encoding, Value, Raw> Decoder<Encoding, Value> for ConvertAndEncode<Raw>
+impl<Encoding, Strategy, Value, Raw> Decoder<Encoding, Strategy, Value> for ConvertAndEncode<Raw>
 where
-    Encoding: CanDecode<Raw> + CanConvert<Raw, Value>,
+    Encoding: CanDecode<Strategy, Raw> + CanConvert<Raw, Value>,
     Raw: Async,
 {
     fn decode(encoding: &Encoding, encoded: &Encoding::Encoded) -> Result<Value, Encoding::Error> {

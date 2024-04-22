@@ -10,24 +10,24 @@ use crate::traits::schema::{HasSchemaType, SchemaGetter};
 
 pub struct DelegateEncoding<Delegate>(pub PhantomData<Delegate>);
 
-impl<Encoding, Value, Components, Delegate> Encoder<Encoding, Value>
+impl<Encoding, Strategy, Value, Components, Delegate> Encoder<Encoding, Strategy, Value>
     for DelegateEncoding<Components>
 where
     Encoding: HasEncodedType + HasErrorType,
-    Components: DelegateComponent<Value, Delegate = Delegate>,
-    Delegate: Encoder<Encoding, Value>,
+    Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
+    Delegate: Encoder<Encoding, Strategy, Value>,
 {
     fn encode(encoding: &Encoding, value: &Value) -> Result<Encoding::Encoded, Encoding::Error> {
         Delegate::encode(encoding, value)
     }
 }
 
-impl<Encoding, Value, Components, Delegate> Decoder<Encoding, Value>
+impl<Encoding, Strategy, Value, Components, Delegate> Decoder<Encoding, Strategy, Value>
     for DelegateEncoding<Components>
 where
     Encoding: HasEncodedType + HasErrorType,
-    Components: DelegateComponent<Value, Delegate = Delegate>,
-    Delegate: Decoder<Encoding, Value>,
+    Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
+    Delegate: Decoder<Encoding, Strategy, Value>,
 {
     fn decode(encoding: &Encoding, encoded: &Encoding::Encoded) -> Result<Value, Encoding::Error> {
         Delegate::decode(encoding, encoded)

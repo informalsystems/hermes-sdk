@@ -54,8 +54,9 @@ use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdat
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeGetter;
-use ibc::clients::tendermint::types::ConsensusState as TmConsensusState;
-use ibc::clients::tendermint::types::{AllowUpdate, Header, TrustThreshold};
+use ibc::clients::tendermint::types::{
+    AllowUpdate, ConsensusState as TmConsensusState, Header, TrustThreshold,
+};
 use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::events::{SendPacket, WriteAcknowledgement};
 use ibc::core::channel::types::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
