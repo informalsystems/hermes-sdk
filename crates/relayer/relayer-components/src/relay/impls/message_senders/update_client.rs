@@ -7,7 +7,7 @@ use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::{HasCounterpartyMessageHeight, HasIbcChainTypes};
 use crate::relay::traits::ibc_message_sender::IbcMessageSender;
 use crate::relay::traits::target::ChainTarget;
-use crate::relay::traits::update_client_message_builder::CanBuildUpdateClientMessage;
+use crate::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 
 pub struct SendIbcMessagesWithUpdateClient<Sender>(pub Sender);
 
@@ -20,7 +20,7 @@ where
     TargetChain: HasIbcChainTypes<CounterpartyChain>,
     TargetChain: HasCounterpartyMessageHeight<CounterpartyChain>,
     CounterpartyChain: HasIbcChainTypes<TargetChain> + CanIncrementHeight,
-    Relay: CanBuildUpdateClientMessage<Target>,
+    Relay: CanBuildTargetUpdateClientMessage<Target>,
 {
     async fn send_messages(
         relay: &Relay,
@@ -38,7 +38,7 @@ where
 
         for update_height in update_heights {
             let messages = relay
-                .build_update_client_messages(Target::default(), &update_height)
+                .build_target_update_client_messages(Target::default(), &update_height)
                 .await?;
 
             in_messages.extend(messages);

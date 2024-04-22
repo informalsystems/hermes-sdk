@@ -28,7 +28,7 @@ use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerCompo
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
-use hermes_relayer_components::relay::traits::update_client_message_builder::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
 use crate::batch::types::sink::BatchWorkerSink;
@@ -46,7 +46,7 @@ delegate_components! {
         PacketRelayerComponent:
             LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
         [
-            UpdateClientMessageBuilderComponent,
+            TargetUpdateClientMessageBuilderComponent,
             ReceivePacketRelayerComponnent,
             AckPacketRelayerComponent,
             TimeoutUnorderedPacketRelayerComponent,
