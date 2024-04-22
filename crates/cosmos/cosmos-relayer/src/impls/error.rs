@@ -1,6 +1,7 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -109,8 +110,8 @@ delegate_components! {
             TypeUrlMismatchError,
             UnknownClientStateType,
             AbciQueryError,
-            MissingSendPacketEventError,
             Status,
+            MissingSendPacketEventError,
         ]:
             DebugError,
     }
@@ -144,6 +145,12 @@ impl<'a, Chain, Counterparty>
 where
     Chain: HasChainIdType,
     Counterparty: HasChainIdType,
+{
+    type Delegate = DebugError;
+}
+
+impl<'a, Relay> DelegateComponent<MissingConnectionInitEventError<'a, Relay>>
+    for CosmosErrorHandlers
 {
     type Delegate = DebugError;
 }
