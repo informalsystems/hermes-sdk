@@ -18,16 +18,13 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
-use hermes_sovereign_rollup_components::types::message::SovereignMessage;
-use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use ibc_proto::google::protobuf::Any;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use ibc_relayer_types::signer::Signer;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 
@@ -103,19 +100,10 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             &create_client_settings,
         ).await?;
 
-        let create_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
-            cosmos_chain,
+        let create_client_message = <SovereignRollup as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
+            rollup,
             create_client_payload
         ).await?;
-
-        let any_message = create_client_message.message.encode_protobuf(
-            &Signer::dummy(),
-        );
-
-        let message = SovereignMessage::Ibc(IbcMessage::Core(Any {
-            type_url: any_message.type_url,
-            value: any_message.value,
-        }));
 
         let wallet_a = rollup_driver
             .wallets
@@ -124,7 +112,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         let events = rollup.send_messages_with_signer(
             &wallet_a.signing_key,
-            &[message],
+            &[create_client_message],
         ).await?;
 
         println!("CreateClient events: {:?}", events);
