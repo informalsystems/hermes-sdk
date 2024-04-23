@@ -207,8 +207,8 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let celestia_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(cosmos_chain, &celestia_client_id).await?;
 
-        let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u128 };
-        let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u128 };
+        let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u64 };
+        let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u64 };
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(

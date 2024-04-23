@@ -1,7 +1,11 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
+use hermes_protobuf_encoding_components::types::Any;
+use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientState;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateBytesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -45,6 +49,7 @@ use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreat
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
+use crate::impls::queries::client_state::QueryClientStateOnSovereign;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
@@ -126,5 +131,9 @@ delegate_components! {
             BuildCreateCosmosClientMessageOnSovereign,
         UpdateClientMessageBuilderComponent:
             BuildUpdateCosmosClientMessageOnSovereign,
+        ClientStateBytesQuerierComponent:
+            QueryClientStateOnSovereign,
+        ClientStateQuerierComponent:
+            QueryAndDecodeClientState<Any>,
     }
 }
