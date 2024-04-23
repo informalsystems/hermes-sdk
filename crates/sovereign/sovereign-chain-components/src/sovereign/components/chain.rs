@@ -13,7 +13,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -30,6 +30,7 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionH
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
+use hermes_sovereign_rollup_components::impls::events::ProvideSovereignEvents;
 use hermes_sovereign_rollup_components::impls::types::chain::ProvideSovereignChainTypes;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
 
@@ -54,6 +55,10 @@ delegate_components! {
             IbcPacketTypesProviderComponent,
         ]:
             ProvideSovereignChainTypes,
+        [
+            CreateClientEventComponent,
+        ]:
+            ProvideSovereignEvents,
         [
             CreateClientOptionsTypeComponent,
             CreateClientPayloadTypeComponent,

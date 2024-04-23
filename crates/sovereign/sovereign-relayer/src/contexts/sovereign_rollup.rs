@@ -18,6 +18,9 @@ use hermes_relayer_components::chain::traits::send_message::MessageSenderCompone
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientEventComponent, HasCreateClientEvent,
+};
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
@@ -155,6 +158,8 @@ delegate_components! {
             TransactionHashTypeComponent,
             TxResponseTypeComponent,
 
+            CreateClientEventComponent,
+
             NonceAllocatorComponent,
             MessageSenderComponent,
             MessagesWithSignerSenderComponent,
@@ -242,6 +247,7 @@ pub trait CanUseSovereignRollup:
     + CanAssertEventualAmount
     + HasLogger
     + CanBuildCreateClientMessage<CosmosChain>
+    + HasCreateClientEvent<CosmosChain>
 where
     Self::Runtime: HasMutex,
 {

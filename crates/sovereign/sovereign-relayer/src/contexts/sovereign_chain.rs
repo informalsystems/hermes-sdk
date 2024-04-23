@@ -10,7 +10,9 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientEvent, HasCreateClientOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -87,6 +89,7 @@ impl RuntimeGetter<SovereignChain> for SovereignChainComponents {
 
 pub trait CanUseSovereignChain:
     HasDataChain
+    + HasChainIdType
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
@@ -95,7 +98,7 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionHandshakePayloads<CosmosChain>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientOptionsType<CosmosChain>
-    + HasChainIdType
+    + HasCreateClientEvent<CosmosChain>
 {
 }
 
