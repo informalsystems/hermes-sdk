@@ -8,6 +8,7 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, HasChainIdType};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;

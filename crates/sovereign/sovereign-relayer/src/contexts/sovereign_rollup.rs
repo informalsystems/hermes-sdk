@@ -14,7 +14,9 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
+use hermes_relayer_components::chain::traits::send_message::{
+    CanSendMessages, MessageSenderComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
@@ -30,6 +32,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::error::impls::retry::ReturnRetryable;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
 use hermes_relayer_components::transaction::traits::encode_tx::{CanEncodeTx, TxEncoderComponent};
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::{
     CanEstimateTxFee, TxFeeEstimatorComponent,
@@ -94,22 +97,26 @@ use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
+use std::sync::Arc;
 
 use crate::contexts::encoding::ProvideSovereignEncoding;
 use crate::contexts::logger::ProvideSovereignLogger;
 
+#[derive(Clone)]
 pub struct SovereignRollup {
     pub runtime: HermesRuntime,
     pub rpc_client: HttpClient,
-    pub nonce_mutex: Mutex<()>,
+    pub signing_key: SigningKey,
+    pub nonce_mutex: Arc<Mutex<()>>,
 }
 
 impl SovereignRollup {
-    pub fn new(runtime: HermesRuntime, rpc_client: HttpClient) -> Self {
+    pub fn new(runtime: HermesRuntime, rpc_client: HttpClient, signing_key: SigningKey) -> Self {
         Self {
             runtime,
             rpc_client,
-            nonce_mutex: Mutex::new(()),
+            signing_key,
+            nonce_mutex: Arc::new(Mutex::new(())),
         }
     }
 }
@@ -213,6 +220,12 @@ impl ChainIdGetter<SovereignRollup> for SovereignRollupComponents {
     }
 }
 
+impl DefaultSignerGetter<SovereignRollup> for SovereignRollupComponents {
+    fn get_default_signer(rollup: &SovereignRollup) -> &SigningKey {
+        &rollup.signing_key
+    }
+}
+
 impl ProvideMutexForNonceAllocation<SovereignRollup> for SovereignRollupComponents {
     fn mutex_for_nonce_allocation<'a>(
         rollup: &'a SovereignRollup,
@@ -240,6 +253,7 @@ pub trait CanUseSovereignRollup:
     + HasMutexForNonceAllocation
     + CanQueryNonce
     + CanAllocateNonce
+    + CanSendMessages
     + CanSendMessagesWithSigner
     + CanSendMessagesWithSignerAndNonce
     + CanQueryTxResponse

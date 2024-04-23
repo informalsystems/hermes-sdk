@@ -17,6 +17,7 @@ use hermes_relayer_components::transaction::traits::send_messages_with_signer::C
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
+use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
@@ -88,6 +89,12 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         let cosmos_chain = cosmos_chain_driver.chain();
         let rollup = rollup_driver.rollup();
+
+        let sovereign_chain = SovereignChain {
+            runtime: runtime.clone(),
+            data_chain: celestia_chain_driver.chain().clone(),
+            rollup: rollup.clone(),
+        };
 
         {
             let create_client_settings = ClientSettings::Tendermint(Settings {
