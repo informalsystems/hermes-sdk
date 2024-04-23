@@ -30,7 +30,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -396,22 +396,23 @@ where
     type CreateClientPayload = Any;
 }
 
-impl<Chain, Counterparty> HasCreateClientEvent<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideCreateClientEvent<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     type CreateClientEvent = CreateClient;
 
-    fn try_extract_create_client_event(event: Self::Event) -> Option<Self::CreateClientEvent> {
+    fn try_extract_create_client_event(event: IbcEvent) -> Option<CreateClient> {
         match event {
             IbcEvent::CreateClient(e) => Some(e.clone()),
             _ => None,
         }
     }
 
-    fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &Self::ClientId {
+    fn create_client_event_client_id(event: &CreateClient) -> &ClientId {
         event.client_id()
     }
 }

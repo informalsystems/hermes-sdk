@@ -11,7 +11,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -43,6 +43,7 @@ use hermes_relayer_components::transaction::traits::types::tx_response::TxRespon
 
 use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
+use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
@@ -50,8 +51,8 @@ use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::impls::transaction::query_nonce::QuerySovereignNonce;
 use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
 use crate::impls::transaction::submit_tx::SubmitSovereignTransaction;
-use crate::impls::types::chain::ProvideSovereignChainTypes;
 use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
+use crate::impls::types::rollup::ProvideSovereignRollupTypes;
 use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
 use crate::traits::json_rpc_client::JsonRpcClientTypeComponent;
 
@@ -69,7 +70,11 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
         ]:
-            ProvideSovereignChainTypes,
+            ProvideSovereignRollupTypes,
+        [
+            CreateClientEventComponent,
+        ]:
+            ProvideSovereignEvents,
         [
             CreateClientOptionsTypeComponent,
             CreateClientPayloadTypeComponent,

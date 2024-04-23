@@ -8,6 +8,8 @@ use hermes_relayer_components::components::default::relay::{
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
+use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -26,7 +28,10 @@ pub struct CosmosToSovereignRelay {
 }
 
 pub trait CanUseCosmosToSovereignRelay:
-    HasRelayChains<SrcChain = CosmosChain, DstChain = SovereignChain> + CanRaiseRelayChainErrors
+    HasRelayChains<SrcChain = CosmosChain, DstChain = SovereignChain>
+    + CanRaiseRelayChainErrors
+    + CanCreateClient<SourceTarget>
+    + CanCreateClient<DestinationTarget>
 {
 }
 

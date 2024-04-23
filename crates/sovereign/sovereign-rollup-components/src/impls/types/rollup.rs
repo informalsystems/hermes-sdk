@@ -18,37 +18,37 @@ use crate::types::message::SovereignMessage;
 use crate::types::rollup_id::RollupId;
 use crate::types::status::SovereignRollupStatus;
 
-pub struct ProvideSovereignChainTypes;
+pub struct ProvideSovereignRollupTypes;
 
-impl<Chain> ProvideHeightType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideHeightType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type Height = RollupHeight;
 }
 
-impl<Chain> ProvideChainIdType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideChainIdType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type ChainId = RollupId;
 }
 
-impl<Chain> ProvideMessageType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideMessageType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type Message = SovereignMessage;
 }
 
-impl<Chain> ProvideEventType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideEventType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type Event = SovereignEvent;
 }
 
-impl<Chain> ProvideChainStatusType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideChainStatusType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: HasHeightType<Height = RollupHeight> + HasTimestampType<Timestamp = Timestamp>,
 {
@@ -64,7 +64,7 @@ where
 }
 
 delegate_components! {
-    ProvideSovereignChainTypes {
+    ProvideSovereignRollupTypes {
         [
             TimestampTypeComponent,
             IbcChainTypesComponent,

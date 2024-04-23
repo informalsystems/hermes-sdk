@@ -27,7 +27,8 @@ where
         + HasRollupDriverType<RollupDriver = SovereignRollupDriver>
         + HasRollupNodeConfigType<RollupNodeConfig = SovereignRollupNodeConfig>
         + HasRollupGenesisConfigType<RollupGenesisConfig = SovereignGenesisConfig>
-        + CanRaiseError<ClientError>,
+        + CanRaiseError<ClientError>
+        + CanRaiseError<&'static str>,
 {
     async fn build_rollup_driver(
         bootstrap: &Bootstrap,
@@ -43,7 +44,15 @@ where
             .build(rpc_url)
             .map_err(Bootstrap::raise_error)?;
 
-        let rollup = SovereignRollup::new(bootstrap.runtime().clone(), rpc_client);
+        let relayer_wallet = wallets
+            .get("relayer")
+            .ok_or_else(|| Bootstrap::raise_error("expect relayer wallet"))?;
+
+        let rollup = SovereignRollup::new(
+            bootstrap.runtime().clone(),
+            rpc_client,
+            relayer_wallet.signing_key.clone(),
+        );
 
         Ok(SovereignRollupDriver {
             rollup,
