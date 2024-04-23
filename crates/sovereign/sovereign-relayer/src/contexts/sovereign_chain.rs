@@ -8,7 +8,8 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, HasChainIdType};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
@@ -18,7 +19,7 @@ use hermes_relayer_components::chain::traits::types::update_client::HasUpdateCli
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
-use hermes_sovereign_chain_components::sovereign::components::chain::{
+use hermes_sovereign_chain_components::sovereign::components::{
     IsSovereignChainClientComponent, SovereignChainClientComponents,
 };
 use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
@@ -27,6 +28,7 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
+use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
 use crate::contexts::sovereign_rollup::SovereignRollup;
@@ -85,6 +87,12 @@ delegate_components! {
 impl RuntimeGetter<SovereignChain> for SovereignChainComponents {
     fn runtime(chain: &SovereignChain) -> &HermesRuntime {
         &chain.runtime
+    }
+}
+
+impl ChainIdGetter<SovereignChain> for SovereignChainComponents {
+    fn chain_id(chain: &SovereignChain) -> &ChainId {
+        chain.data_chain.chain_id()
     }
 }
 

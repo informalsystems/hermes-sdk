@@ -51,8 +51,8 @@ use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::impls::transaction::query_nonce::QuerySovereignNonce;
 use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
 use crate::impls::transaction::submit_tx::SubmitSovereignTransaction;
-use crate::impls::types::chain::ProvideSovereignChainTypes;
 use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
+use crate::impls::types::rollup::ProvideSovereignRollupTypes;
 use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
 use crate::traits::json_rpc_client::JsonRpcClientTypeComponent;
 
@@ -70,7 +70,7 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
         ]:
-            ProvideSovereignChainTypes,
+            ProvideSovereignRollupTypes,
         [
             CreateClientEventComponent,
         ]:
