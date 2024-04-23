@@ -2122,6 +2122,7 @@ dependencies = [
  "cgp-core",
  "cgp-error-eyre",
  "ed25519-dalek",
+ "eyre",
  "futures",
  "hermes-celestia-chain",
  "hermes-cosmos-chain-components",

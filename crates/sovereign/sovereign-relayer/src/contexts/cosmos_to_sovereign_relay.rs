@@ -32,7 +32,7 @@ pub trait CanUseCosmosToSovereignRelay:
     HasRelayChains<SrcChain = CosmosChain, DstChain = SovereignChain>
     + CanRaiseRelayChainErrors
     + CanCreateClient<SourceTarget>
-    // + CanCreateClient<DestinationTarget>
+    + CanCreateClient<DestinationTarget>
     + for<'a> CanRaiseError<MissingCreateClientEventError<'a, CosmosChain, SovereignChain>>
     + for<'a> CanRaiseError<MissingCreateClientEventError<'a, SovereignChain, CosmosChain>>
 {
