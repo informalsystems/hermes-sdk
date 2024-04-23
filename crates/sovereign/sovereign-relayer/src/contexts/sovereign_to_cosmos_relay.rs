@@ -1,8 +1,15 @@
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
+use hermes_relayer_components::components::default::relay::{
+    DefaultRelayComponents, IsDefaultRelayComponent,
+};
+use hermes_relayer_components::relay::traits::chains::{
+    CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
+};
+use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -20,11 +27,27 @@ pub struct SovereignToCosmosRelay {
     // TODO: Relay fields
 }
 
+pub trait CanUseSovereignToCosmosRelay:
+    HasRelayChains<SrcChain = SovereignChain, DstChain = CosmosChain>
+    + CanRaiseRelayChainErrors
+    + CanCreateClient<SourceTarget>
+    + CanCreateClient<DestinationTarget>
+{
+}
+
+impl CanUseSovereignToCosmosRelay for SovereignToCosmosRelay {}
+
 pub struct SovereignToCosmosRelayComponents;
 
 impl HasComponents for SovereignToCosmosRelay {
     type Components = SovereignToCosmosRelayComponents;
 }
+
+delegate_all!(
+    IsDefaultRelayComponent,
+    DefaultRelayComponents,
+    SovereignToCosmosRelayComponents,
+);
 
 delegate_components! {
     SovereignToCosmosRelayComponents {

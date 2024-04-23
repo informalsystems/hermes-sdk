@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp_core::{async_trait, CanRaiseError};
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use crate::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
@@ -44,7 +44,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay, Target, TargetChain, CounterpartyChain> ClientCreator<Relay, Target>
     for CreateClientWithChains
 where

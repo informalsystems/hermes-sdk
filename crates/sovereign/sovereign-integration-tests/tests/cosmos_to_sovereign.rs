@@ -4,30 +4,25 @@ use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
-use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
+use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
+use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
-use hermes_sovereign_rollup_components::types::message::SovereignMessage;
-use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
+use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use ibc_proto::google::protobuf::Any;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use ibc_relayer_types::signer::Signer;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 
@@ -81,7 +76,9 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
-        let bridge_driver = celestia_bootstrap.bootstrap_bridge(&celestia_chain_driver).await?;
+        let bridge_driver = celestia_bootstrap
+            .bootstrap_bridge(&celestia_chain_driver)
+            .await?;
 
         let rollup_driver = sovereign_bootstrap
             .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, "test-rollup")
@@ -90,44 +87,41 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         let cosmos_chain = cosmos_chain_driver.chain();
         let rollup = rollup_driver.rollup();
 
-        let create_client_settings = ClientSettings::Tendermint(Settings {
-            max_clock_drift: Duration::from_secs(40),
-            trusting_period: None,
-            trust_threshold: TrustThreshold::ONE_THIRD,
-        });
+        let sovereign_chain = SovereignChain {
+            runtime: runtime.clone(),
+            data_chain: celestia_chain_driver.chain().clone(),
+            rollup: rollup.clone(),
+        };
 
-        sleep(Duration::from_secs(2)).await;
+        {
+            let create_client_settings = ClientSettings::Tendermint(Settings {
+                max_clock_drift: Duration::from_secs(40),
+                trusting_period: None,
+                trust_threshold: TrustThreshold::ONE_THIRD,
+            });
 
-        let create_client_payload = <CosmosChain as CanBuildCreateClientPayload<SovereignChain>>::build_create_client_payload(
-            cosmos_chain,
-            &create_client_settings,
-        ).await?;
+            sleep(Duration::from_secs(2)).await;
 
-        let create_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
-            cosmos_chain,
-            create_client_payload
-        ).await?;
+            let client_id = CosmosToSovereignRelay::create_client(
+                DestinationTarget,
+                &sovereign_chain,
+                cosmos_chain,
+                &create_client_settings,
+            )
+            .await?;
 
-        let any_message = create_client_message.message.encode_protobuf(
-            &Signer::dummy(),
-        )?;
+            println!("client ID of Cosmos on Sovereign: {:?}", client_id);
 
-        let message = SovereignMessage::Ibc(IbcMessage::Core(Any {
-            type_url: any_message.type_url,
-            value: any_message.value,
-        }));
+            let client_id = SovereignToCosmosRelay::create_client(
+                SourceTarget,
+                &sovereign_chain,
+                cosmos_chain,
+                &create_client_settings,
+            )
+            .await?;
 
-        let wallet_a = rollup_driver
-            .wallets
-            .get("user-a")
-            .ok_or_else(|| eyre!("expect user-a wallet"))?;
-
-        let events = rollup.send_messages_with_signer(
-            &wallet_a.signing_key,
-            &[message],
-        ).await?;
-
-        println!("CreateClient events: {:?}", events);
+            println!("client ID 2 of Cosmos on Sovereign: {:?}", client_id);
+        }
 
         <Result<(), Error>>::Ok(())
     })?;

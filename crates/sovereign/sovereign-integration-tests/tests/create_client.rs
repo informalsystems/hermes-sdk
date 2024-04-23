@@ -7,7 +7,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
-use hermes_cosmos_chain_components::methods::event::try_extract_create_client_event;
+use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -26,10 +26,13 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
+use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
+use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
@@ -65,6 +68,8 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         rand::random::<u64>()
     );
 
+    let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
+
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
@@ -75,76 +80,22 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         account_prefix: "sov".into(),
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
-        genesis_config_modifier: Box::new(|genesis| {
-            let max_deposit_period = genesis
-                .get_mut("app_state")
-                .and_then(|app_state| app_state.get_mut("gov"))
-                .and_then(|gov| gov.get_mut("params"))
-                .and_then(|deposit_params| deposit_params.as_object_mut())
-                .ok_or_else(|| {
-                    eyre!("Failed to retrieve `deposit_params` in genesis configuration")
-                })?;
-
-            max_deposit_period
-                .insert(
-                    "max_deposit_period".to_owned(),
-                    JsonValue::String("10s".to_owned()),
-                )
-                .ok_or_else(|| {
-                    eyre!("Failed to update `max_deposit_period` in genesis configuration")
-                })?;
-
-            let voting_period = genesis
-                .get_mut("app_state")
-                .and_then(|app_state| app_state.get_mut("gov"))
-                .and_then(|gov| gov.get_mut("params"))
-                .and_then(|voting_params| voting_params.as_object_mut())
-                .ok_or_else(|| {
-                    eyre!("Failed to retrieve `voting_params` in genesis configuration")
-                })?;
-
-            voting_period
-                .insert(
-                    "voting_period".to_owned(),
-                    serde_json::Value::String("10s".to_owned()),
-                )
-                .ok_or_else(|| {
-                    eyre!("Failed to update `voting_period` in genesis configuration")
-                })?;
-
-            let allowed_clients = genesis
-                .get_mut("app_state")
-                .and_then(|app_state| app_state.get_mut("ibc"))
-                .and_then(|ibc| ibc.get_mut("client_genesis"))
-                .and_then(|client_genesis| client_genesis.get_mut("params"))
-                .and_then(|params| params.get_mut("allowed_clients"))
-                .and_then(|allowed_clients| allowed_clients.as_array_mut())
-                .ok_or_else(|| {
-                    eyre!("Failed to retrieve `allowed_clients` in genesis configuration")
-                })?;
-
-            allowed_clients.push(JsonValue::String("08-wasm".to_string()));
-
-            Ok(())
-        }),
-        comet_config_modifier: Box::new(|config| {
-            config
-                .get_mut("rpc")
-                .and_then(|rpc| rpc.as_table_mut())
-                .ok_or_else(|| eyre!("Failed to retrieve `rpc` in app configuration"))?
-                .insert(
-                    "max_body_bytes".to_string(),
-                    TomlValue::Integer(10001048576),
-                );
-            Ok(())
-        }),
+        genesis_config_modifier: Box::new(modify_wasm_client_genesis),
+        comet_config_modifier: Box::new(modify_wasm_node_config),
     });
 
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
-        builder,
-        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
-        bridge_store_dir: format!("./test-data/{store_postfix}/bridges").into(),
+        builder: builder.clone(),
+        chain_store_dir: store_dir.join("chains"),
+        bridge_store_dir: store_dir.join("bridges"),
+    };
+
+    let sovereign_bootstrap = SovereignBootstrap {
+        runtime: runtime.clone(),
+        rollup_store_dir: store_dir.join("rollups"),
+        rollup_command_path: "node".into(),
+        account_prefix: "sov".into(),
     };
 
     let create_client_settings = ClientSettings::Tendermint(Settings {
@@ -180,9 +131,17 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let cosmos_chain = cosmos_chain_driver.chain();
 
-        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("datachain").await?;
+        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
         let celestia_chain = celestia_chain_driver.chain();
+
+        let bridge_driver = celestia_bootstrap
+            .bootstrap_bridge(&celestia_chain_driver)
+            .await?;
+
+        let rollup_driver = sovereign_bootstrap
+            .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, "test-rollup")
+            .await?;
 
         // Upload Wasm contract on Cosmos chain
         cosmos_chain_driver.store_wasm_client_code(
@@ -205,6 +164,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         let sovereign_chain = SovereignChain {
             runtime: runtime.clone(),
             data_chain: celestia_chain.clone(),
+            rollup: rollup_driver.rollup,
         };
 
         // Create Sovereign client on Cosmos chain
@@ -237,7 +197,9 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let events = cosmos_chain.send_message(create_celestia_client_message).await?;
 
-        let create_client_event = events.into_iter().find_map(try_extract_create_client_event).ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+        let create_client_event = events.into_iter()
+            .find_map(<CosmosChain as HasCreateClientEvent<CosmosChain>>::try_extract_create_client_event)
+            .ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
 
         let celestia_client_id = create_client_event.client_id;
 
@@ -321,4 +283,60 @@ async fn assert_eventual_governance_status(
         }
     }
     Err(eyre!("Governance proposal `{governance_id}` was not in status `{expected_status}`").into())
+}
+
+fn modify_wasm_node_config(config: &mut TomlValue) -> Result<(), Error> {
+    config
+        .get_mut("rpc")
+        .and_then(|rpc| rpc.as_table_mut())
+        .ok_or_else(|| eyre!("Failed to retrieve `rpc` in app configuration"))?
+        .insert(
+            "max_body_bytes".to_string(),
+            TomlValue::Integer(10001048576),
+        );
+
+    Ok(())
+}
+
+fn modify_wasm_client_genesis(genesis: &mut serde_json::Value) -> Result<(), Error> {
+    let max_deposit_period = genesis
+        .get_mut("app_state")
+        .and_then(|app_state| app_state.get_mut("gov"))
+        .and_then(|gov| gov.get_mut("params"))
+        .and_then(|deposit_params| deposit_params.as_object_mut())
+        .ok_or_else(|| eyre!("Failed to retrieve `deposit_params` in genesis configuration"))?;
+
+    max_deposit_period
+        .insert(
+            "max_deposit_period".to_owned(),
+            JsonValue::String("10s".to_owned()),
+        )
+        .ok_or_else(|| eyre!("Failed to update `max_deposit_period` in genesis configuration"))?;
+
+    let voting_period = genesis
+        .get_mut("app_state")
+        .and_then(|app_state| app_state.get_mut("gov"))
+        .and_then(|gov| gov.get_mut("params"))
+        .and_then(|voting_params| voting_params.as_object_mut())
+        .ok_or_else(|| eyre!("Failed to retrieve `voting_params` in genesis configuration"))?;
+
+    voting_period
+        .insert(
+            "voting_period".to_owned(),
+            serde_json::Value::String("10s".to_owned()),
+        )
+        .ok_or_else(|| eyre!("Failed to update `voting_period` in genesis configuration"))?;
+
+    let allowed_clients = genesis
+        .get_mut("app_state")
+        .and_then(|app_state| app_state.get_mut("ibc"))
+        .and_then(|ibc| ibc.get_mut("client_genesis"))
+        .and_then(|client_genesis| client_genesis.get_mut("params"))
+        .and_then(|params| params.get_mut("allowed_clients"))
+        .and_then(|allowed_clients| allowed_clients.as_array_mut())
+        .ok_or_else(|| eyre!("Failed to retrieve `allowed_clients` in genesis configuration"))?;
+
+    allowed_clients.push(JsonValue::String("08-wasm".to_string()));
+
+    Ok(())
 }

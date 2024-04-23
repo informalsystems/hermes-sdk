@@ -3,7 +3,6 @@ use ibc_proto::ibc::core::channel::v1::MsgChannelOpenInit as ProtoMsgChannelOpen
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use ibc_relayer_types::signer::Signer;
-use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -17,7 +16,7 @@ pub struct CosmosChannelOpenInitMessage {
 }
 
 impl DynCosmosMessage for CosmosChannelOpenInitMessage {
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgChannelOpenInit {
             port_id: self.port_id.to_string(),
             channel: Some(self.channel.clone().into()),
