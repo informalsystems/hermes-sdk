@@ -50,8 +50,7 @@ where
 
         let secret_key = chain.chain.secret_key();
 
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
+        let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
         let payload = SolomachineChannelOpenTryPayload {
             ordering,
@@ -90,8 +89,7 @@ where
 
         let secret_key = chain.chain.secret_key();
 
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
+        let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
         let payload = SolomachineChannelOpenAckPayload {
             version,
@@ -126,8 +124,7 @@ where
 
         let secret_key = chain.chain.secret_key();
 
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
+        let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
         let payload = SolomachineChannelOpenConfirmPayload {
             update_height: *height,

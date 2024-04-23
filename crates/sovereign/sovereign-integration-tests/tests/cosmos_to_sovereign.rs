@@ -18,16 +18,13 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
-use hermes_sovereign_rollup_components::types::message::SovereignMessage;
-use hermes_sovereign_rollup_components::types::messages::ibc::IbcMessage;
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
-use ibc_proto::google::protobuf::Any;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use ibc_relayer_types::signer::Signer;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 
@@ -81,7 +78,9 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
-        let bridge_driver = celestia_bootstrap.bootstrap_bridge(&celestia_chain_driver).await?;
+        let bridge_driver = celestia_bootstrap
+            .bootstrap_bridge(&celestia_chain_driver)
+            .await?;
 
         let rollup_driver = sovereign_bootstrap
             .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, "test-rollup")
@@ -90,44 +89,40 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         let cosmos_chain = cosmos_chain_driver.chain();
         let rollup = rollup_driver.rollup();
 
-        let create_client_settings = ClientSettings::Tendermint(Settings {
-            max_clock_drift: Duration::from_secs(40),
-            trusting_period: None,
-            trust_threshold: TrustThreshold::ONE_THIRD,
-        });
+        {
+            let create_client_settings = ClientSettings::Tendermint(Settings {
+                max_clock_drift: Duration::from_secs(40),
+                trusting_period: None,
+                trust_threshold: TrustThreshold::ONE_THIRD,
+            });
 
-        sleep(Duration::from_secs(2)).await;
+            sleep(Duration::from_secs(2)).await;
 
-        let create_client_payload = <CosmosChain as CanBuildCreateClientPayload<SovereignChain>>::build_create_client_payload(
-            cosmos_chain,
-            &create_client_settings,
-        ).await?;
+            let create_client_payload = <CosmosChain as CanBuildCreateClientPayload<
+                SovereignChain,
+            >>::build_create_client_payload(
+                cosmos_chain, &create_client_settings
+            )
+            .await?;
 
-        let create_client_message = <CosmosChain as CanBuildCreateClientMessage<CosmosChain>>::build_create_client_message(
-            cosmos_chain,
-            create_client_payload
-        ).await?;
+            let create_client_message = <SovereignRollup as CanBuildCreateClientMessage<
+                CosmosChain,
+            >>::build_create_client_message(
+                rollup, create_client_payload
+            )
+            .await?;
 
-        let any_message = create_client_message.message.encode_protobuf(
-            &Signer::dummy(),
-        )?;
+            let wallet_a = rollup_driver
+                .wallets
+                .get("user-a")
+                .ok_or_else(|| eyre!("expect user-a wallet"))?;
 
-        let message = SovereignMessage::Ibc(IbcMessage::Core(Any {
-            type_url: any_message.type_url,
-            value: any_message.value,
-        }));
+            let events = rollup
+                .send_messages_with_signer(&wallet_a.signing_key, &[create_client_message])
+                .await?;
 
-        let wallet_a = rollup_driver
-            .wallets
-            .get("user-a")
-            .ok_or_else(|| eyre!("expect user-a wallet"))?;
-
-        let events = rollup.send_messages_with_signer(
-            &wallet_a.signing_key,
-            &[message],
-        ).await?;
-
-        println!("CreateClient events: {:?}", events);
+            println!("CreateClient events: {:?}", events);
+        }
 
         <Result<(), Error>>::Ok(())
     })?;

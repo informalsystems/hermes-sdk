@@ -4,7 +4,6 @@ use core::fmt::Debug;
 use ibc_proto::google::protobuf::Any;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
-use prost::EncodeError;
 
 #[derive(Debug, Clone)]
 pub struct CosmosMessage {
@@ -28,7 +27,7 @@ pub trait DynCosmosMessage: Debug + Send + Sync + 'static {
         None
     }
 
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError>;
+    fn encode_protobuf(&self, signer: &Signer) -> Any;
 }
 
 pub trait ToCosmosMessage {

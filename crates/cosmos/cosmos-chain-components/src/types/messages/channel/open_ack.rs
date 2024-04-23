@@ -5,7 +5,6 @@ use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
-use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -27,7 +26,7 @@ impl DynCosmosMessage for CosmosChannelOpenAckMessage {
         Some(self.update_height)
     }
 
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgChannelOpenAck {
             port_id: self.port_id.to_string(),
             channel_id: self.channel_id.to_string(),

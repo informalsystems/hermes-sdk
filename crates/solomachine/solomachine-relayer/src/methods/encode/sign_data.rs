@@ -6,7 +6,7 @@ use hermes_cosmos_chain_components::methods::encode::{
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::google::protobuf::Any;
-use prost::{EncodeError, Message};
+use prost::Message;
 use secp256k1::ecdsa::Signature;
 use secp256k1::SecretKey;
 
@@ -40,35 +40,32 @@ pub fn to_proto_sign_bytes(sign_data: &SolomachineSignData) -> ProtoSignBytes {
     }
 }
 
-pub fn sign_data_to_any(sign_data: &SolomachineSignData) -> Result<Any, EncodeError> {
+pub fn sign_data_to_any(sign_data: &SolomachineSignData) -> Any {
     let proto_sign_bytes = to_proto_sign_bytes(sign_data);
 
     encode_to_any(TYPE_URL, &proto_sign_bytes)
 }
 
-pub fn sign_data_to_bytes(sign_data: &SolomachineSignData) -> Result<Vec<u8>, EncodeError> {
+pub fn sign_data_to_bytes(sign_data: &SolomachineSignData) -> Vec<u8> {
     let proto_sign_bytes = to_proto_sign_bytes(sign_data);
 
     encode_any_to_bytes(TYPE_URL, &proto_sign_bytes)
 }
 
-pub fn sign_with_data(
-    secret_key: &SecretKey,
-    sign_data: &SolomachineSignData,
-) -> Result<Signature, EncodeError> {
+pub fn sign_with_data(secret_key: &SecretKey, sign_data: &SolomachineSignData) -> Signature {
     let proto_sign_bytes = to_proto_sign_bytes(sign_data);
-    let sign_bytes = encode_protobuf(&proto_sign_bytes)?;
+    let sign_bytes = encode_protobuf(&proto_sign_bytes);
 
     let signature = sign_sha256(secret_key, &sign_bytes);
 
-    Ok(signature)
+    signature
 }
 
 pub fn timestamped_sign_with_data(
     sign_data: &SolomachineSignData,
     _public_key: PublicKey,
-) -> Result<SolomachineTimestampedSignData, EncodeError> {
-    let signature = sign_data_to_bytes(sign_data)?;
+) -> SolomachineTimestampedSignData {
+    let signature = sign_data_to_bytes(sign_data);
 
     let data = Data {
         sum: Some(Sum::Single(Single {
@@ -79,12 +76,12 @@ pub fn timestamped_sign_with_data(
         })),
     };
 
-    let bytes_data = encode_protobuf(&data).unwrap();
+    let bytes_data = encode_protobuf(&data);
 
-    Ok(SolomachineTimestampedSignData {
+    SolomachineTimestampedSignData {
         signature_data: bytes_data,
         timestamp: sign_data.timestamp,
-    })
+    }
 }
 
 /// TimestampedSignatureData contains the signature data and the timestamp of the
@@ -106,9 +103,7 @@ pub fn to_proto_timestamped_sign_bytes(
     }
 }
 
-pub fn timestamped_sign_data_to_bytes(
-    sign_data: &SolomachineTimestampedSignData,
-) -> Result<Vec<u8>, EncodeError> {
+pub fn timestamped_sign_data_to_bytes(sign_data: &SolomachineTimestampedSignData) -> Vec<u8> {
     let proto_sign_bytes = to_proto_timestamped_sign_bytes(sign_data);
 
     encode_protobuf(&proto_sign_bytes)

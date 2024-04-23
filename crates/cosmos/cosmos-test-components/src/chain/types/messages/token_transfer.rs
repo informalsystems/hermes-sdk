@@ -7,7 +7,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::timestamp::Timestamp;
 use ibc_relayer_types::Height;
-use prost::EncodeError;
 
 use crate::chain::types::amount::Amount;
 
@@ -23,7 +22,7 @@ pub struct TokenTransferMessage {
 }
 
 impl DynCosmosMessage for TokenTransferMessage {
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let timeout_timestamp = self.timeout_time.unwrap_or_default().nanoseconds();
 
         let message = MsgTransfer {
