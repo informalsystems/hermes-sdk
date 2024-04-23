@@ -29,11 +29,12 @@ use hermes_sovereign_chain_components::sovereign::types::client_state::Sovereign
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
+use crate::contexts::sovereign_rollup::SovereignRollup;
 
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
     pub data_chain: CosmosChain,
-    // TODO: fields such as rollup JSON RPC address
+    pub rollup: SovereignRollup,
 }
 
 pub struct SovereignChainComponents;
