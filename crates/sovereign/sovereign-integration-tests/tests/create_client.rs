@@ -81,24 +81,14 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(modify_wasm_client_genesis),
-        comet_config_modifier: Box::new(|config| {
-            config
-                .get_mut("rpc")
-                .and_then(|rpc| rpc.as_table_mut())
-                .ok_or_else(|| eyre!("Failed to retrieve `rpc` in app configuration"))?
-                .insert(
-                    "max_body_bytes".to_string(),
-                    TomlValue::Integer(10001048576),
-                );
-            Ok(())
-        }),
+        comet_config_modifier: Box::new(modify_wasm_node_config),
     });
 
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
-        builder,
-        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
-        bridge_store_dir: format!("./test-data/{store_postfix}/bridges").into(),
+        builder: builder.clone(),
+        chain_store_dir: store_dir.join("chains"),
+        bridge_store_dir: store_dir.join("bridges"),
     };
 
     let sovereign_bootstrap = SovereignBootstrap {
@@ -141,7 +131,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let cosmos_chain = cosmos_chain_driver.chain();
 
-        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("datachain").await?;
+        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
         let celestia_chain = celestia_chain_driver.chain();
 
@@ -293,6 +283,19 @@ async fn assert_eventual_governance_status(
         }
     }
     Err(eyre!("Governance proposal `{governance_id}` was not in status `{expected_status}`").into())
+}
+
+fn modify_wasm_node_config(config: &mut TomlValue) -> Result<(), Error> {
+    config
+        .get_mut("rpc")
+        .and_then(|rpc| rpc.as_table_mut())
+        .ok_or_else(|| eyre!("Failed to retrieve `rpc` in app configuration"))?
+        .insert(
+            "max_body_bytes".to_string(),
+            TomlValue::Integer(10001048576),
+        );
+
+    Ok(())
 }
 
 fn modify_wasm_client_genesis(genesis: &mut serde_json::Value) -> Result<(), Error> {
