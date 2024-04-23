@@ -10,12 +10,13 @@ use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::DestinationTarget;
+use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
@@ -107,9 +108,19 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 cosmos_chain,
                 &create_client_settings,
             )
-            .await;
+            .await?;
 
             println!("client ID of Cosmos on Sovereign: {:?}", client_id);
+
+            let client_id = SovereignToCosmosRelay::create_client(
+                SourceTarget,
+                &sovereign_chain,
+                cosmos_chain,
+                &create_client_settings,
+            )
+            .await?;
+
+            println!("client ID 2 of Cosmos on Sovereign: {:?}", client_id);
         }
 
         <Result<(), Error>>::Ok(())

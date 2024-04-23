@@ -1,11 +1,10 @@
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, CanRaiseError, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use hermes_relayer_components::relay::impls::create_client::MissingCreateClientEventError;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
@@ -33,8 +32,6 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanRaiseRelayChainErrors
     + CanCreateClient<SourceTarget>
     + CanCreateClient<DestinationTarget>
-    + for<'a> CanRaiseError<MissingCreateClientEventError<'a, CosmosChain, SovereignChain>>
-    + for<'a> CanRaiseError<MissingCreateClientEventError<'a, SovereignChain, CosmosChain>>
 {
 }
 
