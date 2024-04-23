@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent, HasComponents};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
@@ -14,6 +16,9 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateBytesQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::{
     CanSendMessages, MessageSenderComponent,
 };
@@ -97,7 +102,6 @@ use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
-use std::sync::Arc;
 
 use crate::contexts::encoding::ProvideSovereignEncoding;
 use crate::contexts::logger::ProvideSovereignLogger;
@@ -185,6 +189,9 @@ delegate_components! {
 
             CreateClientMessageBuilderComponent,
             UpdateClientMessageBuilderComponent,
+
+            ClientStateBytesQuerierComponent,
+            ClientStateQuerierComponent,
         ]:
             SovereignRollupClientComponents,
         [
@@ -262,6 +269,8 @@ pub trait CanUseSovereignRollup:
     + HasLogger
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
+    + CanQueryClientState<CosmosChain>
+// + CanQueryChainStatus
 where
     Self::Runtime: HasMutex,
 {

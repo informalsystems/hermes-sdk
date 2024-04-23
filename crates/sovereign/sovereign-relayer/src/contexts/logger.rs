@@ -5,6 +5,10 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
 use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
+use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
+use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
@@ -43,6 +47,24 @@ impl<'a> DelegateComponent<LogRetryQueryTxResponse<'a, SovereignRollup>> for Sov
 
 impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, SovereignRollup>>
     for SovereignLogHandlers
+{
+    type Delegate = TracingLogger;
+}
+
+impl<'a, Relay, Target> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
+    for SovereignLogHandlers
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+{
+    type Delegate = TracingLogger;
+}
+
+impl<'a, Relay, Target> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
+    for SovereignLogHandlers
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
 {
     type Delegate = TracingLogger;
 }

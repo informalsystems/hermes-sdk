@@ -102,11 +102,7 @@ where
             .client_state
             .ok_or_else(|| Chain::raise_error("expect client state field to be non-empty"))?;
 
-        let client_state_bytes = {
-            let mut buf = Vec::new();
-            Message::encode(&client_state_any, &mut buf).map_err(Chain::raise_error)?;
-            buf
-        };
+        let client_state_bytes = Message::encode_to_vec(&client_state_any);
 
         Ok((client_id, client_state_bytes))
     }

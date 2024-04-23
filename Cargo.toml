@@ -63,6 +63,7 @@ rust-version    = "1.72"
 [workspace.dependencies]
 async-trait                     = { version = "0.1.56" }
 ibc                             = { version = "0.51.0" }
+ibc-query                       = { version = "0.51.0" }
 ibc-proto                       = { version = "0.42.2" }
 sov-celestia-client             = { version = "0.1.0" }
 ibc-relayer                     = { version = "0.27.2" }

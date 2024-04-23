@@ -2,8 +2,7 @@ use core::fmt::{Debug, Display};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct RollupHeight {
-    pub slot_number: u128,
-    // TODO: determine if we also need to include DA height here
+    pub slot_number: u64,
 }
 
 impl Display for RollupHeight {
