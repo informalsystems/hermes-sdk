@@ -61,6 +61,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
     InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::create_client::CreateClientEventComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
@@ -88,6 +89,7 @@ use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithCha
 use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::impls::connection::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
+use crate::impls::events::ProvideCosmosEvents;
 use crate::impls::packet::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::packet::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -145,6 +147,10 @@ delegate_components! {
             BlockHashComponent,
         ]:
             ProvideCosmosChainTypes,
+        [
+            CreateClientEventComponent,
+        ]:
+            ProvideCosmosEvents,
         [
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,

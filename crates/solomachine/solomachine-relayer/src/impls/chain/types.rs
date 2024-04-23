@@ -11,7 +11,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
@@ -195,20 +195,23 @@ where
     type TimeoutUnorderedPacketPayload = SolomachineTimeoutUnorderedPacketPayload;
 }
 
-impl<Chain, Counterparty> HasCreateClientEvent<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideCreateClientEvent<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type CreateClientEvent = SolomachineCreateClientEvent;
 
-    fn try_extract_create_client_event(event: Self::Event) -> Option<Self::CreateClientEvent> {
+    fn try_extract_create_client_event(
+        event: SolomachineEvent,
+    ) -> Option<SolomachineCreateClientEvent> {
         match event {
             SolomachineEvent::CreateClient(e) => Some(e),
             _ => None,
         }
     }
 
-    fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &ClientId {
+    fn create_client_event_client_id(event: &SolomachineCreateClientEvent) -> &ClientId {
         &event.client_id
     }
 }

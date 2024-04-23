@@ -7,7 +7,6 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
-use hermes_cosmos_chain_components::methods::event::try_extract_create_client_event;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -26,6 +25,7 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
@@ -237,7 +237,9 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let events = cosmos_chain.send_message(create_celestia_client_message).await?;
 
-        let create_client_event = events.into_iter().find_map(try_extract_create_client_event).ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+        let create_client_event = events.into_iter()
+            .find_map(<CosmosChain as HasCreateClientEvent<CosmosChain>>::try_extract_create_client_event)
+            .ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
 
         let celestia_client_id = create_client_event.client_id;
 
