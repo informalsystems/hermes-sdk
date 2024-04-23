@@ -135,7 +135,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             let client_state =
                 <SovereignRollup as CanQueryClientState<CosmosChain>>::query_client_state(
-                    &rollup,
+                    rollup,
                     &client_id,
                     &rollup_height,
                 )
