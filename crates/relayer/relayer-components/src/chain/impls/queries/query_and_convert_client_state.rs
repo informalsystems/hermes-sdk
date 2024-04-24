@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
-use hermes_encoding_components::traits::convert::CanConvert;
 
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 
 use crate::chain::traits::queries::client_state::{
