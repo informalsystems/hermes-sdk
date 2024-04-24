@@ -7,7 +7,7 @@ use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
-use hermes_encoding_components::traits::convert::ConverterComponent;
+use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
 use hermes_encoding_components::traits::decoder::{CanDecode, DecoderComponent};
 use hermes_encoding_components::traits::encoded::EncodedTypeComponent;
 use hermes_encoding_components::traits::encoder::EncoderComponent;
@@ -16,7 +16,7 @@ use hermes_encoding_components::traits::has_encoding::{
 };
 use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
-use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
@@ -30,6 +30,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
+use crate::any_client::impls::encoding::convert::AnyClientConverterComponents;
 use crate::any_client::impls::encoding::encode::AnyClientEncoderComponents;
 use crate::any_client::impls::types::client_state::ProvideAnyClientState;
 use crate::any_client::types::client_state::AnyClientState;
@@ -70,7 +71,7 @@ delegate_components! {
         [
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,
-        ]: QueryAndDecodeClientState<Protobuf>,
+        ]: QueryAndConvertRawClientState,
     }
 }
 
@@ -110,10 +111,11 @@ delegate_components! {
         [
             EncodedTypeComponent,
             SchemaTypeComponent,
-            ConverterComponent,
             SchemaGetterComponent,
         ]:
             CosmosEncodingComponents,
+        ConverterComponent:
+            DelegateEncoding<AnyClientConverterComponents>,
     }
 }
 
@@ -121,6 +123,7 @@ pub trait CheckAnyClientEncoding:
     CanDecode<Protobuf, TendermintClientState>
     + CanDecode<Protobuf, Any>
     + CanDecode<Protobuf, AnyClientState>
+    + CanConvert<Any, AnyClientState>
 {
 }
 
