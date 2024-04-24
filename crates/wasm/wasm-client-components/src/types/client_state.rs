@@ -1,5 +1,5 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_encoding_components::traits::convert::Converter;
+use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::Any;
@@ -74,6 +74,21 @@ where
 }
 
 pub struct DecodeViaWasmClientState;
+
+impl<Encoding, Value> Converter<Encoding, Any, Value> for DecodeViaWasmClientState
+where
+    Encoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanConvert<Any, WasmClientState>
+        + CanDecode<Any, Value>,
+{
+    fn convert(encoding: &Encoding, any: &Any) -> Result<Value, Encoding::Error> {
+        let wasm_client_state = encoding.convert(any)?;
+
+        let value: Value = encoding.decode(&wasm_client_state.data)?;
+
+        Ok(value)
+    }
+}
 
 impl<Encoding, Value> Decoder<Encoding, WasmClientState, Value> for DecodeViaWasmClientState
 where
