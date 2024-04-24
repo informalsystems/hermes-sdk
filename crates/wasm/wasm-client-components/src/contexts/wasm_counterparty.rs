@@ -4,12 +4,13 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
+use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
-use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
 };
@@ -58,7 +59,7 @@ delegate_components! {
         [
             ClientStateQuerierComponent,
             AllClientStatesBytesQuerierComponent,
-        ]: QueryAndDecodeClientState<Any>,
+        ]: QueryAndConvertRawClientState,
     }
 }
 
@@ -103,6 +104,7 @@ pub trait CanUseWasmClientEncoding:
     CanDecode<Protobuf, ProtoWasmClientState>
     + CanDecode<Protobuf, WasmClientState>
     + CanDecode<Any, WasmClientState>
+    + CanConvert<Any, WasmClientState>
 {
 }
 
