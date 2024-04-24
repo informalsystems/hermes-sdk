@@ -27,7 +27,8 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
-    ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
+    AllRawClientStatesQuerierComponent, ClientStateBytesQuerierComponent,
+    ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
@@ -54,7 +55,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
@@ -119,7 +120,7 @@ use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
-use crate::impls::types::client_state::ProvideTendermintClientState;
+use crate::impls::types::client_state::{ProvideAnyRawClientState, ProvideTendermintClientState};
 use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
@@ -166,6 +167,8 @@ delegate_components! {
             ClientStateFieldsGetterComponent,
         ]:
             ProvideTendermintClientState,
+        RawClientStateTypeComponent:
+            ProvideAnyRawClientState,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
         PacketFieldsReaderComponent:
@@ -179,6 +182,8 @@ delegate_components! {
         [
             ClientStateBytesQuerierComponent,
             AllClientStatesBytesQuerierComponent,
+            RawClientStateQuerierComponent,
+            AllRawClientStatesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
         ConsensusStateBytesQuerierComponent:

@@ -9,10 +9,10 @@ use crate::chain::traits::queries::client_state::{
 };
 use crate::chain::traits::types::client_state::HasClientStateType;
 
-pub struct QueryAndConvertClientState;
+pub struct QueryAndConvertRawClientState;
 
 impl<Chain, Counterparty, Encoding> ClientStateQuerier<Chain, Counterparty>
-    for QueryAndConvertClientState
+    for QueryAndConvertRawClientState
 where
     Chain: CanQueryRawClientState<Counterparty> + CanRaiseError<Encoding::Error>,
     Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<Encoding = Encoding>,
@@ -34,7 +34,7 @@ where
 }
 
 impl<Chain, Counterparty, Encoding> AllClientStatesQuerier<Chain, Counterparty>
-    for QueryAndConvertClientState
+    for QueryAndConvertRawClientState
 where
     Chain: CanQueryAllRawClientStates<Counterparty>,
     Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<Encoding = Encoding>,

@@ -39,7 +39,8 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
-    ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
+    AllRawClientStatesQuerierComponent, ClientStateBytesQuerierComponent,
+    ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
@@ -67,7 +68,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
@@ -191,6 +192,7 @@ delegate_components! {
             EventTypeComponent,
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
+            RawClientStateTypeComponent,
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndQuerierComponent,
@@ -219,6 +221,8 @@ delegate_components! {
             ConsensusStateBytesQuerierComponent,
             AllClientStatesQuerierComponent,
             AllClientStatesBytesQuerierComponent,
+            RawClientStateQuerierComponent,
+            AllRawClientStatesQuerierComponent,
             CreateClientOptionsTypeComponent,
             CreateClientMessageBuilderComponent,
             CreateClientPayloadBuilderComponent,
