@@ -31,18 +31,6 @@ pub trait CanQueryRawClientState<Counterparty>:
     ) -> Result<Self::RawClientState, Self::Error>;
 }
 
-#[derive_component(ClientStateBytesQuerierComponent, ClientStateBytesQuerier<Chain>)]
-#[async_trait]
-pub trait CanQueryClientStateBytes<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
-{
-    async fn query_client_state_bytes(
-        &self,
-        client_id: &Self::ClientId,
-        height: &Self::Height,
-    ) -> Result<Vec<u8>, Self::Error>;
-}
-
 #[derive_component(AllClientStatesQuerierComponent, AllClientStatesQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryAllClientStates<Counterparty>:
@@ -65,17 +53,6 @@ pub trait CanQueryAllRawClientStates<Counterparty>:
         &self,
         height: &Self::Height,
     ) -> Result<Vec<(Self::ClientId, Self::RawClientState)>, Self::Error>;
-}
-
-#[derive_component(AllClientStatesBytesQuerierComponent, AllClientStatesBytesQuerier<Chain>)]
-#[async_trait]
-pub trait CanQueryAllClientStatesBytes<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
-{
-    async fn query_all_client_states_bytes(
-        &self,
-        height: &Self::Height,
-    ) -> Result<Vec<(Self::ClientId, Vec<u8>)>, Self::Error>;
 }
 
 #[async_trait]

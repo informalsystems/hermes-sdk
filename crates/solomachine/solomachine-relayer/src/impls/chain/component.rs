@@ -18,9 +18,7 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
-};
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -66,10 +64,7 @@ pub struct SolomachineCosmosComponents;
 
 delegate_components! {
     SolomachineCosmosComponents {
-        [
-            ClientStateQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
-        ]:
+        ClientStateQuerierComponent:
             QueryAndConvertRawClientState,
         ConsensusStateQuerierComponent:
             QuerySolomachineConsensusStateFromCosmos,

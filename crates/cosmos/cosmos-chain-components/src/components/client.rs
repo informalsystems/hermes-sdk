@@ -26,8 +26,7 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
-    AllRawClientStatesQuerierComponent, ClientStateBytesQuerierComponent,
+    AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
     ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
@@ -180,8 +179,6 @@ delegate_components! {
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
         [
-            ClientStateBytesQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
             RawClientStateQuerierComponent,
             AllRawClientStatesQuerierComponent,
         ]:

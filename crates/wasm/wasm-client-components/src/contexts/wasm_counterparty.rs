@@ -11,9 +11,7 @@ use hermes_encoding_components::traits::has_encoding::{
 };
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
-};
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -56,10 +54,7 @@ pub struct WasmCounterpartyCosmosComponents;
 
 delegate_components! {
     WasmCounterpartyCosmosComponents {
-        [
-            ClientStateQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
-        ]: QueryAndConvertRawClientState,
+        ClientStateQuerierComponent: QueryAndConvertRawClientState,
     }
 }
 

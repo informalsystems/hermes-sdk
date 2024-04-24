@@ -4,7 +4,6 @@ use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawCli
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateBytesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::RawClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
@@ -135,10 +134,7 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
-        [
-            ClientStateBytesQuerierComponent,
-            RawClientStateQuerierComponent,
-        ]:
+        RawClientStateQuerierComponent:
             QueryClientStateOnSovereign,
         ClientStateQuerierComponent:
             QueryAndConvertRawClientState,
