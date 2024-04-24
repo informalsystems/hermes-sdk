@@ -16,15 +16,17 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateBytesQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    CanQueryClientState, CanQueryRawClientState, ClientStateBytesQuerierComponent,
+    ClientStateQuerierComponent, RawClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::send_message::{
     CanSendMessages, MessageSenderComponent,
 };
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
+use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, HasCreateClientEvent,
 };
@@ -198,6 +200,8 @@ delegate_components! {
             CreateClientMessageBuilderComponent,
             UpdateClientMessageBuilderComponent,
 
+            RawClientStateTypeComponent,
+            RawClientStateQuerierComponent,
             ClientStateBytesQuerierComponent,
             ClientStateQuerierComponent,
         ]:
@@ -278,6 +282,7 @@ pub trait CanUseSovereignRollup:
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
+    + CanQueryRawClientState<CosmosChain>
 // + CanQueryChainStatus
 where
     Self::Runtime: HasMutex,
