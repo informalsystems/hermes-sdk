@@ -10,8 +10,9 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::chain::traits::types::chain_id::{ChainIdGetter, HasChainIdType};
+use hermes_relayer_components::chain::traits::types::chain_id::{
+    ChainIdGetter, HasChainId, HasChainIdType,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,

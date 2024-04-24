@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_relayer_components::chain::impls::queries::query_and_decode_client_state::QueryAndDecodeClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
@@ -10,8 +10,7 @@ use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::conne
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{CanBuildConnectionHandshakeMessages, ConnectionHandshakeMessageBuilderComponent};
 use hermes_relayer_components::chain::traits::message_builders::create_client::{CanBuildCreateClientMessage, CreateClientMessageBuilderComponent};
 use hermes_relayer_components::chain::traits::message_builders::update_client::{CanBuildUpdateClientMessage, UpdateClientMessageBuilderComponent};
-use hermes_relayer_components::chain::traits::queries::client_state::{AllClientStatesBytesQuerierComponent, CanQueryClientState, ClientStateQuerierComponent};
-use hermes_wasm_client_components::types::client_state::WasmClientState;
+use hermes_relayer_components::chain::traits::queries::client_state::{CanQueryClientState, ClientStateQuerierComponent};
 
 use crate::contexts::sovereign_chain::SovereignChain;
 
@@ -27,9 +26,8 @@ delegate_components! {
     SovereignCosmosComponents {
         [
             ClientStateQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
         ]:
-            QueryAndDecodeClientState<WasmClientState>,
+            QueryAndConvertRawClientState,
         UpdateClientMessageBuilderComponent:
             BuildUpdateSovereignClientMessageOnCosmos,
         CreateClientMessageBuilderComponent:

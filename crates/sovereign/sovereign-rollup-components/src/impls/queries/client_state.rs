@@ -1,6 +1,8 @@
 use cgp_core::prelude::HasErrorType;
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateBytesQuerier;
+use hermes_protobuf_encoding_components::types::Any;
+use hermes_relayer_components::chain::traits::queries::client_state::RawClientStateQuerier;
+use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::client::types::error::ClientError as Ics02Error;
 use ibc::core::client::types::Height;
@@ -10,17 +12,17 @@ use ibc_query::core::client::{QueryClientStateRequest, QueryClientStateResponse}
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
-use prost::Message;
 
 use crate::traits::json_rpc_client::HasJsonRpcClient;
 use crate::types::height::RollupHeight;
 
 pub struct QueryClientStateOnSovereign;
 
-impl<Rollup, Counterparty> ClientStateBytesQuerier<Rollup, Counterparty>
+impl<Rollup, Counterparty> RawClientStateQuerier<Rollup, Counterparty>
     for QueryClientStateOnSovereign
 where
     Rollup: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = RollupHeight>
+        + HasRawClientStateType<RawClientState = Any>
         + HasJsonRpcClient
         + HasErrorType
         + CanRaiseError<ClientError>
@@ -28,11 +30,11 @@ where
         + CanRaiseError<IdentifierError>,
     Rollup::JsonRpcClient: ClientT,
 {
-    async fn query_client_state_bytes(
+    async fn query_raw_client_state(
         rollup: &Rollup,
         client_id: &ClientId,
         height: &RollupHeight,
-    ) -> Result<Vec<u8>, Rollup::Error> {
+    ) -> Result<Any, Rollup::Error> {
         let normalized_height = Height::new(0, height.slot_number).map_err(Rollup::raise_error)?;
 
         let client_id_param: IbcClientId =
@@ -49,8 +51,9 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
-        let client_state_bytes = Message::encode_to_vec(&response.client_state);
-
-        Ok(client_state_bytes)
+        Ok(Any {
+            type_url: response.client_state.type_url,
+            value: response.client_state.value,
+        })
     }
 }

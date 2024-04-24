@@ -16,15 +16,16 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateBytesQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    CanQueryClientState, ClientStateQuerierComponent, RawClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::send_message::{
     CanSendMessages, MessageSenderComponent,
 };
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
+use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, HasCreateClientEvent,
 };
@@ -102,6 +103,7 @@ use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
+use jsonrpsee::ws_client::WsClient;
 
 use crate::contexts::encoding::ProvideSovereignEncoding;
 use crate::contexts::logger::ProvideSovereignLogger;
@@ -110,16 +112,23 @@ use crate::contexts::logger::ProvideSovereignLogger;
 pub struct SovereignRollup {
     pub runtime: HermesRuntime,
     pub rpc_client: HttpClient,
+    pub subscription_client: Arc<WsClient>,
     pub signing_key: SigningKey,
     pub nonce_mutex: Arc<Mutex<()>>,
 }
 
 impl SovereignRollup {
-    pub fn new(runtime: HermesRuntime, rpc_client: HttpClient, signing_key: SigningKey) -> Self {
+    pub fn new(
+        runtime: HermesRuntime,
+        signing_key: SigningKey,
+        rpc_client: HttpClient,
+        subscription_client: WsClient,
+    ) -> Self {
         Self {
             runtime,
-            rpc_client,
             signing_key,
+            rpc_client,
+            subscription_client: Arc::new(subscription_client),
             nonce_mutex: Arc::new(Mutex::new(())),
         }
     }
@@ -190,7 +199,8 @@ delegate_components! {
             CreateClientMessageBuilderComponent,
             UpdateClientMessageBuilderComponent,
 
-            ClientStateBytesQuerierComponent,
+            RawClientStateTypeComponent,
+            RawClientStateQuerierComponent,
             ClientStateQuerierComponent,
         ]:
             SovereignRollupClientComponents,

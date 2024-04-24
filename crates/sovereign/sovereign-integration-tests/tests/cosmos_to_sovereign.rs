@@ -4,6 +4,7 @@ use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use futures::StreamExt;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
@@ -27,7 +28,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use jsonrpsee::core::client::ClientT;
+use jsonrpsee::core::client::{ClientT, Subscription, SubscriptionClientT};
 use jsonrpsee::core::params::ArrayParams;
 use serde::Deserialize;
 use tokio::runtime::Builder;
@@ -101,6 +102,25 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         };
 
         {
+            let subscription: Subscription<u64> = rollup
+                .subscription_client
+                .subscribe(
+                    "ledger_subscribeSlots",
+                    ArrayParams::new(),
+                    "ledger_unsubscribeSlots",
+                )
+                .await?;
+
+            runtime.runtime.spawn(async move {
+                subscription
+                    .for_each(|value| async move {
+                        println!("slot subscription yields: {:?}", value);
+                    })
+                    .await;
+            });
+        }
+
+        {
             let create_client_settings = ClientSettings::Tendermint(Settings {
                 max_clock_drift: Duration::from_secs(40),
                 trusting_period: None,
@@ -125,13 +145,13 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                     .request("ledger_getHead", ArrayParams::new())
                     .await?;
 
-                // FIXME: We somehow need the query height to be latest height + 1 to succeed.
+                println!("rollup height: {}", response.number);
+
                 RollupHeight {
+                    // FIXME: We somehow need the query height to be latest height + 1 to succeed.
                     slot_number: response.number + 1,
                 }
             };
-
-            println!("rollup height: {}", rollup_height);
 
             let client_state =
                 <SovereignRollup as CanQueryClientState<CosmosChain>>::query_client_state(
@@ -142,6 +162,16 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 .await?;
 
             println!("client state: {:?}", client_state);
+
+            // for _ in 0..10 {
+            //     let response: SlotResponse = rollup
+            //         .json_rpc_client()
+            //         .request("ledger_getHead", ArrayParams::new())
+            //         .await?;
+
+            //     println!("rollup height: {}", response.number);
+            //     sleep(Duration::from_millis(200)).await;
+            // }
         }
 
         <Result<(), Error>>::Ok(())
