@@ -41,14 +41,14 @@ where
         let rpc_config = &node_config.runner.rpc_config;
 
         let rpc_client = HttpClientBuilder::default()
-            .build(&format!(
+            .build(format!(
                 "http://{}:{}",
                 rpc_config.bind_host, rpc_config.bind_port
             ))
             .map_err(Bootstrap::raise_error)?;
 
         let subscription_client = WsClientBuilder::default()
-            .build(&format!(
+            .build(format!(
                 "ws://{}:{}",
                 rpc_config.bind_host, rpc_config.bind_port
             ))
