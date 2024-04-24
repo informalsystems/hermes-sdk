@@ -102,6 +102,7 @@ use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
 use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
+use jsonrpsee::ws_client::WsClient;
 
 use crate::contexts::encoding::ProvideSovereignEncoding;
 use crate::contexts::logger::ProvideSovereignLogger;
@@ -110,16 +111,23 @@ use crate::contexts::logger::ProvideSovereignLogger;
 pub struct SovereignRollup {
     pub runtime: HermesRuntime,
     pub rpc_client: HttpClient,
+    pub subscription_client: Arc<WsClient>,
     pub signing_key: SigningKey,
     pub nonce_mutex: Arc<Mutex<()>>,
 }
 
 impl SovereignRollup {
-    pub fn new(runtime: HermesRuntime, rpc_client: HttpClient, signing_key: SigningKey) -> Self {
+    pub fn new(
+        runtime: HermesRuntime,
+        signing_key: SigningKey,
+        rpc_client: HttpClient,
+        subscription_client: WsClient,
+    ) -> Self {
         Self {
             runtime,
-            rpc_client,
             signing_key,
+            rpc_client,
+            subscription_client: Arc::new(subscription_client),
             nonce_mutex: Arc::new(Mutex::new(())),
         }
     }
