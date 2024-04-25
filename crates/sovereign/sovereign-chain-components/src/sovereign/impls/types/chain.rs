@@ -5,6 +5,7 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_sovereign_rollup_components::impls::types::rollup::ProvideSovereignRollupTypes;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -18,6 +19,7 @@ delegate_components! {
             TimestampTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
+            ChainStatusTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
         ]:
