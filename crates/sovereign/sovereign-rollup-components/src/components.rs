@@ -4,6 +4,7 @@ use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawCli
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
@@ -24,6 +25,7 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::components::default::transaction::DefaultTxComponents;
@@ -51,6 +53,7 @@ use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreat
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
+use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
 use crate::impls::queries::client_state::QueryClientStateOnSovereign;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
@@ -76,6 +79,7 @@ delegate_components! {
             EventTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
+            ChainStatusTypeComponent,
         ]:
             ProvideSovereignRollupTypes,
         [
@@ -139,5 +143,7 @@ delegate_components! {
             QueryClientStateOnSovereign,
         ClientStateQuerierComponent:
             QueryAndConvertRawClientState,
+        ChainStatusQuerierComponent:
+            QuerySovereignRollupStatus,
     }
 }

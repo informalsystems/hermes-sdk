@@ -1,4 +1,3 @@
-use cgp_core::prelude::HasErrorType;
 use cgp_core::CanRaiseError;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::queries::client_state::RawClientStateQuerier;
@@ -24,7 +23,6 @@ where
     Rollup: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = RollupHeight>
         + HasRawClientStateType<RawClientState = Any>
         + HasJsonRpcClient
-        + HasErrorType
         + CanRaiseError<ClientError>
         + CanRaiseError<Ics02Error>
         + CanRaiseError<IdentifierError>,

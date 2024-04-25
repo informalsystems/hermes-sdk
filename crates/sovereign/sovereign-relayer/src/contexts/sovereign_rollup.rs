@@ -16,6 +16,9 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::chain_status::{
+    CanQueryChainStatus, ChainStatusQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
@@ -34,6 +37,7 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::error::impls::retry::ReturnRetryable;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
@@ -168,6 +172,8 @@ delegate_components! {
             ChainIdTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
+            ChainStatusTypeComponent,
+
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             TransactionTypeComponent,
@@ -202,6 +208,7 @@ delegate_components! {
             RawClientStateTypeComponent,
             RawClientStateQuerierComponent,
             ClientStateQuerierComponent,
+            ChainStatusQuerierComponent,
         ]:
             SovereignRollupClientComponents,
         [
@@ -280,7 +287,7 @@ pub trait CanUseSovereignRollup:
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
-// + CanQueryChainStatus
+    + CanQueryChainStatus
 where
     Self::Runtime: HasMutex,
 {

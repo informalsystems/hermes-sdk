@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent, ProvideInner};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -9,6 +9,8 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
@@ -89,6 +91,14 @@ delegate_components! {
     }
 }
 
+impl ProvideInner<SovereignChain> for SovereignChainComponents {
+    type Inner = SovereignRollup;
+
+    fn inner(chain: &SovereignChain) -> &SovereignRollup {
+        &chain.rollup
+    }
+}
+
 impl RuntimeGetter<SovereignChain> for SovereignChainComponents {
     fn runtime(chain: &SovereignChain) -> &HermesRuntime {
         &chain.runtime
@@ -116,6 +126,7 @@ pub trait CanUseSovereignChain:
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightType<Height = RollupHeight>
     + CanSendMessages
+    + CanQueryChainStatus
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
@@ -123,6 +134,7 @@ pub trait CanUseSovereignChain:
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
+    + CanQueryClientState<CosmosChain>
 {
 }
 

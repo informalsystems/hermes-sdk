@@ -1,9 +1,13 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
+use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
@@ -20,6 +24,7 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
@@ -51,6 +56,7 @@ delegate_components! {
             ChainIdTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
+            ChainStatusTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
         ]:
@@ -90,5 +96,10 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
         ConnectionHandshakePayloadBuilderComponent:
             BuildSovereignConnectionHandshakePayload,
+
+        ChainStatusQuerierComponent:
+            ForwardQueryChainStatus,
+        ClientStateQuerierComponent:
+            ForwardQueryClientState,
     }
 }
