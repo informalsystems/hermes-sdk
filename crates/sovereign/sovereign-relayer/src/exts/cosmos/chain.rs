@@ -3,6 +3,8 @@ use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainCom
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
 use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
@@ -44,6 +46,8 @@ pub trait CanUseCosmosChainWithSovereign:
     + CanBuildConnectionHandshakeMessages<SovereignChain>
     + HasCreateClientOptionsType<SovereignChain>
     + CanBuildCreateClientPayload<SovereignChain>
+    + CanBuildUpdateClientPayload<SovereignChain>
+    + HasClientStateFields<SovereignChain>
 {
 }
 
