@@ -22,6 +22,10 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
+    CanQueryConsensusStateHeights, ConsensusStateHeightQuerierComponent,
+    ConsensusStateHeightsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::send_message::{
     CanSendMessages, MessageSenderComponent,
 };
@@ -209,6 +213,8 @@ delegate_components! {
             RawClientStateQuerierComponent,
             ClientStateQuerierComponent,
             ChainStatusQuerierComponent,
+            ConsensusStateHeightsQuerierComponent,
+            ConsensusStateHeightQuerierComponent,
         ]:
             SovereignRollupClientComponents,
         [
@@ -284,10 +290,11 @@ pub trait CanUseSovereignRollup:
     + CanPollTxResponse
     + CanAssertEventualAmount
     + HasLogger
+    + CanQueryChainStatus
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
-    + CanQueryChainStatus
+    + CanQueryConsensusStateHeights<CosmosChain>
 where
     Self::Runtime: HasMutex,
 {
