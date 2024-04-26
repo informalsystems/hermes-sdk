@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{PageRequest, QueryConsensusStateHeightsRequest};
+use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 
@@ -15,9 +16,8 @@ impl<Chain, Counterparty> ConsensusStateHeightsQuerier<Chain, Counterparty>
     for QueryConsensusStateHeightsFromChainHandle
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + HasHeightType<Height = Height>
         + HasBlockingChainHandle
-        + CanRaiseError<eyre::Report>,
+        + CanRaiseError<RelayerError>,
     Counterparty: HasHeightType<Height = Height>,
 {
     async fn query_consensus_state_heights(

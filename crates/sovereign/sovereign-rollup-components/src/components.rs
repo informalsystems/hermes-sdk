@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawClientState;
+use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
@@ -8,6 +9,8 @@ use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatus
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -55,6 +58,7 @@ use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
 use crate::impls::queries::client_state::QueryClientStateOnSovereign;
+use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsOnSovereign;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
@@ -137,13 +141,17 @@ delegate_components! {
             BuildCreateCosmosClientMessageOnSovereign,
         UpdateClientMessageBuilderComponent:
             BuildUpdateCosmosClientMessageOnSovereign,
+        ChainStatusQuerierComponent:
+            QuerySovereignRollupStatus,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         RawClientStateQuerierComponent:
             QueryClientStateOnSovereign,
         ClientStateQuerierComponent:
             QueryAndConvertRawClientState,
-        ChainStatusQuerierComponent:
-            QuerySovereignRollupStatus,
+        ConsensusStateHeightsQuerierComponent:
+            QueryConsensusStateHeightsOnSovereign,
+        ConsensusStateHeightQuerierComponent:
+            QueryConsensusStateHeightsAndFindHeightBefore,
     }
 }
