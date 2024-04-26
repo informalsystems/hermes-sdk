@@ -1,6 +1,9 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -142,6 +145,16 @@ impl<'a, Chain> DelegateComponent<BroadcastTxError<'a, Chain>> for CosmosErrorHa
 impl<'a, Chain> DelegateComponent<TxNoResponseError<'a, Chain>> for CosmosErrorHandlers
 where
     Chain: HasTransactionHashType,
+{
+    type Delegate = DebugError;
+}
+
+impl<'a, Chain, Counterparty>
+    DelegateComponent<NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>>
+    for CosmosErrorHandlers
+where
+    Chain: HasIbcChainTypes<Counterparty>,
+    Counterparty: HasHeightType,
 {
     type Delegate = DebugError;
 }
