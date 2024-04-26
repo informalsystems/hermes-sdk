@@ -1,6 +1,4 @@
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerier, ConsensusStateHeightsQuerier,
 };
@@ -15,20 +13,19 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 
 pub struct QueryConsensusStateHeightFromChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> ConsensusStateHeightQuerier<Chain, Counterparty>
     for QueryConsensusStateHeightFromChainHandle
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
         + HasBlockingChainHandle
-        + CanRaiseError<eyre::Report>,
+        + CanRaiseError<String>,
     Counterparty: HasHeightType<Height = Height>,
 {
     async fn find_consensus_state_height_before(
         chain: &Chain,
         client_id: &Chain::ClientId,
-        target_height: &Counterparty::Height,
-    ) -> Result<Counterparty::Height, Chain::Error> {
+        target_height: &Height,
+    ) -> Result<Height, Chain::Error> {
         let client_id = client_id.clone();
         let target_height = *target_height;
 
@@ -51,7 +48,7 @@ where
                     .into_iter()
                     .find(|height| height < &target_height)
                     .ok_or_else(|| {
-                        Chain::raise_error(eyre!(
+                        Chain::raise_error(format!(
                             "no consensus state found that is smaller than target height {}",
                             target_height
                         ))
@@ -65,7 +62,6 @@ where
 
 pub struct QueryConsensusStateHeightsFromChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> ConsensusStateHeightsQuerier<Chain, Counterparty>
     for QueryConsensusStateHeightsFromChainHandle
 where

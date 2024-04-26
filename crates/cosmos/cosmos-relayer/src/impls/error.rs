@@ -118,6 +118,7 @@ delegate_components! {
             MissingSendPacketEventError,
         ]:
             DebugError,
+        String: DisplayError,
     }
 }
 
