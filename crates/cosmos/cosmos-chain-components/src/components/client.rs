@@ -121,7 +121,7 @@ use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::{ProvideAnyRawClientState, ProvideTendermintClientState};
 use crate::impls::types::consensus_state::{
-    ProvideRawConsensusStateBytes, ProvideTendermintConsensusState,
+    ProvideAnyRawConsensusState, ProvideTendermintConsensusState,
 };
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
@@ -171,7 +171,7 @@ delegate_components! {
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
-            ProvideRawConsensusStateBytes,
+            ProvideAnyRawConsensusState,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
         PacketFieldsReaderComponent:

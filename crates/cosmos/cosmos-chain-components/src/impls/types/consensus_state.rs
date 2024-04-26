@@ -24,12 +24,3 @@ where
 {
     type RawConsensusState = Any;
 }
-
-pub struct ProvideRawConsensusStateBytes;
-
-impl<Chain> ProvideRawConsensusStateType<Chain> for ProvideRawConsensusStateBytes
-where
-    Chain: Async,
-{
-    type RawConsensusState = Vec<u8>;
-}
