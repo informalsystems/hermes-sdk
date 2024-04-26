@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use crate::types::height::RollupHeight;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct HeightParam {
     pub revision_number: u64,
     pub revision_height: u64,

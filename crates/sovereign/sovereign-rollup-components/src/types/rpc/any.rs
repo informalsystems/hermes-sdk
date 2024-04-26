@@ -1,7 +1,7 @@
 use hermes_protobuf_encoding_components::types::Any;
 use serde::Deserialize;
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct AnyResponse {
     pub type_url: String,
     pub value: Vec<u8>,

@@ -6,14 +6,14 @@ use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::client::types::error::ClientError as Ics02Error;
 use ibc::core::host::types::error::IdentifierError;
+use ibc_query::core::client::QueryConsensusStateResponse;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::traits::json_rpc_client::HasJsonRpcClient;
 use crate::types::height::RollupHeight;
-use crate::types::rpc::any::AnyResponse;
 use crate::types::rpc::height::HeightParam;
 
 pub struct QueryConsensusStateOnSovereign;
@@ -45,13 +45,16 @@ where
             query_height: &query_height.into(),
         };
 
-        let response: Response = rollup
+        let response: QueryConsensusStateResponse = rollup
             .json_rpc_client()
             .request("ibc_consensusState", (request,))
             .await
             .map_err(Rollup::raise_error)?;
 
-        Ok(response.consensus_state.into())
+        Ok(Any {
+            type_url: response.consensus_state.type_url,
+            value: response.consensus_state.value,
+        })
     }
 }
 
@@ -60,9 +63,4 @@ pub struct Request<'a> {
     pub client_id: &'a str,
     pub consensus_height: &'a HeightParam,
     pub query_height: &'a HeightParam,
-}
-
-#[derive(Deserialize)]
-pub struct Response {
-    pub consensus_state: AnyResponse,
 }
