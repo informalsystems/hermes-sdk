@@ -81,7 +81,8 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
+    HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::{
@@ -184,6 +185,7 @@ delegate_components! {
             ProvideCosmosEncoding,
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
             TimestampTypeComponent,

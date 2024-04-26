@@ -64,5 +64,8 @@ delegate_components! {
 
         (Any, SovereignClientState):
             DecodeViaWasmClientState,
+
+        (Any, SovereignConsensusState):
+            DecodeViaWasmClientState,
     }
 }

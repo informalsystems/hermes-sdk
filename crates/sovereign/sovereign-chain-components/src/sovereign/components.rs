@@ -18,6 +18,7 @@ use hermes_relayer_components::chain::traits::types::client_state::ClientStateTy
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
@@ -45,6 +46,7 @@ use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload:
 use crate::sovereign::impls::sovereign_to_cosmos::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
+use crate::sovereign::impls::types::consensus_state::ProvideSovereignConsensusState;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 
 pub struct SovereignChainClientComponents;
@@ -79,6 +81,8 @@ delegate_components! {
             ProvideSovereignPayloadTypes,
         ClientStateTypeComponent:
             ProvideSovereignClientState,
+        ConsensusStateTypeComponent:
+            ProvideSovereignConsensusState,
         [
             TransactionTypeComponent,
             NonceTypeComponent,

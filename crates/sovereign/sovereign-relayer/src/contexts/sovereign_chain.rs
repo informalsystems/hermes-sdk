@@ -21,6 +21,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
 };
@@ -37,6 +38,7 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
     ProvideDataChainType,
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_chain_components::sovereign::types::consensus_state::SovereignConsensusState;
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
@@ -141,6 +143,7 @@ pub trait CanUseSovereignChain:
     + CanQueryChainStatus
     + CanWaitChainReachHeight
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
+    + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildConnectionHandshakePayloads<CosmosChain>
