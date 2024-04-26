@@ -73,7 +73,9 @@ use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
     InitConnectionOptionsTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
@@ -192,6 +194,7 @@ delegate_components! {
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
             RawClientStateTypeComponent,
+            RawConsensusStateTypeComponent,
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndQuerierComponent,

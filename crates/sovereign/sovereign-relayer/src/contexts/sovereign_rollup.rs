@@ -22,7 +22,6 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerierComponent,
     ConsensusStateHeightsQuerierComponent,
