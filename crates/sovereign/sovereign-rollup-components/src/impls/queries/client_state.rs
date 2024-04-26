@@ -4,16 +4,16 @@ use hermes_relayer_components::chain::traits::queries::client_state::RawClientSt
 use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::client::types::error::ClientError as Ics02Error;
-use ibc::core::client::types::Height;
 use ibc::core::host::types::error::IdentifierError;
-use ibc::core::host::types::identifiers::ClientId as IbcClientId;
-use ibc_query::core::client::{QueryClientStateRequest, QueryClientStateResponse};
+use ibc_query::core::client::QueryClientStateResponse;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
+use serde::Serialize;
 
 use crate::traits::json_rpc_client::HasJsonRpcClient;
 use crate::types::height::RollupHeight;
+use crate::types::rpc::height::HeightParam;
 
 pub struct QueryClientStateOnSovereign;
 
@@ -33,14 +33,9 @@ where
         client_id: &ClientId,
         height: &RollupHeight,
     ) -> Result<Any, Rollup::Error> {
-        let normalized_height = Height::new(0, height.slot_number).map_err(Rollup::raise_error)?;
-
-        let client_id_param: IbcClientId =
-            client_id.as_str().parse().map_err(Rollup::raise_error)?;
-
-        let request = QueryClientStateRequest {
-            client_id: client_id_param,
-            query_height: Some(normalized_height),
+        let request = Request {
+            client_id: client_id.as_str(),
+            query_height: &height.into(),
         };
 
         let response: QueryClientStateResponse = rollup
@@ -54,4 +49,10 @@ where
             value: response.client_state.value,
         })
     }
+}
+
+#[derive(Serialize)]
+pub struct Request<'a> {
+    pub client_id: &'a str,
+    pub query_height: &'a HeightParam,
 }
