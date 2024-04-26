@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
+use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state_height::ForwardQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
@@ -9,6 +10,7 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -110,6 +112,8 @@ delegate_components! {
             ForwardQueryChainStatus,
         ClientStateQuerierComponent:
             ForwardQueryClientState,
+        ConsensusStateQuerierComponent:
+            ForwardQueryConsensusState,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
     }
