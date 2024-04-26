@@ -49,6 +49,7 @@ use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
 use crate::contexts::logger::ProvideSovereignLogger;
 use crate::contexts::sovereign_rollup::SovereignRollup;
 
+#[derive(Clone)]
 pub struct SovereignChain {
     pub runtime: HermesRuntime,
     pub data_chain: CosmosChain,
