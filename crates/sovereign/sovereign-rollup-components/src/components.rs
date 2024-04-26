@@ -1,14 +1,18 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawClientState;
+use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideAnyRawConsensusState;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::RawConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
@@ -20,6 +24,7 @@ use hermes_relayer_components::chain::traits::types::client_state::RawClientStat
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::consensus_state::RawConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
@@ -58,6 +63,7 @@ use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
 use crate::impls::queries::client_state::QueryClientStateOnSovereign;
+use crate::impls::queries::consensus_state::QueryConsensusStateOnSovereign;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsOnSovereign;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
@@ -149,6 +155,12 @@ delegate_components! {
             QueryClientStateOnSovereign,
         ClientStateQuerierComponent:
             QueryAndConvertRawClientState,
+        RawConsensusStateTypeComponent:
+            ProvideAnyRawConsensusState,
+        RawConsensusStateQuerierComponent:
+            QueryConsensusStateOnSovereign,
+        ConsensusStateQuerierComponent:
+            QueryAndConvertRawConsensusState,
         ConsensusStateHeightsQuerierComponent:
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:
