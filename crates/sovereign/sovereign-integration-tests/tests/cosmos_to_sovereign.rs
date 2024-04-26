@@ -11,7 +11,9 @@ use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -20,17 +22,14 @@ use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
-use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
-use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use jsonrpsee::core::client::{ClientT, Subscription, SubscriptionClientT};
+use jsonrpsee::core::client::{Subscription, SubscriptionClientT};
 use jsonrpsee::core::params::ArrayParams;
-use serde::Deserialize;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 
@@ -139,19 +138,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("client ID of Cosmos on Sovereign: {:?}", client_id);
 
-            let rollup_height = {
-                let response: SlotResponse = rollup
-                    .json_rpc_client()
-                    .request("ledger_getHead", ArrayParams::new())
-                    .await?;
-
-                println!("rollup height: {}", response.number);
-
-                RollupHeight {
-                    // FIXME: We somehow need the query height to be latest height + 1 to succeed.
-                    slot_number: response.number + 1,
-                }
-            };
+            let rollup_height = rollup.query_chain_height().await?;
 
             let client_state =
                 <SovereignRollup as CanQueryClientState<CosmosChain>>::query_client_state(
@@ -163,24 +150,18 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("client state: {:?}", client_state);
 
-            // for _ in 0..10 {
-            //     let response: SlotResponse = rollup
-            //         .json_rpc_client()
-            //         .request("ledger_getHead", ArrayParams::new())
-            //         .await?;
+            let consensus_state_heights = <SovereignRollup as CanQueryConsensusStateHeights<
+                CosmosChain,
+            >>::query_consensus_state_heights(
+                rollup, &client_id
+            )
+            .await?;
 
-            //     println!("rollup height: {}", response.number);
-            //     sleep(Duration::from_millis(200)).await;
-            // }
+            println!("consensus state heights: {:?}", consensus_state_heights);
         }
 
         <Result<(), Error>>::Ok(())
     })?;
 
     Ok(())
-}
-
-#[derive(Deserialize)]
-struct SlotResponse {
-    number: u64,
 }

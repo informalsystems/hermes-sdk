@@ -32,7 +32,7 @@ where
 
         let response: Response = rollup
             .json_rpc_client()
-            .request("ibc_clientState", (request,))
+            .request("ibc_consensusStateHeights", (request,))
             .await
             .map_err(Rollup::raise_error)?;
 
