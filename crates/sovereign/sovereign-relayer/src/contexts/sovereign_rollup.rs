@@ -22,6 +22,7 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerierComponent,
     ConsensusStateHeightsQuerierComponent,
@@ -294,6 +295,7 @@ pub trait CanUseSovereignRollup:
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
+    // + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
 where
     Self::Runtime: HasMutex,

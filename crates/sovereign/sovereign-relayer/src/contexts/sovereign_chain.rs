@@ -6,6 +6,10 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+};
+use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
@@ -39,6 +43,7 @@ use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
+use crate::contexts::logger::ProvideSovereignLogger;
 use crate::contexts::sovereign_rollup::SovereignRollup;
 
 pub struct SovereignChain {
@@ -89,6 +94,12 @@ delegate_components! {
             DefaultEncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
+        [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideSovereignLogger,
     }
 }
 
@@ -128,6 +139,7 @@ pub trait CanUseSovereignChain:
     + HasHeightType<Height = RollupHeight>
     + CanSendMessages
     + CanQueryChainStatus
+    + CanWaitChainReachHeight
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
