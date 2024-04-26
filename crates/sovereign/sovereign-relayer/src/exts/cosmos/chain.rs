@@ -43,8 +43,7 @@ delegate_components! {
 
 pub trait CanUseCosmosChainWithSovereign:
     CanQueryClientState<SovereignChain>
-    // + CanQueryConsensusState<SovereignChain>
-    // + CanQueryRawConsensusState<SovereignChain>
+    + CanQueryConsensusState<SovereignChain>
     + CanBuildCreateClientMessage<SovereignChain>
     + CanBuildUpdateClientMessage<SovereignChain>
     + CanBuildConnectionHandshakeMessages<SovereignChain>

@@ -1,7 +1,7 @@
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::consensus_state::RawConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasRawConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
@@ -21,16 +21,17 @@ where
         + HasRawConsensusStateType<RawConsensusState = Any>
         + CanQueryAbci
         + CanRaiseError<DecodeError>,
-    Counterparty: HasHeightType<Height = Height>,
+    Counterparty: HasHeightFields,
 {
     async fn query_raw_consensus_state(
         chain: &Chain,
         client_id: &ClientId,
-        consensus_height: &Height,
+        consensus_height: &Counterparty::Height,
         query_height: &Height,
     ) -> Result<Any, Chain::Error> {
-        let revision_number = consensus_height.revision_number();
-        let revision_height = consensus_height.revision_height();
+        let revision_number = Counterparty::revision_number(consensus_height);
+        let revision_height = Counterparty::revision_height(consensus_height);
+
         let consensus_state_path =
             format!("clients/{client_id}/consensusStates/{revision_number}-{revision_height}");
 

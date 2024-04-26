@@ -25,7 +25,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -138,7 +138,7 @@ pub trait CanUseSovereignChain:
     HasDataChain
     + HasChainIdType
     + HasUpdateClientPayloadType<CosmosChain>
-    + HasHeightType<Height = RollupHeight>
+    + HasHeightFields<Height = RollupHeight>
     + CanSendMessages
     + CanQueryChainStatus
     + CanWaitChainReachHeight

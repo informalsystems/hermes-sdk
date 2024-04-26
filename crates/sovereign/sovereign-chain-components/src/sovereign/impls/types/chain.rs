@@ -1,7 +1,9 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightFieldComponent, HeightTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -16,6 +18,7 @@ delegate_components! {
     ProvideSovereignChainTypes {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             TimestampTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,
