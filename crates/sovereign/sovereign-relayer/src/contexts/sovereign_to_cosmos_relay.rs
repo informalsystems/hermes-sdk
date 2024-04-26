@@ -13,6 +13,7 @@ use hermes_relayer_components::relay::traits::chains::{
 };
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -36,6 +37,7 @@ pub trait CanUseSovereignToCosmosRelay:
     + CanRaiseRelayChainErrors
     + CanCreateClient<SourceTarget>
     + CanCreateClient<DestinationTarget>
+    + CanBuildTargetUpdateClientMessage<SourceTarget>
 {
 }
 

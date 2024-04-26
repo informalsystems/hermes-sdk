@@ -11,11 +11,13 @@ use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
+use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
@@ -166,6 +168,22 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             .await?;
 
             println!("consensus state: {:?}", consensus_state);
+
+            sleep(Duration::from_secs(1)).await;
+
+            let relay = CosmosToSovereignRelay {
+                runtime: runtime.clone(),
+                src_chain: cosmos_chain.clone(),
+                dst_chain: sovereign_chain.clone(),
+                src_client_id: client_id.clone(), // stub
+                dst_client_id: client_id.clone(),
+            };
+
+            let target_height = cosmos_chain.query_chain_height().await?;
+
+            relay
+                .send_target_update_client_messages(DestinationTarget, &target_height)
+                .await?;
         }
 
         <Result<(), Error>>::Ok(())
