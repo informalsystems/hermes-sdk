@@ -2,7 +2,9 @@ use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
-use hermes_relayer_components::chain::traits::types::height::{HasHeightType, ProvideHeightType};
+use hermes_relayer_components::chain::traits::types::height::{
+    HasHeightType, HeightFieldGetter, ProvideHeightType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -25,6 +27,19 @@ where
     Chain: Async,
 {
     type Height = RollupHeight;
+}
+
+impl<Chain> HeightFieldGetter<Chain> for ProvideSovereignRollupTypes
+where
+    Chain: HasHeightType<Height = RollupHeight>,
+{
+    fn revision_number(_height: &RollupHeight) -> u64 {
+        0
+    }
+
+    fn revision_height(height: &RollupHeight) -> u64 {
+        height.slot_number
+    }
 }
 
 impl<Chain> ProvideChainIdType<Chain> for ProvideSovereignRollupTypes

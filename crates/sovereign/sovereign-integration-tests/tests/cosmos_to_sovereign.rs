@@ -12,6 +12,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
@@ -154,6 +155,17 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             .await?;
 
             println!("consensus state heights: {:?}", consensus_state_heights);
+
+            let consensus_height = consensus_state_heights[0];
+
+            let consensus_state = <SovereignRollup as CanQueryConsensusStateWithLatestHeight<
+                CosmosChain,
+            >>::query_consensus_state_with_latest_height(
+                rollup, &client_id, &consensus_height
+            )
+            .await?;
+
+            println!("consensus state: {:?}", consensus_state);
         }
 
         <Result<(), Error>>::Ok(())

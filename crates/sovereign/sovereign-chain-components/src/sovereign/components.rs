@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
+use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state_height::ForwardQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
@@ -9,6 +10,7 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -18,11 +20,14 @@ use hermes_relayer_components::chain::traits::types::client_state::ClientStateTy
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightFieldComponent, HeightTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -45,6 +50,7 @@ use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload:
 use crate::sovereign::impls::sovereign_to_cosmos::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
+use crate::sovereign::impls::types::consensus_state::ProvideSovereignConsensusState;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 
 pub struct SovereignChainClientComponents;
@@ -54,6 +60,7 @@ delegate_components! {
     SovereignChainClientComponents {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
@@ -79,6 +86,8 @@ delegate_components! {
             ProvideSovereignPayloadTypes,
         ClientStateTypeComponent:
             ProvideSovereignClientState,
+        ConsensusStateTypeComponent:
+            ProvideSovereignConsensusState,
         [
             TransactionTypeComponent,
             NonceTypeComponent,
@@ -103,6 +112,8 @@ delegate_components! {
             ForwardQueryChainStatus,
         ClientStateQuerierComponent:
             ForwardQueryClientState,
+        ConsensusStateQuerierComponent:
+            ForwardQueryConsensusState,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
     }

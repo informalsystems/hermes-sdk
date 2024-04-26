@@ -22,6 +22,10 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusState, RawConsensusStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerierComponent,
     ConsensusStateHeightsQuerierComponent,
@@ -33,6 +37,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
 use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::RawConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, HasCreateClientEvent,
 };
@@ -209,10 +214,16 @@ delegate_components! {
             CreateClientMessageBuilderComponent,
             UpdateClientMessageBuilderComponent,
 
+            ChainStatusQuerierComponent,
+
             RawClientStateTypeComponent,
             RawClientStateQuerierComponent,
             ClientStateQuerierComponent,
-            ChainStatusQuerierComponent,
+
+            RawConsensusStateTypeComponent,
+            RawConsensusStateQuerierComponent,
+            ConsensusStateQuerierComponent,
+
             ConsensusStateHeightsQuerierComponent,
             ConsensusStateHeightQuerierComponent,
         ]:
@@ -294,6 +305,7 @@ pub trait CanUseSovereignRollup:
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
+    + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
 where
     Self::Runtime: HasMutex,

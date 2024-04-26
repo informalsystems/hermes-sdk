@@ -2,8 +2,10 @@ use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{CanQueryConsensusState, ConsensusStateQuerierComponent};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
@@ -26,10 +28,10 @@ delegate_components! {
 
 delegate_components! {
     SovereignCosmosComponents {
-        [
-            ClientStateQuerierComponent,
-        ]:
+        ClientStateQuerierComponent:
             QueryAndConvertRawClientState,
+        ConsensusStateQuerierComponent:
+            QueryAndConvertRawConsensusState,
         UpdateClientMessageBuilderComponent:
             BuildUpdateSovereignClientMessageOnCosmos,
         CreateClientMessageBuilderComponent:
@@ -41,6 +43,7 @@ delegate_components! {
 
 pub trait CanUseCosmosChainWithSovereign:
     CanQueryClientState<SovereignChain>
+    + CanQueryConsensusState<SovereignChain>
     + CanBuildCreateClientMessage<SovereignChain>
     + CanBuildUpdateClientMessage<SovereignChain>
     + CanBuildConnectionHandshakeMessages<SovereignChain>

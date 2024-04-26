@@ -1,9 +1,9 @@
-use alloc::vec::Vec;
-
 use cgp_core::prelude::*;
 
 use super::chain_status::CanQueryChainStatus;
-use crate::chain::traits::types::consensus_state::HasConsensusStateType;
+use crate::chain::traits::types::consensus_state::{
+    HasConsensusStateType, HasRawConsensusStateType,
+};
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
@@ -22,19 +22,19 @@ where
     ) -> Result<Counterparty::ConsensusState, Self::Error>;
 }
 
-#[derive_component(ConsensusStateBytesQuerierComponent, ConsensusStateBytesQuerier<Chain>)]
+#[derive_component(RawConsensusStateQuerierComponent, RawConsensusStateQuerier<Chain>)]
 #[async_trait]
-pub trait CanQueryConsensusStateBytes<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+pub trait CanQueryRawConsensusState<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasRawConsensusStateType + HasErrorType
 where
     Counterparty: HasHeightType,
 {
-    async fn query_consensus_state_bytes(
+    async fn query_raw_consensus_state(
         &self,
         client_id: &Self::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Self::Height,
-    ) -> Result<Vec<u8>, Self::Error>;
+    ) -> Result<Self::RawConsensusState, Self::Error>;
 }
 
 #[async_trait]

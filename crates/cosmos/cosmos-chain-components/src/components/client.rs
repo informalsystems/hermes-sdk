@@ -32,7 +32,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    ConsensusStateBytesQuerierComponent, ConsensusStateQuerierComponent,
+    ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
@@ -61,13 +61,16 @@ use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
     InitConnectionOptionsTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
+    HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::{
@@ -118,7 +121,9 @@ use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequenc
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::{ProvideAnyRawClientState, ProvideTendermintClientState};
-use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
+use crate::impls::types::consensus_state::{
+    ProvideAnyRawConsensusState, ProvideTendermintConsensusState,
+};
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 use crate::traits::abci_query::AbciQuerierComponent;
@@ -130,6 +135,7 @@ delegate_components! {
     CosmosClientComponents {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
             TimestampTypeComponent,
@@ -166,6 +172,8 @@ delegate_components! {
             ProvideTendermintClientState,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
+        RawConsensusStateTypeComponent:
+            ProvideAnyRawConsensusState,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
         PacketFieldsReaderComponent:
@@ -181,7 +189,7 @@ delegate_components! {
             AllRawClientStatesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
-        ConsensusStateBytesQuerierComponent:
+        RawConsensusStateQuerierComponent:
             QueryCosmosConsensusStateFromAbci,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,

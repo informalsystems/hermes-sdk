@@ -6,21 +6,27 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+};
+use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -33,12 +39,14 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
     ProvideDataChainType,
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_chain_components::sovereign::types::consensus_state::SovereignConsensusState;
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
+use crate::contexts::logger::ProvideSovereignLogger;
 use crate::contexts::sovereign_rollup::SovereignRollup;
 
 pub struct SovereignChain {
@@ -89,6 +97,12 @@ delegate_components! {
             DefaultEncodingGetterComponent,
         ]:
             ProvideSovereignEncoding,
+        [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideSovereignLogger,
     }
 }
 
@@ -125,10 +139,12 @@ pub trait CanUseSovereignChain:
     HasDataChain
     + HasChainIdType
     + HasUpdateClientPayloadType<CosmosChain>
-    + HasHeightType<Height = RollupHeight>
+    + HasHeightFields<Height = RollupHeight>
     + CanSendMessages
     + CanQueryChainStatus
+    + CanWaitChainReachHeight
     + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
+    + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildConnectionHandshakePayloads<CosmosChain>
@@ -136,6 +152,7 @@ pub trait CanUseSovereignChain:
     + HasCreateClientOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
+    + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeight<CosmosChain>
 {
 }
