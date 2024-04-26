@@ -1,4 +1,5 @@
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateBytesQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state::RawConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasRawConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -10,13 +11,15 @@ pub struct QueryCosmosConsensusStateFromAbci;
 
 pub const IBC_QUERY_PATH: &str = "store/ibc/key";
 
-impl<Chain, Counterparty> ConsensusStateBytesQuerier<Chain, Counterparty>
+impl<Chain, Counterparty> RawConsensusStateQuerier<Chain, Counterparty>
     for QueryCosmosConsensusStateFromAbci
 where
-    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height> + CanQueryAbci,
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
+        + HasRawConsensusStateType<RawConsensusState = Vec<u8>>
+        + CanQueryAbci,
     Counterparty: HasHeightType<Height = Height>,
 {
-    async fn query_consensus_state_bytes(
+    async fn query_raw_consensus_state(
         chain: &Chain,
         client_id: &ClientId,
         consensus_height: &Height,

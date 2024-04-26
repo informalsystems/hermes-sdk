@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryAllClientStates, CanQueryClientState,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    CanQueryConsensusState, CanQueryConsensusStateBytes,
+    CanQueryConsensusState, CanQueryRawConsensusState,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
@@ -30,7 +30,7 @@ pub trait CanUseCosmosChain:
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
-    + CanQueryConsensusStateBytes<CosmosChain>
+    + CanQueryRawConsensusState<CosmosChain>
     + CanQueryAllClientStates<CosmosChain>
     + CanQueryClientState<AnyCounterparty>
     + CanQueryAllClientStates<AnyCounterparty>
