@@ -1,7 +1,6 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp_core::async_trait;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -10,7 +9,7 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::{ChainTarget, CounterpartyChainOf};
-use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 
 /**
    Wait for the chain to reach a height that is greater than or equal the required height,
@@ -34,18 +33,17 @@ where
     },
 }
 
-#[async_trait]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
-    UpdateClientMessageBuilder<Relay, Target> for WaitUpdateClient<InUpdateClient>
+    TargetUpdateClientMessageBuilder<Relay, Target> for WaitUpdateClient<InUpdateClient>
 where
     Relay: HasRelayChains + HasLogger,
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
-    InUpdateClient: UpdateClientMessageBuilder<Relay, Target>,
+    InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
     TargetChain: HasIbcChainTypes<CounterpartyChain>,
     CounterpartyChain: CanWaitChainReachHeight + HasIbcChainTypes<TargetChain>,
     Relay::Logger: for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>,
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         relay: &Relay,
         target: Target,
         target_height: &CounterpartyChain::Height,
@@ -83,6 +81,6 @@ where
             )
             .await;
 
-        InUpdateClient::build_update_client_messages(relay, target, target_height).await
+        InUpdateClient::build_target_update_client_messages(relay, target, target_height).await
     }
 }

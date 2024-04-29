@@ -44,8 +44,7 @@ where
             commitment: commitment_bytes,
         };
 
-        let packet_commitment_data_bytes =
-            encode_protobuf(&packet_commitment_data).map_err(Chain::encode_error)?;
+        let packet_commitment_data_bytes = encode_protobuf(&packet_commitment_data);
 
         let new_diversifier = chain.chain.current_diversifier();
         let secret_key = chain.chain.secret_key();
@@ -59,7 +58,7 @@ where
             path: commitment_path.into_bytes(),
         };
 
-        let proof = sign_with_data(secret_key, &sign_data).map_err(Chain::encode_error)?;
+        let proof = sign_with_data(secret_key, &sign_data);
 
         let payload = SolomachineTimeoutUnorderedPacketPayload {
             update_height: *height,

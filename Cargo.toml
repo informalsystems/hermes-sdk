@@ -63,6 +63,7 @@ rust-version    = "1.72"
 [workspace.dependencies]
 async-trait                     = { version = "0.1.56" }
 ibc                             = { version = "0.51.0" }
+ibc-query                       = { version = "0.51.0" }
 ibc-proto                       = { version = "0.42.2" }
 sov-celestia-client             = { version = "0.1.0" }
 ibc-relayer                     = { version = "0.27.2" }
@@ -91,7 +92,7 @@ futures                         = { version = "0.3.29", default-features = false
 futures-core                    = { version = "0.3.30", default-features = false }
 futures-util                    = { version = "0.3.30", default-features = false }
 futures-channel                 = { version = "0.3.30", default-features = false }
-eyre                            = { version = "0.6.8" }
+eyre                            = { version = "0.6.12" }
 itertools                       = { version = "0.11" }
 http                            = { version = "0.2.11" }
 humantime                       = { version = "2.1.0" }
@@ -176,9 +177,9 @@ cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git", 
 cgp-run                 = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-inner               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 
-ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
+ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
+ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
 
 hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }

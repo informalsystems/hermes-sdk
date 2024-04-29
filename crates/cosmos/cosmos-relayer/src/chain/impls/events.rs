@@ -3,16 +3,14 @@ use alloc::sync::Arc;
 use hermes_cosmos_chain_components::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_connection_open_init_event, try_extract_connection_open_try_event,
-    try_extract_create_client_event, try_extract_send_packet_event, try_extract_write_ack_event,
+    try_extract_send_packet_event, try_extract_write_ack_event,
 };
 use hermes_cosmos_chain_components::types::events::channel::{
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
 };
-use hermes_cosmos_chain_components::types::events::client::CosmosCreateClientEvent;
 use hermes_cosmos_chain_components::types::events::connection::{
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
 };
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     HasChannelOpenInitEvent, HasChannelOpenTryEvent,
 };
@@ -23,22 +21,10 @@ use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::Ha
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId};
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
-
-impl<Counterparty> HasCreateClientEvent<Counterparty> for CosmosChain {
-    type CreateClientEvent = CosmosCreateClientEvent;
-
-    fn try_extract_create_client_event(event: Arc<AbciEvent>) -> Option<CosmosCreateClientEvent> {
-        try_extract_create_client_event(event)
-    }
-
-    fn create_client_event_client_id(event: &CosmosCreateClientEvent) -> &ClientId {
-        &event.client_id
-    }
-}
 
 impl<Counterparty> HasSendPacketEvent<Counterparty> for CosmosChain {
     type SendPacketEvent = SendPacket;

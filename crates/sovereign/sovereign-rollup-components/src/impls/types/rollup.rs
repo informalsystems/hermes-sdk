@@ -2,7 +2,9 @@ use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
-use hermes_relayer_components::chain::traits::types::height::{HasHeightType, ProvideHeightType};
+use hermes_relayer_components::chain::traits::types::height::{
+    HasHeightType, HeightFieldGetter, ProvideHeightType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -18,37 +20,50 @@ use crate::types::message::SovereignMessage;
 use crate::types::rollup_id::RollupId;
 use crate::types::status::SovereignRollupStatus;
 
-pub struct ProvideSovereignChainTypes;
+pub struct ProvideSovereignRollupTypes;
 
-impl<Chain> ProvideHeightType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideHeightType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type Height = RollupHeight;
 }
 
-impl<Chain> ProvideChainIdType<Chain> for ProvideSovereignChainTypes
+impl<Chain> HeightFieldGetter<Chain> for ProvideSovereignRollupTypes
+where
+    Chain: HasHeightType<Height = RollupHeight>,
+{
+    fn revision_number(_height: &RollupHeight) -> u64 {
+        0
+    }
+
+    fn revision_height(height: &RollupHeight) -> u64 {
+        height.slot_number
+    }
+}
+
+impl<Chain> ProvideChainIdType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type ChainId = RollupId;
 }
 
-impl<Chain> ProvideMessageType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideMessageType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type Message = SovereignMessage;
 }
 
-impl<Chain> ProvideEventType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideEventType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: Async,
 {
     type Event = SovereignEvent;
 }
 
-impl<Chain> ProvideChainStatusType<Chain> for ProvideSovereignChainTypes
+impl<Chain> ProvideChainStatusType<Chain> for ProvideSovereignRollupTypes
 where
     Chain: HasHeightType<Height = RollupHeight> + HasTimestampType<Timestamp = Timestamp>,
 {
@@ -64,7 +79,7 @@ where
 }
 
 delegate_components! {
-    ProvideSovereignChainTypes {
+    ProvideSovereignRollupTypes {
         [
             TimestampTypeComponent,
             IbcChainTypesComponent,

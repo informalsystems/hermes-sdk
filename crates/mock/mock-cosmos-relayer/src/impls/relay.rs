@@ -4,9 +4,9 @@ use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
-use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
+use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeGetter;
@@ -119,13 +119,13 @@ pub struct MockCosmosBuildUpdateClientMessage;
 
 #[async_trait]
 impl<SrcChain, DstChain>
-    UpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, SourceTarget>
+    TargetUpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, SourceTarget>
     for MockCosmosBuildUpdateClientMessage
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         context: &MockCosmosRelay<SrcChain, DstChain>,
         _target: SourceTarget,
         height: &Height,
@@ -166,13 +166,13 @@ where
 
 #[async_trait]
 impl<SrcChain, DstChain>
-    UpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, DestinationTarget>
+    TargetUpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, DestinationTarget>
     for MockCosmosBuildUpdateClientMessage
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         context: &MockCosmosRelay<SrcChain, DstChain>,
         _target: DestinationTarget,
         height: &Height,
@@ -212,14 +212,18 @@ where
 }
 
 #[async_trait]
-impl<SrcChain, DstChain> HasPacketLock for MockCosmosRelay<SrcChain, DstChain>
+impl<SrcChain, DstChain> ProvidePacketLock<MockCosmosRelay<SrcChain, DstChain>>
+    for MockCosmosRelayComponents
 where
     SrcChain: BasecoinEndpoint,
     DstChain: BasecoinEndpoint,
 {
     type PacketLock<'a> = ();
 
-    async fn try_acquire_packet_lock<'a>(&'a self, _packet: &'a Packet) -> Option<()> {
+    async fn try_acquire_packet_lock<'a>(
+        _relay: &'a MockCosmosRelay<SrcChain, DstChain>,
+        _packet: &'a Packet,
+    ) -> Option<()> {
         Some(())
     }
 }

@@ -8,7 +8,7 @@ use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_ack::ConnectionOpenAckRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use crate::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
+use crate::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 
 /**
    A base implementation of [`ConnectionOpenAckRelayer`] that relays a new connection
@@ -27,7 +27,7 @@ pub struct RelayConnectionOpenAck;
 impl<Relay, SrcChain, DstChain> ConnectionOpenAckRelayer<Relay> for RelayConnectionOpenAck
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanSendUpdateClientMessage<DestinationTarget>
+        + CanSendTargetUpdateClientMessage<DestinationTarget>
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + CanRaiseRelayChainErrors,
     SrcChain: CanBuildConnectionHandshakeMessages<DstChain>

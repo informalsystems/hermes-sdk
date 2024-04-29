@@ -12,8 +12,6 @@ description  = """
     Context-generic client components for communicating with a 08-wasm client enabled node
 """
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 cgp-core                                = { workspace = true }
 cgp-error-eyre                          = { workspace = true }

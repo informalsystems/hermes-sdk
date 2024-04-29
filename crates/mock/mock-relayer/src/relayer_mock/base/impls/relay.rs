@@ -5,9 +5,9 @@ use std::vec;
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, ProvideRelayChains};
-use hermes_relayer_components::relay::traits::packet_lock::HasPacketLock;
+use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 use hermes_runtime_components::traits::runtime::{ProvideRuntimeType, RuntimeGetter};
 
 use crate::relayer_mock::base::error::Error;
@@ -72,8 +72,10 @@ impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
 pub struct MockBuildUpdateClientMessage;
 
 #[async_trait]
-impl UpdateClientMessageBuilder<MockRelayContext, SourceTarget> for MockBuildUpdateClientMessage {
-    async fn build_update_client_messages(
+impl TargetUpdateClientMessageBuilder<MockRelayContext, SourceTarget>
+    for MockBuildUpdateClientMessage
+{
+    async fn build_target_update_client_messages(
         context: &MockRelayContext,
         _target: SourceTarget,
         height: &MockHeight,
@@ -88,10 +90,10 @@ impl UpdateClientMessageBuilder<MockRelayContext, SourceTarget> for MockBuildUpd
 }
 
 #[async_trait]
-impl UpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
+impl TargetUpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
     for MockBuildUpdateClientMessage
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         context: &MockRelayContext,
         _target: DestinationTarget,
         height: &MockHeight,
@@ -106,10 +108,13 @@ impl UpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
 }
 
 #[async_trait]
-impl HasPacketLock for MockRelayContext {
+impl ProvidePacketLock<MockRelayContext> for MockRelayComponents {
     type PacketLock<'a> = ();
 
-    async fn try_acquire_packet_lock<'a>(&'a self, _packet: &'a PacketKey) -> Option<()> {
+    async fn try_acquire_packet_lock<'a>(
+        _relay: &'a MockRelayContext,
+        _packet: &'a PacketKey,
+    ) -> Option<()> {
         Some(())
     }
 }

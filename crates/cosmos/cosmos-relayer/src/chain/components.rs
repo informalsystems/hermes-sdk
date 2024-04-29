@@ -38,11 +38,13 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
-    ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
+    AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
+    ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
@@ -65,19 +67,22 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
     InitConnectionOptionsTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
+    HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::{
@@ -180,6 +185,7 @@ delegate_components! {
             ProvideCosmosEncoding,
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
             TimestampTypeComponent,
@@ -189,6 +195,8 @@ delegate_components! {
             EventTypeComponent,
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
+            RawClientStateTypeComponent,
+            RawConsensusStateTypeComponent,
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndQuerierComponent,
@@ -197,6 +205,8 @@ delegate_components! {
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
+
+            CreateClientEventComponent,
 
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
@@ -211,9 +221,10 @@ delegate_components! {
             ConsensusStateHeightsQuerierComponent,
             WriteAckQuerierComponent,
             ClientStateQuerierComponent,
-            ClientStateBytesQuerierComponent,
+            RawConsensusStateQuerierComponent,
             AllClientStatesQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
+            RawClientStateQuerierComponent,
+            AllRawClientStatesQuerierComponent,
             CreateClientOptionsTypeComponent,
             CreateClientMessageBuilderComponent,
             CreateClientPayloadBuilderComponent,

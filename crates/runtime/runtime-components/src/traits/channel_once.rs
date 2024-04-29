@@ -11,6 +11,10 @@ pub trait HasChannelOnceTypes {
         T: Async;
 }
 
+pub type SenderOnceOf<Runtime, T> = <Runtime as HasChannelOnceTypes>::SenderOnce<T>;
+
+pub type ReceiverOnce<Runtime, T> = <Runtime as HasChannelOnceTypes>::ReceiverOnce<T>;
+
 #[derive_component(ChannelOnceCreatorComponent, ChannelOnceCreator<Runtime>)]
 pub trait CanCreateChannelsOnce: HasChannelOnceTypes {
     fn new_channel_once<T>() -> (Self::SenderOnce<T>, Self::ReceiverOnce<T>)

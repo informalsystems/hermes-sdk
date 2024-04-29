@@ -5,8 +5,7 @@ use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFi
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
-use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::impls::delegate::queries::client_state::QueryAndDecodeClientStateVia;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
@@ -19,9 +18,7 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
-};
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -67,11 +64,8 @@ pub struct SolomachineCosmosComponents;
 
 delegate_components! {
     SolomachineCosmosComponents {
-        [
-            ClientStateQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
-        ]:
-            QueryAndDecodeClientStateVia<Any>,
+        ClientStateQuerierComponent:
+            QueryAndConvertRawClientState,
         ConsensusStateQuerierComponent:
             QuerySolomachineConsensusStateFromCosmos,
         CreateClientMessageBuilderComponent:

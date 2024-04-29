@@ -67,10 +67,7 @@ impl CosmosChain {
             } => {
                 runtime.new_abci_event_subscription(chain_version, url, compat_mode, all_queries())
             }
-            EventSourceMode::Pull {
-                interval: _,
-                max_retries: _,
-            } => {
+            EventSourceMode::Pull { interval: _ } => {
                 // TODO: implement pull-based event source
                 Arc::new(EmptySubscription::new())
             }

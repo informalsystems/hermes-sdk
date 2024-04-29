@@ -4,16 +4,14 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
+use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
-use hermes_encoding_components::types::via::Via;
-use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::impls::delegate::queries::client_state::QueryAndDecodeClientStateVia;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerierComponent, ClientStateQuerierComponent,
-};
+use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::ClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -56,10 +54,7 @@ pub struct WasmCounterpartyCosmosComponents;
 
 delegate_components! {
     WasmCounterpartyCosmosComponents {
-        [
-            ClientStateQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
-        ]: QueryAndDecodeClientStateVia<Any>,
+        ClientStateQuerierComponent: QueryAndConvertRawClientState,
     }
 }
 
@@ -101,7 +96,10 @@ delegate_components! {
 }
 
 pub trait CanUseWasmClientEncoding:
-    CanDecode<ProtoWasmClientState> + CanDecode<WasmClientState> + CanDecode<Via<Any, WasmClientState>>
+    CanDecode<Protobuf, ProtoWasmClientState>
+    + CanDecode<Protobuf, WasmClientState>
+    + CanDecode<Any, WasmClientState>
+    + CanConvert<Any, WasmClientState>
 {
 }
 

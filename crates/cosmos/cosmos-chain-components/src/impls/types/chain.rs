@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, Prov
 use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetter, HasHeightType, HeightIncrementer, ProvideHeightType,
+    GenesisHeightGetter, HasHeightType, HeightFieldGetter, HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::ProvideIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::{
@@ -43,6 +43,19 @@ where
     Chain: Async,
 {
     type Height = Height;
+}
+
+impl<Chain> HeightFieldGetter<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasHeightType<Height = Height> + HasErrorType,
+{
+    fn revision_number(height: &Height) -> u64 {
+        height.revision_number()
+    }
+
+    fn revision_height(height: &Height) -> u64 {
+        height.revision_height()
+    }
 }
 
 impl<Chain> HeightIncrementer<Chain> for ProvideCosmosChainTypes
@@ -90,10 +103,7 @@ where
     Chain: HasMessageType<Message = CosmosMessage> + CanRaiseError<EncodeError>,
 {
     fn estimate_message_size(message: &CosmosMessage) -> Result<usize, Chain::Error> {
-        let raw = message
-            .message
-            .encode_protobuf(&Signer::dummy())
-            .map_err(Chain::raise_error)?;
+        let raw = message.message.encode_protobuf(&Signer::dummy());
 
         Ok(raw.encoded_len())
     }

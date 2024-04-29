@@ -1,6 +1,7 @@
+use core::fmt::Debug;
 use core::iter::Iterator;
 
-use cgp_core::async_trait;
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
@@ -11,10 +12,6 @@ use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEv
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
 
-pub trait CanRaiseMissingConnectionInitEventError: HasRelayChains {
-    fn missing_connection_init_event_error(&self) -> Self::Error;
-}
-
 /**
    A base implementation for [`ConnectionInitializer`] which submits a
    `ConnectionOpenInit` message to the source chain.
@@ -23,11 +20,14 @@ pub trait CanRaiseMissingConnectionInitEventError: HasRelayChains {
 */
 pub struct InitializeConnection;
 
-#[async_trait]
+pub struct MissingConnectionInitEventError<'a, Relay> {
+    pub relay: &'a Relay,
+}
+
 impl<Relay, SrcChain, DstChain> ConnectionInitializer<Relay> for InitializeConnection
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanRaiseMissingConnectionInitEventError
+        + for<'a> CanRaiseError<MissingConnectionInitEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>
@@ -75,11 +75,17 @@ where
         let open_init_event = events
             .into_iter()
             .find_map(|event| SrcChain::try_extract_connection_open_init_event(event))
-            .ok_or_else(|| relay.missing_connection_init_event_error())?;
+            .ok_or_else(|| Relay::raise_error(MissingConnectionInitEventError { relay }))?;
 
         let src_connection_id =
             SrcChain::connection_open_init_event_connection_id(&open_init_event);
 
         Ok(src_connection_id.clone())
+    }
+}
+
+impl<'a, Relay> Debug for MissingConnectionInitEventError<'a, Relay> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "missing connection open init event")
     }
 }

@@ -26,6 +26,7 @@ ibc-relayer                             = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
 sov-celestia-client                     = { workspace = true, features = ["test-util"] }
 ibc                                     = { workspace = true }
+ibc-query                               = { workspace = true, features = ["serde"] }
 
 eyre                = { workspace = true }
 jsonrpsee           = { workspace = true, features = ["http-client"] }

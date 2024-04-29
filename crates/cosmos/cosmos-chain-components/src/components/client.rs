@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::impls::delegate::message_builders::create_
 use hermes_relayer_components::chain::impls::delegate::message_builders::update_client::DelegateBuildUpdateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
+use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -26,11 +27,13 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesBytesQuerierComponent, AllClientStatesQuerierComponent,
-    ClientStateBytesQuerierComponent, ClientStateQuerierComponent,
+    AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
+    ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
@@ -52,19 +55,22 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
     InitConnectionOptionsTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HeightIncrementerComponent, HeightTypeComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
+    HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::{
@@ -86,6 +92,7 @@ use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithCha
 use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::impls::connection::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
+use crate::impls::events::ProvideCosmosEvents;
 use crate::impls::packet::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::packet::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -102,9 +109,8 @@ use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
-use crate::impls::queries::consensus_state_height::{
-    QueryConsensusStateHeightFromChainHandle, QueryConsensusStateHeightsFromChainHandle,
-};
+use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
+use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromChainHandle;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
@@ -114,8 +120,10 @@ use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
-use crate::impls::types::client_state::ProvideTendermintClientState;
-use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
+use crate::impls::types::client_state::{ProvideAnyRawClientState, ProvideTendermintClientState};
+use crate::impls::types::consensus_state::{
+    ProvideAnyRawConsensusState, ProvideTendermintConsensusState,
+};
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 use crate::traits::abci_query::AbciQuerierComponent;
@@ -127,6 +135,7 @@ delegate_components! {
     CosmosClientComponents {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
             TimestampTypeComponent,
@@ -143,6 +152,10 @@ delegate_components! {
         ]:
             ProvideCosmosChainTypes,
         [
+            CreateClientEventComponent,
+        ]:
+            ProvideCosmosEvents,
+        [
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             ConnectionHandshakePayloadTypeComponent,
@@ -157,21 +170,27 @@ delegate_components! {
             ClientStateFieldsGetterComponent,
         ]:
             ProvideTendermintClientState,
+        RawClientStateTypeComponent:
+            ProvideAnyRawClientState,
+        RawConsensusStateTypeComponent:
+            ProvideAnyRawConsensusState,
         ConsensusStateTypeComponent:
             ProvideTendermintConsensusState,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:
-            QueryConsensusStateHeightFromChainHandle,
+            QueryConsensusStateHeightsAndFindHeightBefore,
         ConsensusStateHeightsQuerierComponent:
             QueryConsensusStateHeightsFromChainHandle,
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
         [
-            ClientStateBytesQuerierComponent,
-            AllClientStatesBytesQuerierComponent,
+            RawClientStateQuerierComponent,
+            AllRawClientStatesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
+        RawConsensusStateQuerierComponent:
+            QueryCosmosConsensusStateFromAbci,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:

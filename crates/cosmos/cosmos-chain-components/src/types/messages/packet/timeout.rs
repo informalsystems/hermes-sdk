@@ -4,7 +4,6 @@ use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
-use prost::EncodeError;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -24,7 +23,7 @@ impl DynCosmosMessage for CosmosTimeoutPacketMessage {
         Some(self.update_height)
     }
 
-    fn encode_protobuf(&self, signer: &Signer) -> Result<Any, EncodeError> {
+    fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgTimeout {
             packet: Some(self.packet.clone().into()),
             next_sequence_recv: self.next_sequence_recv.into(),

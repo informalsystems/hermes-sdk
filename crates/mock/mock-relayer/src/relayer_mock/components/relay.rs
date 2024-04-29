@@ -11,7 +11,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::receive::base_rece
 use hermes_relayer_components::relay::impls::packet_relayers::receive::skip_received_packet::SkipReceivedPacketRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_packet::BaseTimeoutUnorderedPacketRelayer;
 use hermes_relayer_components::relay::traits::ibc_message_sender::{MainSink, IbcMessageSenderComponent};
-use hermes_relayer_components::relay::traits::update_client_message_builder::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerComponent;
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
@@ -38,7 +38,7 @@ delegate_components! {
             BaseAckPacketRelayer,
         TimeoutUnorderedPacketRelayerComponent:
             BaseTimeoutUnorderedPacketRelayer,
-        UpdateClientMessageBuilderComponent:
+        TargetUpdateClientMessageBuilderComponent:
             SkipUpdateClient<WaitUpdateClient<MockBuildUpdateClientMessage>>,
     }
 }

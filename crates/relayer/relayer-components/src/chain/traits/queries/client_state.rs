@@ -3,7 +3,7 @@ use alloc::vec::Vec;
 use cgp_core::prelude::*;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
-use crate::chain::traits::types::client_state::HasClientStateType;
+use crate::chain::traits::types::client_state::{HasClientStateType, HasRawClientStateType};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 #[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]
@@ -19,16 +19,16 @@ where
     ) -> Result<Counterparty::ClientState, Self::Error>;
 }
 
-#[derive_component(ClientStateBytesQuerierComponent, ClientStateBytesQuerier<Chain>)]
+#[derive_component(RawClientStateQuerierComponent, RawClientStateQuerier<Chain>)]
 #[async_trait]
-pub trait CanQueryClientStateBytes<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+pub trait CanQueryRawClientState<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasRawClientStateType + HasErrorType
 {
-    async fn query_client_state_bytes(
+    async fn query_raw_client_state(
         &self,
         client_id: &Self::ClientId,
         height: &Self::Height,
-    ) -> Result<Vec<u8>, Self::Error>;
+    ) -> Result<Self::RawClientState, Self::Error>;
 }
 
 #[derive_component(AllClientStatesQuerierComponent, AllClientStatesQuerier<Chain>)]
@@ -44,15 +44,15 @@ where
     ) -> Result<Vec<(Self::ClientId, Counterparty::ClientState)>, Self::Error>;
 }
 
-#[derive_component(AllClientStatesBytesQuerierComponent, AllClientStatesBytesQuerier<Chain>)]
+#[derive_component(AllRawClientStatesQuerierComponent, AllRawClientStatesQuerier<Chain>)]
 #[async_trait]
-pub trait CanQueryAllClientStatesBytes<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+pub trait CanQueryAllRawClientStates<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasRawClientStateType + HasErrorType
 {
-    async fn query_all_client_states_bytes(
+    async fn query_all_raw_client_states(
         &self,
         height: &Self::Height,
-    ) -> Result<Vec<(Self::ClientId, Vec<u8>)>, Self::Error>;
+    ) -> Result<Vec<(Self::ClientId, Self::RawClientState)>, Self::Error>;
 }
 
 #[async_trait]

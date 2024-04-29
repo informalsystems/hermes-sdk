@@ -6,7 +6,7 @@ use prost::{DecodeError, Message};
 
 pub struct EncodeAsProtobuf;
 
-impl<Encoding, Value> Encoder<Encoding, Value> for EncodeAsProtobuf
+impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for EncodeAsProtobuf
 where
     Value: Message,
     Encoding: HasEncodedType<Encoded = Vec<u8>> + HasErrorType,
@@ -16,7 +16,7 @@ where
     }
 }
 
-impl<Encoding, Value> Decoder<Encoding, Value> for EncodeAsProtobuf
+impl<Encoding, Strategy, Value> Decoder<Encoding, Strategy, Value> for EncodeAsProtobuf
 where
     Value: Message + Default,
     Encoding: HasEncodedType<Encoded = Vec<u8>> + CanRaiseError<DecodeError>,

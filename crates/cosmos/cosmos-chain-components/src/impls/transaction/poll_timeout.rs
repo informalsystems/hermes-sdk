@@ -10,6 +10,6 @@ impl<Chain> PollTimeoutGetter<Chain> for DefaultPollTimeout {
     }
 
     fn poll_backoff(_chain: &Chain) -> Duration {
-        Duration::from_millis(200)
+        Duration::from_millis(100)
     }
 }

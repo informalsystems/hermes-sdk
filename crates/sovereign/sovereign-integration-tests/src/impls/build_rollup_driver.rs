@@ -14,6 +14,7 @@ use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollup
 use hermes_sovereign_test_components::types::wallet::SovereignWallet;
 use jsonrpsee::core::ClientError;
 use jsonrpsee::http_client::HttpClientBuilder;
+use jsonrpsee::ws_client::WsClientBuilder;
 use tokio::process::Child;
 
 use crate::contexts::rollup_driver::SovereignRollupDriver;
@@ -27,7 +28,8 @@ where
         + HasRollupDriverType<RollupDriver = SovereignRollupDriver>
         + HasRollupNodeConfigType<RollupNodeConfig = SovereignRollupNodeConfig>
         + HasRollupGenesisConfigType<RollupGenesisConfig = SovereignGenesisConfig>
-        + CanRaiseError<ClientError>,
+        + CanRaiseError<ClientError>
+        + CanRaiseError<&'static str>,
 {
     async fn build_rollup_driver(
         bootstrap: &Bootstrap,
@@ -37,13 +39,32 @@ where
         rollup_process: Child,
     ) -> Result<SovereignRollupDriver, Bootstrap::Error> {
         let rpc_config = &node_config.runner.rpc_config;
-        let rpc_url = format!("http://{}:{}", rpc_config.bind_host, rpc_config.bind_port);
 
         let rpc_client = HttpClientBuilder::default()
-            .build(rpc_url)
+            .build(format!(
+                "http://{}:{}",
+                rpc_config.bind_host, rpc_config.bind_port
+            ))
             .map_err(Bootstrap::raise_error)?;
 
-        let rollup = SovereignRollup::new(bootstrap.runtime().clone(), rpc_client);
+        let subscription_client = WsClientBuilder::default()
+            .build(format!(
+                "ws://{}:{}",
+                rpc_config.bind_host, rpc_config.bind_port
+            ))
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
+        let relayer_wallet = wallets
+            .get("relayer")
+            .ok_or_else(|| Bootstrap::raise_error("expect relayer wallet"))?;
+
+        let rollup = SovereignRollup::new(
+            bootstrap.runtime().clone(),
+            relayer_wallet.signing_key.clone(),
+            rpc_client,
+            subscription_client,
+        );
 
         Ok(SovereignRollupDriver {
             rollup,

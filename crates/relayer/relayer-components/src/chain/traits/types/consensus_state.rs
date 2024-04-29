@@ -12,6 +12,14 @@ pub trait HasConsensusStateType<Counterparty>: Async {
     type ConsensusState: Async;
 }
 
+#[derive_component(RawConsensusStateTypeComponent, ProvideRawConsensusStateType<Chain>)]
+pub trait HasRawConsensusStateType: Async {
+    /**
+        The consensus state of the `Self` chain's client on the `Counterparty` chain
+    */
+    type RawConsensusState: Async;
+}
+
 pub trait HasConsensusStateFields<Counterparty>: HasConsensusStateType<Counterparty>
 where
     Counterparty: HasTimestampType,
