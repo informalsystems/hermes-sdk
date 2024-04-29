@@ -153,9 +153,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         trust_threshold: TrustThreshold::ONE_THIRD,
     });
 
-    let wasm_client_code_path = var("WASM_FILE_PATH")
-        .unwrap_or_else(|_| "tests/utils/sov_celestia_client_cw.wasm".to_string())
-        .into();
+    let wasm_client_code_path = var("WASM_FILE_PATH").expect("Wasm file is required").into();
 
     let wasm_client_code_hash_str = var("WASM_CODE_HASH").expect("Wasm code hash is required");
     if wasm_client_code_hash_str.len() % 2 != 0 {

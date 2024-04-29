@@ -9,7 +9,7 @@ use hermes_wasm_client_components::impls::encoding::encoder::{
     EncodeViaWasmClientState, WasmEncoderComponents,
 };
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
-use sov_celestia_client::types::proto::tendermint::v1::ClientState as ProtoSovereignClientState;
+use sov_celestia_client::types::proto::v1::ClientState as ProtoSovereignClientState;
 
 use crate::sovereign::types::client_state::SovereignClientState;
 
