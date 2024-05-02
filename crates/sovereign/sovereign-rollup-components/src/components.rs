@@ -11,10 +11,12 @@ use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatus
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state::RawConsensusStateQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
+};
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
+    ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
