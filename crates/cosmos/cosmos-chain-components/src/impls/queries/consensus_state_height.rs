@@ -2,39 +2,54 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{PageRequest, QueryConsensusStateHeightsRequest};
-use ibc_relayer::error::Error as RelayerError;
+use ibc_proto::ibc::core::client::v1::query_client::QueryClient;
+use ibc_relayer::chain::requests::QueryConsensusStateHeightsRequest;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
+use tonic::transport::Error as TransportError;
+use tonic::Status;
 
-use crate::traits::chain_handle::HasBlockingChainHandle;
+use crate::traits::grpc_address::HasGrpcAddress;
 
-pub struct QueryConsensusStateHeightsFromChainHandle;
+pub struct QueryConsensusStateHeightsFromGrpc;
 
 impl<Chain, Counterparty> ConsensusStateHeightsQuerier<Chain, Counterparty>
-    for QueryConsensusStateHeightsFromChainHandle
+    for QueryConsensusStateHeightsFromGrpc
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + HasBlockingChainHandle
-        + CanRaiseError<RelayerError>,
+        + HasGrpcAddress
+        + CanRaiseError<TransportError>
+        + CanRaiseError<Status>,
     Counterparty: HasHeightType<Height = Height>,
 {
     async fn query_consensus_state_heights(
         chain: &Chain,
         client_id: &ClientId,
     ) -> Result<Vec<Height>, Chain::Error> {
-        let client_id = client_id.clone();
-
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                chain_handle
-                    .query_consensus_state_heights(QueryConsensusStateHeightsRequest {
-                        client_id: client_id.clone(),
-                        pagination: Some(PageRequest::all()),
-                    })
-                    .map_err(Chain::raise_error)
-            })
+        let mut client = QueryClient::connect(chain.grpc_address().clone())
             .await
+            .map_err(Chain::raise_error)?
+            .max_decoding_message_size(33554432);
+
+        let request = QueryConsensusStateHeightsRequest {
+            client_id: client_id.clone(),
+            pagination: None,
+        };
+
+        let response = client
+            .consensus_state_heights(tonic::Request::new(request.into()))
+            .await
+            .map_err(Chain::raise_error)?
+            .into_inner();
+
+        let mut heights: Vec<Height> = response
+            .consensus_state_heights
+            .into_iter()
+            .filter_map(|height| height.try_into().ok())
+            .collect();
+
+        heights.sort_unstable();
+
+        Ok(heights)
     }
 }
