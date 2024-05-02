@@ -154,7 +154,7 @@ pub trait CanUseSovereignChain:
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
-    + CanQueryConsensusStateHeight<CosmosChain>
+    + CanQueryConsensusStateHeight<CosmosChain> // + HasClientStateFields<CosmosChain>
 {
 }
 
