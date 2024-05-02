@@ -11,8 +11,8 @@ use {
 #[cfg(not(feature = "next"))]
 use crate::framework::binary::next::TestContextV1;
 use crate::framework::next::chain::{
-    CanShutdown, CanSpawnRelayer, CanWaitForAck, HasContextId, HasTestConfig,
-    HasTwoChannels, HasTwoNodes,
+    CanShutdown, CanSpawnRelayer, CanWaitForAck, HasContextId, HasTestConfig, HasTwoChannels,
+    HasTwoNodes,
 };
 use crate::prelude::*;
 
