@@ -22,9 +22,6 @@ pub trait HasRawClientStateType: Async {
 pub trait HasClientStateFields<Counterparty>:
     HasChainIdType + HasHeightType + HasClientStateType<Counterparty>
 {
-    /// The id of the chain referenced by this client
-    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId;
-
     /// The latest height of the client
     fn client_state_latest_height(client_state: &Self::ClientState) -> &Self::Height;
 

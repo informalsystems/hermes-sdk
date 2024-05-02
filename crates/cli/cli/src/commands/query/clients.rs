@@ -65,7 +65,7 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
                         "- {}: {} -> {}",
                         client.client_id,
                         self.host_chain_id,
-                        client.chain_id()
+                        client.client_state.chain_id()
                     );
                 }
             });
@@ -81,7 +81,7 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
                         serde_json::json!({
                             "client_id": client.client_id,
                             "host_chain_id": self.host_chain_id,
-                            "reference_chain_id": client.chain_id(),
+                            "reference_chain_id": client.client_state.chain_id(),
                         })
                     })
                     .collect::<Vec<_>>();
@@ -105,16 +105,6 @@ where
 {
     client_id: Chain::ClientId,
     client_state: Counterparty::ClientState,
-}
-
-impl<Chain, Counterparty> Client<Chain, Counterparty>
-where
-    Chain: HasIbcChainTypes<Counterparty>,
-    Counterparty: HasChainIdType + HasClientStateType<Chain> + HasClientStateFields<Chain>,
-{
-    fn chain_id(&self) -> &Counterparty::ChainId {
-        Counterparty::client_state_chain_id(&self.client_state)
-    }
 }
 
 impl<Chain, Counterparty> fmt::Debug for Client<Chain, Counterparty>

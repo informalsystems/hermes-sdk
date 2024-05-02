@@ -28,12 +28,6 @@ where
         + HasHeightType<Height = Height>
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>,
 {
-    fn client_state_chain_id(client_state: &SovereignClientState) -> &ChainId {
-        let chain_id = &client_state.da_params.chain_id;
-
-        chain_id
-    }
-
     fn client_state_latest_height(client_state: &SovereignClientState) -> &Height {
         &client_state.latest_height
     }

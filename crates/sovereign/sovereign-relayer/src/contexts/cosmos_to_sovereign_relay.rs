@@ -8,6 +8,7 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
+use hermes_relayer_components::relay::impls::update_client::build::BuildUpdateClientMessages;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
