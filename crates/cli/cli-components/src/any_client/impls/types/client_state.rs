@@ -27,9 +27,9 @@ where
         + HasHeightType<Height = Height>
         + HasClientStateType<Counterparty, ClientState = AnyClientState>,
 {
-    fn client_state_latest_height(client_state: &AnyClientState) -> &Height {
+    fn client_state_latest_height(client_state: &AnyClientState) -> Height {
         match client_state {
-            AnyClientState::Tendermint(cs) => &cs.latest_height,
+            AnyClientState::Tendermint(cs) => cs.latest_height,
         }
     }
 

@@ -10,10 +10,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::{Error, ErrorWrapper};
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, HasClientStateType,
-};
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};

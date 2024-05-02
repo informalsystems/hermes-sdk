@@ -28,8 +28,8 @@ where
         + HasHeightType<Height = Height>
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>,
 {
-    fn client_state_latest_height(client_state: &SovereignClientState) -> &Height {
-        &client_state.latest_height
+    fn client_state_latest_height(client_state: &SovereignClientState) -> Height {
+        client_state.latest_height
     }
 
     fn client_state_is_frozen(client_state: &SovereignClientState) -> bool {

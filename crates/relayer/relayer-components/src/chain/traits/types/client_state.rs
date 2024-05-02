@@ -23,7 +23,7 @@ pub trait HasClientStateFields<Counterparty>:
     HasChainIdType + HasHeightType + HasClientStateType<Counterparty>
 {
     /// The latest height of the client
-    fn client_state_latest_height(client_state: &Self::ClientState) -> &Self::Height;
+    fn client_state_latest_height(client_state: &Self::ClientState) -> Self::Height;
 
     /// Whether or not the client is frozen
     fn client_state_is_frozen(client_state: &Self::ClientState) -> bool;

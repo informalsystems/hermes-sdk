@@ -272,10 +272,10 @@ where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    fn client_state_latest_height(client_state: &AnyClientState) -> &Height {
+    fn client_state_latest_height(client_state: &AnyClientState) -> Height {
         match client_state {
-            AnyClientState::Tendermint(client_state) => &client_state.inner().latest_height,
-            AnyClientState::Sovereign(client_state) => &client_state.inner().latest_height,
+            AnyClientState::Tendermint(client_state) => client_state.inner().latest_height,
+            AnyClientState::Sovereign(client_state) => client_state.inner().latest_height,
         }
     }
 
