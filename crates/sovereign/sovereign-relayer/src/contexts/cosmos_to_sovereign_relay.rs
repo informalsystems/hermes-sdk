@@ -8,15 +8,12 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use hermes_relayer_components::relay::impls::update_client::build::BuildUpdateClientMessages;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::relay::traits::update_client_message_builder::{
-    CanBuildTargetUpdateClientMessage, TargetUpdateClientMessageBuilder,
-};
+use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -41,21 +38,11 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanCreateClient<SourceTarget>
     + CanCreateClient<DestinationTarget>
     + CanBuildTargetUpdateClientMessage<DestinationTarget>
-// + CanBuildTargetUpdateClientMessage<SourceTarget>
+    + CanBuildTargetUpdateClientMessage<SourceTarget>
 {
 }
 
 impl CanUseCosmosToSovereignRelay for CosmosToSovereignRelay {}
-
-pub trait CanUseClientUpdateMessageBuilder:
-    TargetUpdateClientMessageBuilder<CosmosToSovereignRelay, SourceTarget>
-{
-}
-
-// impl CanUseClientUpdateMessageBuilder
-//     for BuildUpdateClientMessages
-//     // for SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>
-// {}
 
 pub struct CosmosToSovereignRelayComponents;
 

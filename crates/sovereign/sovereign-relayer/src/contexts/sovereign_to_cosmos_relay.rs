@@ -38,6 +38,7 @@ pub trait CanUseSovereignToCosmosRelay:
     + CanCreateClient<SourceTarget>
     + CanCreateClient<DestinationTarget>
     + CanBuildTargetUpdateClientMessage<SourceTarget>
+    + CanBuildTargetUpdateClientMessage<DestinationTarget>
 {
 }
 
