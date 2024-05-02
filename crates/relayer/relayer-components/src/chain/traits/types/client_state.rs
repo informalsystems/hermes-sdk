@@ -2,7 +2,6 @@ use core::time::Duration;
 
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::height::HasHeightType;
 
 #[derive_component(ClientStateTypeComponent, ProvideClientStateType<Chain>)]
@@ -20,7 +19,7 @@ pub trait HasRawClientStateType: Async {
 
 #[derive_component(ClientStateFieldsGetterComponent, ClientStateFieldsGetter<Chain>)]
 pub trait HasClientStateFields<Counterparty>:
-    HasChainIdType + HasHeightType + HasClientStateType<Counterparty>
+    HasHeightType + HasClientStateType<Counterparty>
 {
     /// The latest height of the client
     fn client_state_latest_height(client_state: &Self::ClientState) -> Self::Height;

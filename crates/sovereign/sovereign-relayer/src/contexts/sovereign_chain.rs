@@ -21,7 +21,9 @@ use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, Me
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    HasClientStateFields, HasClientStateType,
+};
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
@@ -154,7 +156,8 @@ pub trait CanUseSovereignChain:
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
-    + CanQueryConsensusStateHeight<CosmosChain> // + HasClientStateFields<CosmosChain>
+    + CanQueryConsensusStateHeight<CosmosChain>
+    + HasClientStateFields<CosmosChain>
 {
 }
 
