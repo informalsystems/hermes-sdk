@@ -11,7 +11,7 @@ use {
 #[cfg(not(feature = "next"))]
 use crate::framework::binary::next::TestContextV1;
 use crate::framework::next::chain::{
-    CanShutdown, CanSpawnRelayer, CanWaitForAck, HasContextId, HasTestConfig, HasTwoChains,
+    CanShutdown, CanSpawnRelayer, CanWaitForAck, HasContextId, HasTestConfig,
     HasTwoChannels, HasTwoNodes,
 };
 use crate::prelude::*;
@@ -22,8 +22,7 @@ pub fn build_test_context<ChainA: ChainHandle, ChainB: ChainHandle>(
     chains: ConnectedChains<ChainA, ChainB>,
     channels: ConnectedChannel<ChainA, ChainB>,
 ) -> Result<
-    impl HasTwoChains
-        + HasTwoChannels
+    impl HasTwoChannels
         + HasTwoNodes
         + HasTestConfig
         + CanSpawnRelayer

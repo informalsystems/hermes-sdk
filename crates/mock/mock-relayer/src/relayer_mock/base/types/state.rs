@@ -61,15 +61,15 @@ impl Display for State {
 
 impl State {
     pub fn check_sent(&self, packet_uid: PacketUID) -> bool {
-        self.sent_packets.get(&packet_uid).is_some()
+        self.sent_packets.contains_key(&packet_uid)
     }
 
     pub fn check_received(&self, packet_uid: PacketUID) -> bool {
-        self.recv_packets.get(&packet_uid).is_some()
+        self.recv_packets.contains_key(&packet_uid)
     }
 
     pub fn check_acknowledged(&self, packet_uid: PacketUID) -> bool {
-        self.ack_packets.get(&packet_uid).is_some()
+        self.ack_packets.contains_key(&packet_uid)
     }
 
     /// Checks that the given packet has timed out by comparing whether
