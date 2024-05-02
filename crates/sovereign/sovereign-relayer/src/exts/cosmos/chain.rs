@@ -6,9 +6,10 @@ use hermes_relayer_components::chain::impls::queries::query_and_convert_consensu
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{CanQueryConsensusState, ConsensusStateQuerierComponent};
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
+use hermes_relayer_components::chain::traits::queries::consensus_state_height::{CanQueryConsensusStateHeight, CanQueryConsensusStateHeights, ConsensusStateHeightsQuerierComponent};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
+use hermes_sovereign_chain_components::cosmos::impls::queries::consensus_state_heights::QuerySovereignConsensusStateHeightsFromGrpc;
 use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
 use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
 use hermes_sovereign_chain_components::cosmos::impls::sovereign_to_cosmos::connection_handshake_message::BuildSovereignConnectionHandshakeMessageOnCosmos;
@@ -39,13 +40,16 @@ delegate_components! {
             BuildCreateSovereignClientMessageOnCosmos,
         ConnectionHandshakeMessageBuilderComponent:
             BuildSovereignConnectionHandshakeMessageOnCosmos,
+        ConsensusStateHeightsQuerierComponent:
+            QuerySovereignConsensusStateHeightsFromGrpc,
     }
 }
 
 pub trait CanUseCosmosChainWithSovereign:
     CanQueryClientState<SovereignChain>
     + CanQueryConsensusState<SovereignChain>
-    // + CanQueryConsensusStateHeight<SovereignChain>
+    + CanQueryConsensusStateHeight<SovereignChain>
+    + CanQueryConsensusStateHeights<SovereignChain>
     + CanBuildCreateClientMessage<SovereignChain>
     + CanBuildUpdateClientMessage<SovereignChain>
     + CanBuildConnectionHandshakeMessages<SovereignChain>
