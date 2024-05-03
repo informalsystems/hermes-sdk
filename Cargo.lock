@@ -2261,6 +2261,7 @@ dependencies = [
  "cgp-error-eyre",
  "eyre",
  "hermes-cosmos-chain-components",
+ "hermes-cosmos-test-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -2268,7 +2269,9 @@ dependencies = [
  "ibc-proto",
  "ibc-relayer-types",
  "prost",
+ "serde_json",
  "tendermint-proto",
+ "toml 0.8.12",
 ]
 
 [[package]]
