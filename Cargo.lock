@@ -2254,6 +2254,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-wasm-test-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cgp-error-eyre",
+ "eyre",
+ "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "hermes-relayer-components",
+ "ibc",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "prost",
+ "tendermint-proto",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
