@@ -139,8 +139,8 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         // Upload Wasm contract on Cosmos chain
         cosmos_chain_driver.upload_wasm_client_code(
             &wasm_client_code_path,
-            "tmp",
-            "tmp",
+            "sovereign-client",
+            "Sovereign Wasm Client",
             &cosmos_chain_driver.validator_wallet,
         ).await?;
 

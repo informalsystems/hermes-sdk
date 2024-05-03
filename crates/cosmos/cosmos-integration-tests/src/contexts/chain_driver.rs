@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use hermes_test_components::chain_driver::traits::governance::proposal_id::ProposalIdTypeComponent;
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::upload_client_code::WasmClientCodeUploaderComponent;
 use std::path::PathBuf;
@@ -63,6 +64,7 @@ delegate_components! {
             ProvideHermesRuntime,
         [
             RandomAmountGeneratorComponent,
+            ProposalIdTypeComponent,
             GovernanceProposalStatusQuerierComponent,
             GovernanceProposalDepositerComponent,
             GovernanceProposalVoterComponent,
