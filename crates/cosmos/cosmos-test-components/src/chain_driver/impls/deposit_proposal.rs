@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
@@ -5,6 +7,7 @@ use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
+use hermes_test_components::chain_driver::traits::governance::proposal_id::HasProposalIdType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
@@ -19,16 +22,18 @@ impl<ChainDriver, Chain, Runtime> GovernanceProposalDepositer<ChainDriver>
 where
     ChainDriver: HasRuntime<Runtime = Runtime>
         + HasChain<Chain = Chain>
-        + CanRaiseError<Runtime::Error>
+        + HasProposalIdType
         + HasChainCommandPath
         + HasChainHomeDir
-        + HasRpcPort,
+        + HasRpcPort
+        + CanRaiseError<Runtime::Error>,
     Runtime: CanExecCommand + CanWriteStringToFile,
     Chain: HasChainId + HasWalletType<Wallet = CosmosTestWallet>,
+    ChainDriver::ProposalId: Display,
 {
     async fn deposit_proposal(
         chain_driver: &ChainDriver,
-        proposal_id: &str,
+        proposal_id: &ChainDriver::ProposalId,
         amount: &str,
         sender: &CosmosTestWallet,
     ) -> Result<String, ChainDriver::Error> {
@@ -40,7 +45,7 @@ where
                     "tx",
                     "gov",
                     "deposit",
-                    proposal_id,
+                    &proposal_id.to_string(),
                     amount,
                     "--chain-id",
                     &chain_driver.chain().chain_id().to_string(),

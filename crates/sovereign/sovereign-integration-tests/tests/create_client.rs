@@ -144,15 +144,15 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             &cosmos_chain_driver.validator_wallet,
         ).await?;
 
-        assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
+        assert_eventual_governance_status(&cosmos_chain_driver, 1, "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
 
-        cosmos_chain_driver.deposit_proposal("1", "100000000stake", &cosmos_chain_driver.validator_wallet).await?;
+        cosmos_chain_driver.deposit_proposal(&1, "100000000stake", &cosmos_chain_driver.validator_wallet).await?;
 
-        assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_VOTING_PERIOD").await?;
+        assert_eventual_governance_status(&cosmos_chain_driver, 1, "PROPOSAL_STATUS_VOTING_PERIOD").await?;
 
-        cosmos_chain_driver.vote_proposal("1", &cosmos_chain_driver.validator_wallet).await?;
+        cosmos_chain_driver.vote_proposal(&1, &cosmos_chain_driver.validator_wallet).await?;
 
-        assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_PASSED").await?;
+        assert_eventual_governance_status(&cosmos_chain_driver, 1, "PROPOSAL_STATUS_PASSED").await?;
 
         let sovereign_chain = SovereignChain {
             runtime: runtime.clone(),
@@ -262,12 +262,12 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
 async fn assert_eventual_governance_status(
     cosmos_chain_driver: &CosmosChainDriver,
-    governance_id: &str,
+    governance_id: u64,
     expected_status: &str,
 ) -> Result<(), Error> {
     for _ in 0..15 {
         let exec_output = cosmos_chain_driver
-            .query_proposal_status(governance_id)
+            .query_proposal_status(&governance_id)
             .await?;
         if exec_output == expected_status {
             return Ok(());
