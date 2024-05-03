@@ -132,7 +132,9 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let cosmos_chain = cosmos_chain_driver.chain();
 
-        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
+        let celestia_chain_id = "private";
+
+        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain(celestia_chain_id).await?;
 
         let celestia_chain = celestia_chain_driver.chain();
 
@@ -171,7 +173,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         };
 
         let sovereign_create_client_options = SovereignCreateClientOptions {
-            chain_id: "private".to_string(), // sov-ibc returns da_header.chain_id as client chain_id; bug?
+            chain_id: celestia_chain_id.to_string(), // needs DA's chain ID
             code_hash: wasm_code_hash,
         };
 
