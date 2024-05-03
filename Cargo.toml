@@ -152,18 +152,18 @@ debug = 1
 overflow-checks = true
 
 [patch.crates-io]
-ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
-ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "1f581fa8" }
+ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
 
-basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "feat/sov-support" }
+basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "61256f9" }
 
 sov-celestia-client         = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
 sov-celestia-client-types   = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
@@ -178,9 +178,9 @@ cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git", 
 cgp-run                 = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-inner               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 
-ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
+ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
+ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
+ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
 
 hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }

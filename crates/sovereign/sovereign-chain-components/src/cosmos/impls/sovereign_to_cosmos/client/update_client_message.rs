@@ -35,8 +35,8 @@ where
             .map(|da_header| {
                 let header = dummy_sov_header(
                     da_header.clone(),
-                    payload.initial_state_height,
-                    payload.final_state_height,
+                    payload.initial_state_height.revision_height(),
+                    payload.final_state_height.revision_height(),
                     // Dummy Root data
                     vec![0; 32].try_into().unwrap(),
                 );

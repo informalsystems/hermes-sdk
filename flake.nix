@@ -7,6 +7,7 @@
     cosmos-nix.url = github:informalsystems/cosmos.nix;
     cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
     sovereign-nix.url = github:informalsystems/sov-rollup-starter/ibc-rollup;
+    sovereign-ibc-nix.url = github:informalsystems/sovereign-ibc;
   };
 
   outputs = inputs: let
@@ -27,6 +28,7 @@
       cosmos-nix = inputs.cosmos-nix.packages.${system};
       cosmos-nix-wasm = inputs.cosmos-nix-wasm.packages.${system};
       sovereign-nix = inputs.sovereign-nix.packages.${system};
+      sovereign-ibc-nix = inputs.sovereign-ibc-nix.packages.${system};
     in {
       packages = {
         inherit
@@ -45,6 +47,11 @@
           gaia
           celestia-app
           celestia-node
+        ;
+
+        inherit
+          (sovereign-ibc-nix)
+          sov-celestia-cw
         ;
 
         inherit

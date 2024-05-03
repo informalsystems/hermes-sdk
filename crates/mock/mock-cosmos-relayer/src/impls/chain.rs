@@ -275,7 +275,9 @@ where
     fn client_state_latest_height(client_state: &AnyClientState) -> Height {
         match client_state {
             AnyClientState::Tendermint(client_state) => client_state.inner().latest_height,
-            AnyClientState::Sovereign(client_state) => client_state.inner().latest_height,
+            AnyClientState::Sovereign(client_state) => {
+                client_state.inner().sovereign_params.latest_height
+            }
         }
     }
 
@@ -284,7 +286,11 @@ where
             AnyClientState::Tendermint(client_state) => {
                 client_state.inner().frozen_height.is_some()
             }
-            AnyClientState::Sovereign(client_state) => client_state.inner().frozen_height.is_some(),
+            AnyClientState::Sovereign(client_state) => client_state
+                .inner()
+                .sovereign_params
+                .frozen_height
+                .is_some(),
         }
     }
 

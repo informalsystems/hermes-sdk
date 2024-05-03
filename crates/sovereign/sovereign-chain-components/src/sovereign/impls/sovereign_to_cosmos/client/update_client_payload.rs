@@ -1,5 +1,6 @@
 use std::iter;
 use std::str::FromStr;
+use std::time::Duration;
 
 use cgp_core::HasErrorType;
 use eyre::{eyre, Error as ReportError};
@@ -20,7 +21,7 @@ use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold as RelayerTrustThreshold;
 use ibc_relayer_types::core::ics23_commitment::specs::ProofSpecs;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
-use sov_celestia_client::types::client_state::TmClientParams;
+use sov_celestia_client::types::client_state::TendermintClientParams;
 
 use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
 use crate::sovereign::types::client_state::SovereignClientState;
@@ -114,7 +115,7 @@ where
 /// half the Tendermint ClientState value are mocked.
 /// See issue: https://github.com/informalsystems/hermes-sdk/issues/204
 fn convert_tm_params_to_client_state(
-    tm_params: &TmClientParams,
+    tm_params: &TendermintClientParams,
 ) -> Result<TendermintClientState, ReportError> {
     let dummy_latest_height =
         Height::new(0, 10).map_err(|e| eyre!("Error creating dummy Height: {e}"))?;
@@ -128,7 +129,9 @@ fn convert_tm_params_to_client_state(
     Ok(TendermintClientState {
         chain_id: relayer_chain_id,
         trust_threshold: relayer_trust_threshold,
-        trusting_period: tm_params.trusting_period,
+        // trusting_period was removed from `TendermintClientParams`
+        // https://github.com/informalsystems/sovereign-ibc/commit/a9aaa80c4fe7b21fa777ae2a186838aac1fed68c#diff-8735596286f5213c6003fc9dc4c719fe9c9d4f14b7a385f1418f766ef48faa54L17
+        trusting_period: Duration::from_secs(300),
         unbonding_period: tm_params.unbonding_period,
         max_clock_drift: tm_params.max_clock_drift,
         latest_height: dummy_latest_height,
