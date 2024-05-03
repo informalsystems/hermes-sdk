@@ -39,12 +39,8 @@ where
         + HasHeightType<Height = Height>
         + HasClientStateType<Counterparty, ClientState = TendermintClientState>,
 {
-    fn client_state_chain_id(client_state: &TendermintClientState) -> &ChainId {
-        &client_state.chain_id
-    }
-
-    fn client_state_latest_height(client_state: &TendermintClientState) -> &Height {
-        &client_state.latest_height
+    fn client_state_latest_height(client_state: &TendermintClientState) -> Height {
+        client_state.latest_height
     }
 
     fn client_state_is_frozen(client_state: &TendermintClientState) -> bool {

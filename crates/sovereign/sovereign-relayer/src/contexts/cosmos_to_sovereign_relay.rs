@@ -38,17 +38,11 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanCreateClient<SourceTarget>
     + CanCreateClient<DestinationTarget>
     + CanBuildTargetUpdateClientMessage<DestinationTarget>
+    + CanBuildTargetUpdateClientMessage<SourceTarget>
 {
 }
 
 impl CanUseCosmosToSovereignRelay for CosmosToSovereignRelay {}
-
-// pub trait CanUseClientUpdateMessageBuilder:
-//     TargetUpdateClientMessageBuilder<CosmosToSovereignRelay, SourceTarget>
-// {
-// }
-
-// impl CanUseClientUpdateMessageBuilder for SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>> {}
 
 pub struct CosmosToSovereignRelayComponents;
 
