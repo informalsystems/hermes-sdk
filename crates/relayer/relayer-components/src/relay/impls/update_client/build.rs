@@ -44,11 +44,11 @@ where
 
         // If the client state height is already the same as target height, then there
         // is no need to build any UpdateClient message
-        if client_state_height == target_height {
+        if &client_state_height == target_height {
             return Ok(Vec::new());
         }
 
-        let trusted_height = if client_state_height < target_height {
+        let trusted_height = if &client_state_height < target_height {
             // If the client state height is less than the target height, we can use that
             // as a base trust height to build our UpdateClient headers.
             client_state_height.clone()

@@ -1,5 +1,4 @@
 pub mod address;
-pub mod client;
 pub mod event;
 pub mod height;
 pub mod message;
