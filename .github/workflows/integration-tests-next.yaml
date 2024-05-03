@@ -90,7 +90,7 @@ jobs:
       - name: Retrieve Wasm file path
         id: wasm-file
         run: |
-            echo "WASM_FILE_PATH=$(nix build .#sov-celestia-cw --print-out-paths)/sov_celestia_client_cw.wasm" >> "$GITHUB_OUTPUT" \
+            echo "WASM_FILE_PATH=$(nix build .#sov-celestia-cw --print-out-paths)/sov_celestia_client_cw.wasm" >> "$GITHUB_OUTPUT"
             echo "WASM_CODE_HASH=$(sha256sum -z $(nix build .#sov-celestia-cw --print-out-paths)/sov_celestia_client_cw.wasm | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
       - name: run integration tests
         env:
