@@ -1,4 +1,6 @@
 use alloc::collections::BTreeMap;
+use hermes_wasm_test_components::components::WasmChainDriverComponents;
+use hermes_wasm_test_components::traits::upload_client_code::WasmClientCodeUploaderComponent;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -15,7 +17,6 @@ use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::Gover
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerierComponent;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
-use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::WasmClientCodeUploaderComponent;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -41,6 +42,7 @@ pub struct CosmosChainDriver {
     pub chain_process: Child,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
+    pub validator_wallet: CosmosTestWallet,
     pub relayer_wallet: CosmosTestWallet,
     pub user_wallet_a: CosmosTestWallet,
     pub user_wallet_b: CosmosTestWallet,
@@ -61,12 +63,15 @@ delegate_components! {
             ProvideHermesRuntime,
         [
             RandomAmountGeneratorComponent,
-            WasmClientCodeUploaderComponent,
             GovernanceProposalStatusQuerierComponent,
             GovernanceProposalDepositerComponent,
             GovernanceProposalVoterComponent,
         ]:
             BaseCosmosChainDriverComponents,
+        [
+            WasmClientCodeUploaderComponent,
+        ]:
+            WasmChainDriverComponents,
     }
 }
 

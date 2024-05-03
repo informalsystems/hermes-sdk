@@ -16,7 +16,6 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
-use hermes_cosmos_test_components::chain_driver::traits::store_wasm_client::CanUploadWasmClientCode;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
@@ -36,6 +35,7 @@ use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBo
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
+use hermes_wasm_test_components::traits::upload_client_code::CanUploadWasmClientCode;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -137,11 +137,11 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             .await?;
 
         // Upload Wasm contract on Cosmos chain
-        cosmos_chain_driver.store_wasm_client_code(
+        cosmos_chain_driver.upload_wasm_client_code(
             &wasm_client_code_path,
             "tmp",
             "tmp",
-            "validator",
+            &cosmos_chain_driver.validator_wallet,
         ).await?;
 
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
