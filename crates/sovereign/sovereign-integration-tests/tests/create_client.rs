@@ -171,7 +171,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         };
 
         let sovereign_create_client_options = SovereignCreateClientOptions {
-            chain_id: rollup_id.to_string(),
+            chain_id: "private".to_string(), // sov-ibc returns da_header.chain_id as client chain_id; bug?
             code_hash: wasm_code_hash,
         };
 
