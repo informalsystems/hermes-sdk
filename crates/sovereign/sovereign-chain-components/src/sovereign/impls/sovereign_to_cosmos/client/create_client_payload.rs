@@ -59,6 +59,7 @@ where
 
         let chain_id = ChainId::from_str(&create_client_options.chain_id).unwrap();
 
+        // returns with genesis_da_height: Height(0, 3)
         let client_state = dummy_sov_client_state(chain_id, latest_height);
         let tm = Timestamp::now();
         let consensus_state = dummy_sov_consensus_state(tm);
