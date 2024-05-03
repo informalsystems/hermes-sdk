@@ -52,8 +52,10 @@ where
             .await
             .unwrap();
 
-        let latest_height =
-            Height::new(height.revision_number(), height.revision_height()).unwrap();
+        let latest_height = Height::new(height.revision_number(), height.revision_height())
+            .unwrap()
+            .sub(3) // dummy_sov_client_state's genesis height is 3; so rollup height is 3 less than data chain height.
+            .unwrap();
 
         let chain_id = ChainId::from_str(&create_client_options.chain_id).unwrap();
 

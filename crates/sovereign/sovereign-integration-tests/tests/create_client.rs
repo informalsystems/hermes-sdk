@@ -228,7 +228,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u64 };
         //let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u64 };
-        let dummy_target_height = RollupHeight { slot_number: (h2.revision_height()) as u64 };
+        let dummy_target_height = RollupHeight { slot_number: (h2.revision_height() - 3) as u64 }; // genesis height is 3; proxy rollup height from da_height
 
         info!("dummy_trusted_height: {}", wasm_client_state.latest_height.revision_height());
         info!("dummy_target_height: {}", celestia_client_state.latest_height.revision_height());
