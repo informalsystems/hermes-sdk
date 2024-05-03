@@ -146,11 +146,11 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
 
-        cosmos_chain_driver.deposit_proposal("1", "100000000stake", "validator").await?;
+        cosmos_chain_driver.deposit_proposal("1", "100000000stake", &cosmos_chain_driver.validator_wallet).await?;
 
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_VOTING_PERIOD").await?;
 
-        cosmos_chain_driver.vote_proposal("1", "validator").await?;
+        cosmos_chain_driver.vote_proposal("1", &cosmos_chain_driver.validator_wallet).await?;
 
         assert_eventual_governance_status(&cosmos_chain_driver, "1", "PROPOSAL_STATUS_PASSED").await?;
 

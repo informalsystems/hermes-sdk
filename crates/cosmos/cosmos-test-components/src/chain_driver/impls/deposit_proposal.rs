@@ -3,10 +3,12 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
+use crate::chain::types::wallet::CosmosTestWallet;
 use crate::chain_driver::traits::deposit_proposal::GovernanceProposalDepositer;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
 
@@ -22,13 +24,13 @@ where
         + HasChainHomeDir
         + HasRpcPort,
     Runtime: CanExecCommand + CanWriteStringToFile,
-    Chain: HasChainId,
+    Chain: HasChainId + HasWalletType<Wallet = CosmosTestWallet>,
 {
     async fn deposit_proposal(
         chain_driver: &ChainDriver,
         proposal_id: &str,
         amount: &str,
-        sender: &str,
+        sender: &CosmosTestWallet,
     ) -> Result<String, ChainDriver::Error> {
         let output = chain_driver
             .runtime()
@@ -47,7 +49,7 @@ where
                     "--home",
                     &Runtime::file_path_to_string(chain_driver.chain_home_dir()),
                     "--from",
-                    sender,
+                    &sender.id,
                     "--keyring-backend",
                     "test",
                     "--gas",
