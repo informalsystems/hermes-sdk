@@ -4778,7 +4778,7 @@ dependencies = [
 [[package]]
 name = "sov-celestia-client"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/sovereign-ibc.git?branch=soares/cargo-git-nix-vendor#40c92a70e901ee539f965c5975d8bf9a12f13e9a"
+source = "git+https://github.com/informalsystems/sovereign-ibc.git#00e8d1838b70a79e5c3205305ec1236498f21eae"
 dependencies = [
  "borsh",
  "derive_more",
@@ -4797,7 +4797,7 @@ dependencies = [
 [[package]]
 name = "sov-celestia-client-types"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/sovereign-ibc.git?branch=soares/cargo-git-nix-vendor#40c92a70e901ee539f965c5975d8bf9a12f13e9a"
+source = "git+https://github.com/informalsystems/sovereign-ibc.git#00e8d1838b70a79e5c3205305ec1236498f21eae"
 dependencies = [
  "derive_more",
  "hex 0.4.3",
@@ -4817,7 +4817,7 @@ dependencies = [
 [[package]]
 name = "sov-client-types"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/sovereign-ibc.git?branch=soares/cargo-git-nix-vendor#40c92a70e901ee539f965c5975d8bf9a12f13e9a"
+source = "git+https://github.com/informalsystems/sovereign-ibc.git#00e8d1838b70a79e5c3205305ec1236498f21eae"
 dependencies = [
  "derive_more",
  "hex 0.4.3",
@@ -4832,7 +4832,7 @@ dependencies = [
 [[package]]
 name = "sov-ibc-proto"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/sovereign-ibc.git?branch=soares/cargo-git-nix-vendor#40c92a70e901ee539f965c5975d8bf9a12f13e9a"
+source = "git+https://github.com/informalsystems/sovereign-ibc.git#00e8d1838b70a79e5c3205305ec1236498f21eae"
 dependencies = [
  "ibc-proto",
  "informalsystems-pbjson",
