@@ -8,6 +8,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -38,6 +39,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
+use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -69,6 +71,9 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     );
 
     let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
+    let node_binary = var("ROLLUP_PATH")
+        .unwrap_or_else(|_| "node".to_string())
+        .into();
 
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(CosmosBootstrap {
@@ -94,7 +99,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     let sovereign_bootstrap = SovereignBootstrap {
         runtime: runtime.clone(),
         rollup_store_dir: store_dir.join("rollups"),
-        rollup_command_path: "node".into(),
+        rollup_command_path: node_binary,
         account_prefix: "sov".into(),
     };
 
@@ -120,9 +125,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         wasm_code_hash.push(byte);
     }
 
-    let sovereign_create_client_options = SovereignCreateClientOptions {
-        code_hash: wasm_code_hash,
-    };
+    let rollup_chain_id = "test-rollup";
 
     tokio_runtime.block_on(async move {
         let cosmos_chain_driver = bootstrap.bootstrap_chain("cosmos-1").await?;
@@ -137,8 +140,10 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             .bootstrap_bridge(&celestia_chain_driver)
             .await?;
 
+        let rollup_id = "test-rollup";
+
         let rollup_driver = sovereign_bootstrap
-            .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, "test-rollup")
+            .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, rollup_id)
             .await?;
 
         // Upload Wasm contract on Cosmos chain
@@ -163,6 +168,11 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             runtime: runtime.clone(),
             data_chain: celestia_chain.clone(),
             rollup: rollup_driver.rollup,
+        };
+
+        let sovereign_create_client_options = SovereignCreateClientOptions {
+            chain_id: rollup_id.to_string(),
+            code_hash: wasm_code_hash,
         };
 
         // Create Sovereign client on Cosmos chain
@@ -205,8 +215,25 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let celestia_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(cosmos_chain, &celestia_client_id).await?;
 
+        let h = cosmos_chain
+        .with_blocking_chain_handle(move |chain_handle| {
+            let height = chain_handle.query_latest_height().unwrap();
+            Ok(height)
+        }).await.unwrap();
+        let h2 = celestia_chain
+        .with_blocking_chain_handle(move |chain_handle| {
+            let height = chain_handle.query_latest_height().unwrap();
+            Ok(height)
+        }).await.unwrap();
+
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u64 };
-        let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u64 };
+        //let dummy_target_height = RollupHeight { slot_number: (celestia_client_state.latest_height.revision_height()) as u64 };
+        let dummy_target_height = RollupHeight { slot_number: (h2.revision_height()) as u64 };
+
+        info!("dummy_trusted_height: {}", wasm_client_state.latest_height.revision_height());
+        info!("dummy_target_height: {}", celestia_client_state.latest_height.revision_height());
+        info!("Cosmos latest height: {h}");
+        info!("Celestia chain latest height: {h2}");
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
@@ -225,6 +252,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         for update_message in update_client_messages.into_iter() {
             // TODO: remove assertion once the dummy data used to update client is replaced with correct data
             let events = cosmos_chain.send_message(update_message).await;
+            info!("events: {events:#?}");
             assert!(events.is_err(), "Client update will fail due to next validator set hash validation failure");
         }
 

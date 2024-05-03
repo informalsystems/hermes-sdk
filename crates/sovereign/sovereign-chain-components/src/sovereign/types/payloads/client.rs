@@ -20,5 +20,6 @@ pub struct SovereignUpdateClientPayload {
 }
 
 pub struct SovereignCreateClientOptions {
+    pub chain_id: String,
     pub code_hash: Vec<u8>,
 }

@@ -83,6 +83,10 @@ where
                             )
                             .map_err(|e| eyre!("Error creating DA Height: {e}"))
                             .unwrap();
+                            //tracing::info!("sovereign signed_header: {:#?}", header.signed_header);
+                            //tracing::info!("sovereign validator_set: {:#?}", header.validator_set);
+                            //tracing::info!("sovereign trusted_height: {:#?}", da_height);
+                            //tracing::info!("sovereign trusted_validator_set: {:#?}", header.trusted_validator_set);
                             let da_header = Header {
                                 signed_header: header.signed_header.clone(),
                                 validator_set: header.validator_set.clone(),
