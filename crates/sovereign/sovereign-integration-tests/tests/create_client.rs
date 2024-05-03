@@ -46,6 +46,7 @@ use tokio::runtime::Builder;
 use tokio::time::sleep;
 use toml::Value as TomlValue;
 use tracing::info;
+use sha2::{Digest, Sha256};
 
 #[tracing::instrument]
 #[test]
@@ -106,22 +107,16 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
     let wasm_client_code_path = var("WASM_FILE_PATH").expect("Wasm file is required").into();
 
-    let wasm_client_code_hash_str = var("WASM_CODE_HASH").expect("Wasm code hash is required");
-    if wasm_client_code_hash_str.len() % 2 != 0 {
-        return Err(
-            eyre!("Given Wasm code hash is of odd length: {wasm_client_code_hash_str}").into(),
-        );
-    }
-    let mut wasm_code_hash = Vec::new();
-    for i in (0..wasm_client_code_hash_str.len()).step_by(2) {
-        let byte_str = &wasm_client_code_hash_str[i..i + 2];
+    let wasm_client_bytes = std::fs::read(&wasm_client_code_path)?;
 
-        let byte = u8::from_str_radix(byte_str, 16)?;
-        wasm_code_hash.push(byte);
-    }
+    let wasm_code_hash: [u8; 32] = {
+        let mut hasher = Sha256::new();
+        hasher.update(wasm_client_bytes);
+        hasher.finalize().into()
+    };
 
     let sovereign_create_client_options = SovereignCreateClientOptions {
-        code_hash: wasm_code_hash,
+        code_hash: wasm_code_hash.into(),
     };
 
     tokio_runtime.block_on(async move {

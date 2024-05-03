@@ -91,11 +91,9 @@ jobs:
         id: wasm-file
         run: |
             echo "WASM_FILE_PATH=$(nix build .#sov-celestia-cw --print-out-paths)/sov_celestia_client_cw.wasm" >> "$GITHUB_OUTPUT"
-            echo "WASM_CODE_HASH=$(sha256sum -z $(nix build .#sov-celestia-cw --print-out-paths)/sov_celestia_client_cw.wasm | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
       - name: run integration tests
         env:
           CHAIN_COMMAND_PATHS: simd
-          WASM_CODE_HASH: ${{ steps.wasm-file.outputs.WASM_CODE_HASH }}
           WASM_FILE_PATH: ${{ steps.wasm-file.outputs.WASM_FILE_PATH }}
           RUST_BACKTRACE: 1
           CARGO_NET_GIT_FETCH_WITH_CLI: true
