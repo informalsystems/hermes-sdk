@@ -16,7 +16,9 @@ use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::GovernanceProposalDepositerComponent;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
-use hermes_cosmos_test_components::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerierComponent;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::{
+    GovernanceProposalStatusPollerComponent, GovernanceProposalStatusQuerierComponent,
+};
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -68,6 +70,7 @@ delegate_components! {
             GovernanceProposalStatusQuerierComponent,
             GovernanceProposalDepositerComponent,
             GovernanceProposalVoterComponent,
+            GovernanceProposalStatusPollerComponent,
         ]:
             BaseCosmosChainDriverComponents,
         [

@@ -10,12 +10,11 @@ use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
-use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
-use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanQueryGovernanceProposalStatus;
+use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanPollProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
@@ -44,7 +43,6 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use serde_json::Value as JsonValue;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
-use tokio::time::sleep;
 use toml::Value as TomlValue;
 use tracing::info;
 
@@ -144,15 +142,15 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             &cosmos_chain_driver.validator_wallet,
         ).await?;
 
-        assert_eventual_governance_status(&cosmos_chain_driver, 1, "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
+        cosmos_chain_driver.poll_proposal_status(&1, "PROPOSAL_STATUS_DEPOSIT_PERIOD").await?;
 
         cosmos_chain_driver.deposit_proposal(&1, "100000000stake", &cosmos_chain_driver.validator_wallet).await?;
 
-        assert_eventual_governance_status(&cosmos_chain_driver, 1, "PROPOSAL_STATUS_VOTING_PERIOD").await?;
+        cosmos_chain_driver.poll_proposal_status(&1, "PROPOSAL_STATUS_VOTING_PERIOD").await?;
 
         cosmos_chain_driver.vote_proposal(&1, &cosmos_chain_driver.validator_wallet).await?;
 
-        assert_eventual_governance_status(&cosmos_chain_driver, 1, "PROPOSAL_STATUS_PASSED").await?;
+        cosmos_chain_driver.poll_proposal_status(&1, "PROPOSAL_STATUS_PASSED").await?;
 
         let sovereign_chain = SovereignChain {
             runtime: runtime.clone(),
@@ -258,24 +256,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     })?;
 
     Ok(())
-}
-
-async fn assert_eventual_governance_status(
-    cosmos_chain_driver: &CosmosChainDriver,
-    governance_id: u64,
-    expected_status: &str,
-) -> Result<(), Error> {
-    for _ in 0..15 {
-        let exec_output = cosmos_chain_driver
-            .query_proposal_status(&governance_id)
-            .await?;
-        if exec_output == expected_status {
-            return Ok(());
-        } else {
-            sleep(Duration::from_secs(1)).await;
-        }
-    }
-    Err(eyre!("Governance proposal `{governance_id}` was not in status `{expected_status}`").into())
 }
 
 fn modify_wasm_node_config(config: &mut TomlValue) -> Result<(), Error> {
