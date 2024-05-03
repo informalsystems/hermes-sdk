@@ -42,11 +42,11 @@ use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use serde_json::Value as JsonValue;
+use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 use toml::Value as TomlValue;
 use tracing::info;
-use sha2::{Digest, Sha256};
 
 #[tracing::instrument]
 #[test]
