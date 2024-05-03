@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::impls::delegate::message_builders::create_
 use hermes_relayer_components::chain::impls::delegate::message_builders::update_client::DelegateBuildUpdateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
+use hermes_relayer_components::chain::impls::delegate::queries::consensus_state_heights::DelegateQueryConsensusStateHeights;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
@@ -110,7 +111,6 @@ use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
 use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
-use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromChainHandle;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
@@ -180,8 +180,6 @@ delegate_components! {
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,
-        ConsensusStateHeightsQuerierComponent:
-            QueryConsensusStateHeightsFromChainHandle,
         WriteAckQuerierComponent:
             QueryWriteAckEventFromChainHandle,
         [
@@ -254,10 +252,12 @@ delegate_components! {
             AllClientStatesQuerierComponent,
         ]:
             DelegateQueryClientState<DelegateCosmosChainComponents>,
-        ConsensusStateQuerierComponent:
-            DelegateQueryConsensusState<DelegateCosmosChainComponents>,
         CreateClientMessageBuilderComponent:
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
+        ConsensusStateQuerierComponent:
+            DelegateQueryConsensusState<DelegateCosmosChainComponents>,
+        ConsensusStateHeightsQuerierComponent:
+            DelegateQueryConsensusStateHeights<DelegateCosmosChainComponents>,
         UpdateClientMessageBuilderComponent:
             DelegateBuildUpdateClientMessage<DelegateCosmosChainComponents>,
         ConnectionHandshakeMessageBuilderComponent:
