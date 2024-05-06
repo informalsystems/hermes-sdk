@@ -30,7 +30,7 @@ use hermes_test_components::chain_driver::traits::fields::denom_at::{
     DenomGetterAt, StakingDenom, TransferDenom,
 };
 use hermes_test_components::chain_driver::traits::fields::wallet::{
-    RelayerWallet, UserWallet, WalletGetterAt, WalletsGetter,
+    RelayerWallet, UserWallet, ValidatorWallet, WalletGetterAt, WalletsGetter,
 };
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
 use hermes_test_components::types::index::Index;
@@ -142,6 +142,16 @@ impl WalletGetterAt<CosmosChainDriver, UserWallet, 1> for CosmosChainDriverCompo
         _index: Index<1>,
     ) -> &CosmosTestWallet {
         &driver.user_wallet_b
+    }
+}
+
+impl WalletGetterAt<CosmosChainDriver, ValidatorWallet, 0> for CosmosChainDriverComponents {
+    fn wallet_at(
+        driver: &CosmosChainDriver,
+        _kind: ValidatorWallet,
+        _index: Index<0>,
+    ) -> &CosmosTestWallet {
+        &driver.validator_wallet
     }
 }
 
