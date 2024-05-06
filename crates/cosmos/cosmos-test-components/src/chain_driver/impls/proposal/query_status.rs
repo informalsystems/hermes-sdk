@@ -1,13 +1,11 @@
 use core::fmt::Display;
 
-use cgp_core::{Async, CanRaiseError};
+use cgp_core::CanRaiseError;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::{
-    HasProposalStatusType, ProvideProposalStatusType,
-};
+use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use serde::Deserialize;
@@ -16,15 +14,6 @@ use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain::types::proposal_status::ProposalStatus;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerier;
-
-pub struct ProvideCosmosProposalStatusType;
-
-impl<ChainDriver> ProvideProposalStatusType<ChainDriver> for ProvideCosmosProposalStatusType
-where
-    ChainDriver: Async,
-{
-    type ProposalStatus = ProposalStatus;
-}
 
 pub struct QueryProposalStatusWithChainCommand;
 
