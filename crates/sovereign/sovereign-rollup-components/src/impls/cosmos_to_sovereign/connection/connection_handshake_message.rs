@@ -49,7 +49,7 @@ where
     }
 
     async fn build_connection_open_try_message(
-        _chain: &Chain,
+        chain: &Chain,
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
@@ -68,38 +68,21 @@ where
             proof_consensus,
         } = counterparty_payload;
 
-        let counterparty = ibc_proto::ibc::core::connection::v1::Counterparty {
-            client_id: counterparty_client_id.to_string(),
-            connection_id: counterparty_connection_id.to_string(),
-            prefix: Some(ibc_proto::ibc::core::commitment::v1::MerklePrefix {
-                key_prefix: commitment_prefix.into_vec(),
-            }),
+        let msg = CosmosConnectionOpenTryMessage {
+            client_id: client_id.to_owned(),
+            counterparty_client_id: counterparty_client_id.to_owned(),
+            counterparty_connection_id: counterparty_connection_id.to_owned(),
+            counterparty_commitment_prefix: commitment_prefix,
+            counterparty_versions: versions,
+            client_state: client_state.into(),
+            delay_period,
+            update_height,
+            proof_init,
+            proof_client,
+            proof_consensus,
         };
 
-        let msg = ibc_proto::ibc::core::connection::v1::MsgConnectionOpenTry {
-            client_id: client_id.to_string(),
-            client_state: Some(client_state.into()),
-            counterparty: Some(counterparty),
-            delay_period: delay_period.as_secs(),
-            counterparty_versions: versions.into_iter().map(Into::into).collect(),
-            proof_height: Some(update_height.into()),
-            proof_init: proof_init.into(),
-            proof_client: proof_client.into(),
-            proof_consensus: proof_consensus.proof().clone().into_bytes(),
-            consensus_height: Some(proof_consensus.height().into()),
-            signer: "signer".into(),
-
-            // optional: needed when ibc module can't query host consensus state.
-            host_consensus_state_proof: vec![],
-
-            // deprecated fields
-            previous_connection_id: "".into(),
-        };
-
-        let msg_any = Any {
-            type_url: ibc_proto::ibc::core::connection::v1::MsgConnectionOpenTry::full_name(),
-            value: msg.encode_to_vec(),
-        };
+        let msg_any = msg.encode_protobuf(chain.get_default_signer());
 
         Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
