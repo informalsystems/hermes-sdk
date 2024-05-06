@@ -1,6 +1,8 @@
 use std::str::FromStr;
 
 use cgp_core::HasErrorType;
+use eyre::eyre;
+use eyre::Error as ReportError;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -33,7 +35,7 @@ where
         + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
         + HasDataChain
         + HasDataChainType<DataChain = DataChain>
-        + HasErrorType, // TODO: Add chain dependencies for create client payload here
+        + HasErrorType<Error = ReportError>, // TODO: Add chain dependencies for create client payload here
     Chain::DataChain: HasErrorType + HasBlockingChainHandle,
 {
     async fn build_create_client_payload(
@@ -51,12 +53,12 @@ where
                 Ok(height)
             })
             .await
-            .unwrap();
+            .map_err(|e| eyre!("Error querying latest height from DA chain: {e:?}"))?;
 
         let latest_height = Height::new(height.revision_number(), height.revision_height())
-            .unwrap()
-            .sub(3) // dummy_sov_client_state's genesis height is 3; so rollup height is 3 less than data chain height.
-            .unwrap();
+            .map_err(|e| eyre!("Error creating new Height from queried height: {e}"))?
+            .sub(create_client_options.genesis_height) // dummy_sov_client_state's genesis height is 3; so rollup height is 3 less than data chain height.
+            .map_err(|e| eyre!("Error subtracting genesis height: {e}"))?;
 
         let chain_id = ChainId::from_str(&create_client_options.chain_id).unwrap();
 
@@ -74,7 +76,7 @@ where
                     .unwrap())
             })
             .await
-            .unwrap();
+            .map_err(|e| eyre!("Error host consensus state from DA chain: {e:?}"))?;
 
         let AnyConsensusState::Tendermint(tm_consensus_state) = any_consensus_state else {
             panic!("Expected Tendermint consensus state");

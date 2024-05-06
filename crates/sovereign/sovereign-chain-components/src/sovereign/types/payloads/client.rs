@@ -21,5 +21,6 @@ pub struct SovereignUpdateClientPayload {
 
 pub struct SovereignCreateClientOptions {
     pub chain_id: String,
+    pub genesis_height: u64, // TODO: Maybe use Height or RollupHeight depending on value queried
     pub code_hash: Vec<u8>,
 }

@@ -50,11 +50,26 @@ where
         target_height: &RollupHeight,
         client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
-        // genesis height is 3; so da height is 3 more than rollup height.
-        let tm_trusted_height = Height::new(0, trusted_height.slot_number + 3)
-            .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
-        let tm_target_height = Height::new(0, target_height.slot_number + 3)
-            .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
+        // DA height is higher than rollup height. This requires adding
+        // the genesis Height to the trusted and target Heights
+        let tm_trusted_height = Height::new(
+            0,
+            trusted_height.slot_number
+                + client_state
+                    .sovereign_params
+                    .genesis_da_height
+                    .revision_height(),
+        )
+        .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
+        let tm_target_height = Height::new(
+            0,
+            target_height.slot_number
+                + client_state
+                    .sovereign_params
+                    .genesis_da_height
+                    .revision_height(),
+        )
+        .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
         let da_trusted_height = DataChainHeight::new(0, trusted_height.slot_number)
             .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
         let da_target_height = DataChainHeight::new(0, target_height.slot_number)
@@ -84,10 +99,6 @@ where
                             )
                             .map_err(|e| eyre!("Error creating DA Height: {e}"))
                             .unwrap();
-                            //tracing::info!("sovereign signed_header: {:#?}", header.signed_header);
-                            //tracing::info!("sovereign validator_set: {:#?}", header.validator_set);
-                            //tracing::info!("sovereign trusted_height: {:#?}", da_height);
-                            //tracing::info!("sovereign trusted_validator_set: {:#?}", header.trusted_validator_set);
                             let da_header = Header {
                                 signed_header: header.signed_header.clone(),
                                 validator_set: header.validator_set.clone(),
@@ -103,7 +114,7 @@ where
                 Ok(headers)
             })
             .await
-            .unwrap();
+            .map_err(|e| eyre!("Error creating headers from DA chain: {e:?}"))?;
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: headers,
