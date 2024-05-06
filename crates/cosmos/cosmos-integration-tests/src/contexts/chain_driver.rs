@@ -2,6 +2,8 @@ use alloc::collections::BTreeMap;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
 use hermes_test_components::chain_driver::traits::proposal::deposit::ProposalDepositerComponent;
+use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPollerComponent;
+use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::upload_client_code::WasmClientCodeUploaderComponent;
 use std::path::PathBuf;
@@ -17,9 +19,6 @@ use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
-use hermes_cosmos_test_components::chain_driver::traits::proposal_status::{
-    GovernanceProposalStatusPollerComponent, GovernanceProposalStatusQuerierComponent,
-};
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -69,8 +68,8 @@ delegate_components! {
             RandomAmountGeneratorComponent,
             ProposalIdTypeComponent,
             ProposalStatusTypeComponent,
-            GovernanceProposalStatusQuerierComponent,
-            GovernanceProposalStatusPollerComponent,
+            ProposalStatusQuerierComponent,
+            ProposalStatusPollerComponent,
             ProposalDepositerComponent,
             GovernanceProposalVoterComponent,
         ]:

@@ -4,24 +4,27 @@ use core::time::Duration;
 use cgp_core::CanRaiseError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
-
-use crate::chain_driver::traits::proposal_status::{
-    CanQueryGovernanceProposalStatus, GovernanceProposalStatusPoller,
-};
+use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
+use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
+use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPoller;
+use hermes_test_components::chain_driver::traits::proposal::query_status::CanQueryProposalStatus;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 pub struct PollProposalStatus;
 
-impl<ChainDriver> GovernanceProposalStatusPoller<ChainDriver> for PollProposalStatus
+impl<ChainDriver, Chain> ProposalStatusPoller<ChainDriver> for PollProposalStatus
 where
-    ChainDriver: CanQueryGovernanceProposalStatus + HasRuntime + CanRaiseError<String>,
+    ChainDriver:
+        HasChainType<Chain = Chain> + CanQueryProposalStatus + HasRuntime + CanRaiseError<String>,
     ChainDriver::Runtime: CanSleep,
-    ChainDriver::ProposalId: Display,
-    ChainDriver::ProposalStatus: Eq + Debug,
+    Chain::ProposalId: Display,
+    Chain::ProposalStatus: Eq + Debug,
+    Chain: HasProposalIdType + HasProposalStatusType,
 {
     async fn poll_proposal_status(
         chain_driver: &ChainDriver,
-        proposal_id: &ChainDriver::ProposalId,
-        expected_status: &ChainDriver::ProposalStatus,
+        proposal_id: &Chain::ProposalId,
+        expected_status: &Chain::ProposalStatus,
     ) -> Result<(), ChainDriver::Error> {
         let runtime = chain_driver.runtime();
 

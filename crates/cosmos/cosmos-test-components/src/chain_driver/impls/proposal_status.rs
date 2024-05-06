@@ -9,12 +9,13 @@ use hermes_test_components::chain::traits::proposal::types::proposal_status::{
     HasProposalStatusType, ProvideProposalStatusType,
 };
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use serde::Deserialize;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain::types::proposal_status::ProposalStatus;
-use crate::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerier;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
+use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerier;
 
 pub struct ProvideCosmosProposalStatusType;
 
@@ -25,25 +26,25 @@ where
     type ProposalStatus = ProposalStatus;
 }
 
-pub struct QueryGovernanceProposalStatusWithChainCommand;
+pub struct QueryProposalStatusWithChainCommand;
 
-impl<ChainDriver, Runtime> GovernanceProposalStatusQuerier<ChainDriver>
-    for QueryGovernanceProposalStatusWithChainCommand
+impl<ChainDriver, Chain, Runtime> ProposalStatusQuerier<ChainDriver>
+    for QueryProposalStatusWithChainCommand
 where
     ChainDriver: HasRuntime<Runtime = Runtime>
-        + HasProposalIdType
-        + HasProposalStatusType<ProposalStatus = ProposalStatus>
+        + HasChainType<Chain = Chain>
         + HasChainCommandPath
         + HasChainHomeDir
         + HasRpcPort
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<serde_json::Error>,
     Runtime: CanExecCommand + CanWriteStringToFile,
-    ChainDriver::ProposalId: Display,
+    Chain: HasProposalIdType + HasProposalStatusType<ProposalStatus = ProposalStatus>,
+    Chain::ProposalId: Display,
 {
     async fn query_proposal_status(
         chain_driver: &ChainDriver,
-        proposal_id: &ChainDriver::ProposalId,
+        proposal_id: &Chain::ProposalId,
     ) -> Result<ProposalStatus, ChainDriver::Error> {
         let output = chain_driver
             .runtime()
