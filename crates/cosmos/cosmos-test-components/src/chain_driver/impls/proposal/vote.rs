@@ -8,35 +8,33 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
+use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoter;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain::types::wallet::CosmosTestWallet;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
-use crate::chain_driver::traits::vote_proposal::GovernanceProposalVoter;
 
-pub struct VoteGovernanceProposalWithChainCommand;
+pub struct VoteProposalWithChainCommand;
 
-impl<ChainDriver, Chain, Runtime> GovernanceProposalVoter<ChainDriver>
-    for VoteGovernanceProposalWithChainCommand
+impl<ChainDriver, Chain, Runtime> ProposalVoter<ChainDriver> for VoteProposalWithChainCommand
 where
     ChainDriver: HasRuntime<Runtime = Runtime>
         + HasChain<Chain = Chain>
-        + HasProposalIdType
         + HasChainCommandPath
         + HasChainHomeDir
         + HasRpcPort
         + CanRaiseError<Runtime::Error>,
     Runtime: CanExecCommand + CanWriteStringToFile,
-    Chain: HasChainId + HasWalletType<Wallet = CosmosTestWallet>,
-    ChainDriver::ProposalId: Display,
+    Chain: HasChainId + HasProposalIdType + HasWalletType<Wallet = CosmosTestWallet>,
+    Chain::ProposalId: Display,
 {
     async fn vote_proposal(
         chain_driver: &ChainDriver,
-        proposal_id: &ChainDriver::ProposalId,
+        proposal_id: &Chain::ProposalId,
         sender: &CosmosTestWallet,
-    ) -> Result<String, ChainDriver::Error> {
-        let output = chain_driver
+    ) -> Result<(), ChainDriver::Error> {
+        chain_driver
             .runtime()
             .exec_command(
                 chain_driver.chain_command_path(),
@@ -62,6 +60,6 @@ where
             .await
             .map_err(ChainDriver::raise_error)?;
 
-        Ok(output.stdout)
+        Ok(())
     }
 }

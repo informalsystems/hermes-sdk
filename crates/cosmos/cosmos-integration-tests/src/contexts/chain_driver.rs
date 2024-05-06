@@ -4,6 +4,7 @@ use hermes_test_components::chain::traits::proposal::types::proposal_status::Pro
 use hermes_test_components::chain_driver::traits::proposal::deposit::ProposalDepositerComponent;
 use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPollerComponent;
 use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
+use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::upload_client_code::WasmClientCodeUploaderComponent;
 use std::path::PathBuf;
@@ -20,7 +21,6 @@ use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::components::CosmosChainDriverComponents as BaseCosmosChainDriverComponents;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
-use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -71,7 +71,7 @@ delegate_components! {
             ProposalStatusQuerierComponent,
             ProposalStatusPollerComponent,
             ProposalDepositerComponent,
-            GovernanceProposalVoterComponent,
+            ProposalVoterComponent,
         ]:
             BaseCosmosChainDriverComponents,
         [

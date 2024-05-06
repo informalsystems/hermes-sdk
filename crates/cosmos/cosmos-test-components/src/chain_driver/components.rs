@@ -5,6 +5,7 @@ use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGe
 use hermes_test_components::chain_driver::traits::proposal::deposit::ProposalDepositerComponent;
 use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPollerComponent;
 use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
+use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 
 use crate::chain_driver::impls::amount::GenerateRandomAmount;
 use crate::chain_driver::impls::proposal::deposit::DepositProposalWithChainCommand;
@@ -12,9 +13,8 @@ use crate::chain_driver::impls::proposal::poll_status::PollProposalStatus;
 use crate::chain_driver::impls::proposal::query_status::{
     ProvideCosmosProposalStatusType, QueryProposalStatusWithChainCommand,
 };
-use crate::chain_driver::impls::proposal::vote::VoteGovernanceProposalWithChainCommand;
+use crate::chain_driver::impls::proposal::vote::VoteProposalWithChainCommand;
 use crate::chain_driver::impls::proposal_id::ProvideU64ProposalId;
-use crate::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
 
 pub struct CosmosChainDriverComponents;
 
@@ -32,7 +32,7 @@ delegate_components! {
             QueryProposalStatusWithChainCommand,
         ProposalStatusPollerComponent:
             PollProposalStatus,
-        GovernanceProposalVoterComponent:
-            VoteGovernanceProposalWithChainCommand
+        ProposalVoterComponent:
+            VoteProposalWithChainCommand
     }
 }
