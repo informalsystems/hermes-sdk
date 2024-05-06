@@ -44,6 +44,7 @@ use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use serde_json::Value as JsonValue;
+use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 use toml::Value as TomlValue;
@@ -111,21 +112,13 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
     let wasm_client_code_path = var("WASM_FILE_PATH").expect("Wasm file is required").into();
 
-    let wasm_client_code_hash_str = var("WASM_CODE_HASH").expect("Wasm code hash is required");
-    if wasm_client_code_hash_str.len() % 2 != 0 {
-        return Err(
-            eyre!("Given Wasm code hash is of odd length: {wasm_client_code_hash_str}").into(),
-        );
-    }
-    let mut wasm_code_hash = Vec::new();
-    for i in (0..wasm_client_code_hash_str.len()).step_by(2) {
-        let byte_str = &wasm_client_code_hash_str[i..i + 2];
+    let wasm_client_bytes = std::fs::read(&wasm_client_code_path)?;
 
-        let byte = u8::from_str_radix(byte_str, 16)?;
-        wasm_code_hash.push(byte);
-    }
-
-    let rollup_chain_id = "test-rollup";
+    let wasm_code_hash: [u8; 32] = {
+        let mut hasher = Sha256::new();
+        hasher.update(wasm_client_bytes);
+        hasher.finalize().into()
+    };
 
     tokio_runtime.block_on(async move {
         let cosmos_chain_driver = bootstrap.bootstrap_chain("cosmos-1").await?;
@@ -174,7 +167,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let sovereign_create_client_options = SovereignCreateClientOptions {
             chain_id: celestia_chain_id.to_string(), // needs DA's chain ID
-            code_hash: wasm_code_hash,
+            code_hash: wasm_code_hash.into(),
         };
 
         // Create Sovereign client on Cosmos chain
