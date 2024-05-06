@@ -1,5 +1,4 @@
 use core::marker::PhantomData;
-use core::time::Duration;
 
 use alloc::collections::BTreeMap;
 use cgp_core::CanRaiseError;
@@ -12,7 +11,6 @@ use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
-use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
@@ -40,7 +38,7 @@ where
         + HasChainNodeConfigType
         + HasWasmClientCodePath
         + CanRaiseError<ChainDriver::Error>,
-    Runtime: HasChildProcessType + HasFilePathType + CanSleep,
+    Runtime: HasChildProcessType + HasFilePathType,
     Chain: HasWalletType
         + HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
@@ -70,8 +68,6 @@ where
             chain_process,
         )
         .await?;
-
-        bootstrap.runtime().sleep(Duration::from_secs(1)).await;
 
         let validator_wallet = chain_driver.wallet_at(ValidatorWallet, Index::<0>);
 

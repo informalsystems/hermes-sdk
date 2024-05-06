@@ -113,10 +113,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     };
 
     tokio_runtime.block_on(async move {
-        let cosmos_chain_driver = cosmos_bootstrap.bootstrap_chain("cosmos-1").await?;
-
-        let cosmos_chain = cosmos_chain_driver.chain();
-
         let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
         let celestia_chain = celestia_chain_driver.chain();
@@ -134,6 +130,12 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             data_chain: celestia_chain.clone(),
             rollup: rollup_driver.rollup,
         };
+
+        // FIXME: The test would fail if the Wasm client is initialized too early
+
+        let cosmos_chain_driver = cosmos_bootstrap.bootstrap_chain("cosmos-1").await?;
+
+        let cosmos_chain = cosmos_chain_driver.chain();
 
         // Create Sovereign client on Cosmos chain
         let create_client_payload = <SovereignChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
