@@ -6,18 +6,26 @@ use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::chain_driver::traits::governance::proposal_id::HasProposalIdType;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain_driver::traits::proposal_status::{
-    GovernanceProposalStatusQuerier, ProvideProposalStatusType,
+    GovernanceProposalStatusQuerier, HasProposalStatusType, ProvideProposalStatusType,
 };
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
 
+#[derive(Deserialize, Serialize, Debug, PartialEq, Eq)]
 pub enum ProposalStatus {
+    #[serde(rename = "PROPOSAL_STATUS_DEPOSIT_PERIOD")]
     DepositPeriod,
+
+    #[serde(rename = "PROPOSAL_STATUS_VOTING_PERIOD")]
     VotingPeriod,
+
+    #[serde(rename = "PROPOSAL_STATUS_PASSED")]
     Passed,
+
+    #[serde(rename = "PROPOSAL_STATUS_REJECTED")]
     Rejected,
 }
 
@@ -37,6 +45,7 @@ impl<ChainDriver, Runtime> GovernanceProposalStatusQuerier<ChainDriver>
 where
     ChainDriver: HasRuntime<Runtime = Runtime>
         + HasProposalIdType
+        + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasChainCommandPath
         + HasChainHomeDir
         + HasRpcPort
@@ -48,7 +57,7 @@ where
     async fn query_proposal_status(
         chain_driver: &ChainDriver,
         proposal_id: &ChainDriver::ProposalId,
-    ) -> Result<String, ChainDriver::Error> {
+    ) -> Result<ProposalStatus, ChainDriver::Error> {
         let output = chain_driver
             .runtime()
             .exec_command(
@@ -78,5 +87,5 @@ where
 
 #[derive(Deserialize)]
 struct Response {
-    status: String,
+    status: ProposalStatus,
 }

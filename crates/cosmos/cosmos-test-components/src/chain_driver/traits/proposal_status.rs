@@ -8,19 +8,21 @@ pub trait HasProposalStatusType: Async {
 
 #[derive_component(GovernanceProposalStatusQuerierComponent, GovernanceProposalStatusQuerier<ChainDriver>)]
 #[async_trait]
-pub trait CanQueryGovernanceProposalStatus: HasProposalIdType + HasErrorType {
+pub trait CanQueryGovernanceProposalStatus:
+    HasProposalIdType + HasProposalStatusType + HasErrorType
+{
     async fn query_proposal_status(
         &self,
         proposal_id: &Self::ProposalId,
-    ) -> Result<String, Self::Error>;
+    ) -> Result<Self::ProposalStatus, Self::Error>;
 }
 
 #[derive_component(GovernanceProposalStatusPollerComponent, GovernanceProposalStatusPoller<ChainDriver>)]
 #[async_trait]
-pub trait CanPollProposalStatus: HasProposalIdType + HasErrorType {
+pub trait CanPollProposalStatus: HasProposalIdType + HasProposalStatusType + HasErrorType {
     async fn poll_proposal_status(
         &self,
         proposal_id: &Self::ProposalId,
-        expected_status: &str,
+        expected_status: &Self::ProposalStatus,
     ) -> Result<(), Self::Error>;
 }
