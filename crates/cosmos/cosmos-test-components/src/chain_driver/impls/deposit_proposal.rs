@@ -5,6 +5,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::chain_driver::traits::governance::proposal_id::HasProposalIdType;
@@ -28,13 +29,14 @@ where
         + HasRpcPort
         + CanRaiseError<Runtime::Error>,
     Runtime: CanExecCommand + CanWriteStringToFile,
-    Chain: HasChainId + HasWalletType<Wallet = CosmosTestWallet>,
+    Chain: HasChainId + HasWalletType<Wallet = CosmosTestWallet> + HasAmountType,
     ChainDriver::ProposalId: Display,
+    Chain::Amount: Display,
 {
     async fn deposit_proposal(
         chain_driver: &ChainDriver,
         proposal_id: &ChainDriver::ProposalId,
-        amount: &str,
+        amount: &Chain::Amount,
         sender: &CosmosTestWallet,
     ) -> Result<String, ChainDriver::Error> {
         let output = chain_driver
@@ -46,7 +48,7 @@ where
                     "gov",
                     "deposit",
                     &proposal_id.to_string(),
-                    amount,
+                    &amount.to_string(),
                     "--chain-id",
                     &chain_driver.chain().chain_id().to_string(),
                     "--node",

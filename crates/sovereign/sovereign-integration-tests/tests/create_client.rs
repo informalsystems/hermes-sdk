@@ -13,6 +13,7 @@ use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain_driver::impls::proposal_status::ProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanPollProposalStatus;
@@ -145,7 +146,11 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         cosmos_chain_driver.poll_proposal_status(&1, &ProposalStatus::DepositPeriod).await?;
 
-        cosmos_chain_driver.deposit_proposal(&1, "100000000stake", &cosmos_chain_driver.validator_wallet).await?;
+        cosmos_chain_driver.deposit_proposal(
+            &1,
+            &Amount::new(100000000, cosmos_chain_driver.genesis_config.staking_denom.clone()),
+            &cosmos_chain_driver.validator_wallet
+        ).await?;
 
         cosmos_chain_driver.poll_proposal_status(&1, &ProposalStatus::VotingPeriod).await?;
 
