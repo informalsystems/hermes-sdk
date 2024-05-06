@@ -8,7 +8,6 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::contexts::chain_driver::CosmosChainDriver;
@@ -25,6 +24,7 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::C
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -37,10 +37,8 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
 use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::ChainId;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
-use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -172,28 +170,18 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         info!("genesis height: {genesis_height}");
 
-        let celestia_latest_height = celestia_chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let height = chain_handle.query_latest_height().unwrap();
-                Ok(height)
-            }).await?;
-
-        let da_chain_id = ChainId::from_str(celestia_chain_id)?;
-        let sovereign_params_height = Height::new(celestia_latest_height.revision_number(), celestia_latest_height.revision_height())?;
-        let rollup_height = Height::new(1, rollup_driver.node_config.runner.genesis_height)?;
-
-        info!("sovereign_params_height: {sovereign_params_height}");
+        let rollup_genesis_da_height = Height::new(0, rollup_driver.node_config.runner.genesis_height)?;
 
         let sovereign_params = SovereignParamsConfig::builder()
-            .genesis_da_height(sovereign_params_height)
-            .latest_height(sovereign_params_height)
+            .genesis_da_height(rollup_genesis_da_height)
+            .latest_height(Height::min(0)) // dummy value; overwritten while by latest height while creating client payload
             .build();
 
-        let tendermint_params = TendermintParamsConfig::builder().chain_id(da_chain_id).build();
+        let tendermint_params = TendermintParamsConfig::builder().chain_id(celestia_chain_id.parse()?).build();
 
         let sovereign_create_client_options = SovereignCreateClientOptions {
             //chain_id: celestia_chain_id.to_string(), // needs DA's chain ID
-            genesis_height: rollup_height, // TODO: use queried value for genesis height
+            // genesis_height: rollup_height, // TODO: use queried value for genesis height
             tendermint_params_config: tendermint_params,
             sovereign_client_params: sovereign_params,
             code_hash: wasm_code_hash.into(),
@@ -234,9 +222,8 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         info!("sovereign_client_state.sovereign_params.genesis_da_height.revision_height(): {}", sovereign_client_state.sovereign_params.genesis_da_height.revision_height());
 
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u64 };
-        let dummy_target_height = RollupHeight {
-            slot_number: (celestia_latest_height.revision_height() - sovereign_client_state.sovereign_params.genesis_da_height.revision_height()) as u64,
-        };
+
+        let dummy_target_height = sovereign_chain.query_chain_height().await?;
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(

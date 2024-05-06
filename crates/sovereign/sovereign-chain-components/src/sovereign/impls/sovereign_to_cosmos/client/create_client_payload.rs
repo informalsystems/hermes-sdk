@@ -44,29 +44,41 @@ where
         //let chain_id = chain.chain_id();
         //let latest_height = chain.query_chain_height().await?;
         let data_chain = chain.data_chain();
-        let height = data_chain
+        let da_latest_height = data_chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let height = chain_handle.query_latest_height().unwrap();
                 Ok(height)
             })
             .await
-            .map_err(|e| eyre!("Error querying latest height from DA chain: {e:?}"))?;
+            .map_err(|e| eyre!("Error querying latest height from DA chain: {e:?}"))?
+            .decrement()?; // FIXME: taking the previous height because of strange error.
 
-        let latest_height = Height::new(height.revision_number(), height.revision_height())
-            .map_err(|e| eyre!("Error creating new Height from queried height: {e}"))?
-            .sub(create_client_options.genesis_height.revision_height()) // dummy_sov_client_state's genesis height is 3; so rollup height is 3 less than data chain height.
-            .map_err(|e| eyre!("Error subtracting genesis height: {e}"))?;
+        let rollup_latest_height = Height::new(
+            da_latest_height.revision_number(),
+            da_latest_height.revision_height(),
+        )
+        .map_err(|e| eyre!("Error creating new Height from queried height: {e}"))?
+        .sub(
+            create_client_options
+                .sovereign_client_params
+                .genesis_da_height
+                .revision_height(),
+        )?;
+
+        let mut sovereign_client_params = create_client_options.sovereign_client_params.clone();
+        sovereign_client_params.latest_height = rollup_latest_height;
+
+        let host_consensus_state_query = QueryHostConsensusStateRequest {
+            height: QueryHeight::Specific(da_latest_height),
+        };
 
         let client_state = ClientState::new(
-            create_client_options.sovereign_client_params.clone(),
+            sovereign_client_params,
             create_client_options.tendermint_params_config.clone(),
         );
 
-        let host_consensus_state_query = QueryHostConsensusStateRequest {
-            height: QueryHeight::Specific(height),
-        };
-
-        let any_consensus_state = data_chain
+        let any_consensus_state = chain
+            .data_chain()
             .with_blocking_chain_handle(move |chain_handle| {
                 Ok(chain_handle
                     .query_host_consensus_state(host_consensus_state_query)
@@ -94,7 +106,7 @@ where
             client_state,
             consensus_state,
             code_hash,
-            latest_height,
+            latest_height: rollup_latest_height,
         })
     }
 }
