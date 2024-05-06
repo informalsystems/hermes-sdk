@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use cgp_core::CanRaiseError;
+use cgp_core::{Async, CanRaiseError};
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -9,15 +9,28 @@ use hermes_test_components::chain_driver::traits::governance::proposal_id::HasPr
 use serde::Deserialize;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerier;
+use crate::chain_driver::traits::proposal_status::{
+    GovernanceProposalStatusQuerier, ProvideProposalStatusType,
+};
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
 
-pub struct QueryGovernanceProposalStatusWithChainCommand;
-
-#[derive(Deserialize)]
-pub struct Response {
-    pub status: String,
+pub enum ProposalStatus {
+    DepositPeriod,
+    VotingPeriod,
+    Passed,
+    Rejected,
 }
+
+pub struct ProvideCosmosProposalStatusType;
+
+impl<ChainDriver> ProvideProposalStatusType<ChainDriver> for ProvideCosmosProposalStatusType
+where
+    ChainDriver: Async,
+{
+    type ProposalStatus = ProposalStatus;
+}
+
+pub struct QueryGovernanceProposalStatusWithChainCommand;
 
 impl<ChainDriver, Runtime> GovernanceProposalStatusQuerier<ChainDriver>
     for QueryGovernanceProposalStatusWithChainCommand
@@ -61,4 +74,9 @@ where
 
         Ok(response.status)
     }
+}
+
+#[derive(Deserialize)]
+struct Response {
+    status: String,
 }

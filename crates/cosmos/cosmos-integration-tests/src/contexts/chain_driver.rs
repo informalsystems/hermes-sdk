@@ -18,6 +18,7 @@ use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::Gover
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::{
     GovernanceProposalStatusPollerComponent, GovernanceProposalStatusQuerierComponent,
+    ProposalStatusTypeComponent,
 };
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
@@ -67,10 +68,11 @@ delegate_components! {
         [
             RandomAmountGeneratorComponent,
             ProposalIdTypeComponent,
+            ProposalStatusTypeComponent,
             GovernanceProposalStatusQuerierComponent,
+            GovernanceProposalStatusPollerComponent,
             GovernanceProposalDepositerComponent,
             GovernanceProposalVoterComponent,
-            GovernanceProposalStatusPollerComponent,
         ]:
             BaseCosmosChainDriverComponents,
         [

@@ -1,6 +1,11 @@
 use cgp_core::prelude::*;
 use hermes_test_components::chain_driver::traits::governance::proposal_id::HasProposalIdType;
 
+#[derive_component(ProposalStatusTypeComponent, ProvideProposalStatusType<ChainDriver>)]
+pub trait HasProposalStatusType: Async {
+    type ProposalStatus: Async;
+}
+
 #[derive_component(GovernanceProposalStatusQuerierComponent, GovernanceProposalStatusQuerier<ChainDriver>)]
 #[async_trait]
 pub trait CanQueryGovernanceProposalStatus: HasProposalIdType + HasErrorType {
