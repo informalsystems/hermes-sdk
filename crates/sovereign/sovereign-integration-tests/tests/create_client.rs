@@ -174,7 +174,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let sovereign_params = SovereignParamsConfig::builder()
             .genesis_da_height(rollup_genesis_da_height)
-            .latest_height(Height::min(0)) // dummy value; overwritten while by latest height while creating client payload
+            .latest_height(Height::min(0)) // dummy value; overwritten by rollup latest height while creating client payload
             .build();
 
         let tendermint_params = TendermintParamsConfig::builder().chain_id(celestia_chain_id.parse()?).build();
