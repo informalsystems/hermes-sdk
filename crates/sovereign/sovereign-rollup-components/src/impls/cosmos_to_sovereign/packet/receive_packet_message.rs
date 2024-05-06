@@ -2,8 +2,8 @@ use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
-use hermes_cosmos_chain_components::types::payloads::packet::CosmosReceivePacketPayload;
 use hermes_cosmos_chain_components::types::messages::packet::receive::CosmosReceivePacketMessage;
+use hermes_cosmos_chain_components::types::payloads::packet::CosmosReceivePacketPayload;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
