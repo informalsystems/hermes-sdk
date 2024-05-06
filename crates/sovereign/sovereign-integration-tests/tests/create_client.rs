@@ -24,9 +24,11 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::C
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
 use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
@@ -173,6 +175,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let _events = cosmos_chain.send_message(create_client_message).await?;
 
+        let tendermint_client_id = ClientId::from_str("07-tendermint-0").map_err(|e| eyre!("Failed to create a Client ID from string '7-tendermint-0': {e}"))?;
         let wasm_client_id = ClientId::from_str("08-wasm-0").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
 
         let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
@@ -250,9 +253,30 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let connection_init_message = <CosmosChain as CanBuildConnectionHandshakeMessages<SovereignChain>>::build_connection_open_init_message(cosmos_chain, &wasm_client_id, &sovereign_client_id, &options, connection_init_payload).await?;
 
-        let connection_init_event = cosmos_chain.send_message(connection_init_message).await?;
+        let events = cosmos_chain.send_message(connection_init_message).await?;
 
-        info!("{:#?}", connection_init_event);
+        info!("{:#?}", events);
+
+        let connection_init_event = events.into_iter()
+            .find_map(<CosmosChain as HasConnectionOpenInitEvent<CosmosChain>>::try_extract_connection_open_init_event)
+            .ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+
+        let connection_id = connection_init_event.connection_id;
+
+        info!("Connection id at Cosmos: {:#?}", connection_id);
+
+        let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
+
+        let cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
+
+        let connection_id = "connection-1".parse().unwrap();
+
+        let connection_try_payload = <CosmosChain as CanBuildConnectionHandshakePayloads<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &cosmos_height, &wasm_client_id, &connection_id).await?;
+        dbg!("Connection try payload", connection_try_payload);
+
+        // // TODO(rano): finish wiring for `impl CanBuildConnectionHandshakeMessages<CosmosChain> for SovereignChain`
+        // let connection_try_message = <SovereignChain as CanBuildConnectionHandshakeMessages<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
+        // let connection_try_event = sovereign_chain.send_message(connection_try_message).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
