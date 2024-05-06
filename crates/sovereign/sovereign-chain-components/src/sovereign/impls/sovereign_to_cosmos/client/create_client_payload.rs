@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use cgp_core::HasErrorType;
 use eyre::eyre;
 use eyre::Error as ReportError;
@@ -9,11 +7,10 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptionsType, HasCreateClientPayloadType,
 };
 use ibc::core::client::types::Height;
-use ibc::core::host::types::identifiers::ChainId;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{QueryHeight, QueryHostConsensusStateRequest};
 use ibc_relayer::consensus_state::AnyConsensusState;
-use sov_celestia_client::types::client_state::test_util::dummy_sov_client_state;
+use sov_celestia_client::types::client_state::ClientState;
 use sov_celestia_client::types::consensus_state::{SovTmConsensusState, TmConsensusParams};
 use sov_celestia_client::types::sovereign::SovereignConsensusParams;
 
@@ -57,13 +54,13 @@ where
 
         let latest_height = Height::new(height.revision_number(), height.revision_height())
             .map_err(|e| eyre!("Error creating new Height from queried height: {e}"))?
-            .sub(create_client_options.genesis_height) // dummy_sov_client_state's genesis height is 3; so rollup height is 3 less than data chain height.
+            .sub(create_client_options.genesis_height.revision_height()) // dummy_sov_client_state's genesis height is 3; so rollup height is 3 less than data chain height.
             .map_err(|e| eyre!("Error subtracting genesis height: {e}"))?;
 
-        let chain_id = ChainId::from_str(&create_client_options.chain_id).unwrap();
-
-        // returns with genesis_da_height: Height(0, 3)
-        let client_state = dummy_sov_client_state(chain_id, latest_height);
+        let client_state = ClientState::new(
+            create_client_options.sovereign_client_params.clone(),
+            create_client_options.tendermint_params_config.clone(),
+        );
 
         let host_consensus_state_query = QueryHostConsensusStateRequest {
             height: QueryHeight::Specific(height),
@@ -94,7 +91,7 @@ where
         let code_hash = create_client_options.code_hash.clone();
 
         Ok(SovereignCreateClientPayload {
-            client_state: client_state.clone(),
+            client_state,
             consensus_state,
             code_hash,
             latest_height,
