@@ -1,5 +1,8 @@
+use core::time::Duration;
+
+#[derive(Default, Clone, Debug)]
 pub struct SovereignInitConnectionOptions {
-    // TODO: fill in fields
+    pub delay_period: Duration,
 }
 
 pub struct SovereignConnectionOpenInitRollupPayload {
