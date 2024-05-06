@@ -25,5 +25,4 @@ tendermint-proto                        = { workspace = true }
 ibc-proto                               = { workspace = true }
 ibc                                     = { workspace = true, features = ["borsh","schema","serde"] }
 
-eyre                                    = { workspace = true }
 prost                                   = { workspace = true }

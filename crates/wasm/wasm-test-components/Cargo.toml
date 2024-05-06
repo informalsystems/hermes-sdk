@@ -1,0 +1,24 @@
+[package]
+name = "hermes-wasm-test-components"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Context-generic client components for communicating with a 08-wasm client enabled node
+"""
+
+[dependencies]
+cgp-core                                = { workspace = true }
+cgp-error-eyre                          = { workspace = true }
+hermes-cosmos-test-components           = { workspace = true }
+hermes-relayer-components               = { workspace = true }
+hermes-test-components                  = { workspace = true }
+hermes-runtime-components               = { workspace = true }
+
+toml                                    = { workspace = true }
+serde_json                              = { workspace = true }

@@ -1819,6 +1819,7 @@ dependencies = [
  "hermes-runtime",
  "hermes-runtime-components",
  "hermes-test-components",
+ "hermes-wasm-test-components",
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
@@ -2097,6 +2098,7 @@ dependencies = [
  "hermes-sovereign-test-components",
  "hermes-test-components",
  "hermes-wasm-client-components",
+ "hermes-wasm-test-components",
  "hex 0.4.3",
  "ibc-proto",
  "ibc-relayer",
@@ -2241,7 +2243,6 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cgp-error-eyre",
- "eyre",
  "hermes-cosmos-chain-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
@@ -2251,6 +2252,20 @@ dependencies = [
  "ibc-relayer-types",
  "prost",
  "tendermint-proto",
+]
+
+[[package]]
+name = "hermes-wasm-test-components"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cgp-error-eyre",
+ "hermes-cosmos-test-components",
+ "hermes-relayer-components",
+ "hermes-runtime-components",
+ "hermes-test-components",
+ "serde_json",
+ "toml 0.8.12",
 ]
 
 [[package]]
