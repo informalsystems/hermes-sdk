@@ -1,10 +1,6 @@
 use cgp_core::prelude::*;
-use hermes_test_components::chain_driver::traits::governance::proposal_id::HasProposalIdType;
-
-#[derive_component(ProposalStatusTypeComponent, ProvideProposalStatusType<ChainDriver>)]
-pub trait HasProposalStatusType: Async {
-    type ProposalStatus: Async;
-}
+use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
+use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 
 #[derive_component(GovernanceProposalStatusQuerierComponent, GovernanceProposalStatusQuerier<ChainDriver>)]
 #[async_trait]

@@ -1,5 +1,6 @@
 use alloc::collections::BTreeMap;
-use hermes_test_components::chain_driver::traits::governance::proposal_id::ProposalIdTypeComponent;
+use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
+use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::upload_client_code::WasmClientCodeUploaderComponent;
 use std::path::PathBuf;
@@ -18,7 +19,6 @@ use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::Gover
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::{
     GovernanceProposalStatusPollerComponent, GovernanceProposalStatusQuerierComponent,
-    ProposalStatusTypeComponent,
 };
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;

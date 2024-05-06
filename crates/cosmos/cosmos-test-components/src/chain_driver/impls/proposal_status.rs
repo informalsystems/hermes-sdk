@@ -4,14 +4,15 @@ use cgp_core::{Async, CanRaiseError};
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
+use hermes_test_components::chain::traits::proposal::types::proposal_status::{
+    HasProposalStatusType, ProvideProposalStatusType,
+};
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
-use hermes_test_components::chain_driver::traits::governance::proposal_id::HasProposalIdType;
 use serde::{Deserialize, Serialize};
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
-use crate::chain_driver::traits::proposal_status::{
-    GovernanceProposalStatusQuerier, HasProposalStatusType, ProvideProposalStatusType,
-};
+use crate::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerier;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
 
 #[derive(Deserialize, Serialize, Debug, PartialEq, Eq)]

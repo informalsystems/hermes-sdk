@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
+use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::types::amount::{AmountOf, HasAmountType};
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
-use hermes_test_components::chain_driver::traits::governance::proposal_id::HasProposalIdType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 #[derive_component(GovernanceProposalDepositerComponent, GovernanceProposalDepositer<ChainDriver>)]
