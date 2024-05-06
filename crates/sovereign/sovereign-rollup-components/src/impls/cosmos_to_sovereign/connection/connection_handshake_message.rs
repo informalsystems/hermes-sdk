@@ -42,13 +42,30 @@ where
         > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
 {
     async fn build_connection_open_init_message(
-        _chain: &Chain,
-        _client_id: &Chain::ClientId,
-        _counterparty_client_id: &Counterparty::ClientId,
-        _init_connection_options: &Chain::InitConnectionOptions,
-        _counterparty_payload: CosmosConnectionOpenInitPayload,
+        chain: &Chain,
+        client_id: &Chain::ClientId,
+        counterparty_client_id: &Counterparty::ClientId,
+        init_connection_options: &Chain::InitConnectionOptions,
+        counterparty_payload: CosmosConnectionOpenInitPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        todo!()
+        let CosmosConnectionOpenInitPayload { commitment_prefix } = counterparty_payload;
+
+        let SovereignInitConnectionOptions {
+            delay_period,
+            version,
+        } = init_connection_options;
+
+        let msg = CosmosConnectionOpenInitMessage {
+            client_id: client_id.to_owned(),
+            counterparty_client_id: counterparty_client_id.to_owned(),
+            counterparty_commitment_prefix: commitment_prefix,
+            version: version.to_owned(),
+            delay_period: delay_period.to_owned(),
+        };
+
+        let msg_any = msg.encode_protobuf(chain.get_default_signer());
+
+        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_try_message(
