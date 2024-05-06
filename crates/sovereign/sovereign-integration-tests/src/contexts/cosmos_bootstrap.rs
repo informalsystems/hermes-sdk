@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
+use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
 use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
 use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
 use hermes_wasm_test_components::traits::bootstrap::client_code_path::WasmClientCodePathGetter;
@@ -87,7 +88,7 @@ delegate_components! {
         ChainBuilderWithNodeConfigComponent:
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
-            BuildCosmosChainDriver,
+            BuildChainDriverAndInitWasmClient<BuildCosmosChainDriver>,
         CosmosGenesisConfigModifierComponent:
             ModifyWasmGenesisConfig<NoModifyGenesisConfig>,
         CometConfigModifierComponent:

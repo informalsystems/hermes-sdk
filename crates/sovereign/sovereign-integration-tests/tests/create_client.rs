@@ -13,8 +13,6 @@ use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptio
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
-use hermes_cosmos_test_components::chain::types::amount::Amount;
-use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
@@ -32,12 +30,8 @@ use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::chain_driver::traits::proposal::deposit::CanDepositProposal;
-use hermes_test_components::chain_driver::traits::proposal::poll_status::CanPollProposalStatus;
-use hermes_test_components::chain_driver::traits::proposal::vote::CanVoteProposal;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
-use hermes_wasm_test_components::traits::chain_driver::upload_client_code::CanUploadWasmClientCode;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -134,28 +128,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         let rollup_driver = sovereign_bootstrap
             .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, "test-rollup")
             .await?;
-
-        // Upload Wasm contract on Cosmos chain
-        cosmos_chain_driver.upload_wasm_client_code(
-            &wasm_client_code_path,
-            "sovereign-client",
-            "Sovereign Wasm Client",
-            &cosmos_chain_driver.validator_wallet,
-        ).await?;
-
-        cosmos_chain_driver.poll_proposal_status(&1, &ProposalStatus::DepositPeriod).await?;
-
-        cosmos_chain_driver.deposit_proposal(
-            &1,
-            &Amount::new(100000000, cosmos_chain_driver.genesis_config.staking_denom.clone()),
-            &cosmos_chain_driver.validator_wallet
-        ).await?;
-
-        cosmos_chain_driver.poll_proposal_status(&1, &ProposalStatus::VotingPeriod).await?;
-
-        cosmos_chain_driver.vote_proposal(&1, &cosmos_chain_driver.validator_wallet).await?;
-
-        cosmos_chain_driver.poll_proposal_status(&1, &ProposalStatus::Passed).await?;
 
         let sovereign_chain = SovereignChain {
             runtime: runtime.clone(),
