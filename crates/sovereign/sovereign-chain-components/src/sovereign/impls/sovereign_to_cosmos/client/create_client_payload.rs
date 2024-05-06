@@ -50,8 +50,7 @@ where
                 Ok(height)
             })
             .await
-            .map_err(|e| eyre!("Error querying latest height from DA chain: {e:?}"))?
-            .decrement()?; // FIXME: taking the previous height because of strange error.
+            .map_err(|e| eyre!("Error querying latest height from DA chain: {e:?}"))?;
 
         let rollup_latest_height = Height::new(
             da_latest_height.revision_number(),
