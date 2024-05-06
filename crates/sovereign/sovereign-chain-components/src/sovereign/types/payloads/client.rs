@@ -22,8 +22,6 @@ pub struct SovereignUpdateClientPayload {
 }
 
 pub struct SovereignCreateClientOptions {
-    //pub chain_id: String,
-    // pub genesis_height: Height, // TODO: Maybe use Height or RollupHeight depending on value queried
     pub tendermint_params_config: TendermintClientParams,
     pub sovereign_client_params: SovereignClientParams,
     pub code_hash: Vec<u8>,

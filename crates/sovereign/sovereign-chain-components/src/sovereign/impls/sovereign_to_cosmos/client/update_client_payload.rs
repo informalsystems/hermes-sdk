@@ -52,39 +52,58 @@ where
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
         // DA height is higher than rollup height. This requires adding
         // the genesis Height to the trusted and target Heights
-        let tm_trusted_height = Height::new(
-            0,
+        let da_trusted_height = Height::new(
+            client_state
+                .sovereign_params
+                .latest_height
+                .revision_number(),
             trusted_height.slot_number
                 + client_state
                     .sovereign_params
                     .genesis_da_height
                     .revision_height(),
         )
-        .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
-        let tm_target_height = Height::new(
-            0,
+        .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+        let da_target_height = Height::new(
+            client_state
+                .sovereign_params
+                .latest_height
+                .revision_number(),
             target_height.slot_number
                 + client_state
                     .sovereign_params
                     .genesis_da_height
                     .revision_height(),
         )
-        .map_err(|e| eyre!("Error creating Tendermint Height: {e}"))?;
-        let da_trusted_height = DataChainHeight::new(0, trusted_height.slot_number)
-            .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
-        let da_target_height = DataChainHeight::new(0, target_height.slot_number)
-            .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+        .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+        let rollup_trusted_height = DataChainHeight::new(
+            client_state
+                .sovereign_params
+                .latest_height
+                .revision_number(),
+            trusted_height.slot_number,
+        )
+        .map_err(|e| eyre!("Error creating Rollup trusted Height: {e}"))?;
+        let rollup_target_height = DataChainHeight::new(
+            client_state
+                .sovereign_params
+                .latest_height
+                .revision_number(),
+            target_height.slot_number,
+        )
+        .map_err(|e| eyre!("Error creating Rollup target Height: {e}"))?;
 
         let data_chain = chain.data_chain();
 
-        let da_client_state = convert_tm_params_to_client_state(&client_state.da_params)?;
+        let da_client_state =
+            convert_tm_params_to_client_state(&client_state.da_params, &da_target_height)?;
 
         let headers = data_chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let (header, support) = chain_handle
                     .build_header(
-                        tm_trusted_height,
-                        tm_target_height,
+                        da_trusted_height,
+                        da_target_height,
                         AnyClientState::Tendermint(da_client_state),
                     )
                     .unwrap();
@@ -118,8 +137,8 @@ where
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: headers,
-            initial_state_height: da_trusted_height,
-            final_state_height: da_target_height,
+            initial_state_height: rollup_trusted_height,
+            final_state_height: rollup_target_height,
         })
     }
 }
@@ -132,9 +151,8 @@ where
 /// See issue: https://github.com/informalsystems/hermes-sdk/issues/204
 fn convert_tm_params_to_client_state(
     tm_params: &TendermintClientParams,
+    da_target_height: &Height,
 ) -> Result<TendermintClientState, ReportError> {
-    let dummy_latest_height =
-        Height::new(0, 10).map_err(|e| eyre!("Error creating dummy Height: {e}"))?;
     let relayer_chain_id = RelayerChainId::from_str(&tm_params.chain_id.to_string())
         .map_err(|e| eyre!("Error converting ChainId to Relayer Chain Id: {e}"))?;
     let relayer_trust_threshold = RelayerTrustThreshold::new(
@@ -150,7 +168,7 @@ fn convert_tm_params_to_client_state(
         trusting_period: Duration::from_secs(300),
         unbonding_period: tm_params.unbonding_period,
         max_clock_drift: tm_params.max_clock_drift,
-        latest_height: dummy_latest_height,
+        latest_height: *da_target_height,
         proof_specs: ProofSpecs::default(),
         upgrade_path: vec![],
         allow_update: AllowUpdate {

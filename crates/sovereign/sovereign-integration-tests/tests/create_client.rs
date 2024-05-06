@@ -166,10 +166,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
             rollup: rollup_driver.rollup,
         };
 
-        let genesis_height = rollup_driver.node_config.runner.genesis_height;
-
-        info!("genesis height: {genesis_height}");
-
         let rollup_genesis_da_height = Height::new(0, rollup_driver.node_config.runner.genesis_height)?;
 
         let sovereign_params = SovereignParamsConfig::builder()
@@ -180,8 +176,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         let tendermint_params = TendermintParamsConfig::builder().chain_id(celestia_chain_id.parse()?).build();
 
         let sovereign_create_client_options = SovereignCreateClientOptions {
-            //chain_id: celestia_chain_id.to_string(), // needs DA's chain ID
-            // genesis_height: rollup_height, // TODO: use queried value for genesis height
             tendermint_params_config: tendermint_params,
             sovereign_client_params: sovereign_params,
             code_hash: wasm_code_hash.into(),
@@ -219,23 +213,21 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let wasm_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCounterparty>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
 
-        info!("sovereign_client_state.sovereign_params.genesis_da_height.revision_height(): {}", sovereign_client_state.sovereign_params.genesis_da_height.revision_height());
-
-        let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u64 };
+        let trusted_rollup_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u64 };
 
         // // FIXME: currently, sovereign rollup height is returned with +1.
         // let dummy_target_height = sovereign_chain.query_chain_height().await?;
 
         // Computing sovereign height from DA height.
         let da_latest_height = sovereign_chain.data_chain.query_chain_height().await?;
-        let dummy_target_height = RollupHeight { slot_number: da_latest_height.revision_height() - sovereign_client_state.sovereign_params.genesis_da_height.revision_height()};
+        let target_rollup_height = RollupHeight { slot_number: da_latest_height.revision_height() - sovereign_client_state.sovereign_params.genesis_da_height.revision_height()};
 
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
             &sovereign_chain,
-            &dummy_trusted_height,
-            &dummy_target_height,
+            &trusted_rollup_height,
+            &target_rollup_height,
             sovereign_client_state
         ).await?;
 
@@ -246,8 +238,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         ).await?;
 
         for update_message in update_client_messages.into_iter() {
-            let events = cosmos_chain.send_message(update_message).await?;
-            info!("events: {events:#?}");
+            cosmos_chain.send_message(update_message).await?;
         }
 
         let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
