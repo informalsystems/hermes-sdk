@@ -1,11 +1,11 @@
-use cgp_core::HasErrorType;
-use eyre::eyre;
-use eyre::Error as ReportError;
+use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientOptionsType, HasCreateClientPayloadType,
 };
+use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{QueryHeight, QueryHostConsensusStateRequest};
@@ -14,7 +14,8 @@ use sov_celestia_client::types::client_state::ClientState;
 use sov_celestia_client::types::consensus_state::{SovTmConsensusState, TmConsensusParams};
 use sov_celestia_client::types::sovereign::SovereignConsensusParams;
 
-use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
+use crate::sovereign::traits::chain::data_chain::HasDataChain;
+use crate::sovereign::traits::chain::rollup::HasRollup;
 use crate::sovereign::types::payloads::client::{
     SovereignCreateClientOptions, SovereignCreateClientPayload,
 };
@@ -25,24 +26,39 @@ use crate::sovereign::types::payloads::client::{
 */
 pub struct BuildSovereignCreateClientPayload;
 
-impl<Chain, Counterparty, DataChain> CreateClientPayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Rollup, DataChain> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildSovereignCreateClientPayload
 where
-    Chain: HasCreateClientOptionsType<Counterparty, CreateClientOptions = SovereignCreateClientOptions>
+    Chain: HasRollup<Rollup = Rollup>
+        + HasDataChain<DataChain = DataChain>
+        + HasCreateClientOptionsType<Counterparty, CreateClientOptions = SovereignCreateClientOptions>
         + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
-        + HasDataChain
-        + HasDataChainType<DataChain = DataChain>
-        + HasErrorType<Error = ReportError>, // TODO: Add chain dependencies for create client payload here
-    Chain::DataChain: HasErrorType + HasBlockingChainHandle,
+        + CanRaiseError<Rollup::Error>,
+    Rollup: CanQueryChainHeight<Height = RollupHeight>,
+    DataChain: HasBlockingChainHandle,
 {
     async fn build_create_client_payload(
         chain: &Chain,
         create_client_options: &SovereignCreateClientOptions,
     ) -> Result<SovereignCreateClientPayload, Chain::Error> {
-        // TODO: This will be replaced by data queried from the Roll-Up
+        // Build client state
+        let rollup_height = chain
+            .rollup()
+            .query_chain_height()
+            .await
+            .map_err(Chain::raise_error)?;
 
-        //let chain_id = chain.chain_id();
-        //let latest_height = chain.query_chain_height().await?;
+        let latest_height = Height::new(0, rollup_height.slot_number).unwrap();
+
+        let mut sovereign_client_params = create_client_options.sovereign_client_params.clone();
+        sovereign_client_params.latest_height = latest_height;
+
+        let client_state = ClientState::new(
+            sovereign_client_params,
+            create_client_options.tendermint_params_config.clone(),
+        );
+
+        // Build consensus state
         let data_chain = chain.data_chain();
         let da_latest_height = data_chain
             .with_blocking_chain_handle(move |chain_handle| {
@@ -50,31 +66,11 @@ where
                 Ok(height)
             })
             .await
-            .map_err(|e| eyre!("Error querying latest height from DA chain: {e:?}"))?;
-
-        let rollup_latest_height = Height::new(
-            da_latest_height.revision_number(),
-            da_latest_height.revision_height(),
-        )
-        .map_err(|e| eyre!("Error creating new Height from queried height: {e}"))?
-        .sub(
-            create_client_options
-                .sovereign_client_params
-                .genesis_da_height
-                .revision_height(),
-        )?;
-
-        let mut sovereign_client_params = create_client_options.sovereign_client_params.clone();
-        sovereign_client_params.latest_height = rollup_latest_height;
+            .unwrap();
 
         let host_consensus_state_query = QueryHostConsensusStateRequest {
             height: QueryHeight::Specific(da_latest_height),
         };
-
-        let client_state = ClientState::new(
-            sovereign_client_params,
-            create_client_options.tendermint_params_config.clone(),
-        );
 
         let any_consensus_state = chain
             .data_chain()
@@ -84,7 +80,7 @@ where
                     .unwrap())
             })
             .await
-            .map_err(|e| eyre!("Error host consensus state from DA chain: {e:?}"))?;
+            .unwrap();
 
         let AnyConsensusState::Tendermint(tm_consensus_state) = any_consensus_state else {
             panic!("Expected Tendermint consensus state");
@@ -99,13 +95,15 @@ where
 
         let consensus_state = SovTmConsensusState::new(sovereign_params, tendermint_params);
 
+        // Retrieve code hash
         let code_hash = create_client_options.code_hash.clone();
 
+        // Build Create client payload
         Ok(SovereignCreateClientPayload {
             client_state,
             consensus_state,
             code_hash,
-            latest_height: rollup_latest_height,
+            latest_height,
         })
     }
 }

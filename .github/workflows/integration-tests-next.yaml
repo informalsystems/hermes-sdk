@@ -90,7 +90,7 @@ jobs:
       - name: Retrieve Wasm file path
         id: wasm-file
         run: |
-            echo "WASM_FILE_PATH=$(nix build .#sov-celestia-cw --print-out-paths)/sov_celestia_client_cw.wasm" >> "$GITHUB_OUTPUT"
+            echo "WASM_FILE_PATH=$(nix build .#sov-celestia-cw --print-out-paths --no-link)/sov_celestia_client_cw.wasm" >> "$GITHUB_OUTPUT"
       - name: run integration tests
         env:
           CHAIN_COMMAND_PATHS: simd
@@ -98,7 +98,7 @@ jobs:
           RUST_BACKTRACE: 1
           CARGO_NET_GIT_FETCH_WITH_CLI: true
         run: |
-            nix shell .#cargo-nextest .#protobuf .#ibc-go-v7-wasm-simapp .#celestia-app .#celestia-node .#sovereign-rollup .#sov-celestia-cw -c \
+            nix shell .#cargo-nextest .#protobuf .#ibc-go-v7-wasm-simapp .#celestia-app .#celestia-node .#sovereign-rollup -c \
               cargo nextest run -p hermes-sovereign-integration-tests \
               --test-threads=2 \
               --failure-output final

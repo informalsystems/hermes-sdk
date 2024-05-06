@@ -37,8 +37,10 @@ use hermes_sovereign_chain_components::sovereign::components::{
     IsSovereignChainClientComponent, SovereignChainClientComponents,
 };
 use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
-    DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
-    ProvideDataChainType,
+    DataChainGetter, HasDataChain, ProvideDataChainType,
+};
+use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
+    ProvideRollupType, RollupGetter,
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
 use hermes_sovereign_chain_components::sovereign::types::consensus_state::SovereignConsensusState;
@@ -70,30 +72,11 @@ delegate_all!(
     SovereignChainComponents,
 );
 
-pub struct SovereignDataChainType;
-
-impl<Chain> ProvideDataChainType<Chain> for SovereignDataChainType
-where
-    Chain: Async,
-{
-    type DataChain = CosmosChain;
-}
-
-impl DataChainGetter<SovereignChain> for SovereignDataChainType {
-    fn data_chain(chain: &SovereignChain) -> &CosmosChain {
-        &chain.data_chain
-    }
-}
-
 delegate_components! {
     SovereignChainComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
-        [
-            DataChainTypeComponent,
-            DataChainGetterComponent,
-        ]: SovereignDataChainType,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,
@@ -106,6 +89,26 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             ProvideSovereignLogger,
+    }
+}
+
+impl ProvideDataChainType<SovereignChain> for SovereignChainComponents {
+    type DataChain = CosmosChain;
+}
+
+impl DataChainGetter<SovereignChain> for SovereignChainComponents {
+    fn data_chain(chain: &SovereignChain) -> &CosmosChain {
+        &chain.data_chain
+    }
+}
+
+impl ProvideRollupType<SovereignChain> for SovereignChainComponents {
+    type Rollup = SovereignRollup;
+}
+
+impl RollupGetter<SovereignChain> for SovereignChainComponents {
+    fn rollup(chain: &SovereignChain) -> &SovereignRollup {
+        &chain.rollup
     }
 }
 

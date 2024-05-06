@@ -126,6 +126,8 @@ use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmou
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
+use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
+use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
 use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
@@ -293,6 +295,8 @@ delegate_components! {
             DenomTypeComponent,
             AddressTypeComponent,
             MemoTypeComponent,
+            ProposalIdTypeComponent,
+            ProposalStatusTypeComponent,
             DefaultMemoGetterComponent,
             TokenIbcTransferrerComponent,
             IbcTransferTimeoutCalculatorComponent,
