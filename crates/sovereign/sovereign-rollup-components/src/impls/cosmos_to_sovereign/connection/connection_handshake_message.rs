@@ -106,12 +106,34 @@ where
     }
 
     async fn build_connection_open_ack_message(
-        _chain: &Chain,
-        _connection_id: &Chain::ConnectionId,
-        _counterparty_connection_id: &Counterparty::ConnectionId,
-        _counterparty_payload: CosmosConnectionOpenAckPayload,
+        chain: &Chain,
+        connection_id: &Chain::ConnectionId,
+        counterparty_connection_id: &Counterparty::ConnectionId,
+        counterparty_payload: CosmosConnectionOpenAckPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        todo!()
+        let CosmosConnectionOpenAckPayload {
+            client_state,
+            version,
+            update_height,
+            proof_try,
+            proof_client,
+            proof_consensus,
+        } = counterparty_payload;
+
+        let msg = CosmosConnectionOpenAckMessage {
+            connection_id: connection_id.to_owned(),
+            counterparty_connection_id: counterparty_connection_id.to_owned(),
+            client_state: client_state.into(),
+            version,
+            update_height,
+            proof_try,
+            proof_client,
+            proof_consensus,
+        };
+
+        let msg_any = msg.encode_protobuf(chain.get_default_signer());
+
+        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_confirm_message(
