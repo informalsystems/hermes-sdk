@@ -36,6 +36,7 @@ use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
+use tokio::time::sleep;
 use tracing::info;
 
 #[tracing::instrument]
@@ -104,6 +105,10 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
     };
 
     tokio_runtime.block_on(async move {
+        let cosmos_chain_driver = cosmos_bootstrap.bootstrap_chain("cosmos-1").await?;
+
+        let cosmos_chain = cosmos_chain_driver.chain();
+
         let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
 
         let celestia_chain = celestia_chain_driver.chain();
@@ -123,10 +128,6 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             data_chain: celestia_chain.clone(),
             rollup: rollup.clone(),
         };
-
-        let cosmos_chain_driver = cosmos_bootstrap.bootstrap_chain("cosmos-1").await?;
-
-        let cosmos_chain = cosmos_chain_driver.chain();
 
         // Create Sovereign client on Cosmos chain
         let create_client_payload = <SovereignChain as CanBuildCreateClientPayload<CosmosChain>>::build_create_client_payload(
@@ -149,7 +150,12 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() };
 
+        // Wait for the rollup to progress before we build the update client for the next height
+        sleep(Duration::from_secs(1)).await;
+
         let target_height = rollup.query_chain_height().await?;
+
+        println!("trusted height: {trusted_height}, target height: {target_height}");
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
