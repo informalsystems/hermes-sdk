@@ -1,4 +1,6 @@
 use cgp_core::HasErrorType;
+use hermes_cosmos_chain_components::traits::message::DynCosmosMessage;
+use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
 use hermes_cosmos_chain_components::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
@@ -8,9 +10,9 @@ use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_proto::google::protobuf::Any;
+use hermes_relayer_components::transaction::traits::default_signer::HasDefaultSigner;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use prost::{Message, Name};
+use ibc_relayer_types::signer::Signer;
 
 use crate::types::message::SovereignMessage;
 use crate::types::messages::ibc::IbcMessage;
