@@ -6,7 +6,7 @@ use hermes_test_components::chain_driver::traits::proposal::poll_status::Proposa
 use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
 use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
-use hermes_wasm_test_components::traits::upload_client_code::WasmClientCodeUploaderComponent;
+use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;

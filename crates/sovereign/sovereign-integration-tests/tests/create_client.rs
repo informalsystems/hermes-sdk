@@ -1,6 +1,7 @@
 #![recursion_limit = "256"]
 use core::time::Duration;
 use std::env::var;
+use std::path::PathBuf;
 use std::str::FromStr;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -36,7 +37,7 @@ use hermes_test_components::chain_driver::traits::proposal::poll_status::CanPoll
 use hermes_test_components::chain_driver::traits::proposal::vote::CanVoteProposal;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
-use hermes_wasm_test_components::traits::upload_client_code::CanUploadWasmClientCode;
+use hermes_wasm_test_components::traits::chain_driver::upload_client_code::CanUploadWasmClientCode;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -69,6 +70,9 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
     let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
 
+    let wasm_client_code_path =
+        PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
+
     // TODO: load parameters from environment variables
     let cosmos_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
         runtime: runtime.clone(),
@@ -79,6 +83,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         account_prefix: "sov".into(),
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
+        wasm_client_code_path: wasm_client_code_path.clone(),
     });
 
     let celestia_bootstrap = CelestiaBootstrap {
@@ -100,8 +105,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         trusting_period: None,
         trust_threshold: TrustThreshold::ONE_THIRD,
     });
-
-    let wasm_client_code_path = var("WASM_FILE_PATH").expect("Wasm file is required").into();
 
     let wasm_client_bytes = std::fs::read(&wasm_client_code_path)?;
 

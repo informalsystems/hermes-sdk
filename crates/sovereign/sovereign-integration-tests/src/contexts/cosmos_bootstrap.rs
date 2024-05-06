@@ -3,6 +3,7 @@ use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
 use hermes_wasm_test_components::impls::genesis_config::ModifyWasmGenesisConfig;
 use hermes_wasm_test_components::impls::node_config::ModifyWasmNodeConfig;
+use hermes_wasm_test_components::traits::bootstrap::client_code_path::WasmClientCodePathGetter;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -53,6 +54,7 @@ pub struct CosmosWithWasmClientBootstrap {
     pub account_prefix: String,
     pub staking_denom: String,
     pub transfer_denom: String,
+    pub wasm_client_code_path: PathBuf,
 }
 
 impl CanUseCosmosSdkChainBootstrapper for CosmosWithWasmClientBootstrap {}
@@ -164,5 +166,13 @@ impl CosmosBuilderGetter<CosmosWithWasmClientBootstrap>
 {
     fn cosmos_builder(bootstrap: &CosmosWithWasmClientBootstrap) -> &CosmosBuilder {
         &bootstrap.builder
+    }
+}
+
+impl WasmClientCodePathGetter<CosmosWithWasmClientBootstrap>
+    for CosmosWithWasmClientBootstrapComponents
+{
+    fn wasm_client_code_path(bootstrap: &CosmosWithWasmClientBootstrap) -> &PathBuf {
+        &bootstrap.wasm_client_code_path
     }
 }

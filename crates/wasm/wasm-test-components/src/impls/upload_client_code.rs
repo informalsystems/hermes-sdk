@@ -13,7 +13,7 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 
-use crate::traits::upload_client_code::WasmClientCodeUploader;
+use crate::traits::chain_driver::upload_client_code::WasmClientCodeUploader;
 
 pub struct UploadWasmClientCodeWithChainCommand;
 
