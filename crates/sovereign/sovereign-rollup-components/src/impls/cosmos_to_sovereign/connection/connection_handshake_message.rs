@@ -58,8 +58,6 @@ where
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: CosmosConnectionOpenTryPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        // TODO(rano): finish connection open try message
-
         let CosmosConnectionOpenTryPayload {
             commitment_prefix,
             client_state,
