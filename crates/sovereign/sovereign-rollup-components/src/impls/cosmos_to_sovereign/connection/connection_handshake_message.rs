@@ -137,10 +137,23 @@ where
     }
 
     async fn build_connection_open_confirm_message(
-        _chain: &Chain,
-        _connection_id: &Chain::ConnectionId,
-        _counterparty_payload: CosmosConnectionOpenConfirmPayload,
+        chain: &Chain,
+        connection_id: &Chain::ConnectionId,
+        counterparty_payload: CosmosConnectionOpenConfirmPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        todo!()
+        let CosmosConnectionOpenConfirmPayload {
+            update_height,
+            proof_ack,
+        } = counterparty_payload;
+
+        let msg = CosmosConnectionOpenConfirmMessage {
+            connection_id: connection_id.to_owned(),
+            update_height,
+            proof_ack,
+        };
+
+        let msg_any = msg.encode_protobuf(chain.get_default_signer());
+
+        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 }
