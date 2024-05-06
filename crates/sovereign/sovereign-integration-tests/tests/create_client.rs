@@ -223,7 +223,13 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         let dummy_trusted_height = RollupHeight { slot_number: wasm_client_state.latest_height.revision_height() as u64 };
 
-        let dummy_target_height = sovereign_chain.query_chain_height().await?;
+        // // FIXME: currently, sovereign rollup height is returned with +1.
+        // let dummy_target_height = sovereign_chain.query_chain_height().await?;
+
+        // Computing sovereign height from DA height.
+        let da_latest_height = sovereign_chain.data_chain.query_chain_height().await?;
+        let dummy_target_height = RollupHeight { slot_number: da_latest_height.revision_height() - sovereign_client_state.sovereign_params.genesis_da_height.revision_height()};
+
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(

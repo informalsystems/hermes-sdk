@@ -1,6 +1,5 @@
 use ibc::clients::tendermint::types::Header;
 use ibc::core::client::types::Height;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use sov_celestia_client::types::client_state::TendermintClientParams;
 use sov_celestia_client::types::consensus_state::SovTmConsensusState;
 use sov_celestia_client::types::sovereign::SovereignClientParams;
