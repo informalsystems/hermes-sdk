@@ -29,7 +29,8 @@ where
             Message = SovereignMessage,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasErrorType,
+        > + HasDefaultSigner<Signer = Signer>
+        + HasErrorType,
     Counterparty: HasConnectionHandshakePayloadTypes<
             Chain,
             ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload,
