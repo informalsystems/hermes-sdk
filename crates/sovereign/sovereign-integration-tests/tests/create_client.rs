@@ -14,7 +14,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_test_components::chain::types::amount::Amount;
-use hermes_cosmos_test_components::chain_driver::impls::proposal_status::ProposalStatus;
+use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::deposit_proposal::CanDepositProposal;
 use hermes_cosmos_test_components::chain_driver::traits::proposal_status::CanPollProposalStatus;
 use hermes_cosmos_test_components::chain_driver::traits::vote_proposal::CanVoteProposal;

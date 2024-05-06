@@ -9,26 +9,12 @@ use hermes_test_components::chain::traits::proposal::types::proposal_status::{
     HasProposalStatusType, ProvideProposalStatusType,
 };
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
+use crate::chain::types::proposal_status::ProposalStatus;
 use crate::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerier;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
-
-#[derive(Deserialize, Serialize, Debug, PartialEq, Eq)]
-pub enum ProposalStatus {
-    #[serde(rename = "PROPOSAL_STATUS_DEPOSIT_PERIOD")]
-    DepositPeriod,
-
-    #[serde(rename = "PROPOSAL_STATUS_VOTING_PERIOD")]
-    VotingPeriod,
-
-    #[serde(rename = "PROPOSAL_STATUS_PASSED")]
-    Passed,
-
-    #[serde(rename = "PROPOSAL_STATUS_REJECTED")]
-    Rejected,
-}
 
 pub struct ProvideCosmosProposalStatusType;
 
