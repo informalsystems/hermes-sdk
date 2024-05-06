@@ -9,7 +9,6 @@ use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
@@ -26,6 +25,7 @@ use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientEvent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
+use hermes_sovereign_integration_tests::contexts::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
@@ -42,10 +42,8 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use serde_json::Value as JsonValue;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
-use toml::Value as TomlValue;
 use tracing::info;
 
 #[tracing::instrument]
@@ -72,7 +70,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
 
     // TODO: load parameters from environment variables
-    let bootstrap = Arc::new(CosmosBootstrap {
+    let cosmos_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
@@ -81,8 +79,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
         account_prefix: "sov".into(),
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
-        genesis_config_modifier: Box::new(modify_wasm_client_genesis),
-        comet_config_modifier: Box::new(modify_wasm_node_config),
     });
 
     let celestia_bootstrap = CelestiaBootstrap {
@@ -120,7 +116,7 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
     };
 
     tokio_runtime.block_on(async move {
-        let cosmos_chain_driver = bootstrap.bootstrap_chain("cosmos-1").await?;
+        let cosmos_chain_driver = cosmos_bootstrap.bootstrap_chain("cosmos-1").await?;
 
         let cosmos_chain = cosmos_chain_driver.chain();
 
@@ -260,62 +256,6 @@ pub fn test_create_sovereign_client_on_cosmos() -> Result<(), Error> {
 
         <Result<(), Error>>::Ok(())
     })?;
-
-    Ok(())
-}
-
-fn modify_wasm_node_config(config: &mut TomlValue) -> Result<(), Error> {
-    config
-        .get_mut("rpc")
-        .and_then(|rpc| rpc.as_table_mut())
-        .ok_or_else(|| eyre!("Failed to retrieve `rpc` in app configuration"))?
-        .insert(
-            "max_body_bytes".to_string(),
-            TomlValue::Integer(10001048576),
-        );
-
-    Ok(())
-}
-
-fn modify_wasm_client_genesis(genesis: &mut serde_json::Value) -> Result<(), Error> {
-    let max_deposit_period = genesis
-        .get_mut("app_state")
-        .and_then(|app_state| app_state.get_mut("gov"))
-        .and_then(|gov| gov.get_mut("params"))
-        .and_then(|deposit_params| deposit_params.as_object_mut())
-        .ok_or_else(|| eyre!("Failed to retrieve `deposit_params` in genesis configuration"))?;
-
-    max_deposit_period
-        .insert(
-            "max_deposit_period".to_owned(),
-            JsonValue::String("10s".to_owned()),
-        )
-        .ok_or_else(|| eyre!("Failed to update `max_deposit_period` in genesis configuration"))?;
-
-    let voting_period = genesis
-        .get_mut("app_state")
-        .and_then(|app_state| app_state.get_mut("gov"))
-        .and_then(|gov| gov.get_mut("params"))
-        .and_then(|voting_params| voting_params.as_object_mut())
-        .ok_or_else(|| eyre!("Failed to retrieve `voting_params` in genesis configuration"))?;
-
-    voting_period
-        .insert(
-            "voting_period".to_owned(),
-            serde_json::Value::String("10s".to_owned()),
-        )
-        .ok_or_else(|| eyre!("Failed to update `voting_period` in genesis configuration"))?;
-
-    let allowed_clients = genesis
-        .get_mut("app_state")
-        .and_then(|app_state| app_state.get_mut("ibc"))
-        .and_then(|ibc| ibc.get_mut("client_genesis"))
-        .and_then(|client_genesis| client_genesis.get_mut("params"))
-        .and_then(|params| params.get_mut("allowed_clients"))
-        .and_then(|allowed_clients| allowed_clients.as_array_mut())
-        .ok_or_else(|| eyre!("Failed to retrieve `allowed_clients` in genesis configuration"))?;
-
-    allowed_clients.push(JsonValue::String("08-wasm".to_string()));
 
     Ok(())
 }
