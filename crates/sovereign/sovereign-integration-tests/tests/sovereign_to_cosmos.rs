@@ -68,6 +68,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         .unwrap_or_else(|_| "node".to_string())
         .into();
 
+    let keep_nodes = var("KEEP_NODES")
+        .ok()
+        .map(|val| val.to_lowercase() == "true")
+        .unwrap_or(false);
+
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
 
@@ -227,6 +232,13 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         let connection_init_event = cosmos_chain.send_message(connection_init_message).await?;
 
         info!("{:#?}", connection_init_event);
+        if keep_nodes {
+            tracing::warn!("suspending the test indefinitely. you can still interact with any spawned chains by accessing information in `{:?}`", store_dir);
+
+            loop {
+                std::thread::sleep(Duration::from_secs(999_999_999))
+            }
+        }
 
         <Result<(), Error>>::Ok(())
     })?;
