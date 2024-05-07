@@ -5,6 +5,7 @@ use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideAnyRaw
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
@@ -61,6 +62,7 @@ use hermes_relayer_components::transaction::traits::types::tx_response::TxRespon
 
 use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
+use crate::impls::cosmos_to_sovereign::packet::ack_packet_message::BuildAckPacketMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
@@ -167,5 +169,7 @@ delegate_components! {
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,
+        AckPacketMessageBuilderComponent:
+            BuildAckPacketMessageOnSovereign,
     }
 }

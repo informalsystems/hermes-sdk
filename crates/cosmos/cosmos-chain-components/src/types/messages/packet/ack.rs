@@ -8,7 +8,7 @@ use ibc_relayer_types::Height;
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
 
-const TYPE_URL: &str = "/ibc.core.channel.v1.MsgAcknowledgement";
+pub const TYPE_URL: &str = "/ibc.core.channel.v1.MsgAcknowledgement";
 
 #[derive(Debug)]
 pub struct CosmosAckPacketMessage {

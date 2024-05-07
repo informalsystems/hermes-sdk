@@ -12,6 +12,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
+    AckPacketMessageBuilderComponent, CanBuildAckPacketMessage,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
@@ -225,6 +228,8 @@ delegate_components! {
 
             ConsensusStateHeightsQuerierComponent,
             ConsensusStateHeightQuerierComponent,
+
+            AckPacketMessageBuilderComponent,
         ]:
             SovereignRollupClientComponents,
         [
@@ -306,6 +311,7 @@ pub trait CanUseSovereignRollup:
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
+    + CanBuildAckPacketMessage<CosmosChain>
 where
     Self::Runtime: HasMutex,
 {
