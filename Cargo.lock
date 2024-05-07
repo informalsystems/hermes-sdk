@@ -2063,6 +2063,7 @@ dependencies = [
  "hex 0.4.3",
  "ibc",
  "ibc-proto",
+ "ibc-query",
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",
