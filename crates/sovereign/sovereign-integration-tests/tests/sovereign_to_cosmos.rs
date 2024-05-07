@@ -208,7 +208,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         };
 
         // Placeholder for Sovereign client ID
-        let sovereign_client_id = ClientId::from_str("07-tendermint-1").unwrap();
+        let sovereign_client_id = ClientId::from_str("07-tendermint-0").unwrap();
 
         // Assert that the connection Init fails with an invalid client
         {
@@ -237,6 +237,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         info!("Connection id at Cosmos: {:#?}", connection_id);
 
+        // fails as Sovereign doesn't have any client yet.
         let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
 
         let cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
