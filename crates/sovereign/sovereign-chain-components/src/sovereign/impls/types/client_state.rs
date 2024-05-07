@@ -27,7 +27,10 @@ where
 {
     fn client_state_latest_height(client_state: &SovereignClientState) -> RollupHeight {
         RollupHeight {
-            slot_number: client_state.latest_height.revision_height(),
+            slot_number: client_state
+                .sovereign_params
+                .latest_height
+                .revision_height(),
         }
     }
 
@@ -36,6 +39,6 @@ where
     }
 
     fn client_state_has_expired(client_state: &SovereignClientState, elapsed: Duration) -> bool {
-        elapsed > client_state.da_params.trusting_period
+        elapsed > client_state.sovereign_params.trusting_period
     }
 }

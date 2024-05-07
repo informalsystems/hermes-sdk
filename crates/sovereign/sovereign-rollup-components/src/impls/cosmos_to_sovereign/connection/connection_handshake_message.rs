@@ -1,5 +1,8 @@
+use cgp_core::HasErrorType;
+
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
+use hermes_cosmos_chain_components::traits::message::DynCosmosMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
@@ -16,8 +19,10 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc_relayer_types::signer::Signer;
 
 use crate::types::message::SovereignMessage;
+use crate::types::messages::ibc::IbcMessage;
 use crate::types::payloads::connection::SovereignInitConnectionOptions;
 
 pub struct BuildCosmosConnectionHandshakeMessageOnSovereign;
@@ -43,39 +48,30 @@ where
         > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
 {
     async fn build_connection_open_init_message(
-        chain: &Chain,
+        _chain: &Chain,
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &Chain::InitConnectionOptions,
         counterparty_payload: CosmosConnectionOpenInitPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let client_id = client_id.clone();
-        let counterparty_client_id = counterparty_client_id.clone();
-        let counterparty_commitment_prefix = counterparty_payload.commitment_prefix;
-        let delay_period = init_connection_options.delay_period;
+        let CosmosConnectionOpenInitPayload { commitment_prefix } = counterparty_payload;
 
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let versions = chain_handle
-                    .query_compatible_versions()
-                    .map_err(Chain::raise_error)?;
+        let SovereignInitConnectionOptions {
+            delay_period,
+            connection_version,
+        } = init_connection_options;
 
-                let version = versions.into_iter().next().unwrap_or_default();
+        let msg = CosmosConnectionOpenInitMessage {
+            client_id: client_id.to_owned(),
+            counterparty_client_id: counterparty_client_id.to_owned(),
+            counterparty_commitment_prefix: commitment_prefix,
+            version: connection_version.to_owned(),
+            delay_period: delay_period.to_owned(),
+        };
 
-                let message = CosmosConnectionOpenInitMessage {
-                    client_id,
-                    counterparty_client_id,
-                    counterparty_commitment_prefix,
-                    version,
-                    delay_period,
-                };
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
-                let cosmos_message = message.to_cosmos_message();
-                let sovereign_message: SovereignMessage = cosmos_message.into();
-
-                Ok(sovereign_message)
-            })
-            .await
+        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_try_message(
@@ -85,24 +81,34 @@ where
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: CosmosConnectionOpenTryPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let message = CosmosConnectionOpenTryMessage {
-            client_id: client_id.clone(),
-            counterparty_client_id: counterparty_client_id.clone(),
-            counterparty_connection_id: counterparty_connection_id.clone(),
-            counterparty_commitment_prefix: counterparty_payload.commitment_prefix.clone(),
-            counterparty_versions: counterparty_payload.versions,
-            delay_period: counterparty_payload.delay_period,
-            client_state: counterparty_payload.client_state.into(),
-            update_height: counterparty_payload.update_height,
-            proof_init: counterparty_payload.proof_init,
-            proof_client: counterparty_payload.proof_client,
-            proof_consensus: counterparty_payload.proof_consensus,
+        let CosmosConnectionOpenTryPayload {
+            commitment_prefix,
+            client_state,
+            versions,
+            delay_period,
+            update_height,
+            proof_init,
+            proof_client,
+            proof_consensus,
+        } = counterparty_payload;
+
+        let msg = CosmosConnectionOpenTryMessage {
+            client_id: client_id.to_owned(),
+            counterparty_client_id: counterparty_client_id.to_owned(),
+            counterparty_connection_id: counterparty_connection_id.to_owned(),
+            counterparty_commitment_prefix: commitment_prefix,
+            counterparty_versions: versions,
+            client_state: client_state.into(),
+            delay_period,
+            update_height,
+            proof_init,
+            proof_client,
+            proof_consensus,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
-        Ok(sovereign_message)
+        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_ack_message(
@@ -111,24 +117,29 @@ where
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: CosmosConnectionOpenAckPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let connection_id = connection_id.clone();
-        let counterparty_connection_id = counterparty_connection_id.clone();
+        let CosmosConnectionOpenAckPayload {
+            client_state,
+            version,
+            update_height,
+            proof_try,
+            proof_client,
+            proof_consensus,
+        } = counterparty_payload;
 
-        let message = CosmosConnectionOpenAckMessage {
-            connection_id,
-            counterparty_connection_id,
-            version: counterparty_payload.version,
-            client_state: counterparty_payload.client_state.into(),
-            update_height: counterparty_payload.update_height,
-            proof_try: counterparty_payload.proof_try,
-            proof_client: counterparty_payload.proof_client,
-            proof_consensus: counterparty_payload.proof_consensus,
+        let msg = CosmosConnectionOpenAckMessage {
+            connection_id: connection_id.to_owned(),
+            counterparty_connection_id: counterparty_connection_id.to_owned(),
+            client_state: client_state.into(),
+            version,
+            update_height,
+            proof_try,
+            proof_client,
+            proof_consensus,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
-        Ok(sovereign_message)
+        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_confirm_message(
@@ -136,15 +147,19 @@ where
         connection_id: &Chain::ConnectionId,
         counterparty_payload: CosmosConnectionOpenConfirmPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let message = CosmosConnectionOpenConfirmMessage {
-            connection_id: connection_id.clone(),
-            update_height: counterparty_payload.update_height,
-            proof_ack: counterparty_payload.proof_ack,
+        let CosmosConnectionOpenConfirmPayload {
+            update_height,
+            proof_ack,
+        } = counterparty_payload;
+
+        let msg = CosmosConnectionOpenConfirmMessage {
+            connection_id: connection_id.to_owned(),
+            update_height,
+            proof_ack,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
-        Ok(sovereign_message)
+        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 }

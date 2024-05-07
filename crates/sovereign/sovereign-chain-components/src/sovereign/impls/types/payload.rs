@@ -12,6 +12,7 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
+use hermes_sovereign_rollup_components::types::payloads::connection::SovereignInitConnectionOptions;
 
 use crate::sovereign::types::payloads::channel::{
     SovereignChannelOpenAckPayload, SovereignChannelOpenConfirmPayload,
@@ -23,7 +24,6 @@ use crate::sovereign::types::payloads::client::{
 use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
     SovereignConnectionOpenInitPayload, SovereignConnectionOpenTryPayload,
-    SovereignInitConnectionOptions,
 };
 use crate::sovereign::types::payloads::packet::{
     SovereignAckPacketPayload, SovereignReceivePacketPayload,

@@ -20,7 +20,7 @@ use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
-use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
+use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
@@ -72,11 +72,15 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         chain_store_dir: store_dir.join("chains"),
         bridge_store_dir: store_dir.join("bridges"),
     };
+    use std::env::var;
+    let node_binary = var("ROLLUP_PATH")
+        .unwrap_or_else(|_| "node".to_string())
+        .into();
 
     let sovereign_bootstrap = SovereignBootstrap {
         runtime: runtime.clone(),
         rollup_store_dir: store_dir.join("rollups"),
-        rollup_command_path: "node".into(),
+        rollup_command_path: node_binary,
         account_prefix: "sov".into(),
     };
 

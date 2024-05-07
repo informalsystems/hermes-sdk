@@ -73,8 +73,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SOVEREIGN_SDK_PRIVATE_SSH_KEY }}
       - uses: actions/checkout@v4
-        with:
-          lfs: true
       - uses: cachix/install-nix-action@v26
         with:
           extra_nix_config: |
@@ -89,11 +87,16 @@ jobs:
           toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@v2
+      - name: Retrieve Wasm file path
+        id: wasm-file
+        run: |
+            echo "WASM_FILE_PATH=$(nix build .#sov-celestia-cw --print-out-paths --no-link)/sov_celestia_client_cw.wasm" >> "$GITHUB_OUTPUT"
       - name: run integration tests
         env:
           CHAIN_COMMAND_PATHS: simd
-          WASM_CODE_HASH: 6431842a5a3d87702422d97907869ebbe7b721cbe281c96dda2768633f7bbe35
+          WASM_FILE_PATH: ${{ steps.wasm-file.outputs.WASM_FILE_PATH }}
           RUST_BACKTRACE: 1
+          CARGO_NET_GIT_FETCH_WITH_CLI: true
         run: |
             nix shell .#cargo-nextest .#protobuf .#ibc-go-v7-wasm-simapp .#celestia-app .#celestia-node .#sovereign-rollup -c \
               cargo nextest run -p hermes-sovereign-integration-tests \

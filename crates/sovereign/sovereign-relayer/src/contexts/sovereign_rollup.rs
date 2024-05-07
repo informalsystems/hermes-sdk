@@ -15,6 +15,11 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilderComponent, CanBuildAckPacketMessage,
 };
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    CanBuildChannelHandshakeMessages, ChannelHandshakeMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
@@ -38,10 +43,17 @@ use hermes_relayer_components::chain::traits::send_message::{
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
+use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::{
+    ConnectionHandshakePayloadTypeComponent, HasInitConnectionOptionsType,
+    InitConnectionOptionsTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::consensus_state::RawConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientEventComponent, HasCreateClientEvent,
+    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    HasCreateClientEvent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
@@ -50,6 +62,7 @@ use hermes_relayer_components::chain::traits::types::message::MessageTypeCompone
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::impls::retry::ReturnRetryable;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
@@ -197,6 +210,14 @@ delegate_components! {
 
             CreateClientEventComponent,
 
+            CreateClientOptionsTypeComponent,
+            CreateClientPayloadTypeComponent,
+            UpdateClientPayloadTypeComponent,
+            InitConnectionOptionsTypeComponent,
+            ConnectionHandshakePayloadTypeComponent,
+            InitChannelOptionsTypeComponent,
+            ChannelHandshakePayloadTypeComponent,
+
             NonceAllocatorComponent,
             MessageSenderComponent,
             MessagesWithSignerSenderComponent,
@@ -230,6 +251,9 @@ delegate_components! {
             ConsensusStateHeightQuerierComponent,
 
             AckPacketMessageBuilderComponent,
+
+            ConnectionHandshakeMessageBuilderComponent,
+            ChannelHandshakeMessageBuilderComponent,
         ]:
             SovereignRollupClientComponents,
         [
@@ -312,6 +336,9 @@ pub trait CanUseSovereignRollup:
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
+    + HasInitConnectionOptionsType<CosmosChain>
+    + CanBuildConnectionHandshakeMessages<CosmosChain>
+    + CanBuildChannelHandshakeMessages<CosmosChain>
 where
     Self::Runtime: HasMutex,
 {

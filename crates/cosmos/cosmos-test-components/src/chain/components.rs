@@ -7,6 +7,8 @@ use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmou
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
+use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
+use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
 use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
 use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
@@ -32,6 +34,7 @@ use crate::chain::impls::transfer::timeout::IbcTransferTimeoutAfterSeconds;
 use crate::chain::impls::types::address::ProvideStringAddress;
 use crate::chain::impls::types::amount::ProvideU128AmountWithDenom;
 use crate::chain::impls::types::denom::ProvideIbcDenom;
+use crate::chain::impls::types::proposal::ProvideCosmosProposalTypes;
 use crate::chain::impls::types::wallet::ProvideCosmosTestWallet;
 
 pub struct CosmmosChainTestComponents;
@@ -50,6 +53,11 @@ delegate_components! {
             AmountMethodsComponent,
         ]:
             ProvideU128AmountWithDenom,
+        [
+            ProposalIdTypeComponent,
+            ProposalStatusTypeComponent,
+        ]:
+            ProvideCosmosProposalTypes,
         DenomTypeComponent:
             ProvideIbcDenom,
         AddressTypeComponent:
