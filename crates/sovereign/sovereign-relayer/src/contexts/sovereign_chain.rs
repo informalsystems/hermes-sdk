@@ -10,6 +10,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
@@ -164,8 +165,7 @@ pub trait CanUseSovereignChain:
     + HasClientStateFields<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionHandshakePayloads<CosmosChain>
-// + CanBuildConnectionHandshakeMessages<CosmosChain>
-// + CanBuildChannelHandshakePayloads<CosmosChain>
+    + CanBuildConnectionHandshakeMessages<CosmosChain>
 {
 }
 
