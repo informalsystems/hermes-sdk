@@ -13,7 +13,6 @@ use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::transaction::traits::default_signer::HasDefaultSigner;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::signer::Signer;
 
@@ -34,8 +33,7 @@ where
             Message = SovereignMessage,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasDefaultSigner<Signer = Signer>
-        + HasErrorType,
+        > + HasErrorType,
     Counterparty: HasConnectionHandshakePayloadTypes<
             Chain,
             ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload,
@@ -45,7 +43,7 @@ where
         > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
 {
     async fn build_connection_open_init_message(
-        chain: &Chain,
+        _chain: &Chain,
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &Chain::InitConnectionOptions,
@@ -66,13 +64,13 @@ where
             delay_period: delay_period.to_owned(),
         };
 
-        let msg_any = msg.encode_protobuf(chain.get_default_signer());
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
         Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_try_message(
-        chain: &Chain,
+        _chain: &Chain,
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
@@ -103,13 +101,13 @@ where
             proof_consensus,
         };
 
-        let msg_any = msg.encode_protobuf(chain.get_default_signer());
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
         Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_ack_message(
-        chain: &Chain,
+        _chain: &Chain,
         connection_id: &Chain::ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         counterparty_payload: CosmosConnectionOpenAckPayload,
@@ -134,13 +132,13 @@ where
             proof_consensus,
         };
 
-        let msg_any = msg.encode_protobuf(chain.get_default_signer());
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
         Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
 
     async fn build_connection_open_confirm_message(
-        chain: &Chain,
+        _chain: &Chain,
         connection_id: &Chain::ConnectionId,
         counterparty_payload: CosmosConnectionOpenConfirmPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
@@ -155,7 +153,7 @@ where
             proof_ack,
         };
 
-        let msg_any = msg.encode_protobuf(chain.get_default_signer());
+        let msg_any = msg.encode_protobuf(&Signer::dummy());
 
         Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
     }
