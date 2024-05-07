@@ -53,14 +53,14 @@ where
 
         let SovereignInitConnectionOptions {
             delay_period,
-            version,
+            connection_version,
         } = init_connection_options;
 
         let msg = CosmosConnectionOpenInitMessage {
             client_id: client_id.to_owned(),
             counterparty_client_id: counterparty_client_id.to_owned(),
             counterparty_commitment_prefix: commitment_prefix,
-            version: version.to_owned(),
+            version: connection_version.to_owned(),
             delay_period: delay_period.to_owned(),
         };
 
