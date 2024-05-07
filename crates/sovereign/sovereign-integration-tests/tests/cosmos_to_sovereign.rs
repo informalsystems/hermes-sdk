@@ -72,11 +72,15 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         chain_store_dir: store_dir.join("chains"),
         bridge_store_dir: store_dir.join("bridges"),
     };
+    use std::env::var;
+    let node_binary = var("ROLLUP_PATH")
+        .unwrap_or_else(|_| "node".to_string())
+        .into();
 
     let sovereign_bootstrap = SovereignBootstrap {
         runtime: runtime.clone(),
         rollup_store_dir: store_dir.join("rollups"),
-        rollup_command_path: "node".into(),
+        rollup_command_path: node_binary,
         account_prefix: "sov".into(),
     };
 

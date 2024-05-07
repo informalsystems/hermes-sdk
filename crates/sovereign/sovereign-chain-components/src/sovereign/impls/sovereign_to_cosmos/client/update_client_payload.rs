@@ -55,7 +55,7 @@ where
         let da_trusted_height = Height::new(
             client_state
                 .sovereign_params
-                .latest_height
+                .genesis_da_height
                 .revision_number(),
             trusted_height.slot_number
                 + client_state
@@ -67,7 +67,7 @@ where
         let da_target_height = Height::new(
             client_state
                 .sovereign_params
-                .latest_height
+                .genesis_da_height
                 .revision_number(),
             target_height.slot_number
                 + client_state

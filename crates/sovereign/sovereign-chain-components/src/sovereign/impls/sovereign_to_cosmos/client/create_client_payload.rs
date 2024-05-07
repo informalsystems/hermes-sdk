@@ -10,6 +10,7 @@ use ibc::core::client::types::Height;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{QueryHeight, QueryHostConsensusStateRequest};
 use ibc_relayer::consensus_state::AnyConsensusState;
+use ibc_relayer_types::Height as RelayerHeight;
 use sov_celestia_client::types::client_state::ClientState;
 use sov_celestia_client::types::consensus_state::{SovTmConsensusState, TmConsensusParams};
 use sov_celestia_client::types::sovereign::SovereignConsensusParams;
@@ -59,14 +60,17 @@ where
         );
 
         // Build consensus state
-        let data_chain = chain.data_chain();
-        let da_latest_height = data_chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let height = chain_handle.query_latest_height().unwrap();
-                Ok(height)
-            })
-            .await
-            .unwrap();
+        // TODO: Once the + 1 is removed from crates/sovereign/sovereign-rollup-components/src/impls/queries/chain_status.rs
+        // this will need to be fixed by creating the da_latest_height with:
+        // rollup_height + genesis_da_height
+        let da_latest_height = RelayerHeight::new(
+            create_client_options
+                .sovereign_client_params
+                .genesis_da_height
+                .revision_number(),
+            rollup_height.slot_number,
+        )
+        .unwrap();
 
         let host_consensus_state_query = QueryHostConsensusStateRequest {
             height: QueryHeight::Specific(da_latest_height),

@@ -173,7 +173,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         // Wait for the rollup to progress before we build the update client for the next height
         sleep(Duration::from_secs(1)).await;
-        let target_height = rollup.query_chain_height().await?;
+
+        // // FIXME: currently, sovereign rollup height is returned with +1.
+        // Computing sovereign height from DA height.
+        let rollup_target_height = rollup.query_chain_height().await?;
+        let target_height = RollupHeight { slot_number: rollup_target_height.slot_number - sovereign_client_state.sovereign_params.genesis_da_height.revision_height()};
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
