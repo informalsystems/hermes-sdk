@@ -32,9 +32,12 @@ use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBo
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_wasm_client_components::contexts::wasm_counterparty::WasmCounterparty;
+use ibc::core::client::types::Height;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use sha2::{Digest, Sha256};
+use sov_celestia_client::types::client_state::test_util::TendermintParamsConfig;
+use sov_celestia_client::types::sovereign::SovereignParamsConfig;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 use tracing::info;
@@ -61,6 +64,9 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
     );
 
     let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
+    let node_binary = var("ROLLUP_PATH")
+        .unwrap_or_else(|_| "node".to_string())
+        .into();
 
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
@@ -88,7 +94,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
     let sovereign_bootstrap = SovereignBootstrap {
         runtime: runtime.clone(),
         rollup_store_dir: store_dir.join("rollups"),
-        rollup_command_path: "node".into(),
+        rollup_command_path: node_binary,
         account_prefix: "sov".into(),
     };
 
@@ -100,16 +106,14 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         hasher.finalize().into()
     };
 
-    let sovereign_create_client_options = SovereignCreateClientOptions {
-        code_hash: wasm_code_hash.into(),
-    };
-
     tokio_runtime.block_on(async move {
         let cosmos_chain_driver = cosmos_bootstrap.bootstrap_chain("cosmos-1").await?;
 
         let cosmos_chain = cosmos_chain_driver.chain();
 
-        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain("private").await?;
+        let celestia_chain_id = "private";
+
+        let celestia_chain_driver = celestia_bootstrap.bootstrap_chain(celestia_chain_id).await?;
 
         let celestia_chain = celestia_chain_driver.chain();
 
@@ -117,8 +121,10 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             .bootstrap_bridge(&celestia_chain_driver)
             .await?;
 
+        let rollup_id = "test-rollup";
+
         let rollup_driver = sovereign_bootstrap
-            .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, "test-rollup")
+            .bootstrap_rollup(&celestia_chain_driver, &bridge_driver, rollup_id)
             .await?;
 
         let rollup = rollup_driver.rollup;
@@ -127,6 +133,21 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             runtime: runtime.clone(),
             data_chain: celestia_chain.clone(),
             rollup: rollup.clone(),
+        };
+
+        let rollup_genesis_da_height = Height::new(0, rollup_driver.node_config.runner.genesis_height)?;
+
+        let sovereign_params = SovereignParamsConfig::builder()
+            .genesis_da_height(rollup_genesis_da_height)
+            .latest_height(Height::min(0)) // dummy value; overwritten by rollup latest height while creating client payload
+            .build();
+
+        let tendermint_params = TendermintParamsConfig::builder().chain_id(celestia_chain_id.parse()?).build();
+
+        let sovereign_create_client_options = SovereignCreateClientOptions {
+            tendermint_params_config: tendermint_params,
+            sovereign_client_params: sovereign_params,
+            code_hash: wasm_code_hash.into(),
         };
 
         // Create Sovereign client on Cosmos chain
@@ -153,9 +174,10 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         // Wait for the rollup to progress before we build the update client for the next height
         sleep(Duration::from_secs(1)).await;
 
-        let target_height = rollup.query_chain_height().await?;
-
-        println!("trusted height: {trusted_height}, target height: {target_height}");
+        // // FIXME: currently, sovereign rollup height is returned with +1.
+        // Computing sovereign height from DA height.
+        let rollup_target_height = rollup.query_chain_height().await?;
+        let target_height = RollupHeight { slot_number: rollup_target_height.slot_number - sovereign_client_state.sovereign_params.genesis_da_height.revision_height()};
 
         // Update Sovereign client state
         let update_client_payload = <SovereignChain as CanBuildUpdateClientPayload<CosmosChain>>::build_update_client_payload(
@@ -172,9 +194,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         ).await?;
 
         for update_message in update_client_messages.into_iter() {
-            // TODO: remove assertion once the dummy data used to update client is replaced with correct data
-            let events = cosmos_chain.send_message(update_message).await;
-            assert!(events.is_err(), "Client update will fail due to next validator set hash validation failure");
+            cosmos_chain.send_message(update_message).await?;
         }
 
         let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;

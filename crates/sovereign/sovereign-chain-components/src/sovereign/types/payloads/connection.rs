@@ -1,9 +1,5 @@
 use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentPrefix;
 
-pub struct SovereignInitConnectionOptions {
-    // TODO: fill in fields
-}
-
 pub struct SovereignConnectionOpenInitPayload {
     pub commitment_prefix: CommitmentPrefix,
 }
