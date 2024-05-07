@@ -22,6 +22,7 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::C
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
 use hermes_sovereign_integration_tests::contexts::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
@@ -243,10 +244,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         let connection_id = "connection-1".parse().unwrap();
 
         let connection_try_payload = <CosmosChain as CanBuildConnectionHandshakePayloads<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &cosmos_height, &wasm_client_id, &connection_id).await?;
-        dbg!("Connection try payload", connection_try_payload);
 
         let connection_try_message = <SovereignChain as CanBuildConnectionHandshakeMessages<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
         let connection_try_event = sovereign_chain.send_message(connection_try_message).await?;
+
+        info!("ConnectionTry event at Sovereign: {:#?}", connection_try_event);
 
         <Result<(), Error>>::Ok(())
     })?;
