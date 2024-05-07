@@ -208,7 +208,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         };
 
         // Placeholder for Sovereign client ID
-        let sovereign_client_id = ClientId::from_str("sovereign-1").unwrap();
+        let sovereign_client_id = ClientId::from_str("07-tendermint-1").unwrap();
 
         // Assert that the connection Init fails with an invalid client
         {
