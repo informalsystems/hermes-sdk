@@ -1,7 +1,4 @@
-use cgp_core::HasErrorType;
-
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_chain_components::traits::message::DynCosmosMessage;
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;

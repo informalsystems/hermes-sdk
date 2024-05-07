@@ -23,6 +23,12 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
+    CanBuildReceivePacketMessage, ReceivePacketMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, ChainStatusQuerierComponent,
@@ -251,6 +257,8 @@ delegate_components! {
             ConsensusStateHeightQuerierComponent,
 
             AckPacketMessageBuilderComponent,
+            ReceivePacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
 
             ConnectionHandshakeMessageBuilderComponent,
             ChannelHandshakeMessageBuilderComponent,
@@ -336,6 +344,8 @@ pub trait CanUseSovereignRollup:
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
+    + CanBuildReceivePacketMessage<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionHandshakeMessages<CosmosChain>
     + CanBuildChannelHandshakeMessages<CosmosChain>
