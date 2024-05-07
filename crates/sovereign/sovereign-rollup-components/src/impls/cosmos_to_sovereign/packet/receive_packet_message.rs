@@ -29,15 +29,15 @@ where
         packet: &Packet,
         payload: CosmosReceivePacketPayload,
     ) -> Result<SovereignMessage, Rollup::Error> {
-        let message = CosmosReceivePacketMessage {
+        let msg = CosmosReceivePacketMessage {
             packet: packet.clone(),
             update_height: payload.update_height,
             proof_commitment: payload.proof_commitment,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(sovereign_message)
+        Ok(sovereign_msg)
     }
 }

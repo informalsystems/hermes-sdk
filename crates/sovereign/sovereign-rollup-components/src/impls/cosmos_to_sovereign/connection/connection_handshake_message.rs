@@ -1,8 +1,8 @@
 use cgp_core::HasErrorType;
 
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::traits::message::DynCosmosMessage;
+use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
@@ -17,12 +17,9 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
-use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::signer::Signer;
 
 use crate::types::message::SovereignMessage;
-use crate::types::messages::ibc::IbcMessage;
 use crate::types::payloads::connection::SovereignInitConnectionOptions;
 
 pub struct BuildCosmosConnectionHandshakeMessageOnSovereign;
@@ -69,9 +66,10 @@ where
             delay_period: delay_period.to_owned(),
         };
 
-        let msg_any = msg.encode_protobuf(&Signer::dummy());
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
+        Ok(sovereign_msg)
     }
 
     async fn build_connection_open_try_message(
@@ -106,9 +104,10 @@ where
             proof_consensus,
         };
 
-        let msg_any = msg.encode_protobuf(&Signer::dummy());
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
+        Ok(sovereign_msg)
     }
 
     async fn build_connection_open_ack_message(
@@ -137,9 +136,10 @@ where
             proof_consensus,
         };
 
-        let msg_any = msg.encode_protobuf(&Signer::dummy());
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
+        Ok(sovereign_msg)
     }
 
     async fn build_connection_open_confirm_message(
@@ -158,8 +158,9 @@ where
             proof_ack,
         };
 
-        let msg_any = msg.encode_protobuf(&Signer::dummy());
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(SovereignMessage::Ibc(IbcMessage::Core(msg_any)))
+        Ok(sovereign_msg)
     }
 }

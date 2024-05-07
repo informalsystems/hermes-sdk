@@ -31,16 +31,16 @@ where
         packet: &Packet,
         payload: CosmosTimeoutUnorderedPacketPayload,
     ) -> Result<SovereignMessage, Rollup::Error> {
-        let message = CosmosTimeoutPacketMessage {
+        let msg = CosmosTimeoutPacketMessage {
             packet: packet.clone(),
             next_sequence_recv: packet.sequence,
             update_height: payload.update_height,
             proof_unreceived: payload.proof_unreceived,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(sovereign_message)
+        Ok(sovereign_msg)
     }
 }

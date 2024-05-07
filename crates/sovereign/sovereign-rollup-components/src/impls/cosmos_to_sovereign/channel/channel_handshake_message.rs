@@ -63,11 +63,11 @@ where
             0,
         );
 
-        let message = CosmosChannelOpenInitMessage { port_id, channel };
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let msg = CosmosChannelOpenInitMessage { port_id, channel };
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(sovereign_message)
+        Ok(sovereign_msg)
     }
 
     async fn build_channel_open_try_message(
@@ -95,7 +95,7 @@ where
             0,
         );
 
-        let message = CosmosChannelOpenTryMessage {
+        let msg = CosmosChannelOpenTryMessage {
             port_id,
             channel,
             counterparty_version: version,
@@ -103,10 +103,10 @@ where
             proof_init: counterparty_payload.proof_init,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(sovereign_message)
+        Ok(sovereign_msg)
     }
 
     async fn build_channel_open_ack_message(
@@ -116,7 +116,7 @@ where
         counterparty_channel_id: &Counterparty::ChannelId,
         counterparty_payload: CosmosChannelOpenAckPayload,
     ) -> Result<SovereignMessage, Rollup::Error> {
-        let message = CosmosChannelOpenAckMessage {
+        let msg = CosmosChannelOpenAckMessage {
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
             counterparty_channel_id: counterparty_channel_id.clone(),
@@ -125,10 +125,10 @@ where
             proof_try: counterparty_payload.proof_try,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(sovereign_message)
+        Ok(sovereign_msg)
     }
 
     async fn build_channel_open_confirm_message(
@@ -137,16 +137,16 @@ where
         channel_id: &Rollup::ChannelId,
         counterparty_payload: CosmosChannelOpenConfirmPayload,
     ) -> Result<SovereignMessage, Rollup::Error> {
-        let message = CosmosChannelOpenConfirmMessage {
+        let msg = CosmosChannelOpenConfirmMessage {
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
             update_height: counterparty_payload.update_height,
             proof_ack: counterparty_payload.proof_ack,
         };
 
-        let cosmos_message = message.to_cosmos_message();
-        let sovereign_message: SovereignMessage = cosmos_message.into();
+        let cosmos_msg = msg.to_cosmos_message();
+        let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
-        Ok(sovereign_message)
+        Ok(sovereign_msg)
     }
 }

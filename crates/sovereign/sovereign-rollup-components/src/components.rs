@@ -9,6 +9,8 @@ use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckP
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
@@ -65,8 +67,10 @@ use hermes_relayer_components::transaction::traits::types::tx_response::TxRespon
 use crate::impls::cosmos_to_sovereign::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::packet::ack_packet_message::BuildAckPacketMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
+use crate::impls::cosmos_to_sovereign::packet::ack_packet_message::BuildAckPacketMessageOnSovereign;
+use crate::impls::cosmos_to_sovereign::packet::receive_packet_message::BuildReceivePacketMessageOnSovereign;
+use crate::impls::cosmos_to_sovereign::packet::timeout_unordered_packet_message::BuildTimeoutPacketMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
@@ -179,5 +183,9 @@ delegate_components! {
             BuildCosmosConnectionHandshakeMessageOnSovereign,
         ChannelHandshakeMessageBuilderComponent:
             BuildCosmosChannelHandshakeMessageOnSovereign,
+        ReceivePacketMessageBuilderComponent:
+            BuildReceivePacketMessageOnSovereign,
+        TimeoutUnorderedPacketMessageBuilderComponent:
+            BuildTimeoutPacketMessageOnSovereign,
     }
 }
