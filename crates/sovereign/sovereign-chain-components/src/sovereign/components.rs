@@ -1,8 +1,10 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::impls::forward::message_builders::connection_handshake::ForwardConnectionHandshakeBuilder;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state_height::ForwardQueryConsensusStateHeight;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
@@ -112,6 +114,8 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
         ConnectionHandshakePayloadBuilderComponent:
             BuildSovereignConnectionHandshakePayload,
+        ConnectionHandshakeMessageBuilderComponent:
+            ForwardConnectionHandshakeBuilder,
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,

@@ -6,10 +6,6 @@ use ibc_relayer_types::core::ics23_commitment::commitment::{
 use ibc_relayer_types::proofs::ConsensusProof;
 use sov_celestia_client::types::client_state::SovTmClientState as SovereignClientState;
 
-pub struct SovereignInitConnectionOptions {
-    // TODO: fill in fields
-}
-
 pub struct SovereignConnectionOpenInitPayload {
     pub commitment_prefix: CommitmentPrefix,
 }
