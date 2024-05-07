@@ -24,6 +24,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
+use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
@@ -161,6 +162,10 @@ pub trait CanUseSovereignChain:
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeight<CosmosChain>
     + HasClientStateFields<CosmosChain>
+    + HasInitConnectionOptionsType<CosmosChain>
+    + CanBuildConnectionHandshakePayloads<CosmosChain>
+// + CanBuildConnectionHandshakeMessages<CosmosChain>
+// + CanBuildChannelHandshakePayloads<CosmosChain>
 {
 }
 
