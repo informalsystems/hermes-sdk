@@ -1,6 +1,7 @@
 use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -74,11 +75,25 @@ where
 
     async fn build_connection_open_ack_message(
         _chain: &Chain,
-        _connection_id: &Chain::ConnectionId,
-        _counterparty_connection_id: &Counterparty::ConnectionId,
-        _counterparty_payload: SovereignConnectionOpenAckPayload,
+        connection_id: &Chain::ConnectionId,
+        counterparty_connection_id: &Counterparty::ConnectionId,
+        counterparty_payload: SovereignConnectionOpenAckPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        todo!()
+        let connection_id = connection_id.clone();
+        let counterparty_connection_id = counterparty_connection_id.clone();
+
+        let message = CosmosConnectionOpenAckMessage {
+            connection_id,
+            counterparty_connection_id,
+            version: counterparty_payload.version,
+            client_state: counterparty_payload.client_state.into(),
+            update_height: counterparty_payload.update_height,
+            proof_try: counterparty_payload.proof_try,
+            proof_client: counterparty_payload.proof_client,
+            proof_consensus: counterparty_payload.proof_consensus,
+        };
+
+        Ok(message.to_cosmos_message())
     }
 
     async fn build_connection_open_confirm_message(
