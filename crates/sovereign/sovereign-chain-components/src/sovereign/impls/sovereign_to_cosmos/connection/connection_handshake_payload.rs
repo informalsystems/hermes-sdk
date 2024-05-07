@@ -8,6 +8,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::rpc::height::HeightParam;
+use ibc_proto::ibc::core::connection::v1::Version as ProtoVersion;
 use ibc_query::core::client::{QueryClientStateResponse, QueryConsensusStateResponse};
 use ibc_query::core::connection::QueryConnectionResponse;
 use ibc_relayer_types::core::ics03_connection::version::Version;
@@ -20,7 +21,6 @@ use ibc_relayer_types::Height;
 use jsonrpsee::core::client::ClientT;
 use serde::Serialize;
 use sov_celestia_client::types::client_state::SovTmClientState as SovereignClientState;
-use ibc_proto::ibc::core::connection::v1::Version as ProtoVersion;
 
 use crate::sovereign::traits::chain::rollup::HasRollup;
 use crate::sovereign::types::payloads::connection::{
@@ -45,8 +45,7 @@ where
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>
         + HasErrorType
         + CanRaiseError<Rollup::Error>,
-    Rollup: CanQueryChainHeight<Height = RollupHeight>
-        + HasJsonRpcClient,
+    Rollup: CanQueryChainHeight<Height = RollupHeight> + HasJsonRpcClient,
     Rollup::JsonRpcClient: ClientT,
 {
     async fn build_connection_open_init_payload(
@@ -82,17 +81,16 @@ where
             .await
             .map_err(Chain::raise_error)?;
 
-        let rollup_connection_end = query_connection_end(chain
-                .rollup(), connection_id, &rollup_height)
-            .await;
+        let rollup_connection_end =
+            query_connection_end(chain.rollup(), connection_id, &rollup_height).await;
 
         let proof_try = CommitmentProofBytes::try_from(rollup_connection_end.proof).unwrap();
 
-        let rollup_client_state = query_client_state(chain
-                .rollup(), client_id, &rollup_height)
-            .await;
+        let rollup_client_state =
+            query_client_state(chain.rollup(), client_id, &rollup_height).await;
 
-        let client_state = SovereignClientState::try_from(rollup_client_state.client_state).unwrap();
+        let client_state =
+            SovereignClientState::try_from(rollup_client_state.client_state).unwrap();
 
         let proof_client = CommitmentProofBytes::try_from(rollup_client_state.proof).unwrap();
 
@@ -109,19 +107,28 @@ where
         )
         .unwrap();
 
-        let rollup_consensus_state = query_consensus_state(chain.rollup(), client_id, &consensus_height, &rollup_height).await;
+        let rollup_consensus_state =
+            query_consensus_state(chain.rollup(), client_id, &consensus_height, &rollup_height)
+                .await;
 
-        let commitment_bytes_consensus = CommitmentProofBytes::try_from(rollup_consensus_state.proof).unwrap();
-        let consensus_proof_height = Height::new(rollup_consensus_state.proof_height.revision_number(), rollup_consensus_state.proof_height.revision_height()).unwrap();
-
-        let proof_consensus = ConsensusProof::new(commitment_bytes_consensus, consensus_proof_height).unwrap();
-
-        let ibc_version = rollup_connection_end.conn_end
-        .versions()
-        .iter()
-        .next()
-        .cloned()
+        let commitment_bytes_consensus =
+            CommitmentProofBytes::try_from(rollup_consensus_state.proof).unwrap();
+        let consensus_proof_height = Height::new(
+            rollup_consensus_state.proof_height.revision_number(),
+            rollup_consensus_state.proof_height.revision_height(),
+        )
         .unwrap();
+
+        let proof_consensus =
+            ConsensusProof::new(commitment_bytes_consensus, consensus_proof_height).unwrap();
+
+        let ibc_version = rollup_connection_end
+            .conn_end
+            .versions()
+            .iter()
+            .next()
+            .cloned()
+            .unwrap();
 
         let proto_version = ProtoVersion::from(ibc_version);
 
