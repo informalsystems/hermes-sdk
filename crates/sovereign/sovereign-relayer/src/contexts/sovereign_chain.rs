@@ -10,6 +10,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
@@ -24,6 +25,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
+use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
@@ -37,8 +39,10 @@ use hermes_sovereign_chain_components::sovereign::components::{
     IsSovereignChainClientComponent, SovereignChainClientComponents,
 };
 use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
-    DataChainGetter, DataChainGetterComponent, DataChainTypeComponent, HasDataChain,
-    ProvideDataChainType,
+    DataChainGetter, HasDataChain, ProvideDataChainType,
+};
+use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
+    ProvideRollupType, RollupGetter,
 };
 use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
 use hermes_sovereign_chain_components::sovereign::types::consensus_state::SovereignConsensusState;
@@ -70,30 +74,11 @@ delegate_all!(
     SovereignChainComponents,
 );
 
-pub struct SovereignDataChainType;
-
-impl<Chain> ProvideDataChainType<Chain> for SovereignDataChainType
-where
-    Chain: Async,
-{
-    type DataChain = CosmosChain;
-}
-
-impl DataChainGetter<SovereignChain> for SovereignDataChainType {
-    fn data_chain(chain: &SovereignChain) -> &CosmosChain {
-        &chain.data_chain
-    }
-}
-
 delegate_components! {
     SovereignChainComponents {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
-        [
-            DataChainTypeComponent,
-            DataChainGetterComponent,
-        ]: SovereignDataChainType,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,
@@ -106,6 +91,26 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             ProvideSovereignLogger,
+    }
+}
+
+impl ProvideDataChainType<SovereignChain> for SovereignChainComponents {
+    type DataChain = CosmosChain;
+}
+
+impl DataChainGetter<SovereignChain> for SovereignChainComponents {
+    fn data_chain(chain: &SovereignChain) -> &CosmosChain {
+        &chain.data_chain
+    }
+}
+
+impl ProvideRollupType<SovereignChain> for SovereignChainComponents {
+    type Rollup = SovereignRollup;
+}
+
+impl RollupGetter<SovereignChain> for SovereignChainComponents {
+    fn rollup(chain: &SovereignChain) -> &SovereignRollup {
+        &chain.rollup
     }
 }
 
@@ -158,6 +163,9 @@ pub trait CanUseSovereignChain:
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeight<CosmosChain>
     + HasClientStateFields<CosmosChain>
+    + HasInitConnectionOptionsType<CosmosChain>
+    + CanBuildConnectionHandshakePayloads<CosmosChain>
+    + CanBuildConnectionHandshakeMessages<CosmosChain>
 {
 }
 

@@ -13,6 +13,9 @@ pub struct UserWallet;
 #[derive(Copy, Clone)]
 pub struct RelayerWallet;
 
+#[derive(Copy, Clone)]
+pub struct ValidatorWallet;
+
 #[derive_component(WalletGetterComponent, WalletGetterAt<ChainDriver>)]
 pub trait HasWalletAt<WalletKind, const I: usize>: HasChainType
 where

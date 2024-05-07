@@ -46,6 +46,15 @@ where
         wallets: BTreeMap<String, CosmosTestWallet>,
         chain_process: Child,
     ) -> Result<CosmosChainDriver, Bootstrap::Error> {
+        let validator_wallet = wallets
+            .get("validator")
+            .ok_or_else(|| {
+                Bootstrap::raise_error(
+                    "expect validator wallet to be provided in the list of test wallets",
+                )
+            })?
+            .clone();
+
         let relayer_wallet = wallets
             .get("relayer")
             .ok_or_else(|| {
@@ -85,9 +94,10 @@ where
             chain_node_config,
             genesis_config,
             chain_process,
-            relayer_wallet: relayer_wallet.clone(),
-            user_wallet_a: user_wallet_a.clone(),
-            user_wallet_b: user_wallet_b.clone(),
+            validator_wallet,
+            relayer_wallet,
+            user_wallet_a,
+            user_wallet_b,
             wallets,
         };
 

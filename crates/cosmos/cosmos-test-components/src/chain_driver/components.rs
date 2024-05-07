@@ -1,15 +1,15 @@
 use cgp_core::prelude::*;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
+use hermes_test_components::chain_driver::traits::proposal::deposit::ProposalDepositerComponent;
+use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPollerComponent;
+use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
+use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 
 use crate::chain_driver::impls::amount::GenerateRandomAmount;
-use crate::chain_driver::impls::deposit_proposal::DepositGovernanceProposalWithChainCommand;
-use crate::chain_driver::impls::proposal_status::QueryGovernanceProposalStatusWithChainCommand;
-use crate::chain_driver::impls::store_wasm_client::UploadWasmClientCodeWithChainCommand;
-use crate::chain_driver::impls::vote_proposal::VoteGovernanceProposalWithChainCommand;
-use crate::chain_driver::traits::deposit_proposal::GovernanceProposalDepositerComponent;
-use crate::chain_driver::traits::proposal_status::GovernanceProposalStatusQuerierComponent;
-use crate::chain_driver::traits::store_wasm_client::WasmClientCodeUploaderComponent;
-use crate::chain_driver::traits::vote_proposal::GovernanceProposalVoterComponent;
+use crate::chain_driver::impls::proposal::deposit::DepositProposalWithChainCommand;
+use crate::chain_driver::impls::proposal::poll_status::PollProposalStatus;
+use crate::chain_driver::impls::proposal::query_status::QueryProposalStatusWithChainCommand;
+use crate::chain_driver::impls::proposal::vote::VoteProposalWithChainCommand;
 
 pub struct CosmosChainDriverComponents;
 
@@ -17,13 +17,13 @@ delegate_components! {
     CosmosChainDriverComponents {
         RandomAmountGeneratorComponent:
             GenerateRandomAmount,
-        WasmClientCodeUploaderComponent:
-            UploadWasmClientCodeWithChainCommand,
-        GovernanceProposalDepositerComponent:
-            DepositGovernanceProposalWithChainCommand,
-        GovernanceProposalStatusQuerierComponent:
-            QueryGovernanceProposalStatusWithChainCommand,
-        GovernanceProposalVoterComponent:
-            VoteGovernanceProposalWithChainCommand
+        ProposalDepositerComponent:
+            DepositProposalWithChainCommand,
+        ProposalStatusQuerierComponent:
+            QueryProposalStatusWithChainCommand,
+        ProposalStatusPollerComponent:
+            PollProposalStatus,
+        ProposalVoterComponent:
+            VoteProposalWithChainCommand
     }
 }
