@@ -8,15 +8,18 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::rpc::height::HeightParam;
+use ibc::core::client::types::error::ClientError;
 use ibc_proto::ibc::core::connection::v1::Version as ProtoVersion;
 use ibc_query::core::client::{QueryClientStateResponse, QueryConsensusStateResponse};
 use ibc_query::core::connection::QueryConnectionResponse;
+use ibc_relayer_types::core::ics02_client::error::Error as RelayerClientError;
+use ibc_relayer_types::core::ics03_connection::error::Error as ConnectionError;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics23_commitment::commitment::{
     CommitmentPrefix, CommitmentProofBytes,
 };
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::proofs::ConsensusProof;
+use ibc_relayer_types::proofs::{ConsensusProof, ProofError};
 use ibc_relayer_types::Height;
 use jsonrpsee::core::client::ClientT;
 use serde::Serialize;
@@ -44,6 +47,10 @@ where
         + HasRollup<Rollup = Rollup>
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>
         + HasErrorType
+        + CanRaiseError<ClientError>
+        + CanRaiseError<RelayerClientError>
+        + CanRaiseError<ProofError>
+        + CanRaiseError<ConnectionError>
         + CanRaiseError<Rollup::Error>,
     Rollup: CanQueryChainHeight<Height = RollupHeight> + HasJsonRpcClient,
     Rollup::JsonRpcClient: ClientT,
@@ -84,15 +91,17 @@ where
         let rollup_connection_end =
             query_connection_end(chain.rollup(), connection_id, &rollup_height).await;
 
-        let proof_try = CommitmentProofBytes::try_from(rollup_connection_end.proof).unwrap();
+        let proof_try = CommitmentProofBytes::try_from(rollup_connection_end.proof)
+            .map_err(Chain::raise_error)?;
 
         let rollup_client_state =
             query_client_state(chain.rollup(), client_id, &rollup_height).await;
 
-        let client_state =
-            SovereignClientState::try_from(rollup_client_state.client_state).unwrap();
+        let client_state = SovereignClientState::try_from(rollup_client_state.client_state)
+            .map_err(Chain::raise_error)?;
 
-        let proof_client = CommitmentProofBytes::try_from(rollup_client_state.proof).unwrap();
+        let proof_client = CommitmentProofBytes::try_from(rollup_client_state.proof)
+            .map_err(Chain::raise_error)?;
 
         let consensus_height = Height::new(
             client_state
@@ -105,22 +114,25 @@ where
                     .genesis_da_height
                     .revision_height(),
         )
-        .unwrap();
+        .map_err(Chain::raise_error)?;
 
         let rollup_consensus_state =
             query_consensus_state(chain.rollup(), client_id, &consensus_height, &rollup_height)
                 .await;
 
         let commitment_bytes_consensus =
-            CommitmentProofBytes::try_from(rollup_consensus_state.proof).unwrap();
+            CommitmentProofBytes::try_from(rollup_consensus_state.proof)
+                .map_err(Chain::raise_error)?;
+
         let consensus_proof_height = Height::new(
             rollup_consensus_state.proof_height.revision_number(),
             rollup_consensus_state.proof_height.revision_height(),
         )
-        .unwrap();
+        .map_err(Chain::raise_error)?;
 
         let proof_consensus =
-            ConsensusProof::new(commitment_bytes_consensus, consensus_proof_height).unwrap();
+            ConsensusProof::new(commitment_bytes_consensus, consensus_proof_height)
+                .map_err(Chain::raise_error)?;
 
         let ibc_version = rollup_connection_end
             .conn_end
@@ -132,7 +144,7 @@ where
 
         let proto_version = ProtoVersion::from(ibc_version);
 
-        let version = Version::try_from(proto_version).unwrap();
+        let version = Version::try_from(proto_version).map_err(Chain::raise_error)?;
 
         Ok(SovereignConnectionOpenAckPayload {
             client_state,
