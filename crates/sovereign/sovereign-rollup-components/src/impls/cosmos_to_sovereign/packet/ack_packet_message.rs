@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
@@ -14,7 +13,6 @@ use crate::types::message::SovereignMessage;
 
 pub struct BuildAckPacketMessageOnSovereign;
 
-#[async_trait]
 impl<Rollup, Counterparty> AckPacketMessageBuilder<Rollup, Counterparty>
     for BuildAckPacketMessageOnSovereign
 where
