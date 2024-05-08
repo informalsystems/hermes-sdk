@@ -18,12 +18,14 @@ use hermes_relayer_components::chain::traits::message_builders::channel_handshak
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
@@ -45,7 +47,7 @@ use ibc_relayer::config::types::TrustThreshold;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics04_channel::channel::Ordering;
 use ibc_relayer_types::core::ics04_channel::version::Version as ChannelVersion;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, PortId};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
 use sha2::{Digest, Sha256};
 use sov_celestia_client::types::client_state::test_util::TendermintParamsConfig;
 use sov_celestia_client::types::sovereign::SovereignParamsConfig;
@@ -280,11 +282,35 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             channel_version: ChannelVersion::default(),
         };
 
-        let channel_init_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &PortId::transfer(), &PortId::transfer(), &options).await?;
+        let port_id = PortId::transfer();
+        let counterparty_port_id = PortId::transfer();
+
+        let channel_init_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &port_id, &counterparty_port_id, &options).await?;
 
         let events = cosmos_chain.send_message(channel_init_message).await?;
 
-        info!("Channel Open Init events: {:#?}", events);
+        let channel_init_event = events.into_iter()
+            .find_map(<CosmosChain as HasChannelOpenInitEvent<CosmosChain>>::try_extract_channel_open_init_event)
+            .ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+
+        let channel_id = channel_init_event.channel_id;
+
+        info!("Retrieved Channel ID from Channel Open Init event: {channel_id}");
+
+        // let rollup_target_height = rollup.query_chain_height().await?;
+
+        // let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
+        // let channel_ack_payload = <SovereignChain as CanBuildChannelHandshakePayloads<CosmosChain>>::build_channel_open_ack_payload(&sovereign_chain, &sovereign_client_state, &rollup_target_height, &port_id, &channel_id).await?;
+
+        // TODO replace with channel ID retrieved from Channel Open Try event
+        // let counterparty_channel_id = ChannelId::from_str("placeholder-id").unwrap();
+
+        // let channel_ack_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_ack_message(cosmos_chain, &port_id, &channel_id, &counterparty_channel_id, channel_ack_payload).await?;
+
+        // let events = cosmos_chain.send_message(channel_ack_message).await?;
+
+        // info!("Channel Open Ack events: {events:#?}");
 
         <Result<(), Error>>::Ok(())
     })?;
