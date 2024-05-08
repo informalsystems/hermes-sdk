@@ -12,6 +12,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
+    AckPacketMessageBuilderComponent, CanBuildAckPacketMessage,
+};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelHandshakeMessages, ChannelHandshakeMessageBuilderComponent,
 };
@@ -19,6 +22,12 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
+    CanBuildReceivePacketMessage, ReceivePacketMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
@@ -247,6 +256,10 @@ delegate_components! {
             ConsensusStateHeightsQuerierComponent,
             ConsensusStateHeightQuerierComponent,
 
+            AckPacketMessageBuilderComponent,
+            ReceivePacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
+
             ConnectionHandshakeMessageBuilderComponent,
             ChannelHandshakeMessageBuilderComponent,
         ]:
@@ -330,6 +343,9 @@ pub trait CanUseSovereignRollup:
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
+    + CanBuildAckPacketMessage<CosmosChain>
+    + CanBuildReceivePacketMessage<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionHandshakeMessages<CosmosChain>
     + CanBuildChannelHandshakeMessages<CosmosChain>
