@@ -1,4 +1,5 @@
 use cgp_core::prelude::delegate_components;
+use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::update_client::DelegateBuildUpdateClientMessage;
@@ -86,7 +87,6 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::components::delegate::DelegateCosmosChainComponents;
-use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::channel::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
@@ -201,8 +201,6 @@ delegate_components! {
             BuildCosmosConnectionHandshakePayload,
         ChannelHandshakePayloadBuilderComponent:
             BuildCosmosChannelHandshakePayload,
-        ChannelHandshakeMessageBuilderComponent:
-            BuildCosmosChannelHandshakeMessage,
         PacketCommitmentsQuerierComponent:
             QueryCosmosPacketCommitments,
         ReceivedPacketQuerierComponent:
@@ -262,5 +260,7 @@ delegate_components! {
             DelegateBuildUpdateClientMessage<DelegateCosmosChainComponents>,
         ConnectionHandshakeMessageBuilderComponent:
             DelegateBuildConnectionHandshakeMessage<DelegateCosmosChainComponents>,
+        ChannelHandshakeMessageBuilderComponent:
+            DelegateBuildChannelHandshakeMessage<DelegateCosmosChainComponents>,
     }
 }
