@@ -282,9 +282,9 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let channel_init_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &PortId::transfer(), &PortId::transfer(), &options).await?;
 
-        let events = cosmos_chain.send_message(channel_init_message).await;
+        let events = cosmos_chain.send_message(channel_init_message).await?;
 
-        assert!(events.is_err(), "Channel Open Init requires the Connection handshake to be complete");
+        info!("Channel Open Init events: {:#?}", events);
 
         <Result<(), Error>>::Ok(())
     })?;
