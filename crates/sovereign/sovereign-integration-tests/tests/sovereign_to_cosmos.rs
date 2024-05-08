@@ -253,15 +253,13 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let events = cosmos_chain.send_message(connection_init_message).await?;
 
-        info!("{:#?}", events);
+        info!("Connection Open Init events: {:#?}", events);
 
         let connection_init_event = events.into_iter()
             .find_map(<CosmosChain as HasConnectionOpenInitEvent<CosmosChain>>::try_extract_connection_open_init_event)
             .ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
 
         let connection_id = connection_init_event.connection_id;
-
-        info!("Connection id at Cosmos: {:#?}", connection_id);
 
         let _cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
 
@@ -282,11 +280,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             channel_version: ChannelVersion::default(),
         };
 
-        let channel_init_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &PortId::transfer(), &PortId::transfer(), &options).await;
+        let channel_init_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &PortId::transfer(), &PortId::transfer(), &options).await?;
 
-        assert!(channel_init_message.is_err(), "Channel Open Init requires the Connection handshake to be complete");
+        let events = cosmos_chain.send_message(channel_init_message).await;
 
-        //let _events = cosmos_chain.send_message(channel_init_message).await?;
+        assert!(events.is_err(), "Channel Open Init requires the Connection handshake to be complete");
 
         <Result<(), Error>>::Ok(())
     })?;
