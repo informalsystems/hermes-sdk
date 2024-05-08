@@ -3,6 +3,7 @@ use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::CosmosMessage;
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -79,12 +80,21 @@ where
 
     async fn build_channel_open_ack_message(
         _chain: &Chain,
-        _port_id: &Chain::PortId,
-        _channel_id: &Chain::ChannelId,
-        _counterparty_channel_id: &Counterparty::ChannelId,
-        _counterparty_payload: SovereignChannelOpenAckPayload,
+        port_id: &Chain::PortId,
+        channel_id: &Chain::ChannelId,
+        counterparty_channel_id: &Counterparty::ChannelId,
+        counterparty_payload: SovereignChannelOpenAckPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        todo!()
+        let message = CosmosChannelOpenAckMessage {
+            port_id: port_id.clone(),
+            channel_id: channel_id.clone(),
+            counterparty_channel_id: counterparty_channel_id.clone(),
+            counterparty_version: counterparty_payload.version,
+            update_height: counterparty_payload.update_height,
+            proof_try: counterparty_payload.proof_try,
+        };
+
+        Ok(message.to_cosmos_message())
     }
 
     async fn build_channel_open_confirm_message(
