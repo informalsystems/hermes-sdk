@@ -2046,7 +2046,7 @@ dependencies = [
 name = "hermes-sovereign-chain-components"
 version = "0.1.0"
 dependencies = [
- "base64 0.21.7",
+ "base64 0.22.0",
  "bech32 0.9.1",
  "borsh",
  "cgp-core",
@@ -2153,7 +2153,7 @@ dependencies = [
 name = "hermes-sovereign-rollup-components"
 version = "0.1.0"
 dependencies = [
- "base64 0.21.7",
+ "base64 0.22.0",
  "bech32 0.9.1",
  "borsh",
  "cgp-core",
