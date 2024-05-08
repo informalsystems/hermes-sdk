@@ -34,6 +34,9 @@ hermes-wasm-client-components       = { workspace = true }
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 ibc-proto                           = { workspace = true }
+ibc                                 = { workspace = true }
+
+sov-celestia-client                 = { workspace = true, features = ["test-util"] }
 
 eyre               = { workspace = true }
 futures            = { workspace = true }

@@ -1,10 +1,15 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::impls::forward::message_builders::channel_handshake::ForwardChannelHandshakeBuilder;
+use hermes_relayer_components::chain::impls::forward::message_builders::connection_handshake::ForwardConnectionHandshakeBuilder;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state_height::ForwardQueryConsensusStateHeight;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
@@ -47,6 +52,7 @@ use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::upda
 use hermes_sovereign_rollup_components::impls::events::ProvideSovereignEvents;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
 
+use crate::sovereign::impls::sovereign_to_cosmos::channel::channel_handshake_payload::BuildSovereignChannelHandshakePayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
@@ -112,6 +118,12 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
         ConnectionHandshakePayloadBuilderComponent:
             BuildSovereignConnectionHandshakePayload,
+        ConnectionHandshakeMessageBuilderComponent:
+            ForwardConnectionHandshakeBuilder,
+        ChannelHandshakePayloadBuilderComponent:
+            BuildSovereignChannelHandshakePayload,
+        ChannelHandshakeMessageBuilderComponent:
+            ForwardChannelHandshakeBuilder,
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,

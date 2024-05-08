@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
@@ -11,6 +12,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::CanQuery
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeight, CanQueryConsensusStateHeights,
 };
+use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
 use hermes_sovereign_chain_components::cosmos::components::SovereignCosmosComponents;
@@ -35,6 +37,8 @@ pub trait CanUseCosmosChainWithSovereign:
     + CanBuildCreateClientPayload<SovereignChain>
     + CanBuildUpdateClientPayload<SovereignChain>
     + HasClientStateFields<SovereignChain>
+    + HasInitChannelOptionsType<SovereignChain>
+    + CanBuildChannelHandshakeMessages<SovereignChain>
 {
 }
 

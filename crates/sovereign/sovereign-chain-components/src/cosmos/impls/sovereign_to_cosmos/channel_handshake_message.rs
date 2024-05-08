@@ -1,12 +1,17 @@
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::CosmosMessage;
+use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
+use ibc_relayer_types::core::ics04_channel::channel::Counterparty as ChannelCounterparty;
+use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 
 use crate::sovereign::types::payloads::channel::{
@@ -37,11 +42,29 @@ where
 {
     async fn build_channel_open_init_message(
         _chain: &Chain,
-        _port_id: &Chain::PortId,
-        _counterparty_port_id: &Counterparty::PortId,
-        _init_channel_options: &CosmosInitChannelOptions,
+        port_id: &Chain::PortId,
+        counterparty_port_id: &Counterparty::PortId,
+        init_channel_options: &CosmosInitChannelOptions,
     ) -> Result<CosmosMessage, Chain::Error> {
-        todo!()
+        let port_id = port_id.clone();
+        let ordering = init_channel_options.ordering;
+        let connection_hops = init_channel_options.connection_hops.clone();
+        let channel_version = init_channel_options.channel_version.clone();
+
+        let counterparty = ChannelCounterparty::new(counterparty_port_id.clone(), None);
+
+        let channel = ChannelEnd::new(
+            State::Init,
+            ordering,
+            counterparty,
+            connection_hops,
+            channel_version,
+            0,
+        );
+
+        let message = CosmosChannelOpenInitMessage { port_id, channel };
+
+        Ok(message.to_cosmos_message())
     }
 
     async fn build_channel_open_try_message(

@@ -10,7 +10,9 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -21,9 +23,13 @@ use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, Me
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
+use hermes_relayer_components::chain::traits::types::channel::{
+    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
+use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
@@ -153,7 +159,6 @@ pub trait CanUseSovereignChain:
     + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
-    + CanBuildConnectionHandshakePayloads<CosmosChain>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
@@ -161,6 +166,12 @@ pub trait CanUseSovereignChain:
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateHeight<CosmosChain>
     + HasClientStateFields<CosmosChain>
+    + HasInitConnectionOptionsType<CosmosChain>
+    + CanBuildConnectionHandshakePayloads<CosmosChain>
+    + CanBuildConnectionHandshakeMessages<CosmosChain>
+    + HasChannelHandshakePayloadTypes<CosmosChain>
+    + HasInitChannelOptionsType<CosmosChain>
+    + CanBuildChannelHandshakePayloads<CosmosChain>
 {
 }
 
