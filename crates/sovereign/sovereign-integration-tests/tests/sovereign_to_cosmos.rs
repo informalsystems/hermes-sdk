@@ -9,10 +9,12 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
@@ -41,7 +43,9 @@ use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::types::TrustThreshold;
 use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc_relayer_types::core::ics04_channel::channel::Ordering;
+use ibc_relayer_types::core::ics04_channel::version::Version as ChannelVersion;
+use ibc_relayer_types::core::ics24_host::identifier::{ClientId, PortId};
 use sha2::{Digest, Sha256};
 use sov_celestia_client::types::client_state::test_util::TendermintParamsConfig;
 use sov_celestia_client::types::sovereign::SovereignParamsConfig;
@@ -270,6 +274,19 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         // let connection_try_event = sovereign_chain.send_message(connection_try_message).await?;
 
         // info!("ConnectionTry event at Sovereign: {:#?}", connection_try_event);
+
+
+        let options: CosmosInitChannelOptions = CosmosInitChannelOptions {
+            ordering: Ordering::Unordered,
+            connection_hops: vec!(connection_id),
+            channel_version: ChannelVersion::default(),
+        };
+
+        let channel_init_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &PortId::transfer(), &PortId::transfer(), &options).await;
+
+        assert!(channel_init_message.is_err(), "Channel Open Init requires the Connection handshake to be complete");
+
+        //let _events = cosmos_chain.send_message(channel_init_message).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
