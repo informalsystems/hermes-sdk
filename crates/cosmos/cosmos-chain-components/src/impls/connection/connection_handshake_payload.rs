@@ -18,7 +18,6 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::connection::ConnectionMsgType;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
@@ -134,7 +133,9 @@ where
         client_id: &Chain::ClientId,
         connection_id: &Chain::ConnectionId,
     ) -> Result<Chain::ConnectionOpenAckPayload, Chain::Error> {
-        let connection = chain.query_connection_end(connection_id, height).await?;
+        let (connection, connection_proofs) = chain
+            .query_connection_end_with_proofs(connection_id, height)
+            .await?;
 
         let version = connection
             .versions()
@@ -143,50 +144,39 @@ where
             .cloned()
             .unwrap_or_default();
 
-        let height = *height;
-        let client_id = client_id.clone();
-        let connection_id = connection_id.clone();
+        let (client_state, client_state_proofs) = chain
+            .query_client_state_with_proofs(client_id, height)
+            .await?;
 
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let (m_client_state, proofs) = chain_handle
-                    .build_connection_proofs_and_client_state(
-                        ConnectionMsgType::OpenAck,
-                        &connection_id,
-                        &client_id,
-                        height,
-                    )
-                    .map_err(Chain::raise_error)?;
+        let client_state_any = Counterparty::default_encoding()
+            .convert(&client_state)
+            .map_err(Chain::raise_error)?;
 
-                let any_client_state =
-                    m_client_state.ok_or_else(|| Chain::raise_error("expect some client state"))?;
+        let consensus_state_height = Counterparty::client_state_latest_height(&client_state);
 
-                let client_state = match any_client_state {
-                    AnyClientState::Tendermint(client_state) => client_state,
-                };
+        let (_, consensus_state_proofs) = chain
+            .query_raw_consensus_state_with_proofs(client_id, &consensus_state_height, height)
+            .await?;
 
-                let proof_client = proofs
-                    .client_proof()
-                    .ok_or_else(|| Chain::raise_error("expect non empty client proof"))?
-                    .clone();
+        let update_height = Chain::increment_height(height)?;
 
-                let proof_consensus = proofs
-                    .consensus_proof()
-                    .ok_or_else(|| Chain::raise_error("expect non empty consensus proof"))?
-                    .clone();
+        let proof_consensus_height = Height::new(
+            Counterparty::revision_number(&consensus_state_height),
+            Counterparty::revision_height(&consensus_state_height),
+        )
+        .map_err(Chain::raise_error)?;
 
-                let payload = CosmosConnectionOpenAckPayload {
-                    client_state,
-                    version,
-                    update_height: proofs.height(),
-                    proof_try: proofs.object_proof().clone(),
-                    proof_client,
-                    proof_consensus,
-                };
+        let payload = CosmosConnectionOpenAckPayload {
+            client_state: client_state_any,
+            version,
+            update_height,
+            proof_try: connection_proofs,
+            proof_client: client_state_proofs,
+            proof_consensus: consensus_state_proofs,
+            proof_consensus_height,
+        };
 
-                Ok(payload)
-            })
-            .await
+        Ok(payload)
     }
 
     async fn build_connection_open_confirm_payload(

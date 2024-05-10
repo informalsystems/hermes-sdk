@@ -122,6 +122,7 @@ where
             proof_try,
             proof_client,
             proof_consensus,
+            proof_consensus_height,
         } = counterparty_payload;
 
         let msg = CosmosConnectionOpenAckMessage {
@@ -133,6 +134,7 @@ where
             proof_try,
             proof_client,
             proof_consensus,
+            proof_consensus_height,
         };
 
         let cosmos_msg = msg.to_cosmos_message();

@@ -2,11 +2,8 @@ use core::time::Duration;
 
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
-use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::Height;
 use prost_types::Any;
-
-use crate::types::tendermint::TendermintClientState;
 
 #[derive(Debug)]
 pub struct CosmosConnectionOpenInitPayload {
@@ -28,12 +25,13 @@ pub struct CosmosConnectionOpenTryPayload {
 
 #[derive(Debug)]
 pub struct CosmosConnectionOpenAckPayload {
-    pub client_state: TendermintClientState,
+    pub client_state: Any,
     pub version: Version,
     pub update_height: Height,
-    pub proof_try: CommitmentProofBytes,
-    pub proof_client: CommitmentProofBytes,
-    pub proof_consensus: ConsensusProof,
+    pub proof_try: Vec<u8>,
+    pub proof_client: Vec<u8>,
+    pub proof_consensus: Vec<u8>,
+    pub proof_consensus_height: Height,
 }
 
 #[derive(Debug)]
