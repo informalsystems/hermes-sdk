@@ -111,7 +111,7 @@ use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
-use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
+use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
 use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
@@ -248,7 +248,7 @@ delegate_components! {
         AbciQuerierComponent:
             QueryAbci,
         ConnectionEndQuerierComponent:
-            QueryCosmosConnectionEndFromChainHandle,
+            QueryCosmosConnectionEndFromAbci,
         [
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,

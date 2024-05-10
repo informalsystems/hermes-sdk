@@ -15,6 +15,7 @@ use ibc_proto::ibc::core::client::v1::{
 use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
 use ibc_relayer_types::core::ics24_host::error::ValidationError;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
 use prost::{DecodeError, Message};
 use prost_types::Any;
@@ -22,8 +23,6 @@ use prost_types::Any;
 use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryCosmosClientStateFromAbci;
-
-pub const IBC_QUERY_PATH: &str = "store/ibc/key";
 
 impl<Chain, Counterparty> RawClientStateQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromAbci

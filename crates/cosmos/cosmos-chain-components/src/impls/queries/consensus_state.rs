@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasRawCons
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
 use prost::{DecodeError, Message};
 use prost_types::Any;
@@ -11,8 +12,6 @@ use prost_types::Any;
 use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryCosmosConsensusStateFromAbci;
-
-pub const IBC_QUERY_PATH: &str = "store/ibc/key";
 
 impl<Chain, Counterparty> RawConsensusStateQuerier<Chain, Counterparty>
     for QueryCosmosConsensusStateFromAbci
