@@ -9,7 +9,9 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
     ClientStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
 
 use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
@@ -28,7 +30,10 @@ delegate_components! {
             AllClientStatesQuerierComponent,
         ]:
             QueryAndConvertRawClientState,
-        ConsensusStateQuerierComponent:
+        [
+            ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+        ]:
             QueryAndConvertRawConsensusState,
         CreateClientMessageBuilderComponent:
             BuildCosmosCreateClientMessage,

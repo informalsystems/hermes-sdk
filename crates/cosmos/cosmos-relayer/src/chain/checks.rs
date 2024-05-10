@@ -8,7 +8,7 @@ use hermes_relayer_components::chain::traits::queries::connection_end::{
     CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    CanQueryConsensusState, CanQueryRawConsensusState,
+    CanQueryConsensusState, CanQueryConsensusStateWithProofs, CanQueryRawConsensusState,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
@@ -34,6 +34,7 @@ pub trait CanUseCosmosChain:
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
+    + CanQueryConsensusStateWithProofs<CosmosChain>
     + CanQueryRawConsensusState<CosmosChain>
     + CanQueryAllClientStates<CosmosChain>
     + CanQueryClientState<AnyCounterparty>
