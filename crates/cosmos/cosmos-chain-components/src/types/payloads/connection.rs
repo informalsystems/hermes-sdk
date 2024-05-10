@@ -4,6 +4,7 @@ use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::Height;
+use prost_types::Any;
 
 use crate::types::tendermint::TendermintClientState;
 
@@ -15,12 +16,12 @@ pub struct CosmosConnectionOpenInitPayload {
 #[derive(Debug)]
 pub struct CosmosConnectionOpenTryPayload {
     pub commitment_prefix: Vec<u8>,
-    pub client_state: TendermintClientState,
+    pub client_state: Any,
     pub versions: Vec<Version>,
     pub delay_period: Duration,
     pub update_height: Height,
     pub proof_init: Vec<u8>,
-    pub proof_client: CommitmentProofBytes,
+    pub proof_client: Vec<u8>,
     pub proof_consensus: ConsensusProof,
 }
 

@@ -2,6 +2,7 @@ use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryRawClientStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
 };
@@ -15,6 +16,7 @@ use ibc_relayer::connection::ConnectionMsgType;
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
+use prost_types::Any;
 use tonic::metadata::errors::InvalidMetadataValue;
 use tonic::transport::Error as TransportError;
 
@@ -46,11 +48,13 @@ where
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
+        + CanQueryRawClientStateWithProofs<Counterparty, RawClientState = Any>
         + HasGrpcAddress
         + HasBlockingChainHandle
         + CanRaiseError<TransportError>
         + CanRaiseError<InvalidMetadataValue>
         + CanRaiseError<eyre::Report>,
+    Counterparty: HasClientStateType<Chain>,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,
@@ -71,6 +75,10 @@ where
             .query_connection_end_with_proofs(connection_id, height)
             .await?;
 
+        let (client_state, client_state_proofs) = chain
+            .query_raw_client_state_with_proofs(client_id, height)
+            .await?;
+
         let versions = connection.versions().to_vec();
         let delay_period = connection.delay_period();
 
@@ -82,7 +90,7 @@ where
 
         chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let (m_client_state, proofs) = chain_handle
+                let (_, proofs) = chain_handle
                     .build_connection_proofs_and_client_state(
                         ConnectionMsgType::OpenTry,
                         &connection_id,
@@ -90,18 +98,6 @@ where
                         height,
                     )
                     .map_err(Chain::raise_error)?;
-
-                let any_client_state = m_client_state
-                    .ok_or_else(|| Chain::raise_error(eyre!("expect some client state")))?;
-
-                let client_state = match any_client_state {
-                    AnyClientState::Tendermint(client_state) => client_state,
-                };
-
-                let proof_client = proofs
-                    .client_proof()
-                    .ok_or_else(|| Chain::raise_error(eyre!("expect non empty client proof")))?
-                    .clone();
 
                 let proof_consensus = proofs
                     .consensus_proof()
@@ -115,7 +111,7 @@ where
                     delay_period,
                     update_height: proofs.height(),
                     proof_init: connection_proofs,
-                    proof_client,
+                    proof_client: client_state_proofs,
                     proof_consensus,
                 };
 

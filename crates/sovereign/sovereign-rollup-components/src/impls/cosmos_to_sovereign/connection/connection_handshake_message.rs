@@ -93,7 +93,7 @@ where
             counterparty_connection_id: counterparty_connection_id.to_owned(),
             counterparty_commitment_prefix: commitment_prefix,
             counterparty_versions: versions,
-            client_state: client_state.into(),
+            client_state,
             delay_period,
             update_height,
             proof_init,

@@ -2,11 +2,13 @@ use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::ConsensusProof;
 
@@ -58,12 +60,14 @@ where
 
         let proof_init = timestamped_sign_data_to_bytes(&payload.proof_init);
 
-        let proof_client = timestamped_sign_data_to_bytes(&payload.proof_client).try_into()?;
+        let proof_client = timestamped_sign_data_to_bytes(&payload.proof_client);
 
         let consensus_signature =
             timestamped_sign_data_to_bytes(&payload.proof_consensus).try_into()?;
 
         let proof_consensus = ConsensusProof::new(consensus_signature, payload.update_height)?;
+
+        let client_state_any = IbcProtoAny::from(payload.client_state);
 
         let message = CosmosConnectionOpenTryMessage {
             client_id: client_id.clone(),
@@ -72,7 +76,10 @@ where
             counterparty_commitment_prefix,
             counterparty_versions: payload.versions,
             delay_period: payload.delay_period,
-            client_state: payload.client_state.into(),
+            client_state: Any {
+                type_url: client_state_any.type_url,
+                value: client_state_any.value,
+            },
             update_height: payload.update_height,
             proof_init,
             proof_client,

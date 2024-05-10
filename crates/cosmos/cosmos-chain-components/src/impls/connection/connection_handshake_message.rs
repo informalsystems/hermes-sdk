@@ -88,7 +88,7 @@ where
             counterparty_commitment_prefix: counterparty_payload.commitment_prefix,
             counterparty_versions: counterparty_payload.versions,
             delay_period: counterparty_payload.delay_period,
-            client_state: counterparty_payload.client_state.into(),
+            client_state: counterparty_payload.client_state,
             update_height: counterparty_payload.update_height,
             proof_init: counterparty_payload.proof_init,
             proof_client: counterparty_payload.proof_client,

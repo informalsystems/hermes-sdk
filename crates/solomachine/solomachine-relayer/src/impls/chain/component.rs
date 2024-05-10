@@ -3,6 +3,7 @@ use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainCom
 use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
@@ -13,12 +14,17 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    CanBuildConnectionHandshakePayloads, ConnectionHandshakePayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerierComponent,
+    ClientStateWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -49,6 +55,7 @@ use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSo
 use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
 use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachineChainTypes;
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
+use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 
 pub struct SolomachineChainComponents;
@@ -64,7 +71,10 @@ pub struct SolomachineCosmosComponents;
 
 delegate_components! {
     SolomachineCosmosComponents {
-        ClientStateQuerierComponent:
+        [
+            ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
+        ]:
             QueryAndConvertRawClientState,
         ConsensusStateQuerierComponent:
             QuerySolomachineConsensusStateFromCosmos,
@@ -131,3 +141,14 @@ delegate_components! {
             BuildCosmosUpdateClientMessage,
     }
 }
+
+pub trait CanUseCosmosChainWithSolomachine<Chain>:
+    CanQueryClientState<SolomachineChain<Chain>>
+    + CanQueryClientStateWithProofs<SolomachineChain<Chain>>
+    + CanBuildConnectionHandshakePayloads<SolomachineChain<Chain>>
+where
+    Chain: Solomachine,
+{
+}
+
+impl<Chain> CanUseCosmosChainWithSolomachine<Chain> for CosmosChain where Chain: Solomachine {}
