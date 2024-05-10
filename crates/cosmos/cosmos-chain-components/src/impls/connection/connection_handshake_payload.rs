@@ -23,7 +23,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
 use prost_types::Any;
 
-use crate::traits::chain_handle::HasBlockingChainHandle;
 use crate::traits::grpc_address::HasGrpcAddress;
 use crate::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,

@@ -128,7 +128,7 @@ where
         let msg = CosmosConnectionOpenAckMessage {
             connection_id: connection_id.to_owned(),
             counterparty_connection_id: counterparty_connection_id.to_owned(),
-            client_state: client_state.into(),
+            client_state,
             version,
             update_height,
             proof_try,
