@@ -2,7 +2,7 @@ use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterpar
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    CanQueryAllClientStates, CanQueryClientState,
+    CanQueryAllClientStates, CanQueryClientState, CanQueryClientStateWithProofs,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
@@ -32,6 +32,7 @@ pub trait CanUseCosmosChain:
     + CanIbcTransferToken<CosmosChain>
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
+    + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
     + CanQueryRawConsensusState<CosmosChain>
     + CanQueryAllClientStates<CosmosChain>

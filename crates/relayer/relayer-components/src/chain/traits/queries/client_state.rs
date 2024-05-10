@@ -5,6 +5,7 @@ use cgp_core::prelude::*;
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::client_state::{HasClientStateType, HasRawClientStateType};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::traits::types::proof::HasCommitmentProofType;
 
 #[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]
 #[async_trait]
@@ -19,6 +20,20 @@ where
     ) -> Result<Counterparty::ClientState, Self::Error>;
 }
 
+#[derive_component(ClientStateWithProofsQuerierComponent, ClientStateWithProofsQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryClientStateWithProofs<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType
+where
+    Counterparty: HasClientStateType<Self>,
+{
+    async fn query_client_state_with_proofs(
+        &self,
+        client_id: &Self::ClientId,
+        height: &Self::Height,
+    ) -> Result<(Counterparty::ClientState, Self::CommitmentProof), Self::Error>;
+}
+
 #[derive_component(RawClientStateQuerierComponent, RawClientStateQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryRawClientState<Counterparty>:
@@ -29,6 +44,18 @@ pub trait CanQueryRawClientState<Counterparty>:
         client_id: &Self::ClientId,
         height: &Self::Height,
     ) -> Result<Self::RawClientState, Self::Error>;
+}
+
+#[derive_component(RawClientStateWithProofsQuerierComponent, RawClientStateWithProofsQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryRawClientStateWithProofs<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasRawClientStateType + HasCommitmentProofType + HasErrorType
+{
+    async fn query_raw_client_state_with_proofs(
+        &self,
+        client_id: &Self::ClientId,
+        height: &Self::Height,
+    ) -> Result<(Self::RawClientState, Self::CommitmentProof), Self::Error>;
 }
 
 #[derive_component(AllClientStatesQuerierComponent, AllClientStatesQuerier<Chain>)]

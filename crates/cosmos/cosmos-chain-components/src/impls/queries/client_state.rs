@@ -4,7 +4,7 @@ use core::str::FromStr;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllRawClientStatesQuerier, RawClientStateQuerier,
+    AllRawClientStatesQuerier, RawClientStateQuerier, RawClientStateWithProofsQuerier,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -47,6 +47,32 @@ where
             Message::decode(client_state_bytes.as_ref()).map_err(Chain::raise_error)?;
 
         Ok(client_state_any)
+    }
+}
+
+impl<Chain, Counterparty> RawClientStateWithProofsQuerier<Chain, Counterparty>
+    for QueryCosmosClientStateFromAbci
+where
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
+        + HasRawClientStateType<RawClientState = Any>
+        + CanQueryAbci
+        + CanRaiseError<DecodeError>,
+{
+    async fn query_raw_client_state_with_proofs(
+        chain: &Chain,
+        client_id: &ClientId,
+        height: &Height,
+    ) -> Result<(Any, Chain::CommitmentProof), Chain::Error> {
+        let client_state_path = format!("clients/{client_id}/clientState");
+
+        let (client_state_bytes, proofs) = chain
+            .query_abci_with_proofs(IBC_QUERY_PATH, client_state_path.as_bytes(), height)
+            .await?;
+
+        let client_state_any =
+            Message::decode(client_state_bytes.as_ref()).map_err(Chain::raise_error)?;
+
+        Ok((client_state_any, proofs))
     }
 }
 

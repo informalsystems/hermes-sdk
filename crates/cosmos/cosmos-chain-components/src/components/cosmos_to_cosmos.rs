@@ -7,6 +7,7 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::C
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
+    ClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
@@ -23,6 +24,7 @@ delegate_components! {
     CosmosToCosmosComponents {
         [
             ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,
         ]:
             QueryAndConvertRawClientState,

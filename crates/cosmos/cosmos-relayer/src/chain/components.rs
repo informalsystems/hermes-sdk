@@ -42,7 +42,8 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
-    ClientStateQuerierComponent, RawClientStateQuerierComponent,
+    ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
+    RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
@@ -228,14 +229,19 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
 
             PacketFieldsReaderComponent,
+            WriteAckQuerierComponent,
+
+            ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
+            RawClientStateQuerierComponent,
+            RawClientStateWithProofsQuerierComponent,
+            AllClientStatesQuerierComponent,
+            AllRawClientStatesQuerierComponent,
+
+            RawConsensusStateQuerierComponent,
             ConsensusStateHeightQuerierComponent,
             ConsensusStateHeightsQuerierComponent,
-            WriteAckQuerierComponent,
-            ClientStateQuerierComponent,
-            RawConsensusStateQuerierComponent,
-            AllClientStatesQuerierComponent,
-            RawClientStateQuerierComponent,
-            AllRawClientStatesQuerierComponent,
+
             CreateClientOptionsTypeComponent,
             CreateClientMessageBuilderComponent,
             CreateClientPayloadBuilderComponent,
