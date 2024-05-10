@@ -54,7 +54,7 @@ where
         counterparty_connection_id: &ConnectionId,
         payload: SolomachineConnectionOpenTryPayload,
     ) -> Result<CosmosMessage, Error> {
-        let counterparty_commitment_prefix = Vec::from(payload.commitment_prefix).try_into()?;
+        let counterparty_commitment_prefix = payload.commitment_prefix;
 
         let proof_init: ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes = timestamped_sign_data_to_bytes(&payload.proof_init)
             .try_into()?;
