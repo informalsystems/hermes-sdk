@@ -63,13 +63,85 @@ where
     }
 
     async fn build_connection_open_try_payload(
-        _chain: &Chain,
+        chain: &Chain,
         _client_state: &Chain::ClientState,
-        _height: &Chain::Height,
-        _client_id: &Chain::ClientId,
-        _connection_id: &Chain::ConnectionId,
+        height: &Chain::Height,
+        client_id: &Chain::ClientId,
+        connection_id: &Chain::ConnectionId,
     ) -> Result<Chain::ConnectionOpenTryPayload, Chain::Error> {
-        todo!()
+        let rollup_height = chain
+            .rollup()
+            .query_chain_height()
+            .await
+            .map_err(Chain::raise_error)?;
+
+        let rollup_connection_end =
+            query_connection_end(chain.rollup(), connection_id, &rollup_height).await;
+
+        let commitment_prefix = rollup_connection_end.conn_end.counterparty().prefix.clone();
+
+        let rollup_client_state =
+            query_client_state(chain.rollup(), client_id, &rollup_height).await;
+
+        let client_state = SovereignClientState::try_from(rollup_client_state.client_state)
+            .map_err(Chain::raise_error)?;
+
+        let consensus_height = Height::new(
+            client_state
+                .sovereign_params
+                .genesis_da_height
+                .revision_number(),
+            height.slot_number
+                + client_state
+                    .sovereign_params
+                    .genesis_da_height
+                    .revision_height(),
+        )
+        .map_err(Chain::raise_error)?;
+
+        let rollup_consensus_state =
+            query_consensus_state(chain.rollup(), client_id, &consensus_height, &rollup_height)
+                .await;
+
+        let consensus_proof_height = Height::new(
+            rollup_consensus_state.proof_height.revision_number(),
+            rollup_consensus_state.proof_height.revision_height(),
+        )
+        .map_err(Chain::raise_error)?;
+
+        let versions = rollup_connection_end
+            .conn_end
+            .versions()
+            .iter()
+            .map(|version| {
+                let proto_version = ProtoVersion::from(version.clone());
+
+                Version::try_from(proto_version)
+                    .map_err(Chain::raise_error)
+                    .unwrap()
+            })
+            .collect();
+
+        let update_height = Height::new(
+            client_state
+                .sovereign_params
+                .genesis_da_height
+                .revision_number(),
+            rollup_height.slot_number,
+        )
+        .map_err(Chain::raise_error)?;
+
+        Ok(SovereignConnectionOpenTryPayload {
+            commitment_prefix: commitment_prefix.into_vec(),
+            client_state,
+            versions,
+            delay_period: rollup_connection_end.conn_end.delay_period(),
+            update_height,
+            proof_init: rollup_connection_end.proof,
+            proof_client: rollup_client_state.proof,
+            proof_consensus: rollup_consensus_state.proof,
+            proof_consensus_height: consensus_proof_height,
+        })
     }
 
     async fn build_connection_open_ack_payload(

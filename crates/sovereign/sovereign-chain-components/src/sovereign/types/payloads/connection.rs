@@ -1,3 +1,4 @@
+use core::time::Duration;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
@@ -9,7 +10,15 @@ pub struct SovereignConnectionOpenInitPayload {
 }
 
 pub struct SovereignConnectionOpenTryPayload {
-    // TODO: fill in fields
+    pub commitment_prefix: Vec<u8>,
+    pub client_state: SovereignClientState,
+    pub versions: Vec<Version>,
+    pub delay_period: Duration,
+    pub update_height: Height,
+    pub proof_init: Vec<u8>,
+    pub proof_client: Vec<u8>,
+    pub proof_consensus: Vec<u8>,
+    pub proof_consensus_height: Height,
 }
 
 pub struct SovereignConnectionOpenAckPayload {
