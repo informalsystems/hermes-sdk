@@ -56,7 +56,7 @@ where
     ) -> Result<CosmosMessage, Error> {
         let counterparty_commitment_prefix = payload.commitment_prefix;
 
-        let proof_init = timestamped_sign_data_to_bytes(&payload.proof_init).try_into()?;
+        let proof_init = timestamped_sign_data_to_bytes(&payload.proof_init);
 
         let proof_client = timestamped_sign_data_to_bytes(&payload.proof_client).try_into()?;
 
