@@ -38,7 +38,9 @@ use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics03_connection::error::Error as Ics03Error;
+use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
+use ibc_relayer_types::proofs::ProofError;
 use ibc_relayer_types::signer::SignerError;
 use prost::{DecodeError, EncodeError};
 use tendermint_proto::Error as TendermintProtoError;
@@ -108,12 +110,14 @@ delegate_components! {
             TendermintClientError,
             Ics02Error,
             Ics03Error,
+            Ics23Error,
             Ics24ValidationError,
             ParseIntError,
             FromUtf8Error,
             EncodeError,
             DecodeError,
             InvalidMetadataValue,
+            ProofError,
 
             // TODO: make it retryable?
             TransportError,
