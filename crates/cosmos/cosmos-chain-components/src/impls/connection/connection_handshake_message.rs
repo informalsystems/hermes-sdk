@@ -85,7 +85,7 @@ where
             client_id: client_id.clone(),
             counterparty_client_id: counterparty_client_id.clone(),
             counterparty_connection_id: counterparty_connection_id.clone(),
-            counterparty_commitment_prefix: counterparty_payload.commitment_prefix.clone(),
+            counterparty_commitment_prefix: counterparty_payload.commitment_prefix,
             counterparty_versions: counterparty_payload.versions,
             delay_period: counterparty_payload.delay_period,
             client_state: counterparty_payload.client_state.into(),

@@ -15,9 +15,7 @@ use ibc_query::core::connection::QueryConnectionResponse;
 use ibc_relayer_types::core::ics02_client::error::Error as RelayerClientError;
 use ibc_relayer_types::core::ics03_connection::error::Error as ConnectionError;
 use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::{
-    CommitmentPrefix, CommitmentProofBytes,
-};
+use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::{ConsensusProof, ProofError};
 use ibc_relayer_types::Height;
@@ -60,8 +58,7 @@ where
         _client_state: &Chain::ClientState,
     ) -> Result<Chain::ConnectionOpenInitPayload, Chain::Error> {
         // TODO: retrieve commimtment prefix
-        let commitment_prefix =
-            CommitmentPrefix::try_from("ibc".to_string().as_bytes().to_vec()).unwrap();
+        let commitment_prefix = "ibc".into();
         Ok(SovereignConnectionOpenInitPayload { commitment_prefix })
     }
 

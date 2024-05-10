@@ -6,9 +6,7 @@ use ibc_proto::ibc::core::connection::v1::{
     Counterparty, MsgConnectionOpenTry as ProtoMsgConnectionOpenTry,
 };
 use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::{
-    CommitmentPrefix, CommitmentProofBytes,
-};
+use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::signer::Signer;
@@ -24,7 +22,7 @@ pub struct CosmosConnectionOpenTryMessage {
     pub client_id: ClientId,
     pub counterparty_client_id: ClientId,
     pub counterparty_connection_id: ConnectionId,
-    pub counterparty_commitment_prefix: CommitmentPrefix,
+    pub counterparty_commitment_prefix: Vec<u8>,
     pub counterparty_versions: Vec<Version>,
     pub client_state: Any,
     pub delay_period: Duration,
@@ -43,7 +41,7 @@ impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
         let counterparty = Counterparty {
             client_id: self.counterparty_client_id.as_str().to_string(),
             prefix: Some(MerklePrefix {
-                key_prefix: self.counterparty_commitment_prefix.clone().into_vec(),
+                key_prefix: self.counterparty_commitment_prefix.clone(),
             }),
             connection_id: self.counterparty_connection_id.as_str().to_string(),
         };

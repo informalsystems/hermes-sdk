@@ -1,5 +1,6 @@
 use cgp_core::CanRaiseError;
 use eyre::eyre;
+use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
@@ -28,28 +29,22 @@ where
             ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload,
             ConnectionOpenAckPayload = CosmosConnectionOpenAckPayload,
             ConnectionOpenConfirmPayload = CosmosConnectionOpenConfirmPayload,
-        > + HasClientStateType<Counterparty>
-        + HasIbcChainTypes<
+        > + HasIbcChainTypes<
             Counterparty,
             Height = Height,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasBlockingChainHandle
+        > + HasClientStateType<Counterparty>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = Vec<u8>>
+        + HasBlockingChainHandle
         + CanRaiseError<eyre::Report>,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
     ) -> Result<Chain::ConnectionOpenInitPayload, Chain::Error> {
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let commitment_prefix = chain_handle
-                    .query_commitment_prefix()
-                    .map_err(Chain::raise_error)?;
-
-                Ok(CosmosConnectionOpenInitPayload { commitment_prefix })
-            })
-            .await
+        let commitment_prefix = chain.ibc_commitment_prefix().clone();
+        Ok(CosmosConnectionOpenInitPayload { commitment_prefix })
     }
 
     async fn build_connection_open_try_payload(
@@ -62,13 +57,10 @@ where
         let height = *height;
         let client_id = client_id.clone();
         let connection_id = connection_id.clone();
+        let commitment_prefix = chain.ibc_commitment_prefix().clone();
 
         chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let commitment_prefix = chain_handle
-                    .query_commitment_prefix()
-                    .map_err(Chain::raise_error)?;
-
                 let (connection, _) = chain_handle
                     .query_connection(
                         QueryConnectionRequest {
