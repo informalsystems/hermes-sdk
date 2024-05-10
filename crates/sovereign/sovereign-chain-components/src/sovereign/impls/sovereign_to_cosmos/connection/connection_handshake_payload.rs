@@ -15,9 +15,8 @@ use ibc_query::core::connection::QueryConnectionResponse;
 use ibc_relayer_types::core::ics02_client::error::Error as RelayerClientError;
 use ibc_relayer_types::core::ics03_connection::error::Error as ConnectionError;
 use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::proofs::{ConsensusProof, ProofError};
+use ibc_relayer_types::proofs::ProofError;
 use ibc_relayer_types::Height;
 use jsonrpsee::core::client::ClientT;
 use serde::Serialize;
@@ -88,16 +87,10 @@ where
         let rollup_connection_end =
             query_connection_end(chain.rollup(), connection_id, &rollup_height).await;
 
-        let proof_try = CommitmentProofBytes::try_from(rollup_connection_end.proof)
-            .map_err(Chain::raise_error)?;
-
         let rollup_client_state =
             query_client_state(chain.rollup(), client_id, &rollup_height).await;
 
         let client_state = SovereignClientState::try_from(rollup_client_state.client_state)
-            .map_err(Chain::raise_error)?;
-
-        let proof_client = CommitmentProofBytes::try_from(rollup_client_state.proof)
             .map_err(Chain::raise_error)?;
 
         let consensus_height = Height::new(
@@ -117,19 +110,11 @@ where
             query_consensus_state(chain.rollup(), client_id, &consensus_height, &rollup_height)
                 .await;
 
-        let commitment_bytes_consensus =
-            CommitmentProofBytes::try_from(rollup_consensus_state.proof)
-                .map_err(Chain::raise_error)?;
-
         let consensus_proof_height = Height::new(
             rollup_consensus_state.proof_height.revision_number(),
             rollup_consensus_state.proof_height.revision_height(),
         )
         .map_err(Chain::raise_error)?;
-
-        let proof_consensus =
-            ConsensusProof::new(commitment_bytes_consensus, consensus_proof_height)
-                .map_err(Chain::raise_error)?;
 
         let ibc_version = rollup_connection_end
             .conn_end
@@ -147,9 +132,10 @@ where
             client_state,
             version,
             update_height: consensus_proof_height,
-            proof_try,
-            proof_client,
-            proof_consensus,
+            proof_try: rollup_connection_end.proof,
+            proof_client: rollup_client_state.proof,
+            proof_consensus: rollup_consensus_state.proof,
+            proof_consensus_height: consensus_proof_height,
         })
     }
 

@@ -1,14 +1,17 @@
 use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc::core::primitives::proto::Any;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use prost_types::Any as ProstAny;
 
 use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
@@ -74,26 +77,32 @@ where
 
     async fn build_connection_open_ack_message(
         _chain: &Chain,
-        _connection_id: &Chain::ConnectionId,
-        _counterparty_connection_id: &Counterparty::ConnectionId,
-        _counterparty_payload: SovereignConnectionOpenAckPayload,
+        connection_id: &Chain::ConnectionId,
+        counterparty_connection_id: &Counterparty::ConnectionId,
+        counterparty_payload: SovereignConnectionOpenAckPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        todo!()
-        // let connection_id = connection_id.clone();
-        // let counterparty_connection_id = counterparty_connection_id.clone();
+        let connection_id = connection_id.clone();
+        let counterparty_connection_id = counterparty_connection_id.clone();
+        let any_client_state = Any::from(counterparty_payload.client_state);
 
-        // let message = CosmosConnectionOpenAckMessage {
-        //     connection_id,
-        //     counterparty_connection_id,
-        //     version: counterparty_payload.version,
-        //     client_state: counterparty_payload.client_state.into(),
-        //     update_height: counterparty_payload.update_height,
-        //     proof_try: counterparty_payload.proof_try,
-        //     proof_client: counterparty_payload.proof_client,
-        //     proof_consensus: counterparty_payload.proof_consensus,
-        // };
+        let prost_any_client_state = ProstAny {
+            type_url: any_client_state.type_url,
+            value: any_client_state.value,
+        };
 
-        // Ok(message.to_cosmos_message())
+        let message = CosmosConnectionOpenAckMessage {
+            connection_id,
+            counterparty_connection_id,
+            version: counterparty_payload.version,
+            client_state: prost_any_client_state,
+            update_height: counterparty_payload.update_height,
+            proof_try: counterparty_payload.proof_try,
+            proof_client: counterparty_payload.proof_client,
+            proof_consensus: counterparty_payload.proof_consensus,
+            proof_consensus_height: counterparty_payload.proof_consensus_height,
+        };
+
+        Ok(message.to_cosmos_message())
     }
 
     async fn build_connection_open_confirm_message(

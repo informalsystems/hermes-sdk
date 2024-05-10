@@ -2068,6 +2068,7 @@ dependencies = [
  "ibc-relayer-types",
  "jsonrpsee",
  "prost",
+ "prost-types",
  "serde",
  "serde-json-wasm",
  "serde_json",
