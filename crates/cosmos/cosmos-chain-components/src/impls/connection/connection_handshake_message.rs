@@ -93,6 +93,7 @@ where
             proof_init: counterparty_payload.proof_init,
             proof_client: counterparty_payload.proof_client,
             proof_consensus: counterparty_payload.proof_consensus,
+            proof_consensus_height: counterparty_payload.proof_consensus_height,
         };
 
         Ok(message.to_cosmos_message())

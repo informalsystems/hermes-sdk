@@ -1,15 +1,19 @@
 use cgp_core::CanRaiseError;
 use eyre::eyre;
+use hermes_encoding_components::traits::convert::CanConvert;
+use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryRawClientStateWithProofs;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryRawConsensusStateWithProofs;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    HasClientStateFields, HasClientStateType,
+};
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -31,7 +35,7 @@ use crate::types::payloads::connection::{
 
 pub struct BuildCosmosConnectionHandshakePayload;
 
-impl<Chain, Counterparty> ConnectionHandshakePayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Encoding> ConnectionHandshakePayloadBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakePayload
 where
     Chain: HasConnectionHandshakePayloadTypes<
@@ -50,14 +54,17 @@ where
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
-        + CanQueryRawClientStateWithProofs<Counterparty, RawClientState = Any>
+        + CanQueryClientStateWithProofs<Counterparty>
         + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
         + HasGrpcAddress
         + HasBlockingChainHandle
+        + CanRaiseError<Encoding::Error>
         + CanRaiseError<TransportError>
         + CanRaiseError<InvalidMetadataValue>
         + CanRaiseError<eyre::Report>,
-    Counterparty: HasClientStateType<Chain> + HasHeightType,
+    Counterparty:
+        HasClientStateFields<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightFields,
+    Encoding: CanConvert<Counterparty::ClientState, Any>,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,
@@ -74,53 +81,46 @@ where
         client_id: &ClientId,
         connection_id: &ConnectionId,
     ) -> Result<CosmosConnectionOpenTryPayload, Chain::Error> {
+        let commitment_prefix = chain.ibc_commitment_prefix().clone();
+
         let (connection, connection_proofs) = chain
             .query_connection_end_with_proofs(connection_id, height)
-            .await?;
-
-        let (client_state, client_state_proofs) = chain
-            .query_raw_client_state_with_proofs(client_id, height)
             .await?;
 
         let versions = connection.versions().to_vec();
         let delay_period = connection.delay_period();
 
-        let commitment_prefix = chain.ibc_commitment_prefix().clone();
+        let (client_state, client_state_proofs) = chain
+            .query_client_state_with_proofs(client_id, height)
+            .await?;
 
-        let height = *height;
-        let client_id = client_id.clone();
-        let connection_id = connection_id.clone();
+        let client_state_any = Counterparty::default_encoding()
+            .convert(&client_state)
+            .map_err(Chain::raise_error)?;
 
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let (_, proofs) = chain_handle
-                    .build_connection_proofs_and_client_state(
-                        ConnectionMsgType::OpenTry,
-                        &connection_id,
-                        &client_id,
-                        height,
-                    )
-                    .map_err(Chain::raise_error)?;
+        let consensus_state_height = Counterparty::client_state_latest_height(&client_state);
 
-                let proof_consensus = proofs
-                    .consensus_proof()
-                    .ok_or_else(|| Chain::raise_error(eyre!("expect non empty consensus proof")))?
-                    .clone();
+        let (_, consensus_state_proofs) = chain
+            .query_raw_consensus_state_with_proofs(client_id, &consensus_state_height, height)
+            .await?;
 
-                let payload = CosmosConnectionOpenTryPayload {
-                    commitment_prefix,
-                    client_state,
-                    versions,
-                    delay_period,
-                    update_height: proofs.height(),
-                    proof_init: connection_proofs,
-                    proof_client: client_state_proofs,
-                    proof_consensus,
-                };
+        let payload = CosmosConnectionOpenTryPayload {
+            commitment_prefix,
+            client_state: client_state_any,
+            versions,
+            delay_period,
+            update_height: height.clone(),
+            proof_init: connection_proofs,
+            proof_client: client_state_proofs,
+            proof_consensus: consensus_state_proofs,
+            proof_consensus_height: Height::new(
+                Counterparty::revision_number(&consensus_state_height),
+                Counterparty::revision_height(&consensus_state_height),
+            )
+            .unwrap(),
+        };
 
-                Ok(payload)
-            })
-            .await
+        Ok(payload)
     }
 
     async fn build_connection_open_ack_payload(

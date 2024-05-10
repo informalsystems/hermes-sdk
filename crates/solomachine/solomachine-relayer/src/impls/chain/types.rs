@@ -1,3 +1,5 @@
+use core::time::Duration;
+
 use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, ProvideEncodingType,
@@ -5,7 +7,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateFieldsGetter, ProvideClientStateType,
+};
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
 };
@@ -22,6 +26,7 @@ use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc_relayer_types::Height;
 
 use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::component::SolomachineChainComponents;
@@ -95,6 +100,28 @@ where
     Chain: Async,
 {
     type ClientState = SolomachineClientState;
+}
+
+// TODO: properly implement solomachine client state fields
+impl<Chain, Counterparty> ClientStateFieldsGetter<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
+    fn client_state_latest_height(client_state: &SolomachineClientState) -> Height {
+        Height::new(0, client_state.sequence).unwrap()
+    }
+
+    fn client_state_is_frozen(client_state: &SolomachineClientState) -> bool {
+        client_state.is_frozen
+    }
+
+    fn client_state_has_expired(
+        _client_state: &SolomachineClientState,
+        _elapsed: Duration,
+    ) -> bool {
+        false
+    }
 }
 
 impl<Chain, Counterparty> ProvideConsensusStateType<SolomachineChain<Chain>, Counterparty>

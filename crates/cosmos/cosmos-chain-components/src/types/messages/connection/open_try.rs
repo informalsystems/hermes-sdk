@@ -7,7 +7,6 @@ use ibc_proto::ibc::core::connection::v1::{
 };
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 use prost_types::Any;
@@ -29,7 +28,8 @@ pub struct CosmosConnectionOpenTryMessage {
     pub update_height: Height,
     pub proof_init: Vec<u8>,
     pub proof_client: Vec<u8>,
-    pub proof_consensus: ConsensusProof,
+    pub proof_consensus: Vec<u8>,
+    pub proof_consensus_height: Height,
 }
 
 impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
@@ -63,8 +63,8 @@ impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
             proof_height: Some(self.update_height.into()),
             proof_init: self.proof_init.clone(),
             proof_client: self.proof_client.clone(),
-            proof_consensus: self.proof_consensus.proof().clone().into(),
-            consensus_height: Some(self.proof_consensus.height().into()),
+            proof_consensus: self.proof_consensus.clone(),
+            consensus_height: Some(self.proof_consensus_height.into()),
             signer: signer.to_string(),
             previous_connection_id: "".to_string(),
             host_consensus_state_proof: Vec::new(),

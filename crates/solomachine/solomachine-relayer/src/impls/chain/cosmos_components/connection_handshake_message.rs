@@ -10,7 +10,6 @@ use hermes_relayer_components::chain::traits::types::connection::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::proofs::ConsensusProof;
 
 use crate::methods::encode::sign_data::timestamped_sign_data_to_bytes;
 use crate::types::payloads::connection::{
@@ -62,10 +61,7 @@ where
 
         let proof_client = timestamped_sign_data_to_bytes(&payload.proof_client);
 
-        let consensus_signature =
-            timestamped_sign_data_to_bytes(&payload.proof_consensus).try_into()?;
-
-        let proof_consensus = ConsensusProof::new(consensus_signature, payload.update_height)?;
+        let consensus_signature = timestamped_sign_data_to_bytes(&payload.proof_consensus);
 
         let client_state_any = IbcProtoAny::from(payload.client_state);
 
@@ -83,7 +79,8 @@ where
             update_height: payload.update_height,
             proof_init,
             proof_client,
-            proof_consensus,
+            proof_consensus: consensus_signature,
+            proof_consensus_height: payload.update_height,
         };
 
         Ok(message.to_cosmos_message())

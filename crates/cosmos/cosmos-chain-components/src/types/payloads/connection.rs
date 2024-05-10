@@ -22,7 +22,8 @@ pub struct CosmosConnectionOpenTryPayload {
     pub update_height: Height,
     pub proof_init: Vec<u8>,
     pub proof_client: Vec<u8>,
-    pub proof_consensus: ConsensusProof,
+    pub proof_consensus: Vec<u8>,
+    pub proof_consensus_height: Height,
 }
 
 #[derive(Debug)]
