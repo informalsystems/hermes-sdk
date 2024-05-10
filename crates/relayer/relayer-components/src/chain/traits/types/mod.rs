@@ -20,6 +20,7 @@ pub mod ibc_events;
 pub mod message;
 pub mod packet;
 pub mod packets;
+pub mod proof;
 pub mod status;
 pub mod timestamp;
 pub mod update_client;

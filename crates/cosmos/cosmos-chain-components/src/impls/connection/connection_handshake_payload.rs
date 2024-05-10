@@ -64,17 +64,17 @@ where
     ) -> Result<CosmosConnectionOpenTryPayload, Chain::Error> {
         let connection = chain.query_connection_end(connection_id, height).await?;
 
+        let versions = connection.versions().to_vec();
+        let delay_period = connection.delay_period();
+
+        let commitment_prefix = chain.ibc_commitment_prefix().clone();
+
         let height = *height;
         let client_id = client_id.clone();
         let connection_id = connection_id.clone();
 
-        let commitment_prefix = chain.ibc_commitment_prefix().clone();
-
         chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let versions = connection.versions().to_vec();
-                let delay_period = connection.delay_period();
-
                 let (m_client_state, proofs) = chain_handle
                     .build_connection_proofs_and_client_state(
                         ConnectionMsgType::OpenTry,
@@ -126,19 +126,19 @@ where
     ) -> Result<Chain::ConnectionOpenAckPayload, Chain::Error> {
         let connection = chain.query_connection_end(connection_id, height).await?;
 
+        let version = connection
+            .versions()
+            .iter()
+            .next()
+            .cloned()
+            .unwrap_or_default();
+
         let height = *height;
         let client_id = client_id.clone();
         let connection_id = connection_id.clone();
 
         chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let version = connection
-                    .versions()
-                    .iter()
-                    .next()
-                    .cloned()
-                    .unwrap_or_default();
-
                 let (m_client_state, proofs) = chain_handle
                     .build_connection_proofs_and_client_state(
                         ConnectionMsgType::OpenAck,
