@@ -16,6 +16,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    CommitmentPrefixTypeComponent, IbcCommitmentPrefixGetter,
+};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -207,6 +210,7 @@ delegate_components! {
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
+            CommitmentPrefixTypeComponent,
 
             CreateClientEventComponent,
 
@@ -368,5 +372,11 @@ impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainComponents {
             mutex_guard,
             account,
         }
+    }
+}
+
+impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainComponents {
+    fn ibc_commitment_prefix(chain: &CosmosChain) -> &Vec<u8> {
+        &chain.ibc_commitment_prefix
     }
 }

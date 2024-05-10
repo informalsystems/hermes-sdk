@@ -1,3 +1,4 @@
+pub mod commitment_prefix;
 pub mod delegate;
 pub mod forward;
 pub mod queries;

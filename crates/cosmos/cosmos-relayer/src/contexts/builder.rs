@@ -90,14 +90,12 @@ impl CosmosBuilder {
         let runtime = self.runtime.runtime.clone();
         let chain_id = sdk_chain_config.id.clone();
 
-        let (handle, key, chain_config) = task::block_in_place(move || -> Result<_, Error> {
+        let (handle, key) = task::block_in_place(move || -> Result<_, Error> {
             let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(chain_config, runtime)?;
 
             let key = get_keypair(&chain_id, &handle, m_keypair)?;
 
-            let chain_config = handle.config()?;
-
-            Ok((handle, key, chain_config))
+            Ok((handle, key))
         })?;
 
         let event_source_mode = sdk_chain_config.event_source.clone();
@@ -118,7 +116,7 @@ impl CosmosBuilder {
 
         let context = CosmosChain::new(
             handle,
-            chain_config,
+            sdk_chain_config,
             tx_config,
             rpc_client,
             compat_mode,
