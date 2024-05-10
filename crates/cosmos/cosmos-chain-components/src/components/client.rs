@@ -33,7 +33,9 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
     ClientStateQuerierComponent, RawClientStateQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
 };
@@ -247,7 +249,10 @@ delegate_components! {
             QueryCometBlock,
         AbciQuerierComponent:
             QueryAbci,
-        ConnectionEndQuerierComponent:
+        [
+            ConnectionEndQuerierComponent,
+            ConnectionEndWithProofsQuerierComponent,
+        ]:
             QueryCosmosConnectionEndFromAbci,
         [
             ClientStateQuerierComponent,

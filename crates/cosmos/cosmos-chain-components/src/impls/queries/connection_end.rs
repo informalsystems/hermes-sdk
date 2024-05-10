@@ -1,7 +1,10 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerier;
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerier, ConnectionEndWithProofsQuerier,
+};
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc_proto::Protobuf;
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
@@ -36,5 +39,32 @@ where
             ConnectionEnd::decode_vec(&connnection_end_bytes).map_err(Chain::raise_error)?;
 
         Ok(connection_end)
+    }
+}
+
+impl<Chain, Counterparty> ConnectionEndWithProofsQuerier<Chain, Counterparty>
+    for QueryCosmosConnectionEndFromAbci
+where
+    Chain: HasConnectionEndType<Counterparty, ConnectionEnd = ConnectionEnd>
+        + HasIbcChainTypes<Counterparty, Height = Height, ConnectionId = ConnectionId>
+        + HasCommitmentProofType
+        + CanQueryAbci
+        + CanRaiseError<TendermintProtoError>,
+{
+    async fn query_connection_end_with_proofs(
+        chain: &Chain,
+        connection_id: &ConnectionId,
+        height: &Height,
+    ) -> Result<(ConnectionEnd, Chain::CommitmentProof), Chain::Error> {
+        let connection_path = format!("connections/{connection_id}");
+
+        let (connnection_end_bytes, proof) = chain
+            .query_abci_with_proofs(IBC_QUERY_PATH, connection_path.as_bytes(), height)
+            .await?;
+
+        let connection_end =
+            ConnectionEnd::decode_vec(&connnection_end_bytes).map_err(Chain::raise_error)?;
+
+        Ok((connection_end, proof))
     }
 }
