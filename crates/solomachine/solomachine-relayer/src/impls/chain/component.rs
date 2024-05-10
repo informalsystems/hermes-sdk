@@ -5,8 +5,11 @@ use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFi
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::traits::has_encoding::EncodingGetterComponent;
+use hermes_encoding_components::traits::has_encoding::{
+    EncodingGetterComponent, HasDefaultEncoding,
+};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
@@ -25,11 +28,17 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerierComponent,
     ClientStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusStateWithProofs, ConsensusStateQuerierComponent,
+    ConsensusStateWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightFieldComponent, HeightTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -38,9 +47,9 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
+use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
-use crate::impls::chain::cosmos_components::query_consensus_state::QuerySolomachineConsensusStateFromCosmos;
 use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
@@ -57,6 +66,7 @@ use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachin
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
+use crate::types::consensus_state::SolomachineConsensusState;
 
 pub struct SolomachineChainComponents;
 
@@ -76,8 +86,11 @@ delegate_components! {
             ClientStateWithProofsQuerierComponent,
         ]:
             QueryAndConvertRawClientState,
-        ConsensusStateQuerierComponent:
-            QuerySolomachineConsensusStateFromCosmos,
+        [
+            ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+        ]:
+            QueryAndConvertRawConsensusState,
         CreateClientMessageBuilderComponent:
             BuildCreateSolomachineClientMessage,
         ConnectionHandshakeMessageBuilderComponent:
@@ -95,6 +108,7 @@ delegate_components! {
             ProvideHermesRuntime,
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             IbcChainTypesComponent,
@@ -142,9 +156,18 @@ delegate_components! {
     }
 }
 
+pub trait CanUseSolomachine:
+    HasConsensusStateType<CosmosChain, ConsensusState = SolomachineConsensusState>
+    + HasDefaultEncoding<Encoding = SolomachineEncoding>
+{
+}
+
+impl<Chain> CanUseSolomachine for SolomachineChain<Chain> where Chain: Solomachine {}
+
 pub trait CanUseCosmosChainWithSolomachine<Chain>:
     CanQueryClientState<SolomachineChain<Chain>>
     + CanQueryClientStateWithProofs<SolomachineChain<Chain>>
+    + CanQueryConsensusStateWithProofs<SolomachineChain<Chain>>
     + CanBuildConnectionHandshakePayloads<SolomachineChain<Chain>>
 where
     Chain: Solomachine,

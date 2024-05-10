@@ -6,8 +6,10 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryRaw
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
 };
+use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryRawConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -49,12 +51,13 @@ where
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
         + CanQueryRawClientStateWithProofs<Counterparty, RawClientState = Any>
+        + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
         + HasGrpcAddress
         + HasBlockingChainHandle
         + CanRaiseError<TransportError>
         + CanRaiseError<InvalidMetadataValue>
         + CanRaiseError<eyre::Report>,
-    Counterparty: HasClientStateType<Chain>,
+    Counterparty: HasClientStateType<Chain> + HasHeightType,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,

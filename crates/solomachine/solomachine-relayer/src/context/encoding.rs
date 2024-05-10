@@ -10,6 +10,7 @@ use crate::encoding::components::{
     SolomachineEncodingComponents as BaseSolomachineEncodingComponents,
 };
 use crate::types::client_state::SolomachineClientState;
+use crate::types::consensus_state::SolomachineConsensusState;
 
 pub struct SolomachineEncoding;
 
@@ -35,7 +36,9 @@ delegate_components! {
 pub trait CanUseSolomachineEncoding:
     CanEncodeAndDecode<Protobuf, SolomachineClientState>
     + CanEncodeAndDecode<Any, SolomachineClientState>
+    + CanEncodeAndDecode<Any, SolomachineConsensusState>
     + CanConvertBothWays<Any, SolomachineClientState>
+    + CanConvertBothWays<Any, SolomachineConsensusState>
 {
 }
 
