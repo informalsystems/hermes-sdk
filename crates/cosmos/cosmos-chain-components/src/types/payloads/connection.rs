@@ -1,7 +1,6 @@
 use core::time::Duration;
 
 use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::Height;
 use prost_types::Any;
 
@@ -37,5 +36,5 @@ pub struct CosmosConnectionOpenAckPayload {
 #[derive(Debug)]
 pub struct CosmosConnectionOpenConfirmPayload {
     pub update_height: Height,
-    pub proof_ack: CommitmentProofBytes,
+    pub proof_ack: Vec<u8>,
 }

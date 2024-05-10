@@ -17,8 +17,6 @@ use hermes_relayer_components::chain::traits::types::height::{
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::connection::ConnectionMsgType;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
@@ -57,7 +55,6 @@ where
         + CanQueryClientStateWithProofs<Counterparty>
         + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
         + HasGrpcAddress
-        + HasBlockingChainHandle
         + CanRaiseError<Encoding::Error>
         + CanRaiseError<Ics02Error>
         + CanRaiseError<&'static str>,
@@ -183,34 +180,20 @@ where
         chain: &Chain,
         _client_state: &Chain::ClientState,
         height: &Chain::Height,
-        client_id: &Chain::ClientId,
+        _client_id: &Chain::ClientId,
         connection_id: &Chain::ConnectionId,
     ) -> Result<Chain::ConnectionOpenConfirmPayload, Chain::Error> {
-        let height = *height;
-        let client_id = client_id.clone();
-        let connection_id = connection_id.clone();
+        let (_, connection_proofs) = chain
+            .query_connection_end_with_proofs(connection_id, height)
+            .await?;
 
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let (_, proofs) = chain_handle
-                    .build_connection_proofs_and_client_state(
-                        ConnectionMsgType::OpenConfirm,
-                        &connection_id,
-                        &client_id,
-                        height,
-                    )
-                    .map_err(Chain::raise_error)?;
+        let update_height = Chain::increment_height(height)?;
 
-                let update_height = proofs.height();
-                let proof_ack = proofs.object_proof().clone();
+        let payload = CosmosConnectionOpenConfirmPayload {
+            update_height,
+            proof_ack: connection_proofs,
+        };
 
-                let payload = CosmosConnectionOpenConfirmPayload {
-                    update_height,
-                    proof_ack,
-                };
-
-                Ok(payload)
-            })
-            .await
+        Ok(payload)
     }
 }
