@@ -27,7 +27,7 @@ pub struct CosmosConnectionOpenTryMessage {
     pub client_state: Any,
     pub delay_period: Duration,
     pub update_height: Height,
-    pub proof_init: CommitmentProofBytes,
+    pub proof_init: Vec<u8>,
     pub proof_client: CommitmentProofBytes,
     pub proof_consensus: ConsensusProof,
 }
@@ -58,7 +58,7 @@ impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
             client_state: Some(self.client_state.clone()),
             delay_period: self.delay_period.as_nanos() as u64,
             proof_height: Some(self.update_height.into()),
-            proof_init: self.proof_init.clone().into(),
+            proof_init: self.proof_init.clone(),
             proof_client: self.proof_client.clone().into(),
             proof_consensus: self.proof_consensus.proof().clone().into(),
             consensus_height: Some(self.proof_consensus.height().into()),

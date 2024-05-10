@@ -2,10 +2,13 @@ use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::connection::ConnectionMsgType;
@@ -40,7 +43,9 @@ where
             ConnectionId = ConnectionId,
         > + HasClientStateType<Counterparty>
         + HasIbcCommitmentPrefix<CommitmentPrefix = Vec<u8>>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
+        + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasGrpcAddress
         + HasBlockingChainHandle
         + CanRaiseError<TransportError>
@@ -62,7 +67,9 @@ where
         client_id: &ClientId,
         connection_id: &ConnectionId,
     ) -> Result<CosmosConnectionOpenTryPayload, Chain::Error> {
-        let connection = chain.query_connection_end(connection_id, height).await?;
+        let (connection, connection_proofs) = chain
+            .query_connection_end_with_proofs(connection_id, height)
+            .await?;
 
         let versions = connection.versions().to_vec();
         let delay_period = connection.delay_period();
@@ -107,7 +114,7 @@ where
                     versions,
                     delay_period,
                     update_height: proofs.height(),
-                    proof_init: proofs.object_proof().clone(),
+                    proof_init: connection_proofs,
                     proof_client,
                     proof_consensus,
                 };
