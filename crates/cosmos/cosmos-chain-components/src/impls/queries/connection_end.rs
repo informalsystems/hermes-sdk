@@ -1,51 +1,70 @@
-use cgp_core::HasErrorType;
-use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerier;
+use cgp_core::CanRaiseError;
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerier, ConnectionEndWithProofsQuerier,
+};
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{IncludeProof, QueryConnectionRequest, QueryHeight};
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use ibc_proto::Protobuf;
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
+use tendermint_proto::Error as TendermintProtoError;
 
-use crate::traits::chain_handle::HasBlockingChainHandle;
+use crate::traits::abci_query::CanQueryAbci;
 
-pub struct QueryCosmosConnectionEndFromChainHandle;
+pub struct QueryCosmosConnectionEndFromAbci;
 
 impl<Chain, Counterparty> ConnectionEndQuerier<Chain, Counterparty>
-    for QueryCosmosConnectionEndFromChainHandle
+    for QueryCosmosConnectionEndFromAbci
 where
     Chain: HasConnectionEndType<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasIbcChainTypes<Counterparty, Height = Height, ConnectionId = ConnectionId>
-        + HasBlockingChainHandle
-        + HasErrorType,
+        + CanQueryAbci
+        + CanRaiseError<TendermintProtoError>,
 {
     async fn query_connection_end(
         chain: &Chain,
-        connection_id: &Chain::ConnectionId,
-        height: Option<&Chain::Height>,
-    ) -> Result<Chain::ConnectionEnd, Chain::Error> {
-        let connection_id = connection_id.clone();
-        let height = height.cloned();
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let query_height = if let Some(height) = height {
-                    QueryHeight::Specific(height)
-                } else {
-                    QueryHeight::Latest
-                };
-                let (connection_end, _) = chain_handle
-                    .query_connection(
-                        QueryConnectionRequest {
-                            connection_id: connection_id.clone(),
-                            height: query_height,
-                        },
-                        IncludeProof::No,
-                    )
-                    .map_err(Chain::raise_error)?;
+        connection_id: &ConnectionId,
+        height: &Height,
+    ) -> Result<ConnectionEnd, Chain::Error> {
+        let connection_path = format!("connections/{connection_id}");
 
-                Ok(connection_end)
-            })
-            .await
+        let connnection_end_bytes = chain
+            .query_abci(IBC_QUERY_PATH, connection_path.as_bytes(), height)
+            .await?;
+
+        let connection_end =
+            ConnectionEnd::decode_vec(&connnection_end_bytes).map_err(Chain::raise_error)?;
+
+        Ok(connection_end)
+    }
+}
+
+impl<Chain, Counterparty> ConnectionEndWithProofsQuerier<Chain, Counterparty>
+    for QueryCosmosConnectionEndFromAbci
+where
+    Chain: HasConnectionEndType<Counterparty, ConnectionEnd = ConnectionEnd>
+        + HasIbcChainTypes<Counterparty, Height = Height, ConnectionId = ConnectionId>
+        + HasCommitmentProofType
+        + CanQueryAbci
+        + CanRaiseError<TendermintProtoError>,
+{
+    async fn query_connection_end_with_proofs(
+        chain: &Chain,
+        connection_id: &ConnectionId,
+        height: &Height,
+    ) -> Result<(ConnectionEnd, Chain::CommitmentProof), Chain::Error> {
+        let connection_path = format!("connections/{connection_id}");
+
+        let (connnection_end_bytes, proof) = chain
+            .query_abci_with_proofs(IBC_QUERY_PATH, connection_path.as_bytes(), height)
+            .await?;
+
+        let connection_end =
+            ConnectionEnd::decode_vec(&connnection_end_bytes).map_err(Chain::raise_error)?;
+
+        Ok((connection_end, proof))
     }
 }

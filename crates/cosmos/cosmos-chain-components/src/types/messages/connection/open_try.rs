@@ -1,18 +1,15 @@
 use core::time::Duration;
 
-use ibc_proto::google::protobuf::Any;
+use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_proto::ibc::core::commitment::v1::MerklePrefix;
 use ibc_proto::ibc::core::connection::v1::{
     Counterparty, MsgConnectionOpenTry as ProtoMsgConnectionOpenTry,
 };
 use ibc_relayer_types::core::ics03_connection::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::{
-    CommitmentPrefix, CommitmentProofBytes,
-};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::proofs::ConsensusProof;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
+use prost_types::Any;
 
 use crate::methods::encode::encode_to_any;
 use crate::traits::message::DynCosmosMessage;
@@ -24,14 +21,15 @@ pub struct CosmosConnectionOpenTryMessage {
     pub client_id: ClientId,
     pub counterparty_client_id: ClientId,
     pub counterparty_connection_id: ConnectionId,
-    pub counterparty_commitment_prefix: CommitmentPrefix,
+    pub counterparty_commitment_prefix: Vec<u8>,
     pub counterparty_versions: Vec<Version>,
     pub client_state: Any,
     pub delay_period: Duration,
     pub update_height: Height,
-    pub proof_init: CommitmentProofBytes,
-    pub proof_client: CommitmentProofBytes,
-    pub proof_consensus: ConsensusProof,
+    pub proof_init: Vec<u8>,
+    pub proof_client: Vec<u8>,
+    pub proof_consensus: Vec<u8>,
+    pub proof_consensus_height: Height,
 }
 
 impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
@@ -39,11 +37,11 @@ impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
         Some(self.update_height)
     }
 
-    fn encode_protobuf(&self, signer: &Signer) -> Any {
+    fn encode_protobuf(&self, signer: &Signer) -> IbcProtoAny {
         let counterparty = Counterparty {
             client_id: self.counterparty_client_id.as_str().to_string(),
             prefix: Some(MerklePrefix {
-                key_prefix: self.counterparty_commitment_prefix.clone().into_vec(),
+                key_prefix: self.counterparty_commitment_prefix.clone(),
             }),
             connection_id: self.counterparty_connection_id.as_str().to_string(),
         };
@@ -57,13 +55,16 @@ impl DynCosmosMessage for CosmosConnectionOpenTryMessage {
                 .iter()
                 .map(|v| v.clone().into())
                 .collect(),
-            client_state: Some(self.client_state.clone()),
+            client_state: Some(IbcProtoAny {
+                type_url: self.client_state.type_url.clone(),
+                value: self.client_state.value.clone(),
+            }),
             delay_period: self.delay_period.as_nanos() as u64,
             proof_height: Some(self.update_height.into()),
-            proof_init: self.proof_init.clone().into(),
-            proof_client: self.proof_client.clone().into(),
-            proof_consensus: self.proof_consensus.proof().clone().into(),
-            consensus_height: Some(self.proof_consensus.height().into()),
+            proof_init: self.proof_init.clone(),
+            proof_client: self.proof_client.clone(),
+            proof_consensus: self.proof_consensus.clone(),
+            consensus_height: Some(self.proof_consensus_height.into()),
             signer: signer.to_string(),
             previous_connection_id: "".to_string(),
             host_consensus_state_proof: Vec::new(),

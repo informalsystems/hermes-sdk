@@ -7,11 +7,11 @@ use ibc_relayer_types::Height;
 use crate::types::sign_data::SolomachineTimestampedSignData;
 
 pub struct SolomachineConnectionOpenInitPayload {
-    pub commitment_prefix: String,
+    pub commitment_prefix: Vec<u8>,
 }
 
 pub struct SolomachineConnectionOpenTryPayload {
-    pub commitment_prefix: String,
+    pub commitment_prefix: Vec<u8>,
     pub client_state: TendermintClientState,
     pub versions: Vec<Version>,
     pub delay_period: Duration,

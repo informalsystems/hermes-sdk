@@ -1,3 +1,4 @@
+pub mod commitment_prefix;
 pub mod event_subscription;
 pub mod message_builders;
 pub mod packet;

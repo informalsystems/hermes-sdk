@@ -7,6 +7,7 @@ use hermes_relayer_components::chain::impls::delegate::queries::client_state::De
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state_heights::DelegateQueryConsensusStateHeights;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
+use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -30,11 +31,15 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
-    ClientStateQuerierComponent, RawClientStateQuerierComponent,
+    ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
+    RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+    RawConsensusStateQuerierComponent, RawConsensusStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
@@ -82,6 +87,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -109,7 +115,7 @@ use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
-use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromChainHandle;
+use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
 use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
@@ -149,6 +155,8 @@ delegate_components! {
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
+            CommitmentPrefixTypeComponent,
+            CommitmentProofTypeComponent,
         ]:
             ProvideCosmosChainTypes,
         [
@@ -184,10 +192,14 @@ delegate_components! {
             QueryWriteAckEventFromChainHandle,
         [
             RawClientStateQuerierComponent,
+            RawClientStateWithProofsQuerierComponent,
             AllRawClientStatesQuerierComponent,
         ]:
             QueryCosmosClientStateFromAbci,
-        RawConsensusStateQuerierComponent:
+        [
+            RawConsensusStateQuerierComponent,
+            RawConsensusStateWithProofsQuerierComponent,
+        ]:
             QueryCosmosConsensusStateFromAbci,
         CreateClientOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
@@ -243,16 +255,23 @@ delegate_components! {
             QueryCometBlock,
         AbciQuerierComponent:
             QueryAbci,
-        ConnectionEndQuerierComponent:
-            QueryCosmosConnectionEndFromChainHandle,
+        [
+            ConnectionEndQuerierComponent,
+            ConnectionEndWithProofsQuerierComponent,
+        ]:
+            QueryCosmosConnectionEndFromAbci,
         [
             ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,
         ]:
             DelegateQueryClientState<DelegateCosmosChainComponents>,
         CreateClientMessageBuilderComponent:
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
-        ConsensusStateQuerierComponent:
+        [
+            ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+        ]:
             DelegateQueryConsensusState<DelegateCosmosChainComponents>,
         ConsensusStateHeightsQuerierComponent:
             DelegateQueryConsensusStateHeights<DelegateCosmosChainComponents>,

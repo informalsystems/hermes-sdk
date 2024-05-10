@@ -2,10 +2,13 @@ use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterpar
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    CanQueryAllClientStates, CanQueryClientState,
+    CanQueryAllClientStates, CanQueryClientState, CanQueryClientStateWithProofs,
+};
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    CanQueryConsensusState, CanQueryRawConsensusState,
+    CanQueryConsensusState, CanQueryConsensusStateWithProofs, CanQueryRawConsensusState,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
@@ -29,12 +32,16 @@ pub trait CanUseCosmosChain:
     + CanIbcTransferToken<CosmosChain>
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
+    + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
+    + CanQueryConsensusStateWithProofs<CosmosChain>
     + CanQueryRawConsensusState<CosmosChain>
     + CanQueryAllClientStates<CosmosChain>
     + CanQueryClientState<AnyCounterparty>
     + CanQueryAllClientStates<AnyCounterparty>
     + CanBuildUpdateClientMessage<CosmosChain>
+    + CanQueryConnectionEnd<CosmosChain>
+    + CanQueryConnectionEndWithProofs<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = TendermintClientState>
     + HasRawClientStateType<RawClientState = Any>
     + CanSubmitTx

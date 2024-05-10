@@ -85,6 +85,7 @@ where
             proof_init,
             proof_client,
             proof_consensus,
+            proof_consensus_height,
         } = counterparty_payload;
 
         let msg = CosmosConnectionOpenTryMessage {
@@ -93,12 +94,13 @@ where
             counterparty_connection_id: counterparty_connection_id.to_owned(),
             counterparty_commitment_prefix: commitment_prefix,
             counterparty_versions: versions,
-            client_state: client_state.into(),
+            client_state,
             delay_period,
             update_height,
             proof_init,
             proof_client,
             proof_consensus,
+            proof_consensus_height,
         };
 
         let cosmos_msg = msg.to_cosmos_message();
@@ -120,17 +122,19 @@ where
             proof_try,
             proof_client,
             proof_consensus,
+            proof_consensus_height,
         } = counterparty_payload;
 
         let msg = CosmosConnectionOpenAckMessage {
             connection_id: connection_id.to_owned(),
             counterparty_connection_id: counterparty_connection_id.to_owned(),
-            client_state: client_state.into(),
+            client_state,
             version,
             update_height,
             proof_try,
             proof_client,
             proof_consensus,
+            proof_consensus_height,
         };
 
         let cosmos_msg = msg.to_cosmos_message();

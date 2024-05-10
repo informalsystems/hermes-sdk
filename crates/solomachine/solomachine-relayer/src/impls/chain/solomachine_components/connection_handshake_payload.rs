@@ -30,7 +30,7 @@ where
         let commitment_prefix = chain.chain.commitment_prefix();
 
         let payload = SolomachineConnectionOpenInitPayload {
-            commitment_prefix: commitment_prefix.to_string(),
+            commitment_prefix: commitment_prefix.into(),
         };
 
         Ok(payload)
@@ -96,7 +96,7 @@ where
         );
 
         let payload = SolomachineConnectionOpenTryPayload {
-            commitment_prefix: commitment_prefix.to_string(),
+            commitment_prefix: commitment_prefix.into(),
             client_state: cosmos_client_state,
             versions,
             delay_period,

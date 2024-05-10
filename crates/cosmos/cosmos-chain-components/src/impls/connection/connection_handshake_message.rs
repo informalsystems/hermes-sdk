@@ -85,14 +85,15 @@ where
             client_id: client_id.clone(),
             counterparty_client_id: counterparty_client_id.clone(),
             counterparty_connection_id: counterparty_connection_id.clone(),
-            counterparty_commitment_prefix: counterparty_payload.commitment_prefix.clone(),
+            counterparty_commitment_prefix: counterparty_payload.commitment_prefix,
             counterparty_versions: counterparty_payload.versions,
             delay_period: counterparty_payload.delay_period,
-            client_state: counterparty_payload.client_state.into(),
+            client_state: counterparty_payload.client_state,
             update_height: counterparty_payload.update_height,
             proof_init: counterparty_payload.proof_init,
             proof_client: counterparty_payload.proof_client,
             proof_consensus: counterparty_payload.proof_consensus,
+            proof_consensus_height: counterparty_payload.proof_consensus_height,
         };
 
         Ok(message.to_cosmos_message())
@@ -111,11 +112,12 @@ where
             connection_id,
             counterparty_connection_id,
             version: counterparty_payload.version,
-            client_state: counterparty_payload.client_state.into(),
+            client_state: counterparty_payload.client_state,
             update_height: counterparty_payload.update_height,
             proof_try: counterparty_payload.proof_try,
             proof_client: counterparty_payload.proof_client,
             proof_consensus: counterparty_payload.proof_consensus,
+            proof_consensus_height: counterparty_payload.proof_consensus_height,
         };
 
         Ok(message.to_cosmos_message())

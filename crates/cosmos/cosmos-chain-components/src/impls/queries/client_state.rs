@@ -4,7 +4,7 @@ use core::str::FromStr;
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllRawClientStatesQuerier, RawClientStateQuerier,
+    AllRawClientStatesQuerier, RawClientStateQuerier, RawClientStateWithProofsQuerier,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasRawClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -15,6 +15,7 @@ use ibc_proto::ibc::core::client::v1::{
 use ibc_relayer::chain::requests::{PageRequest, QueryClientStatesRequest};
 use ibc_relayer_types::core::ics24_host::error::ValidationError;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
+use ibc_relayer_types::core::ics24_host::IBC_QUERY_PATH;
 use ibc_relayer_types::Height;
 use prost::{DecodeError, Message};
 use prost_types::Any;
@@ -22,8 +23,6 @@ use prost_types::Any;
 use crate::traits::abci_query::CanQueryAbci;
 
 pub struct QueryCosmosClientStateFromAbci;
-
-pub const IBC_QUERY_PATH: &str = "store/ibc/key";
 
 impl<Chain, Counterparty> RawClientStateQuerier<Chain, Counterparty>
     for QueryCosmosClientStateFromAbci
@@ -48,6 +47,32 @@ where
             Message::decode(client_state_bytes.as_ref()).map_err(Chain::raise_error)?;
 
         Ok(client_state_any)
+    }
+}
+
+impl<Chain, Counterparty> RawClientStateWithProofsQuerier<Chain, Counterparty>
+    for QueryCosmosClientStateFromAbci
+where
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, Height = Height>
+        + HasRawClientStateType<RawClientState = Any>
+        + CanQueryAbci
+        + CanRaiseError<DecodeError>,
+{
+    async fn query_raw_client_state_with_proofs(
+        chain: &Chain,
+        client_id: &ClientId,
+        height: &Height,
+    ) -> Result<(Any, Chain::CommitmentProof), Chain::Error> {
+        let client_state_path = format!("clients/{client_id}/clientState");
+
+        let (client_state_bytes, proofs) = chain
+            .query_abci_with_proofs(IBC_QUERY_PATH, client_state_path.as_bytes(), height)
+            .await?;
+
+        let client_state_any =
+            Message::decode(client_state_bytes.as_ref()).map_err(Chain::raise_error)?;
+
+        Ok((client_state_any, proofs))
     }
 }
 

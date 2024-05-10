@@ -16,6 +16,9 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    CommitmentPrefixTypeComponent, IbcCommitmentPrefixGetter,
+};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
@@ -39,11 +42,15 @@ use hermes_relayer_components::chain::traits::queries::block::BlockQuerierCompon
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
-    ClientStateQuerierComponent, RawClientStateQuerierComponent,
+    ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
+    RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+    RawConsensusStateQuerierComponent, RawConsensusStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
@@ -92,6 +99,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -202,11 +210,14 @@ delegate_components! {
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndQuerierComponent,
+            ConnectionEndWithProofsQuerierComponent,
             ConnectionEndTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
+            CommitmentPrefixTypeComponent,
+            CommitmentProofTypeComponent,
 
             CreateClientEventComponent,
 
@@ -219,14 +230,22 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
 
             PacketFieldsReaderComponent,
+            WriteAckQuerierComponent,
+
+            ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
+            RawClientStateQuerierComponent,
+            RawClientStateWithProofsQuerierComponent,
+            AllClientStatesQuerierComponent,
+            AllRawClientStatesQuerierComponent,
+
+            RawConsensusStateQuerierComponent,
+            RawConsensusStateWithProofsQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+
             ConsensusStateHeightQuerierComponent,
             ConsensusStateHeightsQuerierComponent,
-            WriteAckQuerierComponent,
-            ClientStateQuerierComponent,
-            RawConsensusStateQuerierComponent,
-            AllClientStatesQuerierComponent,
-            RawClientStateQuerierComponent,
-            AllRawClientStatesQuerierComponent,
+
             CreateClientOptionsTypeComponent,
             CreateClientMessageBuilderComponent,
             CreateClientPayloadBuilderComponent,
@@ -368,5 +387,11 @@ impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainComponents {
             mutex_guard,
             account,
         }
+    }
+}
+
+impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainComponents {
+    fn ibc_commitment_prefix(chain: &CosmosChain) -> &Vec<u8> {
+        &chain.ibc_commitment_prefix
     }
 }

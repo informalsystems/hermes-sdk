@@ -5,6 +5,7 @@ use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 
 use crate::types::client_state::{ProtoSolomachineClientState, SolomachineClientState};
+use crate::types::consensus_state::{ProtoSolomachineConsensusState, SolomachineConsensusState};
 
 pub struct SolomachineEncoderComponents;
 
@@ -13,5 +14,9 @@ delegate_components! {
         (Any, SolomachineClientState): EncodeViaAny<Protobuf>,
         (Protobuf, SolomachineClientState): ConvertAndEncode<ProtoSolomachineClientState>,
         (Protobuf, ProtoSolomachineClientState): EncodeAsProtobuf,
+
+        (Any, SolomachineConsensusState): EncodeViaAny<Protobuf>,
+        (Protobuf, SolomachineConsensusState): ConvertAndEncode<ProtoSolomachineConsensusState>,
+        (Protobuf, ProtoSolomachineConsensusState): EncodeAsProtobuf,
     }
 }

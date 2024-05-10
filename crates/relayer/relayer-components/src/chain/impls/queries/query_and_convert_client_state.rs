@@ -5,7 +5,8 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 
 use crate::chain::traits::queries::client_state::{
-    AllClientStatesQuerier, CanQueryAllRawClientStates, CanQueryRawClientState, ClientStateQuerier,
+    AllClientStatesQuerier, CanQueryAllRawClientStates, CanQueryRawClientState,
+    CanQueryRawClientStateWithProofs, ClientStateQuerier, ClientStateWithProofsQuerier,
 };
 use crate::chain::traits::types::client_state::HasClientStateType;
 
@@ -30,6 +31,30 @@ where
             .map_err(Chain::raise_error)?;
 
         Ok(client_state)
+    }
+}
+
+impl<Chain, Counterparty, Encoding> ClientStateWithProofsQuerier<Chain, Counterparty>
+    for QueryAndConvertRawClientState
+where
+    Chain: CanQueryRawClientStateWithProofs<Counterparty> + CanRaiseError<Encoding::Error>,
+    Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<Encoding = Encoding>,
+    Encoding: CanConvert<Chain::RawClientState, Counterparty::ClientState>,
+{
+    async fn query_client_state_with_proofs(
+        chain: &Chain,
+        client_id: &Chain::ClientId,
+        height: &Chain::Height,
+    ) -> Result<(Counterparty::ClientState, Chain::CommitmentProof), Chain::Error> {
+        let (raw_client_state, proofs) = chain
+            .query_raw_client_state_with_proofs(client_id, height)
+            .await?;
+
+        let client_state = Counterparty::default_encoding()
+            .convert(&raw_client_state)
+            .map_err(Chain::raise_error)?;
+
+        Ok((client_state, proofs))
     }
 }
 
