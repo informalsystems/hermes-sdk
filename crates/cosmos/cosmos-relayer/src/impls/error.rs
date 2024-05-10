@@ -41,6 +41,7 @@ use ibc_relayer_types::signer::SignerError;
 use prost::{DecodeError, EncodeError};
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
+use tonic::metadata::errors::InvalidMetadataValue;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
@@ -109,6 +110,7 @@ delegate_components! {
             FromUtf8Error,
             EncodeError,
             DecodeError,
+            InvalidMetadataValue,
 
             // TODO: make it retryable?
             TransportError,

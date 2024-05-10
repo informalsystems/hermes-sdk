@@ -23,22 +23,18 @@ where
     async fn query_connection_end(
         chain: &Chain,
         connection_id: &Chain::ConnectionId,
-        height: Option<&Chain::Height>,
+        height: &Height,
     ) -> Result<Chain::ConnectionEnd, Chain::Error> {
         let connection_id = connection_id.clone();
-        let height = height.cloned();
+        let height = height.clone();
+
         chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let query_height = if let Some(height) = height {
-                    QueryHeight::Specific(height)
-                } else {
-                    QueryHeight::Latest
-                };
                 let (connection_end, _) = chain_handle
                     .query_connection(
                         QueryConnectionRequest {
                             connection_id: connection_id.clone(),
-                            height: query_height,
+                            height: QueryHeight::Specific(height),
                         },
                         IncludeProof::No,
                     )

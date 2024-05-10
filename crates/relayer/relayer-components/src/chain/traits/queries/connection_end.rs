@@ -11,6 +11,6 @@ pub trait CanQueryConnectionEnd<Counterparty>:
     async fn query_connection_end(
         &self,
         connection_id: &Self::ConnectionId,
-        height: Option<&Self::Height>,
+        height: &Self::Height,
     ) -> Result<Self::ConnectionEnd, Self::Error>;
 }

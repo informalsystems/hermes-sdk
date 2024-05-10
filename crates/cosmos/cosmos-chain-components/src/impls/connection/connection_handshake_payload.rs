@@ -5,14 +5,19 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_proto::ibc::core::connection::v1::query_client::QueryClient;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryConnectionRequest, QueryHeight};
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::connection::ConnectionMsgType;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
+use tonic::metadata::errors::InvalidMetadataValue;
+use tonic::metadata::AsciiMetadataValue;
+use tonic::transport::Error as TransportError;
 
 use crate::traits::chain_handle::HasBlockingChainHandle;
+use crate::traits::grpc_address::HasGrpcAddress;
 use crate::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
@@ -36,7 +41,10 @@ where
             ConnectionId = ConnectionId,
         > + HasClientStateType<Counterparty>
         + HasIbcCommitmentPrefix<CommitmentPrefix = Vec<u8>>
+        + HasGrpcAddress
         + HasBlockingChainHandle
+        + CanRaiseError<TransportError>
+        + CanRaiseError<InvalidMetadataValue>
         + CanRaiseError<eyre::Report>,
 {
     async fn build_connection_open_init_payload(
@@ -50,70 +58,94 @@ where
     async fn build_connection_open_try_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
-        height: &Chain::Height,
-        client_id: &Chain::ClientId,
-        connection_id: &Chain::ConnectionId,
-    ) -> Result<Chain::ConnectionOpenTryPayload, Chain::Error> {
-        let height = *height;
-        let client_id = client_id.clone();
-        let connection_id = connection_id.clone();
-        let commitment_prefix = chain.ibc_commitment_prefix().clone();
+        height: &Height,
+        client_id: &ClientId,
+        connection_id: &ConnectionId,
+    ) -> Result<CosmosConnectionOpenTryPayload, Chain::Error> {
+        // let height = *height;
+        // let client_id = client_id.clone();
+        // let connection_id = connection_id.clone();
 
-        chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let (connection, _) = chain_handle
-                    .query_connection(
-                        QueryConnectionRequest {
-                            connection_id: connection_id.clone(),
-                            height: QueryHeight::Latest,
-                        },
-                        IncludeProof::No,
-                    )
+        let grpc_address = chain.grpc_address();
+        let commitment_prefix = chain.ibc_commitment_prefix();
+
+        {
+            let mut client = QueryClient::connect(grpc_address.clone())
+                .await
+                .map_err(Chain::raise_error)?;
+
+            let mut request = tonic::Request::new(
+                ibc_proto::ibc::core::connection::v1::QueryConnectionRequest {
+                    connection_id: connection_id.to_string(),
+                },
+            );
+
+            let height_metadata =
+                AsciiMetadataValue::try_from(height.revision_height().to_string())
                     .map_err(Chain::raise_error)?;
 
-                let versions = connection.versions().to_vec();
-                let delay_period = connection.delay_period();
+            request
+                .metadata_mut()
+                .insert("x-cosmos-block-height", height_metadata);
+        }
 
-                let (m_client_state, proofs) = chain_handle
-                    .build_connection_proofs_and_client_state(
-                        ConnectionMsgType::OpenTry,
-                        &connection_id,
-                        &client_id,
-                        height,
-                    )
-                    .map_err(Chain::raise_error)?;
+        todo!()
 
-                let any_client_state = m_client_state
-                    .ok_or_else(|| Chain::raise_error(eyre!("expect some client state")))?;
+        // chain
+        //     .with_blocking_chain_handle(move |chain_handle| {
+        //         let (connection, _) = chain_handle
+        //             .query_connection(
+        //                 QueryConnectionRequest {
+        //                     connection_id: connection_id.clone(),
+        //                     height: QueryHeight::Latest,
+        //                 },
+        //                 IncludeProof::No,
+        //             )
+        //             .map_err(Chain::raise_error)?;
 
-                let client_state = match any_client_state {
-                    AnyClientState::Tendermint(client_state) => client_state,
-                };
+        //         let versions = connection.versions().to_vec();
+        //         let delay_period = connection.delay_period();
 
-                let proof_client = proofs
-                    .client_proof()
-                    .ok_or_else(|| Chain::raise_error(eyre!("expect non empty client proof")))?
-                    .clone();
+        //         let (m_client_state, proofs) = chain_handle
+        //             .build_connection_proofs_and_client_state(
+        //                 ConnectionMsgType::OpenTry,
+        //                 &connection_id,
+        //                 &client_id,
+        //                 height,
+        //             )
+        //             .map_err(Chain::raise_error)?;
 
-                let proof_consensus = proofs
-                    .consensus_proof()
-                    .ok_or_else(|| Chain::raise_error(eyre!("expect non empty consensus proof")))?
-                    .clone();
+        //         let any_client_state = m_client_state
+        //             .ok_or_else(|| Chain::raise_error(eyre!("expect some client state")))?;
 
-                let payload = CosmosConnectionOpenTryPayload {
-                    commitment_prefix,
-                    client_state,
-                    versions,
-                    delay_period,
-                    update_height: proofs.height(),
-                    proof_init: proofs.object_proof().clone(),
-                    proof_client,
-                    proof_consensus,
-                };
+        //         let client_state = match any_client_state {
+        //             AnyClientState::Tendermint(client_state) => client_state,
+        //         };
 
-                Ok(payload)
-            })
-            .await
+        //         let proof_client = proofs
+        //             .client_proof()
+        //             .ok_or_else(|| Chain::raise_error(eyre!("expect non empty client proof")))?
+        //             .clone();
+
+        //         let proof_consensus = proofs
+        //             .consensus_proof()
+        //             .ok_or_else(|| Chain::raise_error(eyre!("expect non empty consensus proof")))?
+        //             .clone();
+
+        //         let payload = CosmosConnectionOpenTryPayload {
+        //             commitment_prefix,
+        //             client_state,
+        //             versions,
+        //             delay_period,
+        //             update_height: proofs.height(),
+        //             proof_init: proofs.object_proof().clone(),
+        //             proof_client,
+        //             proof_consensus,
+        //         };
+
+        //         Ok(payload)
+        //     })
+        //     .await
     }
 
     async fn build_connection_open_ack_payload(
