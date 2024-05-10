@@ -2,18 +2,17 @@ use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
+use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_proto::ibc::core::connection::v1::query_client::QueryClient;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{IncludeProof, QueryConnectionRequest, QueryHeight};
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::connection::ConnectionMsgType;
+use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
 use tonic::metadata::errors::InvalidMetadataValue;
-use tonic::metadata::AsciiMetadataValue;
 use tonic::transport::Error as TransportError;
 
 use crate::traits::chain_handle::HasBlockingChainHandle;
@@ -41,6 +40,7 @@ where
             ConnectionId = ConnectionId,
         > + HasClientStateType<Counterparty>
         + HasIbcCommitmentPrefix<CommitmentPrefix = Vec<u8>>
+        + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasGrpcAddress
         + HasBlockingChainHandle
         + CanRaiseError<TransportError>
@@ -62,90 +62,59 @@ where
         client_id: &ClientId,
         connection_id: &ConnectionId,
     ) -> Result<CosmosConnectionOpenTryPayload, Chain::Error> {
-        // let height = *height;
-        // let client_id = client_id.clone();
-        // let connection_id = connection_id.clone();
+        let connection = chain.query_connection_end(connection_id, height).await?;
 
-        let grpc_address = chain.grpc_address();
-        let commitment_prefix = chain.ibc_commitment_prefix();
+        let height = *height;
+        let client_id = client_id.clone();
+        let connection_id = connection_id.clone();
 
-        {
-            let mut client = QueryClient::connect(grpc_address.clone())
-                .await
-                .map_err(Chain::raise_error)?;
+        let commitment_prefix = chain.ibc_commitment_prefix().clone();
 
-            let mut request = tonic::Request::new(
-                ibc_proto::ibc::core::connection::v1::QueryConnectionRequest {
-                    connection_id: connection_id.to_string(),
-                },
-            );
+        chain
+            .with_blocking_chain_handle(move |chain_handle| {
+                let versions = connection.versions().to_vec();
+                let delay_period = connection.delay_period();
 
-            let height_metadata =
-                AsciiMetadataValue::try_from(height.revision_height().to_string())
+                let (m_client_state, proofs) = chain_handle
+                    .build_connection_proofs_and_client_state(
+                        ConnectionMsgType::OpenTry,
+                        &connection_id,
+                        &client_id,
+                        height,
+                    )
                     .map_err(Chain::raise_error)?;
 
-            request
-                .metadata_mut()
-                .insert("x-cosmos-block-height", height_metadata);
-        }
+                let any_client_state = m_client_state
+                    .ok_or_else(|| Chain::raise_error(eyre!("expect some client state")))?;
 
-        todo!()
+                let client_state = match any_client_state {
+                    AnyClientState::Tendermint(client_state) => client_state,
+                };
 
-        // chain
-        //     .with_blocking_chain_handle(move |chain_handle| {
-        //         let (connection, _) = chain_handle
-        //             .query_connection(
-        //                 QueryConnectionRequest {
-        //                     connection_id: connection_id.clone(),
-        //                     height: QueryHeight::Latest,
-        //                 },
-        //                 IncludeProof::No,
-        //             )
-        //             .map_err(Chain::raise_error)?;
+                let proof_client = proofs
+                    .client_proof()
+                    .ok_or_else(|| Chain::raise_error(eyre!("expect non empty client proof")))?
+                    .clone();
 
-        //         let versions = connection.versions().to_vec();
-        //         let delay_period = connection.delay_period();
+                let proof_consensus = proofs
+                    .consensus_proof()
+                    .ok_or_else(|| Chain::raise_error(eyre!("expect non empty consensus proof")))?
+                    .clone();
 
-        //         let (m_client_state, proofs) = chain_handle
-        //             .build_connection_proofs_and_client_state(
-        //                 ConnectionMsgType::OpenTry,
-        //                 &connection_id,
-        //                 &client_id,
-        //                 height,
-        //             )
-        //             .map_err(Chain::raise_error)?;
+                let payload = CosmosConnectionOpenTryPayload {
+                    commitment_prefix,
+                    client_state,
+                    versions,
+                    delay_period,
+                    update_height: proofs.height(),
+                    proof_init: proofs.object_proof().clone(),
+                    proof_client,
+                    proof_consensus,
+                };
 
-        //         let any_client_state = m_client_state
-        //             .ok_or_else(|| Chain::raise_error(eyre!("expect some client state")))?;
-
-        //         let client_state = match any_client_state {
-        //             AnyClientState::Tendermint(client_state) => client_state,
-        //         };
-
-        //         let proof_client = proofs
-        //             .client_proof()
-        //             .ok_or_else(|| Chain::raise_error(eyre!("expect non empty client proof")))?
-        //             .clone();
-
-        //         let proof_consensus = proofs
-        //             .consensus_proof()
-        //             .ok_or_else(|| Chain::raise_error(eyre!("expect non empty consensus proof")))?
-        //             .clone();
-
-        //         let payload = CosmosConnectionOpenTryPayload {
-        //             commitment_prefix,
-        //             client_state,
-        //             versions,
-        //             delay_period,
-        //             update_height: proofs.height(),
-        //             proof_init: proofs.object_proof().clone(),
-        //             proof_client,
-        //             proof_consensus,
-        //         };
-
-        //         Ok(payload)
-        //     })
-        //     .await
+                Ok(payload)
+            })
+            .await
     }
 
     async fn build_connection_open_ack_payload(
@@ -155,22 +124,14 @@ where
         client_id: &Chain::ClientId,
         connection_id: &Chain::ConnectionId,
     ) -> Result<Chain::ConnectionOpenAckPayload, Chain::Error> {
+        let connection = chain.query_connection_end(connection_id, height).await?;
+
         let height = *height;
         let client_id = client_id.clone();
         let connection_id = connection_id.clone();
 
         chain
             .with_blocking_chain_handle(move |chain_handle| {
-                let (connection, _) = chain_handle
-                    .query_connection(
-                        QueryConnectionRequest {
-                            connection_id: connection_id.clone(),
-                            height: QueryHeight::Latest,
-                        },
-                        IncludeProof::No,
-                    )
-                    .map_err(Chain::raise_error)?;
-
                 let version = connection
                     .versions()
                     .iter()

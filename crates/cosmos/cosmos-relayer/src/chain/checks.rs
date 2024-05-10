@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::C
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryAllClientStates, CanQueryClientState,
 };
+use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryRawConsensusState,
 };
@@ -35,6 +36,7 @@ pub trait CanUseCosmosChain:
     + CanQueryClientState<AnyCounterparty>
     + CanQueryAllClientStates<AnyCounterparty>
     + CanBuildUpdateClientMessage<CosmosChain>
+    + CanQueryConnectionEnd<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = TendermintClientState>
     + HasRawClientStateType<RawClientState = Any>
     + CanSubmitTx

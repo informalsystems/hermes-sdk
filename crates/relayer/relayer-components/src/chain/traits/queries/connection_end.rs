@@ -1,3 +1,5 @@
+use core::fmt::Debug;
+
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::connection::HasConnectionEndType;
@@ -13,4 +15,27 @@ pub trait CanQueryConnectionEnd<Counterparty>:
         connection_id: &Self::ConnectionId,
         height: &Self::Height,
     ) -> Result<Self::ConnectionEnd, Self::Error>;
+}
+
+pub struct ConnectionNotFoundError<'a, Chain, Counterparty>
+where
+    Chain: HasIbcChainTypes<Counterparty>,
+{
+    pub chain: &'a Chain,
+    pub connection_id: &'a Chain::ConnectionId,
+    pub height: &'a Chain::Height,
+}
+
+impl<'a, Chain, Counterparty> Debug for ConnectionNotFoundError<'a, Chain, Counterparty>
+where
+    Chain: HasIbcChainTypes<Counterparty>,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        writeln!(
+            f,
+            "connection not found with connection id {} at height {}",
+            self.connection_id, self.height
+        )?;
+        Ok(())
+    }
 }

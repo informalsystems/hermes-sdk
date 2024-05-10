@@ -1,6 +1,7 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionNotFoundError;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -36,6 +37,7 @@ use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::supervisor::Error as SupervisorError;
 use ibc_relayer_types::clients::ics07_tendermint::error::Error as TendermintClientError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
+use ibc_relayer_types::core::ics03_connection::error::Error as Ics03Error;
 use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
 use ibc_relayer_types::signer::SignerError;
 use prost::{DecodeError, EncodeError};
@@ -105,6 +107,7 @@ delegate_components! {
             TendermintRpcError,
             TendermintClientError,
             Ics02Error,
+            Ics03Error,
             Ics24ValidationError,
             ParseIntError,
             FromUtf8Error,
@@ -167,6 +170,14 @@ impl<'a, Chain, Counterparty>
 where
     Chain: HasChainIdType,
     Counterparty: HasChainIdType,
+{
+    type Delegate = DebugError;
+}
+
+impl<'a, Chain, Counterparty> DelegateComponent<ConnectionNotFoundError<'a, Chain, Counterparty>>
+    for CosmosErrorHandlers
+where
+    Chain: HasIbcChainTypes<Counterparty>,
 {
     type Delegate = DebugError;
 }
