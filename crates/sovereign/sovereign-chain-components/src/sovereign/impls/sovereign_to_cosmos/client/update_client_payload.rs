@@ -24,7 +24,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
 use sov_celestia_client::types::client_state::TendermintClientParams;
 
 use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
-use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::client_state::WrappedSovereignClientState;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
 /**
@@ -38,7 +38,7 @@ impl<Chain, Counterparty, DataChain> UpdateClientPayloadBuilder<Chain, Counterpa
 where
     Chain: HasHeightType<Height = RollupHeight>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
-        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + HasDataChain
         + HasDataChainType<DataChain = DataChain>
         + HasErrorType<Error = ReportError>,
@@ -50,53 +50,40 @@ where
         target_height: &RollupHeight,
         client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
+        let sovereign_params = &client_state.sovereign_client_state.sovereign_params;
+
         // DA height is higher than rollup height. This requires adding
         // the genesis Height to the trusted and target Heights
         let da_trusted_height = Height::new(
-            client_state
-                .sovereign_params
-                .genesis_da_height
-                .revision_number(),
-            trusted_height.slot_number
-                + client_state
-                    .sovereign_params
-                    .genesis_da_height
-                    .revision_height(),
+            sovereign_params.genesis_da_height.revision_number(),
+            trusted_height.slot_number + sovereign_params.genesis_da_height.revision_height(),
         )
         .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+
         let da_target_height = Height::new(
-            client_state
-                .sovereign_params
-                .genesis_da_height
-                .revision_number(),
-            target_height.slot_number
-                + client_state
-                    .sovereign_params
-                    .genesis_da_height
-                    .revision_height(),
+            sovereign_params.genesis_da_height.revision_number(),
+            target_height.slot_number + sovereign_params.genesis_da_height.revision_height(),
         )
         .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+
         let rollup_trusted_height = DataChainHeight::new(
-            client_state
-                .sovereign_params
-                .latest_height
-                .revision_number(),
+            sovereign_params.latest_height.revision_number(),
             trusted_height.slot_number,
         )
         .map_err(|e| eyre!("Error creating Rollup trusted Height: {e}"))?;
+
         let rollup_target_height = DataChainHeight::new(
-            client_state
-                .sovereign_params
-                .latest_height
-                .revision_number(),
+            sovereign_params.latest_height.revision_number(),
             target_height.slot_number,
         )
         .map_err(|e| eyre!("Error creating Rollup target Height: {e}"))?;
 
         let data_chain = chain.data_chain();
 
-        let da_client_state =
-            convert_tm_params_to_client_state(&client_state.da_params, &da_target_height)?;
+        let da_client_state = convert_tm_params_to_client_state(
+            &client_state.sovereign_client_state.da_params,
+            &da_target_height,
+        )?;
 
         let headers = data_chain
             .with_blocking_chain_handle(move |chain_handle| {
