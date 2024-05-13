@@ -30,6 +30,7 @@ use serde::Serialize;
 use sov_celestia_client::types::client_state::SovTmClientState as SovereignClientState;
 
 use crate::sovereign::traits::chain::rollup::HasRollup;
+use crate::sovereign::types::client_state::WrappedSovereignClientState;
 use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
     SovereignConnectionOpenInitPayload, SovereignConnectionOpenTryPayload,
@@ -46,7 +47,7 @@ where
         > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightType<Height = RollupHeight>
         + HasRollup<Rollup = Rollup>
-        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + HasErrorType
         + CanRaiseError<ClientError>
         + CanRaiseError<RelayerClientError>
@@ -74,7 +75,7 @@ where
             ConnectionOpenTryPayload = SovereignConnectionOpenTryPayload,
         > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightType<Height = RollupHeight>
-        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + HasErrorType,
 {
     async fn build_connection_open_try_payload(
@@ -97,7 +98,7 @@ where
         > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightType<Height = RollupHeight>
         + HasRollup<Rollup = Rollup>
-        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + CanRaiseError<ClientError>
         + CanRaiseError<RelayerClientError>
         + CanRaiseError<ProofError>
@@ -196,7 +197,7 @@ where
             ConnectionOpenConfirmPayload = SovereignConnectionOpenConfirmPayload,
         > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightType<Height = RollupHeight>
-        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + HasErrorType,
 {
     async fn build_connection_open_confirm_payload(

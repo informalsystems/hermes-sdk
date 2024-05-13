@@ -7,14 +7,16 @@ use hermes_cosmos_chain_components::types::tendermint::{
 use hermes_encoding_components::impls::convert::{ConvertFrom, TryConvertFrom};
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
-use hermes_wasm_client_components::types::client_state::{
-    DecodeViaWasmClientState, ProtoWasmClientState, WasmClientState,
-};
+use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::{
-    ProtoWasmConsensusState, WasmConsensusState,
+    DecodeViaWasmConsensusState, EncodeViaWasmConsensusState, ProtoWasmConsensusState,
+    WasmConsensusState,
 };
 
-use crate::sovereign::types::client_state::{ProtoSovereignClientState, SovereignClientState};
+use crate::sovereign::types::client_state::{
+    EncodeWrappedSovereignClientState, ProtoSovereignClientState, SovereignClientState,
+    WrappedSovereignClientState,
+};
 use crate::sovereign::types::consensus_state::{
     ProtoSovereignConsensusState, SovereignConsensusState,
 };
@@ -62,10 +64,16 @@ delegate_components! {
         (ProtoSovereignConsensusState, SovereignConsensusState):
             TryConvertFrom,
 
-        (Any, SovereignClientState):
-            DecodeViaWasmClientState,
+        (SovereignConsensusState, Any):
+            EncodeViaWasmConsensusState,
 
         (Any, SovereignConsensusState):
-            DecodeViaWasmClientState,
+            DecodeViaWasmConsensusState,
+
+        [
+            (Any, WrappedSovereignClientState),
+            (WrappedSovereignClientState, Any),
+        ]:
+            EncodeWrappedSovereignClientState
     }
 }
