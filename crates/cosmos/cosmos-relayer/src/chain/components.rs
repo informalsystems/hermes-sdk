@@ -21,7 +21,10 @@ use hermes_relayer_components::chain::traits::commitment_prefix::{
 };
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
@@ -30,7 +33,10 @@ use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader
 use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
+    ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
@@ -77,8 +83,9 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionEndTypeComponent, ConnectionHandshakePayloadTypeComponent,
-    InitConnectionOptionsTypeComponent,
+    ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
+    ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent,
+    ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
@@ -223,7 +230,12 @@ delegate_components! {
 
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
-            ConnectionHandshakePayloadTypeComponent,
+
+            ConnectionOpenInitPayloadTypeComponent,
+            ConnectionOpenTryPayloadTypeComponent,
+            ConnectionOpenAckPayloadTypeComponent,
+            ConnectionOpenConfirmPayloadTypeComponent,
+
             ChannelHandshakePayloadTypeComponent,
             ReceivePacketPayloadTypeComponent,
             AckPacketPayloadTypeComponent,
@@ -252,8 +264,16 @@ delegate_components! {
             UpdateClientMessageBuilderComponent,
             UpdateClientPayloadBuilderComponent,
             CounterpartyChainIdQuerierComponent,
-            ConnectionHandshakeMessageBuilderComponent,
-            ConnectionHandshakePayloadBuilderComponent,
+
+            ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
+            ConnectionOpenAckMessageBuilderComponent,
+            ConnectionOpenConfirmMessageBuilderComponent,
+            ConnectionOpenInitPayloadBuilderComponent,
+            ConnectionOpenTryPayloadBuilderComponent,
+            ConnectionOpenAckPayloadBuilderComponent,
+            ConnectionOpenConfirmPayloadBuilderComponent,
+
             ChannelHandshakePayloadBuilderComponent,
             ChannelHandshakeMessageBuilderComponent,
             PacketCommitmentsQuerierComponent,

@@ -28,21 +28,6 @@ pub trait HasConnectionOpenConfirmPayloadType<Counterparty>: Async {
     type ConnectionOpenConfirmPayload: Async;
 }
 
-/**
-    Payload that contains necessary counterparty information such as proofs and parameters
-    in order for a self chain to build a connection handshake message.
-*/
-#[derive_component(ConnectionHandshakePayloadTypeComponent, ProvideConnectionHandshakePayloadTypes<Chain>)]
-pub trait HasConnectionHandshakePayloadTypes<Counterparty>: Async {
-    type ConnectionOpenInitPayload: Async;
-
-    type ConnectionOpenTryPayload: Async;
-
-    type ConnectionOpenAckPayload: Async;
-
-    type ConnectionOpenConfirmPayload: Async;
-}
-
 #[derive_component(ConnectionEndTypeComponent, ProvideConnectionEndType<Chain>)]
 pub trait HasConnectionEndType<Counterparty>: Async {
     type ConnectionEnd: Async;
