@@ -1,3 +1,4 @@
+use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
     ConnectionOpenInitMessageBuilder, ConnectionOpenTryMessageBuilder,
@@ -85,7 +86,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasBlockingChainHandle,
+        > + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionOpenTryPayloadType<
             Chain,
@@ -126,7 +127,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasBlockingChainHandle,
+        > + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionOpenAckPayloadType<
             Chain,
@@ -166,7 +167,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasBlockingChainHandle,
+        > + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionOpenConfirmPayloadType<
             Chain,
