@@ -266,7 +266,6 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
 
-        // TODO(rano): fails as it expects a Tendermint client; but Sovereign client is a Wasm proxy client.
         let connection_try_payload = <CosmosChain as CanBuildConnectionHandshakePayloads<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &cosmos_height, &wasm_client_id, &connection_id).await?;
 
         let connection_try_message = <SovereignChain as CanBuildConnectionHandshakeMessages<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
