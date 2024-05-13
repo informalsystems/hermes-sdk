@@ -10,10 +10,16 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
+    CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
+};
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
@@ -167,8 +173,14 @@ pub trait CanUseSovereignChain:
     + CanQueryConsensusStateHeight<CosmosChain>
     + HasClientStateFields<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
-    + CanBuildConnectionHandshakePayloads<CosmosChain>
-    + CanBuildConnectionHandshakeMessages<CosmosChain>
+    + CanBuildConnectionOpenInitPayload<CosmosChain>
+    + CanBuildConnectionOpenTryPayload<CosmosChain>
+    + CanBuildConnectionOpenAckPayload<CosmosChain>
+    + CanBuildConnectionOpenConfirmPayload<CosmosChain>
+    + CanBuildConnectionOpenInitMessage<CosmosChain>
+    + CanBuildConnectionOpenTryMessage<CosmosChain>
+    + CanBuildConnectionOpenAckMessage<CosmosChain>
+    + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + HasChannelHandshakePayloadTypes<CosmosChain>
     + HasInitChannelOptionsType<CosmosChain>
     + CanBuildChannelHandshakePayloads<CosmosChain>

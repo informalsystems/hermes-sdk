@@ -11,7 +11,9 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
+    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
+    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
+    ProvideInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -172,17 +174,35 @@ where
     type InitChannelOptions = ();
 }
 
-impl<Chain, Counterparty> ProvideConnectionHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
     for SolomachineChainComponents
 where
     Chain: Async,
 {
     type ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload;
 }
 

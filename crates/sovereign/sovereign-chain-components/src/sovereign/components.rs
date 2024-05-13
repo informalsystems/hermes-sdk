@@ -6,11 +6,17 @@ use hermes_relayer_components::chain::impls::forward::queries::client_state::For
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state_height::ForwardQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
+    ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
@@ -25,7 +31,9 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
+    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
+    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -87,7 +95,12 @@ delegate_components! {
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
-            ConnectionHandshakePayloadTypeComponent,
+
+            ConnectionOpenInitPayloadTypeComponent,
+            ConnectionOpenTryPayloadTypeComponent,
+            ConnectionOpenAckPayloadTypeComponent,
+            ConnectionOpenConfirmPayloadTypeComponent,
+
             InitChannelOptionsTypeComponent,
             ChannelHandshakePayloadTypeComponent,
         ]:
@@ -116,10 +129,23 @@ delegate_components! {
             BuildSovereignUpdateClientPayload,
         UpdateClientMessageBuilderComponent:
             BuildUpdateCosmosClientMessageOnSovereign,
-        ConnectionHandshakePayloadBuilderComponent:
+
+        [
+            ConnectionOpenInitPayloadBuilderComponent,
+            ConnectionOpenTryPayloadBuilderComponent,
+            ConnectionOpenAckPayloadBuilderComponent,
+            ConnectionOpenConfirmPayloadBuilderComponent,
+        ]:
             BuildSovereignConnectionHandshakePayload,
-        ConnectionHandshakeMessageBuilderComponent:
+
+        [
+            ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
+            ConnectionOpenAckMessageBuilderComponent,
+            ConnectionOpenConfirmMessageBuilderComponent,
+        ]:
             ForwardConnectionHandshakeBuilder,
+
         ChannelHandshakePayloadBuilderComponent:
             BuildSovereignChannelHandshakePayload,
         ChannelHandshakeMessageBuilderComponent:

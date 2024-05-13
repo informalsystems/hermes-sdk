@@ -1,7 +1,10 @@
 use cgp_core::Async;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 
@@ -22,7 +25,10 @@ impl<Chain: Solomachine> SolomachineChain<Chain> {
 pub trait CanUseSolomachineChain:
     HasEncoding<Encoding = SolomachineEncoding>
     + HasInitConnectionOptionsType<CosmosChain>
-    + CanBuildConnectionHandshakeMessages<CosmosChain>
+    + CanBuildConnectionOpenInitMessage<CosmosChain>
+    + CanBuildConnectionOpenTryMessage<CosmosChain>
+    + CanBuildConnectionOpenAckMessage<CosmosChain>
+    + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
 {
 }

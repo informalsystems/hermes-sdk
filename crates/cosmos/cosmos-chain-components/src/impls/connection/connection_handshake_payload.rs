@@ -1,17 +1,21 @@
-use cgp_core::CanRaiseError;
+use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
-use hermes_relayer_components::chain::traits::queries::connection_end::{
-    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
+    ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
 };
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
+use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEndWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryRawConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::connection::{
+    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::height::{
     CanIncrementHeight, HasHeightFields,
 };
@@ -19,11 +23,9 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
 use prost_types::Any;
 
-use crate::traits::grpc_address::HasGrpcAddress;
 use crate::types::payloads::connection::{
     CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
     CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
@@ -31,50 +33,52 @@ use crate::types::payloads::connection::{
 
 pub struct BuildCosmosConnectionHandshakePayload;
 
-impl<Chain, Counterparty, Encoding> ConnectionHandshakePayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ConnectionOpenInitPayloadBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakePayload
 where
-    Chain: HasConnectionHandshakePayloadTypes<
+    Chain: HasConnectionOpenInitPayloadType<
             Counterparty,
             ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload,
-            ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload,
-            ConnectionOpenAckPayload = CosmosConnectionOpenAckPayload,
-            ConnectionOpenConfirmPayload = CosmosConnectionOpenConfirmPayload,
-        > + HasIbcChainTypes<
-            Counterparty,
-            Height = Height,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-        > + HasClientStateType<Counterparty>
+        > + HasIbcChainTypes<Counterparty>
+        + HasClientStateType<Counterparty>
         + HasIbcCommitmentPrefix<CommitmentPrefix = Vec<u8>>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
-        + CanIncrementHeight
-        + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
-        + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
-        + CanQueryClientStateWithProofs<Counterparty>
-        + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
-        + HasGrpcAddress
-        + CanRaiseError<Encoding::Error>
-        + CanRaiseError<Ics02Error>
-        + CanRaiseError<&'static str>,
-    Counterparty:
-        HasClientStateFields<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightFields,
-    Encoding: CanConvert<Counterparty::ClientState, Any>,
+        + HasErrorType,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
-    ) -> Result<Chain::ConnectionOpenInitPayload, Chain::Error> {
+    ) -> Result<CosmosConnectionOpenInitPayload, Chain::Error> {
         let commitment_prefix = chain.ibc_commitment_prefix().clone();
         Ok(CosmosConnectionOpenInitPayload { commitment_prefix })
     }
+}
 
+impl<Chain, Counterparty, Encoding> ConnectionOpenTryPayloadBuilder<Chain, Counterparty>
+    for BuildCosmosConnectionHandshakePayload
+where
+    Chain: HasConnectionOpenTryPayloadType<
+            Counterparty,
+            ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload,
+        > + HasIbcChainTypes<Counterparty, Height = Height>
+        + HasClientStateType<Counterparty>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = Vec<u8>>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + CanIncrementHeight
+        + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
+        + CanQueryClientStateWithProofs<Counterparty>
+        + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
+        + CanRaiseError<Encoding::Error>
+        + CanRaiseError<Ics02Error>,
+    Counterparty:
+        HasClientStateFields<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightFields,
+    Encoding: CanConvert<Counterparty::ClientState, Any>,
+{
     async fn build_connection_open_try_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
         height: &Height,
-        client_id: &ClientId,
-        connection_id: &ConnectionId,
+        client_id: &Chain::ClientId,
+        connection_id: &Chain::ConnectionId,
     ) -> Result<CosmosConnectionOpenTryPayload, Chain::Error> {
         let commitment_prefix = chain.ibc_commitment_prefix().clone();
 
@@ -121,7 +125,27 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty, Encoding> ConnectionOpenAckPayloadBuilder<Chain, Counterparty>
+    for BuildCosmosConnectionHandshakePayload
+where
+    Chain: HasConnectionOpenAckPayloadType<
+            Counterparty,
+            ConnectionOpenAckPayload = CosmosConnectionOpenAckPayload,
+        > + HasIbcChainTypes<Counterparty, Height = Height>
+        + HasClientStateType<Counterparty>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + CanIncrementHeight
+        + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
+        + CanQueryClientStateWithProofs<Counterparty>
+        + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
+        + CanRaiseError<Encoding::Error>
+        + CanRaiseError<Ics02Error>,
+    Counterparty:
+        HasClientStateFields<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightFields,
+    Encoding: CanConvert<Counterparty::ClientState, Any>,
+{
     async fn build_connection_open_ack_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
@@ -174,7 +198,20 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenConfirmPayloadBuilder<Chain, Counterparty>
+    for BuildCosmosConnectionHandshakePayload
+where
+    Chain: HasConnectionOpenConfirmPayloadType<
+            Counterparty,
+            ConnectionOpenConfirmPayload = CosmosConnectionOpenConfirmPayload,
+        > + HasIbcChainTypes<Counterparty, Height = Height>
+        + HasClientStateType<Counterparty>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + CanIncrementHeight
+        + CanQueryConnectionEndWithProofs<Counterparty>,
+{
     async fn build_connection_open_confirm_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,

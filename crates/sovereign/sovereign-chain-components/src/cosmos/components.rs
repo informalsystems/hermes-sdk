@@ -2,7 +2,10 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
@@ -28,7 +31,12 @@ delegate_components! {
             BuildUpdateSovereignClientMessageOnCosmos,
         CreateClientMessageBuilderComponent:
             BuildCreateSovereignClientMessageOnCosmos,
-        ConnectionHandshakeMessageBuilderComponent:
+        [
+            ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
+            ConnectionOpenAckMessageBuilderComponent,
+            ConnectionOpenConfirmMessageBuilderComponent,
+        ]:
             BuildSovereignConnectionHandshakeMessageOnCosmos,
         ChannelHandshakeMessageBuilderComponent:
             BuildSovereignChannelHandshakeMessageOnCosmos,

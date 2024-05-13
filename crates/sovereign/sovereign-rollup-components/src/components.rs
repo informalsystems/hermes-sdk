@@ -7,7 +7,10 @@ use hermes_relayer_components::chain::impls::queries::query_and_convert_client_s
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
@@ -29,7 +32,9 @@ use hermes_relayer_components::chain::traits::types::channel::{
 };
 use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionHandshakePayloadTypeComponent, InitConnectionOptionsTypeComponent,
+    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
+    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::RawConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -113,7 +118,12 @@ delegate_components! {
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
-            ConnectionHandshakePayloadTypeComponent,
+
+            ConnectionOpenInitPayloadTypeComponent,
+            ConnectionOpenTryPayloadTypeComponent,
+            ConnectionOpenAckPayloadTypeComponent,
+            ConnectionOpenConfirmPayloadTypeComponent,
+
             InitChannelOptionsTypeComponent,
             ChannelHandshakePayloadTypeComponent,
         ]:
@@ -179,8 +189,15 @@ delegate_components! {
             QueryConsensusStateHeightsAndFindHeightBefore,
         AckPacketMessageBuilderComponent:
             BuildAckPacketMessageOnSovereign,
-        ConnectionHandshakeMessageBuilderComponent:
+
+        [
+            ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
+            ConnectionOpenAckMessageBuilderComponent,
+            ConnectionOpenConfirmMessageBuilderComponent,
+        ]:
             BuildCosmosConnectionHandshakeMessageOnSovereign,
+
         ChannelHandshakeMessageBuilderComponent:
             BuildCosmosChannelHandshakeMessageOnSovereign,
         ReceivePacketMessageBuilderComponent:

@@ -15,10 +15,10 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
@@ -230,7 +230,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         info!("client ID of Cosmos on Sovereign: {:?}", sovereign_client_id);
 
-        let connection_init_payload = <SovereignChain as CanBuildConnectionHandshakePayloads<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
+        let connection_init_payload = <SovereignChain as CanBuildConnectionOpenInitPayload<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
 
         let options = CosmosInitConnectionOptions {
             delay_period: Duration::from_secs(0),
@@ -239,18 +239,18 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         // Assert that the connection Init fails with an invalid client
         {
-            let connection_init_payload = <SovereignChain as CanBuildConnectionHandshakePayloads<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
+            let connection_init_payload = <SovereignChain as CanBuildConnectionOpenInitPayload<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
 
             let wrong_wasm_client_id = ClientId::from_str("08-wasm-12").map_err(|e| eyre!("Failed to create a Client ID from string '08-wasm-0': {e}"))?;
 
-            let connection_init_message = <CosmosChain as CanBuildConnectionHandshakeMessages<SovereignChain>>::build_connection_open_init_message(cosmos_chain, &wrong_wasm_client_id, &sovereign_client_id, &options, connection_init_payload).await?;
+            let connection_init_message = <CosmosChain as CanBuildConnectionOpenInitMessage<SovereignChain>>::build_connection_open_init_message(cosmos_chain, &wrong_wasm_client_id, &sovereign_client_id, &options, connection_init_payload).await?;
 
             let connection_init_event = cosmos_chain.send_message(connection_init_message).await;
 
             assert!(connection_init_event.is_err());
         }
 
-        let connection_init_message = <CosmosChain as CanBuildConnectionHandshakeMessages<SovereignChain>>::build_connection_open_init_message(cosmos_chain, &wasm_client_id, &sovereign_client_id, &options, connection_init_payload).await?;
+        let connection_init_message = <CosmosChain as CanBuildConnectionOpenInitMessage<SovereignChain>>::build_connection_open_init_message(cosmos_chain, &wasm_client_id, &sovereign_client_id, &options, connection_init_payload).await?;
 
         let events = cosmos_chain.send_message(connection_init_message).await?;
 

@@ -3,11 +3,12 @@ use core::iter::Iterator;
 
 use cgp_core::CanRaiseError;
 
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
+use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_init::ConnectionInitializer;
@@ -31,10 +32,10 @@ where
         + CanRaiseRelayChainErrors,
     SrcChain: CanSendSingleMessage
         + HasInitConnectionOptionsType<DstChain>
-        + CanBuildConnectionHandshakeMessages<DstChain>
+        + CanBuildConnectionOpenInitMessage<DstChain>
         + CanQueryClientStateWithLatestHeight<DstChain>
         + HasConnectionOpenInitEvent<DstChain>,
-    DstChain: CanBuildConnectionHandshakePayloads<SrcChain>,
+    DstChain: HasIbcChainTypes<SrcChain> + CanBuildConnectionOpenInitPayload<SrcChain>,
     SrcChain::ConnectionId: Clone,
 {
     async fn init_connection(

@@ -3,8 +3,8 @@ use core::iter::Iterator;
 
 use cgp_core::CanRaiseError;
 
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenTryMessage;
+use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenTryPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenTryEvent;
@@ -43,9 +43,9 @@ where
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + for<'a> CanRaiseError<MissingConnectionTryEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
-    SrcChain: CanQueryChainHeight + CanBuildConnectionHandshakePayloads<DstChain>,
+    SrcChain: CanQueryChainHeight + CanBuildConnectionOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
-        + CanBuildConnectionHandshakeMessages<SrcChain>
+        + CanBuildConnectionOpenTryMessage<SrcChain>
         + HasConnectionOpenTryEvent<SrcChain>,
     DstChain::ConnectionId: Clone,
 {
