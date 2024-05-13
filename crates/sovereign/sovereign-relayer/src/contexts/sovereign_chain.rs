@@ -54,7 +54,7 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
     ProvideRollupType, RollupGetter,
 };
-use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_chain_components::sovereign::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_chain_components::sovereign::types::consensus_state::SovereignConsensusState;
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
@@ -161,7 +161,7 @@ pub trait CanUseSovereignChain:
     + CanSendMessages
     + CanQueryChainStatus
     + CanWaitChainReachHeight
-    + HasClientStateType<CosmosChain, ClientState = SovereignClientState>
+    + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
     + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>

@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 
-use crate::sovereign::types::client_state::SovereignClientState;
+use crate::sovereign::types::client_state::WrappedSovereignClientState;
 
 pub struct ProvideSovereignClientState;
 
@@ -16,29 +16,37 @@ impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty>
 where
     Chain: Async,
 {
-    type ClientState = SovereignClientState;
+    type ClientState = WrappedSovereignClientState;
 }
 
 impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty>
     for ProvideSovereignClientState
 where
     Chain: HasHeightType<Height = RollupHeight>
-        + HasClientStateType<Counterparty, ClientState = SovereignClientState>,
+        + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>,
 {
-    fn client_state_latest_height(client_state: &SovereignClientState) -> RollupHeight {
+    fn client_state_latest_height(client_state: &WrappedSovereignClientState) -> RollupHeight {
         RollupHeight {
             slot_number: client_state
+                .sovereign_client_state
                 .sovereign_params
                 .latest_height
                 .revision_height(),
         }
     }
 
-    fn client_state_is_frozen(client_state: &SovereignClientState) -> bool {
-        client_state.is_frozen()
+    fn client_state_is_frozen(client_state: &WrappedSovereignClientState) -> bool {
+        client_state.sovereign_client_state.is_frozen()
     }
 
-    fn client_state_has_expired(client_state: &SovereignClientState, elapsed: Duration) -> bool {
-        elapsed > client_state.sovereign_params.trusting_period
+    fn client_state_has_expired(
+        client_state: &WrappedSovereignClientState,
+        elapsed: Duration,
+    ) -> bool {
+        elapsed
+            > client_state
+                .sovereign_client_state
+                .sovereign_params
+                .trusting_period
     }
 }

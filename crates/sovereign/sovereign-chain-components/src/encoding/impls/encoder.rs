@@ -40,6 +40,7 @@ delegate_components! {
             (Any, WasmClientState),
             (Protobuf, WasmClientState),
             (Protobuf, ProtoWasmClientState),
+
             (Any, WasmConsensusState),
             (Protobuf, WasmConsensusState),
             (Protobuf, ProtoWasmConsensusState),
@@ -62,6 +63,7 @@ delegate_components! {
 
         (WasmClientState, SovereignClientState):
             DecodeViaWasmClientState,
+
         (WasmConsensusState, SovereignConsensusState):
             EncodeViaWasmConsensusState,
 
