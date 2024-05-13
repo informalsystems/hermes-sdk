@@ -3,7 +3,7 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryRawClientStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
 };
@@ -51,7 +51,7 @@ where
         + CanIncrementHeight
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
-        + CanQueryClientStateWithProofs<Counterparty>
+        + CanQueryRawClientStateWithProofs<Counterparty, RawClientState = Any>
         + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
         + HasGrpcAddress
         + CanRaiseError<Encoding::Error>
@@ -59,7 +59,7 @@ where
         + CanRaiseError<&'static str>,
     Counterparty:
         HasClientStateFields<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightFields,
-    Encoding: CanConvert<Counterparty::ClientState, Any>,
+    Encoding: CanConvert<Any, Counterparty::ClientState>,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,
@@ -85,12 +85,12 @@ where
         let versions = connection.versions().to_vec();
         let delay_period = connection.delay_period();
 
-        let (client_state, client_state_proofs) = chain
-            .query_client_state_with_proofs(client_id, height)
+        let (client_state_any, client_state_proofs) = chain
+            .query_raw_client_state_with_proofs(client_id, height)
             .await?;
 
-        let client_state_any = Counterparty::default_encoding()
-            .convert(&client_state)
+        let client_state = Counterparty::default_encoding()
+            .convert(&client_state_any)
             .map_err(Chain::raise_error)?;
 
         let consensus_state_height = Counterparty::client_state_latest_height(&client_state);
@@ -140,12 +140,12 @@ where
             .cloned()
             .unwrap_or_default();
 
-        let (client_state, client_state_proofs) = chain
-            .query_client_state_with_proofs(client_id, height)
+        let (client_state_any, client_state_proofs) = chain
+            .query_raw_client_state_with_proofs(client_id, height)
             .await?;
 
-        let client_state_any = Counterparty::default_encoding()
-            .convert(&client_state)
+        let client_state = Counterparty::default_encoding()
+            .convert(&client_state_any)
             .map_err(Chain::raise_error)?;
 
         let consensus_state_height = Counterparty::client_state_latest_height(&client_state);
