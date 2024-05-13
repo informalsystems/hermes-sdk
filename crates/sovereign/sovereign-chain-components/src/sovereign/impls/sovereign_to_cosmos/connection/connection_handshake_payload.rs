@@ -66,7 +66,7 @@ where
     }
 }
 
-impl<Chain, Counterparty, Rollup> ConnectionOpenTryPayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ConnectionOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildSovereignConnectionHandshakePayload
 where
     Chain: HasConnectionOpenTryPayloadType<
@@ -74,16 +74,8 @@ where
             ConnectionOpenTryPayload = SovereignConnectionOpenTryPayload,
         > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightType<Height = RollupHeight>
-        + HasRollup<Rollup = Rollup>
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>
-        + HasErrorType
-        + CanRaiseError<ClientError>
-        + CanRaiseError<RelayerClientError>
-        + CanRaiseError<ProofError>
-        + CanRaiseError<ConnectionError>
-        + CanRaiseError<Rollup::Error>,
-    Rollup: CanQueryChainHeight<Height = RollupHeight> + HasJsonRpcClient,
-    Rollup::JsonRpcClient: ClientT,
+        + HasErrorType,
 {
     async fn build_connection_open_try_payload(
         _chain: &Chain,
@@ -106,7 +98,6 @@ where
         + HasHeightType<Height = RollupHeight>
         + HasRollup<Rollup = Rollup>
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>
-        + HasErrorType
         + CanRaiseError<ClientError>
         + CanRaiseError<RelayerClientError>
         + CanRaiseError<ProofError>
@@ -197,7 +188,7 @@ where
     }
 }
 
-impl<Chain, Counterparty, Rollup> ConnectionOpenConfirmPayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ConnectionOpenConfirmPayloadBuilder<Chain, Counterparty>
     for BuildSovereignConnectionHandshakePayload
 where
     Chain: HasConnectionOpenConfirmPayloadType<
@@ -205,16 +196,8 @@ where
             ConnectionOpenConfirmPayload = SovereignConnectionOpenConfirmPayload,
         > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightType<Height = RollupHeight>
-        + HasRollup<Rollup = Rollup>
         + HasClientStateType<Counterparty, ClientState = SovereignClientState>
-        + HasErrorType
-        + CanRaiseError<ClientError>
-        + CanRaiseError<RelayerClientError>
-        + CanRaiseError<ProofError>
-        + CanRaiseError<ConnectionError>
-        + CanRaiseError<Rollup::Error>,
-    Rollup: CanQueryChainHeight<Height = RollupHeight> + HasJsonRpcClient,
-    Rollup::JsonRpcClient: ClientT,
+        + HasErrorType,
 {
     async fn build_connection_open_confirm_payload(
         _chain: &Chain,
