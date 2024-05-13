@@ -15,7 +15,9 @@ use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_sovereign_chain_components::encoding::components::{
     IsSovereignEncodingComponent, SovereignEncodingComponents as BaseSovereignEncodingComponents,
 };
-use hermes_sovereign_chain_components::sovereign::types::client_state::SovereignClientState;
+use hermes_sovereign_chain_components::sovereign::types::client_state::{
+    SovereignClientState, WrappedSovereignClientState,
+};
 use hermes_sovereign_chain_components::sovereign::types::consensus_state::SovereignConsensusState;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
@@ -84,6 +86,7 @@ pub trait CanUseSovereignEncoding:
     + CanEncodeAndDecode<Any, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
+    + CanConvertBothWays<Any, WrappedSovereignClientState>
     + CanConvert<Any, SovereignClientState>
     + CanConvert<Any, SovereignConsensusState>
 {
