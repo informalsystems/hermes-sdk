@@ -1,5 +1,7 @@
-use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
+    ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
+};
 use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
@@ -17,8 +19,7 @@ use crate::types::payloads::connection::{
 
 pub struct BuildSolomachineConnectionHandshakePayloads;
 
-#[async_trait]
-impl<Chain, Counterparty> ConnectionHandshakePayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ConnectionOpenInitPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineConnectionHandshakePayloads
 where
     Chain: Solomachine,
@@ -35,7 +36,13 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenTryPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineConnectionHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_connection_open_try_payload(
         chain: &SolomachineChain<Chain>,
         solo_client_state: &SolomachineClientState,
@@ -108,7 +115,13 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenAckPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineConnectionHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_connection_open_ack_payload(
         chain: &SolomachineChain<Chain>,
         client_state: &SolomachineClientState,
@@ -182,7 +195,13 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenConfirmPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineConnectionHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_connection_open_confirm_payload(
         chain: &SolomachineChain<Chain>,
         client_state: &SolomachineClientState,

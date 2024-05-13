@@ -18,8 +18,12 @@ use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelHandshakeMessages, ChannelHandshakeMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::{
     CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
 };
@@ -53,8 +57,9 @@ use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePa
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionHandshakePayloadTypeComponent, HasInitConnectionOptionsType,
-    InitConnectionOptionsTypeComponent,
+    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
+    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    HasInitConnectionOptionsType, InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::RawConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -220,7 +225,12 @@ delegate_components! {
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
-            ConnectionHandshakePayloadTypeComponent,
+
+            ConnectionOpenInitPayloadTypeComponent,
+            ConnectionOpenTryPayloadTypeComponent,
+            ConnectionOpenAckPayloadTypeComponent,
+            ConnectionOpenConfirmPayloadTypeComponent,
+
             InitChannelOptionsTypeComponent,
             ChannelHandshakePayloadTypeComponent,
 
@@ -260,7 +270,11 @@ delegate_components! {
             ReceivePacketMessageBuilderComponent,
             TimeoutUnorderedPacketMessageBuilderComponent,
 
-            ConnectionHandshakeMessageBuilderComponent,
+            ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
+            ConnectionOpenAckMessageBuilderComponent,
+            ConnectionOpenConfirmMessageBuilderComponent,
+
             ChannelHandshakeMessageBuilderComponent,
         ]:
             SovereignRollupClientComponents,
@@ -347,7 +361,10 @@ pub trait CanUseSovereignRollup:
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
-    + CanBuildConnectionHandshakeMessages<CosmosChain>
+    + CanBuildConnectionOpenInitMessage<CosmosChain>
+    + CanBuildConnectionOpenTryMessage<CosmosChain>
+    + CanBuildConnectionOpenAckMessage<CosmosChain>
+    + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanBuildChannelHandshakeMessages<CosmosChain>
 where
     Self::Runtime: HasMutex,
