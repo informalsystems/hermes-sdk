@@ -2,16 +2,11 @@ use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryRawClientStateWithProofs;
-use hermes_relayer_components::chain::traits::queries::connection_end::{
-    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
-};
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
 };
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryRawClientStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEndWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryRawConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::types::client_state::{
@@ -143,13 +138,13 @@ where
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + CanIncrementHeight
         + CanQueryConnectionEndWithProofs<Counterparty, ConnectionEnd = ConnectionEnd>
-        + CanQueryClientStateWithProofs<Counterparty>
+        + CanQueryRawClientStateWithProofs<Counterparty, RawClientState = Any>
         + CanQueryRawConsensusStateWithProofs<Counterparty, RawConsensusState = Any>
         + CanRaiseError<Encoding::Error>
         + CanRaiseError<Ics02Error>,
     Counterparty:
         HasClientStateFields<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightFields,
-    Encoding: CanConvert<Counterparty::ClientState, Any>,
+    Encoding: CanConvert<Any, Counterparty::ClientState>,
 {
     async fn build_connection_open_ack_payload(
         chain: &Chain,
