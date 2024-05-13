@@ -1,8 +1,14 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
+    ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
+};
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::connection::{
+    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
@@ -31,15 +37,12 @@ use crate::sovereign::types::payloads::connection::{
 
 pub struct BuildSovereignConnectionHandshakePayload;
 
-impl<Chain, Counterparty, Rollup> ConnectionHandshakePayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Rollup> ConnectionOpenInitPayloadBuilder<Chain, Counterparty>
     for BuildSovereignConnectionHandshakePayload
 where
-    Chain: HasConnectionHandshakePayloadTypes<
+    Chain: HasConnectionOpenInitPayloadType<
             Counterparty,
             ConnectionOpenInitPayload = SovereignConnectionOpenInitPayload,
-            ConnectionOpenTryPayload = SovereignConnectionOpenTryPayload,
-            ConnectionOpenAckPayload = SovereignConnectionOpenAckPayload,
-            ConnectionOpenConfirmPayload = SovereignConnectionOpenConfirmPayload,
         > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightType<Height = RollupHeight>
         + HasRollup<Rollup = Rollup>
@@ -61,7 +64,19 @@ where
         let commitment_prefix = "ibc".into();
         Ok(SovereignConnectionOpenInitPayload { commitment_prefix })
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenTryPayloadBuilder<Chain, Counterparty>
+    for BuildSovereignConnectionHandshakePayload
+where
+    Chain: HasConnectionOpenTryPayloadType<
+            Counterparty,
+            ConnectionOpenTryPayload = SovereignConnectionOpenTryPayload,
+        > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
+        + HasHeightType<Height = RollupHeight>
+        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasErrorType,
+{
     async fn build_connection_open_try_payload(
         _chain: &Chain,
         _client_state: &Chain::ClientState,
@@ -71,7 +86,26 @@ where
     ) -> Result<Chain::ConnectionOpenTryPayload, Chain::Error> {
         todo!()
     }
+}
 
+impl<Chain, Counterparty, Rollup> ConnectionOpenAckPayloadBuilder<Chain, Counterparty>
+    for BuildSovereignConnectionHandshakePayload
+where
+    Chain: HasConnectionOpenAckPayloadType<
+            Counterparty,
+            ConnectionOpenAckPayload = SovereignConnectionOpenAckPayload,
+        > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
+        + HasHeightType<Height = RollupHeight>
+        + HasRollup<Rollup = Rollup>
+        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + CanRaiseError<ClientError>
+        + CanRaiseError<RelayerClientError>
+        + CanRaiseError<ProofError>
+        + CanRaiseError<ConnectionError>
+        + CanRaiseError<Rollup::Error>,
+    Rollup: CanQueryChainHeight<Height = RollupHeight> + HasJsonRpcClient,
+    Rollup::JsonRpcClient: ClientT,
+{
     async fn build_connection_open_ack_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
@@ -152,7 +186,19 @@ where
             proof_consensus,
         })
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenConfirmPayloadBuilder<Chain, Counterparty>
+    for BuildSovereignConnectionHandshakePayload
+where
+    Chain: HasConnectionOpenConfirmPayloadType<
+            Counterparty,
+            ConnectionOpenConfirmPayload = SovereignConnectionOpenConfirmPayload,
+        > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
+        + HasHeightType<Height = RollupHeight>
+        + HasClientStateType<Counterparty, ClientState = SovereignClientState>
+        + HasErrorType,
+{
     async fn build_connection_open_confirm_payload(
         _chain: &Chain,
         _client_state: &Chain::ClientState,

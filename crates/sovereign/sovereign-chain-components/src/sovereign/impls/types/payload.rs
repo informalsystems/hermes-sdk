@@ -3,7 +3,9 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
+    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
+    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
+    ProvideInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
@@ -64,17 +66,35 @@ where
     type InitConnectionOptions = SovereignInitConnectionOptions;
 }
 
-impl<Chain, Counterparty> ProvideConnectionHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
     for ProvideSovereignPayloadTypes
 where
     Chain: Async,
 {
     type ConnectionOpenInitPayload = SovereignConnectionOpenInitPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
     type ConnectionOpenTryPayload = SovereignConnectionOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
     type ConnectionOpenAckPayload = SovereignConnectionOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
     type ConnectionOpenConfirmPayload = SovereignConnectionOpenConfirmPayload;
 }
 

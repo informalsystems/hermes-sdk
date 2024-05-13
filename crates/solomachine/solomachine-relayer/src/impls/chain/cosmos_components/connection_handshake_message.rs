@@ -3,9 +3,14 @@ use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMes
 use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_protobuf_encoding_components::types::Any;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
+    ConnectionOpenInitMessageBuilder, ConnectionOpenTryMessageBuilder,
+};
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionHandshakePayloadTypes, HasInitConnectionOptionsType,
+    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+    HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
@@ -19,8 +24,7 @@ use crate::types::payloads::connection::{
 
 pub struct BuildSolomachineConnectionHandshakeMessagesForCosmos;
 
-#[async_trait]
-impl<Chain, Counterparty> ConnectionHandshakeMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ConnectionOpenInitMessageBuilder<Chain, Counterparty>
     for BuildSolomachineConnectionHandshakeMessagesForCosmos
 where
     Chain: HasInitConnectionOptionsType<Counterparty>
@@ -30,12 +34,9 @@ where
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
         > + HasErrorType<Error = Error>,
-    Counterparty: HasConnectionHandshakePayloadTypes<
+    Counterparty: HasConnectionOpenInitPayloadType<
             Chain,
             ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload,
-            ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,
-            ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload,
-            ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload,
         > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
 {
     async fn build_connection_open_init_message(
@@ -47,7 +48,22 @@ where
     ) -> Result<CosmosMessage, Error> {
         todo!()
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
+    for BuildSolomachineConnectionHandshakeMessagesForCosmos
+where
+    Chain: HasIbcChainTypes<
+            Counterparty,
+            ClientId = ClientId,
+            ConnectionId = ConnectionId,
+            Message = CosmosMessage,
+        > + HasErrorType<Error = Error>,
+    Counterparty: HasConnectionOpenTryPayloadType<
+            Chain,
+            ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,
+        > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
+{
     async fn build_connection_open_try_message(
         _chain: &Chain,
         client_id: &ClientId,
@@ -85,7 +101,22 @@ where
 
         Ok(message.to_cosmos_message())
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
+    for BuildSolomachineConnectionHandshakeMessagesForCosmos
+where
+    Chain: HasIbcChainTypes<
+            Counterparty,
+            ClientId = ClientId,
+            ConnectionId = ConnectionId,
+            Message = CosmosMessage,
+        > + HasErrorType<Error = Error>,
+    Counterparty: HasConnectionOpenAckPayloadType<
+            Chain,
+            ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload,
+        > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
+{
     async fn build_connection_open_ack_message(
         _chain: &Chain,
         _connection_id: &ConnectionId,
@@ -94,7 +125,22 @@ where
     ) -> Result<CosmosMessage, Error> {
         todo!()
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>
+    for BuildSolomachineConnectionHandshakeMessagesForCosmos
+where
+    Chain: HasIbcChainTypes<
+            Counterparty,
+            ClientId = ClientId,
+            ConnectionId = ConnectionId,
+            Message = CosmosMessage,
+        > + HasErrorType<Error = Error>,
+    Counterparty: HasConnectionOpenConfirmPayloadType<
+            Chain,
+            ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload,
+        > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
+{
     async fn build_connection_open_confirm_message(
         _chain: &Chain,
         _connection_id: &ConnectionId,

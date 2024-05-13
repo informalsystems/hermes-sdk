@@ -11,14 +11,20 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
+    ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
-    CanBuildConnectionHandshakePayloads, ConnectionHandshakePayloadBuilderComponent,
+    CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
+    CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
+    ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
+    ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
@@ -93,7 +99,12 @@ delegate_components! {
             QueryAndConvertRawConsensusState,
         CreateClientMessageBuilderComponent:
             BuildCreateSolomachineClientMessage,
-        ConnectionHandshakeMessageBuilderComponent:
+        [
+            ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
+            ConnectionOpenAckMessageBuilderComponent,
+            ConnectionOpenConfirmMessageBuilderComponent,
+        ]:
             BuildSolomachineConnectionHandshakeMessagesForCosmos,
     }
 }
@@ -137,10 +148,22 @@ delegate_components! {
             BuildSolomachineChannelHandshakePayloads,
         ChannelHandshakeMessageBuilderComponent:
             BuildCosmosToSolomachineChannelHandshakeMessage,
-        ConnectionHandshakePayloadBuilderComponent:
+        [
+            ConnectionOpenInitPayloadBuilderComponent,
+            ConnectionOpenTryPayloadBuilderComponent,
+            ConnectionOpenAckPayloadBuilderComponent,
+            ConnectionOpenConfirmPayloadBuilderComponent,
+        ]:
             BuildSolomachineConnectionHandshakePayloads,
-        ConnectionHandshakeMessageBuilderComponent:
+
+        [
+            ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
+            ConnectionOpenAckMessageBuilderComponent,
+            ConnectionOpenConfirmMessageBuilderComponent,
+        ]:
             BuildCosmosToSolomachineConnectionHandshakeMessage,
+
         CreateClientPayloadBuilderComponent:
             BuildSolomachineCreateClientPayload,
         CreateClientMessageBuilderComponent:
@@ -168,7 +191,10 @@ pub trait CanUseCosmosChainWithSolomachine<Chain>:
     CanQueryClientState<SolomachineChain<Chain>>
     + CanQueryClientStateWithProofs<SolomachineChain<Chain>>
     + CanQueryConsensusStateWithProofs<SolomachineChain<Chain>>
-    + CanBuildConnectionHandshakePayloads<SolomachineChain<Chain>>
+    + CanBuildConnectionOpenInitPayload<SolomachineChain<Chain>>
+    + CanBuildConnectionOpenTryPayload<SolomachineChain<Chain>>
+    + CanBuildConnectionOpenAckPayload<SolomachineChain<Chain>>
+    + CanBuildConnectionOpenConfirmPayload<SolomachineChain<Chain>>
 where
     Chain: Solomachine,
 {

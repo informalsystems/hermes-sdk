@@ -1,6 +1,9 @@
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::channel::ProvideChannelHandshakePayloadTypes;
-use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::connection::{
+    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
+    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
@@ -49,17 +52,35 @@ where
     type ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> ProvideConnectionHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
     for ProvideCosmosPayloadTypes
 where
     Chain: Async,
 {
     type ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
+    for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
     type ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
+    for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
     type ConnectionOpenAckPayload = CosmosConnectionOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
+    for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
     type ConnectionOpenConfirmPayload = CosmosConnectionOpenConfirmPayload;
 }
 
