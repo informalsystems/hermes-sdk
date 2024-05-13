@@ -11,7 +11,7 @@ use hermes_wasm_client_components::types::client_state::{
     DecodeViaWasmClientState, ProtoWasmClientState, WasmClientState,
 };
 use hermes_wasm_client_components::types::consensus_state::{
-    EncodeViaWasmConsensusState, ProtoWasmConsensusState, WasmConsensusState,
+    ProtoWasmConsensusState, WasmConsensusState,
 };
 
 use crate::sovereign::types::client_state::{ProtoSovereignClientState, SovereignClientState};
@@ -67,11 +67,5 @@ delegate_components! {
 
         (Any, SovereignConsensusState):
             DecodeViaWasmClientState,
-
-        (SovereignClientState, Any):
-            DecodeViaWasmClientState,
-
-        (SovereignConsensusState, Any):
-            EncodeViaWasmConsensusState,
     }
 }
