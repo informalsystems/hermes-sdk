@@ -7,9 +7,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
 use hermes_encoding_components::impls::convert::{ConvertFrom, TryConvertFrom};
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
-use hermes_wasm_client_components::types::client_state::{
-    DecodeViaWasmClientState, ProtoWasmClientState, WasmClientState,
-};
+use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::{
     DecodeViaWasmConsensusState, EncodeViaWasmConsensusState, ProtoWasmConsensusState,
     WasmConsensusState,
@@ -65,9 +63,6 @@ delegate_components! {
 
         (ProtoSovereignConsensusState, SovereignConsensusState):
             TryConvertFrom,
-
-        (Any, SovereignClientState):
-            DecodeViaWasmClientState,
 
         (SovereignConsensusState, Any):
             EncodeViaWasmConsensusState,
