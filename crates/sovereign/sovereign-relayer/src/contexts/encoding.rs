@@ -87,8 +87,8 @@ pub trait CanUseSovereignEncoding:
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
     + CanConvertBothWays<Any, WrappedSovereignClientState>
+    + CanConvertBothWays<Any, SovereignConsensusState>
     + CanConvert<Any, SovereignClientState>
-    + CanConvert<Any, SovereignConsensusState>
 {
 }
 
