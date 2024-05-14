@@ -10,6 +10,7 @@ use hermes_encoding_components::traits::has_encoding::{
 };
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
+use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
@@ -40,6 +41,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 };
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -48,6 +50,7 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -125,6 +128,9 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
+            CommitmentPrefixTypeComponent,
+            CommitmentProofTypeComponent,
+            ConnectionEndTypeComponent,
         ]:
             ProvideCosmosChainTypes,
         [

@@ -6,19 +6,18 @@ use hermes_cosmos_chain_components::types::tendermint::{
 };
 use hermes_encoding_components::impls::convert::{ConvertFrom, TryConvertFrom};
 use hermes_protobuf_encoding_components::types::Any;
+use hermes_sovereign_rollup_components::types::client_state::{
+    EncodeWrappedSovereignClientState, ProtoSovereignClientState, SovereignClientState,
+    WrappedSovereignClientState,
+};
+use hermes_sovereign_rollup_components::types::consensus_state::{
+    ProtoSovereignConsensusState, SovereignConsensusState,
+};
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::{
     DecodeViaWasmConsensusState, EncodeViaWasmConsensusState, ProtoWasmConsensusState,
     WasmConsensusState,
-};
-
-use crate::sovereign::types::client_state::{
-    EncodeWrappedSovereignClientState, ProtoSovereignClientState, SovereignClientState,
-    WrappedSovereignClientState,
-};
-use crate::sovereign::types::consensus_state::{
-    ProtoSovereignConsensusState, SovereignConsensusState,
 };
 
 pub struct SovereignConverterComponents;

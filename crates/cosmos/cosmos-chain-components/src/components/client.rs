@@ -1,4 +1,5 @@
 use cgp_core::prelude::delegate_components;
+use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
@@ -104,7 +105,6 @@ use crate::impls::channel::channel_handshake_payload::BuildCosmosChannelHandshak
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
-use crate::impls::connection::connection_handshake_payload::BuildCosmosConnectionHandshakePayload;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::impls::events::ProvideCosmosEvents;
 use crate::impls::packet::ack_packet_message::BuildCosmosAckPacketMessage;
@@ -225,7 +225,7 @@ delegate_components! {
             ConnectionOpenAckPayloadBuilderComponent,
             ConnectionOpenConfirmPayloadBuilderComponent,
         ]:
-            BuildCosmosConnectionHandshakePayload,
+            BuildConnectionHandshakePayload,
         ChannelHandshakePayloadBuilderComponent:
             BuildCosmosChannelHandshakePayload,
         PacketCommitmentsQuerierComponent:

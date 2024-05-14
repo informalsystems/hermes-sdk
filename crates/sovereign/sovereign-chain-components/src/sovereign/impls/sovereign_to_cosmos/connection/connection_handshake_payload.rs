@@ -12,6 +12,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
+use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::rpc::height::HeightParam;
 use ibc::core::client::types::error::ClientError;
@@ -30,7 +31,6 @@ use serde::Serialize;
 use sov_celestia_client::types::client_state::SovTmClientState as SovereignClientState;
 
 use crate::sovereign::traits::chain::rollup::HasRollup;
-use crate::sovereign::types::client_state::WrappedSovereignClientState;
 use crate::sovereign::types::payloads::connection::{
     SovereignConnectionOpenAckPayload, SovereignConnectionOpenConfirmPayload,
     SovereignConnectionOpenInitPayload, SovereignConnectionOpenTryPayload,

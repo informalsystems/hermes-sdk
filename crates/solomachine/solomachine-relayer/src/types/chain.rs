@@ -6,6 +6,7 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 
 use crate::context::encoding::SolomachineEncoding;
@@ -24,6 +25,7 @@ impl<Chain: Solomachine> SolomachineChain<Chain> {
 
 pub trait CanUseSolomachineChain:
     HasEncoding<Encoding = SolomachineEncoding>
+    + HasClientStateType<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionOpenInitMessage<CosmosChain>
     + CanBuildConnectionOpenTryMessage<CosmosChain>

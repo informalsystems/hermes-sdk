@@ -1,26 +1,38 @@
-use cgp_core::HasErrorType;
+use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
-use hermes_cosmos_chain_components::types::payloads::connection::{
-    CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
-    CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
-};
+use hermes_encoding_components::traits::convert::CanConvert;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_protobuf_encoding_components::types::Any;
+use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
     ConnectionOpenInitMessageBuilder, ConnectionOpenTryMessageBuilder,
 };
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
-    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionEndType, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
     HasInitConnectionOptionsType,
 };
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::types::connection_payload::{
+    ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
+    ConnectionOpenTryPayload,
+};
+use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
+use ibc_relayer_types::core::ics02_client::height::Height;
+use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
+use crate::types::client_state::WrappedSovereignClientState;
+use crate::types::height::RollupHeight;
 use crate::types::message::SovereignMessage;
 use crate::types::payloads::connection::SovereignInitConnectionOptions;
 
@@ -38,9 +50,10 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
         > + HasErrorType,
-    Counterparty: HasConnectionOpenInitPayloadType<
+    Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
+        + HasConnectionOpenInitPayloadType<
             Chain,
-            ConnectionOpenInitPayload = CosmosConnectionOpenInitPayload,
+            ConnectionOpenInitPayload = ConnectionOpenInitPayload<Counterparty>,
         > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
 {
     async fn build_connection_open_init_message(
@@ -48,9 +61,9 @@ where
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &Chain::InitConnectionOptions,
-        counterparty_payload: CosmosConnectionOpenInitPayload,
+        counterparty_payload: ConnectionOpenInitPayload<Counterparty>,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let CosmosConnectionOpenInitPayload { commitment_prefix } = counterparty_payload;
+        let commitment_prefix = counterparty_payload.commitment_prefix;
 
         let SovereignInitConnectionOptions {
             delay_period,
@@ -72,7 +85,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Encoding> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessageOnSovereign
 where
     Chain: HasIbcChainTypes<
@@ -80,43 +93,50 @@ where
             Message = SovereignMessage,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasErrorType,
-    Counterparty: HasConnectionOpenTryPayloadType<
+            Height = RollupHeight,
+        > + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
+        + HasEncoding<Encoding = Encoding>
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<Encoding::Error>,
+    Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
+        + HasConnectionOpenTryPayloadType<
             Chain,
-            ConnectionOpenTryPayload = CosmosConnectionOpenTryPayload,
-        > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
+            ConnectionOpenTryPayload = ConnectionOpenTryPayload<Counterparty, Chain>,
+        > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId, Height = Height>,
+    Encoding: CanConvert<WrappedSovereignClientState, Any>,
 {
     async fn build_connection_open_try_message(
-        _chain: &Chain,
+        chain: &Chain,
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
-        counterparty_payload: CosmosConnectionOpenTryPayload,
+        payload: ConnectionOpenTryPayload<Counterparty, Chain>,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let CosmosConnectionOpenTryPayload {
-            commitment_prefix,
-            client_state,
-            versions,
-            delay_period,
-            update_height,
-            proof_init,
-            proof_client,
-            proof_consensus,
-            proof_consensus_height,
-        } = counterparty_payload;
+        let counterparty_versions = payload.connection_end.versions().to_vec();
+        let delay_period = payload.connection_end.delay_period();
+
+        let client_state_any = chain
+            .encoding()
+            .convert(&payload.client_state)
+            .map_err(Chain::raise_error)?;
+
+        let proof_consensus_height = Height::new(0, payload.proof_consensus_height.slot_number)
+            .map_err(Chain::raise_error)?;
 
         let msg = CosmosConnectionOpenTryMessage {
             client_id: client_id.to_owned(),
             counterparty_client_id: counterparty_client_id.to_owned(),
             counterparty_connection_id: counterparty_connection_id.to_owned(),
-            counterparty_commitment_prefix: commitment_prefix,
-            counterparty_versions: versions,
-            client_state,
+            counterparty_commitment_prefix: payload.commitment_prefix,
+            counterparty_versions,
+            client_state: client_state_any,
             delay_period,
-            update_height,
-            proof_init,
-            proof_client,
-            proof_consensus,
+            update_height: payload.update_height,
+            proof_init: payload.proof_init,
+            proof_client: payload.proof_client,
+            proof_consensus: payload.proof_consensus,
             proof_consensus_height,
         };
 
@@ -127,7 +147,7 @@ where
     }
 }
 
-impl<Chain, Counterparty> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Encoding> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessageOnSovereign
 where
     Chain: HasIbcChainTypes<
@@ -135,37 +155,53 @@ where
             Message = SovereignMessage,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasErrorType,
-    Counterparty: HasConnectionOpenAckPayloadType<
+            Height = RollupHeight,
+        > + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
+        + HasEncoding<Encoding = Encoding>
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<Encoding::Error>,
+    Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
+        + HasConnectionOpenAckPayloadType<
             Chain,
-            ConnectionOpenAckPayload = CosmosConnectionOpenAckPayload,
-        > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
+            ConnectionOpenAckPayload = ConnectionOpenAckPayload<Counterparty, Chain>,
+        > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId, Height = Height>,
+    Encoding: CanConvert<WrappedSovereignClientState, Any>,
 {
     async fn build_connection_open_ack_message(
-        _chain: &Chain,
+        chain: &Chain,
         connection_id: &Chain::ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
-        counterparty_payload: CosmosConnectionOpenAckPayload,
+        payload: ConnectionOpenAckPayload<Counterparty, Chain>,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let CosmosConnectionOpenAckPayload {
-            client_state,
-            version,
-            update_height,
-            proof_try,
-            proof_client,
-            proof_consensus,
-            proof_consensus_height,
-        } = counterparty_payload;
+        let connection_id = connection_id.clone();
+        let counterparty_connection_id = counterparty_connection_id.clone();
+
+        let version = payload
+            .connection_end
+            .versions()
+            .iter()
+            .next()
+            .cloned()
+            .unwrap_or_default();
+
+        let client_state_any = chain
+            .encoding()
+            .convert(&payload.client_state)
+            .map_err(Chain::raise_error)?;
+
+        let proof_consensus_height = Height::new(0, payload.proof_consensus_height.slot_number)
+            .map_err(Chain::raise_error)?;
 
         let msg = CosmosConnectionOpenAckMessage {
             connection_id: connection_id.to_owned(),
             counterparty_connection_id: counterparty_connection_id.to_owned(),
-            client_state,
+            client_state: client_state_any,
             version,
-            update_height,
-            proof_try,
-            proof_client,
-            proof_consensus,
+            update_height: payload.update_height,
+            proof_try: payload.proof_try,
+            proof_client: payload.proof_client,
+            proof_consensus: payload.proof_consensus,
             proof_consensus_height,
         };
 
@@ -185,25 +221,22 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
         > + HasErrorType,
-    Counterparty: HasConnectionOpenConfirmPayloadType<
+    Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasHeightType<Height = Height>
+        + HasConnectionOpenConfirmPayloadType<
             Chain,
-            ConnectionOpenConfirmPayload = CosmosConnectionOpenConfirmPayload,
+            ConnectionOpenConfirmPayload = ConnectionOpenConfirmPayload<Counterparty>,
         > + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
 {
     async fn build_connection_open_confirm_message(
         _chain: &Chain,
         connection_id: &Chain::ConnectionId,
-        counterparty_payload: CosmosConnectionOpenConfirmPayload,
+        counterparty_payload: ConnectionOpenConfirmPayload<Counterparty>,
     ) -> Result<SovereignMessage, Chain::Error> {
-        let CosmosConnectionOpenConfirmPayload {
-            update_height,
-            proof_ack,
-        } = counterparty_payload;
-
         let msg = CosmosConnectionOpenConfirmMessage {
             connection_id: connection_id.to_owned(),
-            update_height,
-            proof_ack,
+            update_height: counterparty_payload.update_height,
+            proof_ack: counterparty_payload.proof_ack,
         };
 
         let cosmos_msg = msg.to_cosmos_message();

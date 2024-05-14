@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::forward::message_builders::channel_handshake::ForwardChannelHandshakeBuilder;
-use hermes_relayer_components::chain::impls::forward::message_builders::connection_handshake::ForwardConnectionHandshakeBuilder;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
@@ -59,14 +58,15 @@ use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::crea
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::events::ProvideSovereignEvents;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
+use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSovereignClientState;
+use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
+use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
 
 use crate::sovereign::impls::sovereign_to_cosmos::channel::channel_handshake_payload::BuildSovereignChannelHandshakePayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
-use crate::sovereign::impls::types::client_state::ProvideSovereignClientState;
-use crate::sovereign::impls::types::consensus_state::ProvideSovereignConsensusState;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 
 pub struct SovereignChainClientComponents;
@@ -144,7 +144,7 @@ delegate_components! {
             ConnectionOpenAckMessageBuilderComponent,
             ConnectionOpenConfirmMessageBuilderComponent,
         ]:
-            ForwardConnectionHandshakeBuilder,
+            BuildCosmosConnectionHandshakeMessageOnSovereign,
 
         ChannelHandshakePayloadBuilderComponent:
             BuildSovereignChannelHandshakePayload,
