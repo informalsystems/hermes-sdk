@@ -36,7 +36,7 @@ where
     Counterparty: HasConnectionOpenInitPayloadType<
             Chain,
             ConnectionOpenInitPayload = ConnectionOpenInitPayload<Counterparty>,
-        > + HasCommitmentPrefixType
+        > + HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>,
 {
     async fn build_connection_open_init_message(
@@ -44,12 +44,13 @@ where
         _client_id: &ClientId,
         _counterparty_client_id: &ClientId,
         _init_connection_options: &Chain::InitConnectionOptions,
-        _counterparty_payload: ConnectionOpenInitPayload<Counterparty>,
+        payload: ConnectionOpenInitPayload<Counterparty>,
     ) -> Result<SolomachineMessage, Chain::Error> {
-        todo!()
-        // let message = SolomachineMessage::CosmosConnectionOpenInit(Box::new(counterparty_payload));
+        let message = SolomachineMessage::CosmosConnectionOpenInit {
+            commitment_prefix: payload.commitment_prefix,
+        };
 
-        // Ok(message)
+        Ok(message)
     }
 }
 
