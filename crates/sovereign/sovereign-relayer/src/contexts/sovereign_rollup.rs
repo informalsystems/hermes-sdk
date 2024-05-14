@@ -7,11 +7,12 @@ use ed25519_dalek::SigningKey;
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+    DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilderComponent, CanBuildAckPacketMessage,
 };
@@ -55,13 +56,19 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
 };
 use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
-use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
-    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
-    HasInitConnectionOptionsType, InitConnectionOptionsTypeComponent,
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, HasClientStateType,
+    RawClientStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::RawConsensusStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::{
+    ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
+    ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent,
+    ConnectionOpenTryPayloadTypeComponent, HasInitConnectionOptionsType,
+    InitConnectionOptionsTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
     HasCreateClientEvent,
@@ -71,6 +78,7 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -127,6 +135,7 @@ use hermes_sovereign_rollup_components::components::SovereignRollupClientCompone
 use hermes_sovereign_rollup_components::traits::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
 };
+use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::rollup_id::RollupId;
 use hermes_sovereign_rollup_components::types::tx::nonce_guard::SovereignNonceGuard;
 use hermes_sovereign_test_components::rollup::components::SovereignRollupTestComponents;
@@ -144,7 +153,7 @@ use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
 use jsonrpsee::ws_client::WsClient;
 
-use crate::contexts::encoding::ProvideSovereignEncoding;
+use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
 use crate::contexts::logger::ProvideSovereignLogger;
 
 #[derive(Clone)]
@@ -208,6 +217,13 @@ delegate_components! {
             MessageTypeComponent,
             EventTypeComponent,
             ChainStatusTypeComponent,
+            CommitmentPrefixTypeComponent,
+            CommitmentProofTypeComponent,
+            ConnectionEndTypeComponent,
+
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+            ConsensusStateTypeComponent,
 
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
@@ -352,6 +368,8 @@ pub trait CanUseSovereignRollup:
     + CanAssertEventualAmount
     + HasLogger
     + CanQueryChainStatus
+    + HasEncoding<Encoding = SovereignEncoding>
+    + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>

@@ -9,12 +9,12 @@ use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_sovereign_rollup_components::types::client_state::SovereignClientState;
+use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsensusState;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use prost::EncodeError;
 
-use crate::sovereign::types::client_state::SovereignClientState;
-use crate::sovereign::types::consensus_state::SovereignConsensusState;
 use crate::sovereign::types::payloads::client::SovereignCreateClientPayload;
 
 /**

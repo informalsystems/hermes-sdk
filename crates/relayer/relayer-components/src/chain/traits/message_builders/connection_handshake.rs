@@ -59,7 +59,7 @@ where
 pub trait CanBuildConnectionOpenConfirmMessage<Counterparty>:
     HasIbcChainTypes<Counterparty> + HasErrorType
 where
-    Counterparty: HasConnectionOpenConfirmPayloadType<Self> + HasIbcChainTypes<Self>,
+    Counterparty: HasConnectionOpenConfirmPayloadType<Self>,
 {
     async fn build_connection_open_confirm_message(
         &self,

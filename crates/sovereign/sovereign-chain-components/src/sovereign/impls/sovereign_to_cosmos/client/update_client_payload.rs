@@ -10,6 +10,7 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::U
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use ibc::clients::tendermint::types::Header;
 use ibc::core::client::types::Height as DataChainHeight;
@@ -24,7 +25,6 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
 use sov_celestia_client::types::client_state::TendermintClientParams;
 
 use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
-use crate::sovereign::types::client_state::WrappedSovereignClientState;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
 /**

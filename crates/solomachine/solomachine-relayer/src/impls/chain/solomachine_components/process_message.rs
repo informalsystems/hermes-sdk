@@ -41,7 +41,7 @@ where
                     };
                     res.push(vec![SolomachineEvent::CreateClient(create_cient_event)]);
                 }
-                SolomachineMessage::CosmosConnectionOpenInit(_) => {
+                SolomachineMessage::CosmosConnectionOpenInit { .. } => {
                     let connection_id = ConnectionId::from_str("connection-1").unwrap();
                     let counterparty_connection_id =
                         ConnectionId::from_str("connection-0").unwrap();

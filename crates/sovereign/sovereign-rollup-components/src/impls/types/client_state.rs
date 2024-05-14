@@ -5,9 +5,9 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_sovereign_rollup_components::types::height::RollupHeight;
 
-use crate::sovereign::types::client_state::WrappedSovereignClientState;
+use crate::types::client_state::WrappedSovereignClientState;
+use crate::types::height::RollupHeight;
 
 pub struct ProvideSovereignClientState;
 

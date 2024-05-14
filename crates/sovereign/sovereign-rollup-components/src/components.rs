@@ -5,6 +5,7 @@ use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideAnyRaw
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
+use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
@@ -30,13 +31,17 @@ use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeCompon
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::client_state::RawClientStateTypeComponent;
-use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
-    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
-    InitConnectionOptionsTypeComponent,
+use hermes_relayer_components::chain::traits::types::client_state::{
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::RawConsensusStateTypeComponent;
+use hermes_relayer_components::chain::traits::types::connection::{
+    ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
+    ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent,
+    ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
@@ -45,6 +50,7 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -88,6 +94,8 @@ use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
 use crate::impls::transaction::query_nonce::QuerySovereignNonce;
 use crate::impls::transaction::query_tx_response::QuerySovereignTxResponse;
 use crate::impls::transaction::submit_tx::SubmitSovereignTransaction;
+use crate::impls::types::client_state::ProvideSovereignClientState;
+use crate::impls::types::consensus_state::ProvideSovereignConsensusState;
 use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
 use crate::impls::types::rollup::ProvideSovereignRollupTypes;
 use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
@@ -107,8 +115,18 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
+            CommitmentPrefixTypeComponent,
+            CommitmentProofTypeComponent,
+            ConnectionEndTypeComponent,
         ]:
             ProvideSovereignRollupTypes,
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            ProvideSovereignClientState,
+        ConsensusStateTypeComponent:
+            ProvideSovereignConsensusState,
         [
             CreateClientEventComponent,
         ]:

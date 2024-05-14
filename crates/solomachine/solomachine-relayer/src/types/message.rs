@@ -4,10 +4,6 @@ use hermes_cosmos_chain_components::types::payloads::channel::{
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
-use hermes_cosmos_chain_components::types::payloads::connection::{
-    CosmosConnectionOpenAckPayload, CosmosConnectionOpenConfirmPayload,
-    CosmosConnectionOpenInitPayload, CosmosConnectionOpenTryPayload,
-};
 
 #[derive(Debug)]
 pub enum SolomachineMessage {
@@ -16,8 +12,5 @@ pub enum SolomachineMessage {
     CosmosChannelOpenTry(Box<CosmosChannelOpenTryPayload>),
     CosmosChannelOpenAck(Box<CosmosChannelOpenAckPayload>),
     CosmosChannelOpenConfirm(Box<CosmosChannelOpenConfirmPayload>),
-    CosmosConnectionOpenInit(Box<CosmosConnectionOpenInitPayload>),
-    CosmosConnectionOpenTry(Box<CosmosConnectionOpenTryPayload>),
-    CosmosConnectionOpenAck(Box<CosmosConnectionOpenAckPayload>),
-    CosmosConnectionOpenConfirm(Box<CosmosConnectionOpenConfirmPayload>),
+    CosmosConnectionOpenInit { commitment_prefix: Vec<u8> },
 }

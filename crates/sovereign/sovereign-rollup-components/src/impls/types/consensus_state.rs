@@ -1,7 +1,7 @@
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 
-use crate::sovereign::types::consensus_state::SovereignConsensusState;
+use crate::types::consensus_state::SovereignConsensusState;
 
 pub struct ProvideSovereignConsensusState;
 
