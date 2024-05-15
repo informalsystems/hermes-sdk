@@ -10,6 +10,9 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
 };
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
@@ -61,6 +64,7 @@ use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovere
 use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSovereignClientState;
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
+use hermes_relayer_components::chain::impls::forward::queries::connection_end::ForwardQueryConnectionEnd;
 
 use crate::sovereign::impls::sovereign_to_cosmos::channel::channel_handshake_payload::BuildSovereignChannelHandshakePayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
@@ -166,6 +170,11 @@ delegate_components! {
             ConsensusStateWithProofsQuerierComponent,
         ]:
             ForwardQueryConsensusState,
+        [
+            ConnectionEndQuerierComponent,
+            ConnectionEndWithProofsQuerierComponent,
+        ]:
+            ForwardQueryConnectionEnd,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
     }
