@@ -43,6 +43,10 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateWithProofsQuerierComponent, RawClientStateQuerierComponent,
     RawClientStateWithProofsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs, ConnectionEndQuerierComponent,
+    ConnectionEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithProofs, ConsensusStateQuerierComponent,
     ConsensusStateWithProofsQuerierComponent, RawConsensusStateQuerierComponent,
@@ -290,6 +294,9 @@ delegate_components! {
             ConsensusStateHeightsQuerierComponent,
             ConsensusStateHeightQuerierComponent,
 
+            ConnectionEndQuerierComponent,
+            ConnectionEndWithProofsQuerierComponent,
+
             AckPacketMessageBuilderComponent,
             ReceivePacketMessageBuilderComponent,
             TimeoutUnorderedPacketMessageBuilderComponent,
@@ -385,6 +392,8 @@ pub trait CanUseSovereignRollup:
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateWithProofs<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
+    + CanQueryConnectionEnd<CosmosChain>
+    + CanQueryConnectionEndWithProofs<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>

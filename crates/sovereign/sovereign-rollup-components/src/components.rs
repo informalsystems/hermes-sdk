@@ -21,6 +21,9 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
     RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
     RawConsensusStateQuerierComponent, RawConsensusStateWithProofsQuerierComponent,
@@ -88,6 +91,7 @@ use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
 use crate::impls::queries::client_state::QueryClientStateOnSovereign;
+use crate::impls::queries::connection_end::QueryConnectionEndOnSovereign;
 use crate::impls::queries::consensus_state::QueryConsensusStateOnSovereign;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsOnSovereign;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
@@ -215,6 +219,11 @@ delegate_components! {
             ConsensusStateWithProofsQuerierComponent,
         ]:
             QueryAndConvertRawConsensusState,
+        [
+            ConnectionEndQuerierComponent,
+            ConnectionEndWithProofsQuerierComponent,
+        ]:
+            QueryConnectionEndOnSovereign,
         ConsensusStateHeightsQuerierComponent:
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:
