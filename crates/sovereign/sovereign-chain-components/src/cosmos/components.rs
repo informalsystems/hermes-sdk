@@ -8,7 +8,9 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
 
@@ -23,7 +25,10 @@ pub struct SovereignCosmosComponents;
 
 delegate_components! {
     SovereignCosmosComponents {
-        ClientStateQuerierComponent:
+        [
+            ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
+        ]:
             QueryAndConvertRawClientState,
         ConsensusStateQuerierComponent:
             QueryAndConvertRawConsensusState,

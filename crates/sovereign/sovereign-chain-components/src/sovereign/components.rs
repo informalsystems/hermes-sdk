@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::impls::forward::queries::chain_status::For
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state_height::ForwardQueryConsensusStateHeight;
+use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
@@ -19,7 +20,7 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::client_state::{ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent};
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -30,9 +31,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
-    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
-    InitConnectionOptionsTypeComponent,
+    ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -45,6 +44,7 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -84,6 +84,9 @@ delegate_components! {
             ChainStatusTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
+            CommitmentPrefixTypeComponent,
+            CommitmentProofTypeComponent,
+            ConnectionEndTypeComponent,
         ]:
             ProvideSovereignChainTypes,
         [
@@ -153,7 +156,10 @@ delegate_components! {
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
-        ClientStateQuerierComponent:
+        [
+            ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
+        ]:
             ForwardQueryClientState,
         ConsensusStateQuerierComponent:
             ForwardQueryConsensusState,
