@@ -51,9 +51,16 @@ where
             return None;
         }
 
-        println!("try extract connection open init event: {:?}", event);
+        let event_json = event.event_value.get("OpenInitConnection")?;
 
-        None
+        let connection_id_value = event_json.get("connection_id")?;
+
+        if let Value::String(connection_id_str) = connection_id_value {
+            let connection_id = connection_id_str.parse().ok()?;
+            Some(connection_id)
+        } else {
+            None
+        }
     }
 
     fn connection_open_init_event_connection_id(event: &ConnectionId) -> &ConnectionId {
