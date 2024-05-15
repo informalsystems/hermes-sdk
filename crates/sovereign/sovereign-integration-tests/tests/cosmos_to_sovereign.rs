@@ -12,7 +12,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
@@ -144,14 +144,16 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("client ID of Cosmos on Sovereign: {:?}", client_id);
 
-            let client_state = <SovereignRollup as CanQueryClientStateWithLatestHeight<
+            let height = rollup.query_chain_height().await?;
+
+            let (client_state, client_state_proofs) = <SovereignRollup as CanQueryClientStateWithProofs<
                 CosmosChain,
-            >>::query_client_state_with_latest_height(
-                rollup, &client_id
+            >>::query_client_state_with_proofs(
+                rollup, &client_id, &height,
             )
             .await?;
 
-            println!("client state: {:?}", client_state);
+            println!("client state: {:?}, proof size: {}", client_state, client_state_proofs.len());
 
             let consensus_state_heights = <SovereignRollup as CanQueryConsensusStateHeights<
                 CosmosChain,
