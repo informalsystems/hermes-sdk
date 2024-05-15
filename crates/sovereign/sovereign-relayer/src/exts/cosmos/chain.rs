@@ -13,7 +13,9 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::C
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusState, CanQueryConsensusStateWithProofs,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeight, CanQueryConsensusStateHeights,
 };
@@ -34,6 +36,7 @@ pub trait CanUseCosmosChainWithSovereign:
     CanQueryClientState<SovereignChain>
     + CanQueryClientStateWithProofs<SovereignChain>
     + CanQueryConsensusState<SovereignChain>
+    + CanQueryConsensusStateWithProofs<SovereignChain>
     + CanQueryConsensusStateHeight<SovereignChain>
     + CanQueryConsensusStateHeights<SovereignChain>
     + CanBuildCreateClientMessage<SovereignChain>

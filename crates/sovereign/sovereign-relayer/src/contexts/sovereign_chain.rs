@@ -25,7 +25,9 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusState, CanQueryConsensusStateWithProofs,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -173,6 +175,7 @@ pub trait CanUseSovereignChain:
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
+    + CanQueryConsensusStateWithProofs<CosmosChain>
     + CanQueryConsensusStateHeight<CosmosChain>
     + HasClientStateFields<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>

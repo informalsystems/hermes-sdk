@@ -4,7 +4,6 @@ use core::time::Duration;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use futures::StreamExt;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
@@ -13,7 +12,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithLatestHeight;
+use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
@@ -30,8 +29,6 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use jsonrpsee::core::client::{Subscription, SubscriptionClientT};
-use jsonrpsee::core::params::ArrayParams;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 
@@ -107,25 +104,6 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         };
 
         {
-            let subscription: Subscription<u64> = rollup
-                .subscription_client
-                .subscribe(
-                    "ledger_subscribeSlots",
-                    ArrayParams::new(),
-                    "ledger_unsubscribeSlots",
-                )
-                .await?;
-
-            runtime.runtime.spawn(async move {
-                subscription
-                    .for_each(|value| async move {
-                        println!("slot subscription yields: {:?}", value);
-                    })
-                    .await;
-            });
-        }
-
-        {
             let create_client_settings = ClientSettings::Tendermint(Settings {
                 max_clock_drift: Duration::from_secs(40),
                 trusting_period: None,
@@ -153,7 +131,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             )
             .await?;
 
-            println!("client state: {:?}, proof size: {}", client_state, client_state_proofs.len());
+            println!("client state: {:?}, proof size at height {}: {}", client_state, height, client_state_proofs.len());
 
             let consensus_state_heights = <SovereignRollup as CanQueryConsensusStateHeights<
                 CosmosChain,
@@ -166,14 +144,16 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             let consensus_height = consensus_state_heights[0];
 
-            let consensus_state = <SovereignRollup as CanQueryConsensusStateWithLatestHeight<
+            let height = rollup.query_chain_height().await?;
+
+            let (consensus_state, consensus_state_proofs) = <SovereignRollup as CanQueryConsensusStateWithProofs<
                 CosmosChain,
-            >>::query_consensus_state_with_latest_height(
-                rollup, &client_id, &consensus_height
+            >>::query_consensus_state_with_proofs(
+                rollup, &client_id, &consensus_height, &height
             )
             .await?;
 
-            println!("consensus state: {:?}", consensus_state);
+            println!("consensus state: {:?}, proof size at height {}: {}", consensus_state, height, consensus_state_proofs.len());
 
             sleep(Duration::from_secs(1)).await;
 

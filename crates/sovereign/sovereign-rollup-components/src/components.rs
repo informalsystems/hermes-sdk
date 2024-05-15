@@ -22,7 +22,8 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+    RawConsensusStateQuerierComponent, RawConsensusStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
@@ -204,9 +205,15 @@ delegate_components! {
             QueryAndConvertRawClientState,
         RawConsensusStateTypeComponent:
             ProvideAnyRawConsensusState,
-        RawConsensusStateQuerierComponent:
+        [
+            RawConsensusStateQuerierComponent,
+            RawConsensusStateWithProofsQuerierComponent,
+        ]:
             QueryConsensusStateOnSovereign,
-        ConsensusStateQuerierComponent:
+        [
+            ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+        ]:
             QueryAndConvertRawConsensusState,
         ConsensusStateHeightsQuerierComponent:
             QueryConsensusStateHeightsOnSovereign,
