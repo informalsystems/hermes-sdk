@@ -44,7 +44,9 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     RawClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
-    CanQueryConsensusState, ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
+    CanQueryConsensusState, CanQueryConsensusStateWithProofs, ConsensusStateQuerierComponent,
+    ConsensusStateWithProofsQuerierComponent, RawConsensusStateQuerierComponent,
+    RawConsensusStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerierComponent,
@@ -281,7 +283,9 @@ delegate_components! {
 
             RawConsensusStateTypeComponent,
             RawConsensusStateQuerierComponent,
+            RawConsensusStateWithProofsQuerierComponent,
             ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
 
             ConsensusStateHeightsQuerierComponent,
             ConsensusStateHeightQuerierComponent,
@@ -379,6 +383,7 @@ pub trait CanUseSovereignRollup:
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
+    + CanQueryConsensusStateWithProofs<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildReceivePacketMessage<CosmosChain>

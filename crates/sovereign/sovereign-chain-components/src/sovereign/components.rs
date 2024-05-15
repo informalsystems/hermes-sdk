@@ -21,7 +21,7 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent};
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -161,7 +161,10 @@ delegate_components! {
             ClientStateWithProofsQuerierComponent,
         ]:
             ForwardQueryClientState,
-        ConsensusStateQuerierComponent:
+        [
+            ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+        ]:
             ForwardQueryConsensusState,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,

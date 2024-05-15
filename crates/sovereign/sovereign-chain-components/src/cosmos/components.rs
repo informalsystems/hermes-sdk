@@ -11,7 +11,9 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::U
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
 
 use crate::cosmos::impls::queries::consensus_state_heights::QuerySovereignConsensusStateHeightsFromGrpc;
@@ -30,7 +32,10 @@ delegate_components! {
             ClientStateWithProofsQuerierComponent,
         ]:
             QueryAndConvertRawClientState,
-        ConsensusStateQuerierComponent:
+        [
+            ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+        ]:
             QueryAndConvertRawConsensusState,
         UpdateClientMessageBuilderComponent:
             BuildUpdateSovereignClientMessageOnCosmos,
