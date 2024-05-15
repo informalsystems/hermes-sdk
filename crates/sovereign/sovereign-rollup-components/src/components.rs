@@ -18,7 +18,8 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    ClientStateQuerierComponent, RawClientStateQuerierComponent,
+    ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
+    RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, RawConsensusStateQuerierComponent,
@@ -191,9 +192,15 @@ delegate_components! {
             QuerySovereignRollupStatus,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
-        RawClientStateQuerierComponent:
+        [
+            RawClientStateQuerierComponent,
+            RawClientStateWithProofsQuerierComponent,
+        ]:
             QueryClientStateOnSovereign,
-        ClientStateQuerierComponent:
+        [
+            ClientStateQuerierComponent,
+            ClientStateWithProofsQuerierComponent,
+        ]:
             QueryAndConvertRawClientState,
         RawConsensusStateTypeComponent:
             ProvideAnyRawConsensusState,
