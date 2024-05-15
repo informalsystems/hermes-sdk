@@ -8,6 +8,10 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
+    CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
+};
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::{
@@ -45,6 +49,10 @@ pub trait CanUseCosmosChainWithSovereign:
     + CanBuildConnectionOpenTryMessage<SovereignChain>
     + CanBuildConnectionOpenAckMessage<SovereignChain>
     + CanBuildConnectionOpenConfirmMessage<SovereignChain>
+    + CanBuildConnectionOpenInitPayload<SovereignChain>
+    + CanBuildConnectionOpenTryPayload<SovereignChain>
+    + CanBuildConnectionOpenAckPayload<SovereignChain>
+    + CanBuildConnectionOpenConfirmPayload<SovereignChain>
     + HasCreateClientOptionsType<SovereignChain>
     + CanBuildCreateClientPayload<SovereignChain>
     + CanBuildUpdateClientPayload<SovereignChain>

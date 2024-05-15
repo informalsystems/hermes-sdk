@@ -170,6 +170,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             relay
                 .send_target_update_client_messages(DestinationTarget, &target_height)
                 .await?;
+
         }
 
         <Result<(), Error>>::Ok(())

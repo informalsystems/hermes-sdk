@@ -48,6 +48,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -194,7 +195,7 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + HasChannelHandshakePayloadTypes<CosmosChain>
     + HasInitChannelOptionsType<CosmosChain>
-    + CanBuildChannelHandshakePayloads<CosmosChain>
+    + CanBuildChannelHandshakePayloads<CosmosChain> // + HasConnectionOpenInitEvent<CosmosChain>
 {
 }
 

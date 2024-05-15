@@ -59,9 +59,9 @@ where
 {
     async fn build_connection_open_init_message(
         _chain: &Chain,
-        client_id: &Chain::ClientId,
-        counterparty_client_id: &Counterparty::ClientId,
-        init_connection_options: &Chain::InitConnectionOptions,
+        client_id: &ClientId,
+        counterparty_client_id: &ClientId,
+        init_connection_options: &SovereignInitConnectionOptions,
         counterparty_payload: ConnectionOpenInitPayload<Counterparty>,
     ) -> Result<SovereignMessage, Chain::Error> {
         let commitment_prefix = counterparty_payload.commitment_prefix;
