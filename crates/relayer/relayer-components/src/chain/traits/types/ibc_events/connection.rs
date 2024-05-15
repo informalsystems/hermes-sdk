@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
+#[derive_component(ConnectionOpenTryEventComponent, ProvideConnectionOpenTryEvent<Chain>)]
 pub trait HasConnectionOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type ConnectionOpenTryEvent: Async;
 

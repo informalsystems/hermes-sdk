@@ -2,22 +2,19 @@ use alloc::sync::Arc;
 
 use hermes_cosmos_chain_components::methods::event::{
     try_extract_channel_open_init_event, try_extract_channel_open_try_event,
-    try_extract_connection_open_try_event, try_extract_send_packet_event,
-    try_extract_write_ack_event,
+    try_extract_send_packet_event, try_extract_write_ack_event,
 };
 use hermes_cosmos_chain_components::types::events::channel::{
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
 };
-use hermes_cosmos_chain_components::types::events::connection::CosmosConnectionOpenTryEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     HasChannelOpenInitEvent, HasChannelOpenTryEvent,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenTryEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId};
+use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
@@ -39,22 +36,6 @@ impl<Counterparty> HasWriteAckEvent<Counterparty> for CosmosChain {
 
     fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAcknowledgement> {
         try_extract_write_ack_event(event)
-    }
-}
-
-impl<Counterparty> HasConnectionOpenTryEvent<Counterparty> for CosmosChain {
-    type ConnectionOpenTryEvent = CosmosConnectionOpenTryEvent;
-
-    fn try_extract_connection_open_try_event(
-        event: Arc<AbciEvent>,
-    ) -> Option<CosmosConnectionOpenTryEvent> {
-        try_extract_connection_open_try_event(event)
-    }
-
-    fn connection_open_try_event_connection_id(
-        event: &CosmosConnectionOpenTryEvent,
-    ) -> &ConnectionId {
-        &event.connection_id
     }
 }
 

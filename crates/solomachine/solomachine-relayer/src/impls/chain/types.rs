@@ -19,9 +19,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::ProvideCon
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
-    HasConnectionOpenInitEvent, ProvideConnectionOpenInitEvent,
-};
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
@@ -33,7 +31,7 @@ use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
 
 use crate::context::encoding::SolomachineEncoding;
-use crate::impls::chain::component::{SolomachineChainComponents, SolomachineCosmosComponents};
+use crate::impls::chain::component::SolomachineChainComponents;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 use crate::types::client_state::SolomachineClientState;

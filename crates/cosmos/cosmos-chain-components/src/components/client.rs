@@ -88,7 +88,9 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
+    ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
+};
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
@@ -170,6 +172,7 @@ delegate_components! {
         [
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
+            ConnectionOpenTryEventComponent,
         ]:
             ProvideCosmosEvents,
         [
