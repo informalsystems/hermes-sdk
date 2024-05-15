@@ -1,11 +1,11 @@
 use core::time::Duration;
 
+use ibc::core::connection::types::version::Version;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::commitment::v1::MerklePrefix;
 use ibc_proto::ibc::core::connection::v1::{
     Counterparty, MsgConnectionOpenInit as ProtoMsgConnectionOpenInit,
 };
-use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::signer::Signer;
 

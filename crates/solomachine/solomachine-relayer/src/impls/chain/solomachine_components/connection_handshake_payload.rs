@@ -1,9 +1,14 @@
+use core::str::FromStr;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
 };
-use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc::core::connection::types::version::Version;
+use ibc::core::connection::types::State as ConnectionState;
+use ibc::core::host::types::identifiers::ConnectionId;
+use ibc_relayer_types::core::ics24_host::identifier::{
+    ClientId, ConnectionId as RelayerConnectionId,
+};
 use ibc_relayer_types::Height;
 
 use crate::methods::proofs::client_state::client_state_proof_data;
@@ -48,9 +53,12 @@ where
         solo_client_state: &SolomachineClientState,
         height: &Height,
         client_id: &ClientId,
-        connection_id: &ConnectionId,
+        connection_id: &RelayerConnectionId,
     ) -> Result<SolomachineConnectionOpenTryPayload, Chain::Error> {
-        let connection = chain.chain.query_connection(connection_id).await?;
+        let connection = chain
+            .chain
+            .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())
+            .await?;
 
         if connection.state != ConnectionState::Init {
             return Err(Chain::invalid_connection_state_error(
@@ -127,11 +135,14 @@ where
         client_state: &SolomachineClientState,
         height: &Height,
         client_id: &ClientId,
-        connection_id: &ConnectionId,
+        connection_id: &RelayerConnectionId,
     ) -> Result<SolomachineConnectionOpenAckPayload, Chain::Error> {
         let public_key = chain.chain.public_key();
         let secret_key = chain.chain.secret_key();
-        let connection = chain.chain.query_connection(connection_id).await?;
+        let connection = chain
+            .chain
+            .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())
+            .await?;
 
         if connection.state != ConnectionState::TryOpen {
             return Err(Chain::invalid_connection_state_error(
@@ -145,7 +156,8 @@ where
             .iter()
             .next()
             .cloned()
-            .unwrap_or_default();
+            .or_else(|| Version::compatibles().into_iter().next())
+            .unwrap();
 
         let commitment_prefix = chain.chain.commitment_prefix();
 
@@ -207,14 +219,17 @@ where
         client_state: &SolomachineClientState,
         height: &Height,
         client_id: &ClientId,
-        connection_id: &ConnectionId,
+        connection_id: &RelayerConnectionId,
     ) -> Result<SolomachineConnectionOpenConfirmPayload, Chain::Error> {
         let public_key = chain.chain.public_key();
         let secret_key = chain.chain.secret_key();
         let commitment_prefix = chain.chain.commitment_prefix();
         let _cosmos_client_state = chain.chain.query_client_state(client_id).await?;
 
-        let connection = chain.chain.query_connection(connection_id).await?;
+        let connection = chain
+            .chain
+            .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())
+            .await?;
 
         // TODO confirm connection state
         /*if connection.state != ConnectionState::TryOpen {

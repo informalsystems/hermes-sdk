@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -17,10 +17,10 @@ use hermes_relayer_components::chain::types::connection_payload::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };
+use ibc::core::connection::types::version::Version;
+use ibc::core::connection::types::ConnectionEnd;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_relayer_types::core::ics02_client::height::Height;
-use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
-use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use prost_types::Any;
 
@@ -45,7 +45,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionOpenInitPayloadType<
@@ -65,7 +65,10 @@ where
         let counterparty_commitment_prefix = counterparty_payload.commitment_prefix;
         let delay_period = init_connection_options.delay_period;
 
-        let version = Version::default();
+        let version = Version::compatibles()
+            .into_iter()
+            .next()
+            .ok_or_else(|| Chain::raise_error("expect default version to be present"))?;
 
         let message = CosmosConnectionOpenInitMessage {
             client_id,
@@ -143,7 +146,7 @@ where
             Message = CosmosMessage,
             Height = Height,
         > + HasClientStateType<Counterparty, ClientState = TendermintClientState>
-        + HasErrorType,
+        + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId, Height = Height>
@@ -167,7 +170,8 @@ where
             .iter()
             .next()
             .cloned()
-            .unwrap_or_default();
+            .or_else(|| Version::compatibles().into_iter().next())
+            .ok_or_else(|| Chain::raise_error("expect default version to be present"))?;
 
         let client_state_any: IbcProtoAny = payload.client_state.into();
 

@@ -12,14 +12,11 @@ use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
-use ibc_relayer_types::core::ics03_connection::connection::{
-    ConnectionEnd, State as ConnectionState,
-};
+use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
+use ibc::core::host::types::identifiers::ConnectionId;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State as ChannelState};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
 use ibc_relayer_types::Height;
 use prost::EncodeError;
 use secp256k1::rand::rngs::OsRng;
