@@ -2,7 +2,6 @@ use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc::core::host::types::error::IdentifierError;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 use jsonrpsee::core::client::ClientT;
@@ -18,8 +17,7 @@ impl<Rollup, Counterparty> ConsensusStateHeightsQuerier<Rollup, Counterparty>
 where
     Rollup: HasIbcChainTypes<Counterparty, ClientId = ClientId>
         + HasJsonRpcClient
-        + CanRaiseError<ClientError>
-        + CanRaiseError<IdentifierError>,
+        + CanRaiseError<ClientError>,
     // Note: The counterparty is a Cosmos chain, hence the Cosmos height type
     Counterparty: HasHeightType<Height = Height>,
     Rollup::JsonRpcClient: ClientT,
