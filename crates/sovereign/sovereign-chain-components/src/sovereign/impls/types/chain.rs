@@ -1,5 +1,7 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
+use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightTypeComponent,
@@ -7,6 +9,7 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_sovereign_rollup_components::impls::types::rollup::ProvideSovereignRollupTypes;
@@ -25,6 +28,9 @@ delegate_components! {
             ChainStatusTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
+            CommitmentPrefixTypeComponent,
+            CommitmentProofTypeComponent,
+            ConnectionEndTypeComponent,
         ]:
             ProvideSovereignRollupTypes,
 
