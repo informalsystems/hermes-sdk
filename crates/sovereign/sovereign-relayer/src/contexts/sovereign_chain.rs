@@ -176,6 +176,7 @@ pub trait CanUseSovereignChain:
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
+    + HasConnectionOpenInitEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>

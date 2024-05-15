@@ -41,7 +41,7 @@ pub trait CanUseSovereignToCosmosRelay:
     + CanCreateClient<DestinationTarget>
     + CanBuildTargetUpdateClientMessage<SourceTarget>
     + CanBuildTargetUpdateClientMessage<DestinationTarget>
-    // + CanInitConnection
+    + CanInitConnection
     + for<'a> CanRaiseError<MissingConnectionInitEventError<'a, SovereignToCosmosRelay>>
 {
 }

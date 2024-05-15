@@ -53,6 +53,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
@@ -135,6 +136,7 @@ delegate_components! {
             ProvideSovereignConsensusState,
         [
             CreateClientEventComponent,
+            ConnectionOpenInitEventComponent,
         ]:
             ProvideSovereignEvents,
         [
