@@ -1,5 +1,6 @@
 use core::time::Duration;
-use ibc_relayer_types::core::ics03_connection::version::Version;
+
+use ibc::core::connection::types::version::Version;
 
 pub struct SovereignInitConnectionOptions {
     pub delay_period: Duration,

@@ -15,6 +15,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::CanQueryCli
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -23,9 +24,12 @@ use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::Sovereign
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
+use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
+use hermes_sovereign_rollup_components::types::payloads::connection::SovereignInitConnectionOptions;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
+use ibc::core::connection::types::version::Version;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -157,7 +161,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             sleep(Duration::from_secs(1)).await;
 
-            let relay = CosmosToSovereignRelay {
+            let cosmos_to_sovereign_relay = CosmosToSovereignRelay {
                 runtime: runtime.clone(),
                 src_chain: cosmos_chain.clone(),
                 dst_chain: sovereign_chain.clone(),
@@ -167,9 +171,37 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             let target_height = cosmos_chain.query_chain_height().await?;
 
-            relay
+            cosmos_to_sovereign_relay
                 .send_target_update_client_messages(DestinationTarget, &target_height)
                 .await?;
+
+            let sovereign_to_cosmos_relay = SovereignToCosmosRelay {
+                runtime: runtime.clone(),
+                src_chain: sovereign_chain.clone(),
+                dst_chain: cosmos_chain.clone(),
+                src_client_id: client_id.clone(),
+                dst_client_id: client_id.clone(), // stub
+            };
+
+            let connection_id = sovereign_to_cosmos_relay.init_connection(&SovereignInitConnectionOptions {
+                delay_period: Duration::from_secs(0),
+                connection_version: Version::compatibles().into_iter().next().unwrap(),
+            }).await?;
+
+            println!("connection id: {:?}", connection_id);
+
+            // FIXME: querying connection end currently fails during JSON deserialization with the error:
+            // SParseError(Error("invalid type: string \"ibc\", expected struct CommitmentPrefix", line: 1, column: 139))
+
+            // let height = rollup.query_chain_height().await?;
+
+            // let (connection_end, connection_end_proofs) = <SovereignRollup as CanQueryConnectionEndWithProofs<CosmosChain>>::query_connection_end_with_proofs(
+            //     &rollup,
+            //     &connection_id,
+            //     &height,
+            // ).await?;
+
+            // println!("connection end: {:?}, proof size at height {}: {}", connection_end, height, connection_end_proofs.len());
         }
 
         <Result<(), Error>>::Ok(())

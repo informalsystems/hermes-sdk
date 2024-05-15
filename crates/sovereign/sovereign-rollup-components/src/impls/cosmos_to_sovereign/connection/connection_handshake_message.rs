@@ -26,9 +26,10 @@ use hermes_relayer_components::chain::types::connection_payload::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };
+use ibc::core::connection::types::version::Version;
+use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics02_client::height::Height;
-use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::types::client_state::WrappedSovereignClientState;
@@ -58,9 +59,9 @@ where
 {
     async fn build_connection_open_init_message(
         _chain: &Chain,
-        client_id: &Chain::ClientId,
-        counterparty_client_id: &Counterparty::ClientId,
-        init_connection_options: &Chain::InitConnectionOptions,
+        client_id: &ClientId,
+        counterparty_client_id: &ClientId,
+        init_connection_options: &SovereignInitConnectionOptions,
         counterparty_payload: ConnectionOpenInitPayload<Counterparty>,
     ) -> Result<SovereignMessage, Chain::Error> {
         let commitment_prefix = counterparty_payload.commitment_prefix;
@@ -159,7 +160,8 @@ where
         > + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + HasEncoding<Encoding = Encoding>
         + CanRaiseError<Ics02Error>
-        + CanRaiseError<Encoding::Error>,
+        + CanRaiseError<Encoding::Error>
+        + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
         + HasConnectionOpenAckPayloadType<
@@ -183,7 +185,8 @@ where
             .iter()
             .next()
             .cloned()
-            .unwrap_or_default();
+            .or_else(|| Version::compatibles().into_iter().next())
+            .ok_or_else(|| Chain::raise_error("expect default version to be present"))?;
 
         let client_state_any = chain
             .encoding()

@@ -19,7 +19,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::ProvideCon
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
@@ -263,15 +263,16 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasConnectionOpenInitEvent<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type ConnectionOpenInitEvent = SolomachineConnectionInitEvent;
 
     fn try_extract_connection_open_init_event(
-        event: Self::Event,
-    ) -> Option<Self::ConnectionOpenInitEvent> {
+        event: SolomachineEvent,
+    ) -> Option<SolomachineConnectionInitEvent> {
         match event {
             SolomachineEvent::ConnectionInit(e) => Some(e),
             _ => None,

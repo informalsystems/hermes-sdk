@@ -25,6 +25,9 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithProofs,
 };
@@ -45,6 +48,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -172,11 +176,14 @@ pub trait CanUseSovereignChain:
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
+    + HasConnectionOpenInitEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateWithProofs<CosmosChain>
     + CanQueryConsensusStateHeight<CosmosChain>
+    + CanQueryConnectionEnd<CosmosChain>
+    + CanQueryConnectionEndWithProofs<CosmosChain>
     + HasClientStateFields<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionOpenInitPayload<CosmosChain>
@@ -189,7 +196,7 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + HasChannelHandshakePayloadTypes<CosmosChain>
     + HasInitChannelOptionsType<CosmosChain>
-    + CanBuildChannelHandshakePayloads<CosmosChain>
+    + CanBuildChannelHandshakePayloads<CosmosChain> // + HasConnectionOpenInitEvent<CosmosChain>
 {
 }
 

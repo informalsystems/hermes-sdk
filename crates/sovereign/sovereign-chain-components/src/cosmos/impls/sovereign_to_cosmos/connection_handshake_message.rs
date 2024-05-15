@@ -12,7 +12,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
     HasInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_types::core::ics03_connection::version::Version;
+use ibc::core::connection::types::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::sovereign::types::payloads::connection::{
@@ -48,7 +48,7 @@ where
         counterparty_payload: SovereignConnectionOpenInitPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
         // TODO: Retrieve version and delay period
-        let version = Version::default();
+        let version = Version::compatibles().into_iter().next().unwrap();
         let delay_period = init_connection_options.delay_period;
 
         let counterparty_commitment_prefix = counterparty_payload.commitment_prefix;

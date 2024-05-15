@@ -1,6 +1,6 @@
+use ibc::core::connection::types::version::Version;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_proto::ibc::core::connection::v1::MsgConnectionOpenAck as ProtoMsgConnectionOpenAck;
-use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;

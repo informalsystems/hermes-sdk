@@ -2,7 +2,6 @@ use alloc::sync::Arc;
 
 use ibc_relayer::event::{
     channel_open_init_try_from_abci_event, channel_open_try_try_from_abci_event,
-    connection_open_ack_try_from_abci_event, connection_open_try_try_from_abci_event,
     extract_packet_and_write_ack_from_tx,
 };
 use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
@@ -10,9 +9,6 @@ use ibc_relayer_types::events::IbcEventType;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::types::events::channel::{CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent};
-use crate::types::events::connection::{
-    CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
-};
 
 pub fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacket> {
     let event_type = event.kind.parse().ok()?;
@@ -38,38 +34,6 @@ pub fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAcknow
         };
 
         Some(ack)
-    } else {
-        None
-    }
-}
-
-pub fn try_extract_connection_open_init_event(
-    event: Arc<AbciEvent>,
-) -> Option<CosmosConnectionOpenInitEvent> {
-    let event_type = event.kind.parse().ok()?;
-
-    if let IbcEventType::OpenInitConnection = event_type {
-        let open_ack_event = connection_open_ack_try_from_abci_event(&event).ok()?;
-
-        let connection_id = open_ack_event.connection_id()?.clone();
-
-        Some(CosmosConnectionOpenInitEvent { connection_id })
-    } else {
-        None
-    }
-}
-
-pub fn try_extract_connection_open_try_event(
-    event: Arc<AbciEvent>,
-) -> Option<CosmosConnectionOpenTryEvent> {
-    let event_type = event.kind.parse().ok()?;
-
-    if let IbcEventType::OpenTryConnection = event_type {
-        let open_try_event = connection_open_try_try_from_abci_event(&event).ok()?;
-
-        let connection_id = open_try_event.connection_id()?.clone();
-
-        Some(CosmosConnectionOpenTryEvent { connection_id })
     } else {
         None
     }

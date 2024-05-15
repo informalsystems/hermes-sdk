@@ -5,7 +5,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use ibc_relayer_types::core::ics03_connection::connection::State;
+use ibc::core::connection::types::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ConnectionId};
 use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
@@ -63,7 +63,7 @@ impl CommandRunner<CosmosBuilder> for QueryConnectionEnd {
             )
             .await?;
 
-        if connection_end.state_matches(&State::Uninitialized) {
+        if connection_end.state == State::Uninitialized {
             return Ok(Output::error(format!(
                 "Connection '{}' does not exist",
                 self.connection_id

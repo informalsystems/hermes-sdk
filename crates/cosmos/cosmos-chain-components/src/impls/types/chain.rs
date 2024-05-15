@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCo
 use hermes_relayer_components::chain::impls::types::proof::ProvideCommitmentProofBytes;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use ibc::core::connection::types::ConnectionEnd;
 
 use cgp_core::{delegate_components, Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::types::block::{
@@ -26,7 +27,6 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, ProvideTimestampType,
 };
 use ibc_relayer::chain::endpoint::ChainStatus;
-use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,

@@ -43,6 +43,10 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateWithProofsQuerierComponent, RawClientStateQuerierComponent,
     RawClientStateWithProofsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::connection_end::{
+    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs, ConnectionEndQuerierComponent,
+    ConnectionEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithProofs, ConsensusStateQuerierComponent,
     ConsensusStateWithProofsQuerierComponent, RawConsensusStateQuerierComponent,
@@ -80,6 +84,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
+    ConnectionOpenInitEventComponent, HasConnectionOpenInitEvent,
+};
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
@@ -240,6 +247,7 @@ delegate_components! {
             TxResponseTypeComponent,
 
             CreateClientEventComponent,
+            ConnectionOpenInitEventComponent,
 
             CreateClientOptionsTypeComponent,
             CreateClientPayloadTypeComponent,
@@ -289,6 +297,9 @@ delegate_components! {
 
             ConsensusStateHeightsQuerierComponent,
             ConsensusStateHeightQuerierComponent,
+
+            ConnectionEndQuerierComponent,
+            ConnectionEndWithProofsQuerierComponent,
 
             AckPacketMessageBuilderComponent,
             ReceivePacketMessageBuilderComponent,
@@ -380,11 +391,14 @@ pub trait CanUseSovereignRollup:
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
+    + HasConnectionOpenInitEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
     + CanQueryConsensusStateWithProofs<CosmosChain>
     + CanQueryConsensusStateHeights<CosmosChain>
+    + CanQueryConnectionEnd<CosmosChain>
+    + CanQueryConnectionEndWithProofs<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
