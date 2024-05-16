@@ -1,5 +1,6 @@
 pub mod channel;
 pub mod client;
+pub mod commitment_prefix;
 pub mod connection;
 pub mod events;
 pub mod packet;

@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
@@ -42,12 +43,15 @@ delegate_components! {
         CreateClientMessageBuilderComponent:
             BuildCreateSovereignClientMessageOnCosmos,
         [
-            ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,
             ConnectionOpenAckMessageBuilderComponent,
             ConnectionOpenConfirmMessageBuilderComponent,
         ]:
             BuildSovereignConnectionHandshakeMessageOnCosmos,
+        [
+            ConnectionOpenInitMessageBuilderComponent,
+        ]:
+            BuildCosmosConnectionHandshakeMessage,
         ChannelHandshakeMessageBuilderComponent:
             BuildSovereignChannelHandshakeMessageOnCosmos,
         ConsensusStateHeightsQuerierComponent:
