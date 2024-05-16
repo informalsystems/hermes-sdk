@@ -74,7 +74,6 @@ use hermes_relayer_components::chain::impls::connection_payload::BuildConnection
 use crate::sovereign::impls::sovereign_to_cosmos::channel::channel_handshake_payload::BuildSovereignChannelHandshakePayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
-use crate::sovereign::impls::sovereign_to_cosmos::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 
@@ -110,8 +109,6 @@ delegate_components! {
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
 
-            ConnectionOpenConfirmPayloadTypeComponent,
-
             InitChannelOptionsTypeComponent,
             ChannelHandshakePayloadTypeComponent,
         ]:
@@ -120,6 +117,7 @@ delegate_components! {
             ConnectionOpenInitPayloadTypeComponent,
             ConnectionOpenTryPayloadTypeComponent,
             ConnectionOpenAckPayloadTypeComponent,
+            ConnectionOpenConfirmPayloadTypeComponent,
         ]:
             ProvideConnectionPayloadTypes,
         [
@@ -150,13 +148,10 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
 
         [
-            ConnectionOpenConfirmPayloadBuilderComponent,
-        ]:
-            BuildSovereignConnectionHandshakePayload,
-        [
             ConnectionOpenInitPayloadBuilderComponent,
             ConnectionOpenTryPayloadBuilderComponent,
             ConnectionOpenAckPayloadBuilderComponent,
+            ConnectionOpenConfirmPayloadBuilderComponent,
         ]:
             BuildConnectionHandshakePayload,
         [
