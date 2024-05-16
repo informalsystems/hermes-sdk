@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::impls::delegate::message_builders::channel
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::update_client::DelegateBuildUpdateClientMessage;
+use hermes_relayer_components::chain::impls::delegate::message_height::DelegateCounterpartyMessageHeightGetter;
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state_heights::DelegateQueryConsensusStateHeights;
@@ -87,6 +88,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
@@ -306,5 +308,7 @@ delegate_components! {
             DelegateBuildConnectionHandshakeMessage<DelegateCosmosChainComponents>,
         ChannelHandshakeMessageBuilderComponent:
             DelegateBuildChannelHandshakeMessage<DelegateCosmosChainComponents>,
+        CounterpartyMessageHeightGetterComponent:
+            DelegateCounterpartyMessageHeightGetter<DelegateCosmosChainComponents>,
     }
 }
