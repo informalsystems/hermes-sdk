@@ -11,12 +11,14 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithProofs;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    CanQueryClientState, CanQueryClientStateWithProofs,
+};
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -125,8 +127,6 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 trust_threshold: TrustThreshold::ONE_THIRD,
             });
 
-            // sleep(Duration::from_secs(1)).await;
-
             CosmosToSovereignRelay::create_client(
                 DestinationTarget,
                 &sovereign_chain,
@@ -208,9 +208,19 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             .await?;
 
             println!("consensus state: {:?}, proof size at height {}: {}", consensus_state, height, consensus_state_proofs.len());
+        }
 
-            sleep(Duration::from_secs(1)).await;
+        {
+            let height = cosmos_chain.query_chain_height().await?;
 
+            let client_state = <CosmosChain as CanQueryClientState<SovereignChain>>::query_client_state(&cosmos_chain,&cosmos_client_id, &height).await?;
+
+            println!("cosmos client state: {:?}", client_state);
+        }
+
+        sleep(Duration::from_secs(1)).await;
+
+        {
             let cosmos_to_sovereign_relay = CosmosToSovereignRelay {
                 runtime: runtime.clone(),
                 src_chain: cosmos_chain.clone(),
@@ -230,13 +240,17 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 src_chain: sovereign_chain.clone(),
                 dst_chain: cosmos_chain.clone(),
                 src_client_id: sovereign_client_id.clone(),
-                dst_client_id: sovereign_client_id.clone(), // stub
+                dst_client_id: cosmos_client_id.clone(), // stub
             };
 
-            let connection_id = sovereign_to_cosmos_relay.init_connection(&SovereignInitConnectionOptions {
+            let init_connection_options = SovereignInitConnectionOptions {
                 delay_period: Duration::from_secs(0),
                 connection_version: Version::compatibles().into_iter().next().unwrap(),
-            }).await?;
+            };
+
+            // let connection_id = sovereign_to_cosmos_relay.init_connection(&init_connection_options).await?;
+
+            let connection_id = sovereign_to_cosmos_relay.bootstrap_connection(&init_connection_options).await?;
 
             println!("connection id: {:?}", connection_id);
 
