@@ -17,8 +17,8 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -248,9 +248,9 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 connection_version: Version::compatibles().into_iter().next().unwrap(),
             };
 
-            // let connection_id = sovereign_to_cosmos_relay.init_connection(&init_connection_options).await?;
+            let connection_id = sovereign_to_cosmos_relay.init_connection(&init_connection_options).await?;
 
-            let connection_id = sovereign_to_cosmos_relay.bootstrap_connection(&init_connection_options).await?;
+            // let connection_id = sovereign_to_cosmos_relay.bootstrap_connection(&init_connection_options).await?;
 
             println!("connection id: {:?}", connection_id);
 
