@@ -43,13 +43,13 @@ delegate_components! {
         CreateClientMessageBuilderComponent:
             BuildCreateSovereignClientMessageOnCosmos,
         [
-            ConnectionOpenTryMessageBuilderComponent,
             ConnectionOpenAckMessageBuilderComponent,
             ConnectionOpenConfirmMessageBuilderComponent,
         ]:
             BuildSovereignConnectionHandshakeMessageOnCosmos,
         [
             ConnectionOpenInitMessageBuilderComponent,
+            ConnectionOpenTryMessageBuilderComponent,
         ]:
             BuildCosmosConnectionHandshakeMessage,
         ChannelHandshakeMessageBuilderComponent:

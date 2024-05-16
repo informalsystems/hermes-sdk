@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdTyp
 use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightFieldComponent, HeightTypeComponent,
+    HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
@@ -22,6 +22,7 @@ delegate_components! {
         [
             HeightTypeComponent,
             HeightFieldComponent,
+            HeightIncrementerComponent,
             TimestampTypeComponent,
             MessageTypeComponent,
             EventTypeComponent,

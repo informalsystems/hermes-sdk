@@ -53,6 +53,8 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightFieldComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
@@ -117,6 +119,8 @@ delegate_components! {
     SovereignRollupClientComponents {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
+            HeightIncrementerComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,

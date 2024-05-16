@@ -45,7 +45,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightFieldComponent, HeightTypeComponent,
+    HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
@@ -86,6 +86,7 @@ delegate_components! {
         [
             HeightTypeComponent,
             HeightFieldComponent,
+            HeightIncrementerComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
@@ -109,8 +110,6 @@ delegate_components! {
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
 
-            // ConnectionOpenInitPayloadTypeComponent,
-            ConnectionOpenTryPayloadTypeComponent,
             ConnectionOpenAckPayloadTypeComponent,
             ConnectionOpenConfirmPayloadTypeComponent,
 
@@ -120,6 +119,7 @@ delegate_components! {
             ProvideSovereignPayloadTypes,
         [
             ConnectionOpenInitPayloadTypeComponent,
+            ConnectionOpenTryPayloadTypeComponent,
         ]:
             ProvideConnectionPayloadTypes,
         [
@@ -150,14 +150,13 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
 
         [
-            // ConnectionOpenInitPayloadBuilderComponent,
-            ConnectionOpenTryPayloadBuilderComponent,
             ConnectionOpenAckPayloadBuilderComponent,
             ConnectionOpenConfirmPayloadBuilderComponent,
         ]:
             BuildSovereignConnectionHandshakePayload,
         [
             ConnectionOpenInitPayloadBuilderComponent,
+            ConnectionOpenTryPayloadBuilderComponent,
         ]:
             BuildConnectionHandshakePayload,
         [

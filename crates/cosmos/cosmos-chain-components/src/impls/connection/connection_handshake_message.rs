@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
     HasInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::height::{HasHeightFields, HasHeightType};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::types::connection_payload::{
@@ -20,6 +20,7 @@ use hermes_relayer_components::chain::types::connection_payload::{
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_proto::google::protobuf::Any as IbcProtoAny;
+use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use prost_types::Any;
@@ -92,10 +93,11 @@ where
             Height = Height,
             Message = CosmosMessage,
         > + HasClientStateType<Counterparty, ClientState = TendermintClientState>
-        + HasErrorType,
+        + CanRaiseError<Ics02Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>
-        + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId, Height = Height>
+        + HasHeightFields
+        + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
         + HasConnectionOpenTryPayloadType<
             Chain,
@@ -114,6 +116,12 @@ where
 
         let client_state_any: IbcProtoAny = payload.client_state.into();
 
+        let update_height = Height::new(
+            Counterparty::revision_number(&payload.update_height),
+            Counterparty::revision_height(&payload.update_height),
+        )
+        .map_err(Chain::raise_error)?;
+
         let message = CosmosConnectionOpenTryMessage {
             client_id: client_id.clone(),
             counterparty_client_id: counterparty_client_id.clone(),
@@ -125,7 +133,7 @@ where
                 type_url: client_state_any.type_url,
                 value: client_state_any.value,
             },
-            update_height: payload.update_height,
+            update_height: update_height,
             proof_init: payload.proof_init,
             proof_client: payload.proof_client,
             proof_consensus: payload.proof_consensus,
