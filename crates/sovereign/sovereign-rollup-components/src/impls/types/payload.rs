@@ -2,11 +2,7 @@ use cgp_core::prelude::Async;
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::connection::{
-    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
-    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
-    ProvideInitConnectionOptionsType,
-};
+use hermes_relayer_components::chain::traits::types::connection::ProvideInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
@@ -21,11 +17,7 @@ use crate::types::payloads::channel::{
     SovereignChannelOpenTryRollupPayload, SovereignInitChannelOptions,
 };
 use crate::types::payloads::client::{SovereignCreateClientPayload, SovereignUpdateClientPayload};
-use crate::types::payloads::connection::{
-    SovereignConnectionOpenAckRollupPayload, SovereignConnectionOpenConfirmRollupPayload,
-    SovereignConnectionOpenInitRollupPayload, SovereignConnectionOpenTryRollupPayload,
-    SovereignInitConnectionOptions,
-};
+use crate::types::payloads::connection::SovereignInitConnectionOptions;
 use crate::types::payloads::packet::{
     SovereignAckPacketRollupPayload, SovereignReceivePacketRollupPayload,
     SovereignTimeoutUnorderedPacketRollupPayload,
@@ -63,38 +55,6 @@ where
     Chain: Async,
 {
     type InitConnectionOptions = SovereignInitConnectionOptions;
-}
-
-impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
-    for ProvideSovereignRollupPayloadTypes
-where
-    Chain: Async,
-{
-    type ConnectionOpenInitPayload = SovereignConnectionOpenInitRollupPayload;
-}
-
-impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
-    for ProvideSovereignRollupPayloadTypes
-where
-    Chain: Async,
-{
-    type ConnectionOpenTryPayload = SovereignConnectionOpenTryRollupPayload;
-}
-
-impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
-    for ProvideSovereignRollupPayloadTypes
-where
-    Chain: Async,
-{
-    type ConnectionOpenAckPayload = SovereignConnectionOpenAckRollupPayload;
-}
-
-impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
-    for ProvideSovereignRollupPayloadTypes
-where
-    Chain: Async,
-{
-    type ConnectionOpenConfirmPayload = SovereignConnectionOpenConfirmRollupPayload;
 }
 
 impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
