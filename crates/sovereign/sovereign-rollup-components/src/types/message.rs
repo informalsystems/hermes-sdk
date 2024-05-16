@@ -17,8 +17,6 @@ impl From<CosmosMessage> for SovereignMessage {
     fn from(cosmos_message: CosmosMessage) -> Self {
         let cosmos_message_any = cosmos_message.message.encode_protobuf(&Signer::dummy());
 
-        let message = IbcMessageWithHeight::new(cosmos_message_any).into();
-
-        message
+        IbcMessageWithHeight::new(cosmos_message_any).into()
     }
 }
