@@ -1,12 +1,12 @@
 #![recursion_limit = "256"]
 
 use core::time::Duration;
+use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
@@ -20,6 +20,7 @@ use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
+use hermes_sovereign_integration_tests::contexts::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
@@ -33,6 +34,7 @@ use ibc::core::connection::types::version::Version;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
+use std::env::var;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 
@@ -54,17 +56,19 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
     let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
 
-    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
+    let wasm_client_code_path =
+        PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
+
+    let cosmos_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
-        chain_store_dir: store_dir.join("chains"),
+        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
         chain_command_path: "simd".into(),
-        account_prefix: "cosmos".into(),
+        account_prefix: "sov".into(),
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
-        genesis_config_modifier: Box::new(|_| Ok(())),
-        comet_config_modifier: Box::new(|_| Ok(())),
+        wasm_client_code_path: wasm_client_code_path.clone(),
     });
 
     let celestia_bootstrap = CelestiaBootstrap {
@@ -73,7 +77,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         chain_store_dir: store_dir.join("chains"),
         bridge_store_dir: store_dir.join("bridges"),
     };
-    use std::env::var;
+
     let node_binary = var("ROLLUP_PATH")
         .unwrap_or_else(|_| "node".to_string())
         .into();
