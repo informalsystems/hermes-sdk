@@ -83,7 +83,10 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasCounterpartyMessageHeight, IbcChainTypesComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, HasConnectionOpenInitEvent,
 };
@@ -311,6 +314,8 @@ delegate_components! {
             ConnectionOpenConfirmMessageBuilderComponent,
 
             ChannelHandshakeMessageBuilderComponent,
+
+            CounterpartyMessageHeightGetterComponent
         ]:
             SovereignRollupClientComponents,
         [
@@ -388,6 +393,7 @@ pub trait CanUseSovereignRollup:
     + HasLogger
     + CanQueryChainStatus
     + HasEncoding<Encoding = SovereignEncoding>
+    + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientEvent<CosmosChain>

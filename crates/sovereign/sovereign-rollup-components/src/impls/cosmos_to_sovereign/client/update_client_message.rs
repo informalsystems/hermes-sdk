@@ -12,7 +12,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::signer::Signer;
 
 use crate::types::message::SovereignMessage;
-use crate::types::messages::ibc::IbcMessage;
+use crate::types::messages::ibc::IbcMessageWithHeight;
 
 pub struct BuildUpdateCosmosClientMessageOnSovereign;
 
@@ -51,5 +51,5 @@ pub fn encode_tendermint_header(
 
     let any_message = encode_to_any(TYPE_URL, &proto_message);
 
-    SovereignMessage::Ibc(IbcMessage::Core(any_message))
+    IbcMessageWithHeight::new(any_message).into()
 }

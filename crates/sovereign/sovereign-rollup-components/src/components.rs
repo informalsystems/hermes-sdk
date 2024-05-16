@@ -56,6 +56,7 @@ use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightFieldComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenTryEventComponent;
@@ -95,6 +96,7 @@ use crate::impls::cosmos_to_sovereign::packet::receive_packet_message::BuildRece
 use crate::impls::cosmos_to_sovereign::packet::timeout_unordered_packet_message::BuildTimeoutPacketMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
+use crate::impls::message_height::GetCosmosHeightFromSovereignMessage;
 use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
 use crate::impls::queries::client_state::QueryClientStateOnSovereign;
 use crate::impls::queries::connection_end::QueryConnectionEndOnSovereign;
@@ -257,5 +259,7 @@ delegate_components! {
             BuildReceivePacketMessageOnSovereign,
         TimeoutUnorderedPacketMessageBuilderComponent:
             BuildTimeoutPacketMessageOnSovereign,
+        CounterpartyMessageHeightGetterComponent:
+            GetCosmosHeightFromSovereignMessage,
     }
 }
