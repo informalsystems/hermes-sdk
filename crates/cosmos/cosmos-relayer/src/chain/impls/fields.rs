@@ -7,7 +7,7 @@ use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscr
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateFields;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetter;
 use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
@@ -28,7 +28,8 @@ impl HasEventSubscription for CosmosChain {
     }
 }
 
-impl<Counterparty> HasCounterpartyMessageHeight<Counterparty> for CosmosChain
+impl<Counterparty> CounterpartyMessageHeightGetter<CosmosChain, Counterparty>
+    for CosmosChainComponents
 where
     Counterparty: HasHeightType<Height = Height>,
 {

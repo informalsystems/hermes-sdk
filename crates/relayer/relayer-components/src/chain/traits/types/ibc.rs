@@ -82,6 +82,7 @@ pub trait HasIbcChainTypes<Counterparty>: HasChainTypes {
     type Sequence: Debug + Display + Async;
 }
 
+#[derive_component(CounterpartyMessageHeightGetterComponent, CounterpartyMessageHeightGetter<Chain>)]
 pub trait HasCounterpartyMessageHeight<Counterparty>: HasMessageType
 where
     Counterparty: HasHeightType,
