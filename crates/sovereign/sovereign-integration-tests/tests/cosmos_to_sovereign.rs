@@ -213,7 +213,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         {
             let height = cosmos_chain.query_chain_height().await?;
 
-            let client_state = <CosmosChain as CanQueryClientState<SovereignChain>>::query_client_state(&cosmos_chain,&cosmos_client_id, &height).await?;
+            let client_state = <CosmosChain as CanQueryClientState<SovereignChain>>::query_client_state(cosmos_chain,&cosmos_client_id, &height).await?;
 
             println!("cosmos client state: {:?}", client_state);
         }
