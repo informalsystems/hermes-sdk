@@ -8,15 +8,13 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use hermes_relayer_components::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
-use hermes_relayer_components::relay::traits::ibc_message_sender::{
-    CanSendIbcMessages, IbcMessageSender, MainSink,
-};
+use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -46,23 +44,12 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanBuildTargetUpdateClientMessage<SourceTarget>
     + CanInitConnection
     + CanSendIbcMessages<MainSink, SourceTarget>
-// + CanSendIbcMessages<MainSink, DestinationTarget>
-// + CanRelayConnectionOpenTry
-// + CanRelayConnectionOpenHandshake
+    + CanSendIbcMessages<MainSink, DestinationTarget>
+    + CanRelayConnectionOpenHandshake
 {
 }
 
 impl CanUseCosmosToSovereignRelay for CosmosToSovereignRelay {}
-
-pub trait CanUseIbcMessageSender:
-    IbcMessageSender<CosmosToSovereignRelay, MainSink, DestinationTarget>
-{
-}
-
-impl CanUseIbcMessageSender for SendIbcMessagesToChain
-// for SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>
-{
-}
 
 pub struct CosmosToSovereignRelayComponents;
 
