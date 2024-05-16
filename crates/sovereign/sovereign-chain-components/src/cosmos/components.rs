@@ -16,7 +16,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 
+use crate::cosmos::impls::message_height::GetSovereignRollupHeightFromCosmosMessage;
 use crate::cosmos::impls::queries::consensus_state_heights::QuerySovereignConsensusStateHeightsFromGrpc;
 use crate::cosmos::impls::sovereign_to_cosmos::client::create_client_message::BuildCreateSovereignClientMessageOnCosmos;
 use crate::cosmos::impls::sovereign_to_cosmos::client::update_client_message::BuildUpdateSovereignClientMessageOnCosmos;
@@ -52,5 +54,7 @@ delegate_components! {
             BuildSovereignChannelHandshakeMessageOnCosmos,
         ConsensusStateHeightsQuerierComponent:
             QuerySovereignConsensusStateHeightsFromGrpc,
+        CounterpartyMessageHeightGetterComponent:
+            GetSovereignRollupHeightFromCosmosMessage,
     }
 }
