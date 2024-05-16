@@ -1,7 +1,9 @@
 use hermes_cosmos_chain_components::types::events::client::CosmosCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
+    ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
+};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use serde_json::Value;
 
@@ -63,7 +65,36 @@ where
         }
     }
 
-    fn connection_open_init_event_connection_id(event: &ConnectionId) -> &ConnectionId {
-        event
+    fn connection_open_init_event_connection_id(connection_id: &ConnectionId) -> &ConnectionId {
+        connection_id
+    }
+}
+
+impl<Chain, Counterparty> ProvideConnectionOpenTryEvent<Chain, Counterparty>
+    for ProvideSovereignEvents
+where
+    Chain: HasIbcChainTypes<Counterparty, Event = SovereignEvent, ConnectionId = ConnectionId>,
+{
+    type ConnectionOpenTryEvent = ConnectionId;
+
+    fn try_extract_connection_open_try_event(event: SovereignEvent) -> Option<ConnectionId> {
+        if event.module_name != "ibc" {
+            return None;
+        }
+
+        let event_json = event.event_value.get("OpenTryConnection")?;
+
+        let connection_id_value = event_json.get("connection_id")?;
+
+        if let Value::String(connection_id_str) = connection_id_value {
+            let connection_id = connection_id_str.parse().ok()?;
+            Some(connection_id)
+        } else {
+            None
+        }
+    }
+
+    fn connection_open_try_event_connection_id(connection_id: &ConnectionId) -> &ConnectionId {
+        connection_id
     }
 }

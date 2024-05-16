@@ -21,7 +21,6 @@ use crate::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 */
 pub struct RelayConnectionOpenHandshake;
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain> ConnectionOpenHandshakeRelayer<Relay>
     for RelayConnectionOpenHandshake
 where

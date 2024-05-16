@@ -41,6 +41,10 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanBuildTargetUpdateClientMessage<DestinationTarget>
     + CanBuildTargetUpdateClientMessage<SourceTarget>
     + CanInitConnection
+// + CanSendIbcMessages<MainSink, SourceTarget>
+// + CanSendIbcMessages<MainSink, DestinationTarget>
+// + CanRelayConnectionOpenTry
+// + CanRelayConnectionOpenHandshake
 {
 }
 
