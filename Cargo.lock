@@ -1686,7 +1686,6 @@ dependencies = [
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
- "once_cell",
  "prost",
  "serde_json",
  "sha2 0.10.8",

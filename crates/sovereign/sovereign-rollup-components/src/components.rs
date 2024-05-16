@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawClientState;
 use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideAnyRawConsensusState;
@@ -6,6 +7,7 @@ use hermes_relayer_components::chain::impls::queries::consensus_state_height::Qu
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
+use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetterComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
@@ -51,6 +53,8 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightFieldComponent;
+use hermes_relayer_components::chain::traits::types::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
@@ -115,6 +119,8 @@ delegate_components! {
     SovereignRollupClientComponents {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
+            HeightIncrementerComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
@@ -172,6 +178,8 @@ delegate_components! {
             TxResponsePollerComponent,
         ]:
             DefaultTxComponents,
+        IbcCommitmentPrefixGetterComponent:
+            ProvideIbcCommitmentPrefix,
         JsonRpcClientTypeComponent:
             ProvideJsonRpseeClient,
         TxResponseQuerierComponent:

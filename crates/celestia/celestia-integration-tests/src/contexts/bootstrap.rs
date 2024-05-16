@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use std::path::PathBuf;
+use std::sync::OnceLock;
 
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
@@ -48,7 +49,6 @@ use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeCompo
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use ibc_relayer::config::compat_mode::CompatMode;
-use once_cell::sync::OnceCell;
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
@@ -143,7 +143,7 @@ impl ChainStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
 
 impl ChainCommandPathGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn chain_command_path(_bootstrap: &CelestiaBootstrap) -> &PathBuf {
-        static CELESTIA_COMMAND_PATH: OnceCell<PathBuf> = OnceCell::new();
+        static CELESTIA_COMMAND_PATH: OnceLock<PathBuf> = OnceLock::new();
 
         CELESTIA_COMMAND_PATH.get_or_init(|| "celestia-appd".into())
     }

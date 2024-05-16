@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::impls::connection_payload::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::impls::forward::message_builders::channel_handshake::ForwardChannelHandshakeBuilder;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
@@ -13,6 +14,8 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetterComponent;
+use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
@@ -42,7 +45,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    HeightFieldComponent, HeightTypeComponent,
+    HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
@@ -66,11 +69,11 @@ use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSover
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
 use hermes_relayer_components::chain::impls::forward::queries::connection_end::ForwardQueryConnectionEnd;
+use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
 
 use crate::sovereign::impls::sovereign_to_cosmos::channel::channel_handshake_payload::BuildSovereignChannelHandshakePayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
-use crate::sovereign::impls::sovereign_to_cosmos::connection::connection_handshake_payload::BuildSovereignConnectionHandshakePayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
 use crate::sovereign::impls::types::payload::ProvideSovereignPayloadTypes;
 
@@ -82,6 +85,7 @@ delegate_components! {
         [
             HeightTypeComponent,
             HeightFieldComponent,
+            HeightIncrementerComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
@@ -105,15 +109,17 @@ delegate_components! {
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
 
-            ConnectionOpenInitPayloadTypeComponent,
-            ConnectionOpenTryPayloadTypeComponent,
-            ConnectionOpenAckPayloadTypeComponent,
-            ConnectionOpenConfirmPayloadTypeComponent,
-
             InitChannelOptionsTypeComponent,
             ChannelHandshakePayloadTypeComponent,
         ]:
             ProvideSovereignPayloadTypes,
+        [
+            ConnectionOpenInitPayloadTypeComponent,
+            ConnectionOpenTryPayloadTypeComponent,
+            ConnectionOpenAckPayloadTypeComponent,
+            ConnectionOpenConfirmPayloadTypeComponent,
+        ]:
+            ProvideConnectionPayloadTypes,
         [
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
@@ -130,6 +136,8 @@ delegate_components! {
             TxResponseTypeComponent,
         ]:
             ProvideSovereignTransactionTypes,
+        IbcCommitmentPrefixGetterComponent:
+            ProvideIbcCommitmentPrefix,
         CreateClientPayloadBuilderComponent:
             BuildSovereignCreateClientPayload,
         CreateClientMessageBuilderComponent:
@@ -145,8 +153,7 @@ delegate_components! {
             ConnectionOpenAckPayloadBuilderComponent,
             ConnectionOpenConfirmPayloadBuilderComponent,
         ]:
-            BuildSovereignConnectionHandshakePayload,
-
+            BuildConnectionHandshakePayload,
         [
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,

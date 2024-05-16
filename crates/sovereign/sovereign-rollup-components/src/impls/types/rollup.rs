@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdTyp
 use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    HasHeightType, HeightFieldGetter, ProvideHeightType,
+    HasHeightType, HeightFieldGetter, HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
@@ -42,6 +42,17 @@ where
 
     fn revision_height(height: &RollupHeight) -> u64 {
         height.slot_number
+    }
+}
+
+impl<Chain> HeightIncrementer<Chain> for ProvideSovereignRollupTypes
+where
+    Chain: HasHeightType<Height = RollupHeight> + HasErrorType,
+{
+    fn increment_height(height: &RollupHeight) -> Result<RollupHeight, Chain::Error> {
+        Ok(RollupHeight {
+            slot_number: height.slot_number + 1,
+        })
     }
 }
 
