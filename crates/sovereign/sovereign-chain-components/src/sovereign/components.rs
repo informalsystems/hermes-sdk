@@ -110,7 +110,6 @@ delegate_components! {
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
 
-            ConnectionOpenAckPayloadTypeComponent,
             ConnectionOpenConfirmPayloadTypeComponent,
 
             InitChannelOptionsTypeComponent,
@@ -120,6 +119,7 @@ delegate_components! {
         [
             ConnectionOpenInitPayloadTypeComponent,
             ConnectionOpenTryPayloadTypeComponent,
+            ConnectionOpenAckPayloadTypeComponent,
         ]:
             ProvideConnectionPayloadTypes,
         [
@@ -150,13 +150,13 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
 
         [
-            ConnectionOpenAckPayloadBuilderComponent,
             ConnectionOpenConfirmPayloadBuilderComponent,
         ]:
             BuildSovereignConnectionHandshakePayload,
         [
             ConnectionOpenInitPayloadBuilderComponent,
             ConnectionOpenTryPayloadBuilderComponent,
+            ConnectionOpenAckPayloadBuilderComponent,
         ]:
             BuildConnectionHandshakePayload,
         [

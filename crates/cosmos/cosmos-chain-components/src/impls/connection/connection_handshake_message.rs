@@ -154,10 +154,12 @@ where
             Message = CosmosMessage,
             Height = Height,
         > + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+        + CanRaiseError<Ics02Error>
         + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
-        + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId, Height = Height>
+        + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
+        + HasHeightFields
         + HasConnectionOpenAckPayloadType<
             Chain,
             ConnectionOpenAckPayload = ConnectionOpenAckPayload<Counterparty, Chain>,
@@ -183,6 +185,12 @@ where
 
         let client_state_any: IbcProtoAny = payload.client_state.into();
 
+        let update_height = Height::new(
+            Counterparty::revision_number(&payload.update_height),
+            Counterparty::revision_height(&payload.update_height),
+        )
+        .map_err(Chain::raise_error)?;
+
         let message = CosmosConnectionOpenAckMessage {
             connection_id,
             counterparty_connection_id,
@@ -191,7 +199,7 @@ where
                 type_url: client_state_any.type_url,
                 value: client_state_any.value,
             },
-            update_height: payload.update_height,
+            update_height: update_height,
             proof_try: payload.proof_try,
             proof_client: payload.proof_client,
             proof_consensus: payload.proof_consensus,
