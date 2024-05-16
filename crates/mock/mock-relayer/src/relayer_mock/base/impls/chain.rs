@@ -36,7 +36,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, ProvideIbcChainTypes,
+    CounterpartyMessageHeightGetter, ProvideIbcChainTypes,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -287,7 +287,7 @@ impl ChainStatusQuerier<MockChainContext> for MockChainComponents {
     }
 }
 
-impl HasCounterpartyMessageHeight<MockChainContext> for MockChainContext {
+impl CounterpartyMessageHeightGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn counterparty_message_height_for_update_client(message: &MockMessage) -> Option<MockHeight> {
         match message {
             MockMessage::RecvPacket(h, _) => Some(h.increment()),

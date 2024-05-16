@@ -32,7 +32,6 @@ where
     ) -> Result<(SrcConnectionId<Self>, DstConnectionId<Self>), Self::Error>;
 }
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain> CanBootstrapConnection for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

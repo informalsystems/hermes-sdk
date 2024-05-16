@@ -12,7 +12,9 @@ use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
+use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -41,6 +43,9 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanBuildTargetUpdateClientMessage<DestinationTarget>
     + CanBuildTargetUpdateClientMessage<SourceTarget>
     + CanInitConnection
+    + CanSendIbcMessages<MainSink, SourceTarget>
+    + CanSendIbcMessages<MainSink, DestinationTarget>
+    + CanRelayConnectionOpenHandshake
 {
 }
 

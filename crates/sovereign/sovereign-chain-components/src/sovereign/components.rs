@@ -48,7 +48,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::{ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent};
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
@@ -70,6 +70,8 @@ use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSo
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
 use hermes_relayer_components::chain::impls::forward::queries::connection_end::ForwardQueryConnectionEnd;
 use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
+use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFromSovereignMessage;
 
 use crate::sovereign::impls::sovereign_to_cosmos::channel::channel_handshake_payload::BuildSovereignChannelHandshakePayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
@@ -101,6 +103,7 @@ delegate_components! {
         [
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
+            ConnectionOpenTryEventComponent,
         ]:
             ProvideSovereignEvents,
         [
@@ -186,5 +189,7 @@ delegate_components! {
             ForwardQueryConnectionEnd,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
+        CounterpartyMessageHeightGetterComponent:
+            GetCosmosHeightFromSovereignMessage,
     }
 }

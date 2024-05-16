@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, CanRaiseError, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_logging_components::traits::has_logger::{
@@ -8,12 +8,13 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
+use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanBuildTargetUpdateClientMessage;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -42,7 +43,9 @@ pub trait CanUseSovereignToCosmosRelay:
     + CanBuildTargetUpdateClientMessage<SourceTarget>
     + CanBuildTargetUpdateClientMessage<DestinationTarget>
     + CanInitConnection
-    + for<'a> CanRaiseError<MissingConnectionInitEventError<'a, SovereignToCosmosRelay>>
+    + CanSendIbcMessages<MainSink, SourceTarget>
+    + CanSendIbcMessages<MainSink, DestinationTarget>
+    + CanRelayConnectionOpenHandshake
 {
 }
 

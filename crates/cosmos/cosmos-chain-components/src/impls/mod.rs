@@ -3,6 +3,7 @@ pub mod client;
 pub mod commitment_prefix;
 pub mod connection;
 pub mod events;
+pub mod message_height;
 pub mod packet;
 pub mod queries;
 pub mod transaction;

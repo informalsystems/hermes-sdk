@@ -154,16 +154,16 @@ debug = 1
 overflow-checks = true
 
 [patch.crates-io]
-ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
-ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "d5e3887770" }
+ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
 
 basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "61256f9" }
 
