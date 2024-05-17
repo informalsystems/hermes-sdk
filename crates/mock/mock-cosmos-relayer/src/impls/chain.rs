@@ -37,7 +37,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, ProvideIbcChainTypes,
+    CounterpartyMessageHeightGetter, ProvideIbcChainTypes,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -601,8 +601,9 @@ impl<Chain: BasecoinEndpoint> MessageSender<MockCosmosContext<Chain>>
     }
 }
 
-impl<Chain, Counterparty> HasCounterpartyMessageHeight<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    CounterpartyMessageHeightGetter<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,

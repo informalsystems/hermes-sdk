@@ -1,7 +1,5 @@
 use alloc::vec::Vec;
 
-use cgp_core::async_trait;
-
 use crate::chain::traits::send_message::CanSendMessages;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
@@ -10,7 +8,6 @@ use crate::relay::traits::target::ChainTarget;
 
 pub struct SendIbcMessagesToChain;
 
-#[async_trait]
 impl<Relay, Sink, Target, TargetChain> IbcMessageSender<Relay, Sink, Target>
     for SendIbcMessagesToChain
 where

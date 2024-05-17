@@ -50,6 +50,10 @@ where
         target_height: &RollupHeight,
         client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
+        // FIXME: the latest rollup height with +1 workaround is causing the DA header
+        // verification to fail, as the DA has not progressed to the expected height.
+        tokio::time::sleep(Duration::from_secs(2)).await;
+
         let sovereign_params = &client_state.sovereign_client_state.sovereign_params;
 
         // DA height is higher than rollup height. This requires adding

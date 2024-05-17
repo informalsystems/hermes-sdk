@@ -8,6 +8,7 @@ use hermes_wasm_client_components::types::client_state::WasmClientState;
 pub use sov_celestia_client::types::client_state::SovTmClientState as SovereignClientState;
 pub use sov_celestia_client::types::proto::v1::ClientState as ProtoSovereignClientState;
 
+#[derive(Debug)]
 pub struct WrappedSovereignClientState {
     pub sovereign_client_state: SovereignClientState,
     pub wasm_code_hash: Vec<u8>,

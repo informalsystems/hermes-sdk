@@ -2060,6 +2060,7 @@ dependencies = [
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-runtime",
+ "hermes-runtime-components",
  "hermes-sovereign-rollup-components",
  "hermes-wasm-client-components",
  "hex 0.4.3",
@@ -2075,6 +2076,7 @@ dependencies = [
  "serde_json",
  "sha2 0.10.8",
  "sov-celestia-client",
+ "tokio",
  "tonic",
 ]
 
@@ -2428,7 +2430,7 @@ dependencies = [
 [[package]]
 name = "ibc"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-apps",
  "ibc-clients",
@@ -2441,7 +2443,7 @@ dependencies = [
 [[package]]
 name = "ibc-app-nft-transfer"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-app-nft-transfer-types",
  "ibc-core",
@@ -2451,7 +2453,7 @@ dependencies = [
 [[package]]
 name = "ibc-app-nft-transfer-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "base64 0.21.7",
  "borsh",
@@ -2471,7 +2473,7 @@ dependencies = [
 [[package]]
 name = "ibc-app-transfer"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-app-transfer-types",
  "ibc-core",
@@ -2481,7 +2483,7 @@ dependencies = [
 [[package]]
 name = "ibc-app-transfer-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2497,7 +2499,7 @@ dependencies = [
 [[package]]
 name = "ibc-apps"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-app-nft-transfer",
  "ibc-app-transfer",
@@ -2506,7 +2508,7 @@ dependencies = [
 [[package]]
 name = "ibc-client-tendermint"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "derive_more",
  "ibc-client-tendermint-types",
@@ -2523,7 +2525,7 @@ dependencies = [
 [[package]]
 name = "ibc-client-tendermint-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "displaydoc",
@@ -2541,7 +2543,7 @@ dependencies = [
 [[package]]
 name = "ibc-client-wasm-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "base64 0.21.7",
  "cosmwasm-schema",
@@ -2556,7 +2558,7 @@ dependencies = [
 [[package]]
 name = "ibc-clients"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-client-tendermint",
  "ibc-client-wasm-types",
@@ -2565,7 +2567,7 @@ dependencies = [
 [[package]]
 name = "ibc-core"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-core-channel",
  "ibc-core-client",
@@ -2581,7 +2583,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-channel"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-core-channel-types",
  "ibc-core-client",
@@ -2596,7 +2598,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-channel-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2619,7 +2621,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-client"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-core-client-context",
  "ibc-core-client-types",
@@ -2632,7 +2634,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-client-context"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "derive_more",
  "displaydoc",
@@ -2648,7 +2650,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-client-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2668,7 +2670,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-commitment-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2686,7 +2688,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-connection"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-core-client",
  "ibc-core-connection-types",
@@ -2698,7 +2700,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-connection-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2719,7 +2721,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-handler"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "ibc-core-channel",
  "ibc-core-client",
@@ -2734,7 +2736,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-handler-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2758,7 +2760,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-host"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "derive_more",
  "displaydoc",
@@ -2776,7 +2778,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-host-cosmos"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2800,7 +2802,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-host-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2815,7 +2817,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-router"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "derive_more",
  "displaydoc",
@@ -2829,7 +2831,7 @@ dependencies = [
 [[package]]
 name = "ibc-core-router-types"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2848,7 +2850,7 @@ dependencies = [
 [[package]]
 name = "ibc-derive"
 version = "0.6.1"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2880,7 +2882,7 @@ dependencies = [
 [[package]]
 name = "ibc-primitives"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "borsh",
  "derive_more",
@@ -2920,7 +2922,7 @@ dependencies = [
 [[package]]
 name = "ibc-query"
 version = "0.51.0"
-source = "git+https://github.com/cosmos/ibc-rs.git?rev=d5e3887770#d5e3887770d3579d49942569833499b57c09af18"
+source = "git+https://github.com/cosmos/ibc-rs.git?branch=soares/fix-commitment-prefix-deserialize#156ff3c01bfa70964c4dce43524e90eaa4401684"
 dependencies = [
  "displaydoc",
  "ibc",

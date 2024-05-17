@@ -83,7 +83,6 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
 
-    // TODO: load parameters from environment variables
     let cosmos_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
