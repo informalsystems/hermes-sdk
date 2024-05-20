@@ -11,7 +11,6 @@ use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
-use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::bank::{BankMessage, CoinFields};
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
@@ -19,8 +18,6 @@ use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::params::ArrayParams;
 use tokio::runtime::Builder;
 
 #[test]
@@ -159,16 +156,6 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     .await?;
 
                 println!("CreateToken events: {:?}", events);
-            }
-
-            // Attempt to fetch aggregated proofs from the Sovereign rollup
-            {
-                let response: serde_json::Value = rollup
-                    .json_rpc_client()
-                    .request("ledger_getAggregatedProof", ArrayParams::new())
-                    .await?;
-
-                println!("ledger_getAggregatedProof response: {response:?}");
             }
         }
         <Result<(), Error>>::Ok(())
