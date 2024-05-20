@@ -20,3 +20,8 @@ pub trait HasChannelHandshakePayloadTypes<Counterparty> {
 
     type ChannelOpenConfirmPayload: Async;
 }
+
+#[derive_component(ChannelEndTypeComponent, ProvideChannelEndType<Chain>)]
+pub trait HasChannelEndType<Counterparty>: Async {
+    type ChannelEnd: Async;
+}
