@@ -41,8 +41,8 @@ where
         height: &Rollup::Height,
     ) -> Result<Rollup::ChannelEnd, Rollup::Error> {
         let request = Request {
-            channel_id: &channel_id.to_string(),
-            port_id: &port_id.to_string(),
+            channel_id: channel_id.as_ref(),
+            port_id: port_id.as_ref(),
             query_height: &height.into(),
         };
 
@@ -77,8 +77,8 @@ where
         height: &Rollup::Height,
     ) -> Result<(Rollup::ChannelEnd, Vec<u8>), Rollup::Error> {
         let request = Request {
-            channel_id: &channel_id.to_string(),
-            port_id: &port_id.to_string(),
+            channel_id: channel_id.as_ref(),
+            port_id: port_id.as_ref(),
             query_height: &height.into(),
         };
 
