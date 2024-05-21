@@ -2,8 +2,8 @@ use core::fmt::Debug;
 
 use cgp_core::CanRaiseError;
 
-use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
-use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
+use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenTryMessage;
+use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenTryPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenTryEvent;
@@ -43,9 +43,9 @@ where
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
         + for<'a> CanRaiseError<MissingChannelTryEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
-    SrcChain: CanQueryChainHeight + CanBuildChannelHandshakePayloads<DstChain>,
+    SrcChain: CanQueryChainHeight + CanBuildChannelOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
-        + CanBuildChannelHandshakeMessages<SrcChain>
+        + CanBuildChannelOpenTryMessage<SrcChain>
         + HasChannelOpenTryEvent<SrcChain>,
     DstChain::ChannelId: Clone,
 {

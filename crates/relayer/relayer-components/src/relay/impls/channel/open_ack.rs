@@ -1,7 +1,7 @@
 use cgp_core::async_trait;
 
-use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
-use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
+use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenAckMessage;
+use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenAckPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -25,15 +25,14 @@ use crate::relay::types::aliases::{DstChannelId, DstPortId, SrcChannelId, SrcPor
 
 pub struct RelayChannelOpenAck;
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain> ChannelOpenAckRelayer<Relay> for RelayChannelOpenAck
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + CanRaiseRelayChainErrors,
     SrcChain:
-        CanQueryClientStateWithLatestHeight<DstChain> + CanBuildChannelHandshakeMessages<DstChain>,
-    DstChain: CanQueryChainHeight + CanBuildChannelHandshakePayloads<SrcChain>,
+        CanQueryClientStateWithLatestHeight<DstChain> + CanBuildChannelOpenAckMessage<DstChain>,
+    DstChain: CanQueryChainHeight + CanBuildChannelOpenAckPayload<SrcChain>,
 {
     async fn relay_channel_open_ack(
         relay: &Relay,

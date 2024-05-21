@@ -1,11 +1,11 @@
 use core::fmt::Debug;
 
-use cgp_core::CanRaiseError;
+use cgp_core::{CanRaiseError, HasErrorType};
 
-use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
-use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
+use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::channel::open_init::ChannelInitializer;
@@ -27,12 +27,12 @@ impl<Relay, SrcChain, DstChain> ChannelInitializer<Relay> for InitializeChannel
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + for<'a> CanRaiseError<MissingChannelInitEventError<'a, Relay>>
-        + CanRaiseRelayChainErrors,
+        + CanRaiseError<SrcChain::Error>,
     SrcChain: CanSendSingleMessage
         + HasInitChannelOptionsType<DstChain>
-        + CanBuildChannelHandshakeMessages<DstChain>
+        + CanBuildChannelOpenInitMessage<DstChain>
         + HasChannelOpenInitEvent<DstChain>,
-    DstChain: CanBuildChannelHandshakePayloads<SrcChain>,
+    DstChain: HasIbcChainTypes<SrcChain>,
     SrcChain::ChannelId: Clone,
 {
     async fn init_channel(
