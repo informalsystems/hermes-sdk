@@ -17,7 +17,9 @@ use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilderComponent, CanBuildAckPacketMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
-    CanBuildChannelHandshakeMessages, ChannelHandshakeMessageBuilderComponent,
+    CanBuildChannelOpenInitMessage, ChannelOpenAckMessageBuilderComponent,
+    ChannelOpenConfirmMessageBuilderComponent, ChannelOpenInitMessageBuilderComponent,
+    ChannelOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
@@ -62,8 +64,11 @@ use hermes_relayer_components::chain::traits::send_message::{
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
-use hermes_relayer_components::chain::traits::types::channel::ChannelHandshakePayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::channel::{
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, HasClientStateType,
     RawClientStateTypeComponent,
@@ -263,7 +268,9 @@ delegate_components! {
             ConnectionOpenConfirmPayloadTypeComponent,
 
             InitChannelOptionsTypeComponent,
-            ChannelHandshakePayloadTypeComponent,
+            ChannelOpenTryPayloadTypeComponent,
+            ChannelOpenAckPayloadTypeComponent,
+            ChannelOpenConfirmPayloadTypeComponent,
 
             NonceAllocatorComponent,
             MessageSenderComponent,
@@ -313,7 +320,10 @@ delegate_components! {
             ConnectionOpenAckMessageBuilderComponent,
             ConnectionOpenConfirmMessageBuilderComponent,
 
-            ChannelHandshakeMessageBuilderComponent,
+            ChannelOpenInitMessageBuilderComponent,
+            ChannelOpenTryMessageBuilderComponent,
+            ChannelOpenAckMessageBuilderComponent,
+            ChannelOpenConfirmMessageBuilderComponent,
 
             CounterpartyMessageHeightGetterComponent
         ]:
@@ -413,7 +423,7 @@ pub trait CanUseSovereignRollup:
     + CanBuildConnectionOpenTryMessage<CosmosChain>
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
-    + CanBuildChannelHandshakeMessages<CosmosChain>
+    + CanBuildChannelOpenInitMessage<CosmosChain>
 where
     Self::Runtime: HasMutex,
 {

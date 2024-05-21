@@ -15,7 +15,6 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::CanBuildChannelHandshakePayloads;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
@@ -36,9 +35,7 @@ use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, Me
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
-use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
-};
+use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
@@ -201,9 +198,7 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenTryMessage<CosmosChain>
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
-    + HasChannelHandshakePayloadTypes<CosmosChain>
     + HasInitChannelOptionsType<CosmosChain>
-    + CanBuildChannelHandshakePayloads<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
 {

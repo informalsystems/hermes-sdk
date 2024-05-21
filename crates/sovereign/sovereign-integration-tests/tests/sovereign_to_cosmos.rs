@@ -14,7 +14,7 @@ use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptio
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
@@ -283,7 +283,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         let port_id = PortId::transfer();
         let counterparty_port_id = PortId::transfer();
 
-        let channel_init_message = <CosmosChain as CanBuildChannelHandshakeMessages<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &port_id, &counterparty_port_id, &options).await?;
+        let channel_init_message = <CosmosChain as CanBuildChannelOpenInitMessage<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &port_id, &counterparty_port_id, &options).await?;
 
         let events = cosmos_chain.send_message(channel_init_message).await?;
 

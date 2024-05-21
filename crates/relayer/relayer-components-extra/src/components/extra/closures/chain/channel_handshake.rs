@@ -1,14 +1,14 @@
 use cgp_core::HasComponents;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
-    CanBuildChannelHandshakeMessages, ChannelHandshakeMessageBuilder,
+    CanBuildChannelOpenTryMessage, ChannelOpenTryMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
-    CanBuildChannelHandshakePayloads, ChannelHandshakePayloadBuilder,
+    CanBuildChannelOpenTryPayload, ChannelOpenTryPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
+    HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -26,8 +26,8 @@ pub trait UseExtraChainComponentsForChannelHandshake<Counterparty>:
     + HasInitChannelOptionsType<Counterparty>
     + HasChannelOpenTryEvent<Counterparty>
     + CanQueryClientState<Counterparty>
-    + CanBuildChannelHandshakePayloads<Counterparty>
-    + CanBuildChannelHandshakeMessages<Counterparty>
+    + CanBuildChannelOpenTryPayload<Counterparty>
+    + CanBuildChannelOpenTryMessage<Counterparty>
     + HasChannelOpenInitEvent<Counterparty>
     + CanQueryChainHeight
 where
@@ -35,7 +35,7 @@ where
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
         + HasUpdateClientPayloadType<Self>
-        + HasChannelHandshakePayloadTypes<Self>,
+        + HasChannelOpenTryPayloadType<Self>,
 {
 }
 
@@ -45,18 +45,18 @@ where
     Chain: HasChannelOpenInitEvent<Counterparty>
         + HasChannelOpenTryEvent<Counterparty>
         + HasInitChannelOptionsType<Counterparty>
-        + HasChannelHandshakePayloadTypes<Counterparty>
+        + HasChannelOpenTryPayloadType<Counterparty>
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasIbcChainTypes<Chain>
         + HasUpdateClientPayloadType<Chain>
-        + HasChannelHandshakePayloadTypes<Chain>,
+        + HasChannelOpenTryPayloadType<Chain>,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraChainComponents<BaseComponents>
-        + ChannelHandshakePayloadBuilder<Chain, Counterparty>
-        + ChannelHandshakeMessageBuilder<Chain, Counterparty>,
+        + ChannelOpenTryPayloadBuilder<Chain, Counterparty>
+        + ChannelOpenTryMessageBuilder<Chain, Counterparty>,
     Chain::Height: Clone,
 {
 }

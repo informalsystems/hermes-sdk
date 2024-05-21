@@ -6,9 +6,13 @@ use hermes_cosmos_chain_components::types::messages::channel::open_confirm::Cosm
 use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
 use hermes_cosmos_relayer::types::error::Error;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
+    ChannelOpenTryMessageBuilder,
+};
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
+    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+    HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics04_channel::channel::{
@@ -23,7 +27,7 @@ use crate::types::payloads::channel::{
 
 pub struct BuildSolomachineChannelHandshakeMessagesForCosmos;
 
-impl<Chain, Counterparty> ChannelHandshakeMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ChannelOpenInitMessageBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakeMessagesForCosmos
 where
     Chain: HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>
@@ -33,12 +37,7 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
         > + HasErrorType<Error = Error>,
-    Counterparty: HasChannelHandshakePayloadTypes<
-            Chain,
-            ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
-            ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,
-            ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload,
-        > + HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
+    Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
 {
     async fn build_channel_open_init_message(
         _chain: &Chain,
@@ -67,7 +66,22 @@ where
 
         Ok(message.to_cosmos_message())
     }
+}
 
+impl<Chain, Counterparty> ChannelOpenTryMessageBuilder<Chain, Counterparty>
+    for BuildSolomachineChannelHandshakeMessagesForCosmos
+where
+    Chain: HasIbcChainTypes<
+            Counterparty,
+            Message = CosmosMessage,
+            ChannelId = ChannelId,
+            PortId = PortId,
+        > + HasErrorType<Error = Error>,
+    Counterparty: HasChannelOpenTryPayloadType<
+            Chain,
+            ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
+        > + HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
+{
     async fn build_channel_open_try_message(
         _chain: &Chain,
         port_id: &PortId,
@@ -102,7 +116,22 @@ where
 
         Ok(message.to_cosmos_message())
     }
+}
 
+impl<Chain, Counterparty> ChannelOpenAckMessageBuilder<Chain, Counterparty>
+    for BuildSolomachineChannelHandshakeMessagesForCosmos
+where
+    Chain: HasIbcChainTypes<
+            Counterparty,
+            Message = CosmosMessage,
+            ChannelId = ChannelId,
+            PortId = PortId,
+        > + HasErrorType<Error = Error>,
+    Counterparty: HasChannelOpenAckPayloadType<
+            Chain,
+            ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,
+        > + HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
+{
     async fn build_channel_open_ack_message(
         _chain: &Chain,
         port_id: &PortId,
@@ -123,7 +152,22 @@ where
 
         Ok(message.to_cosmos_message())
     }
+}
 
+impl<Chain, Counterparty> ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
+    for BuildSolomachineChannelHandshakeMessagesForCosmos
+where
+    Chain: HasIbcChainTypes<
+            Counterparty,
+            Message = CosmosMessage,
+            ChannelId = ChannelId,
+            PortId = PortId,
+        > + HasErrorType<Error = Error>,
+    Counterparty: HasChannelOpenConfirmPayloadType<
+            Chain,
+            ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload,
+        > + HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
+{
     async fn build_channel_open_confirm_message(
         _chain: &Chain,
         port_id: &PortId,

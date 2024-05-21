@@ -4,6 +4,5 @@ pub mod events;
 pub mod json_rpc_client;
 pub mod message_height;
 pub mod queries;
-pub mod sovereign_to_cosmos;
 pub mod transaction;
 pub mod types;

@@ -8,9 +8,13 @@ use hermes_cosmos_chain_components::types::messages::channel::open_try::CosmosCh
 use hermes_cosmos_chain_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
+    ChannelOpenTryMessageBuilder,
+};
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelHandshakePayloadTypes, HasInitChannelOptionsType,
+    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+    HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
@@ -24,7 +28,7 @@ use crate::types::payloads::channel::SovereignInitChannelOptions;
 
 pub struct BuildCosmosChannelHandshakeMessageOnSovereign;
 
-impl<Rollup, Counterparty> ChannelHandshakeMessageBuilder<Rollup, Counterparty>
+impl<Rollup, Counterparty> ChannelOpenInitMessageBuilder<Rollup, Counterparty>
     for BuildCosmosChannelHandshakeMessageOnSovereign
 where
     Rollup: HasInitChannelOptionsType<Counterparty, InitChannelOptions = SovereignInitChannelOptions>
@@ -34,12 +38,7 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
         > + HasErrorType,
-    Counterparty: HasChannelHandshakePayloadTypes<
-            Rollup,
-            ChannelOpenTryPayload = CosmosChannelOpenTryPayload,
-            ChannelOpenAckPayload = CosmosChannelOpenAckPayload,
-            ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload,
-        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
+    Counterparty: HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
 {
     async fn build_channel_open_init_message(
         _rollup: &Rollup,
@@ -69,7 +68,20 @@ where
 
         Ok(sovereign_msg)
     }
+}
 
+impl<Rollup, Counterparty> ChannelOpenTryMessageBuilder<Rollup, Counterparty>
+    for BuildCosmosChannelHandshakeMessageOnSovereign
+where
+    Rollup: HasIbcChainTypes<
+            Counterparty,
+            Message = SovereignMessage,
+            ChannelId = ChannelId,
+            PortId = PortId,
+        > + HasErrorType,
+    Counterparty: HasChannelOpenTryPayloadType<Rollup, ChannelOpenTryPayload = CosmosChannelOpenTryPayload>
+        + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
+{
     async fn build_channel_open_try_message(
         _rollup: &Rollup,
         port_id: &Rollup::PortId,
@@ -108,7 +120,20 @@ where
 
         Ok(sovereign_msg)
     }
+}
 
+impl<Rollup, Counterparty> ChannelOpenAckMessageBuilder<Rollup, Counterparty>
+    for BuildCosmosChannelHandshakeMessageOnSovereign
+where
+    Rollup: HasIbcChainTypes<
+            Counterparty,
+            Message = SovereignMessage,
+            ChannelId = ChannelId,
+            PortId = PortId,
+        > + HasErrorType,
+    Counterparty: HasChannelOpenAckPayloadType<Rollup, ChannelOpenAckPayload = CosmosChannelOpenAckPayload>
+        + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
+{
     async fn build_channel_open_ack_message(
         _rollup: &Rollup,
         port_id: &Rollup::PortId,
@@ -130,7 +155,22 @@ where
 
         Ok(sovereign_msg)
     }
+}
 
+impl<Rollup, Counterparty> ChannelOpenConfirmMessageBuilder<Rollup, Counterparty>
+    for BuildCosmosChannelHandshakeMessageOnSovereign
+where
+    Rollup: HasIbcChainTypes<
+            Counterparty,
+            Message = SovereignMessage,
+            ChannelId = ChannelId,
+            PortId = PortId,
+        > + HasErrorType,
+    Counterparty: HasChannelOpenConfirmPayloadType<
+            Rollup,
+            ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload,
+        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
+{
     async fn build_channel_open_confirm_message(
         _rollup: &Rollup,
         port_id: &Rollup::PortId,
