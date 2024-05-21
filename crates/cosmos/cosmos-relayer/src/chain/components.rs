@@ -20,7 +20,10 @@ use hermes_relayer_components::chain::traits::commitment_prefix::{
     CommitmentPrefixTypeComponent, IbcCommitmentPrefixGetter,
 };
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
+    ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
@@ -32,7 +35,10 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::U
 use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
+    ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
+    ChannelOpenTryPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
     ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
@@ -77,7 +83,8 @@ use hermes_relayer_components::chain::traits::types::block::{
 };
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
@@ -204,6 +211,11 @@ delegate_components! {
             DefaultEncodingGetterComponent,
         ]:
             ProvideCosmosEncoding,
+    }
+}
+
+delegate_components! {
+    CosmosChainComponents {
         [
             HeightTypeComponent,
             HeightFieldComponent,
@@ -242,7 +254,10 @@ delegate_components! {
             ConnectionOpenAckPayloadTypeComponent,
             ConnectionOpenConfirmPayloadTypeComponent,
 
-            ChannelHandshakePayloadTypeComponent,
+            ChannelOpenTryPayloadTypeComponent,
+            ChannelOpenAckPayloadTypeComponent,
+            ChannelOpenConfirmPayloadTypeComponent,
+
             ReceivePacketPayloadTypeComponent,
             AckPacketPayloadTypeComponent,
             TimeoutUnorderedPacketPayloadTypeComponent,
@@ -280,8 +295,15 @@ delegate_components! {
             ConnectionOpenAckPayloadBuilderComponent,
             ConnectionOpenConfirmPayloadBuilderComponent,
 
-            ChannelHandshakePayloadBuilderComponent,
-            ChannelHandshakeMessageBuilderComponent,
+            ChannelOpenTryPayloadBuilderComponent,
+            ChannelOpenAckPayloadBuilderComponent,
+            ChannelOpenConfirmPayloadBuilderComponent,
+
+            ChannelOpenInitMessageBuilderComponent,
+            ChannelOpenTryMessageBuilderComponent,
+            ChannelOpenAckMessageBuilderComponent,
+            ChannelOpenConfirmMessageBuilderComponent,
+
             PacketCommitmentsQuerierComponent,
             PacketAcknowledgementsQuerierComponent,
             ReceivedPacketQuerierComponent,
@@ -305,6 +327,11 @@ delegate_components! {
             CounterpartyMessageHeightGetterComponent,
         ]:
             CosmosClientComponents,
+    }
+}
+
+delegate_components! {
+    CosmosChainComponents {
         [
             ChainStatusQuerierComponent,
             ConsensusStateQuerierComponent,
