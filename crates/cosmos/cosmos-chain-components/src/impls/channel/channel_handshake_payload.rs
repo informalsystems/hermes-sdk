@@ -1,5 +1,9 @@
-use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
+    ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
+};
+use hermes_relayer_components::chain::traits::types::channel::{
+    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -14,14 +18,12 @@ use crate::types::payloads::channel::{
 
 pub struct BuildCosmosChannelHandshakePayload;
 
-impl<Chain, Counterparty> ChannelHandshakePayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakePayload
 where
-    Chain: HasChannelHandshakePayloadTypes<
+    Chain: HasChannelOpenTryPayloadType<
             Counterparty,
             ChannelOpenTryPayload = CosmosChannelOpenTryPayload,
-            ChannelOpenAckPayload = CosmosChannelOpenAckPayload,
-            ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload,
         > + HasIbcChainTypes<Counterparty, Height = Height, PortId = PortId, ChannelId = ChannelId>
         + HasClientStateType<Counterparty>
         + HasBlockingChainHandle,
@@ -66,7 +68,18 @@ where
             })
             .await
     }
+}
 
+impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<Chain, Counterparty>
+    for BuildCosmosChannelHandshakePayload
+where
+    Chain: HasChannelOpenAckPayloadType<
+            Counterparty,
+            ChannelOpenAckPayload = CosmosChannelOpenAckPayload,
+        > + HasIbcChainTypes<Counterparty, Height = Height, PortId = PortId, ChannelId = ChannelId>
+        + HasClientStateType<Counterparty>
+        + HasBlockingChainHandle,
+{
     async fn build_channel_open_ack_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
@@ -105,7 +118,18 @@ where
             })
             .await
     }
+}
 
+impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<Chain, Counterparty>
+    for BuildCosmosChannelHandshakePayload
+where
+    Chain: HasChannelOpenConfirmPayloadType<
+            Counterparty,
+            ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload,
+        > + HasIbcChainTypes<Counterparty, Height = Height, PortId = PortId, ChannelId = ChannelId>
+        + HasClientStateType<Counterparty>
+        + HasBlockingChainHandle,
+{
     async fn build_channel_open_confirm_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,

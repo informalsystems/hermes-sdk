@@ -12,17 +12,17 @@ pub type InitChannelOptions<Chain, Counterparty> =
     Payload that contains necessary counterparty information such as proofs and parameters
     in order for a self chain to build a channel handshake message.
 */
-#[derive_component(ChannelOpenTryPayloadTypeComponent, ProvideOpenTryPayloadType<Chain>)]
+#[derive_component(ChannelOpenTryPayloadTypeComponent, ProvideChannelOpenTryPayloadType<Chain>)]
 pub trait HasChannelOpenTryPayloadType<Counterparty> {
     type ChannelOpenTryPayload: Async;
 }
 
-#[derive_component(ChannelOpenAckPayloadTypeComponent, ProvideOpenAckPayloadType<Chain>)]
+#[derive_component(ChannelOpenAckPayloadTypeComponent, ProvideChannelOpenAckPayloadType<Chain>)]
 pub trait HasChannelOpenAckPayloadType<Counterparty> {
     type ChannelOpenAckPayload: Async;
 }
 
-#[derive_component(ChannelOpenConfirmPayloadTypeComponent, ProvideOpenConfirmPayloadType<Chain>)]
+#[derive_component(ChannelOpenConfirmPayloadTypeComponent, ProvideChannelOpenConfirmPayloadType<Chain>)]
 pub trait HasChannelOpenConfirmPayloadType<Counterparty> {
     type ChannelOpenConfirmPayload: Async;
 }

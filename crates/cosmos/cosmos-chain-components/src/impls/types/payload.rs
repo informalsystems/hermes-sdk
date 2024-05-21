@@ -1,6 +1,9 @@
 use cgp_core::{delegate_components, Async};
 use hermes_relayer_components::chain::impls::connection_payload::ProvideConnectionPayloadTypes;
-use hermes_relayer_components::chain::traits::types::channel::ProvideChannelHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::channel::{
+    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
+    ProvideChannelOpenTryPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
     ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
@@ -49,15 +52,27 @@ where
     type UpdateClientPayload = CosmosUpdateClientPayload;
 }
 
-impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
     for ProvideCosmosPayloadTypes
 where
     Chain: Async,
 {
     type ChannelOpenTryPayload = CosmosChannelOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
+    for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
     type ChannelOpenAckPayload = CosmosChannelOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
+    for ProvideCosmosPayloadTypes
+where
+    Chain: Async,
+{
     type ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload;
 }
 

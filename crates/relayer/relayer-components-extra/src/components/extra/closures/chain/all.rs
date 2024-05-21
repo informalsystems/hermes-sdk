@@ -1,4 +1,4 @@
-use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
+use hermes_relayer_components::chain::traits::types::channel::HasChannelOpenTryPayloadType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -25,6 +25,6 @@ where
         + HasReceivePacketPayloadType<Self>
         + HasAckPacketPayloadType<Self>
         + HasTimeoutUnorderedPacketPayloadType<Self>
-        + HasChannelHandshakePayloadTypes<Self>,
+        + HasChannelOpenTryPayloadType<Self>,
 {
 }
