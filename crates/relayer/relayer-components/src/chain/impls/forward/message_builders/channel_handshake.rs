@@ -1,77 +1,30 @@
 use cgp_core::{Async, CanRaiseError, HasInner};
 
-use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
-use crate::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
-use crate::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
-use crate::chain::traits::types::channel::HasInitChannelOptionsType;
+use crate::chain::traits::message_builders::channel_handshake::{
+    CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
+    CanBuildChannelOpenInitMessage, CanBuildChannelOpenTryMessage, ChannelOpenAckMessageBuilder,
+    ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder, ChannelOpenTryMessageBuilder,
+};
+use crate::chain::traits::types::channel::{
+    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+    HasInitChannelOptionsType,
+};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub struct ForwardChannelHandshakeBuilder;
 
-impl<
-        Chain,
-        Counterparty,
-        InChain,
-        Message,
-        ClientId,
-        ConnectionId,
-        ChannelId,
-        PortId,
-        InitChannelOptions,
-        ChannelOpenTryPayload,
-        ChannelOpenAckPayload,
-        ChannelOpenConfirmPayload,
-    > ChannelHandshakeMessageBuilder<Chain, Counterparty> for ForwardChannelHandshakeBuilder
+impl<Chain, Counterparty, InChain, Message, PortId, InitChannelOptions>
+    ChannelOpenInitMessageBuilder<Chain, Counterparty> for ForwardChannelHandshakeBuilder
 where
     Chain: HasInitChannelOptionsType<Counterparty, InitChannelOptions = InitChannelOptions>
-        + HasIbcChainTypes<
-            Counterparty,
-            Message = Message,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-            ChannelId = ChannelId,
-            PortId = PortId,
-        > + HasInner<Inner = InChain>
+        + HasIbcChainTypes<Counterparty, Message = Message, PortId = PortId>
+        + HasInner<Inner = InChain>
         + CanRaiseError<InChain::Error>,
-    Counterparty: HasChannelHandshakePayloadTypes<
-            Chain,
-            ChannelOpenTryPayload = ChannelOpenTryPayload,
-            ChannelOpenAckPayload = ChannelOpenAckPayload,
-            ChannelOpenConfirmPayload = ChannelOpenConfirmPayload,
-        > + HasChannelHandshakePayloadTypes<
-            InChain,
-            ChannelOpenTryPayload = ChannelOpenTryPayload,
-            ChannelOpenAckPayload = ChannelOpenAckPayload,
-            ChannelOpenConfirmPayload = ChannelOpenConfirmPayload,
-        > + HasIbcChainTypes<
-            Chain,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-            ChannelId = ChannelId,
-            PortId = PortId,
-        > + HasIbcChainTypes<
-            InChain,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-            ChannelId = ChannelId,
-            PortId = PortId,
-        >,
-    InChain: CanBuildChannelHandshakeMessages<Counterparty, InitChannelOptions = InitChannelOptions>
-        + HasIbcChainTypes<
-            Counterparty,
-            Message = Message,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-            ChannelId = ChannelId,
-            PortId = PortId,
-        >,
-    ClientId: Async,
-    ConnectionId: Async,
-    ChannelId: Async,
+    Counterparty:
+        HasIbcChainTypes<Chain, PortId = PortId> + HasIbcChainTypes<InChain, PortId = PortId>,
+    InChain: CanBuildChannelOpenInitMessage<Counterparty, InitChannelOptions = InitChannelOptions>
+        + HasIbcChainTypes<Counterparty, Message = Message, PortId = PortId>,
     PortId: Async,
-    ChannelOpenTryPayload: Async,
-    ChannelOpenAckPayload: Async,
-    ChannelOpenConfirmPayload: Async,
     Message: Async,
     InitChannelOptions: Async,
 {
@@ -87,7 +40,25 @@ where
             .await
             .map_err(Chain::raise_error)
     }
+}
 
+impl<Chain, Counterparty, InChain, Message, ChannelId, PortId, ChannelOpenTryPayload>
+    ChannelOpenTryMessageBuilder<Chain, Counterparty> for ForwardChannelHandshakeBuilder
+where
+    Chain: HasIbcChainTypes<Counterparty, Message = Message, ChannelId = ChannelId, PortId = PortId>
+        + HasInner<Inner = InChain>
+        + CanRaiseError<InChain::Error>,
+    Counterparty: HasChannelOpenTryPayloadType<Chain, ChannelOpenTryPayload = ChannelOpenTryPayload>
+        + HasChannelOpenTryPayloadType<InChain, ChannelOpenTryPayload = ChannelOpenTryPayload>
+        + HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
+        + HasIbcChainTypes<InChain, ChannelId = ChannelId, PortId = PortId>,
+    InChain: CanBuildChannelOpenTryMessage<Counterparty>
+        + HasIbcChainTypes<Counterparty, Message = Message, ChannelId = ChannelId, PortId = PortId>,
+    ChannelId: Async,
+    PortId: Async,
+    ChannelOpenTryPayload: Async,
+    Message: Async,
+{
     async fn build_channel_open_try_message(
         chain: &Chain,
         port_id: &PortId,
@@ -106,7 +77,25 @@ where
             .await
             .map_err(Chain::raise_error)
     }
+}
 
+impl<Chain, Counterparty, InChain, Message, ChannelId, PortId, ChannelOpenAckPayload>
+    ChannelOpenAckMessageBuilder<Chain, Counterparty> for ForwardChannelHandshakeBuilder
+where
+    Chain: HasIbcChainTypes<Counterparty, Message = Message, ChannelId = ChannelId, PortId = PortId>
+        + HasInner<Inner = InChain>
+        + CanRaiseError<InChain::Error>,
+    Counterparty: HasChannelOpenAckPayloadType<Chain, ChannelOpenAckPayload = ChannelOpenAckPayload>
+        + HasChannelOpenAckPayloadType<InChain, ChannelOpenAckPayload = ChannelOpenAckPayload>
+        + HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
+        + HasIbcChainTypes<InChain, ChannelId = ChannelId, PortId = PortId>,
+    InChain: CanBuildChannelOpenAckMessage<Counterparty>
+        + HasIbcChainTypes<Counterparty, Message = Message, ChannelId = ChannelId, PortId = PortId>,
+    ChannelId: Async,
+    PortId: Async,
+    ChannelOpenAckPayload: Async,
+    Message: Async,
+{
     async fn build_channel_open_ack_message(
         chain: &Chain,
         port_id: &PortId,
@@ -125,7 +114,29 @@ where
             .await
             .map_err(Chain::raise_error)
     }
+}
 
+impl<Chain, Counterparty, InChain, Message, ChannelId, PortId, ChannelOpenConfirmPayload>
+    ChannelOpenConfirmMessageBuilder<Chain, Counterparty> for ForwardChannelHandshakeBuilder
+where
+    Chain: HasIbcChainTypes<Counterparty, Message = Message, ChannelId = ChannelId, PortId = PortId>
+        + HasInner<Inner = InChain>
+        + CanRaiseError<InChain::Error>,
+    Counterparty: HasChannelOpenConfirmPayloadType<
+            Chain,
+            ChannelOpenConfirmPayload = ChannelOpenConfirmPayload,
+        > + HasChannelOpenConfirmPayloadType<
+            InChain,
+            ChannelOpenConfirmPayload = ChannelOpenConfirmPayload,
+        > + HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
+        + HasIbcChainTypes<InChain, ChannelId = ChannelId, PortId = PortId>,
+    InChain: CanBuildChannelOpenConfirmMessage<Counterparty>
+        + HasIbcChainTypes<Counterparty, Message = Message, ChannelId = ChannelId, PortId = PortId>,
+    ChannelId: Async,
+    PortId: Async,
+    ChannelOpenConfirmPayload: Async,
+    Message: Async,
+{
     async fn build_channel_open_confirm_message(
         chain: &Chain,
         port_id: &PortId,

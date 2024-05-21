@@ -3,19 +3,24 @@ use core::marker::PhantomData;
 use cgp_core::prelude::HasErrorType;
 use cgp_core::DelegateComponent;
 
-use crate::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilder;
-use crate::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
-use crate::chain::traits::types::channel::HasInitChannelOptionsType;
+use crate::chain::traits::message_builders::channel_handshake::{
+    ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
+    ChannelOpenTryMessageBuilder,
+};
+use crate::chain::traits::types::channel::{
+    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+    HasInitChannelOptionsType,
+};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub struct DelegateBuildChannelHandshakeMessage<Components>(pub PhantomData<Components>);
 
-impl<Chain, Counterparty, Components, Delegate> ChannelHandshakeMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Components, Delegate> ChannelOpenInitMessageBuilder<Chain, Counterparty>
     for DelegateBuildChannelHandshakeMessage<Components>
 where
     Chain: HasInitChannelOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType,
-    Counterparty: HasChannelHandshakePayloadTypes<Chain> + HasIbcChainTypes<Chain>,
-    Delegate: ChannelHandshakeMessageBuilder<Chain, Counterparty>,
+    Counterparty: HasIbcChainTypes<Chain>,
+    Delegate: ChannelOpenInitMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
     async fn build_channel_open_init_message(
@@ -32,7 +37,16 @@ where
         )
         .await
     }
+}
 
+impl<Chain, Counterparty, Components, Delegate> ChannelOpenTryMessageBuilder<Chain, Counterparty>
+    for DelegateBuildChannelHandshakeMessage<Components>
+where
+    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Counterparty: HasChannelOpenTryPayloadType<Chain> + HasIbcChainTypes<Chain>,
+    Delegate: ChannelOpenTryMessageBuilder<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
     async fn build_channel_open_try_message(
         chain: &Chain,
         port_id: &Chain::PortId,
@@ -49,7 +63,16 @@ where
         )
         .await
     }
+}
 
+impl<Chain, Counterparty, Components, Delegate> ChannelOpenAckMessageBuilder<Chain, Counterparty>
+    for DelegateBuildChannelHandshakeMessage<Components>
+where
+    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Counterparty: HasChannelOpenAckPayloadType<Chain> + HasIbcChainTypes<Chain>,
+    Delegate: ChannelOpenAckMessageBuilder<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
     async fn build_channel_open_ack_message(
         chain: &Chain,
         port_id: &Chain::PortId,
@@ -66,7 +89,17 @@ where
         )
         .await
     }
+}
 
+impl<Chain, Counterparty, Components, Delegate>
+    ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
+    for DelegateBuildChannelHandshakeMessage<Components>
+where
+    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Counterparty: HasChannelOpenConfirmPayloadType<Chain> + HasIbcChainTypes<Chain>,
+    Delegate: ChannelOpenConfirmMessageBuilder<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
     async fn build_channel_open_confirm_message(
         chain: &Chain,
         port_id: &Chain::PortId,

@@ -24,7 +24,7 @@ where
 #[derive_component(ChannelOpenTryMessageBuilderComponent, ChannelOpenTryMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildChannelOpenTryMessage<Counterparty>:
-    HasInitChannelOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasChannelOpenTryPayloadType<Self> + HasIbcChainTypes<Self>,
 {
@@ -40,7 +40,7 @@ where
 #[derive_component(ChannelOpenAckMessageBuilderComponent, ChannelOpenAckMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildChannelOpenAckMessage<Counterparty>:
-    HasInitChannelOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasChannelOpenAckPayloadType<Self> + HasIbcChainTypes<Self>,
 {
@@ -56,7 +56,7 @@ where
 #[derive_component(ChannelOpenConfirmMessageBuilderComponent, ChannelOpenConfirmMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildChannelOpenConfirmMessage<Counterparty>:
-    HasInitChannelOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasChannelOpenConfirmPayloadType<Self> + HasIbcChainTypes<Self>,
 {
