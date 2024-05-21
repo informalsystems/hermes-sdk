@@ -1,13 +1,13 @@
 use core::fmt::Debug;
 
-use cgp_core::{CanRaiseError, HasErrorType};
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use crate::chain::traits::send_message::CanSendSingleMessage;
 use crate::chain::traits::types::channel::HasInitChannelOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::channel::open_init::ChannelInitializer;
 
 /**

@@ -5,7 +5,8 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, ProvideEncodingType,
 };
 use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
+    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
+    ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, ProvideClientStateType,
@@ -206,15 +207,27 @@ where
     type ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
     for SolomachineChainComponents
 where
     Chain: Async,
 {
     type ChannelOpenTryPayload = SolomachineChannelOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ChannelOpenAckPayload = SolomachineChannelOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload;
 }
 

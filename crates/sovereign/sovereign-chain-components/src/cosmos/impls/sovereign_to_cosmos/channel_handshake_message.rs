@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::CosmosMessage;
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;

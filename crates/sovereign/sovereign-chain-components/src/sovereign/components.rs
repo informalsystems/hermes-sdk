@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::connection_payload::ProvideConnectionPayloadTypes;
-use hermes_relayer_components::chain::impls::forward::message_builders::channel_handshake::ForwardChannelHandshakeBuilder;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;

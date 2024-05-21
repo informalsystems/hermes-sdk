@@ -1,5 +1,3 @@
-use cgp_core::async_trait;
-
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenAckMessage;
 use crate::chain::traits::payload_builders::channel_handshake::CanBuildChannelOpenAckPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
