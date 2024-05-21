@@ -1,6 +1,7 @@
 use cgp_core::prelude::Async;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
+    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
+    ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
@@ -106,15 +107,27 @@ where
     type InitChannelOptions = SovereignInitChannelOptions;
 }
 
-impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
     for ProvideSovereignPayloadTypes
 where
     Chain: Async,
 {
     type ChannelOpenTryPayload = SovereignChannelOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
     type ChannelOpenAckPayload = SovereignChannelOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
+    for ProvideSovereignPayloadTypes
+where
+    Chain: Async,
+{
     type ChannelOpenConfirmPayload = SovereignChannelOpenConfirmPayload;
 }
 

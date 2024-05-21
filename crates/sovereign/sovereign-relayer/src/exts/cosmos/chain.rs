@@ -1,7 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelHandshakeMessages;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
@@ -59,7 +58,6 @@ pub trait CanUseCosmosChainWithSovereign:
     + CanBuildUpdateClientPayload<SovereignChain>
     + HasClientStateFields<SovereignChain>
     + HasInitChannelOptionsType<SovereignChain>
-    + CanBuildChannelHandshakeMessages<SovereignChain>
     + HasCounterpartyMessageHeight<SovereignChain>
 {
 }

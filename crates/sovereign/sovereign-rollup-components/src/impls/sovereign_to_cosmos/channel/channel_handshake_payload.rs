@@ -1,6 +1,4 @@
 use cgp_core::HasErrorType;
-use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilder;
-use hermes_relayer_components::chain::traits::types::channel::HasChannelHandshakePayloadTypes;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};

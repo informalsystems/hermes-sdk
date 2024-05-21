@@ -6,7 +6,6 @@ use hermes_relayer_components::chain::impls::forward::queries::client_state::For
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state_height::ForwardQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelHandshakeMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
@@ -18,7 +17,6 @@ use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPr
 use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
     ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
@@ -31,7 +29,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{Consens
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelHandshakePayloadTypeComponent, InitChannelOptionsTypeComponent,
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent, InitChannelOptionsTypeComponent
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent,
@@ -73,7 +71,6 @@ use hermes_relayer_components::chain::impls::connection_payload::BuildConnection
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFromSovereignMessage;
 
-use crate::sovereign::impls::sovereign_to_cosmos::channel::channel_handshake_payload::BuildSovereignChannelHandshakePayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
 use crate::sovereign::impls::types::chain::ProvideSovereignChainTypes;
@@ -113,7 +110,9 @@ delegate_components! {
             InitConnectionOptionsTypeComponent,
 
             InitChannelOptionsTypeComponent,
-            ChannelHandshakePayloadTypeComponent,
+            ChannelOpenTryPayloadTypeComponent,
+            ChannelOpenAckPayloadTypeComponent,
+            ChannelOpenConfirmPayloadTypeComponent,
         ]:
             ProvideSovereignPayloadTypes,
         [
@@ -164,11 +163,6 @@ delegate_components! {
             ConnectionOpenConfirmMessageBuilderComponent,
         ]:
             BuildCosmosConnectionHandshakeMessageOnSovereign,
-
-        ChannelHandshakePayloadBuilderComponent:
-            BuildSovereignChannelHandshakePayload,
-        ChannelHandshakeMessageBuilderComponent:
-            ForwardChannelHandshakeBuilder,
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
