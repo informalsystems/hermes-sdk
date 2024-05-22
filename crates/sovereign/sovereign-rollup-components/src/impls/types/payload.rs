@@ -1,8 +1,5 @@
 use cgp_core::prelude::Async;
-use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
-    ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
-};
+use hermes_relayer_components::chain::traits::types::channel::ProvideInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,

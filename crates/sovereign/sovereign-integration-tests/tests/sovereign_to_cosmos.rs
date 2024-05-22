@@ -283,17 +283,17 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         let port_id = PortId::transfer();
         let counterparty_port_id = PortId::transfer();
 
-        // let channel_init_message = <CosmosChain as CanBuildChannelOpenInitMessage<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &port_id, &counterparty_port_id, &options).await?;
+        let channel_init_message = <CosmosChain as CanBuildChannelOpenInitMessage<SovereignChain>>::build_channel_open_init_message(cosmos_chain, &port_id, &counterparty_port_id, &options).await?;
 
-        // let events = cosmos_chain.send_message(channel_init_message).await?;
+        let events = cosmos_chain.send_message(channel_init_message).await?;
 
-        // let channel_init_event = events.into_iter()
-        //     .find_map(<CosmosChain as HasChannelOpenInitEvent<CosmosChain>>::try_extract_channel_open_init_event)
-        //     .ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
+        let channel_init_event = events.into_iter()
+            .find_map(<CosmosChain as HasChannelOpenInitEvent<CosmosChain>>::try_extract_channel_open_init_event)
+            .ok_or_else(|| eyre!("Could not extract Celestia create client event"))?;
 
-        // let channel_id = channel_init_event.channel_id;
+        let channel_id = channel_init_event.channel_id;
 
-        // info!("Retrieved Channel ID from Channel Open Init event: {channel_id}");
+        info!("Retrieved Channel ID from Channel Open Init event: {channel_id}");
 
         // let rollup_target_height = rollup.query_chain_height().await?;
 
