@@ -12,9 +12,8 @@ use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofTy
 use hermes_relayer_components::chain::types::channel_payload::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
-use ibc_relayer_types::core::ics04_channel::channel::{
-    ChannelEnd, Counterparty as ChannelCounterparty, State,
-};
+use ibc::core::channel::types::channel::{ChannelEnd, State};
+use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::Height;
 
@@ -47,19 +46,25 @@ where
     ) -> Result<CosmosMessage, Chain::Error> {
         let port_id = port_id.clone();
         let ordering = init_channel_options.ordering;
-        let connection_hops = init_channel_options.connection_hops.clone();
-        let channel_version = init_channel_options.channel_version.clone();
 
-        let counterparty = ChannelCounterparty::new(counterparty_port_id.clone(), None);
+        let connection_hops = init_channel_options
+            .connection_hops
+            .iter()
+            .map(ToString::to_string)
+            .collect();
+        let channel_version = init_channel_options.channel_version.to_string();
 
-        let channel = ChannelEnd::new(
-            State::Init,
-            ordering,
-            counterparty,
+        let channel = Channel {
+            state: State::Init as i32,
+            ordering: ordering as i32,
+            counterparty: Some(ChannelCounterparty {
+                port_id: counterparty_port_id.to_string(),
+                channel_id: "".to_string(),
+            }),
             connection_hops,
-            channel_version,
-            0,
-        );
+            version: channel_version,
+            upgrade_sequence: 0,
+        };
 
         let message = CosmosChannelOpenInitMessage {
             port_id: port_id.to_string(),
@@ -97,23 +102,26 @@ where
     ) -> Result<CosmosMessage, Chain::Error> {
         let port_id = port_id.clone();
 
-        let counterparty = ChannelCounterparty::new(
-            counterparty_port_id.clone(),
-            Some(counterparty_channel_id.clone()),
-        );
-
         let ordering = payload.channel_end.ordering;
-        let connection_hops = payload.channel_end.connection_hops.clone();
-        let version = payload.channel_end.version.clone();
+        let connection_hops = payload
+            .channel_end
+            .connection_hops
+            .iter()
+            .map(ToString::to_string)
+            .collect();
+        let version = payload.channel_end.version.to_string();
 
-        let channel = ChannelEnd::new(
-            State::TryOpen,
-            ordering,
-            counterparty,
+        let channel = Channel {
+            state: State::TryOpen as i32,
+            ordering: ordering as i32,
+            counterparty: Some(ChannelCounterparty {
+                port_id: counterparty_port_id.to_string(),
+                channel_id: counterparty_channel_id.to_string(),
+            }),
             connection_hops,
-            version.clone(),
-            0,
-        );
+            version: version.clone(),
+            upgrade_sequence: 0,
+        };
 
         let message = CosmosChannelOpenTryMessage {
             port_id: port_id.to_string(),
