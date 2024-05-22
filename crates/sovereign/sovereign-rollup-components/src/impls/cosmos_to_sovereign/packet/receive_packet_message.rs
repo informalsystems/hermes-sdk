@@ -1,5 +1,4 @@
 use cgp_core::HasErrorType;
-
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::types::messages::packet::receive::CosmosReceivePacketMessage;
 use hermes_cosmos_chain_components::types::payloads::packet::CosmosReceivePacketPayload;

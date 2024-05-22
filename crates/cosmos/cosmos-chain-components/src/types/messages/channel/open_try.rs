@@ -1,6 +1,5 @@
 use ibc_proto::google::protobuf::Any;
-use ibc_proto::ibc::core::channel::v1::Channel;
-use ibc_proto::ibc::core::channel::v1::MsgChannelOpenTry as ProtoMsgChannelOpenTry;
+use ibc_proto::ibc::core::channel::v1::{Channel, MsgChannelOpenTry as ProtoMsgChannelOpenTry};
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 

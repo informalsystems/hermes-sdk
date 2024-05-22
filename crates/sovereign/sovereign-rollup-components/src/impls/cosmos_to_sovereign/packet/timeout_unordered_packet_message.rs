@@ -1,5 +1,4 @@
 use cgp_core::HasErrorType;
-
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
 use hermes_cosmos_chain_components::types::messages::packet::timeout::CosmosTimeoutPacketMessage;
 use hermes_cosmos_chain_components::types::payloads::packet::CosmosTimeoutUnorderedPacketPayload;

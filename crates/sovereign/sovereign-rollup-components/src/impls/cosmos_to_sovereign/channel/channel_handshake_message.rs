@@ -1,5 +1,4 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-
 use hermes_cosmos_chain_components::methods::encode::encode_to_any;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
@@ -16,11 +15,10 @@ use hermes_relayer_components::chain::types::channel_payload::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
 use ibc::core::channel::types::channel::{ChannelEnd, State};
-use ibc_proto::ibc::core::channel::v1::MsgChannelOpenAck;
-use ibc_proto::ibc::core::channel::v1::MsgChannelOpenConfirm;
-use ibc_proto::ibc::core::channel::v1::MsgChannelOpenInit;
-use ibc_proto::ibc::core::channel::v1::MsgChannelOpenTry;
-use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
+use ibc_proto::ibc::core::channel::v1::{
+    Channel, Counterparty as ChannelCounterparty, MsgChannelOpenAck, MsgChannelOpenConfirm,
+    MsgChannelOpenInit, MsgChannelOpenTry,
+};
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};

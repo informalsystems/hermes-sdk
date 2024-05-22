@@ -1,4 +1,3 @@
-use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
 use cgp_core::prelude::delegate_components;
 use hermes_relayer_components::chain::impls::channel_payload::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
@@ -101,8 +100,9 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
 };
@@ -138,6 +138,7 @@ use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
 use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;

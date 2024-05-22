@@ -7,13 +7,13 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::HasChainHomeDir;
+use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerier;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use serde::Deserialize;
 
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::chain::types::proposal_status::ProposalStatus;
 use crate::chain_driver::traits::rpc_port::HasRpcPort;
-use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerier;
 
 pub struct QueryProposalStatusWithChainCommand;
 

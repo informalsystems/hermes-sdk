@@ -109,8 +109,9 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
 };

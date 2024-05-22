@@ -1,11 +1,10 @@
 use hermes_cosmos_relayer::types::error::Error;
 use ibc_proto::google::protobuf::Any;
+pub use ibc_proto::ibc::lightclients::solomachine::v3::ConsensusState as ProtoSolomachineConsensusState;
 use ibc_proto::Protobuf;
 use ibc_relayer_types::keys::ROUTER_KEY;
 use ibc_relayer_types::tx_msg::Msg;
 use prost::Message;
-
-pub use ibc_proto::ibc::lightclients::solomachine::v3::ConsensusState as ProtoSolomachineConsensusState;
 
 use crate::methods::encode::public_key::{
     decode_public_key_from_any, encode_public_key, PublicKey,

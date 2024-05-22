@@ -6,8 +6,9 @@ use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideAnyRaw
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
-use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
-use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetterComponent;
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    CommitmentPrefixTypeComponent, IbcCommitmentPrefixGetterComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
@@ -57,13 +58,15 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightFieldComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightIncrementerComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
-use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenInitEventComponent;
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::ConnectionOpenTryEventComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::ibc::{
+    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+};
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
+    ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
+};
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;

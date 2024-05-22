@@ -1,6 +1,7 @@
 #![recursion_limit = "256"]
 
 use core::time::Duration;
+use std::env::var;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -39,11 +40,9 @@ use ibc::core::connection::types::version::Version;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use sha2::Digest;
-use sha2::Sha256;
+use sha2::{Digest, Sha256};
 use sov_celestia_client::types::client_state::test_util::TendermintParamsConfig;
 use sov_celestia_client::types::sovereign::SovereignParamsConfig;
-use std::env::var;
 use tokio::runtime::Builder;
 use tokio::time::sleep;
 

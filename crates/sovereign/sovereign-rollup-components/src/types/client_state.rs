@@ -4,7 +4,6 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
-
 pub use sov_celestia_client::types::client_state::SovTmClientState as SovereignClientState;
 pub use sov_celestia_client::types::proto::v1::ClientState as ProtoSovereignClientState;
 
