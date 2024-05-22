@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::{CanRaiseError, HasErrorType};
 
 use hermes_cosmos_chain_components::methods::encode::encode_to_any;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
@@ -9,6 +9,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelEndType, HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType,
     HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
 };
+use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::types::channel_payload::{
@@ -21,6 +22,7 @@ use ibc_proto::ibc::core::channel::v1::MsgChannelOpenInit;
 use ibc_proto::ibc::core::channel::v1::MsgChannelOpenTry;
 use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
+use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::signer::Signer;
 
@@ -92,21 +94,21 @@ where
             Message = SovereignMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-            Height = RollupHeight,
-        > + HasChannelEndType<Counterparty, ChannelEnd = ChannelEnd>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
-        + HasErrorType,
+        > + CanRaiseError<Ics02Error>,
     Counterparty: HasChannelOpenTryPayloadType<
             Rollup,
-            ChannelOpenTryPayload = ChannelOpenTryPayload<Rollup, Counterparty>,
-        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
+            ChannelOpenTryPayload = ChannelOpenTryPayload<Counterparty, Rollup>,
+        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>
+        + HasChannelEndType<Rollup, ChannelEnd = ChannelEnd>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasHeightFields,
 {
     async fn build_channel_open_try_message(
         _rollup: &Rollup,
         port_id: &Rollup::PortId,
         counterparty_port_id: &Counterparty::PortId,
         counterparty_channel_id: &Counterparty::ChannelId,
-        payload: ChannelOpenTryPayload<Rollup, Counterparty>,
+        payload: ChannelOpenTryPayload<Counterparty, Rollup>,
     ) -> Result<SovereignMessage, Rollup::Error> {
         let ordering = payload.channel_end.ordering;
         let connection_hops = payload
@@ -135,8 +137,8 @@ where
             channel: channel.into(),
             counterparty_version: version.to_string(),
             proof_height: Some(ProtoHeight {
-                revision_number: 0,
-                revision_height: payload.update_height.slot_number,
+                revision_number: Counterparty::revision_number(&payload.update_height),
+                revision_height: Counterparty::revision_height(&payload.update_height),
             }),
             proof_init: payload.proof_init,
             signer: Signer::dummy().to_string(),
@@ -158,20 +160,21 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
             Height = RollupHeight,
-        > + HasChannelEndType<Counterparty, ChannelEnd = ChannelEnd>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
-        + HasErrorType,
+        > + CanRaiseError<Ics02Error>,
     Counterparty: HasChannelOpenAckPayloadType<
             Rollup,
-            ChannelOpenAckPayload = ChannelOpenAckPayload<Rollup, Counterparty>,
-        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
+            ChannelOpenAckPayload = ChannelOpenAckPayload<Counterparty, Rollup>,
+        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>
+        + HasChannelEndType<Rollup, ChannelEnd = ChannelEnd>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasHeightFields,
 {
     async fn build_channel_open_ack_message(
         _rollup: &Rollup,
         port_id: &Rollup::PortId,
         channel_id: &Rollup::ChannelId,
         counterparty_channel_id: &Counterparty::ChannelId,
-        payload: ChannelOpenAckPayload<Rollup, Counterparty>,
+        payload: ChannelOpenAckPayload<Counterparty, Rollup>,
     ) -> Result<SovereignMessage, Rollup::Error> {
         let proto_message = MsgChannelOpenAck {
             port_id: port_id.to_string(),
@@ -179,8 +182,8 @@ where
             counterparty_channel_id: counterparty_channel_id.to_string(),
             counterparty_version: payload.channel_end.version.to_string(),
             proof_height: Some(ProtoHeight {
-                revision_number: 0,
-                revision_height: payload.update_height.slot_number,
+                revision_number: Counterparty::revision_number(&payload.update_height),
+                revision_height: Counterparty::revision_height(&payload.update_height),
             }),
             proof_try: payload.proof_try,
             signer: Signer::dummy().to_string(),
@@ -201,25 +204,26 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
             Height = RollupHeight,
-        > + HasCommitmentProofType<CommitmentProof = Vec<u8>>
-        + HasErrorType,
+        > + HasErrorType,
     Counterparty: HasChannelOpenConfirmPayloadType<
             Rollup,
-            ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Rollup>,
-        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>,
+            ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Counterparty>,
+        > + HasIbcChainTypes<Rollup, ChannelId = ChannelId, PortId = PortId>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasHeightFields,
 {
     async fn build_channel_open_confirm_message(
         _rollup: &Rollup,
         port_id: &Rollup::PortId,
         channel_id: &Rollup::ChannelId,
-        payload: ChannelOpenConfirmPayload<Rollup>,
+        payload: ChannelOpenConfirmPayload<Counterparty>,
     ) -> Result<SovereignMessage, Rollup::Error> {
         let proto_message = MsgChannelOpenConfirm {
             port_id: port_id.to_string(),
             channel_id: channel_id.to_string(),
             proof_height: Some(ProtoHeight {
-                revision_number: 0,
-                revision_height: payload.update_height.slot_number,
+                revision_number: Counterparty::revision_number(&payload.update_height),
+                revision_height: Counterparty::revision_height(&payload.update_height),
             }),
             proof_ack: payload.proof_ack,
             signer: Signer::dummy().to_string(),

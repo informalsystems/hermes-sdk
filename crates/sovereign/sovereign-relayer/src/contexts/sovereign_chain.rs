@@ -10,7 +10,9 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenTryMessage;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage, CanBuildChannelOpenTryMessage,
+};
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
@@ -211,7 +213,9 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenTryMessage<CosmosChain>
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
-    // + CanBuildChannelOpenTryMessage<CosmosChain>
+    + CanBuildChannelOpenTryMessage<CosmosChain>
+    + CanBuildChannelOpenAckMessage<CosmosChain>
+    + CanBuildChannelOpenConfirmMessage<CosmosChain>
     + HasInitChannelOptionsType<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
