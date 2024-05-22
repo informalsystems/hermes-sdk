@@ -84,6 +84,8 @@ where
             .query_consensus_state_with_proofs(client_id, &consensus_state_height, height)
             .await?;
 
+        // TODO: validate client and connection states
+
         let update_height = Chain::increment_height(height)?;
 
         let payload = ConnectionOpenTryPayload {
@@ -139,6 +141,8 @@ where
             .query_consensus_state_with_proofs(client_id, &consensus_state_height, height)
             .await?;
 
+        // TODO: validate client and connection states
+
         let update_height = Chain::increment_height(height)?;
 
         let payload = ConnectionOpenAckPayload {
@@ -177,6 +181,8 @@ where
         let (_, connection_proofs) = chain
             .query_connection_end_with_proofs(connection_id, height)
             .await?;
+
+        // TODO: validate connection state
 
         let update_height = Chain::increment_height(height)?;
 
