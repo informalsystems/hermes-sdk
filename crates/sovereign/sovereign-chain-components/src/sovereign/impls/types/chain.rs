@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
+use hermes_relayer_components::chain::traits::types::channel::ChannelEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -32,6 +33,7 @@ delegate_components! {
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             ConnectionEndTypeComponent,
+            ChannelEndTypeComponent,
         ]:
             ProvideSovereignRollupTypes,
 

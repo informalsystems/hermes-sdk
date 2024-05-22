@@ -10,6 +10,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenTryMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
@@ -35,11 +36,15 @@ use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, Me
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
-use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
+use hermes_relayer_components::chain::traits::types::channel::{
+    HasChannelEndType, HasInitChannelOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
 };
-use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
+use hermes_relayer_components::chain::traits::types::connection::{
+    HasConnectionEndType, HasInitConnectionOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientOptionsType,
@@ -51,6 +56,8 @@ use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessage
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     HasConnectionOpenInitEvent, HasConnectionOpenTryEvent,
 };
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -69,6 +76,8 @@ use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsens
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
+use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
@@ -168,6 +177,8 @@ pub trait CanUseSovereignChain:
     + HasChainIdType
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightFields<Height = RollupHeight>
+    + HasMessageType<Message = SovereignMessage>
+    + HasCommitmentProofType<CommitmentProof = Vec<u8>>
     + CanIncrementHeight
     + CanSendMessages
     + CanQueryChainStatus
@@ -175,6 +186,8 @@ pub trait CanUseSovereignChain:
     + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
     + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
+    + HasConnectionEndType<CosmosChain, ConnectionEnd = ConnectionEnd>
+    + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildCreateClientMessage<CosmosChain>
@@ -198,6 +211,7 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenTryMessage<CosmosChain>
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
+    // + CanBuildChannelOpenTryMessage<CosmosChain>
     + HasInitChannelOptionsType<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
