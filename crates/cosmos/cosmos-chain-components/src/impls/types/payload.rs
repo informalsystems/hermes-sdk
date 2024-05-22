@@ -1,5 +1,5 @@
 use cgp_core::{delegate_components, Async};
-use hermes_relayer_components::chain::impls::connection_payload::ProvideConnectionPayloadTypes;
+use hermes_relayer_components::chain::impls::types::connection_payload::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
     ProvideChannelOpenTryPayloadType,
