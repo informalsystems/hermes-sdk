@@ -52,6 +52,7 @@ where
             .iter()
             .map(ToString::to_string)
             .collect();
+
         let channel_version = init_channel_options.channel_version.to_string();
 
         let channel = Channel {
@@ -100,8 +101,6 @@ where
         counterparty_channel_id: &Counterparty::ChannelId,
         payload: ChannelOpenTryPayload<Chain, Counterparty>,
     ) -> Result<CosmosMessage, Chain::Error> {
-        let port_id = port_id.clone();
-
         let ordering = payload.channel_end.ordering;
         let connection_hops = payload
             .channel_end
