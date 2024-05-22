@@ -1,7 +1,6 @@
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::MsgChannelOpenAck as ProtoMsgChannelOpenAck;
 use ibc_relayer_types::core::ics04_channel::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
@@ -18,7 +17,7 @@ pub struct CosmosChannelOpenAckMessage {
     pub counterparty_channel_id: ChannelId,
     pub counterparty_version: Version,
     pub update_height: Height,
-    pub proof_try: CommitmentProofBytes,
+    pub proof_try: Vec<u8>,
 }
 
 impl DynCosmosMessage for CosmosChannelOpenAckMessage {

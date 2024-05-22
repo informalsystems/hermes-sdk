@@ -112,7 +112,7 @@ where
             channel,
             counterparty_version: version,
             update_height: counterparty_payload.update_height,
-            proof_init: counterparty_payload.proof_init,
+            proof_init: counterparty_payload.proof_init.into(),
         };
 
         let cosmos_msg = msg.to_cosmos_message();
@@ -147,7 +147,7 @@ where
             counterparty_channel_id: counterparty_channel_id.clone(),
             counterparty_version: counterparty_payload.version,
             update_height: counterparty_payload.update_height,
-            proof_try: counterparty_payload.proof_try,
+            proof_try: counterparty_payload.proof_try.into(),
         };
 
         let cosmos_msg = msg.to_cosmos_message();
@@ -181,7 +181,7 @@ where
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
             update_height: counterparty_payload.update_height,
-            proof_ack: counterparty_payload.proof_ack,
+            proof_ack: counterparty_payload.proof_ack.into(),
         };
 
         let cosmos_msg = msg.to_cosmos_message();

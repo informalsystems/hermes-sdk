@@ -113,7 +113,7 @@ where
             counterparty_channel_id: counterparty_channel_id.clone(),
             counterparty_version: counterparty_payload.version,
             update_height: counterparty_payload.update_height,
-            proof_try: counterparty_payload.proof_try,
+            proof_try: counterparty_payload.proof_try.into(),
         };
 
         Ok(message.to_cosmos_message())

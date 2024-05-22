@@ -2,7 +2,6 @@ use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::MsgChannelOpenTry as ProtoMsgChannelOpenTry;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
@@ -18,7 +17,7 @@ pub struct CosmosChannelOpenTryMessage {
     pub channel: ChannelEnd,
     pub counterparty_version: Version,
     pub update_height: Height,
-    pub proof_init: CommitmentProofBytes,
+    pub proof_init: Vec<u8>,
 }
 
 impl DynCosmosMessage for CosmosChannelOpenTryMessage {
