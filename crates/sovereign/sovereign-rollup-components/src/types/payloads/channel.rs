@@ -8,15 +8,3 @@ pub struct SovereignInitChannelOptions {
     pub connection_hops: Vec<ConnectionId>,
     pub channel_version: Version,
 }
-
-pub struct SovereignChannelOpenTryRollupPayload {
-    // TODO: fill in fields
-}
-
-pub struct SovereignChannelOpenAckRollupPayload {
-    // TODO: fill in fields
-}
-
-pub struct SovereignChannelOpenConfirmRollupPayload {
-    // TODO: fill in fields
-}

@@ -1,10 +1,4 @@
 use alloc::sync::Arc;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
-use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
-use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
-use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
-use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
-use hermes_wasm_test_components::traits::bootstrap::client_code_path::WasmClientCodePathGetter;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -24,6 +18,8 @@ use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::{
     CanUseCosmosSdkChainBootstrapper, CosmosSdkBootstrapComponents, IsCosmosSdkBootstrapComponent,
 };
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
@@ -40,6 +36,10 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
+use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
+use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
+use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
+use hermes_wasm_test_components::traits::bootstrap::client_code_path::WasmClientCodePathGetter;
 use ibc_relayer::config::compat_mode::CompatMode;
 
 /**

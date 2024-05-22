@@ -1,6 +1,6 @@
+use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use alloc::vec::Vec;
 use cgp_core::{DelegateComponent, HasErrorType};
 
 use crate::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;

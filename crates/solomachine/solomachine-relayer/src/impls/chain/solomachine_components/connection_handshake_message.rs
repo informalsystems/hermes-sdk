@@ -1,22 +1,21 @@
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionOpenAckMessageBuilder;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionOpenConfirmMessageBuilder;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionOpenInitMessageBuilder;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::ConnectionOpenTryMessageBuilder;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
+    ConnectionOpenInitMessageBuilder, ConnectionOpenTryMessageBuilder,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionEndType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionOpenAckPayloadType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionOpenConfirmPayloadType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionOpenInitPayloadType;
-use hermes_relayer_components::chain::traits::types::connection::HasConnectionOpenTryPayloadType;
-use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
+use hermes_relayer_components::chain::traits::types::connection::{
+    HasConnectionEndType, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
+    HasInitConnectionOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use hermes_relayer_components::chain::types::connection_payload::ConnectionOpenAckPayload;
-use hermes_relayer_components::chain::types::connection_payload::ConnectionOpenConfirmPayload;
-use hermes_relayer_components::chain::types::connection_payload::ConnectionOpenInitPayload;
-use hermes_relayer_components::chain::types::connection_payload::ConnectionOpenTryPayload;
+use hermes_relayer_components::chain::types::connection_payload::{
+    ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
+    ConnectionOpenTryPayload,
+};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::types::message::SolomachineMessage;

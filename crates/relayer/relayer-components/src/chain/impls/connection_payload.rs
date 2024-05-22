@@ -1,6 +1,6 @@
 use cgp_core::HasErrorType;
 
-use crate::chain::traits::commitment_prefix::{HasCommitmentPrefixType, HasIbcCommitmentPrefix};
+use crate::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use crate::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
@@ -10,58 +10,17 @@ use crate::chain::traits::queries::connection_end::CanQueryConnectionEndWithProo
 use crate::chain::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
 use crate::chain::traits::types::client_state::{HasClientStateFields, HasClientStateType};
 use crate::chain::traits::types::connection::{
-    HasConnectionEndType, HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
+    HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
-    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
-    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
 };
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
-use crate::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::proof::HasCommitmentProofType;
 use crate::chain::types::connection_payload::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };
-
-pub struct ProvideConnectionPayloadTypes;
-
-impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
-    for ProvideConnectionPayloadTypes
-where
-    Chain: HasCommitmentPrefixType,
-{
-    type ConnectionOpenInitPayload = ConnectionOpenInitPayload<Chain>;
-}
-
-impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
-    for ProvideConnectionPayloadTypes
-where
-    Chain: HasCommitmentPrefixType
-        + HasCommitmentProofType
-        + HasHeightType
-        + HasConnectionEndType<Counterparty>,
-    Counterparty: HasClientStateType<Chain> + HasHeightType,
-{
-    type ConnectionOpenTryPayload = ConnectionOpenTryPayload<Chain, Counterparty>;
-}
-
-impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
-    for ProvideConnectionPayloadTypes
-where
-    Chain: HasCommitmentProofType + HasHeightType + HasConnectionEndType<Counterparty>,
-    Counterparty: HasClientStateType<Chain> + HasHeightType,
-{
-    type ConnectionOpenAckPayload = ConnectionOpenAckPayload<Chain, Counterparty>;
-}
-
-impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
-    for ProvideConnectionPayloadTypes
-where
-    Chain: HasCommitmentProofType + HasHeightType,
-{
-    type ConnectionOpenConfirmPayload = ConnectionOpenConfirmPayload<Chain>;
-}
 
 pub struct BuildConnectionHandshakePayload;
 
@@ -125,6 +84,8 @@ where
             .query_consensus_state_with_proofs(client_id, &consensus_state_height, height)
             .await?;
 
+        // TODO: validate client and connection states
+
         let update_height = Chain::increment_height(height)?;
 
         let payload = ConnectionOpenTryPayload {
@@ -180,6 +141,8 @@ where
             .query_consensus_state_with_proofs(client_id, &consensus_state_height, height)
             .await?;
 
+        // TODO: validate client and connection states
+
         let update_height = Chain::increment_height(height)?;
 
         let payload = ConnectionOpenAckPayload {
@@ -218,6 +181,8 @@ where
         let (_, connection_proofs) = chain
             .query_connection_end_with_proofs(connection_id, height)
             .await?;
+
+        // TODO: validate connection state
 
         let update_height = Chain::increment_height(height)?;
 

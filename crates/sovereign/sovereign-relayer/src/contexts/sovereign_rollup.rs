@@ -64,10 +64,9 @@ use hermes_relayer_components::chain::traits::send_message::{
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
-use hermes_relayer_components::chain::traits::types::channel::InitChannelOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
-    ChannelOpenTryPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent, InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, HasClientStateType,
@@ -88,9 +87,8 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
-use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, IbcChainTypesComponent,
+    CounterpartyMessageHeightGetterComponent, HasCounterpartyMessageHeight, IbcChainTypesComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, HasConnectionOpenInitEvent,

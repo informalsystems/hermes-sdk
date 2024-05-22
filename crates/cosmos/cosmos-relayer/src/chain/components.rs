@@ -52,6 +52,9 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 };
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
@@ -83,8 +86,9 @@ use hermes_relayer_components::chain::traits::types::block::{
 };
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
-    ChannelOpenTryPayloadTypeComponent, InitChannelOptionsTypeComponent,
+    ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
@@ -105,8 +109,9 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
 };
@@ -232,9 +237,15 @@ delegate_components! {
             RawConsensusStateTypeComponent,
             ConsensusStateTypeComponent,
             IbcChainTypesComponent,
+
             ConnectionEndQuerierComponent,
             ConnectionEndWithProofsQuerierComponent,
             ConnectionEndTypeComponent,
+
+            ChannelEndQuerierComponent,
+            ChannelEndWithProofsQuerierComponent,
+            ChannelEndTypeComponent,
+
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,

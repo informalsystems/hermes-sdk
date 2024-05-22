@@ -1,17 +1,23 @@
-use cgp_core::HasErrorType;
+use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
-    HasInitChannelOptionsType,
+    HasChannelEndType, HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType,
+    HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
 };
+use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_types::core::ics04_channel::channel::{
-    ChannelEnd, Counterparty as ChannelCounterparty, State,
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::types::channel_payload::{
+    ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
+use ibc::core::channel::types::channel::{ChannelEnd, State};
+use ibc_proto::ibc::core::channel::v1::{Channel, Counterparty as ChannelCounterparty};
+use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
+use ibc_relayer_types::Height;
 
 use crate::traits::message::{CosmosMessage, ToCosmosMessage};
 use crate::types::channel::CosmosInitChannelOptions;
@@ -19,9 +25,6 @@ use crate::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
 use crate::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
 use crate::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use crate::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
-use crate::types::payloads::channel::{
-    CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
-};
 
 pub struct BuildCosmosChannelHandshakeMessage;
 
@@ -45,21 +48,31 @@ where
     ) -> Result<CosmosMessage, Chain::Error> {
         let port_id = port_id.clone();
         let ordering = init_channel_options.ordering;
-        let connection_hops = init_channel_options.connection_hops.clone();
-        let channel_version = init_channel_options.channel_version.clone();
 
-        let counterparty = ChannelCounterparty::new(counterparty_port_id.clone(), None);
+        let connection_hops = init_channel_options
+            .connection_hops
+            .iter()
+            .map(ToString::to_string)
+            .collect();
 
-        let channel = ChannelEnd::new(
-            State::Init,
-            ordering,
-            counterparty,
+        let channel_version = init_channel_options.channel_version.to_string();
+
+        let channel = Channel {
+            state: State::Init as i32,
+            ordering: ordering as i32,
+            counterparty: Some(ChannelCounterparty {
+                port_id: counterparty_port_id.to_string(),
+                channel_id: "".to_string(),
+            }),
             connection_hops,
-            channel_version,
-            0,
-        );
+            version: channel_version,
+            upgrade_sequence: 0,
+        };
 
-        let message = CosmosChannelOpenInitMessage { port_id, channel };
+        let message = CosmosChannelOpenInitMessage {
+            port_id: port_id.to_string(),
+            channel,
+        };
 
         Ok(message.to_cosmos_message())
     }
@@ -73,41 +86,57 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + CanRaiseError<Ics02Error>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
-        + HasChannelOpenTryPayloadType<Chain, ChannelOpenTryPayload = CosmosChannelOpenTryPayload>,
+        + HasChannelOpenTryPayloadType<
+            Chain,
+            ChannelOpenTryPayload = ChannelOpenTryPayload<Counterparty, Chain>,
+        > + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasChannelEndType<Chain, ChannelEnd = ChannelEnd>
+        + HasHeightFields,
 {
     async fn build_channel_open_try_message(
         _chain: &Chain,
         port_id: &Chain::PortId,
         counterparty_port_id: &Counterparty::PortId,
         counterparty_channel_id: &Counterparty::ChannelId,
-        counterparty_payload: CosmosChannelOpenTryPayload,
+        payload: ChannelOpenTryPayload<Counterparty, Chain>,
     ) -> Result<CosmosMessage, Chain::Error> {
-        let port_id = port_id.clone();
-        let counterparty = ChannelCounterparty::new(
-            counterparty_port_id.clone(),
-            Some(counterparty_channel_id.clone()),
-        );
-        let ordering = counterparty_payload.ordering;
-        let connection_hops = counterparty_payload.connection_hops.clone();
-        let version = counterparty_payload.version.clone();
+        let ordering = payload.channel_end.ordering as i32;
 
-        let channel = ChannelEnd::new(
-            State::TryOpen,
+        let connection_hops = payload
+            .channel_end
+            .connection_hops
+            .iter()
+            .map(ToString::to_string)
+            .collect();
+
+        let version = payload.channel_end.version.to_string();
+
+        let channel = Channel {
+            state: State::TryOpen as i32,
             ordering,
-            counterparty,
+            counterparty: Some(ChannelCounterparty {
+                port_id: counterparty_port_id.to_string(),
+                channel_id: counterparty_channel_id.to_string(),
+            }),
             connection_hops,
-            version.clone(),
-            0,
-        );
+            version: version.clone(),
+            upgrade_sequence: 0,
+        };
+
+        let update_height = Height::new(
+            Counterparty::revision_number(&payload.update_height),
+            Counterparty::revision_height(&payload.update_height),
+        )
+        .map_err(Chain::raise_error)?;
 
         let message = CosmosChannelOpenTryMessage {
-            port_id,
+            port_id: port_id.to_string(),
             channel,
-            counterparty_version: version,
-            update_height: counterparty_payload.update_height,
-            proof_init: counterparty_payload.proof_init,
+            counterparty_version: version.to_string(),
+            update_height,
+            proof_init: payload.proof_init,
         };
 
         Ok(message.to_cosmos_message())
@@ -122,24 +151,35 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + CanRaiseError<Ics02Error>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
-        + HasChannelOpenAckPayloadType<Chain, ChannelOpenAckPayload = CosmosChannelOpenAckPayload>,
+        + HasChannelOpenAckPayloadType<
+            Chain,
+            ChannelOpenAckPayload = ChannelOpenAckPayload<Counterparty, Chain>,
+        > + HasChannelEndType<Chain, ChannelEnd = ChannelEnd>
+        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasHeightFields,
 {
     async fn build_channel_open_ack_message(
         _chain: &Chain,
         port_id: &Chain::PortId,
         channel_id: &Chain::ChannelId,
         counterparty_channel_id: &Counterparty::ChannelId,
-        counterparty_payload: CosmosChannelOpenAckPayload,
+        payload: ChannelOpenAckPayload<Counterparty, Chain>,
     ) -> Result<CosmosMessage, Chain::Error> {
+        let update_height = Height::new(
+            Counterparty::revision_number(&payload.update_height),
+            Counterparty::revision_height(&payload.update_height),
+        )
+        .map_err(Chain::raise_error)?;
+
         let message = CosmosChannelOpenAckMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            counterparty_channel_id: counterparty_channel_id.clone(),
-            counterparty_version: counterparty_payload.version,
-            update_height: counterparty_payload.update_height,
-            proof_try: counterparty_payload.proof_try,
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            counterparty_channel_id: counterparty_channel_id.to_string(),
+            counterparty_version: payload.channel_end.version.to_string(),
+            update_height,
+            proof_try: payload.proof_try,
         };
 
         Ok(message.to_cosmos_message())
@@ -153,25 +193,33 @@ where
             Counterparty,
             ChannelId = ChannelId,
             PortId = PortId,
+            Height = Height,
             Message = CosmosMessage,
-        > + HasErrorType,
+        > + CanRaiseError<Ics02Error>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenConfirmPayloadType<
             Chain,
-            ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload,
-        >,
+            ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Counterparty>,
+        > + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasHeightFields,
 {
     async fn build_channel_open_confirm_message(
         _chain: &Chain,
         port_id: &Chain::PortId,
         channel_id: &Chain::ChannelId,
-        counterparty_payload: CosmosChannelOpenConfirmPayload,
+        payload: ChannelOpenConfirmPayload<Counterparty>,
     ) -> Result<CosmosMessage, Chain::Error> {
+        let update_height = Height::new(
+            Counterparty::revision_number(&payload.update_height),
+            Counterparty::revision_height(&payload.update_height),
+        )
+        .map_err(Chain::raise_error)?;
+
         let message = CosmosChannelOpenConfirmMessage {
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
-            update_height: counterparty_payload.update_height,
-            proof_ack: counterparty_payload.proof_ack,
+            update_height,
+            proof_ack: payload.proof_ack,
         };
 
         Ok(message.to_cosmos_message())

@@ -1,12 +1,4 @@
 use alloc::collections::BTreeMap;
-use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-use hermes_test_components::chain_driver::traits::proposal::deposit::ProposalDepositerComponent;
-use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPollerComponent;
-use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
-use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
-use hermes_wasm_test_components::components::WasmChainDriverComponents;
-use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
@@ -24,6 +16,8 @@ use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
+use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{
@@ -32,8 +26,14 @@ use hermes_test_components::chain_driver::traits::fields::denom_at::{
 use hermes_test_components::chain_driver::traits::fields::wallet::{
     RelayerWallet, UserWallet, ValidatorWallet, WalletGetterAt, WalletsGetter,
 };
+use hermes_test_components::chain_driver::traits::proposal::deposit::ProposalDepositerComponent;
+use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPollerComponent;
+use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
+use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
 use hermes_test_components::types::index::Index;
+use hermes_wasm_test_components::components::WasmChainDriverComponents;
+use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
 use tokio::process::Child;
 
 /**

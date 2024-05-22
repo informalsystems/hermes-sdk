@@ -31,6 +31,7 @@ hermes-protobuf-encoding-components     = { workspace = true }
 hermes-tracing-logging-components       = { workspace = true }
 hermes-logging-components               = { workspace = true }
 
+ibc                                     = { workspace = true }
 ibc-relayer                             = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
 ibc-proto                               = { workspace = true }

@@ -8,7 +8,7 @@ use crate::chain::traits::types::proof::HasCommitmentProofType;
 
 #[derive_component(ChannelEndQuerierComponent, ChannelEndQuerier<Chain>)]
 #[async_trait]
-pub trait ChanQueryChannelEnd<Counterparty>:
+pub trait CanQueryChannelEnd<Counterparty>:
     HasChannelEndType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType
 {
     async fn query_channel_end(

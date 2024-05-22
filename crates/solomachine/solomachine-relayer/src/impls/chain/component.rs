@@ -11,10 +11,6 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
-use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
-    ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
-    ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
-};
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
@@ -65,7 +61,6 @@ use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
-use crate::impls::chain::solomachine_components::channel_handshake_message::BuildCosmosToSolomachineChannelHandshakeMessage;
 use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::chain::solomachine_components::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
 use crate::impls::chain::solomachine_components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
@@ -162,13 +157,6 @@ delegate_components! {
             ChannelOpenConfirmPayloadBuilderComponent,
         ]:
             BuildSolomachineChannelHandshakePayloads,
-        [
-            ChannelOpenInitMessageBuilderComponent,
-            ChannelOpenTryMessageBuilderComponent,
-            ChannelOpenAckMessageBuilderComponent,
-            ChannelOpenConfirmMessageBuilderComponent,
-        ]:
-            BuildCosmosToSolomachineChannelHandshakeMessage,
         [
             ConnectionOpenInitPayloadBuilderComponent,
             ConnectionOpenTryPayloadBuilderComponent,

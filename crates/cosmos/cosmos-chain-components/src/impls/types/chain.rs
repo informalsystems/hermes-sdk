@@ -1,17 +1,16 @@
 use alloc::sync::Arc;
 use core::time::Duration;
+
+use cgp_core::{delegate_components, Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
 use hermes_relayer_components::chain::impls::types::proof::ProvideCommitmentProofBytes;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
-use ibc::core::connection::types::ConnectionEnd;
-
-use cgp_core::{delegate_components, Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::types::block::{
     HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
 use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
+use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -22,10 +21,13 @@ use hermes_relayer_components::chain::traits::types::message::{
     HasMessageType, MessageSizeEstimator, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, ProvideTimestampType,
 };
+use ibc::core::channel::types::channel::ChannelEnd;
+use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
@@ -198,4 +200,11 @@ where
     Chain: Async,
 {
     type ConnectionEnd = ConnectionEnd;
+}
+
+impl<Chain, Counterparty> ProvideChannelEndType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type ChannelEnd = ChannelEnd;
 }

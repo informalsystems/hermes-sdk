@@ -1,4 +1,5 @@
 use cgp_core::prelude::delegate_components;
+use hermes_relayer_components::chain::impls::channel_payload::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
@@ -43,6 +44,9 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 };
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
@@ -73,8 +77,9 @@ use hermes_relayer_components::chain::traits::types::block::{
 };
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
-    ChannelOpenTryPayloadTypeComponent, InitChannelOptionsTypeComponent,
+    ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
@@ -95,8 +100,9 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
 };
@@ -113,7 +119,6 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::components::delegate::DelegateCosmosChainComponents;
-use crate::impls::channel::channel_handshake_payload::BuildCosmosChannelHandshakePayload;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
 use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
@@ -133,6 +138,7 @@ use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
 use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
+use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
 use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
 use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
@@ -170,6 +176,7 @@ delegate_components! {
             EventTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndTypeComponent,
+            ChannelEndTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
@@ -247,7 +254,7 @@ delegate_components! {
             ChannelOpenAckPayloadBuilderComponent,
             ChannelOpenConfirmPayloadBuilderComponent,
         ]:
-            BuildCosmosChannelHandshakePayload,
+            BuildChannelHandshakePayload,
         PacketCommitmentsQuerierComponent:
             QueryCosmosPacketCommitments,
         ReceivedPacketQuerierComponent:
@@ -295,6 +302,11 @@ delegate_components! {
             ConnectionEndWithProofsQuerierComponent,
         ]:
             QueryCosmosConnectionEndFromAbci,
+        [
+            ChannelEndQuerierComponent,
+            ChannelEndWithProofsQuerierComponent,
+        ]:
+            QueryCosmosChannelEndFromAbci,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,

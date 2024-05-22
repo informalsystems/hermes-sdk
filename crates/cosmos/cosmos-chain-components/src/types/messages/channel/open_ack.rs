@@ -1,8 +1,5 @@
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::MsgChannelOpenAck as ProtoMsgChannelOpenAck;
-use ibc_relayer_types::core::ics04_channel::version::Version;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 
@@ -13,12 +10,12 @@ const TYPE_URL: &str = "/ibc.core.channel.v1.MsgChannelOpenAck";
 
 #[derive(Debug)]
 pub struct CosmosChannelOpenAckMessage {
-    pub port_id: PortId,
-    pub channel_id: ChannelId,
-    pub counterparty_channel_id: ChannelId,
-    pub counterparty_version: Version,
+    pub port_id: String,
+    pub channel_id: String,
+    pub counterparty_channel_id: String,
+    pub counterparty_version: String,
     pub update_height: Height,
-    pub proof_try: CommitmentProofBytes,
+    pub proof_try: Vec<u8>,
 }
 
 impl DynCosmosMessage for CosmosChannelOpenAckMessage {
@@ -28,12 +25,12 @@ impl DynCosmosMessage for CosmosChannelOpenAckMessage {
 
     fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgChannelOpenAck {
-            port_id: self.port_id.to_string(),
-            channel_id: self.channel_id.to_string(),
-            counterparty_channel_id: self.counterparty_channel_id.to_string(),
-            counterparty_version: self.counterparty_version.to_string(),
+            port_id: self.port_id.clone(),
+            channel_id: self.channel_id.clone(),
+            counterparty_channel_id: self.counterparty_channel_id.clone(),
+            counterparty_version: self.counterparty_version.clone(),
             proof_height: Some(self.update_height.into()),
-            proof_try: self.proof_try.clone().into(),
+            proof_try: self.proof_try.clone(),
             signer: signer.to_string(),
         };
 
