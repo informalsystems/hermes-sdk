@@ -27,7 +27,7 @@ impl DynCosmosMessage for CosmosChannelOpenConfirmMessage {
             port_id: self.port_id.to_string(),
             channel_id: self.channel_id.to_string(),
             proof_height: Some(self.update_height.into()),
-            proof_ack: self.proof_ack.clone().into(),
+            proof_ack: self.proof_ack.clone(),
             signer: signer.to_string(),
         };
 

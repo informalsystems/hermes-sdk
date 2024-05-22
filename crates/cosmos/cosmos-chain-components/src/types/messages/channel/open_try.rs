@@ -30,7 +30,7 @@ impl DynCosmosMessage for CosmosChannelOpenTryMessage {
             channel: Some(self.channel.clone()),
             counterparty_version: self.counterparty_version.clone(),
             proof_height: Some(self.update_height.into()),
-            proof_init: self.proof_init.clone().into(),
+            proof_init: self.proof_init.clone(),
             signer: signer.to_string(),
             previous_channel_id: "".to_string(),
         };

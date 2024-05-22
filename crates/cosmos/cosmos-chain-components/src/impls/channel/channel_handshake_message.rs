@@ -71,7 +71,7 @@ where
 
         let message = CosmosChannelOpenInitMessage {
             port_id: port_id.to_string(),
-            channel: channel.into(),
+            channel,
         };
 
         Ok(message.to_cosmos_message())
@@ -133,7 +133,7 @@ where
 
         let message = CosmosChannelOpenTryMessage {
             port_id: port_id.to_string(),
-            channel: channel.into(),
+            channel,
             counterparty_version: version.to_string(),
             update_height,
             proof_init: payload.proof_init,

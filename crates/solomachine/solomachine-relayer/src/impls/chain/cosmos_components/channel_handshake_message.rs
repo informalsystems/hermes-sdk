@@ -89,8 +89,7 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenTryPayload,
     ) -> Result<CosmosMessage, Error> {
-        let proof_init =
-            Vec::from(counterparty_payload.proof_init.serialize_compact()).try_into()?;
+        let proof_init = Vec::from(counterparty_payload.proof_init.serialize_compact());
 
         let counterparty = ChannelCounterparty::new(
             counterparty_port_id.clone(),
@@ -139,7 +138,7 @@ where
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenAckPayload,
     ) -> Result<CosmosMessage, Error> {
-        let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact()).try_into()?;
+        let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact());
 
         let message = CosmosChannelOpenAckMessage {
             port_id: port_id.to_string(),
@@ -174,7 +173,7 @@ where
         channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenConfirmPayload,
     ) -> Result<CosmosMessage, Error> {
-        let proof_ack = Vec::from(counterparty_payload.proof_ack.serialize_compact()).try_into()?;
+        let proof_ack = Vec::from(counterparty_payload.proof_ack.serialize_compact());
 
         let message = CosmosChannelOpenConfirmMessage {
             port_id: port_id.clone(),
