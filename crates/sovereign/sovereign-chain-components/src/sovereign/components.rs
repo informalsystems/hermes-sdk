@@ -110,7 +110,6 @@ delegate_components! {
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
-
             InitChannelOptionsTypeComponent,
             ChannelOpenTryPayloadTypeComponent,
             ChannelOpenAckPayloadTypeComponent,

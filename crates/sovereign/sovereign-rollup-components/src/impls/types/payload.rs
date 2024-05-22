@@ -13,10 +13,7 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTi
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use ibc_relayer::chain::client::ClientSettings;
 
-use crate::types::payloads::channel::{
-    SovereignChannelOpenAckRollupPayload, SovereignChannelOpenConfirmRollupPayload,
-    SovereignChannelOpenTryRollupPayload, SovereignInitChannelOptions,
-};
+use crate::types::payloads::channel::SovereignInitChannelOptions;
 use crate::types::payloads::client::{SovereignCreateClientPayload, SovereignUpdateClientPayload};
 use crate::types::payloads::connection::SovereignInitConnectionOptions;
 use crate::types::payloads::packet::{
@@ -64,30 +61,6 @@ where
     Chain: Async,
 {
     type InitChannelOptions = SovereignInitChannelOptions;
-}
-
-impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
-    for ProvideSovereignRollupPayloadTypes
-where
-    Chain: Async,
-{
-    type ChannelOpenTryPayload = SovereignChannelOpenTryRollupPayload;
-}
-
-impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
-    for ProvideSovereignRollupPayloadTypes
-where
-    Chain: Async,
-{
-    type ChannelOpenAckPayload = SovereignChannelOpenAckRollupPayload;
-}
-
-impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
-    for ProvideSovereignRollupPayloadTypes
-where
-    Chain: Async,
-{
-    type ChannelOpenConfirmPayload = SovereignChannelOpenConfirmRollupPayload;
 }
 
 impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>

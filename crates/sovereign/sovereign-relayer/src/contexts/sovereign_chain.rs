@@ -11,7 +11,8 @@ use hermes_logging_components::traits::has_logger::{
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
-    CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage, CanBuildChannelOpenTryMessage,
+    CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
+    CanBuildChannelOpenInitMessage, CanBuildChannelOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
@@ -78,6 +79,7 @@ use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsens
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
+use hermes_sovereign_rollup_components::types::payloads::channel::SovereignInitChannelOptions;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -190,6 +192,7 @@ pub trait CanUseSovereignChain:
     + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
     + HasConnectionEndType<CosmosChain, ConnectionEnd = ConnectionEnd>
     + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
+    + HasInitChannelOptionsType<CosmosChain, InitChannelOptions = SovereignInitChannelOptions>
     + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildCreateClientMessage<CosmosChain>
@@ -213,10 +216,10 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenTryMessage<CosmosChain>
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
+    + CanBuildChannelOpenInitMessage<CosmosChain>
     + CanBuildChannelOpenTryMessage<CosmosChain>
     + CanBuildChannelOpenAckMessage<CosmosChain>
     + CanBuildChannelOpenConfirmMessage<CosmosChain>
-    + HasInitChannelOptionsType<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
 {
