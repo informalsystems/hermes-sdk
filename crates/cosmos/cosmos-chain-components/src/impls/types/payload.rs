@@ -1,8 +1,9 @@
 use cgp_core::{delegate_components, Async};
+use hermes_relayer_components::chain::impls::types::channel_payload::ProvideChannelPayloadTypes;
 use hermes_relayer_components::chain::impls::types::connection_payload::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
-    ProvideChannelOpenTryPayloadType,
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
@@ -14,9 +15,6 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 
-use crate::types::payloads::channel::{
-    CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
-};
 use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
 use crate::types::payloads::packet::{
     CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
@@ -33,6 +31,12 @@ delegate_components! {
             ConnectionOpenConfirmPayloadTypeComponent,
         ]:
             ProvideConnectionPayloadTypes,
+        [
+            ChannelOpenTryPayloadTypeComponent,
+            ChannelOpenAckPayloadTypeComponent,
+            ChannelOpenConfirmPayloadTypeComponent,
+        ]:
+            ProvideChannelPayloadTypes,
     }
 }
 
@@ -50,30 +54,6 @@ where
     Chain: Async,
 {
     type UpdateClientPayload = CosmosUpdateClientPayload;
-}
-
-impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
-    for ProvideCosmosPayloadTypes
-where
-    Chain: Async,
-{
-    type ChannelOpenTryPayload = CosmosChannelOpenTryPayload;
-}
-
-impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
-    for ProvideCosmosPayloadTypes
-where
-    Chain: Async,
-{
-    type ChannelOpenAckPayload = CosmosChannelOpenAckPayload;
-}
-
-impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
-    for ProvideCosmosPayloadTypes
-where
-    Chain: Async,
-{
-    type ChannelOpenConfirmPayload = CosmosChannelOpenConfirmPayload;
 }
 
 impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>

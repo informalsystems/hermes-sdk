@@ -3,7 +3,9 @@ use core::time::Duration;
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
 use hermes_relayer_components::chain::impls::types::proof::ProvideCommitmentProofBytes;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
+use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 
 use cgp_core::{delegate_components, Async, CanRaiseError, HasErrorType};
@@ -198,4 +200,11 @@ where
     Chain: Async,
 {
     type ConnectionEnd = ConnectionEnd;
+}
+
+impl<Chain, Counterparty> ProvideChannelEndType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type ChannelEnd = ChannelEnd;
 }

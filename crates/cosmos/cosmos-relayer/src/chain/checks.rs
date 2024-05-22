@@ -1,6 +1,9 @@
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryAllClientStates, CanQueryClientState, CanQueryClientStateWithProofs,
 };
@@ -10,6 +13,7 @@ use hermes_relayer_components::chain::traits::queries::connection_end::{
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithProofs, CanQueryRawConsensusState,
 };
+use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
@@ -21,6 +25,7 @@ use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEve
 use hermes_test_components::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
+use ibc::core::channel::types::channel::ChannelEnd;
 use prost_types::Any;
 
 use crate::contexts::chain::CosmosChain;
@@ -41,8 +46,11 @@ pub trait CanUseCosmosChain:
     + CanQueryAllClientStates<AnyCounterparty>
     + CanBuildUpdateClientMessage<CosmosChain>
     + CanQueryConnectionEnd<CosmosChain>
+    + CanQueryChannelEnd<CosmosChain>
+    + CanQueryChannelEndWithProofs<CosmosChain>
     + CanQueryConnectionEndWithProofs<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = TendermintClientState>
+    + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
     + HasRawClientStateType<RawClientState = Any>
     + CanSubmitTx
     + CanPollTxResponse

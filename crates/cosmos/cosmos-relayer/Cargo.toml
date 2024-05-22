@@ -32,6 +32,7 @@ hermes-cosmos-test-components           = { workspace = true }
 hermes-cli-components                   = { workspace = true }
 hermes-wasm-client-components           = { workspace = true }
 
+ibc                                     = { workspace = true }
 ibc-proto                               = { workspace = true }
 ibc-relayer                             = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
