@@ -1,8 +1,6 @@
 use ibc_proto::google::protobuf::Any;
+use ibc_proto::ibc::core::channel::v1::Channel;
 use ibc_proto::ibc::core::channel::v1::MsgChannelOpenTry as ProtoMsgChannelOpenTry;
-use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
-use ibc_relayer_types::core::ics04_channel::version::Version;
-use ibc_relayer_types::core::ics24_host::identifier::PortId;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 
@@ -13,9 +11,9 @@ const TYPE_URL: &str = "/ibc.core.channel.v1.MsgChannelOpenTry";
 
 #[derive(Debug)]
 pub struct CosmosChannelOpenTryMessage {
-    pub port_id: PortId,
-    pub channel: ChannelEnd,
-    pub counterparty_version: Version,
+    pub port_id: String,
+    pub channel: Channel,
+    pub counterparty_version: String,
     pub update_height: Height,
     pub proof_init: Vec<u8>,
 }
@@ -28,9 +26,9 @@ impl DynCosmosMessage for CosmosChannelOpenTryMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Any {
         #[allow(deprecated)]
         let proto_message = ProtoMsgChannelOpenTry {
-            port_id: self.port_id.to_string(),
-            channel: Some(self.channel.clone().into()),
-            counterparty_version: self.counterparty_version.to_string(),
+            port_id: self.port_id.clone(),
+            channel: Some(self.channel.clone()),
+            counterparty_version: self.counterparty_version.clone(),
             proof_height: Some(self.update_height.into()),
             proof_init: self.proof_init.clone().into(),
             signer: signer.to_string(),

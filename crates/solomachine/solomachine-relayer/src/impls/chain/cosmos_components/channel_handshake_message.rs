@@ -60,8 +60,8 @@ where
         );
 
         let message = CosmosChannelOpenInitMessage {
-            port_id: port_id.clone(),
-            channel,
+            port_id: port_id.to_string(),
+            channel: channel.into(),
         };
 
         Ok(message.to_cosmos_message())
@@ -107,9 +107,9 @@ where
         );
 
         let message = CosmosChannelOpenTryMessage {
-            port_id: port_id.clone(),
-            channel,
-            counterparty_version: counterparty_payload.version,
+            port_id: port_id.to_string(),
+            channel: channel.into(),
+            counterparty_version: counterparty_payload.version.to_string(),
             update_height: counterparty_payload.update_height,
             proof_init,
         };
@@ -142,10 +142,10 @@ where
         let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact()).try_into()?;
 
         let message = CosmosChannelOpenAckMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            counterparty_channel_id: counterparty_channel_id.clone(),
-            counterparty_version: counterparty_payload.version,
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            counterparty_channel_id: counterparty_channel_id.to_string(),
+            counterparty_version: counterparty_payload.version.to_string(),
             update_height: counterparty_payload.update_height,
             proof_try,
         };

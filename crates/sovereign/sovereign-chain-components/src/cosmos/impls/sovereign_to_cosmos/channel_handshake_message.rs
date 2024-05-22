@@ -59,7 +59,10 @@ where
             0,
         );
 
-        let message = CosmosChannelOpenInitMessage { port_id, channel };
+        let message = CosmosChannelOpenInitMessage {
+            port_id: port_id.to_string(),
+            channel: channel.into(),
+        };
 
         Ok(message.to_cosmos_message())
     }
@@ -108,10 +111,10 @@ where
         counterparty_payload: SovereignChannelOpenAckPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
         let message = CosmosChannelOpenAckMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            counterparty_channel_id: counterparty_channel_id.clone(),
-            counterparty_version: counterparty_payload.version,
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            counterparty_channel_id: counterparty_channel_id.to_string(),
+            counterparty_version: counterparty_payload.version.to_string(),
             update_height: counterparty_payload.update_height,
             proof_try: counterparty_payload.proof_try.into(),
         };

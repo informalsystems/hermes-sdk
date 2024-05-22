@@ -62,8 +62,12 @@ where
             0,
         );
 
-        let msg = CosmosChannelOpenInitMessage { port_id, channel };
-        let cosmos_msg = msg.to_cosmos_message();
+        let message = CosmosChannelOpenInitMessage {
+            port_id: port_id.to_string(),
+            channel: channel.into(),
+        };
+
+        let cosmos_msg = message.to_cosmos_message();
         let sovereign_msg: SovereignMessage = cosmos_msg.into();
 
         Ok(sovereign_msg)
@@ -108,9 +112,9 @@ where
         );
 
         let msg = CosmosChannelOpenTryMessage {
-            port_id,
-            channel,
-            counterparty_version: version,
+            port_id: port_id.to_string(),
+            channel: channel.into(),
+            counterparty_version: version.to_string(),
             update_height: counterparty_payload.update_height,
             proof_init: counterparty_payload.proof_init.into(),
         };
@@ -142,10 +146,10 @@ where
         counterparty_payload: CosmosChannelOpenAckPayload,
     ) -> Result<SovereignMessage, Rollup::Error> {
         let msg = CosmosChannelOpenAckMessage {
-            port_id: port_id.clone(),
-            channel_id: channel_id.clone(),
-            counterparty_channel_id: counterparty_channel_id.clone(),
-            counterparty_version: counterparty_payload.version,
+            port_id: port_id.to_string(),
+            channel_id: channel_id.to_string(),
+            counterparty_channel_id: counterparty_channel_id.to_string(),
+            counterparty_version: counterparty_payload.version.to_string(),
             update_height: counterparty_payload.update_height,
             proof_try: counterparty_payload.proof_try.into(),
         };
