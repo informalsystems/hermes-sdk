@@ -28,7 +28,9 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
 };
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
-use hermes_relayer_components::chain::traits::queries::channel_end::CanQueryChannelEnd;
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
@@ -212,7 +214,8 @@ pub trait CanUseSovereignChain:
     + CanQueryConsensusStateHeight<CosmosChain>
     + CanQueryConnectionEnd<CosmosChain>
     + CanQueryConnectionEndWithProofs<CosmosChain>
-    // + CanQueryChannelEnd<CosmosChain>
+    + CanQueryChannelEnd<CosmosChain>
+    + CanQueryChannelEndWithProofs<CosmosChain>
     + HasClientStateFields<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionOpenInitPayload<CosmosChain>

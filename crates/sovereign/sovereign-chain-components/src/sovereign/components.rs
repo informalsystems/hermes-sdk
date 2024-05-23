@@ -14,6 +14,10 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+};
+use hermes_relayer_components::chain::impls::forward::queries::channel_end::ForwardQueryChannelEnd;
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetterComponent;
 use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
@@ -207,6 +211,11 @@ delegate_components! {
             ConnectionEndWithProofsQuerierComponent,
         ]:
             ForwardQueryConnectionEnd,
+        [
+            ChannelEndQuerierComponent,
+            ChannelEndWithProofsQuerierComponent,
+        ]:
+            ForwardQueryChannelEnd,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
         CounterpartyMessageHeightGetterComponent:
