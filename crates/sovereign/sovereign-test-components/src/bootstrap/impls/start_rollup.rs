@@ -1,7 +1,8 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
-use hermes_test_components::runtime::traits::child_process::CanStartChildProcess;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
+use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::bootstrap::traits::rollup_command_path::HasRollupCommandPath;
 use crate::bootstrap::traits::start_rollup::RollupStarter;
@@ -11,7 +12,7 @@ pub struct StartSovereignRollup;
 impl<Bootstrap, Runtime> RollupStarter<Bootstrap> for StartSovereignRollup
 where
     Bootstrap: HasRuntime<Runtime = Runtime> + HasRollupCommandPath + CanRaiseError<Runtime::Error>,
-    Runtime: HasFilePathType + CanStartChildProcess,
+    Runtime: HasFilePathType + CanStartChildProcess + CanReserveTcpPort,
 {
     async fn start_rollup(
         bootstrap: &Bootstrap,
@@ -40,6 +41,13 @@ where
             &Runtime::file_path_from_string("stderr.log"),
         );
 
+        let runtime = bootstrap.runtime();
+
+        let metrics_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
         let child = bootstrap
             .runtime()
             .start_child_process(
@@ -51,6 +59,8 @@ where
                     &Runtime::file_path_to_string(&rollup_genesis_path),
                     "--kernel-genesis-paths",
                     &Runtime::file_path_to_string(&rollup_chain_state_path),
+                    "--metrics",
+                    &metrics_port.to_string(),
                 ],
                 &[("RUST_BACKTRACE", "full")],
                 Some(&stdout_path),

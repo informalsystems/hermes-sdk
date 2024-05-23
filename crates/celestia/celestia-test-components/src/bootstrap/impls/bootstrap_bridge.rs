@@ -1,10 +1,10 @@
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
+use hermes_runtime_components::traits::random::CanGenerateRandom;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::random::CanGenerateRandom;
-use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 
 use crate::bootstrap::traits::bootstrap_bridge::BridgeBootstrapper;
 use crate::bootstrap::traits::bridge_auth_token::CanGenerateBridgeAuthToken;
@@ -66,7 +66,7 @@ where
             .await?;
 
         let bridge_process = bootstrap
-            .start_bridge(&bridge_home_dir, chain_driver)
+            .start_bridge(&bridge_home_dir, &bridge_config, chain_driver)
             .await?;
 
         let bridge_driver = bootstrap

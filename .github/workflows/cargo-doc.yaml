@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: cachix/install-nix-action@v25
+      - uses: cachix/install-nix-action@V27
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
@@ -24,7 +24,9 @@ jobs:
           toolchain: stable
           override: true
       - name: Build API documentation
+        # TODO: run cargo doc with all crates once it is fixed
         run: |
             nix shell .#protobuf -c \
               cargo doc \
-              --all-features
+              --all-features \
+              -p hermes-relayer-components

@@ -1,10 +1,12 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::consensus_state::HasConsensusStateType;
+use super::chain_status::CanQueryChainStatus;
+use crate::chain::traits::types::consensus_state::{
+    HasConsensusStateType, HasRawConsensusStateType,
+};
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-
-use super::chain_status::CanQueryChainStatus;
+use crate::chain::traits::types::proof::HasCommitmentProofType;
 
 #[derive_component(ConsensusStateQuerierComponent, ConsensusStateQuerier<Chain>)]
 #[async_trait]
@@ -19,6 +21,51 @@ where
         consensus_height: &Counterparty::Height,
         query_height: &Self::Height,
     ) -> Result<Counterparty::ConsensusState, Self::Error>;
+}
+
+#[derive_component(ConsensusStateWithProofsQuerierComponent, ConsensusStateWithProofsQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryConsensusStateWithProofs<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType
+where
+    Counterparty: HasConsensusStateType<Self> + HasHeightType,
+{
+    async fn query_consensus_state_with_proofs(
+        &self,
+        client_id: &Self::ClientId,
+        consensus_height: &Counterparty::Height,
+        query_height: &Self::Height,
+    ) -> Result<(Counterparty::ConsensusState, Self::CommitmentProof), Self::Error>;
+}
+
+#[derive_component(RawConsensusStateQuerierComponent, RawConsensusStateQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryRawConsensusState<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasRawConsensusStateType + HasErrorType
+where
+    Counterparty: HasHeightType,
+{
+    async fn query_raw_consensus_state(
+        &self,
+        client_id: &Self::ClientId,
+        consensus_height: &Counterparty::Height,
+        query_height: &Self::Height,
+    ) -> Result<Self::RawConsensusState, Self::Error>;
+}
+
+#[derive_component(RawConsensusStateWithProofsQuerierComponent, RawConsensusStateWithProofsQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryRawConsensusStateWithProofs<Counterparty>:
+    HasIbcChainTypes<Counterparty> + HasRawConsensusStateType + HasCommitmentProofType + HasErrorType
+where
+    Counterparty: HasHeightType,
+{
+    async fn query_raw_consensus_state_with_proofs(
+        &self,
+        client_id: &Self::ClientId,
+        consensus_height: &Counterparty::Height,
+        query_height: &Self::Height,
+    ) -> Result<(Self::RawConsensusState, Self::CommitmentProof), Self::Error>;
 }
 
 #[async_trait]

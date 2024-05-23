@@ -2,26 +2,21 @@
 
 use std::sync::Arc;
 
-use eyre::Error;
 use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
+use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use tokio::runtime::Builder;
 
 #[test]
 fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
-    let _ = stable_eyre::install();
-
-    let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
-
-    let runtime = HermesRuntime::new(tokio_runtime.clone());
+    let runtime = init_test_runtime();
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(LegacyCosmosBootstrap {
-        runtime,
+        runtime: runtime.clone(),
         builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
@@ -34,7 +29,7 @@ fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
         comet_config_modifier: Box::new(|_| Ok(())),
     });
 
-    tokio_runtime.block_on(async move {
+    runtime.runtime.clone().block_on(async move {
         let _chain_driver = bootstrap.bootstrap_chain("chain-1").await?;
 
         <Result<(), Error>>::Ok(())

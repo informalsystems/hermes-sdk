@@ -1,19 +1,15 @@
-use oneline_eyre::eyre::Context;
-use tracing::{info, warn};
-
 use hermes_cli_framework::command::CommandRunner;
-use hermes_cli_framework::output::json;
-use hermes_cli_framework::output::Output;
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cli_framework::output::{json, Output};
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::BaseError;
+use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::PageRequest;
-use ibc_relayer::chain::requests::QueryConnectionsRequest;
+use ibc_relayer::chain::requests::{PageRequest, QueryConnectionsRequest};
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use tracing::{info, warn};
 
 use crate::Result;
 
@@ -55,10 +51,10 @@ impl CommandRunner<CosmosBuilder> for QueryConnections {
                     .query_connections(QueryConnectionsRequest {
                         pagination: Some(PageRequest::all()),
                     })
-                    .map_err(|e| BaseError::relayer(e).into())
+                    .map_err(From::from)
             })
             .await
-            .wrap_err("Failed to query connections for host chain")?;
+            .wrap_error("Failed to query connections for host chain")?;
 
         info!(
             "Found {} connections on chain `{chain_id}`",

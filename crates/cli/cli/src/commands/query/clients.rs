@@ -1,25 +1,20 @@
-use std::error::Error as StdError;
 use std::fmt;
 
 use cgp_core::HasErrorType;
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::any_client::types::client_state::AnyClientState;
-use oneline_eyre::eyre::Context;
-use tracing::info;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
-use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStatesWithLatestHeight;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    HasClientStateFields, HasClientStateType,
-};
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::{Error, ErrorWrapper};
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use tracing::info;
 
 use crate::Result;
 
@@ -51,7 +46,7 @@ pub struct QueryClients {
 impl CommandRunner<CosmosBuilder> for QueryClients {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let chain = builder.build_chain(&self.host_chain_id).await?;
-        let clients = query_client_states::<_, AnyCounterparty>(
+        let clients = query_all_client_states::<CosmosChain, AnyCounterparty>(
             &chain,
             &self.host_chain_id,
             self.reference_chain_id.as_ref(),
@@ -67,7 +62,7 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
                         "- {}: {} -> {}",
                         client.client_id,
                         self.host_chain_id,
-                        client.chain_id()
+                        client.client_state.chain_id()
                     );
                 }
             });
@@ -83,7 +78,7 @@ impl CommandRunner<CosmosBuilder> for QueryClients {
                         serde_json::json!({
                             "client_id": client.client_id,
                             "host_chain_id": self.host_chain_id,
-                            "reference_chain_id": client.chain_id(),
+                            "reference_chain_id": client.client_state.chain_id(),
                         })
                     })
                     .collect::<Vec<_>>();
@@ -109,16 +104,6 @@ where
     client_state: Counterparty::ClientState,
 }
 
-impl<Chain, Counterparty> Client<Chain, Counterparty>
-where
-    Chain: HasIbcChainTypes<Counterparty>,
-    Counterparty: HasChainIdType + HasClientStateType<Chain> + HasClientStateFields<Chain>,
-{
-    fn chain_id(&self) -> &Counterparty::ChainId {
-        Counterparty::client_state_chain_id(&self.client_state)
-    }
-}
-
 impl<Chain, Counterparty> fmt::Debug for Client<Chain, Counterparty>
 where
     Chain: HasIbcChainTypes<Counterparty>,
@@ -134,22 +119,21 @@ where
     }
 }
 
-async fn query_client_states<Chain, Counterparty>(
+async fn query_all_client_states<Chain, Counterparty>(
     chain: &Chain,
     host_chain_id: &ChainId,
     reference_chain_id: Option<&ChainId>,
 ) -> Result<Vec<Client<Chain, Counterparty>>>
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId>
-        + CanQueryClientStatesWithLatestHeight<Counterparty>
-        + HasErrorType,
+        + CanQueryAllClientStatesWithLatestHeight<Counterparty>
+        + HasErrorType<Error = Error>,
     Counterparty: HasClientStateType<Chain, ClientState = AnyClientState>,
-    Chain::Error: From<BaseError> + StdError,
 {
     let mut clients = chain
-        .query_client_states_with_latest_height()
+        .query_all_client_states_with_latest_height()
         .await
-        .wrap_err("Failed to query clients")?
+        .wrap_error("Failed to query clients")?
         .into_iter()
         .map(|(client_id, client_state)| Client::<Chain, Counterparty> {
             client_id,

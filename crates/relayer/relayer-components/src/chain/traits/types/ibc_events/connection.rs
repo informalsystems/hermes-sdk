@@ -1,7 +1,8 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
+#[derive_component(ConnectionOpenTryEventComponent, ProvideConnectionOpenTryEvent<Chain>)]
 pub trait HasConnectionOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type ConnectionOpenTryEvent: Async;
 
@@ -14,6 +15,7 @@ pub trait HasConnectionOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty
     ) -> &Self::ConnectionId;
 }
 
+#[derive_component(ConnectionOpenInitEventComponent, ProvideConnectionOpenInitEvent<Chain>)]
 pub trait HasConnectionOpenInitEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type ConnectionOpenInitEvent: Async;
 

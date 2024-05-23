@@ -1,16 +1,14 @@
-use alloc::format;
 use alloc::vec;
 
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
-use crate::logger::traits::log::CanLog;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::packet_clearer::PacketClearer;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use super::ack::ClearAckPackets;
 use super::receive_packet::ClearReceivePackets;
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
+use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::packet_clearer::PacketClearer;
 
 pub struct ClearAllPackets;
 
@@ -33,12 +31,12 @@ where
 
 impl<Relay> Task for RunPacketClearer<Relay>
 where
-    Relay: HasRelayChains + CanLog,
+    Relay: HasRelayChains,
     ClearReceivePackets: PacketClearer<Relay>,
     ClearAckPackets: PacketClearer<Relay>,
 {
     async fn run(self) {
-        let result = match self.clear_option {
+        let _ = match self.clear_option {
             ClearOption::Receive => {
                 ClearReceivePackets::clear_packets(
                     &self.relay,
@@ -60,25 +58,20 @@ where
                 .await
             }
         };
-        if let Err(e) = result {
-            self.relay
-                .log_error(&format!("failed during packet clearing: {e:#?}"));
-        }
     }
 }
 
 impl<Relay, SrcChain, DstChain> PacketClearer<Relay> for ClearAllPackets
 where
-    Relay: Clone + HasRuntime + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanLog,
+    Relay: Clone + HasRuntime + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>,
     SrcChain: HasIbcChainTypes<DstChain>,
     DstChain: HasIbcChainTypes<SrcChain>,
     Relay::Runtime: CanRunConcurrentTasks,
-    ClearReceivePackets: PacketClearer<Relay>,
-    ClearAckPackets: PacketClearer<Relay>,
     SrcChain::ChannelId: Clone,
     SrcChain::PortId: Clone,
     DstChain::ChannelId: Clone,
     DstChain::PortId: Clone,
+    RunPacketClearer<Relay>: Task,
 {
     async fn clear_packets(
         relay: &Relay,

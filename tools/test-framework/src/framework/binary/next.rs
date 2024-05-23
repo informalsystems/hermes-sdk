@@ -4,7 +4,7 @@ use std::time::Duration;
 use cgp_core::CanRun;
 use eyre::eyre;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use ibc_relayer::chain::counterparty::unreceived_acknowledgements;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};

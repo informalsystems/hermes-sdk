@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
 
-use hermes_cosmos_client_components::methods::encode::{encode_protobuf, encode_to_any};
+use hermes_cosmos_chain_components::methods::encode::{encode_protobuf, encode_to_any};
 use ibc_proto::google::protobuf::Any;
-use prost::{EncodeError, Message};
+use prost::Message;
 use secp256k1::ecdsa::Signature;
 use secp256k1::SecretKey;
 
@@ -21,7 +21,7 @@ pub struct ProtoHeaderData {
     pub new_diversifier: String,
 }
 
-pub fn encode_header_data(header_data: &SolomachineHeaderData) -> Result<Any, EncodeError> {
+pub fn encode_header_data(header_data: &SolomachineHeaderData) -> Any {
     let encoded_public_key = encode_public_key(&header_data.new_public_key);
 
     let proto_header_data = ProtoHeaderData {
@@ -35,10 +35,10 @@ pub fn encode_header_data(header_data: &SolomachineHeaderData) -> Result<Any, En
 pub fn sign_header_data(
     secret_key: &SecretKey,
     header_data: &SolomachineSignHeaderData,
-) -> Result<Signature, EncodeError> {
-    let any_header_data = encode_header_data(&header_data.header_data)?;
+) -> Signature {
+    let any_header_data = encode_header_data(&header_data.header_data);
 
-    let header_bytes = encode_protobuf(&any_header_data)?;
+    let header_bytes = encode_protobuf(&any_header_data);
 
     let sign_data = SolomachineSignData {
         sequence: header_data.sequence,

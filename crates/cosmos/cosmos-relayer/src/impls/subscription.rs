@@ -9,8 +9,8 @@ use futures::stream::{self, Stream, StreamExt, TryStreamExt};
 use hermes_async_runtime_components::subscription::impls::closure::CanCreateClosureSubscription;
 use hermes_async_runtime_components::subscription::impls::multiplex::CanMultiplexSubscription;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
-use hermes_relayer_components::runtime::traits::task::Task;
-use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::task::Task;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use moka::future::Cache;
 use tendermint::abci::Event as AbciEvent;
@@ -22,7 +22,7 @@ use tendermint_rpc::{
 };
 use tracing::error;
 
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
 /**
    Creates a new ABCI event subscription that automatically reconnects.
@@ -126,7 +126,7 @@ where
     {
         let builder = WebSocketClient::builder(websocket_url.clone()).compat_mode(*compat_mode);
 
-        let (client, driver) = builder.build().await.map_err(BaseError::tendermint_rpc)?;
+        let (client, driver) = builder.build().await?;
 
         self.spawn_task(RunWebSocketDriverTask { driver });
 
@@ -255,10 +255,7 @@ async fn new_rpc_event_stream(
     websocket_client: &WebSocketClient,
     query: &Query,
 ) -> Result<Pin<Box<dyn Stream<Item = RpcEvent> + Send + Sync + 'static>>, Error> {
-    let subscription = websocket_client
-        .subscribe(query.clone())
-        .await
-        .map_err(BaseError::tendermint_rpc)?;
+    let subscription = websocket_client.subscribe(query.clone()).await?;
 
     let stream = subscription.filter_map(|event| async { event.ok() });
 

@@ -1,25 +1,19 @@
+use core::fmt::Debug;
 use core::iter::Iterator;
 
-use cgp_core::async_trait;
+use cgp_core::CanRaiseError;
 
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenTryMessage;
+use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenTryPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::ibc_events::connection::HasConnectionOpenTryEvent;
+use crate::chain::types::aliases::ConnectionIdOf;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use crate::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
-
-pub trait CanRaiseMissingConnectionTryEventError: HasRelayChains {
-    fn missing_connection_try_event_error(
-        &self,
-        src_connection_id: &<Self::SrcChain as HasIbcChainTypes<Self::DstChain>>::ConnectionId,
-    ) -> Self::Error;
-}
+use crate::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 
 /**
    A base implementation of [`ConnectionOpenTryRelayer`] that relays a new connection
@@ -34,17 +28,24 @@ pub trait CanRaiseMissingConnectionTryEventError: HasRelayChains {
 */
 pub struct RelayConnectionOpenTry;
 
-#[async_trait]
+pub struct MissingConnectionTryEventError<'a, Relay>
+where
+    Relay: HasRelayChains,
+{
+    pub relay: &'a Relay,
+    pub src_connection_id: &'a ConnectionIdOf<Relay::SrcChain, Relay::DstChain>,
+}
+
 impl<Relay, SrcChain, DstChain> ConnectionOpenTryRelayer<Relay> for RelayConnectionOpenTry
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanSendUpdateClientMessage<SourceTarget>
+        + CanSendTargetUpdateClientMessage<SourceTarget>
         + CanSendSingleIbcMessage<MainSink, DestinationTarget>
-        + CanRaiseMissingConnectionTryEventError
+        + for<'a> CanRaiseError<MissingConnectionTryEventError<'a, Relay>>
         + CanRaiseRelayChainErrors,
-    SrcChain: CanQueryChainHeight + CanBuildConnectionHandshakePayloads<DstChain>,
+    SrcChain: CanQueryChainHeight + CanBuildConnectionOpenTryPayload<DstChain>,
     DstChain: CanQueryClientStateWithLatestHeight<SrcChain>
-        + CanBuildConnectionHandshakeMessages<SrcChain>
+        + CanBuildConnectionOpenTryMessage<SrcChain>
         + HasConnectionOpenTryEvent<SrcChain>,
     DstChain::ConnectionId: Clone,
 {
@@ -95,10 +96,26 @@ where
         let open_try_event = events
             .into_iter()
             .find_map(|event| DstChain::try_extract_connection_open_try_event(event))
-            .ok_or_else(|| relay.missing_connection_try_event_error(src_connection_id))?;
+            .ok_or_else(|| {
+                Relay::raise_error(MissingConnectionTryEventError {
+                    relay,
+                    src_connection_id,
+                })
+            })?;
 
         let dst_connection_id = DstChain::connection_open_try_event_connection_id(&open_try_event);
 
         Ok(dst_connection_id.clone())
+    }
+}
+
+impl<'a, Relay> Debug for MissingConnectionTryEventError<'a, Relay>
+where
+    Relay: HasRelayChains,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("MissingConnectionTryEventError")
+            .field("src_connection_id", &self.src_connection_id)
+            .finish()
     }
 }

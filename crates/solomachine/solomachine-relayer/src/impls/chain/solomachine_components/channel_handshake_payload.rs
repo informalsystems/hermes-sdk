@@ -1,5 +1,6 @@
-use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::ChannelHandshakePayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
+    ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
+};
 use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::Height;
@@ -16,8 +17,7 @@ use crate::types::payloads::channel::{
 
 pub struct BuildSolomachineChannelHandshakePayloads;
 
-#[async_trait]
-impl<Chain, Counterparty> ChannelHandshakePayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
     Chain: Solomachine,
@@ -50,8 +50,7 @@ where
 
         let secret_key = chain.chain.secret_key();
 
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
+        let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
         let payload = SolomachineChannelOpenTryPayload {
             ordering,
@@ -63,7 +62,13 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineChannelHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_channel_open_ack_payload(
         chain: &SolomachineChain<Chain>,
         client_state: &SolomachineClientState,
@@ -90,8 +95,7 @@ where
 
         let secret_key = chain.chain.secret_key();
 
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
+        let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
         let payload = SolomachineChannelOpenAckPayload {
             version,
@@ -101,7 +105,13 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineChannelHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_channel_open_confirm_payload(
         chain: &SolomachineChain<Chain>,
         client_state: &SolomachineClientState,
@@ -126,8 +136,7 @@ where
 
         let secret_key = chain.chain.secret_key();
 
-        let channel_proof =
-            sign_with_data(secret_key, &channel_state_data).map_err(Chain::encode_error)?;
+        let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
         let payload = SolomachineChannelOpenConfirmPayload {
             update_height: *height,

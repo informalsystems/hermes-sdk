@@ -1,29 +1,37 @@
-use cgp_core::{Async, CanRaiseError, ErrorRaiser, ProvideErrorType};
+use core::time::Duration;
+
+use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
+use hermes_encoding_components::traits::has_encoding::{
+    DefaultEncodingGetter, ProvideEncodingType,
+};
 use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelHandshakePayloadTypes, ProvideInitChannelOptionsType,
+    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
+    ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoder, ProvideClientStateType,
+    ClientStateFieldsGetter, ProvideClientStateType,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
-    ProvideConnectionHandshakePayloadTypes, ProvideInitConnectionOptionsType,
+    ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
+    ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
+    ProvideInitConnectionOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_proto::google::protobuf::Any;
+use hermes_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use prost::{DecodeError, Message};
+use ibc_relayer_types::Height;
 
+use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::component::SolomachineChainComponents;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
@@ -47,7 +55,6 @@ use crate::types::payloads::packet::{
     SolomachineAckPacketPayload, SolomachineReceivePacketPayload,
     SolomachineTimeoutUnorderedPacketPayload,
 };
-use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoClientState;
 
 impl<Chain> ProvideErrorType<SolomachineChain<Chain>> for SolomachineChainComponents
 where
@@ -65,12 +72,28 @@ where
     }
 }
 
-impl<Chain> ProvideRuntime<SolomachineChain<Chain>> for SolomachineChainComponents
+impl<Chain> RuntimeGetter<SolomachineChain<Chain>> for SolomachineChainComponents
 where
     Chain: Solomachine,
 {
     fn runtime(chain: &SolomachineChain<Chain>) -> &HermesRuntime {
         chain.chain.runtime()
+    }
+}
+
+impl<Chain> ProvideEncodingType<SolomachineChain<Chain>> for SolomachineChainComponents
+where
+    Chain: Async,
+{
+    type Encoding = SolomachineEncoding;
+}
+
+impl<Chain> DefaultEncodingGetter<SolomachineChain<Chain>> for SolomachineChainComponents
+where
+    Chain: Async,
+{
+    fn default_encoding() -> &'static SolomachineEncoding {
+        &SolomachineEncoding
     }
 }
 
@@ -82,24 +105,25 @@ where
     type ClientState = SolomachineClientState;
 }
 
-impl<Chain, Counterparty> ClientStateDecoder<SolomachineChain<Chain>, Counterparty>
+// TODO: properly implement solomachine client state fields
+impl<Chain, Counterparty> ClientStateFieldsGetter<SolomachineChain<Chain>, Counterparty>
     for SolomachineChainComponents
 where
     Chain: Async,
-    Counterparty: CanRaiseError<DecodeError>,
 {
-    fn decode_client_state_bytes(
-        client_state_bytes: &[u8],
-    ) -> Result<SolomachineClientState, Counterparty::Error> {
-        let any_value = Any::decode(client_state_bytes).map_err(Counterparty::raise_error)?;
+    fn client_state_latest_height(client_state: &SolomachineClientState) -> Height {
+        Height::new(0, client_state.sequence).unwrap()
+    }
 
-        let proto_state = ProtoClientState::decode(any_value.value.as_ref())
-            .map_err(Counterparty::raise_error)?;
+    fn client_state_is_frozen(client_state: &SolomachineClientState) -> bool {
+        client_state.is_frozen
+    }
 
-        // TODO: handle TryInto error
-        let client_state = proto_state.try_into().unwrap();
-
-        Ok(client_state)
+    fn client_state_has_expired(
+        _client_state: &SolomachineClientState,
+        _elapsed: Duration,
+    ) -> bool {
+        false
     }
 }
 
@@ -151,29 +175,59 @@ where
     type InitChannelOptions = ();
 }
 
-impl<Chain, Counterparty> ProvideConnectionHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
     for SolomachineChainComponents
 where
     Chain: Async,
 {
     type ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload;
 }
 
-impl<Chain, Counterparty> ProvideChannelHandshakePayloadTypes<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
     for SolomachineChainComponents
 where
     Chain: Async,
 {
     type ChannelOpenTryPayload = SolomachineChannelOpenTryPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ChannelOpenAckPayload = SolomachineChannelOpenAckPayload;
+}
 
+impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
     type ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload;
 }
 
@@ -201,33 +255,37 @@ where
     type TimeoutUnorderedPacketPayload = SolomachineTimeoutUnorderedPacketPayload;
 }
 
-impl<Chain, Counterparty> HasCreateClientEvent<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideCreateClientEvent<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type CreateClientEvent = SolomachineCreateClientEvent;
 
-    fn try_extract_create_client_event(event: Self::Event) -> Option<Self::CreateClientEvent> {
+    fn try_extract_create_client_event(
+        event: SolomachineEvent,
+    ) -> Option<SolomachineCreateClientEvent> {
         match event {
             SolomachineEvent::CreateClient(e) => Some(e),
             _ => None,
         }
     }
 
-    fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &ClientId {
+    fn create_client_event_client_id(event: &SolomachineCreateClientEvent) -> &ClientId {
         &event.client_id
     }
 }
 
-impl<Chain, Counterparty> HasConnectionOpenInitEvent<Counterparty> for SolomachineChain<Chain>
+impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<SolomachineChain<Chain>, Counterparty>
+    for SolomachineChainComponents
 where
     Chain: Async,
 {
     type ConnectionOpenInitEvent = SolomachineConnectionInitEvent;
 
     fn try_extract_connection_open_init_event(
-        event: Self::Event,
-    ) -> Option<Self::ConnectionOpenInitEvent> {
+        event: SolomachineEvent,
+    ) -> Option<SolomachineConnectionInitEvent> {
         match event {
             SolomachineEvent::ConnectionInit(e) => Some(e),
             _ => None,

@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
 
-use hermes_cosmos_client_components::methods::encode::encode_to_any;
+use hermes_cosmos_chain_components::methods::encode::encode_to_any;
 use ibc_proto::google::protobuf::Any;
-use prost::{EncodeError, Message};
+use prost::Message;
 
 use crate::methods::encode::consensus_state::{to_proto_consensus_state, ProtoConsensusState};
 use crate::types::client_state::SolomachineClientState;
@@ -19,7 +19,7 @@ pub struct ProtoClientState {
     pub consensus_state: Option<ProtoConsensusState>,
 }
 
-pub fn encode_client_state(client_state: &SolomachineClientState) -> Result<Any, EncodeError> {
+pub fn encode_client_state(client_state: &SolomachineClientState) -> Any {
     let proto_consensus_state = to_proto_consensus_state(&client_state.consensus_state);
 
     let proto_client_state = ProtoClientState {

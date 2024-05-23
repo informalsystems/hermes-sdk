@@ -1,6 +1,5 @@
-use std::path::PathBuf;
-
 use alloc::collections::BTreeMap;
+use std::path::PathBuf;
 
 use cgp_core::CanRaiseError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -13,12 +12,12 @@ use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
-use hermes_cosmos_test_components::chain_driver::types::wallet::CosmosTestWallet;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntimeType;
+use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
+use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
+use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::types::child_process::HasChildProcessType;
-use hermes_test_components::runtime::traits::types::file_path::HasFilePathType;
 use tokio::process::Child;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
@@ -47,6 +46,15 @@ where
         wallets: BTreeMap<String, CosmosTestWallet>,
         chain_process: Child,
     ) -> Result<CosmosChainDriver, Bootstrap::Error> {
+        let validator_wallet = wallets
+            .get("validator")
+            .ok_or_else(|| {
+                Bootstrap::raise_error(
+                    "expect validator wallet to be provided in the list of test wallets",
+                )
+            })?
+            .clone();
+
         let relayer_wallet = wallets
             .get("relayer")
             .ok_or_else(|| {
@@ -86,9 +94,10 @@ where
             chain_node_config,
             genesis_config,
             chain_process,
-            relayer_wallet: relayer_wallet.clone(),
-            user_wallet_a: user_wallet_a.clone(),
-            user_wallet_b: user_wallet_b.clone(),
+            validator_wallet,
+            relayer_wallet,
+            user_wallet_a,
+            user_wallet_b,
             wallets,
         };
 

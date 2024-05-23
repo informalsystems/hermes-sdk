@@ -5,12 +5,12 @@ use hermes_relayer_components::chain::traits::queries::block::CanQueryBlock;
 use hermes_relayer_components::chain::traits::types::block::HasBlockHash;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::height::HasGenesisHeight;
-use hermes_relayer_components::runtime::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
+use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
+use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
+use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChain, HasChainType};
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::runtime::traits::read_file::CanReadFileAsString;
-use hermes_test_components::runtime::traits::reserve_port::CanReserveTcpPort;
-use hermes_test_components::runtime::traits::write_file::CanWriteStringToFile;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use toml::Value;
 
@@ -65,6 +65,9 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
+        let node_rpc_port = chain_driver.rpc_port();
+        let node_grpc_port = chain_driver.grpc_port();
+
         let mut bridge_config =
             toml::from_str(&bridge_config_str).map_err(Bootstrap::raise_error)?;
 
@@ -73,11 +76,9 @@ where
 
         set_chain_ip(&mut bridge_config, "127.0.0.1").map_err(Bootstrap::raise_error)?;
 
-        set_chain_rpc_port(&mut bridge_config, chain_driver.rpc_port())
-            .map_err(Bootstrap::raise_error)?;
+        set_chain_rpc_port(&mut bridge_config, node_rpc_port).map_err(Bootstrap::raise_error)?;
 
-        set_chain_grpc_port(&mut bridge_config, chain_driver.grpc_port())
-            .map_err(Bootstrap::raise_error)?;
+        set_chain_grpc_port(&mut bridge_config, node_grpc_port).map_err(Bootstrap::raise_error)?;
 
         let bridge_rpc_port = runtime
             .reserve_tcp_port()
@@ -96,6 +97,8 @@ where
 
         let config = CelestiaBridgeConfig {
             config: bridge_config,
+            node_rpc_port,
+            node_grpc_port,
             bridge_rpc_port,
         };
 

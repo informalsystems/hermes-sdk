@@ -11,11 +11,8 @@
 use core::time::Duration;
 
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::eyre;
-use hermes_relayer_components::chain::traits::logs::event::CanLogChainEvent;
-use hermes_relayer_components::chain::traits::logs::packet::CanLogChainPacket;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -35,15 +32,16 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
 use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
-use hermes_relayer_components::chain::traits::types::height::HeightIncrementer;
-use hermes_relayer_components::chain::traits::types::height::ProvideHeightType;
+use hermes_relayer_components::chain::traits::types::height::{
+    HeightIncrementer, ProvideHeightType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::{
-    HasCounterpartyMessageHeight, ProvideIbcChainTypes,
+    CounterpartyMessageHeightGetter, ProvideIbcChainTypes,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
-    CanEstimateMessageSize, ProvideMessageType,
+    MessageSizeEstimator, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
@@ -51,9 +49,7 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntime;
-use hermes_relayer_components::runtime::traits::runtime::ProvideRuntimeType;
-use hermes_relayer_runtime::types::log::value::LogValue;
+use hermes_runtime_components::traits::runtime::{ProvideRuntimeType, RuntimeGetter};
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -87,7 +83,7 @@ impl ProvideRuntimeType<MockChainContext> for MockChainComponents {
     type Runtime = MockRuntimeContext;
 }
 
-impl ProvideRuntime<MockChainContext> for MockChainComponents {
+impl RuntimeGetter<MockChainContext> for MockChainComponents {
     fn runtime(chain: &MockChainContext) -> &MockRuntimeContext {
         &chain.runtime
     }
@@ -249,20 +245,14 @@ impl HasSendPacketEvent<MockChainContext> for MockChainContext {
     }
 }
 
-impl CanLogChainEvent for MockChainContext {
-    fn log_event<'a>(event: &Event) -> LogValue<'_> {
-        LogValue::Debug(event)
-    }
-}
-
 impl HeightIncrementer<MockChainContext> for MockChainComponents {
     fn increment_height(height: &MockHeight) -> Result<MockHeight, Error> {
         Ok(height.increment())
     }
 }
 
-impl CanEstimateMessageSize for MockChainContext {
-    fn estimate_message_size(_message: &Self::Message) -> Result<usize, Self::Error> {
+impl MessageSizeEstimator<MockChainContext> for MockChainComponents {
+    fn estimate_message_size(_message: &MockMessage) -> Result<usize, Error> {
         // Only single messages are sent by the Mock Chain
         Ok(1)
     }
@@ -297,17 +287,7 @@ impl ChainStatusQuerier<MockChainContext> for MockChainComponents {
     }
 }
 
-impl CanLogChainPacket<MockChainContext> for MockChainContext {
-    fn log_incoming_packet(packet: &PacketKey) -> LogValue<'_> {
-        LogValue::Display(packet)
-    }
-
-    fn log_outgoing_packet(packet: &PacketKey) -> LogValue<'_> {
-        LogValue::Display(packet)
-    }
-}
-
-impl HasCounterpartyMessageHeight<MockChainContext> for MockChainContext {
+impl CounterpartyMessageHeightGetter<MockChainContext, MockChainContext> for MockChainComponents {
     fn counterparty_message_height_for_update_client(message: &MockMessage) -> Option<MockHeight> {
         match message {
             MockMessage::RecvPacket(h, _) => Some(h.increment()),

@@ -1,8 +1,7 @@
 use std::ops::Deref;
 
 use hermes_cli_framework::config::Config;
-use ibc_relayer::config::load as load_config;
-use ibc_relayer::config::Config as RelayerConfig;
+use ibc_relayer::config::{load as load_config, Config as RelayerConfig};
 
 pub struct HermesConfig {
     pub config: RelayerConfig,

@@ -1,19 +1,34 @@
-use alloc::format;
 use cgp_core::async_trait;
-use core::fmt::Display;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
 use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use crate::chain::traits::queries::send_packets::CanQuerySendPackets;
 use crate::chain::traits::queries::unreceived_packet_sequences::CanQueryUnreceivedPacketSequences;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf};
-use crate::logger::traits::log::CanLog;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
-use crate::runtime::traits::runtime::HasRuntime;
-use crate::runtime::traits::task::{CanRunConcurrentTasks, Task};
 
 pub struct ClearReceivePackets;
+
+pub struct LogClearPacketError<'a, Relay>
+where
+    Relay: HasRelayChains,
+{
+    pub relay: &'a Relay,
+    pub packet: &'a Relay::Packet,
+    pub error: &'a Relay::Error,
+    pub clear_action: ClearPacketAction,
+}
+
+#[derive(Debug)]
+pub enum ClearPacketAction {
+    ClearReceivePacket,
+    ClearAckPacket,
+}
 
 pub struct RelayPacketTask<Relay>
 where
@@ -26,15 +41,23 @@ where
 #[async_trait]
 impl<Relay> Task for RelayPacketTask<Relay>
 where
-    Relay: CanRelayPacket + CanLog,
-    Relay::Packet: Display,
+    Relay: CanRelayPacket + HasLogger,
+    Relay::Logger: for<'a> CanLog<LogClearPacketError<'a, Relay>>,
 {
     async fn run(self) {
         if let Err(e) = self.relay.relay_packet(&self.packet).await {
-            self.relay.log_error(&format!(
-                "failed to relay packet the packet {} during recv packet clearing: {e:#?}",
-                self.packet
-            ));
+            self.relay
+                .logger()
+                .log(
+                    "failed to relay packet during recv packet clearing",
+                    &LogClearPacketError {
+                        relay: &self.relay,
+                        packet: &self.packet,
+                        clear_action: ClearPacketAction::ClearReceivePacket,
+                        error: &e,
+                    },
+                )
+                .await;
         }
     }
 }
@@ -42,12 +65,12 @@ where
 #[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
-    Relay: Clone + CanRelayPacket + HasRuntime + CanRaiseRelayChainErrors + CanLog,
+    Relay: Clone + HasRuntime + CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryUnreceivedPacketSequences<Relay::SrcChain>,
     Relay::SrcChain:
         CanQueryPacketCommitments<Relay::DstChain> + CanQuerySendPackets<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,
-    Relay::Packet: Display,
+    RelayPacketTask<Relay>: Task,
 {
     async fn clear_packets(
         relay: &Relay,

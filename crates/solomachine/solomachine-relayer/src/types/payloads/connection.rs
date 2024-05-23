@@ -1,17 +1,17 @@
 use core::time::Duration;
 
-use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
-use ibc_relayer_types::core::ics03_connection::version::Version;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use ibc::core::connection::types::version::Version;
 use ibc_relayer_types::Height;
 
 use crate::types::sign_data::SolomachineTimestampedSignData;
 
 pub struct SolomachineConnectionOpenInitPayload {
-    pub commitment_prefix: String,
+    pub commitment_prefix: Vec<u8>,
 }
 
 pub struct SolomachineConnectionOpenTryPayload {
-    pub commitment_prefix: String,
+    pub commitment_prefix: Vec<u8>,
     pub client_state: TendermintClientState,
     pub versions: Vec<Version>,
     pub delay_period: Duration,

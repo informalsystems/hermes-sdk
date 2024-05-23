@@ -2,10 +2,10 @@ use core::str::FromStr;
 
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
-use ibc_relayer_types::core::ics03_connection::connection::{
-    ConnectionEnd, Counterparty, State as ConnectionState,
-};
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc::core::connection::types::version::Version;
+use ibc::core::connection::types::{ConnectionEnd, Counterparty, State as ConnectionState};
+use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
+use ibc_relayer_types::core::ics24_host::identifier::ConnectionId as RelayerConnectionId;
 use ibc_relayer_types::timestamp::ZERO_DURATION;
 
 use crate::traits::solomachine::Solomachine;
@@ -41,7 +41,7 @@ where
                     };
                     res.push(vec![SolomachineEvent::CreateClient(create_cient_event)]);
                 }
-                SolomachineMessage::CosmosConnectionOpenInit(_) => {
+                SolomachineMessage::CosmosConnectionOpenInit { .. } => {
                     let connection_id = ConnectionId::from_str("connection-1").unwrap();
                     let counterparty_connection_id =
                         ConnectionId::from_str("connection-0").unwrap();
@@ -52,23 +52,27 @@ where
                     let counterparty = Counterparty::new(
                         counterparty_client_id,
                         Some(counterparty_connection_id.clone()),
-                        Default::default(),
+                        Vec::from("ibc".as_bytes()).try_into().unwrap(),
                     );
 
                     let connection_end = ConnectionEnd::new(
                         ConnectionState::Init,
                         client_id,
                         counterparty,
-                        vec![Default::default()],
+                        Version::compatibles(),
                         ZERO_DURATION,
-                    );
+                    )
+                    .unwrap();
 
                     chain
                         .chain
                         .update_connection(&connection_id, connection_end)
                         .await;
 
-                    let connection_init_event = SolomachineConnectionInitEvent { connection_id };
+                    let connection_init_event = SolomachineConnectionInitEvent {
+                        connection_id: RelayerConnectionId::from_str(connection_id.as_str())
+                            .unwrap(),
+                    };
 
                     res.push(vec![SolomachineEvent::ConnectionInit(
                         connection_init_event,

@@ -1,17 +1,14 @@
 use alloc::collections::BTreeMap;
-use cgp_core::delegate_all;
+
 use cgp_core::prelude::*;
-use cgp_core::ErrorRaiserComponent;
-use cgp_core::ErrorTypeComponent;
-use cgp_error_eyre::ProvideEyreError;
-use cgp_error_eyre::RaiseDebugError;
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
-use hermes_sovereign_client_components::sovereign::traits::chain::rollup::RollupGetter;
-use hermes_sovereign_client_components::sovereign::traits::chain::rollup::RollupTypeComponent;
-use hermes_sovereign_cosmos_relayer::contexts::sovereign_rollup::SovereignRollup;
-use hermes_sovereign_test_components::rollup_driver::components::IsSovereignTestComponent;
-use hermes_sovereign_test_components::rollup_driver::components::SovereignTestComponents;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
+use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
+    RollupGetter, RollupTypeComponent,
+};
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::types::rollup_genesis_config::SovereignGenesisConfig;
 use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollupNodeConfig;
 use hermes_sovereign_test_components::types::wallet::SovereignWallet;
@@ -33,20 +30,14 @@ impl HasComponents for SovereignRollupDriver {
     type Components = SovereignRollupDriverComponents;
 }
 
-delegate_all!(
-    IsSovereignTestComponent,
-    SovereignTestComponents,
-    SovereignRollupDriverComponents,
-);
-
 delegate_components! {
     SovereignRollupDriverComponents {
         ErrorTypeComponent:
-            ProvideEyreError,
+            ProvideCosmosError,
         ErrorRaiserComponent:
-            RaiseDebugError,
+            DebugError,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+            ProvideHermesRuntime,
         RollupTypeComponent: ProvideSovereignRollupType,
     }
 }

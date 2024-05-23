@@ -1,4 +1,4 @@
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
 
 use crate::contexts::relay::CosmosRelay;
 

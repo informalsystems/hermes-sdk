@@ -4,7 +4,7 @@ use std::time::Duration;
 use hermes_relayer_components::chain::traits::queries::write_ack::CanQueryWriteAck;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
-use hermes_relayer_components::runtime::traits::sleep::CanSleep;
+use hermes_runtime_components::traits::sleep::CanSleep;
 use tracing::info;
 
 use crate::relayer_mock::base::error::Error;

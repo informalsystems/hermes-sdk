@@ -3,15 +3,21 @@
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use eyre::{eyre, Error};
+use eyre::eyre;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use hermes_sovereign_integration_tests::contexts::bootstrap::SovereignBootstrap;
+use hermes_cosmos_relayer::types::error::Error;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
+use hermes_sovereign_rollup_components::types::message::SovereignMessage;
+use hermes_sovereign_rollup_components::types::messages::bank::{BankMessage, CoinFields};
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
+use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::chain_driver::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
+use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
 
 #[test]
@@ -24,13 +30,19 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
-    let store_postfix = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+    let store_postfix = format!(
+        "{}-{}",
+        SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis(),
+        rand::random::<u64>()
+    );
+
+    let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
 
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
-        chain_store_dir: format!("./test-data/{store_postfix}/chains").into(),
-        bridge_store_dir: format!("./test-data/{store_postfix}/bridges").into(),
+        chain_store_dir: store_dir.join("chains"),
+        bridge_store_dir: store_dir.join("bridges"),
     };
 
     let sovereign_bootstrap = SovereignBootstrap {
@@ -52,18 +64,99 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
         {
             // Temporary test to check that rollup driver is bootstrapped properly
 
-            let wallet = rollup_driver
+            let rollup = &rollup_driver.rollup;
+
+            let wallet_a = rollup_driver
                 .wallets
                 .get("user-a")
                 .ok_or_else(|| eyre!("expect user-a wallet"))?;
 
+            let wallet_b = rollup_driver
+                .wallets
+                .get("user-b")
+                .ok_or_else(|| eyre!("expect user-a wallet"))?;
+
             let transfer_denom = &rollup_driver.genesis_config.transfer_token_address;
 
-            let amount = rollup_driver
-                .query_balance(&wallet.address, transfer_denom)
-                .await?;
+            let address_a = &wallet_a.address.address;
+            let address_b = &wallet_b.address.address;
+            let transfer_denom = &transfer_denom.address;
 
-            assert_eq!(amount.quantity, 1_000_000_000_000);
+            assert_eq!(
+                rollup
+                    .query_balance(address_a, transfer_denom)
+                    .await?
+                    .quantity,
+                1_000_000_000_000
+            );
+            assert_eq!(
+                rollup
+                    .query_balance(address_b, transfer_denom)
+                    .await?
+                    .quantity,
+                1_000_000_000_000
+            );
+
+            {
+                let message = SovereignMessage::Bank(BankMessage::Transfer {
+                    to: wallet_b.address.address_bytes.clone(),
+                    coins: CoinFields {
+                        amount: 1000,
+                        token_address: rollup_driver
+                            .genesis_config
+                            .transfer_token_address
+                            .address_bytes
+                            .clone(),
+                    },
+                });
+
+                let events = rollup
+                    .send_messages_with_signer(&wallet_a.signing_key, &[message])
+                    .await?;
+
+                println!("TokenTransfer events: {:?}", events);
+
+                assert_eq!(
+                    rollup
+                        .query_balance(address_a, transfer_denom)
+                        .await?
+                        .quantity,
+                    999_999_999_000
+                );
+                assert_eq!(
+                    rollup
+                        .query_balance(address_b, transfer_denom)
+                        .await?
+                        .quantity,
+                    1_000_000_001_000
+                );
+
+                rollup
+                    .assert_eventual_amount(
+                        address_b,
+                        &SovereignAmount {
+                            quantity: 1_000_000_001_000,
+                            denom: transfer_denom.clone(),
+                        },
+                    )
+                    .await?;
+            }
+
+            {
+                let message = SovereignMessage::Bank(BankMessage::CreateToken {
+                    salt: 0,
+                    token_name: "test".into(),
+                    initial_balance: 1000,
+                    minter_address: wallet_a.address.address_bytes.clone(),
+                    authorized_minters: Vec::new(),
+                });
+
+                let events = rollup
+                    .send_messages_with_signer(&wallet_a.signing_key, &[message])
+                    .await?;
+
+                println!("CreateToken events: {:?}", events);
+            }
         }
         <Result<(), Error>>::Ok(())
     })?;

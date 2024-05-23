@@ -1,5 +1,5 @@
+pub mod commitment_prefix;
 pub mod event_subscription;
-pub mod logs;
 pub mod message_builders;
 pub mod packet;
 pub mod payload_builders;

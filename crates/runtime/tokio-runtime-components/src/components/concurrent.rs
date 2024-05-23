@@ -1,33 +1,32 @@
 use cgp_core::prelude::*;
 use hermes_async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
-use hermes_relayer_components::runtime::traits::mutex::MutexComponent;
-use hermes_relayer_components::runtime::traits::sleep::SleeperComponent;
-use hermes_relayer_components::runtime::traits::stream::{
-    StreamMapperComponent, StreamTypeComponent,
-};
-use hermes_relayer_components::runtime::traits::subscription::SubscriptionComponent;
-use hermes_relayer_components::runtime::traits::task::ConcurrentTaskRunnerComponent;
-use hermes_relayer_components::runtime::traits::time::TimeComponent;
-use hermes_relayer_components_extra::runtime::traits::channel::{
+use hermes_runtime_components::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
     SenderClonerComponent,
 };
-use hermes_relayer_components_extra::runtime::traits::channel_once::{
+use hermes_runtime_components::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
-use hermes_relayer_components_extra::runtime::traits::spawn::TaskSpawnerComponent;
-use hermes_test_components::runtime::traits::child_process::ChildProcessStarterComponent;
-use hermes_test_components::runtime::traits::copy_file::FileCopierComponent;
-use hermes_test_components::runtime::traits::create_dir::DirCreatorComponent;
-use hermes_test_components::runtime::traits::exec_command::{
+use hermes_runtime_components::traits::fs::copy_file::FileCopierComponent;
+use hermes_runtime_components::traits::fs::create_dir::DirCreatorComponent;
+use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
+use hermes_runtime_components::traits::fs::read_file::FileAsStringReaderComponent;
+use hermes_runtime_components::traits::fs::write_file::StringToFileWriterComponent;
+use hermes_runtime_components::traits::mutex::MutexComponent;
+use hermes_runtime_components::traits::os::child_process::{
+    ChildProcessStarterComponent, ChildProcessTypeComponent,
+};
+use hermes_runtime_components::traits::os::exec_command::{
     CommandExecutorComponent, CommandWithEnvsExecutorComponent,
 };
-use hermes_test_components::runtime::traits::random::RandomGeneratorComponent;
-use hermes_test_components::runtime::traits::read_file::FileAsStringReaderComponent;
-use hermes_test_components::runtime::traits::reserve_port::TcpPortReserverComponent;
-use hermes_test_components::runtime::traits::types::child_process::ChildProcessTypeComponent;
-use hermes_test_components::runtime::traits::types::file_path::FilePathTypeComponent;
-use hermes_test_components::runtime::traits::write_file::StringToFileWriterComponent;
+use hermes_runtime_components::traits::os::reserve_port::TcpPortReserverComponent;
+use hermes_runtime_components::traits::random::RandomGeneratorComponent;
+use hermes_runtime_components::traits::sleep::SleeperComponent;
+use hermes_runtime_components::traits::spawn::TaskSpawnerComponent;
+use hermes_runtime_components::traits::stream::{StreamMapperComponent, StreamTypeComponent};
+use hermes_runtime_components::traits::subscription::SubscriptionComponent;
+use hermes_runtime_components::traits::task::ConcurrentTaskRunnerComponent;
+use hermes_runtime_components::traits::time::TimeComponent;
 
 use crate::components::parallel::TokioParallelRuntimeComponents;
 

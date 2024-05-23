@@ -1,10 +1,10 @@
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
+use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
+use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
+use hermes_logging_components::traits::has_logger::{
+    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
 use hermes_test_components::driver::traits::channel_at::ChannelGetterAt;
 use hermes_test_components::driver::traits::types::birelay_at::BiRelayTypeAtComponent;
 use hermes_test_components::driver::traits::types::chain_at::ChainTypeAtComponent;
@@ -42,13 +42,8 @@ impl HasComponents for CosmosBinaryChannelTestDriver {
 
 delegate_components! {
     CosmosBinaryChannelTestDriverComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
-        [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
         [
             ChainTypeAtComponent,
             ChainDriverTypeAtComponent,
@@ -57,6 +52,12 @@ delegate_components! {
             RelayDriverTypeAtComponent,
         ]:
             ProvideCosmosTestTypes,
+        [
+            LoggerTypeComponent,
+            LoggerGetterComponent,
+            GlobalLoggerGetterComponent,
+        ]:
+            ProvideCosmosLogger,
     }
 }
 

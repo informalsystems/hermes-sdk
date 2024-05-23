@@ -1,4 +1,4 @@
-use hermes_cosmos_client_components::methods::encode::encode_protobuf;
+use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use ibc_proto::ibc::core::channel::v1::Channel as ProtoChannelEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
@@ -17,7 +17,7 @@ pub fn channel_proof_data(
 ) -> Result<SolomachineSignData, EncodeError> {
     let proto_channel_end: ProtoChannelEnd = channel_end.into();
 
-    let channel_end_bytes = encode_protobuf(&proto_channel_end)?;
+    let channel_end_bytes = encode_protobuf(&proto_channel_end);
 
     let path = format!("{commitment_prefix}channel/{channel_id}");
 

@@ -9,7 +9,6 @@ pub mod birelay;
 pub mod build;
 pub mod chain;
 pub mod components;
-pub mod logger;
+pub mod error;
 pub mod relay;
-pub mod runtime;
 pub mod transaction;

@@ -2,7 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_async_runtime_components::channel::types::ChannelClosedError;
 use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
-use hermes_relayer_components_extra::runtime::traits::channel::{
+use hermes_runtime_components::traits::channel::{
     ChannelCreator, ChannelUser, ProvideChannelType, ReceiverStreamer, SenderCloner,
 };
 use tokio::sync::mpsc;

@@ -1,10 +1,9 @@
-use hermes_cosmos_client_components::methods::encode::encode_protobuf;
+use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
+use ibc::core::connection::types::ConnectionEnd;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::core::connection::v1::ConnectionEnd as ProtoConnectionEnd;
-use ibc_relayer_types::core::ics03_connection::connection::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ConnectionId;
-use prost::EncodeError;
 use secp256k1::hashes::sha256;
 use secp256k1::{Message, Secp256k1, SecretKey};
 
@@ -22,10 +21,10 @@ pub fn connection_proof_data(
     commitment_prefix: &str,
     connection_id: &ConnectionId,
     connection_end: ConnectionEnd,
-) -> Result<SolomachineTimestampedSignData, EncodeError> {
+) -> SolomachineTimestampedSignData {
     let proto_connection_end: ProtoConnectionEnd = connection_end.into();
 
-    let connection_end_bytes = encode_protobuf(&proto_connection_end)?;
+    let connection_end_bytes = encode_protobuf(&proto_connection_end);
 
     let path = format!("{commitment_prefix}connections/{connection_id}");
 
@@ -39,11 +38,11 @@ pub fn connection_proof_data(
     };
 
     // Sign data using Secret Key
-    let signed_data = sign_with_data(secret_key, &sign_data)?;
+    let signed_data = sign_with_data(secret_key, &sign_data);
 
     // TODO: The signature verification fails on chain, but is successful here
     let proto_sign_bytes = to_proto_sign_bytes(&sign_data);
-    let sign_bytes = encode_protobuf(&proto_sign_bytes)?;
+    let sign_bytes = encode_protobuf(&proto_sign_bytes);
 
     let secp = Secp256k1::verification_only();
     let message = Message::from_hashed_data::<sha256::Hash>(&sign_bytes);
@@ -58,7 +57,7 @@ pub fn connection_proof_data(
         })),
     };
 
-    let bytes_data = encode_protobuf(&data).unwrap();
+    let bytes_data = encode_protobuf(&data);
 
     // Create Timestamped signed data
     let timestamped_signed_data = SolomachineTimestampedSignData {
@@ -66,5 +65,5 @@ pub fn connection_proof_data(
         timestamp: client_state.consensus_state.timestamp,
     };
 
-    Ok(timestamped_signed_data)
+    timestamped_signed_data
 }

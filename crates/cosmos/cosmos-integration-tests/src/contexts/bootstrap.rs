@@ -3,9 +3,8 @@ use std::path::PathBuf;
 
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::Error;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::{
     CanUseCosmosSdkChainBootstrapper, CosmosSdkBootstrapComponents, IsCosmosSdkBootstrapComponent,
 };
@@ -21,9 +20,9 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomI
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use hermes_relayer_components::runtime::traits::runtime::{ProvideRuntime, RuntimeTypeComponent};
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use ibc_relayer::config::compat_mode::CompatMode;
@@ -73,9 +72,9 @@ delegate_all!(
 
 delegate_components! {
     CosmosBootstrapComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
-        RuntimeTypeComponent: ProvideTokioRuntimeType,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
+        RuntimeTypeComponent: ProvideHermesRuntime,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         [
             ChainTypeComponent,
@@ -91,7 +90,7 @@ delegate_components! {
     }
 }
 
-impl ProvideRuntime<CosmosBootstrap> for CosmosBootstrapComponents {
+impl RuntimeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
     fn runtime(bootstrap: &CosmosBootstrap) -> &HermesRuntime {
         &bootstrap.runtime
     }

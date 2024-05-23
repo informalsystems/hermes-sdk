@@ -1,10 +1,9 @@
-use hermes_cosmos_client_components::methods::encode::encode_protobuf;
-use hermes_cosmos_client_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::data::{Single, Sum};
 use ibc_proto::cosmos::tx::signing::v1beta1::signature_descriptor::Data;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
-use prost::EncodeError;
 use secp256k1::SecretKey;
 
 use crate::methods::encode::public_key::PublicKey;
@@ -21,10 +20,10 @@ pub fn client_state_proof_data(
     commitment_prefix: &str,
     client_id: &ClientId,
     cosmos_client_state: &TendermintClientState,
-) -> Result<SolomachineTimestampedSignData, EncodeError> {
+) -> SolomachineTimestampedSignData {
     let proto_client_state: ProtoClientState = cosmos_client_state.clone().into();
 
-    let client_state_bytes = encode_protobuf(&proto_client_state)?;
+    let client_state_bytes = encode_protobuf(&proto_client_state);
 
     let path = format!("{commitment_prefix}clients/{client_id}/clientState");
 
@@ -38,7 +37,7 @@ pub fn client_state_proof_data(
     };
 
     // Sign data using Secret Key
-    let signed_data = sign_with_data(secret_key, &sign_data)?;
+    let signed_data = sign_with_data(secret_key, &sign_data);
 
     let data = Data {
         sum: Some(Sum::Single(Single {
@@ -47,7 +46,7 @@ pub fn client_state_proof_data(
         })),
     };
 
-    let bytes_data = encode_protobuf(&data).unwrap();
+    let bytes_data = encode_protobuf(&data);
 
     // Create Timestamped signed data
     let timestamped_signed_data = SolomachineTimestampedSignData {
@@ -55,5 +54,5 @@ pub fn client_state_proof_data(
         timestamp: solo_client_state.consensus_state.timestamp,
     };
 
-    Ok(timestamped_signed_data)
+    timestamped_signed_data
 }

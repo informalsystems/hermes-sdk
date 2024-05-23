@@ -4,20 +4,19 @@ use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::types::tendermint::{
+use eyre::eyre;
+use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_relayer_runtime::types::error::TokioRuntimeError;
-use hermes_relayer_runtime::types::runtime::HermesRuntime;
-use ibc_relayer_types::core::ics03_connection::connection::{
-    ConnectionEnd, State as ConnectionState,
-};
+use hermes_runtime::types::error::TokioRuntimeError;
+use hermes_runtime::types::runtime::HermesRuntime;
+use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
+use ibc::core::host::types::identifiers::ConnectionId;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State as ChannelState};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
 use ibc_relayer_types::Height;
 use prost::EncodeError;
 use secp256k1::rand::rngs::OsRng;
@@ -25,7 +24,6 @@ use secp256k1::{Secp256k1, SecretKey};
 
 use crate::methods::encode::public_key::PublicKey;
 use crate::traits::solomachine::Solomachine;
-use crate::types::error::{BaseError, Error};
 
 const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 
@@ -83,22 +81,27 @@ impl Solomachine for MockSolomachine {
     }
 
     fn runtime_error(e: TokioRuntimeError) -> Self::Error {
-        BaseError::tokio(e).into()
+        e.into()
     }
 
     fn encode_error(e: EncodeError) -> Self::Error {
-        BaseError::encode(e).into()
+        e.into()
     }
 
     fn invalid_connection_state_error(
         expected: ConnectionState,
         actual: ConnectionState,
     ) -> Self::Error {
-        BaseError::invalid_connection_state(expected, actual).into()
+        eyre!(
+            "connection state error, expected {} got {}",
+            expected,
+            actual
+        )
+        .into()
     }
 
     fn invalid_channel_state_error(expected: ChannelState, actual: ChannelState) -> Self::Error {
-        BaseError::invalid_channel_state(expected, actual).into()
+        eyre!("channel state error, expected {} got {}", expected, actual).into()
     }
 
     fn public_key(&self) -> &PublicKey {
@@ -151,7 +154,7 @@ impl Solomachine for MockSolomachine {
         let client_states = self.client_states.lock().unwrap();
         client_states
             .get(client_id)
-            .ok_or_else(|| BaseError::missing_client_state(client_id.clone()).into())
+            .ok_or_else(|| eyre!("client state for client id `{}` was not found", client_id).into())
             .cloned()
     }
 
@@ -163,7 +166,13 @@ impl Solomachine for MockSolomachine {
         let client_consensus_states = self.client_consensus_states.lock().unwrap();
         client_consensus_states
             .get(client_id)
-            .ok_or_else(|| BaseError::missing_consensus_state(client_id.clone()).into())
+            .ok_or_else(|| {
+                eyre!(
+                    "consensus state for client id `{}` was not found",
+                    client_id
+                )
+                .into()
+            })
             .cloned()
     }
 
@@ -179,7 +188,13 @@ impl Solomachine for MockSolomachine {
         let connections = self.connections.lock().unwrap();
         connections
             .get(connection_id)
-            .ok_or_else(|| BaseError::missing_connection_end(connection_id.clone()).into())
+            .ok_or_else(|| {
+                eyre!(
+                    "connection end for connection id `{}` was not found",
+                    connection_id
+                )
+                .into()
+            })
             .cloned()
     }
 

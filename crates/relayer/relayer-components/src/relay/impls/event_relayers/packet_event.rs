@@ -1,17 +1,17 @@
 use cgp_core::async_trait;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::packet::from_write_ack::CanBuildPacketFromWriteAck;
 use crate::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{EventOf, HeightOf};
-use crate::logger::traits::level::HasBaseLogLevels;
 use crate::relay::impls::packet_filters::chain::{
     MatchPacketDestinationChain, MatchPacketSourceChain,
 };
+use crate::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;
 use crate::relay::traits::event_relayer::EventRelayer;
-use crate::relay::traits::logs::logger::CanLogRelay;
-use crate::relay::traits::logs::packet::CanLogRelayPacket;
 use crate::relay::traits::packet_filter::{CanFilterPackets, PacketFilter};
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::CanRelayPacket;
@@ -64,14 +64,11 @@ where
 #[async_trait]
 impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
-    Relay: CanRelayAckPacket
-        + CanFilterPackets
-        + HasPacketLock
-        + CanLogRelay
-        + CanLogRelayPacket
-        + CanRaiseRelayChainErrors,
+    Relay:
+        CanRelayAckPacket + CanFilterPackets + HasPacketLock + HasLogger + CanRaiseRelayChainErrors,
     Relay::DstChain: CanBuildPacketFromWriteAck<Relay::SrcChain>,
     MatchPacketSourceChain: PacketFilter<Relay>,
+    Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
     async fn relay_chain_event(
         relay: &Relay,
@@ -116,13 +113,12 @@ where
                         relay.relay_ack_packet(height, packet, &ack_event).await?;
                     }
                     None => {
-                        relay.log_relay(
-                            Relay::Logger::LEVEL_TRACE,
+                        relay.logger().log(
                             "skip relaying ack packet, as another packet relayer has acquired the packet lock",
-                            |log| {
-                                log.field("packet", Relay::log_packet(packet));
-                            },
-                        );
+                            &LogSkipRelayLockedPacket {
+                                relay,
+                                packet,
+                            }).await;
                     }
                 }
             }

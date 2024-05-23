@@ -1,9 +1,8 @@
-use oneline_eyre::eyre::Context;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::types::error::ErrorWrapper;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithLatestHeight,
@@ -11,6 +10,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use ibc_relayer_types::Height;
+use oneline_eyre::eyre::Context;
 
 use crate::Result;
 
@@ -60,7 +60,7 @@ impl CommandRunner<CosmosBuilder> for QueryClientConsensus {
         )
         .await
         .map(|cs| cs.chain_id)
-        .wrap_err("failed to query counterparty chain from client state")?;
+        .wrap_error("failed to query counterparty chain from client state")?;
 
         if let Some(consensus_height) = self.consensus_height {
             let consensus_height = Height::new(counterparty_chain_id.version(), consensus_height)
@@ -72,37 +72,41 @@ impl CommandRunner<CosmosBuilder> for QueryClientConsensus {
             let query_height = self.height.map(|height| {
                 Height::new(self.chain_id.version(), height)
                     .wrap_err_with(|| format!(
-                        "Failed to create Height with revision number `{}` and revision height `{height}`", 
+                        "Failed to create Height with revision number `{}` and revision height `{height}`",
                         self.chain_id.version()
                     ))
             }).transpose()?;
 
             let consensus_state = if let Some(query_height) = query_height {
-                chain
-                    .query_consensus_state(&self.client_id, &consensus_height, &query_height)
-                    .await
-                    .wrap_err_with(|| {
-                        format!(
-                            "failed to query consensus state at height `{}` for client `{}`",
-                            consensus_height, self.client_id
-                        )
-                    })?
+                <CosmosChain as CanQueryConsensusState<CosmosChain>>::query_consensus_state(
+                    &chain,
+                    &self.client_id,
+                    &consensus_height,
+                    &query_height,
+                )
+                .await
+                .map_err(|e| {
+                    e.wrap(format!(
+                        "failed to query consensus state at height `{}` for client `{}`",
+                        consensus_height, self.client_id
+                    ))
+                })?
             } else {
-                chain
-                    .query_consensus_state_with_latest_height(&self.client_id, &consensus_height)
+                <CosmosChain as CanQueryConsensusStateWithLatestHeight<CosmosChain>>
+                    ::query_consensus_state_with_latest_height(&chain, &self.client_id, &consensus_height)
                     .await
-                    .wrap_err_with(|| {
-                        format!(
+                    .map_err(|e| {
+                        e.wrap(format!(
                             "failed to query latest consensus state at height `{}` for client `{}`",
                             consensus_height, self.client_id
-                        )
+                        ))
                     })?
             };
 
             Ok(Output::success(consensus_state))
         } else {
             let heights = <CosmosChain as CanQueryConsensusStateHeights<CosmosChain>>::query_consensus_state_heights(&chain, &self.client_id).await
-                .wrap_err_with(|| format!("failed to query consensus state heights for client `{}`", self.client_id))?;
+                .map_err(|e| e.wrap(format!("failed to query consensus state heights for client `{}`", self.client_id)))?;
 
             Ok(Output::success(heights))
         }

@@ -5,12 +5,12 @@ use core::ops::DerefMut;
 use cgp_core::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
-use hermes_relayer_components::runtime::traits::mutex::HasMutex;
-use hermes_relayer_components::runtime::traits::task::Task;
-use hermes_relayer_components_extra::runtime::traits::channel::{
+use hermes_runtime_components::traits::channel::{
     CanCreateChannels, CanStreamReceiver, CanUseChannels, HasChannelTypes,
 };
-use hermes_relayer_components_extra::runtime::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::mutex::HasMutex;
+use hermes_runtime_components::traits::spawn::CanSpawnTask;
+use hermes_runtime_components::traits::task::Task;
 
 use crate::stream::traits::boxed::HasBoxedStreamType;
 use crate::subscription::impls::multiplex::MultiplexingSubscription;

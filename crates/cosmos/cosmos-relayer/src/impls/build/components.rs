@@ -1,14 +1,10 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use hermes_relayer_components::logger::traits::has_logger::{
-    LoggerFieldComponent, LoggerTypeComponent,
-};
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
 use hermes_relayer_components_extra::components::extra::build::{
     CanUseExtraBuildComponents, ExtraBuildComponents, IsExtraBuildComponent,
 };
-use hermes_relayer_runtime::impls::logger::components::ProvideTracingLogger;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::contexts::builder::CosmosBuilder;
 use crate::impls::error::HandleCosmosError;
@@ -41,11 +37,6 @@ delegate_components! {
         ]:
             HandleCosmosError,
         RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
-        [
-            LoggerTypeComponent,
-            LoggerFieldComponent,
-        ]:
-            ProvideTracingLogger,
+            ProvideHermesRuntime,
     }
 }

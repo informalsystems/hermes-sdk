@@ -2,20 +2,17 @@ use core::fmt;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
-use ibc_relayer::chain::counterparty::pending_packet_summary;
 use ibc_relayer::chain::counterparty::{
-    channel_connection_client, channel_on_destination, PendingPackets,
+    channel_connection_client, channel_on_destination, pending_packet_summary, PendingPackets,
 };
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use oneline_eyre::eyre::eyre;
 use serde::Serialize;
 
-use crate::Result;
-
 use super::util::CollatedPendingPackets;
+use crate::Result;
 
 #[derive(Debug, clap::Parser)]
 pub struct QueryPendingPackets {
@@ -118,12 +115,7 @@ impl QueryPendingPackets {
         let chan_conn_cli = chain
             .with_blocking_chain_handle(move |handle| {
                 let chan_conn_cli = channel_connection_client(&handle, &port_id, &channel_id)
-                    .map_err(|e| {
-                        BaseError::generic(eyre!(
-                            "failed to get channel connection and client: {}",
-                            e
-                        ))
-                    })?;
+                    .map_err(|e| eyre!("failed to get channel connection and client: {}", e))?;
                 Ok(chan_conn_cli)
             })
             .await?;
@@ -136,20 +128,20 @@ impl QueryPendingPackets {
             &counterparty_chain.handle,
             &chan_conn_cli.channel,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed to get pending packet summary: {}", e)))?;
+        .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
 
         let counterparty_channel = channel_on_destination(
             &chan_conn_cli.channel,
             &chan_conn_cli.connection,
             &counterparty_chain.handle,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed to get channel on destination: {}", e)))?
+        .map_err(|e| eyre!("failed to get channel on destination: {}", e))?
         .ok_or_else(|| {
-            BaseError::generic(eyre!(
+            eyre!(
                 "missing counterparty channel for ({}, {})",
                 chan_conn_cli.channel.channel_id,
                 chan_conn_cli.channel.port_id
-            ))
+            )
         })?;
 
         let dst_summary = pending_packet_summary(
@@ -157,7 +149,7 @@ impl QueryPendingPackets {
             &chain.handle,
             &counterparty_channel,
         )
-        .map_err(|e| BaseError::generic(eyre!("failed to get pending packet summary: {}", e)))?;
+        .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
 
         Ok(Summary {
             src_chain: chain_id,

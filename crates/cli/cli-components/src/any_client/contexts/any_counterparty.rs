@@ -1,20 +1,38 @@
-use core::time::Duration;
-
 use cgp_core::prelude::*;
-use hermes_cosmos_client_components::impls::types::chain::ProvideCosmosChainTypes;
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
+use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
+use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
+use hermes_encoding_components::impls::delegate::DelegateEncoding;
+use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
+use hermes_encoding_components::traits::decoder::{CanDecode, DecoderComponent};
+use hermes_encoding_components::traits::encoded::EncodedTypeComponent;
+use hermes_encoding_components::traits::encoder::EncoderComponent;
+use hermes_encoding_components::traits::has_encoding::{
+    DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
+};
+use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
+use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    AllClientStatesQuerierComponent, ClientStateQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateDecoderComponent, ProvideClientStateType,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 
-use crate::any_client::decoders::client_state::DecodeAnyClientState;
+use crate::any_client::impls::encoding::convert::AnyClientConverterComponents;
+use crate::any_client::impls::encoding::encode::AnyClientEncoderComponents;
+use crate::any_client::impls::types::client_state::ProvideAnyClientState;
 use crate::any_client::types::client_state::AnyClientState;
 
 pub struct AnyCounterparty;
@@ -36,40 +54,77 @@ delegate_components! {
             ChainStatusTypeComponent,
         ]:
             ProvideCosmosChainTypes,
-        ClientStateDecoderComponent:
-            DecodeAnyClientState,
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            ProvideAnyClientState,
+        EncodingGetterComponent:
+            GetDefaultEncoding,
     }
 }
 
-impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty> for AnyCounterpartyComponents
-where
-    Chain: Async,
+pub struct AnyCounterpartyCosmosComponents;
+
+delegate_components! {
+    AnyCounterpartyCosmosComponents {
+        [
+            ClientStateQuerierComponent,
+            AllClientStatesQuerierComponent,
+        ]: QueryAndConvertRawClientState,
+    }
+}
+
+delegate_components! {
+    DelegateCosmosChainComponents {
+        AnyCounterparty: AnyCounterpartyCosmosComponents,
+    }
+}
+
+impl ProvideEncodingType<AnyCounterparty> for AnyCounterpartyComponents {
+    type Encoding = AnyClientEncoding;
+}
+
+impl DefaultEncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
+    fn default_encoding() -> &'static AnyClientEncoding {
+        &AnyClientEncoding
+    }
+}
+
+pub struct AnyClientEncoding;
+
+pub struct AnyClientEncodingComponents;
+
+impl HasComponents for AnyClientEncoding {
+    type Components = AnyClientEncodingComponents;
+}
+
+delegate_components! {
+    AnyClientEncodingComponents {
+        ErrorTypeComponent: ProvideEyreError,
+        ErrorRaiserComponent: RaiseDebugError,
+        [
+            EncoderComponent,
+            DecoderComponent,
+        ]:
+            DelegateEncoding<AnyClientEncoderComponents>,
+        [
+            EncodedTypeComponent,
+            SchemaTypeComponent,
+            SchemaGetterComponent,
+        ]:
+            CosmosEncodingComponents,
+        ConverterComponent:
+            DelegateEncoding<AnyClientConverterComponents>,
+    }
+}
+
+pub trait CheckAnyClientEncoding:
+    CanDecode<Protobuf, TendermintClientState>
+    + CanDecode<Protobuf, Any>
+    + CanDecode<Protobuf, AnyClientState>
+    + CanConvert<Any, AnyClientState>
 {
-    type ClientState = AnyClientState;
 }
 
-impl<Chain> HasClientStateFields<Chain> for AnyCounterparty {
-    fn client_state_chain_id(client_state: &Self::ClientState) -> &Self::ChainId {
-        match client_state {
-            AnyClientState::Tendermint(cs) => &cs.chain_id,
-        }
-    }
-
-    fn client_state_latest_height(client_state: &Self::ClientState) -> &Self::Height {
-        match client_state {
-            AnyClientState::Tendermint(cs) => &cs.latest_height,
-        }
-    }
-
-    fn client_state_is_frozen(client_state: &Self::ClientState) -> bool {
-        match client_state {
-            AnyClientState::Tendermint(cs) => cs.frozen_height.is_some(),
-        }
-    }
-
-    fn client_state_has_expired(client_state: &Self::ClientState, elapsed: Duration) -> bool {
-        match client_state {
-            AnyClientState::Tendermint(cs) => cs.expired(elapsed),
-        }
-    }
-}
+impl CheckAnyClientEncoding for AnyClientEncoding {}

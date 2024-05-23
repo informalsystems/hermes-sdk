@@ -48,7 +48,7 @@ use crate::relay::traits::packet_relayer::PacketRelayerComponent;
 use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
 use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
-use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilderComponent;
+use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
 pub struct DefaultRelayComponents;
 
@@ -57,7 +57,7 @@ delegate_components! {
     #[mark_delegate(DelegatesToDefaultRelayComponents)]
     DefaultRelayComponents {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-        UpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
+        TargetUpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
         PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
         ReceivePacketRelayerComponnent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
         AckPacketRelayerComponent: BaseAckPacketRelayer,

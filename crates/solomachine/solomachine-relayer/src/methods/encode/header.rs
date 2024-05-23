@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
 
-use hermes_cosmos_client_components::methods::encode::encode_to_any;
+use hermes_cosmos_chain_components::methods::encode::encode_to_any;
 use ibc_proto::google::protobuf::Any;
-use prost::{EncodeError, Message};
+use prost::Message;
 use secp256k1::SecretKey;
 
 use crate::methods::encode::header_data::sign_header_data;
@@ -23,7 +23,7 @@ pub struct ProtoHeader {
     pub new_diversifier: ::prost::alloc::string::String,
 }
 
-pub fn encode_header(header: &SolomachineHeader) -> Result<Any, EncodeError> {
+pub fn encode_header(header: &SolomachineHeader) -> Any {
     let new_public_key = encode_public_key(&header.header_data.new_public_key);
 
     let proto_header = ProtoHeader {
@@ -39,8 +39,8 @@ pub fn encode_header(header: &SolomachineHeader) -> Result<Any, EncodeError> {
 pub fn sign_and_create_header(
     secret_key: &SecretKey,
     header_data: &SolomachineSignHeaderData,
-) -> Result<SolomachineHeader, EncodeError> {
-    let signature = sign_header_data(secret_key, header_data)?;
+) -> SolomachineHeader {
+    let signature = sign_header_data(secret_key, header_data);
 
     let header = SolomachineHeader {
         timestamp: header_data.timestamp,
@@ -48,5 +48,5 @@ pub fn sign_and_create_header(
         header_data: header_data.header_data.clone(),
     };
 
-    Ok(header)
+    header
 }

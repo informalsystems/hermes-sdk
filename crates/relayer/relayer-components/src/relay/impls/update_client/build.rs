@@ -9,12 +9,12 @@ use crate::chain::traits::queries::consensus_state_height::CanQueryConsensusStat
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
-use crate::relay::traits::update_client_message_builder::UpdateClientMessageBuilder;
+use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 
 pub struct BuildUpdateClientMessages;
 
 #[async_trait]
-impl<Relay, Target, TargetChain, CounterpartyChain> UpdateClientMessageBuilder<Relay, Target>
+impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBuilder<Relay, Target>
     for BuildUpdateClientMessages
 where
     Relay: HasRelayChains,
@@ -25,7 +25,7 @@ where
     CounterpartyChain: CanBuildUpdateClientPayload<TargetChain> + HasClientStateFields<TargetChain>,
     CounterpartyChain::Height: Clone,
 {
-    async fn build_update_client_messages(
+    async fn build_target_update_client_messages(
         relay: &Relay,
         _target: Target,
         target_height: &CounterpartyChain::Height,
@@ -44,11 +44,11 @@ where
 
         // If the client state height is already the same as target height, then there
         // is no need to build any UpdateClient message
-        if client_state_height == target_height {
+        if &client_state_height == target_height {
             return Ok(Vec::new());
         }
 
-        let trusted_height = if client_state_height < target_height {
+        let trusted_height = if &client_state_height < target_height {
             // If the client state height is less than the target height, we can use that
             // as a base trust height to build our UpdateClient headers.
             client_state_height.clone()

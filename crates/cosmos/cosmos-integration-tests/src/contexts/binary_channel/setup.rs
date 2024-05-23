@@ -2,14 +2,13 @@ use alloc::sync::Arc;
 
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::Error;
-use hermes_cosmos_client_components::types::channel::CosmosInitChannelOptions;
-use hermes_cosmos_client_components::types::connection::CosmosInitConnectionOptions;
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
+use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
 use hermes_test_components::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
 use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTypeAt;
 use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
@@ -64,8 +63,8 @@ delegate_all!(
 
 delegate_components! {
     CosmosBinaryChannelSetupComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
     }
 }
 

@@ -1,6 +1,7 @@
 use cgp_core::{ErrorRaiser, HasComponents};
-use hermes_relayer_components::logger::traits::has_logger::{HasLogger, HasLoggerType};
-use hermes_relayer_components::logger::traits::level::HasBaseLogLevels;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_relayer_components::relay::traits::event_relayer::CanRelayEvent;
 use hermes_relayer_components::relay::traits::packet::HasRelayPacketFields;
@@ -24,18 +25,17 @@ impl<Relay, SrcChain, DstChain, Components> UseExtraEventRelayer for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasPacketLock
-        + HasLogger
         + HasRelayPacketFields
+        + HasLogger
         + UseExtraAckPacketRelayer
         + UseExtraPacketRelayer
         + HasComponents<Components = Components>,
-    SrcChain:
-        HasLoggerType<Logger = Relay::Logger> + UseExtraChainComponentsForEventRelayer<DstChain>,
+    SrcChain: UseExtraChainComponentsForEventRelayer<DstChain>,
     DstChain: UseExtraChainComponentsForEventRelayer<SrcChain>,
-    Relay::Logger: HasBaseLogLevels,
     Components: DelegatesToExtraRelayComponents
         + PacketFilter<Relay>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
+    Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
 }

@@ -15,9 +15,11 @@ description  = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+hermes-runtime-components           = { workspace = true }
+hermes-logging-components           = { workspace = true }
 hermes-relayer-components           = { workspace = true }
-hermes-relayer-runtime              = { workspace = true }
-hermes-cosmos-client-components     = { workspace = true }
+hermes-runtime                      = { workspace = true }
+hermes-cosmos-chain-components      = { workspace = true }
 
 eyre          = { workspace = true }
 flex-error    = { workspace = true }

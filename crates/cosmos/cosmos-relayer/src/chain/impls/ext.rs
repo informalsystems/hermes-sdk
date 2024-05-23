@@ -1,41 +1,30 @@
-use cgp_core::prelude::*;
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_client_components::traits::grpc_address::HasGrpcAddress;
-use hermes_cosmos_client_components::traits::has_tx_context::HasTxContext;
-use hermes_cosmos_client_components::traits::rpc_client::HasRpcClient;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
+use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use http::Uri;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use tendermint_rpc::{HttpClient, Url};
 
+use crate::chain::components::CosmosChainComponents;
 use crate::contexts::chain::CosmosChain;
-use crate::contexts::transaction::CosmosTxContext;
-use crate::types::error::{BaseError, Error};
+use crate::types::error::Error;
 
-impl HasTxContext for CosmosChain {
-    type TxContext = CosmosTxContext;
-
-    fn tx_context(&self) -> &Self::TxContext {
-        &self.tx_context
+impl GrpcAddressGetter<CosmosChain> for CosmosChainComponents {
+    fn grpc_address(chain: &CosmosChain) -> &Uri {
+        &chain.tx_config.grpc_address
     }
 }
 
-impl HasGrpcAddress for CosmosChain {
-    fn grpc_address(&self) -> &Uri {
-        &self.tx_context.tx_config.grpc_address
+impl RpcClientGetter<CosmosChain> for CosmosChainComponents {
+    fn rpc_client(chain: &CosmosChain) -> &HttpClient {
+        &chain.rpc_client
+    }
+
+    fn rpc_address(chain: &CosmosChain) -> &Url {
+        &chain.tx_config.rpc_address
     }
 }
 
-impl HasRpcClient for CosmosChain {
-    fn rpc_client(&self) -> &HttpClient {
-        &self.tx_context.rpc_client
-    }
-
-    fn rpc_address(&self) -> &Url {
-        &self.tx_context.tx_config.rpc_address
-    }
-}
-
-#[async_trait]
 impl HasBlockingChainHandle for CosmosChain {
     type ChainHandle = BaseChainHandle;
 
@@ -51,7 +40,6 @@ impl HasBlockingChainHandle for CosmosChain {
         self.runtime
             .runtime
             .spawn_blocking(move || cont(chain_handle))
-            .await
-            .map_err(BaseError::join)?
+            .await?
     }
 }

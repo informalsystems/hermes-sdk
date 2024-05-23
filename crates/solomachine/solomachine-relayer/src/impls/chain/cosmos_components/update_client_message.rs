@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
-use hermes_cosmos_client_components::traits::message::{CosmosMessage, ToCosmosMessage};
-use hermes_cosmos_client_components::types::messages::client::update::CosmosUpdateClientMessage;
-use hermes_cosmos_relayer::types::error::{BaseError, Error};
+use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
+use hermes_cosmos_chain_components::types::messages::client::update::CosmosUpdateClientMessage;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
@@ -27,7 +27,7 @@ where
         client_id: &ClientId,
         payload: SolomachineUpdateClientPayload,
     ) -> Result<Vec<CosmosMessage>, Error> {
-        let header = encode_header(&payload.header).map_err(BaseError::encode)?;
+        let header = encode_header(&payload.header);
 
         let message = CosmosUpdateClientMessage {
             client_id: client_id.clone(),

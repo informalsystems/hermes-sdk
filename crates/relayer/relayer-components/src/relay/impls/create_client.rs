@@ -1,8 +1,11 @@
-use cgp_core::async_trait;
+use core::fmt::Debug;
+
+use cgp_core::CanRaiseError;
 
 use crate::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use crate::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use crate::chain::traits::send_message::CanSendSingleMessage;
+use crate::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use crate::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayloadType,
 };
@@ -12,27 +15,48 @@ use crate::relay::traits::target::ChainTarget;
 
 pub struct CreateClientWithChains;
 
-pub trait CanRaiseMissingCreateClientEventError<Target>: HasRelayChains
+pub struct MissingCreateClientEventError<'a, TargetChain, CounterpartyChain>
 where
-    Target: ChainTarget<Self>,
+    TargetChain: HasChainIdType,
+    CounterpartyChain: HasChainIdType,
 {
-    fn missing_create_client_event_error(
-        target_chain: &Target::TargetChain,
-        counterparty_chain: &Target::CounterpartyChain,
-    ) -> Self::Error;
+    pub target_chain_id: &'a TargetChain::ChainId,
+    pub counterparty_chain_id: &'a CounterpartyChain::ChainId,
 }
 
-#[async_trait]
+impl<'a, TargetChain, CounterpartyChain> Debug
+    for MissingCreateClientEventError<'a, TargetChain, CounterpartyChain>
+where
+    TargetChain: HasChainIdType,
+    CounterpartyChain: HasChainIdType,
+    TargetChain::ChainId: Debug,
+    CounterpartyChain::ChainId: Debug,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("MissingCreateClientEventError")
+            .field(
+                "message",
+                &"missing CreateClient event when creating client",
+            )
+            .field("target_chain_id", &self.target_chain_id)
+            .field("counterparty_chain_id", &self.counterparty_chain_id)
+            .finish()
+    }
+}
+
 impl<Relay, Target, TargetChain, CounterpartyChain> ClientCreator<Relay, Target>
     for CreateClientWithChains
 where
-    Relay: CanRaiseMissingCreateClientEventError<Target>,
+    Relay: HasRelayChains
+        + for<'a> CanRaiseError<MissingCreateClientEventError<'a, TargetChain, CounterpartyChain>>,
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
     TargetChain: CanSendSingleMessage
+        + HasChainId
         + CanBuildCreateClientMessage<CounterpartyChain>
         + HasCreateClientEvent<CounterpartyChain>,
-    CounterpartyChain:
-        CanBuildCreateClientPayload<TargetChain> + HasCreateClientPayloadType<TargetChain>,
+    CounterpartyChain: HasChainId
+        + CanBuildCreateClientPayload<TargetChain>
+        + HasCreateClientPayloadType<TargetChain>,
     TargetChain::ClientId: Clone,
 {
     async fn create_client(
@@ -60,7 +84,10 @@ where
             .into_iter()
             .find_map(|event| TargetChain::try_extract_create_client_event(event))
             .ok_or_else(|| {
-                Relay::missing_create_client_event_error(target_chain, counterparty_chain)
+                Relay::raise_error(MissingCreateClientEventError {
+                    target_chain_id: target_chain.chain_id(),
+                    counterparty_chain_id: counterparty_chain.chain_id(),
+                })
             })?;
 
         let client_id = TargetChain::create_client_event_client_id(&create_client_event);

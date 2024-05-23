@@ -13,14 +13,11 @@ description  = """
 """
 
 [dependencies]
-hermes-relayer-components           = { workspace = true }
-hermes-relayer-components-extra     = { workspace = true }
-hermes-test-components              = { workspace = true }
+cgp-core                            = { workspace = true }
+hermes-runtime-components           = { workspace = true }
 hermes-async-runtime-components     = { workspace = true }
 
-cgp-core    = { workspace = true }
-tokio       = { workspace = true, features = ["full"] }
-futures     = { workspace = true }
-
+tokio           = { workspace = true, features = ["full"] }
+futures         = { workspace = true }
+rand            = { workspace = true }
 tokio-stream    = { version = "0.1" }
-rand            = { version = "0.8.5" }

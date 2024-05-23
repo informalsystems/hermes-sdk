@@ -8,23 +8,23 @@ use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::wallet_config::HasWalletConfigType;
 use hermes_cosmos_test_components::bootstrap::types::wallet_config::CosmosWalletConfig;
-use hermes_cosmos_test_components::chain_driver::types::amount::Amount;
-use hermes_cosmos_test_components::chain_driver::types::denom::Denom;
-use hermes_test_components::chain_driver::traits::types::denom::HasDenomType;
-use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
+use hermes_cosmos_test_components::chain::types::amount::Amount;
+use hermes_cosmos_test_components::chain::types::denom::Denom;
+use hermes_test_components::chain::traits::types::denom::HasDenomType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 pub struct GenerateCelestiaWalletConfig;
 
 #[async_trait]
-impl<Bootstrap, ChainDriver> WalletConfigGenerator<Bootstrap> for GenerateCelestiaWalletConfig
+impl<Bootstrap, Chain> WalletConfigGenerator<Bootstrap> for GenerateCelestiaWalletConfig
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>
-        + HasChainDriverType<ChainDriver = ChainDriver>
+        + HasChainType<Chain = Chain>
         + HasChainGenesisConfigType
         + HasErrorType
         + HasGenesisDenom<DenomForStaking>
         + HasGenesisDenom<DenomForTransfer>,
-    ChainDriver: HasDenomType<Denom = Denom>,
+    Chain: HasDenomType<Denom = Denom>,
 {
     async fn generate_wallet_configs(
         _bootstrap: &Bootstrap,
@@ -44,15 +44,6 @@ where
                 1_000_000_000_000_000_000,
                 denom_for_staking.clone(),
             )),
-        };
-
-        let bridge = CosmosWalletConfig {
-            wallet_id: "bridge".to_owned(),
-            genesis_balances: vec![
-                Amount::new(2_000_000_000_000_000_000, denom_for_staking.clone()),
-                Amount::new(1_000_000_000_000_000_000, denom_for_transfer.clone()),
-            ],
-            validator_staked_amount: None,
         };
 
         let sequencer = CosmosWalletConfig {
@@ -93,7 +84,6 @@ where
 
         Ok(BTreeMap::from([
             ("validator".into(), validator),
-            ("bridge".into(), bridge),
             ("sequencer".into(), sequencer),
             ("user1".into(), user1),
             ("user2".into(), user2),

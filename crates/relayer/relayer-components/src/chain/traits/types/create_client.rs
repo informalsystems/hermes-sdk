@@ -15,6 +15,7 @@ pub trait HasCreateClientPayloadType<Counterparty>: Async {
     type CreateClientPayload: Async;
 }
 
+#[derive_component(CreateClientEventComponent, ProvideCreateClientEvent<Chain>)]
 pub trait HasCreateClientEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type CreateClientEvent: Async;
 

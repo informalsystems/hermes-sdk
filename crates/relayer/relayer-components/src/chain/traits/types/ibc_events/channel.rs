@@ -1,7 +1,8 @@
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
+#[derive_component(ChannelOpenInitEventComponent, ProvideChannelOpenInitEvent<Chain>)]
 pub trait HasChannelOpenInitEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type ChannelOpenInitEvent: Async;
 
@@ -12,6 +13,7 @@ pub trait HasChannelOpenInitEvent<Counterparty>: HasIbcChainTypes<Counterparty> 
     fn channel_open_init_event_channel_id(event: &Self::ChannelOpenInitEvent) -> &Self::ChannelId;
 }
 
+#[derive_component(ChannelOpenTryEventComponent, ProvideChannelOpenTryEvent<Chain>)]
 pub trait HasChannelOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     type ChannelOpenTryEvent: Async;
 

@@ -1,10 +1,11 @@
-use cgp_core::delegate_all;
 use cgp_core::prelude::*;
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
-use hermes_relayer_components::runtime::traits::runtime::RuntimeTypeComponent;
-use hermes_relayer_runtime::impls::types::runtime::ProvideTokioRuntimeType;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
 use crate::context::relay::SolomachineRelay;
 
@@ -25,7 +26,8 @@ where
 
 delegate_components! {
     SolomachineRelayComponents {
-        RuntimeTypeComponent:
-            ProvideTokioRuntimeType,
+        RuntimeTypeComponent: ProvideHermesRuntime,
+        ErrorTypeComponent: ProvideCosmosError,
+        ErrorRaiserComponent: DebugError,
     }
 }

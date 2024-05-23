@@ -1,17 +1,13 @@
-use oneline_eyre::eyre::eyre;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
-
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
 use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use ibc_relayer_types::Height;
+use oneline_eyre::eyre::eyre;
 
 use crate::Result;
 
@@ -61,7 +57,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnd {
 
         let query_height = if let Some(height) = height {
             let specified_height = Height::new(chain.chain_id.version(), height)
-                .map_err(|e| BaseError::generic(eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain.chain_id.version())))?;
+                .map_err(|e| eyre!("Failed to create Height with revision number `{}` and revision height `{height}`. Error: {e}", chain.chain_id.version()))?;
 
             QueryHeight::Specific(specified_height)
         } else {
@@ -79,7 +75,7 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnd {
                     IncludeProof::No,
                 ) {
                     Ok((channel_end, _)) => Ok(channel_end),
-                    Err(e) => Err(BaseError::relayer(e).into()),
+                    Err(e) => Err(e.into()),
                 }
             })
             .await;
@@ -87,17 +83,17 @@ impl CommandRunner<CosmosBuilder> for QueryChannelEnd {
         match channel_end {
             Ok(channel_end) => {
                 if channel_end.state_matches(&State::Uninitialized) {
-                    Err(BaseError::generic(eyre!(
+                    Err(eyre!(
                         "port '{}' & channel '{}' do not exist",
                         self.port_id,
                         self.channel_id,
-                    ))
+                    )
                     .into())
                 } else {
                     Ok(Output::success(channel_end))
                 }
             }
-            Err(e) => Err(e.into()),
+            Err(e) => Err(e),
         }
     }
 }

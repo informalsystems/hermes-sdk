@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use futures_util::lock::{Mutex, MutexGuard};
-use hermes_relayer_components::runtime::traits::mutex::ProvideMutex;
+use hermes_runtime_components::traits::mutex::ProvideMutex;
 
 pub struct ProvideFuturesMutex;
 

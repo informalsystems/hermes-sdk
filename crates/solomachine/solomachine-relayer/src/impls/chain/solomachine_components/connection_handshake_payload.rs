@@ -1,7 +1,15 @@
-use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::ConnectionHandshakePayloadBuilder;
-use ibc_relayer_types::core::ics03_connection::connection::State as ConnectionState;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use core::str::FromStr;
+
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
+    ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
+};
+use ibc::core::connection::types::version::Version;
+use ibc::core::connection::types::State as ConnectionState;
+use ibc::core::host::types::identifiers::ConnectionId;
+use ibc_relayer_types::core::ics24_host::identifier::{
+    ClientId, ConnectionId as RelayerConnectionId,
+};
 use ibc_relayer_types::Height;
 
 use crate::methods::proofs::client_state::client_state_proof_data;
@@ -17,8 +25,7 @@ use crate::types::payloads::connection::{
 
 pub struct BuildSolomachineConnectionHandshakePayloads;
 
-#[async_trait]
-impl<Chain, Counterparty> ConnectionHandshakePayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ConnectionOpenInitPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineConnectionHandshakePayloads
 where
     Chain: Solomachine,
@@ -30,20 +37,29 @@ where
         let commitment_prefix = chain.chain.commitment_prefix();
 
         let payload = SolomachineConnectionOpenInitPayload {
-            commitment_prefix: commitment_prefix.to_string(),
+            commitment_prefix: commitment_prefix.into(),
         };
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenTryPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineConnectionHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_connection_open_try_payload(
         chain: &SolomachineChain<Chain>,
         solo_client_state: &SolomachineClientState,
         height: &Height,
         client_id: &ClientId,
-        connection_id: &ConnectionId,
+        connection_id: &RelayerConnectionId,
     ) -> Result<SolomachineConnectionOpenTryPayload, Chain::Error> {
-        let connection = chain.chain.query_connection(connection_id).await?;
+        let connection = chain
+            .chain
+            .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())
+            .await?;
 
         if connection.state != ConnectionState::Init {
             return Err(Chain::invalid_connection_state_error(
@@ -68,8 +84,7 @@ where
             commitment_prefix,
             connection_id,
             connection,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let cosmos_client_state = chain.chain.query_client_state(client_id).await?;
 
@@ -80,8 +95,7 @@ where
             commitment_prefix,
             client_id,
             &cosmos_client_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let cosmos_consensus_state = chain
             .chain
@@ -95,11 +109,10 @@ where
             client_id,
             *height,
             &cosmos_consensus_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let payload = SolomachineConnectionOpenTryPayload {
-            commitment_prefix: commitment_prefix.to_string(),
+            commitment_prefix: commitment_prefix.into(),
             client_state: cosmos_client_state,
             versions,
             delay_period,
@@ -111,17 +124,26 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenAckPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineConnectionHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_connection_open_ack_payload(
         chain: &SolomachineChain<Chain>,
         client_state: &SolomachineClientState,
         height: &Height,
         client_id: &ClientId,
-        connection_id: &ConnectionId,
+        connection_id: &RelayerConnectionId,
     ) -> Result<SolomachineConnectionOpenAckPayload, Chain::Error> {
         let public_key = chain.chain.public_key();
         let secret_key = chain.chain.secret_key();
-        let connection = chain.chain.query_connection(connection_id).await?;
+        let connection = chain
+            .chain
+            .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())
+            .await?;
 
         if connection.state != ConnectionState::TryOpen {
             return Err(Chain::invalid_connection_state_error(
@@ -135,7 +157,8 @@ where
             .iter()
             .next()
             .cloned()
-            .unwrap_or_default();
+            .or_else(|| Version::compatibles().into_iter().next())
+            .unwrap();
 
         let commitment_prefix = chain.chain.commitment_prefix();
 
@@ -148,8 +171,7 @@ where
             commitment_prefix,
             client_id,
             &cosmos_client_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let connection_proof: crate::types::sign_data::SolomachineTimestampedSignData =
             connection_proof_data(
@@ -159,8 +181,7 @@ where
                 commitment_prefix,
                 connection_id,
                 connection,
-            )
-            .map_err(Chain::encode_error)?;
+            );
 
         let cosmos_consensus_state = chain
             .chain
@@ -174,8 +195,7 @@ where
             client_id,
             *height,
             &cosmos_consensus_state,
-        )
-        .map_err(Chain::encode_error)?;
+        );
 
         let payload = SolomachineConnectionOpenAckPayload {
             client_state: cosmos_client_state,
@@ -188,20 +208,29 @@ where
 
         Ok(payload)
     }
+}
 
+impl<Chain, Counterparty> ConnectionOpenConfirmPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+    for BuildSolomachineConnectionHandshakePayloads
+where
+    Chain: Solomachine,
+{
     async fn build_connection_open_confirm_payload(
         chain: &SolomachineChain<Chain>,
         client_state: &SolomachineClientState,
         height: &Height,
         client_id: &ClientId,
-        connection_id: &ConnectionId,
+        connection_id: &RelayerConnectionId,
     ) -> Result<SolomachineConnectionOpenConfirmPayload, Chain::Error> {
         let public_key = chain.chain.public_key();
         let secret_key = chain.chain.secret_key();
         let commitment_prefix = chain.chain.commitment_prefix();
         let _cosmos_client_state = chain.chain.query_client_state(client_id).await?;
 
-        let connection = chain.chain.query_connection(connection_id).await?;
+        let connection = chain
+            .chain
+            .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())
+            .await?;
 
         // TODO confirm connection state
         /*if connection.state != ConnectionState::TryOpen {
@@ -219,8 +248,7 @@ where
                 commitment_prefix,
                 connection_id,
                 connection,
-            )
-            .map_err(Chain::encode_error)?;
+            );
 
         let payload = SolomachineConnectionOpenConfirmPayload {
             update_height: *height,

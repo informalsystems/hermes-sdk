@@ -1,10 +1,7 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-
-use hermes_cosmos_client_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::BaseError;
-
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::QueryChannelClientStateRequest;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
@@ -54,13 +51,13 @@ impl CommandRunner<CosmosBuilder> for QueryChannelClient {
                     channel_id,
                 }) {
                     Ok(maybe_client_state) => Ok(maybe_client_state),
-                    Err(e) => Err(BaseError::relayer(e).into()),
+                    Err(e) => Err(e.into()),
                 }
             })
             .await
         {
             Ok(client_state) => Ok(Output::success(client_state)),
-            Err(e) => Err(e.into()),
+            Err(e) => Err(e),
         }
     }
 }

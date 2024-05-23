@@ -1,14 +1,12 @@
-use cgp_core::async_trait;
-
-use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionHandshakeMessages;
-use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionHandshakePayloads;
+use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenAckMessage;
+use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenAckPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::connection::open_ack::ConnectionOpenAckRelayer;
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::target::{DestinationTarget, SourceTarget};
-use crate::relay::traits::update_client_message_builder::CanSendUpdateClientMessage;
+use crate::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 
 /**
    A base implementation of [`ConnectionOpenAckRelayer`] that relays a new connection
@@ -23,16 +21,15 @@ use crate::relay::traits::update_client_message_builder::CanSendUpdateClientMess
 */
 pub struct RelayConnectionOpenAck;
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain> ConnectionOpenAckRelayer<Relay> for RelayConnectionOpenAck
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
-        + CanSendUpdateClientMessage<DestinationTarget>
+        + CanSendTargetUpdateClientMessage<DestinationTarget>
         + CanSendSingleIbcMessage<MainSink, SourceTarget>
         + CanRaiseRelayChainErrors,
-    SrcChain: CanBuildConnectionHandshakeMessages<DstChain>
-        + CanQueryClientStateWithLatestHeight<DstChain>,
-    DstChain: CanQueryChainHeight + CanBuildConnectionHandshakePayloads<SrcChain>,
+    SrcChain:
+        CanBuildConnectionOpenAckMessage<DstChain> + CanQueryClientStateWithLatestHeight<DstChain>,
+    DstChain: CanQueryChainHeight + CanBuildConnectionOpenAckPayload<SrcChain>,
     DstChain::ConnectionId: Clone,
 {
     async fn relay_connection_open_ack(

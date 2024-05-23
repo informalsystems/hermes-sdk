@@ -6,8 +6,7 @@ pub fn install_logger(with_color: bool, with_json: bool) {
     use tracing::level_filters::LevelFilter;
     use tracing_subscriber::layer::SubscriberExt;
     use tracing_subscriber::util::SubscriberInitExt;
-    use tracing_subscriber::EnvFilter;
-    use tracing_subscriber::{fmt, registry};
+    use tracing_subscriber::{fmt, registry, EnvFilter};
 
     // Use log level INFO by default if RUST_LOG is not set.
     let env_filter = EnvFilter::builder()
