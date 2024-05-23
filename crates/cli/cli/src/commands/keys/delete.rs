@@ -9,8 +9,6 @@ use ibc_relayer::config::{ChainConfig, Config};
 use ibc_relayer::keyring::{KeyRing, Store};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
-use crate::Result;
-
 #[derive(Debug, clap::Parser)]
 #[clap(
     override_usage = "hermes keys delete --chain <CHAIN_ID> --key-name <KEY_NAME>
@@ -48,7 +46,7 @@ pub struct KeysDeleteCmd {
 }
 
 impl KeysDeleteCmd {
-    fn options(&self, config: &Config) -> Result<KeysDeleteOptions<'_>> {
+    fn options(&self, config: &Config) -> eyre::Result<KeysDeleteOptions<'_>> {
         let chain_config = config
             .find_chain(&self.chain_id)
             .ok_or_else(|| eyre!("chain `{}` not found in configuration file", self.chain_id))?;
@@ -83,7 +81,7 @@ enum KeysDeleteId<'a> {
 }
 
 impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+    async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
         let config = &builder.config;
 
         let opts = match self.options(config) {
@@ -93,31 +91,42 @@ impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
 
         match opts.id {
             KeysDeleteId::All => match delete_all_keys(&opts.config) {
-                Ok(_) => Ok(Output::success_msg(format!(
-                    "Removed all keys on chain `{}`",
-                    opts.config.id
-                ))),
-                Err(e) => Err(e.wrap_err("`keys delete` command failed to delete all keys")),
+                Ok(_) => {
+                    Output::success(format!("Removed all keys on chain `{}`", opts.config.id(),))
+                        .exit()
+                }
+                Err(e) => Output::error(format!(
+                    "`keys delete` command failed to delete all keys: {}",
+                    e
+                ))
+                .exit(),
             },
             KeysDeleteId::Named(key_name) => match delete_key(&opts.config, key_name) {
-                Ok(_) => Ok(Output::success_msg(format!(
+                Ok(_) => Output::success_msg(format!(
                     "Removed key `{key_name}` on chain `{}`",
-                    opts.config.id
-                ))),
-                Err(e) => {
-                    Err(e.wrap_err("`keys delete` command failed to delete key `{key_name}`"))
-                }
+                    opts.config.id()
+                ))
+                .exit(),
+                Err(e) => Output::error(format!(
+                    "`keys delete` command failed to delete key `{key_name}`: {}",
+                    e
+                ))
+                .exit(),
             },
         }
     }
 }
 
-fn delete_key(config: &ChainConfig, key_name: &str) -> Result<()> {
+fn delete_key(config: &ChainConfig, key_name: &str) -> eyre::Result<()> {
+    let cosmos_config = match config {
+        ChainConfig::CosmosSdk(config) => config,
+    };
+
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &config.account_prefix,
-        &config.id,
-        &config.key_store_folder,
+        &cosmos_config.account_prefix,
+        &cosmos_config.id,
+        &cosmos_config.key_store_folder,
     )?;
 
     keyring.remove_key(key_name)?;
@@ -125,12 +134,16 @@ fn delete_key(config: &ChainConfig, key_name: &str) -> Result<()> {
     Ok(())
 }
 
-fn delete_all_keys(config: &ChainConfig) -> Result<()> {
+fn delete_all_keys(config: &ChainConfig) -> eyre::Result<()> {
+    let cosmos_config = match config {
+        ChainConfig::CosmosSdk(config) => config,
+    };
+
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &config.account_prefix,
-        &config.id,
-        &config.key_store_folder,
+        &cosmos_config.account_prefix,
+        &cosmos_config.id,
+        &cosmos_config.key_store_folder,
     )?;
 
     let keys = keyring

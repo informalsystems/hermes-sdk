@@ -1,6 +1,7 @@
 use core::fmt::Write;
 
 use ibc_relayer::chain::handle::ChainHandle;
+use ibc_relayer::config::ChainConfig;
 use oneline_eyre::eyre::eyre;
 
 use hermes_cli_framework::command::CommandRunner;
@@ -8,8 +9,6 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-
-use crate::Result;
 
 /// The data structure that represents the arguments when invoking the `keys balance` CLI command.
 ///
@@ -53,14 +52,20 @@ pub struct KeysBalanceCmd {
 }
 
 impl CommandRunner<CosmosBuilder> for KeysBalanceCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+    async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
         let chain = builder.build_chain(&self.chain_id).await?;
         let key_name = self.key_name.clone();
 
         if self.all {
-            get_balances(chain.handle, key_name)
+            match get_balances(chain.handle.clone(), key_name) {
+                Ok(success_msg) => success_msg.exit(),
+                Err(e) => Output::error(format!("`keys balance` command failed: {}", e)).exit(),
+            }
         } else {
-            get_balance(chain.handle, key_name, self.denom.clone())
+            match get_balance(chain.handle.clone(), key_name, self.denom.clone()) {
+                Ok(success_msg) => success_msg.exit(),
+                Err(e) => Output::error(format!("`keys balance` command failed: {}", e)).exit(),
+            }
         }
     }
 }
@@ -69,7 +74,7 @@ fn get_balance(
     chain: impl ChainHandle,
     key_name: Option<String>,
     denom: Option<String>,
-) -> Result<Output> {
+) -> eyre::Result<Output> {
     match chain.query_balance(key_name.clone(), denom) {
         Ok(balance) if json() => Ok(Output::success(balance)),
         Ok(balance) => {
@@ -78,7 +83,12 @@ fn get_balance(
                 let chain_config = chain.config().expect(
                     "`keys balance` command failed due to an error retrieving chain config",
                 );
-                chain_config.key_name
+
+                let cosmos_config = match chain_config {
+                    ChainConfig::CosmosSdk(config) => config,
+                };
+
+                cosmos_config.key_name
             });
 
             Ok(Output::success_msg(format!(
@@ -90,7 +100,7 @@ fn get_balance(
     }
 }
 
-fn get_balances(chain: impl ChainHandle, key_name: Option<String>) -> Result<Output> {
+fn get_balances(chain: impl ChainHandle, key_name: Option<String>) -> eyre::Result<Output> {
     match chain.query_all_balances(key_name.clone()) {
         Ok(balances) if json() => Ok(Output::success(balances)),
         Ok(balances) => {
@@ -99,7 +109,12 @@ fn get_balances(chain: impl ChainHandle, key_name: Option<String>) -> Result<Out
                 let chain_config = chain.config().expect(
                     "`keys balance` command failed due to an error retrieving chain config",
                 );
-                chain_config.key_name
+
+                let cosmos_config = match chain_config {
+                    ChainConfig::CosmosSdk(config) => config,
+                };
+
+                cosmos_config.key_name
             });
 
             let mut pretty_output = format!("Balances for key `{key_name}`:");

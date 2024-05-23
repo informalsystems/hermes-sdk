@@ -63,7 +63,7 @@ impl CommandRunner<CosmosBuilder> for KeysListCmd {
                 }
                 Output::success_msg(msg).exit()
             }
-            Err(e) => Output::error("`keys list` command failed: {e}").exit(),
+            Err(e) => Output::error(format!("`keys list` command failed: {}", e)).exit(),
         }
     }
 }
