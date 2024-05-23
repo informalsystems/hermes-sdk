@@ -37,13 +37,13 @@ where
 {
     async fn query_send_packet_from_sequence(
         chain: &Chain,
-        channel_id: &Chain::ChannelId,
-        port_id: &Chain::PortId,
-        counterparty_channel_id: &Counterparty::ChannelId,
-        counterparty_port_id: &Counterparty::PortId,
-        sequence: &Chain::Sequence,
-        height: &Chain::Height,
-    ) -> Result<Chain::OutgoingPacket, Chain::Error> {
+        channel_id: &ChannelId,
+        port_id: &PortId,
+        counterparty_channel_id: &ChannelId,
+        counterparty_port_id: &PortId,
+        sequence: &Sequence,
+        height: &Height,
+    ) -> Result<Packet, Chain::Error> {
         // The unreceived packet are queried from the source chain, so the destination
         // channel id and port id are the counterparty channel id and counterparty port id.
         let request = QueryPacketEventDataRequest {
