@@ -84,9 +84,7 @@ fn get_balance(
                     "`keys balance` command failed due to an error retrieving chain config",
                 );
 
-                let cosmos_config = match chain_config {
-                    ChainConfig::CosmosSdk(config) => config,
-                };
+                let ChainConfig::CosmosSdk(cosmos_config) = chain_config;
 
                 cosmos_config.key_name
             });
@@ -110,9 +108,7 @@ fn get_balances(chain: impl ChainHandle, key_name: Option<String>) -> eyre::Resu
                     "`keys balance` command failed due to an error retrieving chain config",
                 );
 
-                let cosmos_config = match chain_config {
-                    ChainConfig::CosmosSdk(config) => config,
-                };
+                let ChainConfig::CosmosSdk(cosmos_config) = chain_config;
 
                 cosmos_config.key_name
             });

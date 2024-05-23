@@ -118,9 +118,7 @@ impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
 }
 
 fn delete_key(config: &ChainConfig, key_name: &str) -> eyre::Result<()> {
-    let cosmos_config = match config {
-        ChainConfig::CosmosSdk(config) => config,
-    };
+    let ChainConfig::CosmosSdk(cosmos_config) = config;
 
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
@@ -135,9 +133,7 @@ fn delete_key(config: &ChainConfig, key_name: &str) -> eyre::Result<()> {
 }
 
 fn delete_all_keys(config: &ChainConfig) -> eyre::Result<()> {
-    let cosmos_config = match config {
-        ChainConfig::CosmosSdk(config) => config,
-    };
+    let ChainConfig::CosmosSdk(cosmos_config) = config;
 
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
