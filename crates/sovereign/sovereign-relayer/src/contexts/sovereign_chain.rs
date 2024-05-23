@@ -19,12 +19,18 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
+    CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmPayload, CanBuildChannelOpenTryPayload,
+};
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
 };
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
@@ -40,7 +46,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
 use hermes_relayer_components::chain::traits::types::channel::{
-    HasChannelEndType, HasInitChannelOptionsType,
+    HasChannelEndType, HasChannelOpenTryPayloadType, HasInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateFields, HasClientStateType,
@@ -56,12 +62,14 @@ use hermes_relayer_components::chain::traits::types::height::{
     CanIncrementHeight, HasHeightFields,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     HasConnectionOpenInitEvent, HasConnectionOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_relayer_components::chain::types::channel_payload::ChannelOpenTryPayload;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -193,12 +201,16 @@ pub trait CanUseSovereignChain:
     + HasConnectionEndType<CosmosChain, ConnectionEnd = ConnectionEnd>
     + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
     + HasInitChannelOptionsType<CosmosChain, InitChannelOptions = SovereignInitChannelOptions>
-    + CanBuildUpdateClientPayload<CosmosChain>
+    + HasChannelOpenTryPayloadType<
+        CosmosChain,
+        ChannelOpenTryPayload = ChannelOpenTryPayload<SovereignChain, CosmosChain>,
+    > + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
+    + HasChannelOpenInitEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
@@ -206,6 +218,8 @@ pub trait CanUseSovereignChain:
     + CanQueryConsensusStateHeight<CosmosChain>
     + CanQueryConnectionEnd<CosmosChain>
     + CanQueryConnectionEndWithProofs<CosmosChain>
+    + CanQueryChannelEnd<CosmosChain>
+    + CanQueryChannelEndWithProofs<CosmosChain>
     + HasClientStateFields<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionOpenInitPayload<CosmosChain>
@@ -216,6 +230,9 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenTryMessage<CosmosChain>
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
+    + CanBuildChannelOpenTryPayload<CosmosChain>
+    + CanBuildChannelOpenAckPayload<CosmosChain>
+    + CanBuildChannelOpenConfirmPayload<CosmosChain>
     + CanBuildChannelOpenInitMessage<CosmosChain>
     + CanBuildChannelOpenTryMessage<CosmosChain>
     + CanBuildChannelOpenAckMessage<CosmosChain>

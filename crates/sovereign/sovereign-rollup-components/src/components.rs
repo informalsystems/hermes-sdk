@@ -23,6 +23,9 @@ use hermes_relayer_components::chain::traits::message_builders::receive_packet::
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
     RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
@@ -40,8 +43,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
-    ChannelOpenTryPayloadTypeComponent, InitChannelOptionsTypeComponent,
+    ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
@@ -63,6 +67,9 @@ use hermes_relayer_components::chain::traits::types::height::{
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+};
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
+    ChannelOpenInitEventComponent, ChannelOpenTryEventComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
@@ -105,6 +112,7 @@ use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::message_height::GetCosmosHeightFromSovereignMessage;
 use crate::impls::queries::chain_status::QuerySovereignRollupStatus;
+use crate::impls::queries::channel_end::QueryChannelEndOnSovereign;
 use crate::impls::queries::client_state::QueryClientStateOnSovereign;
 use crate::impls::queries::connection_end::QueryConnectionEndOnSovereign;
 use crate::impls::queries::consensus_state::QueryConsensusStateOnSovereign;
@@ -141,6 +149,7 @@ delegate_components! {
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             ConnectionEndTypeComponent,
+            ChannelEndTypeComponent,
         ]:
             ProvideSovereignRollupTypes,
         [
@@ -154,6 +163,8 @@ delegate_components! {
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
             ConnectionOpenTryEventComponent,
+            ChannelOpenInitEventComponent,
+            ChannelOpenTryEventComponent,
         ]:
             ProvideSovereignEvents,
         [
@@ -247,6 +258,11 @@ delegate_components! {
             ConnectionEndWithProofsQuerierComponent,
         ]:
             QueryConnectionEndOnSovereign,
+        [
+            ChannelEndQuerierComponent,
+            ChannelEndWithProofsQuerierComponent,
+        ]:
+            QueryChannelEndOnSovereign,
         ConsensusStateHeightsQuerierComponent:
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:

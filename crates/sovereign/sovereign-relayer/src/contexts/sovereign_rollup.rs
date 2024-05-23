@@ -40,6 +40,12 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::U
 use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, ChainStatusQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs,
+};
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerierComponent,
     ClientStateWithProofsQuerierComponent, RawClientStateQuerierComponent,
@@ -65,8 +71,9 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, ChainIdTypeComponent, HasChainId,
 };
 use hermes_relayer_components::chain::traits::types::channel::{
-    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
-    ChannelOpenTryPayloadTypeComponent, InitChannelOptionsTypeComponent,
+    ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, HasClientStateType,
@@ -90,8 +97,11 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetterComponent, HasCounterpartyMessageHeight, IbcChainTypesComponent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
+    ChannelOpenInitEventComponent, ChannelOpenTryEventComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
-    ConnectionOpenInitEventComponent, HasConnectionOpenInitEvent,
+    ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent, HasConnectionOpenInitEvent,
 };
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -237,6 +247,7 @@ delegate_components! {
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             ConnectionEndTypeComponent,
+            ChannelEndTypeComponent,
 
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
@@ -254,6 +265,9 @@ delegate_components! {
 
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
+            ConnectionOpenTryEventComponent,
+            ChannelOpenInitEventComponent,
+            ChannelOpenTryEventComponent,
 
             CreateClientOptionsTypeComponent,
             CreateClientPayloadTypeComponent,
@@ -308,6 +322,9 @@ delegate_components! {
 
             ConnectionEndQuerierComponent,
             ConnectionEndWithProofsQuerierComponent,
+
+            ChannelEndQuerierComponent,
+            ChannelEndWithProofsQuerierComponent,
 
             AckPacketMessageBuilderComponent,
             ReceivePacketMessageBuilderComponent,
@@ -413,6 +430,8 @@ pub trait CanUseSovereignRollup:
     + CanQueryConsensusStateHeights<CosmosChain>
     + CanQueryConnectionEnd<CosmosChain>
     + CanQueryConnectionEndWithProofs<CosmosChain>
+    + CanQueryChannelEnd<CosmosChain>
+    + CanQueryChannelEndWithProofs<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>

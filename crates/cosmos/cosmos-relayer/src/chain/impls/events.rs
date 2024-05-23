@@ -1,20 +1,12 @@
 use alloc::sync::Arc;
 
 use hermes_cosmos_chain_components::methods::event::{
-    try_extract_channel_open_init_event, try_extract_channel_open_try_event,
     try_extract_send_packet_event, try_extract_write_ack_event,
-};
-use hermes_cosmos_chain_components::types::events::channel::{
-    CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
-};
-use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
-    HasChannelOpenInitEvent, HasChannelOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use tendermint::abci::Event as AbciEvent;
 
 use crate::contexts::chain::CosmosChain;
@@ -36,33 +28,5 @@ impl<Counterparty> HasWriteAckEvent<Counterparty> for CosmosChain {
 
     fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAcknowledgement> {
         try_extract_write_ack_event(event)
-    }
-}
-
-impl<Counterparty> HasChannelOpenInitEvent<Counterparty> for CosmosChain {
-    type ChannelOpenInitEvent = CosmosChannelOpenInitEvent;
-
-    fn try_extract_channel_open_init_event(
-        event: Arc<AbciEvent>,
-    ) -> Option<CosmosChannelOpenInitEvent> {
-        try_extract_channel_open_init_event(event)
-    }
-
-    fn channel_open_init_event_channel_id(event: &CosmosChannelOpenInitEvent) -> &ChannelId {
-        &event.channel_id
-    }
-}
-
-impl<Counterparty> HasChannelOpenTryEvent<Counterparty> for CosmosChain {
-    type ChannelOpenTryEvent = CosmosChannelOpenTryEvent;
-
-    fn try_extract_channel_open_try_event(
-        event: Arc<AbciEvent>,
-    ) -> Option<CosmosChannelOpenTryEvent> {
-        try_extract_channel_open_try_event(event)
-    }
-
-    fn channel_open_try_event_channel_id(event: &CosmosChannelOpenTryEvent) -> &ChannelId {
-        &event.channel_id
     }
 }

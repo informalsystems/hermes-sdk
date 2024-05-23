@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::impls::types::channel_payload::ProvideChannelPayloadTypes;
 use hermes_relayer_components::chain::impls::types::connection_payload::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
@@ -13,6 +14,10 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::channel_end::{
+    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+};
+use hermes_relayer_components::chain::impls::forward::queries::channel_end::ForwardQueryChannelEnd;
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetterComponent;
 use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
@@ -46,6 +51,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::{ChannelOpenInitEventComponent, ChannelOpenTryEventComponent};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent};
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -71,6 +77,12 @@ use hermes_relayer_components::chain::impls::forward::queries::connection_end::F
 use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFromSovereignMessage;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
+    ChannelOpenTryPayloadBuilderComponent,
+    ChannelOpenAckPayloadBuilderComponent,
+    ChannelOpenConfirmPayloadBuilderComponent,
+};
+use hermes_relayer_components::chain::impls::channel_payload::BuildChannelHandshakePayload;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -103,6 +115,8 @@ delegate_components! {
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
             ConnectionOpenTryEventComponent,
+            ChannelOpenInitEventComponent,
+            ChannelOpenTryEventComponent,
         ]:
             ProvideSovereignEvents,
         [
@@ -111,9 +125,6 @@ delegate_components! {
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
             InitChannelOptionsTypeComponent,
-            ChannelOpenTryPayloadTypeComponent,
-            ChannelOpenAckPayloadTypeComponent,
-            ChannelOpenConfirmPayloadTypeComponent,
         ]:
             ProvideSovereignPayloadTypes,
         [
@@ -123,6 +134,12 @@ delegate_components! {
             ConnectionOpenConfirmPayloadTypeComponent,
         ]:
             ProvideConnectionPayloadTypes,
+        [
+            ChannelOpenTryPayloadTypeComponent,
+            ChannelOpenAckPayloadTypeComponent,
+            ChannelOpenConfirmPayloadTypeComponent,
+        ]:
+            ProvideChannelPayloadTypes,
         [
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
@@ -166,6 +183,13 @@ delegate_components! {
             BuildCosmosConnectionHandshakeMessageOnSovereign,
 
         [
+            ChannelOpenTryPayloadBuilderComponent,
+            ChannelOpenAckPayloadBuilderComponent,
+            ChannelOpenConfirmPayloadBuilderComponent,
+        ]:
+            BuildChannelHandshakePayload,
+
+        [
             ChannelOpenInitMessageBuilderComponent,
             ChannelOpenTryMessageBuilderComponent,
             ChannelOpenAckMessageBuilderComponent,
@@ -190,6 +214,11 @@ delegate_components! {
             ConnectionEndWithProofsQuerierComponent,
         ]:
             ForwardQueryConnectionEnd,
+        [
+            ChannelEndQuerierComponent,
+            ChannelEndWithProofsQuerierComponent,
+        ]:
+            ForwardQueryChannelEnd,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
         CounterpartyMessageHeightGetterComponent:

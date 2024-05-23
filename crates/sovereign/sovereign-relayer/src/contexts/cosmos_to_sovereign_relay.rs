@@ -11,6 +11,8 @@ use hermes_relayer_components::components::default::relay::{
 use hermes_relayer_components::relay::traits::chains::{
     CanRaiseRelayChainErrors, HasRelayChains, ProvideRelayChains,
 };
+use hermes_relayer_components::relay::traits::channel::open_handshake::CanRelayChannelOpenHandshake;
+use hermes_relayer_components::relay::traits::channel::open_init::CanInitChannel;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
@@ -43,9 +45,11 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanBuildTargetUpdateClientMessage<DestinationTarget>
     + CanBuildTargetUpdateClientMessage<SourceTarget>
     + CanInitConnection
+    + CanInitChannel
     + CanSendIbcMessages<MainSink, SourceTarget>
     + CanSendIbcMessages<MainSink, DestinationTarget>
     + CanRelayConnectionOpenHandshake
+    + CanRelayChannelOpenHandshake
 {
 }
 
