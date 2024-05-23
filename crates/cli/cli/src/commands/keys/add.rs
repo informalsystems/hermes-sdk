@@ -2,15 +2,17 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
-use hdpath::StandardHDPath;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+
 use ibc_relayer::config::ChainConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
 };
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+
+use hdpath::StandardHDPath;
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
@@ -183,14 +185,14 @@ pub fn restore_key(
 fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str, overwrite: bool) {
     if keyring.get_key(key_name).is_ok() {
         if overwrite {
-            warn!("key '{key_name}' will be overwritten");
+            warn!("key {} will be overwritten", key_name);
         } else {
             Output::error(format!("key with name '{key_name}' already exists")).exit();
         }
     }
 }
 
-impl CommandRunner<CosmosBuilder> for crate::commands::keys::add::KeysAddCmd {
+impl CommandRunner<CosmosBuilder> for KeysAddCmd {
     async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
         let chain_config = builder
             .config
