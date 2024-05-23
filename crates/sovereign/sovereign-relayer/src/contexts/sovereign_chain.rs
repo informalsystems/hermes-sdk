@@ -62,6 +62,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     CanIncrementHeight, HasHeightFields,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     HasConnectionOpenInitEvent, HasConnectionOpenTryEvent,
 };
@@ -209,6 +210,7 @@ pub trait CanUseSovereignChain:
     + HasCreateClientOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
+    + HasChannelOpenInitEvent<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>

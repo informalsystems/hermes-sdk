@@ -97,8 +97,11 @@ use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetterComponent, HasCounterpartyMessageHeight, IbcChainTypesComponent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
+    ChannelOpenInitEventComponent, ChannelOpenTryEventComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
-    ConnectionOpenInitEventComponent, HasConnectionOpenInitEvent,
+    ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent, HasConnectionOpenInitEvent,
 };
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
@@ -262,6 +265,9 @@ delegate_components! {
 
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
+            ConnectionOpenTryEventComponent,
+            ChannelOpenInitEventComponent,
+            ChannelOpenTryEventComponent,
 
             CreateClientOptionsTypeComponent,
             CreateClientPayloadTypeComponent,
