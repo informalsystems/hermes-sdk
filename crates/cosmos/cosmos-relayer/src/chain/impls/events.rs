@@ -8,7 +8,7 @@ use hermes_cosmos_chain_components::types::events::channel::{
     CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
-    HasChannelOpenInitEvent, HasChannelOpenTryEvent,
+    ProvideChannelOpenInitEvent, ProvideChannelOpenTryEvent,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
@@ -17,6 +17,7 @@ use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
 use tendermint::abci::Event as AbciEvent;
 
+use crate::chain::components::CosmosChainComponents;
 use crate::contexts::chain::CosmosChain;
 
 impl<Counterparty> HasSendPacketEvent<Counterparty> for CosmosChain {
@@ -39,7 +40,9 @@ impl<Counterparty> HasWriteAckEvent<Counterparty> for CosmosChain {
     }
 }
 
-impl<Counterparty> HasChannelOpenInitEvent<Counterparty> for CosmosChain {
+impl<Counterparty> ProvideChannelOpenInitEvent<CosmosChain, Counterparty>
+    for CosmosChainComponents
+{
     type ChannelOpenInitEvent = CosmosChannelOpenInitEvent;
 
     fn try_extract_channel_open_init_event(
@@ -53,7 +56,7 @@ impl<Counterparty> HasChannelOpenInitEvent<Counterparty> for CosmosChain {
     }
 }
 
-impl<Counterparty> HasChannelOpenTryEvent<Counterparty> for CosmosChain {
+impl<Counterparty> ProvideChannelOpenTryEvent<CosmosChain, Counterparty> for CosmosChainComponents {
     type ChannelOpenTryEvent = CosmosChannelOpenTryEvent;
 
     fn try_extract_channel_open_try_event(
