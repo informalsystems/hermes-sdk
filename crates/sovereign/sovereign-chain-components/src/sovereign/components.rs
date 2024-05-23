@@ -1,4 +1,5 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::chain::impls::types::channel_payload::ProvideChannelPayloadTypes;
 use hermes_relayer_components::chain::impls::types::connection_payload::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
@@ -71,6 +72,12 @@ use hermes_relayer_components::chain::impls::forward::queries::connection_end::F
 use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFromSovereignMessage;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
+    ChannelOpenTryPayloadBuilderComponent,
+    ChannelOpenAckPayloadBuilderComponent,
+    ChannelOpenConfirmPayloadBuilderComponent,
+};
+use hermes_relayer_components::chain::impls::channel_payload::BuildChannelHandshakePayload;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -111,9 +118,6 @@ delegate_components! {
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,
             InitChannelOptionsTypeComponent,
-            ChannelOpenTryPayloadTypeComponent,
-            ChannelOpenAckPayloadTypeComponent,
-            ChannelOpenConfirmPayloadTypeComponent,
         ]:
             ProvideSovereignPayloadTypes,
         [
@@ -123,6 +127,12 @@ delegate_components! {
             ConnectionOpenConfirmPayloadTypeComponent,
         ]:
             ProvideConnectionPayloadTypes,
+        [
+            ChannelOpenTryPayloadTypeComponent,
+            ChannelOpenAckPayloadTypeComponent,
+            ChannelOpenConfirmPayloadTypeComponent,
+        ]:
+            ProvideChannelPayloadTypes,
         [
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
@@ -164,6 +174,13 @@ delegate_components! {
             ConnectionOpenConfirmMessageBuilderComponent,
         ]:
             BuildCosmosConnectionHandshakeMessageOnSovereign,
+
+        [
+            ChannelOpenTryPayloadBuilderComponent,
+            ChannelOpenAckPayloadBuilderComponent,
+            ChannelOpenConfirmPayloadBuilderComponent,
+        ]:
+            BuildChannelHandshakePayload,
 
         [
             ChannelOpenInitMessageBuilderComponent,
