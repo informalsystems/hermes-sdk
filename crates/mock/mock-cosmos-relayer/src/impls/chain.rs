@@ -39,8 +39,8 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetter, ProvideIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimator, ProvideMessageType,
 };
@@ -541,24 +541,23 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasSendPacketEvent<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideSendPacketEvent<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     type SendPacketEvent = SendPacket;
 
-    fn try_extract_send_packet_event(event: &Self::Event) -> Option<Self::SendPacketEvent> {
+    fn try_extract_send_packet_event(event: &IbcEvent) -> Option<Self::SendPacketEvent> {
         match event {
             IbcEvent::SendPacket(e) => Some(e.clone()),
             _ => None,
         }
     }
 
-    fn extract_packet_from_send_packet_event(
-        event: &Self::SendPacketEvent,
-    ) -> Self::OutgoingPacket {
+    fn extract_packet_from_send_packet_event(event: &SendPacket) -> Packet {
         Packet {
             seq_on_a: *event.seq_on_a(),
             port_id_on_a: event.port_id_on_a().clone(),
@@ -766,15 +765,16 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasWriteAckEvent<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideWriteAckEvent<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     type WriteAckEvent = WriteAcknowledgement;
 
-    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
+    fn try_extract_write_ack_event(event: &IbcEvent) -> Option<Self::WriteAckEvent> {
         match event {
             IbcEvent::WriteAcknowledgement(e) => Some(e.clone()),
             _ => None,

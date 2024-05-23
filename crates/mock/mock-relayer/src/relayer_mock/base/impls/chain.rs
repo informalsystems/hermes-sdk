@@ -38,8 +38,8 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetter, ProvideIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimator, ProvideMessageType,
 };
@@ -196,10 +196,10 @@ impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainCompone
     }
 }
 
-impl HasWriteAckEvent<MockChainContext> for MockChainContext {
+impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type WriteAckEvent = WriteAckEvent;
 
-    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
+    fn try_extract_write_ack_event(event: &Event) -> Option<Self::WriteAckEvent> {
         match event {
             Event::WriteAcknowledgment(h) => Some(WriteAckEvent::new(*h)),
             _ => None,
@@ -228,19 +228,17 @@ impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
     }
 }
 
-impl HasSendPacketEvent<MockChainContext> for MockChainContext {
+impl ProvideSendPacketEvent<MockChainContext, MockChainContext> for MockChainComponents {
     type SendPacketEvent = SendPacketEvent;
 
-    fn try_extract_send_packet_event(event: &Self::Event) -> Option<Self::SendPacketEvent> {
+    fn try_extract_send_packet_event(event: &Event) -> Option<SendPacketEvent> {
         match event {
             Event::SendPacket(send_packet_event) => Some(send_packet_event.clone()),
             _ => None,
         }
     }
 
-    fn extract_packet_from_send_packet_event(
-        event: &Self::SendPacketEvent,
-    ) -> Self::OutgoingPacket {
+    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> PacketKey {
         PacketKey::from(event.clone())
     }
 }

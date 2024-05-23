@@ -2,7 +2,7 @@
    Trait definitions for [`HasWriteAckEvent`].
 */
 
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
 
@@ -11,6 +11,7 @@ use crate::chain::traits::types::event::HasEventType;
    [`Event`](crate::chain::traits::types::event::HasEventType::Event)
    type contains a [`WriteAckEvent`](Self::WriteAckEvent) variant.
 */
+#[derive_component(WriteAckEventComponent, ProvideWriteAckEvent<Chain>)]
 pub trait HasWriteAckEvent<Counterparty>: HasEventType {
     /**
        The write acknowledgement event that is emitted when a `RecvPacket`
