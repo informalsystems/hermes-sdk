@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -13,7 +12,6 @@ use crate::types::payloads::packet::CosmosTimeoutUnorderedPacketPayload;
 
 pub struct BuildCosmosTimeoutPacketPayload;
 
-#[async_trait]
 impl<Chain, Counterparty> TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
     for BuildCosmosTimeoutPacketPayload
 where

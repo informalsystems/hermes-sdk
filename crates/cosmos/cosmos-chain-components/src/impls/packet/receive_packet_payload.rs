@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -13,7 +12,6 @@ use crate::types::payloads::packet::CosmosReceivePacketPayload;
 
 pub struct BuildCosmosReceivePacketPayload;
 
-#[async_trait]
 impl<Chain, Counterparty> ReceivePacketPayloadBuilder<Chain, Counterparty>
     for BuildCosmosReceivePacketPayload
 where
