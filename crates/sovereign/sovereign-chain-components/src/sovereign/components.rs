@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::impls::types::channel_payload::ProvideChannelPayloadTypes;
-use hermes_relayer_components::chain::impls::types::connection_payload::ProvideConnectionPayloadTypes;
+use hermes_relayer_components::chain::impls::types::payloads::channel::ProvideChannelPayloadTypes;
+use hermes_relayer_components::chain::impls::types::payloads::connection::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::impls::forward::queries::consensus_state::ForwardQueryConsensusState;
@@ -74,7 +74,7 @@ use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSover
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
 use hermes_relayer_components::chain::impls::forward::queries::connection_end::ForwardQueryConnectionEnd;
-use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
+use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFromSovereignMessage;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
@@ -82,7 +82,7 @@ use hermes_relayer_components::chain::traits::payload_builders::channel_handshak
     ChannelOpenAckPayloadBuilderComponent,
     ChannelOpenConfirmPayloadBuilderComponent,
 };
-use hermes_relayer_components::chain::impls::channel_payload::BuildChannelHandshakePayload;
+use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;

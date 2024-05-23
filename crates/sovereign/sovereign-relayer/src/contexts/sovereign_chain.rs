@@ -69,7 +69,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
-use hermes_relayer_components::chain::types::channel_payload::ChannelOpenTryPayload;
+use hermes_relayer_components::chain::types::payloads::channel::ChannelOpenTryPayload;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};

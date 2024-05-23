@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use hermes_relayer_components::chain::types::channel_payload::{
+use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
 use ibc::core::channel::types::channel::{ChannelEnd, State};
