@@ -17,8 +17,6 @@ use oneline_eyre::eyre;
 use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
 
-use crate::Result;
-
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
 ///
 /// The command has one argument and two exclusive flags:

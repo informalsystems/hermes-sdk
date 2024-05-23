@@ -1,17 +1,14 @@
 use core::fmt::Write;
 use std::collections::BTreeMap;
 
-use oneline_eyre::eyre::{eyre, Context};
+use oneline_eyre::eyre::eyre;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 
 use ibc_relayer::config::{ChainConfig, Config};
-use ibc_relayer::keyring::list_keys;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-
-use crate::Result;
 
 #[derive(Debug, clap::Parser)]
 pub struct KeysListCmd {
@@ -31,7 +28,7 @@ pub struct KeysListOptions {
 }
 
 impl KeysListCmd {
-    fn options(&self, config: &Config) -> Result<KeysListOptions> {
+    fn options(&self, config: &Config) -> eyre::Result<KeysListOptions> {
         let chain_config = config
             .find_chain(&self.chain_id)
             .ok_or_else(|| eyre!("chain `{}` not found in configuration file", self.chain_id))?;
@@ -43,7 +40,7 @@ impl KeysListCmd {
 }
 
 impl CommandRunner<CosmosBuilder> for KeysListCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+    async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
         let config = &builder.config;
 
         let opts = match self.options(config) {
@@ -51,19 +48,22 @@ impl CommandRunner<CosmosBuilder> for KeysListCmd {
             Ok(opts) => opts,
         };
 
-        match list_keys(&opts.chain_config) {
+        match &opts.chain_config.list_keys() {
             Ok(keys) if json() => {
-                let keys = keys.into_iter().collect::<BTreeMap<_, _>>();
-                Ok(Output::success(keys))
+                let keys = keys
+                    .iter()
+                    .map(|(n, k)| (n.to_string(), k.clone()))
+                    .collect::<BTreeMap<_, _>>();
+                Output::success(keys).exit()
             }
             Ok(keys) => {
                 let mut msg = String::new();
                 for (name, key) in keys {
                     let _ = write!(msg, "\n- {} ({})", name, key.account());
                 }
-                Ok(Output::success_msg(msg))
+                Output::success_msg(msg).exit()
             }
-            Err(e) => Err(eyre!("`keys list` command failed: {e}")),
+            Err(e) => Output::error("`keys list` command failed: {e}").exit(),
         }
     }
 }
