@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::send_packets::SendPacketQuerier;
@@ -19,7 +18,6 @@ use crate::traits::rpc_client::HasRpcClient;
 
 pub struct QueryCosmosSendPacket;
 
-#[async_trait]
 impl<Chain, Counterparty> SendPacketQuerier<Chain, Counterparty> for QueryCosmosSendPacket
 where
     Chain: HasIbcChainTypes<

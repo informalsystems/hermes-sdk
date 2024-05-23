@@ -118,6 +118,8 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::SendPacketEventComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::WriteAckEventComponent;
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
@@ -261,6 +263,8 @@ delegate_components! {
             ConnectionOpenTryEventComponent,
             ChannelOpenInitEventComponent,
             ChannelOpenTryEventComponent,
+            SendPacketEventComponent,
+            WriteAckEventComponent,
 
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,

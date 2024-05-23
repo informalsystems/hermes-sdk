@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
+use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     ProvideChannelOpenInitEvent, ProvideChannelOpenTryEvent,
@@ -8,11 +9,17 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_relayer::event::{
     channel_open_init_try_from_abci_event, channel_open_try_try_from_abci_event,
     connection_open_ack_try_from_abci_event, connection_open_try_try_from_abci_event,
+    extract_packet_and_write_ack_from_tx,
 };
 use ibc_relayer_types::core::ics02_client::events::CLIENT_ID_ATTRIBUTE_KEY;
+use ibc_relayer_types::core::ics04_channel::events::{SendPacket, WriteAcknowledgement};
+use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId};
 use ibc_relayer_types::events::IbcEventType;
 use tendermint::abci::Event as AbciEvent;
@@ -166,5 +173,53 @@ where
 
     fn channel_open_try_event_channel_id(event: &CosmosChannelOpenTryEvent) -> &ChannelId {
         &event.channel_id
+    }
+}
+
+impl<Chain, Counterparty> ProvideSendPacketEvent<Chain, Counterparty> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>
+        + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>,
+{
+    type SendPacketEvent = SendPacket;
+
+    fn try_extract_send_packet_event(event: &Arc<AbciEvent>) -> Option<SendPacket> {
+        let event_type = event.kind.parse().ok()?;
+
+        if let IbcEventType::SendPacket = event_type {
+            let (packet, _) = extract_packet_and_write_ack_from_tx(event).ok()?;
+
+            let send_packet_event = SendPacket { packet };
+
+            Some(send_packet_event)
+        } else {
+            None
+        }
+    }
+
+    fn extract_packet_from_send_packet_event(event: &SendPacket) -> Packet {
+        event.packet.clone()
+    }
+}
+
+impl<Chain, Counterparty> ProvideWriteAckEvent<Chain, Counterparty> for ProvideCosmosEvents
+where
+    Chain: HasEventType<Event = Arc<AbciEvent>>,
+{
+    type WriteAckEvent = WriteAcknowledgement;
+
+    fn try_extract_write_ack_event(event: &Arc<AbciEvent>) -> Option<WriteAcknowledgement> {
+        if let IbcEventType::WriteAck = event.kind.parse().ok()? {
+            let (packet, write_ack) = extract_packet_and_write_ack_from_tx(event).ok()?;
+
+            let ack = WriteAcknowledgement {
+                packet,
+                ack: write_ack,
+            };
+
+            Some(ack)
+        } else {
+            None
+        }
     }
 }
