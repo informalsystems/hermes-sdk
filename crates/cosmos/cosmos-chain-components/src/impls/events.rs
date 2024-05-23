@@ -2,17 +2,22 @@ use alloc::sync::Arc;
 
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
+    ProvideChannelOpenInitEvent, ProvideChannelOpenTryEvent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
 };
 use ibc_relayer::event::{
+    channel_open_init_try_from_abci_event, channel_open_try_try_from_abci_event,
     connection_open_ack_try_from_abci_event, connection_open_try_try_from_abci_event,
 };
 use ibc_relayer_types::core::ics02_client::events::CLIENT_ID_ATTRIBUTE_KEY;
-use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId};
 use ibc_relayer_types::events::IbcEventType;
 use tendermint::abci::Event as AbciEvent;
 
+use crate::types::events::channel::{CosmosChannelOpenInitEvent, CosmosChannelOpenTryEvent};
 use crate::types::events::client::CosmosCreateClientEvent;
 use crate::types::events::connection::{
     CosmosConnectionOpenInitEvent, CosmosConnectionOpenTryEvent,
@@ -107,5 +112,59 @@ where
         event: &CosmosConnectionOpenTryEvent,
     ) -> &ConnectionId {
         &event.connection_id
+    }
+}
+
+impl<Chain, Counterparty> ProvideChannelOpenInitEvent<Chain, Counterparty> for ProvideCosmosEvents
+where
+    Chain: HasIbcChainTypes<Counterparty, Event = Arc<AbciEvent>, ChannelId = ChannelId>,
+{
+    type ChannelOpenInitEvent = CosmosChannelOpenInitEvent;
+
+    fn try_extract_channel_open_init_event(
+        event: Arc<AbciEvent>,
+    ) -> Option<CosmosChannelOpenInitEvent> {
+        let event_type = event.kind.parse().ok()?;
+
+        if let IbcEventType::OpenInitChannel = event_type {
+            let open_init_event = channel_open_init_try_from_abci_event(&event).ok()?;
+
+            let channel_id = open_init_event.channel_id()?.clone();
+
+            Some(CosmosChannelOpenInitEvent { channel_id })
+        } else {
+            None
+        }
+    }
+
+    fn channel_open_init_event_channel_id(event: &CosmosChannelOpenInitEvent) -> &ChannelId {
+        &event.channel_id
+    }
+}
+
+impl<Chain, Counterparty> ProvideChannelOpenTryEvent<Chain, Counterparty> for ProvideCosmosEvents
+where
+    Chain: HasIbcChainTypes<Counterparty, Event = Arc<AbciEvent>, ChannelId = ChannelId>,
+{
+    type ChannelOpenTryEvent = CosmosChannelOpenTryEvent;
+
+    fn try_extract_channel_open_try_event(
+        event: Arc<AbciEvent>,
+    ) -> Option<CosmosChannelOpenTryEvent> {
+        let event_type = event.kind.parse().ok()?;
+
+        if let IbcEventType::OpenTryChannel = event_type {
+            let open_try_event = channel_open_try_try_from_abci_event(&event).ok()?;
+
+            let channel_id = open_try_event.channel_id()?.clone();
+
+            Some(CosmosChannelOpenTryEvent { channel_id })
+        } else {
+            None
+        }
+    }
+
+    fn channel_open_try_event_channel_id(event: &CosmosChannelOpenTryEvent) -> &ChannelId {
+        &event.channel_id
     }
 }
