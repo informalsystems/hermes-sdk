@@ -1,12 +1,19 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
+    CanBuildChannelOpenInitMessage, CanBuildChannelOpenTryMessage,
+};
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
+    CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmPayload, CanBuildChannelOpenTryPayload,
+};
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
@@ -53,6 +60,13 @@ pub trait CanUseCosmosChainWithSovereign:
     + CanBuildConnectionOpenTryPayload<SovereignChain>
     + CanBuildConnectionOpenAckPayload<SovereignChain>
     + CanBuildConnectionOpenConfirmPayload<SovereignChain>
+    + CanBuildChannelOpenTryPayload<SovereignChain>
+    + CanBuildChannelOpenAckPayload<SovereignChain>
+    + CanBuildChannelOpenConfirmPayload<SovereignChain>
+    + CanBuildChannelOpenInitMessage<SovereignChain>
+    + CanBuildChannelOpenTryMessage<SovereignChain>
+    + CanBuildChannelOpenAckMessage<SovereignChain>
+    + CanBuildChannelOpenConfirmMessage<SovereignChain>
     + HasCreateClientOptionsType<SovereignChain>
     + CanBuildCreateClientPayload<SovereignChain>
     + CanBuildUpdateClientPayload<SovereignChain>

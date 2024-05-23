@@ -200,8 +200,10 @@ pub trait CanUseSovereignChain:
     + HasConnectionEndType<CosmosChain, ConnectionEnd = ConnectionEnd>
     + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
     + HasInitChannelOptionsType<CosmosChain, InitChannelOptions = SovereignInitChannelOptions>
-    + HasChannelOpenTryPayloadType<CosmosChain, ChannelOpenTryPayload = ChannelOpenTryPayload<SovereignChain, CosmosChain>>
-    + CanBuildUpdateClientPayload<CosmosChain>
+    + HasChannelOpenTryPayloadType<
+        CosmosChain,
+        ChannelOpenTryPayload = ChannelOpenTryPayload<SovereignChain, CosmosChain>,
+    > + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientOptionsType<CosmosChain>
@@ -226,9 +228,9 @@ pub trait CanUseSovereignChain:
     + CanBuildConnectionOpenTryMessage<CosmosChain>
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
-    // + CanBuildChannelOpenTryPayload<CosmosChain>
-    // + CanBuildChannelOpenAckPayload<CosmosChain>
-    // + CanBuildChannelOpenConfirmPayload<CosmosChain>
+    + CanBuildChannelOpenTryPayload<CosmosChain>
+    + CanBuildChannelOpenAckPayload<CosmosChain>
+    + CanBuildChannelOpenConfirmPayload<CosmosChain>
     + CanBuildChannelOpenInitMessage<CosmosChain>
     + CanBuildChannelOpenTryMessage<CosmosChain>
     + CanBuildChannelOpenAckMessage<CosmosChain>
