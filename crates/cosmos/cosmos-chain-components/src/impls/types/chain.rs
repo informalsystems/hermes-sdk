@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 use core::time::Duration;
 use hermes_relayer_components::chain::impls::types::ack::ProvideBytesAcknowlegement;
-use hermes_relayer_components::chain::traits::types::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 
 use cgp_core::{delegate_components, Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;

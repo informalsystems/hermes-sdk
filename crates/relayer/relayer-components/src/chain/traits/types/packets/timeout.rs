@@ -4,3 +4,8 @@ use cgp_core::prelude::*;
 pub trait HasTimeoutUnorderedPacketPayloadType<Counterparty>: Async {
     type TimeoutUnorderedPacketPayload: Async;
 }
+
+#[derive_component(PacketReceiptTypeComponent, ProvidePacketReceiptType<Chain>)]
+pub trait HasPacketReceiptType<Counterparty>: Async {
+    type PacketReceipt: Async;
+}

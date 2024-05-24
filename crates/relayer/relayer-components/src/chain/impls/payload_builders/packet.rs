@@ -3,11 +3,11 @@ use cgp_core::prelude::HasErrorType;
 use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use crate::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
-use crate::chain::traits::types::ack::HasAcknowledgementType;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayloadType;
+use crate::chain::traits::types::packets::ack::HasAcknowledgementType;
 use crate::chain::traits::types::proof::HasCommitmentProofType;
 use crate::chain::types::payloads::packet::AckPacketPayload;
 

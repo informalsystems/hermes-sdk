@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::ack::{AcknowledgementOf, HasAcknowledgementType};
+use crate::chain::traits::types::packets::ack::{AcknowledgementOf, HasAcknowledgementType};
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::HasRelayChains;
 

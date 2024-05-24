@@ -4,8 +4,8 @@
 
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::ack::HasAcknowledgementType;
 use crate::chain::traits::types::event::HasEventType;
+use crate::chain::traits::types::packets::ack::HasAcknowledgementType;
 
 /**
    Indicates that a chain context's

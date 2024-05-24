@@ -5,7 +5,6 @@
    are defined in this module.
 */
 
-pub mod ack;
 pub mod block;
 pub mod chain;
 pub mod chain_id;

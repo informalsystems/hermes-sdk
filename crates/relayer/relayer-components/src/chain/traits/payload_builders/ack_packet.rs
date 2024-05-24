@@ -1,10 +1,10 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::ack::HasAcknowledgementType;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::traits::types::packets::ack::HasAckPacketPayloadType;
+use crate::chain::traits::types::packets::ack::HasAcknowledgementType;
 
 #[derive_component(AckPacketPayloadBuilderComponent, AckPacketPayloadBuilder<Chain>)]
 #[async_trait]

@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use cgp_core::Async;
 
-use crate::chain::traits::types::ack::ProvideAcknowledgementType;
+use crate::chain::traits::types::packets::ack::ProvideAcknowledgementType;
 
 pub struct ProvideBytesAcknowlegement;
 

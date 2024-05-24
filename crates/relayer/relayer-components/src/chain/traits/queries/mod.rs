@@ -12,6 +12,7 @@ pub mod packet_acknowledgement;
 pub mod packet_acknowledgements;
 pub mod packet_commitments;
 pub mod packet_is_received;
+pub mod packet_receipt;
 pub mod send_packets;
 pub mod unreceived_acks_sequences;
 pub mod unreceived_packet_sequences;

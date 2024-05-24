@@ -1,5 +1,5 @@
-use crate::chain::traits::types::ack::HasAcknowledgementType;
 use crate::chain::traits::types::height::HasHeightType;
+use crate::chain::traits::types::packets::ack::HasAcknowledgementType;
 use crate::chain::traits::types::proof::HasCommitmentProofType;
 
 pub struct ReceivePacketPayload<Chain>

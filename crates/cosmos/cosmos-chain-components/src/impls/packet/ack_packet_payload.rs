@@ -1,9 +1,9 @@
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
-use hermes_relayer_components::chain::traits::types::ack::HasAcknowledgementType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, PacketMsgType};
 use ibc_relayer_types::Height;

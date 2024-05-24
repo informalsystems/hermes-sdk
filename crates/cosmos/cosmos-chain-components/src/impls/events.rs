@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 
-use hermes_relayer_components::chain::traits::types::ack::HasAcknowledgementType;
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -13,6 +12,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
 use ibc_relayer::event::{
     channel_open_init_try_from_abci_event, channel_open_try_try_from_abci_event,
     connection_open_ack_try_from_abci_event, connection_open_try_try_from_abci_event,

@@ -81,7 +81,6 @@ use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
-use hermes_relayer_components::chain::traits::types::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent,
 };
@@ -126,6 +125,7 @@ use hermes_relayer_components::chain::traits::types::message::{
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
