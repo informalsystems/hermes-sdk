@@ -1,6 +1,4 @@
 use cgp_core::prelude::delegate_components;
-use hermes_relayer_components::chain::impls::channel_payload::BuildChannelHandshakePayload;
-use hermes_relayer_components::chain::impls::connection_payload::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
@@ -9,6 +7,8 @@ use hermes_relayer_components::chain::impls::delegate::message_height::DelegateC
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state_heights::DelegateQueryConsensusStateHeights;
+use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
+use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
@@ -109,11 +109,14 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::SendPacketEventComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::WriteAckEventComponent;
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
@@ -186,6 +189,7 @@ delegate_components! {
             BlockHashComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            AcknowledgementTypeComponent,
         ]:
             ProvideCosmosChainTypes,
         [
@@ -194,6 +198,8 @@ delegate_components! {
             ConnectionOpenTryEventComponent,
             ChannelOpenInitEventComponent,
             ChannelOpenTryEventComponent,
+            SendPacketEventComponent,
+            WriteAckEventComponent,
         ]:
             ProvideCosmosEvents,
         [

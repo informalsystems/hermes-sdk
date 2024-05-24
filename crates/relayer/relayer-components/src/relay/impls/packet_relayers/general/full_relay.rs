@@ -128,7 +128,11 @@ where
                     .await;
 
                 relay
-                    .relay_ack_packet(destination_height, packet, &ack)
+                    .relay_ack_packet(
+                        destination_height,
+                        packet,
+                        DstChain::write_acknowledgement(&ack).as_ref(),
+                    )
                     .await?;
             } else {
                 logger

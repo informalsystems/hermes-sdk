@@ -1,3 +1,4 @@
+#![allow(refining_impl_trait)]
 #![allow(clippy::type_complexity)]
 #![allow(clippy::infallible_destructuring_match)]
 #![recursion_limit = "256"]

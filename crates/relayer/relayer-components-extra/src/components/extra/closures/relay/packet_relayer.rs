@@ -1,6 +1,7 @@
 use cgp_core::{CanRaiseError, HasComponents};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
@@ -33,7 +34,8 @@ where
     SrcChain: HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
         + UseExtraChainComponentsForPacketRelayer<DstChain>,
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
-        + UseExtraChainComponentsForPacketRelayer<SrcChain>,
+        + UseExtraChainComponentsForPacketRelayer<SrcChain>
+        + HasWriteAckEvent<SrcChain>,
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,

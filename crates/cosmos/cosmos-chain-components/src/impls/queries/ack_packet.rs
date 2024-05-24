@@ -1,13 +1,10 @@
 use alloc::sync::Arc;
 
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
-use hermes_relayer_components::chain::types::aliases::WriteAckEventOf;
 use ibc_relayer::chain::cosmos::query::packet_query;
 use ibc_relayer::chain::requests::{Qualified, QueryHeight, QueryPacketEventDataRequest};
 use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
@@ -15,14 +12,13 @@ use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::events::WithBlockDataType;
 use ibc_relayer_types::Height;
-use tendermint_rpc::{Client, Order};
+use tendermint::abci::Event as AbciEvent;
+use tendermint_rpc::{Client, Error as RpcError, Order};
 
-use crate::methods::event::try_extract_write_ack_event;
 use crate::traits::rpc_client::HasRpcClient;
 
 pub struct QueryCosmosAckPacket;
 
-#[async_trait]
 impl<Chain, Counterparty> AckPacketQuerier<Chain, Counterparty> for QueryCosmosAckPacket
 where
     Chain: HasIbcChainTypes<
@@ -31,22 +27,24 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
             Sequence = Sequence,
+            Event = Arc<AbciEvent>,
         > + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
+        + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>
         + HasRpcClient
-        + CanRaiseError<eyre::Report>
-        + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>,
+        + CanRaiseError<RpcError>
+        + CanRaiseError<&'static str>,
     Counterparty:
         HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId> + HasWriteAckEvent<Chain>,
 {
     async fn query_ack_packet_from_sequence(
         chain: &Chain,
-        channel_id: &Chain::ChannelId,
-        port_id: &Chain::PortId,
-        counterparty_channel_id: &Counterparty::ChannelId,
-        counterparty_port_id: &Counterparty::PortId,
-        sequence: &Chain::Sequence,
-        height: &Chain::Height,
-    ) -> Result<(Chain::OutgoingPacket, WriteAckEventOf<Chain, Counterparty>), Chain::Error> {
+        channel_id: &ChannelId,
+        port_id: &PortId,
+        counterparty_channel_id: &ChannelId,
+        counterparty_port_id: &PortId,
+        sequence: &Sequence,
+        height: &Height,
+    ) -> Result<(Packet, WriteAcknowledgement), Chain::Error> {
         // The ack packet are queried from the destination chain, so the destination
         // channel id and port id are the counterparty channel id and counterparty port id.
         let request = QueryPacketEventDataRequest {
@@ -58,13 +56,15 @@ where
             sequences: vec![*sequence],
             height: Qualified::SmallerEqual(QueryHeight::Specific(*height)),
         };
+
         let mut events = vec![];
         let query = packet_query(&request, *sequence);
+
         let response = chain
             .rpc_client()
             .tx_search(query, false, 1, 10, Order::Descending)
             .await
-            .map_err(|e| Chain::raise_error(e.into()))?;
+            .map_err(Chain::raise_error)?;
 
         for tx in response.txs.iter() {
             let mut event = tx
@@ -76,20 +76,16 @@ where
             events.append(&mut event);
         }
 
-        let ack_packets: Vec<WriteAcknowledgement> = events
+        let write_acks: Vec<WriteAcknowledgement> = events
             .iter()
-            .filter_map(try_extract_write_ack_event)
+            .filter_map(Chain::try_extract_write_ack_event)
             .collect();
 
-        let ack_packet = ack_packets
-            .first()
-            .map(|ack| ack.packet.clone())
-            .ok_or_else(|| Chain::raise_error(eyre!("missing ack")))?;
-        let ack = ack_packets
-            .first()
-            .ok_or_else(|| Chain::raise_error(eyre!("missing ack packet")))?
-            .clone();
+        let write_ack = write_acks
+            .into_iter()
+            .next()
+            .ok_or_else(|| Chain::raise_error("missing ack packet"))?;
 
-        Ok((ack_packet.clone(), ack))
+        Ok((write_ack.packet.clone(), write_ack))
     }
 }

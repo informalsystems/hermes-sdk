@@ -2,7 +2,7 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use basecoin::modules::ibc::{AnyClientState, AnyConsensusState};
-use cgp_core::prelude::*;
+use cgp_core::prelude::Async;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
@@ -39,8 +39,8 @@ use hermes_relayer_components::chain::traits::types::height::{
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetter, ProvideIbcChainTypes,
 };
-use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimator, ProvideMessageType,
 };
@@ -305,7 +305,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ClientStateQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -365,7 +364,6 @@ impl<Chain: BasecoinEndpoint> ProvideChainStatusType<MockCosmosContext<Chain>>
     }
 }
 
-#[async_trait]
 impl<Chain: BasecoinEndpoint> ChainStatusQuerier<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
@@ -416,7 +414,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     CreateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -462,7 +459,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     CreateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -486,7 +482,6 @@ where
     type UpdateClientPayload = MsgUpdateClient;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     UpdateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -521,7 +516,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     UpdateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -541,24 +535,23 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasSendPacketEvent<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideSendPacketEvent<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     type SendPacketEvent = SendPacket;
 
-    fn try_extract_send_packet_event(event: &Self::Event) -> Option<Self::SendPacketEvent> {
+    fn try_extract_send_packet_event(event: &IbcEvent) -> Option<Self::SendPacketEvent> {
         match event {
             IbcEvent::SendPacket(e) => Some(e.clone()),
             _ => None,
         }
     }
 
-    fn extract_packet_from_send_packet_event(
-        event: &Self::SendPacketEvent,
-    ) -> Self::OutgoingPacket {
+    fn extract_packet_from_send_packet_event(event: &SendPacket) -> Packet {
         Packet {
             seq_on_a: *event.seq_on_a(),
             port_id_on_a: event.port_id_on_a().clone(),
@@ -589,7 +582,6 @@ impl<Chain: BasecoinEndpoint> MessageSizeEstimator<MockCosmosContext<Chain>>
     }
 }
 
-#[async_trait]
 impl<Chain: BasecoinEndpoint> MessageSender<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
@@ -613,7 +605,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ConsensusStateQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -645,7 +636,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ReceivedPacketQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -675,7 +665,6 @@ where
     type ReceivePacketPayload = Any;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ReceivePacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -705,7 +694,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ReceivePacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -722,7 +710,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty> WriteAckQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
 where
@@ -766,19 +753,24 @@ where
     }
 }
 
-impl<Chain, Counterparty> HasWriteAckEvent<MockCosmosContext<Counterparty>>
-    for MockCosmosContext<Chain>
+impl<Chain, Counterparty>
+    ProvideWriteAckEvent<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
     type WriteAckEvent = WriteAcknowledgement;
 
-    fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent> {
+    fn try_extract_write_ack_event(event: &IbcEvent) -> Option<Self::WriteAckEvent> {
         match event {
             IbcEvent::WriteAcknowledgement(e) => Some(e.clone()),
             _ => None,
         }
+    }
+
+    fn write_acknowledgement(event: &WriteAcknowledgement) -> Vec<u8> {
+        event.packet_data().to_vec()
     }
 }
 
@@ -790,7 +782,6 @@ where
     type AckPacketPayload = Any;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     AckPacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -803,7 +794,7 @@ where
         _client_state: &AnyClientState,
         height: &Height,
         packet: &Packet,
-        ack: &WriteAcknowledgement,
+        ack: &Vec<u8>,
     ) -> Result<Any, Error> {
         let ack_path = AckPath::new(&packet.port_id_on_a, &packet.chan_id_on_a, packet.seq_on_a);
 
@@ -811,7 +802,7 @@ where
 
         let ack_packet_payload = MsgAcknowledgement {
             packet: packet.clone(),
-            acknowledgement: ack.acknowledgement().clone(),
+            acknowledgement: ack.clone().try_into().unwrap(),
             proof_acked_on_b,
             proof_height_on_b: chain.get_current_height(),
             signer: dummy_signer(),
@@ -821,7 +812,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     AckPacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -846,7 +836,6 @@ where
     type TimeoutUnorderedPacketPayload = Any;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     TimeoutUnorderedPacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -877,7 +866,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     TimeoutUnorderedPacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents

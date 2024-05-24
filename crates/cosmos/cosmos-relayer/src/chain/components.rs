@@ -118,11 +118,14 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::SendPacketEventComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::WriteAckEventComponent;
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
@@ -255,12 +258,15 @@ delegate_components! {
             BlockHashComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            AcknowledgementTypeComponent,
 
             CreateClientEventComponent,
             ConnectionOpenInitEventComponent,
             ConnectionOpenTryEventComponent,
             ChannelOpenInitEventComponent,
             ChannelOpenTryEventComponent,
+            SendPacketEventComponent,
+            WriteAckEventComponent,
 
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,

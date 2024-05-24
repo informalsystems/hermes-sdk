@@ -2,7 +2,7 @@
    Trait definitions for [`HasSendPacketEvent`].
 */
 
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
@@ -12,6 +12,7 @@ use crate::chain::traits::types::packet::HasIbcPacketTypes;
    [`Event`](crate::chain::traits::types::event::HasEventType::Event)
    type contains a [`SendPacketEvent`](Self::SendPacketEvent) variant.
 */
+#[derive_component(SendPacketEventComponent, ProvideSendPacketEvent<Chain>)]
 pub trait HasSendPacketEvent<Counterparty>: HasIbcPacketTypes<Counterparty> + HasEventType {
     type SendPacketEvent: Async;
 

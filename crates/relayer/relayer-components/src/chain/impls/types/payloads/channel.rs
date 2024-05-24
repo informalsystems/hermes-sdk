@@ -6,7 +6,7 @@ use crate::chain::traits::types::channel::{
 };
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::proof::HasCommitmentProofType;
-use crate::chain::types::channel_payload::{
+use crate::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
 

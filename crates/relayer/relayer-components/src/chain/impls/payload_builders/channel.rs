@@ -8,7 +8,7 @@ use crate::chain::traits::types::channel::{
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::types::channel_payload::{
+use crate::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
 

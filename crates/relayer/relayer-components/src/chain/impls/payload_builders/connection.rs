@@ -17,7 +17,7 @@ use crate::chain::traits::types::consensus_state::HasConsensusStateType;
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::proof::HasCommitmentProofType;
-use crate::chain::types::connection_payload::{
+use crate::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };

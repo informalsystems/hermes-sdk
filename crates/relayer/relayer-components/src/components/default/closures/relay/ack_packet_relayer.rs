@@ -65,7 +65,8 @@ where
         + HasConsensusStateType<SrcChain>
         + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanBuildAckPacketPayload<SrcChain>
-        + CanBuildUpdateClientPayload<SrcChain>,
+        + CanBuildUpdateClientPayload<SrcChain>
+        + HasWriteAckEvent<SrcChain>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
     DstChain::Runtime: CanSleep,

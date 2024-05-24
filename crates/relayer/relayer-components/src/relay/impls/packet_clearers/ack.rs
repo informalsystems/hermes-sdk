@@ -31,7 +31,6 @@ where
     pub ack: WriteAckEventOf<Relay::DstChain, Relay::SrcChain>,
 }
 
-#[async_trait]
 impl<Relay> Task for RelayPacketTask<Relay>
 where
     Relay: CanRelayAckPacket + HasLogger,
@@ -41,7 +40,11 @@ where
     async fn run(self) {
         let res = self
             .relay
-            .relay_ack_packet(&self.height, &self.packet, &self.ack)
+            .relay_ack_packet(
+                &self.height,
+                &self.packet,
+                Relay::DstChain::write_acknowledgement(&self.ack).as_ref(),
+            )
             .await;
 
         if let Err(e) = res {

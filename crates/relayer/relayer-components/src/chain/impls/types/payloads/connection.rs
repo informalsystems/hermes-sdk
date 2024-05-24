@@ -7,7 +7,7 @@ use crate::chain::traits::types::connection::{
 };
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::proof::HasCommitmentProofType;
-use crate::chain::types::connection_payload::{
+use crate::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
 };

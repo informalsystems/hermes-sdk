@@ -70,6 +70,7 @@ where
         + CanQueryChainStatus
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
+        + HasWriteAckEvent<SrcChain>
         + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanBuildAckPacketPayload<SrcChain>
         + CanBuildUpdateClientPayload<SrcChain>
