@@ -794,7 +794,7 @@ where
         _client_state: &AnyClientState,
         height: &Height,
         packet: &Packet,
-        ack: &WriteAcknowledgement,
+        ack: &Vec<u8>,
     ) -> Result<Any, Error> {
         let ack_path = AckPath::new(&packet.port_id_on_a, &packet.chan_id_on_a, packet.seq_on_a);
 
@@ -802,7 +802,7 @@ where
 
         let ack_packet_payload = MsgAcknowledgement {
             packet: packet.clone(),
-            acknowledgement: ack.acknowledgement().clone(),
+            acknowledgement: ack.clone().try_into().unwrap(),
             proof_acked_on_b,
             proof_height_on_b: chain.get_current_height(),
             signer: dummy_signer(),

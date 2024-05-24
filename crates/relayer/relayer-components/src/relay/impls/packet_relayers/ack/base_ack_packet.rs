@@ -1,9 +1,10 @@
-use cgp_core::{async_trait, Async};
+use cgp_core::Async;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::client_state::HasClientStateType;
+use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
@@ -15,7 +16,6 @@ use crate::relay::traits::target::SourceTarget;
 /// on top of this base type.
 pub struct BaseAckPacketRelayer;
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain, Packet> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>
@@ -26,14 +26,15 @@ where
         + HasIbcPacketTypes<DstChain, OutgoingPacket = Packet>,
     DstChain: HasClientStateType<SrcChain>
         + CanBuildAckPacketPayload<SrcChain>
-        + HasIbcPacketTypes<SrcChain, IncomingPacket = Packet>,
+        + HasIbcPacketTypes<SrcChain, IncomingPacket = Packet>
+        + HasWriteAckEvent<SrcChain>,
     Packet: Async,
 {
     async fn relay_ack_packet(
         relay: &Relay,
         destination_height: &DstChain::Height,
         packet: &Packet,
-        ack: &DstChain::WriteAckEvent,
+        ack: &DstChain::Acknowledgement,
     ) -> Result<(), Relay::Error> {
         let src_client_state = relay
             .src_chain()

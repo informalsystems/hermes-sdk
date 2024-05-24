@@ -45,5 +45,7 @@ pub trait HasWriteAckEvent<Counterparty>:
     */
     fn try_extract_write_ack_event(event: &Self::Event) -> Option<Self::WriteAckEvent>;
 
-    fn write_acknowledgement(event: &Self::WriteAckEvent) -> impl AsRef<Self::Acknowledgement>;
+    fn write_acknowledgement(
+        event: &Self::WriteAckEvent,
+    ) -> impl AsRef<Self::Acknowledgement> + Send;
 }

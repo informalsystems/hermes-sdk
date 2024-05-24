@@ -411,14 +411,13 @@ impl ProvideAckPacketPayloadType<MockChainContext, MockChainContext> for MockCha
     type AckPacketPayload = MockMessage;
 }
 
-#[async_trait]
 impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_payload(
         chain: &MockChainContext,
         _client_state: &(),
         height: &MockHeight,
         packet: &PacketKey,
-        _ack: &WriteAckEvent,
+        _ack: &Vec<u8>,
     ) -> Result<MockMessage, Error> {
         // If the latest state of the destination chain doesn't have the packet as received, return an error.
         let state = chain.get_current_state();

@@ -110,7 +110,13 @@ where
                 */
                 match m_lock {
                     Some(_lock) => {
-                        relay.relay_ack_packet(height, packet, &ack_event).await?;
+                        relay
+                            .relay_ack_packet(
+                                height,
+                                packet,
+                                Relay::DstChain::write_acknowledgement(&ack_event).as_ref(),
+                            )
+                            .await?;
                     }
                     None => {
                         relay.logger().log(
