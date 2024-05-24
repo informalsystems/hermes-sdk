@@ -72,6 +72,7 @@ use hermes_relayer_components::chain::traits::queries::send_packets::{
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
+use hermes_relayer_components::chain::traits::types::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent,
 };
@@ -188,6 +189,7 @@ delegate_components! {
             BlockHashComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            AcknowledgementTypeComponent,
         ]:
             ProvideCosmosChainTypes,
         [
