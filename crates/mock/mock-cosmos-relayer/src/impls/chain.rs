@@ -2,7 +2,7 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use basecoin::modules::ibc::{AnyClientState, AnyConsensusState};
-use cgp_core::prelude::*;
+use cgp_core::prelude::Async;
 use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
@@ -305,7 +305,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ClientStateQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -365,7 +364,6 @@ impl<Chain: BasecoinEndpoint> ProvideChainStatusType<MockCosmosContext<Chain>>
     }
 }
 
-#[async_trait]
 impl<Chain: BasecoinEndpoint> ChainStatusQuerier<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
@@ -416,7 +414,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     CreateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -462,7 +459,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     CreateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -486,7 +482,6 @@ where
     type UpdateClientPayload = MsgUpdateClient;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     UpdateClientPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -521,7 +516,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     UpdateClientMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -588,7 +582,6 @@ impl<Chain: BasecoinEndpoint> MessageSizeEstimator<MockCosmosContext<Chain>>
     }
 }
 
-#[async_trait]
 impl<Chain: BasecoinEndpoint> MessageSender<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
@@ -612,7 +605,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ConsensusStateQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -644,7 +636,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ReceivedPacketQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -674,7 +665,6 @@ where
     type ReceivePacketPayload = Any;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ReceivePacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -704,7 +694,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     ReceivePacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -721,7 +710,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty> WriteAckQuerier<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
 where
@@ -780,6 +768,10 @@ where
             _ => None,
         }
     }
+
+    fn write_acknowledgement(event: &WriteAcknowledgement) -> Vec<u8> {
+        event.packet_data().to_vec()
+    }
 }
 
 impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
@@ -790,7 +782,6 @@ where
     type AckPacketPayload = Any;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     AckPacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -821,7 +812,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     AckPacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -846,7 +836,6 @@ where
     type TimeoutUnorderedPacketPayload = Any;
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     TimeoutUnorderedPacketPayloadBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
@@ -877,7 +866,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain, Counterparty>
     TimeoutUnorderedPacketMessageBuilder<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents

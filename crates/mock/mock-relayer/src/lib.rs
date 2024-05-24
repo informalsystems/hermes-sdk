@@ -1,3 +1,5 @@
+#![allow(refining_impl_trait)]
+
 extern crate alloc;
 extern crate std;
 

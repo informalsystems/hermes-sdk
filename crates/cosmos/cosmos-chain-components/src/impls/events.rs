@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 
+use hermes_relayer_components::chain::traits::types::ack::HasAcknowledgementType;
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -204,7 +205,8 @@ where
 
 impl<Chain, Counterparty> ProvideWriteAckEvent<Chain, Counterparty> for ProvideCosmosEvents
 where
-    Chain: HasEventType<Event = Arc<AbciEvent>>,
+    Chain: HasEventType<Event = Arc<AbciEvent>>
+        + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>,
 {
     type WriteAckEvent = WriteAcknowledgement;
 
@@ -221,5 +223,9 @@ where
         } else {
             None
         }
+    }
+
+    fn write_acknowledgement(event: &WriteAcknowledgement) -> &Vec<u8> {
+        &event.ack
     }
 }

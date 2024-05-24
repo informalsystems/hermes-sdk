@@ -205,6 +205,10 @@ impl ProvideWriteAckEvent<MockChainContext, MockChainContext> for MockChainCompo
             _ => None,
         }
     }
+
+    fn write_acknowledgement(_event: &WriteAckEvent) -> Vec<u8> {
+        Vec::new() // stub
+    }
 }
 
 impl ProvideConsensusStateType<MockChainContext, MockChainContext> for MockChainComponents {
