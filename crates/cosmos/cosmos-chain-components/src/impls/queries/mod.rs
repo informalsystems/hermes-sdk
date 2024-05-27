@@ -12,6 +12,7 @@ pub mod consensus_state_height;
 pub mod packet_acknowledgement;
 pub mod packet_acknowledgements;
 pub mod packet_commitments;
+pub mod packet_receipt;
 pub mod received_packet;
 pub mod send_packet;
 pub mod send_packets;

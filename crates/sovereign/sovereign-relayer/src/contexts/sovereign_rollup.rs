@@ -67,6 +67,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
     CanQueryPacketAcknowledgement, PacketAcknowledgementQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::packet_receipt::{
+    CanQueryPacketReceipt, PacketReceiptQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::send_message::{
     CanSendMessages, MessageSenderComponent,
 };
@@ -109,6 +112,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -251,6 +255,7 @@ delegate_components! {
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             AcknowledgementTypeComponent,
+            PacketReceiptTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
 
@@ -332,6 +337,7 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
 
             PacketAcknowledgementQuerierComponent,
+            PacketReceiptQuerierComponent,
 
             AckPacketMessageBuilderComponent,
             ReceivePacketMessageBuilderComponent,
@@ -440,6 +446,7 @@ pub trait CanUseSovereignRollup:
     + CanQueryChannelEnd<CosmosChain>
     + CanQueryChannelEndWithProofs<CosmosChain>
     + CanQueryPacketAcknowledgement<CosmosChain>
+    + CanQueryPacketReceipt<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>

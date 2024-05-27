@@ -42,6 +42,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent
 };
+use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
@@ -51,6 +52,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
+use hermes_relayer_components::chain::impls::forward::queries::packet_receipt::ForwardQueryPacketReceipt;
 use hermes_relayer_components::chain::impls::forward::queries::packet_acknowledgement::ForwardQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{ChannelOpenInitEventComponent, ChannelOpenTryEventComponent};
@@ -58,6 +60,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{Co
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -111,6 +114,7 @@ delegate_components! {
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             AcknowledgementTypeComponent,
+            PacketReceiptTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
         ]:
@@ -225,6 +229,8 @@ delegate_components! {
             ForwardQueryChannelEnd,
         PacketAcknowledgementQuerierComponent:
             ForwardQueryPacketAcknowledgement,
+        PacketReceiptQuerierComponent:
+            ForwardQueryPacketReceipt,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
         CounterpartyMessageHeightGetterComponent:
