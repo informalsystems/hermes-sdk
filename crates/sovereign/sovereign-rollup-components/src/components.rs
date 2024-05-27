@@ -1,3 +1,4 @@
+use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromSovereign;
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
@@ -40,6 +41,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -76,6 +78,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 };
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -148,6 +151,7 @@ delegate_components! {
             ChainStatusTypeComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            AcknowledgementTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
         ]:
@@ -263,6 +267,8 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
         ]:
             QueryChannelEndOnSovereign,
+        PacketAcknowledgementQuerierComponent:
+            QueryPacketAcknowledgementFromSovereign,
         ConsensusStateHeightsQuerierComponent:
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:
