@@ -30,6 +30,8 @@ where
             .query_abci_with_proofs(IBC_QUERY_PATH, receipt_path.as_bytes(), height)
             .await?;
 
+        // TODO: Use a more precise `PacketReceipt` type, i.e. `bool`
+
         Ok((receipt, proof))
     }
 }

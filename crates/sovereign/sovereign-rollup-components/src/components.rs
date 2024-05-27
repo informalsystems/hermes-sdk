@@ -42,6 +42,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
@@ -79,6 +80,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -120,6 +122,7 @@ use crate::impls::queries::client_state::QueryClientStateOnSovereign;
 use crate::impls::queries::connection_end::QueryConnectionEndOnSovereign;
 use crate::impls::queries::consensus_state::QueryConsensusStateOnSovereign;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsOnSovereign;
+use crate::impls::queries::packet_receipt::QueryPacketReceiptFromSovereign;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
@@ -152,6 +155,7 @@ delegate_components! {
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             AcknowledgementTypeComponent,
+            PacketReceiptTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
         ]:
@@ -269,6 +273,8 @@ delegate_components! {
             QueryChannelEndOnSovereign,
         PacketAcknowledgementQuerierComponent:
             QueryPacketAcknowledgementFromSovereign,
+        PacketReceiptQuerierComponent:
+            QueryPacketReceiptFromSovereign,
         ConsensusStateHeightsQuerierComponent:
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:

@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_relayer_components::chain::impls::types::receipt::ProvideBoolPacketReceipt;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
 use hermes_relayer_components::chain::traits::types::channel::ChannelEndTypeComponent;
@@ -12,6 +13,7 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
@@ -107,5 +109,7 @@ delegate_components! {
             ChannelEndTypeComponent,
         ]:
             ProvideCosmosChainTypes,
+        PacketReceiptTypeComponent:
+            ProvideBoolPacketReceipt,
     }
 }
