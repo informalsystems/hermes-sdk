@@ -83,12 +83,9 @@ where
 impl<Chain, Counterparty> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
-    Chain: HasIbcChainTypes<
-            Counterparty,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-            Height = Height,
-        > + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
+        + HasHeightFields
+        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>
@@ -113,6 +110,12 @@ where
 
         let client_state_any: IbcProtoAny = payload.client_state.into();
 
+        let proof_consensus_height = Height::new(
+            Chain::revision_number(&payload.proof_consensus_height),
+            Chain::revision_height(&payload.proof_consensus_height),
+        )
+        .map_err(Chain::raise_error)?;
+
         let update_height = Height::new(
             Counterparty::revision_number(&payload.update_height),
             Counterparty::revision_height(&payload.update_height),
@@ -134,7 +137,7 @@ where
             proof_init: payload.proof_init,
             proof_client: payload.proof_client,
             proof_consensus: payload.proof_consensus,
-            proof_consensus_height: payload.proof_consensus_height,
+            proof_consensus_height,
         };
 
         Ok(message.to_cosmos_message().into())
@@ -144,12 +147,9 @@ where
 impl<Chain, Counterparty> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
-    Chain: HasIbcChainTypes<
-            Counterparty,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-            Height = Height,
-        > + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+    Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
+        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+        + HasHeightFields
         + CanRaiseError<Ics02Error>
         + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
@@ -182,6 +182,12 @@ where
 
         let client_state_any: IbcProtoAny = payload.client_state.into();
 
+        let proof_consensus_height = Height::new(
+            Chain::revision_number(&payload.proof_consensus_height),
+            Chain::revision_height(&payload.proof_consensus_height),
+        )
+        .map_err(Chain::raise_error)?;
+
         let update_height = Height::new(
             Counterparty::revision_number(&payload.update_height),
             Counterparty::revision_height(&payload.update_height),
@@ -200,7 +206,7 @@ where
             proof_try: payload.proof_try,
             proof_client: payload.proof_client,
             proof_consensus: payload.proof_consensus,
-            proof_consensus_height: payload.proof_consensus_height,
+            proof_consensus_height,
         };
 
         Ok(message.to_cosmos_message().into())

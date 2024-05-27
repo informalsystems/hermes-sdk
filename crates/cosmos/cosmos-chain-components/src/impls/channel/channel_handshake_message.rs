@@ -180,7 +180,7 @@ where
 impl<Chain, Counterparty> ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId, Height = Height>
+    Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenConfirmPayloadType<
