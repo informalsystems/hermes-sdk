@@ -28,7 +28,7 @@ pub struct BuildCosmosPacketMessages;
 impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where
-    Chain: HasMessageType<Message = CosmosMessage>
+    Chain: HasMessageType
         + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasReceivePacketPayloadType<
@@ -36,6 +36,7 @@ where
             ReceivePacketPayload = ReceivePacketPayload<Counterparty>,
         > + HasHeightFields
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_receive_packet_message(
         _chain: &Chain,
@@ -54,19 +55,20 @@ where
             proof_commitment: payload.proof_commitment,
         };
 
-        Ok(message.to_cosmos_message())
+        Ok(message.to_cosmos_message().into())
     }
 }
 
 impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty> for BuildCosmosPacketMessages
 where
-    Chain: HasMessageType<Message = CosmosMessage>
+    Chain: HasMessageType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasAckPacketPayloadType<Chain, AckPacketPayload = AckPacketPayload<Counterparty, Chain>>
         + HasHeightFields
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + HasAcknowledgementType<Chain, Acknowledgement = Vec<u8>>,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_ack_packet_message(
         _chain: &Chain,
@@ -86,14 +88,14 @@ where
             proof_acked: payload.proof_ack,
         };
 
-        Ok(message.to_cosmos_message())
+        Ok(message.to_cosmos_message().into())
     }
 }
 
 impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where
-    Chain: HasMessageType<Message = CosmosMessage>
+    Chain: HasMessageType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasTimeoutUnorderedPacketPayloadType<
@@ -101,6 +103,7 @@ where
             TimeoutUnorderedPacketPayload = TimeoutUnorderedPacketPayload<Counterparty>,
         > + HasHeightFields
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_timeout_unordered_packet_message(
         _chain: &Chain,
@@ -120,6 +123,6 @@ where
             proof_unreceived: payload.proof_unreceived,
         };
 
-        Ok(message.to_cosmos_message())
+        Ok(message.to_cosmos_message().into())
     }
 }

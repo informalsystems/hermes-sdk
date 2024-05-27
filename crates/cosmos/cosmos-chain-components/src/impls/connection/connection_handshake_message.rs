@@ -41,18 +41,15 @@ where
     Chain: HasInitConnectionOptionsType<
             Counterparty,
             InitConnectionOptions = CosmosInitConnectionOptions,
-        > + HasIbcChainTypes<
-            Counterparty,
-            ClientId = ClientId,
-            ConnectionId = ConnectionId,
-            Message = CosmosMessage,
-        > + CanRaiseError<&'static str>,
+        > + HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
+        + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionOpenInitPayloadType<
             Chain,
             ConnectionOpenInitPayload = ConnectionOpenInitPayload<Counterparty>,
         >,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_init_message(
         _chain: &Chain,
@@ -60,7 +57,7 @@ where
         counterparty_client_id: &Counterparty::ClientId,
         init_connection_options: &Chain::InitConnectionOptions,
         counterparty_payload: ConnectionOpenInitPayload<Counterparty>,
-    ) -> Result<CosmosMessage, Chain::Error> {
+    ) -> Result<Chain::Message, Chain::Error> {
         let client_id = client_id.clone();
         let counterparty_client_id = counterparty_client_id.clone();
         let counterparty_commitment_prefix = counterparty_payload.commitment_prefix;
@@ -79,7 +76,7 @@ where
             delay_period,
         };
 
-        Ok(message.to_cosmos_message())
+        Ok(message.to_cosmos_message().into())
     }
 }
 
@@ -91,7 +88,6 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Height = Height,
-            Message = CosmosMessage,
         > + HasClientStateType<Counterparty, ClientState = TendermintClientState>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
@@ -103,6 +99,7 @@ where
             Chain,
             ConnectionOpenTryPayload = ConnectionOpenTryPayload<Counterparty, Chain>,
         >,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_try_message(
         _chain: &Chain,
@@ -110,7 +107,7 @@ where
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         payload: ConnectionOpenTryPayload<Counterparty, Chain>,
-    ) -> Result<CosmosMessage, Chain::Error> {
+    ) -> Result<Chain::Message, Chain::Error> {
         let counterparty_versions = payload.connection_end.versions().to_vec();
         let delay_period = payload.connection_end.delay_period();
 
@@ -140,7 +137,7 @@ where
             proof_consensus_height: payload.proof_consensus_height,
         };
 
-        Ok(message.to_cosmos_message())
+        Ok(message.to_cosmos_message().into())
     }
 }
 
@@ -151,7 +148,6 @@ where
             Counterparty,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-            Message = CosmosMessage,
             Height = Height,
         > + HasClientStateType<Counterparty, ClientState = TendermintClientState>
         + CanRaiseError<Ics02Error>
@@ -164,13 +160,14 @@ where
             Chain,
             ConnectionOpenAckPayload = ConnectionOpenAckPayload<Counterparty, Chain>,
         >,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_ack_message(
         _chain: &Chain,
         connection_id: &Chain::ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         payload: ConnectionOpenAckPayload<Counterparty, Chain>,
-    ) -> Result<CosmosMessage, Chain::Error> {
+    ) -> Result<Chain::Message, Chain::Error> {
         let connection_id = connection_id.clone();
         let counterparty_connection_id = counterparty_connection_id.clone();
 
@@ -206,27 +203,27 @@ where
             proof_consensus_height: payload.proof_consensus_height,
         };
 
-        Ok(message.to_cosmos_message())
+        Ok(message.to_cosmos_message().into())
     }
 }
 
 impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, ConnectionId = ConnectionId, Message = CosmosMessage>
-        + CanRaiseError<Ics02Error>,
+    Chain: HasIbcChainTypes<Counterparty, ConnectionId = ConnectionId> + CanRaiseError<Ics02Error>,
     Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + HasHeightFields
         + HasConnectionOpenConfirmPayloadType<
             Chain,
             ConnectionOpenConfirmPayload = ConnectionOpenConfirmPayload<Counterparty>,
         >,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_confirm_message(
         _chain: &Chain,
         connection_id: &Chain::ConnectionId,
         payload: ConnectionOpenConfirmPayload<Counterparty>,
-    ) -> Result<CosmosMessage, Chain::Error> {
+    ) -> Result<Chain::Message, Chain::Error> {
         let update_height = Height::new(
             Counterparty::revision_number(&payload.update_height),
             Counterparty::revision_height(&payload.update_height),
@@ -239,6 +236,6 @@ where
             proof_ack: payload.proof_ack,
         };
 
-        Ok(message.to_cosmos_message())
+        Ok(message.to_cosmos_message().into())
     }
 }
