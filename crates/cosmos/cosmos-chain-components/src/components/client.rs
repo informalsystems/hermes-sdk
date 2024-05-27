@@ -1,3 +1,4 @@
+use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
 use cgp_core::prelude::delegate_components;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
@@ -67,6 +68,7 @@ use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::P
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::send_packets::{
     SendPacketQuerierComponent, SendPacketsQuerierComponent,
 };
@@ -119,7 +121,9 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::{
+    PacketReceiptTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -192,6 +196,7 @@ delegate_components! {
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             AcknowledgementTypeComponent,
+            PacketReceiptTypeComponent,
         ]:
             ProvideCosmosChainTypes,
         [
@@ -290,6 +295,8 @@ delegate_components! {
             QueryUnreceivedCosmosAcksSequences,
         PacketAcknowledgementQuerierComponent:
             QueryPacketAcknowledgementFromAbci,
+        PacketReceiptQuerierComponent:
+            QueryPacketReceiptFromAbci,
         PacketAcknowledgementsQuerierComponent:
             QueryCosmosPacketAcknowledgements,
         SendPacketQuerierComponent:

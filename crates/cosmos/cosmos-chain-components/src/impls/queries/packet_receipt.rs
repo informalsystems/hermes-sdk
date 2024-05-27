@@ -1,4 +1,3 @@
-use cgp_core::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasPacketReceiptType;
