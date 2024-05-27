@@ -46,7 +46,7 @@ where
 
                 Ok(CosmosTimeoutUnorderedPacketPayload {
                     update_height: proofs.height(),
-                    proof_unreceived: proofs.object_proof().clone(),
+                    proof_unreceived: proofs.object_proof().clone().into(),
                 })
             })
             .await

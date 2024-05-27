@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -12,7 +11,6 @@ use crate::types::payloads::packet::CosmosTimeoutUnorderedPacketPayload;
 
 pub struct BuildCosmosTimeoutPacketMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosTimeoutPacketMessage
 where

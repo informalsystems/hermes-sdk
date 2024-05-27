@@ -7,7 +7,7 @@ use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayl
 #[derive_component(TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildTimeoutUnorderedPacketMessage<Counterparty>:
-    HasMessageType + HasErrorType + HasIbcPacketTypes<Counterparty>
+    HasMessageType + HasIbcPacketTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasTimeoutUnorderedPacketPayloadType<Self>,
 {

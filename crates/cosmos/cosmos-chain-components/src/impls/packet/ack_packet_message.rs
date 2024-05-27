@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
@@ -11,7 +11,6 @@ use crate::types::payloads::packet::CosmosAckPacketPayload;
 
 pub struct BuildCosmosAckPacketMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosAckPacketMessage
 where

@@ -49,7 +49,7 @@ where
                 Ok(CosmosAckPacketPayload {
                     ack,
                     update_height: proofs.height(),
-                    proof_acked: proofs.object_proof().clone(),
+                    proof_acked: proofs.object_proof().clone().into(),
                 })
             })
             .await

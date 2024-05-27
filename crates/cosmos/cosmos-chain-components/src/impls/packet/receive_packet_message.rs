@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
@@ -12,7 +11,6 @@ use crate::types::payloads::packet::CosmosReceivePacketPayload;
 
 pub struct BuildCosmosReceivePacketMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosReceivePacketMessage
 where

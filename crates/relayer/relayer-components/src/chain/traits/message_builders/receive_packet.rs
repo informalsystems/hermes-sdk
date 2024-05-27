@@ -7,7 +7,7 @@ use crate::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 #[derive_component(ReceivePacketMessageBuilderComponent, ReceivePacketMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildReceivePacketMessage<Counterparty>:
-    HasMessageType + HasErrorType + HasIbcPacketTypes<Counterparty>
+    HasMessageType + HasIbcPacketTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasReceivePacketPayloadType<Self>,
 {

@@ -1,5 +1,6 @@
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromSovereign;
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawClientState;
@@ -106,7 +107,7 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
-use crate::impls::cosmos_to_sovereign::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessageOnSovereign;
+use crate::impls::cosmos_to_sovereign::channel::channel_handshake_message::BuildChannelOpenInitMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
@@ -290,13 +291,14 @@ delegate_components! {
         ]:
             BuildCosmosConnectionHandshakeMessageOnSovereign,
 
+        ChannelOpenInitMessageBuilderComponent:
+            BuildChannelOpenInitMessageOnSovereign,
         [
-            ChannelOpenInitMessageBuilderComponent,
             ChannelOpenTryMessageBuilderComponent,
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
-            BuildCosmosChannelHandshakeMessageOnSovereign,
+            BuildCosmosChannelHandshakeMessage,
         ReceivePacketMessageBuilderComponent:
             BuildReceivePacketMessageOnSovereign,
         TimeoutUnorderedPacketMessageBuilderComponent:

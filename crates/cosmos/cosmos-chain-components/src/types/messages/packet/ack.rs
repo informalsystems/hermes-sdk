@@ -1,7 +1,6 @@
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::MsgAcknowledgement as ProtoMsgAcknowledgement;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 
@@ -15,7 +14,7 @@ pub struct CosmosAckPacketMessage {
     pub packet: Packet,
     pub acknowledgement: Vec<u8>,
     pub update_height: Height,
-    pub proof_acked: CommitmentProofBytes,
+    pub proof_acked: Vec<u8>,
 }
 
 impl DynCosmosMessage for CosmosAckPacketMessage {
@@ -27,7 +26,7 @@ impl DynCosmosMessage for CosmosAckPacketMessage {
         let proto_message = ProtoMsgAcknowledgement {
             packet: Some(self.packet.clone().into()),
             acknowledgement: self.acknowledgement.clone(),
-            proof_acked: self.proof_acked.clone().into(),
+            proof_acked: self.proof_acked.clone(),
             proof_height: Some(self.update_height.into()),
             signer: signer.to_string(),
         };

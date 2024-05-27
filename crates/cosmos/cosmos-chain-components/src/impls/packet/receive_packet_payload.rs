@@ -44,7 +44,7 @@ where
 
                 Ok(CosmosReceivePacketPayload {
                     update_height: proofs.height(),
-                    proof_commitment: proofs.object_proof().clone(),
+                    proof_commitment: proofs.object_proof().clone().into(),
                 })
             })
             .await

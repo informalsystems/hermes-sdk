@@ -1,7 +1,6 @@
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::core::channel::v1::MsgRecvPacket as ProtoMsgRecvPacket;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::signer::Signer;
 use ibc_relayer_types::Height;
 
@@ -14,7 +13,7 @@ const TYPE_URL: &str = "/ibc.core.channel.v1.MsgRecvPacket";
 pub struct CosmosReceivePacketMessage {
     pub packet: Packet,
     pub update_height: Height,
-    pub proof_commitment: CommitmentProofBytes,
+    pub proof_commitment: Vec<u8>,
 }
 
 impl DynCosmosMessage for CosmosReceivePacketMessage {
@@ -25,7 +24,7 @@ impl DynCosmosMessage for CosmosReceivePacketMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Any {
         let proto_message = ProtoMsgRecvPacket {
             packet: Some(self.packet.clone().into()),
-            proof_commitment: self.proof_commitment.clone().into(),
+            proof_commitment: self.proof_commitment.clone(),
             proof_height: Some(self.update_height.into()),
             signer: signer.to_string(),
         };
