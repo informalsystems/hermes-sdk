@@ -3,7 +3,7 @@ use ibc_relayer_types::Height;
 
 pub struct CosmosReceivePacketPayload {
     pub update_height: Height,
-    pub proof_commitment: CommitmentProofBytes,
+    pub proof_commitment: Vec<u8>,
 }
 
 pub struct CosmosAckPacketPayload {
