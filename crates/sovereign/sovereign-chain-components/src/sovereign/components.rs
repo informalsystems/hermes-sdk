@@ -42,6 +42,7 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent
 };
+use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
 use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -71,7 +72,7 @@ use hermes_relayer_components::transaction::traits::types::signer::SignerTypeCom
 use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
-use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessageOnSovereign;
+use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::channel::channel_handshake_message::BuildChannelOpenInitMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::events::ProvideSovereignEvents;
@@ -197,13 +198,15 @@ delegate_components! {
         ]:
             BuildChannelHandshakePayload,
 
+        ChannelOpenInitMessageBuilderComponent:
+            BuildChannelOpenInitMessageOnSovereign,
+
         [
-            ChannelOpenInitMessageBuilderComponent,
             ChannelOpenTryMessageBuilderComponent,
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
-            BuildCosmosChannelHandshakeMessageOnSovereign,
+            BuildCosmosChannelHandshakeMessage,
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
