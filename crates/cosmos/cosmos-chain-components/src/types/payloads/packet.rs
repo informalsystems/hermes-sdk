@@ -1,4 +1,3 @@
-use ibc_relayer_types::core::ics23_commitment::commitment::CommitmentProofBytes;
 use ibc_relayer_types::Height;
 
 pub struct CosmosReceivePacketPayload {
@@ -14,5 +13,5 @@ pub struct CosmosAckPacketPayload {
 
 pub struct CosmosTimeoutUnorderedPacketPayload {
     pub update_height: Height,
-    pub proof_unreceived: CommitmentProofBytes,
+    pub proof_unreceived: Vec<u8>,
 }
