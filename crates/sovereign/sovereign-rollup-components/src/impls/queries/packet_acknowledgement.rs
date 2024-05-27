@@ -42,7 +42,7 @@ where
 
         let response: QueryPacketAcknowledgementResponse = rollup
             .json_rpc_client()
-            .request("ibc_connection", (request,))
+            .request("ibc_packetAcknowledgement", (request,))
             .await
             .map_err(Rollup::raise_error)?;
 
