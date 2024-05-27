@@ -71,6 +71,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
@@ -327,6 +328,7 @@ delegate_components! {
             ChannelOpenConfirmMessageBuilderComponent,
 
             PacketCommitmentsQuerierComponent,
+            PacketAcknowledgementQuerierComponent,
             PacketAcknowledgementsQuerierComponent,
             ReceivedPacketQuerierComponent,
             ReceivePacketPayloadBuilderComponent,

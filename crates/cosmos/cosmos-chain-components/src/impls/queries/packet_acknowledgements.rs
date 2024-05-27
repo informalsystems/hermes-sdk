@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerier;
@@ -16,7 +15,6 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryCosmosPacketAcknowledgements;
 
-#[async_trait]
 impl<Chain, Counterparty> PacketAcknowledgementsQuerier<Chain, Counterparty>
     for QueryCosmosPacketAcknowledgements
 where

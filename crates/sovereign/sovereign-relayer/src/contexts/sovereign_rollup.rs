@@ -64,6 +64,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerierComponent,
     ConsensusStateHeightsQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
+    CanQueryPacketAcknowledgement, PacketAcknowledgementQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::send_message::{
     CanSendMessages, MessageSenderComponent,
 };
@@ -105,6 +108,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 };
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -246,6 +250,7 @@ delegate_components! {
             ChainStatusTypeComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            AcknowledgementTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
 
@@ -325,6 +330,8 @@ delegate_components! {
 
             ChannelEndQuerierComponent,
             ChannelEndWithProofsQuerierComponent,
+
+            PacketAcknowledgementQuerierComponent,
 
             AckPacketMessageBuilderComponent,
             ReceivePacketMessageBuilderComponent,
@@ -432,6 +439,7 @@ pub trait CanUseSovereignRollup:
     + CanQueryConnectionEndWithProofs<CosmosChain>
     + CanQueryChannelEnd<CosmosChain>
     + CanQueryChannelEndWithProofs<CosmosChain>
+    + CanQueryPacketAcknowledgement<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>

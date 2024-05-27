@@ -50,11 +50,14 @@ use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
+use hermes_relayer_components::chain::impls::forward::queries::packet_acknowledgement::ForwardQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{ChannelOpenInitEventComponent, ChannelOpenTryEventComponent};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent};
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -107,6 +110,7 @@ delegate_components! {
             IbcPacketTypesProviderComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            AcknowledgementTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
         ]:
@@ -219,6 +223,8 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
         ]:
             ForwardQueryChannelEnd,
+        PacketAcknowledgementQuerierComponent:
+            ForwardQueryPacketAcknowledgement,
         ConsensusStateHeightQuerierComponent:
             ForwardQueryConsensusStateHeight,
         CounterpartyMessageHeightGetterComponent:
