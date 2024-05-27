@@ -48,7 +48,7 @@ where
 
         Ok((
             Vec::from(response.acknowledgement.as_ref()),
-            response.proof.into(),
+            response.proof,
         ))
     }
 }
