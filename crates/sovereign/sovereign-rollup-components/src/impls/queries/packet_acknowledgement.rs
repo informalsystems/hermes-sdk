@@ -46,10 +46,7 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
-        Ok((
-            Vec::from(response.acknowledgement.as_ref()),
-            response.proof,
-        ))
+        Ok((Vec::from(response.acknowledgement.as_ref()), response.proof))
     }
 }
 
