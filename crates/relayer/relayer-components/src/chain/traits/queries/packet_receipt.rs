@@ -14,6 +14,7 @@ pub trait CanQueryPacketReceipt<Counterparty>:
 where
     Counterparty: HasIbcChainTypes<Self>,
 {
+    // TODO: check if the API should return `Option<Self::PacketReceipt>` instead
     async fn query_packet_receipt(
         &self,
         channel_id: &Self::ChannelId,
