@@ -62,7 +62,7 @@ where
         let packet_timeout_height = Relay::packet_timeout_height(packet);
         let packet_timeout_timestamp = Relay::packet_timeout_timestamp(packet);
 
-        let has_packet_timed_out = if let Some(packet_timeout_height) = packet_timeout_height {
+        let has_packet_timed_out = if let Some(ref packet_timeout_height) = packet_timeout_height {
             destination_height > packet_timeout_height
                 || destination_timestamp > packet_timeout_timestamp
         } else {

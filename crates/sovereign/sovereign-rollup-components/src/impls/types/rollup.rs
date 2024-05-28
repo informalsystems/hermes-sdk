@@ -13,6 +13,7 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
@@ -104,6 +105,7 @@ delegate_components! {
             IbcPacketTypesProviderComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,

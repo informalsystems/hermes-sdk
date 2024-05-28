@@ -44,6 +44,7 @@ where
                 Chain::outgoing_packet_src_channel_id(packet),
                 Chain::outgoing_packet_src_port(packet),
                 Chain::outgoing_packet_sequence(packet),
+                height,
             )
             .await?;
 

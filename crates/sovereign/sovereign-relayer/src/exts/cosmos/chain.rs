@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
     CanBuildChannelOpenInitMessage, CanBuildChannelOpenTryMessage,
@@ -10,7 +11,10 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmPayload, CanBuildChannelOpenTryPayload,
 };
@@ -19,6 +23,8 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
@@ -67,6 +73,12 @@ pub trait CanUseCosmosChainWithSovereign:
     + CanBuildChannelOpenTryMessage<SovereignChain>
     + CanBuildChannelOpenAckMessage<SovereignChain>
     + CanBuildChannelOpenConfirmMessage<SovereignChain>
+    + CanBuildReceivePacketPayload<SovereignChain>
+    + CanBuildAckPacketPayload<SovereignChain>
+    + CanBuildTimeoutUnorderedPacketPayload<SovereignChain>
+    + CanBuildReceivePacketMessage<SovereignChain>
+    + CanBuildAckPacketMessage<SovereignChain>
+    + CanBuildTimeoutUnorderedPacketMessage<SovereignChain>
     + HasCreateClientOptionsType<SovereignChain>
     + CanBuildCreateClientPayload<SovereignChain>
     + CanBuildUpdateClientPayload<SovereignChain>

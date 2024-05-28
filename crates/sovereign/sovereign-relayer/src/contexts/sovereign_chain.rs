@@ -10,6 +10,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
     CanBuildChannelOpenInitMessage, CanBuildChannelOpenTryMessage,
@@ -19,6 +20,10 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
+use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmPayload, CanBuildChannelOpenTryPayload,
 };
@@ -26,6 +31,8 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
     CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
 };
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
@@ -42,6 +49,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -213,6 +221,7 @@ pub trait CanUseSovereignChain:
     + HasCreateClientEvent<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasChannelOpenInitEvent<CosmosChain>
+    + CanReadPacketFields<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
@@ -222,6 +231,7 @@ pub trait CanUseSovereignChain:
     + CanQueryConnectionEndWithProofs<CosmosChain>
     + CanQueryChannelEnd<CosmosChain>
     + CanQueryChannelEndWithProofs<CosmosChain>
+    + CanQueryPacketCommitment<CosmosChain>
     + CanQueryPacketAcknowledgement<CosmosChain>
     + CanQueryPacketReceipt<CosmosChain>
     + HasClientStateFields<CosmosChain>
@@ -241,6 +251,12 @@ pub trait CanUseSovereignChain:
     + CanBuildChannelOpenTryMessage<CosmosChain>
     + CanBuildChannelOpenAckMessage<CosmosChain>
     + CanBuildChannelOpenConfirmMessage<CosmosChain>
+    + CanBuildReceivePacketMessage<CosmosChain>
+    + CanBuildAckPacketMessage<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
+    + CanBuildReceivePacketPayload<CosmosChain>
+    + CanBuildAckPacketPayload<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketPayload<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
 {

@@ -212,10 +212,10 @@ where
         &packet.seq_on_a
     }
 
-    fn incoming_packet_timeout_height(packet: &Packet) -> Option<&Height> {
+    fn incoming_packet_timeout_height(packet: &Packet) -> Option<Height> {
         match &packet.timeout_height_on_b {
             TimeoutHeight::Never => None,
-            TimeoutHeight::At(height) => Some(height),
+            TimeoutHeight::At(height) => Some(*height),
         }
     }
 
@@ -243,10 +243,10 @@ where
         &packet.seq_on_a
     }
 
-    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<&Height> {
+    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<Height> {
         match &packet.timeout_height_on_b {
             TimeoutHeight::Never => None,
-            TimeoutHeight::At(height) => Some(height),
+            TimeoutHeight::At(height) => Some(*height),
         }
     }
 

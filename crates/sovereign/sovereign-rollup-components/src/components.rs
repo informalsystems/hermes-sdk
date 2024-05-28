@@ -2,6 +2,7 @@ use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFro
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
+use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawClientState;
 use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideAnyRawConsensusState;
@@ -43,6 +44,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -81,6 +83,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
@@ -111,9 +114,6 @@ use crate::impls::cosmos_to_sovereign::channel::channel_handshake_message::Build
 use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::packet::ack_packet_message::BuildAckPacketMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::packet::receive_packet_message::BuildReceivePacketMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::packet::timeout_unordered_packet_message::BuildTimeoutPacketMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::message_height::GetCosmosHeightFromSovereignMessage;
@@ -123,6 +123,7 @@ use crate::impls::queries::client_state::QueryClientStateOnSovereign;
 use crate::impls::queries::connection_end::QueryConnectionEndOnSovereign;
 use crate::impls::queries::consensus_state::QueryConsensusStateOnSovereign;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsOnSovereign;
+use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromSovereign;
 use crate::impls::queries::packet_receipt::QueryPacketReceiptFromSovereign;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
@@ -155,6 +156,7 @@ delegate_components! {
             ChainStatusTypeComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
             ConnectionEndTypeComponent,
@@ -272,6 +274,8 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
         ]:
             QueryChannelEndOnSovereign,
+        PacketCommitmentQuerierComponent:
+            QueryPacketCommitmentFromSovereign,
         PacketAcknowledgementQuerierComponent:
             QueryPacketAcknowledgementFromSovereign,
         PacketReceiptQuerierComponent:
@@ -280,8 +284,6 @@ delegate_components! {
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,
-        AckPacketMessageBuilderComponent:
-            BuildAckPacketMessageOnSovereign,
 
         [
             ConnectionOpenInitMessageBuilderComponent,
@@ -299,10 +301,14 @@ delegate_components! {
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
             BuildCosmosChannelHandshakeMessage,
-        ReceivePacketMessageBuilderComponent:
-            BuildReceivePacketMessageOnSovereign,
-        TimeoutUnorderedPacketMessageBuilderComponent:
-            BuildTimeoutPacketMessageOnSovereign,
+
+        [
+            ReceivePacketMessageBuilderComponent,
+            AckPacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
+        ]:
+            BuildCosmosPacketMessages,
+
         CounterpartyMessageHeightGetterComponent:
             GetCosmosHeightFromSovereignMessage,
     }

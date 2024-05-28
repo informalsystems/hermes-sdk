@@ -67,6 +67,8 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
     CanQueryPacketAcknowledgement, PacketAcknowledgementQuerierComponent,
 };
+use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::{
     CanQueryPacketReceipt, PacketReceiptQuerierComponent,
 };
@@ -112,6 +114,7 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
@@ -254,6 +257,7 @@ delegate_components! {
             ChainStatusTypeComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
             ConnectionEndTypeComponent,
@@ -336,6 +340,7 @@ delegate_components! {
             ChannelEndQuerierComponent,
             ChannelEndWithProofsQuerierComponent,
 
+            PacketCommitmentQuerierComponent,
             PacketAcknowledgementQuerierComponent,
             PacketReceiptQuerierComponent,
 
@@ -445,6 +450,7 @@ pub trait CanUseSovereignRollup:
     + CanQueryConnectionEndWithProofs<CosmosChain>
     + CanQueryChannelEnd<CosmosChain>
     + CanQueryChannelEndWithProofs<CosmosChain>
+    + CanQueryPacketCommitment<CosmosChain>
     + CanQueryPacketAcknowledgement<CosmosChain>
     + CanQueryPacketReceipt<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>

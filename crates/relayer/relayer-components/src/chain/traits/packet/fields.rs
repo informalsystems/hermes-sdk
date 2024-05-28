@@ -19,7 +19,7 @@ where
 
     fn incoming_packet_sequence(packet: &Self::IncomingPacket) -> &Counterparty::Sequence;
 
-    fn incoming_packet_timeout_height(packet: &Self::IncomingPacket) -> Option<&Self::Height>;
+    fn incoming_packet_timeout_height(packet: &Self::IncomingPacket) -> Option<Self::Height>;
 
     fn incoming_packet_timeout_timestamp(packet: &Self::IncomingPacket) -> &Self::Timestamp;
 
@@ -35,7 +35,7 @@ where
 
     fn outgoing_packet_timeout_height(
         packet: &Self::OutgoingPacket,
-    ) -> Option<&Counterparty::Height>;
+    ) -> Option<Counterparty::Height>;
 
     fn outgoing_packet_timeout_timestamp(packet: &Self::OutgoingPacket)
         -> &Counterparty::Timestamp;
