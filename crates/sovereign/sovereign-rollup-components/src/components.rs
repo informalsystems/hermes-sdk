@@ -112,8 +112,6 @@ use crate::impls::cosmos_to_sovereign::channel::channel_handshake_message::Build
 use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::packet::ack_packet_message::BuildAckPacketMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::packet::timeout_unordered_packet_message::BuildTimeoutPacketMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::message_height::GetCosmosHeightFromSovereignMessage;
@@ -280,8 +278,6 @@ delegate_components! {
             QueryConsensusStateHeightsOnSovereign,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,
-        AckPacketMessageBuilderComponent:
-            BuildAckPacketMessageOnSovereign,
 
         [
             ConnectionOpenInitMessageBuilderComponent,
@@ -302,11 +298,11 @@ delegate_components! {
 
         [
             ReceivePacketMessageBuilderComponent,
+            AckPacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
         ]:
             BuildCosmosPacketMessages,
 
-        TimeoutUnorderedPacketMessageBuilderComponent:
-            BuildTimeoutPacketMessageOnSovereign,
         CounterpartyMessageHeightGetterComponent:
             GetCosmosHeightFromSovereignMessage,
     }

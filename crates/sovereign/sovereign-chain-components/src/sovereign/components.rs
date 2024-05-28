@@ -52,6 +52,8 @@ use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
@@ -212,6 +214,8 @@ delegate_components! {
 
         [
             ReceivePacketMessageBuilderComponent,
+            AckPacketMessageBuilderComponent,
+            TimeoutUnorderedPacketMessageBuilderComponent,
         ]:
             BuildCosmosPacketMessages,
 

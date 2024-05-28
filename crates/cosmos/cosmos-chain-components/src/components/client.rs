@@ -139,13 +139,9 @@ use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithCha
 use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::impls::events::ProvideCosmosEvents;
-use crate::impls::packet::ack_packet_message::BuildCosmosAckPacketMessage;
-use crate::impls::packet::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
 use crate::impls::packet::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
-use crate::impls::packet::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
-use crate::impls::packet::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
 use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
@@ -280,30 +276,19 @@ delegate_components! {
         ]:
             BuildChannelHandshakePayload,
 
-        // ReceivePacketPayloadBuilderComponent:
-        //     BuildCosmosReceivePacketPayload,
-        // ReceivePacketMessageBuilderComponent:
-        //     BuildCosmosReceivePacketMessage,
-
         [
             ReceivePacketPayloadBuilderComponent,
+            AckPacketPayloadBuilderComponent,
+            TimeoutUnorderedPacketPayloadBuilderComponent,
         ]:
             BuildPacketPayloads,
 
         [
-            ReceivePacketMessageBuilderComponent
+            ReceivePacketMessageBuilderComponent,
+            AckPacketMessageBuilderComponent,
+        TimeoutUnorderedPacketMessageBuilderComponent,
         ]:
             BuildCosmosPacketMessages,
-
-        AckPacketPayloadBuilderComponent:
-            BuildCosmosAckPacketPayload,
-        AckPacketMessageBuilderComponent:
-            BuildCosmosAckPacketMessage,
-
-        TimeoutUnorderedPacketPayloadBuilderComponent:
-            BuildCosmosTimeoutPacketPayload,
-        TimeoutUnorderedPacketMessageBuilderComponent:
-            BuildCosmosTimeoutPacketMessage,
 
         PacketCommitmentsQuerierComponent:
             QueryCosmosPacketCommitments,

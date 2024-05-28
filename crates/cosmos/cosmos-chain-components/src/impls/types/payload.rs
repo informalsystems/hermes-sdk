@@ -11,13 +11,12 @@ use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 
 use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
-use crate::types::payloads::packet::{CosmosAckPacketPayload, CosmosTimeoutUnorderedPacketPayload};
 
 pub struct ProvideCosmosPayloadTypes;
 
@@ -38,6 +37,8 @@ delegate_components! {
             ProvideChannelPayloadTypes,
         [
             ReceivePacketPayloadTypeComponent,
+            AckPacketPayloadTypeComponent,
+            TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvidePacketPayloadTypes,
     }
@@ -57,20 +58,4 @@ where
     Chain: Async,
 {
     type UpdateClientPayload = CosmosUpdateClientPayload;
-}
-
-impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
-    for ProvideCosmosPayloadTypes
-where
-    Chain: Async,
-{
-    type AckPacketPayload = CosmosAckPacketPayload;
-}
-
-impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
-    for ProvideCosmosPayloadTypes
-where
-    Chain: Async,
-{
-    type TimeoutUnorderedPacketPayload = CosmosTimeoutUnorderedPacketPayload;
 }
