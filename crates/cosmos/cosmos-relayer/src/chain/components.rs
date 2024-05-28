@@ -73,6 +73,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
@@ -128,7 +129,9 @@ use hermes_relayer_components::chain::traits::types::message::{
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::{
+    PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packets::timeout::{
     PacketReceiptTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
 };
@@ -262,6 +265,7 @@ delegate_components! {
             BlockHashComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
 
@@ -331,19 +335,28 @@ delegate_components! {
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
 
+            PacketCommitmentQuerierComponent,
             PacketCommitmentsQuerierComponent,
+
             PacketAcknowledgementQuerierComponent,
             PacketAcknowledgementsQuerierComponent,
+
             PacketReceiptQuerierComponent,
+
             ReceivedPacketQuerierComponent,
+
             ReceivePacketPayloadBuilderComponent,
             ReceivePacketMessageBuilderComponent,
+
             AckPacketPayloadBuilderComponent,
             AckPacketMessageBuilderComponent,
+
             TimeoutUnorderedPacketPayloadBuilderComponent,
             TimeoutUnorderedPacketMessageBuilderComponent,
+
             UnreceivedPacketSequencesQuerierComponent,
             UnreceivedAcksSequencesQuerierComponent,
+
             AckPacketQuerierComponent,
             AckPacketsQuerierComponent,
             SendPacketQuerierComponent,

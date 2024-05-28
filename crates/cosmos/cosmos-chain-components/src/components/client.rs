@@ -66,6 +66,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
@@ -120,7 +121,9 @@ use hermes_relayer_components::chain::traits::types::message::{
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::{
+    PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packets::timeout::{
     PacketReceiptTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
 };
@@ -155,6 +158,7 @@ use crate::impls::queries::connection_end::QueryCosmosConnectionEndFromAbci;
 use crate::impls::queries::consensus_state::QueryCosmosConsensusStateFromAbci;
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromAbci;
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
+use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
@@ -195,6 +199,7 @@ delegate_components! {
             BlockHashComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
         ]:
@@ -273,6 +278,7 @@ delegate_components! {
             ChannelOpenConfirmPayloadBuilderComponent,
         ]:
             BuildChannelHandshakePayload,
+
         PacketCommitmentsQuerierComponent:
             QueryCosmosPacketCommitments,
         ReceivedPacketQuerierComponent:
@@ -293,6 +299,9 @@ delegate_components! {
             QueryUnreceivedCosmosPacketSequences,
         UnreceivedAcksSequencesQuerierComponent:
             QueryUnreceivedCosmosAcksSequences,
+
+        PacketCommitmentQuerierComponent:
+            QueryPacketCommitmentFromAbci,
         PacketAcknowledgementQuerierComponent:
             QueryPacketAcknowledgementFromAbci,
         PacketReceiptQuerierComponent:
