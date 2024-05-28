@@ -11,7 +11,9 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
+use hermes_relayer_components::chain::traits::types::packets::receive::{
+    ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 
@@ -37,6 +39,10 @@ delegate_components! {
             ChannelOpenConfirmPayloadTypeComponent,
         ]:
             ProvideChannelPayloadTypes,
+        // [
+        //     ReceivePacketPayloadTypeComponent,
+        // ]:
+        //     ProvidePacketPayloadTypes,
     }
 }
 

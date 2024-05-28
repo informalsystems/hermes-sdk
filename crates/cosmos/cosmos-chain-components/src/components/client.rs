@@ -10,6 +10,7 @@ use hermes_relayer_components::chain::impls::delegate::queries::consensus_state:
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state_heights::DelegateQueryConsensusStateHeights;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
+use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::QueryConsensusStateHeightsAndFindHeightBefore;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
@@ -142,6 +143,7 @@ use crate::impls::packet::ack_packet_message::BuildCosmosAckPacketMessage;
 use crate::impls::packet::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
 use crate::impls::packet::packet_from_ack::BuildCosmosPacketFromWriteAck;
+use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
 use crate::impls::packet::receive_packet_message::BuildCosmosReceivePacketMessage;
 use crate::impls::packet::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::packet::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
@@ -265,6 +267,7 @@ delegate_components! {
             BuildUpdateClientPayloadWithChainHandle,
         CounterpartyChainIdQuerierComponent:
             QueryChainIdWithChainHandle,
+
         [
             ConnectionOpenInitPayloadBuilderComponent,
             ConnectionOpenTryPayloadBuilderComponent,
@@ -279,22 +282,36 @@ delegate_components! {
         ]:
             BuildChannelHandshakePayload,
 
-        PacketCommitmentsQuerierComponent:
-            QueryCosmosPacketCommitments,
-        ReceivedPacketQuerierComponent:
-            QueryReceivedPacketWithChainHandle,
         ReceivePacketPayloadBuilderComponent:
             BuildCosmosReceivePacketPayload,
         ReceivePacketMessageBuilderComponent:
             BuildCosmosReceivePacketMessage,
+
+        // [
+        //     ReceivePacketPayloadBuilderComponent,
+        // ]:
+        //     BuildPacketPayloads,
+
+        // [
+        //     ReceivePacketMessageBuilderComponent
+        // ]:
+        //     BuildCosmosPacketMessages,
+
         AckPacketPayloadBuilderComponent:
             BuildCosmosAckPacketPayload,
         AckPacketMessageBuilderComponent:
             BuildCosmosAckPacketMessage,
+
         TimeoutUnorderedPacketPayloadBuilderComponent:
             BuildCosmosTimeoutPacketPayload,
         TimeoutUnorderedPacketMessageBuilderComponent:
             BuildCosmosTimeoutPacketMessage,
+
+        PacketCommitmentsQuerierComponent:
+            QueryCosmosPacketCommitments,
+        ReceivedPacketQuerierComponent:
+            QueryReceivedPacketWithChainHandle,
+
         UnreceivedPacketSequencesQuerierComponent:
             QueryUnreceivedCosmosPacketSequences,
         UnreceivedAcksSequencesQuerierComponent:
@@ -338,23 +355,29 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
         ]:
             QueryCosmosChannelEndFromAbci,
+
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,
         ]:
             DelegateQueryClientState<DelegateCosmosChainComponents>,
+
         CreateClientMessageBuilderComponent:
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
+
         [
             ConsensusStateQuerierComponent,
             ConsensusStateWithProofsQuerierComponent,
         ]:
             DelegateQueryConsensusState<DelegateCosmosChainComponents>,
+
         ConsensusStateHeightsQuerierComponent:
             DelegateQueryConsensusStateHeights<DelegateCosmosChainComponents>,
+
         UpdateClientMessageBuilderComponent:
             DelegateBuildUpdateClientMessage<DelegateCosmosChainComponents>,
+
         [
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,
@@ -362,6 +385,7 @@ delegate_components! {
             ConnectionOpenConfirmMessageBuilderComponent,
         ]:
             DelegateBuildConnectionHandshakeMessage<DelegateCosmosChainComponents>,
+
         [
             ChannelOpenInitMessageBuilderComponent,
             ChannelOpenTryMessageBuilderComponent,
@@ -369,6 +393,7 @@ delegate_components! {
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
             DelegateBuildChannelHandshakeMessage<DelegateCosmosChainComponents>,
+
         CounterpartyMessageHeightGetterComponent:
             DelegateCounterpartyMessageHeightGetter<DelegateCosmosChainComponents>,
     }
