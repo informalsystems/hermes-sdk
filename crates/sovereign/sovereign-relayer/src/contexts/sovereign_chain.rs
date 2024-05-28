@@ -31,6 +31,7 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
     CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
 };
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -48,6 +49,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -229,6 +231,7 @@ pub trait CanUseSovereignChain:
     + CanQueryConnectionEndWithProofs<CosmosChain>
     + CanQueryChannelEnd<CosmosChain>
     + CanQueryChannelEndWithProofs<CosmosChain>
+    + CanQueryPacketCommitment<CosmosChain>
     + CanQueryPacketAcknowledgement<CosmosChain>
     + CanQueryPacketReceipt<CosmosChain>
     + HasClientStateFields<CosmosChain>
@@ -251,6 +254,7 @@ pub trait CanUseSovereignChain:
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
+    + CanBuildReceivePacketPayload<CosmosChain>
     + CanBuildAckPacketPayload<CosmosChain>
     + CanBuildTimeoutUnorderedPacketPayload<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
