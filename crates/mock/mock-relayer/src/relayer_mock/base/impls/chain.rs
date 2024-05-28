@@ -159,8 +159,8 @@ impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainCompone
         &packet.sequence
     }
 
-    fn incoming_packet_timeout_height(packet: &PacketKey) -> Option<&MockHeight> {
-        Some(&packet.timeout_height)
+    fn incoming_packet_timeout_height(packet: &PacketKey) -> Option<MockHeight> {
+        Some(packet.timeout_height)
     }
 
     fn incoming_packet_timeout_timestamp(packet: &PacketKey) -> &MockTimestamp {
@@ -187,8 +187,8 @@ impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainCompone
         &packet.sequence
     }
 
-    fn outgoing_packet_timeout_height(packet: &PacketKey) -> Option<&MockHeight> {
-        Some(&packet.timeout_height)
+    fn outgoing_packet_timeout_height(packet: &PacketKey) -> Option<MockHeight> {
+        Some(packet.timeout_height)
     }
 
     fn outgoing_packet_timeout_timestamp(packet: &PacketKey) -> &MockTimestamp {

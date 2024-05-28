@@ -40,7 +40,7 @@ pub trait HasRelayPacketFields: HasRelayChains {
     /**
         The optional timeout height of a packet, which is a height on the destination chain.
     */
-    fn packet_timeout_height(packet: &Self::Packet) -> Option<&HeightOf<Self::DstChain>>;
+    fn packet_timeout_height(packet: &Self::Packet) -> Option<HeightOf<Self::DstChain>>;
 
     /**
         The timeout timestamp of a packet, which is a timestamp on the destination chain.
@@ -74,7 +74,7 @@ where
         SrcChain::outgoing_packet_sequence(packet)
     }
 
-    fn packet_timeout_height(packet: &Self::Packet) -> Option<&HeightOf<DstChain>> {
+    fn packet_timeout_height(packet: &Self::Packet) -> Option<HeightOf<DstChain>> {
         SrcChain::outgoing_packet_timeout_height(packet)
     }
 

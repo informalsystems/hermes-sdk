@@ -49,10 +49,10 @@ where
         &packet.sequence
     }
 
-    fn incoming_packet_timeout_height(packet: &Packet) -> Option<&Height> {
+    fn incoming_packet_timeout_height(packet: &Packet) -> Option<Height> {
         match &packet.timeout_height {
             TimeoutHeight::Never => None,
-            TimeoutHeight::At(h) => Some(h),
+            TimeoutHeight::At(h) => Some(*h),
         }
     }
 
@@ -80,10 +80,10 @@ where
         &packet.sequence
     }
 
-    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<&Height> {
+    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<Height> {
         match &packet.timeout_height {
             TimeoutHeight::Never => None,
-            TimeoutHeight::At(h) => Some(h),
+            TimeoutHeight::At(h) => Some(*h),
         }
     }
 
