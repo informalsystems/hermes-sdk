@@ -19,6 +19,7 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmPayload, CanBuildChannelOpenTryPayload,
 };
@@ -241,6 +242,7 @@ pub trait CanUseSovereignChain:
     + CanBuildChannelOpenTryMessage<CosmosChain>
     + CanBuildChannelOpenAckMessage<CosmosChain>
     + CanBuildChannelOpenConfirmMessage<CosmosChain>
+    + CanBuildReceivePacketMessage<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
 {

@@ -144,8 +144,6 @@ use crate::impls::packet::ack_packet_payload::BuildCosmosAckPacketPayload;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
 use crate::impls::packet::packet_from_ack::BuildCosmosPacketFromWriteAck;
 use crate::impls::packet::packet_message::BuildCosmosPacketMessages;
-use crate::impls::packet::receive_packet_message::BuildCosmosReceivePacketMessage;
-use crate::impls::packet::receive_packet_payload::BuildCosmosReceivePacketPayload;
 use crate::impls::packet::timeout_packet_message::BuildCosmosTimeoutPacketMessage;
 use crate::impls::packet::timeout_packet_payload::BuildCosmosTimeoutPacketPayload;
 use crate::impls::queries::abci::QueryAbci;
@@ -282,20 +280,20 @@ delegate_components! {
         ]:
             BuildChannelHandshakePayload,
 
-        ReceivePacketPayloadBuilderComponent:
-            BuildCosmosReceivePacketPayload,
-        ReceivePacketMessageBuilderComponent:
-            BuildCosmosReceivePacketMessage,
+        // ReceivePacketPayloadBuilderComponent:
+        //     BuildCosmosReceivePacketPayload,
+        // ReceivePacketMessageBuilderComponent:
+        //     BuildCosmosReceivePacketMessage,
 
-        // [
-        //     ReceivePacketPayloadBuilderComponent,
-        // ]:
-        //     BuildPacketPayloads,
+        [
+            ReceivePacketPayloadBuilderComponent,
+        ]:
+            BuildPacketPayloads,
 
-        // [
-        //     ReceivePacketMessageBuilderComponent
-        // ]:
-        //     BuildCosmosPacketMessages,
+        [
+            ReceivePacketMessageBuilderComponent
+        ]:
+            BuildCosmosPacketMessages,
 
         AckPacketPayloadBuilderComponent:
             BuildCosmosAckPacketPayload,

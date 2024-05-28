@@ -2,6 +2,7 @@ use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFro
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
+use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawClientState;
 use hermes_cosmos_chain_components::impls::types::consensus_state::ProvideAnyRawConsensusState;
@@ -112,7 +113,6 @@ use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreat
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::packet::ack_packet_message::BuildAckPacketMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::packet::receive_packet_message::BuildReceivePacketMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::packet::timeout_unordered_packet_message::BuildTimeoutPacketMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
@@ -299,8 +299,12 @@ delegate_components! {
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
             BuildCosmosChannelHandshakeMessage,
-        ReceivePacketMessageBuilderComponent:
-            BuildReceivePacketMessageOnSovereign,
+
+        [
+            ReceivePacketMessageBuilderComponent,
+        ]:
+            BuildCosmosPacketMessages,
+
         TimeoutUnorderedPacketMessageBuilderComponent:
             BuildTimeoutPacketMessageOnSovereign,
         CounterpartyMessageHeightGetterComponent:

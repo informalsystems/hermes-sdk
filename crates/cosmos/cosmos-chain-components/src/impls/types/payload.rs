@@ -1,6 +1,7 @@
 use cgp_core::{delegate_components, Async};
 use hermes_relayer_components::chain::impls::types::payloads::channel::ProvideChannelPayloadTypes;
 use hermes_relayer_components::chain::impls::types::payloads::connection::ProvideConnectionPayloadTypes;
+use hermes_relayer_components::chain::impls::types::payloads::packet::ProvidePacketPayloadTypes;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
     ChannelOpenTryPayloadTypeComponent,
@@ -11,16 +12,12 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::packets::receive::{
-    ProvideReceivePacketPayloadType, ReceivePacketPayloadTypeComponent,
-};
+use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 
 use crate::types::payloads::client::{CosmosCreateClientPayload, CosmosUpdateClientPayload};
-use crate::types::payloads::packet::{
-    CosmosAckPacketPayload, CosmosReceivePacketPayload, CosmosTimeoutUnorderedPacketPayload,
-};
+use crate::types::payloads::packet::{CosmosAckPacketPayload, CosmosTimeoutUnorderedPacketPayload};
 
 pub struct ProvideCosmosPayloadTypes;
 
@@ -39,10 +36,10 @@ delegate_components! {
             ChannelOpenConfirmPayloadTypeComponent,
         ]:
             ProvideChannelPayloadTypes,
-        // [
-        //     ReceivePacketPayloadTypeComponent,
-        // ]:
-        //     ProvidePacketPayloadTypes,
+        [
+            ReceivePacketPayloadTypeComponent,
+        ]:
+            ProvidePacketPayloadTypes,
     }
 }
 
@@ -60,14 +57,6 @@ where
     Chain: Async,
 {
     type UpdateClientPayload = CosmosUpdateClientPayload;
-}
-
-impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
-    for ProvideCosmosPayloadTypes
-where
-    Chain: Async,
-{
-    type ReceivePacketPayload = CosmosReceivePacketPayload;
 }
 
 impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>

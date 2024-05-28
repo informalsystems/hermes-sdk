@@ -52,6 +52,8 @@ use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent
 };
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
+use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 use hermes_relayer_components::chain::impls::forward::queries::packet_receipt::ForwardQueryPacketReceipt;
 use hermes_relayer_components::chain::impls::forward::queries::packet_acknowledgement::ForwardQueryPacketAcknowledgement;
@@ -207,6 +209,11 @@ delegate_components! {
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
             BuildCosmosChannelHandshakeMessage,
+
+        [
+            ReceivePacketMessageBuilderComponent,
+        ]:
+            BuildCosmosPacketMessages,
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
