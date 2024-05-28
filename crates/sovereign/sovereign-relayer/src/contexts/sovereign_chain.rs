@@ -31,6 +31,7 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
     CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
     CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
 };
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
@@ -250,7 +251,8 @@ pub trait CanUseSovereignChain:
     + CanBuildReceivePacketMessage<CosmosChain>
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
-    // + CanBuildAckPacketPayload<CosmosChain>
+    + CanBuildAckPacketPayload<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketPayload<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
 {

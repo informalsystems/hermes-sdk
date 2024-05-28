@@ -96,6 +96,14 @@ use hermes_relayer_components::chain::traits::payload_builders::channel_handshak
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
+use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
+use hermes_relayer_components::chain::traits::types::packets::receive::ReceivePacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::impls::types::payloads::packet::ProvidePacketPayloadTypes;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -155,6 +163,12 @@ delegate_components! {
             ChannelOpenConfirmPayloadTypeComponent,
         ]:
             ProvideChannelPayloadTypes,
+        [
+            ReceivePacketPayloadTypeComponent,
+            AckPacketPayloadTypeComponent,
+            TimeoutUnorderedPacketPayloadTypeComponent,
+        ]:
+            ProvidePacketPayloadTypes,
         [
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
@@ -222,6 +236,13 @@ delegate_components! {
             TimeoutUnorderedPacketMessageBuilderComponent,
         ]:
             BuildCosmosPacketMessages,
+
+        [
+            ReceivePacketPayloadBuilderComponent,
+            AckPacketPayloadBuilderComponent,
+            TimeoutUnorderedPacketPayloadBuilderComponent,
+        ]:
+            BuildPacketPayloads,
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
