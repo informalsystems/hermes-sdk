@@ -94,6 +94,8 @@ use hermes_relayer_components::chain::traits::payload_builders::channel_handshak
     ChannelOpenConfirmPayloadBuilderComponent,
 };
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
+use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
+use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -171,6 +173,8 @@ delegate_components! {
             ProvideSovereignTransactionTypes,
         IbcCommitmentPrefixGetterComponent:
             ProvideIbcCommitmentPrefix,
+        PacketFieldsReaderComponent:
+            CosmosPacketFieldReader,
         CreateClientPayloadBuilderComponent:
             BuildSovereignCreateClientPayload,
         CreateClientMessageBuilderComponent:

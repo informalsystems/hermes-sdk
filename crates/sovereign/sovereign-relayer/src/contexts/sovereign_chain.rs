@@ -10,6 +10,7 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::impls::wait_chain_reach_height::CanWaitChainReachHeight;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
     CanBuildChannelOpenInitMessage, CanBuildChannelOpenTryMessage,
@@ -20,6 +21,9 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
+use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmPayload, CanBuildChannelOpenTryPayload,
 };
@@ -214,6 +218,7 @@ pub trait CanUseSovereignChain:
     + HasCreateClientEvent<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasChannelOpenInitEvent<CosmosChain>
+    + CanReadPacketFields<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
@@ -243,6 +248,9 @@ pub trait CanUseSovereignChain:
     + CanBuildChannelOpenAckMessage<CosmosChain>
     + CanBuildChannelOpenConfirmMessage<CosmosChain>
     + CanBuildReceivePacketMessage<CosmosChain>
+    + CanBuildAckPacketMessage<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
+    // + CanBuildAckPacketPayload<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
 {

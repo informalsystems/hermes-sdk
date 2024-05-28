@@ -14,7 +14,6 @@ where
     Chain: HasIbcPacketTypes<Counterparty, IncomingPacket = Packet, OutgoingPacket = Packet>
         + HasIbcChainTypes<
             Counterparty,
-            Height = Height,
             Timestamp = Timestamp,
             ChannelId = ChannelId,
             PortId = PortId,
@@ -22,12 +21,13 @@ where
         >,
     Counterparty: HasIbcChainTypes<
         Chain,
-        Height = Height,
         Timestamp = Timestamp,
         ChannelId = ChannelId,
         PortId = PortId,
         Sequence = Sequence,
     >,
+    Chain::Height: From<Height>,
+    Counterparty::Height: From<Height>,
 {
     fn incoming_packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.source_channel
@@ -49,10 +49,10 @@ where
         &packet.sequence
     }
 
-    fn incoming_packet_timeout_height(packet: &Packet) -> Option<Height> {
+    fn incoming_packet_timeout_height(packet: &Packet) -> Option<Chain::Height> {
         match &packet.timeout_height {
             TimeoutHeight::Never => None,
-            TimeoutHeight::At(h) => Some(*h),
+            TimeoutHeight::At(h) => Some((*h).into()),
         }
     }
 
@@ -80,10 +80,10 @@ where
         &packet.sequence
     }
 
-    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<Height> {
+    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<Counterparty::Height> {
         match &packet.timeout_height {
             TimeoutHeight::Never => None,
-            TimeoutHeight::At(h) => Some(*h),
+            TimeoutHeight::At(h) => Some((*h).into()),
         }
     }
 
