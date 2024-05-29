@@ -14,9 +14,7 @@ use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::Sovereign
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::bank::{BankMessage, CoinFields};
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
-use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
 
@@ -114,48 +112,41 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     .send_messages_with_signer(&wallet_a.signing_key, &[message])
                     .await?;
 
-                // println!("TokenTransfer events: {:?}", events);
+                println!("TokenTransfer events: {:?}", events);
 
-                //     assert_eq!(
-                //         rollup
-                //             .query_balance(address_a, transfer_denom)
-                //             .await?
-                //             .quantity,
-                //         999_999_999_000
-                //     );
-                //     assert_eq!(
-                //         rollup
-                //             .query_balance(address_b, transfer_denom)
-                //             .await?
-                //             .quantity,
-                //         1_000_000_001_000
-                //     );
+                tokio::time::sleep(core::time::Duration::from_secs(1)).await;
 
-                //     rollup
-                //         .assert_eventual_amount(
-                //             address_b,
-                //             &SovereignAmount {
-                //                 quantity: 1_000_000_001_000,
-                //                 denom: transfer_denom.clone(),
-                //             },
-                //         )
-                //         .await?;
-                // }
+                assert_eq!(
+                    rollup
+                        .query_balance(address_a, transfer_denom)
+                        .await?
+                        .quantity,
+                    999_999_999_000
+                );
 
-                // {
-                //     let message = SovereignMessage::Bank(BankMessage::CreateToken {
-                //         salt: 0,
-                //         token_name: "test".into(),
-                //         initial_balance: 1000,
-                //         minter_address: wallet_a.address.address_bytes.clone(),
-                //         authorized_minters: Vec::new(),
-                //     });
+                assert_eq!(
+                    rollup
+                        .query_balance(address_b, transfer_denom)
+                        .await?
+                        .quantity,
+                    1_000_000_001_000
+                );
+            }
 
-                //     let events = rollup
-                //         .send_messages_with_signer(&wallet_a.signing_key, &[message])
-                //         .await?;
+            {
+                let message = SovereignMessage::Bank(BankMessage::CreateToken {
+                    salt: 0,
+                    token_name: "test".into(),
+                    initial_balance: 1000,
+                    minter_address: wallet_a.address.address_bytes.clone(),
+                    authorized_minters: Vec::new(),
+                });
 
-                //     println!("CreateToken events: {:?}", events);
+                let events = rollup
+                    .send_messages_with_signer(&wallet_a.signing_key, &[message])
+                    .await?;
+
+                println!("CreateToken events: {:?}", events);
             }
         }
         <Result<(), Error>>::Ok(())

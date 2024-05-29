@@ -2,7 +2,7 @@ use borsh::BorshSerialize;
 
 use crate::types::address::SovereignAddressBytes;
 
-#[derive(BorshSerialize)]
+#[derive(Debug, BorshSerialize)]
 pub enum BankMessage {
     CreateToken {
         salt: u64,
@@ -17,7 +17,7 @@ pub enum BankMessage {
     },
 }
 
-#[derive(BorshSerialize)]
+#[derive(Debug, BorshSerialize)]
 pub struct CoinFields {
     pub amount: u64,
     pub token_address: SovereignAddressBytes,

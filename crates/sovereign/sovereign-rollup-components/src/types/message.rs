@@ -5,7 +5,7 @@ use ibc_relayer_types::signer::Signer;
 use crate::types::messages::bank::BankMessage;
 use crate::types::messages::ibc::{IbcMessage, IbcMessageWithHeight};
 
-#[derive(BorshSerialize)]
+#[derive(Debug, BorshSerialize)]
 pub enum SovereignMessage {
     Accounts,
     Bank(BankMessage),
