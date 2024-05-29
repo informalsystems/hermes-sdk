@@ -29,7 +29,8 @@ pub struct StartTokioChildProcess;
 
 pub struct PrematureChildProcessExitError {
     pub exit_status: ExitStatus,
-    pub output: String,
+    pub stdout: String,
+    pub stderr: String,
 }
 
 impl<Runtime> ChildProcessStarter<Runtime> for StartTokioChildProcess
@@ -83,14 +84,20 @@ where
         match status {
             None => Ok(child_process),
             Some(exit_status) => {
-                let output = match stderr_path {
+                let stderr = match stderr_path {
                     None => String::new(),
                     Some(stderr_path) => runtime.read_file_as_string(stderr_path).await?,
                 };
 
+                let stdout = match stdout_path {
+                    None => String::new(),
+                    Some(stdout_path) => runtime.read_file_as_string(stdout_path).await?,
+                };
+
                 Err(Runtime::raise_error(PrematureChildProcessExitError {
                     exit_status,
-                    output,
+                    stdout,
+                    stderr,
                 }))
             }
         }

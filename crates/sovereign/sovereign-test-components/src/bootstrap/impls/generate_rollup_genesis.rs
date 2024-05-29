@@ -11,8 +11,8 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use crate::bootstrap::traits::generate_rollup_genesis::RollupGenesisGenerator;
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;
 use crate::types::rollup_genesis_config::{
-    AccountsGenesis, BankGenesis, ChainStateGenesis, CoinsToLock, SequencerRegistryGenesis,
-    SovereignGenesisConfig, TimeGenesis, TokenGenesis,
+    AccountsGenesis, BankGenesis, ChainStateGenesis, ProverIncentivesGenesis,
+    SequencerRegistryGenesis, SovereignGenesisConfig, TimeGenesis, TokenGenesis,
 };
 use crate::types::wallet::{encode_token_address, SovereignWallet};
 
@@ -58,7 +58,7 @@ where
             encode_token_address("coin", &[0; 32], 0, "token_").map_err(Bootstrap::raise_error)?;
 
         let rollup_genesis = SovereignGenesisConfig {
-            accounts: AccountsGenesis { pub_keys: vec![] },
+            accounts: AccountsGenesis { accounts: vec![] },
             bank: BankGenesis {
                 gas_token_config: TokenGenesis {
                     token_name: "stake".to_owned(),
@@ -77,19 +77,20 @@ where
             },
             chain_state: ChainStateGenesis {
                 current_time: TimeGenesis { secs: 0, nanos: 0 },
-                gas_price_blocks_depth: 10,
-                gas_price_maximum_elasticity: 5,
-                initial_gas_price: (0, 0),
-                minimum_gas_price: (0, 0),
+                genesis_da_height: 0,
+                inner_code_commitment: [0; 8],
+                outer_code_commitment: [0; 32],
             },
             sequencer_registry: SequencerRegistryGenesis {
                 seq_rollup_address: sequencer_wallet.address.address.clone(),
                 seq_da_address: sequencer_da_address.to_string(),
-                coins_to_lock: CoinsToLock {
-                    amount: 1,
-                    token_id: staking_token_address.address.clone(),
-                },
+                minimum_bond: 10000,
                 is_preferred_sequencer: true,
+            },
+            prover_incentives: ProverIncentivesGenesis {
+                proving_penalty: 10,
+                minimum_bond: 10,
+                initial_provers: vec![],
             },
             staking_token_address,
             transfer_token_address,

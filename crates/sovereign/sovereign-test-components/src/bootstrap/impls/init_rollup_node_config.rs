@@ -13,8 +13,8 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use crate::bootstrap::traits::init_rollup_node_config::RollupNodeConfigInitializer;
 use crate::bootstrap::traits::types::rollup_node_config::HasRollupNodeConfigType;
 use crate::types::rollup_node_config::{
-    SovereignDaConfig, SovereignProverConfig, SovereignRollupNodeConfig, SovereignRpcConfig,
-    SovereignRunnerConfig, SovereignStorageConfig,
+    SovereignAxumConfig, SovereignDaConfig, SovereignProverConfig, SovereignRollupNodeConfig,
+    SovereignRpcConfig, SovereignRunnerConfig, SovereignStorageConfig,
 };
 
 pub struct InitSovereignRollupNodeConfig;
@@ -58,6 +58,11 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
+        let rollup_axum_port = runtime
+            .reserve_tcp_port()
+            .await
+            .map_err(Bootstrap::raise_error)?;
+
         let rollup_node_config = SovereignRollupNodeConfig {
             da: SovereignDaConfig {
                 celestia_rpc_auth_token: auth_token.to_string(),
@@ -75,9 +80,13 @@ where
                     bind_host: "127.0.0.1".into(),
                     bind_port: rollup_rpc_port,
                 },
+                axum_config: SovereignAxumConfig {
+                    bind_host: "127.0.0.1".into(),
+                    bind_port: rollup_axum_port,
+                },
                 da_polling_interval_ms: 10000,
             },
-            prover_service: SovereignProverConfig {
+            proof_manager: SovereignProverConfig {
                 aggregated_proof_block_jump: 1,
             },
         };

@@ -5,7 +5,7 @@ pub struct SovereignRollupNodeConfig {
     pub da: SovereignDaConfig,
     pub storage: SovereignStorageConfig,
     pub runner: SovereignRunnerConfig,
-    pub prover_service: SovereignProverConfig,
+    pub proof_manager: SovereignProverConfig,
 }
 
 #[derive(Serialize)]
@@ -26,11 +26,18 @@ pub struct SovereignStorageConfig {
 pub struct SovereignRunnerConfig {
     pub genesis_height: u64,
     pub rpc_config: SovereignRpcConfig,
+    pub axum_config: SovereignAxumConfig,
     pub da_polling_interval_ms: u64,
 }
 
 #[derive(Serialize)]
 pub struct SovereignRpcConfig {
+    pub bind_host: String,
+    pub bind_port: u16,
+}
+
+#[derive(Serialize)]
+pub struct SovereignAxumConfig {
     pub bind_host: String,
     pub bind_port: u16,
 }
