@@ -876,11 +876,11 @@
         "systems": "systems_13"
       },
       "locked": {
-        "lastModified": 1705309234,
-        "narHash": "sha256-uNRRNRKmJyCRC/8y1RqBkqWBLM034y4qN7EprSdmgyA=",
+        "lastModified": 1710146030,
+        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "1ef2e671c3b0c19053962c07dbda38332dcebf26",
+        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
         "type": "github"
       },
       "original": {
@@ -2686,11 +2686,11 @@
     },
     "nixpkgs_14": {
       "locked": {
-        "lastModified": 1708247094,
-        "narHash": "sha256-H2VS7VwesetGDtIaaz4AMsRkPoSLEVzL/Ika8gnbUnE=",
+        "lastModified": 1716715802,
+        "narHash": "sha256-usk0vE7VlxPX8jOavrtpOqphdfqEQpf9lgedlY/r66c=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "045b51a3ae66f673ed44b5bbd1f4a341d96703bf",
+        "rev": "e2dd4e18cc1c7314e24154331bae07df76eb582f",
         "type": "github"
       },
       "original": {
@@ -3122,11 +3122,11 @@
         "nixpkgs": "nixpkgs_15"
       },
       "locked": {
-        "lastModified": 1708308739,
-        "narHash": "sha256-FtKWP6d51kz8282jfziNNcCBpAvEzv2TtKH6dYIXCuA=",
+        "lastModified": 1716862669,
+        "narHash": "sha256-7oTPM9lcdwiI1cpRC313B+lHawocgpY5F07N+Rbm5Uk=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "d45281ce1027a401255db01ea44972afbc569b7e",
+        "rev": "47b2d15658b37716393b2463a019000dbd6ce4bc",
         "type": "github"
       },
       "original": {
@@ -3334,11 +3334,11 @@
         "sovereign-sdk-src": "sovereign-sdk-src_2"
       },
       "locked": {
-        "lastModified": 1714659476,
-        "narHash": "sha256-CdVZDNmX6Ry62whfU89kGOx69XzPBNr7NhZ1WLVMRIk=",
+        "lastModified": 1716931204,
+        "narHash": "sha256-dOdrtnEHaMXAXHHKcZYL3p6iSwnYujIodwqwxEpb4o0=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "71a7ceef5c3e1e896aa54c1582f3c3e5d9460a38",
+        "rev": "2ab47e1a775eba9acad79d6e2cbae502f305876e",
         "type": "github"
       },
       "original": {
@@ -3368,16 +3368,16 @@
     "sovereign-sdk-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1711704165,
-        "narHash": "sha256-bmOvCxA6paFllm58AaxWRvLvyWhtM+Q/nAyyGIvVS3A=",
+        "lastModified": 1716382491,
+        "narHash": "sha256-5TRCQIAdfqudXS+y2sNz9KP87aSDXaevOf8p4CgJrUo=",
         "ref": "refs/heads/nightly",
-        "rev": "20bfd68c8c740b447d51eb50381b5590102258bb",
-        "revCount": 911,
+        "rev": "fc1552b44acddc2674a783cd11f301a8b79cc4f3",
+        "revCount": 1060,
         "type": "git",
         "url": "ssh://git@github.com/informalsystems/sovereign-sdk-wip"
       },
       "original": {
-        "rev": "20bfd68c8c740b447d51eb50381b5590102258bb",
+        "rev": "fc1552b44acddc2674a783cd11f301a8b79cc4f3",
         "type": "git",
         "url": "ssh://git@github.com/informalsystems/sovereign-sdk-wip"
       }

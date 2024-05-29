@@ -4,11 +4,12 @@ use ibc_relayer_types::core::ics02_client::height::Height;
 
 use crate::types::message::SovereignMessage;
 
-#[derive(BorshSerialize)]
+#[derive(Debug, BorshSerialize)]
 pub enum IbcMessage {
     Core(IbcMessageWithHeight),
 }
 
+#[derive(Debug)]
 pub struct IbcMessageWithHeight {
     pub message: Any,
     pub counterparty_height: Option<Height>,

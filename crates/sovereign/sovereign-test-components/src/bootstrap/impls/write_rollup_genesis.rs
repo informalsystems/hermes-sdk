@@ -96,6 +96,25 @@ where
                 .map_err(Bootstrap::raise_error)?
         }
 
+        {
+            let prover_incentives_genesis_path = Runtime::join_file_path(
+                &genesis_dir,
+                &Runtime::file_path_from_string("prover_incentives.json"),
+            );
+
+            let prover_incentives_genesis_str =
+                json::to_string_pretty(&genesis_config.prover_incentives)
+                    .map_err(Bootstrap::raise_error)?;
+
+            runtime
+                .write_string_to_file(
+                    &prover_incentives_genesis_path,
+                    &prover_incentives_genesis_str,
+                )
+                .await
+                .map_err(Bootstrap::raise_error)?
+        }
+
         Ok(())
     }
 }

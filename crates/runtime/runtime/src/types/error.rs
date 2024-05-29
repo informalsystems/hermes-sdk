@@ -13,7 +13,8 @@ pub enum TokioRuntimeError {
     Utf8(Utf8Error),
     PrematureChildProcessExit {
         exit_status: ExitStatus,
-        output: String,
+        stdout: String,
+        stderr: String,
     },
     ExecCommandFailure {
         command: String,
@@ -40,20 +41,21 @@ impl Display for TokioRuntimeError {
             }
             Self::PrematureChildProcessExit {
                 exit_status,
-                output,
+                stderr,
+                ..
             } => {
-                write!(f, "expected child process to be running, but it exited immediately with exit status {} and output: {}", exit_status, output)?;
+                write!(f, "expected child process to be running, but it exited immediately with exit status {} and stderr: {}", exit_status, stderr)?;
             }
             Self::ExecCommandFailure {
                 command,
                 exit_code,
-                stdout,
                 stderr,
+                ..
             } => {
                 write!(
                     f,
-                    "execution of command {} failed with exit code {:?}. stdout: {}, stderr: {}",
-                    command, exit_code, stdout, stderr
+                    "execution of command {} failed with exit code {:?}. stderr: {}",
+                    command, exit_code, stderr
                 )?;
             }
         };

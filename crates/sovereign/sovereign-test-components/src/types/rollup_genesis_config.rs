@@ -6,13 +6,20 @@ pub struct SovereignGenesisConfig {
     pub bank: BankGenesis,
     pub chain_state: ChainStateGenesis,
     pub sequencer_registry: SequencerRegistryGenesis,
+    pub prover_incentives: ProverIncentivesGenesis,
     pub staking_token_address: SovereignAddress,
     pub transfer_token_address: SovereignAddress,
 }
 
 #[derive(Serialize)]
 pub struct AccountsGenesis {
-    pub pub_keys: Vec<String>,
+    pub accounts: Vec<AccountGenesis>,
+}
+
+#[derive(Serialize)]
+pub struct AccountGenesis {
+    pub credential_id: String,
+    pub address: String,
 }
 
 #[derive(Serialize)]
@@ -33,10 +40,9 @@ pub struct TokenGenesis {
 #[derive(Serialize)]
 pub struct ChainStateGenesis {
     pub current_time: TimeGenesis,
-    pub gas_price_blocks_depth: u64,
-    pub gas_price_maximum_elasticity: u64,
-    pub initial_gas_price: (u64, u64),
-    pub minimum_gas_price: (u64, u64),
+    pub genesis_da_height: u64,
+    pub inner_code_commitment: [u8; 8],
+    pub outer_code_commitment: [u8; 32],
 }
 
 #[derive(Serialize)]
@@ -49,12 +55,13 @@ pub struct TimeGenesis {
 pub struct SequencerRegistryGenesis {
     pub seq_rollup_address: String,
     pub seq_da_address: String,
-    pub coins_to_lock: CoinsToLock,
+    pub minimum_bond: u64,
     pub is_preferred_sequencer: bool,
 }
 
 #[derive(Serialize)]
-pub struct CoinsToLock {
-    pub amount: u64,
-    pub token_id: String,
+pub struct ProverIncentivesGenesis {
+    pub proving_penalty: u64,
+    pub minimum_bond: u64,
+    pub initial_provers: Vec<(String, u64)>,
 }

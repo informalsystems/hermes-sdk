@@ -14,9 +14,7 @@ use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::Sovereign
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use hermes_sovereign_rollup_components::types::messages::bank::{BankMessage, CoinFields};
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
-use hermes_sovereign_test_components::types::amount::SovereignAmount;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use tokio::runtime::Builder;
 
@@ -48,7 +46,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
     let sovereign_bootstrap = SovereignBootstrap {
         runtime: runtime.clone(),
         rollup_store_dir: format!("./test-data/{store_postfix}/rollups").into(),
-        rollup_command_path: "node".into(),
+        rollup_command_path: "rollup".into(),
         account_prefix: "sov".into(),
     };
 
@@ -116,6 +114,8 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
 
                 println!("TokenTransfer events: {:?}", events);
 
+                tokio::time::sleep(core::time::Duration::from_secs(1)).await;
+
                 assert_eq!(
                     rollup
                         .query_balance(address_a, transfer_denom)
@@ -123,6 +123,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                         .quantity,
                     999_999_999_000
                 );
+
                 assert_eq!(
                     rollup
                         .query_balance(address_b, transfer_denom)
@@ -130,16 +131,6 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                         .quantity,
                     1_000_000_001_000
                 );
-
-                rollup
-                    .assert_eventual_amount(
-                        address_b,
-                        &SovereignAmount {
-                            quantity: 1_000_000_001_000,
-                            denom: transfer_denom.clone(),
-                        },
-                    )
-                    .await?;
             }
 
             {

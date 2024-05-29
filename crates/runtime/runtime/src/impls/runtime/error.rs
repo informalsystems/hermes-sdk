@@ -19,7 +19,8 @@ impl ErrorRaiser<HermesRuntime, PrematureChildProcessExitError> for HermesRuntim
     fn raise_error(e: PrematureChildProcessExitError) -> TokioRuntimeError {
         TokioRuntimeError::PrematureChildProcessExit {
             exit_status: e.exit_status,
-            output: e.output,
+            stdout: e.stdout,
+            stderr: e.stderr,
         }
     }
 }

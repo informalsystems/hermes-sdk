@@ -14,8 +14,10 @@ pub struct TxResponse {
 pub enum TxEffect {
     Reverted,
     Successful,
+    CannotReserveGas,
     InsufficientBaseGas,
     Duplicate,
+    CannotResolveContext,
 }
 
 pub enum TxError {

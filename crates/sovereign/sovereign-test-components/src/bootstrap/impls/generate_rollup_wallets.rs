@@ -19,7 +19,7 @@ where
         bootstrap: &Bootstrap,
     ) -> Result<BTreeMap<String, SovereignWallet>, Bootstrap::Error> {
         let account_prefix = bootstrap.account_prefix();
-        let wallet_ids = ["sequencer", "relayer", "user-a", "user-b"];
+        let wallet_ids = ["sequencer", "prover", "relayer", "user-a", "user-b"];
 
         let wallets = wallet_ids
             .iter()
