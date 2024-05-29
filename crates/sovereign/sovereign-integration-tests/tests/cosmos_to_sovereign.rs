@@ -87,7 +87,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
     };
 
     let node_binary = var("ROLLUP_PATH")
-        .unwrap_or_else(|_| "node".to_string())
+        .unwrap_or_else(|_| "rollup".to_string())
         .into();
 
     let sovereign_bootstrap = SovereignBootstrap {

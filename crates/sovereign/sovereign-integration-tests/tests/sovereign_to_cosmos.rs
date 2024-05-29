@@ -77,7 +77,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
     let store_dir = std::env::current_dir()?.join(format!("test-data/{store_postfix}"));
     let node_binary = var("ROLLUP_PATH")
-        .unwrap_or_else(|_| "node".to_string())
+        .unwrap_or_else(|_| "rollup".to_string())
         .into();
 
     let wasm_client_code_path =

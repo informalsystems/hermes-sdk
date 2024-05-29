@@ -48,7 +48,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
     let sovereign_bootstrap = SovereignBootstrap {
         runtime: runtime.clone(),
         rollup_store_dir: format!("./test-data/{store_postfix}/rollups").into(),
-        rollup_command_path: "node".into(),
+        rollup_command_path: "rollup".into(),
         account_prefix: "sov".into(),
     };
 
