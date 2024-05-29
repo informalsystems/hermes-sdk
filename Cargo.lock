@@ -2202,6 +2202,7 @@ dependencies = [
  "hermes-sovereign-chain-components",
  "hermes-sovereign-rollup-components",
  "hermes-test-components",
+ "hex 0.4.3",
  "ibc-relayer",
  "ibc-relayer-types",
  "jsonrpsee",

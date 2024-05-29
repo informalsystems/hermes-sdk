@@ -11,7 +11,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use crate::bootstrap::traits::generate_rollup_genesis::RollupGenesisGenerator;
 use crate::bootstrap::traits::types::rollup_genesis_config::HasRollupGenesisConfigType;
 use crate::types::rollup_genesis_config::{
-    AccountsGenesis, BankGenesis, ChainStateGenesis, ProverIncentivesGenesis,
+    AccountGenesis, AccountsGenesis, BankGenesis, ChainStateGenesis, ProverIncentivesGenesis,
     SequencerRegistryGenesis, SovereignGenesisConfig, TimeGenesis, TokenGenesis,
 };
 use crate::types::wallet::{encode_token_address, SovereignWallet};
@@ -57,8 +57,16 @@ where
         let transfer_token_address =
             encode_token_address("coin", &[0; 32], 0, "token_").map_err(Bootstrap::raise_error)?;
 
+        let accounts = rollup_wallets
+            .values()
+            .map(|wallet| AccountGenesis {
+                credential_id: wallet.credential_id.clone(),
+                address: wallet.address.address.clone(),
+            })
+            .collect();
+
         let rollup_genesis = SovereignGenesisConfig {
-            accounts: AccountsGenesis { accounts: vec![] },
+            accounts: AccountsGenesis { accounts },
             bank: BankGenesis {
                 gas_token_config: TokenGenesis {
                     token_name: "stake".to_owned(),

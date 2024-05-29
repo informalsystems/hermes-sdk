@@ -8,6 +8,7 @@ pub struct SovereignWallet {
     pub wallet_id: String,
     pub signing_key: SigningKey,
     pub address: SovereignAddress,
+    pub credential_id: String,
 }
 
 impl SovereignWallet {
@@ -15,6 +16,7 @@ impl SovereignWallet {
         let mut rng = rand::thread_rng();
         let signing_key = SigningKey::generate(&mut rng);
         let address_hash_bytes = public_key_to_hash_bytes(&signing_key.verifying_key());
+        let credential_id = public_key_to_credential_id(&signing_key.verifying_key());
 
         let address = SovereignAddress::new(address_hash_bytes, account_prefix)?;
 
@@ -22,6 +24,7 @@ impl SovereignWallet {
             wallet_id: wallet_id.to_owned(),
             signing_key,
             address,
+            credential_id,
         })
     }
 }
@@ -45,10 +48,13 @@ pub fn public_key_to_sovereign_address(
     public_key: &VerifyingKey,
     account_prefix: &str,
 ) -> Result<String, bech32::Error> {
-    let mut hasher = Sha256::new();
-    hasher.update(public_key);
-    let key_hash_bytes: [u8; 32] = hasher.finalize().into();
+    let key_hash_bytes: [u8; 32] = public_key_to_hash_bytes(public_key);
     encode_hash_bytes_to_address(&key_hash_bytes, account_prefix)
+}
+
+pub fn public_key_to_credential_id(public_key: &VerifyingKey) -> String {
+    let key_hash_bytes: [u8; 32] = public_key_to_hash_bytes(public_key);
+    format!("0x{}", hex::encode(key_hash_bytes))
 }
 
 /**

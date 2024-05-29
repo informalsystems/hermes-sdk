@@ -42,20 +42,20 @@ impl Display for TokioRuntimeError {
             Self::PrematureChildProcessExit {
                 exit_status,
                 stderr,
-                stdout,
+                ..
             } => {
-                write!(f, "expected child process to be running, but it exited immediately with exit status {} and stdout: {}, stderr: {}", exit_status, stdout, stderr)?;
+                write!(f, "expected child process to be running, but it exited immediately with exit status {} and stderr: {}", exit_status, stderr)?;
             }
             Self::ExecCommandFailure {
                 command,
                 exit_code,
-                stdout,
                 stderr,
+                ..
             } => {
                 write!(
                     f,
-                    "execution of command {} failed with exit code {:?}. stdout: {}, stderr: {}",
-                    command, exit_code, stdout, stderr
+                    "execution of command {} failed with exit code {:?}. stderr: {}",
+                    command, exit_code, stderr
                 )?;
             }
         };
