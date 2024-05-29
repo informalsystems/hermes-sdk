@@ -7,10 +7,20 @@ pub struct SovereignTransaction {
     pub pub_key: SerializePublicKey,
     pub runtime_msg: Vec<u8>,
     pub chain_id: u64,
-    pub gas_tip: u64,
-    pub gas_limit: u64,
-    pub max_gas_price: Option<[u64; 2]>,
+    pub max_priority_fee_bips: u64,
+    pub max_fee: u64,
+    pub gas_limit: Option<[u64; 2]>,
     pub nonce: u64,
+}
+
+#[derive(BorshSerialize)]
+pub struct UnsignedSovereignTransaction {
+    pub runtime_msg: Vec<u8>,
+    pub chain_id: u64,
+    pub max_priority_fee_bips: u64,
+    pub max_fee: u64,
+    pub nonce: u64,
+    pub gas_limit: Option<[u64; 2]>,
 }
 
 pub struct SerializePublicKey(pub VerifyingKey);

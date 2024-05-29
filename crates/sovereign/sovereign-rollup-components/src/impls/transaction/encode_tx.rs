@@ -50,7 +50,7 @@ where
             signer,
             message_bytes.clone(),
             rollup_id.0,
-            *fee,
+            0,
             *fee,
             *nonce,
         )

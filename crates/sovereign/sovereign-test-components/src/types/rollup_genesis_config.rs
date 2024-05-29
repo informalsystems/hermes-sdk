@@ -18,7 +18,7 @@ pub struct AccountsGenesis {
 
 #[derive(Serialize)]
 pub struct AccountGenesis {
-    pub credential_id: [u8; 32],
+    pub credential_id: String,
     pub address: String,
 }
 

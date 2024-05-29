@@ -14,7 +14,7 @@ use crate::types::rollup_genesis_config::{
     AccountGenesis, AccountsGenesis, BankGenesis, ChainStateGenesis, ProverIncentivesGenesis,
     SequencerRegistryGenesis, SovereignGenesisConfig, TimeGenesis, TokenGenesis,
 };
-use crate::types::wallet::{encode_token_address, public_key_to_hash_bytes, SovereignWallet};
+use crate::types::wallet::{encode_token_address, SovereignWallet};
 
 pub struct GenerateSovereignGenesis;
 
@@ -64,7 +64,7 @@ where
         let accounts = rollup_wallets
             .values()
             .map(|wallet| AccountGenesis {
-                credential_id: public_key_to_hash_bytes(&wallet.signing_key.verifying_key()),
+                credential_id: wallet.credential_id.clone(),
                 address: wallet.address.address.clone(),
             })
             .collect();
