@@ -14,7 +14,7 @@ use crate::types::rollup_genesis_config::{
     AccountGenesis, AccountsGenesis, BankGenesis, ChainStateGenesis, ProverIncentivesGenesis,
     SequencerRegistryGenesis, SovereignGenesisConfig, TimeGenesis, TokenGenesis,
 };
-use crate::types::wallet::{encode_token_address, SovereignWallet};
+use crate::types::wallet::{encode_token_address, public_key_to_hash_bytes, SovereignWallet};
 
 pub struct GenerateSovereignGenesis;
 
@@ -40,6 +40,10 @@ where
             .get("sequencer")
             .ok_or_else(|| Bootstrap::raise_error("expect sequencer wallet to be present"))?;
 
+        let prover_wallet = rollup_wallets
+            .get("prover")
+            .ok_or_else(|| Bootstrap::raise_error("expect prover wallet to be present"))?;
+
         let address_and_balances = rollup_wallets
             .values()
             .map(|wallet| (wallet.address.address.clone(), 1_000_000_000_000))
@@ -60,7 +64,7 @@ where
         let accounts = rollup_wallets
             .values()
             .map(|wallet| AccountGenesis {
-                credential_id: wallet.credential_id.clone(),
+                credential_id: public_key_to_hash_bytes(&wallet.signing_key.verifying_key()),
                 address: wallet.address.address.clone(),
             })
             .collect();
@@ -98,7 +102,7 @@ where
             prover_incentives: ProverIncentivesGenesis {
                 proving_penalty: 10,
                 minimum_bond: 10,
-                initial_provers: vec![],
+                initial_provers: vec![(prover_wallet.address.address.clone(), 10)],
             },
             staking_token_address,
             transfer_token_address,
