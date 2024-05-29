@@ -114,7 +114,7 @@ fn test_sovereign_bootstrap() -> Result<(), Error> {
                     .send_messages_with_signer(&wallet_a.signing_key, &[message])
                     .await?;
 
-                println!("TokenTransfer events: {:?}", events);
+                // println!("TokenTransfer events: {:?}", events);
 
                 //     assert_eq!(
                 //         rollup

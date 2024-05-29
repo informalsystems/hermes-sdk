@@ -22,11 +22,12 @@ where
     Rollup::JsonRpcClient: ClientT,
 {
     async fn query_nonce(rollup: &Rollup, signer: &SigningKey) -> Result<u64, Rollup::Error> {
-        let key_hex = hex::encode(signer.verifying_key().as_bytes());
+        let public_key = signer.verifying_key();
+        let key_bytes = public_key.as_bytes();
 
         let response: Response = rollup
             .json_rpc_client()
-            .request("accounts_getAccount", (key_hex,))
+            .request("accounts_getAccount", (key_bytes,))
             .await
             .map_err(Rollup::raise_error)?;
 

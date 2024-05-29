@@ -229,7 +229,7 @@ delegate_components! {
             TxFeeEstimatorComponent,
             FeeForSimulationGetterComponent,
         ]:
-            ReturnSovereignTxFee<0>,
+            ReturnSovereignTxFee<10_000>,
         TxSubmitterComponent:
             SubmitSovereignTransaction,
         NonceQuerierComponent:
