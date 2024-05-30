@@ -60,7 +60,12 @@ fn split_events_by_messages(in_events: Vec<AbciEvent>) -> Vec<Vec<Arc<AbciEvent>
         //    && event.attributes.len() == 1
         //    && &event.attributes[0].key == "action"
 
-        if event.kind == "message" && event.attributes.iter().any(|attr| attr.key == "action") {
+        if event.kind == "message"
+            && event
+                .attributes
+                .iter()
+                .any(|attr| attr.key_bytes() == "action".as_bytes())
+        {
             if first_message_event_found {
                 out_events.push(current_events);
             } else {

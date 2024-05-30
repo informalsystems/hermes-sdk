@@ -86,9 +86,7 @@ where
             .await
             .unwrap();
 
-        let AnyConsensusState::Tendermint(tm_consensus_state) = any_consensus_state else {
-            panic!("Expected Tendermint consensus state");
-        };
+        let AnyConsensusState::Tendermint(tm_consensus_state) = any_consensus_state;
 
         let tendermint_params = TmConsensusParams::new(
             tm_consensus_state.timestamp,
