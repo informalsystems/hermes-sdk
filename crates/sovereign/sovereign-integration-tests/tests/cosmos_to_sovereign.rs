@@ -254,9 +254,6 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("connection id: {:?}", connection_id);
 
-            // FIXME: querying connection end currently fails during JSON deserialization with the error:
-            // SParseError(Error("invalid type: string \"ibc\", expected struct CommitmentPrefix", line: 1, column: 139))
-
             let height = rollup.query_chain_height().await?;
 
             let (connection_end, connection_end_proofs) = <SovereignRollup as CanQueryConnectionEndWithProofs<CosmosChain>>::query_connection_end_with_proofs(

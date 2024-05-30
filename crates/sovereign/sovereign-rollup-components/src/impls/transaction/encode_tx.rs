@@ -42,8 +42,6 @@ where
             .try_into()
             .map_err(|_| Rollup::raise_error(MultiMessageUnsupportedError { messages }))?;
 
-        println!("encoding message with nonce {}: {:?}", nonce, message);
-
         let message_bytes = message.try_to_vec().map_err(Rollup::raise_error)?;
 
         let rollup_id = rollup.chain_id();
