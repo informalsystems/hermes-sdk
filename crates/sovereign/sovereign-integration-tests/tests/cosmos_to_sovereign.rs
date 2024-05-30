@@ -257,7 +257,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             let height = rollup.query_chain_height().await?;
 
             let (connection_end, connection_end_proofs) = <SovereignRollup as CanQueryConnectionEndWithProofs<CosmosChain>>::query_connection_end_with_proofs(
-                &rollup,
+                rollup,
                 &connection_id,
                 &height,
             ).await?;
