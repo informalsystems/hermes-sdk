@@ -15,10 +15,14 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
-use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
+};
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
+};
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
@@ -261,18 +265,15 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let connection_id = connection_init_event.connection_id;
 
-        let _cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
+        let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
+        let cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
 
-        let _cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
+        let connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &cosmos_height, &wasm_client_id, &connection_id).await?;
+        let connection_try_message = <SovereignChain as CanBuildConnectionOpenTryMessage<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
 
-        // // TODO(rano): fails as it expects a Tendermint client; but Sovereign client is a Wasm proxy client.
-        // let connection_try_payload = <CosmosChain as CanBuildConnectionHandshakePayloads<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &cosmos_height, &wasm_client_id, &connection_id).await?;
+        let connection_try_event = sovereign_chain.send_message(connection_try_message).await?;
 
-        // let connection_try_message = <SovereignChain as CanBuildConnectionHandshakeMessages<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
-        // let connection_try_event = sovereign_chain.send_message(connection_try_message).await?;
-
-        // info!("ConnectionTry event at Sovereign: {:#?}", connection_try_event);
-
+        info!("ConnectionTry event at Sovereign: {:#?}", connection_try_event);
 
         let options: CosmosInitChannelOptions = CosmosInitChannelOptions {
             ordering: Ordering::Unordered,
