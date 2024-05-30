@@ -58,7 +58,7 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
         runtime: HermesRuntime,
         chain_id: ChainId,
         validators: Vec<Validator>,
-        store: S,
+        store: RevertibleStore<S>,
     ) -> Self {
         let app_builder = Builder::new(store);
 

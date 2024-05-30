@@ -1,4 +1,5 @@
 use alloc::sync::Arc;
+use basecoin::store::impls::RevertibleStore;
 use std::fmt::Debug;
 
 use basecoin::store::context::ProvableStore;
@@ -27,7 +28,7 @@ impl MockCosmosBuilder {
         &mut self,
         chain_id: ChainId,
         validators: Vec<Validator>,
-        store: S,
+        store: RevertibleStore<S>,
     ) -> Arc<MockBasecoin<S>>
     where
         S: ProvableStore + Debug + Default,
