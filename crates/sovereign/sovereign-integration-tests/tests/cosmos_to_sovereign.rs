@@ -15,6 +15,7 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
+use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEndWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
@@ -253,18 +254,15 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("connection id: {:?}", connection_id);
 
-            // FIXME: querying connection end currently fails during JSON deserialization with the error:
-            // SParseError(Error("invalid type: string \"ibc\", expected struct CommitmentPrefix", line: 1, column: 139))
+            let height = rollup.query_chain_height().await?;
 
-            // let height = rollup.query_chain_height().await?;
+            let (connection_end, connection_end_proofs) = <SovereignRollup as CanQueryConnectionEndWithProofs<CosmosChain>>::query_connection_end_with_proofs(
+                rollup,
+                &connection_id,
+                &height,
+            ).await?;
 
-            // let (connection_end, connection_end_proofs) = <SovereignRollup as CanQueryConnectionEndWithProofs<CosmosChain>>::query_connection_end_with_proofs(
-            //     &rollup,
-            //     &connection_id,
-            //     &height,
-            // ).await?;
-
-            // println!("connection end: {:?}, proof size at height {}: {}", connection_end, height, connection_end_proofs.len());
+            println!("connection end: {:?}, proof size at height {}: {}", connection_end, height, connection_end_proofs.len());
         }
 
         <Result<(), Error>>::Ok(())

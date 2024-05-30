@@ -31,8 +31,6 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
-        println!("query nonce response: {:?}", response);
-
         match response {
             Response::AccountExists { nonce } => Ok(nonce),
             Response::AccountEmpty => Ok(0),

@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use std::sync::Arc;
 
-use basecoin::store::impls::InMemoryStore;
+use basecoin::store::impls::{InMemoryStore, RevertibleStore};
 use hermes_runtime_components::traits::sleep::CanSleep;
 use ibc::core::host::types::identifiers::ChainId;
 use tendermint_testgen::Validator;
@@ -22,7 +22,11 @@ pub async fn binary_setup(
         Validator::new("2").voting_power(30),
         Validator::new("3").voting_power(30),
     ];
-    let src_chain = builder.build_chain(src_chain_id, src_validators, InMemoryStore::default());
+    let src_chain = builder.build_chain(
+        src_chain_id,
+        src_validators,
+        RevertibleStore::new(InMemoryStore::default()),
+    );
 
     // Setup and run the destination chain
     let dst_chain_id = ChainId::from_str("mock-cosmos-chain-1").expect("never fails");
@@ -30,7 +34,11 @@ pub async fn binary_setup(
         Validator::new("1").voting_power(50),
         Validator::new("2").voting_power(50),
     ];
-    let dst_chain = builder.build_chain(dst_chain_id, dst_validators, InMemoryStore::default());
+    let dst_chain = builder.build_chain(
+        dst_chain_id,
+        dst_validators,
+        RevertibleStore::new(InMemoryStore::default()),
+    );
 
     // Setup relayer
     let relayer = builder.build_relay(src_chain, dst_chain);

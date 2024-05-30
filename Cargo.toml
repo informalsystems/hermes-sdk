@@ -63,17 +63,17 @@ rust-version    = "1.72"
 
 [workspace.dependencies]
 async-trait                     = { version = "0.1.80" }
-ibc                             = { version = "0.51.0" }
-ibc-query                       = { version = "0.51.0" }
-ibc-proto                       = { version = "0.42.2" }
+ibc                             = { version = "0.53.0" }
+ibc-query                       = { version = "0.53.0" }
+ibc-proto                       = { version = "0.44.0" }
 sov-celestia-client             = { version = "0.1.0" }
-ibc-relayer                     = { version = "0.27.2" }
-ibc-relayer-types               = { version = "0.27.2" }
-ibc-telemetry                   = { version = "0.27.2" }
-tendermint                      = { version = "0.34" }
-tendermint-proto                = { version = "0.34" }
-tendermint-rpc                  = { version = "0.34" }
-tendermint-testgen              = { version = "0.34" }
+ibc-relayer                     = { version = "0.27.3" }
+ibc-relayer-types               = { version = "0.27.3" }
+ibc-telemetry                   = { version = "0.27.3" }
+tendermint                      = { version = "0.36" }
+tendermint-proto                = { version = "0.36" }
+tendermint-rpc                  = { version = "0.36" }
+tendermint-testgen              = { version = "0.36" }
 basecoin                        = { version = "0.1.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
@@ -81,13 +81,13 @@ clap                            = { version = "4.5.3" }
 oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.12.3" }
 prost-types                     = { version = "0.12.3" }
-serde                           = { version = "1.0" }
+serde                           = { version = "1.0.203" }
 serde_derive                    = { version = "1.0" }
 serde_json                      = { version = "1.0" }
 tokio                           = { version = "1.36" }
 tracing                         = { version = "0.1.40" }
 tracing-subscriber              = { version = "0.3.18" }
-tonic                           = { version = "0.10" }
+tonic                           = { version = "0.11" }
 toml                            = { version = "0.8.12" }
 futures                         = { version = "0.3.30", default-features = false }
 futures-core                    = { version = "0.3.30", default-features = false }
@@ -154,18 +154,19 @@ debug = 1
 overflow-checks = true
 
 [patch.crates-io]
-ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
-ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", branch = "soares/fix-commitment-prefix-deserialize" }
+ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
+ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
 
-basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "61256f9" }
+basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "rano/sov-support" }
+cosmrs                      = { git = "https://github.com/cosmos/cosmos-rust.git", rev = "4f2e3bb" }
 
 sov-celestia-client         = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
 sov-celestia-client-types   = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
@@ -180,9 +181,9 @@ cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git", 
 cgp-run                 = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-inner               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 
-ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
-ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
-ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", tag = "v1.8.2" }
+ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git" }
+ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git" }
+ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git" }
 
 hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }

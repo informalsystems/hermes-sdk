@@ -44,10 +44,8 @@ where
 
         if let IbcEventType::CreateClient = event_type {
             for tag in &event.attributes {
-                let key = tag.key.as_str();
-                let value = tag.value.as_str();
-                if key == CLIENT_ID_ATTRIBUTE_KEY {
-                    let client_id = value.parse().ok()?;
+                if tag.key_bytes() == CLIENT_ID_ATTRIBUTE_KEY.as_bytes() {
+                    let client_id = tag.value_str().ok()?.parse().ok()?;
 
                     return Some(CosmosCreateClientEvent { client_id });
                 }
