@@ -265,15 +265,67 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let connection_id = connection_init_event.connection_id;
 
-        let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
-        let cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
+        // ConnInit has been committed at Cosmos.
+        // update the Cosmos client on Sovereign to the latest height.
 
-        let connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &cosmos_height, &wasm_client_id, &connection_id).await?;
+        sleep(Duration::from_secs(2)).await;
+
+        let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
+        let target_cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
+
+        info!("latest cosmos client height at sov: {:#?}", cosmos_client_state.latest_height);
+        info!("latest cosmos height at cosmos: {:#?}", target_cosmos_height);
+
+        // Update Cosmos client state
+        let update_client_payload = <CosmosChain as CanBuildUpdateClientPayload<SovereignChain>>::build_update_client_payload(
+            cosmos_chain,
+            &cosmos_client_state.latest_height,
+            &target_cosmos_height,
+            cosmos_client_state.clone()
+        ).await?;
+
+        info!("cosmos client payload at height {:?}: {:?}", target_cosmos_height, &update_client_payload);
+
+        let update_client_messages = <SovereignChain as CanBuildUpdateClientMessage<CosmosChain>>::build_update_client_message(
+            &sovereign_chain,
+            &sovereign_client_id,
+            update_client_payload,
+        ).await?;
+
+
+        for update_message in update_client_messages.into_iter() {
+            sovereign_chain.send_message(update_message).await?;
+        }
+
+        // Cosmos client on Sovereign is updated.
+        // Sovereign now can verify if ConnInit has been committed at Cosmos.
+
+        sleep(Duration::from_secs(2)).await;
+
+        let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
+
+        info!("Connection Try payload beginning");
+
+        // passing an older trusted cosmos height
+        // TODO(rano): hack, as proof_height is (query_height + 1)
+        // we need the a consensus state with proof_height
+        let one_less_client_height = (cosmos_client_state.latest_height - 1).unwrap();
+
+        let connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &one_less_client_height, &wasm_client_id, &connection_id).await?;
+
+        info!("Connection Try payload done");
+
         let connection_try_message = <SovereignChain as CanBuildConnectionOpenTryMessage<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
 
+        info!("Connection Try message: {:#?}", connection_try_message);
+
+        // TODO(rano): fails as proof verification fails for ConnOpenTryMessage
         let connection_try_event = sovereign_chain.send_message(connection_try_message).await?;
 
         info!("ConnectionTry event at Sovereign: {:#?}", connection_try_event);
+
+        // ConnTry has been committed at Sovereign.
+        // Update the Sovereign client on Cosmos to the latest height.
 
         let options: CosmosInitChannelOptions = CosmosInitChannelOptions {
             ordering: Ordering::Unordered,
