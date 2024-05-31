@@ -321,7 +321,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         let consensus_state_at_sovereign = <SovereignChain as CanQueryConsensusState<CosmosChain>>::query_consensus_state(&sovereign_chain, &sovereign_client_id, &cosmos_client_state.latest_height, &sovereign_latest_height).await?;
         info!("Consensus state at Sovereign: {:?}", consensus_state_at_sovereign);
 
-        let mut connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &cosmos_client_state.latest_height, &wasm_client_id, &connection_id).await?;
+        // cosmos_client_state.latest_height - 2 doesn't have the connection end
+        // cosmos_client_state.latest_height + 4 is in the future
+        // cosmos_client_state.latest_height + {-1, 0, 1, 2, 3} did not work for verifying the proof
+
+        let mut connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &(cosmos_client_state.latest_height - 1).unwrap(), &wasm_client_id, &connection_id).await?;
 
         // TODO(rano): hack, as proof_height is incremented as (query_height + 1)
         // we need the a consensus state with proof_height
