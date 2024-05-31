@@ -311,6 +311,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         // we need the a consensus state with proof_height
         let one_less_client_height = (cosmos_client_state.latest_height - 1).unwrap();
 
+        // condition for the proof_height:
+        // 1. Sovereign must have a consensus state corresponding to the proof_height.
+        // 2. Cosmos's header, queried at proof_height, must have the same commitment root, stored
+        //    in the above consensus state.
+
         let connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &one_less_client_height, &wasm_client_id, &connection_id).await?;
 
         info!("Connection Try payload done");
