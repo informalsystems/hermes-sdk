@@ -30,6 +30,7 @@ hermes-sovereign-chain-components   = { workspace = true }
 hermes-sovereign-rollup-components  = { workspace = true }
 hermes-sovereign-relayer            = { workspace = true }
 hermes-wasm-client-components       = { workspace = true }
+hermes-cosmos-wasm-relayer          = { workspace = true }
 
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }

@@ -14,6 +14,7 @@ use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptio
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
@@ -30,7 +31,6 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
-use hermes_sovereign_integration_tests::contexts::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
