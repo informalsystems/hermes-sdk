@@ -28,6 +28,7 @@ members = [
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
+    "crates/cosmos/cosmos-wasm-relayer",
 
     "crates/celestia/celestia-chain",
     "crates/celestia/celestia-client-components",
@@ -208,6 +209,7 @@ hermes-cli-framework                = { path = "./crates/cli/cli-framework" }
 
 hermes-cosmos-chain-components      = { path = "./crates/cosmos/cosmos-chain-components" }
 hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" }
+hermes-cosmos-wasm-relayer          = { path = "./crates/cosmos/cosmos-wasm-relayer" }
 hermes-cosmos-test-components       = { path = "./crates/cosmos/cosmos-test-components" }
 hermes-cosmos-integration-tests     = { path = "./crates/cosmos/cosmos-integration-tests" }
 
