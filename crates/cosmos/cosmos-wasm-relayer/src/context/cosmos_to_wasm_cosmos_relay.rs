@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{delegate_all, CanRun, ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::logger::{CosmosLogger, ProvideCosmosLogger};
@@ -13,10 +13,13 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_logging_components::traits::logger::CanLog;
+use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
+use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
+use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
@@ -24,11 +27,10 @@ use hermes_relayer_components::relay::impls::packet_lock::{
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
-use hermes_relayer_components::relay::traits::packet_lock::{HasPacketLock, PacketLockComponent};
+use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
-use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
 use hermes_relayer_components_extra::components::extra::relay::{
     ExtraRelayComponents, IsExtraRelayComponent,
 };
@@ -116,13 +118,15 @@ impl HasComponents for CosmosToWasmCosmosRelay {
     type Components = CosmosToWasmCosmosRelayComponents;
 }
 
-pub trait CanUseCosmosToWasmCosmosRelay: CanRelayPacket // + CanBootstrapConnection
+pub trait CanUseCosmosToWasmCosmosRelay:
+    CanRelayPacket + CanBootstrapConnection + CanBootstrapChannel + CanRun
+where
+    Self::SrcChain:
+        HasInitConnectionOptionsType<Self::DstChain> + HasInitChannelOptionsType<Self::DstChain>,
 {
 }
 
 impl CanUseCosmosToWasmCosmosRelay for CosmosToWasmCosmosRelay {}
-
-// impl CanUseExtraAutoRelayer for CosmosToWasmCosmosRelay {}
 
 pub trait CanUseLogger:
     for<'a> CanLog<LogSkipRelayLockedPacket<'a, CosmosToWasmCosmosRelay>>
