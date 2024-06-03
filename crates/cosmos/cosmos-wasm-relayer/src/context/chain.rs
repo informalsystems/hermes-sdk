@@ -35,35 +35,54 @@ use hermes_relayer_components::chain::traits::commitment_prefix::{
     CommitmentPrefixTypeComponent, IbcCommitmentPrefixGetter,
 };
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
-use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
+    AckPacketMessageBuilderComponent, CanBuildAckPacketMessage,
+};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
+    CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,
+    CanBuildChannelOpenInitMessage, CanBuildChannelOpenTryMessage,
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
     ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
+    CanBuildReceivePacketMessage, ReceivePacketMessageBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
+    AckPacketPayloadBuilderComponent, CanBuildAckPacketPayload,
+};
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
-    ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
-    ChannelOpenTryPayloadBuilderComponent,
+    CanBuildChannelOpenAckPayload, CanBuildChannelOpenConfirmPayload,
+    CanBuildChannelOpenTryPayload, ChannelOpenAckPayloadBuilderComponent,
+    ChannelOpenConfirmPayloadBuilderComponent, ChannelOpenTryPayloadBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
+    CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
     ConnectionOpenAckPayloadBuilderComponent, ConnectionOpenConfirmPayloadBuilderComponent,
     ConnectionOpenInitPayloadBuilderComponent, ConnectionOpenTryPayloadBuilderComponent,
 };
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::receive_packet::{
+    CanBuildReceivePacketPayload, ReceivePacketPayloadBuilderComponent,
+};
+use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::{
+    CanBuildTimeoutUnorderedPacketPayload, TimeoutUnorderedPacketPayloadBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::ack_packets::{
     AckPacketQuerierComponent, AckPacketsQuerierComponent,
@@ -130,7 +149,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
     ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent,
-    ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent,
+    ConnectionOpenTryPayloadTypeComponent, HasInitConnectionOptionsType,
+    InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, HasConsensusStateFields, RawConsensusStateTypeComponent,
@@ -248,6 +268,7 @@ use tendermint_rpc::{HttpClient, Url};
 use crate::context::encoding::ProvideWasmCosmosEncoding;
 use crate::types::client_state::WrappedTendermintClientState;
 
+#[derive(Clone)]
 pub struct WasmCosmosChain {
     pub chain: CosmosChain,
 }
@@ -687,13 +708,56 @@ pub trait CanUseWasmCosmosChain:
     + CanQueryAbci
     + CanQueryClientState<CosmosChain>
     + CanQueryConsensusState<CosmosChain>
+    + CanBuildConnectionOpenInitPayload<CosmosChain>
+    + CanBuildConnectionOpenTryPayload<CosmosChain>
+    + CanBuildConnectionOpenAckPayload<CosmosChain>
+    + CanBuildConnectionOpenConfirmPayload<CosmosChain>
+    + CanBuildConnectionOpenInitMessage<CosmosChain>
+    + CanBuildConnectionOpenTryMessage<CosmosChain>
+    + CanBuildConnectionOpenAckMessage<CosmosChain>
+    + CanBuildConnectionOpenConfirmMessage<CosmosChain>
+    + CanBuildChannelOpenTryPayload<CosmosChain>
+    + CanBuildChannelOpenAckPayload<CosmosChain>
+    + CanBuildChannelOpenConfirmPayload<CosmosChain>
+    + CanBuildChannelOpenInitMessage<CosmosChain>
+    + CanBuildChannelOpenTryMessage<CosmosChain>
+    + CanBuildChannelOpenAckMessage<CosmosChain>
+    + CanBuildChannelOpenConfirmMessage<CosmosChain>
+    + CanBuildReceivePacketPayload<CosmosChain>
+    + CanBuildAckPacketPayload<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketPayload<CosmosChain>
+    + CanBuildReceivePacketMessage<CosmosChain>
+    + CanBuildAckPacketMessage<CosmosChain>
+    + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
+    + HasInitConnectionOptionsType<CosmosChain>
 {
 }
 
 impl CanUseWasmCosmosChain for WasmCosmosChain {}
 
 pub trait CanUseCosmosChainWithWasmCosmosChain:
-    CanQueryClientState<WasmCosmosChain> + CanQueryConsensusState<WasmCosmosChain>
+    CanQueryClientState<WasmCosmosChain>
+    + CanQueryConsensusState<WasmCosmosChain>
+    + CanBuildConnectionOpenInitPayload<WasmCosmosChain>
+    + CanBuildConnectionOpenTryPayload<WasmCosmosChain>
+    + CanBuildConnectionOpenAckPayload<WasmCosmosChain>
+    + CanBuildConnectionOpenConfirmPayload<WasmCosmosChain>
+    + CanBuildConnectionOpenInitMessage<WasmCosmosChain>
+    + CanBuildConnectionOpenTryMessage<WasmCosmosChain>
+    + CanBuildChannelOpenTryPayload<WasmCosmosChain>
+    + CanBuildChannelOpenAckPayload<WasmCosmosChain>
+    + CanBuildChannelOpenConfirmPayload<WasmCosmosChain>
+    + CanBuildChannelOpenInitMessage<WasmCosmosChain>
+    + CanBuildChannelOpenTryMessage<WasmCosmosChain>
+    + CanBuildChannelOpenAckMessage<WasmCosmosChain>
+    + CanBuildChannelOpenConfirmMessage<WasmCosmosChain>
+    + CanBuildReceivePacketPayload<WasmCosmosChain>
+    + CanBuildAckPacketPayload<WasmCosmosChain>
+    + CanBuildTimeoutUnorderedPacketPayload<WasmCosmosChain>
+    + CanBuildReceivePacketMessage<WasmCosmosChain>
+    + CanBuildAckPacketMessage<WasmCosmosChain>
+    + CanBuildTimeoutUnorderedPacketMessage<WasmCosmosChain>
+    + HasInitConnectionOptionsType<WasmCosmosChain>
 {
 }
 

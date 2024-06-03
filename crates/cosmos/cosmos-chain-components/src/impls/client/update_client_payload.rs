@@ -20,8 +20,9 @@ impl<Chain, Counterparty> UpdateClientPayloadBuilder<Chain, Counterparty>
 where
     Chain: HasHeightType<Height = Height>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>
-        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+        + HasClientStateType<Counterparty>
         + HasBlockingChainHandle,
+    TendermintClientState: From<Chain::ClientState>,
 {
     async fn build_update_client_payload(
         chain: &Chain,
@@ -38,7 +39,7 @@ where
                     .build_header(
                         trusted_height,
                         target_height,
-                        AnyClientState::Tendermint(client_state),
+                        AnyClientState::Tendermint(client_state.into()),
                     )
                     .map_err(Chain::raise_error)?;
 

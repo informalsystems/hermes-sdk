@@ -12,6 +12,12 @@ pub struct WrappedTendermintClientState {
     pub wasm_code_hash: Vec<u8>,
 }
 
+impl From<WrappedTendermintClientState> for TendermintClientState {
+    fn from(value: WrappedTendermintClientState) -> Self {
+        value.tendermint_client_state
+    }
+}
+
 pub struct EncodeWrappedTendermintClientState;
 
 impl<Encoding> Converter<Encoding, WrappedTendermintClientState, Any>

@@ -1,4 +1,6 @@
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::convert::CanConvert;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -19,7 +21,6 @@ use hermes_relayer_components::chain::types::payloads::connection::{
 };
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_proto::google::protobuf::Any as IbcProtoAny;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
@@ -31,7 +32,6 @@ use crate::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage
 use crate::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;
 use crate::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
 use crate::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
-use crate::types::tendermint::TendermintClientState;
 
 pub struct BuildCosmosConnectionHandshakeMessage;
 
@@ -80,13 +80,15 @@ where
     }
 }
 
-impl<Chain, Counterparty> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Encoding> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightFields
-        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
-        + CanRaiseError<Ics02Error>,
+        + HasClientStateType<Counterparty>
+        + HasEncoding<Encoding = Encoding>
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<Encoding::Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + HasHeightFields
@@ -96,10 +98,11 @@ where
             Chain,
             ConnectionOpenTryPayload = ConnectionOpenTryPayload<Counterparty, Chain>,
         >,
+    Encoding: CanConvert<Chain::ClientState, Any>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_try_message(
-        _chain: &Chain,
+        chain: &Chain,
         client_id: &Chain::ClientId,
         counterparty_client_id: &Counterparty::ClientId,
         counterparty_connection_id: &Counterparty::ConnectionId,
@@ -108,7 +111,10 @@ where
         let counterparty_versions = payload.connection_end.versions().to_vec();
         let delay_period = payload.connection_end.delay_period();
 
-        let client_state_any: IbcProtoAny = payload.client_state.into();
+        let client_state_any = chain
+            .encoding()
+            .convert(&payload.client_state)
+            .map_err(Chain::raise_error)?;
 
         let proof_consensus_height = Height::new(
             Chain::revision_number(&payload.proof_consensus_height),
@@ -129,10 +135,7 @@ where
             counterparty_commitment_prefix: payload.commitment_prefix,
             counterparty_versions,
             delay_period,
-            client_state: Any {
-                type_url: client_state_any.type_url,
-                value: client_state_any.value,
-            },
+            client_state: client_state_any,
             update_height,
             proof_init: payload.proof_init,
             proof_client: payload.proof_client,
@@ -144,13 +147,15 @@ where
     }
 }
 
-impl<Chain, Counterparty> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, Encoding> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosConnectionHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
-        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+        + HasClientStateType<Counterparty>
         + HasHeightFields
+        + HasEncoding<Encoding = Encoding>
         + CanRaiseError<Ics02Error>
+        + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
@@ -160,10 +165,11 @@ where
             Chain,
             ConnectionOpenAckPayload = ConnectionOpenAckPayload<Counterparty, Chain>,
         >,
+    Encoding: CanConvert<Chain::ClientState, Any>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_ack_message(
-        _chain: &Chain,
+        chain: &Chain,
         connection_id: &Chain::ConnectionId,
         counterparty_connection_id: &Counterparty::ConnectionId,
         payload: ConnectionOpenAckPayload<Counterparty, Chain>,
@@ -180,7 +186,10 @@ where
             .or_else(|| Version::compatibles().into_iter().next())
             .ok_or_else(|| Chain::raise_error("expect default version to be present"))?;
 
-        let client_state_any: IbcProtoAny = payload.client_state.into();
+        let client_state_any = chain
+            .encoding()
+            .convert(&payload.client_state)
+            .map_err(Chain::raise_error)?;
 
         let proof_consensus_height = Height::new(
             Chain::revision_number(&payload.proof_consensus_height),
@@ -198,10 +207,7 @@ where
             connection_id,
             counterparty_connection_id,
             version,
-            client_state: Any {
-                type_url: client_state_any.type_url,
-                value: client_state_any.value,
-            },
+            client_state: client_state_any,
             update_height,
             proof_try: payload.proof_try,
             proof_client: payload.proof_client,

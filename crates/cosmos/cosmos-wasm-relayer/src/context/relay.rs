@@ -5,23 +5,27 @@ use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
+use hermes_cosmos_relayer::contexts::logger::{CosmosLogger, ProvideCosmosLogger};
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::batch::CosmosBatchSender;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
 };
+use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
-use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
+use hermes_relayer_components::relay::traits::packet_lock::{HasPacketLock, PacketLockComponent};
+use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
@@ -35,11 +39,13 @@ use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
 
+use crate::context::chain::WasmCosmosChain;
+
 #[derive(Clone)]
 pub struct CosmosToWasmCosmosRelay {
     pub runtime: HermesRuntime,
     pub src_chain: CosmosChain,
-    pub dst_chain: CosmosChain,
+    pub dst_chain: WasmCosmosChain,
     pub src_client_id: ClientId,
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilterConfig,
@@ -52,7 +58,7 @@ impl CosmosToWasmCosmosRelay {
     pub fn new(
         runtime: HermesRuntime,
         src_chain: CosmosChain,
-        dst_chain: CosmosChain,
+        dst_chain: WasmCosmosChain,
         src_client_id: ClientId,
         dst_client_id: ClientId,
         packet_filter: PacketFilterConfig,
@@ -110,12 +116,25 @@ impl HasComponents for CosmosToWasmCosmosRelay {
     type Components = CosmosToWasmCosmosRelayComponents;
 }
 
-impl CanUseExtraAutoRelayer for CosmosToWasmCosmosRelay {}
+pub trait CanUseCosmosToWasmCosmosRelay: CanRelayPacket // + CanBootstrapConnection
+{
+}
+
+impl CanUseCosmosToWasmCosmosRelay for CosmosToWasmCosmosRelay {}
+
+// impl CanUseExtraAutoRelayer for CosmosToWasmCosmosRelay {}
+
+pub trait CanUseLogger:
+    for<'a> CanLog<LogSkipRelayLockedPacket<'a, CosmosToWasmCosmosRelay>>
+{
+}
+
+impl CanUseLogger for CosmosLogger {}
 
 impl ProvideRelayChains<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComponents {
     type SrcChain = CosmosChain;
 
-    type DstChain = CosmosChain;
+    type DstChain = WasmCosmosChain;
 
     type Packet = Packet;
 
@@ -123,7 +142,7 @@ impl ProvideRelayChains<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComp
         &relay.src_chain
     }
 
-    fn dst_chain(relay: &CosmosToWasmCosmosRelay) -> &CosmosChain {
+    fn dst_chain(relay: &CosmosToWasmCosmosRelay) -> &WasmCosmosChain {
         &relay.dst_chain
     }
 
