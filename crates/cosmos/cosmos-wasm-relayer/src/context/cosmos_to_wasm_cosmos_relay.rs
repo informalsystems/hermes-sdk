@@ -60,7 +60,7 @@ impl CosmosToWasmCosmosRelay {
         dst_client_id: ClientId,
         packet_filter: PacketFilterConfig,
     ) -> Self {
-        let relay = Self {
+        Self {
             runtime,
             src_chain,
             dst_chain,
@@ -68,9 +68,7 @@ impl CosmosToWasmCosmosRelay {
             dst_client_id,
             packet_filter,
             packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
-        };
-
-        relay
+        }
     }
 }
 

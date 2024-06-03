@@ -1,4 +1,5 @@
 #![recursion_limit = "256"]
+#![allow(clippy::type_complexity)]
 
 extern crate alloc;
 

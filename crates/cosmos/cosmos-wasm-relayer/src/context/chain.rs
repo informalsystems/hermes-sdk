@@ -581,10 +581,10 @@ impl ProvideMutexForNonceAllocation<WasmCosmosChain> for WasmCosmosChainComponen
         &chain.nonce_mutex
     }
 
-    fn mutex_to_nonce_guard<'a>(
-        mutex_guard: MutexGuardOf<'a, HermesRuntime, ()>,
+    fn mutex_to_nonce_guard(
+        mutex_guard: MutexGuardOf<'_, HermesRuntime, ()>,
         account: Account,
-    ) -> NonceGuard<'a> {
+    ) -> NonceGuard<'_> {
         NonceGuard {
             mutex_guard,
             account,
