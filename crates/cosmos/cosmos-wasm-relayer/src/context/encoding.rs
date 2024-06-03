@@ -2,7 +2,7 @@ use crate::encoding::components::{
     IsWasmCosmosEncodingComponent, WasmCosmosEncodingComponents as BaseWasmCosmosEncodingComponents,
 };
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, CanRaiseError, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
@@ -16,7 +16,6 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
-use ibc::core::client::types::error::ClientError;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
 

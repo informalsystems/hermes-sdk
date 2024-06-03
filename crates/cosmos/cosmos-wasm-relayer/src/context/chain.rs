@@ -1,4 +1,5 @@
 use core::ops::Deref;
+use core::time::Duration;
 use std::borrow::Cow;
 use std::sync::Arc;
 
@@ -18,7 +19,6 @@ use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::{HasRpcClient, RpcClientGetter};
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
-use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
@@ -124,8 +124,8 @@ use hermes_relayer_components::chain::traits::types::channel::{
     InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent, HasClientStateType,
-    HasRawClientStateType, RawClientStateTypeComponent,
+    ClientStateFieldsGetter, HasClientStateType, HasRawClientStateType, ProvideClientStateType,
+    RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
@@ -140,7 +140,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
+    GenesisHeightGetterComponent, HasHeightType, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
@@ -238,6 +238,7 @@ use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::keyring::Secp256k1KeyPair;
+use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
 use prost::DecodeError;
@@ -246,6 +247,7 @@ use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
 use crate::context::encoding::ProvideWasmCosmosEncoding;
+use crate::types::client_state::WrappedTendermintClientState;
 
 pub struct WasmCosmosChain {
     pub chain: CosmosChain,
@@ -302,8 +304,6 @@ delegate_components! {
             MessageTypeComponent,
             MessageSizeEstimatorComponent,
             EventTypeComponent,
-            ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
             RawClientStateTypeComponent,
             RawConsensusStateTypeComponent,
             ConsensusStateTypeComponent,
@@ -501,6 +501,34 @@ delegate_components! {
     }
 }
 
+impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty> for WasmCosmosChainComponents
+where
+    Chain: Async,
+{
+    type ClientState = WrappedTendermintClientState;
+}
+
+impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty> for WasmCosmosChainComponents
+where
+    Chain: HasClientStateType<Counterparty, ClientState = WrappedTendermintClientState>
+        + HasHeightType<Height = Height>,
+{
+    fn client_state_latest_height(client_state: &WrappedTendermintClientState) -> Height {
+        client_state.tendermint_client_state.latest_height
+    }
+
+    fn client_state_is_frozen(client_state: &WrappedTendermintClientState) -> bool {
+        client_state.tendermint_client_state.is_frozen()
+    }
+
+    fn client_state_has_expired(
+        client_state: &WrappedTendermintClientState,
+        elapsed: Duration,
+    ) -> bool {
+        elapsed > client_state.tendermint_client_state.trusting_period
+    }
+}
+
 impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn tx_extension_options(chain: &WasmCosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
         &chain.tx_config.extension_options
@@ -626,7 +654,7 @@ where
 }
 
 pub trait CanUseWasmCosmosChain:
-    HasClientStateType<WasmCosmosChain, ClientState = TendermintClientState>
+    HasClientStateType<WasmCosmosChain, ClientState = WrappedTendermintClientState>
     + CanQueryBalance
     // + CanIbcTransferToken<WasmCosmosChain>
     // + CanBuildIbcTokenTransferMessage<WasmCosmosChain>

@@ -1,8 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
-use hermes_encoding_components::impls::convert_and_encode::ConvertAndEncode;
-use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
-use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
 use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
