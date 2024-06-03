@@ -84,7 +84,7 @@ pub trait CheckWasmCosmosEncoding:
     + CanConvert<ProtoWasmClientState, WasmClientState>
     + CanEncodeAndDecode<Any, WasmClientState>
     + CanEncodeAndDecode<Any, WasmConsensusState>
-// + CanConvertBothWays<Any, WrappedTendermintClientState>
+    + CanConvertBothWays<Any, WrappedTendermintClientState>
 {
 }
 
