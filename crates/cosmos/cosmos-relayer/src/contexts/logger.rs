@@ -16,6 +16,7 @@ use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::Lo
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
 };
+use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
@@ -58,11 +59,17 @@ impl<'a> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<TxNoResponseError<'a, CosmosChain>> for CosmosLogHandlers {
+impl<'a, Chain> DelegateComponent<TxNoResponseError<'a, Chain>> for CosmosLogHandlers
+where
+    Chain: HasTransactionHashType,
+{
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<LogRetryQueryTxResponse<'a, CosmosChain>> for CosmosLogHandlers {
+impl<'a, Chain> DelegateComponent<LogRetryQueryTxResponse<'a, Chain>> for CosmosLogHandlers
+where
+    Chain: HasTransactionHashType + HasErrorType,
+{
     type Delegate = TracingLogger;
 }
 

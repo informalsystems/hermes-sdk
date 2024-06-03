@@ -7,6 +7,7 @@ use serde::Serialize;
 #[serde(tag = "client_type")]
 pub enum AnyClientState {
     Tendermint(TendermintClientState),
+    // WasmTendermint(WasmTendermintClientState),
     // Sovereign(SovereignClientState),
 }
 

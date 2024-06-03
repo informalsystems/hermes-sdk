@@ -3,20 +3,22 @@ use std::borrow::Cow;
 use std::sync::Arc;
 
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{CanRaiseError, ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
+use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
-use hermes_cosmos_chain_components::traits::abci_query::AbciQuerierComponent;
+use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
-use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
+use hermes_cosmos_chain_components::traits::rpc_client::{HasRpcClient, RpcClientGetter};
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::encoding::ProvideCosmosEncoding;
 use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
@@ -28,7 +30,7 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
 use hermes_logging_components::traits::has_logger::{
-    GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
+    GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
 use hermes_relayer_components::chain::traits::commitment_prefix::{
     CommitmentPrefixTypeComponent, IbcCommitmentPrefixGetter,
@@ -46,7 +48,9 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::update_client::{
+    CanBuildUpdateClientMessage, UpdateClientMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
@@ -68,17 +72,21 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
-    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs, ChannelEndQuerierComponent,
+    ChannelEndWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::{
-    AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent,
+    AllClientStatesQuerierComponent, AllRawClientStatesQuerierComponent, CanQueryAllClientStates,
+    CanQueryClientState, CanQueryClientStateWithProofs, CanQueryRawClientState,
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
     RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::connection_end::{
-    ConnectionEndQuerierComponent, ConnectionEndWithProofsQuerierComponent,
+    CanQueryConnectionEnd, CanQueryConnectionEndWithProofs, ConnectionEndQuerierComponent,
+    ConnectionEndWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusState, CanQueryConsensusStateWithProofs, CanQueryRawConsensusState,
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
     RawConsensusStateQuerierComponent, RawConsensusStateWithProofsQuerierComponent,
 };
@@ -86,12 +94,18 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
     ConsensusStateHeightQuerierComponent, ConsensusStateHeightsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
+    CanQueryPacketAcknowledgement, PacketAcknowledgementQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::{
+    CanQueryPacketCommitment, PacketCommitmentQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerierComponent;
-use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_receipt::{
+    CanQueryPacketReceipt, PacketReceiptQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::send_packets::{
     SendPacketQuerierComponent, SendPacketsQuerierComponent,
 };
@@ -107,11 +121,12 @@ use hermes_relayer_components::chain::traits::types::chain_id::{
 };
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
-    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent, HasChannelEndType,
     InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, HasClientStateType,
+    HasRawClientStateType, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
@@ -158,8 +173,10 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, TimestampTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
-use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
-use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
+use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
+use hermes_relayer_components::transaction::impls::poll_tx_response::{
+    HasPollTimeout, PollTimeoutGetterComponent, TxNoResponseError,
+};
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
@@ -168,12 +185,18 @@ use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGua
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::ProvideMutexForNonceAllocation;
 use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
-use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
-use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::{
+    CanPollTxResponse, TxResponsePollerComponent,
+};
+use hermes_relayer_components::transaction::traits::query_tx_response::{
+    CanQueryTxResponse, TxResponseQuerierComponent,
+};
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetter;
-use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
+use hermes_relayer_components::transaction::traits::submit_tx::{
+    CanSubmitTx, TxSubmitterComponent,
+};
 use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
 use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
 use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
@@ -185,14 +208,16 @@ use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeGetter, RuntimeTypeComponent};
 use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
+use hermes_test_components::chain::traits::queries::balance::{
+    BalanceQuerierComponent, CanQueryBalance,
+};
 use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
 use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
@@ -208,6 +233,7 @@ use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
 use http::Uri;
+use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::gas::GasConfig;
@@ -215,6 +241,8 @@ use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
+use prost::DecodeError;
+use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
@@ -478,8 +506,8 @@ impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     }
 }
 
-impl GasConfigGetter<CosmosChain> for WasmCosmosChainComponents {
-    fn gas_config(chain: &CosmosChain) -> &GasConfig {
+impl GasConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
+    fn gas_config(chain: &WasmCosmosChain) -> &GasConfig {
         &chain.tx_config.gas_config
     }
 }
@@ -521,18 +549,18 @@ impl IbcCommitmentPrefixGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     }
 }
 
-impl GrpcAddressGetter<CosmosChain> for WasmCosmosChainComponents {
-    fn grpc_address(chain: &CosmosChain) -> &Uri {
+impl GrpcAddressGetter<WasmCosmosChain> for WasmCosmosChainComponents {
+    fn grpc_address(chain: &WasmCosmosChain) -> &Uri {
         &chain.tx_config.grpc_address
     }
 }
 
-impl RpcClientGetter<CosmosChain> for WasmCosmosChainComponents {
-    fn rpc_client(chain: &CosmosChain) -> &HttpClient {
+impl RpcClientGetter<WasmCosmosChain> for WasmCosmosChainComponents {
+    fn rpc_client(chain: &WasmCosmosChain) -> &HttpClient {
         &chain.rpc_client
     }
 
-    fn rpc_address(chain: &CosmosChain) -> &Url {
+    fn rpc_address(chain: &WasmCosmosChain) -> &Url {
         &chain.tx_config.rpc_address
     }
 }
@@ -595,3 +623,44 @@ where
         Cow::Owned(Counterparty::timestamp_from_nanos(nanos))
     }
 }
+
+pub trait CanUseWasmCosmosChain:
+    HasClientStateType<WasmCosmosChain, ClientState = TendermintClientState>
+    + CanQueryBalance
+    // + CanIbcTransferToken<WasmCosmosChain>
+    // + CanBuildIbcTokenTransferMessage<WasmCosmosChain>
+    + CanQueryRawClientState<WasmCosmosChain>
+    + CanQueryClientState<WasmCosmosChain>
+    + CanQueryClientStateWithProofs<WasmCosmosChain>
+    + CanQueryConsensusState<WasmCosmosChain>
+    + CanQueryConsensusStateWithProofs<WasmCosmosChain>
+    + CanQueryRawConsensusState<WasmCosmosChain>
+    + CanQueryAllClientStates<WasmCosmosChain>
+    + CanQueryClientState<AnyCounterparty>
+    + CanQueryAllClientStates<AnyCounterparty>
+    + CanBuildUpdateClientMessage<WasmCosmosChain>
+    + CanQueryConnectionEnd<WasmCosmosChain>
+    + CanQueryChannelEnd<WasmCosmosChain>
+    + CanQueryChannelEndWithProofs<WasmCosmosChain>
+    + CanQueryConnectionEndWithProofs<WasmCosmosChain>
+    + CanQueryPacketCommitment<WasmCosmosChain>
+    + CanQueryPacketAcknowledgement<WasmCosmosChain>
+    + CanQueryPacketReceipt<WasmCosmosChain>
+    + HasChannelEndType<WasmCosmosChain, ChannelEnd = ChannelEnd>
+    + HasRawClientStateType<RawClientState = Any>
+    + CanSubmitTx
+    + CanPollTxResponse
+    + HasPollTimeout
+    + CanQueryTxResponse
+    + HasRetryableError
+    + HasLogger
+    + HasRuntime
+    // + CanAssertEventualAmount
+    + CanQueryAbci
+    + HasRpcClient
+    + CanRaiseError<DecodeError>
+    + for<'a> CanRaiseError<TxNoResponseError<'a, WasmCosmosChain>>
+{
+}
+
+impl CanUseWasmCosmosChain for WasmCosmosChain {}
