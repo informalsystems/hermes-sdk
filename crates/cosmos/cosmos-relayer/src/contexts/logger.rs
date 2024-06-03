@@ -11,7 +11,8 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::lock::Log
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LogRelayPacketStatus;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
+use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
     LogRetryQueryTxResponse, TxNoResponseError,
@@ -21,7 +22,6 @@ use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
 use crate::contexts::chain::CosmosChain;
-use crate::contexts::relay::CosmosRelay;
 
 pub struct CosmosLogger;
 
@@ -73,52 +73,56 @@ where
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<LogSkipRelayLockedPacket<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = TracingLogger;
-}
-
-impl<'a> DelegateComponent<LogRelayPacketAction<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = TracingLogger;
-}
-
-impl<'a> DelegateComponent<LogClearPacketError<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = TracingLogger;
-}
-
-impl<'a> DelegateComponent<LogRelayPacketStatus<'a, CosmosRelay>> for CosmosLogHandlers {
-    type Delegate = TracingLogger;
-}
-
-impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, SourceTarget>>
-    for CosmosLogHandlers
+impl<'a, Relay> DelegateComponent<LogSkipRelayLockedPacket<'a, Relay>> for CosmosLogHandlers
+where
+    Relay: HasRelayChains,
 {
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, CosmosRelay, DestinationTarget>>
-    for CosmosLogHandlers
+impl<'a, Relay> DelegateComponent<LogRelayPacketAction<'a, Relay>> for CosmosLogHandlers
+where
+    Relay: HasRelayChains,
 {
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, SourceTarget>>
-    for CosmosLogHandlers
+impl<'a, Relay> DelegateComponent<LogClearPacketError<'a, Relay>> for CosmosLogHandlers
+where
+    Relay: HasRelayChains,
 {
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, CosmosRelay, DestinationTarget>>
-    for CosmosLogHandlers
+impl<'a, Relay> DelegateComponent<LogRelayPacketStatus<'a, Relay>> for CosmosLogHandlers
+where
+    Relay: HasRelayChains,
 {
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<LogBatchWorker<'a, CosmosRelay, SourceTarget>> for CosmosLogHandlers {
+impl<'a, Relay, Target> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
+    for CosmosLogHandlers
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+{
     type Delegate = TracingLogger;
 }
 
-impl<'a> DelegateComponent<LogBatchWorker<'a, CosmosRelay, DestinationTarget>>
+impl<'a, Relay, Target> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
     for CosmosLogHandlers
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
+{
+    type Delegate = TracingLogger;
+}
+
+impl<'a, Relay, Target> DelegateComponent<LogBatchWorker<'a, Relay, Target>> for CosmosLogHandlers
+where
+    Relay: HasRelayChains,
+    Target: ChainTarget<Relay>,
 {
     type Delegate = TracingLogger;
 }

@@ -4,7 +4,7 @@ use std::borrow::Cow;
 use std::sync::Arc;
 
 use cgp_core::prelude::*;
-use cgp_core::{CanRaiseError, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
@@ -16,7 +16,7 @@ use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, C
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
-use hermes_cosmos_chain_components::traits::rpc_client::{HasRpcClient, RpcClientGetter};
+use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -174,7 +174,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::{
-    HasPollTimeout, PollTimeoutGetterComponent, TxNoResponseError,
+    HasPollTimeout, PollTimeoutGetterComponent,
 };
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
@@ -241,7 +241,6 @@ use ibc_relayer::keyring::Secp256k1KeyPair;
 use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
-use prost::DecodeError;
 use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
@@ -686,10 +685,16 @@ pub trait CanUseWasmCosmosChain:
     + HasRuntime
     // + CanAssertEventualAmount
     + CanQueryAbci
-    + HasRpcClient
-    + CanRaiseError<DecodeError>
-    + for<'a> CanRaiseError<TxNoResponseError<'a, WasmCosmosChain>>
+    + CanQueryClientState<CosmosChain>
+    + CanQueryConsensusState<CosmosChain>
 {
 }
 
 impl CanUseWasmCosmosChain for WasmCosmosChain {}
+
+pub trait CanUseCosmosChainWithWasmCosmosChain:
+    CanQueryClientState<WasmCosmosChain> + CanQueryConsensusState<WasmCosmosChain>
+{
+}
+
+impl CanUseCosmosChainWithWasmCosmosChain for CosmosChain {}
