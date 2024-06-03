@@ -7,7 +7,6 @@ use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::logger::{CosmosLogger, ProvideCosmosLogger};
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
-use hermes_cosmos_relayer::types::batch::CosmosBatchSender;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -15,6 +14,9 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
+use hermes_relayer_components::components::default::relay::{
+    DefaultRelayComponents, IsDefaultRelayComponent,
+};
 use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
@@ -29,11 +31,6 @@ use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
-use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
-use hermes_relayer_components_extra::components::extra::relay::{
-    ExtraRelayComponents, IsExtraRelayComponent,
-};
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -52,8 +49,6 @@ pub struct CosmosToWasmCosmosRelay {
     pub dst_client_id: ClientId,
     pub packet_filter: PacketFilterConfig,
     pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
-    pub src_chain_message_batch_sender: CosmosBatchSender,
-    pub dst_chain_message_batch_sender: CosmosBatchSender,
 }
 
 impl CosmosToWasmCosmosRelay {
@@ -64,8 +59,6 @@ impl CosmosToWasmCosmosRelay {
         src_client_id: ClientId,
         dst_client_id: ClientId,
         packet_filter: PacketFilterConfig,
-        src_chain_message_batch_sender: CosmosBatchSender,
-        dst_chain_message_batch_sender: CosmosBatchSender,
     ) -> Self {
         let relay = Self {
             runtime,
@@ -74,8 +67,6 @@ impl CosmosToWasmCosmosRelay {
             src_client_id,
             dst_client_id,
             packet_filter,
-            src_chain_message_batch_sender,
-            dst_chain_message_batch_sender,
             packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
         };
 
@@ -109,8 +100,8 @@ delegate_components! {
 }
 
 delegate_all!(
-    IsExtraRelayComponent,
-    ExtraRelayComponents,
+    IsDefaultRelayComponent,
+    DefaultRelayComponents,
     CosmosToWasmCosmosRelayComponents,
 );
 
@@ -183,21 +174,5 @@ impl PacketMutexGetter<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayCompo
     ) -> &hermes_relayer_components::relay::impls::packet_lock::PacketMutex<CosmosToWasmCosmosRelay>
     {
         &relay.packet_lock_mutex
-    }
-}
-
-impl MessageBatchSenderGetter<CosmosToWasmCosmosRelay, SourceTarget>
-    for CosmosToWasmCosmosRelayComponents
-{
-    fn get_batch_sender(relay: &CosmosToWasmCosmosRelay) -> &CosmosBatchSender {
-        &relay.src_chain_message_batch_sender
-    }
-}
-
-impl MessageBatchSenderGetter<CosmosToWasmCosmosRelay, DestinationTarget>
-    for CosmosToWasmCosmosRelayComponents
-{
-    fn get_batch_sender(relay: &CosmosToWasmCosmosRelay) -> &CosmosBatchSender {
-        &relay.dst_chain_message_batch_sender
     }
 }
