@@ -20,7 +20,6 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOpt
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::encoding::ProvideCosmosEncoding;
 use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::error::Error;
@@ -246,6 +245,8 @@ use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
+use crate::context::encoding::ProvideWasmCosmosEncoding;
+
 pub struct WasmCosmosChain {
     pub chain: CosmosChain,
 }
@@ -285,7 +286,7 @@ delegate_components! {
             EncodingGetterComponent,
             DefaultEncodingGetterComponent,
         ]:
-            ProvideCosmosEncoding,
+            ProvideWasmCosmosEncoding,
     }
 }
 
