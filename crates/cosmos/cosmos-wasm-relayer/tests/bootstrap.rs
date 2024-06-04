@@ -12,6 +12,7 @@ use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_cosmos_wasm_relayer::context::cosmos_to_wasm_cosmos_relay::CosmosToWasmCosmosRelay;
+use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintMessageOptions;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -106,12 +107,16 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
 
         println!("client_id_a: {client_id_a}");
 
+        let wasm_create_message_options = CreateWasmTendermintMessageOptions {
+            code_hash: wasm_code_hash.into(),
+        };
+
         let client_id_b = CosmosToWasmCosmosRelay::create_client(
             DestinationTarget,
             &wasm_cosmos_chain,
             &cosmos_chain,
             &tm_create_client_settings,
-            &(),
+            &wasm_create_message_options,
         )
         .await?;
 

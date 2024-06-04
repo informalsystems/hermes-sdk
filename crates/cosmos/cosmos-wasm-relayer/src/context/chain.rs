@@ -27,6 +27,7 @@ use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
+    HasDefaultEncoding,
 };
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
@@ -158,6 +159,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
     CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    HasCreateClientMessageOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -266,8 +268,12 @@ use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
-use crate::context::encoding::ProvideWasmCosmosEncoding;
+use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
+use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
 use crate::types::client_state::WrappedTendermintClientState;
+use crate::types::create_client::{
+    CreateWasmTendermintMessageOptions, ProvidCreateWasmTendermintMessageOptionsType,
+};
 
 #[derive(Clone)]
 pub struct WasmCosmosChain {
@@ -315,10 +321,14 @@ delegate_components! {
 
 delegate_components! {
     WasmCosmosChainComponents {
+        CreateClientMessageOptionsTypeComponent:
+            ProvidCreateWasmTendermintMessageOptionsType,
+        CreateClientMessageBuilderComponent:
+            // CosmosClientComponents,
+            BuildCreateWasmTendermintClientMessage,
         [
             CreateClientPayloadTypeComponent,
             CreateClientPayloadOptionsTypeComponent,
-            CreateClientMessageOptionsTypeComponent,
             CreateClientPayloadBuilderComponent,
             HeightTypeComponent,
             HeightFieldComponent,
@@ -392,7 +402,6 @@ delegate_components! {
             ConsensusStateHeightQuerierComponent,
             ConsensusStateHeightsQuerierComponent,
 
-            CreateClientMessageBuilderComponent,
             UpdateClientMessageBuilderComponent,
             UpdateClientPayloadBuilderComponent,
             CounterpartyChainIdQuerierComponent,
@@ -732,6 +741,11 @@ pub trait CanUseWasmCosmosChain:
     + CanBuildAckPacketMessage<CosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<CosmosChain>
     + HasInitConnectionOptionsType<CosmosChain>
+    + HasCreateClientMessageOptionsType<
+            CosmosChain,
+            CreateClientMessageOptions = CreateWasmTendermintMessageOptions,
+        >
+    + HasDefaultEncoding<Encoding = WasmCosmosEncoding>
 {
 }
 
