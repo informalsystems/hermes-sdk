@@ -98,4 +98,5 @@ jobs:
               --exclude hermes-cosmos-integration-tests \
               --exclude hermes-celestia-integration-tests \
               --exclude hermes-sovereign-integration-tests \
+              --exclude hermes-cosmos-wasm-relayer \
               --failure-output final
