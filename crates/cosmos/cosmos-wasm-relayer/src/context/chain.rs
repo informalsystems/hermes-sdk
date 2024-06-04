@@ -9,7 +9,6 @@ use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
-use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
@@ -52,7 +51,9 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::message_builders::create_client::{
+    CanBuildCreateClientMessage, CreateClientMessageBuilderComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::{
     CanBuildReceivePacketMessage, ReceivePacketMessageBuilderComponent,
 };
@@ -270,12 +271,9 @@ use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
+use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
-use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
 use crate::types::client_state::WrappedTendermintClientState;
-use crate::types::create_client::{
-    CreateWasmTendermintMessageOptions, ProvidCreateWasmTendermintMessageOptionsType,
-};
 
 #[derive(Clone)]
 pub struct WasmCosmosChain {
@@ -323,12 +321,9 @@ delegate_components! {
 
 delegate_components! {
     WasmCosmosChainComponents {
-        CreateClientMessageOptionsTypeComponent:
-            ProvidCreateWasmTendermintMessageOptionsType,
-        CreateClientMessageBuilderComponent:
-            // CosmosClientComponents,
-            BuildCreateWasmTendermintClientMessage,
         [
+            CreateClientMessageOptionsTypeComponent,
+            CreateClientMessageBuilderComponent,
             CreateClientPayloadTypeComponent,
             CreateClientPayloadOptionsTypeComponent,
             CreateClientPayloadBuilderComponent,
@@ -530,7 +525,7 @@ delegate_components! {
 
 delegate_components! {
     DelegateCosmosChainComponents {
-        WasmCosmosChain: CosmosToCosmosComponents,
+        WasmCosmosChain: CosmosToWasmCosmosComponents,
     }
 }
 
@@ -746,7 +741,7 @@ pub trait CanUseWasmCosmosChain:
     + HasInitConnectionOptionsType<CosmosChain>
     + HasCreateClientMessageOptionsType<
             CosmosChain,
-            CreateClientMessageOptions = CreateWasmTendermintMessageOptions,
+            CreateClientMessageOptions = (),
         >
     + HasDefaultEncoding<Encoding = WasmCosmosEncoding>
 {
@@ -777,6 +772,7 @@ pub trait CanUseCosmosChainWithWasmCosmosChain:
     + CanBuildAckPacketMessage<WasmCosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<WasmCosmosChain>
     + HasInitConnectionOptionsType<WasmCosmosChain>
+    + CanBuildCreateClientMessage<WasmCosmosChain>
 {
 }
 

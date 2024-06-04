@@ -255,10 +255,7 @@ delegate_components! {
             RawConsensusStateWithProofsQuerierComponent,
         ]:
             QueryCosmosConsensusStateFromAbci,
-        [
-            CreateClientPayloadOptionsTypeComponent,
-            CreateClientMessageOptionsTypeComponent,
-        ]:
+        CreateClientPayloadOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:
             BuildCreateClientPayloadWithChainHandle,
@@ -351,7 +348,10 @@ delegate_components! {
         ]:
             DelegateQueryClientState<DelegateCosmosChainComponents>,
 
-        CreateClientMessageBuilderComponent:
+        [
+            CreateClientMessageBuilderComponent,
+            CreateClientMessageOptionsTypeComponent,
+        ]:
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
 
         [

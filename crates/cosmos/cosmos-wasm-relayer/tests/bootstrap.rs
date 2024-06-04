@@ -101,22 +101,20 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             &simd_chain,
             &gaia_chain,
             &tm_create_client_settings,
-            &(),
+            &CreateWasmTendermintMessageOptions {
+                code_hash: wasm_code_hash.into(),
+            },
         )
         .await?;
 
         println!("client_id_a: {client_id_a}");
-
-        let wasm_create_message_options = CreateWasmTendermintMessageOptions {
-            code_hash: wasm_code_hash.into(),
-        };
 
         let client_id_b = CosmosToWasmCosmosRelay::create_client(
             DestinationTarget,
             &gaia_chain,
             &simd_chain,
             &tm_create_client_settings,
-            &wasm_create_message_options,
+            &(),
         )
         .await?;
 

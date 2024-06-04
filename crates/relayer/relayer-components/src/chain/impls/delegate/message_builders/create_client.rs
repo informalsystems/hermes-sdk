@@ -1,14 +1,26 @@
 use core::marker::PhantomData;
 
-use cgp_core::{DelegateComponent, HasErrorType};
+use cgp_core::{Async, DelegateComponent, HasErrorType};
 
 use crate::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use crate::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+    ProvideCreateClientMessageOptionsType,
 };
 use crate::chain::traits::types::message::HasMessageType;
 
 pub struct DelegateBuildCreateClientMessage<Components>(pub PhantomData<Components>);
+
+impl<Chain, Counterparty, Components, Delegate>
+    ProvideCreateClientMessageOptionsType<Chain, Counterparty>
+    for DelegateBuildCreateClientMessage<Components>
+where
+    Chain: Async,
+    Delegate: ProvideCreateClientMessageOptionsType<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
+    type CreateClientMessageOptions = Delegate::CreateClientMessageOptions;
+}
 
 impl<Chain, Counterparty, Components, Delegate> CreateClientMessageBuilder<Chain, Counterparty>
     for DelegateBuildCreateClientMessage<Components>
