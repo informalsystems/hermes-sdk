@@ -19,6 +19,7 @@ use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
+use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
@@ -154,7 +155,8 @@ use hermes_relayer_components::chain::traits::types::connection::{
     InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::{
-    ConsensusStateTypeComponent, HasConsensusStateFields, RawConsensusStateTypeComponent,
+    ConsensusStateTypeComponent, HasConsensusStateFields, HasConsensusStateType,
+    RawConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
@@ -686,6 +688,7 @@ where
 
 pub trait CanUseWasmCosmosChain:
     HasClientStateType<WasmCosmosChain, ClientState = WrappedTendermintClientState>
+    + HasConsensusStateType<WasmCosmosChain, ConsensusState = TendermintConsensusState>
     + CanQueryBalance
     // + CanIbcTransferToken<WasmCosmosChain>
     // + CanBuildIbcTokenTransferMessage<WasmCosmosChain>

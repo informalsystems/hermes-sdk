@@ -45,7 +45,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
 
-    let cosmos_bootstrap = Arc::new(LegacyCosmosBootstrap {
+    let gaia_bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
@@ -59,7 +59,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
         compat_mode: None,
     });
 
-    let wasm_cosmos_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
+    let simd_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
@@ -72,14 +72,14 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
     });
 
     tokio_runtime.block_on(async move {
-        let cosmos_chain_driver = cosmos_bootstrap.bootstrap_chain("cosmos").await?;
+        let gaia_chain_driver = gaia_bootstrap.bootstrap_chain("gaia").await?;
 
-        let cosmos_chain = cosmos_chain_driver.chain.clone();
+        let simd_chain_driver = simd_bootstrap.bootstrap_chain("simd").await?;
 
-        let wasm_cosmos_chain_driver = wasm_cosmos_bootstrap.bootstrap_chain("wasmcosmos").await?;
+        let simd_chain = simd_chain_driver.chain.clone();
 
-        let wasm_cosmos_chain = WasmCosmosChain {
-            chain: wasm_cosmos_chain_driver.chain.clone(),
+        let gaia_chain = WasmCosmosChain {
+            chain: gaia_chain_driver.chain.clone(),
         };
 
         let tm_create_client_settings = ClientSettings::Tendermint(Settings {
@@ -98,8 +98,8 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
 
         let client_id_a = CosmosToWasmCosmosRelay::create_client(
             SourceTarget,
-            &cosmos_chain,
-            &wasm_cosmos_chain,
+            &simd_chain,
+            &gaia_chain,
             &tm_create_client_settings,
             &(),
         )
@@ -113,8 +113,8 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
 
         let client_id_b = CosmosToWasmCosmosRelay::create_client(
             DestinationTarget,
-            &wasm_cosmos_chain,
-            &cosmos_chain,
+            &gaia_chain,
+            &simd_chain,
             &tm_create_client_settings,
             &wasm_create_message_options,
         )
@@ -122,10 +122,10 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
 
         println!("client_id_b: {client_id_b}");
 
-        let relay = CosmosToWasmCosmosRelay::new(
+        let relay: CosmosToWasmCosmosRelay = CosmosToWasmCosmosRelay::new(
             runtime.clone(),
-            cosmos_chain,
-            wasm_cosmos_chain,
+            simd_chain,
+            gaia_chain,
             client_id_a,
             client_id_b,
             Default::default(),
