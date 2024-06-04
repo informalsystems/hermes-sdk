@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
@@ -45,7 +45,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
 
-    let cosmos_bootstrap = Arc::new(CosmosBootstrap {
+    let cosmos_bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
@@ -56,6 +56,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
         transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
+        compat_mode: None,
     });
 
     let wasm_cosmos_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
@@ -108,7 +109,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
         )
         .await?;
 
-        // TODO: define a custom CreateClientOptions for WasmCosmos
+        println!("client_id_a: {client_id_a}");
 
         let client_id_b = CosmosToWasmCosmosRelay::create_client(
             DestinationTarget,
@@ -117,6 +118,8 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             &tm_create_client_settings,
         )
         .await?;
+
+        println!("client_id_b: {client_id_b}");
 
         let relay = CosmosToWasmCosmosRelay::new(
             runtime.clone(),
