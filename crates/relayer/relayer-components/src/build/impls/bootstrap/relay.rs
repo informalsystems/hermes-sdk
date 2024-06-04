@@ -8,7 +8,7 @@ use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     RelayError, TargetDstChain, TargetDstChainId, TargetRelay, TargetSrcChain, TargetSrcChainId,
 };
-use crate::chain::traits::types::create_client::HasCreateClientOptionsType;
+use crate::chain::traits::types::create_client::HasCreateClientPayloadOptionsType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::client_creator::CanCreateClient;
@@ -18,20 +18,20 @@ use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 pub trait CanBootstrapRelay<Target>: HasBiRelayType + HasErrorType
 where
     Target: RelayBuildTarget<Self>,
-    TargetSrcChain<Self, Target>: HasCreateClientOptionsType<TargetDstChain<Self, Target>>,
-    TargetDstChain<Self, Target>: HasCreateClientOptionsType<TargetSrcChain<Self, Target>>,
+    TargetSrcChain<Self, Target>: HasCreateClientPayloadOptionsType<TargetDstChain<Self, Target>>,
+    TargetDstChain<Self, Target>: HasCreateClientPayloadOptionsType<TargetSrcChain<Self, Target>>,
 {
     async fn bootstrap_relay(
         &self,
         target: Target,
         src_chain_id: &TargetSrcChainId<Self, Target>,
         dst_chain_id: &TargetDstChainId<Self, Target>,
-        src_options: &<TargetSrcChain<Self, Target> as HasCreateClientOptionsType<
+        src_options: &<TargetSrcChain<Self, Target> as HasCreateClientPayloadOptionsType<
             TargetDstChain<Self, Target>,
-        >>::CreateClientOptions,
-        dst_options: &<TargetDstChain<Self, Target> as HasCreateClientOptionsType<
+        >>::CreateClientPayloadOptions,
+        dst_options: &<TargetDstChain<Self, Target> as HasCreateClientPayloadOptionsType<
             TargetSrcChain<Self, Target>,
-        >>::CreateClientOptions,
+        >>::CreateClientPayloadOptions,
     ) -> Result<TargetRelay<Self, Target>, Self::Error>;
 }
 
@@ -49,16 +49,18 @@ where
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanRaiseRelayChainErrors,
-    SrcChain: HasCreateClientOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
-    DstChain: HasCreateClientOptionsType<SrcChain> + HasIbcChainTypes<SrcChain> + HasErrorType,
+    SrcChain:
+        HasCreateClientPayloadOptionsType<DstChain> + HasIbcChainTypes<DstChain> + HasErrorType,
+    DstChain:
+        HasCreateClientPayloadOptionsType<SrcChain> + HasIbcChainTypes<SrcChain> + HasErrorType,
 {
     async fn bootstrap_relay(
         &self,
         target: Target,
         src_chain_id: &SrcChain::ChainId,
         dst_chain_id: &DstChain::ChainId,
-        src_payload_options: &SrcChain::CreateClientOptions,
-        dst_payload_options: &DstChain::CreateClientOptions,
+        src_payload_options: &SrcChain::CreateClientPayloadOptions,
+        dst_payload_options: &DstChain::CreateClientPayloadOptions,
     ) -> Result<Relay, Self::Error> {
         let src_chain = self
             .build_chain(Target::SrcChainTarget::default(), src_chain_id)

@@ -156,7 +156,8 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, HasConsensusStateFields, RawConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientPayloadOptionsTypeComponent,
+    CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -316,7 +317,7 @@ delegate_components! {
     WasmCosmosChainComponents {
         [
             CreateClientPayloadTypeComponent,
-            CreateClientOptionsTypeComponent,
+            CreateClientPayloadOptionsTypeComponent,
             CreateClientPayloadBuilderComponent,
             HeightTypeComponent,
             HeightFieldComponent,

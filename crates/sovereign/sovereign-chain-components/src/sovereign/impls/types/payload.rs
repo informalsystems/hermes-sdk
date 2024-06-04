@@ -2,7 +2,7 @@ use cgp_core::prelude::Async;
 use hermes_relayer_components::chain::traits::types::channel::ProvideInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
@@ -21,12 +21,12 @@ use crate::sovereign::types::payloads::packet::{
 
 pub struct ProvideSovereignPayloadTypes;
 
-impl<Chain, Counterparty> ProvideCreateClientOptionsType<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideCreateClientPayloadOptionsType<Chain, Counterparty>
     for ProvideSovereignPayloadTypes
 where
     Chain: Async,
 {
-    type CreateClientOptions = SovereignCreateClientOptions;
+    type CreateClientPayloadOptions = SovereignCreateClientOptions;
 }
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>

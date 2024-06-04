@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientOptions, HasCreateClientOptionsType,
+    CreateClientPayloadOptions, HasCreateClientPayloadOptionsType,
 };
 
 use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
@@ -10,10 +10,10 @@ use crate::types::index::Twindex;
 pub trait HasCreateClientOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:
     HasChainTypeAt<TARGET> + HasChainTypeAt<COUNTERPARTY>
 where
-    ChainTypeAt<Self, TARGET>: HasCreateClientOptionsType<ChainTypeAt<Self, COUNTERPARTY>>,
+    ChainTypeAt<Self, TARGET>: HasCreateClientPayloadOptionsType<ChainTypeAt<Self, COUNTERPARTY>>,
 {
     fn create_client_options(
         &self,
         index: Twindex<TARGET, COUNTERPARTY>,
-    ) -> &CreateClientOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> &CreateClientPayloadOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
 }

@@ -1,7 +1,7 @@
 use cgp_core::prelude::Async;
 use hermes_relayer_components::chain::traits::types::channel::ProvideInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideInitConnectionOptionsType;
-use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientPayloadOptionsType;
 use ibc_relayer::chain::client::ClientSettings;
 
 use crate::types::payloads::channel::SovereignInitChannelOptions;
@@ -9,12 +9,12 @@ use crate::types::payloads::connection::SovereignInitConnectionOptions;
 
 pub struct ProvideSovereignRollupPayloadTypes;
 
-impl<Chain, Counterparty> ProvideCreateClientOptionsType<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideCreateClientPayloadOptionsType<Chain, Counterparty>
     for ProvideSovereignRollupPayloadTypes
 where
     Chain: Async,
 {
-    type CreateClientOptions = ClientSettings;
+    type CreateClientPayloadOptions = ClientSettings;
 }
 
 impl<Chain, Counterparty> ProvideInitConnectionOptionsType<Chain, Counterparty>

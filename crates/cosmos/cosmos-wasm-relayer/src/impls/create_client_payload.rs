@@ -2,7 +2,7 @@ use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientOptionsType, HasCreateClientPayloadType,
+    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
@@ -17,9 +17,9 @@ pub struct BuildCreateWasmTendermintClientPayload;
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCreateWasmTendermintClientPayload
 where
-    Chain: HasCreateClientOptionsType<
+    Chain: HasCreateClientPayloadOptionsType<
             Counterparty,
-            CreateClientOptions = CreateWasmTendermintClientOptions,
+            CreateClientPayloadOptions = CreateWasmTendermintClientOptions,
         > + HasCreateClientPayloadType<
             Counterparty,
             CreateClientPayload = CreateWasmTendermintClientPayload,

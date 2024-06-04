@@ -3,7 +3,7 @@ use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientOptionsType, HasCreateClientPayloadType,
+    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use ibc::core::client::types::Height;
@@ -32,8 +32,10 @@ impl<Chain, Counterparty, Rollup, DataChain> CreateClientPayloadBuilder<Chain, C
 where
     Chain: HasRollup<Rollup = Rollup>
         + HasDataChain<DataChain = DataChain>
-        + HasCreateClientOptionsType<Counterparty, CreateClientOptions = SovereignCreateClientOptions>
-        + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
+        + HasCreateClientPayloadOptionsType<
+            Counterparty,
+            CreateClientPayloadOptions = SovereignCreateClientOptions,
+        > + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
         + CanRaiseError<Rollup::Error>,
     Rollup: CanQueryChainHeight<Height = RollupHeight>,
     DataChain: HasBlockingChainHandle,

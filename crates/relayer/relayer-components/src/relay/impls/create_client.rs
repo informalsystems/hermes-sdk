@@ -63,7 +63,7 @@ where
         _target: Target,
         target_chain: &TargetChain,
         counterparty_chain: &CounterpartyChain,
-        create_client_options: &CounterpartyChain::CreateClientOptions,
+        create_client_options: &CounterpartyChain::CreateClientPayloadOptions,
     ) -> Result<TargetChain::ClientId, Relay::Error> {
         let payload = counterparty_chain
             .build_create_client_payload(create_client_options)

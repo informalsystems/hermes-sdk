@@ -3,7 +3,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
 use ibc_relayer::chain::client::ClientSettings;
 
@@ -21,12 +21,12 @@ pub struct CreateWasmTendermintClientPayload {
 
 pub struct ProvideWasmTendermintClientTypes;
 
-impl<Chain, Counterparty> ProvideCreateClientOptionsType<Chain, Counterparty>
+impl<Chain, Counterparty> ProvideCreateClientPayloadOptionsType<Chain, Counterparty>
     for ProvideWasmTendermintClientTypes
 where
     Chain: Async,
 {
-    type CreateClientOptions = CreateWasmTendermintClientOptions;
+    type CreateClientPayloadOptions = CreateWasmTendermintClientOptions;
 }
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
