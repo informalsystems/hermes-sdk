@@ -466,6 +466,7 @@ pub trait CanUseSovereignRollup:
     + CanBuildChannelOpenInitMessage<CosmosChain>
 where
     Self::Runtime: HasMutex,
+    CosmosChain: HasClientStateType<Self>,
 {
 }
 

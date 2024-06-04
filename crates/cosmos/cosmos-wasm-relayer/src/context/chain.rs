@@ -718,6 +718,9 @@ pub trait CanUseWasmCosmosChain:
             CreateClientMessageOptions = CreateWasmTendermintMessageOptions,
         >
     + HasDefaultEncoding<Encoding = WasmCosmosEncoding>
+where
+    WasmCosmosChain: HasClientStateType<Self>,
+    CosmosChain: HasClientStateType<Self>,
 {
 }
 
@@ -747,6 +750,8 @@ pub trait CanUseCosmosChainWithWasmCosmosChain:
     + CanBuildTimeoutUnorderedPacketMessage<WasmCosmosChain>
     + HasInitConnectionOptionsType<WasmCosmosChain>
 // + HasClientStateType<WasmCosmosChain, ClientState = WrappedTendermintClientState>
+where
+    WasmCosmosChain: HasClientStateType<Self>,
 {
 }
 

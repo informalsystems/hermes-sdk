@@ -8,6 +8,7 @@ use hermes_relayer_components::chain::impls::delegate::message_height::DelegateC
 use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
 use hermes_relayer_components::chain::impls::delegate::queries::consensus_state_heights::DelegateQueryConsensusStateHeights;
+use hermes_relayer_components::chain::impls::delegate::types::client_state::DelegateClientStateType;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
@@ -165,7 +166,7 @@ use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
-use crate::impls::types::client_state::{ProvideAnyRawClientState, ProvideTendermintClientState};
+use crate::impls::types::client_state::ProvideAnyRawClientState;
 use crate::impls::types::consensus_state::{
     ProvideAnyRawConsensusState, ProvideTendermintConsensusState,
 };
@@ -227,11 +228,6 @@ delegate_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
-        [
-            ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
-        ]:
-            ProvideTendermintClientState,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
@@ -384,5 +380,11 @@ delegate_components! {
 
         CounterpartyMessageHeightGetterComponent:
             DelegateCounterpartyMessageHeightGetter<DelegateCosmosChainComponents>,
+
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            DelegateClientStateType<DelegateCosmosChainComponents>,
     }
 }

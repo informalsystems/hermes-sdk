@@ -259,6 +259,8 @@ pub trait CanUseSovereignChain:
     + CanBuildTimeoutUnorderedPacketPayload<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
+where
+    CosmosChain: HasClientStateType<Self>,
 {
 }
 
