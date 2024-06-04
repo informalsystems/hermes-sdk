@@ -8,6 +8,7 @@
     cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
     sovereign-nix.url = github:informalsystems/sov-rollup-starter/ibc-rollup;
     sovereign-ibc-nix.url = github:informalsystems/sovereign-ibc;
+    rust-overlay.url = github:oxalica/rust-overlay;
 
     ibc-rs-src = {
       url = github:cosmos/ibc-rs;
@@ -28,6 +29,9 @@
     (system: let
       nixpkgs = import inputs.nixpkgs {
         inherit system;
+        overlays = [
+          inputs.rust-overlay.overlays.default
+        ];
       };
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
@@ -37,9 +41,23 @@
 
       rust-bin = nixpkgs.rust-bin.fromRustupToolchainFile ./nix/wasm-rust-toolchain.toml;
 
+      ibc-rs-src = nixpkgs.stdenv.mkDerivation {
+        name = "ibc-rs-src";
+        dontUnpack = true;
+        dontBuild = true;
+
+        installPhase = ''
+            mkdir -p $out
+            cp ${./nix/Cargo.lock} $out/Cargo.lock
+
+            cp -r ${inputs.ibc-rs-src}/. $out/
+            ls -la $out
+        '';
+      };
+
       tendermint-wasm-client = nixpkgs.rustPlatform.buildRustPackage {
         name = "ibc-client-tendermint-cw";
-        src = inputs.ibc-rs-src;
+        src = ibc-rs-src;
 
         cargoLock = {
           lockFile = ./nix/Cargo.lock;
@@ -52,12 +70,12 @@
         doCheck = false;
 
         buildPhase = ''
-            RUSTFLAGS='-C link-arg=-s' cargo build -p ibc-client-tendermint-cw --target wasm32-unknown-unknown --release --lib --locked
+          RUSTFLAGS='-C link-arg=-s' cargo build -p ibc-client-tendermint-cw --target wasm32-unknown-unknown --release --lib --locked
         '';
 
         installPhase = ''
             mkdir -p $out
-            cp -r target/wasm32-unknown-unknown/release $out/
+            cp -r target/wasm32-unknown-unknown/release/ibc_client_tendermint_cw.wasm $out/
         '';
       };
     in {

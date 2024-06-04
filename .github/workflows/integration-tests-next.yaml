@@ -60,6 +60,8 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
+            export WASM_FILE_PATH=$(nix build .#tendermint-wasm-client --print-out-paths --no-link)/ibc_client_tendermint_cw.wasm
+
             nix shell .#cargo-nextest .#protobuf .#gaia .#ibc-go-v7-wasm-simapp -c \
               cargo nextest run -p hermes-cosmos-wasm-relayer \
               --test-threads=2
