@@ -1925,6 +1925,7 @@ dependencies = [
  "rand",
  "serde",
  "serde_derive",
+ "sha2 0.10.8",
  "stable-eyre",
  "tendermint",
  "tendermint-proto",

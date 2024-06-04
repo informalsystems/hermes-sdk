@@ -12,6 +12,8 @@ use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_cosmos_wasm_relayer::context::cosmos_to_wasm_cosmos_relay::CosmosToWasmCosmosRelay;
+use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintClientOptions;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -19,6 +21,7 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::types::TrustThreshold;
+use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 
 #[test]
@@ -78,17 +81,30 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             chain: wasm_cosmos_chain_driver.chain.clone(),
         };
 
-        let create_client_settings = ClientSettings::Tendermint(Settings {
+        let tm_create_client_settings = ClientSettings::Tendermint(Settings {
             max_clock_drift: Duration::from_secs(40),
             trusting_period: None,
             trust_threshold: TrustThreshold::ONE_THIRD,
         });
 
+        let wasm_code_hash: [u8; 32] = {
+            let wasm_client_bytes = tokio::fs::read(&wasm_client_code_path).await?;
+
+            let mut hasher = Sha256::new();
+            hasher.update(wasm_client_bytes);
+            hasher.finalize().into()
+        };
+
+        let wasm_tm_create_client_settings = CreateWasmTendermintClientOptions {
+            client_settings: tm_create_client_settings.clone(),
+            code_hash: wasm_code_hash.into(),
+        };
+
         let client_id_a = CosmosToWasmCosmosRelay::create_client(
             SourceTarget,
             &cosmos_chain,
             &wasm_cosmos_chain,
-            &create_client_settings,
+            &wasm_tm_create_client_settings,
         )
         .await?;
 
@@ -98,11 +114,11 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             DestinationTarget,
             &wasm_cosmos_chain,
             &cosmos_chain,
-            &create_client_settings,
+            &tm_create_client_settings,
         )
         .await?;
 
-        let _relay = CosmosToWasmCosmosRelay::new(
+        let relay = CosmosToWasmCosmosRelay::new(
             runtime.clone(),
             cosmos_chain,
             wasm_cosmos_chain,
@@ -111,7 +127,10 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             Default::default(),
         );
 
-        // let (connection_id_a, connection_id_b) = relay.bootstrap_connection().await?;
+        let (connection_id_a, connection_id_b) =
+            relay.bootstrap_connection(&Default::default()).await?;
+
+        println!("successfully bootstrapped connections: {connection_id_a} <> {connection_id_b}");
 
         Ok(())
     })
