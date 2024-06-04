@@ -12,7 +12,6 @@ use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_cosmos_wasm_relayer::context::cosmos_to_wasm_cosmos_relay::CosmosToWasmCosmosRelay;
-use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintClientOptions;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -94,11 +93,6 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             let mut hasher = Sha256::new();
             hasher.update(wasm_client_bytes);
             hasher.finalize().into()
-        };
-
-        let wasm_tm_create_client_settings = CreateWasmTendermintClientOptions {
-            client_settings: tm_create_client_settings.clone(),
-            code_hash: wasm_code_hash.into(),
         };
 
         let client_id_a = CosmosToWasmCosmosRelay::create_client(

@@ -1,6 +1,7 @@
 use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
+use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientPayload;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
@@ -18,7 +19,7 @@ use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
-use crate::types::create_client::CreateWasmTendermintClientPayload;
+use crate::types::create_client::CreateWasmTendermintMessageOptions;
 
 pub struct BuildCreateWasmTendermintClientMessage;
 
@@ -26,9 +27,11 @@ impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterpar
     for BuildCreateWasmTendermintClientMessage
 where
     Chain: HasMessageType<Message = CosmosMessage>
-        + HasCreateClientMessageOptionsType<Counterparty>
-        + CanRaiseError<Encoding::Error>,
-    Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = CreateWasmTendermintClientPayload>
+        + HasCreateClientMessageOptionsType<
+            Counterparty,
+            CreateClientMessageOptions = CreateWasmTendermintMessageOptions,
+        > + CanRaiseError<Encoding::Error>,
+    Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = CosmosCreateClientPayload>
         + HasDefaultEncoding<Encoding = Encoding>,
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + CanConvert<WasmClientState, Any>
@@ -38,8 +41,8 @@ where
 {
     async fn build_create_client_message(
         _chain: &Chain,
-        _options: &Chain::CreateClientMessageOptions,
-        payload: Counterparty::CreateClientPayload,
+        options: &CreateWasmTendermintMessageOptions,
+        payload: CosmosCreateClientPayload,
     ) -> Result<Chain::Message, Chain::Error> {
         let encoding = Counterparty::default_encoding();
 
@@ -51,7 +54,7 @@ where
 
         let wasm_client_state = WasmClientState {
             data: tm_client_state_bytes,
-            checksum: payload.code_hash.clone(),
+            checksum: options.code_hash.clone(),
             latest_height: Height::new(
                 latest_height.revision_number(),
                 latest_height.revision_height(),
