@@ -2028,6 +2028,22 @@
         "type": "github"
       }
     },
+    "ibc-rs-src_3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1717489390,
+        "narHash": "sha256-NVvW1SvMbIbXULlxAe1lMNgoWfq/SzvSwPfVlxDm090=",
+        "owner": "cosmos",
+        "repo": "ibc-rs",
+        "rev": "c2c8dfad4d71c6ee2de7d7955838483a544a3b2f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cosmos",
+        "repo": "ibc-rs",
+        "type": "github"
+      }
+    },
     "ica-src": {
       "flake": false,
       "locked": {
@@ -3054,6 +3070,7 @@
         "cosmos-nix": "cosmos-nix",
         "cosmos-nix-wasm": "cosmos-nix-wasm",
         "flake-utils": "flake-utils_12",
+        "ibc-rs-src": "ibc-rs-src_3",
         "nixpkgs": "nixpkgs_11",
         "sovereign-ibc-nix": "sovereign-ibc-nix",
         "sovereign-nix": "sovereign-nix"
