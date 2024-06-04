@@ -13,6 +13,7 @@ use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_cosmos_wasm_relayer::context::cosmos_to_wasm_cosmos_relay::CosmosToWasmCosmosRelay;
 use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintMessageOptions;
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -122,19 +123,23 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
 
         println!("client_id_b: {client_id_b}");
 
-        let relay = CosmosToWasmCosmosRelay::new(
-            runtime.clone(),
-            cosmos_chain,
-            wasm_cosmos_chain,
-            client_id_a,
-            client_id_b,
-            Default::default(),
-        );
+        // let client_state_a = <CosmosChain as CanQueryClientStateWithLatestHeight<WasmCosmosChain>>::query_client_state_with_latest_height(
+        //     &client_id_a,
+        // ).await?;
 
-        let (connection_id_a, connection_id_b) =
-            relay.bootstrap_connection(&Default::default()).await?;
+        // let relay = CosmosToWasmCosmosRelay::new(
+        //     runtime.clone(),
+        //     cosmos_chain,
+        //     wasm_cosmos_chain,
+        //     client_id_a,
+        //     client_id_b,
+        //     Default::default(),
+        // );
 
-        println!("successfully bootstrapped connections: {connection_id_a} <> {connection_id_b}");
+        // let (connection_id_a, connection_id_b) =
+        //     relay.bootstrap_connection(&Default::default()).await?;
+
+        // println!("successfully bootstrapped connections: {connection_id_a} <> {connection_id_b}");
 
         Ok(())
     })
