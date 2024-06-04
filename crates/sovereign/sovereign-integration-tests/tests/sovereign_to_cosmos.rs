@@ -169,6 +169,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let create_client_message = <CosmosChain as CanBuildCreateClientMessage<SovereignChain>>::build_create_client_message(
             cosmos_chain,
+            &(),
             create_client_payload,
         ).await?;
 
@@ -224,6 +225,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             &sovereign_chain,
             cosmos_chain,
             &create_client_settings,
+            &(),
         )
         .await?;
 

@@ -51,7 +51,14 @@ impl BinaryChainTest for ConnectionAndChannelHandshakeTest {
         runtime
             .block_on(async move {
                 let birelay = builder
-                    .bootstrap_birelay(&chain_id_a, &chain_id_b, &client_settings, &client_settings)
+                    .bootstrap_birelay(
+                        &chain_id_a,
+                        &chain_id_b,
+                        &client_settings,
+                        &client_settings,
+                        &(),
+                        &(),
+                    )
                     .await?;
 
                 let (connection_id_a, connection_id_b) = birelay

@@ -7,7 +7,9 @@ use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_sovereign_rollup_components::types::client_state::SovereignClientState;
 use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsensusState;
@@ -26,6 +28,7 @@ impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterpar
     for BuildCreateSovereignClientMessageOnCosmos
 where
     Chain: HasMessageType<Message = CosmosMessage>
+        + HasCreateClientMessageOptionsType<Counterparty>
         + CanRaiseError<EncodeError>
         + CanRaiseError<Encoding::Error>,
     Counterparty: HasDefaultEncoding<Encoding = Encoding>
@@ -38,6 +41,7 @@ where
 {
     async fn build_create_client_message(
         _chain: &Chain,
+        _options: &Chain::CreateClientMessageOptions,
         payload: SovereignCreateClientPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
         let encoding = Counterparty::default_encoding();

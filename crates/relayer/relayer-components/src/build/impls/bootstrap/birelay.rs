@@ -7,15 +7,21 @@ use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
 use crate::build::traits::target::relay::RelayAToBTarget;
 use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB};
 use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::chain::traits::types::create_client::HasCreateClientPayloadOptionsType;
+use crate::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 
 #[async_trait]
 pub trait CanBootstrapBiRelay: HasBiRelayType + HasErrorType
 where
-    ChainA<Self>: HasChainIdType + HasCreateClientPayloadOptionsType<ChainB<Self>>,
-    ChainB<Self>: HasChainIdType + HasCreateClientPayloadOptionsType<ChainA<Self>>,
+    ChainA<Self>: HasChainIdType
+        + HasCreateClientPayloadOptionsType<ChainB<Self>>
+        + HasCreateClientMessageOptionsType<ChainB<Self>>,
+    ChainB<Self>: HasChainIdType
+        + HasCreateClientPayloadOptionsType<ChainA<Self>>
+        + HasCreateClientMessageOptionsType<ChainA<Self>>,
 {
     async fn bootstrap_birelay(
         &self,
@@ -23,6 +29,8 @@ where
         chain_id_b: &ChainIdB<Self>,
         payload_options_a: &<ChainA<Self> as HasCreateClientPayloadOptionsType<ChainB<Self>>>::CreateClientPayloadOptions,
         payload_options_b: &<ChainB<Self> as HasCreateClientPayloadOptionsType<ChainA<Self>>>::CreateClientPayloadOptions,
+        message_options_a: &<ChainA<Self> as HasCreateClientMessageOptionsType<ChainB<Self>>>::CreateClientMessageOptions,
+        message_options_b: &<ChainB<Self> as HasCreateClientMessageOptionsType<ChainA<Self>>>::CreateClientMessageOptions,
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 
@@ -36,10 +44,12 @@ where
     BiRelay: HasTwoWayRelay<ChainA = ChainA, ChainB = ChainB>,
     ChainA: HasChainIdType
         + HasCreateClientPayloadOptionsType<ChainB>
+        + HasCreateClientMessageOptionsType<ChainB>
         + HasIbcChainTypes<ChainB>
         + HasErrorType,
     ChainB: HasChainIdType
         + HasCreateClientPayloadOptionsType<ChainA>
+        + HasCreateClientMessageOptionsType<ChainA>
         + HasIbcChainTypes<ChainA>
         + HasErrorType,
 {
@@ -49,6 +59,8 @@ where
         chain_id_b: &ChainB::ChainId,
         payload_options_a: &ChainA::CreateClientPayloadOptions,
         payload_options_b: &ChainB::CreateClientPayloadOptions,
+        message_options_a: &ChainA::CreateClientMessageOptions,
+        message_options_b: &ChainB::CreateClientMessageOptions,
     ) -> Result<BiRelay, Error> {
         let relay_a_to_b = self
             .bootstrap_relay(
@@ -57,6 +69,8 @@ where
                 chain_id_b,
                 payload_options_a,
                 payload_options_b,
+                message_options_a,
+                message_options_b,
             )
             .await?;
 

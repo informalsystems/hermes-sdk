@@ -4,7 +4,9 @@ use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreat
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_types::tx_msg::Msg;
 
@@ -15,12 +17,15 @@ pub struct BuildCreateSolomachineClientMessage;
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateSolomachineClientMessage
 where
-    Chain: HasMessageType<Message = CosmosMessage> + HasErrorType<Error = Error>,
+    Chain: HasMessageType<Message = CosmosMessage>
+        + HasCreateClientMessageOptionsType<Counterparty>
+        + HasErrorType<Error = Error>,
     Counterparty:
         HasCreateClientPayloadType<Chain, CreateClientPayload = SolomachineCreateClientPayload>,
 {
     async fn build_create_client_message(
         _chain: &Chain,
+        _options: &Chain::CreateClientMessageOptions,
         counterparty_payload: SolomachineCreateClientPayload,
     ) -> Result<CosmosMessage, Error> {
         let client_state = counterparty_payload.client_state.clone().to_any();

@@ -2,7 +2,9 @@ use cgp_core::CanRaiseError;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use prost_types::Any;
 
@@ -17,6 +19,7 @@ impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterpar
     for BuildCosmosCreateClientMessage
 where
     Chain: HasMessageType<Message = CosmosMessage>
+        + HasCreateClientMessageOptionsType<Counterparty>
         + HasEncoding<Encoding = Encoding>
         + CanRaiseError<Encoding::Error>,
     Counterparty:
@@ -25,6 +28,7 @@ where
 {
     async fn build_create_client_message(
         chain: &Chain,
+        _options: &Chain::CreateClientMessageOptions,
         payload: CosmosCreateClientPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
         let encoding = chain.encoding();

@@ -63,15 +63,16 @@ where
         _target: Target,
         target_chain: &TargetChain,
         counterparty_chain: &CounterpartyChain,
-        create_client_options: &CounterpartyChain::CreateClientPayloadOptions,
+        create_client_payload_options: &CounterpartyChain::CreateClientPayloadOptions,
+        create_client_message_options: &TargetChain::CreateClientMessageOptions,
     ) -> Result<TargetChain::ClientId, Relay::Error> {
         let payload = counterparty_chain
-            .build_create_client_payload(create_client_options)
+            .build_create_client_payload(create_client_payload_options)
             .await
             .map_err(Target::counterparty_chain_error)?;
 
         let message = target_chain
-            .build_create_client_message(payload)
+            .build_create_client_message(create_client_message_options, payload)
             .await
             .map_err(Target::target_chain_error)?;
 

@@ -106,6 +106,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             &cosmos_chain,
             &wasm_cosmos_chain,
             &tm_create_client_settings,
+            &(),
         )
         .await?;
 
@@ -116,6 +117,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             &wasm_cosmos_chain,
             &cosmos_chain,
             &tm_create_client_settings,
+            &(),
         )
         .await?;
 

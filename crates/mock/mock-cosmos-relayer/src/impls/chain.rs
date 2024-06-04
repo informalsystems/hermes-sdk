@@ -30,7 +30,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    ProvideCreateClientEvent, ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
+    ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -385,6 +386,16 @@ where
     type CreateClientPayloadOptions = ();
 }
 
+impl<Chain, Counterparty>
+    ProvideCreateClientMessageOptionsType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
+where
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
+{
+    type CreateClientMessageOptions = ();
+}
+
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
     for MockCosmosChainComponents
 where
@@ -468,6 +479,7 @@ where
 {
     async fn build_create_client_message(
         _chain: &MockCosmosContext<Chain>,
+        _options: &(),
         counterparty_payload: Any,
     ) -> Result<Any, Error> {
         Ok(counterparty_payload)

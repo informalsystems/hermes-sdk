@@ -9,7 +9,9 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
@@ -23,7 +25,9 @@ pub struct BuildCreateWasmTendermintClientMessage;
 impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateWasmTendermintClientMessage
 where
-    Chain: HasMessageType<Message = CosmosMessage> + CanRaiseError<Encoding::Error>,
+    Chain: HasMessageType<Message = CosmosMessage>
+        + HasCreateClientMessageOptionsType<Counterparty>
+        + CanRaiseError<Encoding::Error>,
     Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = CreateWasmTendermintClientPayload>
         + HasDefaultEncoding<Encoding = Encoding>,
     Encoding: HasEncodedType<Encoded = Vec<u8>>
@@ -34,6 +38,7 @@ where
 {
     async fn build_create_client_message(
         _chain: &Chain,
+        _options: &Chain::CreateClientMessageOptions,
         payload: Counterparty::CreateClientPayload,
     ) -> Result<Chain::Message, Chain::Error> {
         let encoding = Counterparty::default_encoding();

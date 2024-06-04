@@ -97,6 +97,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
 };
+use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent,
@@ -254,7 +255,10 @@ delegate_components! {
             RawConsensusStateWithProofsQuerierComponent,
         ]:
             QueryCosmosConsensusStateFromAbci,
-        CreateClientPayloadOptionsTypeComponent:
+        [
+            CreateClientPayloadOptionsTypeComponent,
+            CreateClientMessageOptionsTypeComponent,
+        ]:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:
             BuildCreateClientPayloadWithChainHandle,

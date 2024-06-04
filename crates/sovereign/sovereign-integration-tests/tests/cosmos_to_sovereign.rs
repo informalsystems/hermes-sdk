@@ -132,6 +132,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 &sovereign_chain,
                 cosmos_chain,
                 &create_client_settings,
+                &(),
             )
             .await?
         };
@@ -169,6 +170,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 cosmos_chain,
                 &sovereign_chain,
                 &create_client_settings,
+                &(),
             )
             .await?
         };
