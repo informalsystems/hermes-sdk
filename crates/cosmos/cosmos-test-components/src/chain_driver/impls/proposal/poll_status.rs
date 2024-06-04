@@ -29,11 +29,14 @@ where
         let runtime = chain_driver.runtime();
 
         for _ in 0..20 {
-            let status = chain_driver.query_proposal_status(proposal_id).await?;
-            if &status == expected_status {
-                return Ok(());
-            } else {
-                runtime.sleep(Duration::from_millis(500)).await;
+            let status_result = chain_driver.query_proposal_status(proposal_id).await;
+            match &status_result {
+                Ok(status) if status == expected_status => {
+                    return Ok(());
+                }
+                _ => {
+                    runtime.sleep(Duration::from_millis(500)).await;
+                }
             }
         }
 
