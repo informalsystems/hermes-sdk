@@ -20,17 +20,20 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 
+use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
+
 pub struct CosmosToWasmCosmosComponents;
 
 delegate_components! {
     CosmosToWasmCosmosComponents {
+        CreateClientMessageBuilderComponent:
+            BuildCreateWasmTendermintClientMessage,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,
             ConsensusStateQuerierComponent,
             ConsensusStateWithProofsQuerierComponent,
-            CreateClientMessageBuilderComponent,
             UpdateClientMessageBuilderComponent,
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,

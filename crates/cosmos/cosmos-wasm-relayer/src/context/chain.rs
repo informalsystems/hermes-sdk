@@ -266,7 +266,9 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::ProvideWasmCosmosEncoding;
+use crate::impls::create_client_payload::BuildCreateWasmTendermintClientPayload;
 use crate::types::client_state::WrappedTendermintClientState;
+use crate::types::create_client::ProvideWasmTendermintClientTypes;
 
 #[derive(Clone)]
 pub struct WasmCosmosChain {
@@ -315,6 +317,13 @@ delegate_components! {
 delegate_components! {
     WasmCosmosChainComponents {
         [
+            CreateClientPayloadTypeComponent,
+            CreateClientOptionsTypeComponent,
+        ]:
+            ProvideWasmTendermintClientTypes,
+        CreateClientPayloadBuilderComponent:
+            BuildCreateWasmTendermintClientPayload,
+        [
             HeightTypeComponent,
             HeightFieldComponent,
             HeightIncrementerComponent,
@@ -355,7 +364,6 @@ delegate_components! {
             SendPacketEventComponent,
             WriteAckEventComponent,
 
-            CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
 
             ConnectionOpenInitPayloadTypeComponent,
@@ -388,9 +396,7 @@ delegate_components! {
             ConsensusStateHeightQuerierComponent,
             ConsensusStateHeightsQuerierComponent,
 
-            CreateClientOptionsTypeComponent,
             CreateClientMessageBuilderComponent,
-            CreateClientPayloadBuilderComponent,
             UpdateClientMessageBuilderComponent,
             UpdateClientPayloadBuilderComponent,
             CounterpartyChainIdQuerierComponent,
