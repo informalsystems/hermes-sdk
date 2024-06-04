@@ -9,7 +9,6 @@ use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
-use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
@@ -265,6 +264,7 @@ use prost_types::Any;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::{HttpClient, Url};
 
+use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::ProvideWasmCosmosEncoding;
 use crate::types::client_state::WrappedTendermintClientState;
 
@@ -517,7 +517,7 @@ delegate_components! {
 
 delegate_components! {
     DelegateCosmosChainComponents {
-        WasmCosmosChain: CosmosToCosmosComponents,
+        WasmCosmosChain: CosmosToWasmCosmosComponents,
     }
 }
 
