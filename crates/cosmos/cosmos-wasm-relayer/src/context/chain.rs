@@ -746,7 +746,6 @@ pub trait CanUseCosmosChainWithWasmCosmosChain:
     + CanBuildAckPacketMessage<WasmCosmosChain>
     + CanBuildTimeoutUnorderedPacketMessage<WasmCosmosChain>
     + HasInitConnectionOptionsType<WasmCosmosChain>
-// + HasClientStateType<WasmCosmosChain, ClientState = WrappedTendermintClientState>
 {
 }
 
