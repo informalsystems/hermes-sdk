@@ -37,7 +37,6 @@ impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
 pub trait CanUseCosmosChain:
     CanQueryBalance
-    + HasClientStateType<CosmosChain, ClientState = TendermintClientState>
     + CanIbcTransferToken<CosmosChain>
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
@@ -63,8 +62,6 @@ pub trait CanUseCosmosChain:
     + CanPollTxResponse
     + CanQueryTxResponse
     + CanAssertEventualAmount
-where
-    CosmosChain: HasClientStateType<Self>,
 {
 }
 

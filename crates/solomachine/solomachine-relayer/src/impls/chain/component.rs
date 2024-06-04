@@ -3,7 +3,6 @@ use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainCom
 use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
-use hermes_cosmos_chain_components::impls::types::client_state::ProvideTendermintClientState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::has_encoding::{
@@ -44,9 +43,6 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 };
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
-};
 use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
@@ -95,11 +91,6 @@ pub struct SolomachineCosmosComponents;
 
 delegate_components! {
     SolomachineCosmosComponents {
-        [
-            ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
-        ]:
-            ProvideTendermintClientState,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,

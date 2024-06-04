@@ -32,8 +32,6 @@ pub trait CanUseSolomachineChain:
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
-where
-    CosmosChain: HasClientStateType<Self>,
 {
 }
 

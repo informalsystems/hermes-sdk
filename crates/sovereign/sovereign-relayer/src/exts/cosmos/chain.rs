@@ -42,12 +42,10 @@ use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessage
 use hermes_sovereign_chain_components::cosmos::components::SovereignCosmosComponents;
 
 use crate::contexts::sovereign_chain::SovereignChain;
-use crate::contexts::sovereign_rollup::SovereignRollup;
 
 delegate_components! {
     DelegateCosmosChainComponents {
         SovereignChain: SovereignCosmosComponents,
-        SovereignRollup: SovereignCosmosComponents,
     }
 }
 
