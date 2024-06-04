@@ -105,7 +105,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             SourceTarget,
             &cosmos_chain,
             &wasm_cosmos_chain,
-            &wasm_tm_create_client_settings,
+            &tm_create_client_settings,
         )
         .await?;
 
