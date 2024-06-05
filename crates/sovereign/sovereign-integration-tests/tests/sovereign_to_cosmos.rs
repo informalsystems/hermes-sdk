@@ -15,6 +15,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
+use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
@@ -335,6 +336,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         // TODO(rano): hack, as proof_height is incremented as (query_height + 1)
         // we need the a consensus state with proof_height
         connection_try_payload.update_height = cosmos_client_state.latest_height;
+        connection_try_payload.commitment_prefix.clone_from(dbg!(<SovereignChain as HasIbcCommitmentPrefix>::ibc_commitment_prefix(&sovereign_chain)));
 
         info!("Connection Try payload done");
         info!("{:?}", connection_try_payload.commitment_prefix);
