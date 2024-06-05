@@ -98,8 +98,8 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
 
         let client_id_b = WasmCosmosRelay::create_client(
             DestinationTarget,
-            &chain_a,
             &chain_b,
+            &chain_a,
             &tm_create_client_settings,
             &CreateWasmTendermintMessageOptions {
                 code_hash: wasm_code_hash.into(),

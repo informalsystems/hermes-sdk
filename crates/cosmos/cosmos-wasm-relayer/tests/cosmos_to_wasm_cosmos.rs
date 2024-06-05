@@ -6,13 +6,14 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_cosmos_wasm_relayer::context::cosmos_to_wasm_cosmos_relay::CosmosToWasmCosmosRelay;
 use hermes_cosmos_wasm_relayer::types::create_client::CreateWasmTendermintMessageOptions;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -44,18 +45,17 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
 
-    let gaia_bootstrap = Arc::new(LegacyCosmosBootstrap {
+    let gaia_bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
         builder: builder.clone(),
         should_randomize_identifiers: true,
         chain_store_dir: store_dir.join("chains"),
-        chain_command_path: "gaiad".into(),
+        chain_command_path: "simd".into(),
         account_prefix: "cosmos".into(),
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-        compat_mode: None,
     });
 
     let simd_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
@@ -119,7 +119,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
 
         println!("client_id_b: {client_id_b}");
 
-        let _relay: CosmosToWasmCosmosRelay = CosmosToWasmCosmosRelay::new(
+        let relay: CosmosToWasmCosmosRelay = CosmosToWasmCosmosRelay::new(
             runtime.clone(),
             simd_chain,
             gaia_chain,
@@ -131,10 +131,10 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
         // FIXME: connection bootstrap currently fails at OpenTry,
         // due to bugs on ibc-go.
 
-        // let (connection_id_a, connection_id_b) =
-        //     relay.bootstrap_connection(&Default::default()).await?;
+        let (connection_id_a, connection_id_b) =
+            relay.bootstrap_connection(&Default::default()).await?;
 
-        // println!("successfully bootstrapped connections: {connection_id_a} <> {connection_id_b}");
+        println!("successfully bootstrapped connections: {connection_id_a} <> {connection_id_b}");
 
         Ok(())
     })

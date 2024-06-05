@@ -22,6 +22,7 @@ use hermes_relayer_components::chain::traits::types::create_client::CreateClient
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 
 use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
+use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;
 use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
 
 pub struct CosmosToWasmCosmosComponents;
@@ -32,13 +33,14 @@ delegate_components! {
             BuildCreateWasmTendermintClientMessage,
         CreateClientMessageOptionsTypeComponent:
             ProvidCreateWasmTendermintMessageOptionsType,
+        UpdateClientMessageBuilderComponent:
+            BuildUpdateWasmTendermintClientMessage,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,
             ConsensusStateQuerierComponent,
             ConsensusStateWithProofsQuerierComponent,
-            UpdateClientMessageBuilderComponent,
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,
             ConnectionOpenAckMessageBuilderComponent,
