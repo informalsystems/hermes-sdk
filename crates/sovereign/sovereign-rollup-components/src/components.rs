@@ -65,7 +65,8 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
+    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -179,7 +180,8 @@ delegate_components! {
         ]:
             ProvideSovereignEvents,
         [
-            CreateClientOptionsTypeComponent,
+            CreateClientPayloadOptionsTypeComponent,
+            CreateClientMessageOptionsTypeComponent,
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
             InitConnectionOptionsTypeComponent,

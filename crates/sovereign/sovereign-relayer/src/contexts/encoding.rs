@@ -68,7 +68,7 @@ delegate_components! {
 }
 
 pub trait CanUseSovereignEncoding:
-    CanDecode<Protobuf, ProtoWasmClientState>
+    CanEncodeAndDecode<Protobuf, ProtoWasmClientState>
     + CanEncodeAndDecode<Protobuf, WasmClientState>
     + CanEncodeAndDecode<Any, WasmClientState>
     + CanEncodeAndDecode<Any, WasmConsensusState>

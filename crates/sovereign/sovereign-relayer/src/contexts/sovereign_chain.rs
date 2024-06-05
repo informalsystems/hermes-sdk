@@ -66,7 +66,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientEvent, HasCreateClientOptionsType,
+    HasCreateClientEvent, HasCreateClientPayloadOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::{
     CanIncrementHeight, HasHeightFields,
@@ -217,7 +217,7 @@ pub trait CanUseSovereignChain:
     > + CanBuildUpdateClientPayload<CosmosChain>
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildCreateClientMessage<CosmosChain>
-    + HasCreateClientOptionsType<CosmosChain>
+    + HasCreateClientPayloadOptionsType<CosmosChain>
     + HasCreateClientEvent<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasChannelOpenInitEvent<CosmosChain>

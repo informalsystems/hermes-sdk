@@ -4,6 +4,7 @@ use cgp_core::prelude::*;
 
 use crate::traits::fs::file_path::HasFilePathType;
 
+#[derive(Debug)]
 pub struct ExecOutput {
     pub stdout: String,
     pub stderr: String,

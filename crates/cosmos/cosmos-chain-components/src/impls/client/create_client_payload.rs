@@ -1,8 +1,7 @@
 use cgp_core::CanRaiseError;
-use eyre::eyre;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientOptionsType, HasCreateClientPayloadType,
+    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -17,7 +16,7 @@ pub struct BuildCreateClientPayloadWithChainHandle;
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCreateClientPayloadWithChainHandle
 where
-    Chain: HasCreateClientOptionsType<Counterparty, CreateClientOptions = ClientSettings>
+    Chain: HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = ClientSettings>
         + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
         + HasBlockingChainHandle
         + CanRaiseError<eyre::Report>,
@@ -50,14 +49,7 @@ where
                     )
                     .map_err(Chain::raise_error)?;
 
-                let consensus_state = match any_consensus_state {
-                    AnyConsensusState::Tendermint(consensus_state) => consensus_state,
-                    _ => {
-                        return Err(Chain::raise_error(eyre!(
-                            "expect Tendermint consensus state"
-                        )));
-                    }
-                };
+                let AnyConsensusState::Tendermint(consensus_state) = any_consensus_state;
 
                 Ok(CosmosCreateClientPayload {
                     client_state,

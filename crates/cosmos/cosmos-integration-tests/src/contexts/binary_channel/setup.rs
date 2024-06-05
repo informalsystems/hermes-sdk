@@ -174,11 +174,18 @@ impl ProvideBuilderAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSet
 impl<const I: usize, const J: usize> ProvideCreateClientOptionsAt<CosmosBinaryChannelSetup, I, J>
     for CosmosBinaryChannelSetupComponents
 {
-    fn create_client_options(
+    fn create_client_payload_options(
         setup: &CosmosBinaryChannelSetup,
         _index: Twindex<I, J>,
     ) -> &ClientSettings {
         &setup.create_client_settings
+    }
+
+    fn create_client_message_options(
+        _setup: &CosmosBinaryChannelSetup,
+        _index: Twindex<I, J>,
+    ) -> &() {
+        &()
     }
 }
 

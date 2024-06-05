@@ -8,6 +8,7 @@ use basecoin::modules::bank::Bank;
 use basecoin::modules::context::{prefix, Identifiable};
 use basecoin::modules::ibc::Ibc;
 use basecoin::store::context::ProvableStore;
+use basecoin::store::impls::RevertibleStore;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
@@ -46,7 +47,7 @@ where
     /// Chain blocks
     pub blocks: Arc<Mutex<Vec<TmLightBlock>>>,
     /// Chain application
-    pub app: BaseCoinApp<S>,
+    pub app: BaseCoinApp<RevertibleStore<S>>,
     /// Current chain status
     pub current_status: Arc<Mutex<ChainStatus>>,
 }
@@ -57,7 +58,7 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
         runtime: HermesRuntime,
         chain_id: ChainId,
         validators: Vec<Validator>,
-        store: S,
+        store: RevertibleStore<S>,
     ) -> Self {
         let app_builder = Builder::new(store);
 

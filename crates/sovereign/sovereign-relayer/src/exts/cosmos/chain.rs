@@ -37,7 +37,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 };
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use hermes_sovereign_chain_components::cosmos::components::SovereignCosmosComponents;
 
@@ -79,7 +79,7 @@ pub trait CanUseCosmosChainWithSovereign:
     + CanBuildReceivePacketMessage<SovereignChain>
     + CanBuildAckPacketMessage<SovereignChain>
     + CanBuildTimeoutUnorderedPacketMessage<SovereignChain>
-    + HasCreateClientOptionsType<SovereignChain>
+    + HasCreateClientPayloadOptionsType<SovereignChain>
     + CanBuildCreateClientPayload<SovereignChain>
     + CanBuildUpdateClientPayload<SovereignChain>
     + HasClientStateFields<SovereignChain>
