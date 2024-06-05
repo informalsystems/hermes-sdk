@@ -45,6 +45,7 @@ use hermes_relayer_components::chain::traits::send_message::MessageSenderCompone
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::connection::ConnectionEndTypeComponent;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightTypeComponent,
@@ -101,7 +102,10 @@ delegate_components! {
             ConsensusStateWithProofsQuerierComponent,
         ]:
             QueryAndConvertRawConsensusState,
-        CreateClientMessageBuilderComponent:
+        [
+            CreateClientMessageBuilderComponent,
+            CreateClientMessageOptionsTypeComponent,
+        ]:
             BuildCreateSolomachineClientMessage,
         [
             ConnectionOpenInitMessageBuilderComponent,

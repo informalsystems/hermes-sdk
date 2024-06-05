@@ -1888,6 +1888,54 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-cosmos-wasm-relayer"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "eyre",
+ "futures",
+ "hermes-async-runtime-components",
+ "hermes-cli-components",
+ "hermes-cosmos-chain-components",
+ "hermes-cosmos-integration-tests",
+ "hermes-cosmos-relayer",
+ "hermes-cosmos-test-components",
+ "hermes-encoding-components",
+ "hermes-logging-components",
+ "hermes-protobuf-encoding-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-runtime",
+ "hermes-runtime-components",
+ "hermes-test-components",
+ "hermes-tracing-logging-components",
+ "hermes-wasm-client-components",
+ "hermes-wasm-test-components",
+ "http 0.2.12",
+ "ibc",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-telemetry",
+ "itertools 0.12.1",
+ "moka",
+ "opentelemetry 0.17.0",
+ "prost",
+ "prost-types",
+ "rand",
+ "serde",
+ "serde_derive",
+ "sha2 0.10.8",
+ "stable-eyre",
+ "tendermint",
+ "tendermint-proto",
+ "tendermint-rpc",
+ "tokio",
+ "tonic",
+ "tracing",
+]
+
+[[package]]
 name = "hermes-encoding-components"
 version = "0.1.0"
 dependencies = [
@@ -2083,6 +2131,7 @@ dependencies = [
  "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
+ "hermes-cosmos-wasm-relayer",
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",

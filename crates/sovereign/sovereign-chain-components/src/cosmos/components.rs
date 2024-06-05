@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use hermes_cosmos_chain_components::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
+use hermes_cosmos_chain_components::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
@@ -20,6 +21,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
     ConsensusStateQuerierComponent, ConsensusStateWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
+use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 
 use crate::cosmos::impls::message_height::GetSovereignRollupHeightFromCosmosMessage;
@@ -43,6 +45,8 @@ delegate_components! {
             QueryAndConvertRawConsensusState,
         UpdateClientMessageBuilderComponent:
             BuildUpdateSovereignClientMessageOnCosmos,
+        CreateClientMessageOptionsTypeComponent:
+            ProvideCosmosCreateClientSettings,
         CreateClientMessageBuilderComponent:
             BuildCreateSovereignClientMessageOnCosmos,
         [

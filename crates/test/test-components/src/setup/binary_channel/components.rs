@@ -7,7 +7,9 @@ use hermes_relayer_components::build::traits::components::relay_from_chains_buil
 use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
@@ -112,12 +114,17 @@ where
     ChainDriverA: HasChain<Chain = ChainA>,
     ChainDriverB: HasChain<Chain = ChainB>,
     ChainA: HasIbcChainTypes<ChainB>
-        + HasCreateClientOptionsType<ChainB>
+        + HasCreateClientPayloadOptionsType<ChainB>
+        + HasCreateClientMessageOptionsType<ChainB>
         + HasInitConnectionOptionsType<ChainB>
         + HasInitChannelOptionsType<ChainB>
         + HasErrorType
         + Clone,
-    ChainB: HasIbcChainTypes<ChainA> + HasCreateClientOptionsType<ChainA> + HasErrorType + Clone,
+    ChainB: HasIbcChainTypes<ChainA>
+        + HasCreateClientPayloadOptionsType<ChainA>
+        + HasCreateClientMessageOptionsType<ChainA>
+        + HasErrorType
+        + Clone,
     Relay: HasRelayChains<SrcChain = ChainA, DstChain = ChainB>
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>

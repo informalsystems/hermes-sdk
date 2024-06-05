@@ -11,7 +11,9 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc_relayer_types::signer::Signer;
 
@@ -27,6 +29,7 @@ impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterpar
     for BuildCreateCosmosClientMessageOnSovereign
 where
     Chain: HasMessageType<Message = SovereignMessage>
+        + HasCreateClientMessageOptionsType<Counterparty>
         + HasEncoding<Encoding = Encoding>
         + CanRaiseError<Encoding::Error>,
     Counterparty:
@@ -35,6 +38,7 @@ where
 {
     async fn build_create_client_message(
         chain: &Chain,
+        _options: &Chain::CreateClientMessageOptions,
         payload: CosmosCreateClientPayload,
     ) -> Result<SovereignMessage, Chain::Error> {
         let encoding = chain.encoding();
