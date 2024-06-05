@@ -288,9 +288,12 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         ).await?;
 
         info!("cosmos client payload at height {:?}: {:?}", target_cosmos_height, &update_client_payload);
+
         for header in update_client_payload.headers.iter() {
             info!("cosmos client payload has height {:?} with commitment root: {:?}", &header.signed_header.header.height, &header.signed_header.header.app_hash);
         }
+
+        let app_hash = update_client_payload.headers.last().unwrap().signed_header.header.app_hash.clone();
 
         let update_client_messages = <SovereignChain as CanBuildUpdateClientMessage<CosmosChain>>::build_update_client_message(
             &sovereign_chain,
@@ -342,6 +345,69 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         info!("{:?}", connection_try_payload.proof_client);
         info!("{:?}", connection_try_payload.proof_consensus);
         info!("{:?}", connection_try_payload.proof_consensus_height);
+
+
+        {
+            // use std::time::Duration;
+
+            // use hex::decode;
+
+            // use ibc::clients::tendermint::types::Header as TmHeader;
+            // use ibc::core::connection::types::version::Version;
+            // use ibc::core::connection::types::ConnectionEnd;
+            // use ibc::core::connection::types::Counterparty;
+            // use ibc::core::connection::types::State;
+            // use ibc::clients::tendermint::types::ConsensusState;
+            use ibc::core::commitment_types::commitment::CommitmentPrefix;
+            use ibc::core::commitment_types::commitment::CommitmentProofBytes;
+            use ibc::core::commitment_types::merkle::apply_prefix;
+            use ibc::core::commitment_types::merkle::MerkleProof;
+            use ibc::core::commitment_types::specs::ProofSpecs;
+            use ibc::core::host::types::identifiers::ConnectionId;
+            use ibc::core::host::types::path::ConnectionPath;
+            use ibc::core::host::types::path::Path;
+            // use ibc::core::primitives::proto::Any;
+            use ibc::core::primitives::proto::Protobuf;
+            use ibc::core::commitment_types::commitment::CommitmentRoot;
+
+            // let expected_conn_end_on_a = ConnectionEnd::new(
+            //     State::Init,
+            //     "08-wasm-0".parse().unwrap(),
+            //     Counterparty::new(
+            //         "07-tendermint-0".parse().unwrap(),
+            //         None,
+            //         b"ibc".to_vec().try_into().unwrap(),
+            //     ),
+            //     Version::compatibles(),
+            //     Duration::from_secs(0),
+            // )
+            // .unwrap();
+
+            let expected_conn_end_on_a = connection_try_payload.connection_end.clone();
+
+            let conn_end_proof_bytes = connection_try_payload.proof_init.clone();
+
+            let commitment_proof_bytes =
+                CommitmentProofBytes::try_from(conn_end_proof_bytes.to_vec()).unwrap();
+
+            let conn_end_proof = MerkleProof::try_from(&commitment_proof_bytes).unwrap();
+
+            let prefix = CommitmentPrefix::try_from(connection_try_payload.commitment_prefix.clone().to_vec()).unwrap();
+
+            let path = Path::Connection(ConnectionPath::new(&ConnectionId::new(0)));
+
+            let merkle_path = apply_prefix(&prefix, vec![path.to_string()]);
+
+            conn_end_proof
+                .verify_membership::<ics23::HostFunctionsManager>(
+                    &ProofSpecs::cosmos(),
+                    CommitmentRoot::from_bytes(app_hash.as_ref()).into(),
+                    merkle_path,
+                    expected_conn_end_on_a.encode_vec(),
+                    0,
+                )
+                .unwrap();
+        }
 
         let connection_try_message = <SovereignChain as CanBuildConnectionOpenTryMessage<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
 

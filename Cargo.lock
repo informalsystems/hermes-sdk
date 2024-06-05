@@ -2147,6 +2147,7 @@ dependencies = [
  "ibc-proto",
  "ibc-relayer",
  "ibc-relayer-types",
+ "ics23",
  "jsonrpsee",
  "rand",
  "serde",
