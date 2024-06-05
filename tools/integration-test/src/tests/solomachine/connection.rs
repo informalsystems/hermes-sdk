@@ -62,6 +62,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
                     &solomachine_chain,
                     &cosmos_chain,
                     &client_settings,
+                    &(),
                 )
                 .await
                 .unwrap();
@@ -70,6 +71,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
                     DestinationTarget,
                     &cosmos_chain,
                     &solomachine_chain,
+                    &(),
                     &(),
                 )
                 .await
