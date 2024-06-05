@@ -363,6 +363,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             use ibc::core::commitment_types::merkle::apply_prefix;
             use ibc::core::commitment_types::merkle::MerkleProof;
             use ibc::core::commitment_types::specs::ProofSpecs;
+            use ibc::core::commitment_types::proto::ics23::HostFunctionsManager;
             use ibc::core::host::types::identifiers::ConnectionId;
             use ibc::core::host::types::path::ConnectionPath;
             use ibc::core::host::types::path::Path;
@@ -399,7 +400,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             let merkle_path = apply_prefix(&prefix, vec![path.to_string()]);
 
             conn_end_proof
-                .verify_membership::<ics23::HostFunctionsManager>(
+                .verify_membership::<HostFunctionsManager>(
                     &ProofSpecs::cosmos(),
                     CommitmentRoot::from_bytes(app_hash.as_ref()).into(),
                     merkle_path,
