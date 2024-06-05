@@ -332,6 +332,14 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         connection_try_payload.update_height = cosmos_client_state.latest_height;
 
         info!("Connection Try payload done");
+        info!("{:?}", connection_try_payload.commitment_prefix);
+        info!("{:?}", connection_try_payload.client_state);
+        info!("{:?}", connection_try_payload.connection_end);
+        info!("{:?}", connection_try_payload.update_height);
+        info!("{:?}", connection_try_payload.proof_init);
+        info!("{:?}", connection_try_payload.proof_client);
+        info!("{:?}", connection_try_payload.proof_consensus);
+        info!("{:?}", connection_try_payload.proof_consensus_height);
 
         let connection_try_message = <SovereignChain as CanBuildConnectionOpenTryMessage<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
 
