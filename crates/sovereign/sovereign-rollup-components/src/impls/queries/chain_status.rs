@@ -21,7 +21,11 @@ where
     Rollup::JsonRpcClient: ClientT,
 {
     async fn query_chain_status(rollup: &Rollup) -> Result<SovereignRollupStatus, Rollup::Error> {
-        let response: SlotResponse = rollup
+        let SlotResponse {
+            number,
+            hash,
+            state_root,
+        } = rollup
             .json_rpc_client()
             .request("ledger_getHead", ArrayParams::new())
             .await
@@ -29,18 +33,28 @@ where
 
         let height = RollupHeight {
             // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
-            slot_number: response.number + 1,
+            slot_number: number + 1,
         };
 
         // Use the relayer's local timestamp for now, as it is currently not possible
         // to query the remote time from the rollup.
         let timestamp = Timestamp::now();
 
-        Ok(SovereignRollupStatus { height, timestamp })
+        Ok(SovereignRollupStatus {
+            height,
+            timestamp,
+            hash: hex::decode(hash.strip_prefix("0x").unwrap()).unwrap(),
+            state_root: hex::decode(state_root.strip_prefix("0x").unwrap()).unwrap(),
+        })
     }
 }
 
 #[derive(Deserialize)]
 pub struct SlotResponse {
     pub number: u64,
+    pub hash: String,
+    pub state_root: String,
+    // pub batch_range: (u64, u64),
+    // pub batches: Vec<Batch<B, TxReceipt, E>>,
+    // pub finality_status: FinalityStatus,
 }
