@@ -2191,6 +2191,7 @@ dependencies = [
  "ibc-relayer-types",
  "jsonrpsee",
  "sov-celestia-client",
+ "tokio",
 ]
 
 [[package]]

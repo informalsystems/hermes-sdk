@@ -32,6 +32,8 @@ where
                     header: header.into(),
                 };
 
+                println!("building update client message: {:?}", message);
+
                 message.to_cosmos_message()
             })
             .collect();

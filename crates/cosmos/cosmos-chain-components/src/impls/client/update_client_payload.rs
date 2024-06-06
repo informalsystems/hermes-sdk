@@ -33,6 +33,11 @@ where
         let trusted_height = *trusted_height;
         let target_height = *target_height;
 
+        println!(
+            "building Cosmos update client payload with trusted height: {}, target_height: {}",
+            trusted_height, target_height
+        );
+
         chain
             .with_blocking_chain_handle(move |chain_handle| {
                 let (header, support) = chain_handle

@@ -64,6 +64,8 @@ where
                     header: any_wasm_message,
                 };
 
+                println!("building update client: {:?}", message);
+
                 message.to_cosmos_message()
             })
             .collect();

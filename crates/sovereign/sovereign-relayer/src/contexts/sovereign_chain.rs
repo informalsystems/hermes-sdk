@@ -190,7 +190,14 @@ impl MessageSender<SovereignChain> for SovereignChainComponents {
         chain: &SovereignChain,
         messages: Vec<SovereignMessage>,
     ) -> Result<Vec<Vec<SovereignEvent>>, Error> {
-        chain.rollup.send_messages(messages).await
+        let mut result = Vec::new();
+
+        for message in messages {
+            let events = chain.rollup.send_messages(vec![message]).await?;
+            result.push(events.into_iter().next().unwrap())
+        }
+
+        Ok(result)
     }
 }
 

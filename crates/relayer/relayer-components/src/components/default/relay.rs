@@ -57,7 +57,7 @@ delegate_components! {
     #[mark_delegate(DelegatesToDefaultRelayComponents)]
     DefaultRelayComponents {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
-        TargetUpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
+        TargetUpdateClientMessageBuilderComponent: WaitUpdateClient<BuildUpdateClientMessages>,
         PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
         ReceivePacketRelayerComponnent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
         AckPacketRelayerComponent: BaseAckPacketRelayer,

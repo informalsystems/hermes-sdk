@@ -14,8 +14,12 @@ pub enum SovereignMessage {
 
 impl From<CosmosMessage> for SovereignMessage {
     fn from(cosmos_message: CosmosMessage) -> Self {
+        let counterparty_height = cosmos_message
+            .message
+            .counterparty_message_height_for_update_client();
+
         let cosmos_message_any = cosmos_message.message.encode_protobuf(&Signer::dummy());
 
-        IbcMessageWithHeight::new(cosmos_message_any).into()
+        IbcMessageWithHeight::new(cosmos_message_any, counterparty_height).into()
     }
 }
