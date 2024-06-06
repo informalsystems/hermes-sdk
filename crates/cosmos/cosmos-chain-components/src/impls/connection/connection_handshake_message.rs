@@ -1,6 +1,9 @@
 use cgp_core::CanRaiseError;
 use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEncoding};
+use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -80,17 +83,19 @@ where
     }
 }
 
-impl<Chain, Counterparty, Encoding> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
-    for BuildCosmosConnectionHandshakeMessage
+impl<Chain, Counterparty, Encoding, CounterpartyEncoding>
+    ConnectionOpenTryMessageBuilder<Chain, Counterparty> for BuildCosmosConnectionHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightFields
         + HasClientStateType<Counterparty>
         + HasEncoding<Encoding = Encoding>
         + CanRaiseError<Ics02Error>
-        + CanRaiseError<Encoding::Error>,
-    Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + CanRaiseError<Encoding::Error>
+        + CanRaiseError<CounterpartyEncoding::Error>,
+    Counterparty: HasDefaultEncoding<Encoding = CounterpartyEncoding>
+        + HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
+        + HasCommitmentProofType
         + HasHeightFields
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
@@ -99,6 +104,8 @@ where
             ConnectionOpenTryPayload = ConnectionOpenTryPayload<Counterparty, Chain>,
         >,
     Encoding: CanConvert<Chain::ClientState, Any>,
+    CounterpartyEncoding:
+        HasEncodedType<Encoded = Vec<u8>> + CanEncode<Protobuf, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_try_message(
@@ -128,6 +135,17 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let counterparty_encoding = Counterparty::default_encoding();
+        let proof_init = counterparty_encoding
+            .encode(&payload.proof_init)
+            .map_err(Chain::raise_error)?;
+        let proof_client = counterparty_encoding
+            .encode(&payload.proof_client)
+            .map_err(Chain::raise_error)?;
+        let proof_consensus = counterparty_encoding
+            .encode(&payload.proof_consensus)
+            .map_err(Chain::raise_error)?;
+
         let message = CosmosConnectionOpenTryMessage {
             client_id: client_id.clone(),
             counterparty_client_id: counterparty_client_id.clone(),
@@ -137,9 +155,9 @@ where
             delay_period,
             client_state: client_state_any,
             update_height,
-            proof_init: payload.proof_init,
-            proof_client: payload.proof_client,
-            proof_consensus: payload.proof_consensus,
+            proof_init,
+            proof_client,
+            proof_consensus,
             proof_consensus_height,
         };
 
