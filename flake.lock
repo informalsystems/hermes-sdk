@@ -2736,11 +2736,11 @@
     },
     "nixpkgs_15": {
       "locked": {
-        "lastModified": 1716715802,
-        "narHash": "sha256-usk0vE7VlxPX8jOavrtpOqphdfqEQpf9lgedlY/r66c=",
+        "lastModified": 1717459389,
+        "narHash": "sha256-I8/plBsua4/NZ5bKgj+z7/ThiWuud1YFwLsn1QQ5PgE=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e2dd4e18cc1c7314e24154331bae07df76eb582f",
+        "rev": "3b01abcc24846ae49957b30f4345bab4b3f1d14b",
         "type": "github"
       },
       "original": {
@@ -3193,11 +3193,11 @@
         "nixpkgs": "nixpkgs_16"
       },
       "locked": {
-        "lastModified": 1716862669,
-        "narHash": "sha256-7oTPM9lcdwiI1cpRC313B+lHawocgpY5F07N+Rbm5Uk=",
+        "lastModified": 1717640276,
+        "narHash": "sha256-xtWJuHl0Zq1/pibvU7V8+qad4fcNLP4yerO54nr4Hec=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "47b2d15658b37716393b2463a019000dbd6ce4bc",
+        "rev": "96161e19677e2ae639c41147e422da4d6ec48240",
         "type": "github"
       },
       "original": {
@@ -3405,16 +3405,16 @@
         "sovereign-sdk-src": "sovereign-sdk-src_2"
       },
       "locked": {
-        "lastModified": 1717666164,
-        "narHash": "sha256-QLqygj3UY17uxlBJCm2LQibcuVwinKfqj9ZIyhRyja0=",
+        "lastModified": 1717678000,
+        "narHash": "sha256-WhV7P8uO4NC/4KnfCLN8Bsq4iNI3wtY9BGhaK+SqsOM=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "317fe86eece0f1267f533b5f6c757064e080e63f",
+        "rev": "13ed245accdb00c363dc027bd25034fe45ec9da3",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
-        "ref": "soares/update-ibc-rs-20240605",
+        "ref": "ibc-rollup",
         "repo": "sov-rollup-starter",
         "type": "github"
       }
