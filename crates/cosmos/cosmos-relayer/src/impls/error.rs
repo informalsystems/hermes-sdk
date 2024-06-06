@@ -2,6 +2,7 @@ use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 use ibc::core::client::types::error::ClientError;
+use ibc::core::commitment_types::error::CommitmentError;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -120,6 +121,7 @@ delegate_components! {
             InvalidMetadataValue,
             ProofError,
             ClientError,
+            CommitmentError,
 
             // TODO: make it retryable?
             TransportError,

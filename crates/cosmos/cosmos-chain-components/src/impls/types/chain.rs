@@ -9,7 +9,6 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::PacketRec
 
 use cgp_core::{delegate_components, Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
-use hermes_relayer_components::chain::impls::types::proof::ProvideCommitmentProofBytes;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::block::{
     HasBlockType, ProvideBlockHash, ProvideBlockType,
@@ -47,6 +46,7 @@ use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
 use tendermint::Hash;
 
+use crate::impls::types::proof::ProvideMerkleProofType;
 use crate::traits::message::CosmosMessage;
 pub struct ProvideCosmosChainTypes;
 
@@ -55,7 +55,7 @@ delegate_components! {
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
         CommitmentProofTypeComponent:
-            ProvideCommitmentProofBytes,
+            ProvideMerkleProofType,
         PacketCommitmentTypeComponent:
             ProvideBytesPacketCommitment,
         AcknowledgementTypeComponent:

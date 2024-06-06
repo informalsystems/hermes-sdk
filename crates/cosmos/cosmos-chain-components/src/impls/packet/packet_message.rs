@@ -1,4 +1,7 @@
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -10,7 +13,9 @@ use hermes_relayer_components::chain::traits::types::packets::ack::{
 };
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::traits::types::proof::{
+    HasCommitmentProofType, ViaCommitmentProof,
+};
 use hermes_relayer_components::chain::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };
@@ -25,17 +30,21 @@ use crate::types::messages::packet::timeout::CosmosTimeoutPacketMessage;
 
 pub struct BuildCosmosPacketMessages;
 
-impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, CounterpartyEncoding> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where
     Chain: HasMessageType
         + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<CounterpartyEncoding::Error>,
     Counterparty: HasReceivePacketPayloadType<
             Chain,
             ReceivePacketPayload = ReceivePacketPayload<Counterparty>,
         > + HasHeightFields
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>,
+        + HasDefaultEncoding<Encoding = CounterpartyEncoding>
+        + HasCommitmentProofType,
+    CounterpartyEncoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanEncode<ViaCommitmentProof, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_receive_packet_message(
@@ -49,25 +58,36 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let counterparty_encoding = Counterparty::default_encoding();
+
+        let proof_commitment = counterparty_encoding
+            .encode(&payload.proof_commitment)
+            .map_err(Chain::raise_error)?;
+
         let message = CosmosReceivePacketMessage {
             packet: packet.clone(),
             update_height,
-            proof_commitment: payload.proof_commitment,
+            proof_commitment,
         };
 
         Ok(message.to_cosmos_message().into())
     }
 }
 
-impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty> for BuildCosmosPacketMessages
+impl<Chain, Counterparty, CounterpartyEncoding> AckPacketMessageBuilder<Chain, Counterparty>
+    for BuildCosmosPacketMessages
 where
     Chain: HasMessageType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<CounterpartyEncoding::Error>,
     Counterparty: HasAckPacketPayloadType<Chain, AckPacketPayload = AckPacketPayload<Counterparty, Chain>>
         + HasHeightFields
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasDefaultEncoding<Encoding = CounterpartyEncoding>
+        + HasCommitmentProofType
         + HasAcknowledgementType<Chain, Acknowledgement = Vec<u8>>,
+    CounterpartyEncoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanEncode<ViaCommitmentProof, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_ack_packet_message(
@@ -81,28 +101,38 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let counterparty_encoding = Counterparty::default_encoding();
+
+        let proof_acked = counterparty_encoding
+            .encode(&payload.proof_ack)
+            .map_err(Chain::raise_error)?;
+
         let message = CosmosAckPacketMessage {
             packet: packet.clone(),
             acknowledgement: payload.ack,
             update_height,
-            proof_acked: payload.proof_ack,
+            proof_acked,
         };
 
         Ok(message.to_cosmos_message().into())
     }
 }
 
-impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>
-    for BuildCosmosPacketMessages
+impl<Chain, Counterparty, CounterpartyEncoding>
+    TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty> for BuildCosmosPacketMessages
 where
     Chain: HasMessageType
         + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
-        + CanRaiseError<Ics02Error>,
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<CounterpartyEncoding::Error>,
     Counterparty: HasTimeoutUnorderedPacketPayloadType<
             Chain,
             TimeoutUnorderedPacketPayload = TimeoutUnorderedPacketPayload<Counterparty>,
         > + HasHeightFields
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>,
+        + HasDefaultEncoding<Encoding = CounterpartyEncoding>
+        + HasCommitmentProofType,
+    CounterpartyEncoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanEncode<ViaCommitmentProof, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_timeout_unordered_packet_message(
@@ -116,11 +146,17 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let counterparty_encoding = Counterparty::default_encoding();
+
+        let proof_unreceived = counterparty_encoding
+            .encode(&payload.proof_unreceived)
+            .map_err(Chain::raise_error)?;
+
         let message = CosmosTimeoutPacketMessage {
             next_sequence_recv: packet.sequence,
             packet: packet.clone(),
             update_height,
-            proof_unreceived: payload.proof_unreceived,
+            proof_unreceived,
         };
 
         Ok(message.to_cosmos_message().into())

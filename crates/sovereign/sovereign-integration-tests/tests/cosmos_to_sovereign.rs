@@ -32,12 +32,10 @@ use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSover
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
-use hermes_sovereign_rollup_components::types::payloads::connection::SovereignInitConnectionOptions;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc::core::client::types::Height;
-use ibc::core::connection::types::version::Version;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
@@ -245,12 +243,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 dst_client_id: cosmos_client_id.clone(), // stub
             };
 
-            let init_connection_options = SovereignInitConnectionOptions {
-                delay_period: Duration::from_secs(0),
-                connection_version: Version::compatibles().into_iter().next().unwrap(),
-            };
-
-            let connection_id = sovereign_to_cosmos_relay.init_connection(&init_connection_options).await?;
+            let connection_id = sovereign_to_cosmos_relay.init_connection(&Default::default()).await?;
 
             // let connection_id = sovereign_to_cosmos_relay.bootstrap_connection(&init_connection_options).await?;
 
