@@ -44,7 +44,8 @@ where
             height,
             timestamp,
             hash: hex::decode(hash.strip_prefix("0x").unwrap()).unwrap(),
-            state_root: hex::decode(state_root.strip_prefix("0x").unwrap()).unwrap(),
+            // First 32 bytes are user hash and the last 32 bytes are kernel hash.
+            state_root: hex::decode(state_root.strip_prefix("0x").unwrap()).unwrap()[..32].to_vec(),
         })
     }
 }

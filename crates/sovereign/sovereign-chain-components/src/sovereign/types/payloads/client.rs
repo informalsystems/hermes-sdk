@@ -16,8 +16,8 @@ pub struct SovereignUpdateClientPayload {
     pub datachain_header: Vec<Header>,
     pub initial_state_height: Height,
     pub final_state_height: Height,
-    // TODO: Add updated rollup commitment root
-    // TODO: Add aggregate proof
+    pub final_state_root: Vec<u8>,
+    pub final_state_hash: Vec<u8>,
 }
 
 pub struct SovereignCreateClientOptions {

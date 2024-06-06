@@ -7,11 +7,13 @@ use eyre::{eyre, Error as ReportError};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
+use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
 use ibc::clients::tendermint::types::Header;
 use ibc::core::client::types::Height as DataChainHeight;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -41,7 +43,8 @@ where
         + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + HasDataChain
         + HasDataChainType<DataChain = DataChain>
-        + HasErrorType<Error = ReportError>,
+        + HasErrorType<Error = ReportError>
+        + CanQueryChainStatus<ChainStatus = SovereignRollupStatus>,
     Chain::DataChain: HasErrorType + HasBlockingChainHandle,
 {
     async fn build_update_client_payload(
@@ -126,12 +129,14 @@ where
             .await
             .map_err(|e| eyre!("Error creating headers from DA chain: {e:?}"))?;
 
-        // TODO: Fetch rollup commitment root using `ledger_getHead`
+        let chain_status = chain.query_chain_status().await?;
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: headers,
             initial_state_height: rollup_trusted_height,
             final_state_height: rollup_target_height,
+            final_state_root: chain_status.state_root,
+            final_state_hash: chain_status.hash,
         })
     }
 }

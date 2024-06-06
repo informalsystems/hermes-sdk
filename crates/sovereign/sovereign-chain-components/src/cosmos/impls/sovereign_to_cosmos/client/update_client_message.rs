@@ -40,8 +40,7 @@ where
                     da_header.clone(),
                     payload.initial_state_height.revision_height(),
                     payload.final_state_height.revision_height(),
-                    // FIXME: Use actual commitment root from payload
-                    vec![0; 32].try_into().unwrap(),
+                    payload.final_state_root.clone().try_into().unwrap(),
                 );
                 // Convert Sovereign header to Any
                 let any_header = Any::from(header);
