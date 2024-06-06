@@ -3405,16 +3405,16 @@
         "sovereign-sdk-src": "sovereign-sdk-src_2"
       },
       "locked": {
-        "lastModified": 1716931204,
-        "narHash": "sha256-dOdrtnEHaMXAXHHKcZYL3p6iSwnYujIodwqwxEpb4o0=",
+        "lastModified": 1717666164,
+        "narHash": "sha256-QLqygj3UY17uxlBJCm2LQibcuVwinKfqj9ZIyhRyja0=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "2ab47e1a775eba9acad79d6e2cbae502f305876e",
+        "rev": "317fe86eece0f1267f533b5f6c757064e080e63f",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
-        "ref": "ibc-rollup",
+        "ref": "soares/update-ibc-rs-20240605",
         "repo": "sov-rollup-starter",
         "type": "github"
       }

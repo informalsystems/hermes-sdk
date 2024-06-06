@@ -6,7 +6,7 @@
     flake-utils.url = github:numtide/flake-utils;
     cosmos-nix.url = github:informalsystems/cosmos.nix;
     cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
-    sovereign-nix.url = github:informalsystems/sov-rollup-starter/ibc-rollup;
+    sovereign-nix.url = github:informalsystems/sov-rollup-starter/soares/update-ibc-rs-20240605;
     sovereign-ibc-nix.url = github:informalsystems/sovereign-ibc;
     rust-overlay.url = github:oxalica/rust-overlay;
 
