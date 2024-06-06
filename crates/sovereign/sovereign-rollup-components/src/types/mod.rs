@@ -5,6 +5,7 @@ pub mod event;
 pub mod height;
 pub mod message;
 pub mod messages;
+pub mod proof;
 pub mod rollup_id;
 pub mod rpc;
 pub mod status;

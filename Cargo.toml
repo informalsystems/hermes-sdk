@@ -107,6 +107,7 @@ bech32                          = { version = "0.9.1" }
 ed25519-dalek                   = { version = "2.1.1" }
 sha2                            = { version = "0.10.8" }
 ics23                           = { version = "0.11.1" }
+jmt                             = { version = "0.9.0" }
 
 hermes-runtime-components               = { version = "0.1.0" }
 hermes-async-runtime-components         = { version = "0.1.0" }

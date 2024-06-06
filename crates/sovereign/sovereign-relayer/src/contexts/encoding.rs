@@ -12,6 +12,7 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_relayer_components::chain::traits::types::proof::ViaCommitmentProof;
 use hermes_sovereign_chain_components::encoding::components::{
     IsSovereignEncodingComponent, SovereignEncodingComponents as BaseSovereignEncodingComponents,
 };
@@ -19,6 +20,7 @@ use hermes_sovereign_rollup_components::types::client_state::{
     SovereignClientState, WrappedSovereignClientState,
 };
 use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsensusState;
+use hermes_sovereign_rollup_components::types::proof::JellyfishMerkleProof;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 
@@ -76,6 +78,7 @@ pub trait CanUseSovereignEncoding:
     + CanEncodeAndDecode<Protobuf, SovereignConsensusState>
     + CanEncodeAndDecode<Any, SovereignClientState>
     + CanEncodeAndDecode<Any, SovereignConsensusState>
+    + CanEncodeAndDecode<ViaCommitmentProof, JellyfishMerkleProof>
     + CanDecode<WasmClientState, SovereignClientState>
     + CanEncodeAndDecode<WasmConsensusState, SovereignConsensusState>
     + CanConvertBothWays<WasmClientState, Any>
