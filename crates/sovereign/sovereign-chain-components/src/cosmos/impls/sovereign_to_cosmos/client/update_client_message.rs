@@ -29,6 +29,9 @@ where
         client_id: &ClientId,
         payload: SovereignUpdateClientPayload,
     ) -> Result<Vec<CosmosMessage>, Chain::Error> {
+        // TODO: Multiple DA headers should map to a single UpdateClient message
+        // Maybe limit to a single DA header for now
+
         let messages = payload
             .datachain_header
             .into_iter()
@@ -37,7 +40,7 @@ where
                     da_header.clone(),
                     payload.initial_state_height.revision_height(),
                     payload.final_state_height.revision_height(),
-                    // Dummy Root data
+                    // FIXME: Use actual commitment root from payload
                     vec![0; 32].try_into().unwrap(),
                 );
                 // Convert Sovereign header to Any

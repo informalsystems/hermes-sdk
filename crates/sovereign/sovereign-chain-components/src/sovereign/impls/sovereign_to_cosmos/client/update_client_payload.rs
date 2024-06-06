@@ -126,6 +126,8 @@ where
             .await
             .map_err(|e| eyre!("Error creating headers from DA chain: {e:?}"))?;
 
+        // TODO: Fetch rollup commitment root using `ledger_getHead`
+
         Ok(SovereignUpdateClientPayload {
             datachain_header: headers,
             initial_state_height: rollup_trusted_height,

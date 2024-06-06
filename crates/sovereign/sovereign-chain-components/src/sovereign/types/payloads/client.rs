@@ -8,7 +8,6 @@ use sov_celestia_client::types::sovereign::SovereignClientParams;
 pub struct SovereignCreateClientPayload {
     pub client_state: SovereignClientState,
     pub consensus_state: SovTmConsensusState,
-    // TODO: Add rollup payloads
     pub code_hash: Vec<u8>,
     pub latest_height: Height,
 }
@@ -17,7 +16,8 @@ pub struct SovereignUpdateClientPayload {
     pub datachain_header: Vec<Header>,
     pub initial_state_height: Height,
     pub final_state_height: Height,
-    // TODO: Add rollup payloads
+    // TODO: Add updated rollup commitment root
+    // TODO: Add aggregate proof
 }
 
 pub struct SovereignCreateClientOptions {

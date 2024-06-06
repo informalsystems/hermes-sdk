@@ -164,6 +164,8 @@ where
             proof_consensus_height,
         };
 
+        println!("building CosmosConnectionOpenTryMessage: {:?}", message);
+
         Ok(message.to_cosmos_message().into())
     }
 }

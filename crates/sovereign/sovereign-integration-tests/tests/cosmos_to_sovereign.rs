@@ -12,6 +12,7 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
+use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
@@ -22,6 +23,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::C
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
+use hermes_relayer_components::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -258,6 +260,14 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             ).await?;
 
             println!("connection end: {:?}, proof size at height {}: {}", connection_end, height, connection_end_proofs.len());
+
+            let sov_prefix = sovereign_chain.ibc_commitment_prefix();
+
+            println!("sov_prefix: {:?}", sov_prefix);
+
+            let connection_id_b = sovereign_to_cosmos_relay.relay_connection_open_try(&connection_id).await?;
+
+            println!("connection id on cosmos: {:?}", connection_id_b);
         }
 
         <Result<(), Error>>::Ok(())
