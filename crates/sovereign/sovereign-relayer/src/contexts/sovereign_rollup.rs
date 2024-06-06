@@ -102,7 +102,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    HasHeightFields, HeightFieldComponent, HeightTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetterComponent, HasCounterpartyMessageHeight, IbcChainTypesComponent,
 };
@@ -251,6 +253,7 @@ delegate_components! {
             ProvideSovereignEncoding,
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
@@ -421,6 +424,7 @@ impl ProvideMutexForNonceAllocation<SovereignRollup> for SovereignRollupComponen
 pub trait CanUseSovereignRollup:
     CanQueryBalance
     + HasChainId
+    + HasHeightFields
     + CanEncodeTx
     + CanEstimateTxFee
     + HasFeeForSimulation
