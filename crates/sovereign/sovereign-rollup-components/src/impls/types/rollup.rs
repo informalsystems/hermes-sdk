@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
+use hermes_relayer_components::chain::impls::types::proof::ProvideCommitmentProofBytes;
 use hermes_relayer_components::chain::impls::types::receipt::ProvideBoolPacketReceipt;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
@@ -104,13 +105,14 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             CommitmentPrefixTypeComponent,
-            CommitmentProofTypeComponent,
             PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
         ]:
             ProvideCosmosChainTypes,
+        CommitmentProofTypeComponent:
+            ProvideCommitmentProofBytes,
         PacketReceiptTypeComponent:
             ProvideBoolPacketReceipt,
     }
