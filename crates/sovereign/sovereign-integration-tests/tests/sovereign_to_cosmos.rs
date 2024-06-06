@@ -370,9 +370,9 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             // use ibc::core::connection::types::State;
             // use ibc::clients::tendermint::types::ConsensusState;
             use ibc::core::commitment_types::commitment::CommitmentPrefix;
-            use ibc::core::commitment_types::commitment::CommitmentProofBytes;
+            // use ibc::core::commitment_types::commitment::CommitmentProofBytes;
             use ibc::core::commitment_types::merkle::apply_prefix;
-            use ibc::core::commitment_types::merkle::MerkleProof;
+            // use ibc::core::commitment_types::merkle::MerkleProof;
             use ibc::core::commitment_types::specs::ProofSpecs;
             use ibc::core::commitment_types::proto::ics23::HostFunctionsManager;
             use ibc::core::host::types::identifiers::ConnectionId;
@@ -397,12 +397,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
             let expected_conn_end_on_a = connection_try_payload.connection_end.clone();
 
-            let conn_end_proof_bytes = connection_try_payload.proof_init.clone();
-
-            let commitment_proof_bytes =
-                CommitmentProofBytes::try_from(conn_end_proof_bytes.to_vec()).unwrap();
-
-            let conn_end_proof = MerkleProof::try_from(&commitment_proof_bytes).unwrap();
+            info!("expected connection end on A: {:?}", expected_conn_end_on_a);
 
             let prefix = CommitmentPrefix::try_from(connection_try_payload.commitment_prefix.clone().to_vec()).unwrap();
 
@@ -410,7 +405,8 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
             let merkle_path = apply_prefix(&prefix, vec![path.to_string()]);
 
-            conn_end_proof
+            connection_try_payload
+                .proof_init
                 .verify_membership::<HostFunctionsManager>(
                     &ProofSpecs::cosmos(),
                     CommitmentRoot::from_bytes(app_hash.as_ref()).into(),
