@@ -4,3 +4,5 @@ use cgp_core::prelude::*;
 pub trait HasCommitmentProofType: Async {
     type CommitmentProof: Async;
 }
+
+pub struct ViaCommitmentProof;

@@ -1,4 +1,6 @@
 use cgp_core::prelude::Async;
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::chain::traits::types::channel::ProvideInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::create_client::{
@@ -9,8 +11,6 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use hermes_sovereign_rollup_components::types::payloads::channel::SovereignInitChannelOptions;
-use hermes_sovereign_rollup_components::types::payloads::connection::SovereignInitConnectionOptions;
 
 use crate::sovereign::types::payloads::client::{
     SovereignCreateClientOptions, SovereignCreateClientPayload, SovereignUpdateClientPayload,
@@ -59,7 +59,7 @@ impl<Chain, Counterparty> ProvideInitConnectionOptionsType<Chain, Counterparty>
 where
     Chain: Async,
 {
-    type InitConnectionOptions = SovereignInitConnectionOptions;
+    type InitConnectionOptions = CosmosInitConnectionOptions;
 }
 
 impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
@@ -67,7 +67,7 @@ impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
 where
     Chain: Async,
 {
-    type InitChannelOptions = SovereignInitChannelOptions;
+    type InitChannelOptions = CosmosInitChannelOptions;
 }
 
 impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>

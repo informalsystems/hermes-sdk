@@ -2,6 +2,7 @@ use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent, ProvideInner};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
@@ -97,7 +98,6 @@ use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsens
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
-use hermes_sovereign_rollup_components::types::payloads::channel::SovereignInitChannelOptions;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -210,7 +210,7 @@ pub trait CanUseSovereignChain:
     + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
     + HasConnectionEndType<CosmosChain, ConnectionEnd = ConnectionEnd>
     + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
-    + HasInitChannelOptionsType<CosmosChain, InitChannelOptions = SovereignInitChannelOptions>
+    + HasInitChannelOptionsType<CosmosChain, InitChannelOptions = CosmosInitChannelOptions>
     + HasChannelOpenTryPayloadType<
         CosmosChain,
         ChannelOpenTryPayload = ChannelOpenTryPayload<SovereignChain, CosmosChain>,

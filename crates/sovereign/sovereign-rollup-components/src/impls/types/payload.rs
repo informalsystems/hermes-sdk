@@ -1,13 +1,12 @@
 use cgp_core::prelude::Async;
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_relayer_components::chain::traits::types::channel::ProvideInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientMessageOptionsType, ProvideCreateClientPayloadOptionsType,
 };
 use ibc_relayer::chain::client::ClientSettings;
-
-use crate::types::payloads::channel::SovereignInitChannelOptions;
-use crate::types::payloads::connection::SovereignInitConnectionOptions;
 
 pub struct ProvideSovereignRollupPayloadTypes;
 
@@ -32,7 +31,7 @@ impl<Chain, Counterparty> ProvideInitConnectionOptionsType<Chain, Counterparty>
 where
     Chain: Async,
 {
-    type InitConnectionOptions = SovereignInitConnectionOptions;
+    type InitConnectionOptions = CosmosInitConnectionOptions;
 }
 
 impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
@@ -40,5 +39,5 @@ impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
 where
     Chain: Async,
 {
-    type InitChannelOptions = SovereignInitChannelOptions;
+    type InitChannelOptions = CosmosInitChannelOptions;
 }
