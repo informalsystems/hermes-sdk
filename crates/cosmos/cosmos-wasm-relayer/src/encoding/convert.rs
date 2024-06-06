@@ -6,12 +6,14 @@ use hermes_wasm_client_components::types::consensus_state::{
     DecodeViaWasmConsensusState, EncodeViaWasmConsensusState, ProtoWasmConsensusState,
     WasmConsensusState,
 };
+use ibc::core::commitment_types::merkle::MerkleProof;
 use prost_types::Any;
 
 use hermes_cosmos_chain_components::types::tendermint::{
     ProtoTendermintClientState, ProtoTendermintConsensusState, TendermintClientState,
     TendermintConsensusState,
 };
+use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;
 
 use crate::types::client_state::{
     EncodeWrappedTendermintClientState, WrappedTendermintClientState,
@@ -26,6 +28,8 @@ delegate_components! {
             (ProtoTendermintClientState, TendermintClientState),
             (TendermintConsensusState, ProtoTendermintConsensusState),
             (ProtoTendermintConsensusState, TendermintConsensusState),
+            (MerkleProof, ProtoMerkleProof),
+            (ProtoMerkleProof, MerkleProof),
             (TendermintClientState, Any),
             (Any, TendermintClientState),
         ]:

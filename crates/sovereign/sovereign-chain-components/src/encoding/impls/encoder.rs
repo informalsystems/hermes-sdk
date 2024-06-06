@@ -27,6 +27,7 @@ pub struct SovereignEncoderComponents;
 delegate_components! {
     SovereignEncoderComponents {
         [
+            (Protobuf, Vec<u8>),
             (Any, TendermintClientState),
             (Protobuf, TendermintClientState),
             (Protobuf, ProtoTendermintClientState),

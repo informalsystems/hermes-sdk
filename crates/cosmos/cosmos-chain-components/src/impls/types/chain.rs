@@ -56,6 +56,7 @@ delegate_components! {
             ProvideCommitmentPrefixBytes,
         CommitmentProofTypeComponent:
             ProvideCommitmentProofBytes,
+            // ProvideMerkleProofType,
         PacketCommitmentTypeComponent:
             ProvideBytesPacketCommitment,
         AcknowledgementTypeComponent:

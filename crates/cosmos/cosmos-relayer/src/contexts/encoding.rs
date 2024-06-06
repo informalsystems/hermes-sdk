@@ -68,6 +68,7 @@ where
 
 pub trait CheckCosmosEncoding:
     HasEncodedType<Encoded = Vec<u8>>
+    + CanEncodeAndDecode<Protobuf, Vec<u8>>
     + CanEncodeAndDecode<Protobuf, TendermintClientState>
     + CanEncodeAndDecode<Protobuf, TendermintConsensusState>
     + CanEncodeAndDecode<Protobuf, MerkleProof>

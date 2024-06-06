@@ -6,6 +6,8 @@ use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, W
 use hermes_wasm_client_components::types::consensus_state::{
     ProtoWasmConsensusState, WasmConsensusState,
 };
+use ibc::core::commitment_types::merkle::MerkleProof;
+use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;
 use prost_types::Any;
 
 use hermes_cosmos_chain_components::types::tendermint::{
@@ -18,12 +20,19 @@ pub struct WasmCosmosEncoderComponents;
 delegate_components! {
     WasmCosmosEncoderComponents {
         [
+            (Protobuf, Vec<u8>),
+
             (Any, TendermintClientState),
             (Protobuf, TendermintClientState),
             (Protobuf, ProtoTendermintClientState),
+
             (Any, TendermintConsensusState),
             (Protobuf,TendermintConsensusState),
             (Protobuf, ProtoTendermintConsensusState),
+
+            (Protobuf, MerkleProof),
+            (Protobuf, ProtoMerkleProof),
+
             (Protobuf, Any),
         ]:
             CosmosEncodingComponents,
