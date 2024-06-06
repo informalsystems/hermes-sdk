@@ -1,13 +1,6 @@
 use cgp_core::CanRaiseError;
-use hermes_encoding_components::traits::decoder::CanDecode;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
-use hermes_encoding_components::traits::encoder::CanEncode;
-use hermes_encoding_components::traits::has_encoding::HasEncoding;
-use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::proof::{
-    HasCommitmentProofType, ViaCommitmentProof,
-};
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::proofs::ProofError;
@@ -28,22 +21,17 @@ pub struct AbciQueryError {
     pub response: AbciQuery,
 }
 
-impl<Chain, Encoding> AbciQuerier<Chain> for QueryAbci
+impl<Chain> AbciQuerier<Chain> for QueryAbci
 where
     Chain: HasRpcClient
         + HasHeightType
-        + HasEncoding<Encoding = Encoding>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasCommitmentProofType<CommitmentProof = MerkleProof>
         + CanRaiseError<RpcError>
         + CanRaiseError<AbciQueryError>
         + CanRaiseError<Ics23Error>
         + CanRaiseError<ProofError>
         + CanRaiseError<DecodeError>
-        + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,
-    Encoding: CanDecode<ViaCommitmentProof, Chain::CommitmentProof>
-        + CanEncode<Protobuf, MerkleProof>
-        + HasEncodedType<Encoded = Vec<u8>>,
     Chain::Height: Clone + Into<TendermintHeight>,
 {
     async fn query_abci(
@@ -97,12 +85,7 @@ where
 
         let proof = convert_tm_to_ics_merkle_proof(&raw_proof).map_err(Chain::raise_error)?;
 
-        let proof_bytes = chain
-            .encoding()
-            .encode(&proof)
-            .map_err(Chain::raise_error)?;
-
-        Ok((response.value, proof_bytes))
+        Ok((response.value, proof))
     }
 }
 
