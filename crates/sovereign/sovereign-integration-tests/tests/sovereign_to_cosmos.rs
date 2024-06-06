@@ -40,6 +40,8 @@ use hermes_sovereign_chain_components::sovereign::types::payloads::client::Sover
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
+use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -53,6 +55,8 @@ use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics04_channel::channel::Ordering;
 use ibc_relayer_types::core::ics04_channel::version::Version as ChannelVersion;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, PortId};
+use jsonrpsee::core::client::ClientT;
+use jsonrpsee::core::params::ArrayParams;
 use sha2::{Digest, Sha256};
 use sov_celestia_client::types::client_state::test_util::TendermintParamsConfig;
 use sov_celestia_client::types::sovereign::SovereignParamsConfig;
@@ -338,6 +342,12 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         connection_try_payload.update_height = cosmos_client_state.latest_height;
         connection_try_payload.commitment_prefix.clone_from(dbg!(<SovereignChain as HasIbcCommitmentPrefix>::ibc_commitment_prefix(&sovereign_chain)));
 
+        let sov_ibc_commitment_prefix: Vec<u8>= <SovereignRollup as HasJsonRpcClient>::json_rpc_client(&sovereign_chain.rollup)
+            .request("ibc_commitmentPrefix", ArrayParams::new())
+            .await.unwrap();
+
+        info!("sov commitment prefix: {:?}", String::from_utf8(sov_ibc_commitment_prefix).unwrap());
+
         info!("Connection Try payload done");
         info!("{:?}", connection_try_payload.commitment_prefix);
         info!("{:?}", connection_try_payload.client_state);
@@ -347,7 +357,6 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         info!("{:?}", connection_try_payload.proof_client);
         info!("{:?}", connection_try_payload.proof_consensus);
         info!("{:?}", connection_try_payload.proof_consensus_height);
-
 
         {
             // use std::time::Duration;
