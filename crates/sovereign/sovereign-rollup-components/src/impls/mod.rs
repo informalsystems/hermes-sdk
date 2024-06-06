@@ -1,3 +1,4 @@
+pub mod commitment_prefix;
 pub mod cosmos_to_sovereign;
 pub mod errors;
 pub mod events;
