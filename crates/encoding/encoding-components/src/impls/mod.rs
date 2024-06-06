@@ -5,3 +5,4 @@ pub mod delegate;
 pub mod encoded;
 pub mod return_encoded;
 pub mod schema;
+pub mod use_strategy;

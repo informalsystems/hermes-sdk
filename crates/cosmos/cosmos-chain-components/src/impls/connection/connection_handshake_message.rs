@@ -3,7 +3,6 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEncoding};
-use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -18,6 +17,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::traits::types::proof::ViaCommitmentProof;
 use hermes_relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
@@ -104,8 +104,8 @@ where
             ConnectionOpenTryPayload = ConnectionOpenTryPayload<Counterparty, Chain>,
         >,
     Encoding: CanConvert<Chain::ClientState, Any>,
-    CounterpartyEncoding:
-        HasEncodedType<Encoded = Vec<u8>> + CanEncode<Protobuf, Counterparty::CommitmentProof>,
+    CounterpartyEncoding: HasEncodedType<Encoded = Vec<u8>>
+        + CanEncode<ViaCommitmentProof, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_connection_open_try_message(
