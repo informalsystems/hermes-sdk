@@ -1,5 +1,6 @@
 use cgp_core::{CanRaiseError, HasErrorType};
 use hermes_cosmos_chain_components::traits::message::ToCosmosMessage;
+use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_chain_components::types::messages::connection::open_ack::CosmosConnectionOpenAckMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_confirm::CosmosConnectionOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::connection::open_init::CosmosConnectionOpenInitMessage;
@@ -34,7 +35,6 @@ use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use crate::types::client_state::WrappedSovereignClientState;
 use crate::types::height::RollupHeight;
 use crate::types::message::SovereignMessage;
-use crate::types::payloads::connection::SovereignInitConnectionOptions;
 
 pub struct BuildCosmosConnectionHandshakeMessageOnSovereign;
 
@@ -43,13 +43,13 @@ impl<Chain, Counterparty> ConnectionOpenInitMessageBuilder<Chain, Counterparty>
 where
     Chain: HasInitConnectionOptionsType<
             Counterparty,
-            InitConnectionOptions = SovereignInitConnectionOptions,
+            InitConnectionOptions = CosmosInitConnectionOptions,
         > + HasIbcChainTypes<
             Counterparty,
             Message = SovereignMessage,
             ClientId = ClientId,
             ConnectionId = ConnectionId,
-        > + HasErrorType,
+        > + CanRaiseError<&'static str>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
         + HasConnectionOpenInitPayloadType<
             Chain,
@@ -60,22 +60,22 @@ where
         _chain: &Chain,
         client_id: &ClientId,
         counterparty_client_id: &ClientId,
-        init_connection_options: &SovereignInitConnectionOptions,
+        init_connection_options: &CosmosInitConnectionOptions,
         counterparty_payload: ConnectionOpenInitPayload<Counterparty>,
     ) -> Result<SovereignMessage, Chain::Error> {
         let commitment_prefix = counterparty_payload.commitment_prefix;
 
-        let SovereignInitConnectionOptions {
-            delay_period,
-            connection_version,
-        } = init_connection_options;
+        let version = Version::compatibles()
+            .into_iter()
+            .next()
+            .ok_or_else(|| Chain::raise_error("expect default version to be present"))?;
 
         let msg = CosmosConnectionOpenInitMessage {
             client_id: client_id.to_owned(),
             counterparty_client_id: counterparty_client_id.to_owned(),
             counterparty_commitment_prefix: commitment_prefix,
-            version: connection_version.to_owned(),
-            delay_period: delay_period.to_owned(),
+            version,
+            delay_period: init_connection_options.delay_period.to_owned(),
         };
 
         let cosmos_msg = msg.to_cosmos_message();

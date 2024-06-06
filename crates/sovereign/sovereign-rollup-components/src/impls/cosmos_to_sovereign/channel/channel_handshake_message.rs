@@ -1,5 +1,6 @@
 use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::methods::encode::encode_to_any;
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::ChannelOpenInitMessageBuilder;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -12,14 +13,13 @@ use ibc_relayer_types::signer::Signer;
 
 use crate::types::message::SovereignMessage;
 use crate::types::messages::ibc::IbcMessageWithHeight;
-use crate::types::payloads::channel::SovereignInitChannelOptions;
 
 pub struct BuildChannelOpenInitMessageOnSovereign;
 
 impl<Rollup, Counterparty> ChannelOpenInitMessageBuilder<Rollup, Counterparty>
     for BuildChannelOpenInitMessageOnSovereign
 where
-    Rollup: HasInitChannelOptionsType<Counterparty, InitChannelOptions = SovereignInitChannelOptions>
+    Rollup: HasInitChannelOptionsType<Counterparty, InitChannelOptions = CosmosInitChannelOptions>
         + HasIbcChainTypes<
             Counterparty,
             Message = SovereignMessage,
@@ -32,7 +32,7 @@ where
         _rollup: &Rollup,
         port_id: &Rollup::PortId,
         counterparty_port_id: &Counterparty::PortId,
-        init_channel_options: &SovereignInitChannelOptions,
+        init_channel_options: &CosmosInitChannelOptions,
     ) -> Result<SovereignMessage, Rollup::Error> {
         let port_id = port_id.clone();
         let ordering = init_channel_options.ordering;
