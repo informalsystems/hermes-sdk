@@ -1,10 +1,14 @@
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerier, ChannelEndWithProofsQuerier,
 };
 use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::traits::types::proof::{
+    HasCommitmentProofType, ViaCommitmentProof,
+};
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_query::core::channel::QueryChannelResponse;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
@@ -52,7 +56,7 @@ where
     }
 }
 
-impl<Rollup, Counterparty> ChannelEndWithProofsQuerier<Rollup, Counterparty>
+impl<Rollup, Counterparty, Encoding> ChannelEndWithProofsQuerier<Rollup, Counterparty>
     for QueryChannelEndOnSovereign
 where
     Rollup: HasChannelEndType<Counterparty, ChannelEnd = ChannelEnd>
@@ -62,9 +66,12 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
         > + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasEncoding<Encoding = Encoding>
         + HasJsonRpcClient
+        + CanRaiseError<Encoding::Error>
         + CanRaiseError<ClientError>,
     Rollup::JsonRpcClient: ClientT,
+    Encoding: CanDecode<ViaCommitmentProof, Rollup::CommitmentProof>,
 {
     async fn query_channel_end_with_proofs(
         rollup: &Rollup,
