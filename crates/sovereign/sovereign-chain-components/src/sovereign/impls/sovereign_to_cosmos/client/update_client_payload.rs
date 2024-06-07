@@ -11,6 +11,9 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_sovereign_rollup_components::impls::queries::chain_status::{
+    query_chain_status_at_height, SlotResponse,
+};
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
@@ -129,7 +132,8 @@ where
             .await
             .map_err(|e| eyre!("Error creating headers from DA chain: {e:?}"))?;
 
-        let chain_status = chain.query_chain_status().await?;
+        // TODO(rano): figure out how to implement the following function.
+        let chain_status = query_chain_status_at_height(chain, target_height).await?;
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: headers,
