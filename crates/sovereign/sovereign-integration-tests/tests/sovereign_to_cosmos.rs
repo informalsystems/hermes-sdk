@@ -241,7 +241,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         info!("client ID of Cosmos on Sovereign: {:?}", sovereign_client_id);
 
-        let connection_init_payload = <SovereignChain as CanBuildConnectionOpenInitPayload<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
+        let mut connection_init_payload = <SovereignChain as CanBuildConnectionOpenInitPayload<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
+
+        connection_init_payload.commitment_prefix.clone_from(&b"sov_ibc/Ibc/".to_vec());
+
+        info!("Connection init commitment prefix: {:?}", connection_init_payload.commitment_prefix);
 
         let options = CosmosInitConnectionOptions {
             delay_period: Duration::from_secs(0),
@@ -330,6 +334,21 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         let consensus_state_at_sovereign = <SovereignChain as CanQueryConsensusState<CosmosChain>>::query_consensus_state(&sovereign_chain, &sovereign_client_id, &cosmos_client_state.latest_height, &sovereign_latest_height).await?;
         info!("Consensus state at Sovereign: {:?}", consensus_state_at_sovereign);
+
+        let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
+
+        info!("Client state at Cosmos: {:?}", sovereign_client_state);
+
+        let sovereign_client_state_latest_height = sovereign_client_state.sovereign_client_state.sovereign_params.latest_height;
+        let rollup_client_height = RollupHeight { slot_number: sovereign_client_state_latest_height.revision_height() };
+
+        info!("Latest height of Sovereign Client at Cosmos: {:?}", sovereign_client_state_latest_height);
+
+        let cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
+
+        let sovereign_consensus_state = <CosmosChain as CanQueryConsensusState<SovereignChain>>::query_consensus_state(cosmos_chain, &wasm_client_id, &rollup_client_height, &cosmos_height).await?;
+
+        info!("Consensus state at Cosmos: {:?}", sovereign_consensus_state);
 
         // cosmos_client_state.latest_height - 2 doesn't have the connection end
         // cosmos_client_state.latest_height + 4 is in the future
