@@ -90,6 +90,9 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
+        // FIXME: see below comment.
+        assert!(number + 1 == height.slot_number);
+
         let height = RollupHeight {
             // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
             slot_number: number + 1,
