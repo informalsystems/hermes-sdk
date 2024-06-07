@@ -46,3 +46,12 @@ where
         Ok(height.clone())
     }
 }
+
+#[derive_component(ChainStatusAtHeightQuerierComponent, ChainStatusAtHeightQuerier<Chain>)]
+#[async_trait]
+pub trait CanQueryChainStatusAtHeight: HasHeightType + HasChainStatusType + HasErrorType {
+    async fn query_chain_status_at_height(
+        &self,
+        height: &Self::Height,
+    ) -> Result<Self::ChainStatus, Self::Error>;
+}
