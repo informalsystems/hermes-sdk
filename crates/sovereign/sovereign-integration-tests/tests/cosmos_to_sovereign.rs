@@ -13,7 +13,9 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::queries::chain_status::{
+    CanQueryChainHeight, CanQueryChainStatus, CanQueryChainStatusAtHeight,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
@@ -265,8 +267,12 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("sov_prefix: {:?}", sov_prefix);
 
+
+            let chain_status = <SovereignRollup as CanQueryChainStatus>::query_chain_status(rollup).await?;
+            println!("chain status: {:?}", chain_status); // this prints the `user_hash` that is produced in proof verification.
+
             // currently this fails as, the proofs are passed from previous height.
-            // i.e., the generated root_hash from key, value and proof matches the root_hash from previous height.
+            // i.e., the generated hash from key, value and proof matches the `user_hash` from previous height.
             let connection_id_b = sovereign_to_cosmos_relay.relay_connection_open_try(&connection_id).await?;
 
             println!("connection id on cosmos: {:?}", connection_id_b);
