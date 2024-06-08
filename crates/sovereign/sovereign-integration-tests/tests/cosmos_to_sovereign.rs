@@ -265,6 +265,8 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("sov_prefix: {:?}", sov_prefix);
 
+            // currently this fails as, the proofs are passed from previous height.
+            // i.e., the generated root_hash from key, value and proof matches the root_hash from previous height.
             let connection_id_b = sovereign_to_cosmos_relay.relay_connection_open_try(&connection_id).await?;
 
             println!("connection id on cosmos: {:?}", connection_id_b);
