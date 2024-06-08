@@ -82,6 +82,7 @@ where
     ) -> Result<SovereignRollupStatus, Rollup::Error> {
         let params = {
             let mut params = ArrayParams::new();
+            // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
             params.insert(height.slot_number - 1).unwrap();
             params
         };
@@ -96,13 +97,12 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
-        // FIXME: see below comment.
-        assert!(number == height.slot_number - 1);
-
-        let height = RollupHeight {
-            // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
-            slot_number: height.slot_number,
-        };
+        assert_eq!(
+            height,
+            &RollupHeight {
+                slot_number: number + 1,
+            }
+        );
 
         // Use the relayer's local timestamp for now, as it is currently not possible
         // to query the remote time from the rollup.
@@ -112,7 +112,7 @@ where
         let root_hash = hex::decode(hash.strip_prefix("0x").unwrap()).unwrap();
 
         Ok(SovereignRollupStatus {
-            height,
+            height: height.clone(),
             timestamp,
             root_hash,
             // First 32 bytes are user hash and the last 32 bytes are kernel hash.

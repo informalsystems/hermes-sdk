@@ -133,7 +133,12 @@ where
 
         let chain_status = chain.query_chain_status_at_height(target_height).await?;
 
-        println!("chain_status: {:?}", chain_status);
+        assert_eq!(&chain_status.height, target_height);
+
+        println!(
+            "update client payload: rollup user hash at {}: {:?}",
+            target_height, chain_status.user_hash
+        );
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: headers,

@@ -14,7 +14,7 @@ use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainHeight, CanQueryChainStatus, CanQueryChainStatusAtHeight,
+    CanQueryChainHeight, CanQueryChainStatusAtHeight,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
@@ -267,12 +267,13 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             println!("sov_prefix: {:?}", sov_prefix);
 
+            let latest_rollup_height = <SovereignRollup as CanQueryChainHeight>::query_chain_height(rollup).await?;
+            let rollup_status_at_height = <SovereignRollup as CanQueryChainStatusAtHeight>::query_chain_status_at_height(rollup, &latest_rollup_height).await?;
+            // currently, this prints the `user_hash` that is produced in proof verification.
+            println!("rollup user hash at {}: {:?}", latest_rollup_height, rollup_status_at_height.user_hash);
 
-            let chain_status = <SovereignRollup as CanQueryChainStatus>::query_chain_status(rollup).await?;
-            println!("chain status: {:?}", chain_status); // this prints the `user_hash` that is produced in proof verification.
-
-            // currently this fails as, the proofs are passed from previous height.
-            // i.e., the generated hash from key, value and proof matches the `user_hash` from previous height.
+            // currently this fails as, the proofs are fetched from previous height (`rollup_status_at_height` from previous lines) - even though correct height is passed .
+            // i.e., the generated root hash from (key, value, proof) matches the `user_hash` at `rollup_status_at_height`.
             let connection_id_b = sovereign_to_cosmos_relay.relay_connection_open_try(&connection_id).await?;
 
             println!("connection id on cosmos: {:?}", connection_id_b);
