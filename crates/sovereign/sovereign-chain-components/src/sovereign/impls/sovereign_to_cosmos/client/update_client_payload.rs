@@ -133,12 +133,15 @@ where
 
         let chain_status = chain.query_chain_status_at_height(target_height).await?;
 
+        println!("chain_status: {:?}", chain_status);
+
         Ok(SovereignUpdateClientPayload {
             datachain_header: headers,
             initial_state_height: rollup_trusted_height,
             final_state_height: rollup_target_height,
-            final_state_root: chain_status.state_root,
-            final_state_hash: chain_status.hash,
+            final_user_hash: chain_status.user_hash,
+            final_kernel_hash: chain_status.kernel_hash,
+            final_root_hash: chain_status.root_hash,
         })
     }
 }

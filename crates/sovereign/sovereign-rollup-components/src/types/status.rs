@@ -11,6 +11,7 @@ pub struct SovereignRollupStatus {
 
     pub timestamp: Timestamp,
 
-    pub hash: Vec<u8>,
-    pub state_root: Vec<u8>,
+    pub root_hash: Vec<u8>,
+    pub user_hash: Vec<u8>,
+    pub kernel_hash: Vec<u8>,
 }
