@@ -1,3 +1,4 @@
+use crate::impls::queries::chain_status::QuerySovereignRollupStatusAtHeight;
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromSovereign;
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
@@ -25,10 +26,12 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::C
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusAtHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
 };
+
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
     RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
@@ -241,6 +244,8 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
         ChainStatusQuerierComponent:
             QuerySovereignRollupStatus,
+        ChainStatusAtHeightQuerierComponent:
+            QuerySovereignRollupStatusAtHeight,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         [

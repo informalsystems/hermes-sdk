@@ -62,7 +62,9 @@ pub struct SlotResponse {
     // pub finality_status: FinalityStatus,
 }
 
-impl<Rollup> ChainStatusAtHeightQuerier<Rollup> for QuerySovereignRollupStatus
+pub struct QuerySovereignRollupStatusAtHeight;
+
+impl<Rollup> ChainStatusAtHeightQuerier<Rollup> for QuerySovereignRollupStatusAtHeight
 where
     Rollup: HasChainStatusType<ChainStatus = SovereignRollupStatus>
         + HasJsonRpcClient

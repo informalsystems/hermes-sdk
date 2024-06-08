@@ -7,9 +7,7 @@ use eyre::{eyre, Error as ReportError};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainStatus, CanQueryChainStatusAtHeight,
-};
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatusAtHeight;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
@@ -29,6 +27,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
 use sov_celestia_client::types::client_state::TendermintClientParams;
 
 use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
+use crate::sovereign::traits::chain::rollup::HasRollup;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
 /**
@@ -44,9 +43,9 @@ where
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
         + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
         + HasDataChain
+        + HasRollup
         + HasDataChainType<DataChain = DataChain>
         + HasErrorType<Error = ReportError>
-        + CanQueryChainStatus<ChainStatus = SovereignRollupStatus>
         + CanQueryChainStatusAtHeight<ChainStatus = SovereignRollupStatus>,
     Chain::DataChain: HasErrorType + HasBlockingChainHandle,
 {
