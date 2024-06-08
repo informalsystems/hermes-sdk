@@ -38,7 +38,8 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainStatus, ChainStatusQuerierComponent,
+    CanQueryChainStatus, CanQueryChainStatusAtHeight, ChainStatusAtHeightQuerierComponent,
+    ChainStatusQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
@@ -323,6 +324,7 @@ delegate_components! {
             UpdateClientMessageBuilderComponent,
 
             ChainStatusQuerierComponent,
+            ChainStatusAtHeightQuerierComponent,
 
             RawClientStateTypeComponent,
             RawClientStateQuerierComponent,
@@ -441,6 +443,7 @@ pub trait CanUseSovereignRollup:
     + CanAssertEventualAmount
     + HasLogger
     + CanQueryChainStatus
+    + CanQueryChainStatusAtHeight
     + HasEncoding<Encoding = SovereignEncoding>
     + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>

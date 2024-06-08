@@ -23,7 +23,7 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainHeight, CanQueryChainStatus,
+    CanQueryChainHeight, CanQueryChainStatus, CanQueryChainStatusAtHeight,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
@@ -278,9 +278,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         // info!("ConnectionTry event at Sovereign: {:#?}", connection_try_event);
 
         {
-            let chain_status = <SovereignChain as CanQueryChainStatus>::query_chain_status_at_height(&sovereign_chain, rollup_height).await?;
+            let latest_rollup_height = <SovereignChain as CanQueryChainHeight>::query_chain_height(&sovereign_chain).await?;
 
-            info!("Chain status at height {rollup_height}: {chain_status:#?}", chain_status);
+            let chain_status = <SovereignChain as CanQueryChainStatusAtHeight>::query_chain_status_at_height(&sovereign_chain, &latest_rollup_height).await?;
+
+            info!("Chain status at height {latest_rollup_height}: {chain_status:#?}");
 
             let latest_chain_status = <SovereignChain as CanQueryChainStatus>::query_chain_status(&sovereign_chain).await?;
 

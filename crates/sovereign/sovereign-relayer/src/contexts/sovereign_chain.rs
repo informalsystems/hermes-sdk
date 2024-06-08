@@ -1,5 +1,5 @@
+use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent, ProvideInner};
-use cgp_core::{prelude::*, CanRaiseError};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
@@ -38,9 +38,6 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::C
 use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, CanQueryChainStatusAtHeight,
 };
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    ChainStatusAtHeightQuerier, ChainStatusAtHeightQuerierComponent,
-};
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
 };
@@ -75,7 +72,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent, HasCreateClientPayloadOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::height::{
-    CanIncrementHeight, HasHeightFields, HasHeightType,
+    CanIncrementHeight, HasHeightFields,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
@@ -84,7 +81,6 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 };
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_relayer_components::chain::types::payloads::channel::ChannelOpenTryPayload;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -97,20 +93,16 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
     DataChainGetter, HasDataChain, ProvideDataChainType,
 };
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
-    HasRollup, HasRollupType, ProvideRollupType, RollupGetter,
+    ProvideRollupType, RollupGetter,
 };
-use hermes_sovereign_rollup_components::impls::queries::chain_status::QuerySovereignRollupStatusAtHeight;
-use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsensusState;
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
-use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use jsonrpsee::core::ClientError;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
 use crate::contexts::logger::ProvideSovereignLogger;
@@ -214,6 +206,7 @@ pub trait CanUseSovereignChain:
     + CanIncrementHeight
     + CanSendMessages
     + CanQueryChainStatus
+    + CanQueryChainStatusAtHeight
     + CanWaitChainReachHeight
     + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
@@ -225,7 +218,6 @@ pub trait CanUseSovereignChain:
         CosmosChain,
         ChannelOpenTryPayload = ChannelOpenTryPayload<SovereignChain, CosmosChain>,
     > + CanBuildUpdateClientPayload<CosmosChain>
-    + CanQueryChainStatusAtHeight // TODO(rano): this doesn't satisfy
     + HasEncoding<Encoding = SovereignEncoding>
     + CanBuildCreateClientMessage<CosmosChain>
     + HasCreateClientPayloadOptionsType<CosmosChain>
