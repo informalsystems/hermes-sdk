@@ -33,8 +33,13 @@ where
     ) -> Result<Rollup::ConnectionEnd, Rollup::Error> {
         let request = Request {
             connection_id: &connection_id.to_string(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number + 2,
+            })
+                .into(),
         };
+
+        std::thread::sleep(std::time::Duration::from_secs(2));
 
         let response: QueryConnectionResponse = rollup
             .json_rpc_client()
@@ -63,8 +68,13 @@ where
     ) -> Result<(Rollup::ConnectionEnd, Vec<u8>), Rollup::Error> {
         let request = Request {
             connection_id: &connection_id.to_string(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number + 2,
+            })
+                .into(),
         };
+
+        std::thread::sleep(std::time::Duration::from_secs(2));
 
         let response: QueryConnectionResponse = rollup
             .json_rpc_client()

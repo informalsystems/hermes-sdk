@@ -37,8 +37,13 @@ where
             channel_id: &channel_id.to_string(),
             port_id: &port_id.to_string(),
             sequence,
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number + 2,
+            })
+                .into(),
         };
+
+        std::thread::sleep(std::time::Duration::from_secs(2));
 
         let response: QueryPacketAcknowledgementResponse = rollup
             .json_rpc_client()

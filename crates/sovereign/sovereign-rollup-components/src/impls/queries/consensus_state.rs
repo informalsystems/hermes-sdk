@@ -45,8 +45,13 @@ where
                 revision_number: Counterparty::revision_number(consensus_height),
                 revision_height: Counterparty::revision_height(consensus_height),
             },
-            query_height: &query_height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: query_height.slot_number + 2,
+            })
+                .into(),
         };
+
+        std::thread::sleep(std::time::Duration::from_secs(2));
 
         let response: QueryConsensusStateResponse = rollup
             .json_rpc_client()
@@ -86,8 +91,13 @@ where
                 revision_number: Counterparty::revision_number(consensus_height),
                 revision_height: Counterparty::revision_height(consensus_height),
             },
-            query_height: &query_height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: query_height.slot_number + 2,
+            })
+                .into(),
         };
+
+        std::thread::sleep(std::time::Duration::from_secs(2));
 
         let response: QueryConsensusStateResponse = rollup
             .json_rpc_client()
