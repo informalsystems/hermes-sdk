@@ -23,6 +23,8 @@ where
     Rollup::JsonRpcClient: ClientT,
 {
     async fn query_chain_status(rollup: &Rollup) -> Result<SovereignRollupStatus, Rollup::Error> {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
         let SlotResponse {
             number,
             hash,
@@ -35,7 +37,7 @@ where
 
         let height = RollupHeight {
             // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
-            slot_number: number + 1,
+            slot_number: number,
         };
 
         // Use the relayer's local timestamp for now, as it is currently not possible
@@ -83,9 +85,11 @@ where
         let params = {
             let mut params = ArrayParams::new();
             // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
-            params.insert(height.slot_number - 1).unwrap();
+            params.insert(height.slot_number).unwrap();
             params
         };
+
+        std::thread::sleep(std::time::Duration::from_secs(1));
 
         let SlotResponse {
             number,
@@ -100,7 +104,7 @@ where
         assert_eq!(
             height,
             &RollupHeight {
-                slot_number: number + 1,
+                slot_number: number,
             }
         );
 
