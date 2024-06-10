@@ -4,9 +4,6 @@ use crate::types::height::RollupHeight;
 
 #[derive(Debug)]
 pub struct SovereignRollupStatus {
-    // TODO: Add fields
-    // Rollup height and time
-    // DA height and time that corresponds to the rollup status
     pub height: RollupHeight,
 
     pub timestamp: Timestamp,

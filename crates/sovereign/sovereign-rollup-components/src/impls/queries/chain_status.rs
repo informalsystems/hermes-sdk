@@ -35,11 +35,13 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
+        // FIXME: due to inconsistencies in Sovereign SDK, we report the current height
+        // as -2 of what is returned from the rollup.
         let height = RollupHeight {
             slot_number: number - 2,
         };
 
-        // Use the relayer's local timestamp for now, as it is currently not possible
+        // FIXME: use the relayer's local timestamp for now, as it is currently not possible
         // to query the remote time from the rollup.
         let timestamp = Timestamp::now();
 

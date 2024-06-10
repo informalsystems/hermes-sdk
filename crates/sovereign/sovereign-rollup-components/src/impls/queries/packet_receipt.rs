@@ -38,7 +38,7 @@ where
             port_id: &port_id.to_string(),
             sequence,
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number + 2,
+                slot_number: height.slot_number_for_proofs(),
             })
                 .into(),
         };
