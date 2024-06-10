@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_cosmos_chain_components::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
@@ -115,6 +114,7 @@ use hermes_relayer_components::transaction::traits::types::signer::SignerTypeCom
 use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
+use hermes_sovereign_rollup_components::impls::commitment_prefix::ProvideSovereignIbcCommitmentPrefix;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::events::ProvideSovereignEvents;
@@ -122,6 +122,8 @@ use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFr
 use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSovereignClientState;
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
+use hermes_sovereign_rollup_components::traits::chain_status::ChainStatusAtHeightQuerierComponent;
+use hermes_sovereign_rollup_components::traits::chain_status::ForwardQueryChainStatusAtHeight;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -206,7 +208,7 @@ delegate_components! {
         ]:
             ProvideSovereignTransactionTypes,
         IbcCommitmentPrefixGetterComponent:
-            ProvideIbcCommitmentPrefix,
+            ProvideSovereignIbcCommitmentPrefix,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         CreateClientPayloadBuilderComponent:
@@ -264,6 +266,8 @@ delegate_components! {
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
+        ChainStatusAtHeightQuerierComponent:
+            ForwardQueryChainStatusAtHeight,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,

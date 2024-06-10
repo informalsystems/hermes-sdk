@@ -22,7 +22,9 @@ use hermes_relayer_components::chain::traits::message_builders::update_client::C
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenInitPayload;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::queries::chain_status::{
+    CanQueryChainHeight, CanQueryChainStatus,
+};
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
@@ -34,6 +36,7 @@ use hermes_sovereign_chain_components::sovereign::types::payloads::client::Sover
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -275,6 +278,17 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         // info!("ConnectionTry event at Sovereign: {:#?}", connection_try_event);
 
+        {
+            let latest_rollup_height = <SovereignChain as CanQueryChainHeight>::query_chain_height(&sovereign_chain).await?;
+
+            let chain_status = <SovereignChain as CanQueryChainStatusAtHeight>::query_chain_status_at_height(&sovereign_chain, &latest_rollup_height).await?;
+
+            info!("Chain status at height {latest_rollup_height}: {chain_status:#?}");
+
+            let latest_chain_status = <SovereignChain as CanQueryChainStatus>::query_chain_status(&sovereign_chain).await?;
+
+            info!("Latest chain status: {:#?}", latest_chain_status);
+        }
 
         let options: CosmosInitChannelOptions = CosmosInitChannelOptions {
             ordering: Ordering::Unordered,

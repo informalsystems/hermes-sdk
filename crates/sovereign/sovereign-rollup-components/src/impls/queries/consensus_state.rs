@@ -45,7 +45,10 @@ where
                 revision_number: Counterparty::revision_number(consensus_height),
                 revision_height: Counterparty::revision_height(consensus_height),
             },
-            query_height: &query_height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: query_height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryConsensusStateResponse = rollup
@@ -86,7 +89,10 @@ where
                 revision_number: Counterparty::revision_number(consensus_height),
                 revision_height: Counterparty::revision_height(consensus_height),
             },
-            query_height: &query_height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: query_height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryConsensusStateResponse = rollup
