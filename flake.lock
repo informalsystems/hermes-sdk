@@ -348,11 +348,11 @@
         "wasmvm_1_beta7-src": "wasmvm_1_beta7-src"
       },
       "locked": {
-        "lastModified": 1717072229,
-        "narHash": "sha256-166ggriJPlTWZ/xR6YfbPd3kveJ6Hhj0BclEL0DzDYA=",
+        "lastModified": 1718011615,
+        "narHash": "sha256-VluMd6vAPEP//hepHfE+/CDJKU8AfRRE/Sxo7cqIx3Y=",
         "owner": "informalsystems",
         "repo": "cosmos.nix",
-        "rev": "9a18b54abb037e832a6854f053e274a7ba367074",
+        "rev": "eaf5f4da4b35d8138b2c42aa39bc314b9be89958",
         "type": "github"
       },
       "original": {
@@ -2377,16 +2377,16 @@
     "neutron-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1712330928,
-        "narHash": "sha256-3olixILNnkRcNwtpPDqQJ63cYjV5qiVYTM+fJEIH65s=",
+        "lastModified": 1713877185,
+        "narHash": "sha256-cslMi835EdyByhSUN1FG9ucXjh5tQxqs3YfCLqGwYLg=",
         "owner": "neutron-org",
         "repo": "neutron",
-        "rev": "d652580f204231a5d6d76c83a084d7110d981416",
+        "rev": "73f419c3c60a3b811b08788519063560e84d97a8",
         "type": "github"
       },
       "original": {
         "owner": "neutron-org",
-        "ref": "v3.0.2",
+        "ref": "v3.0.5",
         "repo": "neutron",
         "type": "github"
       }
@@ -2672,11 +2672,11 @@
     },
     "nixpkgs_11": {
       "locked": {
-        "lastModified": 1717646450,
-        "narHash": "sha256-KE+UmfSVk5PG8jdKdclPVcMrUB8yVZHbsjo7ZT1Bm3c=",
+        "lastModified": 1717868076,
+        "narHash": "sha256-c83Y9t815Wa34khrux81j8K8ET94ESmCuwORSKm2bQY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "818dbe2f96df233d2041739d6079bb616d3e5597",
+        "rev": "cd18e2ae9ab8e2a0a8d715b60c91b54c0ac35ff9",
         "type": "github"
       },
       "original": {
@@ -2736,11 +2736,11 @@
     },
     "nixpkgs_15": {
       "locked": {
-        "lastModified": 1717681334,
-        "narHash": "sha256-HlvsMH8BNgdmQCwbBDmWp5/DfkEQYhXZHagJQCgbJU0=",
+        "lastModified": 1717459389,
+        "narHash": "sha256-I8/plBsua4/NZ5bKgj+z7/ThiWuud1YFwLsn1QQ5PgE=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "31f40991012489e858517ec20102f033e4653afb",
+        "rev": "3b01abcc24846ae49957b30f4345bab4b3f1d14b",
         "type": "github"
       },
       "original": {
@@ -2890,16 +2890,16 @@
     "osmosis-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1712687434,
-        "narHash": "sha256-j1PtSv4i/3IV6hUHxxgO/5t9/bfWs28i3D/uVAkf68Q=",
+        "lastModified": 1715157587,
+        "narHash": "sha256-D/CymboICWe73MBGF036W5NT/pyaV8Wvll2bJmYNmHg=",
         "owner": "osmosis-labs",
         "repo": "osmosis",
-        "rev": "0021d3812a8c8d2798ab17e58991a677b82e8955",
+        "rev": "15566f1f2945a16af9243dd376ee58a0d691b66a",
         "type": "github"
       },
       "original": {
         "owner": "osmosis-labs",
-        "ref": "v24.0.1",
+        "ref": "v25.0.0",
         "repo": "osmosis",
         "type": "github"
       }
@@ -3155,11 +3155,11 @@
         "nixpkgs": "nixpkgs_12"
       },
       "locked": {
-        "lastModified": 1717640276,
-        "narHash": "sha256-xtWJuHl0Zq1/pibvU7V8+qad4fcNLP4yerO54nr4Hec=",
+        "lastModified": 1717985971,
+        "narHash": "sha256-24h/qKp0aeI+Ew13WdRF521kY24PYa5HOvw0mlrABjk=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "96161e19677e2ae639c41147e422da4d6ec48240",
+        "rev": "abfe5b3126b1b7e9e4daafc1c6478d17f0b584e7",
         "type": "github"
       },
       "original": {
@@ -3193,11 +3193,11 @@
         "nixpkgs": "nixpkgs_16"
       },
       "locked": {
-        "lastModified": 1717813066,
-        "narHash": "sha256-wqbRwq3i7g5EHIui0bIi84mdqZ/It1AXBSLJ5tafD28=",
+        "lastModified": 1717640276,
+        "narHash": "sha256-xtWJuHl0Zq1/pibvU7V8+qad4fcNLP4yerO54nr4Hec=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "6dc3e45fe4aee36efeed24d64fc68b1f989d5465",
+        "rev": "96161e19677e2ae639c41147e422da4d6ec48240",
         "type": "github"
       },
       "original": {
@@ -3405,16 +3405,16 @@
         "sovereign-sdk-src": "sovereign-sdk-src_2"
       },
       "locked": {
-        "lastModified": 1717840378,
-        "narHash": "sha256-edz+/8/efgAmiw5H2lbMbzULmtSPTUc6TbSl/4s1jiE=",
+        "lastModified": 1717678000,
+        "narHash": "sha256-WhV7P8uO4NC/4KnfCLN8Bsq4iNI3wtY9BGhaK+SqsOM=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "025572365ebb593acdeaecb0698231c513f5b0b6",
+        "rev": "13ed245accdb00c363dc027bd25034fe45ec9da3",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
-        "ref": "rano/update-sov-ibc",
+        "ref": "ibc-rollup",
         "repo": "sov-rollup-starter",
         "type": "github"
       }
