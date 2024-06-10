@@ -2208,7 +2208,7 @@ dependencies = [
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
- "hermes-runtime",
+ "hermes-runtime-components",
  "hermes-wasm-client-components",
  "hex 0.4.3",
  "ibc",
@@ -2224,6 +2224,7 @@ dependencies = [
  "serde_json",
  "sha2 0.10.8",
  "sov-celestia-client",
+ "tokio",
 ]
 
 [[package]]

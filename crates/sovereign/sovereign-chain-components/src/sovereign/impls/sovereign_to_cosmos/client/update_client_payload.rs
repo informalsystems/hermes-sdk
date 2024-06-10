@@ -107,11 +107,6 @@ where
 
         assert_eq!(&chain_status.height, target_height);
 
-        println!(
-            "update client payload: rollup user hash at {}: {:?}",
-            target_height, chain_status.user_hash
-        );
-
         Ok(SovereignUpdateClientPayload {
             datachain_header: da_payload.headers,
             initial_state_height: rollup_trusted_height,

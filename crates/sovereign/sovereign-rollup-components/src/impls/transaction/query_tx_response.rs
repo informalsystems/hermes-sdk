@@ -1,9 +1,12 @@
 use core::ops::Range;
+use core::time::Duration;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerier;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 use hex::ToHex;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
@@ -20,8 +23,10 @@ where
     Chain: HasTxResponseType<TxResponse = TxResponse>
         + HasTransactionHashType<TxHash = TxHash>
         + HasJsonRpcClient
+        + HasRuntime
         + CanRaiseError<ClientError>,
     Chain::JsonRpcClient: ClientT,
+    Chain::Runtime: CanSleep,
 {
     async fn query_tx_response(
         chain: &Chain,
@@ -47,6 +52,11 @@ where
                 events,
                 custom_receipt: response.custom_receipt,
             };
+
+            // FIXME: When we first get a successful TX response from Sovereign, it is not yet
+            // become available in the "latest height" reported by `ledger_getHead`. So we wait
+            // a bit so that queries that are based on this transaction would succeed.
+            chain.runtime().sleep(Duration::from_secs(1)).await;
 
             Ok(Some(response))
         } else {

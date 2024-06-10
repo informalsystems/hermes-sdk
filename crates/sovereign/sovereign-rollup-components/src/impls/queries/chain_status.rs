@@ -36,7 +36,6 @@ where
             .map_err(Rollup::raise_error)?;
 
         let height = RollupHeight {
-            // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
             slot_number: number,
         };
 
@@ -63,9 +62,6 @@ pub struct SlotResponse {
     pub number: u64,
     pub hash: String,
     pub state_root: String,
-    // pub batch_range: (u64, u64),
-    // pub batches: Vec<Batch<B, TxReceipt, E>>,
-    // pub finality_status: FinalityStatus,
 }
 
 pub struct QuerySovereignRollupStatusAtHeight;
@@ -88,8 +84,6 @@ where
             params.insert(height.slot_number).unwrap();
             params
         };
-
-        std::thread::sleep(std::time::Duration::from_secs(1));
 
         let SlotResponse {
             number,
