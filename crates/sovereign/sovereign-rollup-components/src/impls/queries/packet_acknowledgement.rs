@@ -43,8 +43,6 @@ where
                 .into(),
         };
 
-        std::thread::sleep(std::time::Duration::from_secs(2));
-
         let response: QueryPacketAcknowledgementResponse = rollup
             .json_rpc_client()
             .request("ibc_packetAcknowledgement", (request,))

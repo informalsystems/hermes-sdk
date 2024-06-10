@@ -45,8 +45,6 @@ where
                 .into(),
         };
 
-        std::thread::sleep(std::time::Duration::from_secs(2));
-
         let response: QueryChannelResponse = rollup
             .json_rpc_client()
             .request("ibc_channel", (request,))
@@ -85,8 +83,6 @@ where
             })
                 .into(),
         };
-
-        std::thread::sleep(std::time::Duration::from_secs(2));
 
         let response: QueryChannelResponse = rollup
             .json_rpc_client()

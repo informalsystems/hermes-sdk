@@ -56,7 +56,7 @@ where
             // FIXME: When we first get a successful TX response from Sovereign, it is not yet
             // become available in the "latest height" reported by `ledger_getHead`. So we wait
             // a bit so that queries that are based on this transaction would succeed.
-            chain.runtime().sleep(Duration::from_secs(1)).await;
+            chain.runtime().sleep(Duration::from_secs(2)).await;
 
             Ok(Some(response))
         } else {
