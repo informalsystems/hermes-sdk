@@ -17,6 +17,9 @@ use jsonrpsee::http_client::HttpClientBuilder;
 use jsonrpsee::ws_client::WsClientBuilder;
 use tokio::process::Child;
 
+use backoff::future::retry;
+use backoff::ExponentialBackoff;
+
 use crate::contexts::rollup_driver::SovereignRollupDriver;
 
 pub struct BuildSovereignRollupDriver;
@@ -40,20 +43,24 @@ where
     ) -> Result<SovereignRollupDriver, Bootstrap::Error> {
         let rpc_config = &node_config.runner.rpc_config;
 
-        let rpc_client = HttpClientBuilder::default()
-            .build(format!(
-                "http://{}:{}",
-                rpc_config.bind_host, rpc_config.bind_port
+        let (rpc_client, subscription_client) = retry(ExponentialBackoff::default(), || async {
+            Ok((
+                HttpClientBuilder::default()
+                    .build(format!(
+                        "http://{}:{}",
+                        rpc_config.bind_host, rpc_config.bind_port
+                    ))
+                    .map_err(Bootstrap::raise_error)?,
+                WsClientBuilder::default()
+                    .build(format!(
+                        "ws://{}:{}",
+                        rpc_config.bind_host, rpc_config.bind_port
+                    ))
+                    .await
+                    .map_err(Bootstrap::raise_error)?,
             ))
-            .map_err(Bootstrap::raise_error)?;
-
-        let subscription_client = WsClientBuilder::default()
-            .build(format!(
-                "ws://{}:{}",
-                rpc_config.bind_host, rpc_config.bind_port
-            ))
-            .await
-            .map_err(Bootstrap::raise_error)?;
+        })
+        .await?;
 
         let relayer_wallet = wallets
             .get("relayer")
