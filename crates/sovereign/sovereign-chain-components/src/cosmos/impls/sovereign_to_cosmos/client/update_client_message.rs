@@ -4,7 +4,9 @@ use hermes_cosmos_chain_components::types::messages::client::update::CosmosUpdat
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use ibc::clients::tendermint::types::Header;
 use ibc::clients::wasm_types::client_message::{ClientMessage, WASM_CLIENT_MESSAGE_TYPE_URL};
+use ibc::core::client::types::Height;
 use ibc_proto::google::protobuf::Any;
 use ibc_proto::ibc::lightclients::wasm::v1::ClientMessage as RawClientMessage;
 use ibc_proto::Protobuf;
@@ -36,8 +38,19 @@ where
             .datachain_header
             .into_iter()
             .map(|da_header| {
+                let header = Header {
+                    signed_header: da_header.signed_header,
+                    validator_set: da_header.validator_set,
+                    trusted_height: Height::new(
+                        da_header.trusted_height.revision_number(),
+                        da_header.trusted_height.revision_height(),
+                    )
+                    .unwrap(),
+                    trusted_next_validator_set: da_header.trusted_validator_set,
+                };
+
                 let header = dummy_sov_header(
-                    da_header.clone(),
+                    header,
                     payload.initial_state_height.revision_height(),
                     payload.final_state_height.revision_height(),
                     payload.final_user_hash.clone().try_into().unwrap(),

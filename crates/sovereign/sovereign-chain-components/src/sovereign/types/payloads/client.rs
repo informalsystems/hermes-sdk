@@ -1,6 +1,6 @@
 use hermes_sovereign_rollup_components::types::client_state::SovereignClientState;
-use ibc::clients::tendermint::types::Header;
 use ibc::core::client::types::Height;
+use ibc_relayer_types::clients::ics07_tendermint::header::Header;
 use sov_celestia_client::types::client_state::TendermintClientParams;
 use sov_celestia_client::types::consensus_state::SovTmConsensusState;
 use sov_celestia_client::types::sovereign::SovereignClientParams;
