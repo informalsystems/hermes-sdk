@@ -362,7 +362,6 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         // TODO(rano): hack, as proof_height is incremented as (query_height + 1)
         // we need the a consensus state with proof_height
         connection_try_payload.update_height = cosmos_client_state.latest_height;
-        connection_try_payload.commitment_prefix.clone_from(dbg!(<SovereignChain as HasIbcCommitmentPrefix>::ibc_commitment_prefix(&sovereign_chain)));
 
         let sov_ibc_commitment_prefix: Vec<u8>= <SovereignRollup as HasJsonRpcClient>::json_rpc_client(&sovereign_chain.rollup)
             .request("ibc_commitmentPrefix", ArrayParams::new())
