@@ -1,8 +1,6 @@
-use std::str::FromStr;
 use std::time::Duration;
 
 use cgp_core::CanRaiseError;
-use eyre::{eyre, Report};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosUpdateClientPayload;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
@@ -48,7 +46,6 @@ where
         + CanRaiseError<DataChain::Error>
         + CanRaiseError<Ics02Error>
         + CanRaiseError<ClientError>
-        + CanRaiseError<Report>
         + CanQueryChainStatusAtHeight<ChainStatus = SovereignRollupStatus>,
     DataChain: HasBlockingChainHandle
         + HasHeightType<Height = Height>
@@ -135,15 +132,13 @@ where
 fn convert_tm_params_to_client_state(
     tm_params: &TendermintClientParams,
     da_target_height: &Height,
-) -> Result<TendermintClientState, Report> {
-    let relayer_chain_id = RelayerChainId::from_str(&tm_params.chain_id.to_string())
-        .map_err(|e| eyre!("Error converting ChainId to Relayer Chain Id: {e}"))?;
+) -> Result<TendermintClientState, Ics02Error> {
+    let relayer_chain_id = RelayerChainId::from_string(&tm_params.chain_id.to_string());
 
     let relayer_trust_threshold = RelayerTrustThreshold::new(
         tm_params.trust_level.numerator(),
         tm_params.trust_level.denominator(),
-    )
-    .map_err(|e| eyre!("Error converting TrustThreshold to Relayer TrustThreshold: {e}"))?;
+    )?;
 
     Ok(TendermintClientState {
         chain_id: relayer_chain_id,
