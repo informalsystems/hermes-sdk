@@ -1,5 +1,4 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusAtHeightQuerier;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
@@ -9,6 +8,7 @@ use jsonrpsee::core::params::ArrayParams;
 use jsonrpsee::core::ClientError;
 use serde::Deserialize;
 
+use crate::traits::chain_status::ChainStatusAtHeightQuerier;
 use crate::traits::json_rpc_client::HasJsonRpcClient;
 use crate::types::height::RollupHeight;
 use crate::types::status::SovereignRollupStatus;

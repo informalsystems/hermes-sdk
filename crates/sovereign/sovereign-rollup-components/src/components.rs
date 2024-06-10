@@ -26,7 +26,6 @@ use hermes_relayer_components::chain::traits::message_builders::create_client::C
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusAtHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
@@ -139,6 +138,7 @@ use crate::impls::types::consensus_state::ProvideSovereignConsensusState;
 use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
 use crate::impls::types::rollup::ProvideSovereignRollupTypes;
 use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
+use crate::traits::chain_status::ChainStatusAtHeightQuerierComponent;
 use crate::traits::json_rpc_client::JsonRpcClientTypeComponent;
 
 pub struct SovereignRollupClientComponents;

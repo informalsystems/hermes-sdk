@@ -7,10 +7,10 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::{
     CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
 };
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatusAtHeight;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;

@@ -35,9 +35,7 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainStatus, CanQueryChainStatusAtHeight,
-};
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
 };
@@ -95,6 +93,7 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::data_chain::{
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
     ProvideRollupType, RollupGetter,
 };
+use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsensusState;
 use hermes_sovereign_rollup_components::types::event::SovereignEvent;

@@ -4,7 +4,6 @@ use hermes_cosmos_chain_components::impls::connection::connection_handshake_mess
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
 use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatus;
-use hermes_relayer_components::chain::impls::forward::queries::chain_status::ForwardQueryChainStatusAtHeight;
 use hermes_relayer_components::chain::impls::forward::queries::channel_end::ForwardQueryChannelEnd;
 use hermes_relayer_components::chain::impls::forward::queries::client_state::ForwardQueryClientState;
 use hermes_relayer_components::chain::impls::forward::queries::connection_end::ForwardQueryConnectionEnd;
@@ -48,7 +47,6 @@ use hermes_relayer_components::chain::traits::payload_builders::create_client::C
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
-use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusAtHeightQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
@@ -124,6 +122,8 @@ use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFr
 use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSovereignClientState;
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
+use hermes_sovereign_rollup_components::traits::chain_status::ChainStatusAtHeightQuerierComponent;
+use hermes_sovereign_rollup_components::traits::chain_status::ForwardQueryChainStatusAtHeight;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;

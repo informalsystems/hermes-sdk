@@ -38,8 +38,7 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
 };
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainStatus, CanQueryChainStatusAtHeight, ChainStatusAtHeightQuerierComponent,
-    ChainStatusQuerierComponent,
+    CanQueryChainStatus, ChainStatusQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     CanQueryChannelEnd, CanQueryChannelEndWithProofs,
@@ -174,6 +173,9 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf};
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_rollup_components::components::SovereignRollupClientComponents;
+use hermes_sovereign_rollup_components::traits::chain_status::{
+    CanQueryChainStatusAtHeight, ChainStatusAtHeightQuerierComponent,
+};
 use hermes_sovereign_rollup_components::traits::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
 };

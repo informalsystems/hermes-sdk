@@ -13,9 +13,7 @@ use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainHeight, CanQueryChainStatusAtHeight,
-};
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs,
 };
@@ -36,6 +34,7 @@ use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSover
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
+use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
