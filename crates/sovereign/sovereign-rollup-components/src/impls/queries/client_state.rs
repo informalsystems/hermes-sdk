@@ -34,7 +34,10 @@ where
     ) -> Result<Any, Rollup::Error> {
         let request = Request {
             client_id: client_id.as_str(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryClientStateResponse = rollup
@@ -67,7 +70,10 @@ where
     ) -> Result<(Any, Vec<u8>), Rollup::Error> {
         let request = Request {
             client_id: client_id.as_str(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryClientStateResponse = rollup

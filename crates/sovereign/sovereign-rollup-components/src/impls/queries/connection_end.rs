@@ -33,7 +33,10 @@ where
     ) -> Result<Rollup::ConnectionEnd, Rollup::Error> {
         let request = Request {
             connection_id: &connection_id.to_string(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryConnectionResponse = rollup
@@ -63,7 +66,10 @@ where
     ) -> Result<(Rollup::ConnectionEnd, Vec<u8>), Rollup::Error> {
         let request = Request {
             connection_id: &connection_id.to_string(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryConnectionResponse = rollup

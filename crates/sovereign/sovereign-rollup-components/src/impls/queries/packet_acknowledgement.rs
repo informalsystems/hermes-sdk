@@ -37,7 +37,10 @@ where
             channel_id: &channel_id.to_string(),
             port_id: &port_id.to_string(),
             sequence,
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryPacketAcknowledgementResponse = rollup

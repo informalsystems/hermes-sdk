@@ -39,7 +39,10 @@ where
         let request = Request {
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryChannelResponse = rollup
@@ -75,7 +78,10 @@ where
         let request = Request {
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryChannelResponse = rollup

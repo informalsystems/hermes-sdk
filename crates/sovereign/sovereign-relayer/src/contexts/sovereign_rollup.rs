@@ -173,6 +173,9 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf};
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_rollup_components::components::SovereignRollupClientComponents;
+use hermes_sovereign_rollup_components::traits::chain_status::{
+    CanQueryChainStatusAtHeight, ChainStatusAtHeightQuerierComponent,
+};
 use hermes_sovereign_rollup_components::traits::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
 };
@@ -323,6 +326,7 @@ delegate_components! {
             UpdateClientMessageBuilderComponent,
 
             ChainStatusQuerierComponent,
+            ChainStatusAtHeightQuerierComponent,
 
             RawClientStateTypeComponent,
             RawClientStateQuerierComponent,
@@ -441,6 +445,7 @@ pub trait CanUseSovereignRollup:
     + CanAssertEventualAmount
     + HasLogger
     + CanQueryChainStatus
+    + CanQueryChainStatusAtHeight
     + HasEncoding<Encoding = SovereignEncoding>
     + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>

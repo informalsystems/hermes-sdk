@@ -1,3 +1,4 @@
+use crate::impls::queries::chain_status::QuerySovereignRollupStatusAtHeight;
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromSovereign;
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
@@ -29,6 +30,7 @@ use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatus
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
 };
+
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
     RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,
@@ -136,6 +138,7 @@ use crate::impls::types::consensus_state::ProvideSovereignConsensusState;
 use crate::impls::types::payload::ProvideSovereignRollupPayloadTypes;
 use crate::impls::types::rollup::ProvideSovereignRollupTypes;
 use crate::impls::types::transaction::ProvideSovereignTransactionTypes;
+use crate::traits::chain_status::ChainStatusAtHeightQuerierComponent;
 use crate::traits::json_rpc_client::JsonRpcClientTypeComponent;
 
 pub struct SovereignRollupClientComponents;
@@ -241,6 +244,8 @@ delegate_components! {
             BuildUpdateCosmosClientMessageOnSovereign,
         ChainStatusQuerierComponent:
             QuerySovereignRollupStatus,
+        ChainStatusAtHeightQuerierComponent:
+            QuerySovereignRollupStatusAtHeight,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         [
