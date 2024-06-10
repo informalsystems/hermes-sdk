@@ -82,27 +82,17 @@ where
     ) -> Result<SovereignRollupStatus, Rollup::Error> {
         let params = {
             let mut params = ArrayParams::new();
-            // FIXME: the actual latest slot of the rollup is +1, due to bugs on Sovereign's side
-            params.insert(height.slot_number).unwrap();
+            params.insert(height.slot_number - 2).unwrap();
             params
         };
 
         let SlotResponse {
-            number,
-            hash,
-            state_root,
+            hash, state_root, ..
         } = rollup
             .json_rpc_client()
             .request("ledger_getSlotByNumber", params)
             .await
             .map_err(Rollup::raise_error)?;
-
-        assert_eq!(
-            height,
-            &RollupHeight {
-                slot_number: number,
-            }
-        );
 
         // Use the relayer's local timestamp for now, as it is currently not possible
         // to query the remote time from the rollup.
