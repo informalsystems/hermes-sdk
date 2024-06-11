@@ -12,6 +12,7 @@ use hermes_relayer_components::chain::impls::forward::queries::consensus_state_h
 use hermes_relayer_components::chain::impls::forward::queries::packet_acknowledgement::ForwardQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::impls::forward::queries::packet_commitment::ForwardQueryPacketCommitment;
 use hermes_relayer_components::chain::impls::forward::queries::packet_receipt::ForwardQueryPacketReceipt;
+use hermes_relayer_components::chain::impls::forward::send_message::ForwardSendMessage;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
@@ -64,6 +65,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::C
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
+use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
@@ -211,6 +213,8 @@ delegate_components! {
             ProvideSovereignIbcCommitmentPrefix,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
+        MessageSenderComponent:
+            ForwardSendMessage,
         CreateClientPayloadBuilderComponent:
             BuildSovereignCreateClientPayload,
         CreateClientMessageBuilderComponent:
