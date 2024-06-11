@@ -1,4 +1,5 @@
 use core::ops::Range;
+use core::time::Duration;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerier;
@@ -51,6 +52,10 @@ where
                 events,
                 custom_receipt: response.custom_receipt,
             };
+
+            // Sleep for 1 second, as the "latest" state of the rollup is not
+            // always immediately queryable.
+            chain.runtime().sleep(Duration::from_secs(1)).await;
 
             Ok(Some(response))
         } else {
