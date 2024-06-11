@@ -14,6 +14,7 @@ use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientB
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::connection::open_ack::CanRelayConnectionOpenAck;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -193,17 +194,21 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 dst_client_id: cosmos_client_id.clone(),
             };
 
-            let connection_id = sovereign_to_cosmos_relay
+            let connection_id_a = sovereign_to_cosmos_relay
                 .init_connection(&Default::default())
                 .await?;
 
-            println!("connection id on Sovereign: {}", connection_id);
+            println!("connection id on Sovereign: {}", connection_id_a);
 
             let connection_id_b = sovereign_to_cosmos_relay
-                .relay_connection_open_try(&connection_id)
+                .relay_connection_open_try(&connection_id_a)
                 .await?;
 
             println!("connection id on Cosmos: {}", connection_id_b);
+
+            sovereign_to_cosmos_relay
+                .relay_connection_open_ack(&connection_id_a, &connection_id_b)
+                .await?;
         }
 
         <Result<(), Error>>::Ok(())
