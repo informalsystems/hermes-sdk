@@ -51,5 +51,5 @@ pub fn encode_tendermint_header(
 
     let any_message = encode_to_any(TYPE_URL, &proto_message);
 
-    IbcMessageWithHeight::new(any_message).into()
+    IbcMessageWithHeight::new(any_message, None).into()
 }
