@@ -2736,11 +2736,11 @@
     },
     "nixpkgs_15": {
       "locked": {
-        "lastModified": 1717646450,
-        "narHash": "sha256-KE+UmfSVk5PG8jdKdclPVcMrUB8yVZHbsjo7ZT1Bm3c=",
+        "lastModified": 1718089647,
+        "narHash": "sha256-COO4Xk2EzlZ3x9KCiJildlAA6cYDSPlnY8ms7pKl2Iw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "818dbe2f96df233d2041739d6079bb616d3e5597",
+        "rev": "f7207adcc68d9cafa29e3cd252a18743ae512c6a",
         "type": "github"
       },
       "original": {
@@ -3193,11 +3193,11 @@
         "nixpkgs": "nixpkgs_16"
       },
       "locked": {
-        "lastModified": 1717726729,
-        "narHash": "sha256-2WDKLjVRKWXbadnJHSOUb46PTq3D5nS89vhHTphRw1M=",
+        "lastModified": 1718072316,
+        "narHash": "sha256-p33h73iQ1HkLalCplV5MH0oP3HXRaH3zufnFqb5//ps=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "7f52ac9ae95bd60c0780d6e32baea22e542e11e1",
+        "rev": "bedc47af18fc41bb7d2edc2b212d59ca36253f59",
         "type": "github"
       },
       "original": {
@@ -3381,11 +3381,11 @@
         "sovereign-sdk-src": "sovereign-sdk-src"
       },
       "locked": {
-        "lastModified": 1717671698,
-        "narHash": "sha256-Mi1fZe109dug9uip1fpK1TqvWBHI8hij8Alkrw4UtUo=",
+        "lastModified": 1718123709,
+        "narHash": "sha256-cO2VDXuRyX3+DuoIUBr7DNbzdbu+FPPGC9EW0R+3BIw=",
         "owner": "informalsystems",
         "repo": "sovereign-ibc",
-        "rev": "f0d38de673e3fd0a118519183c0598a8ea2a2020",
+        "rev": "3ffd922a495ae19664edfe009041ede025e95e6f",
         "type": "github"
       },
       "original": {
@@ -3405,11 +3405,11 @@
         "sovereign-sdk-src": "sovereign-sdk-src_2"
       },
       "locked": {
-        "lastModified": 1717756970,
-        "narHash": "sha256-yrjVaW6j70M3sGF4IjjInDSmK8/RmXWfiCIZI38/Of8=",
+        "lastModified": 1718123779,
+        "narHash": "sha256-S1ZXMaA5zR5WMKDj2AGTdkM/vPBDEQbzrnW/Png8lFA=",
         "owner": "informalsystems",
         "repo": "sov-rollup-starter",
-        "rev": "b8b725cdc444391ce1374ae77e28fe38de87a09f",
+        "rev": "2385ccfc81867c14869ea02621247ee4c58abe2c",
         "type": "github"
       },
       "original": {
