@@ -1,5 +1,6 @@
 use crate::impls::queries::chain_status::QuerySovereignRollupStatusAtHeight;
 use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromSovereign;
+use crate::impls::send_message::SendMessagesInSequence;
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use hermes_cosmos_chain_components::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
@@ -211,12 +212,13 @@ delegate_components! {
             ProvideSovereignTransactionTypes,
         [
             NonceAllocatorComponent,
-            MessageSenderComponent,
             MessagesWithSignerSenderComponent,
             MessagesWithSignerAndNonceSenderComponent,
             TxResponsePollerComponent,
         ]:
             DefaultTxComponents,
+        MessageSenderComponent:
+            SendMessagesInSequence<DefaultTxComponents>,
         IbcCommitmentPrefixGetterComponent:
             ProvideSovereignIbcCommitmentPrefix,
         JsonRpcClientTypeComponent:
