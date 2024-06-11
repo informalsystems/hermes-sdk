@@ -59,7 +59,7 @@ where
 
         let any_message = encode_to_any(TYPE_URL, &proto_message);
 
-        let message = IbcMessageWithHeight::new(any_message).into();
+        let message = IbcMessageWithHeight::new(any_message, None).into();
 
         Ok(message)
     }

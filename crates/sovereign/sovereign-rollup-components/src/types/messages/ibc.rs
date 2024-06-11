@@ -16,17 +16,10 @@ pub struct IbcMessageWithHeight {
 }
 
 impl IbcMessageWithHeight {
-    pub fn new(message: Any) -> Self {
+    pub fn new(message: Any, counterparty_height: Option<Height>) -> Self {
         Self {
             message,
-            counterparty_height: None,
-        }
-    }
-
-    pub fn new_with_height(message: Any, height: Height) -> Self {
-        Self {
-            message,
-            counterparty_height: Some(height),
+            counterparty_height,
         }
     }
 }
