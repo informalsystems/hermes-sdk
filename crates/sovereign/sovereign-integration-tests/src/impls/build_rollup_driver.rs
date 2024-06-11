@@ -17,9 +17,6 @@ use jsonrpsee::http_client::HttpClientBuilder;
 use jsonrpsee::ws_client::WsClientBuilder;
 use tokio::process::Child;
 
-use backoff::future::retry;
-use backoff::ExponentialBackoff;
-
 use crate::contexts::rollup_driver::SovereignRollupDriver;
 
 pub struct BuildSovereignRollupDriver;
@@ -43,24 +40,44 @@ where
     ) -> Result<SovereignRollupDriver, Bootstrap::Error> {
         let rpc_config = &node_config.runner.rpc_config;
 
-        let (rpc_client, subscription_client) = retry(ExponentialBackoff::default(), || async {
-            Ok((
-                HttpClientBuilder::default()
-                    .build(format!(
-                        "http://{}:{}",
-                        rpc_config.bind_host, rpc_config.bind_port
-                    ))
-                    .map_err(Bootstrap::raise_error)?,
-                WsClientBuilder::default()
-                    .build(format!(
-                        "ws://{}:{}",
-                        rpc_config.bind_host, rpc_config.bind_port
-                    ))
-                    .await
-                    .map_err(Bootstrap::raise_error)?,
-            ))
-        })
-        .await?;
+        let instant = std::time::Instant::now();
+
+        let rpc_client = loop {
+            match HttpClientBuilder::default().build(format!(
+                "http://{}:{}",
+                rpc_config.bind_host, rpc_config.bind_port
+            )) {
+                Ok(client) => break client,
+                Err(err) => {
+                    if instant.elapsed() > std::time::Duration::from_secs(10) {
+                        return Err(Bootstrap::raise_error(err));
+                    } else {
+                        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+                    }
+                }
+            }
+        };
+
+        let instant = std::time::Instant::now();
+
+        let subscription_client = loop {
+            match WsClientBuilder::default()
+                .build(format!(
+                    "ws://{}:{}",
+                    rpc_config.bind_host, rpc_config.bind_port
+                ))
+                .await
+            {
+                Ok(client) => break client,
+                Err(err) => {
+                    if instant.elapsed() > std::time::Duration::from_secs(10) {
+                        return Err(Bootstrap::raise_error(err));
+                    } else {
+                        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+                    }
+                }
+            }
+        };
 
         let relayer_wallet = wallets
             .get("relayer")
