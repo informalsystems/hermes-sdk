@@ -36,11 +36,13 @@ where
         port_id: &Rollup::PortId,
         height: &Rollup::Height,
     ) -> Result<Rollup::ChannelEnd, Rollup::Error> {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
         let request = Request {
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };
@@ -75,11 +77,13 @@ where
         port_id: &Rollup::PortId,
         height: &Rollup::Height,
     ) -> Result<(Rollup::ChannelEnd, Vec<u8>), Rollup::Error> {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
         let request = Request {
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };

@@ -32,10 +32,12 @@ where
         client_id: &ClientId,
         height: &RollupHeight,
     ) -> Result<Any, Rollup::Error> {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
         let request = Request {
             client_id: client_id.as_str(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };
@@ -68,10 +70,12 @@ where
         client_id: &ClientId,
         height: &RollupHeight,
     ) -> Result<(Any, Vec<u8>), Rollup::Error> {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
         let request = Request {
             client_id: client_id.as_str(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };

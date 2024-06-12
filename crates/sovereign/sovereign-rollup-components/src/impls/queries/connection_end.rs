@@ -31,10 +31,12 @@ where
         connection_id: &Rollup::ConnectionId,
         height: &Rollup::Height,
     ) -> Result<Rollup::ConnectionEnd, Rollup::Error> {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
         let request = Request {
             connection_id: &connection_id.to_string(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };
@@ -64,10 +66,12 @@ where
         connection_id: &Rollup::ConnectionId,
         height: &Rollup::Height,
     ) -> Result<(Rollup::ConnectionEnd, Vec<u8>), Rollup::Error> {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+
         let request = Request {
             connection_id: &connection_id.to_string(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };

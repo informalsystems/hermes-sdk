@@ -36,7 +36,7 @@ where
             .map_err(Rollup::raise_error)?;
 
         let height = RollupHeight {
-            slot_number: number,
+            slot_number: number - 1,
         };
 
         // FIXME: use the relayer's local timestamp for now, as it is currently not possible
@@ -80,9 +80,11 @@ where
     ) -> Result<SovereignRollupStatus, Rollup::Error> {
         let params = {
             let mut params = ArrayParams::new();
-            params.insert(height.slot_number - 2).unwrap();
+            params.insert(height.slot_number - 1).unwrap();
             params
         };
+
+        std::thread::sleep(std::time::Duration::from_secs(1));
 
         let SlotResponse {
             hash, state_root, ..
