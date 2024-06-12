@@ -7,7 +7,7 @@
     cosmos-nix.url = github:informalsystems/cosmos.nix;
     cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
     sovereign-nix.url = github:informalsystems/sov-rollup-starter/rano/update-sov-ibc;
-    sovereign-ibc-nix.url = github:informalsystems/sovereign-ibc;
+    sovereign-ibc-nix.url = github:informalsystems/sovereign-ibc/rano/fix/visible-hash;
     rust-overlay.url = github:oxalica/rust-overlay;
 
     ibc-rs-src = {
