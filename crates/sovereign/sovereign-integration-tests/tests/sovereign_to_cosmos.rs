@@ -30,7 +30,6 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainHeight, CanQueryChainStatus,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::HasChannelOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::HasConnectionOpenInitEvent;
@@ -41,9 +40,7 @@ use hermes_sovereign_chain_components::sovereign::types::payloads::client::Sover
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
-use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
-use hermes_sovereign_rollup_components::traits::json_rpc_client::HasJsonRpcClient;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
@@ -57,8 +54,6 @@ use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics04_channel::channel::Ordering;
 use ibc_relayer_types::core::ics04_channel::version::Version as ChannelVersion;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, PortId};
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::params::ArrayParams;
 use sha2::{Digest, Sha256};
 use sov_celestia_client::types::client_state::test_util::TendermintParamsConfig;
 use sov_celestia_client::types::sovereign::SovereignParamsConfig;
@@ -243,9 +238,7 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
         info!("client ID of Cosmos on Sovereign: {:?}", sovereign_client_id);
 
-        let mut connection_init_payload = <SovereignChain as CanBuildConnectionOpenInitPayload<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
-
-        connection_init_payload.commitment_prefix.clone_from(&b"sov_ibc/Ibc/".to_vec());
+        let connection_init_payload = <SovereignChain as CanBuildConnectionOpenInitPayload<CosmosChain>>::build_connection_open_init_payload(&sovereign_chain, &sovereign_client_state).await?;
 
         info!("Connection init commitment prefix: {:?}", connection_init_payload.commitment_prefix);
 
@@ -287,9 +280,6 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
         let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
         let target_cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
 
-        info!("latest cosmos client height at sov: {:?}", cosmos_client_state.latest_height);
-        info!("latest cosmos height at cosmos: {:?}", target_cosmos_height);
-
         // Update Cosmos client state
         let update_client_payload = <CosmosChain as CanBuildUpdateClientPayload<SovereignChain>>::build_update_client_payload(
             cosmos_chain,
@@ -297,14 +287,6 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             &target_cosmos_height,
             cosmos_client_state.clone()
         ).await?;
-
-        info!("cosmos client payload at height {:?}: {:?}", target_cosmos_height, &update_client_payload);
-
-        for header in update_client_payload.headers.iter() {
-            info!("cosmos client payload has height {:?} with commitment root: {:?}", &header.signed_header.header.height, &header.signed_header.header.app_hash);
-        }
-
-        let app_hash = update_client_payload.headers.last().unwrap().signed_header.header.app_hash.clone();
 
         let update_client_messages = <SovereignChain as CanBuildUpdateClientMessage<CosmosChain>>::build_update_client_message(
             &sovereign_chain,
@@ -317,131 +299,15 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
             sovereign_chain.send_message(update_message).await?;
         }
 
-        // Cosmos client on Sovereign is updated.
-        // Sovereign now can verify if ConnInit has been committed at Cosmos.
-
         sleep(Duration::from_secs(2)).await;
 
         let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
 
-        info!("latest cosmos client height at sov: {:?}", cosmos_client_state.latest_height);
-        info!("Connection Try payload beginning");
-
-        // condition for the proof_height:
-        // 1. Sovereign must have a consensus state corresponding to the proof_height.
-        // 2. Cosmos's header, queried at proof_height, must have the same commitment root, stored
-        //    in the above consensus state.
-
-        let sovereign_latest_height = <SovereignChain as CanQueryChainHeight>::query_chain_height(&sovereign_chain).await?;
-
-        let consensus_state_at_sovereign = <SovereignChain as CanQueryConsensusState<CosmosChain>>::query_consensus_state(&sovereign_chain, &sovereign_client_id, &cosmos_client_state.latest_height, &sovereign_latest_height).await?;
-        info!("Consensus state at Sovereign: {:?}", consensus_state_at_sovereign);
-
-        let sovereign_client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<SovereignChain>>::query_client_state_with_latest_height(cosmos_chain, &wasm_client_id).await?;
-
-        info!("Client state at Cosmos: {:?}", sovereign_client_state);
-
-        let sovereign_client_state_latest_height = sovereign_client_state.sovereign_client_state.sovereign_params.latest_height;
-        let rollup_client_height = RollupHeight { slot_number: sovereign_client_state_latest_height.revision_height() };
-
-        info!("Latest height of Sovereign Client at Cosmos: {:?}", sovereign_client_state_latest_height);
-
-        let cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
-
-        let sovereign_consensus_state = <CosmosChain as CanQueryConsensusState<SovereignChain>>::query_consensus_state(cosmos_chain, &wasm_client_id, &rollup_client_height, &cosmos_height).await?;
-
-        info!("Consensus state at Cosmos: {:?}", sovereign_consensus_state);
-
-        // cosmos_client_state.latest_height - 2 doesn't have the connection end
-        // cosmos_client_state.latest_height + 4 is in the future
-        // cosmos_client_state.latest_height + {-1, 0, 1, 2, 3} did not work for verifying the proof
-
-        let mut connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &(cosmos_client_state.latest_height - 1).unwrap(), &wasm_client_id, &connection_id).await?;
-
-        // TODO(rano): hack, as proof_height is incremented as (query_height + 1)
-        // we need the a consensus state with proof_height
-        connection_try_payload.update_height = cosmos_client_state.latest_height;
-
-        let sov_ibc_commitment_prefix: Vec<u8>= <SovereignRollup as HasJsonRpcClient>::json_rpc_client(&sovereign_chain.rollup)
-            .request("ibc_commitmentPrefix", ArrayParams::new())
-            .await.unwrap();
-
-        info!("sov commitment prefix: {:?}", String::from_utf8(sov_ibc_commitment_prefix).unwrap());
-
-        info!("Connection Try payload done");
-        info!("{:?}", connection_try_payload.commitment_prefix);
-        info!("{:?}", connection_try_payload.client_state);
-        info!("{:?}", connection_try_payload.connection_end);
-        info!("{:?}", connection_try_payload.update_height);
-        info!("{:?}", connection_try_payload.proof_init);
-        info!("{:?}", connection_try_payload.proof_client);
-        info!("{:?}", connection_try_payload.proof_consensus);
-        info!("{:?}", connection_try_payload.proof_consensus_height);
-
-        {
-            // use std::time::Duration;
-
-            // use hex::decode;
-
-            // use ibc::clients::tendermint::types::Header as TmHeader;
-            // use ibc::core::connection::types::version::Version;
-            // use ibc::core::connection::types::ConnectionEnd;
-            // use ibc::core::connection::types::Counterparty;
-            // use ibc::core::connection::types::State;
-            // use ibc::clients::tendermint::types::ConsensusState;
-            use ibc::core::commitment_types::commitment::CommitmentPrefix;
-            // use ibc::core::commitment_types::commitment::CommitmentProofBytes;
-            use ibc::core::commitment_types::merkle::apply_prefix;
-            // use ibc::core::commitment_types::merkle::MerkleProof;
-            use ibc::core::commitment_types::specs::ProofSpecs;
-            use ibc::core::commitment_types::proto::ics23::HostFunctionsManager;
-            use ibc::core::host::types::identifiers::ConnectionId;
-            use ibc::core::host::types::path::ConnectionPath;
-            use ibc::core::host::types::path::Path;
-            // use ibc::core::primitives::proto::Any;
-            use ibc::core::primitives::proto::Protobuf;
-            use ibc::core::commitment_types::commitment::CommitmentRoot;
-
-            // let expected_conn_end_on_a = ConnectionEnd::new(
-            //     State::Init,
-            //     "08-wasm-0".parse().unwrap(),
-            //     Counterparty::new(
-            //         "07-tendermint-0".parse().unwrap(),
-            //         None,
-            //         b"ibc".to_vec().try_into().unwrap(),
-            //     ),
-            //     Version::compatibles(),
-            //     Duration::from_secs(0),
-            // )
-            // .unwrap();
-
-            let expected_conn_end_on_a = connection_try_payload.connection_end.clone();
-
-            info!("expected connection end on A: {:?}", expected_conn_end_on_a);
-
-            let prefix = CommitmentPrefix::try_from(connection_try_payload.commitment_prefix.clone().to_vec()).unwrap();
-
-            let path = Path::Connection(ConnectionPath::new(&ConnectionId::new(0)));
-
-            let merkle_path = apply_prefix(&prefix, vec![path.to_string()]);
-
-            connection_try_payload
-                .proof_init
-                .verify_membership::<HostFunctionsManager>(
-                    &ProofSpecs::cosmos(),
-                    CommitmentRoot::from_bytes(app_hash.as_ref()).into(),
-                    merkle_path,
-                    expected_conn_end_on_a.encode_vec(),
-                    0,
-                )
-                .unwrap();
-        }
+        // using (cosmos_client_state.latest_height - 1) as it returns +1 of the queried height
+        let connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &(cosmos_client_state.latest_height - 1).unwrap(), &wasm_client_id, &connection_id).await?;
 
         let connection_try_message = <SovereignChain as CanBuildConnectionOpenTryMessage<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
 
-        info!("Connection Try message: {:?}", connection_try_message);
-
-        // TODO(rano): fails as proof verification fails for ConnOpenTryMessage
         let connection_try_event = sovereign_chain.send_message(connection_try_message).await?;
 
         info!("ConnectionTry event at Sovereign: {:?}", connection_try_event);
@@ -453,11 +319,11 @@ pub fn test_sovereign_to_cosmos() -> Result<(), Error> {
 
             let chain_status = <SovereignChain as CanQueryChainStatusAtHeight>::query_chain_status_at_height(&sovereign_chain, &latest_rollup_height).await?;
 
-            info!("Chain status at height {latest_rollup_height}: {chain_status:#?}");
+            info!("Chain status at height {latest_rollup_height}: {chain_status:?}");
 
             let latest_chain_status = <SovereignChain as CanQueryChainStatus>::query_chain_status(&sovereign_chain).await?;
 
-            info!("Latest chain status: {:#?}", latest_chain_status);
+            info!("Latest chain status: {:?}", latest_chain_status);
         }
 
         let options: CosmosInitChannelOptions = CosmosInitChannelOptions {
