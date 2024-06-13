@@ -87,8 +87,6 @@ where
 
         let rollup_process = bootstrap.start_rollup(&rollup_home_dir).await?;
 
-        std::thread::sleep(std::time::Duration::from_secs(5));
-
         let rollup_driver = bootstrap
             .build_rollup_driver(
                 rollup_node_config,
