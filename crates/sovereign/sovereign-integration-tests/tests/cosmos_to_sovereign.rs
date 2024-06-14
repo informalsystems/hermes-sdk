@@ -22,7 +22,6 @@ use hermes_sovereign_chain_components::sovereign::types::payloads::client::Sover
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
-use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
@@ -176,25 +175,25 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         println!("client ID of Sovereign on Cosmos: {:?}", cosmos_client_id);
 
         {
-            let sovereign_to_cosmos_relay = SovereignToCosmosRelay {
+            let cosmos_to_sovereign_relay = CosmosToSovereignRelay {
                 runtime: runtime.clone(),
-                src_chain: sovereign_chain.clone(),
-                dst_chain: cosmos_chain.clone(),
-                src_client_id: sovereign_client_id.clone(),
-                dst_client_id: cosmos_client_id.clone(),
+                src_chain: cosmos_chain.clone(),
+                dst_chain: sovereign_chain.clone(),
+                src_client_id: cosmos_client_id.clone(),
+                dst_client_id: sovereign_client_id.clone(),
             };
 
-            let connection_id_a = sovereign_to_cosmos_relay
+            let connection_id_a = cosmos_to_sovereign_relay
                 .init_connection(&Default::default())
                 .await?;
 
-            println!("connection id on Sovereign: {:?}", connection_id_a);
+            println!("connection id on Cosmos: {:?}", connection_id_a);
 
-            let connection_id_b = sovereign_to_cosmos_relay
+            let connection_id_b = cosmos_to_sovereign_relay
                 .relay_connection_open_try(&connection_id_a)
                 .await?;
 
-            println!("connection id on cosmos: {:?}", connection_id_b);
+            println!("connection id on Sovereign: {:?}", connection_id_b);
         }
 
         <Result<(), Error>>::Ok(())
