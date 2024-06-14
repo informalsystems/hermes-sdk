@@ -275,7 +275,7 @@ pub fn test_sovereign_draft() -> Result<(), Error> {
         // ConnInit has been committed at Cosmos.
         // update the Cosmos client on Sovereign to the latest height.
 
-        sleep(Duration::from_secs(2)).await;
+        sleep(Duration::from_secs(1)).await;
 
         let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
         let target_cosmos_height = <CosmosChain as CanQueryChainHeight>::query_chain_height(cosmos_chain).await?;
@@ -294,17 +294,11 @@ pub fn test_sovereign_draft() -> Result<(), Error> {
             update_client_payload,
         ).await?;
 
-
         for update_message in update_client_messages.into_iter() {
             sovereign_chain.send_message(update_message).await?;
         }
 
-        sleep(Duration::from_secs(2)).await;
-
-        let cosmos_client_state = <SovereignChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::query_client_state_with_latest_height(&sovereign_chain, &sovereign_client_id).await?;
-
-        // using (cosmos_client_state.latest_height - 1) as it returns +1 of the queried height
-        let connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &(cosmos_client_state.latest_height - 1).unwrap(), &wasm_client_id, &connection_id).await?;
+        let connection_try_payload = <CosmosChain as CanBuildConnectionOpenTryPayload<SovereignChain>>::build_connection_open_try_payload(cosmos_chain, &cosmos_client_state, &(target_cosmos_height - 1).unwrap(), &wasm_client_id, &connection_id).await?;
 
         let connection_try_message = <SovereignChain as CanBuildConnectionOpenTryMessage<CosmosChain>>::build_connection_open_try_message(&sovereign_chain, &sovereign_client_id, &wasm_client_id, &connection_id, connection_try_payload).await?;
 
