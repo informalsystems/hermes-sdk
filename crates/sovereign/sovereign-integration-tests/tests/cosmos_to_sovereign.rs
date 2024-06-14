@@ -14,6 +14,8 @@ use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientB
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::connection::open_ack::CanRelayConnectionOpenAck;
+use hermes_relayer_components::relay::traits::connection::open_confirm::CanRelayConnectionOpenConfirm;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -176,36 +178,42 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         println!("client ID of Sovereign on Cosmos: {:?}", cosmos_client_id);
 
+        let cosmos_to_sovereign_relay = CosmosToSovereignRelay {
+            runtime: runtime.clone(),
+            src_chain: cosmos_chain.clone(),
+            dst_chain: sovereign_chain.clone(),
+            src_client_id: cosmos_client_id.clone(),
+            dst_client_id: sovereign_client_id.clone(),
+        };
+
         {
-            let cosmos_to_sovereign_relay = CosmosToSovereignRelay {
-                runtime: runtime.clone(),
-                src_chain: cosmos_chain.clone(),
-                dst_chain: sovereign_chain.clone(),
-                src_client_id: cosmos_client_id.clone(),
-                dst_client_id: sovereign_client_id.clone(),
-            };
-
-            {
-                // FIXME: we somehow needs to send an UpdateClient message first,
-                // or ConnectionOpenTry on Sovereign would fail.
-                let height = sovereign_chain.query_chain_height().await?;
-                cosmos_to_sovereign_relay
-                    .send_target_update_client_messages(SourceTarget, &height)
-                    .await?;
-            }
-
-            let connection_id_a = cosmos_to_sovereign_relay
-                .init_connection(&Default::default())
+            // FIXME: we somehow needs to send an UpdateClient message first,
+            // or ConnectionOpenTry on Sovereign would fail.
+            let height = sovereign_chain.query_chain_height().await?;
+            cosmos_to_sovereign_relay
+                .send_target_update_client_messages(SourceTarget, &height)
                 .await?;
-
-            println!("connection id on Cosmos: {:?}", connection_id_a);
-
-            let connection_id_b = cosmos_to_sovereign_relay
-                .relay_connection_open_try(&connection_id_a)
-                .await?;
-
-            println!("connection id on Sovereign: {:?}", connection_id_b);
         }
+
+        let connection_id_a = cosmos_to_sovereign_relay
+            .init_connection(&Default::default())
+            .await?;
+
+        println!("connection id on Cosmos: {:?}", connection_id_a);
+
+        let connection_id_b = cosmos_to_sovereign_relay
+            .relay_connection_open_try(&connection_id_a)
+            .await?;
+
+        println!("connection id on Sovereign: {:?}", connection_id_b);
+
+        cosmos_to_sovereign_relay
+            .relay_connection_open_ack(&connection_id_a, &connection_id_b)
+            .await?;
+
+        cosmos_to_sovereign_relay
+            .relay_connection_open_confirm(&connection_id_a, &connection_id_b)
+            .await?;
 
         <Result<(), Error>>::Ok(())
     })?;
