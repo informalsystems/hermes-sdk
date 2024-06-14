@@ -39,8 +39,6 @@ where
         consensus_height: &Counterparty::Height,
         query_height: &RollupHeight,
     ) -> Result<Any, Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(2));
-
         let request = Request {
             client_id: client_id.as_str(),
             consensus_height: &HeightParam {
@@ -85,8 +83,6 @@ where
         consensus_height: &Counterparty::Height,
         query_height: &RollupHeight,
     ) -> Result<(Any, Vec<u8>), Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
         let request = Request {
             client_id: client_id.as_str(),
             consensus_height: &HeightParam {

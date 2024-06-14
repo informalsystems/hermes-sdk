@@ -36,8 +36,6 @@ where
         port_id: &Rollup::PortId,
         height: &Rollup::Height,
     ) -> Result<Rollup::ChannelEnd, Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
         let request = Request {
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
@@ -77,8 +75,6 @@ where
         port_id: &Rollup::PortId,
         height: &Rollup::Height,
     ) -> Result<(Rollup::ChannelEnd, Vec<u8>), Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
         let request = Request {
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),

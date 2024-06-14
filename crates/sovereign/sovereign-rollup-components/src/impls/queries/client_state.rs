@@ -32,8 +32,6 @@ where
         client_id: &ClientId,
         height: &RollupHeight,
     ) -> Result<Any, Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
         let request = Request {
             client_id: client_id.as_str(),
             query_height: &(&RollupHeight {
@@ -70,8 +68,6 @@ where
         client_id: &ClientId,
         height: &RollupHeight,
     ) -> Result<(Any, Vec<u8>), Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
         let request = Request {
             client_id: client_id.as_str(),
             query_height: &(&RollupHeight {

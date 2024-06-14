@@ -32,8 +32,6 @@ where
         sequence: &Rollup::Sequence,
         height: &Rollup::Height,
     ) -> Result<(Rollup::PacketCommitment, Rollup::CommitmentProof), Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
         let request = Request {
             channel_id: &channel_id.to_string(),
             port_id: &port_id.to_string(),
