@@ -23,8 +23,6 @@ where
     Rollup::JsonRpcClient: ClientT,
 {
     async fn query_chain_status(rollup: &Rollup) -> Result<SovereignRollupStatus, Rollup::Error> {
-        std::thread::sleep(std::time::Duration::from_secs(1));
-
         let SlotResponse {
             number,
             hash,
@@ -80,7 +78,7 @@ where
     ) -> Result<SovereignRollupStatus, Rollup::Error> {
         let params = {
             let mut params = ArrayParams::new();
-            params.insert(height.slot_number - 2).unwrap();
+            params.insert(height.slot_number - 1).unwrap();
             params
         };
 

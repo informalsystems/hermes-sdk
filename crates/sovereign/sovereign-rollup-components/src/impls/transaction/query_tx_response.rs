@@ -1,4 +1,5 @@
 use core::ops::Range;
+use core::time::Duration;
 
 use cgp_core::CanRaiseError;
 use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerier;
@@ -45,6 +46,10 @@ where
                 .request("ledger_getEventsByTxnHash", (tx_hash_str,))
                 .await
                 .map_err(Chain::raise_error)?;
+
+            // FIXME: we need to wait a little bit even though the rollup reports the transaction as committed.
+            // This is because Sovereign SDK's storage for queries is currently lagging behind.
+            chain.runtime().sleep(Duration::from_secs(1)).await;
 
             let response = TxResponse {
                 hash: response.hash,

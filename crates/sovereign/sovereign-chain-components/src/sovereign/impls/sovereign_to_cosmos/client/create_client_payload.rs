@@ -1,11 +1,11 @@
 use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
-use hermes_sovereign_rollup_components::types::height::RollupHeight;
+use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{QueryHeight, QueryHostConsensusStateRequest};
@@ -37,7 +37,7 @@ where
             CreateClientPayloadOptions = SovereignCreateClientOptions,
         > + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
         + CanRaiseError<Rollup::Error>,
-    Rollup: CanQueryChainHeight<Height = RollupHeight>,
+    Rollup: CanQueryChainStatus<ChainStatus = SovereignRollupStatus>,
     DataChain: HasBlockingChainHandle,
 {
     async fn build_create_client_payload(
@@ -45,16 +45,20 @@ where
         create_client_options: &SovereignCreateClientOptions,
     ) -> Result<SovereignCreateClientPayload, Chain::Error> {
         // Build client state
-        let rollup_height = chain
+        let rollup_status = chain
             .rollup()
-            .query_chain_height()
+            .query_chain_status()
             .await
             .map_err(Chain::raise_error)?;
+
+        let rollup_height = rollup_status.height;
 
         let latest_height = Height::new(0, rollup_height.slot_number).unwrap();
 
         let mut sovereign_client_params = create_client_options.sovereign_client_params.clone();
         sovereign_client_params.latest_height = latest_height;
+
+        let genesis_da_height = sovereign_client_params.genesis_da_height;
 
         let client_state = ClientState::new(
             sovereign_client_params,
@@ -70,7 +74,7 @@ where
                 .sovereign_client_params
                 .genesis_da_height
                 .revision_number(),
-            rollup_height.slot_number,
+            rollup_height.slot_number + genesis_da_height.revision_height(),
         )
         .unwrap();
 
@@ -95,7 +99,8 @@ where
             tm_consensus_state.next_validators_hash,
         );
 
-        let sovereign_params = SovereignConsensusParams::new(vec![0].into());
+        let sovereign_params =
+            SovereignConsensusParams::new(rollup_status.user_hash.to_vec().into());
 
         let consensus_state = SovTmConsensusState::new(sovereign_params, tendermint_params);
 

@@ -40,7 +40,7 @@ where
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };
@@ -79,7 +79,7 @@ where
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
+                slot_number: height.slot_number + 1,
             })
                 .into(),
         };

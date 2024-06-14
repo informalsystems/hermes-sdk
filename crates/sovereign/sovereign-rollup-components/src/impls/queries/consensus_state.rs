@@ -46,7 +46,7 @@ where
                 revision_height: Counterparty::revision_height(consensus_height),
             },
             query_height: &(&RollupHeight {
-                slot_number: query_height.slot_number,
+                slot_number: query_height.slot_number + 1,
             })
                 .into(),
         };
@@ -90,7 +90,7 @@ where
                 revision_height: Counterparty::revision_height(consensus_height),
             },
             query_height: &(&RollupHeight {
-                slot_number: query_height.slot_number,
+                slot_number: query_height.slot_number + 1,
             })
                 .into(),
         };
