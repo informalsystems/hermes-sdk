@@ -34,7 +34,7 @@ where
         let request = Request {
             connection_id: &connection_id.to_string(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number + 1,
+                slot_number: height.slot_number,
             })
                 .into(),
         };
@@ -67,7 +67,7 @@ where
         let request = Request {
             connection_id: &connection_id.to_string(),
             query_height: &(&RollupHeight {
-                slot_number: height.slot_number + 1,
+                slot_number: height.slot_number,
             })
                 .into(),
         };

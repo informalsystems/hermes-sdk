@@ -56,9 +56,8 @@ where
     Chain: HasHeightType<Height = RollupHeight> + HasErrorType,
 {
     fn increment_height(height: &RollupHeight) -> Result<RollupHeight, Chain::Error> {
-        Ok(RollupHeight {
-            slot_number: height.slot_number + 1,
-        })
+        // FIXME: do not increment height for now, as proof height for Sovereign is not incremented
+        Ok(height.clone())
     }
 }
 
