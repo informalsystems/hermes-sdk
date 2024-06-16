@@ -65,10 +65,6 @@ where
             create_client_options.tendermint_params_config.clone(),
         );
 
-        // Build consensus state
-        // TODO: Once the + 1 is removed from crates/sovereign/sovereign-rollup-components/src/impls/queries/chain_status.rs
-        // this will need to be fixed by creating the da_latest_height with:
-        // rollup_height + genesis_da_height
         let da_latest_height = RelayerHeight::new(
             create_client_options
                 .sovereign_client_params

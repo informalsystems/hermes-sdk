@@ -187,7 +187,7 @@ fn test_sovereign_to_cosmos() -> Result<(), Error> {
         };
 
         {
-            // FIXME: we somehow needs to send an UpdateClient message first,
+            // FIXME: we somehow need to send an UpdateClient message first,
             // or ConnectionOpenTry on Sovereign would fail.
             let height = sovereign_chain.query_chain_height().await?;
             sovereign_to_cosmos_relay

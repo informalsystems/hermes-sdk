@@ -186,20 +186,20 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             dst_client_id: sovereign_client_id.clone(),
         };
 
-        {
-            // FIXME: we somehow needs to send an UpdateClient message first,
-            // or ConnectionOpenTry on Sovereign would fail.
-            let height = sovereign_chain.query_chain_height().await?;
-            cosmos_to_sovereign_relay
-                .send_target_update_client_messages(SourceTarget, &height)
-                .await?;
-        }
-
         let connection_id_a = cosmos_to_sovereign_relay
             .init_connection(&Default::default())
             .await?;
 
         println!("connection id on Cosmos: {:?}", connection_id_a);
+
+        {
+            // FIXME: we somehow need to send an UpdateClient message first,
+            // or ConnectionOpenAck on Sovereign would fail.
+            let height = sovereign_chain.query_chain_height().await?;
+            cosmos_to_sovereign_relay
+                .send_target_update_client_messages(SourceTarget, &height)
+                .await?;
+        }
 
         let connection_id_b = cosmos_to_sovereign_relay
             .relay_connection_open_try(&connection_id_a)

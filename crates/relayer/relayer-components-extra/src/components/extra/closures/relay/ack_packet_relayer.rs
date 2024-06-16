@@ -14,7 +14,6 @@ use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::error::types::ErrorOf;
@@ -66,7 +65,6 @@ where
     DstChain: HasErrorType
         + HasRuntime
         + HasChainId
-        + CanIncrementHeight
         + CanQueryChainStatus
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
