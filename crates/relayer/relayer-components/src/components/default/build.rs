@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp_core::prelude::*;
-use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::birelay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 use crate::build::components::birelay::BuildBiRelayFromRelays;
@@ -66,7 +65,6 @@ where
     ChainB::ChainId: Ord + Clone,
     ChainA::ClientId: Ord + Clone,
     ChainB::ClientId: Ord + Clone,
-    Build::Runtime: HasMutex,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToDefaultBuildComponents<BaseComponents>
         + BiRelayFromRelayBuilder<Build>

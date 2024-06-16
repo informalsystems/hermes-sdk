@@ -170,7 +170,7 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionH
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf};
+use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_rollup_components::components::SovereignRollupClientComponents;
 use hermes_sovereign_rollup_components::traits::chain_status::{
@@ -473,8 +473,6 @@ pub trait CanUseSovereignRollup:
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanBuildChannelOpenInitMessage<CosmosChain>
-where
-    Self::Runtime: HasMutex,
 {
 }
 

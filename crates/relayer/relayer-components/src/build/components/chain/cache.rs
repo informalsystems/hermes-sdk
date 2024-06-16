@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::HasErrorType;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::cache::HasChainCache;
@@ -10,7 +10,6 @@ use crate::build::types::aliases::{TargetChain, TargetChainId};
 
 pub struct BuildChainWithCache<InBuilder>(pub PhantomData<InBuilder>);
 
-#[async_trait]
 impl<InBuilder, Build, Target> ChainBuilder<Build, Target> for BuildChainWithCache<InBuilder>
 where
     TargetChain<Build, Target>: Clone,
@@ -18,7 +17,6 @@ where
     Build: HasChainCache<Target> + HasErrorType,
     InBuilder: ChainBuilder<Build, Target>,
     Target: ChainBuildTarget<Build>,
-    Build::Runtime: HasMutex,
 {
     async fn build_chain(
         build: &Build,

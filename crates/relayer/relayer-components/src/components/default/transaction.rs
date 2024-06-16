@@ -2,7 +2,6 @@ use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;
 
@@ -99,7 +98,7 @@ where
         + CanParseTxResponseAsEvents
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
-    Chain::Runtime: HasMutex + HasTime + CanSleep,
+    Chain::Runtime: HasTime + CanSleep,
     Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>
         + for<'a> CanLog<TxNoResponseError<'a, Chain>>
         + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,

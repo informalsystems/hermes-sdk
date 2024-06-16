@@ -9,7 +9,6 @@ pub struct AllocateNonceWithMutex;
 impl<Context> NonceAllocator<Context> for AllocateNonceWithMutex
 where
     Context: CanQueryNonce + HasMutexForNonceAllocation,
-    Context::Runtime: HasMutex,
 {
     async fn allocate_nonce<'a>(
         context: &'a Context,
