@@ -49,7 +49,7 @@ where
 
             // FIXME: we need to wait a little bit even though the rollup reports the transaction as committed.
             // This is because Sovereign SDK's storage for queries is currently lagging behind.
-            chain.runtime().sleep(Duration::from_secs(2)).await;
+            chain.runtime().sleep(Duration::from_secs(1)).await;
 
             let response = TxResponse {
                 hash: response.hash,

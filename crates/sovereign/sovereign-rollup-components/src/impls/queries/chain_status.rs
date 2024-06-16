@@ -34,7 +34,7 @@ where
             .map_err(Rollup::raise_error)?;
 
         let height = RollupHeight {
-            slot_number: number - 1,
+            slot_number: number,
         };
 
         // FIXME: use the relayer's local timestamp for now, as it is currently not possible
