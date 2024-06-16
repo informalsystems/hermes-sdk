@@ -108,8 +108,7 @@ where
 trait CanRunLoop<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
-    Target::TargetChain: HasRuntime,
-    RuntimeOf<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
+    Target::TargetChain: HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
 {
     async fn run_loop(
         &self,
@@ -118,7 +117,6 @@ where
     );
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> CanRunLoop<Target> for Relay
 where
     Relay: CanProcessMessageBatches<Target> + HasLogger,

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::HasErrorType;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::cache::HasRelayCache;
@@ -12,7 +12,6 @@ use crate::build::types::aliases::{
 
 pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
 
-#[async_trait]
 impl<InBuilder, Build, Target> RelayBuilder<Build, Target> for BuildRelayWithCache<InBuilder>
 where
     TargetSrcChainId<Build, Target>: Ord + Clone,
@@ -23,7 +22,6 @@ where
     Build: HasRelayCache<Target> + HasErrorType,
     InBuilder: RelayBuilder<Build, Target>,
     Target: RelayBuildTarget<Build>,
-    Build::Runtime: HasMutex,
 {
     async fn build_relay(
         build: &Build,

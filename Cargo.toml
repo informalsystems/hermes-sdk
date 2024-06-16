@@ -60,7 +60,7 @@ license         = "Apache-2.0"
 keywords        = ["blockchain", "consensus", "cosmos", "ibc", "tendermint"]
 repository      = "https://github.com/informalsystems/hermes-sdk"
 authors         = ["Informal Systems <hello@informal.systems>"]
-rust-version    = "1.72"
+rust-version    = "1.79"
 
 [workspace.dependencies]
 async-trait                     = { version = "0.1.80" }
