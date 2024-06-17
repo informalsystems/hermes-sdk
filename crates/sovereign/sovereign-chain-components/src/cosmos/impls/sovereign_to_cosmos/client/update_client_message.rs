@@ -51,7 +51,7 @@ where
             header,
             payload.initial_state_height.revision_height(),
             payload.final_state_height.revision_height(),
-            payload.final_user_hash.clone().try_into().unwrap(),
+            payload.final_user_hash.into(),
         );
         // Convert Sovereign header to Any
         let any_header = Any::from(header);
