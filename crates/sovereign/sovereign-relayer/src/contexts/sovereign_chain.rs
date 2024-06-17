@@ -94,6 +94,7 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
 };
 use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
+use hermes_sovereign_rollup_components::types::commitment_proof::SovereignCommitmentProof;
 use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsensusState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
@@ -190,7 +191,7 @@ pub trait CanUseSovereignChain:
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightFields<Height = RollupHeight>
     + HasMessageType<Message = SovereignMessage>
-    + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+    + HasCommitmentProofType<CommitmentProof = SovereignCommitmentProof>
     + CanIncrementHeight
     + CanSendMessages
     + CanQueryChainStatus

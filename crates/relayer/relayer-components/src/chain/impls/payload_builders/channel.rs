@@ -6,8 +6,8 @@ use crate::chain::traits::types::channel::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
 };
 use crate::chain::traits::types::client_state::HasClientStateType;
-use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::traits::types::proof::HasCommitmentProofHeight;
 use crate::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
@@ -23,7 +23,7 @@ where
             ChannelOpenTryPayload = ChannelOpenTryPayload<Chain, Counterparty>,
         > + HasClientStateType<Counterparty>
         + CanQueryChannelEndWithProofs<Counterparty>
-        + CanIncrementHeight,
+        + HasCommitmentProofHeight,
 {
     async fn build_channel_open_try_payload(
         chain: &Chain,
@@ -38,7 +38,8 @@ where
 
         // TODO: validate channel state
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&proof_init).clone();
 
         let payload = ChannelOpenTryPayload {
             channel_end,
@@ -59,7 +60,7 @@ where
             ChannelOpenAckPayload = ChannelOpenAckPayload<Chain, Counterparty>,
         > + HasClientStateType<Counterparty>
         + CanQueryChannelEndWithProofs<Counterparty>
-        + CanIncrementHeight,
+        + HasCommitmentProofHeight,
 {
     async fn build_channel_open_ack_payload(
         chain: &Chain,
@@ -74,7 +75,8 @@ where
 
         // TODO: validate channel state
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&proof_try).clone();
 
         let payload = ChannelOpenAckPayload {
             channel_end,
@@ -95,7 +97,7 @@ where
             ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Chain>,
         > + HasClientStateType<Counterparty>
         + CanQueryChannelEndWithProofs<Counterparty>
-        + CanIncrementHeight,
+        + HasCommitmentProofHeight,
 {
     async fn build_channel_open_confirm_payload(
         chain: &Chain,
@@ -110,7 +112,8 @@ where
 
         // TODO: validate channel state
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&proof_ack).clone();
 
         let payload = ChannelOpenConfirmPayload {
             update_height,

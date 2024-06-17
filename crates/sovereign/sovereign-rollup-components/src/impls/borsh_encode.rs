@@ -5,6 +5,8 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::Encoder;
 use std::io::Error as IoError;
 
+pub struct ViaBorsh;
+
 pub struct EncodeWithBorsh;
 
 impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for EncodeWithBorsh
