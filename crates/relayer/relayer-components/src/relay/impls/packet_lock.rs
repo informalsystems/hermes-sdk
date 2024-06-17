@@ -36,10 +36,7 @@ pub type PacketKey<Relay> = (
 pub type PacketMutex<Relay> = Arc<MutexOf<RuntimeOf<Relay>, BTreeSet<PacketKey<Relay>>>>;
 
 #[derive_component(PacketMutexGetterComponent, PacketMutexGetter<Relay>)]
-pub trait HasPacketMutex: HasRuntime + HasRelayChains
-where
-    Self::Runtime: HasMutex,
-{
+pub trait HasPacketMutex: HasRuntime<Runtime: HasMutex> + HasRelayChains {
     fn packet_mutex(&self) -> &PacketMutex<Self>;
 }
 pub struct ReleasePacketLockTask<Relay>
@@ -71,7 +68,7 @@ where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>
         + HasRuntime<Runtime = Runtime>
         + HasPacketMutex,
-    Runtime: HasMutex + CanUseChannelsOnce + CanCreateChannelsOnce + CanSpawnTask,
+    Runtime: CanUseChannelsOnce + CanCreateChannelsOnce + CanSpawnTask,
     SrcChain: CanReadPacketFields<DstChain, OutgoingPacket = Packet>,
     DstChain: HasIbcChainTypes<SrcChain>,
     SrcChain::ChannelId: Clone + Ord,

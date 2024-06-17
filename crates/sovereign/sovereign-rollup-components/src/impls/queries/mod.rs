@@ -7,3 +7,4 @@ pub mod consensus_state_height;
 pub mod packet_acknowledgement;
 pub mod packet_commitment;
 pub mod packet_receipt;
+pub mod slot_hash;

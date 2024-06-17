@@ -22,7 +22,6 @@ use hermes_relayer_components::components::default::build::DefaultBuildComponent
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use hermes_runtime_components::traits::channel::{CanCloneSender, CanCreateChannels};
 use hermes_runtime_components::traits::channel_once::CanUseChannelsOnce;
-use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::batch::traits::config::HasBatchConfig;
@@ -98,7 +97,6 @@ where
     ChainB::ClientId: Ord + Clone,
     ChainA::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
     ChainB::Runtime: CanCreateChannels + CanUseChannelsOnce + CanCloneSender,
-    Build::Runtime: HasMutex,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToExtraBuildComponents<BaseComponents>
         + BiRelayFromRelayBuilder<Build>

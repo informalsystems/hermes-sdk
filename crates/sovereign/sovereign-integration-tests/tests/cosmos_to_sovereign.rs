@@ -9,29 +9,18 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
-use hermes_relayer_components::chain::traits::queries::client_state::{
-    CanQueryClientState, CanQueryClientStateWithProofs,
-};
-use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEndWithProofs;
-use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusStateWithProofs;
-use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
-use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
 use hermes_sovereign_chain_components::sovereign::types::payloads::client::SovereignCreateClientOptions;
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
-use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
-use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
@@ -43,10 +32,13 @@ use sha2::{Digest, Sha256};
 use sov_celestia_client::types::client_state::test_util::TendermintParamsConfig;
 use sov_celestia_client::types::sovereign::SovereignParamsConfig;
 use tokio::runtime::Builder;
-use tokio::time::sleep;
 
 #[test]
 fn test_cosmos_to_sovereign() -> Result<(), Error> {
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::INFO)
+        .init();
+
     let _ = stable_eyre::install();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
@@ -118,7 +110,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             rollup: rollup.clone(),
         };
 
-        let sovereign_client_id =  {
+        let sovereign_client_id = {
             let create_client_settings = ClientSettings::Tendermint(Settings {
                 max_clock_drift: Duration::from_secs(40),
                 trusting_period: None,
@@ -135,7 +127,10 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             .await?
         };
 
-        println!("client ID of Cosmos on Sovereign: {:?}", sovereign_client_id);
+        println!(
+            "client ID of Cosmos on Sovereign: {:?}",
+            sovereign_client_id
+        );
 
         let cosmos_client_id = {
             let wasm_client_bytes = tokio::fs::read(&wasm_client_code_path).await?;
@@ -146,7 +141,8 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
                 hasher.finalize().into()
             };
 
-            let rollup_genesis_da_height = Height::new(0, rollup_driver.node_config.runner.genesis_height)?;
+            let rollup_genesis_da_height =
+                Height::new(0, rollup_driver.node_config.runner.genesis_height)?;
 
             let sovereign_params = SovereignParamsConfig::builder()
                 .genesis_da_height(rollup_genesis_da_height)
@@ -155,7 +151,9 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
             let celestia_chain_id = celestia_chain_driver.chain().chain_id();
 
-            let tendermint_params = TendermintParamsConfig::builder().chain_id(celestia_chain_id.to_string().parse()?).build();
+            let tendermint_params = TendermintParamsConfig::builder()
+                .chain_id(celestia_chain_id.to_string().parse()?)
+                .build();
 
             let create_client_settings = SovereignCreateClientOptions {
                 tendermint_params_config: tendermint_params,
@@ -175,90 +173,36 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         println!("client ID of Sovereign on Cosmos: {:?}", cosmos_client_id);
 
-        {
-            let height = rollup.query_chain_height().await?;
+        let cosmos_to_sovereign_relay = CosmosToSovereignRelay {
+            runtime: runtime.clone(),
+            src_chain: cosmos_chain.clone(),
+            dst_chain: sovereign_chain.clone(),
+            src_client_id: cosmos_client_id.clone(),
+            dst_client_id: sovereign_client_id.clone(),
+        };
 
-            let (client_state, client_state_proofs) = <SovereignRollup as CanQueryClientStateWithProofs<
-                CosmosChain,
-            >>::query_client_state_with_proofs(
-                rollup, &sovereign_client_id, &height,
-            )
+        let (connection_id_a, connection_id_b) = cosmos_to_sovereign_relay
+            .bootstrap_connection(&Default::default())
             .await?;
 
-            println!("client state: {:?}, proof size at height {}: {}", client_state, height, client_state_proofs.len());
+        println!(
+            "connection id on Cosmos: {}, connection id on Sovereign: {}",
+            connection_id_a, connection_id_b
+        );
 
-            let consensus_state_heights = <SovereignRollup as CanQueryConsensusStateHeights<
-                CosmosChain,
-            >>::query_consensus_state_heights(
-                rollup, &sovereign_client_id
-            )
-            .await?;
+        // FIXME: run bootstrap channel test
+        // let (channel_id_a, channel_b) = cosmos_to_sovereign_relay
+        //     .bootstrap_channel(
+        //         &PortId::transfer(),
+        //         &PortId::transfer(),
+        //         &CosmosInitChannelOptions::new(connection_id_a),
+        //     )
+        //     .await?;
 
-            println!("consensus state heights: {:?}", consensus_state_heights);
-
-            let consensus_height = consensus_state_heights[0];
-
-            let height = rollup.query_chain_height().await?;
-
-            let (consensus_state, consensus_state_proofs) = <SovereignRollup as CanQueryConsensusStateWithProofs<
-                CosmosChain,
-            >>::query_consensus_state_with_proofs(
-                rollup, &sovereign_client_id, &consensus_height, &height
-            )
-            .await?;
-
-            println!("consensus state: {:?}, proof size at height {}: {}", consensus_state, height, consensus_state_proofs.len());
-        }
-
-        {
-            let height = cosmos_chain.query_chain_height().await?;
-
-            let client_state = <CosmosChain as CanQueryClientState<SovereignChain>>::query_client_state(cosmos_chain,&cosmos_client_id, &height).await?;
-
-            println!("cosmos client state: {:?}", client_state);
-        }
-
-        sleep(Duration::from_secs(1)).await;
-
-        {
-            let cosmos_to_sovereign_relay = CosmosToSovereignRelay {
-                runtime: runtime.clone(),
-                src_chain: cosmos_chain.clone(),
-                dst_chain: sovereign_chain.clone(),
-                src_client_id: cosmos_client_id.clone(),
-                dst_client_id: sovereign_client_id.clone(),
-            };
-
-            let target_height = cosmos_chain.query_chain_height().await?;
-
-            cosmos_to_sovereign_relay
-                .send_target_update_client_messages(DestinationTarget, &target_height)
-                .await?;
-
-            let sovereign_to_cosmos_relay = SovereignToCosmosRelay {
-                runtime: runtime.clone(),
-                src_chain: sovereign_chain.clone(),
-                dst_chain: cosmos_chain.clone(),
-                src_client_id: sovereign_client_id.clone(),
-                dst_client_id: cosmos_client_id.clone(), // stub
-            };
-
-            let connection_id = sovereign_to_cosmos_relay.init_connection(&Default::default()).await?;
-
-            // let connection_id = sovereign_to_cosmos_relay.bootstrap_connection(&init_connection_options).await?;
-
-            println!("connection id: {:?}", connection_id);
-
-            let height = rollup.query_chain_height().await?;
-
-            let (connection_end, connection_end_proofs) = <SovereignRollup as CanQueryConnectionEndWithProofs<CosmosChain>>::query_connection_end_with_proofs(
-                rollup,
-                &connection_id,
-                &height,
-            ).await?;
-
-            println!("connection end: {:?}, proof size at height {}: {}", connection_end, height, connection_end_proofs.len());
-        }
+        // println!(
+        //     "channel id on Cosmos: {}, channel id on Sovereign: {}",
+        //     channel_id_a, channel_b
+        // );
 
         <Result<(), Error>>::Ok(())
     })?;

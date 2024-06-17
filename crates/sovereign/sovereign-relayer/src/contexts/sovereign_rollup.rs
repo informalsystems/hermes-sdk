@@ -119,7 +119,10 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -170,9 +173,12 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionH
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf};
+use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_rollup_components::components::SovereignRollupClientComponents;
+use hermes_sovereign_rollup_components::traits::chain_status::{
+    CanQueryChainStatusAtHeight, ChainStatusAtHeightQuerierComponent,
+};
 use hermes_sovereign_rollup_components::traits::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
 };
@@ -261,6 +267,8 @@ delegate_components! {
             ChainStatusTypeComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
             PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
@@ -323,6 +331,7 @@ delegate_components! {
             UpdateClientMessageBuilderComponent,
 
             ChainStatusQuerierComponent,
+            ChainStatusAtHeightQuerierComponent,
 
             RawClientStateTypeComponent,
             RawClientStateQuerierComponent,
@@ -441,6 +450,7 @@ pub trait CanUseSovereignRollup:
     + CanAssertEventualAmount
     + HasLogger
     + CanQueryChainStatus
+    + CanQueryChainStatusAtHeight
     + HasEncoding<Encoding = SovereignEncoding>
     + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
@@ -468,8 +478,6 @@ pub trait CanUseSovereignRollup:
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanBuildChannelOpenInitMessage<CosmosChain>
-where
-    Self::Runtime: HasMutex,
 {
 }
 

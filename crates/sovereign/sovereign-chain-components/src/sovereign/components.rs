@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
 use hermes_cosmos_chain_components::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
@@ -13,6 +12,7 @@ use hermes_relayer_components::chain::impls::forward::queries::consensus_state_h
 use hermes_relayer_components::chain::impls::forward::queries::packet_acknowledgement::ForwardQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::impls::forward::queries::packet_commitment::ForwardQueryPacketCommitment;
 use hermes_relayer_components::chain::impls::forward::queries::packet_receipt::ForwardQueryPacketReceipt;
+use hermes_relayer_components::chain::impls::forward::send_message::ForwardSendMessage;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
@@ -65,6 +65,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::C
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerierComponent;
+use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::channel::{
     ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
@@ -105,6 +106,8 @@ use hermes_relayer_components::chain::traits::types::packets::receive::{
 };
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofBytesGetterComponent;
+use hermes_relayer_components::chain::traits::types::proof::CommitmentProofHeightGetterComponent;
 use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
@@ -115,6 +118,7 @@ use hermes_relayer_components::transaction::traits::types::signer::SignerTypeCom
 use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
+use hermes_sovereign_rollup_components::impls::commitment_prefix::ProvideSovereignIbcCommitmentPrefix;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
 use hermes_sovereign_rollup_components::impls::events::ProvideSovereignEvents;
@@ -122,6 +126,8 @@ use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFr
 use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSovereignClientState;
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
+use hermes_sovereign_rollup_components::traits::chain_status::ChainStatusAtHeightQuerierComponent;
+use hermes_sovereign_rollup_components::traits::chain_status::ForwardQueryChainStatusAtHeight;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -146,6 +152,8 @@ delegate_components! {
             IbcPacketTypesProviderComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
             PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
@@ -206,9 +214,11 @@ delegate_components! {
         ]:
             ProvideSovereignTransactionTypes,
         IbcCommitmentPrefixGetterComponent:
-            ProvideIbcCommitmentPrefix,
+            ProvideSovereignIbcCommitmentPrefix,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,
+        MessageSenderComponent:
+            ForwardSendMessage,
         CreateClientPayloadBuilderComponent:
             BuildSovereignCreateClientPayload,
         CreateClientMessageBuilderComponent:
@@ -264,6 +274,8 @@ delegate_components! {
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
+        ChainStatusAtHeightQuerierComponent:
+            ForwardQueryChainStatusAtHeight,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,

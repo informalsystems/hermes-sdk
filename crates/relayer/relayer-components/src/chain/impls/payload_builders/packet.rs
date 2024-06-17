@@ -14,6 +14,7 @@ use crate::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 use crate::chain::traits::types::packets::ack::HasAcknowledgementType;
 use crate::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
+use crate::chain::traits::types::proof::HasCommitmentProofHeight;
 use crate::chain::traits::types::proof::HasCommitmentProofType;
 use crate::chain::types::payloads::packet::AckPacketPayload;
 use crate::chain::types::payloads::packet::ReceivePacketPayload;
@@ -29,7 +30,7 @@ where
         > + CanReadPacketFields<Counterparty>
         + HasClientStateType<Counterparty>
         + CanQueryPacketCommitment<Counterparty>
-        + CanIncrementHeight
+        + HasCommitmentProofHeight
         + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain>,
 {
@@ -48,9 +49,10 @@ where
             )
             .await?;
 
-        let update_height = Chain::increment_height(height)?;
-
         // TODO: validate packet commitment
+
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&proof_commitment).clone();
 
         let payload = ReceivePacketPayload {
             update_height,
@@ -71,7 +73,7 @@ where
         + HasClientStateType<Counterparty>
         + CanQueryPacketAcknowledgement<Counterparty>
         + CanIncrementHeight
-        + HasCommitmentProofType
+        + HasCommitmentProofHeight
         + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain>,
     Chain::Acknowledgement: Clone,
@@ -92,9 +94,10 @@ where
             )
             .await?;
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: validate paket ack
 
-        // TODO: validate packet ack
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&proof_ack).clone();
 
         let payload = AckPacketPayload {
             ack: ack.clone(),
@@ -115,7 +118,7 @@ where
         > + CanReadPacketFields<Counterparty>
         + HasClientStateType<Counterparty>
         + CanQueryPacketReceipt<Counterparty>
-        + CanIncrementHeight
+        + HasCommitmentProofHeight
         + HasCommitmentProofType
         + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain>,
@@ -137,7 +140,8 @@ where
 
         // TODO: validate packet receipt
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&proof_unreceived).clone();
 
         let payload = TimeoutUnorderedPacketPayload {
             update_height,
