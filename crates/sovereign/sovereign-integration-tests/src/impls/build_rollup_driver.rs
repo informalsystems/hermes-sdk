@@ -40,7 +40,7 @@ where
     ) -> Result<SovereignRollupDriver, Bootstrap::Error> {
         let rpc_config = &node_config.runner.rpc_config;
 
-        let instant = std::time::Instant::now();
+        let mut count = 0u8;
 
         let rpc_client = loop {
             match HttpClientBuilder::default().build(format!(
@@ -49,16 +49,16 @@ where
             )) {
                 Ok(client) => break client,
                 Err(err) => {
-                    if instant.elapsed() > std::time::Duration::from_secs(10) {
+                    count += 1;
+                    if count >= 10 {
                         return Err(Bootstrap::raise_error(err));
-                    } else {
-                        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
                     }
+                    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
                 }
             }
         };
 
-        let instant = std::time::Instant::now();
+        count = 0u8;
 
         let subscription_client = loop {
             match WsClientBuilder::default()
@@ -70,11 +70,11 @@ where
             {
                 Ok(client) => break client,
                 Err(err) => {
-                    if instant.elapsed() > std::time::Duration::from_secs(10) {
+                    count += 1;
+                    if count >= 10 {
                         return Err(Bootstrap::raise_error(err));
-                    } else {
-                        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
                     }
+                    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
                 }
             }
         };
