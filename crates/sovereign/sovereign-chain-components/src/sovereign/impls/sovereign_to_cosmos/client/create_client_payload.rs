@@ -1,10 +1,15 @@
 use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
+use hermes_relayer_components::chain::traits::queries::chain_status::{
+    CanQueryChainHeight, CanQueryChainStatus,
+};
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
+use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
 use hex::ToHex;
 use ibc::core::client::types::Height;
@@ -38,21 +43,25 @@ where
             CreateClientPayloadOptions = SovereignCreateClientOptions,
         > + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
         + CanRaiseError<Rollup::Error>,
-    Rollup: CanQueryChainStatus<ChainStatus = SovereignRollupStatus>,
+    Rollup: CanQueryChainHeight + CanQuerySlotHash + HasHeightType<Height = RollupHeight>,
     DataChain: HasBlockingChainHandle,
 {
     async fn build_create_client_payload(
         chain: &Chain,
         create_client_options: &SovereignCreateClientOptions,
     ) -> Result<SovereignCreateClientPayload, Chain::Error> {
+        let rollup = chain.rollup();
+
         // Build client state
-        let rollup_status = chain
-            .rollup()
-            .query_chain_status()
+        let rollup_height = rollup
+            .query_chain_height()
             .await
             .map_err(Chain::raise_error)?;
 
-        let rollup_height = rollup_status.height;
+        let slot_hash = rollup
+            .query_slot_hash(rollup_height.slot_number - 1)
+            .await
+            .map_err(Chain::raise_error)?;
 
         let latest_height = Height::new(0, rollup_height.slot_number).unwrap();
 
@@ -96,8 +105,7 @@ where
             tm_consensus_state.next_validators_hash,
         );
 
-        let sovereign_params =
-            SovereignConsensusParams::new(rollup_status.user_hash.to_vec().into());
+        let sovereign_params = SovereignConsensusParams::new(slot_hash.user_hash.to_vec().into());
 
         let consensus_state = SovTmConsensusState::new(sovereign_params, tendermint_params);
 
@@ -107,7 +115,7 @@ where
         println!(
             "built update client payload at target height {} with root hash: {}",
             rollup_height.slot_number,
-            rollup_status.user_hash.encode_hex::<String>(),
+            slot_hash.user_hash.encode_hex::<String>(),
         );
 
         // Build Create client payload
