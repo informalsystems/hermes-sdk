@@ -1,18 +1,25 @@
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_protobuf_encoding_components::types::Protobuf;
+use hermes_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
+use hermes_relayer_components::chain::traits::types::proof::{
+    HasCommitmentProofType, ViaCommitmentProof,
+};
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::proofs::ProofError;
+use ibc_relayer_types::Height;
 use ics23::CommitmentProof;
 use prost::{DecodeError, Message};
-use tendermint::block::Height as TendermintHeight;
 use tendermint::merkle::proof::ProofOps as TendermintProof;
 use tendermint_rpc::endpoint::abci_query::AbciQuery;
 use tendermint_rpc::{Client, Error as RpcError};
 
 use crate::traits::abci_query::AbciQuerier;
 use crate::traits::rpc_client::HasRpcClient;
+use crate::types::commitment_proof::CosmosCommitmentProof;
 
 pub struct QueryAbci;
 
@@ -21,18 +28,20 @@ pub struct AbciQueryError {
     pub response: AbciQuery,
 }
 
-impl<Chain> AbciQuerier<Chain> for QueryAbci
+impl<Chain, Encoding> AbciQuerier<Chain> for QueryAbci
 where
     Chain: HasRpcClient
-        + HasHeightType
-        + HasCommitmentProofType<CommitmentProof = MerkleProof>
+        + HasHeightType<Height = Height>
+        + HasEncoding<Encoding = Encoding>
+        + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
         + CanRaiseError<RpcError>
         + CanRaiseError<AbciQueryError>
         + CanRaiseError<Ics23Error>
         + CanRaiseError<ProofError>
         + CanRaiseError<DecodeError>
+        + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,
-    Chain::Height: Clone + Into<TendermintHeight>,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanEncode<Protobuf, MerkleProof>,
 {
     async fn query_abci(
         chain: &Chain,
@@ -62,14 +71,14 @@ where
         chain: &Chain,
         path: &str,
         data: &[u8],
-        height: &Chain::Height,
+        query_height: &Height,
     ) -> Result<(Vec<u8>, Chain::CommitmentProof), Chain::Error> {
         let response = chain
             .rpc_client()
             .abci_query(
                 Some(path.to_owned()),
                 data,
-                Some(height.clone().into()),
+                Some((*query_height).into()),
                 true,
             )
             .await
@@ -83,9 +92,23 @@ where
             .proof
             .ok_or_else(|| Chain::raise_error("empty response proof"))?;
 
-        let proof = convert_tm_to_ics_merkle_proof(&raw_proof).map_err(Chain::raise_error)?;
+        let merkle_proof =
+            convert_tm_to_ics_merkle_proof(&raw_proof).map_err(Chain::raise_error)?;
 
-        Ok((response.value, proof))
+        let proof_bytes = chain
+            .encoding()
+            .encode(&merkle_proof)
+            .map_err(Chain::raise_error)?;
+
+        let proof_height = *query_height + 1;
+
+        let commitment_proof = CosmosCommitmentProof {
+            merkle_proof,
+            proof_bytes,
+            proof_height,
+        };
+
+        Ok((response.value, commitment_proof))
     }
 }
 

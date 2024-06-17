@@ -1,7 +1,4 @@
 use cgp_core::{CanRaiseError, HasErrorType};
-use hermes_encoding_components::traits::encoded::HasEncodedType;
-use hermes_encoding_components::traits::encoder::CanEncode;
-use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,
@@ -12,9 +9,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::{
-    HasCommitmentProofType, ViaCommitmentProof,
-};
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
@@ -80,22 +75,18 @@ where
     }
 }
 
-impl<Chain, Counterparty, CounterpartyEncoding> ChannelOpenTryMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ChannelOpenTryMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
-        + CanRaiseError<Ics02Error>
-        + CanRaiseError<CounterpartyEncoding::Error>,
+        + CanRaiseError<Ics02Error>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenTryPayloadType<
             Chain,
             ChannelOpenTryPayload = ChannelOpenTryPayload<Counterparty, Chain>,
-        > + HasDefaultEncoding<Encoding = CounterpartyEncoding>
-        + HasCommitmentProofType
+        > + HasCommitmentProofBytes
         + HasChannelEndType<Chain, ChannelEnd = ChannelEnd>
         + HasHeightFields,
-    CounterpartyEncoding: HasEncodedType<Encoded = Vec<u8>>
-        + CanEncode<ViaCommitmentProof, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_channel_open_try_message(
@@ -134,11 +125,7 @@ where
         )
         .map_err(Chain::raise_error)?;
 
-        let counterparty_encoding = Counterparty::default_encoding();
-
-        let proof_init = counterparty_encoding
-            .encode(&payload.proof_init)
-            .map_err(Chain::raise_error)?;
+        let proof_init = Counterparty::commitment_proof_bytes(&payload.proof_init).into();
 
         let message = CosmosChannelOpenTryMessage {
             port_id: port_id.to_string(),
@@ -152,22 +139,18 @@ where
     }
 }
 
-impl<Chain, Counterparty, CounterpartyEncoding> ChannelOpenAckMessageBuilder<Chain, Counterparty>
+impl<Chain, Counterparty> ChannelOpenAckMessageBuilder<Chain, Counterparty>
     for BuildCosmosChannelHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
-        + CanRaiseError<Ics02Error>
-        + CanRaiseError<CounterpartyEncoding::Error>,
+        + CanRaiseError<Ics02Error>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenAckPayloadType<
             Chain,
             ChannelOpenAckPayload = ChannelOpenAckPayload<Counterparty, Chain>,
         > + HasChannelEndType<Chain, ChannelEnd = ChannelEnd>
-        + HasDefaultEncoding<Encoding = CounterpartyEncoding>
-        + HasCommitmentProofType
+        + HasCommitmentProofBytes
         + HasHeightFields,
-    CounterpartyEncoding: HasEncodedType<Encoded = Vec<u8>>
-        + CanEncode<ViaCommitmentProof, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_channel_open_ack_message(
@@ -183,11 +166,7 @@ where
         )
         .map_err(Chain::raise_error)?;
 
-        let counterparty_encoding = Counterparty::default_encoding();
-
-        let proof_try = counterparty_encoding
-            .encode(&payload.proof_try)
-            .map_err(Chain::raise_error)?;
+        let proof_try = Counterparty::commitment_proof_bytes(&payload.proof_try).into();
 
         let message = CosmosChannelOpenAckMessage {
             port_id: port_id.to_string(),
@@ -202,21 +181,17 @@ where
     }
 }
 
-impl<Chain, Counterparty, CounterpartyEncoding>
-    ChannelOpenConfirmMessageBuilder<Chain, Counterparty> for BuildCosmosChannelHandshakeMessage
+impl<Chain, Counterparty> ChannelOpenConfirmMessageBuilder<Chain, Counterparty>
+    for BuildCosmosChannelHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId>
-        + CanRaiseError<Ics02Error>
-        + CanRaiseError<CounterpartyEncoding::Error>,
+        + CanRaiseError<Ics02Error>,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>
         + HasChannelOpenConfirmPayloadType<
             Chain,
             ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Counterparty>,
-        > + HasDefaultEncoding<Encoding = CounterpartyEncoding>
-        + HasCommitmentProofType
+        > + HasCommitmentProofBytes
         + HasHeightFields,
-    CounterpartyEncoding: HasEncodedType<Encoded = Vec<u8>>
-        + CanEncode<ViaCommitmentProof, Counterparty::CommitmentProof>,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_channel_open_confirm_message(
@@ -231,11 +206,7 @@ where
         )
         .map_err(Chain::raise_error)?;
 
-        let counterparty_encoding = Counterparty::default_encoding();
-
-        let proof_ack = counterparty_encoding
-            .encode(&payload.proof_ack)
-            .map_err(Chain::raise_error)?;
+        let proof_ack = Counterparty::commitment_proof_bytes(&payload.proof_ack).into();
 
         let message = CosmosChannelOpenConfirmMessage {
             port_id: port_id.clone(),

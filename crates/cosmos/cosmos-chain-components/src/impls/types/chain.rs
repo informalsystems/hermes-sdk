@@ -26,7 +26,10 @@ use hermes_relayer_components::chain::traits::types::message::{
     HasMessageType, MessageSizeEstimator, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, ProvideTimestampType,
@@ -46,16 +49,20 @@ use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
 use tendermint::Hash;
 
-use crate::impls::types::proof::ProvideMerkleProofType;
 use crate::traits::message::CosmosMessage;
+use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
 pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
     ProvideCosmosChainTypes {
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
-        CommitmentProofTypeComponent:
-            ProvideMerkleProofType,
+        [
+            CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
+        ]:
+            ProvideCosmosCommitmentProof,
         PacketCommitmentTypeComponent:
             ProvideBytesPacketCommitment,
         AcknowledgementTypeComponent:

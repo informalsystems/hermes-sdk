@@ -130,7 +130,10 @@ use hermes_relayer_components::chain::traits::types::packets::receive::{
 use hermes_relayer_components::chain::traits::types::packets::timeout::{
     PacketReceiptTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -197,6 +200,8 @@ delegate_components! {
             BlockHashComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
             PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
