@@ -12,11 +12,8 @@ use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::connection::open_ack::CanRelayConnectionOpenAck;
-use hermes_relayer_components::relay::traits::connection::open_confirm::CanRelayConnectionOpenConfirm;
-use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
-use hermes_relayer_components::relay::traits::connection::open_try::CanRelayConnectionOpenTry;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
@@ -184,25 +181,14 @@ fn test_sovereign_to_cosmos() -> Result<(), Error> {
             dst_client_id: cosmos_client_id.clone(),
         };
 
-        let connection_id_a = sovereign_to_cosmos_relay
-            .init_connection(&Default::default())
+        let (connection_id_a, connection_id_b) = sovereign_to_cosmos_relay
+            .bootstrap_connection(&Default::default())
             .await?;
 
-        println!("connection id on Sovereign: {:?}", connection_id_a);
-
-        let connection_id_b = sovereign_to_cosmos_relay
-            .relay_connection_open_try(&connection_id_a)
-            .await?;
-
-        println!("connection id on Cosmos: {:?}", connection_id_b);
-
-        sovereign_to_cosmos_relay
-            .relay_connection_open_ack(&connection_id_a, &connection_id_b)
-            .await?;
-
-        sovereign_to_cosmos_relay
-            .relay_connection_open_confirm(&connection_id_a, &connection_id_b)
-            .await?;
+        println!(
+            "connection id on Sovereign: {}, connection id on Cosmos: {}",
+            connection_id_a, connection_id_b
+        );
 
         <Result<(), Error>>::Ok(())
     })?;

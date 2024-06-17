@@ -110,7 +110,7 @@ where
         let code_hash = create_client_options.code_hash.clone();
 
         println!(
-            "built update client payload at target height {} with root hash: {}",
+            "built create client payload at target height {} with root hash: {}",
             rollup_height.slot_number,
             slot_hash.user_hash.encode_hex::<String>(),
         );
