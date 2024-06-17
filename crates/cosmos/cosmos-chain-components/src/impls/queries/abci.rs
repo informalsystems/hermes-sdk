@@ -45,16 +45,11 @@ where
         chain: &Chain,
         path: &str,
         data: &[u8],
-        height: &Chain::Height,
+        height: &Height,
     ) -> Result<Vec<u8>, Chain::Error> {
         let response = chain
             .rpc_client()
-            .abci_query(
-                Some(path.to_owned()),
-                data,
-                Some(height.clone().into()),
-                false,
-            )
+            .abci_query(Some(path.to_owned()), data, Some((*height).into()), false)
             .await
             .map_err(Chain::raise_error)?;
 
