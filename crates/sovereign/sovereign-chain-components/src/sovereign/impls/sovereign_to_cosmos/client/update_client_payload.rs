@@ -14,6 +14,7 @@ use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatu
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
+use hex::ToHex;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height as IbcHeight;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::AllowUpdate;
@@ -106,6 +107,12 @@ where
         let chain_status = chain.query_chain_status_at_height(target_height).await?;
 
         assert_eq!(&chain_status.height, target_height);
+
+        println!(
+            "built update client payload at target height {} with root hash: {}",
+            target_height.slot_number,
+            chain_status.user_hash.encode_hex::<String>(),
+        );
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: da_payload.headers,

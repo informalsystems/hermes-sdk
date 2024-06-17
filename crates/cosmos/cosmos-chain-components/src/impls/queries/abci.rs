@@ -6,6 +6,7 @@ use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::commitment_types::merkle::MerkleProof;
+use ibc_proto::ibc::core::commitment::v1::MerkleRoot;
 use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::proofs::ProofError;
 use ibc_relayer_types::Height;
@@ -94,6 +95,12 @@ where
             .map_err(Chain::raise_error)?;
 
         let proof_height = *query_height + 1;
+
+        // println!(
+        //     "built proof from ABCI query for {}: {:?}",
+        //     core::str::from_utf8(data).unwrap(),
+        //     merkle_proof
+        // );
 
         let commitment_proof = CosmosCommitmentProof {
             merkle_proof,

@@ -186,15 +186,6 @@ fn test_sovereign_to_cosmos() -> Result<(), Error> {
             dst_client_id: cosmos_client_id.clone(),
         };
 
-        {
-            // FIXME: we somehow need to send an UpdateClient message first,
-            // or ConnectionOpenTry on Sovereign would fail.
-            let height = sovereign_chain.query_chain_height().await?;
-            sovereign_to_cosmos_relay
-                .send_target_update_client_messages(DestinationTarget, &height)
-                .await?;
-        }
-
         let connection_id_a = sovereign_to_cosmos_relay
             .init_connection(&Default::default())
             .await?;
