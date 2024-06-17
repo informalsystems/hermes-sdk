@@ -10,6 +10,7 @@ use hermes_relayer_components::chain::traits::payload_builders::update_client::{
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
 use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
@@ -25,7 +26,7 @@ use ibc_relayer_types::core::ics23_commitment::specs::ProofSpecs;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
 use sov_celestia_client::types::client_state::TendermintClientParams;
 
-use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
+use crate::sovereign::traits::chain::data_chain::HasDataChain;
 use crate::sovereign::traits::chain::rollup::HasRollup;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
@@ -35,23 +36,22 @@ use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 */
 pub struct BuildSovereignUpdateClientPayload;
 
-impl<Chain, Counterparty, DataChain> UpdateClientPayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, DataChain, Rollup> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildSovereignUpdateClientPayload
 where
     Chain: HasHeightType<Height = RollupHeight>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
         + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
-        + HasDataChain
-        + HasRollup
-        + HasDataChainType<DataChain = DataChain>
+        + HasRollup<Rollup = Rollup>
+        + HasDataChain<DataChain = DataChain>
+        + CanRaiseError<Rollup::Error>
         + CanRaiseError<DataChain::Error>
         + CanRaiseError<Ics02Error>
-        + CanRaiseError<IbcClientError>
-        + CanQueryChainStatusAtHeight<ChainStatus = SovereignRollupStatus>,
-    DataChain: HasBlockingChainHandle
-        + HasHeightType<Height = Height>
+        + CanRaiseError<IbcClientError>,
+    DataChain: HasHeightType<Height = Height>
         + HasClientStateType<Counterparty, ClientState = TendermintClientState>
         + CanBuildUpdateClientPayload<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>,
+    Rollup: CanQuerySlotHash,
 {
     async fn build_update_client_payload(
         chain: &Chain,
@@ -59,6 +59,9 @@ where
         target_height: &RollupHeight,
         client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
+        let rollup = chain.rollup();
+        let data_chain = chain.data_chain();
+
         let sovereign_params = &client_state.sovereign_client_state.sovereign_params;
 
         // DA height is higher than rollup height. This requires adding
@@ -87,8 +90,6 @@ where
         )
         .map_err(Chain::raise_error)?;
 
-        let data_chain = chain.data_chain();
-
         let da_client_state = convert_tm_params_to_client_state(
             &client_state.sovereign_client_state.da_params,
             &da_target_height,
@@ -100,23 +101,24 @@ where
             .await
             .map_err(Chain::raise_error)?;
 
-        let chain_status = chain.query_chain_status_at_height(target_height).await?;
-
-        assert_eq!(&chain_status.height, target_height);
+        let slot_hash = rollup
+            .query_slot_hash(target_height.slot_number - 1)
+            .await
+            .map_err(Chain::raise_error)?;
 
         println!(
             "built update client payload at target height {} with root hash: {}",
             target_height.slot_number,
-            chain_status.user_hash.encode_hex::<String>(),
+            slot_hash.user_hash.encode_hex::<String>(),
         );
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: da_payload.headers,
             initial_state_height: rollup_trusted_height,
             final_state_height: rollup_target_height,
-            final_user_hash: chain_status.user_hash,
-            final_kernel_hash: chain_status.kernel_hash,
-            final_root_hash: chain_status.root_hash,
+            final_user_hash: slot_hash.user_hash,
+            final_kernel_hash: slot_hash.kernel_hash,
+            final_root_hash: slot_hash.root_hash,
         })
     }
 }
