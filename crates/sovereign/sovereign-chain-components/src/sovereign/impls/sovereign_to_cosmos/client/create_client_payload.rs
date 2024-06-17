@@ -1,16 +1,13 @@
 use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
-use hermes_relayer_components::chain::traits::queries::chain_status::{
-    CanQueryChainHeight, CanQueryChainStatus,
-};
+use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
-use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
 use hex::ToHex;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::handle::ChainHandle;

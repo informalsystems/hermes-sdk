@@ -1,7 +1,6 @@
 use std::time::Duration;
 
 use cgp_core::CanRaiseError;
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosUpdateClientPayload;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::{
@@ -11,10 +10,8 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
-use hermes_sovereign_rollup_components::traits::chain_status::CanQueryChainStatusAtHeight;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
-use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
 use hex::ToHex;
 use ibc::core::client::types::error::ClientError as IbcClientError;
 use ibc::core::client::types::Height as IbcHeight;

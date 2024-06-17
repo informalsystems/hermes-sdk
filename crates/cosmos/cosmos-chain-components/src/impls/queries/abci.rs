@@ -6,7 +6,6 @@ use hermes_protobuf_encoding_components::types::Protobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::commitment_types::merkle::MerkleProof;
-use ibc_proto::ibc::core::commitment::v1::MerkleRoot;
 use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::proofs::ProofError;
 use ibc_relayer_types::Height;
