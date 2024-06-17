@@ -192,15 +192,6 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         println!("connection id on Cosmos: {:?}", connection_id_a);
 
-        {
-            // FIXME: we somehow need to send an UpdateClient message first,
-            // or ConnectionOpenAck on Sovereign would fail.
-            let height = sovereign_chain.query_chain_height().await?;
-            cosmos_to_sovereign_relay
-                .send_target_update_client_messages(SourceTarget, &height)
-                .await?;
-        }
-
         let connection_id_b = cosmos_to_sovereign_relay
             .relay_connection_open_try(&connection_id_a)
             .await?;
