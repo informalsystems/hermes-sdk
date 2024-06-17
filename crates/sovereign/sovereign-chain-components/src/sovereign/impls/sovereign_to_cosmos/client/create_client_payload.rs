@@ -59,7 +59,7 @@ where
             .map_err(Chain::raise_error)?;
 
         let slot_hash = rollup
-            .query_slot_hash(rollup_height.slot_number - 1)
+            .query_slot_hash(&rollup_height)
             .await
             .map_err(Chain::raise_error)?;
 

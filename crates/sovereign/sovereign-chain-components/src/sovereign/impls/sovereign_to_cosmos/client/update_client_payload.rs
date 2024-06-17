@@ -51,7 +51,7 @@ where
     DataChain: HasHeightType<Height = Height>
         + HasClientStateType<Counterparty, ClientState = TendermintClientState>
         + CanBuildUpdateClientPayload<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>,
-    Rollup: CanQuerySlotHash,
+    Rollup: HasHeightType<Height = RollupHeight> + CanQuerySlotHash,
 {
     async fn build_update_client_payload(
         chain: &Chain,
@@ -102,7 +102,7 @@ where
             .map_err(Chain::raise_error)?;
 
         let slot_hash = rollup
-            .query_slot_hash(target_height.slot_number - 1)
+            .query_slot_hash(target_height)
             .await
             .map_err(Chain::raise_error)?;
 

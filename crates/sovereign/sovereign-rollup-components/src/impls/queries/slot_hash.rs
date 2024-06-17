@@ -1,9 +1,12 @@
 use crate::traits::json_rpc_client::HasJsonRpcClient;
 use cgp_core::{async_trait, CanRaiseError, HasErrorType};
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hex::FromHexError;
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
 use serde::Deserialize;
+
+use crate::types::height::RollupHeight;
 
 pub struct SlotHash {
     pub root_hash: [u8; 32],
@@ -12,19 +15,24 @@ pub struct SlotHash {
 }
 
 #[async_trait]
-pub trait CanQuerySlotHash: HasErrorType {
-    async fn query_slot_hash(&self, slot_number: u64) -> Result<SlotHash, Self::Error>;
+pub trait CanQuerySlotHash: HasHeightType + HasErrorType {
+    async fn query_slot_hash(&self, height: &Self::Height) -> Result<SlotHash, Self::Error>;
 }
 
 impl<Rollup> CanQuerySlotHash for Rollup
 where
-    Rollup: HasJsonRpcClient
+    Rollup: HasHeightType<Height = RollupHeight>
+        + HasJsonRpcClient
         + CanRaiseError<ClientError>
         + CanRaiseError<FromHexError>
         + CanRaiseError<&'static str>,
     Rollup::JsonRpcClient: ClientT,
 {
-    async fn query_slot_hash(&self, slot_number: u64) -> Result<SlotHash, Self::Error> {
+    async fn query_slot_hash(&self, height: &RollupHeight) -> Result<SlotHash, Self::Error> {
+        // FIXME: due to quirks on Sovereign SDK, the "actual" hash of a rollup at
+        // slot H is queried at slot H-1.
+        let slot_number = height.slot_number - 1;
+
         let response: SlotResponse = self
             .json_rpc_client()
             .request("ledger_getSlotByNumber", (slot_number,))
