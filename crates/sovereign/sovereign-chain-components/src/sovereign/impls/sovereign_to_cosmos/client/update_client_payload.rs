@@ -15,7 +15,7 @@ use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignCli
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::status::SovereignRollupStatus;
 use hex::ToHex;
-use ibc::core::client::types::error::ClientError;
+use ibc::core::client::types::error::ClientError as IbcClientError;
 use ibc::core::client::types::Height as IbcHeight;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::AllowUpdate;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
@@ -46,7 +46,7 @@ where
         + HasDataChainType<DataChain = DataChain>
         + CanRaiseError<DataChain::Error>
         + CanRaiseError<Ics02Error>
-        + CanRaiseError<ClientError>
+        + CanRaiseError<IbcClientError>
         + CanQueryChainStatusAtHeight<ChainStatus = SovereignRollupStatus>,
     DataChain: HasBlockingChainHandle
         + HasHeightType<Height = Height>
@@ -59,10 +59,6 @@ where
         target_height: &RollupHeight,
         client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
-        // FIXME: the latest rollup height with +1 workaround is causing the DA header
-        // verification to fail, as the DA has not progressed to the expected height.
-        tokio::time::sleep(Duration::from_secs(2)).await;
-
         let sovereign_params = &client_state.sovereign_client_state.sovereign_params;
 
         // DA height is higher than rollup height. This requires adding
