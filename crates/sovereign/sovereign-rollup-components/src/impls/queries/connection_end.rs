@@ -70,14 +70,14 @@ where
     async fn query_connection_end_with_proofs(
         rollup: &Rollup,
         connection_id: &Rollup::ConnectionId,
-        height: &Rollup::Height,
+        query_height: &Rollup::Height,
     ) -> Result<(Rollup::ConnectionEnd, SovereignCommitmentProof), Rollup::Error> {
         let request = Request {
             connection_id: &connection_id.to_string(),
-            query_height: &(&RollupHeight {
-                slot_number: height.slot_number,
-            })
-                .into(),
+            query_height: &HeightParam {
+                revision_number: 0,
+                revision_height: query_height.slot_number,
+            },
         };
 
         let response: QueryConnectionResponse = rollup
@@ -98,6 +98,13 @@ where
         let proof_height = RollupHeight {
             slot_number: response.proof_height.revision_height(),
         };
+
+        println!(
+            "built connection proof at query height {}, proof height {} with root hash: {:?}",
+            query_height.slot_number,
+            proof_height.slot_number,
+            merkle_proof.root_hash(),
+        );
 
         let commitment_proof = SovereignCommitmentProof {
             proof_bytes,

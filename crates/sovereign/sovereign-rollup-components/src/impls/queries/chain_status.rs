@@ -23,26 +23,28 @@ where
     Rollup::JsonRpcClient: ClientT,
 {
     async fn query_chain_status(rollup: &Rollup) -> Result<SovereignRollupStatus, Rollup::Error> {
-        let SlotResponse {
-            number,
-            hash,
-            state_root,
-        } = rollup
+        let response_a: SlotResponse = rollup
             .json_rpc_client()
             .request("ledger_getHead", ArrayParams::new())
             .await
             .map_err(Rollup::raise_error)?;
 
+        let response_b: SlotResponse = rollup
+            .json_rpc_client()
+            .request("ledger_getSlotByNumber", (response_a.number - 1,))
+            .await
+            .map_err(Rollup::raise_error)?;
+
         let height = RollupHeight {
-            slot_number: number,
+            slot_number: response_a.number,
         };
 
         // FIXME: use the relayer's local timestamp for now, as it is currently not possible
         // to query the remote time from the rollup.
         let timestamp = Timestamp::now();
 
-        let state_root = hex::decode(state_root.strip_prefix("0x").unwrap()).unwrap();
-        let root_hash = hex::decode(hash.strip_prefix("0x").unwrap()).unwrap();
+        let state_root = hex::decode(response_b.state_root.strip_prefix("0x").unwrap()).unwrap();
+        let root_hash = hex::decode(response_b.hash.strip_prefix("0x").unwrap()).unwrap();
 
         Ok(SovereignRollupStatus {
             height,
@@ -76,17 +78,11 @@ where
         rollup: &Rollup,
         height: &Rollup::Height,
     ) -> Result<SovereignRollupStatus, Rollup::Error> {
-        let params = {
-            let mut params = ArrayParams::new();
-            params.insert(height.slot_number - 1).unwrap();
-            params
-        };
-
         let SlotResponse {
             hash, state_root, ..
         } = rollup
             .json_rpc_client()
-            .request("ledger_getSlotByNumber", params)
+            .request("ledger_getSlotByNumber", (height.slot_number - 1,))
             .await
             .map_err(Rollup::raise_error)?;
 

@@ -95,6 +95,12 @@ where
 
         let proof_height = *query_height + 1;
 
+        // println!(
+        //     "built proof from ABCI query for {}: {:?}",
+        //     core::str::from_utf8(data).unwrap(),
+        //     merkle_proof
+        // );
+
         let commitment_proof = CosmosCommitmentProof {
             merkle_proof,
             proof_bytes,

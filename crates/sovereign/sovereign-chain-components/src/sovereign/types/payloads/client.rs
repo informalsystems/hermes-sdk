@@ -16,9 +16,9 @@ pub struct SovereignUpdateClientPayload {
     pub datachain_header: Vec<Header>,
     pub initial_state_height: Height,
     pub final_state_height: Height,
-    pub final_user_hash: Vec<u8>,
-    pub final_kernel_hash: Vec<u8>,
-    pub final_root_hash: Vec<u8>,
+    pub final_user_hash: [u8; 32],
+    pub final_kernel_hash: [u8; 32],
+    pub final_root_hash: [u8; 32],
 }
 
 pub struct SovereignCreateClientOptions {

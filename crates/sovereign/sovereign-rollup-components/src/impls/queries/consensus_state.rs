@@ -97,10 +97,10 @@ where
                 revision_number: Counterparty::revision_number(consensus_height),
                 revision_height: Counterparty::revision_height(consensus_height),
             },
-            query_height: &(&RollupHeight {
-                slot_number: query_height.slot_number,
-            })
-                .into(),
+            query_height: &HeightParam {
+                revision_number: 0,
+                revision_height: query_height.slot_number,
+            },
         };
 
         let response: QueryConsensusStateResponse = rollup
@@ -124,6 +124,13 @@ where
         let proof_height = RollupHeight {
             slot_number: response.proof_height.revision_height(),
         };
+
+        println!(
+            "built consensus state proof at query height {}, proof height {} with root hash: {:?}",
+            query_height.slot_number,
+            proof_height.slot_number,
+            merkle_proof.root_hash(),
+        );
 
         let commitment_proof = SovereignCommitmentProof {
             proof_bytes,
