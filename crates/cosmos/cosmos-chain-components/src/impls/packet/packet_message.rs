@@ -1,7 +1,4 @@
 use cgp_core::CanRaiseError;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
-use hermes_encoding_components::traits::encoder::CanEncode;
-use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -13,9 +10,7 @@ use hermes_relayer_components::chain::traits::types::packets::ack::{
 };
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::proof::{
-    HasCommitmentProofBytes, HasCommitmentProofType, ViaCommitmentProof,
-};
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };

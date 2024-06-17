@@ -1,4 +1,7 @@
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerier, ChannelEndWithProofsQuerier,
 };
@@ -12,7 +15,9 @@ use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
 use serde::Serialize;
 
+use crate::impls::borsh_encode::ViaBorsh;
 use crate::traits::json_rpc_client::HasJsonRpcClient;
+use crate::types::commitment_proof::{JellyfishMerkleProof, SovereignCommitmentProof};
 use crate::types::height::RollupHeight;
 use crate::types::rpc::height::HeightParam;
 
@@ -55,7 +60,7 @@ where
     }
 }
 
-impl<Rollup, Counterparty> ChannelEndWithProofsQuerier<Rollup, Counterparty>
+impl<Rollup, Counterparty, Encoding> ChannelEndWithProofsQuerier<Rollup, Counterparty>
     for QueryChannelEndOnSovereign
 where
     Rollup: HasChannelEndType<Counterparty, ChannelEnd = ChannelEnd>
@@ -64,17 +69,20 @@ where
             Height = RollupHeight,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        > + HasCommitmentProofType<CommitmentProof = SovereignCommitmentProof>
         + HasJsonRpcClient
+        + HasEncoding<Encoding = Encoding>
+        + CanRaiseError<Encoding::Error>
         + CanRaiseError<ClientError>,
     Rollup::JsonRpcClient: ClientT,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanDecode<ViaBorsh, JellyfishMerkleProof>,
 {
     async fn query_channel_end_with_proofs(
         rollup: &Rollup,
         channel_id: &Rollup::ChannelId,
         port_id: &Rollup::PortId,
         height: &Rollup::Height,
-    ) -> Result<(Rollup::ChannelEnd, Vec<u8>), Rollup::Error> {
+    ) -> Result<(Rollup::ChannelEnd, SovereignCommitmentProof), Rollup::Error> {
         let request = Request {
             channel_id: channel_id.as_ref(),
             port_id: port_id.as_ref(),
@@ -90,7 +98,26 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
-        Ok((response.channel, response.proof))
+        let channel_end = response.channel;
+
+        let proof_bytes = response.proof;
+
+        let merkle_proof = rollup
+            .encoding()
+            .decode(&proof_bytes)
+            .map_err(Rollup::raise_error)?;
+
+        let proof_height = RollupHeight {
+            slot_number: response.proof_height.revision_height(),
+        };
+
+        let commitment_proof = SovereignCommitmentProof {
+            proof_bytes,
+            merkle_proof,
+            proof_height,
+        };
+
+        Ok((channel_end, commitment_proof))
     }
 }
 

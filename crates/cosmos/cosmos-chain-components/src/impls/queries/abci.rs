@@ -3,10 +3,8 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_protobuf_encoding_components::types::Protobuf;
-use hermes_relayer_components::chain::traits::types::height::{CanIncrementHeight, HasHeightType};
-use hermes_relayer_components::chain::traits::types::proof::{
-    HasCommitmentProofType, ViaCommitmentProof,
-};
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::proofs::ProofError;

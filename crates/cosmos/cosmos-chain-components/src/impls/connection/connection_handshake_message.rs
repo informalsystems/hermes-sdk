@@ -1,8 +1,6 @@
 use cgp_core::CanRaiseError;
 use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
-use hermes_encoding_components::traits::encoder::CanEncode;
-use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEncoding};
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -16,10 +14,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::ViaCommitmentProof;
-use hermes_relayer_components::chain::traits::types::proof::{
-    HasCommitmentProofBytes, HasCommitmentProofType,
-};
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,

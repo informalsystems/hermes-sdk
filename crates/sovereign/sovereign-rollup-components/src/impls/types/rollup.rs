@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
-use hermes_relayer_components::chain::impls::types::proof::ProvideCommitmentProofBytes;
 use hermes_relayer_components::chain::impls::types::receipt::ProvideBoolPacketReceipt;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ProvideChainIdType;
@@ -16,13 +15,17 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, TimestampTypeComponent,
 };
 use ibc_relayer_types::timestamp::Timestamp;
 
+use crate::types::commitment_proof::ProvideSovereignCommitmentProof;
 use crate::types::event::SovereignEvent;
 use crate::types::height::RollupHeight;
 use crate::types::message::SovereignMessage;
@@ -110,8 +113,12 @@ delegate_components! {
             ChannelEndTypeComponent,
         ]:
             ProvideCosmosChainTypes,
-        CommitmentProofTypeComponent:
-            ProvideCommitmentProofBytes,
+        [
+            CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
+        ]:
+            ProvideSovereignCommitmentProof,
         PacketReceiptTypeComponent:
             ProvideBoolPacketReceipt,
     }
