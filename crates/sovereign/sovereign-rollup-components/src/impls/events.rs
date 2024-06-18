@@ -1,5 +1,6 @@
 use hermes_cosmos_chain_components::types::events::client::CosmosCreateClientEvent;
 use hermes_relayer_components::chain::traits::types::create_client::ProvideCreateClientEvent;
+use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     ProvideChannelOpenInitEvent, ProvideChannelOpenTryEvent,
@@ -7,6 +8,11 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ProvideConnectionOpenInitEvent, ProvideConnectionOpenTryEvent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
+use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId};
 use serde_json::Value;
 
@@ -156,5 +162,51 @@ where
 
     fn channel_open_try_event_channel_id(channel_id: &ChannelId) -> &ChannelId {
         channel_id
+    }
+}
+
+impl<Chain, Counterparty> ProvideSendPacketEvent<Chain, Counterparty> for ProvideSovereignEvents
+where
+    Chain: HasEventType<Event = SovereignEvent>
+        + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>,
+{
+    type SendPacketEvent = Packet;
+
+    fn try_extract_send_packet_event(event: &SovereignEvent) -> Option<Packet> {
+        if event.module_name != "ibc" {
+            return None;
+        }
+
+        println!("try extract send packet event: {:?}", event);
+
+        // TODO
+        None
+    }
+
+    fn extract_packet_from_send_packet_event(packet: &Packet) -> Packet {
+        packet.clone()
+    }
+}
+
+impl<Chain, Counterparty> ProvideWriteAckEvent<Chain, Counterparty> for ProvideSovereignEvents
+where
+    Chain: HasEventType<Event = SovereignEvent>
+        + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>,
+{
+    type WriteAckEvent = Vec<u8>;
+
+    fn try_extract_write_ack_event(event: &SovereignEvent) -> Option<Vec<u8>> {
+        if event.module_name != "ibc" {
+            return None;
+        }
+
+        println!("try extract send packet event: {:?}", event);
+
+        // TODO
+        None
+    }
+
+    fn write_acknowledgement(ack: &Vec<u8>) -> &Vec<u8> {
+        ack
     }
 }

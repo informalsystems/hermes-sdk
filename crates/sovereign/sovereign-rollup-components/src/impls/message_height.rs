@@ -17,6 +17,9 @@ where
     fn counterparty_message_height_for_update_client(message: &SovereignMessage) -> Option<Height> {
         match message {
             SovereignMessage::Ibc(IbcMessage::Core(message)) => message.counterparty_height,
+            SovereignMessage::Ibc(IbcMessage::Transfer(message)) => {
+                Some(message.counterparty_height)
+            }
             _ => None,
         }
     }

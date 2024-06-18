@@ -1,11 +1,13 @@
 #![recursion_limit = "256"]
 
 use core::time::Duration;
+use std::collections::BTreeSet;
 use std::env::var;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use futures::lock::Mutex;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
@@ -25,6 +27,7 @@ use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSover
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::client::ClientSettings;
@@ -182,6 +185,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             dst_chain: sovereign_chain.clone(),
             src_client_id: cosmos_client_id.clone(),
             dst_client_id: sovereign_client_id.clone(),
+            packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
         };
 
         let (connection_id_a, connection_id_b) = cosmos_to_sovereign_relay
@@ -205,6 +209,34 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
             "channel id on Cosmos: {}, channel id on Sovereign: {}",
             channel_id_a, channel_b
         );
+
+        let wallet_a = &cosmos_chain_driver.user_wallet_a;
+
+        let address_a = &wallet_a.address;
+
+        let wallet_b = rollup_driver.wallets.get("user-a").unwrap();
+
+        let _address_b = &wallet_b.address.address;
+
+        let denom_a = &cosmos_chain_driver.genesis_config.transfer_denom;
+
+        let _balance_a1 = cosmos_chain.query_balance(address_a, denom_a).await?;
+
+        // FIXME: Submitting IBC transfer message to the Wasm contract on Cosmos is broken
+
+        // let packet = <CosmosChain as CanIbcTransferToken<SovereignRollup>>::ibc_transfer_token(
+        //     &cosmos_chain,
+        //     &channel_id_a,
+        //     &PortId::transfer(),
+        //     wallet_a,
+        //     address_b,
+        //     &Amount::new(1000, denom_a.clone()),
+        // )
+        // .await?;
+
+        // println!("packet for IBC transfer from Cosmos: {}", packet);
+
+        // cosmos_to_sovereign_relay.relay_packet(&packet).await?;
 
         <Result<(), Error>>::Ok(())
     })?;

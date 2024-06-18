@@ -27,9 +27,9 @@ where
             PortId = PortId,
             Height = Height,
             Timestamp = Timestamp,
-            Message = CosmosMessage,
         >,
     Counterparty: HasAddressType,
+    Chain::Message: From<CosmosMessage>,
 {
     async fn build_ibc_token_transfer_message(
         _chain: &Chain,
@@ -40,7 +40,7 @@ where
         memo: &Option<String>,
         timeout_height: Option<&Height>,
         timeout_time: Option<&Timestamp>,
-    ) -> Result<CosmosMessage, Chain::Error> {
+    ) -> Result<Chain::Message, Chain::Error> {
         let message = TokenTransferMessage {
             channel_id: channel_id.clone(),
             port_id: port_id.clone(),
@@ -51,6 +51,8 @@ where
             timeout_time: timeout_time.cloned(),
         };
 
-        Ok(message.to_cosmos_message())
+        println!("built IBC transfer message: {:?}", message);
+
+        Ok(message.to_cosmos_message().into())
     }
 }

@@ -6,6 +6,7 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use ed25519_dalek::SigningKey;
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
@@ -113,6 +114,8 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     ConnectionOpenInitEventComponent, ConnectionOpenTryEventComponent, HasConnectionOpenInitEvent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::SendPacketEventComponent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::WriteAckEventComponent;
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
@@ -186,18 +189,24 @@ use hermes_test_components::chain::traits::assert::eventual_amount::{
     CanAssertEventualAmount, EventualAmountAsserterComponent,
 };
 use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
+use hermes_test_components::chain::traits::messages::ibc_transfer::{
+    CanBuildIbcTokenTransferMessage, IbcTokenTransferMessageBuilderComponent,
+};
 use hermes_test_components::chain::traits::queries::balance::{
     BalanceQuerierComponent, CanQueryBalance,
 };
+use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
+use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
 use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
 use hermes_test_components::chain::traits::types::amount::AmountTypeComponent;
 use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
+use hermes_test_components::chain::traits::types::memo::DefaultMemoGetterComponent;
+use hermes_test_components::chain::traits::types::memo::{HasMemoType, MemoTypeComponent};
 use hermes_test_components::chain::traits::types::wallet::WalletTypeComponent;
 use jsonrpsee::http_client::HttpClient;
 use jsonrpsee::ws_client::WsClient;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
-use crate::contexts::logger::ProvideSovereignLogger;
 
 #[derive(Clone)]
 pub struct SovereignRollup {
@@ -246,7 +255,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideSovereignLogger,
+            ProvideCosmosLogger,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,
@@ -290,6 +299,8 @@ delegate_components! {
             ConnectionOpenTryEventComponent,
             ChannelOpenInitEventComponent,
             ChannelOpenTryEventComponent,
+            SendPacketEventComponent,
+            WriteAckEventComponent,
 
             CreateClientPayloadOptionsTypeComponent,
             CreateClientMessageOptionsTypeComponent,
@@ -375,6 +386,11 @@ delegate_components! {
             DenomTypeComponent,
             AmountTypeComponent,
             WalletTypeComponent,
+            MemoTypeComponent,
+            DefaultMemoGetterComponent,
+            TokenIbcTransferrerComponent,
+            IbcTransferTimeoutCalculatorComponent,
+            IbcTokenTransferMessageBuilderComponent,
             BalanceQuerierComponent,
             EventualAmountAsserterComponent,
             PollAssertDurationGetterComponent,
@@ -445,6 +461,7 @@ pub trait CanUseSovereignRollup:
     + CanAssertEventualAmount
     + HasLogger
     + CanQueryChainStatus
+    + HasMemoType<Memo = Option<String>>
     + HasEncoding<Encoding = SovereignEncoding>
     + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>
@@ -472,6 +489,7 @@ pub trait CanUseSovereignRollup:
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanBuildChannelOpenInitMessage<CosmosChain>
+    + CanBuildIbcTokenTransferMessage<CosmosChain>
 {
 }
 

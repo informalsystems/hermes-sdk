@@ -1,4 +1,5 @@
 #![recursion_limit = "256"]
+#![allow(refining_impl_trait)]
 
 extern crate alloc;
 

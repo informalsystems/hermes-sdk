@@ -1,12 +1,21 @@
 use borsh::BorshSerialize;
+use ibc::apps::transfer::types::msgs::transfer::MsgTransfer;
 use ibc_proto::google::protobuf::Any;
 use ibc_relayer_types::core::ics02_client::height::Height;
+use std::io::prelude::Write;
 
 use crate::types::message::SovereignMessage;
 
 #[derive(Debug, BorshSerialize)]
 pub enum IbcMessage {
     Core(IbcMessageWithHeight),
+    Transfer(MsgTransferWithHeight),
+}
+
+#[derive(Debug)]
+pub struct MsgTransferWithHeight {
+    pub message: MsgTransfer,
+    pub counterparty_height: Height,
 }
 
 #[derive(Debug)]
@@ -25,7 +34,13 @@ impl IbcMessageWithHeight {
 }
 
 impl BorshSerialize for IbcMessageWithHeight {
-    fn serialize<W: std::io::prelude::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+    fn serialize<W: Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        self.message.serialize(writer)
+    }
+}
+
+impl BorshSerialize for MsgTransferWithHeight {
+    fn serialize<W: Write>(&self, writer: &mut W) -> std::io::Result<()> {
         self.message.serialize(writer)
     }
 }
