@@ -10,7 +10,9 @@ use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
@@ -23,8 +25,11 @@ use hermes_sovereign_chain_components::sovereign::types::payloads::client::Sover
 use hermes_sovereign_integration_tests::contexts::sovereign_bootstrap::SovereignBootstrap;
 use hermes_sovereign_relayer::contexts::cosmos_to_sovereign_relay::CosmosToSovereignRelay;
 use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
+use hermes_sovereign_relayer::contexts::sovereign_rollup::SovereignRollup;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::client::ClientSettings;
@@ -204,6 +209,34 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
         println!(
             "channel id on Cosmos: {}, channel id on Sovereign: {}",
             channel_id_a, channel_b
+        );
+
+        let wallet_a = &cosmos_chain_driver.user_wallet_a;
+
+        let address_a = &wallet_a.address;
+
+        let wallet_b = rollup_driver.wallets.get("user-a").unwrap();
+
+        let address_b = &wallet_b.address.address;
+
+        let denom_a = &cosmos_chain_driver.genesis_config.transfer_denom;
+
+        let _balance_a1 = cosmos_chain.query_balance(address_a, denom_a).await?;
+
+        let send_packet_event =
+            <CosmosChain as CanIbcTransferToken<SovereignRollup>>::ibc_transfer_token(
+                &cosmos_chain,
+                &channel_id_a,
+                &PortId::transfer(),
+                wallet_a,
+                address_b,
+                &Amount::new(1000, denom_a.clone()),
+            )
+            .await?;
+
+        println!(
+            "send packet event for IBC transfer from Cosmos: {}",
+            send_packet_event
         );
 
         <Result<(), Error>>::Ok(())
