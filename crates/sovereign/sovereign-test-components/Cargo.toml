@@ -23,6 +23,7 @@ hermes-celestia-test-components     = { workspace = true }
 hermes-sovereign-chain-components   = { workspace = true }
 hermes-sovereign-rollup-components  = { workspace = true }
 
+ibc                                 = { workspace = true }
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 

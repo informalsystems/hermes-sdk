@@ -27,6 +27,7 @@ use hermes_sovereign_relayer::contexts::sovereign_chain::SovereignChain;
 use hermes_sovereign_relayer::contexts::sovereign_to_cosmos_relay::SovereignToCosmosRelay;
 use hermes_sovereign_test_components::bootstrap::traits::bootstrap_rollup::CanBootstrapRollup;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::client::ClientSettings;
@@ -209,6 +210,32 @@ fn test_sovereign_to_cosmos() -> Result<(), Error> {
             "channel id on Sovereign: {}, channel id on Cosmos: {}",
             channel_id_a, channel_b
         );
+
+        let wallet_b = &cosmos_chain_driver.user_wallet_a;
+
+        let _address_b = &wallet_b.address;
+
+        let wallet_a = rollup_driver.wallets.get("user-a").unwrap();
+
+        let address_a = &wallet_a.address.address;
+
+        let denom_a = &rollup_driver.genesis_config.transfer_token_address.address;
+
+        let _balance_a1 = rollup.query_balance(address_a, denom_a).await?;
+
+        // let packet = <SovereignRollup as CanIbcTransferToken<CosmosChain>>::ibc_transfer_token(
+        //     &cosmos_chain,
+        //     &channel_id_a,
+        //     &PortId::transfer(),
+        //     wallet_a,
+        //     address_b,
+        //     &Amount::new(1000, denom_a.clone()),
+        // )
+        // .await?;
+
+        // println!("packet for IBC transfer from Cosmos: {}", packet);
+
+        // sovereign_to_cosmos_relay.relay_packet(&packet).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
