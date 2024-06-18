@@ -1,11 +1,13 @@
 #![recursion_limit = "256"]
 
 use core::time::Duration;
+use std::collections::BTreeSet;
 use std::env::var;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use futures::lock::Mutex;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
@@ -182,6 +184,7 @@ fn test_sovereign_to_cosmos() -> Result<(), Error> {
             dst_chain: cosmos_chain.clone(),
             src_client_id: sovereign_client_id.clone(),
             dst_client_id: cosmos_client_id.clone(),
+            packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
         };
 
         let (connection_id_a, connection_id_b) = sovereign_to_cosmos_relay
