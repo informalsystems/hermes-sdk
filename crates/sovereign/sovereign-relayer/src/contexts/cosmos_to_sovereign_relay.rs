@@ -10,9 +10,11 @@ use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use hermes_relayer_components::components::default::relay::{
     DefaultRelayComponents, IsDefaultRelayComponent,
 };
+use hermes_relayer_components::relay::impls::packet_filters::allow_all::AllowAll;
 use hermes_relayer_components::relay::impls::packet_lock::PacketMutex;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
@@ -28,6 +30,7 @@ use hermes_relayer_components::relay::traits::connection::open_handshake::CanRel
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
 use hermes_relayer_components::relay::traits::packet::HasRelayPacketFields;
+use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
 use hermes_relayer_components::relay::traits::packet_lock::{HasPacketLock, PacketLockComponent};
 use hermes_relayer_components::relay::traits::packet_relayer::{CanRelayPacket, PacketRelayer};
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
@@ -69,9 +72,12 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanRelayReceivePacket
     + CanRelayAckPacket
     + CanRelayTimeoutUnorderedPacket
-    + HasPacketLock // + CanRelayPacket
+    + HasPacketLock
+    + CanRelayPacket
 {
 }
+
+impl CanUseDefaultPacketRelayer for CosmosToSovereignRelay {}
 
 impl CanUseCosmosToSovereignRelay for CosmosToSovereignRelay {}
 
@@ -104,6 +110,8 @@ delegate_components! {
             ProvideCosmosLogger,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
+        PacketFilterComponent:
+            AllowAll,
     }
 }
 
