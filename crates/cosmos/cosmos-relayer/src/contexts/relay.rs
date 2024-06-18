@@ -12,7 +12,7 @@ use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
 use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutexGetter, ProvidePacketLockWithMutex,
+    PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
@@ -153,9 +153,7 @@ impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
 }
 
 impl PacketMutexGetter<CosmosRelay> for CosmosRelayComponents {
-    fn packet_mutex(
-        relay: &CosmosRelay,
-    ) -> &hermes_relayer_components::relay::impls::packet_lock::PacketMutex<CosmosRelay> {
+    fn packet_mutex(relay: &CosmosRelay) -> &PacketMutex<CosmosRelay> {
         &relay.packet_lock_mutex
     }
 }
