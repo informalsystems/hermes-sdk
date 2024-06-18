@@ -99,13 +99,6 @@ where
             slot_number: response.proof_height.revision_height(),
         };
 
-        println!(
-            "built connection proof at query height {}, proof height {} with root hash: {:?}",
-            query_height.slot_number,
-            proof_height.slot_number,
-            merkle_proof.root_hash(),
-        );
-
         let commitment_proof = SovereignCommitmentProof {
             proof_bytes,
             merkle_proof,

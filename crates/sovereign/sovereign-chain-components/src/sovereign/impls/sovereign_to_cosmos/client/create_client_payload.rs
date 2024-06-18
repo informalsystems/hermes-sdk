@@ -8,7 +8,6 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
-use hex::ToHex;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{QueryHeight, QueryHostConsensusStateRequest};
@@ -108,12 +107,6 @@ where
 
         // Retrieve code hash
         let code_hash = create_client_options.code_hash.clone();
-
-        println!(
-            "built create client payload at target height {} with root hash: {}",
-            rollup_height.slot_number,
-            slot_hash.user_hash.encode_hex::<String>(),
-        );
 
         // Build Create client payload
         Ok(SovereignCreateClientPayload {
