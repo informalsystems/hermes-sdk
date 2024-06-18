@@ -126,8 +126,6 @@ use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFr
 use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSovereignClientState;
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
-use hermes_sovereign_rollup_components::traits::chain_status::ChainStatusAtHeightQuerierComponent;
-use hermes_sovereign_rollup_components::traits::chain_status::ForwardQueryChainStatusAtHeight;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -274,8 +272,6 @@ delegate_components! {
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
-        ChainStatusAtHeightQuerierComponent:
-            ForwardQueryChainStatusAtHeight,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
