@@ -6,6 +6,7 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use ed25519_dalek::SigningKey;
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
@@ -199,7 +200,6 @@ use jsonrpsee::http_client::HttpClient;
 use jsonrpsee::ws_client::WsClient;
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
-use crate::contexts::logger::ProvideSovereignLogger;
 
 #[derive(Clone)]
 pub struct SovereignRollup {
@@ -248,7 +248,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideSovereignLogger,
+            ProvideCosmosLogger,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,

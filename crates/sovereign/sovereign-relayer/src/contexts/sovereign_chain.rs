@@ -4,6 +4,7 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
+use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
 };
@@ -107,7 +108,6 @@ use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
-use crate::contexts::logger::ProvideSovereignLogger;
 use crate::contexts::sovereign_rollup::SovereignRollup;
 
 #[derive(Clone)]
@@ -145,7 +145,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideSovereignLogger,
+            ProvideCosmosLogger,
     }
 }
 
