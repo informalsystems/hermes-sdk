@@ -1,4 +1,5 @@
 use alloc::vec::Vec;
+
 use cgp_core::{CanRaiseError, HasInner};
 
 use crate::chain::traits::send_message::{CanSendMessages, MessageSender};

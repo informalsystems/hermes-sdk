@@ -1,9 +1,10 @@
+use std::io::Error as IoError;
+
 use borsh::{BorshDeserialize, BorshSerialize};
 use cgp_core::CanRaiseError;
 use hermes_encoding_components::traits::decoder::Decoder;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::Encoder;
-use std::io::Error as IoError;
 
 pub struct ViaBorsh;
 

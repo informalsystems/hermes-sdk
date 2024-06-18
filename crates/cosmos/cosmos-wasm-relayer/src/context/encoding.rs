@@ -1,6 +1,3 @@
-use crate::encoding::components::{
-    IsWasmCosmosEncodingComponent, WasmCosmosEncodingComponents as BaseWasmCosmosEncodingComponents,
-};
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
@@ -19,6 +16,9 @@ use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
 
+use crate::encoding::components::{
+    IsWasmCosmosEncodingComponent, WasmCosmosEncodingComponents as BaseWasmCosmosEncodingComponents,
+};
 use crate::types::client_state::WrappedTendermintClientState;
 
 pub struct WasmCosmosEncoding;

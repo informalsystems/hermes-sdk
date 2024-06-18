@@ -41,10 +41,8 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, ChainStatusQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::channel_end::{
-    CanQueryChannelEnd, CanQueryChannelEndWithProofs,
-};
-use hermes_relayer_components::chain::traits::queries::channel_end::{
-    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs, ChannelEndQuerierComponent,
+    ChannelEndWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerierComponent,
@@ -67,8 +65,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
     CanQueryPacketAcknowledgement, PacketAcknowledgementQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
-use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::{
+    CanQueryPacketCommitment, PacketCommitmentQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::packet_receipt::{
     CanQueryPacketReceipt, PacketReceiptQuerierComponent,
 };

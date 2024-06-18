@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
-
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };

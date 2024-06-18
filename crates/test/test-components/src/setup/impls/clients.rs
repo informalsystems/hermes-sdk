@@ -1,7 +1,8 @@
 use cgp_core::prelude::*;
 use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientMessageOptionsType;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;

@@ -1,8 +1,6 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
-use ibc::core::client::types::error::ClientError;
-use ibc::core::commitment_types::error::CommitmentError;
 
 use cgp_core::prelude::*;
 use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -34,6 +32,8 @@ use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::E
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use ibc::core::client::types::error::ClientError;
+use ibc::core::commitment_types::error::CommitmentError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::supervisor::Error as SupervisorError;

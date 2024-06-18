@@ -28,7 +28,6 @@ use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatus
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
 };
-
 use hermes_relayer_components::chain::traits::queries::client_state::{
     ClientStateQuerierComponent, ClientStateWithProofsQuerierComponent,
     RawClientStateQuerierComponent, RawClientStateWithProofsQuerierComponent,

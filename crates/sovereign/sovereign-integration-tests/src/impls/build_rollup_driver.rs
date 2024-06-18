@@ -1,6 +1,5 @@
-use core::time::Duration;
-
 use alloc::collections::BTreeMap;
+use core::time::Duration;
 
 use cgp_core::CanRaiseError;
 use hermes_runtime::types::runtime::HermesRuntime;
