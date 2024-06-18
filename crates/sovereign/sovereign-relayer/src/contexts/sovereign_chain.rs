@@ -76,6 +76,8 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::HasCha
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
     HasConnectionOpenInitEvent, HasConnectionOpenTryEvent,
 };
+use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
+use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
@@ -249,6 +251,8 @@ pub trait CanUseSovereignChain:
     + CanBuildTimeoutUnorderedPacketPayload<CosmosChain>
     + HasConnectionOpenInitEvent<CosmosChain>
     + HasConnectionOpenTryEvent<CosmosChain>
+    + HasSendPacketEvent<CosmosChain>
+    + HasWriteAckEvent<CosmosChain>
 {
 }
 

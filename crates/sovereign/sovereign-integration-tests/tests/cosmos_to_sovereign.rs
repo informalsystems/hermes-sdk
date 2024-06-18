@@ -223,21 +223,19 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         let _balance_a1 = cosmos_chain.query_balance(address_a, denom_a).await?;
 
-        let send_packet_event =
-            <CosmosChain as CanIbcTransferToken<SovereignRollup>>::ibc_transfer_token(
-                &cosmos_chain,
-                &channel_id_a,
-                &PortId::transfer(),
-                wallet_a,
-                address_b,
-                &Amount::new(1000, denom_a.clone()),
-            )
-            .await?;
+        let packet = <CosmosChain as CanIbcTransferToken<SovereignRollup>>::ibc_transfer_token(
+            &cosmos_chain,
+            &channel_id_a,
+            &PortId::transfer(),
+            wallet_a,
+            address_b,
+            &Amount::new(1000, denom_a.clone()),
+        )
+        .await?;
 
-        println!(
-            "send packet event for IBC transfer from Cosmos: {}",
-            send_packet_event
-        );
+        println!("packet for IBC transfer from Cosmos: {}", packet);
+
+        // cosmos_to_sovereign_relay.relay_packet();
 
         <Result<(), Error>>::Ok(())
     })?;

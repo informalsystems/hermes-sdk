@@ -26,17 +26,9 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::target::SourceTarget;
 
-pub trait CanUseDefaultAckPacketRelayer: UseDefaultAckPacketRelayer
-where
-    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
-{
-}
+pub trait CanUseDefaultAckPacketRelayer: UseDefaultAckPacketRelayer {}
 
-pub trait UseDefaultAckPacketRelayer: CanRelayAckPacket
-where
-    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
-{
-}
+pub trait UseDefaultAckPacketRelayer: CanRelayAckPacket {}
 
 impl<Relay, SrcChain, DstChain, Components, Logger> UseDefaultAckPacketRelayer for Relay
 where

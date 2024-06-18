@@ -6,9 +6,8 @@ use crate::relay::traits::chains::HasRelayChains;
 
 #[derive_component(ReceivePacketRelayerComponnent, ReceivePacketRelayer<Relay>)]
 #[async_trait]
-pub trait CanRelayReceivePacket: HasRelayChains
-where
-    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
+pub trait CanRelayReceivePacket:
+    HasRelayChains<DstChain: HasWriteAckEvent<Self::SrcChain>>
 {
     async fn relay_receive_packet(
         &self,
