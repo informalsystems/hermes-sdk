@@ -1,6 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent, ProvideInner};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use eyre::Error;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::{
@@ -50,6 +51,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
+use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::chain_id::{
@@ -101,7 +103,8 @@ use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use ibc_relayer_types::core::ics04_channel::packet::Sequence;
+use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 
 use crate::contexts::encoding::{ProvideSovereignEncoding, SovereignEncoding};
 use crate::contexts::logger::ProvideSovereignLogger;
@@ -183,6 +186,18 @@ impl RuntimeGetter<SovereignChain> for SovereignChainComponents {
 impl ChainIdGetter<SovereignChain> for SovereignChainComponents {
     fn chain_id(chain: &SovereignChain) -> &ChainId {
         chain.data_chain.chain_id()
+    }
+}
+
+impl ReceivedPacketQuerier<SovereignChain, CosmosChain> for SovereignChainComponents {
+    async fn query_packet_is_received(
+        _chain: &SovereignChain,
+        _port_id: &PortId,
+        _channel_id: &ChannelId,
+        _sequence: &Sequence,
+    ) -> Result<bool, Error> {
+        // TODO: stub
+        Ok(false)
     }
 }
 

@@ -18,6 +18,7 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::connection::open_handshake::CanRelayConnectionOpenHandshake;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::ibc_message_sender::{CanSendIbcMessages, MainSink};
+use hermes_relayer_components::relay::traits::packet::HasRelayPacketFields;
 use hermes_relayer_components::relay::traits::packet_relayer::{CanRelayPacket, PacketRelayer};
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
@@ -44,6 +45,7 @@ pub struct CosmosToSovereignRelay {
 
 pub trait CanUseCosmosToSovereignRelay:
     HasRelayChains<SrcChain = CosmosChain, DstChain = SovereignChain>
+    + HasRelayPacketFields
     + CanRaiseRelayChainErrors
     + CanCreateClient<SourceTarget>
     + CanCreateClient<DestinationTarget>
@@ -55,9 +57,9 @@ pub trait CanUseCosmosToSovereignRelay:
     + CanSendIbcMessages<MainSink, DestinationTarget>
     + CanRelayConnectionOpenHandshake
     + CanRelayChannelOpenHandshake
-// + CanRelayAckPacket
-// + CanRelayReceivePacket
-// + CanRelayTimeoutUnorderedPacket
+    + CanRelayReceivePacket
+    + CanRelayAckPacket
+    + CanRelayTimeoutUnorderedPacket
 {
 }
 
