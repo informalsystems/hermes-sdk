@@ -14,7 +14,7 @@ impl CosmosInitChannelOptions {
         Self {
             ordering: Ordering::Unordered,
             connection_hops: vec![connection_id],
-            channel_version: Version::default(),
+            channel_version: Version::ics20(),
         }
     }
 }

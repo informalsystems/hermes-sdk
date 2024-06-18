@@ -60,11 +60,6 @@ where
             &chain_driver.chain().chain_id().to_string(),
         ];
 
-        // println!("running command: HOME={} celestia {}",
-        //     Runtime::file_path_to_string(bridge_home_dir),
-        //     args.join(" ")
-        // );
-
         let child = bootstrap
             .runtime()
             .start_child_process(

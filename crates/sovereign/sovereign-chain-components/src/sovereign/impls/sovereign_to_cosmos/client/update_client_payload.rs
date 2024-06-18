@@ -12,7 +12,6 @@ use hermes_relayer_components::chain::traits::types::update_client::HasUpdateCli
 use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
-use hex::ToHex;
 use ibc::core::client::types::error::ClientError as IbcClientError;
 use ibc::core::client::types::Height as IbcHeight;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::AllowUpdate;
@@ -102,12 +101,6 @@ where
             .query_slot_hash(target_height)
             .await
             .map_err(Chain::raise_error)?;
-
-        println!(
-            "built update client payload at target height {} with root hash: {}",
-            target_height.slot_number,
-            slot_hash.user_hash.encode_hex::<String>(),
-        );
 
         Ok(SovereignUpdateClientPayload {
             datachain_header: da_payload.headers,

@@ -10,15 +10,13 @@ use crate::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::packets::ack::HasAckPacketPayloadType;
-use crate::chain::traits::types::packets::ack::HasAcknowledgementType;
+use crate::chain::traits::types::packets::ack::{HasAckPacketPayloadType, HasAcknowledgementType};
 use crate::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use crate::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
-use crate::chain::traits::types::proof::HasCommitmentProofHeight;
-use crate::chain::traits::types::proof::HasCommitmentProofType;
-use crate::chain::types::payloads::packet::AckPacketPayload;
-use crate::chain::types::payloads::packet::ReceivePacketPayload;
-use crate::chain::types::payloads::packet::TimeoutUnorderedPacketPayload;
+use crate::chain::traits::types::proof::{HasCommitmentProofHeight, HasCommitmentProofType};
+use crate::chain::types::payloads::packet::{
+    AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
+};
 
 pub struct BuildPacketPayloads;
 

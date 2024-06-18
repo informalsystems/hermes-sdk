@@ -41,10 +41,8 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, ChainStatusQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::channel_end::{
-    CanQueryChannelEnd, CanQueryChannelEndWithProofs,
-};
-use hermes_relayer_components::chain::traits::queries::channel_end::{
-    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs, ChannelEndQuerierComponent,
+    ChannelEndWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerierComponent,
@@ -67,8 +65,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
     CanQueryPacketAcknowledgement, PacketAcknowledgementQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
-use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::{
+    CanQueryPacketCommitment, PacketCommitmentQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::packet_receipt::{
     CanQueryPacketReceipt, PacketReceiptQuerierComponent,
 };
@@ -176,9 +175,6 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_rollup_components::components::SovereignRollupClientComponents;
-use hermes_sovereign_rollup_components::traits::chain_status::{
-    CanQueryChainStatusAtHeight, ChainStatusAtHeightQuerierComponent,
-};
 use hermes_sovereign_rollup_components::traits::json_rpc_client::{
     JsonRpcClientGetter, JsonRpcClientTypeComponent,
 };
@@ -331,7 +327,6 @@ delegate_components! {
             UpdateClientMessageBuilderComponent,
 
             ChainStatusQuerierComponent,
-            ChainStatusAtHeightQuerierComponent,
 
             RawClientStateTypeComponent,
             RawClientStateQuerierComponent,
@@ -450,7 +445,6 @@ pub trait CanUseSovereignRollup:
     + CanAssertEventualAmount
     + HasLogger
     + CanQueryChainStatus
-    + CanQueryChainStatusAtHeight
     + HasEncoding<Encoding = SovereignEncoding>
     + HasCounterpartyMessageHeight<CosmosChain>
     + HasClientStateType<CosmosChain, ClientState = WrappedSovereignClientState>

@@ -116,7 +116,7 @@ where
 
         let event_json = event.event_value.get("OpenInitChannel")?;
 
-        let channel_id_value = event_json.get("channel_id")?;
+        let channel_id_value = event_json.get("chan_id_attr_on_a")?.get("channel_id")?;
 
         if let Value::String(channel_id_str) = channel_id_value {
             let channel_id = channel_id_str.parse().ok()?;
@@ -144,7 +144,7 @@ where
 
         let event_json = event.event_value.get("OpenTryChannel")?;
 
-        let channel_id_value = event_json.get("channel_id")?;
+        let channel_id_value = event_json.get("chan_id_attr_on_b")?.get("channel_id")?;
 
         if let Value::String(channel_id_str) = channel_id_value {
             let channel_id = channel_id_str.parse().ok()?;

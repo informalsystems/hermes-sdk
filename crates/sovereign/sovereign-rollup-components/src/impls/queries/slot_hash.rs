@@ -1,4 +1,3 @@
-use crate::traits::json_rpc_client::HasJsonRpcClient;
 use cgp_core::{async_trait, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hex::FromHexError;
@@ -6,6 +5,7 @@ use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
 use serde::Deserialize;
 
+use crate::traits::json_rpc_client::HasJsonRpcClient;
 use crate::types::height::RollupHeight;
 
 pub struct SlotHash {

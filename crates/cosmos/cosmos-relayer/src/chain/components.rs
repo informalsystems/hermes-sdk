@@ -128,8 +128,9 @@ use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
-use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::{
+    AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packets::receive::{
     PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
 };

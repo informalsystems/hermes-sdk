@@ -19,8 +19,9 @@ use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPack
 use hermes_relayer_components::chain::impls::types::payloads::channel::ProvideChannelPayloadTypes;
 use hermes_relayer_components::chain::impls::types::payloads::connection::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::impls::types::payloads::packet::ProvidePacketPayloadTypes;
-use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
-use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetterComponent;
+use hermes_relayer_components::chain::traits::commitment_prefix::{
+    CommitmentPrefixTypeComponent, IbcCommitmentPrefixGetterComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
@@ -89,8 +90,9 @@ use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightIncrementerComponent, HeightTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent,
 };
@@ -99,16 +101,19 @@ use hermes_relayer_components::chain::traits::types::ibc_events::connection::{
 };
 use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
-use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::{
+    AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packets::receive::{
     PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::timeout::TimeoutUnorderedPacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofBytesGetterComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofHeightGetterComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::{
+    PacketReceiptTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+};
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -126,8 +131,6 @@ use hermes_sovereign_rollup_components::impls::message_height::GetCosmosHeightFr
 use hermes_sovereign_rollup_components::impls::types::client_state::ProvideSovereignClientState;
 use hermes_sovereign_rollup_components::impls::types::consensus_state::ProvideSovereignConsensusState;
 use hermes_sovereign_rollup_components::impls::types::transaction::ProvideSovereignTransactionTypes;
-use hermes_sovereign_rollup_components::traits::chain_status::ChainStatusAtHeightQuerierComponent;
-use hermes_sovereign_rollup_components::traits::chain_status::ForwardQueryChainStatusAtHeight;
 
 use crate::sovereign::impls::sovereign_to_cosmos::client::create_client_payload::BuildSovereignCreateClientPayload;
 use crate::sovereign::impls::sovereign_to_cosmos::client::update_client_payload::BuildSovereignUpdateClientPayload;
@@ -274,8 +277,6 @@ delegate_components! {
 
         ChainStatusQuerierComponent:
             ForwardQueryChainStatus,
-        ChainStatusAtHeightQuerierComponent:
-            ForwardQueryChainStatusAtHeight,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
