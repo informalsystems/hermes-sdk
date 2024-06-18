@@ -49,7 +49,6 @@ where
     DstChain: HasRuntime<Runtime = DstRuntime> + HasChainId,
     SrcRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
     DstRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
-    Build::Runtime: HasMutex,
 {
     async fn build_relay_from_chains(
         build: &Build,
@@ -137,7 +136,6 @@ where
     >;
 }
 
-#[async_trait]
 impl<Build, Target, Chain, Counterparty, Runtime> CanBuildBatchChannel<Target> for Build
 where
     Build: HasBiRelayType + HasRuntime + HasErrorType,

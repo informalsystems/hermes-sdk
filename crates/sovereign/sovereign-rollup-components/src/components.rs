@@ -1,7 +1,6 @@
-use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromSovereign;
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-use hermes_cosmos_chain_components::impls::commitment_prefix::ProvideIbcCommitmentPrefix;
+use hermes_cosmos_chain_components::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_message::BuildCosmosPacketMessages;
 use hermes_cosmos_chain_components::impls::transaction::poll_timeout::DefaultPollTimeout;
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideAnyRawClientState;
@@ -111,10 +110,9 @@ use hermes_relayer_components::transaction::traits::types::transaction::Transact
 use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
-use crate::impls::cosmos_to_sovereign::channel::channel_handshake_message::BuildChannelOpenInitMessageOnSovereign;
+use crate::impls::commitment_prefix::ProvideSovereignIbcCommitmentPrefix;
 use crate::impls::cosmos_to_sovereign::client::create_client_message::BuildCreateCosmosClientMessageOnSovereign;
 use crate::impls::cosmos_to_sovereign::client::update_client_message::BuildUpdateCosmosClientMessageOnSovereign;
-use crate::impls::cosmos_to_sovereign::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessageOnSovereign;
 use crate::impls::events::ProvideSovereignEvents;
 use crate::impls::json_rpc_client::ProvideJsonRpseeClient;
 use crate::impls::message_height::GetCosmosHeightFromSovereignMessage;
@@ -124,8 +122,10 @@ use crate::impls::queries::client_state::QueryClientStateOnSovereign;
 use crate::impls::queries::connection_end::QueryConnectionEndOnSovereign;
 use crate::impls::queries::consensus_state::QueryConsensusStateOnSovereign;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsOnSovereign;
+use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFromSovereign;
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromSovereign;
 use crate::impls::queries::packet_receipt::QueryPacketReceiptFromSovereign;
+use crate::impls::send_message::SendMessagesInSequence;
 use crate::impls::transaction::encode_tx::EncodeSovereignTx;
 use crate::impls::transaction::estimate_fee::ReturnSovereignTxFee;
 use crate::impls::transaction::event::ParseSovTxResponseAsEvents;
@@ -209,14 +209,15 @@ delegate_components! {
             ProvideSovereignTransactionTypes,
         [
             NonceAllocatorComponent,
-            MessageSenderComponent,
             MessagesWithSignerSenderComponent,
             MessagesWithSignerAndNonceSenderComponent,
             TxResponsePollerComponent,
         ]:
             DefaultTxComponents,
+        MessageSenderComponent:
+            SendMessagesInSequence<DefaultTxComponents>,
         IbcCommitmentPrefixGetterComponent:
-            ProvideIbcCommitmentPrefix,
+            ProvideSovereignIbcCommitmentPrefix,
         JsonRpcClientTypeComponent:
             ProvideJsonRpseeClient,
         TxResponseQuerierComponent:
@@ -293,11 +294,9 @@ delegate_components! {
             ConnectionOpenAckMessageBuilderComponent,
             ConnectionOpenConfirmMessageBuilderComponent,
         ]:
-            BuildCosmosConnectionHandshakeMessageOnSovereign,
-
-        ChannelOpenInitMessageBuilderComponent:
-            BuildChannelOpenInitMessageOnSovereign,
+            BuildCosmosConnectionHandshakeMessage,
         [
+            ChannelOpenInitMessageBuilderComponent,
             ChannelOpenTryMessageBuilderComponent,
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,

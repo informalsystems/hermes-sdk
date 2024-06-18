@@ -1,7 +1,6 @@
 use alloc::collections::BTreeSet;
 use alloc::vec::Vec;
 
-use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::{HasCounterpartyMessageHeight, HasIbcChainTypes};
 use crate::relay::traits::ibc_message_sender::IbcMessageSender;
 use crate::relay::traits::target::ChainTarget;
@@ -16,7 +15,7 @@ where
     InSender: IbcMessageSender<Relay, Sink, Target>,
     TargetChain: HasIbcChainTypes<CounterpartyChain>,
     TargetChain: HasCounterpartyMessageHeight<CounterpartyChain>,
-    CounterpartyChain: HasIbcChainTypes<TargetChain> + CanIncrementHeight,
+    CounterpartyChain: HasIbcChainTypes<TargetChain>,
     Relay: CanBuildTargetUpdateClientMessage<Target>,
 {
     async fn send_messages(

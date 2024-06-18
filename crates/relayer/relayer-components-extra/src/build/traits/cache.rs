@@ -25,10 +25,9 @@ pub trait HasBatchSenderCacheType<Build, Error>: Async {
 impl<Target, Build, Error> HasBatchSenderCacheType<Build, Error> for Target
 where
     Error: Async,
-    Build: HasBiRelayType + HasRuntime,
+    Build: HasBiRelayType + HasRuntime<Runtime: HasMutex>,
     Target: ChainBuildTarget<Build>,
     Target::TargetChain: HasMessageBatchSenderType<Error>,
-    Build::Runtime: HasMutex,
 {
     type BatchSenderCache = MutexOf<
         RuntimeOf<Build>,

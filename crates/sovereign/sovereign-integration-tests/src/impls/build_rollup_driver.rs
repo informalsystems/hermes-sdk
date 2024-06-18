@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use core::time::Duration;
 
 use cgp_core::CanRaiseError;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -14,8 +15,9 @@ use hermes_sovereign_test_components::types::rollup_node_config::SovereignRollup
 use hermes_sovereign_test_components::types::wallet::SovereignWallet;
 use jsonrpsee::core::ClientError;
 use jsonrpsee::http_client::HttpClientBuilder;
-use jsonrpsee::ws_client::WsClientBuilder;
+use jsonrpsee::ws_client::{WsClient, WsClientBuilder};
 use tokio::process::Child;
+use tokio::time::sleep;
 
 use crate::contexts::rollup_driver::SovereignRollupDriver;
 
@@ -39,19 +41,14 @@ where
         rollup_process: Child,
     ) -> Result<SovereignRollupDriver, Bootstrap::Error> {
         let rpc_config = &node_config.runner.rpc_config;
+        let bind_host = &rpc_config.bind_host;
+        let bind_port = rpc_config.bind_port;
 
         let rpc_client = HttpClientBuilder::default()
-            .build(format!(
-                "http://{}:{}",
-                rpc_config.bind_host, rpc_config.bind_port
-            ))
+            .build(format!("http://{}:{}", bind_host, bind_port))
             .map_err(Bootstrap::raise_error)?;
 
-        let subscription_client = WsClientBuilder::default()
-            .build(format!(
-                "ws://{}:{}",
-                rpc_config.bind_host, rpc_config.bind_port
-            ))
+        let subscription_client = build_subscription_client(bind_host, bind_port)
             .await
             .map_err(Bootstrap::raise_error)?;
 
@@ -74,4 +71,26 @@ where
             rollup_process,
         })
     }
+}
+
+async fn build_subscription_client(
+    bind_host: &String,
+    bind_port: u16,
+) -> Result<WsClient, ClientError> {
+    let build_client =
+        || WsClientBuilder::default().build(format!("ws://{}:{}", bind_host, bind_port));
+
+    // The WebSocket server may not start in time during test.
+    // In such case, we will wait for at most 10s for the server to start
+    for _ in 0..10 {
+        let result = build_client().await;
+
+        if let Ok(client) = result {
+            return Ok(client);
+        }
+
+        sleep(Duration::from_secs(1)).await;
+    }
+
+    build_client().await
 }

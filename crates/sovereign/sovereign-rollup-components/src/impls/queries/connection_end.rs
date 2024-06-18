@@ -1,4 +1,7 @@
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::queries::connection_end::{
     ConnectionEndQuerier, ConnectionEndWithProofsQuerier,
 };
@@ -11,7 +14,9 @@ use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
 use serde::Serialize;
 
+use crate::impls::borsh_encode::ViaBorsh;
 use crate::traits::json_rpc_client::HasJsonRpcClient;
+use crate::types::commitment_proof::{JellyfishMerkleProof, SovereignCommitmentProof};
 use crate::types::height::RollupHeight;
 use crate::types::rpc::height::HeightParam;
 
@@ -33,7 +38,10 @@ where
     ) -> Result<Rollup::ConnectionEnd, Rollup::Error> {
         let request = Request {
             connection_id: &connection_id.to_string(),
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryConnectionResponse = rollup
@@ -46,24 +54,30 @@ where
     }
 }
 
-impl<Rollup, Counterparty> ConnectionEndWithProofsQuerier<Rollup, Counterparty>
+impl<Rollup, Counterparty, Encoding> ConnectionEndWithProofsQuerier<Rollup, Counterparty>
     for QueryConnectionEndOnSovereign
 where
     Rollup: HasConnectionEndType<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasIbcChainTypes<Counterparty, Height = RollupHeight>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasCommitmentProofType<CommitmentProof = SovereignCommitmentProof>
         + HasJsonRpcClient
+        + HasEncoding<Encoding = Encoding>
+        + CanRaiseError<Encoding::Error>
         + CanRaiseError<ClientError>,
     Rollup::JsonRpcClient: ClientT,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanDecode<ViaBorsh, JellyfishMerkleProof>,
 {
     async fn query_connection_end_with_proofs(
         rollup: &Rollup,
         connection_id: &Rollup::ConnectionId,
-        height: &Rollup::Height,
-    ) -> Result<(Rollup::ConnectionEnd, Vec<u8>), Rollup::Error> {
+        query_height: &Rollup::Height,
+    ) -> Result<(Rollup::ConnectionEnd, SovereignCommitmentProof), Rollup::Error> {
         let request = Request {
             connection_id: &connection_id.to_string(),
-            query_height: &height.into(),
+            query_height: &HeightParam {
+                revision_number: 0,
+                revision_height: query_height.slot_number,
+            },
         };
 
         let response: QueryConnectionResponse = rollup
@@ -72,7 +86,26 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
-        Ok((response.conn_end, response.proof))
+        let connection_end = response.conn_end;
+
+        let proof_bytes = response.proof;
+
+        let merkle_proof = rollup
+            .encoding()
+            .decode(&proof_bytes)
+            .map_err(Rollup::raise_error)?;
+
+        let proof_height = RollupHeight {
+            slot_number: response.proof_height.revision_height(),
+        };
+
+        let commitment_proof = SovereignCommitmentProof {
+            proof_bytes,
+            merkle_proof,
+            proof_height,
+        };
+
+        Ok((connection_end, commitment_proof))
     }
 }
 

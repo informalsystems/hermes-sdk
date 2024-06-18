@@ -22,7 +22,6 @@ use crate::chain::traits::send_message::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
-use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
@@ -51,7 +50,6 @@ where
         + HasRuntime
         + HasChainId
         + CanSendMessages
-        + CanIncrementHeight
         + CanQueryChainStatus
         + HasClientStateFields<DstChain>
         + HasConsensusStateType<DstChain>
@@ -69,7 +67,6 @@ where
         + HasRuntime
         + HasChainId
         + CanSendMessages
-        + CanIncrementHeight
         + CanQueryChainStatus
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>

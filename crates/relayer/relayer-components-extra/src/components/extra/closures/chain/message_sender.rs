@@ -38,7 +38,6 @@ use crate::telemetry::traits::telemetry::HasTelemetry;
 pub trait UseExtraChainComponentsForIbcMessageSender<Counterparty>:
     HasRuntime
     + HasChainId
-    + CanIncrementHeight
     + CanSendMessages
     + CanQueryChainStatus
     + HasConsensusStateType<Counterparty>

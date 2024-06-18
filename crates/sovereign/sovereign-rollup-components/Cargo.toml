@@ -14,10 +14,10 @@ description  = """
 
 [dependencies]
 cgp-core                                = { workspace = true }
-hermes-runtime                          = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-wasm-client-components           = { workspace = true }
+hermes-runtime-components               = { workspace = true }
 hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
 
@@ -28,6 +28,7 @@ sov-celestia-client                     = { workspace = true, features = ["test-
 ibc                                     = { workspace = true }
 ibc-query                               = { workspace = true, features = ["serde"] }
 
+tokio               = { workspace = true }
 eyre                = { workspace = true }
 jsonrpsee           = { workspace = true, features = ["http-client"] }
 prost               = { workspace = true }
@@ -37,7 +38,8 @@ bech32              = { workspace = true }
 borsh               = { workspace = true }
 futures             = { workspace = true }
 ed25519-dalek       = { workspace = true }
-sha2                = { version = "0.10.8" }
+jmt                 = { workspace = true }
+sha2                = { workspace = true }
 hex                 = { version = "0.4.3" }
 base64              = { version = "0.22.1" }
 serde-json-wasm     = { version = "1.0.1" }

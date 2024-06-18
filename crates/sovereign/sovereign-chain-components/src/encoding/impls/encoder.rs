@@ -8,9 +8,12 @@ use hermes_encoding_components::impls::convert_and_encode::ConvertAndEncode;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_relayer_components::chain::traits::types::proof::ViaCommitmentProof;
+use hermes_sovereign_rollup_components::impls::borsh_encode::{EncodeWithBorsh, ViaBorsh};
 use hermes_sovereign_rollup_components::types::client_state::{
     ProtoSovereignClientState, SovereignClientState,
 };
+use hermes_sovereign_rollup_components::types::commitment_proof::JellyfishMerkleProof;
 use hermes_sovereign_rollup_components::types::consensus_state::{
     ProtoSovereignConsensusState, SovereignConsensusState,
 };
@@ -27,6 +30,9 @@ pub struct SovereignEncoderComponents;
 delegate_components! {
     SovereignEncoderComponents {
         [
+            (Protobuf, Vec<u8>),
+            (ViaCommitmentProof, Vec<u8>),
+
             (Any, TendermintClientState),
             (Protobuf, TendermintClientState),
             (Protobuf, ProtoTendermintClientState),
@@ -68,5 +74,7 @@ delegate_components! {
         (WasmConsensusState, SovereignConsensusState):
             EncodeViaWasmConsensusState,
 
+        (ViaBorsh, JellyfishMerkleProof):
+            EncodeWithBorsh,
     }
 }

@@ -14,7 +14,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
@@ -90,7 +90,7 @@ where
         + CanRaiseError<Ics02Error>
         + CanRaiseError<Encoding::Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasCommitmentProofBytes
         + HasHeightFields
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
@@ -128,6 +128,10 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_init = Counterparty::commitment_proof_bytes(&payload.proof_init).into();
+        let proof_client = Counterparty::commitment_proof_bytes(&payload.proof_client).into();
+        let proof_consensus = Counterparty::commitment_proof_bytes(&payload.proof_consensus).into();
+
         let message = CosmosConnectionOpenTryMessage {
             client_id: client_id.clone(),
             counterparty_client_id: counterparty_client_id.clone(),
@@ -137,9 +141,9 @@ where
             delay_period,
             client_state: client_state_any,
             update_height,
-            proof_init: payload.proof_init,
-            proof_client: payload.proof_client,
-            proof_consensus: payload.proof_consensus,
+            proof_init,
+            proof_client,
+            proof_consensus,
             proof_consensus_height,
         };
 
@@ -157,7 +161,7 @@ where
         + CanRaiseError<Ics02Error>
         + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,
-    Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
+    Counterparty: HasCommitmentProofBytes
         + HasConnectionEndType<Chain, ConnectionEnd = ConnectionEnd>
         + HasIbcChainTypes<Chain, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightFields
@@ -203,15 +207,19 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_try = Counterparty::commitment_proof_bytes(&payload.proof_try).into();
+        let proof_client = Counterparty::commitment_proof_bytes(&payload.proof_client).into();
+        let proof_consensus = Counterparty::commitment_proof_bytes(&payload.proof_consensus).into();
+
         let message = CosmosConnectionOpenAckMessage {
             connection_id,
             counterparty_connection_id,
             version,
             client_state: client_state_any,
             update_height,
-            proof_try: payload.proof_try,
-            proof_client: payload.proof_client,
-            proof_consensus: payload.proof_consensus,
+            proof_try,
+            proof_client,
+            proof_consensus,
             proof_consensus_height,
         };
 
@@ -223,7 +231,7 @@ impl<Chain, Counterparty> ConnectionOpenConfirmMessageBuilder<Chain, Counterpart
     for BuildCosmosConnectionHandshakeMessage
 where
     Chain: HasIbcChainTypes<Counterparty, ConnectionId = ConnectionId> + CanRaiseError<Ics02Error>,
-    Counterparty: HasCommitmentProofType<CommitmentProof = Vec<u8>>
+    Counterparty: HasCommitmentProofBytes
         + HasHeightFields
         + HasConnectionOpenConfirmPayloadType<
             Chain,
@@ -242,10 +250,12 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_ack = Counterparty::commitment_proof_bytes(&payload.proof_ack).into();
+
         let message = CosmosConnectionOpenConfirmMessage {
             connection_id: connection_id.clone(),
             update_height,
-            proof_ack: payload.proof_ack,
+            proof_ack,
         };
 
         Ok(message.to_cosmos_message().into())

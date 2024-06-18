@@ -41,7 +41,6 @@ where
     pub task_senders: Arc<Runtime::Mutex<Option<Vec<Runtime::Sender<T>>>>>,
 }
 
-#[async_trait]
 impl<Runtime, S, T> Task for StreamSubscriptionTask<Runtime, S, T>
 where
     Runtime: HasMutex + CanCreateChannels + CanUseChannels + CanStreamReceiver + HasBoxedStreamType,

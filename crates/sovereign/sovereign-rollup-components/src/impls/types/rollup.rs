@@ -15,13 +15,17 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, TimestampTypeComponent,
 };
 use ibc_relayer_types::timestamp::Timestamp;
 
+use crate::types::commitment_proof::ProvideSovereignCommitmentProof;
 use crate::types::event::SovereignEvent;
 use crate::types::height::RollupHeight;
 use crate::types::message::SovereignMessage;
@@ -55,9 +59,8 @@ where
     Chain: HasHeightType<Height = RollupHeight> + HasErrorType,
 {
     fn increment_height(height: &RollupHeight) -> Result<RollupHeight, Chain::Error> {
-        Ok(RollupHeight {
-            slot_number: height.slot_number + 1,
-        })
+        // FIXME: do not increment height for now, as proof height for Sovereign is not incremented
+        Ok(height.clone())
     }
 }
 
@@ -104,13 +107,18 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             CommitmentPrefixTypeComponent,
-            CommitmentProofTypeComponent,
             PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
         ]:
             ProvideCosmosChainTypes,
+        [
+            CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
+        ]:
+            ProvideSovereignCommitmentProof,
         PacketReceiptTypeComponent:
             ProvideBoolPacketReceipt,
     }

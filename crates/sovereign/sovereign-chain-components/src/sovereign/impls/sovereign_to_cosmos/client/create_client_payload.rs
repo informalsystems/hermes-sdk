@@ -5,6 +5,8 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use ibc::core::client::types::Height;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -37,17 +39,23 @@ where
             CreateClientPayloadOptions = SovereignCreateClientOptions,
         > + HasCreateClientPayloadType<Counterparty, CreateClientPayload = SovereignCreateClientPayload>
         + CanRaiseError<Rollup::Error>,
-    Rollup: CanQueryChainHeight<Height = RollupHeight>,
+    Rollup: CanQueryChainHeight + CanQuerySlotHash + HasHeightType<Height = RollupHeight>,
     DataChain: HasBlockingChainHandle,
 {
     async fn build_create_client_payload(
         chain: &Chain,
         create_client_options: &SovereignCreateClientOptions,
     ) -> Result<SovereignCreateClientPayload, Chain::Error> {
+        let rollup = chain.rollup();
+
         // Build client state
-        let rollup_height = chain
-            .rollup()
+        let rollup_height = rollup
             .query_chain_height()
+            .await
+            .map_err(Chain::raise_error)?;
+
+        let slot_hash = rollup
+            .query_slot_hash(&rollup_height)
             .await
             .map_err(Chain::raise_error)?;
 
@@ -56,21 +64,19 @@ where
         let mut sovereign_client_params = create_client_options.sovereign_client_params.clone();
         sovereign_client_params.latest_height = latest_height;
 
+        let genesis_da_height = sovereign_client_params.genesis_da_height;
+
         let client_state = ClientState::new(
             sovereign_client_params,
             create_client_options.tendermint_params_config.clone(),
         );
 
-        // Build consensus state
-        // TODO: Once the + 1 is removed from crates/sovereign/sovereign-rollup-components/src/impls/queries/chain_status.rs
-        // this will need to be fixed by creating the da_latest_height with:
-        // rollup_height + genesis_da_height
         let da_latest_height = RelayerHeight::new(
             create_client_options
                 .sovereign_client_params
                 .genesis_da_height
                 .revision_number(),
-            rollup_height.slot_number,
+            rollup_height.slot_number + genesis_da_height.revision_height(),
         )
         .unwrap();
 
@@ -95,7 +101,7 @@ where
             tm_consensus_state.next_validators_hash,
         );
 
-        let sovereign_params = SovereignConsensusParams::new(vec![0].into());
+        let sovereign_params = SovereignConsensusParams::new(slot_hash.user_hash.to_vec().into());
 
         let consensus_state = SovTmConsensusState::new(sovereign_params, tendermint_params);
 

@@ -41,10 +41,8 @@ use hermes_relayer_components::chain::traits::queries::chain_status::{
     CanQueryChainStatus, ChainStatusQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::channel_end::{
-    CanQueryChannelEnd, CanQueryChannelEndWithProofs,
-};
-use hermes_relayer_components::chain::traits::queries::channel_end::{
-    ChannelEndQuerierComponent, ChannelEndWithProofsQuerierComponent,
+    CanQueryChannelEnd, CanQueryChannelEndWithProofs, ChannelEndQuerierComponent,
+    ChannelEndWithProofsQuerierComponent,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerierComponent,
@@ -67,8 +65,9 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::{
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::{
     CanQueryPacketAcknowledgement, PacketAcknowledgementQuerierComponent,
 };
-use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
-use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerierComponent;
+use hermes_relayer_components::chain::traits::queries::packet_commitment::{
+    CanQueryPacketCommitment, PacketCommitmentQuerierComponent,
+};
 use hermes_relayer_components::chain::traits::queries::packet_receipt::{
     CanQueryPacketReceipt, PacketReceiptQuerierComponent,
 };
@@ -102,7 +101,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientEvent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
+use hermes_relayer_components::chain::traits::types::height::{
+    HasHeightFields, HeightFieldComponent, HeightTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetterComponent, HasCounterpartyMessageHeight, IbcChainTypesComponent,
 };
@@ -117,7 +118,10 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -168,7 +172,7 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionH
 use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf};
+use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_sovereign_rollup_components::components::SovereignRollupClientComponents;
 use hermes_sovereign_rollup_components::traits::json_rpc_client::{
@@ -251,6 +255,7 @@ delegate_components! {
             ProvideSovereignEncoding,
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
@@ -258,6 +263,8 @@ delegate_components! {
             ChainStatusTypeComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
             PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
@@ -421,6 +428,7 @@ impl ProvideMutexForNonceAllocation<SovereignRollup> for SovereignRollupComponen
 pub trait CanUseSovereignRollup:
     CanQueryBalance
     + HasChainId
+    + HasHeightFields
     + CanEncodeTx
     + CanEstimateTxFee
     + HasFeeForSimulation
@@ -464,8 +472,6 @@ pub trait CanUseSovereignRollup:
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanBuildChannelOpenInitMessage<CosmosChain>
-where
-    Self::Runtime: HasMutex,
 {
 }
 

@@ -1,30 +1,29 @@
-use std::iter;
-use std::str::FromStr;
 use std::time::Duration;
 
-use cgp_core::HasErrorType;
-use eyre::{eyre, Error as ReportError};
-use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use cgp_core::CanRaiseError;
+use hermes_cosmos_chain_components::types::payloads::client::CosmosUpdateClientPayload;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
-use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::{
+    CanBuildUpdateClientPayload, UpdateClientPayloadBuilder,
+};
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
+use hermes_sovereign_rollup_components::impls::queries::slot_hash::CanQuerySlotHash;
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
-use ibc::clients::tendermint::types::Header;
-use ibc::core::client::types::Height as DataChainHeight;
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::client_state::AnyClientState;
+use ibc::core::client::types::error::ClientError as IbcClientError;
+use ibc::core::client::types::Height as IbcHeight;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::AllowUpdate;
-use ibc_relayer_types::core::ics02_client::header::AnyHeader;
+use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold as RelayerTrustThreshold;
 use ibc_relayer_types::core::ics23_commitment::specs::ProofSpecs;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId as RelayerChainId;
 use sov_celestia_client::types::client_state::TendermintClientParams;
 
-use crate::sovereign::traits::chain::data_chain::{HasDataChain, HasDataChainType};
+use crate::sovereign::traits::chain::data_chain::HasDataChain;
+use crate::sovereign::traits::chain::rollup::HasRollup;
 use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 
 /**
@@ -33,16 +32,22 @@ use crate::sovereign::types::payloads::client::SovereignUpdateClientPayload;
 */
 pub struct BuildSovereignUpdateClientPayload;
 
-impl<Chain, Counterparty, DataChain> UpdateClientPayloadBuilder<Chain, Counterparty>
+impl<Chain, Counterparty, DataChain, Rollup> UpdateClientPayloadBuilder<Chain, Counterparty>
     for BuildSovereignUpdateClientPayload
 where
     Chain: HasHeightType<Height = RollupHeight>
         + HasUpdateClientPayloadType<Counterparty, UpdateClientPayload = SovereignUpdateClientPayload>
         + HasClientStateType<Counterparty, ClientState = WrappedSovereignClientState>
-        + HasDataChain
-        + HasDataChainType<DataChain = DataChain>
-        + HasErrorType<Error = ReportError>,
-    Chain::DataChain: HasErrorType + HasBlockingChainHandle,
+        + HasRollup<Rollup = Rollup>
+        + HasDataChain<DataChain = DataChain>
+        + CanRaiseError<Rollup::Error>
+        + CanRaiseError<DataChain::Error>
+        + CanRaiseError<Ics02Error>
+        + CanRaiseError<IbcClientError>,
+    DataChain: HasHeightType<Height = Height>
+        + HasClientStateType<Counterparty, ClientState = TendermintClientState>
+        + CanBuildUpdateClientPayload<Counterparty, UpdateClientPayload = CosmosUpdateClientPayload>,
+    Rollup: HasHeightType<Height = RollupHeight> + CanQuerySlotHash,
 {
     async fn build_update_client_payload(
         chain: &Chain,
@@ -50,9 +55,8 @@ where
         target_height: &RollupHeight,
         client_state: Chain::ClientState,
     ) -> Result<SovereignUpdateClientPayload, Chain::Error> {
-        // FIXME: the latest rollup height with +1 workaround is causing the DA header
-        // verification to fail, as the DA has not progressed to the expected height.
-        tokio::time::sleep(Duration::from_secs(2)).await;
+        let rollup = chain.rollup();
+        let data_chain = chain.data_chain();
 
         let sovereign_params = &client_state.sovereign_client_state.sovereign_params;
 
@@ -62,74 +66,49 @@ where
             sovereign_params.genesis_da_height.revision_number(),
             trusted_height.slot_number + sovereign_params.genesis_da_height.revision_height(),
         )
-        .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+        .map_err(Chain::raise_error)?;
 
         let da_target_height = Height::new(
             sovereign_params.genesis_da_height.revision_number(),
             target_height.slot_number + sovereign_params.genesis_da_height.revision_height(),
         )
-        .map_err(|e| eyre!("Error creating DA Height: {e}"))?;
+        .map_err(Chain::raise_error)?;
 
-        let rollup_trusted_height = DataChainHeight::new(
+        let rollup_trusted_height = IbcHeight::new(
             sovereign_params.latest_height.revision_number(),
             trusted_height.slot_number,
         )
-        .map_err(|e| eyre!("Error creating Rollup trusted Height: {e}"))?;
+        .map_err(Chain::raise_error)?;
 
-        let rollup_target_height = DataChainHeight::new(
+        let rollup_target_height = IbcHeight::new(
             sovereign_params.latest_height.revision_number(),
             target_height.slot_number,
         )
-        .map_err(|e| eyre!("Error creating Rollup target Height: {e}"))?;
-
-        let data_chain = chain.data_chain();
+        .map_err(Chain::raise_error)?;
 
         let da_client_state = convert_tm_params_to_client_state(
             &client_state.sovereign_client_state.da_params,
             &da_target_height,
-        )?;
+        )
+        .map_err(Chain::raise_error)?;
 
-        let headers = data_chain
-            .with_blocking_chain_handle(move |chain_handle| {
-                let (header, support) = chain_handle
-                    .build_header(
-                        da_trusted_height,
-                        da_target_height,
-                        AnyClientState::Tendermint(da_client_state),
-                    )
-                    .unwrap();
-
-                let headers = iter::once(header)
-                    .chain(support.into_iter())
-                    .map(|header| match header {
-                        AnyHeader::Tendermint(header) => {
-                            let da_height = DataChainHeight::new(
-                                header.trusted_height.revision_number(),
-                                header.trusted_height.revision_height(),
-                            )
-                            .map_err(|e| eyre!("Error creating DA Height: {e}"))
-                            .unwrap();
-                            let da_header = Header {
-                                signed_header: header.signed_header.clone(),
-                                validator_set: header.validator_set.clone(),
-                                trusted_height: da_height,
-                                trusted_next_validator_set: header.trusted_validator_set.clone(),
-                            };
-                            Ok(da_header)
-                        }
-                    })
-                    .collect::<Result<Vec<Header>, Chain::Error>>()
-                    .unwrap();
-
-                Ok(headers)
-            })
+        let da_payload = data_chain
+            .build_update_client_payload(&da_trusted_height, &da_target_height, da_client_state)
             .await
-            .map_err(|e| eyre!("Error creating headers from DA chain: {e:?}"))?;
+            .map_err(Chain::raise_error)?;
+
+        let slot_hash = rollup
+            .query_slot_hash(target_height)
+            .await
+            .map_err(Chain::raise_error)?;
 
         Ok(SovereignUpdateClientPayload {
-            datachain_header: headers,
+            datachain_header: da_payload.headers,
             initial_state_height: rollup_trusted_height,
             final_state_height: rollup_target_height,
+            final_user_hash: slot_hash.user_hash,
+            final_kernel_hash: slot_hash.kernel_hash,
+            final_root_hash: slot_hash.root_hash,
         })
     }
 }
@@ -143,14 +122,14 @@ where
 fn convert_tm_params_to_client_state(
     tm_params: &TendermintClientParams,
     da_target_height: &Height,
-) -> Result<TendermintClientState, ReportError> {
-    let relayer_chain_id = RelayerChainId::from_str(&tm_params.chain_id.to_string())
-        .map_err(|e| eyre!("Error converting ChainId to Relayer Chain Id: {e}"))?;
+) -> Result<TendermintClientState, Ics02Error> {
+    let relayer_chain_id = RelayerChainId::from_string(&tm_params.chain_id.to_string());
+
     let relayer_trust_threshold = RelayerTrustThreshold::new(
         tm_params.trust_level.numerator(),
         tm_params.trust_level.denominator(),
-    )
-    .map_err(|e| eyre!("Error converting TrustThreshold to Relayer TrustThreshold: {e}"))?;
+    )?;
+
     Ok(TendermintClientState {
         chain_id: relayer_chain_id,
         trust_threshold: relayer_trust_threshold,

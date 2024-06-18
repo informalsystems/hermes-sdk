@@ -1,4 +1,5 @@
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
+use hermes_cosmos_chain_components::types::commitment_proof::CosmosCommitmentProof;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
@@ -20,6 +21,7 @@ use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
@@ -36,7 +38,10 @@ use crate::contexts::chain::CosmosChain;
 impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
 pub trait CanUseCosmosChain:
-    CanQueryBalance
+    HasClientStateType<CosmosChain, ClientState = TendermintClientState>
+    + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
+    + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
+    + CanQueryBalance
     + CanIbcTransferToken<CosmosChain>
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
@@ -55,8 +60,6 @@ pub trait CanUseCosmosChain:
     + CanQueryPacketCommitment<CosmosChain>
     + CanQueryPacketAcknowledgement<CosmosChain>
     + CanQueryPacketReceipt<CosmosChain>
-    + HasClientStateType<CosmosChain, ClientState = TendermintClientState>
-    + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
     + HasRawClientStateType<RawClientState = Any>
     + CanSubmitTx
     + CanPollTxResponse

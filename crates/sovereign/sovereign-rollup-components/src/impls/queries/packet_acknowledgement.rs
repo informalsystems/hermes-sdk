@@ -1,4 +1,7 @@
 use cgp_core::CanRaiseError;
+use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAcknowledgementType;
@@ -9,22 +12,27 @@ use jsonrpsee::core::client::ClientT;
 use jsonrpsee::core::ClientError;
 use serde::Serialize;
 
+use crate::impls::borsh_encode::ViaBorsh;
 use crate::traits::json_rpc_client::HasJsonRpcClient;
+use crate::types::commitment_proof::{JellyfishMerkleProof, SovereignCommitmentProof};
 use crate::types::height::RollupHeight;
 use crate::types::rpc::height::HeightParam;
 
 pub struct QueryPacketAcknowledgementFromSovereign;
 
-impl<Rollup, Counterparty> PacketAcknowledgementQuerier<Rollup, Counterparty>
+impl<Rollup, Counterparty, Encoding> PacketAcknowledgementQuerier<Rollup, Counterparty>
     for QueryPacketAcknowledgementFromSovereign
 where
     Rollup: HasIbcChainTypes<Counterparty, Height = RollupHeight>
         + HasAcknowledgementType<Counterparty, Acknowledgement = Vec<u8>>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasCommitmentProofType<CommitmentProof = SovereignCommitmentProof>
         + HasJsonRpcClient
+        + HasEncoding<Encoding = Encoding>
+        + CanRaiseError<Encoding::Error>
         + CanRaiseError<ClientError>,
     Counterparty: HasIbcChainTypes<Rollup, Sequence = Sequence>,
     Rollup::JsonRpcClient: ClientT,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanDecode<ViaBorsh, JellyfishMerkleProof>,
 {
     async fn query_packet_acknowledgement(
         rollup: &Rollup,
@@ -37,7 +45,10 @@ where
             channel_id: &channel_id.to_string(),
             port_id: &port_id.to_string(),
             sequence,
-            query_height: &height.into(),
+            query_height: &(&RollupHeight {
+                slot_number: height.slot_number,
+            })
+                .into(),
         };
 
         let response: QueryPacketAcknowledgementResponse = rollup
@@ -46,7 +57,26 @@ where
             .await
             .map_err(Rollup::raise_error)?;
 
-        Ok((Vec::from(response.acknowledgement.as_ref()), response.proof))
+        let ack = Vec::from(response.acknowledgement.as_ref());
+
+        let proof_bytes = response.proof;
+
+        let merkle_proof = rollup
+            .encoding()
+            .decode(&proof_bytes)
+            .map_err(Rollup::raise_error)?;
+
+        let proof_height = RollupHeight {
+            slot_number: response.proof_height.revision_height(),
+        };
+
+        let commitment_proof = SovereignCommitmentProof {
+            proof_bytes,
+            merkle_proof,
+            proof_height,
+        };
+
+        Ok((ack, commitment_proof))
     }
 }
 

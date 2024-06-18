@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent, ProvideInner};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
-use eyre::Error;
+use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent, HasEncoding,
@@ -51,7 +51,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state_height::C
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgement;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use hermes_relayer_components::chain::traits::queries::packet_receipt::CanQueryPacketReceipt;
-use hermes_relayer_components::chain::traits::send_message::{CanSendMessages, MessageSender};
+use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::chain_id::{
     ChainIdGetter, HasChainId, HasChainIdType,
 };
@@ -93,11 +93,10 @@ use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::{
     ProvideRollupType, RollupGetter,
 };
 use hermes_sovereign_rollup_components::types::client_state::WrappedSovereignClientState;
+use hermes_sovereign_rollup_components::types::commitment_proof::SovereignCommitmentProof;
 use hermes_sovereign_rollup_components::types::consensus_state::SovereignConsensusState;
-use hermes_sovereign_rollup_components::types::event::SovereignEvent;
 use hermes_sovereign_rollup_components::types::height::RollupHeight;
 use hermes_sovereign_rollup_components::types::message::SovereignMessage;
-use hermes_sovereign_rollup_components::types::payloads::channel::SovereignInitChannelOptions;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -185,22 +184,13 @@ impl ChainIdGetter<SovereignChain> for SovereignChainComponents {
     }
 }
 
-impl MessageSender<SovereignChain> for SovereignChainComponents {
-    async fn send_messages(
-        chain: &SovereignChain,
-        messages: Vec<SovereignMessage>,
-    ) -> Result<Vec<Vec<SovereignEvent>>, Error> {
-        chain.rollup.send_messages(messages).await
-    }
-}
-
 pub trait CanUseSovereignChain:
     HasDataChain
     + HasChainIdType
     + HasUpdateClientPayloadType<CosmosChain>
     + HasHeightFields<Height = RollupHeight>
     + HasMessageType<Message = SovereignMessage>
-    + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+    + HasCommitmentProofType<CommitmentProof = SovereignCommitmentProof>
     + CanIncrementHeight
     + CanSendMessages
     + CanQueryChainStatus
@@ -210,7 +200,7 @@ pub trait CanUseSovereignChain:
     + HasConsensusStateType<CosmosChain, ConsensusState = SovereignConsensusState>
     + HasConnectionEndType<CosmosChain, ConnectionEnd = ConnectionEnd>
     + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
-    + HasInitChannelOptionsType<CosmosChain, InitChannelOptions = SovereignInitChannelOptions>
+    + HasInitChannelOptionsType<CosmosChain, InitChannelOptions = CosmosInitChannelOptions>
     + HasChannelOpenTryPayloadType<
         CosmosChain,
         ChannelOpenTryPayload = ChannelOpenTryPayload<SovereignChain, CosmosChain>,

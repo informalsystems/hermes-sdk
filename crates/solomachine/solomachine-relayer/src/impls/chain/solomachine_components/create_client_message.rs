@@ -2,8 +2,9 @@ use cgp_core::prelude::*;
 use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosCreateClientPayload;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientMessageOptionsType;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 
 use crate::types::message::SolomachineMessage;
