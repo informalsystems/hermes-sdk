@@ -20,6 +20,7 @@ use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
+use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_sovereign_chain_components::sovereign::traits::chain::rollup::HasRollup;
@@ -238,7 +239,7 @@ fn test_cosmos_to_sovereign() -> Result<(), Error> {
 
         println!("packet for IBC transfer from Cosmos: {}", packet);
 
-        // cosmos_to_sovereign_relay.relay_packet();
+        cosmos_to_sovereign_relay.relay_packet(&packet).await?;
 
         <Result<(), Error>>::Ok(())
     })?;
