@@ -39,45 +39,11 @@
       sovereign-nix = inputs.sovereign-nix.packages.${system};
       sovereign-ibc-nix = inputs.sovereign-ibc-nix.packages.${system};
 
-      rust-bin = nixpkgs.rust-bin.fromRustupToolchainFile ./nix/wasm-rust-toolchain.toml;
-
-      ibc-rs-src = nixpkgs.stdenv.mkDerivation {
-        name = "ibc-rs-src";
-        dontUnpack = true;
-        dontBuild = true;
-
-        installPhase = ''
-            mkdir -p $out
-            cp ${./nix/Cargo.lock} $out/Cargo.lock
-
-            cp -r ${inputs.ibc-rs-src}/. $out/
-            ls -la $out
-        '';
+      tendermint-wasm-client = import ./nix/tendermint-wasm-client {
+        inherit nixpkgs;
+        inherit (inputs) ibc-rs-src;
       };
 
-      tendermint-wasm-client = nixpkgs.rustPlatform.buildRustPackage {
-        name = "ibc-client-tendermint-cw";
-        src = ibc-rs-src;
-
-        cargoLock = {
-          lockFile = ./nix/Cargo.lock;
-        };
-
-        nativeBuildInputs = [
-          rust-bin
-        ];
-
-        doCheck = false;
-
-        buildPhase = ''
-          RUSTFLAGS='-C link-arg=-s' cargo build -p ibc-client-tendermint-cw --target wasm32-unknown-unknown --release --lib --locked
-        '';
-
-        installPhase = ''
-            mkdir -p $out
-            cp -r target/wasm32-unknown-unknown/release/ibc_client_tendermint_cw.wasm $out/
-        '';
-      };
     in {
       packages = {
         inherit tendermint-wasm-client;
@@ -91,18 +57,6 @@
         inherit
           (cosmos-nix-wasm)
           ibc-go-v7-wasm-simapp
-        ;
-
-        inherit
-          (sovereign-nix)
-          gaia
-          celestia-app
-          celestia-node
-        ;
-
-        inherit
-          (sovereign-ibc-nix)
-          sov-celestia-cw
         ;
 
         inherit
