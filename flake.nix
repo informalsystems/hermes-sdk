@@ -75,7 +75,9 @@
       };
     in {
       packages = {
-        inherit tendermint-wasm-client gaia celestia-app celestia-node;
+        inherit tendermint-wasm-client celestia-app celestia-node;
+
+        gaia = cosmos-nix.gaia14;
 
         inherit
           (nixpkgs)
