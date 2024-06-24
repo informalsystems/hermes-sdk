@@ -3,17 +3,32 @@
 
   inputs = {
     nixpkgs.url = github:nixos/nixpkgs/nixpkgs-unstable;
+    rust-overlay.url = github:oxalica/rust-overlay;
     flake-utils.url = github:numtide/flake-utils;
+
     cosmos-nix.url = github:informalsystems/cosmos.nix;
     cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
-    sovereign-nix.url = github:informalsystems/sov-rollup-starter/ibc-rollup;
-    sovereign-ibc-nix.url = github:informalsystems/sovereign-ibc;
-    rust-overlay.url = github:oxalica/rust-overlay;
 
     ibc-rs-src = {
       url = github:cosmos/ibc-rs;
       flake = false;
     };
+
+    gaia-src = {
+        flake = false;
+        url = github:cosmos/gaia/v14.1.0;
+    };
+
+    celestia-app-src = {
+        flake = false;
+        url = github:celestiaorg/celestia-app/v1.3.0;
+    };
+
+    celestia-node-src = {
+        flake = false;
+        url = github:celestiaorg/celestia-node/v0.12.0;
+    };
+
   };
 
   outputs = inputs: let
@@ -39,48 +54,36 @@
       sovereign-nix = inputs.sovereign-nix.packages.${system};
       sovereign-ibc-nix = inputs.sovereign-ibc-nix.packages.${system};
 
-      rust-bin = nixpkgs.rust-bin.fromRustupToolchainFile ./nix/wasm-rust-toolchain.toml;
-
-      ibc-rs-src = nixpkgs.stdenv.mkDerivation {
-        name = "ibc-rs-src";
-        dontUnpack = true;
-        dontBuild = true;
-
-        installPhase = ''
-            mkdir -p $out
-            cp ${./nix/Cargo.lock} $out/Cargo.lock
-
-            cp -r ${inputs.ibc-rs-src}/. $out/
-            ls -la $out
-        '';
+      tendermint-wasm-client = import ./nix/tendermint-wasm-client {
+        inherit nixpkgs;
+        inherit (inputs) ibc-rs-src;
       };
 
-      tendermint-wasm-client = nixpkgs.rustPlatform.buildRustPackage {
-        name = "ibc-client-tendermint-cw";
-        src = ibc-rs-src;
+      gaia = import ./nix/gaia.nix {
+        inherit nixpkgs;
+        inherit (inputs) gaia-src;
+      };
 
-        cargoLock = {
-          lockFile = ./nix/Cargo.lock;
-        };
+      celestia-app = import ./nix/celestia-app.nix {
+        inherit nixpkgs;
+        inherit (inputs) celestia-app-src;
+      };
 
-        nativeBuildInputs = [
-          rust-bin
-        ];
-
-        doCheck = false;
-
-        buildPhase = ''
-          RUSTFLAGS='-C link-arg=-s' cargo build -p ibc-client-tendermint-cw --target wasm32-unknown-unknown --release --lib --locked
-        '';
-
-        installPhase = ''
-            mkdir -p $out
-            cp -r target/wasm32-unknown-unknown/release/ibc_client_tendermint_cw.wasm $out/
-        '';
+      celestia-node = import ./nix/celestia-node.nix {
+        inherit nixpkgs;
+        inherit (inputs) celestia-node-src;
       };
     in {
       packages = {
-        inherit tendermint-wasm-client;
+        inherit tendermint-wasm-client celestia-app celestia-node;
+
+        gaia = cosmos-nix.gaia14;
+
+        inherit
+          (nixpkgs)
+          protobuf
+          cargo-nextest
+        ;
 
         inherit
           (cosmos-nix)
@@ -92,26 +95,6 @@
           (cosmos-nix-wasm)
           ibc-go-v7-wasm-simapp
         ;
-
-        inherit
-          (sovereign-nix)
-          gaia
-          celestia-app
-          celestia-node
-        ;
-
-        inherit
-          (sovereign-ibc-nix)
-          sov-celestia-cw
-        ;
-
-        inherit
-          (nixpkgs)
-          protobuf
-          cargo-nextest
-        ;
-
-        sovereign-rollup = sovereign-nix.rollup;
       };
     });
 }

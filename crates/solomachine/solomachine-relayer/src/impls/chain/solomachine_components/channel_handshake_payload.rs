@@ -1,3 +1,5 @@
+use eyre::eyre;
+use hermes_cosmos_relayer::types::error::Error;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
 };
@@ -20,7 +22,7 @@ pub struct BuildSolomachineChannelHandshakePayloads;
 impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
-    Chain: Solomachine,
+    Chain: Solomachine<Error = Error>,
 {
     async fn build_channel_open_try_payload(
         chain: &SolomachineChain<Chain>,
@@ -32,10 +34,7 @@ where
         let channel = chain.chain.query_channel(channel_id, port_id).await?;
 
         if channel.state != State::Init {
-            return Err(Chain::invalid_channel_state_error(
-                State::Init,
-                channel.state,
-            ));
+            return Err(Error::from(eyre!("expected channel to be in Init state")));
         }
 
         let ordering = *channel.ordering();
@@ -67,7 +66,7 @@ where
 impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
-    Chain: Solomachine,
+    Chain: Solomachine<Error = Error>,
 {
     async fn build_channel_open_ack_payload(
         chain: &SolomachineChain<Chain>,
@@ -79,10 +78,9 @@ where
         let channel = chain.chain.query_channel(channel_id, port_id).await?;
 
         if channel.state != State::TryOpen {
-            return Err(Chain::invalid_channel_state_error(
-                State::TryOpen,
-                channel.state,
-            ));
+            return Err(Error::from(eyre!(
+                "expected channel to be in TryOpen state"
+            )));
         }
 
         let version = channel.version().clone();
@@ -110,7 +108,7 @@ where
 impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
-    Chain: Solomachine,
+    Chain: Solomachine<Error = Error>,
 {
     async fn build_channel_open_confirm_payload(
         chain: &SolomachineChain<Chain>,
@@ -121,11 +119,8 @@ where
     ) -> Result<SolomachineChannelOpenConfirmPayload, Chain::Error> {
         let channel = chain.chain.query_channel(channel_id, port_id).await?;
 
-        if channel.state != State::Open {
-            return Err(Chain::invalid_channel_state_error(
-                State::Open,
-                channel.state,
-            ));
+        if !channel.state.is_open() {
+            return Err(Error::from(eyre!("expected channel to be in open state")));
         }
 
         let commitment_prefix = chain.chain.commitment_prefix();

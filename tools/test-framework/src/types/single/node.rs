@@ -2,7 +2,6 @@
    Type definition for a single running full node.
 */
 
-use alloc::collections::BTreeMap;
 use core::str::FromStr;
 use core::time::Duration;
 use std::sync::{Arc, RwLock};
@@ -176,7 +175,8 @@ impl FullNode {
             client_refresh_rate: config::default::client_refresh_rate(),
             memo_overwrite: None,
             dynamic_gas_price: Default::default(),
-            excluded_sequences: BTreeMap::new(),
+            excluded_sequences: Default::default(),
+            allow_ccq: false,
         }))
     }
 

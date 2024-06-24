@@ -1,4 +1,3 @@
-use alloc::collections::BTreeMap;
 use core::str::FromStr;
 use core::time::Duration;
 
@@ -85,7 +84,8 @@ where
             sequential_batch_tx: false,
             compat_mode: bootstrap.compat_mode().cloned(),
             clear_interval: None,
-            excluded_sequences: BTreeMap::new(),
+            excluded_sequences: Default::default(),
+            allow_ccq: false,
         });
 
         Ok(relayer_chain_config)
