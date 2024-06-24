@@ -56,12 +56,13 @@ repository      = "https://github.com/informalsystems/hermes-sdk"
 authors         = ["Informal Systems <hello@informal.systems>"]
 rust-version    = "1.79"
 
+[profile.release]
+overflow-checks = true
+
 [workspace.dependencies]
 async-trait                     = { version = "0.1.80" }
 ibc                             = { version = "0.53.0" }
-ibc-query                       = { version = "0.53.0" }
 ibc-proto                       = { version = "0.44.0" }
-sov-celestia-client             = { version = "0.1.0" }
 ibc-relayer                     = { version = "0.27.3" }
 ibc-relayer-types               = { version = "0.27.3" }
 ibc-telemetry                   = { version = "0.27.3" }
@@ -79,7 +80,7 @@ prost-types                     = { version = "0.12.3" }
 serde                           = { version = "1.0.203" }
 serde_derive                    = { version = "1.0" }
 serde_json                      = { version = "1.0" }
-tokio                           = { version = "1.36" }
+tokio                           = { version = "1.38" }
 tracing                         = { version = "0.1.40" }
 tracing-subscriber              = { version = "0.3.18" }
 tonic                           = { version = "0.11" }
@@ -93,15 +94,11 @@ itertools                       = { version = "0.12" }
 http                            = { version = "0.2.11" }
 humantime                       = { version = "2.1.0" }
 flex-error                      = { version = "0.4.4", default-features = false }
-jsonrpsee                       = { version = "0.21.0", default-features = false }
 hdpath                          = { version = "0.6.3" }
-borsh                           = { version = "0.10.3" }
 rand                            = { version = "0.8.5" }
 bech32                          = { version = "0.9.1" }
-ed25519-dalek                   = { version = "2.1.1" }
 sha2                            = { version = "0.10.8" }
 ics23                           = { version = "0.11.1" }
-jmt                             = { version = "0.9.0" }
 
 hermes-runtime-components               = { version = "0.1.0" }
 hermes-async-runtime-components         = { version = "0.1.0" }
@@ -140,12 +137,6 @@ hermes-wasm-test-components             = { version = "0.1.0" }
 
 hermes-solomachine-relayer              = { version = "0.1.0" }
 
-[profile.dev]
-debug = 1
-
-[profile.release]
-overflow-checks = true
-
 [patch.crates-io]
 ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
 ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
@@ -158,11 +149,7 @@ ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", re
 ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
 ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "67841b3c" }
 
-basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", branch = "rano/sov-support" }
-cosmrs                      = { git = "https://github.com/cosmos/cosmos-rust.git", rev = "4f2e3bb" }
-
-sov-celestia-client         = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
-sov-celestia-client-types   = { git = "https://github.com/informalsystems/sovereign-ibc.git" }
+basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git"}
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
@@ -214,16 +201,3 @@ hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-compon
 hermes-wasm-test-components         = { path = "./crates/wasm/wasm-test-components" }
 
 hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
-
-# ibc-relayer-types                 = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-# ibc-relayer                       = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-# ibc-telemetry                     = { git = "https://github.com/informalsystems/hermes.git", branch = "master" }
-# ibc-proto                         = { git = "https://github.com/cosmos/ibc-proto-rs.git",       branch = "main" }
-
-# tendermint                        = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-rpc                    = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-proto                  = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-light-client           = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-light-client-verifier  = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-light-client-detector  = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
-# tendermint-testgen                = { git = "https://github.com/informalsystems/tendermint-rs.git", branch = "main" }
