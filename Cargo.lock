@@ -243,12 +243,6 @@ checksum = "4c7f02d4ea65f2c1853089ffd8d2787bdbc63de2f0d29dedbcf8ccdfa0ccd4cf"
 
 [[package]]
 name = "base64"
-version = "0.13.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
-
-[[package]]
-name = "base64"
 version = "0.21.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d297deb1925b89f2ccc13d7635fa0714f12c87adce1c75356b39ca9b7178567"
@@ -376,15 +370,6 @@ name = "bech32"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d965446196e3b7decd44aa7ee49e31d630118f90ef12f97900f262eb915c951d"
-
-[[package]]
-name = "beef"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a8241f3ebb85c056b509d4327ad0358fbbba6ffb340bf388f26350aeda225b1"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "bip32"
@@ -881,30 +866,6 @@ dependencies = [
  "subtle-encoding",
  "tendermint",
  "thiserror",
-]
-
-[[package]]
-name = "cosmwasm-schema"
-version = "1.5.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8467874827d384c131955ff6f4d47d02e72a956a08eb3c0ff24f8c903a5517b4"
-dependencies = [
- "cosmwasm-schema-derive",
- "schemars",
- "serde",
- "serde_json",
- "thiserror",
-]
-
-[[package]]
-name = "cosmwasm-schema-derive"
-version = "1.5.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6db85d98ac80922aef465e564d5b21fa9cfac5058cb62df7f116c3682337393"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
@@ -1454,12 +1415,6 @@ name = "futures-task"
 version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "38d84fa142264698cdce1a9f9172cf383a0c82de1bddcf3092901442c4097004"
-
-[[package]]
-name = "futures-timer"
-version = "3.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f288b0a4f20f9a56b5d1da57e2227c661b7b16168e2f72365f57b63326e29b24"
 
 [[package]]
 name = "futures-util"
@@ -2083,178 +2038,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-sovereign-chain-components"
-version = "0.1.0"
-dependencies = [
- "base64 0.22.1",
- "bech32 0.9.1",
- "borsh",
- "cgp-core",
- "cgp-error-eyre",
- "ed25519-dalek",
- "eyre",
- "hermes-cosmos-chain-components",
- "hermes-encoding-components",
- "hermes-protobuf-encoding-components",
- "hermes-relayer-components",
- "hermes-runtime",
- "hermes-runtime-components",
- "hermes-sovereign-rollup-components",
- "hermes-wasm-client-components",
- "hex 0.4.3",
- "ibc",
- "ibc-proto",
- "ibc-query",
- "ibc-relayer",
- "ibc-relayer-types",
- "jsonrpsee",
- "prost",
- "serde",
- "serde-json-wasm",
- "serde_json",
- "sha2 0.10.8",
- "sov-celestia-client",
- "tokio",
- "tonic",
-]
-
-[[package]]
-name = "hermes-sovereign-integration-tests"
-version = "0.1.0"
-dependencies = [
- "borsh",
- "cgp-core",
- "eyre",
- "futures",
- "hermes-celestia-integration-tests",
- "hermes-celestia-test-components",
- "hermes-cosmos-chain-components",
- "hermes-cosmos-integration-tests",
- "hermes-cosmos-relayer",
- "hermes-cosmos-test-components",
- "hermes-cosmos-wasm-relayer",
- "hermes-relayer-components",
- "hermes-runtime",
- "hermes-runtime-components",
- "hermes-sovereign-chain-components",
- "hermes-sovereign-relayer",
- "hermes-sovereign-rollup-components",
- "hermes-sovereign-test-components",
- "hermes-test-components",
- "hermes-wasm-client-components",
- "hermes-wasm-test-components",
- "hex 0.4.3",
- "ibc",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-types",
- "jsonrpsee",
- "rand",
- "serde",
- "serde_json",
- "sha2 0.10.8",
- "sov-celestia-client",
- "stable-eyre",
- "tokio",
- "toml 0.8.12",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "hermes-sovereign-relayer"
-version = "0.1.0"
-dependencies = [
- "cgp-core",
- "cgp-error-eyre",
- "ed25519-dalek",
- "eyre",
- "futures",
- "hermes-celestia-chain",
- "hermes-cosmos-chain-components",
- "hermes-cosmos-relayer",
- "hermes-encoding-components",
- "hermes-logging-components",
- "hermes-protobuf-encoding-components",
- "hermes-relayer-components",
- "hermes-runtime",
- "hermes-runtime-components",
- "hermes-sovereign-chain-components",
- "hermes-sovereign-rollup-components",
- "hermes-sovereign-test-components",
- "hermes-test-components",
- "hermes-tracing-logging-components",
- "hermes-wasm-client-components",
- "ibc",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-types",
- "jsonrpsee",
- "sov-celestia-client",
-]
-
-[[package]]
-name = "hermes-sovereign-rollup-components"
-version = "0.1.0"
-dependencies = [
- "base64 0.22.1",
- "bech32 0.9.1",
- "borsh",
- "cgp-core",
- "ed25519-dalek",
- "eyre",
- "futures",
- "hermes-cosmos-chain-components",
- "hermes-encoding-components",
- "hermes-protobuf-encoding-components",
- "hermes-relayer-components",
- "hermes-runtime-components",
- "hermes-wasm-client-components",
- "hex 0.4.3",
- "ibc",
- "ibc-proto",
- "ibc-query",
- "ibc-relayer",
- "ibc-relayer-types",
- "jmt",
- "jsonrpsee",
- "prost",
- "serde",
- "serde-json-wasm",
- "serde_json",
- "sha2 0.10.8",
- "sov-celestia-client",
- "tokio",
-]
-
-[[package]]
-name = "hermes-sovereign-test-components"
-version = "0.1.0"
-dependencies = [
- "bech32 0.9.1",
- "cgp-core",
- "ed25519-dalek",
- "hermes-celestia-test-components",
- "hermes-cosmos-test-components",
- "hermes-relayer-components",
- "hermes-runtime",
- "hermes-runtime-components",
- "hermes-sovereign-chain-components",
- "hermes-sovereign-rollup-components",
- "hermes-test-components",
- "hex 0.4.3",
- "ibc",
- "ibc-relayer",
- "ibc-relayer-types",
- "jsonrpsee",
- "rand",
- "serde",
- "serde_json",
- "sha2 0.10.8",
- "toml 0.8.12",
-]
-
-[[package]]
 name = "hermes-test-components"
 version = "0.1.0"
 dependencies = [
@@ -2452,9 +2235,7 @@ dependencies = [
  "futures-util",
  "http 0.2.12",
  "hyper",
- "log",
  "rustls 0.21.12",
- "rustls-native-certs 0.6.3",
  "tokio",
  "tokio-rustls 0.24.1",
 ]
@@ -2593,7 +2374,6 @@ version = "0.53.0"
 source = "git+https://github.com/cosmos/ibc-rs.git?rev=67841b3c#67841b3c3730b259fd239ce9496ab965ec0ce5b3"
 dependencies = [
  "base64 0.21.7",
- "cosmwasm-schema",
  "displaydoc",
  "ibc-core-client",
  "ibc-core-host-types",
@@ -2974,7 +2754,6 @@ dependencies = [
  "displaydoc",
  "ibc",
  "ibc-proto",
- "serde",
  "tonic",
 ]
 
@@ -3289,109 +3068,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29c15563dc2726973df627357ce0c9ddddbea194836909d655df6a75d2cf296d"
 dependencies = [
  "wasm-bindgen",
-]
-
-[[package]]
-name = "jsonrpsee"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9579d0ca9fb30da026bac2f0f7d9576ec93489aeb7cd4971dd5b4617d82c79b2"
-dependencies = [
- "jsonrpsee-core",
- "jsonrpsee-http-client",
- "jsonrpsee-types",
- "jsonrpsee-ws-client",
-]
-
-[[package]]
-name = "jsonrpsee-client-transport"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3f9f9ed46590a8d5681975f126e22531698211b926129a40a2db47cbca429220"
-dependencies = [
- "futures-util",
- "http 0.2.12",
- "jsonrpsee-core",
- "pin-project",
- "rustls-native-certs 0.7.0",
- "rustls-pki-types",
- "soketto",
- "thiserror",
- "tokio",
- "tokio-rustls 0.25.0",
- "tokio-util 0.7.10",
- "tracing",
- "url",
-]
-
-[[package]]
-name = "jsonrpsee-core"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "776d009e2f591b78c038e0d053a796f94575d66ca4e77dd84bfc5e81419e436c"
-dependencies = [
- "anyhow",
- "async-lock",
- "async-trait",
- "beef",
- "futures-timer",
- "futures-util",
- "hyper",
- "jsonrpsee-types",
- "pin-project",
- "rustc-hash",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
- "tokio-stream",
- "tracing",
-]
-
-[[package]]
-name = "jsonrpsee-http-client"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "78b7de9f3219d95985eb77fd03194d7c1b56c19bce1abfcc9d07462574b15572"
-dependencies = [
- "async-trait",
- "hyper",
- "hyper-rustls",
- "jsonrpsee-core",
- "jsonrpsee-types",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
- "tower",
- "tracing",
- "url",
-]
-
-[[package]]
-name = "jsonrpsee-types"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3266dfb045c9174b24c77c2dfe0084914bb23a6b2597d70c9dc6018392e1cd1b"
-dependencies = [
- "anyhow",
- "beef",
- "serde",
- "serde_json",
- "thiserror",
-]
-
-[[package]]
-name = "jsonrpsee-ws-client"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "073c077471e89c4b511fa88b3df9a0f0abdf4a0a2e6683dd2ab36893af87bb2d"
-dependencies = [
- "http 0.2.12",
- "jsonrpsee-client-transport",
- "jsonrpsee-core",
- "jsonrpsee-types",
- "url",
 ]
 
 [[package]]
@@ -4707,19 +4383,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sha-1"
-version = "0.9.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99cd6713db3cf16b6c84e06321e049a9b9f699826e16096d23bbcc44d15d51a6"
-dependencies = [
- "block-buffer 0.9.0",
- "cfg-if",
- "cpufeatures",
- "digest 0.9.0",
- "opaque-debug",
-]
-
-[[package]]
 name = "sha1"
 version = "0.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4824,21 +4487,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "soketto"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41d1c5305e39e09653383c2c7244f2f78b3bcae37cf50c64cb4789c9f5096ec2"
-dependencies = [
- "base64 0.13.1",
- "bytes",
- "futures",
- "httparse",
- "log",
- "rand",
- "sha-1",
-]
-
-[[package]]
 name = "sov-celestia-client"
 version = "0.1.0"
 source = "git+https://github.com/informalsystems/sovereign-ibc.git#90591e58d89dc5c2d1b912ed1db69c2f93dbc321"
@@ -4863,9 +4511,7 @@ version = "0.1.0"
 source = "git+https://github.com/informalsystems/sovereign-ibc.git#90591e58d89dc5c2d1b912ed1db69c2f93dbc321"
 dependencies = [
  "derive_more",
- "hex 0.4.3",
  "ibc-client-tendermint",
- "ibc-client-wasm-types",
  "ibc-core",
  "prost",
  "serde",
@@ -4874,7 +4520,6 @@ dependencies = [
  "tendermint",
  "tendermint-light-client-verifier",
  "tendermint-proto",
- "typed-builder",
 ]
 
 [[package]]
@@ -4889,7 +4534,6 @@ dependencies = [
  "prost",
  "serde",
  "sov-ibc-proto",
- "typed-builder",
 ]
 
 [[package]]
@@ -5438,7 +5082,6 @@ checksum = "5419f34732d9eb6ee4c3578b7989078579b7f039cbbb9ca2c4da015749371e15"
 dependencies = [
  "bytes",
  "futures-core",
- "futures-io",
  "futures-sink",
  "pin-project-lite",
  "tokio",
@@ -5722,26 +5365,6 @@ dependencies = [
  "thiserror",
  "url",
  "utf-8",
-]
-
-[[package]]
-name = "typed-builder"
-version = "0.18.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77739c880e00693faef3d65ea3aad725f196da38b22fdc7ea6ded6e1ce4d3add"
-dependencies = [
- "typed-builder-macro",
-]
-
-[[package]]
-name = "typed-builder-macro"
-version = "0.18.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f718dfaf347dcb5b983bfc87608144b0bad87970aebcbea5ce44d2a30c08e63"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.60",
 ]
 
 [[package]]
