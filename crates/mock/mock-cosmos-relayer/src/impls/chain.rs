@@ -276,9 +276,6 @@ where
     fn client_state_latest_height(client_state: &AnyClientState) -> Height {
         match client_state {
             AnyClientState::Tendermint(client_state) => client_state.inner().latest_height,
-            AnyClientState::Sovereign(client_state) => {
-                client_state.inner().sovereign_params.latest_height
-            }
         }
     }
 
@@ -287,11 +284,6 @@ where
             AnyClientState::Tendermint(client_state) => {
                 client_state.inner().frozen_height.is_some()
             }
-            AnyClientState::Sovereign(client_state) => client_state
-                .inner()
-                .sovereign_params
-                .frozen_height
-                .is_some(),
         }
     }
 
@@ -300,8 +292,6 @@ where
             AnyClientState::Tendermint(client_state) => {
                 elapsed > client_state.inner().trusting_period
             }
-            // TODO: no trusting period for Sovereign client_state, should this default to false?
-            AnyClientState::Sovereign(_) => false,
         }
     }
 }
