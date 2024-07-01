@@ -73,6 +73,7 @@ tendermint-testgen              = { version = "0.37" }
 basecoin                        = { version = "0.1.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
+cgp-component-macro             = { version = "0.1.0" }
 clap                            = { version = "4.5.3" }
 oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.12.3" }
@@ -154,7 +155,8 @@ tower-abci                  = { git = "https://github.com/informalsystems/tower-
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
-cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
+cgp-component-macro     = { path = "../cgp/crates/cgp-component-macro" }
+# cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-error-eyre          = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }
 cgp-async               = { git = "https://github.com/informalsystems/cgp.git", branch = "main" }

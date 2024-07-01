@@ -9,6 +9,7 @@ use hermes_cosmos_chain_components::traits::abci_query::AbciQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
+use hermes_cosmos_chain_components::with_cosmos_tx_components;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
@@ -382,6 +383,14 @@ delegate_components! {
     }
 }
 
+with_cosmos_tx_components! {
+    delegate_components! {
+        CosmosChainComponents {
+            @components : CosmosTxComponents,
+        }
+    }
+}
+
 delegate_components! {
     CosmosChainComponents {
         [
@@ -389,28 +398,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        [
-            SignerTypeComponent,
-            NonceTypeComponent,
-            NonceGuardComponent,
-            TransactionTypeComponent,
-            TransactionHashTypeComponent,
-            FeeTypeComponent,
-            TxResponseTypeComponent,
-            MessageSenderComponent,
-            MessagesWithSignerSenderComponent,
-            MessagesWithSignerAndNonceSenderComponent,
-            NonceAllocatorComponent,
-            TxResponsePollerComponent,
-            PollTimeoutGetterComponent,
-            TxResponseAsEventsParserComponent,
-            TxResponseQuerierComponent,
-            TxEncoderComponent,
-            TxFeeEstimatorComponent,
-            TxSubmitterComponent,
-            NonceQuerierComponent,
-        ]:
-            CosmosTxComponents,
         [
             WalletTypeComponent,
             WalletSignerComponent,

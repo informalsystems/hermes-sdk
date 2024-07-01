@@ -1,8 +1,5 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
-use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
-use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
-use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::components::default::transaction::DefaultTxComponents;
 use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
@@ -30,19 +27,12 @@ use crate::impls::transaction::poll_timeout::DefaultPollTimeout;
 use crate::impls::transaction::query_nonce::QueryCosmosAccount;
 use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
 use crate::impls::transaction::submit_tx::BroadcastCosmosTx;
-use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::transaction::ProvideCosmosTransactionTypes;
 
 pub struct CosmosTxComponents;
 
-delegate_components! {
+cgp_component_macro::delegate_components! {
     CosmosTxComponents {
-        [
-            ChainIdTypeComponent,
-            MessageTypeComponent,
-            EventTypeComponent,
-        ]:
-            ProvideCosmosChainTypes,
         [
             SignerTypeComponent,
             NonceTypeComponent,

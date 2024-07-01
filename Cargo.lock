@@ -665,9 +665,9 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "itertools 0.11.0",
+ "prettyplease",
  "proc-macro2",
  "quote",
  "syn 2.0.68",
@@ -1723,6 +1723,7 @@ name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
  "bech32 0.9.1",
+ "cgp-component-macro",
  "cgp-core",
  "eyre",
  "futures",
@@ -3599,6 +3600,16 @@ name = "ppv-lite86"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
+
+[[package]]
+name = "prettyplease"
+version = "0.2.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5f12335488a2f3b0a83b14edad48dca9879ce89b2edd10e80237e4e852dd645e"
+dependencies = [
+ "proc-macro2",
+ "syn 2.0.68",
+]
 
 [[package]]
 name = "primitive-types"
