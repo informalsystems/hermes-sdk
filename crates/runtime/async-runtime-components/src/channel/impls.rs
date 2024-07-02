@@ -2,7 +2,6 @@ use alloc::boxed::Box;
 use alloc::sync::Arc;
 
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use futures_channel::mpsc;
 use futures_util::lock::Mutex;
 use futures_util::stream::StreamExt;

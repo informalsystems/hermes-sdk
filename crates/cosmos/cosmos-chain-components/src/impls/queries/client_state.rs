@@ -1,8 +1,8 @@
 use core::iter::Iterator;
 use core::str::FromStr;
 
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllRawClientStatesQuerier, RawClientStateQuerier, RawClientStateWithProofsQuerier,
 };

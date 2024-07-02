@@ -1,5 +1,5 @@
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;

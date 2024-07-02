@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::{async_trait, HasErrorType};
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilder;
 use hermes_relayer_components::build::traits::target::chain::ChainBuildTarget;

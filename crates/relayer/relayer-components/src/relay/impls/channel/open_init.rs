@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 
 use crate::chain::traits::message_builders::channel_handshake::CanBuildChannelOpenInitMessage;
 use crate::chain::traits::send_message::CanSendSingleMessage;

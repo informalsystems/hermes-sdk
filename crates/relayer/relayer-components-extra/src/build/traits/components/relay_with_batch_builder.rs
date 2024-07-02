@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, DelegateComponent, HasComponents, HasErrorType};
+use cgp_core::prelude::{async_trait, DelegateComponent, HasComponents, HasErrorType};
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::build::traits::target::relay::RelayBuildTarget;
 use hermes_relayer_components::build::types::aliases::{

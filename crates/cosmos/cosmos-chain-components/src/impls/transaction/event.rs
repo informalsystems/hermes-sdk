@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParser;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;

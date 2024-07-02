@@ -1,4 +1,4 @@
-use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
+use cgp_core::{component::HasComponents, error::ErrorRaiser, error::HasErrorType};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;

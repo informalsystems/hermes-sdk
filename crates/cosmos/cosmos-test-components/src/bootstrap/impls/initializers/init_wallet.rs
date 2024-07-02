@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{Async, CanRaiseError};
+use cgp_core::prelude::{Async, CanRaiseError};
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
 use hermes_runtime_components::traits::os::exec_command::{CanExecCommand, ExecOutput};

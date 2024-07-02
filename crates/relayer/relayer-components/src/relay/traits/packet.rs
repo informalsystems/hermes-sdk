@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 
 use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::types::aliases::{ChannelIdOf, HeightOf, PortIdOf, SequenceOf, TimestampOf};

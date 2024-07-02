@@ -1,6 +1,6 @@
 use alloc::vec;
 
-use cgp_core::{async_trait, CanRun, HasErrorType, Runner};
+use cgp_core::{async_trait, error::HasErrorType, run::CanRun, run::Runner};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 

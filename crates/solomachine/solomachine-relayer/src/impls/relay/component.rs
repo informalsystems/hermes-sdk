@@ -1,5 +1,5 @@
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_relayer_components::components::default::relay::*;
 use hermes_relayer_components::with_default_relay_components;

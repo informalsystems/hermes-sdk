@@ -2,8 +2,8 @@ use alloc::string::ToString;
 use alloc::vec::Vec;
 use std::vec;
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, ProvideRelayChains};
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};

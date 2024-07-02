@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::HasErrorType;
+use cgp_core::error::{ErrorOf, HasErrorType};
 use hermes_runtime_components::traits::mutex::MutexOf;
 use hermes_runtime_components::traits::runtime::{HasRuntimeType, RuntimeOf};
 
@@ -10,7 +10,6 @@ use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::error::types::ErrorOf;
 use crate::relay::traits::chains::HasRelayChains;
 
 pub type ChainA<Build> = <BiRelayOf<Build> as HasTwoChainTypes>::ChainA;

@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::prelude::Async;
-use cgp_core::HasErrorType;
+use cgp_core::prelude::*;
 use hermes_encoding_components::traits::decoder::Decoder;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::Encoder;

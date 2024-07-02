@@ -1,6 +1,6 @@
 #![allow(clippy::ptr_arg)]
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::transaction::traits::encode_tx::TxEncoder;

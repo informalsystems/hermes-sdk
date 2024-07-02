@@ -1,5 +1,5 @@
+use cgp_core::error::HasErrorType;
 use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::update::CosmosUpdateClientMessage;
 use hermes_cosmos_relayer::types::error::Error;

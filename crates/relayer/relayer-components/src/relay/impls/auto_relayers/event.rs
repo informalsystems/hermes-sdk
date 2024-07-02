@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::{async_trait, HasErrorType};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::stream::CanMapStream;
 use hermes_runtime_components::traits::subscription::HasSubscription;

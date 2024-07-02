@@ -1,5 +1,5 @@
 use cgp_core::prelude::HasErrorType;
-use cgp_core::{CanRun, ErrorRaiser, HasComponents};
+use cgp_core::{component::HasComponents, error::ErrorRaiser, run::CanRun};
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;

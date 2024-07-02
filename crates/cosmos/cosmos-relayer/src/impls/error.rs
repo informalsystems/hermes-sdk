@@ -2,8 +2,8 @@ use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 
+use cgp_core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::Report;
 use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;

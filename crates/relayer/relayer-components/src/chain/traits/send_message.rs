@@ -55,7 +55,7 @@ pub trait CanSendMessages: HasMessageType + HasEventType + HasErrorType {
         at the same position in the input message list.
 
         On failure, the method returns an
-        [error](cgp_core::HasErrorType::Error).
+        [error](cgp_core::error::HasErrorType::Error).
         Note that since the message sending must be atomic, the sending of
         messages must either all succeed or all failed. i.e. partial failure
         is forbidden.

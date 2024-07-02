@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::birelay::traits::two_way::HasTwoChainTypes;
 use crate::build::traits::components::birelay_builder::BiRelayBuilder;

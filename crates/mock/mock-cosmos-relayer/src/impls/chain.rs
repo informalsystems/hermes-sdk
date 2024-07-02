@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use basecoin::modules::ibc::{AnyClientState, AnyConsensusState};
 use cgp_core::prelude::Async;
-use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
+use cgp_core::{component::HasComponents, error::ErrorRaiser, error::ProvideErrorType};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;

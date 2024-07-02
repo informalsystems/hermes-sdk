@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::{async_trait, HasErrorType};
 
 use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;

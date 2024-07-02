@@ -1,5 +1,5 @@
 use alloc::sync::Arc;
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use core::time::Duration;
 
 use cgp_core::prelude::*;

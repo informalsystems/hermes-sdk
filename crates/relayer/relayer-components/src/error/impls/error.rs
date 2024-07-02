@@ -1,4 +1,4 @@
-use cgp_core::{ErrorRaiser, HasErrorType};
+use cgp_core::error::{ErrorRaiser, HasErrorType};
 
 pub struct MaxRetryExceededError<'a, Context>
 where

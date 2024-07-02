@@ -1,5 +1,5 @@
+use cgp_core::error::HasErrorType;
 use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
 use hermes_cosmos_chain_components::types::payloads::client::CosmosUpdateClientPayload;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

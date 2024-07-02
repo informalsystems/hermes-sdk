@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
+use cgp_core::{component::HasComponents, error::ErrorRaiser, error::ProvideErrorType};
 use hermes_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;

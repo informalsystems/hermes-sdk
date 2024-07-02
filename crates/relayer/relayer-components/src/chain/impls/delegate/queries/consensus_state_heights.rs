@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp_core::{DelegateComponent, HasErrorType};
+use cgp_core::prelude::{DelegateComponent, HasErrorType};
 
 use crate::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerier;
 use crate::chain::traits::types::height::HasHeightType;

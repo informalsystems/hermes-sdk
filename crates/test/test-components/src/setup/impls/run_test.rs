@@ -1,4 +1,4 @@
-use cgp_core::{CanRaiseError, HasErrorType};
+use cgp_core::error::{CanRaiseError, HasErrorType};
 
 use crate::setup::traits::driver::CanBuildTestDriver;
 use crate::setup::traits::run_test::TestRunner;

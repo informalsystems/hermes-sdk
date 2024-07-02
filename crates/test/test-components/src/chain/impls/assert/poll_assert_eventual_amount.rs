@@ -1,8 +1,8 @@
 use core::fmt::Debug;
 use core::time::Duration;
 
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
