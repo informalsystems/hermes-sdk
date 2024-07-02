@@ -1,4 +1,4 @@
-use cgp_core::prelude::{async_trait, HasErrorType};
+use cgp_core::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::chain_status::*;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 

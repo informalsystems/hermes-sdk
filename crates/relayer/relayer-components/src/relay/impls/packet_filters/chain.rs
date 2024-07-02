@@ -1,5 +1,3 @@
-use cgp_core::async_trait;
-
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;

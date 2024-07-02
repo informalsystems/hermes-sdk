@@ -5,7 +5,6 @@ use basecoin::modules::types::IdentifiedModule;
 use basecoin::store::context::{ProvableStore, Store};
 use basecoin::store::impls::RevertibleStore;
 use basecoin::store::utils::SharedRwExt;
-use cgp_core::prelude::*;
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::commitment::CommitmentProofBytes;
 use ibc::core::host::types::identifiers::ChainId;

@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use futures::stream::{self, StreamExt, TryStreamExt};
 use hermes_relayer_components::chain::traits::queries::ack_packets::{
     AckPacketsQuerier, CanQueryAckPacket,

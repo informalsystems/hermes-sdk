@@ -1,7 +1,5 @@
 use alloc::vec::Vec;
 
-use cgp_core::async_trait;
-
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;

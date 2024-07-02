@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;

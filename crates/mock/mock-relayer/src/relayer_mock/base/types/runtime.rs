@@ -2,7 +2,6 @@ use alloc::sync::Arc;
 use core::time::Duration;
 
 use cgp_core::error::HasErrorType;
-use cgp_core::prelude::*;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;

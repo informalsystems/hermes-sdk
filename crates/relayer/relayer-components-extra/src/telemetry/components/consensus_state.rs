@@ -1,4 +1,4 @@
-use cgp_core::prelude::{async_trait, HasErrorType};
+use cgp_core::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;

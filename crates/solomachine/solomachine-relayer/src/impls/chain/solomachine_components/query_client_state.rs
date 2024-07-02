@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;

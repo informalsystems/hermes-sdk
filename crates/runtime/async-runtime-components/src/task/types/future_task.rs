@@ -2,7 +2,6 @@ use alloc::boxed::Box;
 use core::future::Future;
 use core::pin::Pin;
 
-use cgp_core::async_trait;
 use hermes_runtime_components::traits::task::Task;
 
 pub struct FutureTask {

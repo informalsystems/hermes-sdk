@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp_core::async_trait;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 

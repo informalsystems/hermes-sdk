@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;

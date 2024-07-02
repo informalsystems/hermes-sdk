@@ -1,6 +1,5 @@
 use alloc::vec;
 
-use cgp_core::async_trait;
 use cgp_core::error::HasErrorType;
 use cgp_core::run::{CanRun, Runner};
 use hermes_runtime_components::traits::runtime::HasRuntime;

@@ -1,7 +1,5 @@
 use core::marker::PhantomData;
 
-use cgp_core::async_trait;
-
 use crate::chain::traits::queries::packet_is_received::CanQueryPacketIsReceived;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::chain::types::aliases::{HeightOf, WriteAckEventOf};
