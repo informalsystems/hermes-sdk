@@ -1,7 +1,6 @@
 use alloc::format;
 
-use cgp_core::error::CanRaiseError;
-use cgp_core::error::ErrorOf;
+use cgp_core::error::{CanRaiseError, ErrorOf};
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;

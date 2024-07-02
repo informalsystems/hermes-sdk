@@ -1,11 +1,9 @@
 use std::collections::BTreeSet;
 use std::sync::Arc;
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{
-    error::{ErrorRaiserComponent, ErrorTypeComponent},
-    run::CanRun,
-};
+use cgp_core::run::CanRun;
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::logger::{CosmosLogger, ProvideCosmosLogger};
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;

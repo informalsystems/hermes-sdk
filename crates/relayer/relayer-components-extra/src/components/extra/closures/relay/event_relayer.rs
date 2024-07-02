@@ -1,4 +1,5 @@
-use cgp_core::{component::HasComponents, error::ErrorRaiser};
+use cgp_core::component::HasComponents;
+use cgp_core::error::ErrorRaiser;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;

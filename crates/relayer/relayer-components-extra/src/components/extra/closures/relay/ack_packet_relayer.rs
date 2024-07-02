@@ -1,7 +1,5 @@
-use cgp_core::{
-    component::HasComponents, error::CanRaiseError, error::ErrorOf, error::ErrorRaiser,
-    error::HasErrorType,
-};
+use cgp_core::component::HasComponents;
+use cgp_core::error::{CanRaiseError, ErrorOf, ErrorRaiser, HasErrorType};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;

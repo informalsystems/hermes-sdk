@@ -1,7 +1,5 @@
-use cgp_core::{
-    error::{ErrorRaiser, HasErrorType, ProvideErrorType},
-    Async,
-};
+use cgp_core::error::{ErrorRaiser, HasErrorType, ProvideErrorType};
+use cgp_core::Async;
 use hermes_runtime::types::error::TokioRuntimeError;
 
 use crate::relayer_mock::base::error::{BaseError, Error};

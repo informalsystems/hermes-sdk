@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp_core::{component::DelegateComponent, error::ErrorRaiser, error::HasErrorType};
+use cgp_core::component::DelegateComponent;
+use cgp_core::error::{ErrorRaiser, HasErrorType};
 
 pub struct DelegateErrorRaiser<Components>(pub PhantomData<Components>);
 
