@@ -74,7 +74,7 @@ basecoin                        = { version = "0.1.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
 cgp-component-macro             = { version = "0.1.0" }
-clap                            = { version = "4.5.3" }
+clap                            = { version = "4.5.8" }
 oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.12.3" }
 prost-types                     = { version = "0.12.3" }
