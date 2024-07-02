@@ -638,7 +638,7 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-async-macro",
 ]
@@ -646,7 +646,7 @@ dependencies = [
 [[package]]
 name = "cgp-async-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -656,6 +656,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -664,6 +665,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-component-macro-lib",
  "itertools 0.11.0",
@@ -676,6 +678,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro-lib"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "itertools 0.11.0",
  "prettyplease",
@@ -687,6 +690,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -698,7 +702,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -707,7 +711,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -716,7 +720,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -725,7 +729,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git?branch=delegate-components-proc-macro#f3c9676493af506a87c4b374570c673e2436ab98"
 dependencies = [
  "cgp-async",
  "cgp-component",
