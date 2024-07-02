@@ -15,7 +15,6 @@ use crate::relay::types::aliases::Packet;
 /// implemented on top of this base type.
 pub struct BaseTimeoutUnorderedPacketRelayer;
 
-#[async_trait]
 impl<Relay> TimeoutUnorderedPacketRelayer<Relay> for BaseTimeoutUnorderedPacketRelayer
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,

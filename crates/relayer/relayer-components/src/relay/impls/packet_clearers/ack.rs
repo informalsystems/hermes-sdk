@@ -64,7 +64,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
     Relay: Clone + HasRuntime + CanRaiseRelayChainErrors + HasLogger,

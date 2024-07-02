@@ -38,7 +38,6 @@ where
     pub packet: Relay::Packet,
 }
 
-#[async_trait]
 impl<Relay> Task for RelayPacketTask<Relay>
 where
     Relay: CanRelayPacket + HasLogger,
@@ -62,7 +61,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
     Relay: Clone + HasRuntime + CanRaiseRelayChainErrors,

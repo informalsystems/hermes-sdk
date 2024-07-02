@@ -4,7 +4,6 @@ use hermes_runtime_components::traits::mutex::ProvideMutex;
 
 pub struct ProvideFuturesMutex;
 
-#[async_trait]
 impl<Runtime> ProvideMutex<Runtime> for ProvideFuturesMutex
 where
     Runtime: Async,

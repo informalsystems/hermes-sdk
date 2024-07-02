@@ -16,7 +16,6 @@ use crate::batch::types::sink::BatchWorkerSink;
 
 pub struct SendMessagesToBatchWorker;
 
-#[async_trait]
 impl<Relay, Sink, Target, TargetChain, Runtime> IbcMessageSender<Relay, Sink, Target>
     for SendMessagesToBatchWorker
 where

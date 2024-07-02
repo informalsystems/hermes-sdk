@@ -24,7 +24,6 @@ where
     pub target_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
 }
 
-#[async_trait]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     TargetUpdateClientMessageBuilder<Relay, Target> for SkipUpdateClient<InUpdateClient>
 where

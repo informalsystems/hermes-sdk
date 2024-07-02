@@ -16,7 +16,6 @@ use crate::bootstrap::traits::types::wallet_config::HasWalletConfigFields;
 
 pub struct AddCosmosWalletToGenesis;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain, ChainDriver> GenesisWalletAdder<Bootstrap>
     for AddCosmosWalletToGenesis
 where

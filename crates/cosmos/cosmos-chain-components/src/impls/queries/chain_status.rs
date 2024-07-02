@@ -12,7 +12,6 @@ use crate::traits::rpc_client::HasRpcClient;
 
 pub struct QueryChainStatusWithChainHandle;
 
-#[async_trait]
 impl<Chain> ChainStatusQuerier<Chain> for QueryChainStatusWithChainHandle
 where
     Chain: HasErrorType

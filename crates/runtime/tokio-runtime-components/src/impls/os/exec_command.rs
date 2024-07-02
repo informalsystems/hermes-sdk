@@ -17,7 +17,6 @@ pub struct ExecCommandFailure {
     pub stderr: String,
 }
 
-#[async_trait]
 impl<Runtime> CommandWithEnvsExecutor<Runtime> for TokioExecCommand
 where
     Runtime: HasFilePathType

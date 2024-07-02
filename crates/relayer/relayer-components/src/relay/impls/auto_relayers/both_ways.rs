@@ -23,7 +23,6 @@ where
     BToA(BiRelay::RelayBToA),
 }
 
-#[async_trait]
 impl<BiRelay> Task for TwoWayRelayerTask<BiRelay>
 where
     BiRelay: HasTwoWayRelay,
@@ -42,7 +41,6 @@ where
     }
 }
 
-#[async_trait]
 impl<BiRelay> Runner<BiRelay> for RelayBothWays
 where
     BiRelay: HasTwoWayRelay + HasRuntime + HasErrorType,

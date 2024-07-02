@@ -13,7 +13,6 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryUnreceivedCosmosAcksSequences;
 
-#[async_trait]
 impl<Chain, Counterparty> UnreceivedAcksSequencesQuerier<Chain, Counterparty>
     for QueryUnreceivedCosmosAcksSequences
 where

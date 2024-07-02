@@ -16,7 +16,6 @@ use crate::types::sign_data::SolomachineSignData;
 
 pub struct BuildSolomachineReceivePacketPayload;
 
-#[async_trait]
 impl<Chain, Counterparty> ReceivePacketPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineReceivePacketPayload
 where

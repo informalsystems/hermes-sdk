@@ -9,7 +9,6 @@ use tokio::task::JoinSet;
 
 pub struct TokioRunParallelTasks;
 
-#[async_trait]
 impl<Runtime> ConcurrentTaskRunner<Runtime> for TokioRunParallelTasks
 where
     Runtime: HasBoxedStreamType,

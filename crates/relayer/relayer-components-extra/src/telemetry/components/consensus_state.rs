@@ -11,7 +11,6 @@ pub struct ConsensusStateTelemetryQuerier<InQuerier> {
     pub querier: InQuerier,
 }
 
-#[async_trait]
 impl<InQuerier, Chain, Counterparty, Telemetry> ConsensusStateQuerier<Chain, Counterparty>
     for ConsensusStateTelemetryQuerier<InQuerier>
 where

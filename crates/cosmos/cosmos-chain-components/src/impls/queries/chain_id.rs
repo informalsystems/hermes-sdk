@@ -11,7 +11,6 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 
 pub struct QueryChainIdWithChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> CounterpartyChainIdQuerier<Chain, Counterparty>
     for QueryChainIdWithChainHandle
 where

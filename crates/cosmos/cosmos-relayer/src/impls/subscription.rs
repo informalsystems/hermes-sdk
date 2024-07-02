@@ -104,14 +104,12 @@ pub struct RunWebSocketDriverTask {
     pub driver: WebSocketClientDriver,
 }
 
-#[async_trait]
 impl Task for RunWebSocketDriverTask {
     async fn run(self) {
         let _ = self.driver.run().await;
     }
 }
 
-#[async_trait]
 impl<Runtime> CanCreateAbciEventStream for Runtime
 where
     Runtime: CanSpawnTask,

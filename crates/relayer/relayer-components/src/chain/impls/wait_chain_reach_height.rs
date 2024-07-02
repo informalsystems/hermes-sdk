@@ -15,7 +15,6 @@ pub trait CanWaitChainReachHeight: HasHeightType + HasErrorType {
     ) -> Result<Self::Height, Self::Error>;
 }
 
-#[async_trait]
 impl<Chain> CanWaitChainReachHeight for Chain
 where
     Chain: CanQueryChainHeight + HasRuntime,

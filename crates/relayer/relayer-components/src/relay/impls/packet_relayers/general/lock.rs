@@ -25,7 +25,6 @@ where
     pub packet: &'a Relay::Packet,
 }
 
-#[async_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LockPacketRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasPacketLock + HasLogger,

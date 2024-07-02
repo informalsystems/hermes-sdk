@@ -11,7 +11,6 @@ pub struct RetryRelayer<InRelay> {
     pub phantom: PhantomData<InRelay>,
 }
 
-#[async_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for RetryRelayer<InRelayer>
 where
     Relay: HasRelayChains

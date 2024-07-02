@@ -12,7 +12,6 @@ use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirIni
 
 pub struct CreateChainHomeDirFromTestDir;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> ChainHomeDirInitializer<Bootstrap> for CreateChainHomeDirFromTestDir
 where
     Bootstrap: HasChainType<Chain = Chain>

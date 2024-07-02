@@ -8,7 +8,6 @@ use tokio::net::TcpListener;
 
 pub struct TokioReserveTcpPort;
 
-#[async_trait]
 impl<Runtime> TcpPortReserver<Runtime> for TokioReserveTcpPort
 where
     Runtime: CanRaiseError<IoError>,

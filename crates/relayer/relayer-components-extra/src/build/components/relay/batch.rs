@@ -26,7 +26,6 @@ use crate::build::traits::components::relay_with_batch_builder::CanBuildRelayWit
 
 pub struct BuildRelayWithBatchWorker;
 
-#[async_trait]
 impl<Build, Target, Relay, SrcChain, DstChain, SrcRuntime, DstRuntime>
     RelayFromChainsBuilder<Build, Target> for BuildRelayWithBatchWorker
 where

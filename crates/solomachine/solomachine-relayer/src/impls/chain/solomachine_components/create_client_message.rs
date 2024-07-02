@@ -11,7 +11,6 @@ use crate::types::message::SolomachineMessage;
 
 pub struct BuildCreateCosmosClientMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> CreateClientMessageBuilder<Chain, Counterparty>
     for BuildCreateCosmosClientMessage
 where

@@ -13,7 +13,6 @@ use crate::relay::types::aliases::Packet;
 
 pub struct BaseReceivePacketRelayer;
 
-#[async_trait]
 impl<Relay, AckEvent> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
 where
     Relay: HasRelayChains

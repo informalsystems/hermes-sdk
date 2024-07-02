@@ -11,7 +11,6 @@ use crate::build::types::aliases::{
 
 pub struct BuildRelayFromChains;
 
-#[async_trait]
 impl<Build, Target> RelayBuilder<Build, Target> for BuildRelayFromChains
 where
     Build: CanBuildChain<SrcChainTarget<Build, Target>>

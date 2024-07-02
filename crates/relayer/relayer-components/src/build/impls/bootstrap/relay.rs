@@ -45,7 +45,6 @@ where
     ) -> Result<TargetRelay<Self, Target>, Self::Error>;
 }
 
-#[async_trait]
 impl<Build, Target, BiRelay, Relay, SrcChain, DstChain> CanBootstrapRelay<Target> for Build
 where
     Build: HasBiRelayType<BiRelay = BiRelay>

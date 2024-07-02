@@ -34,7 +34,6 @@ where
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 
-#[async_trait]
 impl<Build, BiRelay, ChainA, ChainB, Error> CanBootstrapBiRelay for Build
 where
     Build: HasBiRelayType<BiRelay = BiRelay>

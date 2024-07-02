@@ -9,7 +9,6 @@ pub struct ChainStatusTelemetryQuerier<InQuerier> {
     pub querier: InQuerier,
 }
 
-#[async_trait]
 impl<InQuerier, Chain, Telemetry> ChainStatusQuerier<Chain>
     for ChainStatusTelemetryQuerier<InQuerier>
 where

@@ -16,7 +16,6 @@ use crate::types::sign_data::SolomachineSignData;
 
 pub struct BuildSolomachineTimeoutPacketPayload;
 
-#[async_trait]
 impl<Chain, Counterparty>
     TimeoutUnorderedPacketPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineTimeoutPacketPayload

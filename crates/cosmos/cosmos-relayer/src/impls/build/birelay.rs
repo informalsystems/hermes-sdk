@@ -7,7 +7,6 @@ use crate::contexts::relay::CosmosRelay;
 use crate::impls::build::components::CosmosBuildComponents;
 use crate::types::error::Error;
 
-#[async_trait]
 impl BiRelayFromRelayBuilder<CosmosBuilder> for CosmosBuildComponents {
     async fn build_birelay_from_relays(
         build: &CosmosBuilder,

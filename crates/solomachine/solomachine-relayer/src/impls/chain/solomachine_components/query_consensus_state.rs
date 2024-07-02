@@ -11,7 +11,6 @@ use crate::types::chain::SolomachineChain;
 
 pub struct QueryCosmosConsensusStateFromSolomachine;
 
-#[async_trait]
 impl<Chain, Counterparty> ConsensusStateQuerier<SolomachineChain<Chain>, Counterparty>
     for QueryCosmosConsensusStateFromSolomachine
 where

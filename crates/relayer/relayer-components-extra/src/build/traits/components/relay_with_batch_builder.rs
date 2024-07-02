@@ -28,7 +28,6 @@ where
     ) -> Result<TargetRelay<Build, Target>, Build::Error>;
 }
 
-#[async_trait]
 impl<Build, Target, Component> RelayWithBatchBuilder<Build, Target> for Component
 where
     Build: HasBiRelayType + HasErrorType,
@@ -77,7 +76,6 @@ where
     ) -> Result<TargetRelay<Self, Target>, Self::Error>;
 }
 
-#[async_trait]
 impl<Build, Target> CanBuildRelayWithBatch<Target> for Build
 where
     Build: HasBiRelayType + HasRuntime + HasErrorType + HasComponents,

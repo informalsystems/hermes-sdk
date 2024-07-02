@@ -8,7 +8,6 @@ use tokio::fs::read_to_string;
 
 pub struct TokioReadFileAsString;
 
-#[async_trait]
 impl<Runtime> FileAsStringReader<Runtime> for TokioReadFileAsString
 where
     Runtime: HasFilePathType + CanRaiseError<IoError>,

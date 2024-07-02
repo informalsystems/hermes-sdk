@@ -9,7 +9,6 @@ use crate::stream::traits::boxed::HasBoxedStreamType;
 
 pub struct RunConcurrentTasks;
 
-#[async_trait]
 impl<Runtime> ConcurrentTaskRunner<Runtime> for RunConcurrentTasks
 where
     Runtime: HasBoxedStreamType,

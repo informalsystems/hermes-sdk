@@ -11,7 +11,6 @@ use crate::types::payloads::client::SolomachineUpdateClientPayload;
 
 pub struct BuildSolomachineUpdateClientPayload;
 
-#[async_trait]
 impl<Chain, Counterparty> UpdateClientPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineUpdateClientPayload
 where

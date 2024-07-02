@@ -11,7 +11,6 @@ use crate::bootstrap::traits::init_bridge_data::BridgeDataInitializer;
 
 pub struct InitCelestiaBridgeData;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> BridgeDataInitializer<Bootstrap> for InitCelestiaBridgeData
 where
     Bootstrap:

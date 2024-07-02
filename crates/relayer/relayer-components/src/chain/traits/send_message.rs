@@ -83,7 +83,6 @@ pub trait CanSendSingleMessage: HasMessageType + HasEventType + HasErrorType {
     async fn send_message(&self, message: Self::Message) -> Result<Vec<Self::Event>, Self::Error>;
 }
 
-#[async_trait]
 impl<Chain> CanSendFixSizedMessages for Chain
 where
     Chain: CanSendMessages + InjectMismatchIbcEventsCountError,
@@ -102,7 +101,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Chain> CanSendSingleMessage for Chain
 where
     Chain: CanSendMessages,

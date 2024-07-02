@@ -5,7 +5,6 @@ use crate::relay::traits::packet_filter::PacketFilter;
 
 pub struct AllowAll;
 
-#[async_trait]
 impl<Relay> PacketFilter<Relay> for AllowAll
 where
     Relay: HasRelayChains,

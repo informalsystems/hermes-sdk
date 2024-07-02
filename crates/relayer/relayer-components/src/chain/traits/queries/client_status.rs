@@ -38,7 +38,6 @@ where
     ) -> Result<ClientStatus, Self::Error>;
 }
 
-#[async_trait]
 impl<Chain, Counterparty> CanQueryClientStatus<Counterparty> for Chain
 where
     Chain: HasIbcChainTypes<Counterparty>

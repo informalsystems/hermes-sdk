@@ -111,7 +111,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay, Target> CanSendMessages for RelayToChain<Relay, Target>
 where
     Relay: HasRelayChains,

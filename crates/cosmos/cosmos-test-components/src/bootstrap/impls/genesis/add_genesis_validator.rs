@@ -17,7 +17,6 @@ use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAd
 */
 pub struct AddCosmosGenesisValidator;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> GenesisValidatorAdder<Bootstrap> for AddCosmosGenesisValidator
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

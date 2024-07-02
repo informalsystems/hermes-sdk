@@ -46,7 +46,6 @@ pub trait BasecoinEndpoint: Async + Clone {
     fn get_light_block(&self, height: &Height) -> Result<TmLightBlock, Error>;
 }
 
-#[async_trait]
 impl<Ctx> BasecoinEndpoint for Ctx
 where
     Ctx: QueryService + Async + Clone,

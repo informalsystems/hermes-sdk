@@ -17,7 +17,6 @@ impl FutureTask {
     }
 }
 
-#[async_trait]
 impl Task for FutureTask {
     async fn run(self) {
         self.future.await;

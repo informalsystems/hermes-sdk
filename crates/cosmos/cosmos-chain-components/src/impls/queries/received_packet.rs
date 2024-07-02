@@ -10,7 +10,6 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 
 pub struct QueryReceivedPacketWithChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> ReceivedPacketQuerier<Chain, Counterparty>
     for QueryReceivedPacketWithChainHandle
 where

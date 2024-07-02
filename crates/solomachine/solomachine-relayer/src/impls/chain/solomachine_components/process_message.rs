@@ -17,7 +17,6 @@ use crate::types::message::SolomachineMessage;
 
 pub struct ProcessSolomachineMessages;
 
-#[async_trait]
 impl<Chain> MessageSender<SolomachineChain<Chain>> for ProcessSolomachineMessages
 where
     Chain: Solomachine,

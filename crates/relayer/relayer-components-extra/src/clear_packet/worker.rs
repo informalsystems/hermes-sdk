@@ -32,7 +32,6 @@ where
     pub dst_port_id: PortIdOf<Relay::DstChain, Relay::SrcChain>,
 }
 
-#[async_trait]
 impl<Relay> Task for ClearPacketTask<Relay>
 where
     Relay: CanRunLoop,
@@ -84,7 +83,6 @@ trait CanRunLoop: HasRelayChains {
     );
 }
 
-#[async_trait]
 impl<Relay> CanRunLoop for Relay
 where
     Relay: HasRuntime + CanClearPackets + HasClearInterval,

@@ -13,7 +13,6 @@ use crate::types::payloads::client::SolomachineUpdateClientPayload;
 
 pub struct BuildUpdateSolomachineClientMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
     for BuildUpdateSolomachineClientMessage
 where

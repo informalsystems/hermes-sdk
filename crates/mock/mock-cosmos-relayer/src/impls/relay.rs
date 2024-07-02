@@ -118,7 +118,6 @@ where
 
 pub struct MockCosmosBuildUpdateClientMessage;
 
-#[async_trait]
 impl<SrcChain, DstChain>
     TargetUpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, SourceTarget>
     for MockCosmosBuildUpdateClientMessage
@@ -165,7 +164,6 @@ where
     }
 }
 
-#[async_trait]
 impl<SrcChain, DstChain>
     TargetUpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, DestinationTarget>
     for MockCosmosBuildUpdateClientMessage
@@ -212,7 +210,6 @@ where
     }
 }
 
-#[async_trait]
 impl<SrcChain, DstChain> ProvidePacketLock<MockCosmosRelay<SrcChain, DstChain>>
     for MockCosmosRelayComponents
 where

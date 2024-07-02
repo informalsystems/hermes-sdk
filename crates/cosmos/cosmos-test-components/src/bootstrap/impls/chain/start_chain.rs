@@ -11,7 +11,6 @@ use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 
 pub struct StartCosmosChain;
 
-#[async_trait]
 impl<Bootstrap, Runtime> ChainFullNodeStarter<Bootstrap> for StartCosmosChain
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

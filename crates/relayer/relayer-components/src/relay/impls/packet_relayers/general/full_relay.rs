@@ -31,7 +31,6 @@ pub enum RelayPacketProgress {
     SkipRelayAckPacket,
 }
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for FullCycleRelayer
 where
     Relay: CanRelayAckPacket

@@ -9,7 +9,6 @@ use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildSolomachineCreateClientPayload;
 
-#[async_trait]
 impl<Chain, Counterparty> CreateClientPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineCreateClientPayload
 where

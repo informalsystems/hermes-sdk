@@ -27,7 +27,6 @@ where
     Error { error: &'a Relay::Error },
 }
 
-#[async_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LoggerRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasLogger,

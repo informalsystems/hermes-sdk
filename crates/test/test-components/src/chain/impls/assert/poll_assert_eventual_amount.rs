@@ -14,7 +14,6 @@ use crate::chain::traits::types::amount::HasAmountType;
 
 pub struct PollAssertEventualAmount;
 
-#[async_trait]
 impl<Chain> EventualAmountAsserter<Chain> for PollAssertEventualAmount
 where
     Chain: HasRuntime

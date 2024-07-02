@@ -21,7 +21,6 @@ use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainNodeConfig;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> ChainNodeConfigInitializer<Bootstrap>
     for UpdateCosmosChainNodeConfig
 where

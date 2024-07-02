@@ -91,7 +91,6 @@ where
     pub phantom: PhantomData<Target>,
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> Task for BatchMessageTask<Relay, Target>
 where
     Relay: CanRunLoop<Target>,
@@ -212,7 +211,6 @@ where
     );
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> CanProcessMessageBatches<Target> for Relay
 where
     Relay: Clone + CanSendReadyBatches<Target> + HasLogger,
@@ -343,7 +341,6 @@ where
     pub ready_batches: VecDeque<BatchSubmission<Target::TargetChain, Relay::Error>>,
 }
 
-#[async_trait]
 impl<Relay, Target> Task for SendReadyBatchTask<Relay, Target>
 where
     Relay: CanSendReadyBatches<Target>,
@@ -369,7 +366,6 @@ where
     );
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> CanSendReadyBatches<Target> for Relay
 where
     Relay: CanSendIbcMessages<BatchWorkerSink, Target> + HasLogger,

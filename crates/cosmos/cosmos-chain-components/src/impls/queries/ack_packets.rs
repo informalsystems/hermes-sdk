@@ -9,7 +9,6 @@ use hermes_relayer_components::chain::types::aliases::WriteAckEventOf;
 
 pub struct QueryAckPacketsConcurrently;
 
-#[async_trait]
 impl<Chain, Counterparty> AckPacketsQuerier<Chain, Counterparty> for QueryAckPacketsConcurrently
 where
     Chain: CanQueryAckPacket<Counterparty>,

@@ -10,7 +10,6 @@ use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;
 
 pub struct GenerateRandomChainId;
 
-#[async_trait]
 impl<Bootstrap, Chain, Runtime> ChainIdGenerator<Bootstrap> for GenerateRandomChainId
 where
     Bootstrap: HasChainType<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasRandomIdFlag,

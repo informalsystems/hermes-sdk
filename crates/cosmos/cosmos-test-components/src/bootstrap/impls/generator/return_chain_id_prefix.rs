@@ -7,7 +7,6 @@ use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;
 
 pub struct ReturnPrefixAsChainId;
 
-#[async_trait]
 impl<Bootstrap, Chain> ChainIdGenerator<Bootstrap> for ReturnPrefixAsChainId
 where
     Bootstrap: HasChainType<Chain = Chain>,

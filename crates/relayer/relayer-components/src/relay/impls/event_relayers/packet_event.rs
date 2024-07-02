@@ -37,7 +37,6 @@ use crate::relay::traits::target::{DestinationTarget, SourceTarget};
 */
 pub struct PacketEventRelayer;
 
-#[async_trait]
 impl<Relay> EventRelayer<Relay, SourceTarget> for PacketEventRelayer
 where
     Relay: CanRelayPacket + CanRaiseRelayChainErrors,
@@ -61,7 +60,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay> EventRelayer<Relay, DestinationTarget> for PacketEventRelayer
 where
     Relay:

@@ -14,7 +14,6 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryCosmosPacketCommitments;
 
-#[async_trait]
 impl<Chain, Counterparty> PacketCommitmentsQuerier<Chain, Counterparty>
     for QueryCosmosPacketCommitments
 where

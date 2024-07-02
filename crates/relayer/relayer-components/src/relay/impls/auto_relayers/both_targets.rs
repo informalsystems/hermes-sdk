@@ -21,7 +21,6 @@ pub struct TargetRelayerTask<Relay> {
     pub target: EitherTarget,
 }
 
-#[async_trait]
 impl<Relay> Task for TargetRelayerTask<Relay>
 where
     Relay: HasRelayChains
@@ -42,7 +41,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay> Runner<Relay> for RelayBothTargets
 where
     Relay: Clone

@@ -14,7 +14,6 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 
 pub struct QueryWriteAckEventFromChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> WriteAckQuerier<Chain, Counterparty> for QueryWriteAckEventFromChainHandle
 where
     Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>

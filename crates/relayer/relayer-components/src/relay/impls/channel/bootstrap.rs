@@ -33,7 +33,6 @@ where
     ) -> Result<(SrcChannelId<Self>, DstChannelId<Self>), Self::Error>;
 }
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain> CanBootstrapChannel for Relay
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>

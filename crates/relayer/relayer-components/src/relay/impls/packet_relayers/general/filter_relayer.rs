@@ -9,7 +9,6 @@ pub struct FilterRelayer<InRelayer> {
     pub phantom: PhantomData<InRelayer>,
 }
 
-#[async_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for FilterRelayer<InRelayer>
 where
     Relay: CanFilterPackets,

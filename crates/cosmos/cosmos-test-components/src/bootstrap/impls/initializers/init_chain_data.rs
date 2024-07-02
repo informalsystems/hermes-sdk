@@ -11,7 +11,6 @@ use crate::bootstrap::traits::initializers::init_chain_data::ChainDataInitialize
 
 pub struct InitCosmosChainData;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> ChainDataInitializer<Bootstrap> for InitCosmosChainData
 where
     Bootstrap: HasChainType<Chain = Chain>

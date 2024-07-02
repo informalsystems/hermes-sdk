@@ -9,7 +9,6 @@ use crate::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub struct BuildBiRelayFromRelays;
 
-#[async_trait]
 impl<Build, ChainA, ChainB> BiRelayBuilder<Build> for BuildBiRelayFromRelays
 where
     Build:

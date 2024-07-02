@@ -10,7 +10,6 @@ use crate::types::chain::SolomachineChain;
 
 pub struct QueryCosmosClientStateFromSolomachine;
 
-#[async_trait]
 impl<Chain, Counterparty> ClientStateQuerier<SolomachineChain<Chain>, Counterparty>
     for QueryCosmosClientStateFromSolomachine
 where

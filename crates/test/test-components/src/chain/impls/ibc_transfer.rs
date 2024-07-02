@@ -19,7 +19,6 @@ pub struct SendIbcTransferMessage;
 #[derive(Debug)]
 pub struct MissingSendPacketEventError;
 
-#[async_trait]
 impl<Chain, Counterparty> TokenIbcTransferrer<Chain, Counterparty> for SendIbcTransferMessage
 where
     Chain: HasWalletType

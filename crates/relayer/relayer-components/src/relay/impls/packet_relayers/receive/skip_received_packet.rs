@@ -13,7 +13,6 @@ pub struct SkipReceivedPacketRelayer<Relayer> {
     pub phantom: PhantomData<Relayer>,
 }
 
-#[async_trait]
 impl<Relay, Relayer> ReceivePacketRelayer<Relay> for SkipReceivedPacketRelayer<Relayer>
 where
     Relay: HasRelayPacketFields + CanRaiseRelayChainErrors,

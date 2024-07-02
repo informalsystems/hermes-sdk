@@ -13,7 +13,6 @@ use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessa
 
 pub struct BuildUpdateClientMessages;
 
-#[async_trait]
 impl<Relay, Target, TargetChain, CounterpartyChain> TargetUpdateClientMessageBuilder<Relay, Target>
     for BuildUpdateClientMessages
 where

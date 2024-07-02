@@ -10,7 +10,6 @@ pub struct MatchPacketSourceChain;
 
 pub struct MatchPacketDestinationChain;
 
-#[async_trait]
 impl<Relay> PacketFilter<Relay> for MatchPacketSourceChain
 where
     Relay: HasRelayPacketFields + CanRaiseRelayChainErrors,
@@ -36,7 +35,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay> PacketFilter<Relay> for MatchPacketDestinationChain
 where
     Relay: HasRelayPacketFields + CanRaiseRelayChainErrors,

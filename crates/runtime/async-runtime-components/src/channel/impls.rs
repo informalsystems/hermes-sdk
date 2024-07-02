@@ -86,7 +86,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Runtime> ChannelUser<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: HasUnboundedChannelType + CanRaiseError<ChannelClosedError>,

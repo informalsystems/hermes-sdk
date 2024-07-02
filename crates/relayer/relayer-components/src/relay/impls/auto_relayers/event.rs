@@ -31,7 +31,6 @@ where
     pub phantom: PhantomData<Target>,
 }
 
-#[async_trait]
 impl<Relay, Target> Task for EventRelayerTask<Relay, Target>
 where
     Relay: CanRelayEvent<Target>,
@@ -45,7 +44,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> AutoRelayer<Relay, Target> for RelayEvents
 where
     Relay: CanRelayEvent<Target> + HasRuntime + Clone,

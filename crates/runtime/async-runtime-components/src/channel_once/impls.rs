@@ -72,7 +72,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Runtime> ChannelOnceUser<Runtime> for ProvideOneShotChannelType
 where
     Runtime: HasOneShotChannelType + CanRaiseError<ChannelClosedError>,

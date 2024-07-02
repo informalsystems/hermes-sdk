@@ -32,7 +32,6 @@ where
     ) -> Result<(), Self::Error>;
 }
 
-#[async_trait]
 impl<Relay, Target> CanSendTargetUpdateClientMessage<Target> for Relay
 where
     Relay: CanBuildTargetUpdateClientMessage<Target>,

@@ -8,7 +8,6 @@ use tokio::fs::write;
 
 pub struct TokioWriteStringToFile;
 
-#[async_trait]
 impl<Runtime> StringToFileWriter<Runtime> for TokioWriteStringToFile
 where
     Runtime: HasFilePathType + HasErrorType,

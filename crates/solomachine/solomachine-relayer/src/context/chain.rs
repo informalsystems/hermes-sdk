@@ -64,7 +64,6 @@ impl MockSolomachine {
     }
 }
 
-#[async_trait]
 impl Solomachine for MockSolomachine {
     type Error = Error;
 

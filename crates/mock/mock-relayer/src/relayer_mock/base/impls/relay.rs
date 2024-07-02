@@ -71,7 +71,6 @@ impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
 
 pub struct MockBuildUpdateClientMessage;
 
-#[async_trait]
 impl TargetUpdateClientMessageBuilder<MockRelayContext, SourceTarget>
     for MockBuildUpdateClientMessage
 {
@@ -89,7 +88,6 @@ impl TargetUpdateClientMessageBuilder<MockRelayContext, SourceTarget>
     }
 }
 
-#[async_trait]
 impl TargetUpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
     for MockBuildUpdateClientMessage
 {
@@ -107,7 +105,6 @@ impl TargetUpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
     }
 }
 
-#[async_trait]
 impl ProvidePacketLock<MockRelayContext> for MockRelayComponents {
     type PacketLock<'a> = ();
 

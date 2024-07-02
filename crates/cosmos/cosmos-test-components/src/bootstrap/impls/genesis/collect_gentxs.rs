@@ -9,7 +9,6 @@ use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollec
 
 pub struct CollectCosmosGentxs;
 
-#[async_trait]
 impl<Bootstrap, Runtime> GenesisTransactionsCollector<Bootstrap> for CollectCosmosGentxs
 where
     Bootstrap: HasRuntime<Runtime = Runtime> + CanRaiseError<Runtime::Error> + HasChainCommandPath,

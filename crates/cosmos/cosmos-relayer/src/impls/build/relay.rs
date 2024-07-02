@@ -10,7 +10,6 @@ use crate::impls::build::components::CosmosBuildComponents;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::error::Error;
 
-#[async_trait]
 impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,
@@ -34,7 +33,6 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildCompon
     }
 }
 
-#[async_trait]
 impl RelayWithBatchBuilder<CosmosBuilder, RelayBToATarget> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,

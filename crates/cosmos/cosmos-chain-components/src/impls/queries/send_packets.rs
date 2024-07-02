@@ -7,7 +7,6 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub struct QuerySendPacketsConcurrently;
 
-#[async_trait]
 impl<Chain, Counterparty> SendPacketsQuerier<Chain, Counterparty> for QuerySendPacketsConcurrently
 where
     Chain: CanQuerySendPacket<Counterparty>,

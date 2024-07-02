@@ -35,7 +35,6 @@ impl HasErrorType for MockRuntimeContext {
     type Error = TokioRuntimeError;
 }
 
-#[async_trait]
 impl CanSleep for MockRuntimeContext {
     async fn sleep(&self, duration: Duration) {
         // Increment the shared MockClock by the duration is milliseconds.
