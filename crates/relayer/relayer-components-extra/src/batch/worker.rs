@@ -91,7 +91,6 @@ where
     pub phantom: PhantomData<Target>,
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> Task for BatchMessageTask<Relay, Target>
 where
     Relay: CanRunLoop<Target>,
@@ -108,8 +107,7 @@ where
 trait CanRunLoop<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
-    Target::TargetChain: HasRuntime,
-    RuntimeOf<Target::TargetChain>: HasChannelTypes + HasChannelOnceTypes,
+    Target::TargetChain: HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
 {
     async fn run_loop(
         &self,
@@ -118,7 +116,6 @@ where
     );
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> CanRunLoop<Target> for Relay
 where
     Relay: CanProcessMessageBatches<Target> + HasLogger,
@@ -214,7 +211,6 @@ where
     );
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> CanProcessMessageBatches<Target> for Relay
 where
     Relay: Clone + CanSendReadyBatches<Target> + HasLogger,
@@ -345,7 +341,6 @@ where
     pub ready_batches: VecDeque<BatchSubmission<Target::TargetChain, Relay::Error>>,
 }
 
-#[async_trait]
 impl<Relay, Target> Task for SendReadyBatchTask<Relay, Target>
 where
     Relay: CanSendReadyBatches<Target>,
@@ -371,7 +366,6 @@ where
     );
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> CanSendReadyBatches<Target> for Relay
 where
     Relay: CanSendIbcMessages<BatchWorkerSink, Target> + HasLogger,

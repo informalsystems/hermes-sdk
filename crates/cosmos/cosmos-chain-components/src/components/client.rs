@@ -1,5 +1,4 @@
-use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
-use cgp_core::prelude::delegate_components;
+use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
@@ -98,7 +97,8 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientEventComponent, CreateClientOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
+    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -120,15 +120,19 @@ use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
-use hermes_relayer_components::chain::traits::types::packets::ack::AckPacketPayloadTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::{
+    AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::packets::receive::{
     PacketCommitmentTypeComponent, ReceivePacketPayloadTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::packets::timeout::{
     PacketReceiptTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
@@ -156,6 +160,7 @@ use crate::impls::queries::packet_acknowledgement::QueryPacketAcknowledgementFro
 use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledgements;
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
+use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
 use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
 use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
@@ -171,10 +176,7 @@ use crate::impls::types::create_client_options::ProvideCosmosCreateClientSetting
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 use crate::traits::abci_query::AbciQuerierComponent;
 
-pub struct CosmosClientComponents;
-
-delegate_components! {
-    #[mark_component(IsCosmosClientComponents)]
+define_components! {
     CosmosClientComponents {
         [
             HeightTypeComponent,
@@ -195,6 +197,8 @@ delegate_components! {
             BlockHashComponent,
             CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
             PacketCommitmentTypeComponent,
             AcknowledgementTypeComponent,
             PacketReceiptTypeComponent,
@@ -253,7 +257,7 @@ delegate_components! {
             RawConsensusStateWithProofsQuerierComponent,
         ]:
             QueryCosmosConsensusStateFromAbci,
-        CreateClientOptionsTypeComponent:
+        CreateClientPayloadOptionsTypeComponent:
             ProvideCosmosCreateClientSettings,
         CreateClientPayloadBuilderComponent:
             BuildCreateClientPayloadWithChainHandle,
@@ -346,7 +350,10 @@ delegate_components! {
         ]:
             DelegateQueryClientState<DelegateCosmosChainComponents>,
 
-        CreateClientMessageBuilderComponent:
+        [
+            CreateClientMessageBuilderComponent,
+            CreateClientMessageOptionsTypeComponent,
+        ]:
             DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
 
         [

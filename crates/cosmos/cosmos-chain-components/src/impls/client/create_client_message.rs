@@ -1,8 +1,10 @@
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_encoding_components::traits::convert::CanConvert;
-use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use prost_types::Any;
 
@@ -17,17 +19,18 @@ impl<Chain, Counterparty, Encoding> CreateClientMessageBuilder<Chain, Counterpar
     for BuildCosmosCreateClientMessage
 where
     Chain: HasMessageType<Message = CosmosMessage>
-        + HasEncoding<Encoding = Encoding>
+        + HasCreateClientMessageOptionsType<Counterparty>
         + CanRaiseError<Encoding::Error>,
-    Counterparty:
-        HasCreateClientPayloadType<Chain, CreateClientPayload = CosmosCreateClientPayload>,
+    Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = CosmosCreateClientPayload>
+        + HasDefaultEncoding<Encoding = Encoding>,
     Encoding: CanConvert<TendermintClientState, Any> + CanConvert<TendermintConsensusState, Any>,
 {
     async fn build_create_client_message(
-        chain: &Chain,
+        _chain: &Chain,
+        _options: &Chain::CreateClientMessageOptions,
         payload: CosmosCreateClientPayload,
     ) -> Result<CosmosMessage, Chain::Error> {
-        let encoding = chain.encoding();
+        let encoding = Counterparty::default_encoding();
 
         let client_state = encoding
             .convert(&payload.client_state)

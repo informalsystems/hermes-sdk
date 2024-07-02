@@ -1,7 +1,7 @@
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    HasCreateClientOptionsType, HasCreateClientPayloadType,
+    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -16,7 +16,7 @@ pub struct BuildCreateClientPayloadWithChainHandle;
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCreateClientPayloadWithChainHandle
 where
-    Chain: HasCreateClientOptionsType<Counterparty, CreateClientOptions = ClientSettings>
+    Chain: HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = ClientSettings>
         + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
         + HasBlockingChainHandle
         + CanRaiseError<eyre::Report>,

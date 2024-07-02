@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 
 use crate::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use crate::chain::traits::payload_builders::connection_handshake::{
@@ -14,9 +14,8 @@ use crate::chain::traits::types::connection::{
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
 };
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
-use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::proof::HasCommitmentProofType;
+use crate::chain::traits::types::proof::HasCommitmentProofHeight;
 use crate::chain::types::payloads::connection::{
     ConnectionOpenAckPayload, ConnectionOpenConfirmPayload, ConnectionOpenInitPayload,
     ConnectionOpenTryPayload,
@@ -48,13 +47,12 @@ impl<Chain, Counterparty> ConnectionOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildConnectionHandshakePayload
 where
     Chain: HasIbcCommitmentPrefix
-        + HasCommitmentProofType
+        + HasCommitmentProofHeight
         + HasClientStateType<Counterparty>
         + HasConnectionOpenTryPayloadType<
             Counterparty,
             ConnectionOpenTryPayload = ConnectionOpenTryPayload<Chain, Counterparty>,
-        > + CanIncrementHeight
-        + CanQueryConnectionEndWithProofs<Counterparty>
+        > + CanQueryConnectionEndWithProofs<Counterparty>
         + CanQueryClientStateWithProofs<Counterparty>
         + CanQueryConsensusStateWithProofs<Counterparty>
         + HasErrorType,
@@ -86,7 +84,8 @@ where
 
         // TODO: validate client and connection states
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&connection_proofs).clone();
 
         let payload = ConnectionOpenTryPayload {
             commitment_prefix,
@@ -107,13 +106,12 @@ impl<Chain, Counterparty> ConnectionOpenAckPayloadBuilder<Chain, Counterparty>
     for BuildConnectionHandshakePayload
 where
     Chain: HasIbcCommitmentPrefix
-        + HasCommitmentProofType
+        + HasCommitmentProofHeight
         + HasClientStateType<Counterparty>
         + HasConnectionOpenAckPayloadType<
             Counterparty,
             ConnectionOpenAckPayload = ConnectionOpenAckPayload<Chain, Counterparty>,
-        > + CanIncrementHeight
-        + CanQueryConnectionEndWithProofs<Counterparty>
+        > + CanQueryConnectionEndWithProofs<Counterparty>
         + CanQueryClientStateWithProofs<Counterparty>
         + CanQueryConsensusStateWithProofs<Counterparty>
         + HasErrorType,
@@ -143,7 +141,8 @@ where
 
         // TODO: validate client and connection states
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&connection_proofs).clone();
 
         let payload = ConnectionOpenAckPayload {
             client_state,
@@ -167,8 +166,7 @@ where
             ConnectionOpenConfirmPayload = ConnectionOpenConfirmPayload<Chain>,
         > + HasIbcChainTypes<Counterparty>
         + HasClientStateType<Counterparty>
-        + HasCommitmentProofType
-        + CanIncrementHeight
+        + HasCommitmentProofHeight
         + CanQueryConnectionEndWithProofs<Counterparty>,
 {
     async fn build_connection_open_confirm_payload(
@@ -184,7 +182,8 @@ where
 
         // TODO: validate connection state
 
-        let update_height = Chain::increment_height(height)?;
+        // TODO: check that all commitment proof heights are the same
+        let update_height = Chain::commitment_proof_height(&connection_proofs).clone();
 
         let payload = ConnectionOpenConfirmPayload {
             update_height,

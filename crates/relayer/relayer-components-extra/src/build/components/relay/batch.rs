@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::{async_trait, HasErrorType};
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilder;
 use hermes_relayer_components::build::traits::target::chain::ChainBuildTarget;
@@ -26,7 +26,6 @@ use crate::build::traits::components::relay_with_batch_builder::CanBuildRelayWit
 
 pub struct BuildRelayWithBatchWorker;
 
-#[async_trait]
 impl<Build, Target, Relay, SrcChain, DstChain, SrcRuntime, DstRuntime>
     RelayFromChainsBuilder<Build, Target> for BuildRelayWithBatchWorker
 where
@@ -49,7 +48,6 @@ where
     DstChain: HasRuntime<Runtime = DstRuntime> + HasChainId,
     SrcRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
     DstRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
-    Build::Runtime: HasMutex,
 {
     async fn build_relay_from_chains(
         build: &Build,
@@ -137,7 +135,6 @@ where
     >;
 }
 
-#[async_trait]
 impl<Build, Target, Chain, Counterparty, Runtime> CanBuildBatchChannel<Target> for Build
 where
     Build: HasBiRelayType + HasRuntime + HasErrorType,

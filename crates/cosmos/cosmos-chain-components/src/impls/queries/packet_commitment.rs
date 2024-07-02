@@ -14,7 +14,7 @@ impl<Chain, Counterparty> PacketCommitmentQuerier<Chain, Counterparty>
 where
     Chain: HasIbcChainTypes<Counterparty>
         + HasPacketCommitmentType<Counterparty, PacketCommitment = Vec<u8>>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasCommitmentProofType
         + CanQueryAbci
         + HasErrorType,
 {

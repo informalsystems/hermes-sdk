@@ -2,8 +2,9 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use basecoin::modules::ibc::{AnyClientState, AnyConsensusState};
+use cgp_core::component::HasComponents;
+use cgp_core::error::{ErrorRaiser, ProvideErrorType};
 use cgp_core::prelude::Async;
-use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
@@ -30,7 +31,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    ProvideCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
+    ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -275,9 +277,6 @@ where
     fn client_state_latest_height(client_state: &AnyClientState) -> Height {
         match client_state {
             AnyClientState::Tendermint(client_state) => client_state.inner().latest_height,
-            AnyClientState::Sovereign(client_state) => {
-                client_state.inner().sovereign_params.latest_height
-            }
         }
     }
 
@@ -286,11 +285,6 @@ where
             AnyClientState::Tendermint(client_state) => {
                 client_state.inner().frozen_height.is_some()
             }
-            AnyClientState::Sovereign(client_state) => client_state
-                .inner()
-                .sovereign_params
-                .frozen_height
-                .is_some(),
         }
     }
 
@@ -299,8 +293,6 @@ where
             AnyClientState::Tendermint(client_state) => {
                 elapsed > client_state.inner().trusting_period
             }
-            // TODO: no trusting period for Sovereign client_state, should this default to false?
-            AnyClientState::Sovereign(_) => false,
         }
     }
 }
@@ -376,13 +368,23 @@ impl<Chain: BasecoinEndpoint> ChainStatusQuerier<MockCosmosContext<Chain>>
 }
 
 impl<Chain, Counterparty>
-    ProvideCreateClientOptionsType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    ProvideCreateClientPayloadOptionsType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
     for MockCosmosChainComponents
 where
     Chain: BasecoinEndpoint,
     Counterparty: BasecoinEndpoint,
 {
-    type CreateClientOptions = ();
+    type CreateClientPayloadOptions = ();
+}
+
+impl<Chain, Counterparty>
+    ProvideCreateClientMessageOptionsType<MockCosmosContext<Chain>, MockCosmosContext<Counterparty>>
+    for MockCosmosChainComponents
+where
+    Chain: BasecoinEndpoint,
+    Counterparty: BasecoinEndpoint,
+{
+    type CreateClientMessageOptions = ();
 }
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
@@ -468,6 +470,7 @@ where
 {
     async fn build_create_client_message(
         _chain: &MockCosmosContext<Chain>,
+        _options: &(),
         counterparty_payload: Any,
     ) -> Result<Any, Error> {
         Ok(counterparty_payload)

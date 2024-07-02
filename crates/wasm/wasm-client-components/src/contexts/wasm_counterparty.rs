@@ -1,5 +1,5 @@
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
@@ -20,7 +20,7 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
-use crate::impls::encoding::components::{IsWasmEncodingComponent, WasmEncodingComponents};
+use crate::impls::encoding::components::*;
 use crate::impls::types::client_state::ProvideWasmClientState;
 use crate::types::client_state::{ProtoWasmClientState, WasmClientState};
 
@@ -82,11 +82,13 @@ impl HasComponents for WasmClientEncoding {
     type Components = WasmClientEncodingComponents;
 }
 
-delegate_all!(
-    IsWasmEncodingComponent,
-    WasmEncodingComponents,
-    WasmClientEncodingComponents,
-);
+with_wasm_encoding_components! {
+    delegate_components! {
+        WasmClientEncodingComponents {
+            @WasmEncodingComponents: WasmEncodingComponents,
+        }
+    }
+}
 
 delegate_components! {
     WasmClientEncodingComponents {

@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::{CanRaiseError, HasErrorType};
+use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
@@ -13,7 +12,6 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryUnreceivedCosmosAcksSequences;
 
-#[async_trait]
 impl<Chain, Counterparty> UnreceivedAcksSequencesQuerier<Chain, Counterparty>
     for QueryUnreceivedCosmosAcksSequences
 where

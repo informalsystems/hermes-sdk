@@ -1,13 +1,9 @@
 use cgp_core::prelude::*;
-use cgp_core::RunnerComponent;
+pub use cgp_core::run::RunnerComponent;
 
 use crate::relay::impls::auto_relayers::both_ways::RelayBothWays;
 
-pub struct DefaultBiRelayComponents;
-
-delegate_components! {
-    #[mark_component(IsDefaultBiRelayComponent)]
-    #[mark_delegate(DelegatesToDefaultBiRelayComponents)]
+define_components! {
     DefaultBiRelayComponents {
         RunnerComponent: RelayBothWays,
     }

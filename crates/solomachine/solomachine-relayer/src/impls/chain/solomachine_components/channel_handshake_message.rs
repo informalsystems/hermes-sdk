@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use hermes_cosmos_chain_components::types::payloads::channel::{
     CosmosChannelOpenAckPayload, CosmosChannelOpenConfirmPayload, CosmosChannelOpenTryPayload,
 };

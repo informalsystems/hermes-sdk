@@ -1,6 +1,7 @@
 use core::time::Duration;
 
-use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
+use cgp_core::error::{ErrorRaiser, ProvideErrorType};
+use cgp_core::Async;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, ProvideEncodingType,
 };
@@ -18,7 +19,8 @@ use hermes_relayer_components::chain::traits::types::connection::{
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    ProvideCreateClientEvent, ProvideCreateClientOptionsType, ProvideCreateClientPayloadType,
+    ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
+    ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
@@ -135,12 +137,21 @@ where
     type ConsensusState = SolomachineConsensusState;
 }
 
-impl<Chain, Counterparty> ProvideCreateClientOptionsType<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty>
+    ProvideCreateClientPayloadOptionsType<SolomachineChain<Chain>, Counterparty>
     for SolomachineChainComponents
 where
     Chain: Async,
 {
-    type CreateClientOptions = ();
+    type CreateClientPayloadOptions = ();
+}
+
+impl<Chain, Counterparty> ProvideCreateClientMessageOptionsType<Chain, Counterparty>
+    for SolomachineChainComponents
+where
+    Chain: Async,
+{
+    type CreateClientMessageOptions = ();
 }
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>

@@ -2,8 +2,8 @@ use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 
+use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::Report;
 use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
@@ -14,7 +14,6 @@ use hermes_relayer_components::chain::traits::queries::connection_end::Connectio
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::error::impls::delegate::DelegateErrorRaiser;
 use hermes_relayer_components::error::impls::error::{
     MaxRetryExceededError, UnwrapMaxRetryExceededError,
 };
@@ -32,6 +31,8 @@ use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::E
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use ibc::core::client::types::error::ClientError;
+use ibc::core::commitment_types::error::CommitmentError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::supervisor::Error as SupervisorError;
@@ -118,6 +119,8 @@ delegate_components! {
             DecodeError,
             InvalidMetadataValue,
             ProofError,
+            ClientError,
+            CommitmentError,
 
             // TODO: make it retryable?
             TransportError,

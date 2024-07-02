@@ -1,8 +1,8 @@
 use alloc::sync::Arc;
-use basecoin::store::impls::RevertibleStore;
 use std::fmt::Debug;
 
 use basecoin::store::context::ProvableStore;
+use basecoin::store::impls::RevertibleStore;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::host::types::identifiers::ChainId;
 use tendermint_testgen::Validator;

@@ -2,8 +2,8 @@ use alloc::sync::Arc;
 use std::path::PathBuf;
 use std::sync::OnceLock;
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::Error;
 use hermes_celestia_test_components::bootstrap::components::CelestiaBootstrapComponents as BaseCelestiaBootstrapComponents;
@@ -28,10 +28,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBu
 use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::{
-    CanUseLegacyCosmosSdkChainBootstrapper, IsLegacyCosmosSdkBootstrapComponent,
-    LegacyCosmosSdkBootstrapComponents,
-};
+use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
@@ -68,11 +65,13 @@ impl HasComponents for CelestiaBootstrap {
     type Components = CelestiaBootstrapComponents;
 }
 
-delegate_all!(
-    IsLegacyCosmosSdkBootstrapComponent,
-    LegacyCosmosSdkBootstrapComponents,
-    CelestiaBootstrapComponents,
-);
+with_legacy_cosmos_sdk_bootstrap_components! {
+    delegate_components! {
+        CelestiaBootstrapComponents {
+            @LegacyCosmosSdkBootstrapComponents: LegacyCosmosSdkBootstrapComponents,
+        }
+    }
+}
 
 delegate_components! {
     CelestiaBootstrapComponents {

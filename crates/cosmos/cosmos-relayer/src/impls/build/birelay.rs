@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 
 use crate::contexts::birelay::CosmosBiRelay;
@@ -7,7 +6,6 @@ use crate::contexts::relay::CosmosRelay;
 use crate::impls::build::components::CosmosBuildComponents;
 use crate::types::error::Error;
 
-#[async_trait]
 impl BiRelayFromRelayBuilder<CosmosBuilder> for CosmosBuildComponents {
     async fn build_birelay_from_relays(
         build: &CosmosBuilder,

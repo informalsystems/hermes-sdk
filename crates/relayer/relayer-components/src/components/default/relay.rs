@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::RunnerComponent;
+pub use cgp_core::run::RunnerComponent;
 
 use crate::relay::impls::auto_relayers::both_targets::RelayBothTargets;
 use crate::relay::impls::auto_relayers::event::RelayEvents;
@@ -29,32 +29,28 @@ use crate::relay::impls::packet_relayers::timeout_unordered::timeout_unordered_p
 use crate::relay::impls::update_client::build::BuildUpdateClientMessages;
 use crate::relay::impls::update_client::skip::SkipUpdateClient;
 use crate::relay::impls::update_client::wait::WaitUpdateClient;
-use crate::relay::traits::auto_relayer::AutoRelayerComponent;
-use crate::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
-use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
-use crate::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
-use crate::relay::traits::channel::open_init::ChannelInitializerComponent;
-use crate::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
-use crate::relay::traits::client_creator::ClientCreatorComponent;
-use crate::relay::traits::connection::open_ack::ConnectionOpenAckRelayerComponent;
-use crate::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayerComponent;
-use crate::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
-use crate::relay::traits::connection::open_init::ConnectionInitializerComponent;
-use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
-use crate::relay::traits::event_relayer::EventRelayerComponent;
-use crate::relay::traits::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
-use crate::relay::traits::packet_clearer::PacketClearerComponent;
-use crate::relay::traits::packet_relayer::PacketRelayerComponent;
-use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
-use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
-use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
-use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
+pub use crate::relay::traits::auto_relayer::AutoRelayerComponent;
+pub use crate::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
+pub use crate::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
+pub use crate::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
+pub use crate::relay::traits::channel::open_init::ChannelInitializerComponent;
+pub use crate::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
+pub use crate::relay::traits::client_creator::ClientCreatorComponent;
+pub use crate::relay::traits::connection::open_ack::ConnectionOpenAckRelayerComponent;
+pub use crate::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayerComponent;
+pub use crate::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
+pub use crate::relay::traits::connection::open_init::ConnectionInitializerComponent;
+pub use crate::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
+pub use crate::relay::traits::event_relayer::EventRelayerComponent;
+pub use crate::relay::traits::ibc_message_sender::{IbcMessageSenderComponent, MainSink};
+pub use crate::relay::traits::packet_clearer::PacketClearerComponent;
+pub use crate::relay::traits::packet_relayer::PacketRelayerComponent;
+pub use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
+pub use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
+pub use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
+pub use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
-pub struct DefaultRelayComponents;
-
-delegate_components! {
-    #[mark_component(IsDefaultRelayComponent)]
-    #[mark_delegate(DelegatesToDefaultRelayComponents)]
+define_components! {
     DefaultRelayComponents {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         TargetUpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,

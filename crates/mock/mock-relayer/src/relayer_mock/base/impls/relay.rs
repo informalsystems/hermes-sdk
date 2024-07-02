@@ -2,8 +2,8 @@ use alloc::string::ToString;
 use alloc::vec::Vec;
 use std::vec;
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_relayer_components::relay::traits::chains::{HasRelayChains, ProvideRelayChains};
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -71,7 +71,6 @@ impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
 
 pub struct MockBuildUpdateClientMessage;
 
-#[async_trait]
 impl TargetUpdateClientMessageBuilder<MockRelayContext, SourceTarget>
     for MockBuildUpdateClientMessage
 {
@@ -89,7 +88,6 @@ impl TargetUpdateClientMessageBuilder<MockRelayContext, SourceTarget>
     }
 }
 
-#[async_trait]
 impl TargetUpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
     for MockBuildUpdateClientMessage
 {
@@ -107,7 +105,6 @@ impl TargetUpdateClientMessageBuilder<MockRelayContext, DestinationTarget>
     }
 }
 
-#[async_trait]
 impl ProvidePacketLock<MockRelayContext> for MockRelayComponents {
     type PacketLock<'a> = ();
 

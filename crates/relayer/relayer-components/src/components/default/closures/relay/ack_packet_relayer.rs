@@ -1,4 +1,5 @@
-use cgp_core::{ErrorRaiser, HasComponents, HasErrorType};
+use cgp_core::component::HasComponents;
+use cgp_core::error::{ErrorRaiser, HasErrorType};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -17,7 +18,6 @@ use crate::chain::traits::send_message::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainId;
 use crate::chain::traits::types::client_state::HasClientStateFields;
 use crate::chain::traits::types::consensus_state::HasConsensusStateType;
-use crate::chain::traits::types::height::CanIncrementHeight;
 use crate::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::components::default::relay::DelegatesToDefaultRelayComponents;
@@ -27,17 +27,9 @@ use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::target::SourceTarget;
 
-pub trait CanUseDefaultAckPacketRelayer: UseDefaultAckPacketRelayer
-where
-    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
-{
-}
+pub trait CanUseDefaultAckPacketRelayer: UseDefaultAckPacketRelayer {}
 
-pub trait UseDefaultAckPacketRelayer: CanRelayAckPacket
-where
-    Self::DstChain: HasWriteAckEvent<Self::SrcChain>,
-{
-}
+pub trait UseDefaultAckPacketRelayer: CanRelayAckPacket {}
 
 impl<Relay, SrcChain, DstChain, Components, Logger> UseDefaultAckPacketRelayer for Relay
 where
@@ -59,7 +51,6 @@ where
     DstChain: HasErrorType
         + HasRuntime
         + HasChainId
-        + CanIncrementHeight
         + CanQueryChainStatus
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>

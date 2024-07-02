@@ -1,4 +1,4 @@
-use cgp_core::HasComponents;
+use cgp_core::prelude::{Async, HasComponents};
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
 };
@@ -38,7 +38,6 @@ use crate::telemetry::traits::telemetry::HasTelemetry;
 pub trait UseExtraChainComponentsForIbcMessageSender<Counterparty>:
     HasRuntime
     + HasChainId
-    + CanIncrementHeight
     + CanSendMessages
     + CanQueryChainStatus
     + HasConsensusStateType<Counterparty>
@@ -86,5 +85,6 @@ where
         + ConsensusStateHeightQuerier<Chain, Counterparty>
         + UpdateClientPayloadBuilder<Chain, Counterparty>
         + UpdateClientMessageBuilder<Chain, Counterparty>,
+    BaseComponents: Async,
 {
 }

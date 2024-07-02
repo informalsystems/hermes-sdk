@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::random::CanGenerateRandom;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -10,7 +9,6 @@ use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGenerator;
 
 pub struct GenerateRandomChainId;
 
-#[async_trait]
 impl<Bootstrap, Chain, Runtime> ChainIdGenerator<Bootstrap> for GenerateRandomChainId
 where
     Bootstrap: HasChainType<Chain = Chain> + HasRuntime<Runtime = Runtime> + HasRandomIdFlag,

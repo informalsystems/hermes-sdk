@@ -1,4 +1,4 @@
-use cgp_core::{CanRaiseError, HasErrorType};
+use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,
@@ -9,7 +9,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
 };
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::channel::{
     ChannelOpenAckPayload, ChannelOpenConfirmPayload, ChannelOpenTryPayload,
 };
@@ -84,7 +84,7 @@ where
         + HasChannelOpenTryPayloadType<
             Chain,
             ChannelOpenTryPayload = ChannelOpenTryPayload<Counterparty, Chain>,
-        > + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        > + HasCommitmentProofBytes
         + HasChannelEndType<Chain, ChannelEnd = ChannelEnd>
         + HasHeightFields,
     Chain::Message: From<CosmosMessage>,
@@ -125,12 +125,14 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_init = Counterparty::commitment_proof_bytes(&payload.proof_init).into();
+
         let message = CosmosChannelOpenTryMessage {
             port_id: port_id.to_string(),
             channel,
             counterparty_version: version.to_string(),
             update_height,
-            proof_init: payload.proof_init,
+            proof_init,
         };
 
         Ok(message.to_cosmos_message().into())
@@ -147,7 +149,7 @@ where
             Chain,
             ChannelOpenAckPayload = ChannelOpenAckPayload<Counterparty, Chain>,
         > + HasChannelEndType<Chain, ChannelEnd = ChannelEnd>
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasCommitmentProofBytes
         + HasHeightFields,
     Chain::Message: From<CosmosMessage>,
 {
@@ -164,13 +166,15 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_try = Counterparty::commitment_proof_bytes(&payload.proof_try).into();
+
         let message = CosmosChannelOpenAckMessage {
             port_id: port_id.to_string(),
             channel_id: channel_id.to_string(),
             counterparty_channel_id: counterparty_channel_id.to_string(),
             counterparty_version: payload.channel_end.version.to_string(),
             update_height,
-            proof_try: payload.proof_try,
+            proof_try,
         };
 
         Ok(message.to_cosmos_message().into())
@@ -186,7 +190,7 @@ where
         + HasChannelOpenConfirmPayloadType<
             Chain,
             ChannelOpenConfirmPayload = ChannelOpenConfirmPayload<Counterparty>,
-        > + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        > + HasCommitmentProofBytes
         + HasHeightFields,
     Chain::Message: From<CosmosMessage>,
 {
@@ -202,11 +206,13 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_ack = Counterparty::commitment_proof_bytes(&payload.proof_ack).into();
+
         let message = CosmosChannelOpenConfirmMessage {
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
             update_height,
-            proof_ack: payload.proof_ack,
+            proof_ack,
         };
 
         Ok(message.to_cosmos_message().into())

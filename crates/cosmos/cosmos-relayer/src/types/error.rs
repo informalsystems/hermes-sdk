@@ -2,7 +2,8 @@ use alloc::sync::Arc;
 use core::convert::Infallible;
 use core::fmt::{self, Debug, Display, Formatter};
 
-use cgp_core::{Async, ErrorRaiser, HasErrorType, ProvideErrorType};
+use cgp_core::error::{ErrorRaiser, HasErrorType, ProvideErrorType};
+use cgp_core::Async;
 use eyre::{eyre, Report};
 
 #[derive(Clone)]

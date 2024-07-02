@@ -21,7 +21,6 @@ use crate::chain::types::denom::Denom;
 */
 pub struct GenerateStandardWalletConfig;
 
-#[async_trait]
 impl<Bootstrap, Chain> WalletConfigGenerator<Bootstrap> for GenerateStandardWalletConfig
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>

@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::fs::write_file::CanWriteStringToFile;
@@ -16,7 +15,6 @@ use crate::chain::types::denom::Denom;
 /// Parse the generated genesis JSON file, and allow the bootstrap context to modify the genesis config
 pub struct UpdateCosmosGenesisConfig;
 
-#[async_trait]
 impl<Bootstrap, Runtime> ChainGenesisConfigInitializer<Bootstrap> for UpdateCosmosGenesisConfig
 where
     Bootstrap: HasRuntime<Runtime = Runtime>

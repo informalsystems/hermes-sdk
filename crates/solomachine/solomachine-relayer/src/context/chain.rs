@@ -3,7 +3,6 @@ use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use cgp_core::prelude::*;
 use eyre::eyre;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
@@ -14,7 +13,7 @@ use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
 use ibc::core::host::types::identifiers::ConnectionId;
-use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State as ChannelState};
+use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
 use ibc_relayer_types::Height;
@@ -64,7 +63,6 @@ impl MockSolomachine {
     }
 }
 
-#[async_trait]
 impl Solomachine for MockSolomachine {
     type Error = Error;
 
@@ -98,10 +96,6 @@ impl Solomachine for MockSolomachine {
             actual
         )
         .into()
-    }
-
-    fn invalid_channel_state_error(expected: ChannelState, actual: ChannelState) -> Self::Error {
-        eyre!("channel state error, expected {} got {}", expected, actual).into()
     }
 
     fn public_key(&self) -> &PublicKey {

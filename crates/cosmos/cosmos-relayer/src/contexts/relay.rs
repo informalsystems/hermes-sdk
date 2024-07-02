@@ -1,8 +1,8 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -12,7 +12,7 @@ use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
 };
 use hermes_relayer_components::relay::impls::packet_lock::{
-    PacketMutexGetter, ProvidePacketLockWithMutex,
+    PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
@@ -20,9 +20,7 @@ use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components_extra::batch::traits::channel::MessageBatchSenderGetter;
 use hermes_relayer_components_extra::components::extra::closures::relay::auto_relayer::CanUseExtraAutoRelayer;
-use hermes_relayer_components_extra::components::extra::relay::{
-    ExtraRelayComponents, IsExtraRelayComponent,
-};
+use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -101,11 +99,13 @@ delegate_components! {
     }
 }
 
-delegate_all!(
-    IsExtraRelayComponent,
-    ExtraRelayComponents,
-    CosmosRelayComponents,
-);
+with_extra_relay_components! {
+    delegate_components! {
+        CosmosRelayComponents {
+            @ExtraRelayComponents: ExtraRelayComponents,
+        }
+    }
+}
 
 impl HasComponents for CosmosRelay {
     type Components = CosmosRelayComponents;
@@ -153,9 +153,7 @@ impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
 }
 
 impl PacketMutexGetter<CosmosRelay> for CosmosRelayComponents {
-    fn packet_mutex(
-        relay: &CosmosRelay,
-    ) -> &hermes_relayer_components::relay::impls::packet_lock::PacketMutex<CosmosRelay> {
+    fn packet_mutex(relay: &CosmosRelay) -> &PacketMutex<CosmosRelay> {
         &relay.packet_lock_mutex
     }
 }

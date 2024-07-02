@@ -1,13 +1,11 @@
 use alloc::sync::Arc;
 use std::path::PathBuf;
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::{
-    CanUseCosmosSdkChainBootstrapper, CosmosSdkBootstrapComponents, IsCosmosSdkBootstrapComponent,
-};
+use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
@@ -64,11 +62,13 @@ impl HasComponents for CosmosBootstrap {
     type Components = CosmosBootstrapComponents;
 }
 
-delegate_all!(
-    IsCosmosSdkBootstrapComponent,
-    CosmosSdkBootstrapComponents,
-    CosmosBootstrapComponents,
-);
+with_cosmos_sdk_bootstrap_components! {
+    delegate_components! {
+        CosmosBootstrapComponents {
+            @CosmosSdkBootstrapComponents: CosmosSdkBootstrapComponents,
+        }
+    }
+}
 
 delegate_components! {
     CosmosBootstrapComponents {

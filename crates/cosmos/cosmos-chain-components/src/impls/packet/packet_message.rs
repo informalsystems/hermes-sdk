@@ -1,4 +1,4 @@
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::traits::types::packets::ack::{
 };
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
-use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
+use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofBytes;
 use hermes_relayer_components::chain::types::payloads::packet::{
     AckPacketPayload, ReceivePacketPayload, TimeoutUnorderedPacketPayload,
 };
@@ -35,7 +35,7 @@ where
             Chain,
             ReceivePacketPayload = ReceivePacketPayload<Counterparty>,
         > + HasHeightFields
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>,
+        + HasCommitmentProofBytes,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_receive_packet_message(
@@ -49,10 +49,13 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_commitment =
+            Counterparty::commitment_proof_bytes(&payload.proof_commitment).into();
+
         let message = CosmosReceivePacketMessage {
             packet: packet.clone(),
             update_height,
-            proof_commitment: payload.proof_commitment,
+            proof_commitment,
         };
 
         Ok(message.to_cosmos_message().into())
@@ -66,7 +69,7 @@ where
         + CanRaiseError<Ics02Error>,
     Counterparty: HasAckPacketPayloadType<Chain, AckPacketPayload = AckPacketPayload<Counterparty, Chain>>
         + HasHeightFields
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>
+        + HasCommitmentProofBytes
         + HasAcknowledgementType<Chain, Acknowledgement = Vec<u8>>,
     Chain::Message: From<CosmosMessage>,
 {
@@ -81,11 +84,13 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_acked = Counterparty::commitment_proof_bytes(&payload.proof_ack).into();
+
         let message = CosmosAckPacketMessage {
             packet: packet.clone(),
             acknowledgement: payload.ack,
             update_height,
-            proof_acked: payload.proof_ack,
+            proof_acked,
         };
 
         Ok(message.to_cosmos_message().into())
@@ -102,7 +107,7 @@ where
             Chain,
             TimeoutUnorderedPacketPayload = TimeoutUnorderedPacketPayload<Counterparty>,
         > + HasHeightFields
-        + HasCommitmentProofType<CommitmentProof = Vec<u8>>,
+        + HasCommitmentProofBytes,
     Chain::Message: From<CosmosMessage>,
 {
     async fn build_timeout_unordered_packet_message(
@@ -116,11 +121,14 @@ where
         )
         .map_err(Chain::raise_error)?;
 
+        let proof_unreceived =
+            Counterparty::commitment_proof_bytes(&payload.proof_unreceived).into();
+
         let message = CosmosTimeoutPacketMessage {
             next_sequence_recv: packet.sequence,
             packet: packet.clone(),
             update_height,
-            proof_unreceived: payload.proof_unreceived,
+            proof_unreceived,
         };
 
         Ok(message.to_cosmos_message().into())

@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::counterparty_chain_id::CounterpartyChainIdQuerier;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -11,7 +10,6 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 
 pub struct QueryChainIdWithChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> CounterpartyChainIdQuerier<Chain, Counterparty>
     for QueryChainIdWithChainHandle
 where

@@ -10,50 +10,86 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  integration-test:
+  cosmos-integration-tests:
     runs-on: ubuntu-20.04
     timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        chain:
-          - package: gaia
-            command: gaiad
-            account_prefix: cosmos
-            features: ''
-          - package: ibc-go-v7-simapp
-            command: simd
-            account_prefix: cosmos
-            features: solomachine
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@V27
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - uses: cachix/cachix-action@v14
+      - uses: cachix/cachix-action@v15
         with:
-          name: informal-sovereign
+          name: hermes-sdk
+          extraPullNames: cosmos-nix
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@v2
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -p ibc-integration-test --no-run --features=${{ matrix.chain.features }}
       - name: run integration tests
         env:
-          RUST_LOG: info,ibc_relayer_runtime=trace
           RUST_BACKTRACE: 1
-          NO_COLOR_LOG: 1
-          CHAIN_COMMAND_PATHS: ${{ matrix.chain.command }}
-          ACCOUNT_PREFIXES: ${{ matrix.chain.account_prefix }}
         run: |
-            nix shell .#cargo-nextest .#protobuf .#${{ matrix.chain.package }} -c \
-              cargo nextest run \
-              -p ibc-integration-test \
-              --features=${{ matrix.chain.features }} \
+            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#ibc-go-v8-simapp -c \
+              cargo nextest run -p hermes-cosmos-integration-tests \
+              --test-threads=2
+
+  wasm-cosmos-integration-tests:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@V27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - uses: cachix/cachix-action@v15
+        with:
+          name: hermes-sdk
+          extraPullNames: cosmos-nix
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - name: run integration tests
+        env:
+          RUST_BACKTRACE: 1
+        run: |
+            export WASM_FILE_PATH=$(nix build .#tendermint-wasm-client --print-out-paths --no-link)/ibc_client_tendermint_cw.wasm
+
+            nix shell .#cargo-nextest .#protobuf .#gaia .#ibc-go-v7-wasm-simapp -c \
+              cargo nextest run -p hermes-cosmos-wasm-relayer \
+              --test-threads=2
+
+  celestia-integration-tests:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@V27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - uses: cachix/cachix-action@v15
+        with:
+          name: hermes-sdk
+          extraPullNames: cosmos-nix
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v2
+      - name: run integration tests
+        env:
+          RUST_BACKTRACE: 1
+        run: |
+            nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#celestia-node -c \
+              cargo nextest run -p hermes-celestia-integration-tests \
               --test-threads=2 \
               --failure-output final

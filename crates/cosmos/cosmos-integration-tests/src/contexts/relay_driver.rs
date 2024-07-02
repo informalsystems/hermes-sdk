@@ -1,5 +1,6 @@
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{CanRun, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::run::CanRun;
 use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};

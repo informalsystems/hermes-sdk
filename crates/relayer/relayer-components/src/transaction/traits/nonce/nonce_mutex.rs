@@ -15,9 +15,8 @@ use crate::transaction::traits::types::signer::HasSignerType;
    allocator only allows one transaction to be submitted at a time.
 */
 #[derive_component(MutexForNonceAllocationComponent, ProvideMutexForNonceAllocation<Chain>)]
-pub trait HasMutexForNonceAllocation: HasRuntime + HasNonceGuard + HasSignerType
-where
-    Self::Runtime: HasMutex,
+pub trait HasMutexForNonceAllocation:
+    HasRuntime<Runtime: HasMutex> + HasNonceGuard + HasSignerType
 {
     fn mutex_for_nonce_allocation<'a>(
         &'a self,

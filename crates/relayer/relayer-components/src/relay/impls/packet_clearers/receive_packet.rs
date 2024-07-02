@@ -1,4 +1,3 @@
-use cgp_core::async_trait;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -38,7 +37,6 @@ where
     pub packet: Relay::Packet,
 }
 
-#[async_trait]
 impl<Relay> Task for RelayPacketTask<Relay>
 where
     Relay: CanRelayPacket + HasLogger,
@@ -62,7 +60,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay> PacketClearer<Relay> for ClearReceivePackets
 where
     Relay: Clone + HasRuntime + CanRaiseRelayChainErrors,

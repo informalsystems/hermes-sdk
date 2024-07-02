@@ -1,6 +1,9 @@
 use cgp_core::prelude::*;
 
-use crate::chain::traits::types::create_client::{CreateClientOptions, HasCreateClientOptionsType};
+use crate::chain::traits::types::create_client::{
+    CreateClientMessageOptions, CreateClientPayloadOptions, HasCreateClientMessageOptionsType,
+    HasCreateClientPayloadOptionsType,
+};
 use crate::chain::types::aliases::ClientIdOf;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
@@ -10,7 +13,8 @@ use crate::relay::traits::target::ChainTarget;
 pub trait CanCreateClient<Target>: HasRelayChains
 where
     Target: ChainTarget<Self>,
-    Target::CounterpartyChain: HasCreateClientOptionsType<Target::TargetChain>,
+    Target::TargetChain: HasCreateClientMessageOptionsType<Target::CounterpartyChain>,
+    Target::CounterpartyChain: HasCreateClientPayloadOptionsType<Target::TargetChain>,
 {
     /**
        Create a new IBC client on the target chain.
@@ -28,6 +32,13 @@ where
         target: Target,
         target_chain: &Target::TargetChain,
         counterparty_chain: &Target::CounterpartyChain,
-        create_client_options: &CreateClientOptions<Target::CounterpartyChain, Target::TargetChain>,
+        create_client_payload_options: &CreateClientPayloadOptions<
+            Target::CounterpartyChain,
+            Target::TargetChain,
+        >,
+        create_client_message_options: &CreateClientMessageOptions<
+            Target::TargetChain,
+            Target::CounterpartyChain,
+        >,
     ) -> Result<ClientIdOf<Target::TargetChain, Target::CounterpartyChain>, Self::Error>;
 }

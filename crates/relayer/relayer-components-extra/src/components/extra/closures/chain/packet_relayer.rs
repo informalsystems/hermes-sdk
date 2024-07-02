@@ -1,4 +1,4 @@
-use cgp_core::HasComponents;
+use cgp_core::prelude::{Async, HasComponents};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
 };
@@ -84,5 +84,6 @@ where
         + AckPacketMessageBuilder<Chain, Counterparty>
         + TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
         + TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>,
+    BaseComponents: Async,
 {
 }

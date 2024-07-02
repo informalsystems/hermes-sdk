@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp_core::{DelegateComponent, HasErrorType};
+use cgp_core::prelude::{DelegateComponent, HasErrorType};
 
 use crate::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

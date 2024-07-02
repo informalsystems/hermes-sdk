@@ -48,7 +48,6 @@ where
     ) -> Result<Vec<EventOf<Target::TargetChain>>, Self::Error>;
 }
 
-#[async_trait]
 impl<Relay, Sink, Target, TargetChain, Event, Message> CanSendFixSizedIbcMessages<Sink, Target>
     for Relay
 where
@@ -72,7 +71,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay, Sink, Target, TargetChain, Event, Message> CanSendSingleIbcMessage<Sink, Target>
     for Relay
 where

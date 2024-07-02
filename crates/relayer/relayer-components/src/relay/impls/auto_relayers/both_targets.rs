@@ -1,6 +1,6 @@
 use alloc::vec;
 
-use cgp_core::{async_trait, Runner};
+use cgp_core::run::Runner;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -20,7 +20,6 @@ pub struct TargetRelayerTask<Relay> {
     pub target: EitherTarget,
 }
 
-#[async_trait]
 impl<Relay> Task for TargetRelayerTask<Relay>
 where
     Relay: HasRelayChains
@@ -41,7 +40,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay> Runner<Relay> for RelayBothTargets
 where
     Relay: Clone

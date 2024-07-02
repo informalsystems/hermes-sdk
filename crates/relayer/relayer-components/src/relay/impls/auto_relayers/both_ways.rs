@@ -1,6 +1,7 @@
 use alloc::vec;
 
-use cgp_core::{async_trait, CanRun, HasErrorType, Runner};
+use cgp_core::error::HasErrorType;
+use cgp_core::run::{CanRun, Runner};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 
@@ -21,7 +22,6 @@ where
     BToA(BiRelay::RelayBToA),
 }
 
-#[async_trait]
 impl<BiRelay> Task for TwoWayRelayerTask<BiRelay>
 where
     BiRelay: HasTwoWayRelay,
@@ -40,7 +40,6 @@ where
     }
 }
 
-#[async_trait]
 impl<BiRelay> Runner<BiRelay> for RelayBothWays
 where
     BiRelay: HasTwoWayRelay + HasRuntime + HasErrorType,

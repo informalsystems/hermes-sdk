@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::queries::packet_is_received::ReceivedPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer::chain::handle::ChainHandle;
@@ -10,7 +9,6 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 
 pub struct QueryReceivedPacketWithChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> ReceivedPacketQuerier<Chain, Counterparty>
     for QueryReceivedPacketWithChainHandle
 where

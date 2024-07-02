@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use serde_json::Value;
 

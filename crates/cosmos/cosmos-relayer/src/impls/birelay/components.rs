@@ -1,8 +1,6 @@
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use hermes_relayer_components::components::default::birelay::{
-    DefaultBiRelayComponents, IsDefaultBiRelayComponent,
-};
+use hermes_relayer_components::components::default::birelay::*;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
 
@@ -15,11 +13,13 @@ impl HasComponents for CosmosBiRelay {
     type Components = CosmosBiRelayComponents;
 }
 
-delegate_all!(
-    IsDefaultBiRelayComponent,
-    DefaultBiRelayComponents,
-    CosmosBiRelayComponents,
-);
+with_default_bi_relay_components! {
+    delegate_components! {
+        CosmosBiRelayComponents {
+            @DefaultBiRelayComponents: DefaultBiRelayComponents,
+        }
+    }
+}
 
 delegate_components! {
     CosmosBiRelayComponents {

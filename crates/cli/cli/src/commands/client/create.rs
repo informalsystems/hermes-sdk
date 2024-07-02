@@ -106,10 +106,15 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
             self.reference_chain_id
         );
 
-        let client_id_on_host =
-            CosmosRelay::create_client(DestinationTarget, &host_chain, &reference_chain, &settings)
-                .await
-                .map_err(|e| eyre!("Failed to create client on host chain: {e}"))?;
+        let client_id_on_host = CosmosRelay::create_client(
+            DestinationTarget,
+            &host_chain,
+            &reference_chain,
+            &settings,
+            &(),
+        )
+        .await
+        .map_err(|e| eyre!("Failed to create client on host chain: {e}"))?;
 
         info!(
             %client_id_on_host,

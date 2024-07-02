@@ -1,8 +1,7 @@
-use alloc::collections::BTreeMap;
 use core::str::FromStr;
 use core::time::Duration;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -85,7 +84,8 @@ where
             sequential_batch_tx: false,
             compat_mode: bootstrap.compat_mode().cloned(),
             clear_interval: None,
-            excluded_sequences: BTreeMap::new(),
+            excluded_sequences: Default::default(),
+            allow_ccq: false,
         });
 
         Ok(relayer_chain_config)

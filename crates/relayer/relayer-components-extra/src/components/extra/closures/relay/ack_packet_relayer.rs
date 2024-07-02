@@ -1,4 +1,5 @@
-use cgp_core::{CanRaiseError, ErrorRaiser, HasComponents, HasErrorType};
+use cgp_core::component::HasComponents;
+use cgp_core::error::{CanRaiseError, ErrorOf, ErrorRaiser, HasErrorType};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
@@ -14,10 +15,8 @@ use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::height::CanIncrementHeight;
 use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use hermes_relayer_components::error::types::ErrorOf;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -66,7 +65,6 @@ where
     DstChain: HasErrorType
         + HasRuntime
         + HasChainId
-        + CanIncrementHeight
         + CanQueryChainStatus
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>

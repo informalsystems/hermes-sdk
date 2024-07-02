@@ -1,6 +1,6 @@
+use cgp_core::error::ErrorOf;
 use cgp_core::prelude::*;
 
-use crate::error::types::ErrorOf;
 use crate::relay::traits::chains::HasRelayChains;
 
 #[derive_component(TwoChainTypesComponent, ProvideTwoChainTypes<BiRelay>)]

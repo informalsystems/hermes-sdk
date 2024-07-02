@@ -6,18 +6,16 @@ use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{TargetChainCache, TargetRelayCache};
 
-pub trait HasChainCache<Target>: HasBiRelayType + HasRuntime
+pub trait HasChainCache<Target>: HasBiRelayType + HasRuntime<Runtime: HasMutex>
 where
     Target: ChainBuildTarget<Self>,
-    Self::Runtime: HasMutex,
 {
     fn chain_cache(&self) -> &TargetChainCache<Self, Target>;
 }
 
-pub trait HasRelayCache<Target>: HasBiRelayType + HasRuntime
+pub trait HasRelayCache<Target>: HasBiRelayType + HasRuntime<Runtime: HasMutex>
 where
     Target: RelayBuildTarget<Self>,
-    Self::Runtime: HasMutex,
 {
     fn relay_cache(&self) -> &TargetRelayCache<Self, Target>;
 }

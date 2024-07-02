@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::CanStartChildProcess;
@@ -59,11 +59,6 @@ where
             "--p2p.network",
             &chain_driver.chain().chain_id().to_string(),
         ];
-
-        // println!("running command: HOME={} celestia {}",
-        //     Runtime::file_path_to_string(bridge_home_dir),
-        //     args.join(" ")
-        // );
 
         let child = bootstrap
             .runtime()

@@ -1,7 +1,6 @@
 use core::fmt::Display;
 
-use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -12,7 +11,6 @@ use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirIni
 
 pub struct CreateChainHomeDirFromTestDir;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> ChainHomeDirInitializer<Bootstrap> for CreateChainHomeDirFromTestDir
 where
     Bootstrap: HasChainType<Chain = Chain>

@@ -1,15 +1,12 @@
 use alloc::sync::Arc;
 use core::time::Duration;
+
+use cgp_core::error::CanRaiseError;
+use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::types::ack::ProvideBytesAcknowlegement;
 use hermes_relayer_components::chain::impls::types::commitment::ProvideBytesPacketCommitment;
-use hermes_relayer_components::chain::impls::types::receipt::ProvideBytesPacketReceipt;
-use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
-use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
-
-use cgp_core::{delegate_components, Async, CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
-use hermes_relayer_components::chain::impls::types::proof::ProvideCommitmentProofBytes;
+use hermes_relayer_components::chain::impls::types::receipt::ProvideBytesPacketReceipt;
 use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefixTypeComponent;
 use hermes_relayer_components::chain::traits::types::block::{
     HasBlockType, ProvideBlockHash, ProvideBlockType,
@@ -27,7 +24,13 @@ use hermes_relayer_components::chain::traits::types::message::{
     HasMessageType, MessageSizeEstimator, ProvideMessageType,
 };
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
-use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
+use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
+use hermes_relayer_components::chain::traits::types::proof::{
+    CommitmentProofBytesGetterComponent, CommitmentProofHeightGetterComponent,
+    CommitmentProofTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
     HasTimestampType, ProvideTimestampType,
@@ -48,14 +51,19 @@ use tendermint::block::{Block, Id as BlockId};
 use tendermint::Hash;
 
 use crate::traits::message::CosmosMessage;
+use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
 pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
     ProvideCosmosChainTypes {
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
-        CommitmentProofTypeComponent:
-            ProvideCommitmentProofBytes,
+        [
+            CommitmentProofTypeComponent,
+            CommitmentProofHeightGetterComponent,
+            CommitmentProofBytesGetterComponent,
+        ]:
+            ProvideCosmosCommitmentProof,
         PacketCommitmentTypeComponent:
             ProvideBytesPacketCommitment,
         AcknowledgementTypeComponent:

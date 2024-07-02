@@ -1,9 +1,8 @@
-use cgp_core::CanRaiseError;
+use cgp_core::error::{CanRaiseError, ErrorOf};
 use hermes_relayer_components::build::traits::components::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-use hermes_relayer_components::error::types::ErrorOf;
 
 use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::driver::traits::types::relay_at::{HasRelayTypeAt, RelayTypeAt};

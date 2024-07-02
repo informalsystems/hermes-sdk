@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
@@ -11,7 +11,6 @@ pub struct ConsensusStateTelemetryQuerier<InQuerier> {
     pub querier: InQuerier,
 }
 
-#[async_trait]
 impl<InQuerier, Chain, Counterparty, Telemetry> ConsensusStateQuerier<Chain, Counterparty>
     for ConsensusStateTelemetryQuerier<InQuerier>
 where

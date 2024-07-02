@@ -1,14 +1,12 @@
 use core::fmt::Write;
 
-use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::config::ChainConfig;
-use oneline_eyre::eyre::eyre;
-
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-
+use ibc_relayer::chain::handle::ChainHandle;
+use ibc_relayer::config::ChainConfig;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
+use oneline_eyre::eyre::eyre;
 
 /// The data structure that represents the arguments when invoking the `keys balance` CLI command.
 ///

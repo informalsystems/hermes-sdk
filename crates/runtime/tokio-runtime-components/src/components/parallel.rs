@@ -6,33 +6,33 @@ use hermes_async_runtime_components::stream::impls::boxed::ProvideBoxedStreamTyp
 use hermes_async_runtime_components::stream::impls::map::BoxedStreamMapper;
 use hermes_async_runtime_components::subscription::impls::subscription::ProvideBoxedSubscription;
 use hermes_runtime_components::impls::os::exec_command::ExecCommandWithNoEnv;
-use hermes_runtime_components::traits::channel::{
+pub use hermes_runtime_components::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,
     SenderClonerComponent,
 };
-use hermes_runtime_components::traits::channel_once::{
+pub use hermes_runtime_components::traits::channel_once::{
     ChannelOnceCreatorComponent, ChannelOnceTypeComponent, ChannelOnceUserComponent,
 };
-use hermes_runtime_components::traits::fs::copy_file::FileCopierComponent;
-use hermes_runtime_components::traits::fs::create_dir::DirCreatorComponent;
-use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
-use hermes_runtime_components::traits::fs::read_file::FileAsStringReaderComponent;
-use hermes_runtime_components::traits::fs::write_file::StringToFileWriterComponent;
-use hermes_runtime_components::traits::mutex::MutexComponent;
-use hermes_runtime_components::traits::os::child_process::{
+pub use hermes_runtime_components::traits::fs::copy_file::FileCopierComponent;
+pub use hermes_runtime_components::traits::fs::create_dir::DirCreatorComponent;
+pub use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
+pub use hermes_runtime_components::traits::fs::read_file::FileAsStringReaderComponent;
+pub use hermes_runtime_components::traits::fs::write_file::StringToFileWriterComponent;
+pub use hermes_runtime_components::traits::mutex::MutexComponent;
+pub use hermes_runtime_components::traits::os::child_process::{
     ChildProcessStarterComponent, ChildProcessTypeComponent,
 };
-use hermes_runtime_components::traits::os::exec_command::{
+pub use hermes_runtime_components::traits::os::exec_command::{
     CommandExecutorComponent, CommandWithEnvsExecutorComponent,
 };
-use hermes_runtime_components::traits::os::reserve_port::TcpPortReserverComponent;
-use hermes_runtime_components::traits::random::RandomGeneratorComponent;
-use hermes_runtime_components::traits::sleep::SleeperComponent;
-use hermes_runtime_components::traits::spawn::TaskSpawnerComponent;
-use hermes_runtime_components::traits::stream::{StreamMapperComponent, StreamTypeComponent};
-use hermes_runtime_components::traits::subscription::SubscriptionComponent;
-use hermes_runtime_components::traits::task::ConcurrentTaskRunnerComponent;
-use hermes_runtime_components::traits::time::TimeComponent;
+pub use hermes_runtime_components::traits::os::reserve_port::TcpPortReserverComponent;
+pub use hermes_runtime_components::traits::random::RandomGeneratorComponent;
+pub use hermes_runtime_components::traits::sleep::SleeperComponent;
+pub use hermes_runtime_components::traits::spawn::TaskSpawnerComponent;
+pub use hermes_runtime_components::traits::stream::{StreamMapperComponent, StreamTypeComponent};
+pub use hermes_runtime_components::traits::subscription::SubscriptionComponent;
+pub use hermes_runtime_components::traits::task::ConcurrentTaskRunnerComponent;
+pub use hermes_runtime_components::traits::time::TimeComponent;
 
 use crate::impls::fs::copy_file::TokioCopyFile;
 use crate::impls::fs::create_dir::TokioCreateDir;
@@ -48,11 +48,7 @@ use crate::impls::sleep::TokioSleep;
 use crate::impls::spawn::TokioSpawnTask;
 use crate::impls::time::ProvideStdTime;
 
-pub struct TokioParallelRuntimeComponents;
-
-delegate_components! {
-    #[mark_component(IsTokioParallelRuntimeComponent)]
-    #[mark_delegate(DelegatesToTokioParallelRuntimeComponents)]
+define_components! {
     TokioParallelRuntimeComponents {
         SleeperComponent: TokioSleep,
         TimeComponent: ProvideStdTime,

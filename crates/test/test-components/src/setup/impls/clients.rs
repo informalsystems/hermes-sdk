@@ -1,6 +1,8 @@
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
-use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientOptionsType;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
@@ -22,10 +24,12 @@ where
         + HasCreateClientOptionsAt<A, B>
         + HasCreateClientOptionsAt<B, A>
         + CanRaiseError<<RelayTypeAt<Setup, A, B> as HasErrorType>::Error>,
-    ChainTypeAt<Setup, A>:
-        HasIbcChainTypes<ChainTypeAt<Setup, B>> + HasCreateClientOptionsType<ChainTypeAt<Setup, B>>,
-    ChainTypeAt<Setup, B>:
-        HasIbcChainTypes<ChainTypeAt<Setup, A>> + HasCreateClientOptionsType<ChainTypeAt<Setup, A>>,
+    ChainTypeAt<Setup, A>: HasIbcChainTypes<ChainTypeAt<Setup, B>>
+        + HasCreateClientPayloadOptionsType<ChainTypeAt<Setup, B>>
+        + HasCreateClientMessageOptionsType<ChainTypeAt<Setup, B>>,
+    ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>>
+        + HasCreateClientPayloadOptionsType<ChainTypeAt<Setup, A>>
+        + HasCreateClientMessageOptionsType<ChainTypeAt<Setup, A>>,
     RelayTypeAt<Setup, A, B>: CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanRaiseRelayChainErrors,
@@ -45,7 +49,8 @@ where
             SourceTarget,
             chain_a,
             chain_b,
-            setup.create_client_options(Twindex::<B, A>),
+            setup.create_client_payload_options(Twindex::<B, A>),
+            setup.create_client_message_options(Twindex::<A, B>),
         )
         .await
         .map_err(Setup::raise_error)?;
@@ -54,7 +59,8 @@ where
             DestinationTarget,
             chain_b,
             chain_a,
-            setup.create_client_options(Twindex::<A, B>),
+            setup.create_client_payload_options(Twindex::<A, B>),
+            setup.create_client_message_options(Twindex::<B, A>),
         )
         .await
         .map_err(Setup::raise_error)?;

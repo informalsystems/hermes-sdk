@@ -1,8 +1,6 @@
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
-use hermes_cosmos_chain_components::encoding::components::{
-    CosmosEncodingComponents as BaseCosmosEncodingComponents, IsCosmosEncodingComponent,
-};
+use hermes_cosmos_chain_components::encoding::components::*;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
@@ -12,6 +10,7 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_protobuf_encoding_components::types::Protobuf;
+use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
 
@@ -19,20 +18,22 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosEncoding;
 
-pub struct CosmosEncodingComponents;
+pub struct CosmosEncodingComponents2;
 
 impl HasComponents for CosmosEncoding {
-    type Components = CosmosEncodingComponents;
+    type Components = CosmosEncodingComponents2;
 }
 
-delegate_all!(
-    IsCosmosEncodingComponent,
-    BaseCosmosEncodingComponents,
-    CosmosEncodingComponents,
-);
+with_cosmos_encoding_components! {
+    delegate_components! {
+        CosmosEncodingComponents2 {
+            @CosmosEncodingComponents: CosmosEncodingComponents,
+        }
+    }
+}
 
 delegate_components! {
-    CosmosEncodingComponents {
+    CosmosEncodingComponents2 {
         [
             ErrorTypeComponent,
             ErrorRaiserComponent,
@@ -67,9 +68,11 @@ where
 
 pub trait CheckCosmosEncoding:
     HasEncodedType<Encoded = Vec<u8>>
+    + CanEncodeAndDecode<Protobuf, Vec<u8>>
     + CanEncodeAndDecode<Protobuf, TendermintClientState>
-    + CanEncodeAndDecode<Any, TendermintClientState>
     + CanEncodeAndDecode<Protobuf, TendermintConsensusState>
+    + CanEncodeAndDecode<Protobuf, MerkleProof>
+    + CanEncodeAndDecode<Any, TendermintClientState>
     + CanEncodeAndDecode<Any, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>

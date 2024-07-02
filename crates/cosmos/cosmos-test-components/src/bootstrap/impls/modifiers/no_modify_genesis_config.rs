@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use serde_json::Value;
 
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;

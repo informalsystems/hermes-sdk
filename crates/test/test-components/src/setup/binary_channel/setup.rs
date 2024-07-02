@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 use crate::chain_driver::traits::types::chain::HasChain;

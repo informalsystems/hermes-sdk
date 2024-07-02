@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilder;
 use ibc_relayer_types::Height;
 
@@ -11,7 +10,6 @@ use crate::types::payloads::client::SolomachineUpdateClientPayload;
 
 pub struct BuildSolomachineUpdateClientPayload;
 
-#[async_trait]
 impl<Chain, Counterparty> UpdateClientPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineUpdateClientPayload
 where

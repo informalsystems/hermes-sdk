@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
@@ -19,7 +18,6 @@ pub struct SendIbcTransferMessage;
 #[derive(Debug)]
 pub struct MissingSendPacketEventError;
 
-#[async_trait]
 impl<Chain, Counterparty> TokenIbcTransferrer<Chain, Counterparty> for SendIbcTransferMessage
 where
     Chain: HasWalletType

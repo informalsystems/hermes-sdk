@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::RunnerComponent;
+pub use cgp_core::run::RunnerComponent;
 use hermes_relayer_components::components::default::relay::DefaultRelayComponents;
 use hermes_relayer_components::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use hermes_relayer_components::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;
@@ -7,38 +7,34 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::filter_re
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::FullCycleRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LockPacketRelayer;
 use hermes_relayer_components::relay::impls::packet_relayers::general::log::LoggerRelayer;
-use hermes_relayer_components::relay::traits::auto_relayer::AutoRelayerComponent;
-use hermes_relayer_components::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
-use hermes_relayer_components::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
-use hermes_relayer_components::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
-use hermes_relayer_components::relay::traits::channel::open_init::ChannelInitializerComponent;
-use hermes_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
-use hermes_relayer_components::relay::traits::client_creator::ClientCreatorComponent;
-use hermes_relayer_components::relay::traits::connection::open_ack::ConnectionOpenAckRelayerComponent;
-use hermes_relayer_components::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayerComponent;
-use hermes_relayer_components::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
-use hermes_relayer_components::relay::traits::connection::open_init::ConnectionInitializerComponent;
-use hermes_relayer_components::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
-use hermes_relayer_components::relay::traits::event_relayer::EventRelayerComponent;
-use hermes_relayer_components::relay::traits::ibc_message_sender::{
+pub use hermes_relayer_components::relay::traits::auto_relayer::AutoRelayerComponent;
+pub use hermes_relayer_components::relay::traits::channel::open_ack::ChannelOpenAckRelayerComponent;
+pub use hermes_relayer_components::relay::traits::channel::open_confirm::ChannelOpenConfirmRelayerComponent;
+pub use hermes_relayer_components::relay::traits::channel::open_handshake::ChannelOpenHandshakeRelayerComponent;
+pub use hermes_relayer_components::relay::traits::channel::open_init::ChannelInitializerComponent;
+pub use hermes_relayer_components::relay::traits::channel::open_try::ChannelOpenTryRelayerComponent;
+pub use hermes_relayer_components::relay::traits::client_creator::ClientCreatorComponent;
+pub use hermes_relayer_components::relay::traits::connection::open_ack::ConnectionOpenAckRelayerComponent;
+pub use hermes_relayer_components::relay::traits::connection::open_confirm::ConnectionOpenConfirmRelayerComponent;
+pub use hermes_relayer_components::relay::traits::connection::open_handshake::ConnectionOpenHandshakeRelayerComponent;
+pub use hermes_relayer_components::relay::traits::connection::open_init::ConnectionInitializerComponent;
+pub use hermes_relayer_components::relay::traits::connection::open_try::ConnectionOpenTryRelayerComponent;
+pub use hermes_relayer_components::relay::traits::event_relayer::EventRelayerComponent;
+pub use hermes_relayer_components::relay::traits::ibc_message_sender::{
     IbcMessageSenderComponent, MainSink,
 };
-use hermes_relayer_components::relay::traits::packet_clearer::PacketClearerComponent;
-use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerComponent;
-use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
-use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
-use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
-use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
+pub use hermes_relayer_components::relay::traits::packet_clearer::PacketClearerComponent;
+pub use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerComponent;
+pub use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
+pub use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
+pub use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
+pub use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
 use crate::batch::components::message_sender::SendMessagesToBatchWorker;
-use crate::batch::types::sink::BatchWorkerSink;
+pub use crate::batch::types::sink::BatchWorkerSink;
 use crate::relay::components::packet_relayers::retry::RetryRelayer;
 
-pub struct ExtraRelayComponents;
-
-delegate_components! {
-    #[mark_component(IsExtraRelayComponent)]
-    #[mark_delegate(DelegatesToExtraRelayComponents)]
+define_components! {
     ExtraRelayComponents {
         IbcMessageSenderComponent<MainSink>: SendMessagesToBatchWorker,
         IbcMessageSenderComponent<BatchWorkerSink>:

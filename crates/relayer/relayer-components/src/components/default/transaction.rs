@@ -1,8 +1,6 @@
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;
 
@@ -47,11 +45,7 @@ use crate::transaction::traits::types::transaction::HasTransactionType;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
-pub struct DefaultTxComponents;
-
-delegate_components! {
-    #[mark_component(IsDefaultTxComponents)]
-    #[mark_delegate(DelegatesToDefaultTxComponents)]
+define_components! {
     DefaultTxComponents {
         MessageSenderComponent: SendMessagesWithDefaultSigner,
         MessagesWithSignerSenderComponent: AllocateNonceAndSendMessages,
@@ -99,7 +93,7 @@ where
         + CanParseTxResponseAsEvents
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
-    Chain::Runtime: HasMutex + HasTime + CanSleep,
+    Chain::Runtime: HasTime + CanSleep,
     Logger: for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, Chain>>
         + for<'a> CanLog<TxNoResponseError<'a, Chain>>
         + for<'a> CanLog<LogRetryQueryTxResponse<'a, Chain>>,

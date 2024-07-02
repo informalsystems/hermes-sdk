@@ -8,3 +8,13 @@ pub struct CosmosInitChannelOptions {
     pub connection_hops: Vec<ConnectionId>,
     pub channel_version: Version,
 }
+
+impl CosmosInitChannelOptions {
+    pub fn new(connection_id: ConnectionId) -> Self {
+        Self {
+            ordering: Ordering::Unordered,
+            connection_hops: vec![connection_id],
+            channel_version: Version::ics20(),
+        }
+    }
+}

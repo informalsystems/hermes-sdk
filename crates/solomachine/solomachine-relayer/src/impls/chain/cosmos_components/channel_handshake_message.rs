@@ -1,4 +1,4 @@
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosChannelOpenAckMessage;
@@ -56,7 +56,7 @@ where
             counterparty,
             connection_hops,
             channel_version,
-            0,
+            0.into(),
         );
 
         let message = CosmosChannelOpenInitMessage {
@@ -102,7 +102,7 @@ where
             counterparty,
             counterparty_payload.connection_hops,
             counterparty_payload.version.clone(),
-            0,
+            0.into(),
         );
 
         let message = CosmosChannelOpenTryMessage {

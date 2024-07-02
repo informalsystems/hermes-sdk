@@ -1,7 +1,6 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp_core::async_trait;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -24,7 +23,6 @@ where
     pub target_height: &'a HeightOf<CounterpartyChainOf<Relay, Target>>,
 }
 
-#[async_trait]
 impl<Relay, Target, InUpdateClient, TargetChain, CounterpartyChain>
     TargetUpdateClientMessageBuilder<Relay, Target> for SkipUpdateClient<InUpdateClient>
 where
