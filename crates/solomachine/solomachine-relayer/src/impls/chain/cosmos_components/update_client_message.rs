@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::update::CosmosUpdateClientMessage;
 use hermes_cosmos_relayer::types::error::Error;
@@ -13,7 +12,6 @@ use crate::types::payloads::client::SolomachineUpdateClientPayload;
 
 pub struct BuildUpdateSolomachineClientMessage;
 
-#[async_trait]
 impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
     for BuildUpdateSolomachineClientMessage
 where

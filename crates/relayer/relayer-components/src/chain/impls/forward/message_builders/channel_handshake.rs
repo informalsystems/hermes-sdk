@@ -1,4 +1,5 @@
-use cgp_core::{Async, CanRaiseError, HasInner};
+use cgp_core::inner::HasInner;
+use cgp_core::prelude::{Async, CanRaiseError};
 
 use crate::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenAckMessage, CanBuildChannelOpenConfirmMessage,

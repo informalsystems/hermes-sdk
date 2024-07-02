@@ -1,7 +1,7 @@
 use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;

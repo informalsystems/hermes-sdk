@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{Async, DelegateComponent, HasErrorType};
+use cgp_core::prelude::*;
 
 use crate::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use crate::chain::traits::types::create_client::{

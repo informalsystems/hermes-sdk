@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-pub use cgp_core::RunnerComponent;
+pub use cgp_core::run::RunnerComponent;
 use hermes_relayer_components::components::default::relay::DefaultRelayComponents;
 use hermes_relayer_components::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;
 use hermes_relayer_components::relay::impls::message_senders::update_client::SendIbcMessagesWithUpdateClient;

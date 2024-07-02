@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::HasErrorType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::stream::CanMapStream;
 use hermes_runtime_components::traits::subscription::HasSubscription;
@@ -31,7 +31,6 @@ where
     pub phantom: PhantomData<Target>,
 }
 
-#[async_trait]
 impl<Relay, Target> Task for EventRelayerTask<Relay, Target>
 where
     Relay: CanRelayEvent<Target>,
@@ -45,7 +44,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay, Target, Runtime> AutoRelayer<Relay, Target> for RelayEvents
 where
     Relay: CanRelayEvent<Target> + HasRuntime + Clone,

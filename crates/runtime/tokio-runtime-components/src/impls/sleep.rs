@@ -6,7 +6,6 @@ use tokio::time::sleep;
 
 pub struct TokioSleep;
 
-#[async_trait]
 impl<Runtime> Sleeper<Runtime> for TokioSleep
 where
     Runtime: Async,

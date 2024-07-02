@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
@@ -11,7 +10,6 @@ use crate::bootstrap::traits::initializers::init_chain_data::ChainDataInitialize
 
 pub struct InitCosmosChainData;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> ChainDataInitializer<Bootstrap> for InitCosmosChainData
 where
     Bootstrap: HasChainType<Chain = Chain>

@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use futures::stream::{self, StreamExt, TryStreamExt};
 use hermes_relayer_components::chain::traits::queries::ack_packets::{
     AckPacketsQuerier, CanQueryAckPacket,
@@ -9,7 +8,6 @@ use hermes_relayer_components::chain::types::aliases::WriteAckEventOf;
 
 pub struct QueryAckPacketsConcurrently;
 
-#[async_trait]
 impl<Chain, Counterparty> AckPacketsQuerier<Chain, Counterparty> for QueryAckPacketsConcurrently
 where
     Chain: CanQueryAckPacket<Counterparty>,

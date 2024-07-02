@@ -1,5 +1,3 @@
-use cgp_core::async_trait;
-
 use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
@@ -15,7 +13,6 @@ use crate::relay::types::aliases::Packet;
 /// implemented on top of this base type.
 pub struct BaseTimeoutUnorderedPacketRelayer;
 
-#[async_trait]
 impl<Relay> TimeoutUnorderedPacketRelayer<Relay> for BaseTimeoutUnorderedPacketRelayer
 where
     Relay: HasRelayChains + CanRaiseRelayChainErrors,

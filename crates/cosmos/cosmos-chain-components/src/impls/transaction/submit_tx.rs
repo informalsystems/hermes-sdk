@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitter;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransactionHashType;

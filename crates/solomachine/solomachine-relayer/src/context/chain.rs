@@ -3,7 +3,6 @@ use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use cgp_core::prelude::*;
 use eyre::eyre;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
@@ -64,7 +63,6 @@ impl MockSolomachine {
     }
 }
 
-#[async_trait]
 impl Solomachine for MockSolomachine {
     type Error = Error;
 

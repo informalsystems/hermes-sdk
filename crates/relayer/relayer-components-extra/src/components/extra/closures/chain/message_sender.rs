@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasComponents};
+use cgp_core::prelude::{Async, HasComponents};
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
 };

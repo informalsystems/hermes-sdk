@@ -5,7 +5,6 @@ use basecoin::modules::types::IdentifiedModule;
 use basecoin::store::context::{ProvableStore, Store};
 use basecoin::store::impls::RevertibleStore;
 use basecoin::store::utils::SharedRwExt;
-use cgp_core::prelude::*;
 use ibc::core::client::types::Height;
 use ibc::core::commitment_types::commitment::CommitmentProofBytes;
 use ibc::core::host::types::identifiers::ChainId;
@@ -28,7 +27,6 @@ use crate::util::conversion::convert_tm_to_ics_merkle_proof;
 use crate::util::dummy::genesis_app_state;
 use crate::util::mutex::MutexUtil;
 
-#[async_trait]
 impl<S> BasecoinRunner for MockBasecoin<S>
 where
     S: ProvableStore + Default + Debug,
@@ -93,7 +91,6 @@ where
     }
 }
 
-#[async_trait]
 impl<S: ProvableStore + Default + Debug> BasecoinEndpoint for MockBasecoin<S> {
     type Store = S;
     /// Queries the mock chain for the given path and height.

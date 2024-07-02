@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
@@ -16,7 +15,6 @@ use crate::types::sign_data::SolomachineSignData;
 
 pub struct BuildSolomachineTimeoutPacketPayload;
 
-#[async_trait]
 impl<Chain, Counterparty>
     TimeoutUnorderedPacketPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineTimeoutPacketPayload

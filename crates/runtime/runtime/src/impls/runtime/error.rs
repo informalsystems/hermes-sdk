@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use core::str::Utf8Error;
 use std::io::Error as IoError;
 
-use cgp_core::{ErrorRaiser, ProvideErrorType};
+use cgp_core::error::{ErrorRaiser, ProvideErrorType};
 use hermes_async_runtime_components::channel::types::ChannelClosedError;
 use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
 use hermes_tokio_runtime_components::impls::os::exec_command::ExecCommandFailure;

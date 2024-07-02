@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 
-use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, HasComponents, ProvideErrorType};
+use cgp_core::component::HasComponents;
+use cgp_core::error::{ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::components::default::closures::relay::packet_relayer::CanUseDefaultPacketRelayer;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
@@ -117,7 +117,6 @@ where
 
 pub struct MockCosmosBuildUpdateClientMessage;
 
-#[async_trait]
 impl<SrcChain, DstChain>
     TargetUpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, SourceTarget>
     for MockCosmosBuildUpdateClientMessage
@@ -164,7 +163,6 @@ where
     }
 }
 
-#[async_trait]
 impl<SrcChain, DstChain>
     TargetUpdateClientMessageBuilder<MockCosmosRelay<SrcChain, DstChain>, DestinationTarget>
     for MockCosmosBuildUpdateClientMessage
@@ -211,7 +209,6 @@ where
     }
 }
 
-#[async_trait]
 impl<SrcChain, DstChain> ProvidePacketLock<MockCosmosRelay<SrcChain, DstChain>>
     for MockCosmosRelayComponents
 where

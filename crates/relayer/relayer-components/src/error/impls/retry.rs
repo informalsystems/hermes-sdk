@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasErrorType};
+use cgp_core::prelude::{Async, HasErrorType};
 
 use crate::error::traits::retry::{MaxErrorRetryGetter, ProvideRetryableError};
 

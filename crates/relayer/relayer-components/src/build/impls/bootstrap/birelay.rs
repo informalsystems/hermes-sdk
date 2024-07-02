@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::{async_trait, HasErrorType};
 
 use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
@@ -34,7 +34,6 @@ where
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 
-#[async_trait]
 impl<Build, BiRelay, ChainA, ChainB, Error> CanBootstrapBiRelay for Build
 where
     Build: HasBiRelayType<BiRelay = BiRelay>

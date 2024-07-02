@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::HasErrorType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -27,7 +27,6 @@ where
     Error { error: &'a Relay::Error },
 }
 
-#[async_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for LoggerRelayer<InRelayer>
 where
     Relay: HasRelayChains + HasLogger,

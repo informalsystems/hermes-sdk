@@ -1,6 +1,7 @@
 use alloc::vec::Vec;
 
-use cgp_core::{CanRaiseError, HasInner};
+use cgp_core::error::CanRaiseError;
+use cgp_core::inner::HasInner;
 
 use crate::chain::traits::send_message::{CanSendMessages, MessageSender};
 use crate::chain::traits::types::event::HasEventType;

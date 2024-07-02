@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::{async_trait, CanRaiseError};
+use cgp_core::prelude::CanRaiseError;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
@@ -11,7 +11,6 @@ pub struct RetryRelayer<InRelay> {
     pub phantom: PhantomData<InRelay>,
 }
 
-#[async_trait]
 impl<Relay, InRelayer> PacketRelayer<Relay> for RetryRelayer<InRelayer>
 where
     Relay: HasRelayChains

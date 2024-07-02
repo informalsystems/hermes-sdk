@@ -25,7 +25,6 @@ use hermes_test_components::types::index::{Index, Twindex};
 
 pub struct TestIbcTransfer;
 
-#[async_trait]
 impl<Driver, ChainA, ChainB, ChainDriverA, ChainDriverB, RelayDriver, Logger> TestCase<Driver>
     for TestIbcTransfer
 where

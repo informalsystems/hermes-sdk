@@ -1,4 +1,4 @@
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::block::BlockQuerier;
 use hermes_relayer_components::chain::traits::types::block::HasBlockType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;

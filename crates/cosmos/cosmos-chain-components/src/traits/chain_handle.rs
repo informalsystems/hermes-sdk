@@ -1,5 +1,5 @@
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::error::Error as RelayerError;
 

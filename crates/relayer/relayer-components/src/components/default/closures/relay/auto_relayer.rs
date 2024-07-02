@@ -1,4 +1,6 @@
-use cgp_core::{CanRun, ErrorRaiser, HasComponents, HasErrorType};
+use cgp_core::component::HasComponents;
+use cgp_core::error::{ErrorRaiser, HasErrorType};
+use cgp_core::run::CanRun;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::stream::CanMapStream;
 use hermes_runtime_components::traits::subscription::HasSubscription;

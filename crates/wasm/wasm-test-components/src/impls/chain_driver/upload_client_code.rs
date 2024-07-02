@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;

@@ -2,14 +2,12 @@ use std::io::Error as IoError;
 use std::path::Path;
 
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::write_file::StringToFileWriter;
 use tokio::fs::write;
 
 pub struct TokioWriteStringToFile;
 
-#[async_trait]
 impl<Runtime> StringToFileWriter<Runtime> for TokioWriteStringToFile
 where
     Runtime: HasFilePathType + HasErrorType,

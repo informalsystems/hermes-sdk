@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};

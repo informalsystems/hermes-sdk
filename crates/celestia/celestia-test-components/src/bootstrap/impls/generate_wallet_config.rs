@@ -15,7 +15,6 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 
 pub struct GenerateCelestiaWalletConfig;
 
-#[async_trait]
 impl<Bootstrap, Chain> WalletConfigGenerator<Bootstrap> for GenerateCelestiaWalletConfig
 where
     Bootstrap: HasWalletConfigType<WalletConfig = CosmosWalletConfig>

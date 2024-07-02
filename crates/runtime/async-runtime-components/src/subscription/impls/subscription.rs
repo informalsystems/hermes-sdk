@@ -8,7 +8,6 @@ use crate::subscription::traits::subscription::Subscription;
 
 pub struct ProvideBoxedSubscription;
 
-#[async_trait]
 impl<Runtime> ProvideSubscription<Runtime> for ProvideBoxedSubscription
 where
     Runtime: HasBoxedStreamType,

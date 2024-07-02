@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use hermes_cosmos_chain_components::traits::rpc_client::HasRpcClient;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -15,7 +15,6 @@ use crate::types::consensus_state::{decode_client_consensus_state, SolomachineCo
 
 pub struct QuerySolomachineConsensusStateFromCosmos;
 
-#[async_trait]
 impl<Chain, Counterparty> ConsensusStateQuerier<Chain, Counterparty>
     for QuerySolomachineConsensusStateFromCosmos
 where

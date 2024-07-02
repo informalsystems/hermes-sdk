@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 use core::time::Duration;
 
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::HasErrorType;
 
 use crate::chain::traits::send_message::CanSendMessages;
 use crate::chain::traits::types::chain_id::HasChainIdType;
@@ -111,7 +111,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Relay, Target> CanSendMessages for RelayToChain<Relay, Target>
 where
     Relay: HasRelayChains,

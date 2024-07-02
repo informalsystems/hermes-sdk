@@ -34,7 +34,6 @@ pub trait CanQueryChainHeight: HasHeightType + HasErrorType {
     async fn query_chain_height(&self) -> Result<Self::Height, Self::Error>;
 }
 
-#[async_trait]
 impl<Chain> CanQueryChainHeight for Chain
 where
     Chain: CanQueryChainStatus,

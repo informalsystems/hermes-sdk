@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::{async_trait, HasErrorType};
+use cgp_core::prelude::{async_trait, HasErrorType};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 
@@ -15,7 +15,6 @@ pub trait CanWaitChainReachHeight: HasHeightType + HasErrorType {
     ) -> Result<Self::Height, Self::Error>;
 }
 
-#[async_trait]
 impl<Chain> CanWaitChainReachHeight for Chain
 where
     Chain: CanQueryChainHeight + HasRuntime,

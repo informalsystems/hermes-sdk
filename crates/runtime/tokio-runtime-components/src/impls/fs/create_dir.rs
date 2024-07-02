@@ -1,7 +1,7 @@
 use std::io::Error as IoError;
 use std::path::Path;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use hermes_runtime_components::traits::fs::create_dir::DirCreator;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use tokio::fs::create_dir_all;

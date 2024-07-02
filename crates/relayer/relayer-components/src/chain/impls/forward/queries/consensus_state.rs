@@ -1,4 +1,5 @@
-use cgp_core::{CanRaiseError, HasInner};
+use cgp_core::error::CanRaiseError;
+use cgp_core::inner::HasInner;
 
 use crate::chain::traits::queries::consensus_state::{
     CanQueryConsensusState, CanQueryConsensusStateWithProofs, ConsensusStateQuerier,
