@@ -1,4 +1,4 @@
-use cgp_core::{Async, HasComponents, HasErrorType};
+use cgp_core::prelude::{Async, HasComponents, HasErrorType};
 use hermes_relayer_components::chain::traits::packet::from_write_ack::{
     CanBuildPacketFromWriteAck, PacketFromWriteAckBuilder,
 };

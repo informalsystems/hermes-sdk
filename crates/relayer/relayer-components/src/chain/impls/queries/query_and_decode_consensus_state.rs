@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp_core::{Async, CanRaiseError};
+use cgp_core::prelude::{Async, CanRaiseError};
 use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;

@@ -1,4 +1,4 @@
-use cgp_core::{async_trait, CanRaiseError};
+use cgp_core::prelude::CanRaiseError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -31,7 +31,6 @@ pub enum RelayPacketProgress {
     SkipRelayAckPacket,
 }
 
-#[async_trait]
 impl<Relay, SrcChain, DstChain> PacketRelayer<Relay> for FullCycleRelayer
 where
     Relay: CanRelayAckPacket

@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-pub use cgp_core::RunnerComponent;
+pub use cgp_core::run::RunnerComponent;
 
 use crate::relay::impls::auto_relayers::both_ways::RelayBothWays;
 

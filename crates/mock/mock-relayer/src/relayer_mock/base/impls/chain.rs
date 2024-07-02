@@ -10,8 +10,8 @@
 
 use core::time::Duration;
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
@@ -266,7 +266,6 @@ impl ChainIdGetter<MockChainContext> for MockChainComponents {
     }
 }
 
-#[async_trait]
 impl MessageSender<MockChainContext> for MockChainComponents {
     async fn send_messages(
         chain: &MockChainContext,
@@ -276,7 +275,6 @@ impl MessageSender<MockChainContext> for MockChainComponents {
     }
 }
 
-#[async_trait]
 impl ChainStatusQuerier<MockChainContext> for MockChainComponents {
     async fn query_chain_status(chain: &MockChainContext) -> Result<ChainStatus, Error> {
         let height = chain.get_current_height();
@@ -300,7 +298,6 @@ impl CounterpartyMessageHeightGetter<MockChainContext, MockChainContext> for Moc
     }
 }
 
-#[async_trait]
 impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_consensus_state(
         chain: &MockChainContext,
@@ -314,7 +311,6 @@ impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComp
     }
 }
 
-#[async_trait]
 impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_client_state(
         _chain: &MockChainContext,
@@ -325,7 +321,6 @@ impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainCompone
     }
 }
 
-#[async_trait]
 impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_packet_is_received(
         chain: &MockChainContext,
@@ -338,7 +333,6 @@ impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComp
     }
 }
 
-#[async_trait]
 impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_write_ack_event(
         chain: &MockChainContext,
@@ -371,7 +365,6 @@ impl ProvideReceivePacketPayloadType<MockChainContext, MockChainContext> for Moc
     type ReceivePacketPayload = MockMessage;
 }
 
-#[async_trait]
 impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_payload(
         chain: &MockChainContext,
@@ -396,7 +389,6 @@ impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockCha
     }
 }
 
-#[async_trait]
 impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_message(
         _chain: &MockChainContext,
@@ -438,7 +430,6 @@ impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainCo
     }
 }
 
-#[async_trait]
 impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_message(
         _chain: &MockChainContext,
@@ -455,7 +446,6 @@ impl ProvideTimeoutUnorderedPacketPayloadType<MockChainContext, MockChainContext
     type TimeoutUnorderedPacketPayload = MockMessage;
 }
 
-#[async_trait]
 impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext>
     for MockChainComponents
 {
@@ -480,7 +470,6 @@ impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext>
     }
 }
 
-#[async_trait]
 impl TimeoutUnorderedPacketMessageBuilder<MockChainContext, MockChainContext>
     for MockChainComponents
 {

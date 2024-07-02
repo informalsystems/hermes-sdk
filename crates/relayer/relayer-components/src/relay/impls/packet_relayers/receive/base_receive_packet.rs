@@ -1,5 +1,3 @@
-use cgp_core::async_trait;
-
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
 use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
@@ -13,7 +11,6 @@ use crate::relay::types::aliases::Packet;
 
 pub struct BaseReceivePacketRelayer;
 
-#[async_trait]
 impl<Relay, AckEvent> ReceivePacketRelayer<Relay> for BaseReceivePacketRelayer
 where
     Relay: HasRelayChains

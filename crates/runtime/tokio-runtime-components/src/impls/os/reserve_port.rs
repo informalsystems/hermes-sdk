@@ -2,14 +2,12 @@ use std::io::Error as IoError;
 use std::net::{Ipv4Addr, SocketAddrV4};
 
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_runtime_components::traits::os::reserve_port::TcpPortReserver;
 use rand::Rng;
 use tokio::net::TcpListener;
 
 pub struct TokioReserveTcpPort;
 
-#[async_trait]
 impl<Runtime> TcpPortReserver<Runtime> for TokioReserveTcpPort
 where
     Runtime: CanRaiseError<IoError>,

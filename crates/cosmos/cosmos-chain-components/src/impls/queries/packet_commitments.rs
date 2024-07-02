@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -14,7 +13,6 @@ use crate::traits::grpc_address::HasGrpcAddress;
 
 pub struct QueryCosmosPacketCommitments;
 
-#[async_trait]
 impl<Chain, Counterparty> PacketCommitmentsQuerier<Chain, Counterparty>
     for QueryCosmosPacketCommitments
 where

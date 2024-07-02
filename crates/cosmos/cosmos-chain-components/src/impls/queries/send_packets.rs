@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use futures::stream::{self, StreamExt, TryStreamExt};
 use hermes_relayer_components::chain::traits::queries::send_packets::{
     CanQuerySendPacket, SendPacketsQuerier,
@@ -7,7 +6,6 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 
 pub struct QuerySendPacketsConcurrently;
 
-#[async_trait]
 impl<Chain, Counterparty> SendPacketsQuerier<Chain, Counterparty> for QuerySendPacketsConcurrently
 where
     Chain: CanQuerySendPacket<Counterparty>,

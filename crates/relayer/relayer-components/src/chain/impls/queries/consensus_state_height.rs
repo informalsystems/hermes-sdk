@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 
 use crate::chain::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerier,

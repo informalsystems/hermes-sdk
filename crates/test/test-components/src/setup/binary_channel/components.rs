@@ -1,5 +1,5 @@
+use cgp_core::error::{ErrorRaiser, ProvideErrorType};
 use cgp_core::prelude::*;
-use cgp_core::{ErrorRaiser, ProvideErrorType};
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;

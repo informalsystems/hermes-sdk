@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
+use cgp_core::component::DelegateComponent;
 use cgp_core::prelude::Async;
-use cgp_core::DelegateComponent;
 
 use crate::traits::logger::Logger;
 

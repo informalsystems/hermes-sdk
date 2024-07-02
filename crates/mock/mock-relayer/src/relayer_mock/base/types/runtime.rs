@@ -1,8 +1,7 @@
 use alloc::sync::Arc;
 use core::time::Duration;
 
-use cgp_core::prelude::*;
-use cgp_core::HasErrorType;
+use cgp_core::error::HasErrorType;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::time::HasTime;
@@ -35,7 +34,6 @@ impl HasErrorType for MockRuntimeContext {
     type Error = TokioRuntimeError;
 }
 
-#[async_trait]
 impl CanSleep for MockRuntimeContext {
     async fn sleep(&self, duration: Duration) {
         // Increment the shared MockClock by the duration is milliseconds.

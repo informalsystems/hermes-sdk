@@ -1,5 +1,4 @@
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use futures_channel::oneshot::{channel, Receiver, Sender};
 use hermes_runtime_components::traits::channel_once::{
     ChannelOnceCreator, ChannelOnceUser, ProvideChannelOnceType,
@@ -73,7 +72,6 @@ where
     }
 }
 
-#[async_trait]
 impl<Runtime> ChannelOnceUser<Runtime> for ProvideOneShotChannelType
 where
     Runtime: HasOneShotChannelType + CanRaiseError<ChannelClosedError>,

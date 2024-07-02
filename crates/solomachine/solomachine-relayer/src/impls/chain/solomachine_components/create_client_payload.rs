@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
 
 use crate::traits::solomachine::Solomachine;
@@ -9,7 +8,6 @@ use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildSolomachineCreateClientPayload;
 
-#[async_trait]
 impl<Chain, Counterparty> CreateClientPayloadBuilder<SolomachineChain<Chain>, Counterparty>
     for BuildSolomachineCreateClientPayload
 where

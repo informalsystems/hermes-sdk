@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp_core::{async_trait, CanRaiseError};
+use cgp_core::prelude::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::ibc_message_sender::{
@@ -16,7 +16,6 @@ use crate::batch::types::sink::BatchWorkerSink;
 
 pub struct SendMessagesToBatchWorker;
 
-#[async_trait]
 impl<Relay, Sink, Target, TargetChain, Runtime> IbcMessageSender<Relay, Sink, Target>
     for SendMessagesToBatchWorker
 where

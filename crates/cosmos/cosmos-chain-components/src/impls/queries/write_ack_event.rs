@@ -1,4 +1,3 @@
-use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
@@ -14,7 +13,6 @@ use crate::traits::chain_handle::HasBlockingChainHandle;
 
 pub struct QueryWriteAckEventFromChainHandle;
 
-#[async_trait]
 impl<Chain, Counterparty> WriteAckQuerier<Chain, Counterparty> for QueryWriteAckEventFromChainHandle
 where
     Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>

@@ -1,5 +1,3 @@
-use cgp_core::async_trait;
-
 use crate::build::traits::components::chain_builder::CanBuildChain;
 use crate::build::traits::components::relay_builder::RelayBuilder;
 use crate::build::traits::components::relay_from_chains_builder::CanBuildRelayFromChains;
@@ -11,7 +9,6 @@ use crate::build::types::aliases::{
 
 pub struct BuildRelayFromChains;
 
-#[async_trait]
 impl<Build, Target> RelayBuilder<Build, Target> for BuildRelayFromChains
 where
     Build: CanBuildChain<SrcChainTarget<Build, Target>>

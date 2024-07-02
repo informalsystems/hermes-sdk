@@ -78,7 +78,6 @@ where
     pub phantom: PhantomData<Runtime>,
 }
 
-#[async_trait]
 impl<Runtime, S, M, T, U> Task for MultiplexSubscriptionTask<Runtime, S, M, T, U>
 where
     Runtime: HasMutex + CanUseChannels,

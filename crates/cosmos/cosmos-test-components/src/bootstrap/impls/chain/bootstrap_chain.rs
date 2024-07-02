@@ -23,7 +23,6 @@ use crate::bootstrap::traits::initializers::init_genesis_config::CanInitChainGen
 
 pub struct BootstrapCosmosChain;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain, ChainDriver> ChainBootstrapper<Bootstrap> for BootstrapCosmosChain
 where
     Bootstrap: HasErrorType

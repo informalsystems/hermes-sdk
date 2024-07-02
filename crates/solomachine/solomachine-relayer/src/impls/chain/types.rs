@@ -1,6 +1,7 @@
 use core::time::Duration;
 
-use cgp_core::{Async, ErrorRaiser, ProvideErrorType};
+use cgp_core::error::{ErrorRaiser, ProvideErrorType};
+use cgp_core::Async;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, ProvideEncodingType,
 };

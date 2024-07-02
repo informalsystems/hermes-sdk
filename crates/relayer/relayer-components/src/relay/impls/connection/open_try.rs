@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::iter::Iterator;
 
-use cgp_core::CanRaiseError;
+use cgp_core::error::CanRaiseError;
 
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenTryMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenTryPayload;

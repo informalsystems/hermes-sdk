@@ -1,5 +1,4 @@
-use cgp_core::prelude::*;
-use cgp_core::{CanRaiseError, HasErrorType};
+use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer::chain::endpoint::ChainStatus;
@@ -12,7 +11,6 @@ use crate::traits::rpc_client::HasRpcClient;
 
 pub struct QueryChainStatusWithChainHandle;
 
-#[async_trait]
 impl<Chain> ChainStatusQuerier<Chain> for QueryChainStatusWithChainHandle
 where
     Chain: HasErrorType

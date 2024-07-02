@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
-use cgp_core::CanRaiseError;
 use core::time::Duration;
 
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::types::ack::ProvideBytesAcknowlegement;
 use hermes_relayer_components::chain::impls::types::commitment::ProvideBytesPacketCommitment;

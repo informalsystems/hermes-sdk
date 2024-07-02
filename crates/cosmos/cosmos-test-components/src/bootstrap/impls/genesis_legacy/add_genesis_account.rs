@@ -1,5 +1,5 @@
+use cgp_core::error::CanRaiseError;
 use cgp_core::prelude::*;
-use cgp_core::CanRaiseError;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -18,7 +18,6 @@ use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdder;
 */
 pub struct LegacyAddCosmosGenesisAccount;
 
-#[async_trait]
 impl<Bootstrap, Runtime, Chain> GenesisAccountAdder<Bootstrap> for LegacyAddCosmosGenesisAccount
 where
     Bootstrap: HasRuntime<Runtime = Runtime>
