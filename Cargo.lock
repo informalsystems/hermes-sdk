@@ -656,7 +656,6 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -664,6 +663,18 @@ dependencies = [
 
 [[package]]
 name = "cgp-component-macro"
+version = "0.1.0"
+dependencies = [
+ "cgp-component-macro-lib",
+ "itertools 0.11.0",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.68",
+]
+
+[[package]]
+name = "cgp-component-macro-lib"
 version = "0.1.0"
 dependencies = [
  "itertools 0.11.0",
@@ -676,7 +687,6 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -1972,6 +1982,7 @@ dependencies = [
 name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
+ "cgp-component-macro",
  "cgp-core",
  "hermes-encoding-components",
  "hermes-logging-components",

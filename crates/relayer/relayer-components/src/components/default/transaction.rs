@@ -46,11 +46,7 @@ use crate::transaction::traits::types::transaction::HasTransactionType;
 use crate::transaction::traits::types::tx_hash::HasTransactionHashType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;
 
-pub struct DefaultTxComponents;
-
-delegate_components! {
-    #[mark_component(IsDefaultTxComponents)]
-    #[mark_delegate(DelegatesToDefaultTxComponents)]
+define_components! {
     DefaultTxComponents {
         MessageSenderComponent: SendMessagesWithDefaultSigner,
         MessagesWithSignerSenderComponent: AllocateNonceAndSendMessages,

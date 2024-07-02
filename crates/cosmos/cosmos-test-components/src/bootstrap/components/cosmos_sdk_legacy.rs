@@ -13,7 +13,7 @@ use hermes_runtime_components::traits::os::exec_command::CanExecCommand;
 use hermes_runtime_components::traits::os::reserve_port::CanReserveTcpPort;
 use hermes_runtime_components::traits::random::CanGenerateRandom;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use hermes_test_components::bootstrap::traits::chain::{
+pub use hermes_test_components::bootstrap::traits::chain::{
     CanBootstrapChain, ChainBootstrapperComponent,
 };
 use hermes_test_components::chain::traits::chain_id::CanBuildChainIdFromString;
@@ -33,34 +33,34 @@ use crate::bootstrap::impls::initializers::init_wallet::{
     GetStdOutOrElseStdErr, InitCosmosTestWallet,
 };
 use crate::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
-use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
+pub use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarterComponent;
 use crate::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
-use crate::bootstrap::traits::fields::denom::{
+pub use crate::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetterComponent,
 };
-use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
+pub use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
-use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
-use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
-use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderComponent;
-use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdderComponent;
-use crate::bootstrap::traits::genesis::add_genesis_wallet::GenesisWalletAdderComponent;
-use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollectorComponent;
-use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializerComponent;
-use crate::bootstrap::traits::initializers::init_chain_data::ChainDataInitializerComponent;
-use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializerComponent;
-use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializerComponent;
-use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
+pub use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
+pub use crate::bootstrap::traits::generator::generate_wallet_config::WalletConfigGenerator;
+pub use crate::bootstrap::traits::genesis::add_genesis_account::GenesisAccountAdderComponent;
+pub use crate::bootstrap::traits::genesis::add_genesis_validator::GenesisValidatorAdderComponent;
+pub use crate::bootstrap::traits::genesis::add_genesis_wallet::GenesisWalletAdderComponent;
+pub use crate::bootstrap::traits::genesis::collect_gentxs::GenesisTransactionsCollectorComponent;
+pub use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializerComponent;
+pub use crate::bootstrap::traits::initializers::init_chain_data::ChainDataInitializerComponent;
+pub use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDirInitializerComponent;
+pub use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializerComponent;
+pub use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
-use crate::bootstrap::traits::types::chain_node_config::{
+pub use crate::bootstrap::traits::types::chain_node_config::{
     ChainNodeConfigTypeComponent, ProvideChainNodeConfigType,
 };
-use crate::bootstrap::traits::types::genesis_config::{
+pub use crate::bootstrap::traits::types::genesis_config::{
     ChainGenesisConfigTypeComponent, ProvideChainGenesisConfigType,
 };
-use crate::bootstrap::traits::types::wallet_config::{
+pub use crate::bootstrap::traits::types::wallet_config::{
     ProvideWalletConfigType, WalletConfigFieldsComponent, WalletConfigFieldsGetter,
     WalletConfigTypeComponent,
 };
@@ -68,11 +68,7 @@ use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use crate::chain::types::wallet::CosmosTestWallet;
 
-pub struct LegacyCosmosSdkBootstrapComponents;
-
-delegate_components! {
-    #[mark_component(IsLegacyCosmosSdkBootstrapComponent)]
-    #[mark_delegate(DelegatesToLegacyToCosmosSdkBootstrapComponents)]
+define_components! {
     LegacyCosmosSdkBootstrapComponents {
         GenesisAccountAdderComponent: LegacyAddCosmosGenesisAccount,
         GenesisValidatorAdderComponent: LegacyAddCosmosGenesisValidator,
@@ -115,7 +111,7 @@ where
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<toml::de::Error>,
-    Components: DelegatesToLegacyToCosmosSdkBootstrapComponents
+    Components: DelegatesToLegacyCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
         + ProvideChainGenesisConfigType<Bootstrap, ChainGenesisConfig = CosmosGenesisConfig>

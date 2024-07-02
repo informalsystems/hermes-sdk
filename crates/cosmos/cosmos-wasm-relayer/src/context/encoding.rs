@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
@@ -16,27 +16,27 @@ use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
 
-use crate::encoding::components::{
-    IsWasmCosmosEncodingComponent, WasmCosmosEncodingComponents as BaseWasmCosmosEncodingComponents,
-};
+use crate::encoding::components::*;
 use crate::types::client_state::WrappedTendermintClientState;
 
 pub struct WasmCosmosEncoding;
 
-pub struct WasmCosmosEncodingComponents;
+pub struct WasmCosmosEncodingComponents2;
 
 impl HasComponents for WasmCosmosEncoding {
-    type Components = WasmCosmosEncodingComponents;
+    type Components = WasmCosmosEncodingComponents2;
 }
 
-delegate_all!(
-    IsWasmCosmosEncodingComponent,
-    BaseWasmCosmosEncodingComponents,
-    WasmCosmosEncodingComponents,
-);
+with_wasm_cosmos_encoding_components! {
+    delegate_components! {
+        WasmCosmosEncodingComponents2 {
+            @WasmCosmosEncodingComponents: WasmCosmosEncodingComponents,
+        }
+    }
+}
 
 delegate_components! {
-    WasmCosmosEncodingComponents {
+    WasmCosmosEncodingComponents2 {
         [
             ErrorTypeComponent,
             ErrorRaiserComponent,

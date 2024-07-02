@@ -367,7 +367,7 @@ delegate_components! {
 with_cosmos_tx_components! {
     delegate_components! {
         CosmosChainComponents {
-            @components : CosmosTxComponents,
+            @CosmosTxComponents : CosmosTxComponents,
         }
     }
 }

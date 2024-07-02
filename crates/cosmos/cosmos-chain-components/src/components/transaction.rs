@@ -29,9 +29,7 @@ use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
 use crate::impls::transaction::submit_tx::BroadcastCosmosTx;
 use crate::impls::types::transaction::ProvideCosmosTransactionTypes;
 
-pub struct CosmosTxComponents;
-
-cgp_component_macro::delegate_components! {
+define_components! {
     CosmosTxComponents {
         [
             SignerTypeComponent,

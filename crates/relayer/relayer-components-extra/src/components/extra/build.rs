@@ -1,18 +1,16 @@
-use core::marker::PhantomData;
-
 use cgp_core::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
-use hermes_relayer_components::build::traits::components::birelay_builder::{
+pub use hermes_relayer_components::build::traits::components::birelay_builder::{
     BiRelayBuilderComponent, CanBuildBiRelay,
 };
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilder;
-use hermes_relayer_components::build::traits::components::chain_builder::{
+pub use hermes_relayer_components::build::traits::components::chain_builder::{
     ChainBuilder, ChainBuilderComponent,
 };
-use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilderComponent;
-use hermes_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilderComponent;
+pub use hermes_relayer_components::build::traits::components::relay_builder::RelayBuilderComponent;
+pub use hermes_relayer_components::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilderComponent;
 use hermes_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components::build::types::aliases::{ChainA, ChainB};
@@ -30,12 +28,8 @@ use crate::build::traits::cache::HasBatchSenderCache;
 use crate::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 use crate::components::extra::closures::batch::UseBatchMessageWorkerSpawner;
 
-pub struct ExtraBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
-
-delegate_components! {
-    #[mark_component(IsExtraBuildComponent)]
-    #[mark_delegate(DelegatesToExtraBuildComponents)]
-    ExtraBuildComponents<BaseComponents> {
+define_components! {
+    ExtraBuildComponents<BaseComponents: Async> {
         RelayFromChainsBuilderComponent: BuildRelayWithBatchWorker,
         [
             ChainBuilderComponent,

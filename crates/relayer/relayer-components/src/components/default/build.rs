@@ -1,5 +1,3 @@
-use core::marker::PhantomData;
-
 use cgp_core::prelude::*;
 
 use crate::birelay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
@@ -20,12 +18,8 @@ use crate::build::types::aliases::{ChainA, ChainB};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::relay::traits::chains::HasRelayChains;
 
-pub struct DefaultBuildComponents<BaseComponents>(pub PhantomData<BaseComponents>);
-
-delegate_components! {
-    #[mark_component(IsDefaultBuildComponent)]
-    #[mark_delegate(DelegatesToDefaultBuildComponents)]
-    DefaultBuildComponents<BaseComponents> {
+define_components! {
+    DefaultBuildComponents<BaseComponents: Async> {
         ChainBuilderComponent: BuildChainWithCache<BaseComponents>,
         RelayBuilderComponent: BuildRelayWithCache<BuildRelayFromChains>,
         BiRelayBuilderComponent: BuildBiRelayFromRelays,
