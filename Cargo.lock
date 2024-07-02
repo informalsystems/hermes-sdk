@@ -638,7 +638,7 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "cgp-async-macro",
 ]
@@ -646,7 +646,7 @@ dependencies = [
 [[package]]
 name = "cgp-async-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -656,7 +656,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -665,9 +665,23 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
+dependencies = [
+ "cgp-component-macro-lib",
+ "itertools 0.11.0",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.68",
+]
+
+[[package]]
+name = "cgp-component-macro-lib"
+version = "0.1.0"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "itertools 0.11.0",
+ "prettyplease",
  "proc-macro2",
  "quote",
  "syn 2.0.68",
@@ -676,7 +690,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -688,7 +702,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -697,7 +711,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -706,7 +720,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -715,7 +729,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git?branch=main#9c323af08b5076397005fd0e8912687c71ebacd4"
+source = "git+https://github.com/informalsystems/cgp.git#89293a9d63b28e0d3996b56fb8470ca0f93077b0"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -1723,6 +1737,7 @@ name = "hermes-cosmos-chain-components"
 version = "0.1.0"
 dependencies = [
  "bech32 0.9.1",
+ "cgp-component-macro",
  "cgp-core",
  "eyre",
  "futures",
@@ -1971,6 +1986,7 @@ dependencies = [
 name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
+ "cgp-component-macro",
  "cgp-core",
  "hermes-encoding-components",
  "hermes-logging-components",
@@ -3599,6 +3615,16 @@ name = "ppv-lite86"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
+
+[[package]]
+name = "prettyplease"
+version = "0.2.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5f12335488a2f3b0a83b14edad48dca9879ce89b2edd10e80237e4e852dd645e"
+dependencies = [
+ "proc-macro2",
+ "syn 2.0.68",
+]
 
 [[package]]
 name = "primitive-types"

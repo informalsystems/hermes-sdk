@@ -32,29 +32,25 @@ use crate::setup::impls::clients::SetupClientsWithRelay;
 use crate::setup::impls::connection::SetupConnectionHandshake;
 use crate::setup::impls::relay::SetupRelayWithBuilder;
 use crate::setup::impls::run_test::BuildDriverAndRunTest;
-use crate::setup::traits::birelay::BiRelaySetupComponent;
+pub use crate::setup::traits::birelay::BiRelaySetupComponent;
 use crate::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use crate::setup::traits::builder_at::ProvideBuilderAt;
-use crate::setup::traits::chain::ChainSetupComponent;
-use crate::setup::traits::channel::ChannelSetupComponent;
-use crate::setup::traits::clients::ClientSetupComponent;
-use crate::setup::traits::connection::ConnectionSetupComponent;
+pub use crate::setup::traits::chain::ChainSetupComponent;
+pub use crate::setup::traits::channel::ChannelSetupComponent;
+pub use crate::setup::traits::clients::ClientSetupComponent;
+pub use crate::setup::traits::connection::ConnectionSetupComponent;
 use crate::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
-use crate::setup::traits::driver::{
+pub use crate::setup::traits::driver::{
     CanBuildTestDriver, DriverBuilderComponent, ProvideTestDriverType,
 };
 use crate::setup::traits::drivers::binary_channel::BinaryChannelDriverBuilder;
 use crate::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use crate::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use crate::setup::traits::port_id_at::ProvidePortIdAt;
-use crate::setup::traits::relay::RelaySetupComponent;
-use crate::setup::traits::run_test::TestRunnerComponent;
+pub use crate::setup::traits::relay::RelaySetupComponent;
+pub use crate::setup::traits::run_test::TestRunnerComponent;
 
-pub struct BinaryChannelTestComponents;
-
-delegate_components! {
-    #[mark_component(IsBinaryChannelTestComponent)]
-    #[mark_delegate(DelegatesToBinaryChannelTestComponents)]
+define_components! {
     BinaryChannelTestComponents {
         DriverBuilderComponent: SetupBinaryChannelDriver,
         TestRunnerComponent: BuildDriverAndRunTest,

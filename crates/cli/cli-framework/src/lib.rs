@@ -1,5 +1,3 @@
-#![recursion_limit = "256"]
-
 use hermes_cosmos_relayer::types::error::Error;
 
 pub mod application;

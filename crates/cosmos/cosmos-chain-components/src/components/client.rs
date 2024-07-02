@@ -1,4 +1,4 @@
-use cgp_core::prelude::delegate_components;
+use cgp_core::prelude::*;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
@@ -176,10 +176,7 @@ use crate::impls::types::create_client_options::ProvideCosmosCreateClientSetting
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 use crate::traits::abci_query::AbciQuerierComponent;
 
-pub struct CosmosClientComponents;
-
-delegate_components! {
-    #[mark_component(IsCosmosClientComponents)]
+define_components! {
     CosmosClientComponents {
         [
             HeightTypeComponent,

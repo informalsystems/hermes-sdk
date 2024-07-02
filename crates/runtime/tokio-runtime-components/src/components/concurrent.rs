@@ -30,11 +30,7 @@ use hermes_runtime_components::traits::time::TimeComponent;
 
 use crate::components::parallel::TokioParallelRuntimeComponents;
 
-pub struct TokioConcurrentRuntimeComponents;
-
-delegate_components! {
-    #[mark_component(IsTokioConcurrentRuntimeComponent)]
-    #[mark_delegate(DelegatesToTokioConcurrentRuntimeComponents)]
+define_components! {
     TokioConcurrentRuntimeComponents {
         ConcurrentTaskRunnerComponent: RunConcurrentTasks,
         [

@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
@@ -14,9 +14,7 @@ use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTyp
 use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
 use hermes_test_components::driver::traits::types::relay_at::ProvideRelayTypeAt;
-use hermes_test_components::setup::binary_channel::components::{
-    BinaryChannelTestComponents, CanUseBinaryChannelTestSetup, IsBinaryChannelTestComponent,
-};
+use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
 use hermes_test_components::setup::traits::create_client_options_at::ProvideCreateClientOptionsAt;
@@ -55,11 +53,13 @@ impl HasComponents for CosmosBinaryChannelSetup {
     type Components = CosmosBinaryChannelSetupComponents;
 }
 
-delegate_all!(
-    IsBinaryChannelTestComponent,
-    BinaryChannelTestComponents,
-    CosmosBinaryChannelSetupComponents,
-);
+with_binary_channel_test_components! {
+    delegate_components! {
+        CosmosBinaryChannelSetupComponents {
+            @BinaryChannelTestComponents: BinaryChannelTestComponents,
+        }
+    }
+}
 
 delegate_components! {
     CosmosBinaryChannelSetupComponents {

@@ -1,5 +1,3 @@
-#![recursion_limit = "256"]
-
 use std::sync::Arc;
 
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;

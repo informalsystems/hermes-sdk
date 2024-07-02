@@ -1,4 +1,4 @@
-use cgp_core::{HasComponents, HasErrorType};
+use cgp_core::{Async, HasComponents, HasErrorType};
 use hermes_relayer_components::chain::traits::packet::from_write_ack::{
     CanBuildPacketFromWriteAck, PacketFromWriteAckBuilder,
 };
@@ -38,5 +38,6 @@ where
         + DelegatesToExtraChainComponents<BaseComponents>
         + CounterpartyChainIdQuerier<Chain, Counterparty>
         + PacketFromWriteAckBuilder<Chain, Counterparty>,
+    BaseComponents: Async,
 {
 }

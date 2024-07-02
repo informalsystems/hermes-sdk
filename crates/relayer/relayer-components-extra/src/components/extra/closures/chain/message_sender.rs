@@ -1,4 +1,4 @@
-use cgp_core::HasComponents;
+use cgp_core::{Async, HasComponents};
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
 };
@@ -85,5 +85,6 @@ where
         + ConsensusStateHeightQuerier<Chain, Counterparty>
         + UpdateClientPayloadBuilder<Chain, Counterparty>
         + UpdateClientMessageBuilder<Chain, Counterparty>,
+    BaseComponents: Async,
 {
 }

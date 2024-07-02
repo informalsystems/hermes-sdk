@@ -2,7 +2,7 @@ use alloc::sync::Arc;
 use std::path::PathBuf;
 
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{ErrorRaiserComponent, ErrorTypeComponent};
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
@@ -14,9 +14,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGette
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
-use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::{
-    CanUseCosmosSdkChainBootstrapper, CosmosSdkBootstrapComponents, IsCosmosSdkBootstrapComponent,
-};
+use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
@@ -66,11 +64,13 @@ impl HasComponents for CosmosWithWasmClientBootstrap {
     type Components = CosmosWithWasmClientBootstrapComponents;
 }
 
-delegate_all!(
-    IsCosmosSdkBootstrapComponent,
-    CosmosSdkBootstrapComponents,
-    CosmosWithWasmClientBootstrapComponents,
-);
+with_cosmos_sdk_bootstrap_components! {
+    delegate_components! {
+        CosmosWithWasmClientBootstrapComponents {
+            @CosmosSdkBootstrapComponents: CosmosSdkBootstrapComponents,
+        }
+    }
+}
 
 delegate_components! {
     CosmosWithWasmClientBootstrapComponents {

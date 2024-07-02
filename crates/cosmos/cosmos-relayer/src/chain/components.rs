@@ -4,11 +4,12 @@ use futures::lock::Mutex;
 use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
+use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::AbciQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
+use hermes_cosmos_chain_components::with_cosmos_tx_components;
 use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
@@ -83,7 +84,6 @@ use hermes_relayer_components::chain::traits::queries::send_packets::{
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::unreceived_packet_sequences::UnreceivedPacketSequencesQuerierComponent;
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerierComponent;
-use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 use hermes_relayer_components::chain::traits::types::block::{
     BlockHashComponent, BlockTypeComponent,
 };
@@ -145,27 +145,9 @@ use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComp
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
-use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
-use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
-use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
-use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
-use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::ProvideMutexForNonceAllocation;
-use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
-use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
-use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
-use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetter;
-use hermes_relayer_components::transaction::traits::submit_tx::TxSubmitterComponent;
-use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
-use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
-use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
-use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
-use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
-use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -382,6 +364,14 @@ delegate_components! {
     }
 }
 
+with_cosmos_tx_components! {
+    delegate_components! {
+        CosmosChainComponents {
+            @CosmosTxComponents : CosmosTxComponents,
+        }
+    }
+}
+
 delegate_components! {
     CosmosChainComponents {
         [
@@ -389,28 +379,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        [
-            SignerTypeComponent,
-            NonceTypeComponent,
-            NonceGuardComponent,
-            TransactionTypeComponent,
-            TransactionHashTypeComponent,
-            FeeTypeComponent,
-            TxResponseTypeComponent,
-            MessageSenderComponent,
-            MessagesWithSignerSenderComponent,
-            MessagesWithSignerAndNonceSenderComponent,
-            NonceAllocatorComponent,
-            TxResponsePollerComponent,
-            PollTimeoutGetterComponent,
-            TxResponseAsEventsParserComponent,
-            TxResponseQuerierComponent,
-            TxEncoderComponent,
-            TxFeeEstimatorComponent,
-            TxSubmitterComponent,
-            NonceQuerierComponent,
-        ]:
-            CosmosTxComponents,
         [
             WalletTypeComponent,
             WalletSignerComponent,

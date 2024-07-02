@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::sync::Arc;
 
 use cgp_core::prelude::*;
-use cgp_core::{delegate_all, CanRun, ErrorRaiserComponent, ErrorTypeComponent};
+use cgp_core::{CanRun, ErrorRaiserComponent, ErrorTypeComponent};
 use futures::lock::Mutex;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::logger::{CosmosLogger, ProvideCosmosLogger};
@@ -14,9 +14,7 @@ use hermes_logging_components::traits::has_logger::{
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
-use hermes_relayer_components::components::default::relay::{
-    DefaultRelayComponents, IsDefaultRelayComponent,
-};
+use hermes_relayer_components::components::default::relay::*;
 use hermes_relayer_components::error::impls::retry::ReturnMaxRetry;
 use hermes_relayer_components::error::traits::retry::{
     MaxErrorRetryGetterComponent, RetryableErrorComponent,
@@ -31,6 +29,7 @@ use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
+use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -97,11 +96,13 @@ delegate_components! {
     }
 }
 
-delegate_all!(
-    IsDefaultRelayComponent,
-    DefaultRelayComponents,
-    CosmosToWasmCosmosRelayComponents,
-);
+with_default_relay_components! {
+    delegate_components! {
+        CosmosToWasmCosmosRelayComponents {
+            @DefaultRelayComponents : DefaultRelayComponents,
+        }
+    }
+}
 
 impl HasComponents for CosmosToWasmCosmosRelay {
     type Components = CosmosToWasmCosmosRelayComponents;

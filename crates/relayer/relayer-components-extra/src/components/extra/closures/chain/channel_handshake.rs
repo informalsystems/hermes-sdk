@@ -1,4 +1,4 @@
-use cgp_core::HasComponents;
+use cgp_core::{Async, HasComponents};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenTryMessage, ChannelOpenTryMessageBuilder,
 };
@@ -58,5 +58,6 @@ where
         + ChannelOpenTryPayloadBuilder<Chain, Counterparty>
         + ChannelOpenTryMessageBuilder<Chain, Counterparty>,
     Chain::Height: Clone,
+    BaseComponents: Async,
 {
 }
