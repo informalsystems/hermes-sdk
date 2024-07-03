@@ -1,6 +1,7 @@
 use alloc::string::{String, ToString};
 use alloc::sync::Arc;
 use core::fmt::{self, Debug, Display, Formatter};
+
 use eyre::{eyre, Report};
 
 pub type HermesError = Error;
