@@ -42,7 +42,7 @@ serde_yaml          = "0.9.34"
 toml                = "0.8"
 subtle-encoding     = "0.5.1"
 sha2                = "0.10.6"
-crossbeam-channel   = "0.5.11"
+crossbeam-channel   = "0.5.13"
 semver              = "1.0.21"
 tracing-subscriber  = { version = "0.3.17", features = [ "env-filter" ] }
 hdpath              = "0.6.3"
