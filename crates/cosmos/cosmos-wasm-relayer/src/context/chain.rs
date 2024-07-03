@@ -1,5 +1,4 @@
 use core::ops::Deref;
-use core::time::Duration;
 use std::borrow::Cow;
 use std::sync::Arc;
 
@@ -8,7 +7,9 @@ use cgp_core::prelude::*;
 use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
-use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
+use hermes_cosmos_chain_components::components::client::{
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, CosmosClientComponents,
+};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
@@ -146,8 +147,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetter, HasClientStateType, HasRawClientStateType, ProvideClientStateType,
-    RawClientStateTypeComponent,
+    HasClientStateType, HasRawClientStateType, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
@@ -166,7 +166,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HasHeightType, HeightFieldComponent, HeightIncrementerComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
@@ -223,7 +223,6 @@ use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
 use prost_types::Any;
@@ -232,6 +231,7 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
+use crate::impls::client_state::ProvideWrappedTendermintClientState;
 use crate::types::client_state::WrappedTendermintClientState;
 
 #[derive(Clone)]
@@ -418,6 +418,11 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             CosmosClientComponents,
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            ProvideWrappedTendermintClientState,
     }
 }
 
@@ -440,34 +445,6 @@ with_cosmmos_chain_test_components! {
 delegate_components! {
     DelegateCosmosChainComponents {
         WasmCosmosChain: CosmosToWasmCosmosComponents,
-    }
-}
-
-impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty> for WasmCosmosChainComponents
-where
-    Chain: Async,
-{
-    type ClientState = WrappedTendermintClientState;
-}
-
-impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty> for WasmCosmosChainComponents
-where
-    Chain: HasClientStateType<Counterparty, ClientState = WrappedTendermintClientState>
-        + HasHeightType<Height = Height>,
-{
-    fn client_state_latest_height(client_state: &WrappedTendermintClientState) -> Height {
-        client_state.tendermint_client_state.latest_height
-    }
-
-    fn client_state_is_frozen(client_state: &WrappedTendermintClientState) -> bool {
-        client_state.tendermint_client_state.is_frozen()
-    }
-
-    fn client_state_has_expired(
-        client_state: &WrappedTendermintClientState,
-        elapsed: Duration,
-    ) -> bool {
-        elapsed > client_state.tendermint_client_state.trusting_period
     }
 }
 
