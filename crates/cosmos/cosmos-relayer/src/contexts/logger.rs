@@ -52,84 +52,30 @@ impl CanUseCosmosLogger for CosmosLogger {}
 
 delegate_components! {
     CosmosLogHandlers {
-        (): TracingLogger,
+        [
+            (),
+            <'a, Chain: HasSignerType + HasNonceType + HasMessageType,>
+                LogSendMessagesWithSignerAndNonce<'a, Chain>,
+            <'a, Chain: HasTransactionHashType>
+                TxNoResponseError<'a, Chain>,
+            <'a, Chain: HasTransactionHashType + HasErrorType>
+                LogRetryQueryTxResponse<'a, Chain>,
+            <'a, Relay: HasRelayChains>
+                LogSkipRelayLockedPacket<'a, Relay>,
+            <'a, Relay: HasRelayChains>
+                LogRelayPacketAction<'a, Relay>,
+            <'a, Relay: HasRelayChains>
+                LogClearPacketError<'a, Relay>,
+            <'a, Relay: HasRelayChains>
+                LogRelayPacketStatus<'a, Relay>,
+            <'a, Relay: HasRelayChains, Target: ChainTarget<Relay>>
+                LogSkipBuildUpdateClientMessage<'a, Relay, Target>,
+            <'a, Relay: HasRelayChains, Target: ChainTarget<Relay>>
+                LogWaitUpdateClientHeightStatus<'a, Relay, Target>,
+            <'a, Relay: HasRelayChains, Target: ChainTarget<Relay>>
+                LogBatchWorker<'a, Relay, Target>,
+        ]: TracingLogger,
     }
-}
-
-impl<'a, Chain> DelegateComponent<LogSendMessagesWithSignerAndNonce<'a, Chain>>
-    for CosmosLogHandlers
-where
-    Chain: HasSignerType + HasNonceType + HasMessageType,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Chain> DelegateComponent<TxNoResponseError<'a, Chain>> for CosmosLogHandlers
-where
-    Chain: HasTransactionHashType,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Chain> DelegateComponent<LogRetryQueryTxResponse<'a, Chain>> for CosmosLogHandlers
-where
-    Chain: HasTransactionHashType + HasErrorType,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Relay> DelegateComponent<LogSkipRelayLockedPacket<'a, Relay>> for CosmosLogHandlers
-where
-    Relay: HasRelayChains,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Relay> DelegateComponent<LogRelayPacketAction<'a, Relay>> for CosmosLogHandlers
-where
-    Relay: HasRelayChains,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Relay> DelegateComponent<LogClearPacketError<'a, Relay>> for CosmosLogHandlers
-where
-    Relay: HasRelayChains,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Relay> DelegateComponent<LogRelayPacketStatus<'a, Relay>> for CosmosLogHandlers
-where
-    Relay: HasRelayChains,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Relay, Target> DelegateComponent<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>
-    for CosmosLogHandlers
-where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Relay, Target> DelegateComponent<LogWaitUpdateClientHeightStatus<'a, Relay, Target>>
-    for CosmosLogHandlers
-where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-{
-    type Delegate = TracingLogger;
-}
-
-impl<'a, Relay, Target> DelegateComponent<LogBatchWorker<'a, Relay, Target>> for CosmosLogHandlers
-where
-    Relay: HasRelayChains,
-    Target: ChainTarget<Relay>,
-{
-    type Delegate = TracingLogger;
 }
 
 pub struct ProvideCosmosLogger;
