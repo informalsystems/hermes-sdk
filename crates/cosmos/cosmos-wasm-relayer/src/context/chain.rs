@@ -21,7 +21,6 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOpt
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
@@ -30,6 +29,7 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
     HasDefaultEncoding,
 };
+use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -268,7 +268,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideCosmosLogger,
+            ProvideHermesLogger,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,

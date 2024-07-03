@@ -4,7 +4,7 @@ use hermes_logging_components::impls::global::GetGlobalLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
-use hermes_logging_components::traits::logger::{CanLog, LoggerComponent};
+use hermes_logging_components::traits::logger::LoggerComponent;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
@@ -24,34 +24,24 @@ use hermes_relayer_components::transaction::traits::types::tx_hash::HasTransacti
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use hermes_tracing_logging_components::contexts::logger::TracingLogger;
 
-use crate::contexts::chain::CosmosChain;
+pub struct HermesLogger;
 
-pub struct CosmosLogger;
+pub struct HermesLoggerComponents;
 
-pub struct CosmosLoggerComponents;
+pub struct HermesLogHandlers;
 
-pub struct CosmosLogHandlers;
-
-impl HasComponents for CosmosLogger {
-    type Components = CosmosLoggerComponents;
+impl HasComponents for HermesLogger {
+    type Components = HermesLoggerComponents;
 }
 
 delegate_components! {
-    CosmosLoggerComponents {
-        LoggerComponent: DelegateLogger<CosmosLogHandlers>,
+    HermesLoggerComponents {
+        LoggerComponent: DelegateLogger<HermesLogHandlers>,
     }
 }
 
-pub trait CanUseCosmosLogger:
-    for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
-    + for<'a> CanLog<TxNoResponseError<'a, CosmosChain>>
-{
-}
-
-impl CanUseCosmosLogger for CosmosLogger {}
-
 delegate_components! {
-    CosmosLogHandlers {
+    HermesLogHandlers {
         [
             (),
             <'a, Chain: HasSignerType + HasNonceType + HasMessageType,>
@@ -78,26 +68,26 @@ delegate_components! {
     }
 }
 
-pub struct ProvideCosmosLogger;
+pub struct ProvideHermesLogger;
 
 delegate_components! {
-    ProvideCosmosLogger {
+    ProvideHermesLogger {
         LoggerGetterComponent: GetGlobalLogger,
     }
 }
 
-impl<Context> ProvideLoggerType<Context> for ProvideCosmosLogger
+impl<Context> ProvideLoggerType<Context> for ProvideHermesLogger
 where
     Context: Async,
 {
-    type Logger = CosmosLogger;
+    type Logger = HermesLogger;
 }
 
-impl<Context> GlobalLoggerGetter<Context> for ProvideCosmosLogger
+impl<Context> GlobalLoggerGetter<Context> for ProvideHermesLogger
 where
-    Context: HasLoggerType<Logger = CosmosLogger>,
+    Context: HasLoggerType<Logger = HermesLogger>,
 {
-    fn global_logger() -> &'static CosmosLogger {
-        &CosmosLogger
+    fn global_logger() -> &'static HermesLogger {
+        &HermesLogger
     }
 }

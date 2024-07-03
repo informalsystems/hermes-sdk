@@ -5,9 +5,9 @@ use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use cgp_core::run::CanRun;
 use futures::lock::Mutex;
-use hermes_cosmos_relayer::contexts::logger::{CosmosLogger, ProvideCosmosLogger};
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::error::Error;
+use hermes_logger::{HermesLogger, ProvideHermesLogger};
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -88,7 +88,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideCosmosLogger,
+            ProvideHermesLogger,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
@@ -120,7 +120,7 @@ impl CanUseWasmCosmosRelay for WasmCosmosRelay {}
 
 pub trait CanUseLogger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, WasmCosmosRelay>> {}
 
-impl CanUseLogger for CosmosLogger {}
+impl CanUseLogger for HermesLogger {}
 
 impl ProvideRelayChains<WasmCosmosRelay> for WasmCosmosRelayComponents {
     type SrcChain = WasmCosmosChain;

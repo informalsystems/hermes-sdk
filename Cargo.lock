@@ -1775,6 +1775,7 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
  "hermes-ibc-test-suite",
+ "hermes-logger",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1807,6 +1808,7 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
+ "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1874,6 +1876,7 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
+ "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1923,6 +1926,17 @@ dependencies = [
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-test-components",
+]
+
+[[package]]
+name = "hermes-logger"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-logging-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-tracing-logging-components",
 ]
 
 [[package]]

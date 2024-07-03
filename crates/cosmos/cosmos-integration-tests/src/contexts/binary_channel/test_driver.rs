@@ -1,7 +1,7 @@
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
+use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -57,7 +57,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideCosmosLogger,
+            ProvideHermesLogger,
     }
 }
 

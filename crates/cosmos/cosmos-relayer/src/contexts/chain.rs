@@ -1,5 +1,9 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use hermes_logger::{HermesLogger, ProvideHermesLogger};
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
+use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
 
 use alloc::borrow::Cow;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -90,7 +94,6 @@ use tendermint_rpc::client::CompatMode;
 use tendermint_rpc::{HttpClient, Url};
 
 use crate::contexts::encoding::ProvideCosmosEncoding;
-use crate::contexts::logger::ProvideCosmosLogger;
 use crate::impls::error::HandleCosmosError;
 use crate::impls::subscription::CanCreateAbciEventSubscription;
 use crate::types::error::Error;
@@ -145,7 +148,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideCosmosLogger,
+            ProvideHermesLogger,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,
@@ -392,3 +395,11 @@ pub trait CanUseCosmosChain:
 }
 
 impl CanUseCosmosChain for CosmosChain {}
+
+pub trait CanUseLoggerWithCosmosChain:
+    for<'a> CanLog<LogSendMessagesWithSignerAndNonce<'a, CosmosChain>>
+    + for<'a> CanLog<TxNoResponseError<'a, CosmosChain>>
+{
+}
+
+impl CanUseLoggerWithCosmosChain for HermesLogger {}

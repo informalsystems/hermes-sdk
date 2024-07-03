@@ -4,6 +4,7 @@ use alloc::sync::Arc;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use futures::lock::Mutex;
+use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -29,7 +30,6 @@ use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
 
 use crate::contexts::chain::CosmosChain;
-use crate::contexts::logger::ProvideCosmosLogger;
 use crate::impls::error::HandleCosmosError;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::error::Error;
@@ -91,7 +91,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideCosmosLogger,
+            ProvideHermesLogger,
         MaxErrorRetryGetterComponent:
             ReturnMaxRetry<3>,
         PacketLockComponent:
