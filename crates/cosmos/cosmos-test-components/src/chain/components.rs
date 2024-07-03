@@ -3,26 +3,26 @@ use hermes_test_components::chain::impls::assert::default_assert_duration::Provi
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::PollAssertEventualAmount;
 use hermes_test_components::chain::impls::default_memo::ProvideDefaultMemo;
 use hermes_test_components::chain::impls::ibc_transfer::SendIbcTransferMessage;
-use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
-use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
-use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
-use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
-use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
-use hermes_test_components::chain::traits::transfer::string_memo::ProvideStringMemoType;
-use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
-use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
-use hermes_test_components::chain::traits::types::amount::{
+pub use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
+pub use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
+pub use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
+pub use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
+pub use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
+pub use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
+pub use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
+pub use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
+pub use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
+pub use hermes_test_components::chain::traits::transfer::string_memo::ProvideStringMemoType;
+pub use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
+pub use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
+pub use hermes_test_components::chain::traits::types::amount::{
     AmountMethodsComponent, AmountTypeComponent,
 };
-use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
-use hermes_test_components::chain::traits::types::memo::{
+pub use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
+pub use hermes_test_components::chain::traits::types::memo::{
     DefaultMemoGetterComponent, MemoTypeComponent,
 };
-use hermes_test_components::chain::traits::types::wallet::{
+pub use hermes_test_components::chain::traits::types::wallet::{
     WalletSignerComponent, WalletTypeComponent,
 };
 
@@ -37,9 +37,7 @@ use crate::chain::impls::types::denom::ProvideIbcDenom;
 use crate::chain::impls::types::proposal::ProvideCosmosProposalTypes;
 use crate::chain::impls::types::wallet::ProvideCosmosTestWallet;
 
-pub struct CosmmosChainTestComponents;
-
-delegate_components! {
+define_components! {
     CosmmosChainTestComponents {
         [
             WalletTypeComponent,

@@ -10,7 +10,7 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
+use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
@@ -24,7 +24,7 @@ use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
+use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
     HasDefaultEncoding,
@@ -464,6 +464,22 @@ delegate_components! {
     }
 }
 
+with_cosmos_tx_components! {
+    delegate_components! {
+        WasmCosmosChainComponents {
+            @CosmosTxComponents : CosmosTxComponents,
+        }
+    }
+}
+
+with_cosmmos_chain_test_components! {
+    delegate_components! {
+        WasmCosmosChainComponents {
+            @CosmmosChainTestComponents: CosmmosChainTestComponents,
+        }
+    }
+}
+
 delegate_components! {
     WasmCosmosChainComponents {
         [
@@ -471,49 +487,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        [
-            SignerTypeComponent,
-            NonceTypeComponent,
-            NonceGuardComponent,
-            TransactionTypeComponent,
-            TransactionHashTypeComponent,
-            FeeTypeComponent,
-            TxResponseTypeComponent,
-            MessageSenderComponent,
-            MessagesWithSignerSenderComponent,
-            MessagesWithSignerAndNonceSenderComponent,
-            NonceAllocatorComponent,
-            TxResponsePollerComponent,
-            PollTimeoutGetterComponent,
-            TxResponseAsEventsParserComponent,
-            TxResponseQuerierComponent,
-            TxEncoderComponent,
-            TxFeeEstimatorComponent,
-            TxSubmitterComponent,
-            NonceQuerierComponent,
-        ]:
-            CosmosTxComponents,
-        [
-            WalletTypeComponent,
-            WalletSignerComponent,
-            ChainIdFromStringBuilderComponent,
-            AmountTypeComponent,
-            AmountMethodsComponent,
-            DenomTypeComponent,
-            AddressTypeComponent,
-            MemoTypeComponent,
-            ProposalIdTypeComponent,
-            ProposalStatusTypeComponent,
-            DefaultMemoGetterComponent,
-            TokenIbcTransferrerComponent,
-            IbcTransferTimeoutCalculatorComponent,
-            IbcTokenTransferMessageBuilderComponent,
-            IbcTransferredAmountConverterComponent,
-            BalanceQuerierComponent,
-            EventualAmountAsserterComponent,
-            PollAssertDurationGetterComponent,
-        ]:
-            CosmmosChainTestComponents,
     }
 }
 

@@ -1,7 +1,7 @@
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use futures::lock::Mutex;
-use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
+use hermes_cosmos_chain_components::components::client::*;
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
@@ -10,7 +10,7 @@ use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::with_cosmos_tx_components;
-use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
+use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
@@ -372,6 +372,14 @@ with_cosmos_tx_components! {
     }
 }
 
+with_cosmmos_chain_test_components! {
+    delegate_components! {
+        CosmosChainComponents {
+            @CosmmosChainTestComponents: CosmmosChainTestComponents,
+        }
+    }
+}
+
 delegate_components! {
     CosmosChainComponents {
         [
@@ -379,27 +387,6 @@ delegate_components! {
             ConsensusStateQuerierComponent,
         ]:
             ExtraChainComponents<CosmosBaseChainComponents>,
-        [
-            WalletTypeComponent,
-            WalletSignerComponent,
-            ChainIdFromStringBuilderComponent,
-            AmountTypeComponent,
-            AmountMethodsComponent,
-            DenomTypeComponent,
-            AddressTypeComponent,
-            MemoTypeComponent,
-            ProposalIdTypeComponent,
-            ProposalStatusTypeComponent,
-            DefaultMemoGetterComponent,
-            TokenIbcTransferrerComponent,
-            IbcTransferTimeoutCalculatorComponent,
-            IbcTokenTransferMessageBuilderComponent,
-            IbcTransferredAmountConverterComponent,
-            BalanceQuerierComponent,
-            EventualAmountAsserterComponent,
-            PollAssertDurationGetterComponent,
-        ]:
-            CosmmosChainTestComponents,
     }
 }
 

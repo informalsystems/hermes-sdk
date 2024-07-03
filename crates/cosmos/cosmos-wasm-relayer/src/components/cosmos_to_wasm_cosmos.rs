@@ -25,9 +25,7 @@ use crate::impls::create_client_message::BuildCreateWasmTendermintClientMessage;
 use crate::impls::update_client_message::BuildUpdateWasmTendermintClientMessage;
 use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
 
-pub struct CosmosToWasmCosmosComponents;
-
-delegate_components! {
+define_components! {
     CosmosToWasmCosmosComponents {
         CreateClientMessageBuilderComponent:
             BuildCreateWasmTendermintClientMessage,

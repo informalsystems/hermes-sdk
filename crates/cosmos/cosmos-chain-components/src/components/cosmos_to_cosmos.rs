@@ -30,9 +30,7 @@ use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 
-pub struct CosmosToCosmosComponents;
-
-delegate_components! {
+define_components! {
     CosmosToCosmosComponents {
         [
             ClientStateQuerierComponent,
