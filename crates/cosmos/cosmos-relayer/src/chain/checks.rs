@@ -25,7 +25,6 @@ use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofTy
 use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
 use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
-use hermes_relayer_components_extra::components::extra::closures::chain::all::CanUseExtraChainComponents;
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
@@ -34,8 +33,6 @@ use ibc::core::channel::types::channel::ChannelEnd;
 use prost_types::Any;
 
 use crate::contexts::chain::CosmosChain;
-
-impl CanUseExtraChainComponents<CosmosChain> for CosmosChain {}
 
 pub trait CanUseCosmosChain:
     HasClientStateType<CosmosChain, ClientState = TendermintClientState>

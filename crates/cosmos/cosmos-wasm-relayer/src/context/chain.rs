@@ -203,64 +203,19 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
 };
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
-use hermes_relayer_components::transaction::impls::poll_tx_response::{
-    HasPollTimeout, PollTimeoutGetterComponent,
-};
+use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
-use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
-use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
-use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
-use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::ProvideMutexForNonceAllocation;
-use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
-use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
-use hermes_relayer_components::transaction::traits::poll_tx_response::{
-    CanPollTxResponse, TxResponsePollerComponent,
-};
-use hermes_relayer_components::transaction::traits::query_tx_response::{
-    CanQueryTxResponse, TxResponseQuerierComponent,
-};
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
+use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetter;
-use hermes_relayer_components::transaction::traits::submit_tx::{
-    CanSubmitTx, TxSubmitterComponent,
-};
-use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
-use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
-use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
-use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
-use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
-use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
-use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
+use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeGetter, RuntimeTypeComponent};
-use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
-use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
-use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
-use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-use hermes_test_components::chain::traits::queries::balance::{
-    BalanceQuerierComponent, CanQueryBalance,
-};
-use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
-use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
-use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
-use hermes_test_components::chain::traits::types::amount::{
-    AmountMethodsComponent, AmountTypeComponent,
-};
-use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
-use hermes_test_components::chain::traits::types::memo::{
-    DefaultMemoGetterComponent, MemoTypeComponent,
-};
-use hermes_test_components::chain::traits::types::wallet::{
-    WalletSignerComponent, WalletTypeComponent,
-};
+use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
@@ -459,6 +414,8 @@ delegate_components! {
             BlockQuerierComponent,
             AbciQuerierComponent,
             CounterpartyMessageHeightGetterComponent,
+            ChainStatusQuerierComponent,
+            ConsensusStateQuerierComponent,
         ]:
             CosmosClientComponents,
     }
@@ -477,28 +434,6 @@ with_cosmmos_chain_test_components! {
         WasmCosmosChainComponents {
             @CosmmosChainTestComponents: CosmmosChainTestComponents,
         }
-    }
-}
-
-delegate_components! {
-    WasmCosmosChainComponents {
-        [
-            ChainStatusQuerierComponent,
-            ConsensusStateQuerierComponent,
-        ]:
-            ExtraChainComponents<CosmosBaseChainComponents>,
-    }
-}
-
-pub struct CosmosBaseChainComponents;
-
-delegate_components! {
-    CosmosBaseChainComponents {
-        [
-            ChainStatusQuerierComponent,
-            ConsensusStateQuerierComponent,
-        ]:
-            CosmosClientComponents,
     }
 }
 
