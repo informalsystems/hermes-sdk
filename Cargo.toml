@@ -21,6 +21,8 @@ members = [
     "crates/encoding/encoding-components",
     "crates/encoding/protobuf-encoding-components",
 
+    "crates/error",
+
     "crates/logging/logging-components",
     "crates/logging/tracing-logging-components",
     "crates/logging/logger",
@@ -108,6 +110,7 @@ hermes-async-runtime-components         = { version = "0.1.0" }
 hermes-tokio-runtime-components         = { version = "0.1.0" }
 hermes-runtime                          = { version = "0.1.0" }
 
+hermes-error                            = { version = "0.1.0" }
 hermes-encoding-components              = { version = "0.1.0" }
 hermes-protobuf-encoding-components     = { version = "0.1.0" }
 
@@ -178,6 +181,8 @@ hermes-runtime-components           = { path = "./crates/runtime/runtime-compone
 hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-components" }
 hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
 hermes-runtime                      = { path = "./crates/runtime/runtime" }
+
+hermes-error                        = { path = "./crates/error" }
 
 hermes-encoding-components          = { path = "./crates/encoding/encoding-components" }
 hermes-protobuf-encoding-components = { path = "./crates/encoding/protobuf-encoding-components" }

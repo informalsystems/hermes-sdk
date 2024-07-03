@@ -1919,6 +1919,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-error"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "eyre",
+]
+
+[[package]]
 name = "hermes-ibc-test-suite"
 version = "0.1.0"
 dependencies = [
