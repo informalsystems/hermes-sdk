@@ -1,10 +1,10 @@
+use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 
 use crate::contexts::birelay::CosmosBiRelay;
 use crate::contexts::builder::CosmosBuilder;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::build::components::CosmosBuildComponents;
-use crate::types::error::Error;
 
 impl BiRelayFromRelayBuilder<CosmosBuilder> for CosmosBuildComponents {
     async fn build_birelay_from_relays(

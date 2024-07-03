@@ -1,4 +1,4 @@
-use hermes_cosmos_relayer::types::error::Error;
+use hermes_error::types::Error;
 use ibc_proto::google::protobuf::Any;
 pub use ibc_proto::ibc::lightclients::solomachine::v3::ConsensusState as ProtoSolomachineConsensusState;
 use ibc_proto::Protobuf;

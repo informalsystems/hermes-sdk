@@ -1,3 +1,4 @@
+use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components_extra::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
@@ -7,7 +8,6 @@ use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::impls::build::components::CosmosBuildComponents;
 use crate::types::batch::CosmosBatchSender;
-use crate::types::error::Error;
 
 impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildComponents {
     async fn build_relay_with_batch(

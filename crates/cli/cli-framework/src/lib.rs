@@ -1,4 +1,4 @@
-use hermes_cosmos_relayer::types::error::Error;
+use hermes_error::types::Error;
 
 pub mod application;
 pub mod command;

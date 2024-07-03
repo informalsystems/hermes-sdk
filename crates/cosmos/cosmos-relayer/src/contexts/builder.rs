@@ -4,6 +4,7 @@ use std::collections::HashMap;
 
 use eyre::eyre;
 use futures::lock::Mutex;
+use hermes_error::types::Error;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
@@ -20,7 +21,6 @@ use tokio::task;
 use crate::contexts::chain::CosmosChain;
 use crate::contexts::relay::CosmosRelay;
 use crate::types::batch::CosmosBatchSender;
-use crate::types::error::Error;
 use crate::types::telemetry::CosmosTelemetry;
 
 pub struct CosmosBuilder {

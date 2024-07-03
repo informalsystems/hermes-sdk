@@ -1,5 +1,4 @@
 use core::ops::Deref;
-use core::time::Duration;
 use std::borrow::Cow;
 use std::sync::Arc;
 
@@ -8,9 +7,11 @@ use cgp_core::prelude::*;
 use futures::lock::Mutex;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
-use hermes_cosmos_chain_components::components::client::CosmosClientComponents;
+use hermes_cosmos_chain_components::components::client::{
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, CosmosClientComponents,
+};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::components::transaction::CosmosTxComponents;
+use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
@@ -20,15 +21,15 @@ use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOpt
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::contexts::logger::ProvideCosmosLogger;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
-use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_cosmos_test_components::chain::components::CosmmosChainTestComponents;
+use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
     HasDefaultEncoding,
 };
+use hermes_error::types::Error;
+use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, HasLogger, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -146,8 +147,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
     InitChannelOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetter, HasClientStateType, HasRawClientStateType, ProvideClientStateType,
-    RawClientStateTypeComponent,
+    HasClientStateType, HasRawClientStateType, RawClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
@@ -166,7 +166,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HasHeightType, HeightFieldComponent, HeightIncrementerComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
@@ -203,64 +203,19 @@ use hermes_relayer_components::chain::traits::types::timestamp::{
 };
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
-use hermes_relayer_components::transaction::impls::poll_tx_response::{
-    HasPollTimeout, PollTimeoutGetterComponent,
-};
+use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
-use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
-use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
-use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
-use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
 use hermes_relayer_components::transaction::traits::nonce::nonce_mutex::ProvideMutexForNonceAllocation;
-use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
-use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
-use hermes_relayer_components::transaction::traits::poll_tx_response::{
-    CanPollTxResponse, TxResponsePollerComponent,
-};
-use hermes_relayer_components::transaction::traits::query_tx_response::{
-    CanQueryTxResponse, TxResponseQuerierComponent,
-};
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer_and_nonce::MessagesWithSignerAndNonceSenderComponent;
+use hermes_relayer_components::transaction::traits::poll_tx_response::CanPollTxResponse;
+use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryTxResponse;
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetter;
-use hermes_relayer_components::transaction::traits::submit_tx::{
-    CanSubmitTx, TxSubmitterComponent,
-};
-use hermes_relayer_components::transaction::traits::types::fee::FeeTypeComponent;
-use hermes_relayer_components::transaction::traits::types::nonce::NonceTypeComponent;
-use hermes_relayer_components::transaction::traits::types::signer::SignerTypeComponent;
-use hermes_relayer_components::transaction::traits::types::transaction::TransactionTypeComponent;
-use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
-use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
-use hermes_relayer_components_extra::components::extra::chain::ExtraChainComponents;
+use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeGetter, RuntimeTypeComponent};
-use hermes_test_components::chain::traits::assert::eventual_amount::EventualAmountAsserterComponent;
-use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
-use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
-use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
-use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
-use hermes_test_components::chain::traits::queries::balance::{
-    BalanceQuerierComponent, CanQueryBalance,
-};
-use hermes_test_components::chain::traits::transfer::amount::IbcTransferredAmountConverterComponent;
-use hermes_test_components::chain::traits::transfer::ibc_transfer::TokenIbcTransferrerComponent;
-use hermes_test_components::chain::traits::transfer::timeout::IbcTransferTimeoutCalculatorComponent;
-use hermes_test_components::chain::traits::types::address::AddressTypeComponent;
-use hermes_test_components::chain::traits::types::amount::{
-    AmountMethodsComponent, AmountTypeComponent,
-};
-use hermes_test_components::chain::traits::types::denom::DenomTypeComponent;
-use hermes_test_components::chain::traits::types::memo::{
-    DefaultMemoGetterComponent, MemoTypeComponent,
-};
-use hermes_test_components::chain::traits::types::wallet::{
-    WalletSignerComponent, WalletTypeComponent,
-};
+use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
@@ -268,7 +223,6 @@ use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::keyring::Secp256k1KeyPair;
-use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
 use prost_types::Any;
@@ -277,6 +231,7 @@ use tendermint_rpc::{HttpClient, Url};
 
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
+use crate::impls::client_state::ProvideWrappedTendermintClientState;
 use crate::types::client_state::WrappedTendermintClientState;
 
 #[derive(Clone)]
@@ -313,7 +268,7 @@ delegate_components! {
             LoggerGetterComponent,
             GlobalLoggerGetterComponent,
         ]:
-            ProvideCosmosLogger,
+            ProvideHermesLogger,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,
@@ -459,107 +414,37 @@ delegate_components! {
             BlockQuerierComponent,
             AbciQuerierComponent,
             CounterpartyMessageHeightGetterComponent,
-        ]:
-            CosmosClientComponents,
-    }
-}
-
-delegate_components! {
-    WasmCosmosChainComponents {
-        [
-            ChainStatusQuerierComponent,
-            ConsensusStateQuerierComponent,
-        ]:
-            ExtraChainComponents<CosmosBaseChainComponents>,
-        [
-            SignerTypeComponent,
-            NonceTypeComponent,
-            NonceGuardComponent,
-            TransactionTypeComponent,
-            TransactionHashTypeComponent,
-            FeeTypeComponent,
-            TxResponseTypeComponent,
-            MessageSenderComponent,
-            MessagesWithSignerSenderComponent,
-            MessagesWithSignerAndNonceSenderComponent,
-            NonceAllocatorComponent,
-            TxResponsePollerComponent,
-            PollTimeoutGetterComponent,
-            TxResponseAsEventsParserComponent,
-            TxResponseQuerierComponent,
-            TxEncoderComponent,
-            TxFeeEstimatorComponent,
-            TxSubmitterComponent,
-            NonceQuerierComponent,
-        ]:
-            CosmosTxComponents,
-        [
-            WalletTypeComponent,
-            WalletSignerComponent,
-            ChainIdFromStringBuilderComponent,
-            AmountTypeComponent,
-            AmountMethodsComponent,
-            DenomTypeComponent,
-            AddressTypeComponent,
-            MemoTypeComponent,
-            ProposalIdTypeComponent,
-            ProposalStatusTypeComponent,
-            DefaultMemoGetterComponent,
-            TokenIbcTransferrerComponent,
-            IbcTransferTimeoutCalculatorComponent,
-            IbcTokenTransferMessageBuilderComponent,
-            IbcTransferredAmountConverterComponent,
-            BalanceQuerierComponent,
-            EventualAmountAsserterComponent,
-            PollAssertDurationGetterComponent,
-        ]:
-            CosmmosChainTestComponents,
-    }
-}
-
-pub struct CosmosBaseChainComponents;
-
-delegate_components! {
-    CosmosBaseChainComponents {
-        [
             ChainStatusQuerierComponent,
             ConsensusStateQuerierComponent,
         ]:
             CosmosClientComponents,
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            ProvideWrappedTendermintClientState,
+    }
+}
+
+with_cosmos_tx_components! {
+    delegate_components! {
+        WasmCosmosChainComponents {
+            @CosmosTxComponents : CosmosTxComponents,
+        }
+    }
+}
+
+with_cosmmos_chain_test_components! {
+    delegate_components! {
+        WasmCosmosChainComponents {
+            @CosmmosChainTestComponents: CosmmosChainTestComponents,
+        }
     }
 }
 
 delegate_components! {
     DelegateCosmosChainComponents {
         WasmCosmosChain: CosmosToWasmCosmosComponents,
-    }
-}
-
-impl<Chain, Counterparty> ProvideClientStateType<Chain, Counterparty> for WasmCosmosChainComponents
-where
-    Chain: Async,
-{
-    type ClientState = WrappedTendermintClientState;
-}
-
-impl<Chain, Counterparty> ClientStateFieldsGetter<Chain, Counterparty> for WasmCosmosChainComponents
-where
-    Chain: HasClientStateType<Counterparty, ClientState = WrappedTendermintClientState>
-        + HasHeightType<Height = Height>,
-{
-    fn client_state_latest_height(client_state: &WrappedTendermintClientState) -> Height {
-        client_state.tendermint_client_state.latest_height
-    }
-
-    fn client_state_is_frozen(client_state: &WrappedTendermintClientState) -> bool {
-        client_state.tendermint_client_state.is_frozen()
-    }
-
-    fn client_state_has_expired(
-        client_state: &WrappedTendermintClientState,
-        elapsed: Duration,
-    ) -> bool {
-        elapsed > client_state.tendermint_client_state.trusting_period
     }
 }
 

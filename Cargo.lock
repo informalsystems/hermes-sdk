@@ -1636,6 +1636,7 @@ dependencies = [
  "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
+ "hermes-error",
  "hermes-ibc-test-suite",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1685,6 +1686,7 @@ dependencies = [
  "hermes-cli-framework",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
+ "hermes-error",
  "hermes-relayer-components",
  "hermes-runtime",
  "humantime",
@@ -1723,6 +1725,7 @@ dependencies = [
  "cgp-core",
  "clap",
  "hermes-cosmos-relayer",
+ "hermes-error",
  "hermes-runtime",
  "oneline-eyre",
  "serde",
@@ -1774,7 +1777,9 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
+ "hermes-error",
  "hermes-ibc-test-suite",
+ "hermes-logger",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -1807,6 +1812,8 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
+ "hermes-error",
+ "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1874,6 +1881,8 @@ dependencies = [
  "hermes-cosmos-relayer",
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
+ "hermes-error",
+ "hermes-logger",
  "hermes-logging-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1916,6 +1925,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-error"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "eyre",
+]
+
+[[package]]
 name = "hermes-ibc-test-suite"
 version = "0.1.0"
 dependencies = [
@@ -1923,6 +1940,17 @@ dependencies = [
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-test-components",
+]
+
+[[package]]
+name = "hermes-logger"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "hermes-logging-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-tracing-logging-components",
 ]
 
 [[package]]
@@ -2034,6 +2062,7 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-encoding-components",
+ "hermes-error",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
@@ -2720,6 +2749,7 @@ dependencies = [
  "cgp-core",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
+ "hermes-error",
  "hermes-relayer-components",
  "hermes-relayer-components-extra",
  "hermes-runtime",

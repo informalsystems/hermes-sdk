@@ -13,7 +13,6 @@ use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBu
 use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
@@ -29,6 +28,8 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomI
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -74,7 +75,7 @@ with_cosmos_sdk_bootstrap_components! {
 
 delegate_components! {
     CosmosWithWasmClientBootstrapComponents {
-        ErrorTypeComponent: ProvideCosmosError,
+        ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,

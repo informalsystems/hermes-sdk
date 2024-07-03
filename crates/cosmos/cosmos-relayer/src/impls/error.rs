@@ -8,6 +8,13 @@ use eyre::Report;
 use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::handlers::display::DisplayError;
+use hermes_error::handlers::identity::ReturnError;
+use hermes_error::handlers::infallible::HandleInfallible;
+use hermes_error::handlers::report::ReportError;
+use hermes_error::impls::ProvideHermesError;
+use hermes_error::types::Error;
 use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionNotFoundError;
@@ -51,9 +58,6 @@ use tonic::transport::Error as TransportError;
 use tonic::Status;
 
 use crate::contexts::chain::CosmosChain;
-use crate::types::error::{
-    DebugError, DisplayError, Error, HandleInfallible, ProvideCosmosError, ReportError, ReturnError,
-};
 
 pub struct HandleCosmosError;
 
@@ -89,7 +93,7 @@ where
 
 delegate_components! {
     HandleCosmosError {
-        ErrorTypeComponent: ProvideCosmosError,
+        ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent:
             DelegateErrorRaiser<CosmosErrorHandlers>,
     }
@@ -126,96 +130,39 @@ delegate_components! {
             TransportError,
         ]: ReportError,
         [
+            <'a> &'a str,
+            String,
+        ]:
+            DisplayError,
+        [
             TypeUrlMismatchError,
             UnknownClientStateType,
             AbciQueryError,
             Status,
             MissingSendPacketEventError,
+            <'a, Chain: HasAddressType + HasAmountType>
+                EventualAmountTimeoutError<'a, Chain>,
+            <'a, Chain>
+                BroadcastTxError<'a, Chain>,
+            <'a, Chain: HasTransactionHashType>
+                TxNoResponseError<'a, Chain>,
+            <'a, Chain: HasIbcChainTypes<Counterparty>, Counterparty: HasHeightType>
+                NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>,
+            <'a, Chain: HasChainIdType, Counterparty: HasChainIdType>
+                MissingCreateClientEventError<'a, Chain, Counterparty>,
+            <'a, Chain: HasIbcChainTypes<Counterparty>, Counterparty>
+                ConnectionNotFoundError<'a, Chain, Counterparty>,
+            <'a, Relay>
+                MissingConnectionInitEventError<'a, Relay>,
+            <'a, Relay: HasRelayChains>
+                MissingConnectionTryEventError<'a, Relay>,
+            <'a, Relay>
+                MissingChannelInitEventError<'a, Relay>,
+            <'a, Relay: HasRelayChains>
+                MissingChannelTryEventError<'a, Relay>,
         ]:
             DebugError,
-        String: DisplayError,
+        <'a, Context: HasErrorType> MaxRetryExceededError<'a, Context>:
+            UnwrapMaxRetryExceededError
     }
-}
-
-// TODO: improve delegate_components to allow HRTB
-
-impl<'a> DelegateComponent<&'a str> for CosmosErrorHandlers {
-    type Delegate = DisplayError;
-}
-
-impl<'a, Chain> DelegateComponent<EventualAmountTimeoutError<'a, Chain>> for CosmosErrorHandlers
-where
-    Chain: HasAddressType + HasAmountType,
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Chain> DelegateComponent<BroadcastTxError<'a, Chain>> for CosmosErrorHandlers {
-    type Delegate = DebugError;
-}
-
-impl<'a, Chain> DelegateComponent<TxNoResponseError<'a, Chain>> for CosmosErrorHandlers
-where
-    Chain: HasTransactionHashType,
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Chain, Counterparty>
-    DelegateComponent<NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>>
-    for CosmosErrorHandlers
-where
-    Chain: HasIbcChainTypes<Counterparty>,
-    Counterparty: HasHeightType,
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Chain, Counterparty>
-    DelegateComponent<MissingCreateClientEventError<'a, Chain, Counterparty>>
-    for CosmosErrorHandlers
-where
-    Chain: HasChainIdType,
-    Counterparty: HasChainIdType,
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Chain, Counterparty> DelegateComponent<ConnectionNotFoundError<'a, Chain, Counterparty>>
-    for CosmosErrorHandlers
-where
-    Chain: HasIbcChainTypes<Counterparty>,
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Relay> DelegateComponent<MissingConnectionInitEventError<'a, Relay>>
-    for CosmosErrorHandlers
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Relay> DelegateComponent<MissingConnectionTryEventError<'a, Relay>> for CosmosErrorHandlers
-where
-    Relay: HasRelayChains,
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Relay> DelegateComponent<MissingChannelInitEventError<'a, Relay>> for CosmosErrorHandlers {
-    type Delegate = DebugError;
-}
-
-impl<'a, Relay> DelegateComponent<MissingChannelTryEventError<'a, Relay>> for CosmosErrorHandlers
-where
-    Relay: HasRelayChains,
-{
-    type Delegate = DebugError;
-}
-
-impl<'a, Context> DelegateComponent<MaxRetryExceededError<'a, Context>> for CosmosErrorHandlers
-where
-    Context: HasErrorType,
-{
-    type Delegate = UnwrapMaxRetryExceededError;
 }

@@ -1,4 +1,4 @@
-use cgp_core::prelude::{Async, HasComponents};
+use cgp_core::prelude::HasComponents;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::{
     AckPacketMessageBuilder, CanBuildAckPacketMessage,
 };
@@ -33,7 +33,6 @@ use hermes_relayer_components::chain::traits::types::packets::receive::HasReceiv
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
-use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
@@ -57,8 +56,8 @@ where
 {
 }
 
-impl<Chain, Counterparty, Components, BaseComponents>
-    UseExtraChainComponentsForPacketRelayer<Counterparty> for Chain
+impl<Chain, Counterparty, Components> UseExtraChainComponentsForPacketRelayer<Counterparty>
+    for Chain
 where
     Chain: HasIbcPacketTypes<Counterparty>
         + HasReceivePacketPayloadType<Counterparty>
@@ -74,9 +73,7 @@ where
         + HasAckPacketPayloadType<Chain>
         + HasTimeoutUnorderedPacketPayloadType<Chain>
         + HasReceivePacketPayloadType<Chain>,
-    Components: HasComponents<Components = BaseComponents>
-        + DelegatesToExtraChainComponents<BaseComponents>
-        + PacketFieldsReader<Chain, Counterparty>
+    Components: PacketFieldsReader<Chain, Counterparty>
         + ReceivedPacketQuerier<Chain, Counterparty>
         + ReceivePacketPayloadBuilder<Chain, Counterparty>
         + ReceivePacketMessageBuilder<Chain, Counterparty>
@@ -84,6 +81,5 @@ where
         + AckPacketMessageBuilder<Chain, Counterparty>
         + TimeoutUnorderedPacketPayloadBuilder<Chain, Counterparty>
         + TimeoutUnorderedPacketMessageBuilder<Chain, Counterparty>,
-    BaseComponents: Async,
 {
 }

@@ -4,7 +4,6 @@ use std::path::PathBuf;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
@@ -18,6 +17,9 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomI
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
+use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -73,7 +75,7 @@ with_legacy_cosmos_sdk_bootstrap_components! {
 
 delegate_components! {
     LegacyCosmosBootstrapComponents {
-        ErrorTypeComponent: ProvideCosmosError,
+        ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,

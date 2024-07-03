@@ -1,4 +1,4 @@
-use cgp_core::prelude::{Async, HasComponents};
+use cgp_core::prelude::HasComponents;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenTryMessage, ChannelOpenTryMessageBuilder,
 };
@@ -18,7 +18,6 @@ use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
 };
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
-use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::components::extra::closures::chain::message_sender::UseExtraChainComponentsForIbcMessageSender;
 
 pub trait UseExtraChainComponentsForChannelHandshake<Counterparty>:
@@ -39,8 +38,8 @@ where
 {
 }
 
-impl<Chain, Counterparty, Components, BaseComponents>
-    UseExtraChainComponentsForChannelHandshake<Counterparty> for Chain
+impl<Chain, Counterparty, Components> UseExtraChainComponentsForChannelHandshake<Counterparty>
+    for Chain
 where
     Chain: HasChannelOpenInitEvent<Counterparty>
         + HasChannelOpenTryEvent<Counterparty>
@@ -53,11 +52,8 @@ where
         + HasIbcChainTypes<Chain>
         + HasUpdateClientPayloadType<Chain>
         + HasChannelOpenTryPayloadType<Chain>,
-    Components: HasComponents<Components = BaseComponents>
-        + DelegatesToExtraChainComponents<BaseComponents>
-        + ChannelOpenTryPayloadBuilder<Chain, Counterparty>
+    Components: ChannelOpenTryPayloadBuilder<Chain, Counterparty>
         + ChannelOpenTryMessageBuilder<Chain, Counterparty>,
     Chain::Height: Clone,
-    BaseComponents: Async,
 {
 }

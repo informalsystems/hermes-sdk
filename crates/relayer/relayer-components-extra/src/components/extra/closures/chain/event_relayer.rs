@@ -1,4 +1,4 @@
-use cgp_core::prelude::{Async, HasComponents, HasErrorType};
+use cgp_core::prelude::{HasComponents, HasErrorType};
 use hermes_relayer_components::chain::traits::packet::from_write_ack::{
     CanBuildPacketFromWriteAck, PacketFromWriteAckBuilder,
 };
@@ -11,8 +11,6 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 
-use crate::components::extra::chain::DelegatesToExtraChainComponents;
-
 pub trait UseExtraChainComponentsForEventRelayer<Counterparty>:
     HasChainId
     + HasSendPacketEvent<Counterparty>
@@ -23,8 +21,7 @@ where
 {
 }
 
-impl<Chain, Counterparty, Components, BaseComponents>
-    UseExtraChainComponentsForEventRelayer<Counterparty> for Chain
+impl<Chain, Counterparty, Components> UseExtraChainComponentsForEventRelayer<Counterparty> for Chain
 where
     Chain: HasErrorType
         + HasChainId
@@ -34,10 +31,7 @@ where
         + HasWriteAckEvent<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>,
-    Components: HasComponents<Components = BaseComponents>
-        + DelegatesToExtraChainComponents<BaseComponents>
-        + CounterpartyChainIdQuerier<Chain, Counterparty>
+    Components: CounterpartyChainIdQuerier<Chain, Counterparty>
         + PacketFromWriteAckBuilder<Chain, Counterparty>,
-    BaseComponents: Async,
 {
 }

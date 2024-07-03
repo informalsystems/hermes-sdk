@@ -1,5 +1,5 @@
-use hermes_cosmos_relayer::types::error::Error as CosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_error::types::HermesError;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -101,7 +101,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
 
                 // info!("dst_connection_id: {dst_connection_id:#?}");
 
-                <Result<(), CosmosError>>::Ok(())
+                <Result<(), HermesError>>::Ok(())
             })
             .unwrap();
 

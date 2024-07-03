@@ -1,4 +1,4 @@
-use cgp_core::prelude::{Async, HasComponents};
+use cgp_core::prelude::HasComponents;
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilder,
 };
@@ -31,7 +31,6 @@ use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-use crate::components::extra::chain::DelegatesToExtraChainComponents;
 use crate::telemetry::traits::metrics::HasBasicMetrics;
 use crate::telemetry::traits::telemetry::HasTelemetry;
 
@@ -56,8 +55,8 @@ where
 {
 }
 
-impl<Chain, Counterparty, Components, BaseComponents>
-    UseExtraChainComponentsForIbcMessageSender<Counterparty> for Chain
+impl<Chain, Counterparty, Components> UseExtraChainComponentsForIbcMessageSender<Counterparty>
+    for Chain
 where
     Chain: HasRuntime
         + HasChainId
@@ -76,15 +75,12 @@ where
         + HasConsensusStateType<Chain>
         + HasUpdateClientPayloadType<Chain>,
     Chain::Telemetry: HasBasicMetrics,
-    Components: HasComponents<Components = BaseComponents>
-        + DelegatesToExtraChainComponents<BaseComponents>
-        + MessageSender<Chain>
+    Components: MessageSender<Chain>
         + ChainStatusQuerier<Chain>
         + ConsensusStateQuerier<Chain, Counterparty>
         + ClientStateQuerier<Chain, Counterparty>
         + ConsensusStateHeightQuerier<Chain, Counterparty>
         + UpdateClientPayloadBuilder<Chain, Counterparty>
         + UpdateClientMessageBuilder<Chain, Counterparty>,
-    BaseComponents: Async,
 {
 }

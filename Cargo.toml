@@ -21,8 +21,11 @@ members = [
     "crates/encoding/encoding-components",
     "crates/encoding/protobuf-encoding-components",
 
+    "crates/error",
+
     "crates/logging/logging-components",
     "crates/logging/tracing-logging-components",
+    "crates/logging/logger",
 
     "crates/cosmos/cosmos-chain-components",
     "crates/cosmos/cosmos-test-components",
@@ -48,6 +51,7 @@ members = [
 ]
 
 [workspace.package]
+
 version         = "0.1.0"
 edition         = "2021"
 license         = "Apache-2.0"
@@ -106,11 +110,13 @@ hermes-async-runtime-components         = { version = "0.1.0" }
 hermes-tokio-runtime-components         = { version = "0.1.0" }
 hermes-runtime                          = { version = "0.1.0" }
 
+hermes-error                            = { version = "0.1.0" }
 hermes-encoding-components              = { version = "0.1.0" }
 hermes-protobuf-encoding-components     = { version = "0.1.0" }
 
 hermes-logging-components               = { version = "0.1.0" }
 hermes-tracing-logging-components       = { version = "0.1.0" }
+hermes-logger                           = { version = "0.1.0" }
 
 hermes-relayer-components               = { version = "0.1.0" }
 hermes-relayer-components-extra         = { version = "0.1.0" }
@@ -176,11 +182,14 @@ hermes-async-runtime-components     = { path = "./crates/runtime/async-runtime-c
 hermes-tokio-runtime-components     = { path = "./crates/runtime/tokio-runtime-components" }
 hermes-runtime                      = { path = "./crates/runtime/runtime" }
 
+hermes-error                        = { path = "./crates/error" }
+
 hermes-encoding-components          = { path = "./crates/encoding/encoding-components" }
 hermes-protobuf-encoding-components = { path = "./crates/encoding/protobuf-encoding-components" }
 
 hermes-logging-components           = { path = "./crates/logging/logging-components" }
 hermes-tracing-logging-components   = { path = "./crates/logging/tracing-logging-components" }
+hermes-logger                       = { path = "./crates/logging/logger" }
 
 hermes-test-components              = { path = "./crates/test/test-components" }
 hermes-ibc-test-suite               = { path = "./crates/test/test-suite" }

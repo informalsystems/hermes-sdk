@@ -1,3 +1,4 @@
+use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::components::chain_builder::ChainBuilder;
 use hermes_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -5,7 +6,6 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use crate::contexts::builder::CosmosBuilder;
 use crate::contexts::chain::CosmosChain;
 use crate::impls::build::components::CosmosBaseBuildComponents;
-use crate::types::error::Error;
 
 impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBaseBuildComponents {
     async fn build_chain(

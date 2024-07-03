@@ -1,5 +1,5 @@
 use eyre::eyre;
-use hermes_cosmos_relayer::types::error::Error;
+use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
 };
