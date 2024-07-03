@@ -8,7 +8,9 @@ use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
-use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
+use hermes_error::types::Error;
 use hermes_test_components::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
 use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTypeAt;
 use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
@@ -63,7 +65,7 @@ with_binary_channel_test_components! {
 
 delegate_components! {
     CosmosBinaryChannelSetupComponents {
-        ErrorTypeComponent: ProvideCosmosError,
+        ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
     }
 }

@@ -1,4 +1,6 @@
 use alloc::sync::Arc;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
 use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -13,7 +15,6 @@ use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBu
 use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
-use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
@@ -74,7 +75,7 @@ with_cosmos_sdk_bootstrap_components! {
 
 delegate_components! {
     CosmosWithWasmClientBootstrapComponents {
-        ErrorTypeComponent: ProvideCosmosError,
+        ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,

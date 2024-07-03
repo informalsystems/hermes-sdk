@@ -1,10 +1,11 @@
 use alloc::collections::BTreeMap;
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
 use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::{DebugError, ProvideCosmosError};
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
 use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
@@ -60,7 +61,7 @@ impl HasComponents for CosmosChainDriver {
 
 delegate_components! {
     CosmosChainDriverComponents {
-        ErrorTypeComponent: ProvideCosmosError,
+        ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,

@@ -1,4 +1,3 @@
-
 use core::convert::Infallible;
 
 use cgp_core::error::{ErrorRaiser, HasErrorType};

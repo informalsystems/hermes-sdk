@@ -1,5 +1,5 @@
 use eyre::eyre;
-use hermes_cosmos_relayer::types::error::Error;
+use hermes_error::types::Error;
 use ibc_proto::google::protobuf::Any;
 pub use ibc_proto::ibc::lightclients::solomachine::v3::ClientState as ProtoSolomachineClientState;
 use ibc_proto::Protobuf;

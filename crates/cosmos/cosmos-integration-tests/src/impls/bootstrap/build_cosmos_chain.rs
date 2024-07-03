@@ -2,9 +2,9 @@ use core::time::Duration;
 
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::Error as CosmosError;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
+use hermes_error::types::HermesError;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -22,7 +22,7 @@ where
         + CanBuildRelayerChainConfig
         + HasCosmosBuilder
         + HasRuntime
-        + CanRaiseError<CosmosError>,
+        + CanRaiseError<HermesError>,
     Bootstrap::Runtime: CanSleep,
 {
     async fn build_chain_with_node_config(

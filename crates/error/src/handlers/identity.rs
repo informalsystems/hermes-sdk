@@ -2,7 +2,6 @@ use cgp_core::error::{ErrorRaiser, HasErrorType};
 
 use crate::types::Error;
 
-
 pub struct ReturnError;
 
 impl<Context> ErrorRaiser<Context, Error> for ReturnError

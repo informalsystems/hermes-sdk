@@ -7,8 +7,8 @@ use eyre::eyre;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
-use hermes_cosmos_relayer::types::error::Error;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_error::types::Error;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};

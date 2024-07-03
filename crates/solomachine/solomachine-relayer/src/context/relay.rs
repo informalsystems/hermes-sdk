@@ -1,5 +1,5 @@
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_cosmos_relayer::types::error::Error;
+use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_runtime::types::runtime::HermesRuntime;

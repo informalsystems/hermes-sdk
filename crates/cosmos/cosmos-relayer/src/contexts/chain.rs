@@ -29,6 +29,7 @@ use hermes_cosmos_test_components::chain::components::*;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
 };
+use hermes_error::types::Error;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
@@ -96,7 +97,6 @@ use tendermint_rpc::{HttpClient, Url};
 use crate::contexts::encoding::ProvideCosmosEncoding;
 use crate::impls::error::HandleCosmosError;
 use crate::impls::subscription::CanCreateAbciEventSubscription;
-use crate::types::error::Error;
 use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(Clone)]

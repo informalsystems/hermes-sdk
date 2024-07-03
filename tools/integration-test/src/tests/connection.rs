@@ -1,5 +1,5 @@
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
-use hermes_cosmos_relayer::types::error::Error as CosmosError;
+use hermes_error::types::HermesError;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::impls::bootstrap::birelay::CanBootstrapBiRelay;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
@@ -91,7 +91,7 @@ impl BinaryChainTest for ConnectionAndChannelHandshakeTest {
                     channel_id_a, channel_id_b
                 );
 
-                <Result<(), CosmosError>>::Ok(())
+                <Result<(), HermesError>>::Ok(())
             })
             .unwrap();
 

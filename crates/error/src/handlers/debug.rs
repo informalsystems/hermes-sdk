@@ -1,8 +1,8 @@
-use core::fmt::Debug;
 use alloc::sync::Arc;
+use core::fmt::Debug;
 
-use eyre::eyre;
 use cgp_core::error::{ErrorRaiser, HasErrorType};
+use eyre::eyre;
 
 use crate::types::{Error, ErrorDetail};
 

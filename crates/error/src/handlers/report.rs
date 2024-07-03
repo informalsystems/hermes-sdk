@@ -1,4 +1,3 @@
-
 use alloc::sync::Arc;
 
 use cgp_core::error::{ErrorRaiser, HasErrorType};

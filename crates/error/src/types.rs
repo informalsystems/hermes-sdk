@@ -1,7 +1,6 @@
-
+use alloc::string::{String, ToString};
 use alloc::sync::Arc;
 use core::fmt::{self, Debug, Display, Formatter};
-
 use eyre::{eyre, Report};
 
 pub type HermesError = Error;
@@ -53,28 +52,6 @@ impl Error {
             is_retryable: self.is_retryable,
             detail: ErrorDetail::Wrapped(message.to_string(), Arc::new(self.detail)),
         }
-    }
-}
-
-pub trait ErrorWrapper {
-    type Value;
-
-    fn wrap_error<M>(self, message: M) -> Result<Self::Value, Error>
-    where
-        M: Display;
-}
-
-impl<T, E> ErrorWrapper for Result<T, E>
-where
-    Error: From<E>,
-{
-    type Value = T;
-
-    fn wrap_error<M>(self, message: M) -> Result<Self::Value, Error>
-    where
-        M: Display,
-    {
-        self.map_err(|e| Error::from(e).wrap(message))
     }
 }
 

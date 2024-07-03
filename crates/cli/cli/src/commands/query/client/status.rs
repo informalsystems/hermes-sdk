@@ -2,7 +2,7 @@ use std::fmt::Debug;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::types::error::Error;
+use hermes_error::types::Error;
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 use hermes_relayer_components::build::traits::components::chain_builder::CanBuildChain;
 use hermes_relayer_components::build::traits::target::chain::ChainATarget;

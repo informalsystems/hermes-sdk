@@ -3,7 +3,9 @@ use cgp_core::prelude::*;
 use cgp_core::run::CanRun;
 use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
-use hermes_cosmos_relayer::types::error::{DebugError, Error, ProvideCosmosError};
+use hermes_error::handlers::debug::DebugError;
+use hermes_error::impls::ProvideHermesError;
+use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::birelay::ProvideBiRelayType;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_test_components::relay_driver::run::RelayerBackgroundRunner;
@@ -20,7 +22,7 @@ impl HasComponents for CosmosRelayDriver {
 
 delegate_components! {
     CosmosRelayDriverComponents {
-        ErrorTypeComponent: ProvideCosmosError,
+        ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
     }
 }

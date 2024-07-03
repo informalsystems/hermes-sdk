@@ -5,7 +5,7 @@ use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosCh
 use hermes_cosmos_chain_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
-use hermes_cosmos_relayer::types::error::Error;
+use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,

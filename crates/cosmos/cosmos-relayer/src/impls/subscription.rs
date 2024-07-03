@@ -9,6 +9,7 @@ use futures::stream::{self, Stream, StreamExt, TryStreamExt};
 use hermes_async_runtime_components::subscription::impls::closure::CanCreateClosureSubscription;
 use hermes_async_runtime_components::subscription::impls::multiplex::CanMultiplexSubscription;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
+use hermes_error::types::Error;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
 use ibc_relayer_types::core::ics02_client::height::Height;
@@ -21,8 +22,6 @@ use tendermint_rpc::{
     SubscriptionClient, WebSocketClient, WebSocketClientDriver, WebSocketClientUrl,
 };
 use tracing::error;
-
-use crate::types::error::Error;
 
 /**
    Creates a new ABCI event subscription that automatically reconnects.
