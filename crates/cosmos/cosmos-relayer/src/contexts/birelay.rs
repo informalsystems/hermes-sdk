@@ -1,13 +1,13 @@
-use cgp_core::prelude::*;
-use hermes_runtime::types::runtime::HermesRuntime;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use hermes_relayer_components::components::default::birelay::*;
-use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
-use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
-};
+use cgp_core::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::{
     ProvideTwoChainTypes, ProvideTwoWayRelayTypes, TwoWayRelayGetter,
+};
+use hermes_relayer_components::components::default::birelay::*;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
+use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 
 use crate::contexts::chain::CosmosChain;

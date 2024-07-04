@@ -1,7 +1,7 @@
 use cgp_core::run::CanRun;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::eyre;

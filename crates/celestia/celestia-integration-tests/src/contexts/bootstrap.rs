@@ -27,7 +27,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::CompatModeG
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;

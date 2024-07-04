@@ -1,5 +1,5 @@
 use cgp_core::prelude::*;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 
 #[derive_component(CosmosBuilderGetterComponent, CosmosBuilderGetter<Bootstrap>)]
 pub trait HasCosmosBuilder: Async {

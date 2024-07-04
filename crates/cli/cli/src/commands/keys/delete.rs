@@ -1,6 +1,6 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::config::{ChainConfig, Config};
 use ibc_relayer::keyring::{KeyRing, Store};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;

@@ -1,7 +1,7 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
 use ibc_relayer_types::core::ics04_channel::channel::State;

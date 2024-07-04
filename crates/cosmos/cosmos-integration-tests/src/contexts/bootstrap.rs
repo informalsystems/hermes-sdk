@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;

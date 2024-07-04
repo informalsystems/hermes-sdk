@@ -1,7 +1,7 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::traits::wrap::ErrorWrapper;
 use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
 use ibc_relayer::path::PathIdentifiers;

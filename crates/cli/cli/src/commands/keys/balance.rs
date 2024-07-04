@@ -2,7 +2,7 @@ use core::fmt::Write;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::ChainConfig;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
