@@ -159,16 +159,19 @@ ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", re
 basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "65c00d3" }
 tower-abci                  = { git = "https://github.com/informalsystems/tower-abci", rev = "37d952e" }
 
-cgp-core                = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-component           = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-component-macro-lib = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-error               = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-error-eyre          = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-async               = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-run                 = { git = "https://github.com/informalsystems/cgp.git" }
-cgp-inner               = { git = "https://github.com/informalsystems/cgp.git" }
+cgp-core                = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-component           = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-component-macro     = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-component-macro-lib = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-field               = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-field-macro         = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-field-macro-lib     = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-error               = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-error-eyre          = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-async               = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-run                 = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
+cgp-inner               = { git = "https://github.com/informalsystems/cgp.git", branch = "cgp-field" }
 
 ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", rev = "ddc0dd8" }
 ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", rev = "ddc0dd8" }
