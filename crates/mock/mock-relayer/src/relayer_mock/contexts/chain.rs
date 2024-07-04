@@ -10,12 +10,12 @@
 //! Merkle Trees and Proofs.
 
 use alloc::string::String;
-use cgp_core::field::HasField;
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::vec;
 
+use cgp_core::field::HasField;
 use cgp_core::prelude::*;
 use eyre::eyre;
 

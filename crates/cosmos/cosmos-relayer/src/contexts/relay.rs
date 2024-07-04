@@ -1,7 +1,6 @@
-use core::ops::Deref;
-
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
+use core::ops::Deref;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
