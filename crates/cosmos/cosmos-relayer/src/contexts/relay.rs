@@ -1,3 +1,5 @@
+use core::ops::Deref;
+
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 
@@ -36,6 +38,11 @@ use crate::types::batch::CosmosBatchSender;
 
 #[derive(Clone)]
 pub struct CosmosRelay {
+    pub base_relay: Arc<BaseCosmosRelay>,
+}
+
+#[derive(HasField)]
+pub struct BaseCosmosRelay {
     pub runtime: HermesRuntime,
     pub src_chain: CosmosChain,
     pub dst_chain: CosmosChain,
@@ -45,6 +52,14 @@ pub struct CosmosRelay {
     pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
     pub src_chain_message_batch_sender: CosmosBatchSender,
     pub dst_chain_message_batch_sender: CosmosBatchSender,
+}
+
+impl Deref for CosmosRelay {
+    type Target = BaseCosmosRelay;
+
+    fn deref(&self) -> &BaseCosmosRelay {
+        &self.base_relay
+    }
 }
 
 impl CosmosRelay {
@@ -59,15 +74,17 @@ impl CosmosRelay {
         dst_chain_message_batch_sender: CosmosBatchSender,
     ) -> Self {
         let relay = Self {
-            runtime,
-            src_chain,
-            dst_chain,
-            src_client_id,
-            dst_client_id,
-            packet_filter,
-            src_chain_message_batch_sender,
-            dst_chain_message_batch_sender,
-            packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
+            base_relay: Arc::new(BaseCosmosRelay {
+                runtime,
+                src_chain,
+                dst_chain,
+                src_client_id,
+                dst_client_id,
+                packet_filter,
+                src_chain_message_batch_sender,
+                dst_chain_message_batch_sender,
+                packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
+            }),
         };
 
         relay
