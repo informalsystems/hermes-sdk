@@ -2,6 +2,7 @@ use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use std::collections::HashMap;
 
+use cgp_core::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
 use hermes_error::types::Error;
@@ -23,6 +24,7 @@ use crate::contexts::relay::CosmosRelay;
 use crate::types::batch::CosmosBatchSender;
 use crate::types::telemetry::CosmosTelemetry;
 
+#[derive(HasField)]
 pub struct CosmosBuilder {
     pub config: Config,
     pub packet_filter: PacketFilter,

@@ -1,8 +1,9 @@
+use cgp_core::prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 
 use crate::contexts::relay::CosmosRelay;
 
-#[derive(Clone)]
+#[derive(HasField, Clone)]
 pub struct CosmosBiRelay {
     pub runtime: HermesRuntime,
     pub relay_a_to_b: CosmosRelay,
