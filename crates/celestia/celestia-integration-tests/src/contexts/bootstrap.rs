@@ -27,7 +27,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::CompatModeG
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
@@ -42,7 +42,9 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_co
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use ibc_relayer::config::compat_mode::CompatMode;
@@ -50,6 +52,7 @@ use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 
+#[derive(HasField)]
 pub struct CelestiaBootstrap {
     pub runtime: HermesRuntime,
     pub builder: Arc<CosmosBuilder>,
@@ -89,6 +92,8 @@ delegate_components! {
         ErrorTypeComponent: ProvideEyreError,
         ErrorRaiserComponent: RaiseDebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             ChainTypeComponent,
             ChainDriverTypeComponent,
@@ -125,12 +130,6 @@ impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
             bridge_auth_token,
             bridge_process,
         })
-    }
-}
-
-impl RuntimeGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn runtime(bootstrap: &CelestiaBootstrap) -> &HermesRuntime {
-        &bootstrap.runtime
     }
 }
 

@@ -1,5 +1,6 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
+use core::ops::Deref;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -25,7 +26,9 @@ use hermes_relayer_components_extra::components::extra::closures::relay::auto_re
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
@@ -36,6 +39,11 @@ use crate::types::batch::CosmosBatchSender;
 
 #[derive(Clone)]
 pub struct CosmosRelay {
+    pub base_relay: Arc<BaseCosmosRelay>,
+}
+
+#[derive(HasField)]
+pub struct BaseCosmosRelay {
     pub runtime: HermesRuntime,
     pub src_chain: CosmosChain,
     pub dst_chain: CosmosChain,
@@ -45,6 +53,14 @@ pub struct CosmosRelay {
     pub packet_lock_mutex: Arc<Mutex<BTreeSet<(ChannelId, PortId, ChannelId, PortId, Sequence)>>>,
     pub src_chain_message_batch_sender: CosmosBatchSender,
     pub dst_chain_message_batch_sender: CosmosBatchSender,
+}
+
+impl Deref for CosmosRelay {
+    type Target = BaseCosmosRelay;
+
+    fn deref(&self) -> &BaseCosmosRelay {
+        &self.base_relay
+    }
 }
 
 impl CosmosRelay {
@@ -59,15 +75,17 @@ impl CosmosRelay {
         dst_chain_message_batch_sender: CosmosBatchSender,
     ) -> Self {
         let relay = Self {
-            runtime,
-            src_chain,
-            dst_chain,
-            src_client_id,
-            dst_client_id,
-            packet_filter,
-            src_chain_message_batch_sender,
-            dst_chain_message_batch_sender,
-            packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
+            base_relay: Arc::new(BaseCosmosRelay {
+                runtime,
+                src_chain,
+                dst_chain,
+                src_client_id,
+                dst_client_id,
+                packet_filter,
+                src_chain_message_batch_sender,
+                dst_chain_message_batch_sender,
+                packet_lock_mutex: Arc::new(Mutex::new(BTreeSet::new())),
+            }),
         };
 
         relay
@@ -86,6 +104,8 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
@@ -134,12 +154,6 @@ impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
 
     fn dst_client_id(relay: &CosmosRelay) -> &ClientId {
         &relay.dst_client_id
-    }
-}
-
-impl RuntimeGetter<CosmosRelay> for CosmosRelayComponents {
-    fn runtime(relay: &CosmosRelay) -> &HermesRuntime {
-        &relay.runtime
     }
 }
 

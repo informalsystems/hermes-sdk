@@ -5,7 +5,9 @@ use hermes_error::impls::ProvideHermesError;
 use hermes_relayer_components::components::default::relay::*;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 
 use crate::context::relay::SolomachineRelay;
 
@@ -29,6 +31,8 @@ where
 delegate_components! {
     SolomachineRelayComponents {
         RuntimeTypeComponent: ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
     }

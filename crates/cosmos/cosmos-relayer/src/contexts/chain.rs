@@ -70,7 +70,9 @@ use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
@@ -103,14 +105,7 @@ pub struct CosmosChain {
     pub base_chain: Arc<BaseCosmosChain>,
 }
 
-impl Deref for CosmosChain {
-    type Target = BaseCosmosChain;
-
-    fn deref(&self) -> &BaseCosmosChain {
-        &self.base_chain
-    }
-}
-
+#[derive(HasField)]
 pub struct BaseCosmosChain {
     pub handle: BaseChainHandle,
     pub chain_config: CosmosSdkConfig,
@@ -124,6 +119,14 @@ pub struct BaseCosmosChain {
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
     pub nonce_mutex: Mutex<()>,
+}
+
+impl Deref for CosmosChain {
+    type Target = BaseCosmosChain;
+
+    fn deref(&self) -> &BaseCosmosChain {
+        &self.base_chain
+    }
 }
 
 pub struct CosmosChainComponents;
@@ -142,6 +145,8 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
@@ -284,12 +289,6 @@ impl CosmosChain {
         };
 
         chain
-    }
-}
-
-impl RuntimeGetter<CosmosChain> for CosmosChainComponents {
-    fn runtime(chain: &CosmosChain) -> &HermesRuntime {
-        &chain.runtime
     }
 }
 

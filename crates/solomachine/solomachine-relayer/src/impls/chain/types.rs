@@ -28,8 +28,6 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_runtime::types::error::TokioRuntimeError;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
 
@@ -71,15 +69,6 @@ where
 {
     fn raise_error(e: TokioRuntimeError) -> Chain::Error {
         Chain::runtime_error(e)
-    }
-}
-
-impl<Chain> RuntimeGetter<SolomachineChain<Chain>> for SolomachineChainComponents
-where
-    Chain: Solomachine,
-{
-    fn runtime(chain: &SolomachineChain<Chain>) -> &HermesRuntime {
-        chain.chain.runtime()
     }
 }
 

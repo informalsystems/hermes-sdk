@@ -1,9 +1,12 @@
 use alloc::string::String;
 use std::sync::Arc;
 
+use cgp_core::prelude::*;
+
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
+#[derive(HasField)]
 pub struct MockRelayContext {
     pub src_chain: Arc<MockChainContext>,
     pub dst_chain: Arc<MockChainContext>,

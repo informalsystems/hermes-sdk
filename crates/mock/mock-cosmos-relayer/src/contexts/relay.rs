@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use cgp_core::prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::clients::tendermint::types::client_type;
 use ibc::core::host::types::identifiers::ClientId;
@@ -14,7 +15,7 @@ use crate::types::error::Error;
 /// The `SrcChain` and `DstChain` endpoints are wrapped in
 /// `MockCosmosContext`, which bundles the `BasecoinEndpoint` with
 /// the runtime.
-#[derive(Clone)]
+#[derive(HasField, Clone)]
 pub struct MockCosmosRelay<SrcChain, DstChain>
 where
     SrcChain: BasecoinEndpoint,

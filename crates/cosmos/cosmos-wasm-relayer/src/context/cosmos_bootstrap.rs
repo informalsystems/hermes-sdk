@@ -12,7 +12,7 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::CompatModeG
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
@@ -32,7 +32,9 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
@@ -45,6 +47,7 @@ use ibc_relayer::config::compat_mode::CompatMode;
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
+#[derive(HasField)]
 pub struct CosmosWithWasmClientBootstrap {
     pub runtime: HermesRuntime,
     pub builder: Arc<CosmosBuilder>,
@@ -78,6 +81,8 @@ delegate_components! {
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         [
             ChainTypeComponent,
@@ -94,12 +99,6 @@ delegate_components! {
             ModifyWasmGenesisConfig<NoModifyGenesisConfig>,
         CometConfigModifierComponent:
             ModifyWasmNodeConfig<NoModifyCometConfig>,
-    }
-}
-
-impl RuntimeGetter<CosmosWithWasmClientBootstrap> for CosmosWithWasmClientBootstrapComponents {
-    fn runtime(bootstrap: &CosmosWithWasmClientBootstrap) -> &HermesRuntime {
-        &bootstrap.runtime
     }
 }
 

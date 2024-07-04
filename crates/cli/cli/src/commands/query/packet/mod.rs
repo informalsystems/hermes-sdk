@@ -6,7 +6,7 @@ mod util;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 pub use pending::QueryPendingPackets;
 
 use crate::commands::query::packet::pending_acks::QueryPendingAcks;

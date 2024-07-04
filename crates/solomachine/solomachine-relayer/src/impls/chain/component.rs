@@ -57,7 +57,9 @@ use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeC
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 
 use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
@@ -125,6 +127,8 @@ delegate_components! {
     SolomachineChainComponents {
         RuntimeTypeComponent:
             ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             HeightTypeComponent,
             HeightFieldComponent,

@@ -5,7 +5,7 @@ use std::str::FromStr;
 use hdpath::StandardHDPath;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::builder::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::config::ChainConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,

@@ -1,3 +1,4 @@
+use cgp_core::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
@@ -8,6 +9,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 
+#[derive(HasField)]
 pub struct SolomachineRelay<Chain> {
     pub runtime: HermesRuntime,
     pub src_chain: SolomachineChain<Chain>,

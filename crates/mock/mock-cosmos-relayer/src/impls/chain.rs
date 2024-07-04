@@ -54,8 +54,6 @@ use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusT
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_runtime::types::error::TokioRuntimeError;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc::clients::tendermint::types::{
     AllowUpdate, ConsensusState as TmConsensusState, Header, TrustThreshold,
 };
@@ -93,14 +91,6 @@ impl<Chain: BasecoinEndpoint> ProvideErrorType<MockCosmosContext<Chain>>
     for MockCosmosChainComponents
 {
     type Error = Error;
-}
-
-impl<Chain: BasecoinEndpoint> RuntimeGetter<MockCosmosContext<Chain>>
-    for MockCosmosChainComponents
-{
-    fn runtime(chain: &MockCosmosContext<Chain>) -> &HermesRuntime {
-        &chain.runtime
-    }
 }
 
 impl<Chain: BasecoinEndpoint> ErrorRaiser<MockCosmosContext<Chain>, TokioRuntimeError>

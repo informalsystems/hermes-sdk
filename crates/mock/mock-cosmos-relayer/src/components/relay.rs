@@ -8,7 +8,9 @@ use hermes_relayer_components::relay::impls::packet_filters::allow_all::AllowAll
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilterComponent;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeTypeComponent;
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 
 pub struct MockCosmosRelayComponents;
 
@@ -25,6 +27,8 @@ delegate_components! {
         PacketFilterComponent: AllowAll,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
