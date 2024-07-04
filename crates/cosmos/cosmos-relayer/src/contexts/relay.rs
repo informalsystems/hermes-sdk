@@ -27,7 +27,9 @@ use hermes_relayer_components_extra::components::extra::closures::relay::auto_re
 use hermes_relayer_components_extra::components::extra::relay::*;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
@@ -103,6 +105,8 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
@@ -151,12 +155,6 @@ impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
 
     fn dst_client_id(relay: &CosmosRelay) -> &ClientId {
         &relay.dst_client_id
-    }
-}
-
-impl RuntimeGetter<CosmosRelay> for CosmosRelayComponents {
-    fn runtime(relay: &CosmosRelay) -> &HermesRuntime {
-        &relay.runtime
     }
 }
 
