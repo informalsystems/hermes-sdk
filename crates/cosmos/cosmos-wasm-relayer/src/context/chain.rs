@@ -214,7 +214,9 @@ use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
-use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, HasRuntime, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
@@ -263,6 +265,8 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
@@ -529,12 +533,6 @@ impl HasBlockingChainHandle for WasmCosmosChain {
             .runtime
             .spawn_blocking(move || cont(chain_handle))
             .await?
-    }
-}
-
-impl RuntimeGetter<WasmCosmosChain> for WasmCosmosChainComponents {
-    fn runtime(chain: &WasmCosmosChain) -> &HermesRuntime {
-        &chain.runtime
     }
 }
 

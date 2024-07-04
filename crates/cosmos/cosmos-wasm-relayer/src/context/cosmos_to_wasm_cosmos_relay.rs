@@ -33,14 +33,16 @@ use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, PortId};
 
 use crate::context::chain::WasmCosmosChain;
 
-#[derive(Clone)]
+#[derive(HasField, Clone)]
 pub struct CosmosToWasmCosmosRelay {
     pub runtime: HermesRuntime,
     pub src_chain: CosmosChain,
@@ -84,6 +86,8 @@ delegate_components! {
             HandleCosmosError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
@@ -147,12 +151,6 @@ impl ProvideRelayChains<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComp
 
     fn dst_client_id(relay: &CosmosToWasmCosmosRelay) -> &ClientId {
         &relay.dst_client_id
-    }
-}
-
-impl RuntimeGetter<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComponents {
-    fn runtime(relay: &CosmosToWasmCosmosRelay) -> &HermesRuntime {
-        &relay.runtime
     }
 }
 

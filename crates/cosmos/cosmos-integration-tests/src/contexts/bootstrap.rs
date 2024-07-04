@@ -22,7 +22,9 @@ use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
 use ibc_relayer::config::compat_mode::CompatMode;
@@ -41,6 +43,7 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
    A bootstrap context for bootstrapping a new Cosmos chain, and builds
    a `CosmosChainDriver`.
 */
+#[derive(HasField)]
 pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,
     pub builder: Arc<CosmosBuilder>,
@@ -77,6 +80,8 @@ delegate_components! {
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RuntimeTypeComponent: ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         [
             ChainTypeComponent,
@@ -89,12 +94,6 @@ delegate_components! {
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
             BuildCosmosChainDriver,
-    }
-}
-
-impl RuntimeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn runtime(bootstrap: &CosmosBootstrap) -> &HermesRuntime {
-        &bootstrap.runtime
     }
 }
 

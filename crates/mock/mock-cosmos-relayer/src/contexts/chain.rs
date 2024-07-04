@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use basecoin::modules::ibc::IbcContext;
 use basecoin::store::impls::RevertibleStore;
+use cgp_core::prelude::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::handler::types::events::IbcEvent;
 use ibc::core::host::ValidationContext;
@@ -12,7 +13,7 @@ use crate::types::error::Error;
 
 /// Holds the necessary fields for querying a mock Cosmos
 /// chain endpoint.
-#[derive(Clone)]
+#[derive(HasField, Clone)]
 pub struct MockCosmosContext<Endpoint: BasecoinEndpoint> {
     /// Chain runtime
     pub runtime: HermesRuntime,

@@ -10,11 +10,13 @@
 //! Merkle Trees and Proofs.
 
 use alloc::string::String;
+use cgp_core::field::HasField;
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::vec;
 
+use cgp_core::prelude::*;
 use eyre::eyre;
 
 use crate::relayer_mock::base::error::{BaseError, Error};
@@ -30,6 +32,7 @@ use crate::relayer_mock::base::types::state::State;
 use crate::relayer_mock::util::clock::MockClock;
 use crate::relayer_mock::util::mutex::MutexUtil;
 
+#[derive(HasField)]
 pub struct MockChainContext {
     pub name: String,
     pub past_chain_states: Arc<Mutex<StateStore>>,

@@ -8,8 +8,6 @@ use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 use hermes_runtime::types::error::TokioRuntimeError;
-use hermes_runtime::types::runtime::HermesRuntime;
-use hermes_runtime_components::traits::runtime::RuntimeGetter;
 use ibc::clients::tendermint::types::Header;
 use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::packet::Packet;
@@ -51,17 +49,6 @@ where
     DstChain: BasecoinEndpoint,
 {
     type Error = Error;
-}
-
-impl<SrcChain, DstChain> RuntimeGetter<MockCosmosRelay<SrcChain, DstChain>>
-    for MockCosmosRelayComponents
-where
-    SrcChain: BasecoinEndpoint,
-    DstChain: BasecoinEndpoint,
-{
-    fn runtime(relay: &MockCosmosRelay<SrcChain, DstChain>) -> &HermesRuntime {
-        &relay.runtime
-    }
 }
 
 impl<SrcChain, DstChain> ErrorRaiser<MockCosmosRelay<SrcChain, DstChain>, TokioRuntimeError>

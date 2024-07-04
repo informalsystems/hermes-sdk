@@ -49,7 +49,9 @@ use hermes_relayer_components::chain::traits::types::packets::receive::ProvideRe
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
-use hermes_runtime_components::traits::runtime::{ProvideRuntimeType, RuntimeGetter};
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, ProvideRuntimeType, RuntimeGetterComponent,
+};
 
 use crate::relayer_mock::base::error::{BaseError, Error};
 use crate::relayer_mock::base::impls::error::HandleMockError;
@@ -76,17 +78,13 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleMockError,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
     }
 }
 
 impl ProvideRuntimeType<MockChainContext> for MockChainComponents {
     type Runtime = MockRuntimeContext;
-}
-
-impl RuntimeGetter<MockChainContext> for MockChainComponents {
-    fn runtime(chain: &MockChainContext) -> &MockRuntimeContext {
-        &chain.runtime
-    }
 }
 
 impl ProvideHeightType<MockChainContext> for MockChainComponents {
