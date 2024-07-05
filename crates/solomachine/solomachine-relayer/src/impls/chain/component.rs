@@ -77,7 +77,6 @@ use crate::impls::chain::solomachine_components::create_client_message::BuildCre
 use crate::impls::chain::solomachine_components::create_client_payload::BuildSolomachineCreateClientPayload;
 use crate::impls::chain::solomachine_components::process_message::ProcessSolomachineMessages;
 use crate::impls::chain::solomachine_components::query_chain_status::QuerySolomachineStatus;
-use crate::impls::chain::solomachine_components::query_consensus_state::QueryCosmosConsensusStateFromSolomachine;
 use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
 use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
 use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachineChainTypes;
@@ -168,8 +167,6 @@ delegate_components! {
             ProcessSolomachineMessages,
         ChainStatusQuerierComponent:
             QuerySolomachineStatus,
-        ConsensusStateQuerierComponent:
-            QueryCosmosConsensusStateFromSolomachine,
         [
             ChannelOpenTryPayloadBuilderComponent,
             ChannelOpenAckPayloadBuilderComponent,

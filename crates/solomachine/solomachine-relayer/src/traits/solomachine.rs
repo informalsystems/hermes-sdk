@@ -6,7 +6,6 @@ use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
-use ibc_relayer_types::Height;
 use secp256k1::SecretKey;
 
 use crate::methods::encode::public_key::PublicKey;
@@ -31,13 +30,6 @@ pub trait Solomachine: HasErrorType {
         client_state: TendermintClientState,
         consensus_state: TendermintConsensusState,
     ) -> Result<ClientId, Self::Error>;
-
-    async fn query_consensus_state(
-        &self,
-        client_id: &ClientId,
-        height: Height,
-    ) -> Result<TendermintConsensusState, Self::Error>;
-
     async fn update_connection(&self, connection_id: &ConnectionId, connection_end: ConnectionEnd);
 
     async fn query_connection(

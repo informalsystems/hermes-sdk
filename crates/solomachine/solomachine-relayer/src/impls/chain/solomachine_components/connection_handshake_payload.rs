@@ -1,17 +1,22 @@
 use core::str::FromStr;
 
 use cgp_core::error::{CanRaiseError, HasErrorType};
-use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
+use hermes_cosmos_chain_components::types::tendermint::{
+    TendermintClientState, TendermintConsensusState,
+};
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
     HasConnectionOpenInitPayloadType, HasConnectionOpenTryPayloadType,
 };
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::State as ConnectionState;
@@ -68,8 +73,11 @@ where
             ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryClientState<Counterparty>
+        + CanQueryConsensusState<Counterparty>
         + CanRaiseError<String>,
-    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
+    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
+        + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
+        + HasHeightType<Height = Height>,
 {
     async fn build_connection_open_try_payload(
         chain: &Chain,
@@ -117,7 +125,9 @@ where
             &cosmos_client_state,
         );
 
-        let cosmos_consensus_state = chain.query_consensus_state(client_id, *height).await?;
+        let cosmos_consensus_state = chain
+            .query_consensus_state(client_id, height, height)
+            .await?;
 
         let consensus_state_proof = consensus_state_proof_data(
             secret_key,
@@ -157,8 +167,11 @@ where
             ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryClientState<Counterparty>
+        + CanQueryConsensusState<Counterparty>
         + CanRaiseError<String>,
-    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
+    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
+        + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
+        + HasHeightType<Height = Height>,
 {
     async fn build_connection_open_ack_payload(
         chain: &Chain,
@@ -211,7 +224,9 @@ where
                 connection,
             );
 
-        let cosmos_consensus_state = chain.query_consensus_state(client_id, *height).await?;
+        let cosmos_consensus_state = chain
+            .query_consensus_state(client_id, height, height)
+            .await?;
 
         let consensus_state_proof = consensus_state_proof_data(
             secret_key,
