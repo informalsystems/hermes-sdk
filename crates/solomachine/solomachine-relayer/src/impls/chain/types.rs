@@ -1,5 +1,3 @@
-use core::time::Duration;
-
 use cgp_core::error::{ErrorRaiser, ProvideErrorType};
 use cgp_core::Async;
 use hermes_encoding_components::traits::has_encoding::{
@@ -9,15 +7,11 @@ use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
     ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetter, ProvideClientStateType,
-};
 use hermes_relayer_components::chain::traits::types::connection::{
     ProvideConnectionOpenAckPayloadType, ProvideConnectionOpenConfirmPayloadType,
     ProvideConnectionOpenInitPayloadType, ProvideConnectionOpenTryPayloadType,
     ProvideInitConnectionOptionsType,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
     ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
@@ -29,14 +23,11 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTi
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
 use hermes_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
-use ibc_relayer_types::Height;
 
 use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::component::SolomachineChainComponents;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
-use crate::types::client_state::SolomachineClientState;
-use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };
@@ -86,44 +77,6 @@ where
     fn default_encoding() -> &'static SolomachineEncoding {
         &SolomachineEncoding
     }
-}
-
-impl<Chain, Counterparty> ProvideClientStateType<SolomachineChain<Chain>, Counterparty>
-    for SolomachineChainComponents
-where
-    Chain: Async,
-{
-    type ClientState = SolomachineClientState;
-}
-
-// TODO: properly implement solomachine client state fields
-impl<Chain, Counterparty> ClientStateFieldsGetter<SolomachineChain<Chain>, Counterparty>
-    for SolomachineChainComponents
-where
-    Chain: Async,
-{
-    fn client_state_latest_height(client_state: &SolomachineClientState) -> Height {
-        Height::new(0, client_state.sequence).unwrap()
-    }
-
-    fn client_state_is_frozen(client_state: &SolomachineClientState) -> bool {
-        client_state.is_frozen
-    }
-
-    fn client_state_has_expired(
-        _client_state: &SolomachineClientState,
-        _elapsed: Duration,
-    ) -> bool {
-        false
-    }
-}
-
-impl<Chain, Counterparty> ProvideConsensusStateType<SolomachineChain<Chain>, Counterparty>
-    for SolomachineChainComponents
-where
-    Chain: Async,
-{
-    type ConsensusState = SolomachineConsensusState;
 }
 
 impl<Chain, Counterparty>

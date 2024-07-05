@@ -1,4 +1,7 @@
 use cgp_core::prelude::*;
+use hermes_cosmos_chain_components::components::client::{
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent, ConsensusStateTypeComponent,
+};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -77,6 +80,8 @@ use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSo
 use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
 use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachineChainTypes;
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
+use crate::impls::client_state::ProvideSolomachineClientState;
+use crate::impls::consensus_state::ProvideSolomachineConsensusState;
 use crate::traits::solomachine::Solomachine;
 use crate::types::chain::SolomachineChain;
 use crate::types::consensus_state::SolomachineConsensusState;
@@ -147,6 +152,13 @@ delegate_components! {
             EventTypeComponent,
         ]:
             ProvideSolomachineChainTypes,
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            ProvideSolomachineClientState,
+        ConsensusStateTypeComponent:
+            ProvideSolomachineConsensusState,
         EncodingGetterComponent:
             GetDefaultEncoding,
         PacketFieldsReaderComponent:
