@@ -2,7 +2,8 @@ use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent, ConsensusStateTypeComponent,
+    ChannelEndTypeComponent, ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ConsensusStateTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
@@ -150,6 +151,7 @@ delegate_components! {
         [
             MessageTypeComponent,
             EventTypeComponent,
+            ChannelEndTypeComponent,
         ]:
             ProvideSolomachineChainTypes,
         [

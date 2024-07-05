@@ -1,6 +1,8 @@
 use cgp_core::Async;
+use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
+use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 
 use crate::types::event::SolomachineEvent;
 use crate::types::message::SolomachineMessage;
@@ -19,4 +21,12 @@ where
     Chain: Async,
 {
     type Event = SolomachineEvent;
+}
+
+impl<Chain, Counterparty> ProvideChannelEndType<Chain, Counterparty>
+    for ProvideSolomachineChainTypes
+where
+    Chain: Async,
+{
+    type ChannelEnd = ChannelEnd;
 }

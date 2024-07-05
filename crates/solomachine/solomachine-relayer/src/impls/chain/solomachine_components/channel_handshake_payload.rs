@@ -4,12 +4,13 @@ use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
 };
+use hermes_relayer_components::chain::traits::queries::channel_end::CanQueryChannelEnd;
 use hermes_relayer_components::chain::traits::types::channel::{
     HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use ibc_relayer_types::core::ics04_channel::channel::State;
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::Height;
 
@@ -33,6 +34,7 @@ where
             Counterparty,
             ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasErrorType<Error = Error>,
 {
     async fn build_channel_open_try_payload(
@@ -42,7 +44,7 @@ where
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenTryPayload, Error> {
-        let channel = chain.query_channel(channel_id, port_id).await?;
+        let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if channel.state != State::Init {
             return Err(Error::from(eyre!("expected channel to be in Init state")));
@@ -82,6 +84,7 @@ where
             Counterparty,
             ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasErrorType<Error = Error>,
 {
     async fn build_channel_open_ack_payload(
@@ -91,7 +94,7 @@ where
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenAckPayload, Error> {
-        let channel = chain.query_channel(channel_id, port_id).await?;
+        let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if channel.state != State::TryOpen {
             return Err(Error::from(eyre!(
@@ -129,6 +132,7 @@ where
             Counterparty,
             ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasErrorType<Error = Error>,
 {
     async fn build_channel_open_confirm_payload(
@@ -138,7 +142,7 @@ where
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenConfirmPayload, Chain::Error> {
-        let channel = chain.query_channel(channel_id, port_id).await?;
+        let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if !channel.state.is_open() {
             return Err(Error::from(eyre!("expected channel to be in open state")));

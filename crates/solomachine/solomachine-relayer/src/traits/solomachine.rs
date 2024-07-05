@@ -3,9 +3,8 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
+use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use secp256k1::SecretKey;
 
 use crate::methods::encode::public_key::PublicKey;
@@ -31,12 +30,6 @@ pub trait Solomachine: HasErrorType {
         consensus_state: TendermintConsensusState,
     ) -> Result<ClientId, Self::Error>;
     async fn update_connection(&self, connection_id: &ConnectionId, connection_end: ConnectionEnd);
-
-    async fn query_channel(
-        &self,
-        channel_id: &ChannelId,
-        port_id: &PortId,
-    ) -> Result<ChannelEnd, Self::Error>;
 
     async fn handle_receive_packet(&self, packet: &Packet) -> Result<Vec<u8>, Self::Error>;
 }

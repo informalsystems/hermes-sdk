@@ -9,6 +9,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_relayer_components::chain::traits::queries::channel_end::ChannelEndQuerier;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
@@ -141,6 +142,17 @@ impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
     }
 }
 
+impl<Counterparty> ChannelEndQuerier<MockSolomachine, Counterparty> for SolomachineChainComponents {
+    async fn query_channel_end(
+        _chain: &MockSolomachine,
+        _channel_id: &ChannelId,
+        _port_id: &PortId,
+        _height: &Height,
+    ) -> Result<ChannelEnd, Error> {
+        todo!()
+    }
+}
+
 impl Solomachine for MockSolomachine {
     fn public_key(&self) -> &PublicKey {
         &self.public_key
@@ -188,14 +200,6 @@ impl Solomachine for MockSolomachine {
     async fn update_connection(&self, connection_id: &ConnectionId, connection_end: ConnectionEnd) {
         let mut connections = self.connections.lock().unwrap();
         connections.insert(connection_id.clone(), connection_end);
-    }
-
-    async fn query_channel(
-        &self,
-        _channel_id: &ChannelId,
-        _port_id: &PortId,
-    ) -> Result<ChannelEnd, Self::Error> {
-        todo!()
     }
 
     async fn handle_receive_packet(&self, _packet: &Packet) -> Result<Vec<u8>, Self::Error> {
