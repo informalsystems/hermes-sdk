@@ -35,8 +35,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + CanRaiseError<&'static str>
-        ,
+        + CanRaiseError<&'static str>,
 {
     async fn build_channel_open_try_payload(
         chain: &Chain,
@@ -100,7 +99,7 @@ where
 
         if channel.state != State::TryOpen {
             return Err(Chain::raise_error(
-                "expected channel to be in TryOpen state"
+                "expected channel to be in TryOpen state",
             ));
         }
 

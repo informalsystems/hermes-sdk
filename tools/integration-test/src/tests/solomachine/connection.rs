@@ -114,7 +114,5 @@ pub fn solomachine_chain_context(
 ) -> MockSolomachine {
     let commitment_prefix = "solomachine".to_owned();
 
-    let chain = MockSolomachine::new("solomachine1", commitment_prefix, runtime, telemetry);
-
-    chain
+    MockSolomachine::new("solomachine1", commitment_prefix, runtime, telemetry)
 }

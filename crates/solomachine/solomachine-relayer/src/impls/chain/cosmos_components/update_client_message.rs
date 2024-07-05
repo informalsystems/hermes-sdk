@@ -14,8 +14,8 @@ pub struct BuildUpdateSolomachineClientMessage;
 impl<Chain, Counterparty> UpdateClientMessageBuilder<Chain, Counterparty>
     for BuildUpdateSolomachineClientMessage
 where
-    Chain: HasIbcChainTypes<Counterparty, Message = CosmosMessage, ClientId = ClientId>
-        + HasErrorType,
+    Chain:
+        HasIbcChainTypes<Counterparty, Message = CosmosMessage, ClientId = ClientId> + HasErrorType,
     Counterparty:
         HasUpdateClientPayloadType<Chain, UpdateClientPayload = SolomachineUpdateClientPayload>,
 {
