@@ -6,7 +6,6 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_solomachine_relayer::context::chain::MockSolomachine;
 use hermes_solomachine_relayer::context::relay::SolomachineRelay;
-use hermes_solomachine_relayer::types::chain::SolomachineChain;
 use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::PacketFilter;
@@ -57,7 +56,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
             .block_on(async move {
                 let cosmos_chain = builder.build_chain(&chain_id_a).await?;
 
-                let src_client_id = <SolomachineRelay<MockSolomachine>>::create_client(
+                let src_client_id = SolomachineRelay::create_client(
                     SourceTarget,
                     &solomachine_chain,
                     &cosmos_chain,
@@ -67,7 +66,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
                 .await
                 .unwrap();
 
-                let dst_client_id = <SolomachineRelay<MockSolomachine>>::create_client(
+                let dst_client_id = SolomachineRelay::create_client(
                     DestinationTarget,
                     &cosmos_chain,
                     &solomachine_chain,
@@ -81,7 +80,7 @@ impl BinaryChainTest for SolomachineToCosmosTest {
                 info!("dst_client_id: {dst_client_id:#?}");
 
                 let relay = SolomachineRelay {
-                    runtime: solomachine_chain.chain.runtime.clone(),
+                    runtime: solomachine_chain.runtime.clone(),
                     src_chain: solomachine_chain,
                     dst_chain: cosmos_chain,
                     src_client_id,
@@ -112,10 +111,10 @@ impl BinaryChainTest for SolomachineToCosmosTest {
 pub fn solomachine_chain_context(
     runtime: HermesRuntime,
     telemetry: CosmosTelemetry,
-) -> SolomachineChain<MockSolomachine> {
+) -> MockSolomachine {
     let commitment_prefix = "solomachine".to_owned();
 
     let chain = MockSolomachine::new("solomachine1", commitment_prefix, runtime, telemetry);
 
-    SolomachineChain::new(chain)
+    chain
 }

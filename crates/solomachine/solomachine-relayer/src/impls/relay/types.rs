@@ -1,5 +1,4 @@
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_error::types::Error;
 use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;

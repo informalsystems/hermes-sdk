@@ -9,17 +9,15 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
-use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
-use ibc::core::host::types::identifiers::ConnectionId;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
+use ibc_relayer_types::core::ics24_host::identifier::{
+    ChainId, ChannelId, ClientId, ConnectionId, PortId,
+};
 use ibc_relayer_types::Height;
-use prost::EncodeError;
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
@@ -31,13 +29,13 @@ const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 
 #[derive(HasField, Clone)]
 pub struct MockSolomachine {
+    pub runtime: HermesRuntime,
     pub chain_id: ChainId,
     commitment_prefix: String,
     public_key: PublicKey,
     secret_key: SecretKey,
     client_states: Arc<Mutex<HashMap<ClientId, TendermintClientState>>>,
     client_consensus_states: Arc<Mutex<HashMap<ClientId, TendermintConsensusState>>>,
-    pub runtime: HermesRuntime,
     pub telemetry: CosmosTelemetry,
     pub connections: Arc<Mutex<HashMap<ConnectionId, ConnectionEnd>>>,
 }

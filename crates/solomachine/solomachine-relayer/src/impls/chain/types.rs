@@ -1,4 +1,3 @@
-use cgp_core::error::{ErrorRaiser, ProvideErrorType};
 use cgp_core::Async;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
@@ -23,12 +22,10 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
-use hermes_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
 use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::component::SolomachineChainComponents;
-use crate::traits::solomachine::Solomachine;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };

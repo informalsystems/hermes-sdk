@@ -6,9 +6,7 @@ use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
-use ibc_relayer_types::core::ics24_host::identifier::{
-    ChainId, ChannelId, ClientId, ConnectionId, PortId,
-};
+use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
 use ibc_relayer_types::Height;
 use secp256k1::SecretKey;
 

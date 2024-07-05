@@ -1,4 +1,6 @@
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, ConsensusStateTypeComponent,
 };
@@ -83,7 +85,6 @@ use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachin
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
 use crate::impls::client_state::ProvideSolomachineClientState;
 use crate::impls::consensus_state::ProvideSolomachineConsensusState;
-use crate::traits::solomachine::Solomachine;
 use crate::types::consensus_state::SolomachineConsensusState;
 
 pub struct SolomachineChainComponents;
@@ -127,6 +128,10 @@ impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
 
 delegate_components! {
     SolomachineChainComponents {
+        ErrorTypeComponent:
+            ProvideEyreError,
+        ErrorRaiserComponent:
+            RaiseDebugError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
         RuntimeGetterComponent:

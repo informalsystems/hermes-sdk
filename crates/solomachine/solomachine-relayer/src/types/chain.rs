@@ -1,4 +1,3 @@
-use cgp_core::Async;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{

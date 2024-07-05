@@ -13,7 +13,6 @@ use hermes_relayer_components::chain::traits::types::connection::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::State as ConnectionState;
-use ibc::core::host::types::identifiers::ConnectionId as IbcConnectionId;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
 
