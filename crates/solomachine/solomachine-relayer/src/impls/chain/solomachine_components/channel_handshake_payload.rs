@@ -1,6 +1,4 @@
-use cgp_core::error::HasErrorType;
-use eyre::eyre;
-use hermes_error::types::Error;
+use cgp_core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
@@ -37,7 +35,8 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + HasErrorType<Error = Error>,
+        + CanRaiseError<&'static str>
+        ,
 {
     async fn build_channel_open_try_payload(
         chain: &Chain,
@@ -45,11 +44,11 @@ where
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
-    ) -> Result<SolomachineChannelOpenTryPayload, Error> {
+    ) -> Result<SolomachineChannelOpenTryPayload, Chain::Error> {
         let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if channel.state != State::Init {
-            return Err(Error::from(eyre!("expected channel to be in Init state")));
+            return Err(Chain::raise_error("expected channel to be in Init state"));
         }
 
         let ordering = *channel.ordering();
@@ -59,7 +58,7 @@ where
         let commitment_prefix: &str = chain.ibc_commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)?;
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel);
 
         let secret_key = chain.secret_key();
 
@@ -88,7 +87,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + HasErrorType<Error = Error>,
+        + CanRaiseError<&'static str>,
 {
     async fn build_channel_open_ack_payload(
         chain: &Chain,
@@ -96,13 +95,13 @@ where
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
-    ) -> Result<SolomachineChannelOpenAckPayload, Error> {
+    ) -> Result<SolomachineChannelOpenAckPayload, Chain::Error> {
         let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if channel.state != State::TryOpen {
-            return Err(Error::from(eyre!(
+            return Err(Chain::raise_error(
                 "expected channel to be in TryOpen state"
-            )));
+            ));
         }
 
         let version = channel.version().clone();
@@ -110,7 +109,7 @@ where
         let commitment_prefix = chain.ibc_commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)?;
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel);
 
         let secret_key = chain.secret_key();
 
@@ -137,7 +136,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
         + HasIbcCommitmentPrefix<CommitmentPrefix = String>
-        + HasErrorType<Error = Error>,
+        + CanRaiseError<&'static str>,
 {
     async fn build_channel_open_confirm_payload(
         chain: &Chain,
@@ -149,13 +148,13 @@ where
         let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if !channel.state.is_open() {
-            return Err(Error::from(eyre!("expected channel to be in open state")));
+            return Err(Chain::raise_error("expected channel to be in open state"));
         }
 
         let commitment_prefix = chain.ibc_commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)?;
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel);
 
         let secret_key = chain.secret_key();
 

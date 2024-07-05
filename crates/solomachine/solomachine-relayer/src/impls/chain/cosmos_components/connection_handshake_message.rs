@@ -1,7 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::connection::open_try::CosmosConnectionOpenTryMessage;
-use hermes_error::types::Error;
 use hermes_protobuf_encoding_components::types::Any;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -33,7 +32,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasConnectionOpenInitPayloadType<
             Chain,
             ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload,
@@ -45,7 +44,7 @@ where
         _counterparty_client_id: &ClientId,
         _init_connection_options: &Chain::InitConnectionOptions,
         _counterparty_payload: SolomachineConnectionOpenInitPayload,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         todo!()
     }
 }
@@ -58,7 +57,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasConnectionOpenTryPayloadType<
             Chain,
             ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,
@@ -70,7 +69,7 @@ where
         counterparty_client_id: &ClientId,
         counterparty_connection_id: &ConnectionId,
         payload: SolomachineConnectionOpenTryPayload,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let counterparty_commitment_prefix = payload.commitment_prefix;
 
         let proof_init = timestamped_sign_data_to_bytes(&payload.proof_init);
@@ -111,7 +110,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasConnectionOpenAckPayloadType<
             Chain,
             ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload,
@@ -122,7 +121,7 @@ where
         _connection_id: &ConnectionId,
         _counterparty_connection_id: &ConnectionId,
         _counterparty_payload: SolomachineConnectionOpenAckPayload,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         todo!()
     }
 }
@@ -135,7 +134,7 @@ where
             ClientId = ClientId,
             ConnectionId = ConnectionId,
             Message = CosmosMessage,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasConnectionOpenConfirmPayloadType<
             Chain,
             ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload,
@@ -145,7 +144,7 @@ where
         _chain: &Chain,
         _connection_id: &ConnectionId,
         _counterparty_payload: SolomachineConnectionOpenConfirmPayload,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         todo!()
     }
 }
