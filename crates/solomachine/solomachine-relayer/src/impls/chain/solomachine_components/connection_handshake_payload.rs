@@ -2,6 +2,7 @@ use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
@@ -42,16 +43,17 @@ where
             Counterparty,
             ConnectionOpenInitPayload = SolomachineConnectionOpenInitPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
         + HasErrorType,
 {
     async fn build_connection_open_init_payload(
         chain: &Chain,
         _client_state: &SolomachineClientState,
     ) -> Result<SolomachineConnectionOpenInitPayload, Chain::Error> {
-        let commitment_prefix = chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
 
         let payload = SolomachineConnectionOpenInitPayload {
-            commitment_prefix: commitment_prefix.into(),
+            commitment_prefix: commitment_prefix.as_bytes().into(),
         };
 
         Ok(payload)
@@ -74,6 +76,7 @@ where
         + CanQueryClientState<Counterparty>
         + CanQueryConsensusState<Counterparty>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
         + CanRaiseError<String>,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
         + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
@@ -100,7 +103,7 @@ where
 
         let delay_period = connection.delay_period();
 
-        let commitment_prefix = chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
 
         let public_key = chain.public_key();
         let secret_key = chain.secret_key();
@@ -139,7 +142,7 @@ where
         );
 
         let payload = SolomachineConnectionOpenTryPayload {
-            commitment_prefix: commitment_prefix.into(),
+            commitment_prefix: commitment_prefix.as_bytes().into(),
             client_state: cosmos_client_state,
             versions,
             delay_period,
@@ -169,6 +172,7 @@ where
         + CanQueryClientState<Counterparty>
         + CanQueryConsensusState<Counterparty>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
         + CanRaiseError<String>,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
         + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
@@ -202,7 +206,7 @@ where
             .or_else(|| Version::compatibles().into_iter().next())
             .unwrap();
 
-        let commitment_prefix = chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
 
         let cosmos_client_state = chain.query_client_state(client_id, height).await?;
 
@@ -266,6 +270,7 @@ where
             ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload,
         > + CanQueryClientState<Counterparty>
         + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
         + HasErrorType,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
 {
@@ -278,7 +283,7 @@ where
     ) -> Result<SolomachineConnectionOpenConfirmPayload, Chain::Error> {
         let public_key = chain.public_key();
         let secret_key = chain.secret_key();
-        let commitment_prefix = chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
         let _cosmos_client_state = chain.query_client_state(client_id, height).await?;
 
         let connection = chain.query_connection_end(connection_id, height).await?;

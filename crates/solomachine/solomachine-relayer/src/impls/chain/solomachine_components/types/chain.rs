@@ -1,4 +1,5 @@
 use cgp_core::Async;
+use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
@@ -29,4 +30,11 @@ where
     Chain: Async,
 {
     type ChannelEnd = ChannelEnd;
+}
+
+impl<Chain> ProvideCommitmentPrefixType<Chain> for ProvideSolomachineChainTypes
+where
+    Chain: Async,
+{
+    type CommitmentPrefix = String;
 }

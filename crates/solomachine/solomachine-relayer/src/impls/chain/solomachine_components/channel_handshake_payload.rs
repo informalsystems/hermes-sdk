@@ -1,6 +1,7 @@
 use cgp_core::error::HasErrorType;
 use eyre::eyre;
 use hermes_error::types::Error;
+use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
 };
@@ -35,6 +36,7 @@ where
             ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
         + HasErrorType<Error = Error>,
 {
     async fn build_channel_open_try_payload(
@@ -54,7 +56,7 @@ where
         let connection_hops = channel.connection_hops().clone();
         let version = channel.version().clone();
 
-        let commitment_prefix: &str = chain.commitment_prefix();
+        let commitment_prefix: &str = chain.ibc_commitment_prefix();
 
         let channel_state_data =
             channel_proof_data(client_state, commitment_prefix, channel_id, channel)?;
@@ -85,6 +87,7 @@ where
             ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
         + HasErrorType<Error = Error>,
 {
     async fn build_channel_open_ack_payload(
@@ -104,7 +107,7 @@ where
 
         let version = channel.version().clone();
 
-        let commitment_prefix = chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
 
         let channel_state_data =
             channel_proof_data(client_state, commitment_prefix, channel_id, channel)?;
@@ -133,6 +136,7 @@ where
             ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
         + HasErrorType<Error = Error>,
 {
     async fn build_channel_open_confirm_payload(
@@ -148,7 +152,7 @@ where
             return Err(Error::from(eyre!("expected channel to be in open state")));
         }
 
-        let commitment_prefix = chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
 
         let channel_state_data =
             channel_proof_data(client_state, commitment_prefix, channel_id, channel)?;

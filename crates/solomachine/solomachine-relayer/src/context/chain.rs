@@ -9,6 +9,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
 use hermes_relayer_components::chain::traits::queries::channel_end::ChannelEndQuerier;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerier;
@@ -74,6 +75,12 @@ impl MockSolomachine {
 impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents {
     fn chain_id(chain: &MockSolomachine) -> &ChainId {
         &chain.chain_id
+    }
+}
+
+impl IbcCommitmentPrefixGetter<MockSolomachine> for SolomachineChainComponents {
+    fn ibc_commitment_prefix(chain: &MockSolomachine) -> &String {
+        &chain.commitment_prefix
     }
 }
 
@@ -160,10 +167,6 @@ impl Solomachine for MockSolomachine {
 
     fn secret_key(&self) -> &SecretKey {
         &self.secret_key
-    }
-
-    fn commitment_prefix(&self) -> &str {
-        self.commitment_prefix.as_str()
     }
 
     fn current_time(&self) -> u64 {

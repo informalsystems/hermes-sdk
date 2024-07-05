@@ -143,7 +143,6 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
-            CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             ConnectionEndTypeComponent,
         ]:
@@ -152,6 +151,7 @@ delegate_components! {
             MessageTypeComponent,
             EventTypeComponent,
             ChannelEndTypeComponent,
+            CommitmentPrefixTypeComponent,
         ]:
             ProvideSolomachineChainTypes,
         [

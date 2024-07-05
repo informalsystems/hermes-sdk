@@ -18,8 +18,6 @@ pub trait Solomachine: HasErrorType {
     // of the process, such as in HSM.
     fn secret_key(&self) -> &SecretKey;
 
-    fn commitment_prefix(&self) -> &str;
-
     fn current_time(&self) -> u64;
 
     fn current_diversifier(&self) -> String;
