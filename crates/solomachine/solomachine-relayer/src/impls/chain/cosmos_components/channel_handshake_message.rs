@@ -5,7 +5,6 @@ use hermes_cosmos_chain_components::types::messages::channel::open_ack::CosmosCh
 use hermes_cosmos_chain_components::types::messages::channel::open_confirm::CosmosChannelOpenConfirmMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_init::CosmosChannelOpenInitMessage;
 use hermes_cosmos_chain_components::types::messages::channel::open_try::CosmosChannelOpenTryMessage;
-use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,
@@ -36,7 +35,7 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId>,
 {
     async fn build_channel_open_init_message(
@@ -44,7 +43,7 @@ where
         port_id: &PortId,
         counterparty_port_id: &PortId,
         init_channel_options: &CosmosInitChannelOptions,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let ordering = init_channel_options.ordering;
         let connection_hops = init_channel_options.connection_hops.clone();
         let channel_version = init_channel_options.channel_version.clone();
@@ -76,7 +75,7 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasChannelOpenTryPayloadType<
             Chain,
             ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
@@ -88,7 +87,7 @@ where
         counterparty_port_id: &PortId,
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenTryPayload,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let proof_init = Vec::from(counterparty_payload.proof_init.serialize_compact());
 
         let counterparty = ChannelCounterparty::new(
@@ -125,7 +124,7 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasChannelOpenAckPayloadType<
             Chain,
             ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,
@@ -137,7 +136,7 @@ where
         channel_id: &ChannelId,
         counterparty_channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenAckPayload,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let proof_try = Vec::from(counterparty_payload.proof_try.serialize_compact());
 
         let message = CosmosChannelOpenAckMessage {
@@ -161,7 +160,7 @@ where
             Message = CosmosMessage,
             ChannelId = ChannelId,
             PortId = PortId,
-        > + HasErrorType<Error = Error>,
+        > + HasErrorType,
     Counterparty: HasChannelOpenConfirmPayloadType<
             Chain,
             ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload,
@@ -172,7 +171,7 @@ where
         port_id: &PortId,
         channel_id: &ChannelId,
         counterparty_payload: SolomachineChannelOpenConfirmPayload,
-    ) -> Result<CosmosMessage, Error> {
+    ) -> Result<CosmosMessage, Chain::Error> {
         let proof_ack = Vec::from(counterparty_payload.proof_ack.serialize_compact());
 
         let message = CosmosChannelOpenConfirmMessage {

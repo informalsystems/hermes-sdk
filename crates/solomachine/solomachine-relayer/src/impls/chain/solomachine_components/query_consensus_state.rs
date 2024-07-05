@@ -2,29 +2,28 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 use ibc_relayer_types::Height;
 
 use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 
 pub struct QueryCosmosConsensusStateFromSolomachine;
 
-impl<Chain, Counterparty> ConsensusStateQuerier<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ConsensusStateQuerier<Chain, Counterparty>
     for QueryCosmosConsensusStateFromSolomachine
 where
-    Chain: Solomachine,
+    Chain: Solomachine + HasIbcChainTypes<Counterparty, Height = Height, ClientId = ClientId>,
     Counterparty: HasHeightType<Height = Height>
-        + HasConsensusStateType<SolomachineChain<Chain>, ConsensusState = TendermintConsensusState>,
+        + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>,
 {
     async fn query_consensus_state(
-        chain: &SolomachineChain<Chain>,
+        chain: &Chain,
         client_id: &ClientId,
         consensus_height: &Height,
         _query_height: &Height,
     ) -> Result<TendermintConsensusState, Chain::Error> {
         chain
-            .chain
             .query_consensus_state(client_id, *consensus_height)
             .await
     }

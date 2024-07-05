@@ -1,4 +1,10 @@
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_chain_components::components::client::{
+    ChannelEndTypeComponent, ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ConsensusStateTypeComponent,
+};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -61,6 +67,7 @@ use hermes_runtime_components::traits::runtime::{
     GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 
+use crate::context::chain::MockSolomachine;
 use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
@@ -71,22 +78,17 @@ use crate::impls::chain::solomachine_components::create_client_message::BuildCre
 use crate::impls::chain::solomachine_components::create_client_payload::BuildSolomachineCreateClientPayload;
 use crate::impls::chain::solomachine_components::process_message::ProcessSolomachineMessages;
 use crate::impls::chain::solomachine_components::query_chain_status::QuerySolomachineStatus;
-use crate::impls::chain::solomachine_components::query_client_state::QueryCosmosClientStateFromSolomachine;
-use crate::impls::chain::solomachine_components::query_consensus_state::QueryCosmosConsensusStateFromSolomachine;
 use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
 use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
 use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachineChainTypes;
 use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
-use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
+use crate::impls::client_state::ProvideSolomachineClientState;
+use crate::impls::consensus_state::ProvideSolomachineConsensusState;
 use crate::types::consensus_state::SolomachineConsensusState;
 
 pub struct SolomachineChainComponents;
 
-impl<Chain> HasComponents for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
+impl HasComponents for MockSolomachine {
     type Components = SolomachineChainComponents;
 }
 
@@ -119,12 +121,16 @@ delegate_components! {
     }
 }
 
-impl<Chain> DelegateComponent<SolomachineChain<Chain>> for DelegateCosmosChainComponents {
+impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
     type Delegate = SolomachineCosmosComponents;
 }
 
 delegate_components! {
     SolomachineChainComponents {
+        ErrorTypeComponent:
+            ProvideEyreError,
+        ErrorRaiserComponent:
+            RaiseDebugError,
         RuntimeTypeComponent:
             ProvideHermesRuntime,
         RuntimeGetterComponent:
@@ -137,7 +143,6 @@ delegate_components! {
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
-            CommitmentPrefixTypeComponent,
             CommitmentProofTypeComponent,
             ConnectionEndTypeComponent,
         ]:
@@ -145,8 +150,17 @@ delegate_components! {
         [
             MessageTypeComponent,
             EventTypeComponent,
+            ChannelEndTypeComponent,
+            CommitmentPrefixTypeComponent,
         ]:
             ProvideSolomachineChainTypes,
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            ProvideSolomachineClientState,
+        ConsensusStateTypeComponent:
+            ProvideSolomachineConsensusState,
         EncodingGetterComponent:
             GetDefaultEncoding,
         PacketFieldsReaderComponent:
@@ -155,10 +169,6 @@ delegate_components! {
             ProcessSolomachineMessages,
         ChainStatusQuerierComponent:
             QuerySolomachineStatus,
-        ClientStateQuerierComponent:
-            QueryCosmosClientStateFromSolomachine,
-        ConsensusStateQuerierComponent:
-            QueryCosmosConsensusStateFromSolomachine,
         [
             ChannelOpenTryPayloadBuilderComponent,
             ChannelOpenAckPayloadBuilderComponent,
@@ -202,19 +212,17 @@ pub trait CanUseSolomachine:
 {
 }
 
-impl<Chain> CanUseSolomachine for SolomachineChain<Chain> where Chain: Solomachine {}
+impl CanUseSolomachine for MockSolomachine {}
 
-pub trait CanUseCosmosChainWithSolomachine<Chain>:
-    CanQueryClientState<SolomachineChain<Chain>>
-    + CanQueryClientStateWithProofs<SolomachineChain<Chain>>
-    + CanQueryConsensusStateWithProofs<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenInitPayload<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenTryPayload<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenAckPayload<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenConfirmPayload<SolomachineChain<Chain>>
-where
-    Chain: Solomachine,
+pub trait CanUseCosmosChainWithSolomachine:
+    CanQueryClientState<MockSolomachine>
+    + CanQueryClientStateWithProofs<MockSolomachine>
+    + CanQueryConsensusStateWithProofs<MockSolomachine>
+    + CanBuildConnectionOpenInitPayload<MockSolomachine>
+    + CanBuildConnectionOpenTryPayload<MockSolomachine>
+    + CanBuildConnectionOpenAckPayload<MockSolomachine>
+    + CanBuildConnectionOpenConfirmPayload<MockSolomachine>
 {
 }
 
-impl<Chain> CanUseCosmosChainWithSolomachine<Chain> for CosmosChain where Chain: Solomachine {}
+impl CanUseCosmosChainWithSolomachine for CosmosChain {}

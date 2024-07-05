@@ -2,7 +2,6 @@ use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use ibc_proto::ibc::core::channel::v1::Channel as ProtoChannelEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics24_host::identifier::ChannelId;
-use prost::EncodeError;
 
 use crate::types::client_state::SolomachineClientState;
 use crate::types::sign_data::SolomachineSignData;
@@ -14,7 +13,7 @@ pub fn channel_proof_data(
     commitment_prefix: &str,
     channel_id: &ChannelId,
     channel_end: ChannelEnd,
-) -> Result<SolomachineSignData, EncodeError> {
+) -> SolomachineSignData {
     let proto_channel_end: ProtoChannelEnd = channel_end.into();
 
     let channel_end_bytes = encode_protobuf(&proto_channel_end);
@@ -29,5 +28,5 @@ pub fn channel_proof_data(
         data: channel_end_bytes,
     };
 
-    Ok(sign_data)
+    sign_data
 }

@@ -1,16 +1,21 @@
-use eyre::eyre;
-use hermes_error::types::Error;
+use cgp_core::error::CanRaiseError;
+use hermes_relayer_components::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilder, ChannelOpenConfirmPayloadBuilder, ChannelOpenTryPayloadBuilder,
 };
-use ibc_relayer_types::core::ics04_channel::channel::State;
+use hermes_relayer_components::chain::traits::queries::channel_end::CanQueryChannelEnd;
+use hermes_relayer_components::chain::traits::types::channel::{
+    HasChannelOpenAckPayloadType, HasChannelOpenConfirmPayloadType, HasChannelOpenTryPayloadType,
+};
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, State};
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::Height;
 
 use crate::methods::encode::sign_data::sign_with_data;
 use crate::methods::proofs::channel::channel_proof_data;
 use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 use crate::types::client_state::SolomachineClientState;
 use crate::types::payloads::channel::{
     SolomachineChannelOpenAckPayload, SolomachineChannelOpenConfirmPayload,
@@ -19,35 +24,42 @@ use crate::types::payloads::channel::{
 
 pub struct BuildSolomachineChannelHandshakePayloads;
 
-impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ChannelOpenTryPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
-    Chain: Solomachine<Error = Error>,
+    Chain: Solomachine
+        + HasIbcChainTypes<Counterparty, Height = Height, PortId = PortId, ChannelId = ChannelId>
+        + HasChannelOpenTryPayloadType<
+            Counterparty,
+            ChannelOpenTryPayload = SolomachineChannelOpenTryPayload,
+        > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
+        + CanRaiseError<&'static str>,
 {
     async fn build_channel_open_try_payload(
-        chain: &SolomachineChain<Chain>,
+        chain: &Chain,
         client_state: &SolomachineClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenTryPayload, Chain::Error> {
-        let channel = chain.chain.query_channel(channel_id, port_id).await?;
+        let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if channel.state != State::Init {
-            return Err(Error::from(eyre!("expected channel to be in Init state")));
+            return Err(Chain::raise_error("expected channel to be in Init state"));
         }
 
         let ordering = *channel.ordering();
         let connection_hops = channel.connection_hops().clone();
         let version = channel.version().clone();
 
-        let commitment_prefix: &str = chain.chain.commitment_prefix();
+        let commitment_prefix: &str = chain.ibc_commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
-                .map_err(Chain::encode_error)?;
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel);
 
-        let secret_key = chain.chain.secret_key();
+        let secret_key = chain.secret_key();
 
         let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
@@ -63,35 +75,42 @@ where
     }
 }
 
-impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ChannelOpenAckPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
-    Chain: Solomachine<Error = Error>,
+    Chain: Solomachine
+        + HasIbcChainTypes<Counterparty, Height = Height, PortId = PortId, ChannelId = ChannelId>
+        + HasChannelOpenAckPayloadType<
+            Counterparty,
+            ChannelOpenAckPayload = SolomachineChannelOpenAckPayload,
+        > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
+        + CanRaiseError<&'static str>,
 {
     async fn build_channel_open_ack_payload(
-        chain: &SolomachineChain<Chain>,
+        chain: &Chain,
         client_state: &SolomachineClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenAckPayload, Chain::Error> {
-        let channel = chain.chain.query_channel(channel_id, port_id).await?;
+        let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if channel.state != State::TryOpen {
-            return Err(Error::from(eyre!(
-                "expected channel to be in TryOpen state"
-            )));
+            return Err(Chain::raise_error(
+                "expected channel to be in TryOpen state",
+            ));
         }
 
         let version = channel.version().clone();
 
-        let commitment_prefix = chain.chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
-                .map_err(Chain::encode_error)?;
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel);
 
-        let secret_key = chain.chain.secret_key();
+        let secret_key = chain.secret_key();
 
         let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
@@ -105,31 +124,38 @@ where
     }
 }
 
-impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ChannelOpenConfirmPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineChannelHandshakePayloads
 where
-    Chain: Solomachine<Error = Error>,
+    Chain: Solomachine
+        + HasIbcChainTypes<Counterparty, Height = Height, PortId = PortId, ChannelId = ChannelId>
+        + HasChannelOpenConfirmPayloadType<
+            Counterparty,
+            ChannelOpenConfirmPayload = SolomachineChannelOpenConfirmPayload,
+        > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryChannelEnd<Counterparty, ChannelEnd = ChannelEnd>
+        + HasIbcCommitmentPrefix<CommitmentPrefix = String>
+        + CanRaiseError<&'static str>,
 {
     async fn build_channel_open_confirm_payload(
-        chain: &SolomachineChain<Chain>,
+        chain: &Chain,
         client_state: &SolomachineClientState,
         height: &Height,
         port_id: &PortId,
         channel_id: &ChannelId,
     ) -> Result<SolomachineChannelOpenConfirmPayload, Chain::Error> {
-        let channel = chain.chain.query_channel(channel_id, port_id).await?;
+        let channel = chain.query_channel_end(channel_id, port_id, height).await?;
 
         if !channel.state.is_open() {
-            return Err(Error::from(eyre!("expected channel to be in open state")));
+            return Err(Chain::raise_error("expected channel to be in open state"));
         }
 
-        let commitment_prefix = chain.chain.commitment_prefix();
+        let commitment_prefix = chain.ibc_commitment_prefix();
 
         let channel_state_data =
-            channel_proof_data(client_state, commitment_prefix, channel_id, channel)
-                .map_err(Chain::encode_error)?;
+            channel_proof_data(client_state, commitment_prefix, channel_id, channel);
 
-        let secret_key = chain.chain.secret_key();
+        let secret_key = chain.secret_key();
 
         let channel_proof = sign_with_data(secret_key, &channel_state_data);
 
