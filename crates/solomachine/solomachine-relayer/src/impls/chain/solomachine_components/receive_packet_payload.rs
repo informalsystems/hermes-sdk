@@ -1,5 +1,10 @@
+use cgp_core::error::HasErrorType;
 use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::path::CommitmentsPath;
 use ibc_relayer_types::Height;
@@ -8,20 +13,26 @@ use crate::methods::commitment::packet_commitment_bytes;
 use crate::methods::encode::sign_data::sign_with_data;
 use crate::protobuf::solomachine_v2::PacketCommitmentData;
 use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 use crate::types::client_state::SolomachineClientState;
 use crate::types::payloads::packet::SolomachineReceivePacketPayload;
 use crate::types::sign_data::SolomachineSignData;
 
 pub struct BuildSolomachineReceivePacketPayload;
 
-impl<Chain, Counterparty> ReceivePacketPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> ReceivePacketPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineReceivePacketPayload
 where
-    Chain: Solomachine,
+    Chain: Solomachine
+        + HasReceivePacketPayloadType<
+            Counterparty,
+            ReceivePacketPayload = SolomachineReceivePacketPayload,
+        > + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
+        + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + HasHeightType<Height = Height>
+        + HasErrorType,
 {
     async fn build_receive_packet_payload(
-        chain: &SolomachineChain<Chain>,
+        chain: &Chain,
         client_state: &SolomachineClientState,
         height: &Height,
         packet: &Packet,
@@ -43,8 +54,8 @@ where
 
         let packet_commitment_data_bytes = encode_protobuf(&packet_commitment_data);
 
-        let new_diversifier = chain.chain.current_diversifier();
-        let secret_key = chain.chain.secret_key();
+        let new_diversifier = chain.current_diversifier();
+        let secret_key = chain.secret_key();
         let consensus_timestamp = client_state.consensus_state.timestamp;
 
         let sign_data = SolomachineSignData {

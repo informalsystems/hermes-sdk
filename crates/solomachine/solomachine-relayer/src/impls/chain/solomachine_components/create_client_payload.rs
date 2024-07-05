@@ -1,25 +1,33 @@
+use cgp_core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilder;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
+};
 
 use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 use crate::types::client_state::SolomachineClientState;
 use crate::types::consensus_state::SolomachineConsensusState;
 use crate::types::payloads::client::SolomachineCreateClientPayload;
 
 pub struct BuildSolomachineCreateClientPayload;
 
-impl<Chain, Counterparty> CreateClientPayloadBuilder<SolomachineChain<Chain>, Counterparty>
+impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildSolomachineCreateClientPayload
 where
-    Chain: Solomachine,
+    Chain: Solomachine
+        + HasCreateClientPayloadOptionsType<Counterparty>
+        + HasCreateClientPayloadType<
+            Counterparty,
+            CreateClientPayload = SolomachineCreateClientPayload,
+        > + HasErrorType,
 {
     async fn build_create_client_payload(
-        chain: &SolomachineChain<Chain>,
-        _create_client_options: &(),
+        chain: &Chain,
+        _create_client_options: &Chain::CreateClientPayloadOptions,
     ) -> Result<SolomachineCreateClientPayload, Chain::Error> {
-        let public_key = chain.chain.public_key().clone();
-        let diversifier = chain.chain.current_diversifier();
-        let timestamp = chain.chain.current_time();
+        let public_key = chain.public_key().clone();
+        let diversifier = chain.current_diversifier();
+        let timestamp = chain.current_time();
 
         let consensus_state = SolomachineConsensusState {
             public_key: Some(public_key),

@@ -10,6 +10,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_error::types::Error;
+use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_runtime::types::error::TokioRuntimeError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
@@ -22,6 +23,7 @@ use prost::EncodeError;
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
+use crate::impls::chain::component::SolomachineChainComponents;
 use crate::methods::encode::public_key::PublicKey;
 use crate::traits::solomachine::Solomachine;
 
@@ -64,27 +66,15 @@ impl MockSolomachine {
     }
 }
 
-impl Solomachine for MockSolomachine {
-    type Error = Error;
-
-    fn get_chain_id(&self) -> &ChainId {
-        &self.chain_id
+impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents {
+    fn chain_id(chain: &MockSolomachine) -> &ChainId {
+        &chain.chain_id
     }
+}
 
+impl Solomachine for MockSolomachine {
     fn get_telemetry(&self) -> &CosmosTelemetry {
         &self.telemetry
-    }
-
-    fn runtime(&self) -> &HermesRuntime {
-        &self.runtime
-    }
-
-    fn runtime_error(e: TokioRuntimeError) -> Self::Error {
-        e.into()
-    }
-
-    fn encode_error(e: EncodeError) -> Self::Error {
-        e.into()
     }
 
     fn invalid_connection_state_error(

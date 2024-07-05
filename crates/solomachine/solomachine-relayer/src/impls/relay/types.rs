@@ -4,34 +4,30 @@ use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
+use crate::context::chain::MockSolomachine;
 use crate::context::relay::SolomachineRelay;
 use crate::impls::relay::component::SolomachineRelayComponents;
-use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 
-impl<Chain> ProvideRelayChains<SolomachineRelay<Chain>> for SolomachineRelayComponents
-where
-    Chain: Solomachine<Error = Error>,
-{
-    type SrcChain = SolomachineChain<Chain>;
+impl ProvideRelayChains<SolomachineRelay> for SolomachineRelayComponents {
+    type SrcChain = MockSolomachine;
 
     type DstChain = CosmosChain;
 
     type Packet = Packet;
 
-    fn src_client_id(relay: &SolomachineRelay<Chain>) -> &ClientId {
+    fn src_client_id(relay: &SolomachineRelay) -> &ClientId {
         &relay.src_client_id
     }
 
-    fn dst_client_id(relay: &SolomachineRelay<Chain>) -> &ClientId {
+    fn dst_client_id(relay: &SolomachineRelay) -> &ClientId {
         &relay.dst_client_id
     }
 
-    fn src_chain(relay: &SolomachineRelay<Chain>) -> &SolomachineChain<Chain> {
+    fn src_chain(relay: &SolomachineRelay) -> &MockSolomachine {
         &relay.src_chain
     }
 
-    fn dst_chain(relay: &SolomachineRelay<Chain>) -> &CosmosChain {
+    fn dst_chain(relay: &SolomachineRelay) -> &CosmosChain {
         &relay.dst_chain
     }
 }

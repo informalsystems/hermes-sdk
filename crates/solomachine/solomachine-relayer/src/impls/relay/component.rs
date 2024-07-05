@@ -21,10 +21,7 @@ with_default_relay_components! {
     }
 }
 
-impl<Chain> HasComponents for SolomachineRelay<Chain>
-where
-    Chain: Async,
-{
+impl HasComponents for SolomachineRelay {
     type Components = SolomachineRelayComponents;
 }
 

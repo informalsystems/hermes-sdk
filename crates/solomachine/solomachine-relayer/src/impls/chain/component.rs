@@ -64,6 +64,7 @@ use hermes_runtime_components::traits::runtime::{
     GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 
+use crate::context::chain::MockSolomachine;
 use crate::context::encoding::SolomachineEncoding;
 use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
 use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
@@ -83,15 +84,11 @@ use crate::impls::chain::solomachine_components::update_client_payload::BuildSol
 use crate::impls::client_state::ProvideSolomachineClientState;
 use crate::impls::consensus_state::ProvideSolomachineConsensusState;
 use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 use crate::types::consensus_state::SolomachineConsensusState;
 
 pub struct SolomachineChainComponents;
 
-impl<Chain> HasComponents for SolomachineChain<Chain>
-where
-    Chain: Async,
-{
+impl HasComponents for MockSolomachine {
     type Components = SolomachineChainComponents;
 }
 
@@ -124,7 +121,7 @@ delegate_components! {
     }
 }
 
-impl<Chain> DelegateComponent<SolomachineChain<Chain>> for DelegateCosmosChainComponents {
+impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
     type Delegate = SolomachineCosmosComponents;
 }
 
@@ -214,19 +211,17 @@ pub trait CanUseSolomachine:
 {
 }
 
-impl<Chain> CanUseSolomachine for SolomachineChain<Chain> where Chain: Solomachine {}
+impl CanUseSolomachine for MockSolomachine {}
 
-pub trait CanUseCosmosChainWithSolomachine<Chain>:
-    CanQueryClientState<SolomachineChain<Chain>>
-    + CanQueryClientStateWithProofs<SolomachineChain<Chain>>
-    + CanQueryConsensusStateWithProofs<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenInitPayload<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenTryPayload<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenAckPayload<SolomachineChain<Chain>>
-    + CanBuildConnectionOpenConfirmPayload<SolomachineChain<Chain>>
-where
-    Chain: Solomachine,
+pub trait CanUseCosmosChainWithSolomachine:
+    CanQueryClientState<MockSolomachine>
+    + CanQueryClientStateWithProofs<MockSolomachine>
+    + CanQueryConsensusStateWithProofs<MockSolomachine>
+    + CanBuildConnectionOpenInitPayload<MockSolomachine>
+    + CanBuildConnectionOpenTryPayload<MockSolomachine>
+    + CanBuildConnectionOpenAckPayload<MockSolomachine>
+    + CanBuildConnectionOpenConfirmPayload<MockSolomachine>
 {
 }
 
-impl<Chain> CanUseCosmosChainWithSolomachine<Chain> for CosmosChain where Chain: Solomachine {}
+impl CanUseCosmosChainWithSolomachine for CosmosChain {}

@@ -1,6 +1,9 @@
 use core::str::FromStr;
 
+use cgp_core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
+use hermes_relayer_components::chain::traits::types::event::HasEventType;
+use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::{ConnectionEnd, Counterparty, State as ConnectionState};
 use ibc::core::host::types::identifiers::{ClientId, ConnectionId};
@@ -8,7 +11,6 @@ use ibc_relayer_types::core::ics24_host::identifier::ConnectionId as RelayerConn
 use ibc_relayer_types::timestamp::ZERO_DURATION;
 
 use crate::traits::solomachine::Solomachine;
-use crate::types::chain::SolomachineChain;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };
@@ -16,12 +18,15 @@ use crate::types::message::SolomachineMessage;
 
 pub struct ProcessSolomachineMessages;
 
-impl<Chain> MessageSender<SolomachineChain<Chain>> for ProcessSolomachineMessages
+impl<Chain> MessageSender<Chain> for ProcessSolomachineMessages
 where
-    Chain: Solomachine,
+    Chain: Solomachine
+        + HasMessageType<Message = SolomachineMessage>
+        + HasEventType<Event = SolomachineEvent>
+        + HasErrorType,
 {
     async fn send_messages(
-        chain: &SolomachineChain<Chain>,
+        chain: &Chain,
         messages: Vec<SolomachineMessage>,
     ) -> Result<Vec<Vec<SolomachineEvent>>, Chain::Error> {
         let mut res = vec![];
@@ -29,7 +34,6 @@ where
             match message {
                 SolomachineMessage::CosmosCreateClient(m) => {
                     let client_id = chain
-                        .chain
                         .create_client(m.client_state.clone(), m.consensus_state.clone())
                         .await
                         .unwrap();
@@ -41,6 +45,9 @@ where
                 }
                 SolomachineMessage::CosmosConnectionOpenInit { .. } => {
                     let connection_id = ConnectionId::from_str("connection-1").unwrap();
+                    let relayer_connection_id =
+                        RelayerConnectionId::from_str(connection_id.as_str()).unwrap();
+
                     let counterparty_connection_id =
                         ConnectionId::from_str("connection-0").unwrap();
 
@@ -63,13 +70,11 @@ where
                     .unwrap();
 
                     chain
-                        .chain
-                        .update_connection(&connection_id, connection_end)
+                        .update_connection(&relayer_connection_id, connection_end)
                         .await;
 
                     let connection_init_event = SolomachineConnectionInitEvent {
-                        connection_id: RelayerConnectionId::from_str(connection_id.as_str())
-                            .unwrap(),
+                        connection_id: relayer_connection_id,
                     };
 
                     res.push(vec![SolomachineEvent::ConnectionInit(
