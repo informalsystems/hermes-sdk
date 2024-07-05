@@ -4,12 +4,14 @@ use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgp_core::prelude::*;
-use eyre::eyre;
+use eyre::{eyre, Error};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
+use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
@@ -70,6 +72,24 @@ impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents {
     }
 }
 
+impl<Counterparty> ClientStateQuerier<MockSolomachine, Counterparty> for SolomachineChainComponents
+where
+    Counterparty: HasClientStateType<MockSolomachine, ClientState = TendermintClientState>,
+{
+    async fn query_client_state(
+        chain: &MockSolomachine,
+        client_id: &ClientId,
+        _height: &Height,
+    ) -> Result<TendermintClientState, Error> {
+        let client_states = chain.client_states.lock().unwrap();
+
+        client_states
+            .get(client_id)
+            .ok_or_else(|| eyre!("client state for client id `{}` was not found", client_id))
+            .cloned()
+    }
+}
+
 impl Solomachine for MockSolomachine {
     fn public_key(&self) -> &PublicKey {
         &self.public_key
@@ -112,17 +132,6 @@ impl Solomachine for MockSolomachine {
             client_consensus_states.insert(client_id.clone(), consensus_state);
         }
         Ok(client_id)
-    }
-
-    async fn query_client_state(
-        &self,
-        client_id: &ClientId,
-    ) -> Result<TendermintClientState, Self::Error> {
-        let client_states = self.client_states.lock().unwrap();
-        client_states
-            .get(client_id)
-            .ok_or_else(|| eyre!("client state for client id `{}` was not found", client_id))
-            .cloned()
     }
 
     async fn query_consensus_state(

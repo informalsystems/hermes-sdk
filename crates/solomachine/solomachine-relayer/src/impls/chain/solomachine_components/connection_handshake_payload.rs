@@ -1,10 +1,12 @@
 use core::str::FromStr;
 
 use cgp_core::error::{CanRaiseError, HasErrorType};
+use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
 };
+use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasConnectionOpenAckPayloadType, HasConnectionOpenConfirmPayloadType,
@@ -65,7 +67,9 @@ where
             Counterparty,
             ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryClientState<Counterparty>
         + CanRaiseError<String>,
+    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
 {
     async fn build_connection_open_try_payload(
         chain: &Chain,
@@ -102,7 +106,7 @@ where
             connection,
         );
 
-        let cosmos_client_state = chain.query_client_state(client_id).await?;
+        let cosmos_client_state = chain.query_client_state(client_id, height).await?;
 
         let client_state_proof = client_state_proof_data(
             public_key,
@@ -152,7 +156,9 @@ where
             Counterparty,
             ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        + CanQueryClientState<Counterparty>
         + CanRaiseError<String>,
+    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
 {
     async fn build_connection_open_ack_payload(
         chain: &Chain,
@@ -184,7 +190,7 @@ where
 
         let commitment_prefix = chain.commitment_prefix();
 
-        let cosmos_client_state = chain.query_client_state(client_id).await?;
+        let cosmos_client_state = chain.query_client_state(client_id, height).await?;
 
         let client_state_proof = client_state_proof_data(
             public_key,
@@ -242,7 +248,9 @@ where
         + HasConnectionOpenConfirmPayloadType<
             Counterparty,
             ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload,
-        > + HasErrorType,
+        > + CanQueryClientState<Counterparty>
+        + HasErrorType,
+    Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
 {
     async fn build_connection_open_confirm_payload(
         chain: &Chain,
@@ -254,7 +262,7 @@ where
         let public_key = chain.public_key();
         let secret_key = chain.secret_key();
         let commitment_prefix = chain.commitment_prefix();
-        let _cosmos_client_state = chain.query_client_state(client_id).await?;
+        let _cosmos_client_state = chain.query_client_state(client_id, height).await?;
 
         let connection = chain
             .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())

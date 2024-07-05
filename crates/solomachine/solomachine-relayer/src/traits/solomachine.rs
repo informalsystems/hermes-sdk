@@ -32,11 +32,6 @@ pub trait Solomachine: HasErrorType {
         consensus_state: TendermintConsensusState,
     ) -> Result<ClientId, Self::Error>;
 
-    async fn query_client_state(
-        &self,
-        client_id: &ClientId,
-    ) -> Result<TendermintClientState, Self::Error>;
-
     async fn query_consensus_state(
         &self,
         client_id: &ClientId,
