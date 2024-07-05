@@ -1,5 +1,3 @@
-use core::str::FromStr;
-
 use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
@@ -9,6 +7,7 @@ use hermes_relayer_components::chain::traits::payload_builders::connection_hands
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
 };
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
+use hermes_relayer_components::chain::traits::queries::connection_end::CanQueryConnectionEnd;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -19,7 +18,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::HasConsens
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc::core::connection::types::version::Version;
-use ibc::core::connection::types::State as ConnectionState;
+use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 use ibc_relayer_types::Height;
 
@@ -74,6 +73,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryClientState<Counterparty>
         + CanQueryConsensusState<Counterparty>
+        + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + CanRaiseError<String>,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
         + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
@@ -86,7 +86,7 @@ where
         client_id: &ClientId,
         connection_id: &ConnectionId,
     ) -> Result<SolomachineConnectionOpenTryPayload, Chain::Error> {
-        let connection = chain.query_connection(connection_id).await?;
+        let connection = chain.query_connection_end(connection_id, height).await?;
 
         if connection.state != ConnectionState::Init {
             return Err(Chain::raise_error(format!(
@@ -168,6 +168,7 @@ where
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + CanQueryClientState<Counterparty>
         + CanQueryConsensusState<Counterparty>
+        + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + CanRaiseError<String>,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>
         + HasConsensusStateType<Chain, ConsensusState = TendermintConsensusState>
@@ -183,7 +184,7 @@ where
         let public_key = chain.public_key();
         let secret_key = chain.secret_key();
 
-        let connection = chain.query_connection(connection_id).await?;
+        let connection = chain.query_connection_end(connection_id, height).await?;
 
         if connection.state != ConnectionState::TryOpen {
             return Err(Chain::raise_error(format!(
@@ -264,6 +265,7 @@ where
             Counterparty,
             ConnectionOpenConfirmPayload = SolomachineConnectionOpenConfirmPayload,
         > + CanQueryClientState<Counterparty>
+        + CanQueryConnectionEnd<Counterparty, ConnectionEnd = ConnectionEnd>
         + HasErrorType,
     Counterparty: HasClientStateType<Chain, ClientState = TendermintClientState>,
 {
@@ -279,9 +281,7 @@ where
         let commitment_prefix = chain.commitment_prefix();
         let _cosmos_client_state = chain.query_client_state(client_id, height).await?;
 
-        let connection = chain
-            .query_connection(&ConnectionId::from_str(connection_id.as_str()).unwrap())
-            .await?;
+        let connection = chain.query_connection_end(connection_id, height).await?;
 
         // TODO confirm connection state
         /*if connection.state != ConnectionState::TryOpen {

@@ -32,11 +32,6 @@ pub trait Solomachine: HasErrorType {
     ) -> Result<ClientId, Self::Error>;
     async fn update_connection(&self, connection_id: &ConnectionId, connection_end: ConnectionEnd);
 
-    async fn query_connection(
-        &self,
-        connection_id: &ConnectionId,
-    ) -> Result<ConnectionEnd, Self::Error>;
-
     async fn query_channel(
         &self,
         channel_id: &ChannelId,

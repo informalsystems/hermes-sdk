@@ -10,6 +10,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
 };
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
+use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerier;
 use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
@@ -119,6 +120,27 @@ where
     }
 }
 
+impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
+    for SolomachineChainComponents
+{
+    async fn query_connection_end(
+        chain: &MockSolomachine,
+        connection_id: &ConnectionId,
+        _height: &Height,
+    ) -> Result<ConnectionEnd, Error> {
+        let connections = chain.connections.lock().unwrap();
+
+        let connection = connections.get(connection_id).ok_or_else(|| {
+            eyre!(
+                "connection end for connection id `{}` was not found",
+                connection_id
+            )
+        })?;
+
+        Ok(connection.clone())
+    }
+}
+
 impl Solomachine for MockSolomachine {
     fn public_key(&self) -> &PublicKey {
         &self.public_key
@@ -166,22 +188,6 @@ impl Solomachine for MockSolomachine {
     async fn update_connection(&self, connection_id: &ConnectionId, connection_end: ConnectionEnd) {
         let mut connections = self.connections.lock().unwrap();
         connections.insert(connection_id.clone(), connection_end);
-    }
-
-    async fn query_connection(
-        &self,
-        connection_id: &ConnectionId,
-    ) -> Result<ConnectionEnd, Self::Error> {
-        let connections = self.connections.lock().unwrap();
-        connections
-            .get(connection_id)
-            .ok_or_else(|| {
-                eyre!(
-                    "connection end for connection id `{}` was not found",
-                    connection_id
-                )
-            })
-            .cloned()
     }
 
     async fn query_channel(
