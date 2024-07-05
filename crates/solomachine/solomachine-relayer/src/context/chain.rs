@@ -11,7 +11,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_runtime::types::runtime::HermesRuntime;
-use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
+use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::{
@@ -71,21 +71,6 @@ impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents {
 }
 
 impl Solomachine for MockSolomachine {
-    fn get_telemetry(&self) -> &CosmosTelemetry {
-        &self.telemetry
-    }
-
-    fn invalid_connection_state_error(
-        expected: ConnectionState,
-        actual: ConnectionState,
-    ) -> Self::Error {
-        eyre!(
-            "connection state error, expected {} got {}",
-            expected,
-            actual
-        )
-    }
-
     fn public_key(&self) -> &PublicKey {
         &self.public_key
     }

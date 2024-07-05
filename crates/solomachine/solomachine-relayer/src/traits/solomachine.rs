@@ -2,8 +2,7 @@ use cgp_core::prelude::*;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
-use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
-use ibc::core::connection::types::{ConnectionEnd, State as ConnectionState};
+use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ClientId, ConnectionId, PortId};
@@ -14,13 +13,6 @@ use crate::methods::encode::public_key::PublicKey;
 
 #[async_trait]
 pub trait Solomachine: HasErrorType {
-    fn get_telemetry(&self) -> &CosmosTelemetry;
-
-    fn invalid_connection_state_error(
-        expected: ConnectionState,
-        actual: ConnectionState,
-    ) -> Self::Error;
-
     fn public_key(&self) -> &PublicKey;
 
     // TODO: remove secret key accessor and provide sign methods instead.

@@ -1,6 +1,6 @@
 use core::str::FromStr;
 
-use cgp_core::error::HasErrorType;
+use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
     ConnectionOpenAckPayloadBuilder, ConnectionOpenConfirmPayloadBuilder,
     ConnectionOpenInitPayloadBuilder, ConnectionOpenTryPayloadBuilder,
@@ -65,7 +65,7 @@ where
             Counterparty,
             ConnectionOpenTryPayload = SolomachineConnectionOpenTryPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
-        + HasErrorType,
+        + CanRaiseError<String>,
 {
     async fn build_connection_open_try_payload(
         chain: &Chain,
@@ -77,10 +77,11 @@ where
         let connection = chain.query_connection(connection_id).await?;
 
         if connection.state != ConnectionState::Init {
-            return Err(Chain::invalid_connection_state_error(
+            return Err(Chain::raise_error(format!(
+                "connection state error, expected {} got {}",
                 ConnectionState::Init,
-                connection.state,
-            ));
+                connection.state
+            )));
         }
 
         let versions = connection.versions().to_vec();
@@ -151,7 +152,7 @@ where
             Counterparty,
             ConnectionOpenAckPayload = SolomachineConnectionOpenAckPayload,
         > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
-        + HasErrorType,
+        + CanRaiseError<String>,
 {
     async fn build_connection_open_ack_payload(
         chain: &Chain,
@@ -166,10 +167,11 @@ where
         let connection = chain.query_connection(connection_id).await?;
 
         if connection.state != ConnectionState::TryOpen {
-            return Err(Chain::invalid_connection_state_error(
+            return Err(Chain::raise_error(format!(
+                "connection state error, expected {} got {}",
                 ConnectionState::TryOpen,
-                connection.state,
-            ));
+                connection.state
+            )));
         }
 
         let version = connection
