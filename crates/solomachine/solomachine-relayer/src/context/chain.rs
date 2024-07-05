@@ -84,7 +84,6 @@ impl Solomachine for MockSolomachine {
             expected,
             actual
         )
-        .into()
     }
 
     fn public_key(&self) -> &PublicKey {
@@ -137,7 +136,7 @@ impl Solomachine for MockSolomachine {
         let client_states = self.client_states.lock().unwrap();
         client_states
             .get(client_id)
-            .ok_or_else(|| eyre!("client state for client id `{}` was not found", client_id).into())
+            .ok_or_else(|| eyre!("client state for client id `{}` was not found", client_id))
             .cloned()
     }
 
@@ -154,7 +153,6 @@ impl Solomachine for MockSolomachine {
                     "consensus state for client id `{}` was not found",
                     client_id
                 )
-                .into()
             })
             .cloned()
     }
@@ -176,7 +174,6 @@ impl Solomachine for MockSolomachine {
                     "connection end for connection id `{}` was not found",
                     connection_id
                 )
-                .into()
             })
             .cloned()
     }
