@@ -21,19 +21,19 @@ use hermes_relayer_components::error::traits::retry::{
 };
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
+use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
 use hermes_relayer_components::with_default_relay_components;
-use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use ibc_relayer::config::filter::PacketFilter as PacketFilterConfig;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
@@ -83,10 +83,11 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent:
-            ProvideHermesRuntime,
-        RuntimeGetterComponent:
-            GetRuntimeField<symbol!("runtime")>,
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]:
+            ProvideDefaultRuntimeField,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,
@@ -97,6 +98,8 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
+        RelayChainsComponent:
+            ProvideDefaultRelayFields,
     }
 }
 
@@ -125,30 +128,6 @@ impl CanUseWasmCosmosRelay for WasmCosmosRelay {}
 pub trait CanUseLogger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, WasmCosmosRelay>> {}
 
 impl CanUseLogger for HermesLogger {}
-
-impl ProvideRelayChains<WasmCosmosRelay> for WasmCosmosRelayComponents {
-    type SrcChain = WasmCosmosChain;
-
-    type DstChain = WasmCosmosChain;
-
-    type Packet = Packet;
-
-    fn src_chain(relay: &WasmCosmosRelay) -> &WasmCosmosChain {
-        &relay.src_chain
-    }
-
-    fn dst_chain(relay: &WasmCosmosRelay) -> &WasmCosmosChain {
-        &relay.dst_chain
-    }
-
-    fn src_client_id(relay: &WasmCosmosRelay) -> &ClientId {
-        &relay.src_client_id
-    }
-
-    fn dst_client_id(relay: &WasmCosmosRelay) -> &ClientId {
-        &relay.dst_client_id
-    }
-}
 
 impl PacketFilter<WasmCosmosRelay> for WasmCosmosRelayComponents {
     async fn should_relay_packet(relay: &WasmCosmosRelay, packet: &Packet) -> Result<bool, Error> {

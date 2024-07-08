@@ -50,7 +50,7 @@ use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTi
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
 use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, ProvideRuntimeType, RuntimeGetterComponent,
+    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 
 use crate::relayer_mock::base::error::{BaseError, Error};
@@ -63,7 +63,6 @@ use crate::relayer_mock::base::types::events::{Event, SendPacketEvent, WriteAckE
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
 use crate::relayer_mock::base::types::packet::PacketKey;
-use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
@@ -78,13 +77,12 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        RuntimeGetterComponent:
-            GetRuntimeField<symbol!("runtime")>,
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]:
+            ProvideDefaultRuntimeField,
     }
-}
-
-impl ProvideRuntimeType<MockChainContext> for MockChainComponents {
-    type Runtime = MockRuntimeContext;
 }
 
 impl ProvideHeightType<MockChainContext> for MockChainComponents {

@@ -15,7 +15,7 @@ use crate::types::error::Error;
 /// The `SrcChain` and `DstChain` endpoints are wrapped in
 /// `MockCosmosContext`, which bundles the `BasecoinEndpoint` with
 /// the runtime.
-#[derive(HasField, Clone)]
+#[derive(HasField)]
 pub struct MockCosmosRelay<SrcChain, DstChain>
 where
     SrcChain: BasecoinEndpoint,

@@ -211,11 +211,10 @@ use hermes_relayer_components::transaction::traits::query_tx_response::CanQueryT
 use hermes_relayer_components::transaction::traits::simulation_fee::FeeForSimulationGetter;
 use hermes_relayer_components::transaction::traits::submit_tx::CanSubmitTx;
 use hermes_relayer_components_extra::telemetry::traits::telemetry::HasTelemetry;
-use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::mutex::MutexGuardOf;
 use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, HasRuntime, RuntimeGetterComponent, RuntimeTypeComponent,
+    HasRuntime, ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use http::Uri;
@@ -263,10 +262,11 @@ delegate_components! {
             RetryableErrorComponent,
         ]:
             HandleCosmosError,
-        RuntimeTypeComponent:
-            ProvideHermesRuntime,
-        RuntimeGetterComponent:
-            GetRuntimeField<symbol!("runtime")>,
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]:
+            ProvideDefaultRuntimeField,
         [
             LoggerTypeComponent,
             LoggerGetterComponent,

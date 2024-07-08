@@ -14,14 +14,23 @@ pub trait HasRuntime: HasRuntimeType {
 
 pub type RuntimeOf<Context> = <Context as HasRuntimeType>::Runtime;
 
-pub struct GetRuntimeField<Key>(pub PhantomData<Key>);
+pub struct ProvideRuntimeField<Field>(pub PhantomData<Field>);
 
-impl<Context, Key> RuntimeGetter<Context> for GetRuntimeField<Key>
+impl<Context, Field: Async, Runtime> ProvideRuntimeType<Context> for ProvideRuntimeField<Field>
 where
-    Context: HasRuntimeType + HasField<Key, Field = Context::Runtime>,
-    Key: Async,
+    Context: HasField<Field, Field = Runtime> + Async,
+    Runtime: HasErrorType,
+{
+    type Runtime = Runtime;
+}
+
+impl<Context, Field: Async> RuntimeGetter<Context> for ProvideRuntimeField<Field>
+where
+    Context: HasRuntimeType + HasField<Field, Field = Context::Runtime>,
 {
     fn runtime(context: &Context) -> &Context::Runtime {
         context.get_field(PhantomData)
     }
 }
+
+pub type ProvideDefaultRuntimeField = ProvideRuntimeField<symbol!("runtime")>;
