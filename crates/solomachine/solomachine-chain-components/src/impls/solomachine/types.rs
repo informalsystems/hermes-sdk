@@ -1,9 +1,7 @@
 use cgp_core::Async;
-use hermes_encoding_components::traits::has_encoding::{
-    DefaultEncodingGetter, HasEncodingType, ProvideEncodingType,
-};
+use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
+    ProvideChannelEndType, ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
     ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -15,20 +13,21 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
     ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::event::HasEventType;
+use hermes_relayer_components::chain::traits::types::event::{HasEventType, ProvideEventType};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
+use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::update_client::ProvideUpdateClientPayloadType;
+use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics24_host::identifier::{ClientId, ConnectionId};
 
-use crate::context::encoding::SolomachineEncoding;
-use crate::impls::chain::component::SolomachineChainComponents;
 use crate::types::event::{
     SolomachineConnectionInitEvent, SolomachineCreateClientEvent, SolomachineEvent,
 };
+use crate::types::message::SolomachineMessage;
 use crate::types::payloads::channel::{
     SolomachineChannelOpenAckPayload, SolomachineChannelOpenConfirmPayload,
     SolomachineChannelOpenTryPayload,
@@ -45,24 +44,39 @@ use crate::types::payloads::packet::{
     SolomachineTimeoutUnorderedPacketPayload,
 };
 
-impl<Chain> ProvideEncodingType<Chain> for SolomachineChainComponents
+pub struct ProvideSolomachineChainTypes;
+
+impl<Chain> ProvideMessageType<Chain> for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
-    type Encoding = SolomachineEncoding;
+    type Message = SolomachineMessage;
 }
 
-impl<Chain> DefaultEncodingGetter<Chain> for SolomachineChainComponents
+impl<Chain> ProvideEventType<Chain> for ProvideSolomachineChainTypes
 where
-    Chain: HasEncodingType<Encoding = SolomachineEncoding>,
+    Chain: Async,
 {
-    fn default_encoding() -> &'static SolomachineEncoding {
-        &SolomachineEncoding
-    }
+    type Event = SolomachineEvent;
+}
+
+impl<Chain, Counterparty> ProvideChannelEndType<Chain, Counterparty>
+    for ProvideSolomachineChainTypes
+where
+    Chain: Async,
+{
+    type ChannelEnd = ChannelEnd;
+}
+
+impl<Chain> ProvideCommitmentPrefixType<Chain> for ProvideSolomachineChainTypes
+where
+    Chain: Async,
+{
+    type CommitmentPrefix = String;
 }
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadOptionsType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -70,7 +84,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideCreateClientMessageOptionsType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -78,7 +92,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideCreateClientPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -86,7 +100,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideUpdateClientPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -94,7 +108,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideInitConnectionOptionsType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -102,7 +116,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideInitChannelOptionsType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -110,7 +124,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideConnectionOpenInitPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -118,7 +132,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideConnectionOpenTryPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -126,7 +140,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideConnectionOpenAckPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -134,7 +148,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideConnectionOpenConfirmPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -142,7 +156,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideChannelOpenTryPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -150,7 +164,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideChannelOpenAckPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -158,7 +172,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideChannelOpenConfirmPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -166,7 +180,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideReceivePacketPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -174,7 +188,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideAckPacketPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -182,7 +196,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideTimeoutUnorderedPacketPayloadType<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: Async,
 {
@@ -190,7 +204,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideCreateClientEvent<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: HasEventType<Event = SolomachineEvent>
         + HasIbcChainTypes<Counterparty, ClientId = ClientId>,
@@ -212,7 +226,7 @@ where
 }
 
 impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<Chain, Counterparty>
-    for SolomachineChainComponents
+    for ProvideSolomachineChainTypes
 where
     Chain: HasEventType<Event = SolomachineEvent>
         + HasIbcChainTypes<Counterparty, ConnectionId = ConnectionId>,

@@ -2076,6 +2076,41 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-solomachine-chain-components"
+version = "0.1.0"
+dependencies = [
+ "bytes",
+ "cgp-core",
+ "cgp-error-eyre",
+ "crypto-hash",
+ "eyre",
+ "futures",
+ "hermes-cosmos-chain-components",
+ "hermes-cosmos-relayer",
+ "hermes-encoding-components",
+ "hermes-error",
+ "hermes-protobuf-encoding-components",
+ "hermes-relayer-components",
+ "hermes-relayer-components-extra",
+ "hermes-runtime",
+ "hermes-runtime-components",
+ "ibc",
+ "ibc-proto",
+ "ibc-relayer",
+ "ibc-relayer-types",
+ "ibc-telemetry",
+ "itertools 0.12.1",
+ "prost",
+ "secp256k1 0.27.0",
+ "serde",
+ "serde_derive",
+ "sha2 0.10.8",
+ "tendermint 0.37.0",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "hermes-solomachine-relayer"
 version = "0.1.0"
 dependencies = [
@@ -2094,6 +2129,7 @@ dependencies = [
  "hermes-relayer-components-extra",
  "hermes-runtime",
  "hermes-runtime-components",
+ "hermes-solomachine-chain-components",
  "ibc",
  "ibc-proto",
  "ibc-relayer",
