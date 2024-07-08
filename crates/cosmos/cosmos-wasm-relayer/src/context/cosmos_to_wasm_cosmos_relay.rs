@@ -22,11 +22,12 @@ use hermes_relayer_components::error::traits::retry::{
 };
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
+use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutexGetter, ProvidePacketLockWithMutex,
 };
 use hermes_relayer_components::relay::impls::packet_relayers::general::lock::LogSkipRelayLockedPacket;
-use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
+use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::CanRelayPacket;
@@ -98,6 +99,8 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
+        RelayChainsComponent:
+            ProvideDefaultRelayFields,
     }
 }
 
@@ -129,30 +132,6 @@ pub trait CanUseLogger:
 }
 
 impl CanUseLogger for HermesLogger {}
-
-impl ProvideRelayChains<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComponents {
-    type SrcChain = CosmosChain;
-
-    type DstChain = WasmCosmosChain;
-
-    type Packet = Packet;
-
-    fn src_chain(relay: &CosmosToWasmCosmosRelay) -> &CosmosChain {
-        &relay.src_chain
-    }
-
-    fn dst_chain(relay: &CosmosToWasmCosmosRelay) -> &WasmCosmosChain {
-        &relay.dst_chain
-    }
-
-    fn src_client_id(relay: &CosmosToWasmCosmosRelay) -> &ClientId {
-        &relay.src_client_id
-    }
-
-    fn dst_client_id(relay: &CosmosToWasmCosmosRelay) -> &ClientId {
-        &relay.dst_client_id
-    }
-}
 
 impl PacketFilter<CosmosToWasmCosmosRelay> for CosmosToWasmCosmosRelayComponents {
     async fn should_relay_packet(

@@ -5,7 +5,8 @@ use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::components::default::relay::*;
-use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
+use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
+use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::with_default_relay_components;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
@@ -13,7 +14,6 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
-use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
 use crate::contexts::chain::MockSolomachine;
@@ -48,6 +48,8 @@ delegate_components! {
             GetRuntimeField<symbol!("runtime")>,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
+        RelayChainsComponent:
+            ProvideDefaultRelayFields,
     }
 }
 
@@ -66,30 +68,6 @@ impl SolomachineRelay {
             src_client_id,
             dst_client_id,
         }
-    }
-}
-
-impl ProvideRelayChains<SolomachineRelay> for SolomachineRelayComponents {
-    type SrcChain = MockSolomachine;
-
-    type DstChain = CosmosChain;
-
-    type Packet = Packet;
-
-    fn src_client_id(relay: &SolomachineRelay) -> &ClientId {
-        &relay.src_client_id
-    }
-
-    fn dst_client_id(relay: &SolomachineRelay) -> &ClientId {
-        &relay.dst_client_id
-    }
-
-    fn src_chain(relay: &SolomachineRelay) -> &MockSolomachine {
-        &relay.src_chain
-    }
-
-    fn dst_chain(relay: &SolomachineRelay) -> &CosmosChain {
-        &relay.dst_chain
     }
 }
 

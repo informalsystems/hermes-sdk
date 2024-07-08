@@ -1,8 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::error::HasErrorType;
-use cgp_core::field::HasField;
-use cgp_core::Async;
+use cgp_core::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;
@@ -16,6 +14,13 @@ pub struct ProvideRelayFields<SrcChainField, DstChainField, SrcClientIdField, Ds
         DstClientIdField,
     )>,
 );
+
+pub type ProvideDefaultRelayFields = ProvideRelayFields<
+    symbol!("src_chain"),
+    symbol!("dst_chain"),
+    symbol!("src_client_id"),
+    symbol!("dst_client_id"),
+>;
 
 impl<
         Relay,
