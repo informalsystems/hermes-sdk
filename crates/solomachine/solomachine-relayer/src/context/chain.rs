@@ -3,22 +3,46 @@ use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
+use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use eyre::{eyre, Error};
+use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
+use hermes_encoding_components::traits::has_encoding::{
+    DefaultEncodingGetterComponent, EncodingTypeComponent, HasDefaultEncoding,
+};
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
+use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
+    CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
+    CanBuildConnectionOpenInitMessage, CanBuildConnectionOpenTryMessage,
+};
+use hermes_relayer_components::chain::traits::payload_builders::connection_handshake::{
+    CanBuildConnectionOpenAckPayload, CanBuildConnectionOpenConfirmPayload,
+    CanBuildConnectionOpenInitPayload, CanBuildConnectionOpenTryPayload,
+};
 use hermes_relayer_components::chain::traits::queries::channel_end::ChannelEndQuerier;
-use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerier;
+use hermes_relayer_components::chain::traits::queries::client_state::{
+    CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerier,
+};
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionEndQuerier;
-use hermes_relayer_components::chain::traits::queries::consensus_state::ConsensusStateQuerier;
+use hermes_relayer_components::chain::traits::queries::consensus_state::{
+    CanQueryConsensusStateWithProofs, ConsensusStateQuerier,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdGetter;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
+use hermes_runtime_components::traits::runtime::{
+    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+};
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
@@ -29,9 +53,12 @@ use ibc_relayer_types::Height;
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
-use crate::impls::chain::component::SolomachineChainComponents;
+use crate::context::encoding::{ProvideSolomachineEncoding, SolomachineEncoding};
+use crate::impls::chain::component::*;
+use crate::impls::chain::cosmos_components::components::SolomachineCosmosComponents;
 use crate::methods::encode::public_key::PublicKey;
 use crate::traits::solomachine::Solomachine;
+use crate::types::consensus_state::SolomachineConsensusState;
 
 const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 
@@ -46,6 +73,43 @@ pub struct MockSolomachine {
     client_consensus_states: Arc<Mutex<HashMap<ClientId, TendermintConsensusState>>>,
     pub telemetry: CosmosTelemetry,
     pub connections: Arc<Mutex<HashMap<ConnectionId, ConnectionEnd>>>,
+}
+
+pub struct SolomachineChainComponents2;
+
+impl HasComponents for MockSolomachine {
+    type Components = SolomachineChainComponents2;
+}
+
+impl DelegateComponent<MockSolomachine> for DelegateCosmosChainComponents {
+    type Delegate = SolomachineCosmosComponents;
+}
+
+with_solomachine_chain_components! {
+    delegate_components! {
+        SolomachineChainComponents2 {
+            @SolomachineChainComponents: SolomachineChainComponents,
+        }
+    }
+}
+
+delegate_components! {
+    SolomachineChainComponents2 {
+        ErrorTypeComponent:
+            ProvideEyreError,
+        ErrorRaiserComponent:
+            RaiseDebugError,
+        RuntimeTypeComponent:
+            ProvideHermesRuntime,
+        RuntimeGetterComponent:
+            GetRuntimeField<symbol!("runtime")>,
+        [
+            EncodingTypeComponent,
+            EncodingGetterComponent,
+            DefaultEncodingGetterComponent,
+        ]:
+            ProvideSolomachineEncoding,
+    }
 }
 
 impl MockSolomachine {
@@ -72,19 +136,19 @@ impl MockSolomachine {
     }
 }
 
-impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents {
+impl ChainIdGetter<MockSolomachine> for SolomachineChainComponents2 {
     fn chain_id(chain: &MockSolomachine) -> &ChainId {
         &chain.chain_id
     }
 }
 
-impl IbcCommitmentPrefixGetter<MockSolomachine> for SolomachineChainComponents {
+impl IbcCommitmentPrefixGetter<MockSolomachine> for SolomachineChainComponents2 {
     fn ibc_commitment_prefix(chain: &MockSolomachine) -> &String {
         &chain.commitment_prefix
     }
 }
 
-impl<Counterparty> ClientStateQuerier<MockSolomachine, Counterparty> for SolomachineChainComponents
+impl<Counterparty> ClientStateQuerier<MockSolomachine, Counterparty> for SolomachineChainComponents2
 where
     Counterparty: HasClientStateType<MockSolomachine, ClientState = TendermintClientState>,
 {
@@ -104,7 +168,7 @@ where
 }
 
 impl<Counterparty> ConsensusStateQuerier<MockSolomachine, Counterparty>
-    for SolomachineChainComponents
+    for SolomachineChainComponents2
 where
     Counterparty: HasHeightType<Height = Height>
         + HasConsensusStateType<MockSolomachine, ConsensusState = TendermintConsensusState>,
@@ -129,7 +193,7 @@ where
 }
 
 impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
-    for SolomachineChainComponents
+    for SolomachineChainComponents2
 {
     async fn query_connection_end(
         chain: &MockSolomachine,
@@ -149,7 +213,9 @@ impl<Counterparty> ConnectionEndQuerier<MockSolomachine, Counterparty>
     }
 }
 
-impl<Counterparty> ChannelEndQuerier<MockSolomachine, Counterparty> for SolomachineChainComponents {
+impl<Counterparty> ChannelEndQuerier<MockSolomachine, Counterparty>
+    for SolomachineChainComponents2
+{
     async fn query_channel_end(
         _chain: &MockSolomachine,
         _channel_id: &ChannelId,
@@ -209,3 +275,31 @@ impl Solomachine for MockSolomachine {
         todo!()
     }
 }
+
+pub trait CanUseSolomachine:
+    HasDefaultEncoding<Encoding = SolomachineEncoding>
+    + HasClientStateType<CosmosChain>
+    + HasConsensusStateType<CosmosChain, ConsensusState = SolomachineConsensusState>
+    + HasInitConnectionOptionsType<CosmosChain>
+    + CanBuildConnectionOpenInitMessage<CosmosChain>
+    + CanBuildConnectionOpenTryMessage<CosmosChain>
+    + CanBuildConnectionOpenAckMessage<CosmosChain>
+    + CanBuildConnectionOpenConfirmMessage<CosmosChain>
+    + CanQueryClientState<CosmosChain>
+{
+}
+
+impl CanUseSolomachine for MockSolomachine {}
+
+pub trait CanUseCosmosChainWithSolomachine:
+    CanQueryClientState<MockSolomachine>
+    + CanQueryClientStateWithProofs<MockSolomachine>
+    + CanQueryConsensusStateWithProofs<MockSolomachine>
+    + CanBuildConnectionOpenInitPayload<MockSolomachine>
+    + CanBuildConnectionOpenTryPayload<MockSolomachine>
+    + CanBuildConnectionOpenAckPayload<MockSolomachine>
+    + CanBuildConnectionOpenConfirmPayload<MockSolomachine>
+{
+}
+
+impl CanUseCosmosChainWithSolomachine for CosmosChain {}
