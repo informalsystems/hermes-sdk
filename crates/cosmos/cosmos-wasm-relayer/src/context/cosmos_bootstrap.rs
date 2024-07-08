@@ -30,10 +30,9 @@ use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_co
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
-use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
@@ -80,9 +79,11 @@ delegate_components! {
     CosmosWithWasmClientBootstrapComponents {
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
-        RuntimeTypeComponent: ProvideHermesRuntime,
-        RuntimeGetterComponent:
-            GetRuntimeField<symbol!("runtime")>,
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]:
+            ProvideDefaultRuntimeField,
         WalletConfigGeneratorComponent: GenerateStandardWalletConfig,
         [
             ChainTypeComponent,

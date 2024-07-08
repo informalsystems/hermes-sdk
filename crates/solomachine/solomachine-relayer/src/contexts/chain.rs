@@ -38,10 +38,9 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use hermes_solomachine_chain_components::components::cosmos::SolomachineCosmosComponents;
 use hermes_solomachine_chain_components::components::solomachine::*;
@@ -100,10 +99,11 @@ delegate_components! {
             ProvideEyreError,
         ErrorRaiserComponent:
             RaiseDebugError,
-        RuntimeTypeComponent:
-            ProvideHermesRuntime,
-        RuntimeGetterComponent:
-            GetRuntimeField<symbol!("runtime")>,
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]:
+            ProvideDefaultRuntimeField,
         [
             EncodingTypeComponent,
             EncodingGetterComponent,

@@ -9,10 +9,9 @@ use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
 use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
 use hermes_relayer_components::relay::traits::connection::open_init::CanInitConnection;
 use hermes_relayer_components::with_default_relay_components;
-use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
+    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
@@ -43,9 +42,11 @@ impl HasComponents for SolomachineRelay {
 
 delegate_components! {
     SolomachineRelayComponents {
-        RuntimeTypeComponent: ProvideHermesRuntime,
-        RuntimeGetterComponent:
-            GetRuntimeField<symbol!("runtime")>,
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]:
+            ProvideDefaultRuntimeField,
         ErrorTypeComponent: ProvideHermesError,
         ErrorRaiserComponent: DebugError,
         RelayChainsComponent:

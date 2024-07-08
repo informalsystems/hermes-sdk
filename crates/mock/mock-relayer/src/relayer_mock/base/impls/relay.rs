@@ -9,7 +9,7 @@ use hermes_relayer_components::relay::traits::packet_lock::ProvidePacketLock;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilder;
 use hermes_runtime_components::traits::runtime::{
-    GetRuntimeField, ProvideRuntimeType, RuntimeGetterComponent,
+    ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 
 use crate::relayer_mock::base::error::Error;
@@ -18,7 +18,6 @@ use crate::relayer_mock::base::types::aliases::ClientId;
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
 use crate::relayer_mock::base::types::packet::PacketKey;
-use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::components::relay::MockRelayComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 use crate::relayer_mock::contexts::relay::MockRelayContext;
@@ -34,13 +33,12 @@ delegate_components! {
             ErrorRaiserComponent,
         ]:
             HandleMockError,
-        RuntimeGetterComponent:
-            GetRuntimeField<symbol!("runtime")>,
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]:
+            ProvideDefaultRuntimeField,
     }
-}
-
-impl ProvideRuntimeType<MockRelayContext> for MockRelayComponents {
-    type Runtime = MockRuntimeContext;
 }
 
 impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
