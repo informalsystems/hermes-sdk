@@ -14,8 +14,8 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 };
 use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
 
-use crate::impls::chain::cosmos_components::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
-use crate::impls::chain::cosmos_components::create_client_message::BuildCreateSolomachineClientMessage;
+use crate::impls::cosmos::connection_handshake_message::BuildSolomachineConnectionHandshakeMessagesForCosmos;
+use crate::impls::cosmos::create_client_message::BuildCreateSolomachineClientMessage;
 
 define_components! {
     SolomachineCosmosComponents {

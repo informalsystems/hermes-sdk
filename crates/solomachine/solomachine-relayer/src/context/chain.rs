@@ -53,9 +53,9 @@ use ibc_relayer_types::Height;
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
+use crate::components::cosmos::SolomachineCosmosComponents;
+use crate::components::solomachine::*;
 use crate::context::encoding::{ProvideSolomachineEncoding, SolomachineEncoding};
-use crate::impls::chain::component::*;
-use crate::impls::chain::cosmos_components::components::SolomachineCosmosComponents;
 use crate::methods::encode::public_key::PublicKey;
 use crate::traits::solomachine::Solomachine;
 use crate::types::consensus_state::SolomachineConsensusState;

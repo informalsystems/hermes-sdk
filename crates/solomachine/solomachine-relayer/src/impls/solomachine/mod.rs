@@ -1,6 +1,8 @@
 pub mod channel_handshake_payload;
+pub mod client_state;
 pub mod connection_handshake_message;
 pub mod connection_handshake_payload;
+pub mod consensus_state;
 pub mod create_client_message;
 pub mod create_client_payload;
 pub mod process_message;

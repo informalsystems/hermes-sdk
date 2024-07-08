@@ -57,19 +57,19 @@ pub use hermes_relayer_components::chain::traits::types::proof::CommitmentProofT
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
-use crate::impls::chain::solomachine_components::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
-use crate::impls::chain::solomachine_components::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
-use crate::impls::chain::solomachine_components::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
-use crate::impls::chain::solomachine_components::create_client_message::BuildCreateCosmosClientMessage;
-use crate::impls::chain::solomachine_components::create_client_payload::BuildSolomachineCreateClientPayload;
-use crate::impls::chain::solomachine_components::process_message::ProcessSolomachineMessages;
-use crate::impls::chain::solomachine_components::query_chain_status::QuerySolomachineStatus;
-use crate::impls::chain::solomachine_components::receive_packet_payload::BuildSolomachineReceivePacketPayload;
-use crate::impls::chain::solomachine_components::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
-use crate::impls::chain::solomachine_components::types::chain::ProvideSolomachineChainTypes;
-use crate::impls::chain::solomachine_components::update_client_payload::BuildSolomachineUpdateClientPayload;
-use crate::impls::client_state::ProvideSolomachineClientState;
-use crate::impls::consensus_state::ProvideSolomachineConsensusState;
+use crate::impls::solomachine::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
+use crate::impls::solomachine::client_state::ProvideSolomachineClientState;
+use crate::impls::solomachine::connection_handshake_message::BuildCosmosToSolomachineConnectionHandshakeMessage;
+use crate::impls::solomachine::connection_handshake_payload::BuildSolomachineConnectionHandshakePayloads;
+use crate::impls::solomachine::consensus_state::ProvideSolomachineConsensusState;
+use crate::impls::solomachine::create_client_message::BuildCreateCosmosClientMessage;
+use crate::impls::solomachine::create_client_payload::BuildSolomachineCreateClientPayload;
+use crate::impls::solomachine::process_message::ProcessSolomachineMessages;
+use crate::impls::solomachine::query_chain_status::QuerySolomachineStatus;
+use crate::impls::solomachine::receive_packet_payload::BuildSolomachineReceivePacketPayload;
+use crate::impls::solomachine::timeout_packet_payload::BuildSolomachineTimeoutPacketPayload;
+use crate::impls::solomachine::types::ProvideSolomachineChainTypes;
+use crate::impls::solomachine::update_client_payload::BuildSolomachineUpdateClientPayload;
 
 define_components! {
     SolomachineChainComponents {
