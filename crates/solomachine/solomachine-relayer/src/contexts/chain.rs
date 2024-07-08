@@ -59,7 +59,7 @@ use ibc_relayer_types::Height;
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
-use crate::context::encoding::{ProvideSolomachineEncoding, SolomachineEncoding};
+use crate::contexts::encoding::{ProvideSolomachineEncoding, SolomachineEncoding};
 
 const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 

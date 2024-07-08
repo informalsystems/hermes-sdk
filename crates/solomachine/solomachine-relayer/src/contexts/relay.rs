@@ -16,7 +16,7 @@ use hermes_runtime_components::traits::runtime::{
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::identifier::ClientId;
 
-use crate::context::chain::MockSolomachine;
+use crate::contexts::chain::MockSolomachine;
 
 #[derive(HasField)]
 pub struct SolomachineRelay {
