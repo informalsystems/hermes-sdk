@@ -1,21 +1,15 @@
 use cgp_core::prelude::*;
 pub use hermes_cosmos_chain_components::components::client::{
-    AckPacketPayloadTypeComponent, ChannelOpenAckPayloadTypeComponent,
+    AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
     ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
     ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
-    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    ConnectionOpenInitEventComponent, ConnectionOpenInitPayloadTypeComponent,
+    ConnectionOpenTryPayloadTypeComponent, ConsensusStateTypeComponent, CreateClientEventComponent,
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
     InitConnectionOptionsTypeComponent, ReceivePacketPayloadTypeComponent,
-    UpdateClientPayloadTypeComponent,
-};
-pub use hermes_cosmos_chain_components::components::client::{
-    ChannelEndTypeComponent, ClientStateFieldsGetterComponent, ClientStateTypeComponent,
-    ConsensusStateTypeComponent,
-};
-pub use hermes_cosmos_chain_components::components::client::{
-    ConnectionOpenInitEventComponent, CreateClientEventComponent,
-    TimeoutUnorderedPacketPayloadTypeComponent,
+    TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
 };
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;

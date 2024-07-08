@@ -1,8 +1,7 @@
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
-use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::channel::{
-    ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
+    ProvideChannelEndType, ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
     ProvideChannelOpenTryPayloadType, ProvideInitChannelOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::connection::{
@@ -14,8 +13,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
     ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::event::HasEventType;
-use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
+use hermes_relayer_components::chain::traits::types::event::{HasEventType, ProvideEventType};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
