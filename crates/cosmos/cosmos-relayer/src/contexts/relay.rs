@@ -1,7 +1,6 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 use core::ops::Deref;
-use hermes_relayer_components::relay::impls::fields::ProvideDefaultRelayFields;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -18,7 +17,7 @@ use hermes_relayer_components::error::traits::retry::{
 use hermes_relayer_components::relay::impls::packet_lock::{
     PacketMutex, PacketMutexGetter, ProvidePacketLockWithMutex,
 };
-use hermes_relayer_components::relay::traits::chains::RelayChainsComponent;
+use hermes_relayer_components::relay::traits::chains::ProvideRelayChains;
 use hermes_relayer_components::relay::traits::packet_filter::PacketFilter;
 use hermes_relayer_components::relay::traits::packet_lock::PacketLockComponent;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
@@ -117,8 +116,6 @@ delegate_components! {
             ReturnMaxRetry<3>,
         PacketLockComponent:
             ProvidePacketLockWithMutex,
-        RelayChainsComponent:
-            ProvideDefaultRelayFields,
     }
 }
 
@@ -135,6 +132,30 @@ impl HasComponents for CosmosRelay {
 }
 
 impl CanUseExtraAutoRelayer for CosmosRelay {}
+
+impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
+    type SrcChain = CosmosChain;
+
+    type DstChain = CosmosChain;
+
+    type Packet = Packet;
+
+    fn src_chain(relay: &CosmosRelay) -> &CosmosChain {
+        &relay.src_chain
+    }
+
+    fn dst_chain(relay: &CosmosRelay) -> &CosmosChain {
+        &relay.dst_chain
+    }
+
+    fn src_client_id(relay: &CosmosRelay) -> &ClientId {
+        &relay.src_client_id
+    }
+
+    fn dst_client_id(relay: &CosmosRelay) -> &ClientId {
+        &relay.dst_client_id
+    }
+}
 
 impl PacketFilter<CosmosRelay> for CosmosRelayComponents {
     async fn should_relay_packet(relay: &CosmosRelay, packet: &Packet) -> Result<bool, Error> {
