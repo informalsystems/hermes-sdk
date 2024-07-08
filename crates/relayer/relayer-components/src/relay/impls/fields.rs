@@ -53,18 +53,18 @@ where
     type Packet = Packet;
 
     fn src_chain(relay: &Relay) -> &SrcChain {
-        &relay.get_field(PhantomData::<SrcChainField>)
+        relay.get_field(PhantomData::<SrcChainField>)
     }
 
     fn dst_chain(relay: &Relay) -> &DstChain {
-        &relay.get_field(PhantomData::<DstChainField>)
+        relay.get_field(PhantomData::<DstChainField>)
     }
 
     fn src_client_id(relay: &Relay) -> &SrcChain::ClientId {
-        &relay.get_field(PhantomData::<SrcClientIdField>)
+        relay.get_field(PhantomData::<SrcClientIdField>)
     }
 
     fn dst_client_id(relay: &Relay) -> &DstChain::ClientId {
-        &relay.get_field(PhantomData::<DstClientIdField>)
+        relay.get_field(PhantomData::<DstClientIdField>)
     }
 }
