@@ -2076,7 +2076,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-solomachine-components"
+name = "hermes-solomachine-chain-components"
 version = "0.1.0"
 dependencies = [
  "bytes",
@@ -2129,7 +2129,7 @@ dependencies = [
  "hermes-relayer-components-extra",
  "hermes-runtime",
  "hermes-runtime-components",
- "hermes-solomachine-components",
+ "hermes-solomachine-chain-components",
  "ibc",
  "ibc-proto",
  "ibc-relayer",

@@ -43,6 +43,12 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     GetRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
+use hermes_solomachine_chain_components::components::cosmos::SolomachineCosmosComponents;
+use hermes_solomachine_chain_components::components::solomachine::*;
+use hermes_solomachine_chain_components::methods::encode::public_key::PublicKey;
+use hermes_solomachine_chain_components::traits::solomachine::Solomachine;
+use hermes_solomachine_chain_components::types::client_state::SolomachineClientState;
+use hermes_solomachine_chain_components::types::consensus_state::SolomachineConsensusState;
 use ibc::core::connection::types::ConnectionEnd;
 use ibc_relayer_types::core::ics04_channel::channel::ChannelEnd;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
@@ -53,12 +59,7 @@ use ibc_relayer_types::Height;
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::{Secp256k1, SecretKey};
 
-use crate::components::cosmos::SolomachineCosmosComponents;
-use crate::components::solomachine::*;
 use crate::context::encoding::{ProvideSolomachineEncoding, SolomachineEncoding};
-use crate::methods::encode::public_key::PublicKey;
-use crate::traits::solomachine::Solomachine;
-use crate::types::consensus_state::SolomachineConsensusState;
 
 const DEFAULT_DIVERSIFIER: &str = "solo-machine-diversifier";
 
@@ -278,7 +279,7 @@ impl Solomachine for MockSolomachine {
 
 pub trait CanUseSolomachine:
     HasDefaultEncoding<Encoding = SolomachineEncoding>
-    + HasClientStateType<CosmosChain>
+    + HasClientStateType<CosmosChain, ClientState = SolomachineClientState>
     + HasConsensusStateType<CosmosChain, ConsensusState = SolomachineConsensusState>
     + HasInitConnectionOptionsType<CosmosChain>
     + CanBuildConnectionOpenInitMessage<CosmosChain>
