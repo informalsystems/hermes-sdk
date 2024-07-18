@@ -13,7 +13,7 @@ description  = """
 """
 
 [dependencies]
-hermes-runtime-components               = { workspace = true }
+ibc-proto                               = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-encoding-components              = { workspace = true }
@@ -21,11 +21,5 @@ hermes-protobuf-encoding-components     = { workspace = true }
 
 cgp-core            = { workspace = true }
 cgp-error-eyre      = { workspace = true }
-ibc-proto           = { workspace = true }
-ibc-relayer         = { workspace = true }
 ibc-relayer-types   = { workspace = true }
-tendermint-proto    = { workspace = true }
-prost               = { workspace = true }
 serde               = { workspace = true, features = ["derive"] }
-tracing             = { workspace = true }
-toml                = { workspace = true }
