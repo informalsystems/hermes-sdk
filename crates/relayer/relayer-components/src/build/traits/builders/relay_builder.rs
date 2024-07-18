@@ -1,9 +1,9 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::chain::types::aliases::{ChainIdOf, ClientIdOf};
-use crate::multi::traits::chain_at::ChainTypeAt;
+use crate::multi::traits::chain_at::ChainIdAt;
 use crate::multi::traits::chain_at::HasChainTypeAt;
+use crate::multi::traits::relay_at::ClientIdAt;
 use crate::multi::traits::relay_at::HasRelayTypeAt;
 use crate::multi::types::index::Twindex;
 
@@ -18,9 +18,9 @@ pub trait CanBuildRelay<const SRC: usize, const DST: usize>:
     async fn build_relay(
         &self,
         index: Twindex<SRC, DST>,
-        src_chain_id: &ChainIdOf<ChainTypeAt<Self, SRC>>,
-        dst_chain_id: &ChainIdOf<ChainTypeAt<Self, DST>>,
-        src_client_id: &ClientIdOf<ChainTypeAt<Self, SRC>, ChainTypeAt<Self, DST>>,
-        dst_client_id: &ClientIdOf<ChainTypeAt<Self, DST>, ChainTypeAt<Self, SRC>>,
+        src_chain_id: &ChainIdAt<Self, SRC>,
+        dst_chain_id: &ChainIdAt<Self, DST>,
+        src_client_id: &ClientIdAt<Self, SRC, DST>,
+        dst_client_id: &ClientIdAt<Self, DST, SRC>,
     ) -> Result<Self::Relay, Self::Error>;
 }

@@ -10,6 +10,9 @@ use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::chain::types::aliases::{ChainIdOf, ClientIdOf};
+use crate::multi::traits::chain_at::ChainTypeAt;
+use crate::multi::traits::relay_at::RelayTypeAt;
 use crate::relay::traits::chains::HasRelayChains;
 
 pub type ChainA<Build> = <BiRelayOf<Build> as HasTwoChainTypes>::ChainA;
@@ -78,8 +81,8 @@ pub type CounterpartyChainId<Build, Target> =
 pub type CounterpartyClientId<Build, Target> =
     <CounterpartyChain<Build, Target> as HasIbcChainTypes<TargetChain<Build, Target>>>::ClientId;
 
-pub type TargetChainCache<Build, Target> =
-    MutexOf<RuntimeOf<Build>, BTreeMap<TargetChainId<Build, Target>, TargetChain<Build, Target>>>;
+pub type ChainCacheAt<Build, const I: usize> =
+    MutexOf<RuntimeOf<Build>, BTreeMap<ChainIdOf<ChainTypeAt<Build, I>>, ChainTypeAt<Build, I>>>;
 
 pub type TargetRelay<Build, Target> = <Target as RelayBuildTarget<Build>>::TargetRelay;
 
@@ -105,15 +108,15 @@ pub type TargetSrcClientId<Build, Target> =
 pub type TargetDstClientId<Build, Target> =
     <TargetDstChain<Build, Target> as HasIbcChainTypes<TargetSrcChain<Build, Target>>>::ClientId;
 
-pub type TargetRelayCache<Build, Target> = MutexOf<
+pub type RelayCacheAt<Build, const SRC: usize, const DST: usize> = MutexOf<
     RuntimeOf<Build>,
     BTreeMap<
         (
-            TargetSrcChainId<Build, Target>,
-            TargetDstChainId<Build, Target>,
-            TargetSrcClientId<Build, Target>,
-            TargetDstClientId<Build, Target>,
+            ChainIdOf<ChainTypeAt<Build, SRC>>,
+            ChainIdOf<ChainTypeAt<Build, DST>>,
+            ClientIdOf<ChainTypeAt<Build, SRC>, ChainTypeAt<Build, DST>>,
+            ClientIdOf<ChainTypeAt<Build, DST>, ChainTypeAt<Build, SRC>>,
         ),
-        TargetRelay<Build, Target>,
+        RelayTypeAt<Build, SRC, DST>,
     >,
 >;
