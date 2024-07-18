@@ -3,8 +3,8 @@ use core::marker::PhantomData;
 use cgp_core::error::HasErrorType;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
+use crate::build::traits::builders::relay_builder::RelayBuilder;
 use crate::build::traits::cache::HasRelayCache;
-use crate::build::traits::components::relay_builder::RelayBuilder;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     TargetDstChainId, TargetDstClientId, TargetRelay, TargetSrcChainId, TargetSrcClientId,

@@ -1,6 +1,6 @@
-use crate::build::traits::components::chain_builder::CanBuildChain;
-use crate::build::traits::components::relay_builder::RelayBuilder;
-use crate::build::traits::components::relay_from_chains_builder::CanBuildRelayFromChains;
+use crate::build::traits::builders::chain_builder::CanBuildChain;
+use crate::build::traits::builders::relay_builder::RelayBuilder;
+use crate::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use crate::build::traits::target::relay::RelayBuildTarget;
 use crate::build::types::aliases::{
     DstChainTarget, SrcChainTarget, TargetDstChainId, TargetDstClientId, TargetRelay,

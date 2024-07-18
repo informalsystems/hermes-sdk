@@ -3,8 +3,8 @@ use core::marker::PhantomData;
 use cgp_core::error::HasErrorType;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
+use crate::build::traits::builders::chain_builder::ChainBuilder;
 use crate::build::traits::cache::HasChainCache;
-use crate::build::traits::components::chain_builder::ChainBuilder;
 use crate::build::traits::target::chain::ChainBuildTarget;
 use crate::build::types::aliases::{TargetChain, TargetChainId};
 
