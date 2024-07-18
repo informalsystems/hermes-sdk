@@ -5,6 +5,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_runtime::types::runtime::HermesRuntime;
+use ibc_relayer::config::ChainConfig;
 
 use crate::commands::HermesCommand;
 use crate::config::HermesConfig;
@@ -40,8 +41,18 @@ impl Application for HermesCli {
     }
 
     async fn run(&self, runtime: HermesRuntime, config: Self::Config) -> Result<Output> {
+        let chain_configs = config
+            .config
+            .chains
+            .into_iter()
+            .map(|config| {
+                let ChainConfig::CosmosSdk(config) = config;
+                config
+            })
+            .collect();
+
         let builder = CosmosBuilder::new(
-            config.config,
+            chain_configs,
             runtime,
             Default::default(),
             Default::default(),

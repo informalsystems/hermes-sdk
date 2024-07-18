@@ -1,5 +1,6 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
+use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use std::collections::HashMap;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -25,7 +26,7 @@ use hermes_runtime_components::traits::runtime::{
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
-use ibc_relayer::config::{ChainConfig, Config};
+use ibc_relayer::config::ChainConfig;
 use ibc_relayer::keyring::{AnySigningKeyPair, Secp256k1KeyPair};
 use ibc_relayer::spawn::{spawn_chain_runtime_with_config, SpawnError};
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
@@ -42,7 +43,7 @@ use crate::types::telemetry::CosmosTelemetry;
 
 #[derive(HasField)]
 pub struct CosmosBuilder {
-    pub config: Config,
+    pub config_map: HashMap<ChainId, CosmosSdkConfig>,
     pub packet_filter: PacketFilter,
     pub telemetry: CosmosTelemetry,
     pub runtime: HermesRuntime,
@@ -108,15 +109,21 @@ impl CosmosBuilder {
     }
 
     pub fn new(
-        config: Config,
+        chain_configs: Vec<CosmosSdkConfig>,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
         packet_filter: PacketFilter,
         batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
     ) -> Self {
+        let config_map = HashMap::from_iter(
+            chain_configs
+                .into_iter()
+                .map(|config| (config.id.clone(), config)),
+        );
+
         Self {
-            config,
+            config_map,
             packet_filter,
             telemetry,
             runtime,
@@ -130,8 +137,8 @@ impl CosmosBuilder {
 
     pub async fn build_chain(&self, chain_id: &ChainId) -> Result<CosmosChain, Error> {
         let chain_config = self
-            .config
-            .find_chain(chain_id)
+            .config_map
+            .get(chain_id)
             .cloned()
             .ok_or_else(|| SpawnError::missing_chain_config(chain_id.clone()))?;
 
@@ -141,29 +148,30 @@ impl CosmosBuilder {
 
     pub async fn build_chain_with_config(
         &self,
-        chain_config: ChainConfig,
+        chain_config: CosmosSdkConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
     ) -> Result<CosmosChain, Error> {
-        let ChainConfig::CosmosSdk(sdk_chain_config) = chain_config.clone();
-
         let runtime = self.runtime.runtime.clone();
-        let chain_id = sdk_chain_config.id.clone();
+        let chain_id = chain_config.id.clone();
 
-        let (handle, key) = task::block_in_place(move || -> Result<_, Error> {
-            let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(chain_config, runtime)?;
+        let (handle, key) = task::block_in_place(|| -> Result<_, Error> {
+            let handle = spawn_chain_runtime_with_config::<BaseChainHandle>(
+                ChainConfig::CosmosSdk(chain_config.clone()),
+                runtime,
+            )?;
 
             let key = get_keypair(&chain_id, &handle, m_keypair)?;
 
             Ok((handle, key))
         })?;
 
-        let event_source_mode = sdk_chain_config.event_source.clone();
+        let event_source_mode = chain_config.event_source.clone();
 
-        let tx_config = TxConfig::try_from(&sdk_chain_config)?;
+        let tx_config = TxConfig::try_from(&chain_config)?;
 
         let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
-        let compat_mode = if let Some(compat_mode) = &sdk_chain_config.compat_mode {
+        let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
             compat_mode.clone().into()
         } else {
             let status = rpc_client.status().await?;
@@ -175,7 +183,7 @@ impl CosmosBuilder {
 
         let context = CosmosChain::new(
             handle,
-            sdk_chain_config,
+            chain_config,
             tx_config,
             rpc_client,
             compat_mode,

@@ -5,6 +5,7 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
 use ibc_relayer::chain::client::ClientSettings;
+use ibc_relayer::config::ChainConfig;
 use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -66,27 +67,6 @@ pub struct ClientCreate {
 
 impl CommandRunner<CosmosBuilder> for ClientCreate {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
-        let host_chain_config =
-            builder
-                .config
-                .find_chain(&self.host_chain_id)
-                .ok_or_else(|| {
-                    eyre!(
-                        "No chain configuration found for chain `{}`",
-                        self.host_chain_id
-                    )
-                })?;
-
-        let reference_chain_config = builder
-            .config
-            .find_chain(&self.reference_chain_id)
-            .ok_or_else(|| {
-                eyre!(
-                    "No chain configuration found for chain `{}`",
-                    self.reference_chain_id
-                )
-            })?;
-
         let host_chain = builder.build_chain(&self.host_chain_id).await?;
         let reference_chain = builder.build_chain(&self.reference_chain_id).await?;
 
@@ -96,8 +76,11 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
             trust_threshold: self.trust_threshold,
         };
 
-        let settings =
-            ClientSettings::for_create_command(options, host_chain_config, reference_chain_config);
+        let settings = ClientSettings::for_create_command(
+            options,
+            &ChainConfig::CosmosSdk(host_chain.chain_config.clone()),
+            &ChainConfig::CosmosSdk(reference_chain.chain_config.clone()),
+        );
 
         info!(
             ?settings,

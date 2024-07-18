@@ -11,7 +11,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
-use ibc_relayer::config::{self, AddressType, ChainConfig};
+use ibc_relayer::config::{self, AddressType};
 use ibc_relayer::keyring::Store;
 use tendermint_rpc::{Error as TendermintRpcError, Url, WebSocketClientUrl};
 
@@ -35,8 +35,8 @@ where
         bootstrap: &Bootstrap,
         chain_node_config: &CosmosChainNodeConfig,
         relayer_wallet: &CosmosTestWallet,
-    ) -> Result<ChainConfig, Bootstrap::Error> {
-        let relayer_chain_config = ChainConfig::CosmosSdk(CosmosSdkConfig {
+    ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
+        let relayer_chain_config = CosmosSdkConfig {
             id: chain_node_config.chain_id.clone(),
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
                 .map_err(Bootstrap::raise_error)?,
@@ -86,7 +86,7 @@ where
             clear_interval: None,
             excluded_sequences: Default::default(),
             allow_ccq: false,
-        });
+        };
 
         Ok(relayer_chain_config)
     }

@@ -1,7 +1,7 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use ibc_relayer::config::{ChainConfig, Config};
+use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::keyring::{KeyRing, Store};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre::{eyre, Context};
@@ -44,11 +44,7 @@ pub struct KeysDeleteCmd {
 }
 
 impl KeysDeleteCmd {
-    fn options(&self, config: &Config) -> eyre::Result<KeysDeleteOptions<'_>> {
-        let chain_config = config
-            .find_chain(&self.chain_id)
-            .ok_or_else(|| eyre!("chain `{}` not found in configuration file", self.chain_id))?;
-
+    fn options(&self, config: &CosmosSdkConfig) -> eyre::Result<KeysDeleteOptions<'_>> {
         let id = match (self.all, &self.key_name) {
             (true, None) => KeysDeleteId::All,
             (false, Some(ref key_name)) => KeysDeleteId::Named(key_name),
@@ -60,7 +56,7 @@ impl KeysDeleteCmd {
         };
 
         Ok(KeysDeleteOptions {
-            config: chain_config.clone(),
+            config: config.clone(),
             id,
         })
     }
@@ -69,7 +65,7 @@ impl KeysDeleteCmd {
 #[derive(Clone, Debug)]
 struct KeysDeleteOptions<'a> {
     id: KeysDeleteId<'a>,
-    config: ChainConfig,
+    config: CosmosSdkConfig,
 }
 
 #[derive(Clone, Debug)]
@@ -80,9 +76,12 @@ enum KeysDeleteId<'a> {
 
 impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
     async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
-        let config = &builder.config;
+        let chain_config = builder
+            .config_map
+            .get(&self.chain_id)
+            .ok_or_else(|| eyre!("chain `{}` not found in configuration file", self.chain_id))?;
 
-        let opts = match self.options(config) {
+        let opts = match self.options(chain_config) {
             Err(e) => Output::error(e).exit(),
             Ok(opts) => opts,
         };
@@ -90,7 +89,7 @@ impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
         match opts.id {
             KeysDeleteId::All => match delete_all_keys(&opts.config) {
                 Ok(_) => {
-                    Output::success(format!("Removed all keys on chain `{}`", opts.config.id(),))
+                    Output::success(format!("Removed all keys on chain `{}`", opts.config.id,))
                         .exit()
                 }
                 Err(e) => Output::error(format!(
@@ -102,7 +101,7 @@ impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
             KeysDeleteId::Named(key_name) => match delete_key(&opts.config, key_name) {
                 Ok(_) => Output::success_msg(format!(
                     "Removed key `{key_name}` on chain `{}`",
-                    opts.config.id()
+                    opts.config.id
                 ))
                 .exit(),
                 Err(e) => Output::error(format!(
@@ -115,14 +114,12 @@ impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
     }
 }
 
-fn delete_key(config: &ChainConfig, key_name: &str) -> eyre::Result<()> {
-    let ChainConfig::CosmosSdk(cosmos_config) = config;
-
+fn delete_key(config: &CosmosSdkConfig, key_name: &str) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &cosmos_config.account_prefix,
-        &cosmos_config.id,
-        &cosmos_config.key_store_folder,
+        &config.account_prefix,
+        &config.id,
+        &config.key_store_folder,
     )?;
 
     keyring.remove_key(key_name)?;
@@ -130,14 +127,12 @@ fn delete_key(config: &ChainConfig, key_name: &str) -> eyre::Result<()> {
     Ok(())
 }
 
-fn delete_all_keys(config: &ChainConfig) -> eyre::Result<()> {
-    let ChainConfig::CosmosSdk(cosmos_config) = config;
-
+fn delete_all_keys(config: &CosmosSdkConfig) -> eyre::Result<()> {
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &cosmos_config.account_prefix,
-        &cosmos_config.id,
-        &cosmos_config.key_store_folder,
+        &config.account_prefix,
+        &config.id,
+        &config.key_store_folder,
     )?;
 
     let keys = keyring
