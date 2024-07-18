@@ -1753,6 +1753,7 @@ dependencies = [
  "hermes-runtime-components",
  "serde",
  "toml",
+ "tracing",
 ]
 
 [[package]]
