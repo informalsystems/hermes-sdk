@@ -1731,6 +1731,7 @@ dependencies = [
  "hermes-error",
  "hermes-relayer-components",
  "hermes-runtime",
+ "hermes-runtime-components",
  "humantime",
  "ibc",
  "ibc-relayer",

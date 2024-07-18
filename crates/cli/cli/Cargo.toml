@@ -23,6 +23,7 @@ hermes-cli-components           = { workspace = true }
 hermes-cli-framework            = { workspace = true }
 hermes-error                    = { workspace = true }
 hermes-runtime                  = { workspace = true }
+hermes-runtime-components       = { workspace = true }
 hermes-relayer-components       = { workspace = true }
 hermes-cosmos-relayer           = { workspace = true }
 hermes-cosmos-chain-components  = { workspace = true }
