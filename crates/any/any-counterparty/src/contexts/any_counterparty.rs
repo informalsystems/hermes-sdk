@@ -30,10 +30,10 @@ use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvi
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 
-use crate::any_client::impls::encoding::convert::AnyClientConverterComponents;
-use crate::any_client::impls::encoding::encode::AnyClientEncoderComponents;
-use crate::any_client::impls::types::client_state::ProvideAnyClientState;
-use crate::any_client::types::client_state::AnyClientState;
+use crate::impls::encoding::convert::AnyClientConverterComponents;
+use crate::impls::encoding::encode::AnyClientEncoderComponents;
+use crate::impls::types::client_state::ProvideAnyClientState;
+use crate::types::client_state::AnyClientState;
 
 pub struct AnyCounterparty;
 

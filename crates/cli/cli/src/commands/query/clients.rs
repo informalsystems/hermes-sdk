@@ -1,8 +1,8 @@
 use std::fmt;
 
 use cgp_core::error::HasErrorType;
-use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
-use hermes_cli_components::any_client::types::client_state::AnyClientState;
+use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
+use hermes_any_counterparty::types::client_state::AnyClientState;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;

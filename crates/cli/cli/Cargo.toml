@@ -18,6 +18,7 @@ path = "bin/hermes.rs"
 
 [dependencies]
 cgp-core                        = { workspace = true }
+hermes-any-counterparty         = { workspace = true }
 hermes-cli-components           = { workspace = true }
 hermes-cli-framework            = { workspace = true }
 hermes-error                    = { workspace = true }

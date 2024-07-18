@@ -5,8 +5,8 @@ use std::sync::Arc;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use futures::lock::Mutex;
+use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
-use hermes_cli_components::any_client::contexts::any_counterparty::AnyCounterparty;
 use hermes_cosmos_chain_components::components::client::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent, CosmosClientComponents,
 };

@@ -1,0 +1,31 @@
+[package]
+name = "hermes-any-counterparty"
+version      = { workspace = true }
+edition      = { workspace = true }
+license      = { workspace = true }
+keywords     = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+readme       = "README.md"
+description  = """
+    Implementation of an IBC Relayer in Rust, as a library
+"""
+
+[dependencies]
+hermes-runtime-components               = { workspace = true }
+hermes-relayer-components               = { workspace = true }
+hermes-cosmos-chain-components          = { workspace = true }
+hermes-encoding-components              = { workspace = true }
+hermes-protobuf-encoding-components     = { workspace = true }
+
+cgp-core            = { workspace = true }
+cgp-error-eyre      = { workspace = true }
+ibc-proto           = { workspace = true }
+ibc-relayer         = { workspace = true }
+ibc-relayer-types   = { workspace = true }
+tendermint-proto    = { workspace = true }
+prost               = { workspace = true }
+serde               = { workspace = true, features = ["derive"] }
+tracing             = { workspace = true }
+toml                = { workspace = true }

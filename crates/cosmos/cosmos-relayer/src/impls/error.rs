@@ -5,7 +5,7 @@ use core::num::ParseIntError;
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use eyre::Report;
-use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
+use hermes_any_counterparty::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_error::handlers::debug::DebugError;

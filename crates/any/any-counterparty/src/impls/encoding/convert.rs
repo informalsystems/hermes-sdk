@@ -6,8 +6,8 @@ use hermes_cosmos_chain_components::types::tendermint::{
 };
 use hermes_protobuf_encoding_components::types::Any;
 
-use crate::any_client::impls::encoding::encode::EncodeAnyClientState;
-use crate::any_client::types::client_state::AnyClientState;
+use crate::impls::encoding::encode::EncodeAnyClientState;
+use crate::types::client_state::AnyClientState;
 
 pub struct AnyClientConverterComponents;
 

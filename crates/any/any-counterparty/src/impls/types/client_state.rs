@@ -10,7 +10,7 @@ use ibc_relayer_types::core::ics02_client::client_state::ClientState;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use ibc_relayer_types::Height;
 
-use crate::any_client::types::client_state::AnyClientState;
+use crate::types::client_state::AnyClientState;
 
 pub struct ProvideAnyClientState;
 

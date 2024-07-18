@@ -12,7 +12,7 @@ use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 use ibc_proto::ibc::lightclients::tendermint::v1::ClientState as ProtoTendermintClientState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 
-use crate::any_client::types::client_state::AnyClientState;
+use crate::types::client_state::AnyClientState;
 
 pub struct AnyClientEncoderComponents;
 

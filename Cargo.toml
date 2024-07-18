@@ -14,6 +14,8 @@ members = [
     "crates/test/test-components",
     "crates/test/test-suite",
 
+    "crates/any/any-counterparty",
+
     "crates/cli/cli-components",
     "crates/cli/cli-framework",
     "crates/cli/cli",
@@ -125,6 +127,8 @@ hermes-relayer-components-extra         = { version = "0.1.0" }
 hermes-test-components                  = { version = "0.1.0" }
 hermes-ibc-test-suite                   = { version = "0.1.0" }
 
+hermes-any-counterparty                 = { version = "0.1.0" }
+
 hermes-cli                              = { version = "0.1.0" }
 hermes-cli-components                   = { version = "0.1.0" }
 hermes-cli-framework                    = { version = "0.1.0" }
@@ -198,6 +202,8 @@ hermes-logger                       = { path = "./crates/logging/logger" }
 
 hermes-test-components              = { path = "./crates/test/test-components" }
 hermes-ibc-test-suite               = { path = "./crates/test/test-suite" }
+
+hermes-any-counterparty             = { path = "./crates/any/any-counterparty" }
 
 hermes-cli                          = { path = "./crates/cli/cli" }
 hermes-cli-components               = { path = "./crates/cli/cli-components" }
