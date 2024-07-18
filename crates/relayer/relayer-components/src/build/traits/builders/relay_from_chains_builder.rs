@@ -1,23 +1,21 @@
 use cgp_core::prelude::*;
 
-use crate::build::traits::birelay::HasBiRelayType;
-use crate::build::traits::target::relay::RelayBuildTarget;
-use crate::build::types::aliases::{
-    TargetDstChain, TargetDstClientId, TargetRelay, TargetSrcChain, TargetSrcClientId,
-};
+use crate::chain::types::aliases::ClientIdOf;
+use crate::multi::traits::chain_at::ChainTypeAt;
+use crate::multi::traits::relay_at::HasRelayTypeAt;
+use crate::multi::types::index::Twindex;
 
 #[derive_component(RelayFromChainsBuilderComponent, RelayFromChainsBuilder<Build>)]
 #[async_trait]
-pub trait CanBuildRelayFromChains<Target>: HasBiRelayType + HasErrorType
-where
-    Target: RelayBuildTarget<Self>,
+pub trait CanBuildRelayFromChains<const SRC: usize, const DST: usize>:
+    HasRelayTypeAt<SRC, DST> + HasErrorType
 {
     async fn build_relay_from_chains(
         &self,
-        target: Target,
-        src_client_id: &TargetSrcClientId<Self, Target>,
-        dst_client_id: &TargetDstClientId<Self, Target>,
-        src_chain: TargetSrcChain<Self, Target>,
-        dst_chain: TargetDstChain<Self, Target>,
-    ) -> Result<TargetRelay<Self, Target>, Self::Error>;
+        index: Twindex<SRC, DST>,
+        src_client_id: &ClientIdOf<ChainTypeAt<Self, SRC>, ChainTypeAt<Self, DST>>,
+        dst_client_id: &ClientIdOf<ChainTypeAt<Self, DST>, ChainTypeAt<Self, SRC>>,
+        src_chain: ChainTypeAt<Self, SRC>,
+        dst_chain: ChainTypeAt<Self, DST>,
+    ) -> Result<Self::Relay, Self::Error>;
 }

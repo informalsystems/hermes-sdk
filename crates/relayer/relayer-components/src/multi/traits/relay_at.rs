@@ -1,11 +1,13 @@
 use cgp_core::prelude::*;
 
+use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
 use crate::relay::traits::chains::HasRelayChains;
 
 #[derive_component(RelayTypeAtComponent, ProvideRelayTypeAt<Context>)]
 pub trait HasRelayTypeAt<const SRC: usize, const DST: usize>:
-    HasChainTypeAt<SRC> + HasChainTypeAt<DST>
+    HasChainTypeAt<SRC, Chain: HasIbcChainTypes<ChainTypeAt<Self, DST>>>
+    + HasChainTypeAt<DST, Chain: HasIbcChainTypes<ChainTypeAt<Self, SRC>>>
 {
     type Relay: HasRelayChains<SrcChain = ChainTypeAt<Self, SRC>, DstChain = ChainTypeAt<Self, DST>>;
 }
