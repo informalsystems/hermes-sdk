@@ -1719,6 +1719,7 @@ name = "hermes-cli"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
  "clap",
  "eyre",
  "futures",

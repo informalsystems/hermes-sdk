@@ -4,16 +4,14 @@ use hermes_cli_components::traits::types::config::HasConfigType;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use ibc_relayer::config::ChainConfig;
-
-use crate::config::HermesConfig;
+use ibc_relayer::config::{ChainConfig, Config};
 
 pub struct LoadCosmosBuilder;
 
 impl<App> BuilderLoader<App> for LoadCosmosBuilder
 where
     App: HasBuilderType<Builder = CosmosBuilder>
-        + HasConfigType<Config = HermesConfig>
+        + HasConfigType<Config = Config>
         + HasRuntime<Runtime = HermesRuntime>
         + CanLoadConfig,
 {
@@ -22,7 +20,6 @@ where
         let config = app.load_config().await?;
 
         let chain_configs = config
-            .config
             .chains
             .into_iter()
             .map(|config| {
