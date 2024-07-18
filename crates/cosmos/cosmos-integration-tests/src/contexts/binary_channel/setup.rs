@@ -26,7 +26,7 @@ use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitC
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
 use hermes_test_components::types::index::{Index, Twindex};
-use ibc_relayer::chain::client::ClientSettings;
+use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
 
 use crate::contexts::binary_channel::test_driver::CosmosBinaryChannelTestDriver;
@@ -41,7 +41,7 @@ use crate::contexts::relay_driver::CosmosRelayDriver;
 pub struct CosmosBinaryChannelSetup {
     pub bootstrap_a: Arc<LegacyCosmosBootstrap>,
     pub bootstrap_b: Arc<LegacyCosmosBootstrap>,
-    pub create_client_settings: ClientSettings,
+    pub create_client_settings: Settings,
     pub init_connection_options: CosmosInitConnectionOptions,
     pub init_channel_options: CosmosInitChannelOptions,
     pub port_id: PortId,
@@ -179,7 +179,7 @@ impl<const I: usize, const J: usize> ProvideCreateClientOptionsAt<CosmosBinaryCh
     fn create_client_payload_options(
         setup: &CosmosBinaryChannelSetup,
         _index: Twindex<I, J>,
-    ) -> &ClientSettings {
+    ) -> &Settings {
         &setup.create_client_settings
     }
 

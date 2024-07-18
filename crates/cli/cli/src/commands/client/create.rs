@@ -4,8 +4,7 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
-use ibc_relayer::chain::client::ClientSettings;
-use ibc_relayer::config::ChainConfig;
+use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
@@ -76,10 +75,10 @@ impl CommandRunner<CosmosBuilder> for ClientCreate {
             trust_threshold: self.trust_threshold,
         };
 
-        let settings = ClientSettings::for_create_command(
+        let settings = Settings::for_create_command(
             options,
-            &ChainConfig::CosmosSdk(host_chain.chain_config.clone()),
-            &ChainConfig::CosmosSdk(reference_chain.chain_config.clone()),
+            &host_chain.chain_config.clone(),
+            &reference_chain.chain_config.clone(),
         );
 
         info!(

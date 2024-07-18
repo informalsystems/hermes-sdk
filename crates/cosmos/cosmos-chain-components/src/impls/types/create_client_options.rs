@@ -2,7 +2,7 @@ use cgp_core::prelude::Async;
 use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientMessageOptionsType, ProvideCreateClientPayloadOptionsType,
 };
-use ibc_relayer::chain::client::ClientSettings;
+use ibc_relayer::chain::cosmos::client::Settings;
 
 pub struct ProvideCosmosCreateClientSettings;
 
@@ -12,7 +12,7 @@ where
     Chain: Async,
     Counterparty: Async,
 {
-    type CreateClientPayloadOptions = ClientSettings;
+    type CreateClientPayloadOptions = Settings;
 }
 
 impl<Chain, Counterparty> ProvideCreateClientMessageOptionsType<Chain, Counterparty>

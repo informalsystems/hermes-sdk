@@ -4,7 +4,6 @@ use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::build::impls::bootstrap::birelay::CanBootstrapBiRelay;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
-use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::channel::version::Version;
 use ibc_relayer::config::PacketFilter;
@@ -42,11 +41,11 @@ impl BinaryChainTest for ConnectionAndChannelHandshakeTest {
         let chain_id_b = chains.chain_id_b().cloned_value();
 
         // TODO: figure ways to build client settings easily without too much dependencies
-        let client_settings = ClientSettings::Tendermint(Settings {
+        let client_settings = Settings {
             max_clock_drift: Duration::from_secs(40),
             trust_threshold: Default::default(),
             trusting_period: None,
-        });
+        };
 
         runtime
             .block_on(async move {
