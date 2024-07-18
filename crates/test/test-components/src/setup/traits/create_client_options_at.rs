@@ -3,9 +3,8 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientMessageOptions, CreateClientPayloadOptions, HasCreateClientMessageOptionsType,
     HasCreateClientPayloadOptionsType,
 };
-
-use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
-use crate::types::index::Twindex;
+use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::types::index::Twindex;
 
 #[derive_component(CreateClientOptionsAtComponent, ProvideCreateClientOptionsAt<Setup>)]
 pub trait HasCreateClientOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:

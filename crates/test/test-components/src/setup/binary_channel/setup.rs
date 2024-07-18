@@ -1,8 +1,9 @@
 use cgp_core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 
 use crate::chain_driver::traits::types::chain::HasChain;
-use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
 use crate::setup::traits::birelay::CanSetupBiRelay;
 use crate::setup::traits::chain::CanSetupChain;
@@ -11,7 +12,6 @@ use crate::setup::traits::clients::CanSetupClients;
 use crate::setup::traits::connection::CanSetupConnection;
 use crate::setup::traits::driver::{DriverBuilder, HasTestDriverType};
 use crate::setup::traits::drivers::binary_channel::CanBuildTestDriverWithBinaryChannel;
-use crate::types::index::{Index, Twindex};
 
 pub struct SetupBinaryChannelDriver;
 

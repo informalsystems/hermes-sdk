@@ -1,8 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
-
-use crate::driver::traits::types::birelay_at::HasBiRelayTypeAt;
-use crate::types::index::Twindex;
+use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
+use hermes_relayer_components::multi::types::index::Twindex;
 
 #[derive_component(RelayDriverTypeAtComponent, ProvideRelayDriverTypeAt<Driver>)]
 pub trait HasRelayDriverTypeAt<const A: usize, const B: usize>: HasBiRelayTypeAt<A, B> {

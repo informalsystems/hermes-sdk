@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::multi::types::index::Index;
 
 use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
-use crate::types::index::Index;
 
 #[derive_component(ChainSetupComponent, ChainSetup<Setup>)]
 #[async_trait]

@@ -2,10 +2,10 @@ use alloc::collections::BTreeMap;
 use alloc::string::String;
 
 use cgp_core::prelude::*;
+use hermes_relayer_components::multi::types::index::Index;
 
 use crate::chain::traits::types::wallet::{HasWalletType, WalletOf};
 use crate::chain_driver::traits::types::chain::HasChainType;
-use crate::types::index::Index;
 
 #[derive(Copy, Clone)]
 pub struct UserWallet;

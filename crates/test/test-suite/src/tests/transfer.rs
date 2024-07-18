@@ -6,6 +6,8 @@ use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
@@ -16,12 +18,10 @@ use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt,
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::channel_at::HasChannelAt;
-use hermes_test_components::driver::traits::types::chain_at::HasChainTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::HasChainDriverAt;
 use hermes_test_components::driver::traits::types::relay_driver_at::HasRelayDriverAt;
 use hermes_test_components::relay_driver::run::CanRunRelayerInBackground;
 use hermes_test_components::test_case::traits::test_case::TestCase;
-use hermes_test_components::types::index::{Index, Twindex};
 
 pub struct TestIbcTransfer;
 

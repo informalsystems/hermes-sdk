@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 
-use crate::driver::traits::types::chain_at::ChainTypeAt;
-use crate::driver::traits::types::relay_at::{HasRelayTypeAt, RelayTypeAt};
+use crate::birelay::traits::two_way::HasTwoWayRelayTypes;
+use crate::multi::traits::chain_at::ChainTypeAt;
+use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
 
 #[derive_component(BiRelayTypeAtComponent, ProvideBiRelayTypeAt<Setup>)]
 pub trait HasBiRelayTypeAt<const A: usize, const B: usize>:

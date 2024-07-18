@@ -1,6 +1,5 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
-use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use std::collections::HashMap;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -23,6 +22,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
+use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;

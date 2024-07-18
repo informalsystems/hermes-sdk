@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::types::index::Index;
+use crate::multi::types::index::Index;
 
 #[derive_component(ChainTypeAtComponent, ProvideChainTypeAt<Context>)]
 pub trait HasChainTypeAt<const I: usize>: Async {

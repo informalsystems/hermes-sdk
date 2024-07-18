@@ -1,7 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
-
-use crate::driver::traits::types::birelay_at::HasBiRelayTypeAt;
+use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 
 #[derive_component(BuilderTypeAtComponent, ProvideBuilderTypeAt<Context>)]
 pub trait HasBuilderTypeAt<const A: usize, const B: usize>: HasBiRelayTypeAt<A, B> {

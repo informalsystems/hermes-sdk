@@ -11,6 +11,9 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -19,11 +22,8 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::chain_driver::traits::types::chain::HasChain;
-use crate::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
 use crate::driver::traits::types::builder_at::ProvideBuilderTypeAt;
-use crate::driver::traits::types::chain_at::ProvideChainTypeAt;
 use crate::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
-use crate::driver::traits::types::relay_at::ProvideRelayTypeAt;
 use crate::setup::binary_channel::setup::SetupBinaryChannelDriver;
 use crate::setup::impls::birelay::SetupBiRelayWithBuilder;
 use crate::setup::impls::chain::SetupChainWithBootstrap;

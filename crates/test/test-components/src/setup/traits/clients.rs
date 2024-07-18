@@ -1,8 +1,7 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-
-use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
 
 #[derive_component(ClientSetupComponent, ClientSetup<Setup>)]
 #[async_trait]

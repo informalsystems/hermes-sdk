@@ -4,8 +4,7 @@ use hermes_relayer_components::chain::traits::types::channel::{
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
-
-use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
 
 #[derive_component(InitChannelOptionsAtComponent, ProvideInitChannelOptionsAt<Setup>)]
 pub trait HasInitChannelOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:

@@ -5,15 +5,15 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
+use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 
-use crate::driver::traits::types::chain_at::ChainTypeAt;
-use crate::driver::traits::types::relay_at::{HasRelayTypeAt, RelayTypeAt};
 use crate::setup::traits::clients::ClientSetup;
 use crate::setup::traits::create_client_options_at::HasCreateClientOptionsAt;
-use crate::types::index::Twindex;
 
 pub struct SetupClientsWithRelay;
 

@@ -11,11 +11,12 @@ use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
-use hermes_test_components::driver::traits::types::birelay_at::ProvideBiRelayTypeAt;
+use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 use hermes_test_components::driver::traits::types::builder_at::ProvideBuilderTypeAt;
-use hermes_test_components::driver::traits::types::chain_at::ProvideChainTypeAt;
 use hermes_test_components::driver::traits::types::chain_driver_at::ProvideChainDriverTypeAt;
-use hermes_test_components::driver::traits::types::relay_at::ProvideRelayTypeAt;
 use hermes_test_components::setup::binary_channel::components::*;
 use hermes_test_components::setup::traits::bootstrap_at::ProvideBootstrapAt;
 use hermes_test_components::setup::traits::builder_at::ProvideBuilderAt;
@@ -25,7 +26,6 @@ use hermes_test_components::setup::traits::drivers::binary_channel::BinaryChanne
 use hermes_test_components::setup::traits::init_channel_options_at::ProvideInitChannelOptionsAt;
 use hermes_test_components::setup::traits::init_connection_options_at::ProvideInitConnectionOptionsAt;
 use hermes_test_components::setup::traits::port_id_at::ProvidePortIdAt;
-use hermes_test_components::types::index::{Index, Twindex};
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, ConnectionId, PortId};
 

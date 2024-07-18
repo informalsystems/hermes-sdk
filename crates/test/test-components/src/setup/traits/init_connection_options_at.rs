@@ -2,8 +2,7 @@ use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::connection::{
     HasInitConnectionOptionsType, InitConnectionOptionsOf,
 };
-
-use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
 
 #[derive_component(InitConnectionOptionsAtComponent, ProvideInitConnectionOptionsAt<Setup>)]
 pub trait HasInitConnectionOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:

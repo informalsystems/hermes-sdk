@@ -3,11 +3,11 @@ use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
+use hermes_relayer_components::multi::traits::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::RelayTypeAt;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
-use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
-use crate::driver::traits::types::chain_at::ChainTypeAt;
-use crate::driver::traits::types::relay_at::RelayTypeAt;
 use crate::setup::traits::connection::ConnectionSetup;
 use crate::setup::traits::init_connection_options_at::HasInitConnectionOptionsAt;
 

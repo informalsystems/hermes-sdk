@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 
-use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
+use crate::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
+use crate::relay::traits::chains::HasRelayChains;
 
 #[derive_component(RelayTypeAtComponent, ProvideRelayTypeAt<Context>)]
 pub trait HasRelayTypeAt<const SRC: usize, const DST: usize>:

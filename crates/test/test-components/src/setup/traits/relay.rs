@@ -1,10 +1,9 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-
-use crate::driver::traits::types::chain_at::ChainTypeAt;
-use crate::driver::traits::types::relay_at::{HasRelayTypeAt, RelayTypeAt};
-use crate::types::index::Twindex;
+use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
+use hermes_relayer_components::multi::types::index::Twindex;
 
 #[derive_component(RelaySetupComponent, RelaySetup<Setup>)]
 #[async_trait]

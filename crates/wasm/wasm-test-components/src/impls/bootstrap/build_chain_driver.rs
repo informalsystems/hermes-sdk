@@ -8,6 +8,7 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Has
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
@@ -22,7 +23,6 @@ use hermes_test_components::chain_driver::traits::proposal::poll_status::CanPoll
 use hermes_test_components::chain_driver::traits::proposal::vote::CanVoteProposal;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
-use hermes_test_components::types::index::Index;
 
 use crate::traits::bootstrap::client_code_path::HasWasmClientCodePath;
 use crate::traits::chain_driver::upload_client_code::CanUploadWasmClientCode;
