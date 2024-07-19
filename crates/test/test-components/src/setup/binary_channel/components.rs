@@ -21,9 +21,7 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::chain_driver::traits::types::chain::HasChain;
 use crate::driver::traits::types::builder_at::ProvideBuilderTypeAt;
-use crate::driver::traits::types::chain_driver_at::{
-    ChainDriverTypeAt, HasChainDriverTypeAt, ProvideChainDriverTypeAt,
-};
+use crate::driver::traits::types::chain_driver_at::{ChainDriverTypeAt, HasChainDriverTypeAt};
 use crate::setup::binary_channel::setup::SetupBinaryChannelDriver;
 use crate::setup::impls::birelay::SetupBiRelayWithBuilder;
 use crate::setup::impls::chain::SetupChainWithBootstrap;

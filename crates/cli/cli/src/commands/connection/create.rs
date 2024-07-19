@@ -5,7 +5,7 @@ use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::types::connection::CosmosInitConnectionOptions;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
-use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
+use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use ibc_relayer_types::core::ics03_connection::version::Version;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
@@ -57,7 +57,7 @@ impl CommandRunner<CosmosBuilder> for ConnectionCreate {
     async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
         let relay = builder
             .build_relay(
-                RelayAToBTarget,
+                Twindex::<0, 1>,
                 &self.chain_id_a,
                 &self.chain_id_b,
                 &self.client_id_a,

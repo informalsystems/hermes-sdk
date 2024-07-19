@@ -3,9 +3,7 @@ use std::fmt::Debug;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_error::types::Error;
-use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::build::traits::target::chain::ChainATarget;
 use hermes_relayer_components::chain::traits::queries::client_status::{
     CanQueryClientStatus, ClientStatus,
 };
@@ -16,6 +14,8 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     HasConsensusStateFields, HasConsensusStateType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use serde::Serialize;
@@ -46,8 +46,7 @@ pub struct QueryClientStatus {
 
 impl<Build, Chain, Counterparty> CommandRunner<Build> for QueryClientStatus
 where
-    Build: CanBuildChain<ChainATarget>,
-    Build::BiRelay: HasTwoWayRelayTypes<ChainA = Chain, ChainB = Counterparty>,
+    Build: CanBuildChain<0, Chain = Chain> + HasChainTypeAt<1, Chain = Counterparty>,
     Chain: HasIbcChainTypes<Counterparty, ChainId = ChainId, ClientId = ClientId, Height = Height>
         + CanQueryClientStatus<Counterparty>,
     Counterparty: HasIbcChainTypes<Chain>
@@ -58,7 +57,7 @@ where
     Error: From<Chain::Error> + From<Build::Error>,
 {
     async fn run(&self, builder: &Build) -> Result<Output> {
-        let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
+        let chain = builder.build_chain(Index::<0>, &self.chain_id).await?;
         let client_status = chain.query_client_status(&self.client_id).await?;
 
         match client_status {

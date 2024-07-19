@@ -3,14 +3,14 @@ use std::fmt::Debug;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_error::types::Error;
-use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelayTypes;
 use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildChain;
-use hermes_relayer_components::build::traits::target::chain::ChainATarget;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithLatestHeight,
 };
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
+use hermes_relayer_components::multi::types::index::Index;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use serde::Serialize;
@@ -48,8 +48,7 @@ pub struct QueryClientState {
 
 impl<Build, ChainA, ChainB> CommandRunner<Build> for QueryClientState
 where
-    Build: CanBuildChain<ChainATarget>,
-    Build::BiRelay: HasTwoWayRelayTypes<ChainA = ChainA, ChainB = ChainB>,
+    Build: CanBuildChain<0, Chain = ChainA> + HasChainTypeAt<1, Chain = ChainB>,
     ChainA: HasIbcChainTypes<ChainB, ChainId = ChainId, ClientId = ClientId, Height = Height>
         + CanQueryClientState<ChainB>
         + CanQueryClientStateWithLatestHeight<ChainB>,
@@ -61,7 +60,7 @@ where
         let chain_id = &self.chain_id;
         let client_id = &self.client_id;
 
-        let chain = builder.build_chain(ChainATarget, &self.chain_id).await?;
+        let chain = builder.build_chain(Index::<0>, &self.chain_id).await?;
 
         let client_state = match self.height {
             Some(height) => {
