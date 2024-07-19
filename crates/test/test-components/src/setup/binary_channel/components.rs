@@ -11,7 +11,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -127,7 +127,7 @@ where
         + HasChainTypeAt<0, Chain = ChainAt<Setup, 0>>
         + HasChainTypeAt<1, Chain = ChainAt<Setup, 1>>
         + HasRelayTypeAt<0, 1, Relay = Relay>
-        + HasRelayTypeAt<1, 0, Relay = RelayTypeAt<Setup, 1, 0>>
+        + HasRelayTypeAt<1, 0, Relay = RelayAt<Setup, 1, 0>>
         + CanBuildRelayFromChains<0, 1>
         + CanBuildRelayFromChains<1, 0>
         + CanBuildBiRelayFromRelays<0, 1>,

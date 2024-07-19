@@ -13,7 +13,7 @@ pub trait HasRelayTypeAt<const SRC: usize, const DST: usize>:
     type Relay: HasRelayChains<SrcChain = ChainAt<Self, SRC>, DstChain = ChainAt<Self, DST>>;
 }
 
-pub type RelayTypeAt<Context, const SRC: usize, const DST: usize> =
+pub type RelayAt<Context, const SRC: usize, const DST: usize> =
     <Context as HasRelayTypeAt<SRC, DST>>::Relay;
 
 pub type ClientIdAt<Context, const SRC: usize, const DST: usize> =

@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 
@@ -21,13 +21,13 @@ where
         + HasInitChannelOptionsAt<A, B>
         + HasPortIdAt<A, B>
         + HasPortIdAt<B, A>
-        + CanRaiseError<ErrorOf<RelayTypeAt<Setup, A, B>>>,
+        + CanRaiseError<ErrorOf<RelayAt<Setup, A, B>>>,
     ChainAt<Setup, A>:
         HasIbcChainTypes<ChainAt<Setup, B>> + HasInitChannelOptionsType<ChainAt<Setup, B>>,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
-    RelayTypeAt<Setup, A, B>: CanBootstrapChannel,
+    RelayAt<Setup, A, B>: CanBootstrapChannel,
     BiRelayTypeAt<Setup, A, B>:
-        HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayTypeAt<Setup, A, B>>,
+        HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
     PortIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>: Clone,
     PortIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>: Clone,
 {

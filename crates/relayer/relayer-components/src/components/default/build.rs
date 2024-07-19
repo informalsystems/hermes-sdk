@@ -13,7 +13,7 @@ use crate::build::traits::builders::relay_from_chains_builder::RelayFromChainsBu
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainIdAt, ChainAt};
-use crate::multi::traits::relay_at::{ClientIdAt, RelayTypeAt};
+use crate::multi::traits::relay_at::{ClientIdAt, RelayAt};
 
 define_components! {
     DefaultBuildComponents<BaseComponents: Async> {
@@ -35,8 +35,8 @@ where
         + HasChainCache<0>
         + HasChainCache<1>
         + HasComponents<Components = Components>,
-    RelayTypeAt<Build, 0, 1>: Clone,
-    RelayTypeAt<Build, 1, 0>: Clone,
+    RelayAt<Build, 0, 1>: Clone,
+    RelayAt<Build, 1, 0>: Clone,
     ChainAt<Build, 0>: Clone,
     ChainAt<Build, 1>: Clone,
     ChainIdAt<Build, 0>: Ord + Clone,

@@ -3,7 +3,7 @@ use hermes_relayer_components::build::traits::builders::relay_from_chains_builde
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 
 use crate::setup::traits::builder_at::HasBuilderAt;
@@ -20,8 +20,8 @@ where
         + CanBuildRelayFromChains<1, 0>
         + HasChainTypeAt<0, Chain = ChainAt<Setup, A>>
         + HasChainTypeAt<1, Chain = ChainAt<Setup, B>>
-        + HasRelayTypeAt<0, 1, Relay = RelayTypeAt<Setup, A, B>>
-        + HasRelayTypeAt<1, 0, Relay = RelayTypeAt<Setup, B, A>>,
+        + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>
+        + HasRelayTypeAt<1, 0, Relay = RelayAt<Setup, B, A>>,
 {
     async fn setup_relays(
         setup: &Setup,
@@ -30,7 +30,7 @@ where
         chain_b: &ChainAt<Setup, B>,
         client_id_a: &ClientIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
         client_id_b: &ClientIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
-    ) -> Result<(RelayTypeAt<Setup, A, B>, RelayTypeAt<Setup, B, A>), Setup::Error> {
+    ) -> Result<(RelayAt<Setup, A, B>, RelayAt<Setup, B, A>), Setup::Error> {
         let build = setup.builder();
 
         let relay_a_to_b = build

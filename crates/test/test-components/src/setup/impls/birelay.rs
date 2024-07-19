@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
-use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 
 use crate::setup::traits::birelay::BiRelaySetup;
@@ -22,8 +22,8 @@ where
     ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>> + Clone,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>> + Clone,
     Setup::Builder: CanBuildBiRelayFromRelays<0, 1>
-        + HasRelayTypeAt<0, 1, Relay = RelayTypeAt<Setup, A, B>>
-        + HasRelayTypeAt<1, 0, Relay = RelayTypeAt<Setup, B, A>>,
+        + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>
+        + HasRelayTypeAt<1, 0, Relay = RelayAt<Setup, B, A>>,
 {
     async fn setup_birelay(
         setup: &Setup,
