@@ -1,44 +1,38 @@
 use alloc::collections::BTreeMap;
 
 use cgp_core::Async;
-use hermes_relayer_components::build::traits::birelay::HasBiRelayType;
-use hermes_relayer_components::build::traits::target::chain::ChainBuildTarget;
-use hermes_relayer_components::build::types::aliases::{
-    CounterpartyChainId, CounterpartyClientId, TargetChain, TargetChainId, TargetClientId,
-};
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
+use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
 use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 
 use crate::batch::traits::channel::HasMessageBatchSenderType;
+use crate::batch::types::aliases::MessageBatchSender;
 
-pub trait HasBatchSenderCache<Target, Error>: Async
-where
-    Target: HasBatchSenderCacheType<Self, Error>,
+pub trait HasBatchSenderCache<Error: Async, const TARGET: usize, const COUNTERPARTY: usize>:
+    HasRuntime<Runtime: HasMutex>
+    + HasChainTypeAt<
+        TARGET,
+        Chain: HasIbcChainTypes<ChainTypeAt<Self, COUNTERPARTY>> + HasMessageBatchSenderType<Error>,
+    > + HasChainTypeAt<COUNTERPARTY, Chain: HasIbcChainTypes<ChainTypeAt<Self, TARGET>>>
 {
-    fn batch_sender_cache(&self, target: Target) -> &Target::BatchSenderCache;
+    fn batch_sender_cache(
+        &self,
+        index: Twindex<TARGET, COUNTERPARTY>,
+    ) -> &BatchSenderCache<Self, Error, TARGET, COUNTERPARTY>;
 }
 
-pub trait HasBatchSenderCacheType<Build, Error>: Async {
-    type BatchSenderCache: Async;
-}
-
-impl<Target, Build, Error> HasBatchSenderCacheType<Build, Error> for Target
-where
-    Error: Async,
-    Build: HasBiRelayType + HasRuntime<Runtime: HasMutex>,
-    Target: ChainBuildTarget<Build>,
-    Target::TargetChain: HasMessageBatchSenderType<Error>,
-{
-    type BatchSenderCache = MutexOf<
-        RuntimeOf<Build>,
-        BTreeMap<
-            (
-                TargetChainId<Build, Target>,
-                CounterpartyChainId<Build, Target>,
-                TargetClientId<Build, Target>,
-                CounterpartyClientId<Build, Target>,
-            ),
-            <TargetChain<Build, Target> as HasMessageBatchSenderType<Error>>::MessageBatchSender,
-        >,
-    >;
-}
+pub type BatchSenderCache<Build, Error, const TARGET: usize, const COUNTERPARTY: usize> = MutexOf<
+    RuntimeOf<Build>,
+    BTreeMap<
+        (
+            ChainIdAt<Build, TARGET>,
+            ChainIdAt<Build, COUNTERPARTY>,
+            ClientIdAt<Build, TARGET, COUNTERPARTY>,
+            ClientIdAt<Build, COUNTERPARTY, TARGET>,
+        ),
+        MessageBatchSender<ChainTypeAt<Build, TARGET>, Error>,
+    >,
+>;

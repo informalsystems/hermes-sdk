@@ -18,36 +18,30 @@ where
     fn get_batch_sender(&self) -> &MessageBatchSender<Target::TargetChain, Self::Error>;
 }
 
-pub trait HasMessageBatchSenderType<Error>: Async {
-    type MessageBatchSender: Async;
+pub trait HasMessageBatchSenderType<Error>:
+    HasChainTypes + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>
+{
 }
 
 impl<Chain, Error> HasMessageBatchSenderType<Error> for Chain
 where
-    Error: Async,
     Chain: HasChainTypes + HasRuntime,
     Chain::Runtime: HasChannelTypes + HasChannelOnceTypes,
 {
-    type MessageBatchSender = MessageBatchSender<Chain, Error>;
 }
 
-pub trait HasMessageBatchSenderTypes: Async {
-    type SrcMessageBatchSender: Async;
-
-    type DstMessageBatchSender: Async;
-}
-
-impl<Relay, SrcMessageBatchSender, DstMessageBatchSender> HasMessageBatchSenderTypes for Relay
-where
-    SrcMessageBatchSender: Async,
-    DstMessageBatchSender: Async,
-    Relay: HasRelayChains,
-    Relay::SrcChain:
-        HasMessageBatchSenderType<Relay::Error, MessageBatchSender = SrcMessageBatchSender>,
-    Relay::DstChain:
-        HasMessageBatchSenderType<Relay::Error, MessageBatchSender = DstMessageBatchSender>,
+pub trait HasMessageBatchSenderTypes:
+    HasRelayChains<
+    SrcChain: HasMessageBatchSenderType<Self::Error>,
+    DstChain: HasMessageBatchSenderType<Self::Error>,
+>
 {
-    type SrcMessageBatchSender = SrcMessageBatchSender;
+}
 
-    type DstMessageBatchSender = DstMessageBatchSender;
+impl<Relay> HasMessageBatchSenderTypes for Relay
+where
+    Relay: HasRelayChains,
+    Relay::SrcChain: HasMessageBatchSenderType<Relay::Error>,
+    Relay::DstChain: HasMessageBatchSenderType<Relay::Error>,
+{
 }

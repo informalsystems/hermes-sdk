@@ -23,7 +23,7 @@ use hermes_runtime_components::traits::channel_once::CanUseChannelsOnce;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
 use crate::batch::traits::config::HasBatchConfig;
-use crate::build::components::relay::batch::BuildRelayWithBatchWorker;
+use crate::build::impls::relay::batch::BuildRelayWithBatchWorker;
 use crate::build::traits::cache::HasBatchSenderCache;
 use crate::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
 use crate::components::extra::closures::batch::UseBatchMessageWorkerSpawner;
