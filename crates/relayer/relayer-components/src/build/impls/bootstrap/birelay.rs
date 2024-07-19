@@ -4,13 +4,12 @@ use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
 use crate::build::traits::birelay::HasBiRelayType;
 use crate::build::traits::builders::birelay_builder::CanBuildBiRelay;
-use crate::build::traits::target::relay::RelayAToBTarget;
-use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB};
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::multi::types::index::Twindex;
 use crate::relay::traits::chains::HasRelayChains;
 
 #[async_trait]
@@ -38,8 +37,8 @@ impl<Build, BiRelay, ChainA, ChainB, Error> CanBootstrapBiRelay for Build
 where
     Build: HasBiRelayType<BiRelay = BiRelay>
         + HasErrorType<Error = Error>
-        + CanBuildBiRelay
-        + CanBootstrapRelay<RelayAToBTarget>,
+        + CanBuildBiRelay<0, 1>
+        + CanBootstrapRelay<0, 1>,
     BiRelay: HasTwoWayRelay<ChainA = ChainA, ChainB = ChainB>,
     ChainA: HasChainIdType
         + HasCreateClientPayloadOptionsType<ChainB>
@@ -63,7 +62,7 @@ where
     ) -> Result<BiRelay, Error> {
         let relay_a_to_b = self
             .bootstrap_relay(
-                RelayAToBTarget,
+                Twindex::<0, 1>,
                 chain_id_a,
                 chain_id_b,
                 payload_options_a,

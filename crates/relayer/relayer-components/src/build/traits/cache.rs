@@ -1,10 +1,10 @@
-use hermes_runtime_components::traits::mutex::HasMutex;
-use hermes_runtime_components::traits::runtime::HasRuntime;
+use alloc::collections::BTreeMap;
+use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
+use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 
-use crate::build::types::aliases::{ChainCacheAt, RelayCacheAt};
 use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::multi::traits::chain_at::HasChainTypeAt;
-use crate::multi::traits::relay_at::HasRelayTypeAt;
+use crate::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt, RelayTypeAt};
 
 pub trait HasChainCache<const I: usize>:
     HasChainTypeAt<I, Chain: HasChainIdType> + HasRuntime<Runtime: HasMutex>
@@ -17,3 +17,19 @@ pub trait HasRelayCache<const SRC: usize, const DST: usize>:
 {
     fn relay_cache(&self) -> &RelayCacheAt<Self, SRC, DST>;
 }
+
+pub type RelayCacheAt<Build, const SRC: usize, const DST: usize> = MutexOf<
+    RuntimeOf<Build>,
+    BTreeMap<
+        (
+            ChainIdAt<Build, SRC>,
+            ChainIdAt<Build, DST>,
+            ClientIdAt<Build, SRC, DST>,
+            ClientIdAt<Build, DST, SRC>,
+        ),
+        RelayTypeAt<Build, SRC, DST>,
+    >,
+>;
+
+pub type ChainCacheAt<Build, const I: usize> =
+    MutexOf<RuntimeOf<Build>, BTreeMap<ChainIdAt<Build, I>, ChainTypeAt<Build, I>>>;

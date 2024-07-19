@@ -5,30 +5,30 @@ use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::builders::chain_builder::ChainBuilder;
 use crate::build::traits::cache::HasChainCache;
-use crate::build::traits::target::chain::ChainBuildTarget;
-use crate::build::types::aliases::{TargetChain, TargetChainId};
+use crate::chain::traits::types::chain_id::HasChainIdType;
+use crate::multi::types::index::Index;
 
 pub struct BuildChainWithCache<InBuilder>(pub PhantomData<InBuilder>);
 
-impl<InBuilder, Build, Target> ChainBuilder<Build, Target> for BuildChainWithCache<InBuilder>
+impl<InBuilder, Build, Chain, const I: usize> ChainBuilder<Build, I>
+    for BuildChainWithCache<InBuilder>
 where
-    TargetChain<Build, Target>: Clone,
-    TargetChainId<Build, Target>: Ord + Clone,
-    Build: HasChainCache<Target> + HasErrorType,
-    InBuilder: ChainBuilder<Build, Target>,
-    Target: ChainBuildTarget<Build>,
+    Chain: HasChainIdType + Clone,
+    Chain::ChainId: Ord + Clone,
+    Build: HasChainCache<I, Chain = Chain> + HasErrorType,
+    InBuilder: ChainBuilder<Build, I>,
 {
     async fn build_chain(
         build: &Build,
-        target: Target,
-        chain_id: &TargetChainId<Build, Target>,
-    ) -> Result<TargetChain<Build, Target>, Build::Error> {
+        index: Index<I>,
+        chain_id: &Chain::ChainId,
+    ) -> Result<Chain, Build::Error> {
         let mut cache = Build::Runtime::acquire_mutex(build.chain_cache()).await;
 
         if let Some(chain) = cache.get(chain_id) {
             Ok(chain.clone())
         } else {
-            let chain = InBuilder::build_chain(build, target, chain_id).await?;
+            let chain = InBuilder::build_chain(build, index, chain_id).await?;
             cache.insert(chain_id.clone(), chain.clone());
 
             Ok(chain)
