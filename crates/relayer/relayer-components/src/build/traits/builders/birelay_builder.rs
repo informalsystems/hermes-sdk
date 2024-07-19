@@ -2,8 +2,7 @@ use cgp_core::prelude::*;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
-use crate::multi::traits::chain_at::ChainIdAt;
-use crate::multi::traits::chain_at::HasChainTypeAt;
+use crate::multi::traits::chain_at::{ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::ClientIdAt;
 
 #[derive_component(BiRelayBuilderComponent, BiRelayBuilder<Build>)]

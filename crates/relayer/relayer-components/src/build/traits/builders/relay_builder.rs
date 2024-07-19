@@ -1,10 +1,8 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::multi::traits::chain_at::ChainIdAt;
-use crate::multi::traits::chain_at::HasChainTypeAt;
-use crate::multi::traits::relay_at::ClientIdAt;
-use crate::multi::traits::relay_at::HasRelayTypeAt;
+use crate::multi::traits::chain_at::{ChainIdAt, HasChainTypeAt};
+use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 use crate::multi::types::index::Twindex;
 
 #[derive_component(RelayBuilderComponent, RelayBuilder<Build>)]

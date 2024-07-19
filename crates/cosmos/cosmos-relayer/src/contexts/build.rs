@@ -1,9 +1,5 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
-use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
-use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
-use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
-use hermes_relayer_components::multi::types::index::{Index, Twindex};
 use std::collections::HashMap;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -14,6 +10,10 @@ use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
+use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_relayer_components_extra::build::traits::cache::HasBatchSenderCache;
