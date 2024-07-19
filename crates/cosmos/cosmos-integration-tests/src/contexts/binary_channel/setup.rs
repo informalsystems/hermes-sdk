@@ -127,15 +127,19 @@ impl<const I: usize, const J: usize> ProvideRelayTypeAt<CosmosBinaryChannelSetup
     type Relay = CosmosRelay;
 }
 
-impl<const I: usize, const J: usize> ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, I, J>
-    for CosmosBinaryChannelSetupComponents
-{
+impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
     type BiRelay = CosmosBiRelay;
 }
 
-impl<const I: usize, const J: usize> ProvideBuilderTypeAt<CosmosBinaryChannelSetup, I, J>
-    for CosmosBinaryChannelSetupComponents
-{
+impl ProvideBiRelayTypeAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
+    type BiRelay = CosmosBiRelay;
+}
+
+impl ProvideBuilderTypeAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
+    type Builder = CosmosBuilder;
+}
+
+impl ProvideBuilderTypeAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
     type Builder = CosmosBuilder;
 }
 

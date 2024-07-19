@@ -37,13 +37,12 @@ where
     type Relay = CosmosRelay;
 }
 
-impl<Context, const I: usize, const J: usize> ProvideBiRelayTypeAt<Context, I, J>
-    for ProvideCosmosTestTypes
+impl<Context> ProvideBiRelayTypeAt<Context, 0, 1> for ProvideCosmosTestTypes
 where
-    Context: HasChainTypeAt<I, Chain = CosmosChain>
-        + HasChainTypeAt<J, Chain = CosmosChain>
-        + HasRelayTypeAt<I, J, Relay = CosmosRelay>
-        + HasRelayTypeAt<J, I, Relay = CosmosRelay>,
+    Context: HasChainTypeAt<0, Chain = CosmosChain>
+        + HasChainTypeAt<1, Chain = CosmosChain>
+        + HasRelayTypeAt<0, 1, Relay = CosmosRelay>
+        + HasRelayTypeAt<1, 0, Relay = CosmosRelay>,
 {
     type BiRelay = CosmosBiRelay;
 }
