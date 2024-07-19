@@ -5,7 +5,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
-use hermes_relayer_components::multi::traits::relay_at::RelayTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
 use crate::setup::traits::connection::ConnectionSetup;
@@ -23,7 +23,8 @@ where
         + HasInitConnectionOptionsType<ChainTypeAt<Setup, B>>,
     ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>>,
     RelayTypeAt<Setup, A, B>: CanBootstrapConnection,
-    BiRelayTypeAt<Setup, A, B>: HasTwoWayRelay,
+    BiRelayTypeAt<Setup, A, B>:
+        HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayTypeAt<Setup, A, B>>,
 {
     async fn setup_connection(
         setup: &Setup,

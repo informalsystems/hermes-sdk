@@ -1,9 +1,8 @@
 use cgp_core::error::{CanRaiseError, ErrorOf};
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
-use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 
@@ -17,8 +16,12 @@ where
     Setup: HasRelayTypeAt<A, B> + HasBuilderAt<A, B> + CanRaiseError<ErrorOf<Setup::Builder>>,
     ChainTypeAt<Setup, A>: HasIbcChainTypes<ChainTypeAt<Setup, B>> + Clone,
     ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>> + Clone,
-    Setup::Builder:
-        CanBuildRelayFromChains<RelayAToBTarget> + CanBuildRelayFromChains<RelayBToATarget>,
+    Setup::Builder: CanBuildRelayFromChains<0, 1>
+        + CanBuildRelayFromChains<1, 0>
+        + HasChainTypeAt<0, Chain = ChainTypeAt<Setup, A>>
+        + HasChainTypeAt<1, Chain = ChainTypeAt<Setup, B>>
+        + HasRelayTypeAt<0, 1, Relay = RelayTypeAt<Setup, A, B>>
+        + HasRelayTypeAt<1, 0, Relay = RelayTypeAt<Setup, B, A>>,
 {
     async fn setup_relays(
         setup: &Setup,
@@ -32,7 +35,7 @@ where
 
         let relay_a_to_b = build
             .build_relay_from_chains(
-                RelayAToBTarget,
+                Twindex::<0, 1>,
                 client_id_a,
                 client_id_b,
                 chain_a.clone(),
@@ -43,7 +46,7 @@ where
 
         let relay_b_to_a = build
             .build_relay_from_chains(
-                RelayBToATarget,
+                Twindex::<1, 0>,
                 client_id_b,
                 client_id_a,
                 chain_b.clone(),

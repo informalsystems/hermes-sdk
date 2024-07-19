@@ -2,7 +2,7 @@ use cgp_core::error::ErrorOf;
 use cgp_core::prelude::{async_trait, HasErrorType};
 use cgp_core::Async;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
-use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};

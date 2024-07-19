@@ -1,7 +1,6 @@
 use cgp_core::error::ProvideErrorType;
 use cgp_core::prelude::*;
 
-use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::components::birelay::BuildBiRelayFromRelays;
 use crate::build::components::chain::cache::BuildChainWithCache;
 use crate::build::components::relay::build_from_chain::BuildRelayFromChains;
@@ -12,11 +11,9 @@ use crate::build::traits::builders::chain_builder::{ChainBuilder, ChainBuilderCo
 use crate::build::traits::builders::relay_builder::RelayBuilderComponent;
 use crate::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::chain_at::{ChainIdAt, ChainTypeAt};
 use crate::multi::traits::relay_at::{ClientIdAt, RelayTypeAt};
-use crate::relay::traits::chains::HasRelayChains;
 
 define_components! {
     DefaultBuildComponents<BaseComponents: Async> {

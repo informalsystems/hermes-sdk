@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
-    CreateClientMessageOptions, CreateClientPayloadOptions, HasCreateClientMessageOptionsType,
+    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
     HasCreateClientPayloadOptionsType,
 };
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
@@ -16,10 +16,10 @@ where
     fn create_client_payload_options(
         &self,
         index: Twindex<TARGET, COUNTERPARTY>,
-    ) -> &CreateClientPayloadOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> &CreateClientPayloadOptionsOf<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
 
     fn create_client_message_options(
         &self,
         index: Twindex<TARGET, COUNTERPARTY>,
-    ) -> &CreateClientMessageOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> &CreateClientMessageOptionsOf<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
 }

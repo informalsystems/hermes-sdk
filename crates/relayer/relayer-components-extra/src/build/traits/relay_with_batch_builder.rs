@@ -1,6 +1,6 @@
 use cgp_core::error::ErrorOf;
 use cgp_core::prelude::*;
-use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt, RelayTypeAt};
 use hermes_relayer_components::multi::types::index::Twindex;

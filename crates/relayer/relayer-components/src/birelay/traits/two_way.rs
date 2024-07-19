@@ -1,6 +1,5 @@
 use cgp_core::prelude::*;
 
-use crate::multi::traits::chain_at::HasChainTypeAt;
 use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
 
 /// Trait for types that have a two-way relay context, i.e.,
