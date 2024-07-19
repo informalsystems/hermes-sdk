@@ -2,7 +2,7 @@ use cgp_core::error::{CanRaiseError, ErrorOf};
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;
-use hermes_relayer_components::multi::traits::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
+use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
 use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 use hermes_relayer_components::multi::types::index::Twindex;
@@ -32,7 +32,7 @@ where
         chain_b: &ChainAt<Setup, B>,
         client_id_a: &ClientIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
         client_id_b: &ClientIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
-    ) -> Result<BiRelayTypeAt<Setup, A, B>, Setup::Error> {
+    ) -> Result<BiRelayAt<Setup, A, B>, Setup::Error> {
         let (relay_a_to_b, relay_b_to_a) = setup
             .setup_relays(Twindex::<A, B>, chain_a, chain_b, client_id_a, client_id_b)
             .await?;
