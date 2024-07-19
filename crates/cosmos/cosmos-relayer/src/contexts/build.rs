@@ -1,5 +1,9 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
+use hermes_relayer_components::multi::traits::birelay_at::ProvideBiRelayTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 use std::collections::HashMap;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -7,16 +11,13 @@ use cgp_core::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
 use hermes_error::types::Error;
-use hermes_relayer_components::build::traits::birelay::ProvideBiRelayType;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
 use hermes_relayer_components::build::traits::cache::{HasChainCache, HasRelayCache};
-use hermes_relayer_components::build::traits::target::chain::{ChainATarget, ChainBTarget};
-use hermes_relayer_components::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
 use hermes_relayer_components_extra::batch::traits::config::HasBatchConfig;
 use hermes_relayer_components_extra::batch::types::config::BatchConfig;
 use hermes_relayer_components_extra::build::traits::cache::HasBatchSenderCache;
-use hermes_relayer_components_extra::build::traits::components::relay_with_batch_builder::RelayWithBatchBuilder;
+use hermes_relayer_components_extra::build::traits::relay_with_batch_builder::RelayWithBatchBuilder;
 use hermes_relayer_components_extra::components::extra::build::*;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
@@ -92,8 +93,24 @@ delegate_components! {
     }
 }
 
-impl ProvideBiRelayType<CosmosBuilder> for CosmosBuildComponents {
+impl ProvideBiRelayTypeAt<CosmosBuilder, 0, 1> for CosmosBuildComponents {
     type BiRelay = CosmosBiRelay;
+}
+
+impl ProvideChainTypeAt<CosmosBuilder, 0> for CosmosBuildComponents {
+    type Chain = CosmosChain;
+}
+
+impl ProvideChainTypeAt<CosmosBuilder, 1> for CosmosBuildComponents {
+    type Chain = CosmosChain;
+}
+
+impl ProvideRelayTypeAt<CosmosBuilder, 0, 1> for CosmosBuildComponents {
+    type Relay = CosmosRelay;
+}
+
+impl ProvideRelayTypeAt<CosmosBuilder, 1, 0> for CosmosBuildComponents {
+    type Relay = CosmosRelay;
 }
 
 impl CosmosBuilder {
@@ -247,10 +264,10 @@ pub fn get_keypair(
     Ok(key)
 }
 
-impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBaseBuildComponents {
+impl ChainBuilder<CosmosBuilder, 0> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,
-        _target: ChainATarget,
+        _index: Index<0>,
         chain_id: &ChainId,
     ) -> Result<CosmosChain, Error> {
         let chain = build.build_chain(chain_id).await?;
@@ -259,10 +276,10 @@ impl ChainBuilder<CosmosBuilder, ChainATarget> for CosmosBaseBuildComponents {
     }
 }
 
-impl ChainBuilder<CosmosBuilder, ChainBTarget> for CosmosBaseBuildComponents {
+impl ChainBuilder<CosmosBuilder, 1> for CosmosBaseBuildComponents {
     async fn build_chain(
         build: &CosmosBuilder,
-        _target: ChainBTarget,
+        _index: Index<1>,
         chain_id: &ChainId,
     ) -> Result<CosmosChain, Error> {
         let chain = build.build_chain(chain_id).await?;
@@ -271,9 +288,10 @@ impl ChainBuilder<CosmosBuilder, ChainBTarget> for CosmosBaseBuildComponents {
     }
 }
 
-impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildComponents {
+impl RelayWithBatchBuilder<CosmosBuilder, 0, 1> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,
+        _index: Twindex<0, 1>,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
         src_chain: CosmosChain,
@@ -294,9 +312,10 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayAToBTarget> for CosmosBuildCompon
     }
 }
 
-impl RelayWithBatchBuilder<CosmosBuilder, RelayBToATarget> for CosmosBuildComponents {
+impl RelayWithBatchBuilder<CosmosBuilder, 1, 0> for CosmosBuildComponents {
     async fn build_relay_with_batch(
         build: &CosmosBuilder,
+        _index: Twindex<1, 0>,
         src_client_id: &ClientId,
         dst_client_id: &ClientId,
         src_chain: CosmosChain,
@@ -317,7 +336,7 @@ impl RelayWithBatchBuilder<CosmosBuilder, RelayBToATarget> for CosmosBuildCompon
     }
 }
 
-impl BiRelayFromRelayBuilder<CosmosBuilder> for CosmosBuildComponents {
+impl BiRelayFromRelayBuilder<CosmosBuilder, 0, 1> for CosmosBuildComponents {
     async fn build_birelay_from_relays(
         build: &CosmosBuilder,
         relay_a_to_b: CosmosRelay,
@@ -333,43 +352,43 @@ impl BiRelayFromRelayBuilder<CosmosBuilder> for CosmosBuildComponents {
     }
 }
 
-impl HasChainCache<ChainATarget> for CosmosBuilder {
+impl HasChainCache<0> for CosmosBuilder {
     fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain>> {
         &self.chain_cache
     }
 }
 
-impl HasChainCache<ChainBTarget> for CosmosBuilder {
+impl HasChainCache<1> for CosmosBuilder {
     fn chain_cache(&self) -> &Mutex<BTreeMap<ChainId, CosmosChain>> {
         &self.chain_cache
     }
 }
 
-impl HasRelayCache<RelayAToBTarget> for CosmosBuilder {
+impl HasRelayCache<0, 1> for CosmosBuilder {
     fn relay_cache(&self) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>> {
         &self.relay_cache
     }
 }
 
-impl HasRelayCache<RelayBToATarget> for CosmosBuilder {
+impl HasRelayCache<1, 0> for CosmosBuilder {
     fn relay_cache(&self) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>> {
         &self.relay_cache
     }
 }
 
-impl HasBatchSenderCache<ChainATarget, Error> for CosmosBuilder {
+impl HasBatchSenderCache<Error, 0, 1> for CosmosBuilder {
     fn batch_sender_cache(
         &self,
-        _target: ChainATarget,
+        _index: Twindex<0, 1>,
     ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
         &self.batch_senders
     }
 }
 
-impl HasBatchSenderCache<ChainBTarget, Error> for CosmosBuilder {
+impl HasBatchSenderCache<Error, 1, 0> for CosmosBuilder {
     fn batch_sender_cache(
         &self,
-        _target: ChainBTarget,
+        _index: Twindex<1, 0>,
     ) -> &Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>> {
         &self.batch_senders
     }

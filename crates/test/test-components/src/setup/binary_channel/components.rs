@@ -1,4 +1,4 @@
-use cgp_core::error::{ErrorRaiser, ProvideErrorType};
+use cgp_core::error::ErrorRaiser;
 use cgp_core::prelude::*;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
