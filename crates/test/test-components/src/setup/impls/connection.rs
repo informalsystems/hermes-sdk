@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::connection::HasInitConnecti
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
@@ -19,9 +19,9 @@ where
     Setup: HasBiRelayTypeAt<A, B>
         + HasInitConnectionOptionsAt<A, B>
         + CanRaiseError<ErrorOf<RelayTypeAt<Setup, A, B>>>,
-    ChainTypeAt<Setup, A>: HasIbcChainTypes<ChainTypeAt<Setup, B>>
-        + HasInitConnectionOptionsType<ChainTypeAt<Setup, B>>,
-    ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>>,
+    ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>>
+        + HasInitConnectionOptionsType<ChainAt<Setup, B>>,
+    ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
     RelayTypeAt<Setup, A, B>: CanBootstrapConnection,
     BiRelayTypeAt<Setup, A, B>:
         HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayTypeAt<Setup, A, B>>,
@@ -31,8 +31,8 @@ where
         birelay: &BiRelayTypeAt<Setup, A, B>,
     ) -> Result<
         (
-            ConnectionIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            ConnectionIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            ConnectionIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+            ConnectionIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
         ),
         Setup::Error,
     > {

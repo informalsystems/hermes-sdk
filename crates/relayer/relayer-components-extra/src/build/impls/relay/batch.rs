@@ -4,7 +4,7 @@ use cgp_core::Async;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainIdAt, ChainAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
@@ -39,16 +39,16 @@ where
         + CanSpawnBatchMessageWorker<SourceTarget>
         + CanSpawnBatchMessageWorker<DestinationTarget>
         + CanRaiseRelayChainErrors,
-    ChainTypeAt<Build, SRC>: HasChainId,
-    ChainTypeAt<Build, DST>: HasChainId,
+    ChainAt<Build, SRC>: HasChainId,
+    ChainAt<Build, DST>: HasChainId,
 {
     async fn build_relay_from_chains(
         build: &Build,
         index: Twindex<SRC, DST>,
         src_client_id: &ClientIdAt<Build, SRC, DST>,
         dst_client_id: &ClientIdAt<Build, DST, SRC>,
-        src_chain: ChainTypeAt<Build, SRC>,
-        dst_chain: ChainTypeAt<Build, DST>,
+        src_chain: ChainAt<Build, SRC>,
+        dst_chain: ChainAt<Build, DST>,
     ) -> Result<Build::Relay, Build::Error> {
         let src_chain_id = src_chain.chain_id();
         let dst_chain_id = dst_chain.chain_id();
@@ -109,9 +109,9 @@ where
 pub trait CanBuildBatchChannel<Error: Async, const TARGET: usize, const COUNTERPARTY: usize>:
     HasChainTypeAt<
         TARGET,
-        Chain: HasIbcChainTypes<ChainTypeAt<Self, COUNTERPARTY>>
+        Chain: HasIbcChainTypes<ChainAt<Self, COUNTERPARTY>>
                    + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
-    > + HasChainTypeAt<COUNTERPARTY, Chain: HasIbcChainTypes<ChainTypeAt<Self, TARGET>>>
+    > + HasChainTypeAt<COUNTERPARTY, Chain: HasIbcChainTypes<ChainAt<Self, TARGET>>>
     + HasErrorType
 {
     async fn build_batch_channel(
@@ -123,8 +123,8 @@ pub trait CanBuildBatchChannel<Error: Async, const TARGET: usize, const COUNTERP
         counterparty_client_id: &ClientIdAt<Self, COUNTERPARTY, TARGET>,
     ) -> Result<
         (
-            MessageBatchSender<ChainTypeAt<Self, TARGET>, Error>,
-            Option<MessageBatchReceiver<ChainTypeAt<Self, TARGET>, Error>>,
+            MessageBatchSender<ChainAt<Self, TARGET>, Error>,
+            Option<MessageBatchReceiver<ChainAt<Self, TARGET>, Error>>,
         ),
         Self::Error,
     >;

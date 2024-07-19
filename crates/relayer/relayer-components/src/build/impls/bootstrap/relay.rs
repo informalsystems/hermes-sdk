@@ -9,7 +9,7 @@ use crate::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType,
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
+use crate::multi::traits::chain_at::{ChainIdAt, ChainAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::HasRelayTypeAt;
 use crate::multi::types::index::{Index, Twindex};
 use crate::relay::traits::chains::CanRaiseRelayChainErrors;
@@ -22,13 +22,13 @@ pub trait CanBootstrapRelay<const SRC: usize, const DST: usize>:
     + HasChainTypeAt<
         SRC,
         Chain: HasChainIdType
-                   + HasCreateClientPayloadOptionsType<ChainTypeAt<Self, DST>>
-                   + HasCreateClientMessageOptionsType<ChainTypeAt<Self, DST>>,
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, DST>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, DST>>,
     > + HasChainTypeAt<
         DST,
         Chain: HasChainIdType
-                   + HasCreateClientPayloadOptionsType<ChainTypeAt<Self, SRC>>
-                   + HasCreateClientMessageOptionsType<ChainTypeAt<Self, SRC>>,
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, SRC>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, SRC>>,
     > + HasErrorType
 {
     async fn bootstrap_relay(
@@ -37,20 +37,20 @@ pub trait CanBootstrapRelay<const SRC: usize, const DST: usize>:
         src_chain_id: &ChainIdAt<Self, SRC>,
         dst_chain_id: &ChainIdAt<Self, DST>,
         src_payload_options: &CreateClientPayloadOptionsOf<
-            ChainTypeAt<Self, SRC>,
-            ChainTypeAt<Self, DST>,
+            ChainAt<Self, SRC>,
+            ChainAt<Self, DST>,
         >,
         dst_payload_options: &CreateClientPayloadOptionsOf<
-            ChainTypeAt<Self, DST>,
-            ChainTypeAt<Self, SRC>,
+            ChainAt<Self, DST>,
+            ChainAt<Self, SRC>,
         >,
         src_message_options: &CreateClientMessageOptionsOf<
-            ChainTypeAt<Self, SRC>,
-            ChainTypeAt<Self, DST>,
+            ChainAt<Self, SRC>,
+            ChainAt<Self, DST>,
         >,
         dst_message_options: &CreateClientMessageOptionsOf<
-            ChainTypeAt<Self, DST>,
-            ChainTypeAt<Self, SRC>,
+            ChainAt<Self, DST>,
+            ChainAt<Self, SRC>,
         >,
     ) -> Result<Self::Relay, Self::Error>;
 }

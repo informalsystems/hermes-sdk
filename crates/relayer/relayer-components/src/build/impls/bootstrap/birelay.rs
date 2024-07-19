@@ -9,7 +9,7 @@ use crate::chain::traits::types::create_client::{
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
-use crate::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
+use crate::multi::traits::chain_at::{ChainIdAt, ChainAt, HasChainTypeAt};
 use crate::multi::types::index::Twindex;
 use crate::relay::traits::chains::HasRelayChains;
 
@@ -19,13 +19,13 @@ pub trait CanBootstrapBiRelay<const A: usize, const B: usize>:
     + HasChainTypeAt<
         A,
         Chain: HasChainIdType
-                   + HasCreateClientPayloadOptionsType<ChainTypeAt<Self, B>>
-                   + HasCreateClientMessageOptionsType<ChainTypeAt<Self, B>>,
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, B>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, B>>,
     > + HasChainTypeAt<
         B,
         Chain: HasChainIdType
-                   + HasCreateClientPayloadOptionsType<ChainTypeAt<Self, A>>
-                   + HasCreateClientMessageOptionsType<ChainTypeAt<Self, A>>,
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, A>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, A>>,
     > + HasErrorType
 {
     async fn bootstrap_birelay(
@@ -33,20 +33,20 @@ pub trait CanBootstrapBiRelay<const A: usize, const B: usize>:
         chain_id_a: &ChainIdAt<Self, A>,
         chain_id_b: &ChainIdAt<Self, B>,
         payload_options_a: &CreateClientPayloadOptionsOf<
-            ChainTypeAt<Self, A>,
-            ChainTypeAt<Self, B>,
+            ChainAt<Self, A>,
+            ChainAt<Self, B>,
         >,
         payload_options_b: &CreateClientPayloadOptionsOf<
-            ChainTypeAt<Self, B>,
-            ChainTypeAt<Self, A>,
+            ChainAt<Self, B>,
+            ChainAt<Self, A>,
         >,
         message_options_a: &CreateClientMessageOptionsOf<
-            ChainTypeAt<Self, A>,
-            ChainTypeAt<Self, B>,
+            ChainAt<Self, A>,
+            ChainAt<Self, B>,
         >,
         message_options_b: &CreateClientMessageOptionsOf<
-            ChainTypeAt<Self, B>,
-            ChainTypeAt<Self, A>,
+            ChainAt<Self, B>,
+            ChainAt<Self, A>,
         >,
     ) -> Result<Self::BiRelay, Self::Error>;
 }

@@ -10,7 +10,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::PortIdOf;
 use hermes_relayer_components::multi::traits::birelay_at::HasBiRelayTypeAt;
-use hermes_relayer_components::multi::traits::chain_at::{ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
@@ -101,21 +101,21 @@ where
         + ErrorRaiser<Setup, BootstrapB::Error>
         + ErrorRaiser<Setup, Relay::Error>
         + ErrorRaiser<Setup, Build::Error>,
-    ChainDriverTypeAt<Setup, 0>: HasChain<Chain = ChainTypeAt<Setup, 0>>,
-    ChainDriverTypeAt<Setup, 1>: HasChain<Chain = ChainTypeAt<Setup, 1>>,
-    ChainTypeAt<Setup, 0>: HasIbcChainTypes<ChainTypeAt<Setup, 1>>
-        + HasCreateClientPayloadOptionsType<ChainTypeAt<Setup, 1>>
-        + HasCreateClientMessageOptionsType<ChainTypeAt<Setup, 1>>
-        + HasInitConnectionOptionsType<ChainTypeAt<Setup, 1>>
-        + HasInitChannelOptionsType<ChainTypeAt<Setup, 1>>
+    ChainDriverTypeAt<Setup, 0>: HasChain<Chain = ChainAt<Setup, 0>>,
+    ChainDriverTypeAt<Setup, 1>: HasChain<Chain = ChainAt<Setup, 1>>,
+    ChainAt<Setup, 0>: HasIbcChainTypes<ChainAt<Setup, 1>>
+        + HasCreateClientPayloadOptionsType<ChainAt<Setup, 1>>
+        + HasCreateClientMessageOptionsType<ChainAt<Setup, 1>>
+        + HasInitConnectionOptionsType<ChainAt<Setup, 1>>
+        + HasInitChannelOptionsType<ChainAt<Setup, 1>>
         + HasErrorType
         + Clone,
-    ChainTypeAt<Setup, 1>: HasIbcChainTypes<ChainTypeAt<Setup, 0>>
-        + HasCreateClientPayloadOptionsType<ChainTypeAt<Setup, 0>>
-        + HasCreateClientMessageOptionsType<ChainTypeAt<Setup, 0>>
+    ChainAt<Setup, 1>: HasIbcChainTypes<ChainAt<Setup, 0>>
+        + HasCreateClientPayloadOptionsType<ChainAt<Setup, 0>>
+        + HasCreateClientMessageOptionsType<ChainAt<Setup, 0>>
         + HasErrorType
         + Clone,
-    Relay: HasRelayChains<SrcChain = ChainTypeAt<Setup, 0>, DstChain = ChainTypeAt<Setup, 1>>
+    Relay: HasRelayChains<SrcChain = ChainAt<Setup, 0>, DstChain = ChainAt<Setup, 1>>
         + CanCreateClient<SourceTarget>
         + CanCreateClient<DestinationTarget>
         + CanBootstrapConnection
@@ -124,14 +124,14 @@ where
     BootstrapA: CanBootstrapChain,
     BootstrapB: CanBootstrapChain,
     Build: HasBiRelayTypeAt<0, 1, BiRelay = Setup::BiRelay>
-        + HasChainTypeAt<0, Chain = ChainTypeAt<Setup, 0>>
-        + HasChainTypeAt<1, Chain = ChainTypeAt<Setup, 1>>
+        + HasChainTypeAt<0, Chain = ChainAt<Setup, 0>>
+        + HasChainTypeAt<1, Chain = ChainAt<Setup, 1>>
         + HasRelayTypeAt<0, 1, Relay = Relay>
         + HasRelayTypeAt<1, 0, Relay = RelayTypeAt<Setup, 1, 0>>
         + CanBuildRelayFromChains<0, 1>
         + CanBuildRelayFromChains<1, 0>
         + CanBuildBiRelayFromRelays<0, 1>,
-    PortIdOf<ChainTypeAt<Setup, 0>, ChainTypeAt<Setup, 1>>: Clone,
-    PortIdOf<ChainTypeAt<Setup, 1>, ChainTypeAt<Setup, 0>>: Clone,
+    PortIdOf<ChainAt<Setup, 0>, ChainAt<Setup, 1>>: Clone,
+    PortIdOf<ChainAt<Setup, 1>, ChainAt<Setup, 0>>: Clone,
 {
 }

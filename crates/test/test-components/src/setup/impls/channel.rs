@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOpti
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
 use hermes_relayer_components::multi::traits::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
-use hermes_relayer_components::multi::traits::chain_at::ChainTypeAt;
+use hermes_relayer_components::multi::traits::chain_at::ChainAt;
 use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayTypeAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
@@ -22,26 +22,26 @@ where
         + HasPortIdAt<A, B>
         + HasPortIdAt<B, A>
         + CanRaiseError<ErrorOf<RelayTypeAt<Setup, A, B>>>,
-    ChainTypeAt<Setup, A>:
-        HasIbcChainTypes<ChainTypeAt<Setup, B>> + HasInitChannelOptionsType<ChainTypeAt<Setup, B>>,
-    ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>>,
+    ChainAt<Setup, A>:
+        HasIbcChainTypes<ChainAt<Setup, B>> + HasInitChannelOptionsType<ChainAt<Setup, B>>,
+    ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
     RelayTypeAt<Setup, A, B>: CanBootstrapChannel,
     BiRelayTypeAt<Setup, A, B>:
         HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayTypeAt<Setup, A, B>>,
-    PortIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>: Clone,
-    PortIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>: Clone,
+    PortIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>: Clone,
+    PortIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>: Clone,
 {
     async fn setup_channel(
         setup: &Setup,
         birelay: &BiRelayTypeAt<Setup, A, B>,
-        connection_id_a: &ConnectionIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-        connection_id_b: &ConnectionIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+        connection_id_a: &ConnectionIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+        connection_id_b: &ConnectionIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
     ) -> Result<
         (
-            ChannelIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            ChannelIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
-            PortIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            PortIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            ChannelIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+            ChannelIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
+            PortIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+            PortIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
         ),
         Setup::Error,
     > {
