@@ -2,12 +2,12 @@ use cgp_core::error::ErrorOf;
 use cgp_core::prelude::{async_trait, HasErrorType};
 use cgp_core::Async;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
-use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, HasChainIdType};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 use hermes_relayer_components::multi::types::index::Twindex;
-use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime_components::traits::channel::{
     CanCloneSender, CanCreateChannels, HasChannelTypes,
@@ -16,7 +16,7 @@ use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
 use hermes_runtime_components::traits::mutex::HasMutex;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 
-use crate::batch::traits::channel::HasMessageBatchSenderType;
+use crate::batch::traits::channel::HasMessageBatchSenderTypes;
 use crate::batch::traits::config::HasBatchConfig;
 use crate::batch::types::aliases::{MessageBatchReceiver, MessageBatchSender};
 use crate::batch::worker::CanSpawnBatchMessageWorker;
@@ -28,36 +28,34 @@ pub struct BuildRelayWithBatchWorker;
 impl<Build, const SRC: usize, const DST: usize> RelayFromChainsBuilder<Build, SRC, DST>
     for BuildRelayWithBatchWorker
 where
-    Build: CanBuildRelayWithBatch<SRC, DST> + HasRuntime + HasBatchConfig,
-    Build:
-        CanBuildBatchChannel<Target::SrcChainTarget> + CanBuildBatchChannel<Target::DstChainTarget>,
-    Target: RelayBuildTarget<Build, TargetRelay = Relay>,
-    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Error = RelayError<Build>>,
-    Relay: Clone
+    Build: HasRuntime
+        + HasBatchConfig
+        + HasRelayTypeAt<SRC, DST>
+        + CanBuildRelayWithBatch<SRC, DST>
+        + CanBuildBatchChannel<ErrorOf<Build::Relay>, SRC, DST>
+        + CanBuildBatchChannel<ErrorOf<Build::Relay>, DST, SRC>,
+    Build::Relay: Clone
+        + HasMessageBatchSenderTypes
         + CanSpawnBatchMessageWorker<SourceTarget>
         + CanSpawnBatchMessageWorker<DestinationTarget>
         + CanRaiseRelayChainErrors,
-    SrcChain: HasIbcChainTypes<DstChain> + HasErrorType,
-    DstChain: HasIbcChainTypes<SrcChain> + HasErrorType,
-    SrcChain: HasRuntime<Runtime = SrcRuntime> + HasChainId,
-    DstChain: HasRuntime<Runtime = DstRuntime> + HasChainId,
-    SrcRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
-    DstRuntime: HasChannelTypes + HasChannelOnceTypes + HasErrorType,
+    ChainTypeAt<Build, SRC>: HasChainId,
+    ChainTypeAt<Build, DST>: HasChainId,
 {
     async fn build_relay_from_chains(
         build: &Build,
-        _target: Target,
-        src_client_id: &SrcChain::ClientId,
-        dst_client_id: &DstChain::ClientId,
-        src_chain: SrcChain,
-        dst_chain: DstChain,
-    ) -> Result<Target::TargetRelay, Build::Error> {
+        index: Twindex<SRC, DST>,
+        src_client_id: &ClientIdAt<Build, SRC, DST>,
+        dst_client_id: &ClientIdAt<Build, DST, SRC>,
+        src_chain: ChainTypeAt<Build, SRC>,
+        dst_chain: ChainTypeAt<Build, DST>,
+    ) -> Result<Build::Relay, Build::Error> {
         let src_chain_id = src_chain.chain_id();
         let dst_chain_id = dst_chain.chain_id();
 
         let (src_sender, m_src_receiver) = build
             .build_batch_channel(
-                Target::SrcChainTarget::default(),
+                index,
                 src_chain_id,
                 dst_chain_id,
                 src_client_id,
@@ -67,7 +65,7 @@ where
 
         let (dst_sender, m_dst_receiver) = build
             .build_batch_channel(
-                Target::DstChainTarget::default(),
+                Twindex::<DST, SRC>,
                 dst_chain_id,
                 src_chain_id,
                 dst_client_id,
@@ -77,7 +75,7 @@ where
 
         let relay = build
             .build_relay_with_batch(
-                Target::default(),
+                index,
                 src_client_id,
                 dst_client_id,
                 src_chain,
@@ -108,9 +106,12 @@ where
 }
 
 #[async_trait]
-pub trait CanBuildBatchChannel<Error, const TARGET: usize, const COUNTERPARTY: usize>:
-    HasChainTypeAt<TARGET, Chain: HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>>
-    + HasChainTypeAt<COUNTERPARTY>
+pub trait CanBuildBatchChannel<Error: Async, const TARGET: usize, const COUNTERPARTY: usize>:
+    HasChainTypeAt<
+        TARGET,
+        Chain: HasIbcChainTypes<ChainTypeAt<Self, COUNTERPARTY>>
+                   + HasRuntime<Runtime: HasChannelTypes + HasChannelOnceTypes>,
+    > + HasChainTypeAt<COUNTERPARTY, Chain: HasIbcChainTypes<ChainTypeAt<Self, TARGET>>>
     + HasErrorType
 {
     async fn build_batch_channel(
