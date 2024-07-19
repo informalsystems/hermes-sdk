@@ -9,6 +9,8 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
+use hermes_relayer_components::chain::traits::types::height::HasHeightType;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::any_counterparty::HasAnyCounterparty;
@@ -17,6 +19,16 @@ use crate::traits::command::CommandRunner;
 use crate::traits::output::CanShowOutput;
 
 pub struct RunQueryClientState;
+
+#[derive(HasField)]
+pub struct QueryClientStateArgs<Chain, Counterparty>
+where
+    Chain: HasChainIdType + HasHeightType + HasIbcChainTypes<Counterparty>,
+{
+    pub chain_id: Chain::ChainId,
+    pub client_id: Chain::ClientId,
+    pub height: Option<Chain::Height>,
+}
 
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientState
 where
