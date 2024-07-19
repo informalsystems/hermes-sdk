@@ -7,7 +7,7 @@ pub trait HasCreateClientPayloadOptionsType<Counterparty>: Async {
     type CreateClientPayloadOptions: Async;
 }
 
-pub type CreateClientPayloadOptions<Chain, Counterparty> =
+pub type CreateClientPayloadOptionsOf<Chain, Counterparty> =
     <Chain as HasCreateClientPayloadOptionsType<Counterparty>>::CreateClientPayloadOptions;
 
 #[derive_component(CreateClientMessageOptionsTypeComponent, ProvideCreateClientMessageOptionsType<Chain>)]
@@ -15,7 +15,7 @@ pub trait HasCreateClientMessageOptionsType<Counterparty>: Async {
     type CreateClientMessageOptions: Async;
 }
 
-pub type CreateClientMessageOptions<Chain, Counterparty> =
+pub type CreateClientMessageOptionsOf<Chain, Counterparty> =
     <Chain as HasCreateClientMessageOptionsType<Counterparty>>::CreateClientMessageOptions;
 
 #[derive_component(CreateClientPayloadTypeComponent, ProvideCreateClientPayloadType<Chain>)]

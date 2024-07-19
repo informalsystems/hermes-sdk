@@ -5,7 +5,8 @@ use crate::build::traits::builders::chain_builder::CanBuildChain;
 use crate::build::traits::builders::relay_builder::CanBuildRelay;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::create_client::{
-    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
+    HasCreateClientPayloadOptionsType,
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::chain_at::{ChainIdAt, ChainTypeAt, HasChainTypeAt};
@@ -35,18 +36,22 @@ pub trait CanBootstrapRelay<const SRC: usize, const DST: usize>:
         index: Twindex<SRC, DST>,
         src_chain_id: &ChainIdAt<Self, SRC>,
         dst_chain_id: &ChainIdAt<Self, DST>,
-        src_payload_options: &<ChainTypeAt<Self, SRC> as HasCreateClientPayloadOptionsType<
-            ChainTypeAt<Self, DST>,
-        >>::CreateClientPayloadOptions,
-        dst_payload_options: &<ChainTypeAt<Self, DST> as HasCreateClientPayloadOptionsType<
+        src_payload_options: &CreateClientPayloadOptionsOf<
             ChainTypeAt<Self, SRC>,
-        >>::CreateClientPayloadOptions,
-        src_message_options: &<ChainTypeAt<Self, SRC> as HasCreateClientMessageOptionsType<
             ChainTypeAt<Self, DST>,
-        >>::CreateClientMessageOptions,
-        dst_message_options: &<ChainTypeAt<Self, DST> as HasCreateClientMessageOptionsType<
+        >,
+        dst_payload_options: &CreateClientPayloadOptionsOf<
+            ChainTypeAt<Self, DST>,
             ChainTypeAt<Self, SRC>,
-        >>::CreateClientMessageOptions,
+        >,
+        src_message_options: &CreateClientMessageOptionsOf<
+            ChainTypeAt<Self, SRC>,
+            ChainTypeAt<Self, DST>,
+        >,
+        dst_message_options: &CreateClientMessageOptionsOf<
+            ChainTypeAt<Self, DST>,
+            ChainTypeAt<Self, SRC>,
+        >,
     ) -> Result<Self::Relay, Self::Error>;
 }
 
