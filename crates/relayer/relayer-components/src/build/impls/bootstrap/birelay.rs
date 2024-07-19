@@ -9,7 +9,7 @@ use crate::chain::traits::types::create_client::{
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
-use crate::multi::traits::chain_at::{ChainIdAt, ChainAt, HasChainTypeAt};
+use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::types::index::Twindex;
 use crate::relay::traits::chains::HasRelayChains;
 
@@ -32,22 +32,10 @@ pub trait CanBootstrapBiRelay<const A: usize, const B: usize>:
         &self,
         chain_id_a: &ChainIdAt<Self, A>,
         chain_id_b: &ChainIdAt<Self, B>,
-        payload_options_a: &CreateClientPayloadOptionsOf<
-            ChainAt<Self, A>,
-            ChainAt<Self, B>,
-        >,
-        payload_options_b: &CreateClientPayloadOptionsOf<
-            ChainAt<Self, B>,
-            ChainAt<Self, A>,
-        >,
-        message_options_a: &CreateClientMessageOptionsOf<
-            ChainAt<Self, A>,
-            ChainAt<Self, B>,
-        >,
-        message_options_b: &CreateClientMessageOptionsOf<
-            ChainAt<Self, B>,
-            ChainAt<Self, A>,
-        >,
+        payload_options_a: &CreateClientPayloadOptionsOf<ChainAt<Self, A>, ChainAt<Self, B>>,
+        payload_options_b: &CreateClientPayloadOptionsOf<ChainAt<Self, B>, ChainAt<Self, A>>,
+        message_options_a: &CreateClientMessageOptionsOf<ChainAt<Self, A>, ChainAt<Self, B>>,
+        message_options_b: &CreateClientMessageOptionsOf<ChainAt<Self, B>, ChainAt<Self, A>>,
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 

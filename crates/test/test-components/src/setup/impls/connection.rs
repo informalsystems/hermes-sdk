@@ -19,12 +19,11 @@ where
     Setup: HasBiRelayTypeAt<A, B>
         + HasInitConnectionOptionsAt<A, B>
         + CanRaiseError<ErrorOf<RelayAt<Setup, A, B>>>,
-    ChainAt<Setup, A>: HasIbcChainTypes<ChainAt<Setup, B>>
-        + HasInitConnectionOptionsType<ChainAt<Setup, B>>,
+    ChainAt<Setup, A>:
+        HasIbcChainTypes<ChainAt<Setup, B>> + HasInitConnectionOptionsType<ChainAt<Setup, B>>,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
     RelayAt<Setup, A, B>: CanBootstrapConnection,
-    BiRelayAt<Setup, A, B>:
-        HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
+    BiRelayAt<Setup, A, B>: HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
 {
     async fn setup_connection(
         setup: &Setup,

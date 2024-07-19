@@ -2,7 +2,7 @@ use alloc::collections::BTreeMap;
 
 use cgp_core::Async;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::multi::traits::chain_at::{ChainIdAt, ChainAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};

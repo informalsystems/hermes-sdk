@@ -4,7 +4,7 @@ use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
 use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
-use crate::multi::traits::chain_at::{ChainIdAt, ChainAt, HasChainTypeAt};
+use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt, RelayAt};
 
 pub trait HasChainCache<const I: usize>:

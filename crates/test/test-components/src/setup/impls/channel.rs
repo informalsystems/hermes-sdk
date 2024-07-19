@@ -26,8 +26,7 @@ where
         HasIbcChainTypes<ChainAt<Setup, B>> + HasInitChannelOptionsType<ChainAt<Setup, B>>,
     ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
     RelayAt<Setup, A, B>: CanBootstrapChannel,
-    BiRelayAt<Setup, A, B>:
-        HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
+    BiRelayAt<Setup, A, B>: HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
     PortIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>: Clone,
     PortIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>: Clone,
 {

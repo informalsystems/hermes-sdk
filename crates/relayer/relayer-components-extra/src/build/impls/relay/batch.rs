@@ -4,7 +4,7 @@ use cgp_core::Async;
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::multi::traits::chain_at::{ChainIdAt, ChainAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::{ClientIdAt, HasRelayTypeAt};
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::traits::chains::CanRaiseRelayChainErrors;

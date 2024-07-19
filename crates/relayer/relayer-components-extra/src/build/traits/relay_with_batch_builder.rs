@@ -27,13 +27,7 @@ pub trait CanBuildRelayWithBatch<const SRC: usize, const DST: usize>:
         dst_client_id: &ClientIdAt<Self, DST, SRC>,
         src_chain: ChainAt<Self, SRC>,
         dst_chain: ChainAt<Self, DST>,
-        src_batch_sender: MessageBatchSender<
-            ChainAt<Self, SRC>,
-            ErrorOf<RelayAt<Self, SRC, DST>>,
-        >,
-        dst_batch_sender: MessageBatchSender<
-            ChainAt<Self, DST>,
-            ErrorOf<RelayAt<Self, SRC, DST>>,
-        >,
+        src_batch_sender: MessageBatchSender<ChainAt<Self, SRC>, ErrorOf<RelayAt<Self, SRC, DST>>>,
+        dst_batch_sender: MessageBatchSender<ChainAt<Self, DST>, ErrorOf<RelayAt<Self, SRC, DST>>>,
     ) -> Result<Self::Relay, Self::Error>;
 }

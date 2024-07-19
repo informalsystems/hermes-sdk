@@ -12,7 +12,7 @@ use crate::build::traits::builders::relay_builder::RelayBuilderComponent;
 use crate::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
-use crate::multi::traits::chain_at::{ChainIdAt, ChainAt};
+use crate::multi::traits::chain_at::{ChainAt, ChainIdAt};
 use crate::multi::traits::relay_at::{ClientIdAt, RelayAt};
 
 define_components! {
