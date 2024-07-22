@@ -17,6 +17,7 @@ use crate::traits::any_counterparty::HasAnyCounterparty;
 use crate::traits::build::{CanLoadBuilder, HasBuilderType};
 use crate::traits::command::CommandRunner;
 use crate::traits::output::CanShowOutput;
+use crate::traits::parse::CanParseArg;
 
 pub struct RunQueryClientState;
 
@@ -37,12 +38,12 @@ where
         + HasLogger
         + HasAnyCounterparty<AnyCounterparty = Counterparty>
         + CanShowOutput<Counterparty::ClientState>
+        + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
+        + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
+        + CanParseArg<Args, (symbol!("chain_id"), symbol!("height")), Parsed = Option<Chain::Height>>
         + CanRaiseError<Build::Error>
         + CanRaiseError<Chain::Error>,
-    Args: Async
-        + HasField<symbol!("chain_id"), Field = Chain::ChainId>
-        + HasField<symbol!("client_id"), Field = Chain::ClientId>
-        + HasField<symbol!("height"), Field = Option<Chain::Height>>,
+    Args: Async,
     Build: CanBuildChain<0, Chain = Chain>,
     Chain: HasChainIdType + CanQueryChainHeight + CanQueryClientState<Counterparty>,
     Counterparty: HasClientStateType<Chain>,
@@ -52,22 +53,25 @@ where
         let logger = app.logger();
         let builder = app.load_builder().await?;
 
-        let chain_id = args.get_field(PhantomData::<symbol!("chain_id")>);
-        let client_id = args.get_field(PhantomData::<symbol!("client_id")>);
-        let m_height = args.get_field(PhantomData::<symbol!("height")>);
+        let chain_id = app.parse_arg(args, PhantomData::<symbol!("chain_id")>)?;
+        let client_id = app.parse_arg(args, PhantomData::<symbol!("client_id")>)?;
+        let m_height = app.parse_arg(
+            args,
+            PhantomData::<(symbol!("chain_id"), symbol!("height"))>,
+        )?;
 
         let chain = builder
-            .build_chain(Index::<0>, chain_id)
+            .build_chain(Index::<0>, &chain_id)
             .await
             .map_err(App::raise_error)?;
 
         let query_height = match m_height {
             Some(height) => height,
-            None => &chain.query_chain_height().await.map_err(App::raise_error)?,
+            None => chain.query_chain_height().await.map_err(App::raise_error)?,
         };
 
         let client_state = chain
-            .query_client_state(client_id, query_height)
+            .query_client_state(&client_id, &query_height)
             .await
             .map_err(App::raise_error)?;
 

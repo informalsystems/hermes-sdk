@@ -1,5 +1,6 @@
 use std::fmt::Debug;
 
+use cgp_core::prelude::*;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_error::types::Error;
@@ -18,7 +19,7 @@ use tracing::info;
 
 use crate::Result;
 
-#[derive(Debug, clap::Parser)]
+#[derive(Debug, clap::Parser, HasField)]
 pub struct QueryClientState {
     /// Identifier of the host chain
     #[clap(

@@ -16,10 +16,14 @@ where
 {
     type Parsed = Option<Height>;
 
-    fn parse_arg(app: &App, args: &Args) -> Result<Option<Height>, App::Error> {
+    fn parse_arg(
+        app: &App,
+        args: &Args,
+        _tag: PhantomData<(ChainIdTag, HeightTag)>,
+    ) -> Result<Option<Height>, App::Error> {
         match args.get_field(PhantomData) {
             Some(raw_height) => {
-                let chain_id = app.parse_arg(args)?;
+                let chain_id = app.parse_arg(args, PhantomData)?;
 
                 let height =
                     Height::new(chain_id.version(), *raw_height).map_err(App::raise_error)?;
