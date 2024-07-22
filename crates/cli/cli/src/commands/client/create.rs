@@ -1,6 +1,6 @@
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
 use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::DestinationTarget;
@@ -11,6 +11,7 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre::eyre;
 use tracing::info;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -64,8 +65,10 @@ pub struct ClientCreate {
     trust_threshold: Option<TrustThreshold>,
 }
 
-impl CommandRunner<CosmosBuilder> for ClientCreate {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for ClientCreate {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let host_chain = builder.build_chain(&self.host_chain_id).await?;
         let reference_chain = builder.build_chain(&self.reference_chain_id).await?;
 

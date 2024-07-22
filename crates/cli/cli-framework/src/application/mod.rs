@@ -16,9 +16,9 @@ use crate::Result;
 pub trait Application: Sized {
     type Config: Config;
 
-    type Build;
+    type App;
 
-    type Command: CommandRunner<Self::Build>;
+    type Command: CommandRunner<Self::App>;
 
     fn parse_from_env() -> Self;
 
@@ -26,5 +26,5 @@ pub trait Application: Sized {
 
     fn json_output(&self) -> bool;
 
-    async fn run(&self, runtime: HermesRuntime, config: Self::Config) -> Result<Output>;
+    async fn run(&self, runtime: HermesRuntime) -> Result<Output>;
 }

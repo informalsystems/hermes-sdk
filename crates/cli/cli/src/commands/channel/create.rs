@@ -1,7 +1,7 @@
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::types::channel::CosmosInitChannelOptions;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
 use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
@@ -11,6 +11,7 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId, Connect
 use oneline_eyre::eyre::eyre;
 use tracing::info;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -93,8 +94,10 @@ pub struct ChannelCreate {
     version: Version,
 }
 
-impl CommandRunner<CosmosBuilder> for ChannelCreate {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for ChannelCreate {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let relay = builder
             .build_relay(
                 Twindex::<0, 1>,

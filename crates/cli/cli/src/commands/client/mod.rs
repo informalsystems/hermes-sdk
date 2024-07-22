@@ -1,7 +1,7 @@
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 mod create;
@@ -19,11 +19,11 @@ pub enum ClientCommands {
     Update(ClientUpdate),
 }
 
-impl CommandRunner<CosmosBuilder> for ClientCommands {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for ClientCommands {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::Create(cmd) => cmd.run(builder).await,
-            Self::Update(cmd) => cmd.run(builder).await,
+            Self::Create(cmd) => cmd.run(app).await,
+            Self::Update(cmd) => cmd.run(app).await,
         }
     }
 }

@@ -1,6 +1,7 @@
 use std::fmt::Debug;
 
 use cgp_core::prelude::*;
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_error::types::Error;
@@ -47,8 +48,9 @@ pub struct QueryClientState {
     height: Option<u64>,
 }
 
-impl<Build, ChainA, ChainB> CommandRunner<Build> for QueryClientState
+impl<App, Build, ChainA, ChainB> CommandRunner<App> for QueryClientState
 where
+    App: CanLoadBuilder<Builder = Build> + HasErrorType<Error = Error>,
     Build: CanBuildChain<0, Chain = ChainA> + HasChainTypeAt<1, Chain = ChainB>,
     ChainA: HasIbcChainTypes<ChainB, ChainId = ChainId, ClientId = ClientId, Height = Height>
         + CanQueryClientState<ChainB>
@@ -57,7 +59,9 @@ where
     Error: From<ChainA::Error> + From<Build::Error>,
     ChainB::ClientState: Debug + Serialize,
 {
-    async fn run(&self, builder: &Build) -> Result<Output> {
+    async fn run(&self, app: &App) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain_id = &self.chain_id;
         let client_id = &self.client_id;
 

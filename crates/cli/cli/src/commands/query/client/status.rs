@@ -1,5 +1,7 @@
 use std::fmt::Debug;
 
+use cgp_core::error::HasErrorType;
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_error::types::Error;
@@ -44,8 +46,9 @@ pub struct QueryClientStatus {
     client_id: ClientId,
 }
 
-impl<Build, Chain, Counterparty> CommandRunner<Build> for QueryClientStatus
+impl<App, Build, Chain, Counterparty> CommandRunner<App> for QueryClientStatus
 where
+    App: CanLoadBuilder<Builder = Build> + HasErrorType<Error = Error>,
     Build: CanBuildChain<0, Chain = Chain> + HasChainTypeAt<1, Chain = Counterparty>,
     Chain: HasIbcChainTypes<Counterparty, ChainId = ChainId, ClientId = ClientId, Height = Height>
         + CanQueryClientStatus<Counterparty>,
@@ -56,7 +59,9 @@ where
         + HasConsensusStateFields<Chain>,
     Error: From<Chain::Error> + From<Build::Error>,
 {
-    async fn run(&self, builder: &Build) -> Result<Output> {
+    async fn run(&self, app: &App) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain = builder.build_chain(Index::<0>, &self.chain_id).await?;
         let client_status = chain.query_client_status(&self.client_id).await?;
 

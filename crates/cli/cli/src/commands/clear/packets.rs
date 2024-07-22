@@ -1,11 +1,12 @@
 use futures::stream::{self, StreamExt};
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::relay::traits::packet_clearer::CanClearPackets;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, ClientId, PortId};
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -84,8 +85,10 @@ pub struct PacketsClear {
     counterparty_channel_id: ChannelId,
 }
 
-impl CommandRunner<CosmosBuilder> for PacketsClear {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for PacketsClear {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let relayer = builder
             .build_birelay(
                 &self.chain_id,

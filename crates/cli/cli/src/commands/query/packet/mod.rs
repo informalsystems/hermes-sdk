@@ -6,10 +6,10 @@ mod util;
 
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 pub use pending::QueryPendingPackets;
 
 use crate::commands::query::packet::pending_acks::QueryPendingAcks;
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Subcommand)]
@@ -24,12 +24,12 @@ pub enum PacketCommands {
     PendingAcks(QueryPendingAcks),
 }
 
-impl CommandRunner<CosmosBuilder> for PacketCommands {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for PacketCommands {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::Commitments(cmd) => cmd.run(builder).await,
-            Self::Pending(cmd) => cmd.run(builder).await,
-            Self::PendingAcks(cmd) => cmd.run(builder).await,
+            Self::Commitments(cmd) => cmd.run(app).await,
+            Self::Pending(cmd) => cmd.run(app).await,
+            Self::PendingAcks(cmd) => cmd.run(app).await,
         }
     }
 }

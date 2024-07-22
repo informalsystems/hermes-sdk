@@ -1,12 +1,13 @@
 use cgp_core::run::CanRun;
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::eyre;
 use tracing::info;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -48,9 +49,11 @@ pub struct Start {
     client_id_b: ClientId,
 }
 
-impl CommandRunner<CosmosBuilder> for Start {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for Start {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
         info!("Starting relayer...");
+
+        let builder = app.load_builder().await?;
 
         let birelay = builder
             .build_birelay(

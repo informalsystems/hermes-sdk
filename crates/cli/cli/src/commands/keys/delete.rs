@@ -1,11 +1,13 @@
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::keyring::{KeyRing, Store};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre::{eyre, Context};
 use tracing::warn;
+
+use crate::contexts::app::HermesApp;
 
 #[derive(Debug, clap::Parser)]
 #[clap(
@@ -74,8 +76,10 @@ enum KeysDeleteId<'a> {
     Named(&'a str),
 }
 
-impl CommandRunner<CosmosBuilder> for KeysDeleteCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
+impl CommandRunner<HermesApp> for KeysDeleteCmd {
+    async fn run(&self, app: &HermesApp) -> hermes_cli_framework::Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain_config = builder
             .config_map
             .get(&self.chain_id)

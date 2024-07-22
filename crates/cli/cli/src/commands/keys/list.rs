@@ -1,12 +1,14 @@
 use core::fmt::Write;
 use std::collections::BTreeMap;
 
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::keyring::{KeyRing, SigningKeyPair, Store};
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre::eyre;
+
+use crate::contexts::app::HermesApp;
 
 #[derive(Debug, clap::Parser)]
 pub struct KeysListCmd {
@@ -20,8 +22,10 @@ pub struct KeysListCmd {
     chain_id: ChainId,
 }
 
-impl CommandRunner<CosmosBuilder> for KeysListCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
+impl CommandRunner<HermesApp> for KeysListCmd {
+    async fn run(&self, app: &HermesApp) -> hermes_cli_framework::Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain_config = builder
             .config_map
             .get(&self.chain_id)

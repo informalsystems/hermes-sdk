@@ -3,9 +3,9 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use hdpath::StandardHDPath;
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
@@ -14,6 +14,8 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
+
+use crate::contexts::app::HermesApp;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
 ///
@@ -184,8 +186,10 @@ fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str
     }
 }
 
-impl CommandRunner<CosmosBuilder> for KeysAddCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
+impl CommandRunner<HermesApp> for KeysAddCmd {
+    async fn run(&self, app: &HermesApp) -> hermes_cli_framework::Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain_config = builder
             .config_map
             .get(&self.chain_id)

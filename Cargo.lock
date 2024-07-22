@@ -1765,6 +1765,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "clap",
+ "eyre",
  "hermes-cosmos-relayer",
  "hermes-error",
  "hermes-runtime",
@@ -1881,6 +1882,7 @@ dependencies = [
  "tendermint-proto 0.37.0",
  "tendermint-rpc",
  "tokio",
+ "toml",
  "tonic",
  "tracing",
 ]

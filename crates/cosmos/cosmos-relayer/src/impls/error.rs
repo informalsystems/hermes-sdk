@@ -125,6 +125,7 @@ delegate_components! {
             ProofError,
             ClientError,
             CommitmentError,
+            toml::de::Error,
 
             // TODO: make it retryable?
             TransportError,

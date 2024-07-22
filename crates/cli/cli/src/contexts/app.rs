@@ -3,7 +3,6 @@ use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::impls::commands::delegate::DelegateCommandRunner;
 use hermes_cli_components::impls::commands::queries::client_state::{
@@ -25,11 +24,13 @@ use hermes_cli_components::traits::parse::{ArgParserComponent, CanParseArg};
 use hermes_cli_components::traits::types::config::ProvideConfigType;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_error::types::HermesError;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
 };
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
@@ -60,8 +61,12 @@ impl HasComponents for HermesApp {
 
 delegate_components! {
     HermesAppComponents {
-        ErrorTypeComponent: ProvideEyreError,
-        ErrorRaiserComponent: RaiseDebugError,
+        [
+            ErrorTypeComponent,
+            ErrorRaiserComponent,
+            RetryableErrorComponent,
+        ]:
+            HandleCosmosError,
         [
             RuntimeTypeComponent,
             RuntimeGetterComponent,
