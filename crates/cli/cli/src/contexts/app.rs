@@ -25,6 +25,7 @@ use hermes_cli_components::traits::parse::{ArgParserComponent, CanParseArg};
 use hermes_cli_components::traits::types::config::ProvideConfigType;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_error::types::HermesError;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -146,7 +147,8 @@ pub trait CanUseHermesApp:
         QueryClientStateArgs,
         (symbol!("chain_id"), symbol!("height")),
         Parsed = Option<Height>,
-    > // + CanRunCommand<QueryClientStateArgs>
+    > + CanRaiseError<HermesError>
+    + CanRunCommand<QueryClientStateArgs>
 {
 }
 
