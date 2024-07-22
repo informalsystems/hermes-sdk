@@ -9,8 +9,6 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
-use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::types::index::Index;
 
 use crate::traits::any_counterparty::HasAnyCounterparty;
@@ -20,6 +18,34 @@ use crate::traits::output::CanShowOutput;
 use crate::traits::parse::CanParseArg;
 
 pub struct RunQueryClientState;
+
+#[derive(Debug, clap::Parser, HasField)]
+pub struct QueryClientStateArgs {
+    /// Identifier of the host chain
+    #[clap(
+        long = "chain",
+        required = true,
+        value_name = "CHAIN_ID",
+        help_heading = "REQUIRED"
+    )]
+    chain_id: String,
+
+    /// Identifier of the client on the host chain
+    #[clap(
+        long = "client",
+        required = true,
+        value_name = "CLIENT_ID",
+        help_heading = "REQUIRED"
+    )]
+    client_id: String,
+
+    #[clap(
+        long = "height",
+        value_name = "HEIGHT",
+        help = "The height at which to query the client state. If not specified, the latest height is used."
+    )]
+    height: Option<u64>,
+}
 
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientState
 where

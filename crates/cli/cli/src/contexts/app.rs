@@ -3,10 +3,11 @@ use std::path::PathBuf;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cli_components::impls::commands::queries::client_state::QueryClientStateArgs;
 use hermes_cli_components::impls::get_config_path::GetDefaultConfigField;
 use hermes_cli_components::impls::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
-use hermes_cli_components::impls::parse::field::GetField;
+use hermes_cli_components::impls::parse::string::ParseFromString;
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, CanLoadBuilder, ProvideBuilderType,
 };
@@ -23,7 +24,6 @@ use ibc_relayer::config::Config;
 use ibc_relayer_types::core::ics02_client::height::Height;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 
-use crate::commands::query::client::QueryClientState;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::parse_height::ParseCosmosHeight;
 
@@ -63,9 +63,9 @@ delegate_components! {
 
 delegate_components! {
     HermesParserComponents {
-        symbol!("chain_id"): GetField,
-        symbol!("client_id"): GetField,
-        (symbol!("chain_id"), symbol!("height")): ParseCosmosHeight,
+        (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
+        (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
+        (QueryClientStateArgs, (symbol!("chain_id"), symbol!("height"))): ParseCosmosHeight,
     }
 }
 
@@ -83,11 +83,16 @@ where
     type Config = Config;
 }
 
-pub trait CanUseHermesApp: CanLoadConfig
+pub trait CanUseHermesApp:
+    CanLoadConfig
     + CanLoadBuilder
-    + CanParseArg<QueryClientState, symbol!("chain_id"), Parsed = ChainId>
-    + CanParseArg<QueryClientState, symbol!("client_id"), Parsed = ClientId>
-    + CanParseArg<QueryClientState, (symbol!("chain_id"), symbol!("height")), Parsed = Option<Height>>
+    + CanParseArg<QueryClientStateArgs, symbol!("chain_id"), Parsed = ChainId>
+    + CanParseArg<QueryClientStateArgs, symbol!("client_id"), Parsed = ClientId>
+    + CanParseArg<
+        QueryClientStateArgs,
+        (symbol!("chain_id"), symbol!("height")),
+        Parsed = Option<Height>,
+    >
 {
 }
 

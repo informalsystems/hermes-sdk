@@ -1748,13 +1748,13 @@ name = "hermes-cli-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "clap",
  "hermes-encoding-components",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime-components",
  "serde",
  "toml",
- "tracing",
 ]
 
 [[package]]

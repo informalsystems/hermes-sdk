@@ -11,7 +11,7 @@ impl<App, Args, Tag, Components, Delegate> ArgParser<App, Args, Tag>
     for DelegateArgParsers<Components>
 where
     App: HasErrorType,
-    Components: DelegateComponent<Tag, Delegate = Delegate>,
+    Components: DelegateComponent<(Args, Tag), Delegate = Delegate>,
     Delegate: ArgParser<App, Args, Tag>,
 {
     type Parsed = Delegate::Parsed;
