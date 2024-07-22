@@ -1,5 +1,5 @@
-mod state;
-pub use state::QueryClientState;
+use hermes_cli_components::impls::commands::queries::client_state::QueryClientStateArgs;
+use hermes_cli_components::traits::command::CanRunCommand;
 
 mod status;
 pub use status::QueryClientStatus;
@@ -15,7 +15,7 @@ use crate::Result;
 #[derive(Debug, clap::Subcommand)]
 pub enum ClientCommands {
     /// Query the state of a client
-    State(QueryClientState),
+    State(QueryClientStateArgs),
 
     /// Query the status of a client
     Status(QueryClientStatus),
@@ -27,7 +27,7 @@ pub enum ClientCommands {
 impl CommandRunner<HermesApp> for ClientCommands {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::State(cmd) => cmd.run(app).await,
+            Self::State(cmd) => app.run_command(cmd).await,
             Self::Status(cmd) => cmd.run(app).await,
             Self::Consensus(cmd) => cmd.run(app).await,
         }
