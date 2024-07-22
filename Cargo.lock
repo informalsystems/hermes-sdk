@@ -1730,6 +1730,8 @@ dependencies = [
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-error",
+ "hermes-logger",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime",
  "hermes-runtime-components",

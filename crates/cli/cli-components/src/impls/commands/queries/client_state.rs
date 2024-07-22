@@ -14,10 +14,10 @@ use hermes_relayer_components::multi::types::index::Index;
 use crate::traits::any_counterparty::HasAnyCounterparty;
 use crate::traits::build::{CanLoadBuilder, HasBuilderType};
 use crate::traits::command::CommandRunner;
-use crate::traits::output::CanShowOutput;
+use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
-pub struct RunQueryClientState;
+pub struct RunQueryClientStateCommand;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct QueryClientStateArgs {
@@ -47,13 +47,13 @@ pub struct QueryClientStateArgs {
     height: Option<u64>,
 }
 
-impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientState
+impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientStateCommand
 where
     App: HasBuilderType<Builder = Build>
         + CanLoadBuilder
         + HasLogger
         + HasAnyCounterparty<AnyCounterparty = Counterparty>
-        + CanShowOutput<Counterparty::ClientState>
+        + CanProduceOutput<Counterparty::ClientState>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
         + CanParseArg<Args, (symbol!("chain_id"), symbol!("height")), Parsed = Option<Chain::Height>>
@@ -98,6 +98,6 @@ where
             )
             .await;
 
-        Ok(app.show_output(client_state))
+        Ok(app.produce_output(client_state))
     }
 }

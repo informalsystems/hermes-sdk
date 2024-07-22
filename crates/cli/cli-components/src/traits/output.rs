@@ -5,6 +5,7 @@ pub trait HasOutputType: Async {
     type Output: Async;
 }
 
-pub trait CanShowOutput<Value>: HasOutputType {
-    fn show_output(&self, value: Value) -> Self::Output;
+#[derive_component(OutputProducerComponent, OutputProducer<App>)]
+pub trait CanProduceOutput<Value>: HasOutputType {
+    fn produce_output(&self, value: Value) -> Self::Output;
 }
