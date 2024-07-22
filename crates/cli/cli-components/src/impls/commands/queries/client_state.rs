@@ -21,16 +21,6 @@ use crate::traits::parse::CanParseArg;
 
 pub struct RunQueryClientState;
 
-#[derive(HasField)]
-pub struct QueryClientStateArgs<Chain, Counterparty>
-where
-    Chain: HasChainIdType + HasHeightType + HasIbcChainTypes<Counterparty>,
-{
-    pub chain_id: Chain::ChainId,
-    pub client_id: Chain::ClientId,
-    pub height: Option<Chain::Height>,
-}
-
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientState
 where
     App: HasBuilderType<Builder = Build>
