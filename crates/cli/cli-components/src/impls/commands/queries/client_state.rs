@@ -56,7 +56,7 @@ where
         + CanProduceOutput<Counterparty::ClientState>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
-        + CanParseArg<Args, (symbol!("chain_id"), symbol!("height")), Parsed = Option<Chain::Height>>
+        + CanParseArg<Args, symbol!("height"), Parsed = Option<Chain::Height>>
         + CanRaiseError<Build::Error>
         + CanRaiseError<Chain::Error>,
     Args: Async,
@@ -66,15 +66,12 @@ where
     App::Logger: CanLog<LevelInfo>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
-        let logger = app.logger();
-        let builder = app.load_builder().await?;
-
         let chain_id = app.parse_arg(args, PhantomData::<symbol!("chain_id")>)?;
         let client_id = app.parse_arg(args, PhantomData::<symbol!("client_id")>)?;
-        let m_height = app.parse_arg(
-            args,
-            PhantomData::<(symbol!("chain_id"), symbol!("height"))>,
-        )?;
+        let m_height = app.parse_arg(args, PhantomData::<symbol!("height")>)?;
+
+        let logger = app.logger();
+        let builder = app.load_builder().await?;
 
         let chain = builder
             .build_chain(Index::<0>, &chain_id)

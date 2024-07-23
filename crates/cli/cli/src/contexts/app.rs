@@ -99,7 +99,7 @@ delegate_components! {
     HermesParserComponents {
         (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
-        (QueryClientStateArgs, (symbol!("chain_id"), symbol!("height"))): ParseCosmosHeight,
+        (QueryClientStateArgs, symbol!("height")): ParseCosmosHeight<symbol!("chain_id")>,
 
         (StartRelayerArgs, symbol!("chain_id_a")): ParseFromString<ChainId>,
         (StartRelayerArgs, symbol!("client_id_a")): ParseFromString<ClientId>,
@@ -158,11 +158,8 @@ pub trait CanUseHermesApp:
     + CanLoadBuilder
     + CanParseArg<QueryClientStateArgs, symbol!("chain_id"), Parsed = ChainId>
     + CanParseArg<QueryClientStateArgs, symbol!("client_id"), Parsed = ClientId>
-    + CanParseArg<
-        QueryClientStateArgs,
-        (symbol!("chain_id"), symbol!("height")),
-        Parsed = Option<Height>,
-    > + CanRunCommand<QueryClientStateArgs>
+    + CanParseArg<QueryClientStateArgs, symbol!("height"), Parsed = Option<Height>>
+    + CanRunCommand<QueryClientStateArgs>
     + CanRunCommand<StartRelayerArgs>
     + CanProduceOutput<&'static str>
     + CanRaiseError<HermesError>
