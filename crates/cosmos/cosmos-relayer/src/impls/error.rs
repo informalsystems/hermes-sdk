@@ -53,6 +53,7 @@ use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24Validati
 use ibc_relayer_types::proofs::ProofError;
 use ibc_relayer_types::signer::SignerError;
 use prost::{DecodeError, EncodeError};
+use tendermint::Error as TendermintError;
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
 use tonic::metadata::errors::InvalidMetadataValue;
@@ -106,6 +107,7 @@ delegate_components! {
             SignerError,
             KeyringError,
             SupervisorError,
+            TendermintError,
             TendermintProtoError,
             TendermintRpcError,
             TendermintClientError,

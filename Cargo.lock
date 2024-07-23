@@ -1806,6 +1806,7 @@ dependencies = [
  "tendermint 0.37.0",
  "tendermint-proto 0.37.0",
  "tendermint-rpc",
+ "time",
  "tokio",
  "tonic",
  "tracing",

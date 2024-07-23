@@ -1,5 +1,4 @@
 use core::ops::Deref;
-use std::borrow::Cow;
 use std::sync::Arc;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -156,8 +155,7 @@ use hermes_relayer_components::chain::traits::types::connection::{
     InitConnectionOptionsTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::{
-    ConsensusStateTypeComponent, HasConsensusStateFields, HasConsensusStateType,
-    RawConsensusStateTypeComponent,
+    ConsensusStateTypeComponent, HasConsensusStateType, RawConsensusStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
@@ -198,9 +196,7 @@ use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimestampType, TimestampTypeComponent,
-};
+use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
@@ -553,20 +549,6 @@ impl ChainIdGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 impl HasEventSubscription for WasmCosmosChain {
     fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
         &self.subscription
-    }
-}
-
-impl<Counterparty> HasConsensusStateFields<Counterparty> for WasmCosmosChain
-where
-    Counterparty: HasTimestampType,
-{
-    fn consensus_state_timestamp(
-        consensus_state: &Self::ConsensusState,
-    ) -> Cow<'_, Counterparty::Timestamp> {
-        // FIXME(romac): This is a temporary workaround until we have a proper conversion,
-        // and can blow out if the timestamp is later than July 21st, 2554.
-        let nanos = consensus_state.timestamp.unix_timestamp_nanos() as u64;
-        Cow::Owned(Counterparty::timestamp_from_nanos(nanos))
     }
 }
 

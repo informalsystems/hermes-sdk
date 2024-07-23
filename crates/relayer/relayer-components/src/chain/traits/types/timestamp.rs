@@ -48,3 +48,11 @@ pub trait HasTimestampType: Async {
         later: &Self::Timestamp,
     ) -> Option<Duration>;
 }
+
+#[derive_component(UnixTimestampBuilderComponent, UnixTimestampBuilder<Chain>)]
+pub trait CanBuildUnixTimestamp: HasTimestampType + HasErrorType {
+    fn time_from_unix_timestamp(
+        seconds: i64,
+        nanoseconds: u32,
+    ) -> Result<Self::Timestamp, Self::Error>;
+}

@@ -136,6 +136,7 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+pub use hermes_relayer_components::chain::traits::types::timestamp::UnixTimestampBuilderComponent;
 pub use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::components::delegate::DelegateCosmosChainComponents;
@@ -185,6 +186,7 @@ define_components! {
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
             TimestampTypeComponent,
+            UnixTimestampBuilderComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
             MessageSizeEstimatorComponent,
