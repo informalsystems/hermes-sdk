@@ -23,7 +23,6 @@ use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
 use serde::Serialize;
 
-use crate::traits::any_counterparty::HasAnyCounterparty;
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;
 use crate::traits::output::CanProduceOutput;
@@ -64,6 +63,7 @@ where
     App: CanLoadBuilder<Builder = Build>
         + CanProduceOutput<ClientStatus>
         + HasLogger
+        // TODO: use AnyCounterparty
         // + HasAnyCounterparty<AnyCounterparty = Counterparty>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>

@@ -1,6 +1,10 @@
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_chain_components::components::client::{
+    ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
+    ConsensusStateWithProofsQuerierComponent,
+};
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
@@ -17,6 +21,7 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
 use hermes_protobuf_encoding_components::types::{Any, Protobuf};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
+use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
 };
@@ -33,6 +38,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 use crate::impls::encoding::convert::AnyClientConverterComponents;
 use crate::impls::encoding::encode::AnyClientEncoderComponents;
 use crate::impls::types::client_state::ProvideAnyClientState;
+use crate::impls::types::consensus_state::ProvideAnyConsensusState;
 use crate::types::client_state::AnyClientState;
 
 pub struct AnyCounterparty;
@@ -59,6 +65,11 @@ delegate_components! {
             ClientStateFieldsGetterComponent,
         ]:
             ProvideAnyClientState,
+        [
+            ConsensusStateTypeComponent,
+            ConsensusStateFieldComponent,
+        ]:
+            ProvideAnyConsensusState,
         EncodingGetterComponent:
             GetDefaultEncoding,
     }
@@ -72,6 +83,11 @@ delegate_components! {
             ClientStateQuerierComponent,
             AllClientStatesQuerierComponent,
         ]: QueryAndConvertRawClientState,
+        [
+            ConsensusStateQuerierComponent,
+            ConsensusStateWithProofsQuerierComponent,
+        ]:
+            QueryAndConvertRawConsensusState,
     }
 }
 

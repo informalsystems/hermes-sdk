@@ -18,7 +18,7 @@ pub trait HasRawConsensusStateType: Async {
     type RawConsensusState: Async;
 }
 
-#[derive_component(ConsensusStateFieldComponent, ConsensusFieldGetter<Chain>)]
+#[derive_component(ConsensusStateFieldComponent, ConsensusStateFieldGetter<Chain>)]
 pub trait HasConsensusStateFields<Counterparty>: HasConsensusStateType<Counterparty>
 where
     Counterparty: HasTimestampType,

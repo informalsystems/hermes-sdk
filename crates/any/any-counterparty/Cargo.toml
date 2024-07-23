@@ -14,6 +14,7 @@ description  = """
 
 [dependencies]
 ibc-proto                               = { workspace = true }
+tendermint-proto                        = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-encoding-components              = { workspace = true }

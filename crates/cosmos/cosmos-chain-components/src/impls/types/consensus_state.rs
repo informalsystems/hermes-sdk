@@ -1,6 +1,6 @@
 use cgp_core::prelude::Async;
 use hermes_relayer_components::chain::traits::types::consensus_state::{
-    ConsensusFieldGetter, HasConsensusStateType, ProvideConsensusStateType,
+    ConsensusStateFieldGetter, HasConsensusStateType, ProvideConsensusStateType,
     ProvideRawConsensusStateType,
 };
 use hermes_relayer_components::chain::traits::types::timestamp::CanBuildUnixTimestamp;
@@ -19,7 +19,7 @@ where
     type ConsensusState = TendermintConsensusState;
 }
 
-impl<Chain, Counterparty> ConsensusFieldGetter<Chain, Counterparty>
+impl<Chain, Counterparty> ConsensusStateFieldGetter<Chain, Counterparty>
     for ProvideTendermintConsensusState
 where
     Chain: HasConsensusStateType<Counterparty, ConsensusState = TendermintConsensusState>,

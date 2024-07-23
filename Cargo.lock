@@ -1627,6 +1627,7 @@ dependencies = [
  "ibc-proto",
  "ibc-relayer-types",
  "serde",
+ "tendermint-proto 0.37.0",
 ]
 
 [[package]]
