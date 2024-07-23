@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientPayloadOptionsType, HasCreateClientPayloadType,
 };
 use ibc_relayer::chain::client::ClientSettings;
+use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::client_state::AnyClientState;
 use ibc_relayer::consensus_state::AnyConsensusState;
@@ -16,14 +17,14 @@ pub struct BuildCreateClientPayloadWithChainHandle;
 impl<Chain, Counterparty> CreateClientPayloadBuilder<Chain, Counterparty>
     for BuildCreateClientPayloadWithChainHandle
 where
-    Chain: HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = ClientSettings>
+    Chain: HasCreateClientPayloadOptionsType<Counterparty, CreateClientPayloadOptions = Settings>
         + HasCreateClientPayloadType<Counterparty, CreateClientPayload = CosmosCreateClientPayload>
         + HasBlockingChainHandle
         + CanRaiseError<eyre::Report>,
 {
     async fn build_create_client_payload(
         chain: &Chain,
-        create_client_options: &ClientSettings,
+        create_client_options: &Settings,
     ) -> Result<CosmosCreateClientPayload, Chain::Error> {
         let client_settings = create_client_options.clone();
 
@@ -34,7 +35,7 @@ where
                     .map_err(Chain::raise_error)?;
 
                 let any_client_state = chain_handle
-                    .build_client_state(height, client_settings)
+                    .build_client_state(height, ClientSettings::Tendermint(client_settings))
                     .map_err(Chain::raise_error)?;
 
                 let client_state = match &any_client_state {

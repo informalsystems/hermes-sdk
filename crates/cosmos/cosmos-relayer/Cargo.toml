@@ -31,7 +31,7 @@ hermes-test-components                  = { workspace = true }
 hermes-async-runtime-components         = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
 hermes-cosmos-test-components           = { workspace = true }
-hermes-cli-components                   = { workspace = true }
+hermes-any-counterparty                 = { workspace = true }
 hermes-wasm-client-components           = { workspace = true }
 
 ibc                                     = { workspace = true }

@@ -1,7 +1,7 @@
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{
     IncludeProof, QueryChannelRequest, QueryClientStateRequest, QueryConnectionRequest, QueryHeight,
@@ -14,6 +14,7 @@ use ibc_relayer_types::Height;
 use oneline_eyre::eyre::eyre;
 use serde::{Deserialize, Serialize};
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -67,8 +68,10 @@ pub struct ChannelEndsSummary {
     counterparty_port_id: PortId,
 }
 
-impl CommandRunner<CosmosBuilder> for QueryChannelEnds {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for QueryChannelEnds {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain_id = self.chain_id.clone();
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();

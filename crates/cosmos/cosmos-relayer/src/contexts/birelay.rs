@@ -1,9 +1,9 @@
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
-use hermes_relayer_components::birelay::traits::two_way::{
-    ProvideTwoChainTypes, ProvideTwoWayRelayTypes, TwoWayRelayGetter,
-};
+use hermes_relayer_components::birelay::traits::two_way::TwoWayRelayGetter;
 use hermes_relayer_components::components::default::birelay::*;
+use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;
+use hermes_relayer_components::multi::traits::relay_at::ProvideRelayTypeAt;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
@@ -63,16 +63,20 @@ impl CosmosBiRelay {
     }
 }
 
-impl ProvideTwoChainTypes<CosmosBiRelay> for CosmosBiRelayComponents {
-    type ChainA = CosmosChain;
-
-    type ChainB = CosmosChain;
+impl ProvideChainTypeAt<CosmosBiRelay, 0> for CosmosBiRelayComponents {
+    type Chain = CosmosChain;
 }
 
-impl ProvideTwoWayRelayTypes<CosmosBiRelay> for CosmosBiRelayComponents {
-    type RelayAToB = CosmosRelay;
+impl ProvideChainTypeAt<CosmosBiRelay, 1> for CosmosBiRelayComponents {
+    type Chain = CosmosChain;
+}
 
-    type RelayBToA = CosmosRelay;
+impl ProvideRelayTypeAt<CosmosBiRelay, 0, 1> for CosmosBiRelayComponents {
+    type Relay = CosmosRelay;
+}
+
+impl ProvideRelayTypeAt<CosmosBiRelay, 1, 0> for CosmosBiRelayComponents {
+    type Relay = CosmosRelay;
 }
 
 impl TwoWayRelayGetter<CosmosBiRelay> for CosmosBiRelayComponents {

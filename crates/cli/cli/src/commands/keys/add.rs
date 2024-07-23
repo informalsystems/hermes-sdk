@@ -3,10 +3,10 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use hdpath::StandardHDPath;
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use ibc_relayer::config::ChainConfig;
+use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::keyring::{
     AnySigningKeyPair, KeyRing, Secp256k1KeyPair, SigningKeyPair, SigningKeyPairSized, Store,
 };
@@ -14,6 +14,8 @@ use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use oneline_eyre::eyre;
 use oneline_eyre::eyre::{eyre, WrapErr};
 use tracing::warn;
+
+use crate::contexts::app::HermesApp;
 
 /// The data structure that represents the arguments when invoking the `keys add` CLI command.
 ///
@@ -92,13 +94,11 @@ pub struct KeysAddCmd {
 }
 
 impl KeysAddCmd {
-    fn options(&self, chain_config: &ChainConfig) -> eyre::Result<KeysAddOptions> {
-        let ChainConfig::CosmosSdk(sdk_config) = &chain_config;
-
+    fn options(&self, chain_config: &CosmosSdkConfig) -> eyre::Result<KeysAddOptions> {
         let name = self
             .key_name
             .clone()
-            .unwrap_or_else(|| sdk_config.key_name.to_string());
+            .unwrap_or_else(|| chain_config.key_name.to_string());
 
         let hd_path = StandardHDPath::from_str(&self.hd_path)
             .map_err(|_| eyre!("invalid derivation path: {}", self.hd_path))?;
@@ -114,24 +114,22 @@ impl KeysAddCmd {
 #[derive(Clone, Debug)]
 pub struct KeysAddOptions {
     pub name: String,
-    pub config: ChainConfig,
+    pub config: CosmosSdkConfig,
     pub hd_path: StandardHDPath,
 }
 
 pub fn add_key(
-    config: &ChainConfig,
+    config: &CosmosSdkConfig,
     key_name: &str,
     file: &Path,
     hd_path: &StandardHDPath,
     overwrite: bool,
 ) -> eyre::Result<AnySigningKeyPair> {
-    let ChainConfig::CosmosSdk(sdk_config) = config;
-
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &sdk_config.account_prefix,
-        config.id(),
-        &sdk_config.key_store_folder,
+        &config.account_prefix,
+        &config.id,
+        &config.key_store_folder,
     )?;
 
     check_key_exists(&keyring, key_name, overwrite);
@@ -148,19 +146,17 @@ pub fn restore_key(
     mnemonic: &Path,
     key_name: &str,
     hdpath: &StandardHDPath,
-    config: &ChainConfig,
+    config: &CosmosSdkConfig,
     overwrite: bool,
 ) -> eyre::Result<AnySigningKeyPair> {
-    let ChainConfig::CosmosSdk(sdk_config) = config;
-
     let mnemonic_content =
         fs::read_to_string(mnemonic).wrap_err("error reading the mnemonic file")?;
 
     let mut keyring = KeyRing::new_secp256k1(
         Store::Test,
-        &sdk_config.account_prefix,
-        &sdk_config.id,
-        &sdk_config.key_store_folder,
+        &config.account_prefix,
+        &config.id,
+        &config.key_store_folder,
     )?;
 
     check_key_exists(&keyring, key_name, overwrite);
@@ -168,7 +164,7 @@ pub fn restore_key(
     let key_pair = Secp256k1KeyPair::from_mnemonic(
         &mnemonic_content,
         hdpath,
-        &sdk_config.address_type,
+        &config.address_type,
         keyring.account_prefix(),
     )?;
 
@@ -190,11 +186,13 @@ fn check_key_exists<S: SigningKeyPairSized>(keyring: &KeyRing<S>, key_name: &str
     }
 }
 
-impl CommandRunner<CosmosBuilder> for KeysAddCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> hermes_cli_framework::Result<Output> {
+impl CommandRunner<HermesApp> for KeysAddCmd {
+    async fn run(&self, app: &HermesApp) -> hermes_cli_framework::Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain_config = builder
-            .config
-            .find_chain(&self.chain_id)
+            .config_map
+            .get(&self.chain_id)
             .ok_or_else(|| eyre!("no chain configuration found for chain `{}`", self.chain_id))?;
 
         let opts = match self.options(chain_config) {
@@ -217,7 +215,7 @@ impl CommandRunner<CosmosBuilder> for KeysAddCmd {
                         "added key '{}' ({}) on chain `{}`",
                         opts.name,
                         key.account(),
-                        opts.config.id(),
+                        opts.config.id,
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(
@@ -241,7 +239,7 @@ impl CommandRunner<CosmosBuilder> for KeysAddCmd {
                         "restored key '{}' ({}) on chain `{}`",
                         opts.name,
                         key.account(),
-                        opts.config.id()
+                        opts.config.id
                     ))
                     .exit(),
                     Err(e) => Output::error(format!(

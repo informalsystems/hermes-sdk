@@ -1,23 +1,22 @@
 use cgp_core::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
-
-use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
-use crate::types::index::Twindex;
+use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
+use hermes_relayer_components::multi::types::index::Twindex;
 
 #[derive_component(ChannelGetterAtComponent, ChannelGetterAt<ChainDriver>)]
 pub trait HasChannelAt<const CHAIN: usize, const COUNTERPARTY: usize>:
     HasChainTypeAt<CHAIN> + HasChainTypeAt<COUNTERPARTY>
 where
-    ChainTypeAt<Self, CHAIN>: HasIbcChainTypes<ChainTypeAt<Self, COUNTERPARTY>>,
+    ChainAt<Self, CHAIN>: HasIbcChainTypes<ChainAt<Self, COUNTERPARTY>>,
 {
     fn channel_id_at(
         &self,
         index: Twindex<CHAIN, COUNTERPARTY>,
-    ) -> &ChannelIdOf<ChainTypeAt<Self, CHAIN>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> &ChannelIdOf<ChainAt<Self, CHAIN>, ChainAt<Self, COUNTERPARTY>>;
 
     fn port_id_at(
         &self,
         index: Twindex<CHAIN, COUNTERPARTY>,
-    ) -> &PortIdOf<ChainTypeAt<Self, CHAIN>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> &PortIdOf<ChainAt<Self, CHAIN>, ChainAt<Self, COUNTERPARTY>>;
 }

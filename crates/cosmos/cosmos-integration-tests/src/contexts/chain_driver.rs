@@ -14,6 +14,7 @@ use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGett
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
+use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
@@ -32,7 +33,6 @@ use hermes_test_components::chain_driver::traits::proposal::poll_status::Proposa
 use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
 use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
-use hermes_test_components::types::index::Index;
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
 use tokio::process::Child;

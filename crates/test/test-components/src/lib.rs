@@ -11,4 +11,3 @@ pub mod driver;
 pub mod relay_driver;
 pub mod setup;
 pub mod test_case;
-pub mod types;

@@ -1615,6 +1615,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
+name = "hermes-any-counterparty"
+version = "0.1.0"
+dependencies = [
+ "cgp-core",
+ "cgp-error-eyre",
+ "hermes-cosmos-chain-components",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "hermes-relayer-components",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "serde",
+ "tendermint-proto 0.37.0",
+]
+
+[[package]]
 name = "hermes-async-runtime-components"
 version = "0.1.0"
 dependencies = [
@@ -1704,17 +1720,22 @@ name = "hermes-cli"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
+ "cgp-error-eyre",
  "clap",
  "eyre",
  "futures",
  "hdpath",
+ "hermes-any-counterparty",
  "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-error",
+ "hermes-logger",
+ "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime",
+ "hermes-runtime-components",
  "humantime",
  "ibc",
  "ibc-relayer",
@@ -1722,6 +1743,7 @@ dependencies = [
  "oneline-eyre",
  "serde",
  "serde_json",
+ "toml",
  "tracing",
 ]
 
@@ -1730,18 +1752,14 @@ name = "hermes-cli-components"
 version = "0.1.0"
 dependencies = [
  "cgp-core",
- "cgp-error-eyre",
- "hermes-cosmos-chain-components",
+ "clap",
  "hermes-encoding-components",
- "hermes-protobuf-encoding-components",
+ "hermes-error",
+ "hermes-logging-components",
  "hermes-relayer-components",
- "ibc-proto",
- "ibc-relayer",
- "ibc-relayer-types",
- "prost",
+ "hermes-runtime-components",
  "serde",
- "tendermint-proto 0.37.0",
- "tracing",
+ "toml",
 ]
 
 [[package]]
@@ -1750,6 +1768,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "clap",
+ "eyre",
  "hermes-cosmos-relayer",
  "hermes-error",
  "hermes-runtime",
@@ -1788,6 +1807,7 @@ dependencies = [
  "tendermint 0.37.0",
  "tendermint-proto 0.37.0",
  "tendermint-rpc",
+ "time",
  "tokio",
  "tonic",
  "tracing",
@@ -1833,8 +1853,8 @@ dependencies = [
  "cgp-core",
  "eyre",
  "futures",
+ "hermes-any-counterparty",
  "hermes-async-runtime-components",
- "hermes-cli-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-encoding-components",
@@ -1900,8 +1920,8 @@ dependencies = [
  "cgp-core",
  "eyre",
  "futures",
+ "hermes-any-counterparty",
  "hermes-async-runtime-components",
- "hermes-cli-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
@@ -1956,6 +1976,7 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "eyre",
+ "hermes-relayer-components",
 ]
 
 [[package]]
@@ -2880,8 +2901,8 @@ dependencies = [
 
 [[package]]
 name = "ibc-relayer"
-version = "0.28.0"
-source = "git+https://github.com/informalsystems/hermes.git?rev=ddc0dd8#ddc0dd861de05f325b19aa9e729596a01f8323a4"
+version = "0.29.0"
+source = "git+https://github.com/informalsystems/hermes.git?rev=43f3e835#43f3e835a0beec4754bdcebdb76b13fefa1d7974"
 dependencies = [
  "anyhow",
  "async-stream",
@@ -2946,8 +2967,8 @@ dependencies = [
 
 [[package]]
 name = "ibc-relayer-types"
-version = "0.28.0"
-source = "git+https://github.com/informalsystems/hermes.git?rev=ddc0dd8#ddc0dd861de05f325b19aa9e729596a01f8323a4"
+version = "0.29.0"
+source = "git+https://github.com/informalsystems/hermes.git?rev=43f3e835#43f3e835a0beec4754bdcebdb76b13fefa1d7974"
 dependencies = [
  "bytes",
  "derive_more",
@@ -2973,8 +2994,8 @@ dependencies = [
 
 [[package]]
 name = "ibc-telemetry"
-version = "0.28.0"
-source = "git+https://github.com/informalsystems/hermes.git?rev=ddc0dd8#ddc0dd861de05f325b19aa9e729596a01f8323a4"
+version = "0.29.0"
+source = "git+https://github.com/informalsystems/hermes.git?rev=43f3e835#43f3e835a0beec4754bdcebdb76b13fefa1d7974"
 dependencies = [
  "axum",
  "dashmap 5.5.3",
@@ -3281,9 +3302,9 @@ dependencies = [
 
 [[package]]
 name = "moka"
-version = "0.12.7"
+version = "0.12.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e0d88686dc561d743b40de8269b26eaf0dc58781bde087b0984646602021d08"
+checksum = "32cf62eb4dd975d2dde76432fb1075c49e3ee2331cf36f1f8fd4b66550d32b6f"
 dependencies = [
  "async-lock",
  "async-trait",
@@ -4376,9 +4397,9 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "serde"
-version = "1.0.203"
+version = "1.0.204"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7253ab4de971e72fb7be983802300c30b5a7f0c2e56fab8abfc6a214307c0094"
+checksum = "bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12"
 dependencies = [
  "serde_derive",
 ]
@@ -4413,9 +4434,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.203"
+version = "1.0.204"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "500cbc0ebeb6f46627f50f3f5811ccf6bf00643be300b4c3eabc0ef55dc5b5ba"
+checksum = "e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4435,9 +4456,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.117"
+version = "1.0.120"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "455182ea6142b14f93f4bc5320a2b31c1f266b66a4a5c858b013302a5d8cbfc3"
+checksum = "4e0d21c9a8cae1235ad58a00c11cb40d4b1e5c784f1ef2c537876ed6ffd8b7c5"
 dependencies = [
  "indexmap 2.2.6",
  "itoa",
@@ -5004,18 +5025,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.61"
+version = "1.0.63"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c546c80d6be4bc6a00c0f01730c08df82eaa7a7a61f11d656526506112cc1709"
+checksum = "c0342370b38b6a11b6cc11d6a805569958d54cfa061a29969c3b5ce2ea405724"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.61"
+version = "1.0.63"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46c3384250002a6d5af4d114f2845d37b57521033f30d5c3f46c4d70e1197533"
+checksum = "a4558b58466b9ad7ca0f102865eccc95938dca1a74a856f2b57b6629050da261"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -5431,9 +5452,9 @@ dependencies = [
 
 [[package]]
 name = "triomphe"
-version = "0.1.13"
+version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6631e42e10b40c0690bf92f404ebcfe6e1fdb480391d15f17cc8e96eeed5369"
+checksum = "859eb650cfee7434994602c3a68b25d77ad9e68c8a6cd491616ef86661382eb3"
 
 [[package]]
 name = "try-lock"
@@ -5550,9 +5571,9 @@ checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 
 [[package]]
 name = "uuid"
-version = "1.9.0"
+version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ea73390fe27785838dcbf75b91b1d84799e28f1ce71e6f372a5dc2200c80de5"
+checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
 dependencies = [
  "getrandom",
 ]

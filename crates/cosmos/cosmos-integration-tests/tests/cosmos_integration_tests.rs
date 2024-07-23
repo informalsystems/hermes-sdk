@@ -10,7 +10,6 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_test_components::setup::traits::run_test::CanRunTest;
-use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
@@ -36,11 +35,11 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         comet_config_modifier: Box::new(|_| Ok(())),
     });
 
-    let create_client_settings = ClientSettings::Tendermint(Settings {
+    let create_client_settings = Settings {
         max_clock_drift: Duration::from_secs(40),
         trusting_period: None,
         trust_threshold: TrustThreshold::ONE_THIRD,
-    });
+    };
 
     let setup = CosmosBinaryChannelSetup {
         bootstrap_a: bootstrap.clone(),

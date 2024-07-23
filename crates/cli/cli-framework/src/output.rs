@@ -116,7 +116,7 @@ pub fn exit_with_unrecoverable_error<T, E: fmt::Display>(err: E) -> T {
 pub enum Result {
     Json(serde_json::Value),
     Text(String),
-    Value(Box<dyn fmt::Debug>),
+    Value(Box<dyn fmt::Debug + Send + Sync + 'static>),
     Nothing,
 }
 
@@ -165,7 +165,7 @@ impl Output {
     /// Builder-style method for attaching a result to an output object.
     pub fn with_result<R>(mut self, result: R) -> Self
     where
-        R: Serialize + Debug + 'static,
+        R: Serialize + Debug + Send + Sync + 'static,
     {
         if json() {
             self.result = Result::Json(serde_json::to_value(result).unwrap());
@@ -186,7 +186,7 @@ impl Output {
     /// input `result`.
     pub fn success<R>(result: R) -> Self
     where
-        R: Serialize + Debug + 'static,
+        R: Serialize + Debug + Send + Sync + 'static,
     {
         Output::with_success().with_result(result)
     }

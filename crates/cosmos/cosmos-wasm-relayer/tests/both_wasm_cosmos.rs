@@ -14,7 +14,6 @@ use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
 use hermes_relayer_components::relay::traits::target::{DestinationTarget, SourceTarget};
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use ibc_relayer::chain::client::ClientSettings;
 use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::types::TrustThreshold;
 use sha2::{Digest, Sha256};
@@ -66,11 +65,11 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             chain: chain_driver_b.chain.clone(),
         };
 
-        let tm_create_client_settings = ClientSettings::Tendermint(Settings {
+        let tm_create_client_settings = Settings {
             max_clock_drift: Duration::from_secs(40),
             trusting_period: None,
             trust_threshold: TrustThreshold::ONE_THIRD,
-        });
+        };
 
         let wasm_code_hash: [u8; 32] = {
             let wasm_client_bytes = tokio::fs::read(&wasm_client_code_path).await?;

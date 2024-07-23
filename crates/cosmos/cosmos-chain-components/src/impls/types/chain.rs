@@ -33,7 +33,7 @@ use hermes_relayer_components::chain::traits::types::proof::{
 };
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimestampType, ProvideTimestampType,
+    HasTimestampType, ProvideTimestampType, UnixTimestampBuilder,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
@@ -48,7 +48,7 @@ use ibc_relayer_types::Height;
 use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
-use tendermint::Hash;
+use tendermint::{Error as TendermintError, Hash, Time};
 
 use crate::traits::message::CosmosMessage;
 use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
@@ -117,12 +117,22 @@ where
 {
     type Timestamp = Timestamp;
 
-    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
-        Timestamp::from_nanoseconds(nanos).expect("Timestamp::from_nanoseconds is infallible")
-    }
-
     fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
         later.duration_since(earlier)
+    }
+}
+
+impl<Chain> UnixTimestampBuilder<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasTimestampType<Timestamp = Timestamp> + CanRaiseError<TendermintError>,
+{
+    fn time_from_unix_timestamp(
+        seconds: i64,
+        nanoseconds: u32,
+    ) -> Result<Chain::Timestamp, Chain::Error> {
+        let time = Time::from_unix_timestamp(seconds, nanoseconds).map_err(Chain::raise_error)?;
+
+        Ok(time.into())
     }
 }
 

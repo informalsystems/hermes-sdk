@@ -1,7 +1,9 @@
+use hermes_cli_components::impls::commands::start::StartRelayerArgs;
+use hermes_cli_components::traits::command::CanRunCommand;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 pub mod channel;
@@ -11,11 +13,11 @@ pub mod connection;
 pub mod query;
 
 pub mod keys;
-pub mod start;
+
 #[derive(Debug, clap::Parser)]
 pub enum HermesCommand {
     /// Start the Hermes relayer
-    Start(start::Start),
+    Start(StartRelayerArgs),
 
     /// Work with clients
     #[clap(subcommand)]
@@ -42,16 +44,16 @@ pub enum HermesCommand {
     Keys(keys::KeysCmd),
 }
 
-impl CommandRunner<CosmosBuilder> for HermesCommand {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for HermesCommand {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::Start(cmd) => cmd.run(builder).await,
-            Self::Client(cmd) => cmd.run(builder).await,
-            Self::Connection(cmd) => cmd.run(builder).await,
-            Self::Channel(cmd) => cmd.run(builder).await,
-            Self::Query(cmd) => cmd.run(builder).await,
-            Self::Clear(cmd) => cmd.run(builder).await,
-            Self::Keys(cmd) => cmd.run(builder).await,
+            Self::Start(cmd) => app.run_command(cmd).await,
+            Self::Client(cmd) => cmd.run(app).await,
+            Self::Connection(cmd) => cmd.run(app).await,
+            Self::Channel(cmd) => cmd.run(app).await,
+            Self::Query(cmd) => cmd.run(app).await,
+            Self::Clear(cmd) => cmd.run(app).await,
+            Self::Keys(cmd) => cmd.run(app).await,
         }
     }
 }

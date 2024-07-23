@@ -1,22 +1,19 @@
+use cgp_core::error::ProvideErrorType;
 use cgp_core::prelude::*;
 
-use crate::birelay::traits::two_way::{HasTwoChainTypes, HasTwoWayRelay};
 use crate::build::components::birelay::BuildBiRelayFromRelays;
 use crate::build::components::chain::cache::BuildChainWithCache;
 use crate::build::components::relay::build_from_chain::BuildRelayFromChains;
 use crate::build::components::relay::cache::BuildRelayWithCache;
-use crate::build::traits::birelay::HasBiRelayType;
+use crate::build::traits::builders::birelay_builder::{BiRelayBuilderComponent, CanBuildBiRelay};
+use crate::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
+use crate::build::traits::builders::chain_builder::{ChainBuilder, ChainBuilderComponent};
+use crate::build::traits::builders::relay_builder::RelayBuilderComponent;
+use crate::build::traits::builders::relay_from_chains_builder::RelayFromChainsBuilder;
 use crate::build::traits::cache::{HasChainCache, HasRelayCache};
-use crate::build::traits::components::birelay_builder::{BiRelayBuilderComponent, CanBuildBiRelay};
-use crate::build::traits::components::birelay_from_relay_builder::BiRelayFromRelayBuilder;
-use crate::build::traits::components::chain_builder::{ChainBuilder, ChainBuilderComponent};
-use crate::build::traits::components::relay_builder::RelayBuilderComponent;
-use crate::build::traits::components::relay_from_chains_builder::RelayFromChainsBuilder;
-use crate::build::traits::target::chain::{ChainATarget, ChainBTarget};
-use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
-use crate::build::types::aliases::{ChainA, ChainB};
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
+use crate::multi::traits::chain_at::{ChainAt, ChainIdAt};
+use crate::multi::traits::relay_at::{ClientIdAt, RelayAt};
 
 define_components! {
     DefaultBuildComponents<BaseComponents: Async> {
@@ -26,44 +23,32 @@ define_components! {
     }
 }
 
-pub trait CanUseDefaultBuildComponents: UseDefaultBuildComponents
-where
-    ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
-    ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
-{
-}
+pub trait CanUseDefaultBuildComponents: UseDefaultBuildComponents {}
 
-pub trait UseDefaultBuildComponents: CanBuildBiRelay
-where
-    ChainA<Self>: HasIbcChainTypes<ChainB<Self>>,
-    ChainB<Self>: HasIbcChainTypes<ChainA<Self>>,
-{
-}
+pub trait UseDefaultBuildComponents: CanBuildBiRelay<0, 1> {}
 
-impl<Build, BiRelay, RelayAToB, RelayBToA, ChainA, ChainB, Components, BaseComponents>
-    UseDefaultBuildComponents for Build
+impl<Build, Components, BaseComponents> UseDefaultBuildComponents for Build
 where
-    Build: HasBiRelayType<BiRelay = BiRelay>
-        + HasRelayCache<RelayAToBTarget>
-        + HasRelayCache<RelayBToATarget>
-        + HasChainCache<ChainATarget>
-        + HasChainCache<ChainBTarget>
+    Build: HasBiRelayTypeAt<0, 1>
+        + HasRelayCache<0, 1>
+        + HasRelayCache<1, 0>
+        + HasChainCache<0>
+        + HasChainCache<1>
         + HasComponents<Components = Components>,
-    BiRelay: HasTwoChainTypes<ChainA = ChainA, ChainB = ChainB>
-        + HasTwoWayRelay<RelayAToB = RelayAToB, RelayBToA = RelayBToA>,
-    RelayAToB: Clone + HasRelayChains<SrcChain = ChainA, DstChain = ChainB>,
-    RelayBToA: Clone + HasRelayChains<SrcChain = ChainB, DstChain = ChainA>,
-    ChainA: Clone + HasIbcChainTypes<ChainB> + HasErrorType,
-    ChainB: Clone + HasIbcChainTypes<ChainA> + HasErrorType,
-    ChainA::ChainId: Ord + Clone,
-    ChainB::ChainId: Ord + Clone,
-    ChainA::ClientId: Ord + Clone,
-    ChainB::ClientId: Ord + Clone,
+    RelayAt<Build, 0, 1>: Clone,
+    RelayAt<Build, 1, 0>: Clone,
+    ChainAt<Build, 0>: Clone,
+    ChainAt<Build, 1>: Clone,
+    ChainIdAt<Build, 0>: Ord + Clone,
+    ChainIdAt<Build, 1>: Ord + Clone,
+    ClientIdAt<Build, 0, 1>: Ord + Clone,
+    ClientIdAt<Build, 1, 0>: Ord + Clone,
     Components: HasComponents<Components = BaseComponents>
         + DelegatesToDefaultBuildComponents<BaseComponents>
-        + BiRelayFromRelayBuilder<Build>
-        + RelayFromChainsBuilder<Build, RelayAToBTarget>
-        + RelayFromChainsBuilder<Build, RelayBToATarget>,
-    BaseComponents: ChainBuilder<Build, ChainATarget> + ChainBuilder<Build, ChainBTarget>,
+        + BiRelayFromRelayBuilder<Build, 0, 1>
+        + RelayFromChainsBuilder<Build, 0, 1>
+        + RelayFromChainsBuilder<Build, 1, 0>
+        + ProvideErrorType<Build>,
+    BaseComponents: ChainBuilder<Build, 0> + ChainBuilder<Build, 1>,
 {
 }

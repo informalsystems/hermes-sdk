@@ -1,7 +1,7 @@
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::create_client::{
-    CreateClientMessageOptions, CreateClientPayloadOptions, HasCreateClientMessageOptionsType,
+    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
     HasCreateClientPayloadOptionsType,
 };
 use crate::chain::types::aliases::ClientIdOf;
@@ -32,11 +32,11 @@ where
         target: Target,
         target_chain: &Target::TargetChain,
         counterparty_chain: &Target::CounterpartyChain,
-        create_client_payload_options: &CreateClientPayloadOptions<
+        create_client_payload_options: &CreateClientPayloadOptionsOf<
             Target::CounterpartyChain,
             Target::TargetChain,
         >,
-        create_client_message_options: &CreateClientMessageOptions<
+        create_client_message_options: &CreateClientMessageOptionsOf<
             Target::TargetChain,
             Target::CounterpartyChain,
         >,

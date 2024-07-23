@@ -1,46 +1,51 @@
 use cgp_core::prelude::{async_trait, HasErrorType};
 
-use crate::birelay::traits::two_way::HasTwoWayRelay;
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
-use crate::build::traits::birelay::HasBiRelayType;
-use crate::build::traits::components::birelay_builder::CanBuildBiRelay;
-use crate::build::traits::target::relay::RelayAToBTarget;
-use crate::build::types::aliases::{ChainA, ChainB, ChainIdA, ChainIdB};
+use crate::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::create_client::{
-    HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
+    CreateClientMessageOptionsOf, CreateClientPayloadOptionsOf, HasCreateClientMessageOptionsType,
+    HasCreateClientPayloadOptionsType,
 };
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
+use crate::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
+use crate::multi::types::index::Twindex;
 use crate::relay::traits::chains::HasRelayChains;
 
 #[async_trait]
-pub trait CanBootstrapBiRelay: HasBiRelayType + HasErrorType
-where
-    ChainA<Self>: HasChainIdType
-        + HasCreateClientPayloadOptionsType<ChainB<Self>>
-        + HasCreateClientMessageOptionsType<ChainB<Self>>,
-    ChainB<Self>: HasChainIdType
-        + HasCreateClientPayloadOptionsType<ChainA<Self>>
-        + HasCreateClientMessageOptionsType<ChainA<Self>>,
+pub trait CanBootstrapBiRelay<const A: usize, const B: usize>:
+    HasBiRelayTypeAt<A, B>
+    + HasChainTypeAt<
+        A,
+        Chain: HasChainIdType
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, B>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, B>>,
+    > + HasChainTypeAt<
+        B,
+        Chain: HasChainIdType
+                   + HasCreateClientPayloadOptionsType<ChainAt<Self, A>>
+                   + HasCreateClientMessageOptionsType<ChainAt<Self, A>>,
+    > + HasErrorType
 {
     async fn bootstrap_birelay(
         &self,
-        chain_id_a: &ChainIdA<Self>,
-        chain_id_b: &ChainIdB<Self>,
-        payload_options_a: &<ChainA<Self> as HasCreateClientPayloadOptionsType<ChainB<Self>>>::CreateClientPayloadOptions,
-        payload_options_b: &<ChainB<Self> as HasCreateClientPayloadOptionsType<ChainA<Self>>>::CreateClientPayloadOptions,
-        message_options_a: &<ChainA<Self> as HasCreateClientMessageOptionsType<ChainB<Self>>>::CreateClientMessageOptions,
-        message_options_b: &<ChainB<Self> as HasCreateClientMessageOptionsType<ChainA<Self>>>::CreateClientMessageOptions,
+        chain_id_a: &ChainIdAt<Self, A>,
+        chain_id_b: &ChainIdAt<Self, B>,
+        payload_options_a: &CreateClientPayloadOptionsOf<ChainAt<Self, A>, ChainAt<Self, B>>,
+        payload_options_b: &CreateClientPayloadOptionsOf<ChainAt<Self, B>, ChainAt<Self, A>>,
+        message_options_a: &CreateClientMessageOptionsOf<ChainAt<Self, A>, ChainAt<Self, B>>,
+        message_options_b: &CreateClientMessageOptionsOf<ChainAt<Self, B>, ChainAt<Self, A>>,
     ) -> Result<Self::BiRelay, Self::Error>;
 }
 
-impl<Build, BiRelay, ChainA, ChainB, Error> CanBootstrapBiRelay for Build
+impl<Build, ChainA, ChainB, const A: usize, const B: usize> CanBootstrapBiRelay<A, B> for Build
 where
-    Build: HasBiRelayType<BiRelay = BiRelay>
-        + HasErrorType<Error = Error>
-        + CanBuildBiRelay
-        + CanBootstrapRelay<RelayAToBTarget>,
-    BiRelay: HasTwoWayRelay<ChainA = ChainA, ChainB = ChainB>,
+    Build: HasBiRelayTypeAt<A, B>
+        + HasChainTypeAt<A, Chain = ChainA>
+        + HasChainTypeAt<B, Chain = ChainB>
+        + CanBuildBiRelay<A, B>
+        + CanBootstrapRelay<A, B>,
     ChainA: HasChainIdType
         + HasCreateClientPayloadOptionsType<ChainB>
         + HasCreateClientMessageOptionsType<ChainB>
@@ -60,10 +65,10 @@ where
         payload_options_b: &ChainB::CreateClientPayloadOptions,
         message_options_a: &ChainA::CreateClientMessageOptions,
         message_options_b: &ChainB::CreateClientMessageOptions,
-    ) -> Result<BiRelay, Error> {
+    ) -> Result<Build::BiRelay, Build::Error> {
         let relay_a_to_b = self
             .bootstrap_relay(
-                RelayAToBTarget,
+                Twindex::<A, B>,
                 chain_id_a,
                 chain_id_b,
                 payload_options_a,

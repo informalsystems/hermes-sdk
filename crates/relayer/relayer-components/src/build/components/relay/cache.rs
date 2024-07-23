@@ -3,34 +3,33 @@ use core::marker::PhantomData;
 use cgp_core::error::HasErrorType;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
+use crate::build::traits::builders::relay_builder::RelayBuilder;
 use crate::build::traits::cache::HasRelayCache;
-use crate::build::traits::components::relay_builder::RelayBuilder;
-use crate::build::traits::target::relay::RelayBuildTarget;
-use crate::build::types::aliases::{
-    TargetDstChainId, TargetDstClientId, TargetRelay, TargetSrcChainId, TargetSrcClientId,
-};
+use crate::multi::traits::chain_at::ChainIdAt;
+use crate::multi::traits::relay_at::ClientIdAt;
+use crate::multi::types::index::Twindex;
 
 pub struct BuildRelayWithCache<InBuilder>(pub PhantomData<InBuilder>);
 
-impl<InBuilder, Build, Target> RelayBuilder<Build, Target> for BuildRelayWithCache<InBuilder>
+impl<InBuilder, Build, const SRC: usize, const DST: usize> RelayBuilder<Build, SRC, DST>
+    for BuildRelayWithCache<InBuilder>
 where
-    TargetSrcChainId<Build, Target>: Ord + Clone,
-    TargetDstChainId<Build, Target>: Ord + Clone,
-    TargetSrcClientId<Build, Target>: Ord + Clone,
-    TargetDstClientId<Build, Target>: Ord + Clone,
-    TargetRelay<Build, Target>: Clone,
-    Build: HasRelayCache<Target> + HasErrorType,
-    InBuilder: RelayBuilder<Build, Target>,
-    Target: RelayBuildTarget<Build>,
+    ChainIdAt<Build, SRC>: Ord + Clone,
+    ChainIdAt<Build, DST>: Ord + Clone,
+    ClientIdAt<Build, SRC, DST>: Ord + Clone,
+    ClientIdAt<Build, DST, SRC>: Ord + Clone,
+    Build: HasRelayCache<SRC, DST> + HasErrorType,
+    InBuilder: RelayBuilder<Build, SRC, DST>,
+    Build::Relay: Clone,
 {
     async fn build_relay(
         build: &Build,
-        target: Target,
-        src_chain_id: &TargetSrcChainId<Build, Target>,
-        dst_chain_id: &TargetDstChainId<Build, Target>,
-        src_client_id: &TargetSrcClientId<Build, Target>,
-        dst_client_id: &TargetDstClientId<Build, Target>,
-    ) -> Result<TargetRelay<Build, Target>, Build::Error> {
+        index: Twindex<SRC, DST>,
+        src_chain_id: &ChainIdAt<Build, SRC>,
+        dst_chain_id: &ChainIdAt<Build, DST>,
+        src_client_id: &ClientIdAt<Build, SRC, DST>,
+        dst_client_id: &ClientIdAt<Build, DST, SRC>,
+    ) -> Result<Build::Relay, Build::Error> {
         let relay_id = (
             src_chain_id.clone(),
             dst_chain_id.clone(),
@@ -45,7 +44,7 @@ where
         } else {
             let relay = InBuilder::build_relay(
                 build,
-                target,
+                index,
                 src_chain_id,
                 dst_chain_id,
                 src_client_id,

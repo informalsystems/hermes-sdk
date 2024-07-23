@@ -3,11 +3,11 @@ use std::path::{Path, PathBuf};
 use hermes_cli_framework::application::Application;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_runtime::types::runtime::HermesRuntime;
 
 use crate::commands::HermesCommand;
 use crate::config::HermesConfig;
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(clap::Parser)]
@@ -24,7 +24,9 @@ pub struct HermesCli {
 
 impl Application for HermesCli {
     type Config = HermesConfig;
-    type Build = CosmosBuilder;
+
+    type App = HermesApp;
+
     type Command = HermesCommand;
 
     fn config_path(&self) -> &Path {
@@ -39,16 +41,12 @@ impl Application for HermesCli {
         clap::Parser::parse()
     }
 
-    async fn run(&self, runtime: HermesRuntime, config: Self::Config) -> Result<Output> {
-        let builder = CosmosBuilder::new(
-            config.config,
+    async fn run(&self, runtime: HermesRuntime) -> Result<Output> {
+        let app = HermesApp {
             runtime,
-            Default::default(),
-            Default::default(),
-            Default::default(),
-            Default::default(),
-        );
+            config_path: self.config_path.clone(),
+        };
 
-        self.command.run(&builder).await
+        self.command.run(&app).await
     }
 }

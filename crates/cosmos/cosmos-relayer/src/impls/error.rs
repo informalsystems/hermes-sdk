@@ -5,7 +5,7 @@ use core::num::ParseIntError;
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use eyre::Report;
-use hermes_cli_components::any_client::impls::encoding::encode::UnknownClientStateType;
+use hermes_any_counterparty::impls::encoding::encode::UnknownClientStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_error::handlers::debug::DebugError;
@@ -13,7 +13,9 @@ use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;
 use hermes_error::handlers::infallible::HandleInfallible;
 use hermes_error::handlers::report::ReportError;
+use hermes_error::handlers::wrap::WrapErrorDetail;
 use hermes_error::impls::ProvideHermesError;
+use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::Error;
 use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;
@@ -24,7 +26,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::error::impls::error::{
     MaxRetryExceededError, UnwrapMaxRetryExceededError,
 };
-use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
 use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
@@ -51,6 +53,7 @@ use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24Validati
 use ibc_relayer_types::proofs::ProofError;
 use ibc_relayer_types::signer::SignerError;
 use prost::{DecodeError, EncodeError};
+use tendermint::Error as TendermintError;
 use tendermint_proto::Error as TendermintProtoError;
 use tendermint_rpc::Error as TendermintRpcError;
 use tonic::metadata::errors::InvalidMetadataValue;
@@ -82,18 +85,12 @@ impl<Context> CanHandleCosmosError<Context> for HandleCosmosError where
 {
 }
 
-impl<Context> ProvideRetryableError<Context> for HandleCosmosError
-where
-    Context: HasErrorType<Error = Error>,
-{
-    fn is_retryable_error(e: &Error) -> bool {
-        e.is_retryable
-    }
-}
-
 delegate_components! {
     HandleCosmosError {
-        ErrorTypeComponent: ProvideHermesError,
+        [
+            ErrorTypeComponent,
+            RetryableErrorComponent,
+        ]: ProvideHermesError,
         ErrorRaiserComponent:
             DelegateErrorRaiser<CosmosErrorHandlers>,
     }
@@ -110,6 +107,7 @@ delegate_components! {
             SignerError,
             KeyringError,
             SupervisorError,
+            TendermintError,
             TendermintProtoError,
             TendermintRpcError,
             TendermintClientError,
@@ -162,7 +160,12 @@ delegate_components! {
                 MissingChannelTryEventError<'a, Relay>,
         ]:
             DebugError,
+        [
+            WrapError<&'static str, Error>,
+            WrapError<String, Error>,
+        ]:
+            WrapErrorDetail,
         <'a, Context: HasErrorType> MaxRetryExceededError<'a, Context>:
-            UnwrapMaxRetryExceededError
+            UnwrapMaxRetryExceededError,
     }
 }

@@ -1,8 +1,8 @@
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_error::traits::wrap::ErrorWrapper;
+use hermes_error::traits::wrapper::ErrorWrapper;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::{
@@ -13,6 +13,7 @@ use ibc_relayer_types::core::ics04_channel::channel::State;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use tracing::{info, warn};
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -40,8 +41,10 @@ pub struct QueryChannels {
     show_counterparty: bool,
 }
 
-impl CommandRunner<CosmosBuilder> for QueryChannels {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for QueryChannels {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain = builder.build_chain(&self.chain_id).await?;
         let chain_id = self.chain_id.clone();
         let dst_chain_id = self.counterparty_chain_id.clone();

@@ -2,8 +2,8 @@ mod end;
 pub use end::QueryConnectionEnd;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Subcommand)]
@@ -12,10 +12,10 @@ pub enum QueryConnection {
     End(QueryConnectionEnd),
 }
 
-impl CommandRunner<CosmosBuilder> for QueryConnection {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for QueryConnection {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::End(cmd) => cmd.run(builder).await,
+            Self::End(cmd) => cmd.run(app).await,
         }
     }
 }

@@ -2,11 +2,11 @@ use std::collections::HashMap;
 
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_relayer_components::build::traits::components::birelay_builder::CanBuildBiRelay;
+use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::config::filter::PacketFilter;
-use ibc_relayer::config::Config;
+use ibc_relayer::config::{ChainConfig, Config};
 use ibc_test_framework::error::{handle_generic_error, Error};
 use ibc_test_framework::prelude::TaggedFullNodeExt;
 use ibc_test_framework::types::binary::chains::ConnectedChains;
@@ -31,8 +31,17 @@ where
         (chains.chain_id_b().cloned_value(), key_b),
     ]);
 
+    let chain_configs = config
+        .chains
+        .iter()
+        .map(|config| {
+            let ChainConfig::CosmosSdk(config) = config;
+            config.clone()
+        })
+        .collect();
+
     let builder = CosmosBuilder::new(
-        config.clone(),
+        chain_configs,
         HermesRuntime::new(runtime),
         Default::default(),
         packet_filter,

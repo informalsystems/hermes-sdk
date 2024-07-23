@@ -5,6 +5,9 @@ use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetter, HasLoggerType, LoggerGetterComponent, ProvideLoggerType,
 };
 use hermes_logging_components::traits::logger::LoggerComponent;
+use hermes_logging_components::types::level::{
+    LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
+};
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_relayer_components::relay::impls::packet_clearers::receive_packet::LogClearPacketError;
 use hermes_relayer_components::relay::impls::packet_relayers::general::full_relay::LogRelayPacketAction;
@@ -44,6 +47,11 @@ delegate_components! {
     HermesLogHandlers {
         [
             (),
+            LevelTrace,
+            LevelDebug,
+            LevelInfo,
+            LevelWarn,
+            LevelError,
             <'a, Chain: HasSignerType + HasNonceType + HasMessageType,>
                 LogSendMessagesWithSignerAndNonce<'a, Chain>,
             <'a, Chain: HasTransactionHashType>

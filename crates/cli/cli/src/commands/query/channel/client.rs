@@ -1,11 +1,12 @@
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::QueryChannelClientStateRequest;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -38,8 +39,10 @@ pub struct QueryChannelClient {
     channel_id: ChannelId,
 }
 
-impl CommandRunner<CosmosBuilder> for QueryChannelClient {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for QueryChannelClient {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let chain = builder.build_chain(&self.chain_id).await?;
         let channel_id = self.channel_id.clone();
         let port_id = self.port_id.clone();

@@ -1,12 +1,12 @@
 use alloc::format;
 
 use cgp_core::error::{CanRaiseError, ErrorOf};
+use hermes_relayer_components::multi::types::index::Index;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
 use crate::setup::traits::bootstrap_at::HasBootstrapAt;
 use crate::setup::traits::chain::ChainSetup;
-use crate::types::index::Index;
 
 pub struct SetupChainWithBootstrap;
 

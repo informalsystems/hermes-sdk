@@ -14,6 +14,8 @@ members = [
     "crates/test/test-components",
     "crates/test/test-suite",
 
+    "crates/any/any-counterparty",
+
     "crates/cli/cli-components",
     "crates/cli/cli-framework",
     "crates/cli/cli",
@@ -68,9 +70,9 @@ overflow-checks = true
 async-trait                     = { version = "0.1.80" }
 ibc                             = { version = "0.53.0" }
 ibc-proto                       = { version = "0.46.0" }
-ibc-relayer                     = { version = "0.28" }
-ibc-relayer-types               = { version = "0.28" }
-ibc-telemetry                   = { version = "0.28" }
+ibc-relayer                     = { version = "0.29" }
+ibc-relayer-types               = { version = "0.29" }
+ibc-telemetry                   = { version = "0.29" }
 tendermint                      = { version = "0.37" }
 tendermint-proto                = { version = "0.37" }
 tendermint-rpc                  = { version = "0.37" }
@@ -89,6 +91,7 @@ serde_json                      = { version = "1.0" }
 tokio                           = { version = "1.38" }
 tracing                         = { version = "0.1.40" }
 tracing-subscriber              = { version = "0.3.18" }
+time                            = { version = "0.3.36" }
 tonic                           = { version = "0.11" }
 toml                            = { version = "0.8.12" }
 futures                         = { version = "0.3.30", default-features = false }
@@ -124,6 +127,8 @@ hermes-relayer-components-extra         = { version = "0.1.0" }
 
 hermes-test-components                  = { version = "0.1.0" }
 hermes-ibc-test-suite                   = { version = "0.1.0" }
+
+hermes-any-counterparty                 = { version = "0.1.0" }
 
 hermes-cli                              = { version = "0.1.0" }
 hermes-cli-components                   = { version = "0.1.0" }
@@ -175,9 +180,9 @@ cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git" }
 cgp-run                 = { git = "https://github.com/informalsystems/cgp.git" }
 cgp-inner               = { git = "https://github.com/informalsystems/cgp.git" }
 
-ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", rev = "ddc0dd8" }
-ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", rev = "ddc0dd8" }
-ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", rev = "ddc0dd8" }
+ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", rev = "43f3e835" }
+ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", rev = "43f3e835" }
+ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", rev = "43f3e835" }
 
 hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }
@@ -198,6 +203,8 @@ hermes-logger                       = { path = "./crates/logging/logger" }
 
 hermes-test-components              = { path = "./crates/test/test-components" }
 hermes-ibc-test-suite               = { path = "./crates/test/test-suite" }
+
+hermes-any-counterparty             = { path = "./crates/any/any-counterparty" }
 
 hermes-cli                          = { path = "./crates/cli/cli" }
 hermes-cli-components               = { path = "./crates/cli/cli-components" }

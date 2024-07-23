@@ -1,32 +1,26 @@
-use cgp_core::prelude::*;
-
-use crate::birelay::traits::two_way::HasTwoChainTypes;
-use crate::build::traits::components::birelay_builder::BiRelayBuilder;
-use crate::build::traits::components::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
-use crate::build::traits::components::relay_builder::CanBuildRelay;
-use crate::build::traits::target::relay::{RelayAToBTarget, RelayBToATarget};
-use crate::chain::traits::types::ibc::HasIbcChainTypes;
+use crate::build::traits::builders::birelay_builder::BiRelayBuilder;
+use crate::build::traits::builders::birelay_from_relay_builder::CanBuildBiRelayFromRelays;
+use crate::build::traits::builders::relay_builder::CanBuildRelay;
+use crate::multi::traits::chain_at::ChainIdAt;
+use crate::multi::traits::relay_at::ClientIdAt;
+use crate::multi::types::index::Twindex;
 
 pub struct BuildBiRelayFromRelays;
 
-impl<Build, ChainA, ChainB> BiRelayBuilder<Build> for BuildBiRelayFromRelays
+impl<Build, const A: usize, const B: usize> BiRelayBuilder<Build, A, B> for BuildBiRelayFromRelays
 where
-    Build:
-        CanBuildBiRelayFromRelays + CanBuildRelay<RelayAToBTarget> + CanBuildRelay<RelayBToATarget>,
-    Build::BiRelay: HasTwoChainTypes<ChainA = ChainA, ChainB = ChainB>,
-    ChainA: HasIbcChainTypes<ChainB> + HasErrorType,
-    ChainB: HasIbcChainTypes<ChainA> + HasErrorType,
+    Build: CanBuildBiRelayFromRelays<A, B> + CanBuildRelay<A, B> + CanBuildRelay<B, A>,
 {
     async fn build_birelay(
         build: &Build,
-        chain_id_a: &ChainA::ChainId,
-        chain_id_b: &ChainB::ChainId,
-        client_id_a: &ChainA::ClientId,
-        client_id_b: &ChainB::ClientId,
+        chain_id_a: &ChainIdAt<Build, A>,
+        chain_id_b: &ChainIdAt<Build, B>,
+        client_id_a: &ClientIdAt<Build, A, B>,
+        client_id_b: &ClientIdAt<Build, B, A>,
     ) -> Result<Build::BiRelay, Build::Error> {
         let relay_a_to_b = build
             .build_relay(
-                RelayAToBTarget,
+                Twindex::<A, B>,
                 chain_id_a,
                 chain_id_b,
                 client_id_a,
@@ -36,7 +30,7 @@ where
 
         let relay_b_to_a = build
             .build_relay(
-                RelayBToATarget,
+                Twindex::<B, A>,
                 chain_id_b,
                 chain_id_a,
                 client_id_b,

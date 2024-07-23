@@ -11,8 +11,8 @@ mod balance;
 pub use balance::KeysBalanceCmd;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 /// `keys` subcommand
@@ -31,13 +31,13 @@ pub enum KeysCmd {
     Balance(KeysBalanceCmd),
 }
 
-impl CommandRunner<CosmosBuilder> for KeysCmd {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for KeysCmd {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::Add(cmd) => cmd.run(builder).await,
-            Self::List(cmd) => cmd.run(builder).await,
-            Self::Delete(cmd) => cmd.run(builder).await,
-            Self::Balance(cmd) => cmd.run(builder).await,
+            Self::Add(cmd) => cmd.run(app).await,
+            Self::List(cmd) => cmd.run(app).await,
+            Self::Delete(cmd) => cmd.run(app).await,
+            Self::Balance(cmd) => cmd.run(app).await,
         }
     }
 }

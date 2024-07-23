@@ -6,6 +6,7 @@ use hermes_logging_components::types::level::{
     LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,
 };
 use tracing::{debug, error, info, trace, warn};
+
 pub struct LogMessageOnly<Level>(pub PhantomData<Level>);
 
 impl<Logging, Details> Logger<Logging, Details> for LogMessageOnly<LevelError>

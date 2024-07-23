@@ -1,2 +1,2 @@
 pub mod cache;
-pub mod components;
+pub mod relay_with_batch_builder;

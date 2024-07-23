@@ -3,15 +3,15 @@ use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, ConnectionIdOf, PortIdOf};
+use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::ChainAt;
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
+use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::impls::channel::bootstrap::CanBootstrapChannel;
 
-use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
-use crate::driver::traits::types::chain_at::ChainTypeAt;
-use crate::driver::traits::types::relay_at::RelayTypeAt;
 use crate::setup::traits::channel::ChannelSetup;
 use crate::setup::traits::init_channel_options_at::HasInitChannelOptionsAt;
 use crate::setup::traits::port_id_at::HasPortIdAt;
-use crate::types::index::Twindex;
 
 pub struct SetupChannelHandshake;
 
@@ -21,26 +21,26 @@ where
         + HasInitChannelOptionsAt<A, B>
         + HasPortIdAt<A, B>
         + HasPortIdAt<B, A>
-        + CanRaiseError<ErrorOf<RelayTypeAt<Setup, A, B>>>,
-    ChainTypeAt<Setup, A>:
-        HasIbcChainTypes<ChainTypeAt<Setup, B>> + HasInitChannelOptionsType<ChainTypeAt<Setup, B>>,
-    ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>>,
-    RelayTypeAt<Setup, A, B>: CanBootstrapChannel,
-    BiRelayTypeAt<Setup, A, B>: HasTwoWayRelay,
-    PortIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>: Clone,
-    PortIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>: Clone,
+        + CanRaiseError<ErrorOf<RelayAt<Setup, A, B>>>,
+    ChainAt<Setup, A>:
+        HasIbcChainTypes<ChainAt<Setup, B>> + HasInitChannelOptionsType<ChainAt<Setup, B>>,
+    ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
+    RelayAt<Setup, A, B>: CanBootstrapChannel,
+    BiRelayAt<Setup, A, B>: HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
+    PortIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>: Clone,
+    PortIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>: Clone,
 {
     async fn setup_channel(
         setup: &Setup,
-        birelay: &BiRelayTypeAt<Setup, A, B>,
-        connection_id_a: &ConnectionIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-        connection_id_b: &ConnectionIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+        birelay: &BiRelayAt<Setup, A, B>,
+        connection_id_a: &ConnectionIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+        connection_id_b: &ConnectionIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
     ) -> Result<
         (
-            ChannelIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            ChannelIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
-            PortIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            PortIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            ChannelIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+            ChannelIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
+            PortIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+            PortIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
         ),
         Setup::Error,
     > {

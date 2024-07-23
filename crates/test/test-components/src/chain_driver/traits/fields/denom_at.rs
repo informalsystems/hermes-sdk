@@ -1,8 +1,8 @@
 use cgp_core::prelude::*;
+use hermes_relayer_components::multi::types::index::Index;
 
 use crate::chain::traits::types::denom::{DenomOf, HasDenomType};
 use crate::chain_driver::traits::types::chain::HasChainType;
-use crate::types::index::Index;
 
 #[derive(Clone, Copy, Default)]
 pub struct TransferDenom;

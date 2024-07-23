@@ -94,7 +94,7 @@ pub use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::consensus_state::{
-    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+    ConsensusStateFieldComponent, ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
@@ -134,7 +134,9 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+pub use hermes_relayer_components::chain::traits::types::timestamp::{
+    TimestampTypeComponent, UnixTimestampBuilderComponent,
+};
 pub use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::components::delegate::DelegateCosmosChainComponents;
@@ -184,6 +186,7 @@ define_components! {
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
             TimestampTypeComponent,
+            UnixTimestampBuilderComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
             MessageSizeEstimatorComponent,
@@ -238,7 +241,10 @@ define_components! {
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
             ProvideAnyRawConsensusState,
-        ConsensusStateTypeComponent:
+        [
+            ConsensusStateTypeComponent,
+            ConsensusStateFieldComponent,
+        ]:
             ProvideTendermintConsensusState,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,

@@ -1,4 +1,4 @@
-mod client;
+pub mod client;
 pub use client::ClientCommands;
 
 mod connection;
@@ -19,9 +19,9 @@ pub use channels::QueryChannels;
 mod packet;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 pub use packet::PacketCommands;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 /// All subcommands for querying IBC-related objects and data.
@@ -53,16 +53,16 @@ pub enum QueryCommands {
     Packet(PacketCommands),
 }
 
-impl CommandRunner<CosmosBuilder> for QueryCommands {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for QueryCommands {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::Client(cmd) => cmd.run(builder).await,
-            Self::Clients(cmd) => cmd.run(builder).await,
-            Self::Connection(cmd) => cmd.run(builder).await,
-            Self::Connections(cmd) => cmd.run(builder).await,
-            Self::Channels(cmd) => cmd.run(builder).await,
-            Self::Channel(cmd) => cmd.run(builder).await,
-            Self::Packet(cmd) => cmd.run(builder).await,
+            Self::Client(cmd) => cmd.run(app).await,
+            Self::Clients(cmd) => cmd.run(app).await,
+            Self::Connection(cmd) => cmd.run(app).await,
+            Self::Connections(cmd) => cmd.run(app).await,
+            Self::Channels(cmd) => cmd.run(app).await,
+            Self::Channel(cmd) => cmd.run(app).await,
+            Self::Packet(cmd) => cmd.run(app).await,
         }
     }
 }

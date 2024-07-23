@@ -1,12 +1,12 @@
+use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_error::traits::wrap::ErrorWrapper;
-use hermes_relayer_components::build::traits::components::relay_builder::CanBuildRelay;
-use hermes_relayer_components::build::traits::target::relay::RelayAToBTarget;
+use hermes_error::traits::wrapper::ErrorWrapper;
+use hermes_relayer_components::build::traits::builders::relay_builder::CanBuildRelay;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
+use hermes_relayer_components::multi::types::index::Twindex;
 use hermes_relayer_components::relay::traits::target::SourceTarget;
 use hermes_relayer_components::relay::traits::update_client_message_builder::CanSendTargetUpdateClientMessage;
 use ibc_relayer_types::core::ics02_client::height::Height;
@@ -14,6 +14,7 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use oneline_eyre::eyre::Context;
 use tracing::info;
 
+use crate::contexts::app::HermesApp;
 use crate::Result;
 
 #[derive(Debug, clap::Parser)]
@@ -44,8 +45,10 @@ pub struct ClientUpdate {
     target_height: Option<u64>,
 }
 
-impl CommandRunner<CosmosBuilder> for ClientUpdate {
-    async fn run(&self, builder: &CosmosBuilder) -> Result<Output> {
+impl CommandRunner<HermesApp> for ClientUpdate {
+    async fn run(&self, app: &HermesApp) -> Result<Output> {
+        let builder = app.load_builder().await?;
+
         let host_chain = builder.build_chain(&self.host_chain_id).await?;
 
         let client_state =
@@ -58,7 +61,7 @@ impl CommandRunner<CosmosBuilder> for ClientUpdate {
 
         let relayer = builder
             .build_relay(
-                RelayAToBTarget,
+                Twindex::<0, 1>,
                 &self.host_chain_id,
                 &reference_chain_id,
                 &self.client_id,

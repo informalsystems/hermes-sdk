@@ -3,11 +3,11 @@ use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::connection::HasInitConnectionOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
+use hermes_relayer_components::multi::traits::birelay_at::{BiRelayAt, HasBiRelayTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::ChainAt;
+use hermes_relayer_components::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 use hermes_relayer_components::relay::impls::connection::bootstrap::CanBootstrapConnection;
 
-use crate::driver::traits::types::birelay_at::{BiRelayTypeAt, HasBiRelayTypeAt};
-use crate::driver::traits::types::chain_at::ChainTypeAt;
-use crate::driver::traits::types::relay_at::RelayTypeAt;
 use crate::setup::traits::connection::ConnectionSetup;
 use crate::setup::traits::init_connection_options_at::HasInitConnectionOptionsAt;
 
@@ -18,20 +18,20 @@ impl<Setup, const A: usize, const B: usize> ConnectionSetup<Setup, A, B>
 where
     Setup: HasBiRelayTypeAt<A, B>
         + HasInitConnectionOptionsAt<A, B>
-        + CanRaiseError<ErrorOf<RelayTypeAt<Setup, A, B>>>,
-    ChainTypeAt<Setup, A>: HasIbcChainTypes<ChainTypeAt<Setup, B>>
-        + HasInitConnectionOptionsType<ChainTypeAt<Setup, B>>,
-    ChainTypeAt<Setup, B>: HasIbcChainTypes<ChainTypeAt<Setup, A>>,
-    RelayTypeAt<Setup, A, B>: CanBootstrapConnection,
-    BiRelayTypeAt<Setup, A, B>: HasTwoWayRelay,
+        + CanRaiseError<ErrorOf<RelayAt<Setup, A, B>>>,
+    ChainAt<Setup, A>:
+        HasIbcChainTypes<ChainAt<Setup, B>> + HasInitConnectionOptionsType<ChainAt<Setup, B>>,
+    ChainAt<Setup, B>: HasIbcChainTypes<ChainAt<Setup, A>>,
+    RelayAt<Setup, A, B>: CanBootstrapConnection,
+    BiRelayAt<Setup, A, B>: HasTwoWayRelay + HasRelayTypeAt<0, 1, Relay = RelayAt<Setup, A, B>>,
 {
     async fn setup_connection(
         setup: &Setup,
-        birelay: &BiRelayTypeAt<Setup, A, B>,
+        birelay: &BiRelayAt<Setup, A, B>,
     ) -> Result<
         (
-            ConnectionIdOf<ChainTypeAt<Setup, A>, ChainTypeAt<Setup, B>>,
-            ConnectionIdOf<ChainTypeAt<Setup, B>, ChainTypeAt<Setup, A>>,
+            ConnectionIdOf<ChainAt<Setup, A>, ChainAt<Setup, B>>,
+            ConnectionIdOf<ChainAt<Setup, B>, ChainAt<Setup, A>>,
         ),
         Setup::Error,
     > {

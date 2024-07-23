@@ -4,23 +4,22 @@ use hermes_relayer_components::chain::traits::types::channel::{
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ConnectionIdOf;
-
-use crate::driver::traits::types::chain_at::{ChainTypeAt, HasChainTypeAt};
+use hermes_relayer_components::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 
 #[derive_component(InitChannelOptionsAtComponent, ProvideInitChannelOptionsAt<Setup>)]
 pub trait HasInitChannelOptionsAt<const TARGET: usize, const COUNTERPARTY: usize>:
     HasChainTypeAt<TARGET> + HasChainTypeAt<COUNTERPARTY>
 where
-    ChainTypeAt<Self, TARGET>: HasInitChannelOptionsType<ChainTypeAt<Self, COUNTERPARTY>>
-        + HasIbcChainTypes<ChainTypeAt<Self, COUNTERPARTY>>,
-    ChainTypeAt<Self, COUNTERPARTY>: HasIbcChainTypes<ChainTypeAt<Self, TARGET>>,
+    ChainAt<Self, TARGET>: HasInitChannelOptionsType<ChainAt<Self, COUNTERPARTY>>
+        + HasIbcChainTypes<ChainAt<Self, COUNTERPARTY>>,
+    ChainAt<Self, COUNTERPARTY>: HasIbcChainTypes<ChainAt<Self, TARGET>>,
 {
     fn init_channel_options(
         &self,
-        connection_id: &ConnectionIdOf<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>,
+        connection_id: &ConnectionIdOf<ChainAt<Self, TARGET>, ChainAt<Self, COUNTERPARTY>>,
         counterparty_connection_id: &ConnectionIdOf<
-            ChainTypeAt<Self, COUNTERPARTY>,
-            ChainTypeAt<Self, TARGET>,
+            ChainAt<Self, COUNTERPARTY>,
+            ChainAt<Self, TARGET>,
         >,
-    ) -> InitChannelOptions<ChainTypeAt<Self, TARGET>, ChainTypeAt<Self, COUNTERPARTY>>;
+    ) -> InitChannelOptions<ChainAt<Self, TARGET>, ChainAt<Self, COUNTERPARTY>>;
 }

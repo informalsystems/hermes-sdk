@@ -1,8 +1,9 @@
 use cgp_core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::multi::traits::chain_at::ChainAt;
+use hermes_relayer_components::multi::types::index::{Index, Twindex};
 
 use crate::chain_driver::traits::types::chain::HasChain;
-use crate::driver::traits::types::chain_at::ChainTypeAt;
 use crate::driver::traits::types::chain_driver_at::ChainDriverTypeAt;
 use crate::setup::traits::birelay::CanSetupBiRelay;
 use crate::setup::traits::chain::CanSetupChain;
@@ -11,7 +12,6 @@ use crate::setup::traits::clients::CanSetupClients;
 use crate::setup::traits::connection::CanSetupConnection;
 use crate::setup::traits::driver::{DriverBuilder, HasTestDriverType};
 use crate::setup::traits::drivers::binary_channel::CanBuildTestDriverWithBinaryChannel;
-use crate::types::index::{Index, Twindex};
 
 pub struct SetupBinaryChannelDriver;
 
@@ -28,8 +28,8 @@ where
         + CanBuildTestDriverWithBinaryChannel,
     ChainDriverTypeAt<Setup, 0>: HasChain,
     ChainDriverTypeAt<Setup, 1>: HasChain,
-    ChainTypeAt<Setup, 0>: HasIbcChainTypes<ChainTypeAt<Setup, 1>>,
-    ChainTypeAt<Setup, 1>: HasIbcChainTypes<ChainTypeAt<Setup, 0>>,
+    ChainAt<Setup, 0>: HasIbcChainTypes<ChainAt<Setup, 1>>,
+    ChainAt<Setup, 1>: HasIbcChainTypes<ChainAt<Setup, 0>>,
 {
     async fn build_driver(setup: &Setup) -> Result<Setup::TestDriver, Setup::Error> {
         let chain_driver_a = setup.setup_chain(Index::<0>).await?;
