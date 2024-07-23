@@ -8,6 +8,7 @@ use hermes_cli_components::impls::commands::delegate::DelegateCommandRunner;
 use hermes_cli_components::impls::commands::queries::client_state::{
     QueryClientStateArgs, RunQueryClientStateCommand,
 };
+use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, StartRelayerArgs};
 use hermes_cli_components::impls::get_config_path::GetDefaultConfigField;
 use hermes_cli_components::impls::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
@@ -19,7 +20,9 @@ use hermes_cli_components::traits::build::{
 use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponent;
 use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
-use hermes_cli_components::traits::output::{HasOutputType, OutputProducer, ProvideOutputType};
+use hermes_cli_components::traits::output::{
+    CanProduceOutput, HasOutputType, OutputProducer, ProvideOutputType,
+};
 use hermes_cli_components::traits::parse::{ArgParserComponent, CanParseArg};
 use hermes_cli_components::traits::types::config::ProvideConfigType;
 use hermes_cli_framework::output::Output;
@@ -96,12 +99,18 @@ delegate_components! {
         (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (QueryClientStateArgs, (symbol!("chain_id"), symbol!("height"))): ParseCosmosHeight,
+
+        (StartRelayerArgs, symbol!("chain_id_a")): ParseFromString<ChainId>,
+        (StartRelayerArgs, symbol!("client_id_a")): ParseFromString<ClientId>,
+        (StartRelayerArgs, symbol!("chain_id_b")): ParseFromString<ChainId>,
+        (StartRelayerArgs, symbol!("client_id_b")): ParseFromString<ClientId>,
     }
 }
 
 delegate_components! {
     HermesCommandRunnerComponents {
         QueryClientStateArgs: RunQueryClientStateCommand,
+        StartRelayerArgs: RunStartRelayerCommand,
     }
 }
 
@@ -152,8 +161,10 @@ pub trait CanUseHermesApp:
         QueryClientStateArgs,
         (symbol!("chain_id"), symbol!("height")),
         Parsed = Option<Height>,
-    > + CanRaiseError<HermesError>
-    + CanRunCommand<QueryClientStateArgs>
+    > + CanRunCommand<QueryClientStateArgs>
+    + CanRunCommand<StartRelayerArgs>
+    + CanProduceOutput<&'static str>
+    + CanRaiseError<HermesError>
 {
 }
 

@@ -11,10 +11,10 @@ use crate::traits::command::CommandRunner;
 use crate::traits::output::CanProduceOutput;
 use crate::traits::parse::CanParseArg;
 
-pub struct StartRelayer;
+pub struct RunStartRelayerCommand;
 
 #[derive(Debug, clap::Parser, HasField)]
-pub struct Start {
+pub struct StartRelayerArgs {
     /// Identifier of chain A
     #[clap(
         long = "chain-a",
@@ -52,7 +52,7 @@ pub struct Start {
     client_id_b: String,
 }
 
-impl<App, Args, Build, BiRelay, ChainA, ChainB> CommandRunner<App, Args> for StartRelayer
+impl<App, Args, Build, BiRelay, ChainA, ChainB> CommandRunner<App, Args> for RunStartRelayerCommand
 where
     App: CanLoadBuilder<Builder = Build>
         + CanProduceOutput<&'static str>

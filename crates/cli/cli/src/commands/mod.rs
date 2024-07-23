@@ -1,3 +1,5 @@
+use hermes_cli_components::impls::commands::start::StartRelayerArgs;
+use hermes_cli_components::traits::command::CanRunCommand;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
@@ -11,11 +13,11 @@ pub mod connection;
 pub mod query;
 
 pub mod keys;
-pub mod start;
+
 #[derive(Debug, clap::Parser)]
 pub enum HermesCommand {
     /// Start the Hermes relayer
-    Start(start::Start),
+    Start(StartRelayerArgs),
 
     /// Work with clients
     #[clap(subcommand)]
@@ -45,7 +47,7 @@ pub enum HermesCommand {
 impl CommandRunner<HermesApp> for HermesCommand {
     async fn run(&self, app: &HermesApp) -> Result<Output> {
         match self {
-            Self::Start(cmd) => cmd.run(app).await,
+            Self::Start(cmd) => app.run_command(cmd).await,
             Self::Client(cmd) => cmd.run(app).await,
             Self::Connection(cmd) => cmd.run(app).await,
             Self::Channel(cmd) => cmd.run(app).await,
