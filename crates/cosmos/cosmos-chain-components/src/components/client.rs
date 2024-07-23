@@ -93,6 +93,7 @@ pub use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent,
     ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
+pub use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateFieldComponent;
 pub use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
 };
@@ -238,7 +239,10 @@ define_components! {
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
             ProvideAnyRawConsensusState,
-        ConsensusStateTypeComponent:
+        [
+            ConsensusStateTypeComponent,
+            ConsensusStateFieldComponent,
+        ]:
             ProvideTendermintConsensusState,
         PacketFieldsReaderComponent:
             CosmosPacketFieldReader,

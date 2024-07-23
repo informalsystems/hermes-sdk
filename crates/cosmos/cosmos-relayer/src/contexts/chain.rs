@@ -1,4 +1,3 @@
-use alloc::borrow::Cow;
 use alloc::sync::Arc;
 use core::ops::Deref;
 
@@ -54,9 +53,7 @@ use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateFields;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
 use hermes_relayer_components::transaction::impls::poll_tx_response::TxNoResponseError;
@@ -344,20 +341,6 @@ impl ChainIdGetter<CosmosChain> for CosmosChainComponents {
 impl HasEventSubscription for CosmosChain {
     fn event_subscription(&self) -> &Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>> {
         &self.subscription
-    }
-}
-
-impl<Counterparty> HasConsensusStateFields<Counterparty> for CosmosChain
-where
-    Counterparty: HasTimestampType,
-{
-    fn consensus_state_timestamp(
-        consensus_state: &Self::ConsensusState,
-    ) -> Cow<'_, Counterparty::Timestamp> {
-        // FIXME(romac): This is a temporary workaround until we have a proper conversion,
-        // and can blow out if the timestamp is later than July 21st, 2554.
-        let nanos = consensus_state.timestamp.unix_timestamp_nanos() as u64;
-        Cow::Owned(Counterparty::timestamp_from_nanos(nanos))
     }
 }
 

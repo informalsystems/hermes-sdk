@@ -1,5 +1,3 @@
-use alloc::borrow::Cow;
-
 use cgp_core::prelude::*;
 
 use crate::chain::traits::types::timestamp::HasTimestampType;
@@ -20,11 +18,11 @@ pub trait HasRawConsensusStateType: Async {
     type RawConsensusState: Async;
 }
 
+#[derive_component(ConsensusStateFieldComponent, ConsensusFieldGetter<Chain>)]
 pub trait HasConsensusStateFields<Counterparty>: HasConsensusStateType<Counterparty>
 where
     Counterparty: HasTimestampType,
 {
-    fn consensus_state_timestamp(
-        consensus_state: &Self::ConsensusState,
-    ) -> Cow<'_, Counterparty::Timestamp>;
+    fn consensus_state_timestamp(consensus_state: &Self::ConsensusState)
+        -> Counterparty::Timestamp;
 }

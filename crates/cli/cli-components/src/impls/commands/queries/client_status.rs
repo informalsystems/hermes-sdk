@@ -23,6 +23,7 @@ use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
 use serde::Serialize;
 
+use crate::traits::any_counterparty::HasAnyCounterparty;
 use crate::traits::build::CanLoadBuilder;
 use crate::traits::command::CommandRunner;
 use crate::traits::output::CanProduceOutput;
@@ -63,6 +64,7 @@ where
     App: CanLoadBuilder<Builder = Build>
         + CanProduceOutput<ClientStatus>
         + HasLogger
+        // + HasAnyCounterparty<AnyCounterparty = Counterparty>
         + CanParseArg<Args, symbol!("chain_id"), Parsed = Chain::ChainId>
         + CanParseArg<Args, symbol!("client_id"), Parsed = Chain::ClientId>
         + CanRaiseError<Build::Error>
@@ -192,10 +194,8 @@ where
 
         let current_network_time = Self::chain_status_timestamp(&chain_status);
 
-        let elapsed = Self::timestamp_duration_since(
-            latest_consensus_state_timestamp.as_ref(),
-            current_network_time,
-        );
+        let elapsed =
+            Self::timestamp_duration_since(&latest_consensus_state_timestamp, current_network_time);
 
         let has_expired = elapsed.map_or(false, |elapsed| {
             Counterparty::client_state_has_expired(&client_state, elapsed)
