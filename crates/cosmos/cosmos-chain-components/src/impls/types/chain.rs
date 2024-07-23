@@ -48,8 +48,7 @@ use ibc_relayer_types::Height;
 use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
-use tendermint::Error as TendermintError;
-use tendermint::{Hash, Time};
+use tendermint::{Error as TendermintError, Hash, Time};
 
 use crate::traits::message::CosmosMessage;
 use crate::types::commitment_proof::ProvideCosmosCommitmentProof;

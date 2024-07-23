@@ -1,7 +1,7 @@
 use cgp_core::Async;
-use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateFieldGetter;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::consensus_state::ProvideConsensusStateType;
+use hermes_relayer_components::chain::traits::types::consensus_state::{
+    ConsensusStateFieldGetter, HasConsensusStateType, ProvideConsensusStateType,
+};
 use hermes_relayer_components::chain::traits::types::timestamp::CanBuildUnixTimestamp;
 use tendermint_proto::google::protobuf::Timestamp;
 

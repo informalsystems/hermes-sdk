@@ -1,8 +1,6 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
-use hermes_error::handlers::wrap::WrapErrorDetail;
-use hermes_error::traits::wrap::WrapError;
 
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -15,7 +13,9 @@ use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;
 use hermes_error::handlers::infallible::HandleInfallible;
 use hermes_error::handlers::report::ReportError;
+use hermes_error::handlers::wrap::WrapErrorDetail;
 use hermes_error::impls::ProvideHermesError;
+use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::Error;
 use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;

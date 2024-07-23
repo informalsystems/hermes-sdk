@@ -93,9 +93,8 @@ pub use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitPayloadTypeComponent,
     ConnectionOpenTryPayloadTypeComponent, InitConnectionOptionsTypeComponent,
 };
-pub use hermes_relayer_components::chain::traits::types::consensus_state::ConsensusStateFieldComponent;
 pub use hermes_relayer_components::chain::traits::types::consensus_state::{
-    ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
+    ConsensusStateFieldComponent, ConsensusStateTypeComponent, RawConsensusStateTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
@@ -135,8 +134,9 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::timestamp::UnixTimestampBuilderComponent;
+pub use hermes_relayer_components::chain::traits::types::timestamp::{
+    TimestampTypeComponent, UnixTimestampBuilderComponent,
+};
 pub use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::components::delegate::DelegateCosmosChainComponents;
