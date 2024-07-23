@@ -160,6 +160,7 @@ delegate_components! {
             DebugError,
         [
             WrapError<&'static str, Error>,
+            WrapError<String, Error>,
         ]:
             WrapErrorDetail,
         <'a, Context: HasErrorType> MaxRetryExceededError<'a, Context>:

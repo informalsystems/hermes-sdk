@@ -145,7 +145,7 @@ where
         + CanQueryClientStateWithLatestHeight<Counterparty>
         + CanQueryChainStatus
         + CanQueryConsensusState<Counterparty>
-        + CanWrapError<&'static str>,
+        + CanWrapError<String>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasClientStateFields<Chain>
@@ -158,8 +158,13 @@ where
     ) -> Result<ClientStatus, Self::Error> {
         let client_state = self
             .query_client_state_with_latest_height(client_id)
-            .await?;
-        // .wrap_err_with(|e| "Failed to query client state for client `{client_id}`")?;
+            .await
+            .map_err(|e| {
+                Chain::wrap_error(
+                    format!("Failed to query client state for client `{client_id}`"),
+                    e,
+                )
+            })?;
 
         if Counterparty::client_state_is_frozen(&client_state) {
             return Ok(ClientStatus::Frozen);
@@ -169,16 +174,21 @@ where
 
         let latest_consensus_state = self
             .query_consensus_state_with_latest_height(client_id, &client_latest_height)
-            .await?;
-        // .wrap_err_with(|| {
-        //     format!("Failed to query consensus state at height {client_latest_height}")
-        // })?;
+            .await
+            .map_err(|e| {
+                Chain::wrap_error(
+                    format!("Failed to query consensus state at height {client_latest_height}"),
+                    e,
+                )
+            })?;
 
         let latest_consensus_state_timestamp =
             Counterparty::consensus_state_timestamp(&latest_consensus_state);
 
-        let chain_status = self.query_chain_status().await?;
-        // .wrap_err("Failed to query chain status")?;
+        let chain_status = self
+            .query_chain_status()
+            .await
+            .map_err(|e| Chain::wrap_error("Failed to query chain status".to_owned(), e))?;
 
         let current_network_time = Self::chain_status_timestamp(&chain_status);
 
