@@ -96,10 +96,6 @@ impl ProvideEventType<MockChainContext> for MockChainComponents {
 impl ProvideTimestampType<MockChainContext> for MockChainComponents {
     type Timestamp = MockTimestamp;
 
-    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
-        MockTimestamp(u128::from(nanos))
-    }
-
     fn timestamp_duration_since(
         earlier: &MockTimestamp,
         later: &MockTimestamp,

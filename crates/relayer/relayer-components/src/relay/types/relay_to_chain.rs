@@ -99,10 +99,6 @@ where
 {
     type Timestamp = <Target::TargetChain as HasTimestampType>::Timestamp;
 
-    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
-        Target::TargetChain::timestamp_from_nanos(nanos)
-    }
-
     fn timestamp_duration_since(
         earlier: &Self::Timestamp,
         later: &Self::Timestamp,

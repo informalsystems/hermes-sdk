@@ -35,11 +35,6 @@ pub trait HasTimestampType: Async {
     type Timestamp: Ord + Display + ToOwned<Owned = Self::Timestamp> + Async;
 
     /**
-       Build a timestamp from the given nanoseconds since the Unix epoch.
-    */
-    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp;
-
-    /**
        Returns the amount of time elapsed from an `earlier` instant to a `later` one,
        or `None` if the supposedly `earlier` instant is later than the `later` one.
     */

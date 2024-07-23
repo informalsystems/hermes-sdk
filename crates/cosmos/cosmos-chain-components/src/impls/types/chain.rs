@@ -118,10 +118,6 @@ where
 {
     type Timestamp = Timestamp;
 
-    fn timestamp_from_nanos(nanos: u64) -> Self::Timestamp {
-        Timestamp::from_nanoseconds(nanos).expect("Timestamp::from_nanoseconds is infallible")
-    }
-
     fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
         later.duration_since(earlier)
     }
