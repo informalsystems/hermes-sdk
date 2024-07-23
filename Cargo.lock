@@ -1753,6 +1753,7 @@ dependencies = [
  "cgp-core",
  "clap",
  "hermes-encoding-components",
+ "hermes-error",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime-components",

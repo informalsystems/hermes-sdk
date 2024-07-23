@@ -8,7 +8,7 @@ use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
-use hermes_error::traits::wrap::ErrorWrapper;
+use hermes_error::traits::wrapper::ErrorWrapper;
 use hermes_error::types::Error;
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryAllClientStatesWithLatestHeight;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;

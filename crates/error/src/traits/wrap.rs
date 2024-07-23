@@ -1,25 +1,19 @@
-use core::fmt::Display;
+use cgp_core::error::{CanRaiseError, HasErrorType};
 
-use crate::types::Error;
-
-pub trait ErrorWrapper {
-    type Value;
-
-    fn wrap_error<M>(self, message: M) -> Result<Self::Value, Error>
-    where
-        M: Display;
+pub struct WrapError<Detail, Error> {
+    pub detail: Detail,
+    pub error: Error,
 }
 
-impl<T, E> ErrorWrapper for Result<T, E>
-where
-    Error: From<E>,
-{
-    type Value = T;
+pub trait CanWrapError<Detail>: HasErrorType {
+    fn wrap_error(detail: Detail, error: Self::Error) -> Self::Error;
+}
 
-    fn wrap_error<M>(self, message: M) -> Result<Self::Value, Error>
-    where
-        M: Display,
-    {
-        self.map_err(|e| Error::from(e).wrap(message))
+impl<Context, Detail, Error> CanWrapError<Detail> for Context
+where
+    Context: HasErrorType<Error = Error> + CanRaiseError<WrapError<Detail, Error>>,
+{
+    fn wrap_error(detail: Detail, error: Self::Error) -> Self::Error {
+        Context::raise_error(WrapError { detail, error })
     }
 }

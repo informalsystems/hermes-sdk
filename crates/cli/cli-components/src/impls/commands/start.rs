@@ -2,6 +2,10 @@ use std::marker::PhantomData;
 
 use cgp_core::prelude::*;
 use cgp_core::run::CanRun;
+use hermes_error::traits::wrap::CanWrapError;
+use hermes_logging_components::traits::has_logger::HasLogger;
+use hermes_logging_components::traits::logger::CanLog;
+use hermes_logging_components::types::level::LevelInfo;
 use hermes_relayer_components::build::traits::builders::birelay_builder::CanBuildBiRelay;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
@@ -55,14 +59,17 @@ pub struct StartRelayerArgs {
 impl<App, Args, Build, BiRelay, ChainA, ChainB> CommandRunner<App, Args> for RunStartRelayerCommand
 where
     App: CanLoadBuilder<Builder = Build>
+        + HasLogger
         + CanProduceOutput<&'static str>
         + CanParseArg<Args, symbol!("chain_id_a"), Parsed = ChainA::ChainId>
         + CanParseArg<Args, symbol!("client_id_a"), Parsed = ChainA::ClientId>
         + CanParseArg<Args, symbol!("chain_id_b"), Parsed = ChainB::ChainId>
         + CanParseArg<Args, symbol!("client_id_b"), Parsed = ChainB::ClientId>
         + CanRaiseError<Build::Error>
-        + CanRaiseError<BiRelay::Error>,
+        + CanRaiseError<BiRelay::Error>
+        + CanWrapError<&'static str>,
     Args: Async,
+    App::Logger: CanLog<LevelInfo>,
     Build: CanBuildBiRelay<0, 1, BiRelay = BiRelay>
         + HasChainTypeAt<0, Chain = ChainA>
         + HasChainTypeAt<1, Chain = ChainB>,
@@ -71,6 +78,7 @@ where
     ChainB: HasIbcChainTypes<ChainA>,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
+        let logger = app.logger();
         let builder = app.load_builder().await?;
 
         let chain_id_a = app.parse_arg(args, PhantomData::<symbol!("chain_id_a")>)?;
@@ -84,7 +92,17 @@ where
             .await
             .map_err(App::raise_error)?;
 
-        birelay.run().await.map_err(App::raise_error)?;
+        logger
+            .log(
+                &format!("Relaying between {} and {}...", chain_id_a, chain_id_b,),
+                &LevelInfo,
+            )
+            .await;
+
+        birelay
+            .run()
+            .await
+            .map_err(|e| App::wrap_error("Relayer failed to start", App::raise_error(e)))?;
 
         Ok(app.produce_output("Relayer exited successfully."))
     }

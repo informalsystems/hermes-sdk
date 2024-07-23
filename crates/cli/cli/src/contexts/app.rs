@@ -27,6 +27,7 @@ use hermes_cli_components::traits::parse::{ArgParserComponent, CanParseArg};
 use hermes_cli_components::traits::types::config::ProvideConfigType;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::HermesError;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
@@ -165,6 +166,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<StartRelayerArgs>
     + CanProduceOutput<&'static str>
     + CanRaiseError<HermesError>
+    + CanRaiseError<WrapError<&'static str, HermesError>>
 {
 }
 

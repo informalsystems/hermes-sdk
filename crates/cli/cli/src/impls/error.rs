@@ -7,7 +7,9 @@ use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;
 use hermes_error::handlers::infallible::HandleInfallible;
 use hermes_error::handlers::report::ReportError;
+use hermes_error::handlers::wrap::WrapErrorDetail;
 use hermes_error::impls::ProvideHermesError;
+use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::Error;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_runtime::types::error::TokioRuntimeError;
@@ -59,5 +61,9 @@ delegate_components! {
             String,
         ]:
             DisplayError,
+        [
+            WrapError<&'static str, Error>,
+        ]:
+            WrapErrorDetail,
     }
 }
