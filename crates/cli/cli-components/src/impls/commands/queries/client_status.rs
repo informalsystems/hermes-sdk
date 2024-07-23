@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use cgp_core::prelude::*;
+use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_logging_components::types::level::LevelInfo;
@@ -143,7 +144,8 @@ where
         + CanQueryClientState<Counterparty>
         + CanQueryClientStateWithLatestHeight<Counterparty>
         + CanQueryChainStatus
-        + CanQueryConsensusState<Counterparty>,
+        + CanQueryConsensusState<Counterparty>
+        + CanWrapError<&'static str>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>
         + HasClientStateFields<Chain>

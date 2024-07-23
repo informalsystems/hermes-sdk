@@ -1,6 +1,8 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_error::handlers::wrap::WrapErrorDetail;
+use hermes_error::traits::wrap::WrapError;
 
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -156,7 +158,11 @@ delegate_components! {
                 MissingChannelTryEventError<'a, Relay>,
         ]:
             DebugError,
+        [
+            WrapError<&'static str, Error>,
+        ]:
+            WrapErrorDetail,
         <'a, Context: HasErrorType> MaxRetryExceededError<'a, Context>:
-            UnwrapMaxRetryExceededError
+            UnwrapMaxRetryExceededError,
     }
 }
