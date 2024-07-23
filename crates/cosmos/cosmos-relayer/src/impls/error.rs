@@ -24,7 +24,7 @@ use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::error::impls::error::{
     MaxRetryExceededError, UnwrapMaxRetryExceededError,
 };
-use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
+use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;
 use hermes_relayer_components::relay::impls::connection::open_init::MissingConnectionInitEventError;
@@ -82,18 +82,12 @@ impl<Context> CanHandleCosmosError<Context> for HandleCosmosError where
 {
 }
 
-impl<Context> ProvideRetryableError<Context> for HandleCosmosError
-where
-    Context: HasErrorType<Error = Error>,
-{
-    fn is_retryable_error(e: &Error) -> bool {
-        e.is_retryable
-    }
-}
-
 delegate_components! {
     HandleCosmosError {
-        ErrorTypeComponent: ProvideHermesError,
+        [
+            ErrorTypeComponent,
+            RetryableErrorComponent,
+        ]: ProvideHermesError,
         ErrorRaiserComponent:
             DelegateErrorRaiser<CosmosErrorHandlers>,
     }
@@ -125,7 +119,6 @@ delegate_components! {
             ProofError,
             ClientError,
             CommitmentError,
-            toml::de::Error,
 
             // TODO: make it retryable?
             TransportError,

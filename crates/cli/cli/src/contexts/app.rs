@@ -24,7 +24,6 @@ use hermes_cli_components::traits::parse::{ArgParserComponent, CanParseArg};
 use hermes_cli_components::traits::types::config::ProvideConfigType;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_error::types::HermesError;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
@@ -41,6 +40,7 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use serde::Serialize;
 
 use crate::impls::build::LoadCosmosBuilder;
+use crate::impls::error::ProvideCliError;
 use crate::impls::parse_height::ParseCosmosHeight;
 
 #[derive(HasField)]
@@ -66,7 +66,7 @@ delegate_components! {
             ErrorRaiserComponent,
             RetryableErrorComponent,
         ]:
-            HandleCosmosError,
+            ProvideCliError,
         [
             RuntimeTypeComponent,
             RuntimeGetterComponent,

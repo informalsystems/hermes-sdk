@@ -37,6 +37,7 @@ ibc-relayer-types               = { workspace = true }
 
 clap                        = { workspace = true, features = ["derive"] }
 eyre                        = { workspace = true }
+toml                        = { workspace = true }
 oneline-eyre                = { workspace = true }
 hdpath                      = { workspace = true }
 humantime                   = { workspace = true }

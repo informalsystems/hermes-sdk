@@ -54,7 +54,6 @@ serde_derive    = { workspace = true }
 itertools       = { workspace = true }
 futures         = { workspace = true }
 http            = { workspace = true }
-toml            = { workspace = true }
 
 opentelemetry   = { version = "0.17.0", features = ["metrics"] }
 moka            = { version = "0.12", features = ["future"] }
