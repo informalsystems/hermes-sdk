@@ -1,38 +1,26 @@
-use hermes_cli_components::traits::build::CanLoadBuilder;
-use hermes_cli_framework::command::CommandRunner;
-use hermes_cli_framework::output::Output;
-use hermes_cosmos_relayer::contexts::relay::CosmosRelay;
-use hermes_relayer_components::relay::traits::client_creator::CanCreateClient;
-use hermes_relayer_components::relay::traits::target::DestinationTarget;
-use ibc_relayer::chain::cosmos::client::Settings;
-use ibc_relayer::foreign_client::CreateOptions;
+use cgp_core::prelude::*;
+use eyre::eyre;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
-use oneline_eyre::eyre::eyre;
-use tracing::info;
 
-use crate::contexts::app::HermesApp;
-use crate::Result;
-
-#[derive(Debug, clap::Parser)]
-pub struct ClientCreate {
+#[derive(Debug, clap::Parser, HasField)]
+pub struct CreateClientArgs {
     /// Identifier of the chain that hosts the client
     #[clap(
-        long = "host-chain",
+        long = "target-chain",
         required = true,
-        value_name = "HOST_CHAIN_ID",
+        value_name = "TARGET_CHAIN_ID",
         help_heading = "REQUIRED"
     )]
-    host_chain_id: ChainId,
+    pub target_chain_id: String,
 
     /// Identifier of the chain targeted by the client
     #[clap(
-        long = "reference-chain",
+        long = "counterparty-chain",
         required = true,
-        value_name = "REFERENCE_CHAIN_ID",
+        value_name = "COUNTERPARTY_CHAIN_ID",
         help_heading = "REQUIRED"
     )]
-    reference_chain_id: ChainId,
+    pub counterparty_chain_id: String,
 
     /// The maximum allowed clock drift for this client.
     ///
@@ -44,14 +32,14 @@ pub struct ClientCreate {
     /// If this option is not specified, a suitable clock drift value is derived from the chain
     /// configurations.
     #[clap(long = "clock-drift", value_name = "CLOCK_DRIFT")]
-    clock_drift: Option<humantime::Duration>,
+    pub clock_drift: Option<humantime::Duration>,
 
     /// Override the trusting period specified in the config.
     ///
     /// The trusting period specifies how long a validator set is trusted for
     /// (must be shorter than the chain's unbonding period).
     #[clap(long = "trusting-period", value_name = "TRUSTING_PERIOD")]
-    trusting_period: Option<humantime::Duration>,
+    pub trusting_period: Option<humantime::Duration>,
 
     /// Override the trust threshold specified in the configuration.
     ///
@@ -62,53 +50,7 @@ pub struct ClientCreate {
         value_name = "TRUST_THRESHOLD",
         value_parser = parse_trust_threshold
     )]
-    trust_threshold: Option<TrustThreshold>,
-}
-
-impl CommandRunner<HermesApp> for ClientCreate {
-    async fn run(&self, app: &HermesApp) -> Result<Output> {
-        let builder = app.load_builder().await?;
-
-        let host_chain = builder.build_chain(&self.host_chain_id).await?;
-        let reference_chain = builder.build_chain(&self.reference_chain_id).await?;
-
-        let options = CreateOptions {
-            max_clock_drift: self.clock_drift.map(|d| d.into()),
-            trusting_period: self.trusting_period.map(|d| d.into()),
-            trust_threshold: self.trust_threshold,
-        };
-
-        let settings = Settings::for_create_command(
-            options,
-            &host_chain.chain_config.clone(),
-            &reference_chain.chain_config.clone(),
-        );
-
-        info!(
-            ?settings,
-            "Creating client on host chain `{}` that references chain `{}`...",
-            self.host_chain_id,
-            self.reference_chain_id
-        );
-
-        let client_id_on_host = CosmosRelay::create_client(
-            DestinationTarget,
-            &host_chain,
-            &reference_chain,
-            &settings,
-            &(),
-        )
-        .await
-        .map_err(|e| eyre!("Failed to create client on host chain: {e}"))?;
-
-        info!(
-            %client_id_on_host,
-            "Successfully created client on host chain `{}`",
-            self.host_chain_id,
-        );
-
-        Ok(Output::success_msg("Done"))
-    }
+    pub trust_threshold: Option<TrustThreshold>,
 }
 
 fn parse_trust_threshold(input: &str) -> eyre::Result<TrustThreshold> {

@@ -6,13 +6,13 @@ use crate::chain::traits::types::create_client::{
 };
 use crate::chain::types::aliases::ClientIdOf;
 use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::target::ChainTarget;
+use crate::relay::traits::target::ChainTargetType;
 
 #[derive_component(ClientCreatorComponent, ClientCreator<Relay>)]
 #[async_trait]
 pub trait CanCreateClient<Target>: HasRelayChains
 where
-    Target: ChainTarget<Self>,
+    Target: ChainTargetType<Self>,
     Target::TargetChain: HasCreateClientMessageOptionsType<Target::CounterpartyChain>,
     Target::CounterpartyChain: HasCreateClientPayloadOptionsType<Target::TargetChain>,
 {

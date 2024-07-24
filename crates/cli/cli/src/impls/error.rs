@@ -63,6 +63,7 @@ delegate_components! {
             DisplayError,
         [
             WrapError<&'static str, Error>,
+            WrapError<String, Error>,
         ]:
             WrapErrorDetail,
     }

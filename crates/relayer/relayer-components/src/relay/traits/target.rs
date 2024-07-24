@@ -11,11 +11,13 @@ pub struct SourceTarget;
 #[derive(Default, Clone, Copy)]
 pub struct DestinationTarget;
 
-pub trait ChainTarget<Relay: HasRelayChains>: Async + Default + Copy + private::Sealed {
+pub trait ChainTargetType<Relay>: Async + Default + Copy + private::Sealed {
     type TargetChain: HasIbcChainTypes<Self::CounterpartyChain> + HasErrorType;
 
     type CounterpartyChain: HasIbcChainTypes<Self::TargetChain> + HasErrorType;
+}
 
+pub trait ChainTarget<Relay: HasRelayChains>: ChainTargetType<Relay> {
     fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error;
 
     fn counterparty_chain_error(e: ErrorOf<Self::CounterpartyChain>) -> Relay::Error;
@@ -31,21 +33,26 @@ pub trait ChainTarget<Relay: HasRelayChains>: Async + Default + Copy + private::
     ) -> &ClientIdOf<Self::CounterpartyChain, Self::TargetChain>;
 }
 
-pub type TargetChainOf<Relay, Target> = <Target as ChainTarget<Relay>>::TargetChain;
+pub type TargetChainOf<Relay, Target> = <Target as ChainTargetType<Relay>>::TargetChain;
 
-pub type CounterpartyChainOf<Relay, Target> = <Target as ChainTarget<Relay>>::CounterpartyChain;
+pub type CounterpartyChainOf<Relay, Target> = <Target as ChainTargetType<Relay>>::CounterpartyChain;
 
 impl private::Sealed for SourceTarget {}
 impl private::Sealed for DestinationTarget {}
+
+impl<Relay> ChainTargetType<Relay> for SourceTarget
+where
+    Relay: HasRelayChains,
+{
+    type TargetChain = Relay::SrcChain;
+
+    type CounterpartyChain = Relay::DstChain;
+}
 
 impl<Relay> ChainTarget<Relay> for SourceTarget
 where
     Relay: CanRaiseRelayChainErrors,
 {
-    type TargetChain = Relay::SrcChain;
-
-    type CounterpartyChain = Relay::DstChain;
-
     fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
         Relay::raise_error(e)
     }
@@ -75,14 +82,19 @@ where
     }
 }
 
-impl<Relay> ChainTarget<Relay> for DestinationTarget
+impl<Relay> ChainTargetType<Relay> for DestinationTarget
 where
-    Relay: CanRaiseRelayChainErrors,
+    Relay: HasRelayChains,
 {
     type TargetChain = Relay::DstChain;
 
     type CounterpartyChain = Relay::SrcChain;
+}
 
+impl<Relay> ChainTarget<Relay> for DestinationTarget
+where
+    Relay: CanRaiseRelayChainErrors,
+{
     fn target_chain_error(e: ErrorOf<Self::TargetChain>) -> Relay::Error {
         Relay::raise_error(e)
     }
