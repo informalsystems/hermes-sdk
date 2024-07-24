@@ -14,6 +14,7 @@ use hermes_error::types::Error;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_runtime::types::error::TokioRuntimeError;
 use ibc_relayer_types::core::ics02_client::error::Error as Ics02Error;
+use ibc_relayer_types::core::ics02_client::height::HeightError;
 use ibc_relayer_types::core::ics03_connection::error::Error as Ics03Error;
 use ibc_relayer_types::core::ics23_commitment::error::Error as Ics23Error;
 use ibc_relayer_types::core::ics24_host::error::ValidationError as Ics24ValidationError;
@@ -51,6 +52,7 @@ delegate_components! {
             Report,
             TokioRuntimeError,
             toml::de::Error,
+            HeightError,
             Ics02Error,
             Ics03Error,
             Ics23Error,

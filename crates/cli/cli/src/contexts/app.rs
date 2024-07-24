@@ -14,11 +14,14 @@ use hermes_cli_components::impls::commands::queries::client_state::{
 use hermes_cli_components::impls::commands::queries::client_status::{
     QueryClientStatusArgs, RunQueryClientStatusCommand,
 };
+use hermes_cli_components::impls::commands::queries::consensus_state::{
+    QueryConsensusStateArgs, RunQueryConsensusStateCommand,
+};
 use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, StartRelayerArgs};
 use hermes_cli_components::impls::get_config_path::GetDefaultConfigField;
 use hermes_cli_components::impls::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
-use hermes_cli_components::impls::parse::string::ParseFromString;
+use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, CanLoadBuilder, ProvideBuilderType,
@@ -49,6 +52,7 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::Config;
 use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
+use ibc_relayer_types::Height;
 use serde::Serialize;
 
 use crate::commands::client::create::CreateClientArgs;
@@ -110,6 +114,11 @@ delegate_components! {
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
         (QueryClientStateArgs, symbol!("height")): ParseCosmosHeight<symbol!("chain_id")>,
 
+        (QueryConsensusStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
+        (QueryConsensusStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
+        (QueryConsensusStateArgs, symbol!("query_height")): ParseFromOptionalString<Height>,
+        (QueryConsensusStateArgs, symbol!("consensus_height")): ParseFromOptionalString<Height>,
+
         (StartRelayerArgs, symbol!("chain_id_a")): ParseFromString<ChainId>,
         (StartRelayerArgs, symbol!("client_id_a")): ParseFromString<ClientId>,
         (StartRelayerArgs, symbol!("chain_id_b")): ParseFromString<ChainId>,
@@ -128,6 +137,7 @@ delegate_components! {
         StartRelayerArgs: RunStartRelayerCommand,
         QueryClientStateArgs: RunQueryClientStateCommand,
         QueryClientStatusArgs: RunQueryClientStatusCommand,
+        QueryConsensusStateArgs: RunQueryConsensusStateCommand,
         CreateClientArgs: RunCreateClientCommand,
     }
 }
@@ -198,6 +208,7 @@ pub trait CanUseHermesApp:
     + CanLoadBuilder
     + CanRunCommand<StartRelayerArgs>
     + CanRunCommand<QueryClientStateArgs>
+    + CanRunCommand<QueryConsensusStateArgs>
     + CanRunCommand<QueryClientStatusArgs>
     + CanRunCommand<CreateClientArgs>
     + CanProduceOutput<&'static str>

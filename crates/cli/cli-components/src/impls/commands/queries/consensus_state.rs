@@ -18,7 +18,7 @@ use crate::traits::parse::CanParseArg;
 pub struct RunQueryConsensusStateCommand;
 
 #[derive(Debug, clap::Parser, HasField)]
-pub struct QueryClientConsensusStateArgs {
+pub struct QueryConsensusStateArgs {
     #[clap(
         long = "chain",
         required = true,
@@ -42,14 +42,14 @@ pub struct QueryClientConsensusStateArgs {
         value_name = "CONSENSUS_HEIGHT",
         help = "Height of the client's consensus state to query, if not specified the latest consensus height is used"
     )]
-    consensus_height: Option<u64>,
+    consensus_height: Option<String>,
 
     #[clap(
         long = "query_height",
         value_name = "QUERY_HEIGHT",
         help = "The height at which to query the chain"
     )]
-    height: Option<u64>,
+    query_height: Option<String>,
 }
 
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args>
