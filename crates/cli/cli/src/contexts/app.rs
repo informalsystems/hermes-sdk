@@ -8,6 +8,9 @@ use hermes_cli_components::impls::commands::client::create::{
     CreateClientOptionsParser, RunCreateClientCommand,
 };
 use hermes_cli_components::impls::commands::delegate::DelegateCommandRunner;
+use hermes_cli_components::impls::commands::queries::client::{
+    QueryClientSubCommand, RunQueryClientSubCommand,
+};
 use hermes_cli_components::impls::commands::queries::client_state::{
     QueryClientStateArgs, RunQueryClientStateCommand,
 };
@@ -134,6 +137,8 @@ delegate_components! {
 delegate_components! {
     HermesCommandRunnerComponents {
         StartRelayerArgs: RunStartRelayerCommand,
+
+        QueryClientSubCommand: RunQueryClientSubCommand,
         QueryClientStateArgs: RunQueryClientStateCommand,
         QueryClientStatusArgs: RunQueryClientStatusCommand,
         QueryConsensusStateArgs: RunQueryConsensusStateCommand,
@@ -206,6 +211,7 @@ pub trait CanUseHermesApp:
     CanLoadConfig
     + CanLoadBuilder
     + CanRunCommand<StartRelayerArgs>
+    + CanRunCommand<QueryClientSubCommand>
     + CanRunCommand<QueryClientStateArgs>
     + CanRunCommand<QueryConsensusStateArgs>
     + CanRunCommand<QueryClientStatusArgs>
