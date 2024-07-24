@@ -1,6 +1,7 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -135,6 +136,7 @@ delegate_components! {
         [
             TypeUrlMismatchError,
             UnknownClientStateType,
+            UnknownConsensusStateType,
             AbciQueryError,
             Status,
             MissingSendPacketEventError,

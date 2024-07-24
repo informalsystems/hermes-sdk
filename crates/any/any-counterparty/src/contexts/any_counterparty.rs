@@ -3,7 +3,7 @@ use cgp_core::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
     ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent,
+    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
@@ -54,6 +54,7 @@ delegate_components! {
     AnyCounterpartyComponents {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             IbcChainTypesComponent,
@@ -136,7 +137,7 @@ delegate_components! {
     }
 }
 
-pub trait CheckAnyClientEncoding:
+pub trait CanUseAnyClientEncoding:
     CanDecode<Protobuf, TendermintClientState>
     + CanDecode<Protobuf, Any>
     + CanDecode<Protobuf, AnyClientState>
@@ -146,4 +147,4 @@ pub trait CheckAnyClientEncoding:
 {
 }
 
-impl CheckAnyClientEncoding for AnyClientEncoding {}
+impl CanUseAnyClientEncoding for AnyClientEncoding {}

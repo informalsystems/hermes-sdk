@@ -358,6 +358,7 @@ pub trait CanUseCosmosChain:
     + CanQueryRawConsensusState<CosmosChain>
     + CanQueryAllClientStates<CosmosChain>
     + CanQueryClientState<AnyCounterparty>
+    + CanQueryConsensusState<AnyCounterparty>
     + CanQueryAllClientStates<AnyCounterparty>
     + CanBuildUpdateClientMessage<CosmosChain>
     + CanQueryConnectionEnd<CosmosChain>

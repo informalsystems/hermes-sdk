@@ -82,7 +82,7 @@ where
 
 impl<Chain> HeightFieldGetter<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasHeightType<Height = Height> + HasErrorType,
+    Chain: HasHeightType<Height = Height>,
 {
     fn revision_number(height: &Height) -> u64 {
         height.revision_number()
