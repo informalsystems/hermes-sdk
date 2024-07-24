@@ -1,9 +1,8 @@
 use hermes_cli_components::impls::commands::queries::client_state::QueryClientStateArgs;
 use hermes_cli_components::impls::commands::queries::client_status::QueryClientStatusArgs;
+use hermes_cli_components::impls::commands::queries::consensus_state::QueryConsensusStateArgs;
 use hermes_cli_components::traits::command::CanRunCommand;
 
-mod consensus;
-pub use consensus::QueryClientConsensus;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
 
@@ -19,7 +18,7 @@ pub enum ClientCommands {
     Status(QueryClientStatusArgs),
 
     /// Query the consensus state of a client
-    Consensus(QueryClientConsensus),
+    Consensus(QueryConsensusStateArgs),
 }
 
 impl CommandRunner<HermesApp> for ClientCommands {
@@ -27,7 +26,7 @@ impl CommandRunner<HermesApp> for ClientCommands {
         match self {
             Self::State(cmd) => app.run_command(cmd).await,
             Self::Status(cmd) => app.run_command(cmd).await,
-            Self::Consensus(cmd) => cmd.run(app).await,
+            Self::Consensus(cmd) => app.run_command(cmd).await,
         }
     }
 }
