@@ -40,6 +40,7 @@ use crate::impls::encoding::encode::AnyClientEncoderComponents;
 use crate::impls::types::client_state::ProvideAnyClientState;
 use crate::impls::types::consensus_state::ProvideAnyConsensusState;
 use crate::types::client_state::AnyClientState;
+use crate::types::consensus_state::AnyConsensusState;
 
 pub struct AnyCounterparty;
 
@@ -139,7 +140,9 @@ pub trait CheckAnyClientEncoding:
     CanDecode<Protobuf, TendermintClientState>
     + CanDecode<Protobuf, Any>
     + CanDecode<Protobuf, AnyClientState>
+    + CanDecode<Protobuf, AnyConsensusState>
     + CanConvert<Any, AnyClientState>
+    + CanConvert<Any, AnyConsensusState>
 {
 }
 
