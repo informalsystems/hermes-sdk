@@ -58,7 +58,6 @@ use serde::Serialize;
 use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
-use crate::impls::parse_height::ParseCosmosHeight;
 
 #[derive(HasField)]
 pub struct HermesApp {
@@ -112,7 +111,7 @@ delegate_components! {
     HermesParserComponents {
         (QueryClientStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStateArgs, symbol!("client_id")): ParseFromString<ClientId>,
-        (QueryClientStateArgs, symbol!("height")): ParseCosmosHeight<symbol!("chain_id")>,
+        (QueryClientStateArgs, symbol!("height")): ParseFromOptionalString<Height>,
 
         (QueryConsensusStateArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryConsensusStateArgs, symbol!("client_id")): ParseFromString<ClientId>,

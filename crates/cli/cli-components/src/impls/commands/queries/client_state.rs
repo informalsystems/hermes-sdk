@@ -44,7 +44,7 @@ pub struct QueryClientStateArgs {
         value_name = "HEIGHT",
         help = "The height at which to query the client state. If not specified, the latest height is used."
     )]
-    height: Option<u64>,
+    height: Option<String>,
 }
 
 impl<App, Args, Build, Chain, Counterparty> CommandRunner<App, Args> for RunQueryClientStateCommand
