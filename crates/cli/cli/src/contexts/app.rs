@@ -4,6 +4,9 @@ use std::path::PathBuf;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
+use hermes_cli_components::impls::commands::client::create::{
+    CreateClientOptionsParser, RunCreateClientCommand,
+};
 use hermes_cli_components::impls::commands::delegate::DelegateCommandRunner;
 use hermes_cli_components::impls::commands::queries::client_state::{
     QueryClientStateArgs, RunQueryClientStateCommand,
@@ -30,8 +33,9 @@ use hermes_cli_components::traits::parse::ArgParserComponent;
 use hermes_cli_components::traits::types::config::ProvideConfigType;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_error::traits::wrap::WrapError;
-use hermes_error::types::HermesError;
+use hermes_error::types::{Error, HermesError};
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
     GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent,
@@ -41,10 +45,13 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
+use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer::config::Config;
+use ibc_relayer::foreign_client::CreateOptions;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use serde::Serialize;
 
+use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
 use crate::impls::parse_height::ParseCosmosHeight;
@@ -110,6 +117,9 @@ delegate_components! {
 
         (QueryClientStatusArgs, symbol!("chain_id")): ParseFromString<ChainId>,
         (QueryClientStatusArgs, symbol!("client_id")): ParseFromString<ClientId>,
+
+        (CreateClientArgs, symbol!("target_chain_id")): ParseFromString<ChainId>,
+        (CreateClientArgs, symbol!("counterparty_chain_id")): ParseFromString<ChainId>,
     }
 }
 
@@ -118,6 +128,7 @@ delegate_components! {
         StartRelayerArgs: RunStartRelayerCommand,
         QueryClientStateArgs: RunQueryClientStateCommand,
         QueryClientStatusArgs: RunQueryClientStatusCommand,
+        CreateClientArgs: RunCreateClientCommand,
     }
 }
 
@@ -159,13 +170,38 @@ where
     }
 }
 
+impl CreateClientOptionsParser<HermesApp, CreateClientArgs, 0, 1> for HermesAppComponents {
+    async fn parse_create_client_options(
+        _app: &HermesApp,
+        args: &CreateClientArgs,
+        target_chain: &CosmosChain,
+        counterparty_chain: &CosmosChain,
+    ) -> Result<((), Settings), Error> {
+        let options = CreateOptions {
+            max_clock_drift: args.clock_drift.map(|d| d.into()),
+            trusting_period: args.trusting_period.map(|d| d.into()),
+            trust_threshold: args.trust_threshold,
+        };
+
+        let settings = Settings::for_create_command(
+            options,
+            &target_chain.chain_config.clone(),
+            &counterparty_chain.chain_config.clone(),
+        );
+
+        Ok(((), settings))
+    }
+}
+
 pub trait CanUseHermesApp:
     CanLoadConfig
     + CanLoadBuilder
     + CanRunCommand<StartRelayerArgs>
     + CanRunCommand<QueryClientStateArgs>
     + CanRunCommand<QueryClientStatusArgs>
+    + CanRunCommand<CreateClientArgs>
     + CanProduceOutput<&'static str>
+    + CanProduceOutput<ClientId>
     + CanRaiseError<HermesError>
     + CanRaiseError<WrapError<&'static str, HermesError>>
 {

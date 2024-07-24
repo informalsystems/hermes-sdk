@@ -4,7 +4,7 @@ use hermes_cli_framework::output::Output;
 use crate::contexts::app::HermesApp;
 use crate::Result;
 
-mod create;
+pub mod create;
 pub use create::ClientCreate;
 
 mod update;
