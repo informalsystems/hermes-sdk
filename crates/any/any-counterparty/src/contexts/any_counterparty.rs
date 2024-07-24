@@ -3,7 +3,7 @@ use cgp_core::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
     ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent,
+    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
@@ -40,6 +40,7 @@ use crate::impls::encoding::encode::AnyClientEncoderComponents;
 use crate::impls::types::client_state::ProvideAnyClientState;
 use crate::impls::types::consensus_state::ProvideAnyConsensusState;
 use crate::types::client_state::AnyClientState;
+use crate::types::consensus_state::AnyConsensusState;
 
 pub struct AnyCounterparty;
 
@@ -53,6 +54,7 @@ delegate_components! {
     AnyCounterpartyComponents {
         [
             HeightTypeComponent,
+            HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
             IbcChainTypesComponent,
@@ -135,12 +137,14 @@ delegate_components! {
     }
 }
 
-pub trait CheckAnyClientEncoding:
+pub trait CanUseAnyClientEncoding:
     CanDecode<Protobuf, TendermintClientState>
     + CanDecode<Protobuf, Any>
     + CanDecode<Protobuf, AnyClientState>
+    + CanDecode<Protobuf, AnyConsensusState>
     + CanConvert<Any, AnyClientState>
+    + CanConvert<Any, AnyConsensusState>
 {
 }
 
-impl CheckAnyClientEncoding for AnyClientEncoding {}
+impl CanUseAnyClientEncoding for AnyClientEncoding {}

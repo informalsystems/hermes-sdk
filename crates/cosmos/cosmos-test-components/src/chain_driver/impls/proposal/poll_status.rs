@@ -28,7 +28,7 @@ where
     ) -> Result<(), ChainDriver::Error> {
         let runtime = chain_driver.runtime();
 
-        for _ in 0..20 {
+        for _ in 0..40 {
             let status_result = chain_driver.query_proposal_status(proposal_id).await;
             match &status_result {
                 Ok(status) if status == expected_status => {
