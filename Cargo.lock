@@ -1758,6 +1758,7 @@ dependencies = [
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime-components",
+ "hermes-test-components",
  "serde",
  "toml",
 ]

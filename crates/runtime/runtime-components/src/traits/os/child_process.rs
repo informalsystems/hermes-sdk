@@ -9,7 +9,7 @@ pub trait HasChildProcessType: Async {
 
 pub type ChildProcessOf<Runtime> = <Runtime as HasChildProcessType>::ChildProcess;
 
-#[derive_component(ChildProcessStarterComponent, ChildProcessStarter<Bootstrap>)]
+#[derive_component(ChildProcessStarterComponent, ChildProcessStarter<Runtime>)]
 #[async_trait]
 pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasErrorType {
     async fn start_child_process(
@@ -20,4 +20,10 @@ pub trait CanStartChildProcess: HasChildProcessType + HasFilePathType + HasError
         stdout_path: Option<&Self::FilePath>,
         stderr_path: Option<&Self::FilePath>,
     ) -> Result<Self::ChildProcess, Self::Error>;
+}
+
+#[derive_component(ChildProcesssWaiterComponent, ChildProcessWaiter<Runtime>)]
+#[async_trait]
+pub trait CanWaitChildProcess: HasChildProcessType + HasErrorType {
+    async fn wait_child_process(child_process: Self::ChildProcess) -> Result<(), Self::Error>;
 }
