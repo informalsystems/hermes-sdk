@@ -19,6 +19,7 @@ pub use hermes_runtime_components::traits::fs::file_path::FilePathTypeComponent;
 pub use hermes_runtime_components::traits::fs::read_file::FileAsStringReaderComponent;
 pub use hermes_runtime_components::traits::fs::write_file::StringToFileWriterComponent;
 pub use hermes_runtime_components::traits::mutex::MutexComponent;
+pub use hermes_runtime_components::traits::os::child_process::ChildProcessWaiterComponent;
 pub use hermes_runtime_components::traits::os::child_process::{
     ChildProcessStarterComponent, ChildProcessTypeComponent,
 };
@@ -39,7 +40,9 @@ use crate::impls::fs::create_dir::TokioCreateDir;
 use crate::impls::fs::file_path::ProvideStdPathType;
 use crate::impls::fs::read_file::TokioReadFileAsString;
 use crate::impls::fs::write_file::TokioWriteStringToFile;
-use crate::impls::os::child_process::{ProvideTokioChildProcessType, StartTokioChildProcess};
+use crate::impls::os::child_process::{
+    ProvideTokioChildProcessType, StartTokioChildProcess, WaitChildProcess,
+};
 use crate::impls::os::exec_command::TokioExecCommand;
 use crate::impls::os::reserve_port::TokioReserveTcpPort;
 use crate::impls::parallel_task::TokioRunParallelTasks;
@@ -74,6 +77,7 @@ define_components! {
         FilePathTypeComponent: ProvideStdPathType,
         ChildProcessTypeComponent: ProvideTokioChildProcessType,
         ChildProcessStarterComponent: StartTokioChildProcess,
+        ChildProcessWaiterComponent: WaitChildProcess,
         FileAsStringReaderComponent: TokioReadFileAsString,
         DirCreatorComponent: TokioCreateDir,
         FileCopierComponent: TokioCopyFile,

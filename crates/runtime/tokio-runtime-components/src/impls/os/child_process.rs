@@ -8,7 +8,7 @@ use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
 use hermes_runtime_components::traits::os::child_process::{
-    ChildProcessStarter, HasChildProcessType, ProvideChildProcessType,
+    ChildProcessStarter, ChildProcessWaiter, HasChildProcessType, ProvideChildProcessType,
 };
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
@@ -99,6 +99,27 @@ where
                     stderr,
                 }))
             }
+        }
+    }
+}
+
+pub struct WaitChildProcess;
+
+impl<Runtime> ChildProcessWaiter<Runtime> for WaitChildProcess
+where
+    Runtime: HasChildProcessType<ChildProcess = Child>
+        + CanRaiseError<IoError>
+        + CanRaiseError<ExitStatus>,
+{
+    async fn wait_child_process(
+        mut child_process: Runtime::ChildProcess,
+    ) -> Result<(), Runtime::Error> {
+        let status = child_process.wait().await.map_err(Runtime::raise_error)?;
+
+        if status.success() {
+            Ok(())
+        } else {
+            Err(Runtime::raise_error(status))
         }
     }
 }
