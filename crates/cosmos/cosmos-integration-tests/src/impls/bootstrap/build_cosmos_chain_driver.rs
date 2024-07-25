@@ -1,5 +1,7 @@
 use alloc::collections::BTreeMap;
+use alloc::sync::Arc;
 use std::path::PathBuf;
+use tokio::sync::Mutex;
 
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -93,7 +95,7 @@ where
             chain_command_path,
             chain_node_config,
             genesis_config,
-            chain_process,
+            chain_process: Arc::new(Mutex::new(Some(chain_process))),
             validator_wallet,
             relayer_wallet,
             user_wallet_a,
