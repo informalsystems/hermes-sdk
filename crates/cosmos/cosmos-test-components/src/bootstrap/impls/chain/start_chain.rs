@@ -42,7 +42,7 @@ where
             "--rpc.laddr",
             &format!("tcp://localhost:{}", chain_config.rpc_port),
             "--minimum-gas-prices",
-            &format!("1{}", chain_genesis_config.staking_denom),
+            &format!("0.01{}", chain_genesis_config.staking_denom),
         ];
 
         let stdout_path = Runtime::join_file_path(

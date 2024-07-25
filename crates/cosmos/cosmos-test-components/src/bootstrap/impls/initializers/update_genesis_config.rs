@@ -23,7 +23,8 @@ where
         + HasDenomPrefix<DenomForStaking>
         + HasDenomPrefix<DenomForTransfer>
         + CanRaiseError<Runtime::Error>
-        + CanRaiseError<JsonError>,
+        + CanRaiseError<JsonError>
+        + CanRaiseError<&'static str>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile,
     Bootstrap::ChainGenesisConfig: From<CosmosGenesisConfig>,
 {
@@ -45,6 +46,8 @@ where
 
         let mut config_json: Value =
             serde_json::from_str(&config_string).map_err(Bootstrap::raise_error)?;
+
+        disable_fee_market(&mut config_json).map_err(Bootstrap::raise_error)?;
 
         bootstrap.modify_genesis_config(&mut config_json)?;
 
@@ -68,4 +71,23 @@ where
 
         Ok(genesis_config.into())
     }
+}
+
+// TODO: always disable fee market until we implemented dynamic fees in Hermes SDK
+pub fn disable_fee_market(config: &mut Value) -> Result<(), &'static str> {
+    let m_fee_market = config
+        .get_mut("app_state")
+        .ok_or("expect app_state to present")?
+        .get_mut("feemarket");
+
+    if let Some(feemarket) = m_fee_market {
+        feemarket
+            .get_mut("params")
+            .ok_or("expect feemarket.params to present")?
+            .as_object_mut()
+            .ok_or("expect feemarket.params to present as dictionary")?
+            .insert("enabled".into(), false.into());
+    }
+
+    Ok(())
 }

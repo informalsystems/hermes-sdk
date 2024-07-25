@@ -8,7 +8,8 @@ use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 
 #[derive_component(ChainFullNodeStarterComponent, ChainFullNodeStarter<Bootstrap>)]
 #[async_trait]
-pub trait CanStartChainFullNode: HasChainNodeConfigType + HasChainGenesisConfigType + HasRuntime + HasErrorType
+pub trait CanStartChainFullNode:
+    HasChainNodeConfigType + HasChainGenesisConfigType + HasRuntime + HasErrorType
 where
     Self::Runtime: HasChildProcessType + HasFilePathType,
 {

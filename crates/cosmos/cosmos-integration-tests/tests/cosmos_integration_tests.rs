@@ -4,7 +4,7 @@ use core::time::Duration;
 use std::sync::Arc;
 
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
-use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
+use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_error::types::Error;
@@ -21,14 +21,13 @@ fn cosmos_integration_tests() -> Result<(), Error> {
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
-    let bootstrap = Arc::new(LegacyCosmosBootstrap {
+    let bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
         builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
         chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
-        compat_mode: None,
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
