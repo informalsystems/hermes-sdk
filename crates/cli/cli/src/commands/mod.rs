@@ -6,6 +6,7 @@ use hermes_cli_framework::output::Output;
 use crate::contexts::app::HermesApp;
 use crate::Result;
 
+pub mod bootstrap;
 pub mod channel;
 pub mod clear;
 pub mod client;

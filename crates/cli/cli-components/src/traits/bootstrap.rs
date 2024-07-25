@@ -1,5 +1,6 @@
 use cgp_core::prelude::*;
 
+#[derive_component(BootstrapTypeComponent, ProvideBootstrapType<App>)]
 pub trait HasBootstrapType: Async {
     type Bootstrap: Async;
 }

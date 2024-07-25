@@ -26,6 +26,7 @@ use hermes_cli_components::impls::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
+use hermes_cli_components::traits::bootstrap::ProvideBootstrapType;
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, CanLoadBuilder, ProvideBuilderType,
 };
@@ -38,6 +39,7 @@ use hermes_cli_components::traits::output::{
 use hermes_cli_components::traits::parse::ArgParserComponent;
 use hermes_cli_components::traits::types::config::ProvideConfigType;
 use hermes_cli_framework::output::Output;
+use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_error::traits::wrap::WrapError;
@@ -172,6 +174,13 @@ where
     App: Async,
 {
     type Output = Output;
+}
+
+impl<App> ProvideBootstrapType<App> for HermesAppComponents
+where
+    App: Async,
+{
+    type Bootstrap = CosmosBootstrap;
 }
 
 impl<App, Value> OutputProducer<App, Value> for HermesAppComponents

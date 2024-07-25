@@ -1729,6 +1729,7 @@ dependencies = [
  "hermes-cli-components",
  "hermes-cli-framework",
  "hermes-cosmos-chain-components",
+ "hermes-cosmos-integration-tests",
  "hermes-cosmos-relayer",
  "hermes-error",
  "hermes-logger",

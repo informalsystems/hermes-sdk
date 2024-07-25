@@ -29,6 +29,7 @@ hermes-logging-components       = { workspace = true }
 hermes-logger                   = { workspace = true }
 hermes-relayer-components       = { workspace = true }
 hermes-cosmos-relayer           = { workspace = true }
+hermes-cosmos-integration-tests = { workspace = true }
 hermes-cosmos-chain-components  = { workspace = true }
 
 ibc                             = { workspace = true }
