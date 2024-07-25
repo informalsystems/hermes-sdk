@@ -4,6 +4,7 @@ use std::path::PathBuf;
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
+use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
 use hermes_cli_components::impls::commands::client::create::{
     CreateClientOptionsParser, RunCreateClientCommand,
 };
@@ -26,7 +27,7 @@ use hermes_cli_components::impls::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
-use hermes_cli_components::traits::bootstrap::ProvideBootstrapType;
+use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, ProvideBootstrapType};
 use hermes_cli_components::traits::build::{
     BuilderLoaderComponent, CanLoadBuilder, ProvideBuilderType,
 };
@@ -60,6 +61,8 @@ use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ClientId};
 use ibc_relayer_types::Height;
 use serde::Serialize;
 
+use crate::commands::bootstrap::chain::{BootstrapChainArgs, LoadCosmosBootstrap};
+use crate::commands::bootstrap::subcommand::{BootstrapSubCommand, RunBootstrapSubCommand};
 use crate::commands::client::create::CreateClientArgs;
 use crate::impls::build::LoadCosmosBuilder;
 use crate::impls::error::ProvideCliError;
@@ -105,6 +108,8 @@ delegate_components! {
             LoadTomlConfig,
         BuilderLoaderComponent:
             LoadCosmosBuilder,
+        BootstrapLoaderComponent:
+            LoadCosmosBootstrap,
         ArgParserComponent:
             DelegateArgParsers<HermesParserComponents>,
         CommandRunnerComponent:
@@ -144,7 +149,11 @@ delegate_components! {
         QueryClientStateArgs: RunQueryClientStateCommand,
         QueryClientStatusArgs: RunQueryClientStatusCommand,
         QueryConsensusStateArgs: RunQueryConsensusStateCommand,
+
         CreateClientArgs: RunCreateClientCommand,
+
+        BootstrapSubCommand: RunBootstrapSubCommand,
+        BootstrapChainArgs: RunBootstrapChainCommand,
     }
 }
 
@@ -225,6 +234,7 @@ pub trait CanUseHermesApp:
     + CanRunCommand<QueryConsensusStateArgs>
     + CanRunCommand<QueryClientStatusArgs>
     + CanRunCommand<CreateClientArgs>
+    + CanRunCommand<BootstrapChainArgs>
     + CanProduceOutput<&'static str>
     + CanProduceOutput<ClientId>
     + CanRaiseError<HermesError>

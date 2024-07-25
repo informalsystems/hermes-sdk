@@ -10,6 +10,9 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct BootstrapChainArgs {
+    #[clap(long = "chain-id", required = true)]
+    pub chain_id: String,
+
     #[clap(long = "chain-store-dir", required = true)]
     pub chain_store_dir: String,
 

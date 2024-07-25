@@ -43,6 +43,9 @@ pub enum HermesCommand {
     /// Manage keys in the relayer for each chain
     #[clap(subcommand)]
     Keys(keys::KeysCmd),
+
+    #[clap(subcommand)]
+    Bootstrap(bootstrap::subcommand::BootstrapSubCommand),
 }
 
 impl CommandRunner<HermesApp> for HermesCommand {
@@ -55,6 +58,7 @@ impl CommandRunner<HermesApp> for HermesCommand {
             Self::Query(cmd) => cmd.run(app).await,
             Self::Clear(cmd) => cmd.run(app).await,
             Self::Keys(cmd) => cmd.run(app).await,
+            Self::Bootstrap(cmd) => app.run_command(cmd).await,
         }
     }
 }
