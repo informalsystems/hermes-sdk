@@ -81,14 +81,20 @@ where
             };
 
             set_log_level(&mut comet_config, "info").map_err(Bootstrap::raise_error)?;
+
             set_rpc_port(&mut comet_config, rpc_port).map_err(Bootstrap::raise_error)?;
+
             set_p2p_port(&mut comet_config, p2p_port).map_err(Bootstrap::raise_error)?;
+
             set_pprof_port(&mut comet_config, pprof_port).map_err(Bootstrap::raise_error)?;
+
             set_timeout_commit(&mut comet_config, Duration::from_secs(1))
                 .map_err(Bootstrap::raise_error)?;
+
             set_timeout_propose(&mut comet_config, Duration::from_secs(1))
                 .map_err(Bootstrap::raise_error)?;
             set_mode(&mut comet_config, "validator").map_err(Bootstrap::raise_error)?;
+
             set_indexer(&mut comet_config, "kv").map_err(Bootstrap::raise_error)?;
 
             bootstrap.modify_comet_config(&mut comet_config)?;

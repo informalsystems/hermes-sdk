@@ -292,6 +292,7 @@
         "gaia14-src": "gaia14-src",
         "gaia15-src": "gaia15-src",
         "gaia17-src": "gaia17-src",
+        "gaia18-src": "gaia18-src",
         "gaia5-src": "gaia5-src",
         "gaia6-ordered-src": "gaia6-ordered-src",
         "gaia6-src": "gaia6-src",
@@ -352,15 +353,16 @@
         "wasmvm_2_0_0-src": "wasmvm_2_0_0-src"
       },
       "locked": {
-        "lastModified": 1718033821,
-        "narHash": "sha256-Y7zF1PWl6W6pSj2Hh6dl+n+udu/6jJV+ODinxk44YqU=",
+        "lastModified": 1721913554,
+        "narHash": "sha256-fD8yDMOuJWx0WwlgAO07QrhbDwZ+PRl7HMVG4uwgFnk=",
         "owner": "informalsystems",
         "repo": "cosmos.nix",
-        "rev": "0475f2c4fff872218f70bae9c0c2ea49e2cfe785",
+        "rev": "f7ff25adb614a92368adb74ce6479dc556f0e8ed",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
+        "ref": "soareas/gaia18",
         "repo": "cosmos.nix",
         "type": "github"
       }
@@ -1029,16 +1031,16 @@
     "gaia-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1700568577,
-        "narHash": "sha256-kx4dn7Cj0RhIg5oUqMkbowJ396AUQo9hJEwn/y495yI=",
+        "lastModified": 1720430036,
+        "narHash": "sha256-wATunCFeMgCP9usv2TK/IKDGZIWfOKx2zWip5qWDuqk=",
         "owner": "cosmos",
         "repo": "gaia",
-        "rev": "0d9408e9169488707f1ad423e87d0df84a30431f",
+        "rev": "58b4e54a95c7fc6a64272ccd0f09f46213c005ad",
         "type": "github"
       },
       "original": {
         "owner": "cosmos",
-        "ref": "v14.1.0",
+        "ref": "v18.1.0",
         "repo": "gaia",
         "type": "github"
       }
@@ -1238,6 +1240,23 @@
       "original": {
         "owner": "cosmos",
         "ref": "v17.2.0",
+        "repo": "gaia",
+        "type": "github"
+      }
+    },
+    "gaia18-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1720430036,
+        "narHash": "sha256-wATunCFeMgCP9usv2TK/IKDGZIWfOKx2zWip5qWDuqk=",
+        "owner": "cosmos",
+        "repo": "gaia",
+        "rev": "58b4e54a95c7fc6a64272ccd0f09f46213c005ad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cosmos",
+        "ref": "v18.1.0",
         "repo": "gaia",
         "type": "github"
       }

@@ -7,7 +7,9 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use crate::bootstrap::traits::chain::start_chain::ChainFullNodeStarter;
 use crate::bootstrap::traits::fields::chain_command_path::HasChainCommandPath;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
+use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 
 pub struct StartCosmosChain;
 
@@ -17,6 +19,7 @@ where
         + HasErrorType
         + HasChainCommandPath
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
+        + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + CanRaiseError<Runtime::Error>,
     Runtime: HasFilePathType + CanStartChildProcess,
 {
@@ -24,6 +27,7 @@ where
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         chain_config: &CosmosChainNodeConfig,
+        chain_genesis_config: &CosmosGenesisConfig,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
         let chain_command = bootstrap.chain_command_path();
 
@@ -37,6 +41,8 @@ where
             &format!("localhost:{}", chain_config.grpc_port),
             "--rpc.laddr",
             &format!("tcp://localhost:{}", chain_config.rpc_port),
+            "--minimum-gas-prices",
+            &format!("1{}", chain_genesis_config.staking_denom),
         ];
 
         let stdout_path = Runtime::join_file_path(
