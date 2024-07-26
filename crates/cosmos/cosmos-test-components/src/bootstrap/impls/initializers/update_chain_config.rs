@@ -125,6 +125,7 @@ where
                 toml::from_str(&sdk_config_string).map_err(Bootstrap::raise_error)?
             };
 
+            set_min_gas_price(&mut sdk_config, "0.1stake").map_err(Bootstrap::raise_error)?;
             enable_grpc(&mut sdk_config).map_err(Bootstrap::raise_error)?;
             set_grpc_port(&mut sdk_config, grpc_port).map_err(Bootstrap::raise_error)?;
             disable_grpc_web(&mut sdk_config).map_err(Bootstrap::raise_error)?;
@@ -291,6 +292,15 @@ pub fn disable_api(config: &mut Value) -> Result<(), &'static str> {
             .ok_or("expect object")?
             .insert("enable".to_string(), false.into());
     }
+
+    Ok(())
+}
+
+pub fn set_min_gas_price(config: &mut Value, value: &str) -> Result<(), &'static str> {
+    config
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("minimum-gas-prices".into(), value.into());
 
     Ok(())
 }

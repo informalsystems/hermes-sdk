@@ -10,6 +10,8 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
+    // Note: This test only works with Gaia v14 or older. Hence we get the older version of
+    // gaiad from the environment variable, if applicable.
     let gaia_bin = std::env::var("LEGACY_GAIA_BIN").unwrap_or("gaiad".into());
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
