@@ -27,7 +27,7 @@ where
         bootstrap: &Bootstrap,
         chain_home_dir: &Runtime::FilePath,
         chain_config: &CosmosChainNodeConfig,
-        chain_genesis_config: &CosmosGenesisConfig,
+        _chain_genesis_config: &CosmosGenesisConfig,
     ) -> Result<Runtime::ChildProcess, Bootstrap::Error> {
         let chain_command = bootstrap.chain_command_path();
 
@@ -41,8 +41,8 @@ where
             &format!("localhost:{}", chain_config.grpc_port),
             "--rpc.laddr",
             &format!("tcp://localhost:{}", chain_config.rpc_port),
-            "--minimum-gas-prices",
-            &format!("0.01{}", chain_genesis_config.staking_denom),
+            // "--minimum-gas-prices",
+            // &format!("0.01{}", chain_genesis_config.staking_denom),
         ];
 
         let stdout_path = Runtime::join_file_path(
