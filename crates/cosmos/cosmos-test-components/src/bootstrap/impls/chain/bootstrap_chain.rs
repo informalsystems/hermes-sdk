@@ -84,12 +84,12 @@ where
         // Initialize (or update) the chain config files that are required for starting
         // the chain full node
         let chain_config = bootstrap
-            .init_chain_node_config(&chain_home_dir, &chain_id)
+            .init_chain_node_config(&chain_home_dir, &chain_id, &genesis_config)
             .await?;
 
         // Start the chain full node in the background, and return the child process handle
         let chain_process = bootstrap
-            .start_chain_full_node(&chain_home_dir, &chain_config)
+            .start_chain_full_node(&chain_home_dir, &chain_config, &genesis_config)
             .await?;
 
         // Build the chain context from the bootstrap parameters

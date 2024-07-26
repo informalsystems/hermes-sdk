@@ -15,7 +15,9 @@ use toml::Value;
 use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
+use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainNodeConfig;
@@ -26,6 +28,7 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
         + HasChainNodeConfigType
+        + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + CanModifyCometConfig
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
@@ -42,6 +45,7 @@ where
         bootstrap: &Bootstrap,
         chain_home_dir: &PathBuf,
         chain_id: &ChainId,
+        genesis_config: &CosmosGenesisConfig,
     ) -> Result<Bootstrap::ChainNodeConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
@@ -81,14 +85,20 @@ where
             };
 
             set_log_level(&mut comet_config, "info").map_err(Bootstrap::raise_error)?;
+
             set_rpc_port(&mut comet_config, rpc_port).map_err(Bootstrap::raise_error)?;
+
             set_p2p_port(&mut comet_config, p2p_port).map_err(Bootstrap::raise_error)?;
+
             set_pprof_port(&mut comet_config, pprof_port).map_err(Bootstrap::raise_error)?;
+
             set_timeout_commit(&mut comet_config, Duration::from_secs(1))
                 .map_err(Bootstrap::raise_error)?;
+
             set_timeout_propose(&mut comet_config, Duration::from_secs(1))
                 .map_err(Bootstrap::raise_error)?;
             set_mode(&mut comet_config, "validator").map_err(Bootstrap::raise_error)?;
+
             set_indexer(&mut comet_config, "kv").map_err(Bootstrap::raise_error)?;
 
             bootstrap.modify_comet_config(&mut comet_config)?;
@@ -118,6 +128,12 @@ where
 
                 toml::from_str(&sdk_config_string).map_err(Bootstrap::raise_error)?
             };
+
+            set_min_gas_price(
+                &mut sdk_config,
+                &format!("0{}", genesis_config.staking_denom),
+            )
+            .map_err(Bootstrap::raise_error)?;
 
             enable_grpc(&mut sdk_config).map_err(Bootstrap::raise_error)?;
             set_grpc_port(&mut sdk_config, grpc_port).map_err(Bootstrap::raise_error)?;
@@ -285,6 +301,15 @@ pub fn disable_api(config: &mut Value) -> Result<(), &'static str> {
             .ok_or("expect object")?
             .insert("enable".to_string(), false.into());
     }
+
+    Ok(())
+}
+
+pub fn set_min_gas_price(config: &mut Value, value: &str) -> Result<(), &'static str> {
+    config
+        .as_table_mut()
+        .ok_or("expect object")?
+        .insert("minimum-gas-prices".into(), value.into());
 
     Ok(())
 }

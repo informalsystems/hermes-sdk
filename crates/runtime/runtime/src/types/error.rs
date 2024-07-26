@@ -16,6 +16,9 @@ pub enum TokioRuntimeError {
         stdout: String,
         stderr: String,
     },
+    ChildProcessExitFailure {
+        exit_status: ExitStatus,
+    },
     ExecCommandFailure {
         command: String,
         exit_code: Option<i32>,
@@ -56,6 +59,13 @@ impl Display for TokioRuntimeError {
                     f,
                     "execution of command {} failed with exit code {:?}. stderr: {}",
                     command, exit_code, stderr
+                )?;
+            }
+            Self::ChildProcessExitFailure { exit_status } => {
+                write!(
+                    f,
+                    "child process exited with non-success status {}",
+                    exit_status
                 )?;
             }
         };

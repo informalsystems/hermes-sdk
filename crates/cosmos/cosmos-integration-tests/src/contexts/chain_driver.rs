@@ -1,5 +1,7 @@
 use alloc::collections::BTreeMap;
+use alloc::sync::Arc;
 use std::path::PathBuf;
+use tokio::sync::Mutex;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -20,6 +22,7 @@ use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeComponent};
 use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
+use hermes_test_components::chain_driver::traits::chain_process::ChainProcessTaker;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{
@@ -43,7 +46,7 @@ use tokio::process::Child;
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
     pub chain_command_path: PathBuf,
-    pub chain_process: Child,
+    pub chain_process: Arc<Mutex<Option<Child>>>,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
     pub validator_wallet: CosmosTestWallet,
@@ -177,5 +180,11 @@ impl DenomGetterAt<CosmosChainDriver, StakingDenom, 0> for CosmosChainDriverComp
 impl ChainCommandPathGetter<CosmosChainDriver> for CosmosChainDriverComponents {
     fn chain_command_path(driver: &CosmosChainDriver) -> &PathBuf {
         &driver.chain_command_path
+    }
+}
+
+impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
+    async fn take_chain_process(chain_driver: &CosmosChainDriver) -> Option<Child> {
+        chain_driver.chain_process.lock().await.take()
     }
 }

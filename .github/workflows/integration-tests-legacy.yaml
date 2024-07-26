@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         chain:
-          - package: gaia
+          - package: gaia14
             command: gaiad
             account_prefix: cosmos
             features: ''

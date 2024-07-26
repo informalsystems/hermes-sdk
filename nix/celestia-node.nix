@@ -3,11 +3,11 @@
 ,   celestia-node-src
 }:
 let
-    celestia-node = nixpkgs.buildGo121Module {
+    celestia-node = nixpkgs.buildGo122Module {
         name = "celestia-node";
-        version = "0.12.0";
+        version = "0.14.1";
         src = celestia-node-src;
-        vendorHash = "sha256-iAyXhSV3Up8mb1kyQYxFDC1RUyYMFwG2E+OgG/wUe88=";
+        vendorHash = "sha256-UxJNlcIn6z5OYkaA2OyI2EOVDdl+dhypi8IUCyr1X+U=";
         doCheck = false;
     };
 in

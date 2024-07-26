@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 use core::str::Utf8Error;
 use std::io::Error as IoError;
+use std::process::ExitStatus;
 
 use cgp_core::error::{ErrorRaiser, ProvideErrorType};
 use hermes_async_runtime_components::channel::types::ChannelClosedError;
@@ -22,6 +23,12 @@ impl ErrorRaiser<HermesRuntime, PrematureChildProcessExitError> for HermesRuntim
             stdout: e.stdout,
             stderr: e.stderr,
         }
+    }
+}
+
+impl ErrorRaiser<HermesRuntime, ExitStatus> for HermesRuntimeComponents {
+    fn raise_error(exit_status: ExitStatus) -> TokioRuntimeError {
+        TokioRuntimeError::ChildProcessExitFailure { exit_status }
     }
 }
 

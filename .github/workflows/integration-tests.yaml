@@ -33,6 +33,8 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
+            export LEGACY_GAIA_BIN=$(nix build .#gaia14 --print-out-paths --no-link)/bin/gaiad
+
             nix shell .#cargo-nextest .#protobuf .#gaia .#celestia-app .#ibc-go-v8-simapp -c \
               cargo nextest run -p hermes-cosmos-integration-tests \
               --test-threads=2

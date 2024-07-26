@@ -1,4 +1,5 @@
 pub mod any_counterparty;
+pub mod bootstrap;
 pub mod build;
 pub mod command;
 pub mod config;

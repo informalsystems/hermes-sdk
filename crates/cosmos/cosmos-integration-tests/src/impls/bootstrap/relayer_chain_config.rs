@@ -74,7 +74,7 @@ where
             client_refresh_rate: config::default::client_refresh_rate(),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(0.1, bootstrap.gas_denom().into()),
+            gas_price: config::GasPrice::new(1.0, bootstrap.gas_denom().into()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),

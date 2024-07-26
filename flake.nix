@@ -14,19 +14,14 @@
       flake = false;
     };
 
-    gaia-src = {
-        flake = false;
-        url = github:cosmos/gaia/v14.1.0;
-    };
-
     celestia-app-src = {
         flake = false;
-        url = github:celestiaorg/celestia-app/v1.3.0;
+        url = github:celestiaorg/celestia-app/v1.13.0;
     };
 
     celestia-node-src = {
         flake = false;
-        url = github:celestiaorg/celestia-node/v0.12.0;
+        url = github:celestiaorg/celestia-node/v0.14.1;
     };
 
   };
@@ -51,17 +46,10 @@
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
       cosmos-nix-wasm = inputs.cosmos-nix-wasm.packages.${system};
-      sovereign-nix = inputs.sovereign-nix.packages.${system};
-      sovereign-ibc-nix = inputs.sovereign-ibc-nix.packages.${system};
 
       tendermint-wasm-client = import ./nix/tendermint-wasm-client {
         inherit nixpkgs;
         inherit (inputs) ibc-rs-src;
-      };
-
-      gaia = import ./nix/gaia.nix {
-        inherit nixpkgs;
-        inherit (inputs) gaia-src;
       };
 
       celestia-app = import ./nix/celestia-app.nix {
@@ -77,7 +65,7 @@
       packages = {
         inherit tendermint-wasm-client celestia-app celestia-node;
 
-        gaia = cosmos-nix.gaia14;
+        gaia = cosmos-nix.gaia18;
 
         inherit
           (nixpkgs)
@@ -89,6 +77,8 @@
           (cosmos-nix)
           ibc-go-v7-simapp
           ibc-go-v8-simapp
+          gaia18
+          gaia14
         ;
 
         inherit

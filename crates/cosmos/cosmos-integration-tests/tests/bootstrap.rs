@@ -18,7 +18,7 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
         builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
-        chain_command_path: "simd".into(),
+        chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
         staking_denom: "stake".into(),
         transfer_denom: "coin".into(),
