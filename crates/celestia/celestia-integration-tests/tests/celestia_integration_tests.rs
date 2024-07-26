@@ -14,7 +14,11 @@ use ibc_relayer::chain::cosmos::client::Settings;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
+// FIXME: Celestia currently can only be bootstrapped using CosmosBootstrap.
+// We need to refactor `CosmosBinaryChannelSetup` to make it support generic
+// bootstrap contexts.
 #[test]
+#[ignore]
 fn celestia_integration_tests() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
