@@ -15,7 +15,9 @@ use toml::Value;
 use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
+use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;
 
 /// Parse the generated Comet and CosmosSDK TOML config files, and update the configuration
 pub struct UpdateCosmosChainNodeConfig;
@@ -26,6 +28,7 @@ where
     Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainType<Chain = Chain>
         + HasChainNodeConfigType
+        + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + CanModifyCometConfig
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
@@ -42,6 +45,7 @@ where
         bootstrap: &Bootstrap,
         chain_home_dir: &PathBuf,
         chain_id: &ChainId,
+        genesis_config: &CosmosGenesisConfig,
     ) -> Result<Bootstrap::ChainNodeConfig, Bootstrap::Error> {
         let runtime = bootstrap.runtime();
 
@@ -125,7 +129,12 @@ where
                 toml::from_str(&sdk_config_string).map_err(Bootstrap::raise_error)?
             };
 
-            set_min_gas_price(&mut sdk_config, "0.1stake").map_err(Bootstrap::raise_error)?;
+            set_min_gas_price(
+                &mut sdk_config,
+                &format!("0.1{}", genesis_config.staking_denom),
+            )
+            .map_err(Bootstrap::raise_error)?;
+
             enable_grpc(&mut sdk_config).map_err(Bootstrap::raise_error)?;
             set_grpc_port(&mut sdk_config, grpc_port).map_err(Bootstrap::raise_error)?;
             disable_grpc_web(&mut sdk_config).map_err(Bootstrap::raise_error)?;
