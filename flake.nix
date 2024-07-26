@@ -21,7 +21,7 @@
 
     celestia-app-src = {
         flake = false;
-        url = github:celestiaorg/celestia-app/v2.0.0;
+        url = github:celestiaorg/celestia-app/v1.13.0;
     };
 
     celestia-node-src = {

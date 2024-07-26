@@ -5,9 +5,9 @@
 let
     celestia-app = nixpkgs.buildGo122Module {
         name = "celestia-app";
-        version = "2.0.0";
+        version = "1.13.0";
         src = celestia-app-src;
-        vendorHash = "sha256-0O+ODTtCfDgahizZDYFEdgIYwi4w3lY6sPZp0Q7h4FY=";
+        vendorHash = "sha256-HCVb7hmTVaZnO9dfyXHT8RaaS/FyPyH2cdyXRgv4gkE=";
         doCheck = false;
         excludedPackages = [
             "./test/interchain"
