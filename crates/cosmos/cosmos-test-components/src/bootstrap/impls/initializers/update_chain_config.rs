@@ -131,7 +131,7 @@ where
 
             set_min_gas_price(
                 &mut sdk_config,
-                &format!("0.1{}", genesis_config.staking_denom),
+                &format!("0{}", genesis_config.staking_denom),
             )
             .map_err(Bootstrap::raise_error)?;
 
