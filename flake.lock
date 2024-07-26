@@ -353,16 +353,15 @@
         "wasmvm_2_0_0-src": "wasmvm_2_0_0-src"
       },
       "locked": {
-        "lastModified": 1721913554,
+        "lastModified": 1721927677,
         "narHash": "sha256-fD8yDMOuJWx0WwlgAO07QrhbDwZ+PRl7HMVG4uwgFnk=",
         "owner": "informalsystems",
         "repo": "cosmos.nix",
-        "rev": "f7ff25adb614a92368adb74ce6479dc556f0e8ed",
+        "rev": "826b8ddd3c397306dc67de0646b27dc5656fadf9",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
-        "ref": "soareas/gaia18",
         "repo": "cosmos.nix",
         "type": "github"
       }
@@ -1024,23 +1023,6 @@
       },
       "original": {
         "owner": "cosmos",
-        "repo": "gaia",
-        "type": "github"
-      }
-    },
-    "gaia-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1720430036,
-        "narHash": "sha256-wATunCFeMgCP9usv2TK/IKDGZIWfOKx2zWip5qWDuqk=",
-        "owner": "cosmos",
-        "repo": "gaia",
-        "rev": "58b4e54a95c7fc6a64272ccd0f09f46213c005ad",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cosmos",
-        "ref": "v18.1.0",
         "repo": "gaia",
         "type": "github"
       }
@@ -3011,7 +2993,6 @@
         "cosmos-nix": "cosmos-nix",
         "cosmos-nix-wasm": "cosmos-nix-wasm",
         "flake-utils": "flake-utils_12",
-        "gaia-src": "gaia-src",
         "ibc-rs-src": "ibc-rs-src_3",
         "nixpkgs": "nixpkgs_11",
         "rust-overlay": "rust-overlay_3"

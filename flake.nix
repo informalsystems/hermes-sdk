@@ -6,17 +6,12 @@
     rust-overlay.url = github:oxalica/rust-overlay;
     flake-utils.url = github:numtide/flake-utils;
 
-    cosmos-nix.url = github:informalsystems/cosmos.nix/soareas/gaia18;
+    cosmos-nix.url = github:informalsystems/cosmos.nix;
     cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
 
     ibc-rs-src = {
       url = github:cosmos/ibc-rs;
       flake = false;
-    };
-
-    gaia-src = {
-        flake = false;
-        url = github:cosmos/gaia/v18.1.0;
     };
 
     celestia-app-src = {
@@ -51,8 +46,6 @@
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
       cosmos-nix-wasm = inputs.cosmos-nix-wasm.packages.${system};
-      sovereign-nix = inputs.sovereign-nix.packages.${system};
-      sovereign-ibc-nix = inputs.sovereign-ibc-nix.packages.${system};
 
       tendermint-wasm-client = import ./nix/tendermint-wasm-client {
         inherit nixpkgs;
@@ -85,6 +78,7 @@
           ibc-go-v7-simapp
           ibc-go-v8-simapp
           gaia18
+          gaia14
         ;
 
         inherit

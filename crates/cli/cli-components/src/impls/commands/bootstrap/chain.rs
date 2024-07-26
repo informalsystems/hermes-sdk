@@ -41,7 +41,7 @@ where
         let bootstrap = app.load_bootstrap(args).await?;
 
         let chain_driver = bootstrap
-            .bootstrap_chain(&chain_id)
+            .bootstrap_chain(chain_id)
             .await
             .map_err(App::raise_error)?;
 

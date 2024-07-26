@@ -10,6 +10,8 @@ use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
     let runtime = init_test_runtime();
 
+    let gaia_bin = std::env::var("LEGACY_GAIA_BIN").unwrap_or("gaiad".into());
+
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
 
     // TODO: load parameters from environment variables
@@ -18,7 +20,7 @@ fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
         builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
-        chain_command_path: "gaiad".into(),
+        chain_command_path: gaia_bin.into(),
         account_prefix: "cosmos".into(),
         compat_mode: None,
         staking_denom: "stake".into(),
