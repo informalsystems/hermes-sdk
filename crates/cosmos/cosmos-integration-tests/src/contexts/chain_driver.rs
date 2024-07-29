@@ -1,10 +1,10 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use std::path::PathBuf;
-use tokio::sync::Mutex;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
+use eyre::eyre;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -16,6 +16,7 @@ use hermes_cosmos_test_components::chain_driver::traits::grpc_port::GrpcPortGett
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::RpcPortGetter;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
+use hermes_error::types::Error;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime::impls::types::runtime::ProvideHermesRuntime;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -23,6 +24,7 @@ use hermes_runtime_components::traits::runtime::{RuntimeGetter, RuntimeTypeCompo
 use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
 use hermes_test_components::chain_driver::traits::chain_process::ChainProcessTaker;
+use hermes_test_components::chain_driver::traits::config::ConfigUpdater;
 use hermes_test_components::chain_driver::traits::fields::amount::RandomAmountGeneratorComponent;
 use hermes_test_components::chain_driver::traits::fields::chain_home_dir::ChainHomeDirGetter;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{
@@ -39,6 +41,8 @@ use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, Pr
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
 use tokio::process::Child;
+use tokio::sync::Mutex;
+use toml::Value;
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
@@ -186,5 +190,26 @@ impl ChainCommandPathGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
     async fn take_chain_process(chain_driver: &CosmosChainDriver) -> Option<Child> {
         chain_driver.chain_process.lock().await.take()
+    }
+}
+
+impl ConfigUpdater<CosmosChainDriver, Value> for CosmosChainDriverComponents {
+    fn update_config(chain_driver: &CosmosChainDriver, config: &mut Value) -> Result<(), Error> {
+        let chain_config = Value::try_from(&chain_driver.chain.chain_config).unwrap();
+
+        if let Some(chains_config) = config.get_mut("chains") {
+            let chains_config = chains_config
+                .as_array_mut()
+                .ok_or_else(|| eyre!("expect chain entries as array"))?;
+
+            chains_config.push(chain_config);
+        } else {
+            config
+                .as_table_mut()
+                .ok_or(eyre!("expect object"))?
+                .insert("chains".into(), vec![chain_config].into());
+        };
+
+        Ok(())
     }
 }
