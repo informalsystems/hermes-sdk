@@ -52,6 +52,7 @@ delegate_components! {
             Report,
             TokioRuntimeError,
             toml::de::Error,
+            toml::ser::Error,
             HeightError,
             Ics02Error,
             Ics03Error,

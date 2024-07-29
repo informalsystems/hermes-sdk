@@ -31,3 +31,5 @@ mc.log
 
 # Ignore Nix artifacts
 /result*
+
+config.toml
