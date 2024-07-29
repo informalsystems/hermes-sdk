@@ -22,8 +22,9 @@ use hermes_cli_components::impls::commands::queries::consensus_state::{
     QueryConsensusStateArgs, RunQueryConsensusStateCommand,
 };
 use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, StartRelayerArgs};
-use hermes_cli_components::impls::get_config_path::GetDefaultConfigField;
-use hermes_cli_components::impls::load_toml_config::LoadTomlConfig;
+use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField;
+use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
+use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
 use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
@@ -34,6 +35,7 @@ use hermes_cli_components::traits::build::{
 use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponent;
 use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
+use hermes_cli_components::traits::config::write_config::{CanWriteConfig, ConfigWriterComponent};
 use hermes_cli_components::traits::output::{
     CanProduceOutput, HasOutputType, OutputProducer, ProvideOutputType,
 };
@@ -106,6 +108,8 @@ delegate_components! {
             GetDefaultConfigField,
         ConfigLoaderComponent:
             LoadTomlConfig,
+        ConfigWriterComponent:
+            WriteTomlConfig,
         BuilderLoaderComponent:
             LoadCosmosBuilder,
         BootstrapLoaderComponent:
@@ -227,6 +231,7 @@ impl CreateClientOptionsParser<HermesApp, CreateClientArgs, 0, 1> for HermesAppC
 
 pub trait CanUseHermesApp:
     CanLoadConfig
+    + CanWriteConfig
     + CanLoadBuilder
     + CanRunCommand<StartRelayerArgs>
     + CanRunCommand<QueryClientSubCommand>
