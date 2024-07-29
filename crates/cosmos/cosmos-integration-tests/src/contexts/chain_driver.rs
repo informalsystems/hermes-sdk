@@ -43,7 +43,7 @@ use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
 use tokio::process::Child;
 use tokio::sync::Mutex;
-use toml::Value;
+use toml::{to_string_pretty, Value};
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
@@ -195,8 +195,12 @@ impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
 }
 
 impl ConfigUpdater<CosmosChainDriver, Value> for CosmosChainDriverComponents {
-    fn update_config(chain_driver: &CosmosChainDriver, config: &mut Value) -> Result<(), Error> {
-        let chain_config = Value::try_from(&chain_driver.chain.chain_config).unwrap();
+    fn update_config(
+        chain_driver: &CosmosChainDriver,
+        config: &mut Value,
+    ) -> Result<String, Error> {
+        let chain_config = Value::try_from(&chain_driver.chain.chain_config)?;
+        let chain_config_str = to_string_pretty(&chain_config)?;
 
         if let Some(chains_config) = config.get_mut("chains") {
             let chains_config = chains_config
@@ -211,16 +215,21 @@ impl ConfigUpdater<CosmosChainDriver, Value> for CosmosChainDriverComponents {
                 .insert("chains".into(), vec![chain_config].into());
         };
 
-        Ok(())
+        Ok(chain_config_str)
     }
 }
 
 impl ConfigUpdater<CosmosChainDriver, Config> for CosmosChainDriverComponents {
-    fn update_config(chain_driver: &CosmosChainDriver, config: &mut Config) -> Result<(), Error> {
+    fn update_config(
+        chain_driver: &CosmosChainDriver,
+        config: &mut Config,
+    ) -> Result<String, Error> {
+        let chain_config_str = to_string_pretty(&chain_driver.chain.chain_config)?;
+
         let chain_config = chain_driver.chain.chain_config.clone();
 
         config.chains.push(ChainConfig::CosmosSdk(chain_config));
 
-        Ok(())
+        Ok(chain_config_str)
     }
 }

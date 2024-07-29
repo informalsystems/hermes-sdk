@@ -59,9 +59,29 @@ where
 
         let chain = chain_driver.chain();
 
-        chain_driver
+        logger
+            .log(
+                &format!(
+                    "Bootstrapped a new chain with chain ID: {}",
+                    chain.chain_id()
+                ),
+                &LevelInfo,
+            )
+            .await;
+
+        let chain_config = chain_driver
             .update_config(&mut config)
             .map_err(App::raise_error)?;
+
+        logger
+            .log(
+                &format!(
+                    "Added the following chain config to the main config file:\n{}",
+                    chain_config
+                ),
+                &LevelInfo,
+            )
+            .await;
 
         let m_chain_process = chain_driver.take_chain_process().await;
 
