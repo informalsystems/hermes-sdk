@@ -1,5 +1,6 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
+use ibc_relayer::config::{ChainConfig, Config};
 use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -209,6 +210,16 @@ impl ConfigUpdater<CosmosChainDriver, Value> for CosmosChainDriverComponents {
                 .ok_or(eyre!("expect object"))?
                 .insert("chains".into(), vec![chain_config].into());
         };
+
+        Ok(())
+    }
+}
+
+impl ConfigUpdater<CosmosChainDriver, Config> for CosmosChainDriverComponents {
+    fn update_config(chain_driver: &CosmosChainDriver, config: &mut Config) -> Result<(), Error> {
+        let chain_config = chain_driver.chain.chain_config.clone();
+
+        config.chains.push(ChainConfig::CosmosSdk(chain_config));
 
         Ok(())
     }
