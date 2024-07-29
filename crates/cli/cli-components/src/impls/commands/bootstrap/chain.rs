@@ -19,6 +19,7 @@ use crate::traits::bootstrap::CanLoadBootstrap;
 use crate::traits::command::CommandRunner;
 use crate::traits::config::config_path::HasConfigPath;
 use crate::traits::config::load_config::CanLoadConfig;
+use crate::traits::config::write_config::CanWriteConfig;
 use crate::traits::output::CanProduceOutput;
 
 pub struct RunBootstrapChainCommand;
@@ -31,6 +32,7 @@ where
         + CanLoadBootstrap<Args, Bootstrap = Bootstrap>
         + HasConfigPath
         + CanLoadConfig
+        + CanWriteConfig
         + CanRaiseError<Bootstrap::Error>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<ChainDriver::Error>
@@ -72,6 +74,8 @@ where
         let chain_config = chain_driver
             .update_config(&mut config)
             .map_err(App::raise_error)?;
+
+        app.write_config(&config).await?;
 
         logger
             .log(
