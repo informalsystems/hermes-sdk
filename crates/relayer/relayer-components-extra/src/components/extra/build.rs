@@ -84,6 +84,6 @@ where
         + RelayWithBatchBuilder<Build, 0, 1>
         + RelayWithBatchBuilder<Build, 1, 0>
         + ProvideErrorType<Build>,
-    BaseComponents: ChainBuilder<Build, 0> + ChainBuilder<Build, 1>,
+    BaseComponents: Async + ChainBuilder<Build, 0> + ChainBuilder<Build, 1>,
 {
 }

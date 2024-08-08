@@ -10,7 +10,7 @@ pub struct TokioReserveTcpPort;
 
 impl<Runtime> TcpPortReserver<Runtime> for TokioReserveTcpPort
 where
-    Runtime: CanRaiseError<IoError>,
+    Runtime: Async + CanRaiseError<IoError>,
 {
     async fn reserve_tcp_port(_runtime: &Runtime) -> Result<u16, Runtime::Error> {
         // TODO: abort if failed to find a free port after X tries

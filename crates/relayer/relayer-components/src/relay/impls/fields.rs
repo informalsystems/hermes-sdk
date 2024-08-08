@@ -34,7 +34,8 @@ impl<
     > ProvideRelayChains<Relay>
     for ProvideRelayFields<SrcChainField, DstChainField, SrcClientIdField, DstClientIdField>
 where
-    Relay: HasErrorType
+    Relay: Async
+        + HasErrorType
         + HasField<SrcChainField, Field = SrcChain>
         + HasField<DstChainField, Field = DstChain>
         + HasField<SrcClientIdField, Field = SrcChain::ClientId>

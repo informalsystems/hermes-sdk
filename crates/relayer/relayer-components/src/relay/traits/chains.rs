@@ -33,7 +33,7 @@ use crate::chain::types::aliases::ClientIdOf;
     only a single channel or connection.
 */
 #[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
-pub trait HasRelayChains: HasErrorType {
+pub trait HasRelayChains: Async + HasErrorType {
     type Packet: Async;
 
     /**

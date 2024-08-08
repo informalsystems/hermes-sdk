@@ -1,4 +1,5 @@
 use cgp_core::error::CanRaiseError;
+use cgp_core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 
@@ -17,7 +18,7 @@ where
     Chain: CanQueryRawConsensusState<Counterparty> + CanRaiseError<Encoding::Error>,
     Counterparty:
         HasConsensusStateType<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightType,
-    Encoding: CanConvert<Chain::RawConsensusState, Counterparty::ConsensusState>,
+    Encoding: Async + CanConvert<Chain::RawConsensusState, Counterparty::ConsensusState>,
 {
     async fn query_consensus_state(
         chain: &Chain,
@@ -43,7 +44,7 @@ where
     Chain: CanQueryRawConsensusStateWithProofs<Counterparty> + CanRaiseError<Encoding::Error>,
     Counterparty:
         HasConsensusStateType<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightType,
-    Encoding: CanConvert<Chain::RawConsensusState, Counterparty::ConsensusState>,
+    Encoding: Async + CanConvert<Chain::RawConsensusState, Counterparty::ConsensusState>,
 {
     async fn query_consensus_state_with_proofs(
         chain: &Chain,

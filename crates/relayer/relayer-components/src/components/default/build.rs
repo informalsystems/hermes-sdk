@@ -29,7 +29,8 @@ pub trait UseDefaultBuildComponents: CanBuildBiRelay<0, 1> {}
 
 impl<Build, Components, BaseComponents> UseDefaultBuildComponents for Build
 where
-    Build: HasBiRelayTypeAt<0, 1>
+    Build: Async
+        + HasBiRelayTypeAt<0, 1>
         + HasRelayCache<0, 1>
         + HasRelayCache<1, 0>
         + HasChainCache<0>
@@ -49,6 +50,6 @@ where
         + RelayFromChainsBuilder<Build, 0, 1>
         + RelayFromChainsBuilder<Build, 1, 0>
         + ProvideErrorType<Build>,
-    BaseComponents: ChainBuilder<Build, 0> + ChainBuilder<Build, 1>,
+    BaseComponents: Async + ChainBuilder<Build, 0> + ChainBuilder<Build, 1>,
 {
 }
