@@ -1,12 +1,12 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
-use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
 use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
+use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_error::handlers::debug::DebugError;

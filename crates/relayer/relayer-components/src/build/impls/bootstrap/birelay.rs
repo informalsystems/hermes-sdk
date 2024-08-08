@@ -1,4 +1,5 @@
 use cgp_core::prelude::{async_trait, HasErrorType};
+use cgp_core::Async;
 
 use crate::build::impls::bootstrap::relay::CanBootstrapRelay;
 use crate::build::traits::builders::birelay_builder::CanBuildBiRelay;
@@ -41,17 +42,20 @@ pub trait CanBootstrapBiRelay<const A: usize, const B: usize>:
 
 impl<Build, ChainA, ChainB, const A: usize, const B: usize> CanBootstrapBiRelay<A, B> for Build
 where
-    Build: HasBiRelayTypeAt<A, B>
+    Build: Async
+        + HasBiRelayTypeAt<A, B>
         + HasChainTypeAt<A, Chain = ChainA>
         + HasChainTypeAt<B, Chain = ChainB>
         + CanBuildBiRelay<A, B>
         + CanBootstrapRelay<A, B>,
-    ChainA: HasChainIdType
+    ChainA: Async
+        + HasChainIdType
         + HasCreateClientPayloadOptionsType<ChainB>
         + HasCreateClientMessageOptionsType<ChainB>
         + HasIbcChainTypes<ChainB>
         + HasErrorType,
-    ChainB: HasChainIdType
+    ChainB: Async
+        + HasChainIdType
         + HasCreateClientPayloadOptionsType<ChainA>
         + HasCreateClientMessageOptionsType<ChainA>
         + HasIbcChainTypes<ChainA>

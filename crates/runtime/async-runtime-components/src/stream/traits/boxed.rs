@@ -23,7 +23,7 @@ pub trait HasBoxedStreamType: HasStreamType {
 
 impl<Runtime, Components> HasBoxedStreamType for Runtime
 where
-    Runtime: HasComponents<Components = Components>,
+    Runtime: Async + HasComponents<Components = Components>,
     Components: BoxedStreamTypeProvider<Runtime>,
 {
     fn to_boxed_stream<Item>(

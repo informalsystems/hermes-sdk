@@ -638,7 +638,7 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "cgp-async"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-async-macro",
 ]
@@ -646,7 +646,7 @@ dependencies = [
 [[package]]
 name = "cgp-async-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -656,7 +656,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-async",
  "cgp-component-macro",
@@ -665,7 +665,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-component-macro-lib",
  "proc-macro2",
@@ -674,7 +674,7 @@ dependencies = [
 [[package]]
 name = "cgp-component-macro-lib"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "itertools 0.11.0",
  "prettyplease",
@@ -686,7 +686,7 @@ dependencies = [
 [[package]]
 name = "cgp-core"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -699,7 +699,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -708,7 +708,7 @@ dependencies = [
 [[package]]
 name = "cgp-error-eyre"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-core",
  "eyre",
@@ -717,7 +717,7 @@ dependencies = [
 [[package]]
 name = "cgp-field"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-field-macro",
 ]
@@ -725,7 +725,7 @@ dependencies = [
 [[package]]
 name = "cgp-field-macro"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-field-macro-lib",
  "proc-macro2",
@@ -734,7 +734,7 @@ dependencies = [
 [[package]]
 name = "cgp-field-macro-lib"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "itertools 0.11.0",
  "prettyplease",
@@ -746,7 +746,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -755,7 +755,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.1.0"
-source = "git+https://github.com/informalsystems/cgp.git#778fb3f76164fc7b8199e8c6edd9f085ba73438d"
+source = "git+https://github.com/informalsystems/cgp.git#c545eb3cc73df3b9285e282e7fed8b2492af6edb"
 dependencies = [
  "cgp-async",
  "cgp-component",

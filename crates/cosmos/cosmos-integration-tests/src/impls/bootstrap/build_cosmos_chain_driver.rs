@@ -1,7 +1,6 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
 use std::path::PathBuf;
-use tokio::sync::Mutex;
 
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
@@ -21,6 +20,7 @@ use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use tokio::process::Child;
+use tokio::sync::Mutex;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::traits::bootstrap::build_chain::CanBuildChainWithNodeConfig;

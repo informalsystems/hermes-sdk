@@ -5,7 +5,7 @@ use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};
 
 #[derive_component(BiRelayTypeAtComponent, ProvideBiRelayTypeAt<Setup>)]
 pub trait HasBiRelayTypeAt<const A: usize, const B: usize>:
-    HasRelayTypeAt<A, B> + HasRelayTypeAt<B, A>
+    Async + HasRelayTypeAt<A, B> + HasRelayTypeAt<B, A>
 {
     type BiRelay: HasChainTypeAt<A, Chain = ChainAt<Self, A>>
         + HasChainTypeAt<B, Chain = ChainAt<Self, B>>

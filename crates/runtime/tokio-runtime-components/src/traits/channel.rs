@@ -57,7 +57,7 @@ where
 
 impl<Runtime, Components> HasUnboundedChannelType for Runtime
 where
-    Runtime: HasComponents<Components = Components>,
+    Runtime: Async + HasComponents<Components = Components>,
     Components: UnboundedChannelTypeProvider<Runtime> + ProvideChannelType<Runtime>,
 {
     fn from_unbounded_sender<T>(sender: mpsc::UnboundedSender<T>) -> Self::Sender<T>
