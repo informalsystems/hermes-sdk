@@ -1,6 +1,5 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
-use ibc_relayer::config::{ChainConfig, Config};
 use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -41,6 +40,7 @@ use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterC
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
 use hermes_wasm_test_components::components::WasmChainDriverComponents;
 use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
+use ibc_relayer::config::{ChainConfig, Config};
 use tokio::process::Child;
 use tokio::sync::Mutex;
 use toml::{to_string_pretty, Value};
