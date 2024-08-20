@@ -1,6 +1,8 @@
 use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
+use core::str::Utf8Error;
+use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
 
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -124,6 +126,7 @@ delegate_components! {
             ProofError,
             ClientError,
             CommitmentError,
+            Utf8Error,
 
             // TODO: make it retryable?
             TransportError,
@@ -140,6 +143,7 @@ delegate_components! {
             AbciQueryError,
             Status,
             MissingSendPacketEventError,
+            ProposalIdNotFound,
             <'a, Chain: HasAddressType + HasAmountType>
                 EventualAmountTimeoutError<'a, Chain>,
             <'a, Chain>

@@ -15,10 +15,14 @@ description  = """
 [dependencies]
 cgp-core                                = { workspace = true }
 cgp-error-eyre                          = { workspace = true }
+ibc-relayer-types                       = { workspace = true }
+hermes-cosmos-chain-components          = { workspace = true }
 hermes-cosmos-test-components           = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-test-components                  = { workspace = true }
 hermes-runtime-components               = { workspace = true }
 
+prost                                   = { workspace = true }
 toml                                    = { workspace = true }
 serde_json                              = { workspace = true }
+ibc-proto                               = { workspace = true }

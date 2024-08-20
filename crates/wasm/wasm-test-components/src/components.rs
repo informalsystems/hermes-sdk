@@ -1,13 +1,17 @@
 use cgp_core::prelude::*;
 
-use crate::impls::chain_driver::upload_client_code::UploadWasmClientCodeWithChainCommand;
-use crate::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
+use crate::impls::chain::messages::store_code::BuildStoreCodeMessage;
+use crate::impls::chain::upload_client_code::SendStoreCodeProposalMessage;
+use crate::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
+use crate::traits::chain::upload_client_code::WasmClientCodeUploaderComponent;
 
-pub struct WasmChainDriverComponents;
+pub struct WasmChainComponents;
 
 delegate_components! {
-    WasmChainDriverComponents {
+    WasmChainComponents {
+        StoreCodeMessageBuilderComponent:
+            BuildStoreCodeMessage,
         WasmClientCodeUploaderComponent:
-            UploadWasmClientCodeWithChainCommand,
+            SendStoreCodeProposalMessage,
     }
 }

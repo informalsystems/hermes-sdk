@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 use core::time::Duration;
 use std::env::var;
 use std::path::PathBuf;
@@ -40,19 +42,28 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
     let wasm_client_code_path =
         PathBuf::from(var("WASM_FILE_PATH").expect("Wasm file is required"));
 
-    let bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
-        runtime: runtime.clone(),
-        builder: builder.clone(),
-        should_randomize_identifiers: true,
-        chain_store_dir: store_dir.join("chains"),
-        chain_command_path: "simd".into(),
-        account_prefix: "cosmos".into(),
-        staking_denom: "stake".into(),
-        transfer_denom: "coin".into(),
-        wasm_client_code_path: wasm_client_code_path.clone(),
-    });
-
     tokio_runtime.block_on(async move {
+        let wasm_client_byte_code = tokio::fs::read(&wasm_client_code_path).await?;
+
+        let wasm_code_hash: [u8; 32] = {
+            let mut hasher = Sha256::new();
+            hasher.update(&wasm_client_byte_code);
+            hasher.finalize().into()
+        };
+
+        let bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
+            runtime: runtime.clone(),
+            builder: builder.clone(),
+            should_randomize_identifiers: true,
+            chain_store_dir: store_dir.join("chains"),
+            chain_command_path: "simd".into(),
+            account_prefix: "cosmos".into(),
+            staking_denom: "stake".into(),
+            transfer_denom: "coin".into(),
+            wasm_client_byte_code,
+            governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
+        });
+
         let chain_driver_a = bootstrap.bootstrap_chain("chain-a").await?;
 
         let chain_driver_b = bootstrap.bootstrap_chain("chain-b").await?;
@@ -69,14 +80,6 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             max_clock_drift: Duration::from_secs(40),
             trusting_period: None,
             trust_threshold: TrustThreshold::ONE_THIRD,
-        };
-
-        let wasm_code_hash: [u8; 32] = {
-            let wasm_client_bytes = tokio::fs::read(&wasm_client_code_path).await?;
-
-            let mut hasher = Sha256::new();
-            hasher.update(wasm_client_bytes);
-            hasher.finalize().into()
         };
 
         let client_id_a = WasmCosmosRelay::create_client(
