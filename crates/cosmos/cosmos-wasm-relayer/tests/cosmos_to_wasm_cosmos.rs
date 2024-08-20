@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 use core::time::Duration;
 use std::env::var;
 use std::path::PathBuf;

@@ -70,7 +70,7 @@ impl DynCosmosMessage for StoreCodeProposalMessage {
         };
 
         let proposal_code_message_any = Any {
-            type_url: "/gov.types.v1.msgs.MsgSubmitProposal".into(),
+            type_url: "/cosmos.gov.v1.MsgSubmitProposal".into(),
             value: proposal_message.encode_to_vec(),
         };
 
