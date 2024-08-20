@@ -74,11 +74,9 @@ impl DynCosmosMessage for StoreCodeProposalMessage {
             summary: self.summary.clone(),
         };
 
-        let proposal_code_message_any = Any {
+        Any {
             type_url: "/cosmos.gov.v1.MsgSubmitProposal".into(),
             value: proposal_message.encode_to_vec(),
-        };
-
-        proposal_code_message_any
+        }
     }
 }
