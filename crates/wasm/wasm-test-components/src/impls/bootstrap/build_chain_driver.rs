@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use core::marker::PhantomData;
 
 use cgp_core::error::CanRaiseError;
@@ -15,7 +16,7 @@ use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
-use hermes_test_components::chain::traits::types::wallet::HasWalletType;
+use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, StakingDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, ValidatorWallet};
 use hermes_test_components::chain_driver::traits::proposal::deposit::CanDepositProposal;
@@ -25,6 +26,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
+use crate::traits::chain::store_code::CanBuildStoreCodeMessage;
 use crate::traits::chain::upload_client_code::CanUploadWasmClientCode;
 
 pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilder>);
@@ -40,11 +42,14 @@ where
         + CanRaiseError<Chain::Error>
         + CanRaiseError<ChainDriver::Error>,
     Runtime: HasChildProcessType + HasFilePathType,
-    Chain: HasWalletType
+    Chain: HasWalletSigner
         + HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasAmountType<Amount = Amount, Denom = Denom>
-        + CanUploadWasmClientCode,
+        + CanUploadWasmClientCode
+        + CanBuildStoreCodeMessage
+        + CanSendMessagesWithSigner
+        ,
     ChainDriver: HasChain<Chain = Chain>
         + HasWalletAt<ValidatorWallet, 0>
         + HasDenomAt<StakingDenom, 0>
@@ -76,8 +81,8 @@ where
 
         let staking_denom = chain_driver.denom_at(StakingDenom, Index::<0>);
 
-        chain
-            .upload_wasm_client_code(
+        {
+            let message = chain.build_store_code_message(
                 bootstrap.wasm_client_byte_code(),
                 "wasm-client",
                 "Wasm Client",
@@ -85,9 +90,14 @@ where
                     quantity: 20000,
                     denom: staking_denom.clone(),
                 },
-            )
-            .await
+            );
+
+            chain.send_messages_with_signer(
+                Chain::wallet_signer(validator_wallet),
+                &vec![message],
+            ).await
             .map_err(Bootstrap::raise_error)?;
+        }
 
         chain_driver
             .poll_proposal_status(&1, &ProposalStatus::DepositPeriod)

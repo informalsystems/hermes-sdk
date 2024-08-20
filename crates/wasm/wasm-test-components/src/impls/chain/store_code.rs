@@ -48,7 +48,7 @@ where
 impl DynCosmosMessage for StoreCodeProposalMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Any {
         let store_code_message = MsgStoreCode {
-            signer: signer.to_string(),
+            signer: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(),
             wasm_byte_code: self.wasm_byte_code.clone(),
         };
 
