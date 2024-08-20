@@ -1,6 +1,6 @@
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 
-use crate::traits::chain::store_code::CanBuildStoreCodeMessage;
+use crate::traits::chain::messages::store_code::CanBuildStoreCodeMessage;
 use crate::traits::chain::upload_client_code::WasmClientCodeUploader;
 
 pub struct SendStoreCodeProposalMessage;

@@ -30,7 +30,7 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 
 use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
 use crate::traits::bootstrap::gov_authority::HasGovernanceProposalAuthority;
-use crate::traits::chain::store_code::CanBuildStoreCodeMessage;
+use crate::traits::chain::messages::store_code::CanBuildStoreCodeMessage;
 use crate::traits::chain::upload_client_code::CanUploadWasmClientCode;
 
 pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilder>);

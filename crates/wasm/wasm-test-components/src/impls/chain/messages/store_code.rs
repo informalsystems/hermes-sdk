@@ -12,7 +12,7 @@ use ibc_proto::ibc::lightclients::wasm::v1::MsgStoreCode;
 use ibc_relayer_types::signer::Signer;
 use prost::Message;
 
-use crate::traits::chain::store_code::StoreCodeMessageBuilder;
+use crate::traits::chain::messages::store_code::StoreCodeMessageBuilder;
 
 pub struct BuildStoreCodeMessage;
 
