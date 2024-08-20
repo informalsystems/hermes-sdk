@@ -44,7 +44,7 @@ where
         let events = chain.send_message(message).await?;
 
         for event in events {
-            if event.as_ref().kind == "" {
+            if event.as_ref().kind == "submit_proposal" {
                 for attribute in event.as_ref().attributes.iter() {
                     if attribute.key_bytes() == "proposal_id".as_bytes() {
                         let proposal_id_str =

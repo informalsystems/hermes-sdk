@@ -1,5 +1,4 @@
 use alloc::collections::BTreeMap;
-use core::fmt::Debug;
 use core::marker::PhantomData;
 use core::time::Duration;
 
@@ -10,7 +9,6 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Has
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
-use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_components::multi::types::index::Index;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
@@ -30,7 +28,6 @@ use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverT
 
 use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
 use crate::traits::bootstrap::gov_authority::HasGovernanceProposalAuthority;
-use crate::traits::chain::messages::store_code::CanBuildStoreCodeMessage;
 use crate::traits::chain::upload_client_code::CanUploadWasmClientCode;
 
 pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilder>);
@@ -52,8 +49,7 @@ where
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasAmountType<Amount = Amount, Denom = Denom>
         + CanUploadWasmClientCode
-        + CanBuildStoreCodeMessage
-        + CanSendSingleMessage,
+        + CanUploadWasmClientCode,
     ChainDriver: HasChain<Chain = Chain>
         + HasWalletAt<ValidatorWallet, 0>
         + HasDenomAt<StakingDenom, 0>
@@ -62,7 +58,6 @@ where
         + CanVoteProposal,
     ChainDriver::Runtime: HasFilePathType<FilePath = Runtime::FilePath>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
-    Chain::Event: Debug,
 {
     async fn build_chain_driver(
         bootstrap: &Bootstrap,
@@ -86,8 +81,8 @@ where
 
         let staking_denom = chain_driver.denom_at(StakingDenom, Index::<0>);
 
-        {
-            let message = chain.build_store_code_message(
+        let proposal_id = chain
+            .upload_wasm_client_code(
                 bootstrap.wasm_client_byte_code(),
                 "wasm-client",
                 "Wasm Client",
@@ -96,20 +91,14 @@ where
                     quantity: 20000,
                     denom: staking_denom.clone(),
                 },
-            );
-
-            let events = chain
-                .send_message(message)
-                .await
-                .map_err(Bootstrap::raise_error)?;
-
-            println!("store-code events: {:?}", events);
-        }
+            )
+            .await
+            .map_err(Bootstrap::raise_error)?;
 
         bootstrap.runtime().sleep(Duration::from_secs(3)).await;
 
         chain_driver
-            .poll_proposal_status(&1, &ProposalStatus::DepositPeriod)
+            .poll_proposal_status(&proposal_id, &ProposalStatus::DepositPeriod)
             .await
             .map_err(Bootstrap::raise_error)?;
 
@@ -123,7 +112,7 @@ where
             .map_err(Bootstrap::raise_error)?;
 
         chain_driver
-            .poll_proposal_status(&1, &ProposalStatus::VotingPeriod)
+            .poll_proposal_status(&proposal_id, &ProposalStatus::VotingPeriod)
             .await
             .map_err(Bootstrap::raise_error)?;
 
@@ -133,7 +122,7 @@ where
             .map_err(Bootstrap::raise_error)?;
 
         chain_driver
-            .poll_proposal_status(&1, &ProposalStatus::Passed)
+            .poll_proposal_status(&proposal_id, &ProposalStatus::Passed)
             .await
             .map_err(Bootstrap::raise_error)?;
 
