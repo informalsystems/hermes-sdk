@@ -1,6 +1,7 @@
 use alloc::collections::BTreeMap;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
+use core::fmt::Debug;
 use core::marker::PhantomData;
+use core::time::Duration;
 
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
@@ -9,10 +10,13 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Has
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
+use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_components::multi::types::index::Index;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
-use hermes_runtime_components::traits::runtime::HasRuntimeType;
+use hermes_runtime_components::traits::runtime::HasRuntime;
+use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
@@ -34,22 +38,21 @@ pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilde
 impl<Bootstrap, ChainDriver, Chain, Runtime, InBuilder> ChainDriverBuilder<Bootstrap>
     for BuildChainDriverAndInitWasmClient<InBuilder>
 where
-    Bootstrap: HasRuntimeType<Runtime = Runtime>
+    Bootstrap: HasRuntime<Runtime = Runtime>
         + HasChainDriverType<ChainDriver = ChainDriver, Chain = Chain>
         + HasChainGenesisConfigType
         + HasChainNodeConfigType
         + HasWasmClientByteCode
         + CanRaiseError<Chain::Error>
         + CanRaiseError<ChainDriver::Error>,
-    Runtime: HasChildProcessType + HasFilePathType,
+    Runtime: HasChildProcessType + HasFilePathType + CanSleep,
     Chain: HasWalletSigner
         + HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasAmountType<Amount = Amount, Denom = Denom>
         + CanUploadWasmClientCode
         + CanBuildStoreCodeMessage
-        + CanSendMessagesWithSigner
-        ,
+        + CanSendSingleMessage,
     ChainDriver: HasChain<Chain = Chain>
         + HasWalletAt<ValidatorWallet, 0>
         + HasDenomAt<StakingDenom, 0>
@@ -58,6 +61,7 @@ where
         + CanVoteProposal,
     ChainDriver::Runtime: HasFilePathType<FilePath = Runtime::FilePath>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
+    Chain::Event: Debug,
 {
     async fn build_chain_driver(
         bootstrap: &Bootstrap,
@@ -92,12 +96,15 @@ where
                 },
             );
 
-            chain.send_messages_with_signer(
-                Chain::wallet_signer(validator_wallet),
-                &vec![message],
-            ).await
-            .map_err(Bootstrap::raise_error)?;
+            let events = chain
+                .send_message(message)
+                .await
+                .map_err(Bootstrap::raise_error)?;
+
+            println!("store-code events: {:?}", events);
         }
+
+        bootstrap.runtime().sleep(Duration::from_secs(3)).await;
 
         chain_driver
             .poll_proposal_status(&1, &ProposalStatus::DepositPeriod)
