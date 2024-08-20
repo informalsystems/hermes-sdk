@@ -21,11 +21,11 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, 
 use hermes_test_components::chain_driver::traits::proposal::deposit::CanDepositProposal;
 use hermes_test_components::chain_driver::traits::proposal::poll_status::CanPollProposalStatus;
 use hermes_test_components::chain_driver::traits::proposal::vote::CanVoteProposal;
-use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
+use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
-use crate::traits::bootstrap::client_code_path::HasWasmClientCodePath;
-use crate::traits::chain_driver::upload_client_code::CanUploadWasmClientCode;
+use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
+use crate::traits::chain::upload_client_code::CanUploadWasmClientCode;
 
 pub struct BuildChainDriverAndInitWasmClient<InBuilder>(pub PhantomData<InBuilder>);
 
@@ -36,17 +36,18 @@ where
         + HasChainDriverType<ChainDriver = ChainDriver, Chain = Chain>
         + HasChainGenesisConfigType
         + HasChainNodeConfigType
-        + HasWasmClientCodePath
+        + HasWasmClientByteCode
+        + CanRaiseError<Chain::Error>
         + CanRaiseError<ChainDriver::Error>,
     Runtime: HasChildProcessType + HasFilePathType,
     Chain: HasWalletType
         + HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
-        + HasAmountType<Amount = Amount, Denom = Denom>,
-    ChainDriver: HasChainType<Chain = Chain>
+        + HasAmountType<Amount = Amount, Denom = Denom>
+        + CanUploadWasmClientCode,
+    ChainDriver: HasChain<Chain = Chain>
         + HasWalletAt<ValidatorWallet, 0>
         + HasDenomAt<StakingDenom, 0>
-        + CanUploadWasmClientCode
         + CanPollProposalStatus
         + CanDepositProposal
         + CanVoteProposal,
@@ -69,16 +70,21 @@ where
         )
         .await?;
 
+        let chain = chain_driver.chain();
+
         let validator_wallet = chain_driver.wallet_at(ValidatorWallet, Index::<0>);
 
         let staking_denom = chain_driver.denom_at(StakingDenom, Index::<0>);
 
-        chain_driver
+        chain
             .upload_wasm_client_code(
-                bootstrap.wasm_client_code_path(),
+                bootstrap.wasm_client_byte_code(),
                 "wasm-client",
                 "Wasm Client",
-                validator_wallet,
+                &Amount {
+                    quantity: 20000,
+                    denom: staking_denom.clone(),
+                },
             )
             .await
             .map_err(Bootstrap::raise_error)?;

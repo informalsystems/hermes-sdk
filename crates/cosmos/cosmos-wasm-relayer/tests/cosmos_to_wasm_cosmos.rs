@@ -54,19 +54,27 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
         comet_config_modifier: Box::new(|_| Ok(())),
     });
 
-    let simd_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
-        runtime: runtime.clone(),
-        builder: builder.clone(),
-        should_randomize_identifiers: true,
-        chain_store_dir: store_dir.join("chains"),
-        chain_command_path: "simd".into(),
-        account_prefix: "cosmos".into(),
-        staking_denom: "stake".into(),
-        transfer_denom: "coin".into(),
-        wasm_client_code_path: wasm_client_code_path.clone(),
-    });
-
     tokio_runtime.block_on(async move {
+        let wasm_client_byte_code = tokio::fs::read(&wasm_client_code_path).await?;
+
+        let wasm_code_hash: [u8; 32] = {
+            let mut hasher = Sha256::new();
+            hasher.update(&wasm_client_byte_code);
+            hasher.finalize().into()
+        };
+
+        let simd_bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
+            runtime: runtime.clone(),
+            builder: builder.clone(),
+            should_randomize_identifiers: true,
+            chain_store_dir: store_dir.join("chains"),
+            chain_command_path: "simd".into(),
+            account_prefix: "cosmos".into(),
+            staking_denom: "stake".into(),
+            transfer_denom: "coin".into(),
+            wasm_client_byte_code,
+        });
+
         let gaia_chain_driver = gaia_bootstrap.bootstrap_chain("gaia").await?;
 
         let simd_chain_driver = simd_bootstrap.bootstrap_chain("simd").await?;
@@ -81,14 +89,6 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             max_clock_drift: Duration::from_secs(40),
             trusting_period: None,
             trust_threshold: TrustThreshold::ONE_THIRD,
-        };
-
-        let wasm_code_hash: [u8; 32] = {
-            let wasm_client_bytes = tokio::fs::read(&wasm_client_code_path).await?;
-
-            let mut hasher = Sha256::new();
-            hasher.update(wasm_client_bytes);
-            hasher.finalize().into()
         };
 
         let client_id_a = CosmosToWasmCosmosRelay::create_client(

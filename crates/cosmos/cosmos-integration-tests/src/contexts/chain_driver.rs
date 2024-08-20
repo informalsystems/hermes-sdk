@@ -38,8 +38,6 @@ use hermes_test_components::chain_driver::traits::proposal::poll_status::Proposa
 use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
 use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
-use hermes_wasm_test_components::components::WasmChainDriverComponents;
-use hermes_wasm_test_components::traits::chain_driver::upload_client_code::WasmClientCodeUploaderComponent;
 use ibc_relayer::config::{ChainConfig, Config};
 use tokio::process::Child;
 use tokio::sync::Mutex;
@@ -83,10 +81,6 @@ delegate_components! {
             ProposalVoterComponent,
         ]:
             BaseCosmosChainDriverComponents,
-        [
-            WasmClientCodeUploaderComponent,
-        ]:
-            WasmChainDriverComponents,
     }
 }
 

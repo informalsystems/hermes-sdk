@@ -1,1 +1,1 @@
-pub mod client_code_path;
+pub mod client_byte_code;
