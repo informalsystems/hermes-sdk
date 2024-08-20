@@ -1,5 +1,9 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use hermes_wasm_test_components::impls::chain::store_code::BuildStoreCodeMessage;
+use hermes_wasm_test_components::traits::chain::store_code::{
+    CanBuildStoreCodeMessage, StoreCodeMessageBuilderComponent,
+};
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -156,6 +160,8 @@ delegate_components! {
             DefaultEncodingGetterComponent,
         ]:
             ProvideCosmosEncoding,
+        StoreCodeMessageBuilderComponent:
+            BuildStoreCodeMessage,
     }
 }
 
@@ -373,6 +379,7 @@ pub trait CanUseCosmosChain:
     + CanPollTxResponse
     + CanQueryTxResponse
     + CanAssertEventualAmount
+    + CanBuildStoreCodeMessage
 {
 }
 

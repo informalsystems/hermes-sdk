@@ -1871,6 +1871,7 @@ dependencies = [
  "hermes-test-components",
  "hermes-tracing-logging-components",
  "hermes-wasm-client-components",
+ "hermes-wasm-test-components",
  "http 0.2.12",
  "ibc",
  "ibc-proto",

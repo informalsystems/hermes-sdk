@@ -213,6 +213,10 @@ use hermes_runtime_components::traits::runtime::{
     HasRuntime, ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
+use hermes_wasm_test_components::impls::chain::store_code::BuildStoreCodeMessage;
+use hermes_wasm_test_components::traits::chain::store_code::{
+    CanBuildStoreCodeMessage, StoreCodeMessageBuilderComponent,
+};
 use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
@@ -275,6 +279,8 @@ delegate_components! {
             DefaultEncodingGetterComponent,
         ]:
             ProvideWasmCosmosEncoding,
+        StoreCodeMessageBuilderComponent:
+            BuildStoreCodeMessage,
     }
 }
 
@@ -615,6 +621,7 @@ pub trait CanUseWasmCosmosChain:
             CreateClientMessageOptions = (),
         >
     + HasDefaultEncoding<Encoding = WasmCosmosEncoding>
+    + CanBuildStoreCodeMessage
 {
 }
 
