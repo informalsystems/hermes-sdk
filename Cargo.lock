@@ -2226,10 +2226,14 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cgp-error-eyre",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-runtime-components",
  "hermes-test-components",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "prost",
  "serde_json",
  "toml",
 ]
