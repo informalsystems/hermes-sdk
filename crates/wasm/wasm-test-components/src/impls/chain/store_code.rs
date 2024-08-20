@@ -3,6 +3,7 @@ use hermes_cosmos_chain_components::traits::message::{
 };
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
+use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::gov::v1::MsgSubmitProposal;
@@ -20,24 +21,28 @@ pub struct StoreCodeProposalMessage {
     pub wasm_byte_code: Vec<u8>,
     pub title: String,
     pub summary: String,
+    pub authority: String,
     pub deposit_amount: Amount,
 }
 
 impl<Chain> StoreCodeMessageBuilder<Chain> for BuildStoreCodeMessage
 where
-    Chain: HasAmountType<Amount = Amount> + HasMessageType<Message = CosmosMessage>,
+    Chain:
+        HasAmountType<Amount = Amount> + HasAddressType + HasMessageType<Message = CosmosMessage>,
 {
     fn build_store_code_message(
         _chain: &Chain,
         wasm_byte_code: &Vec<u8>,
         title: &str,
         summary: &str,
+        authority: &Chain::Address,
         deposit_amount: &Amount,
     ) -> CosmosMessage {
         let message = StoreCodeProposalMessage {
             wasm_byte_code: wasm_byte_code.clone(),
             title: title.into(),
             summary: summary.into(),
+            authority: authority.to_string(),
             deposit_amount: deposit_amount.clone(),
         };
 
@@ -48,7 +53,7 @@ where
 impl DynCosmosMessage for StoreCodeProposalMessage {
     fn encode_protobuf(&self, signer: &Signer) -> Any {
         let store_code_message = MsgStoreCode {
-            signer: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(),
+            signer: self.authority.clone(),
             wasm_byte_code: self.wasm_byte_code.clone(),
         };
 

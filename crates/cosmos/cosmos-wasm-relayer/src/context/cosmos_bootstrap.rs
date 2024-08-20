@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use hermes_wasm_test_components::traits::bootstrap::client_byte_code::WasmClientByteCodeGetter;
+use hermes_wasm_test_components::traits::bootstrap::gov_authority::GovernanceProposalAuthorityGetter;
 use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -57,6 +58,7 @@ pub struct CosmosWithWasmClientBootstrap {
     pub staking_denom: String,
     pub transfer_denom: String,
     pub wasm_client_byte_code: Vec<u8>,
+    pub governance_proposal_authority: String,
 }
 
 impl CanUseCosmosSdkChainBootstrapper for CosmosWithWasmClientBootstrap {}
@@ -176,5 +178,13 @@ impl WasmClientByteCodeGetter<CosmosWithWasmClientBootstrap>
 {
     fn wasm_client_byte_code(bootstrap: &CosmosWithWasmClientBootstrap) -> &Vec<u8> {
         &bootstrap.wasm_client_byte_code
+    }
+}
+
+impl GovernanceProposalAuthorityGetter<CosmosWithWasmClientBootstrap>
+    for CosmosWithWasmClientBootstrapComponents
+{
+    fn governance_proposal_authority(bootstrap: &CosmosWithWasmClientBootstrap) -> &String {
+        &bootstrap.governance_proposal_authority
     }
 }

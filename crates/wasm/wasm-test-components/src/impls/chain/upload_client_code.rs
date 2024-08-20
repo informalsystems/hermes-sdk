@@ -14,10 +14,16 @@ where
         wasm_client_bytes: &Vec<u8>,
         title: &str,
         summary: &str,
+        authority: &Chain::Address,
         deposit_amount: &Chain::Amount,
     ) -> Result<(), Chain::Error> {
-        let message =
-            chain.build_store_code_message(wasm_client_bytes, title, summary, deposit_amount);
+        let message = chain.build_store_code_message(
+            wasm_client_bytes,
+            title,
+            summary,
+            authority,
+            deposit_amount,
+        );
 
         chain.send_message(message).await?;
 

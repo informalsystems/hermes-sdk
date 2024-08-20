@@ -75,6 +75,7 @@ fn test_cosmos_to_wasm_cosmos() -> Result<(), Error> {
             staking_denom: "stake".into(),
             transfer_denom: "coin".into(),
             wasm_client_byte_code,
+            governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
         });
 
         let gaia_chain_driver = gaia_bootstrap.bootstrap_chain("gaia").await?;

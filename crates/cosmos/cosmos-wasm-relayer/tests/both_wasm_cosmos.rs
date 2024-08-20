@@ -61,6 +61,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             staking_denom: "stake".into(),
             transfer_denom: "coin".into(),
             wasm_client_byte_code,
+            governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
         });
 
         let chain_driver_a = bootstrap.bootstrap_chain("chain-a").await?;

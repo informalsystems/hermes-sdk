@@ -12,7 +12,6 @@ use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_relayer_components::multi::types::index::Index;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -30,6 +29,7 @@ use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
 use crate::traits::bootstrap::client_byte_code::HasWasmClientByteCode;
+use crate::traits::bootstrap::gov_authority::HasGovernanceProposalAuthority;
 use crate::traits::chain::store_code::CanBuildStoreCodeMessage;
 use crate::traits::chain::upload_client_code::CanUploadWasmClientCode;
 
@@ -43,6 +43,7 @@ where
         + HasChainGenesisConfigType
         + HasChainNodeConfigType
         + HasWasmClientByteCode
+        + HasGovernanceProposalAuthority
         + CanRaiseError<Chain::Error>
         + CanRaiseError<ChainDriver::Error>,
     Runtime: HasChildProcessType + HasFilePathType + CanSleep,
@@ -90,6 +91,7 @@ where
                 bootstrap.wasm_client_byte_code(),
                 "wasm-client",
                 "Wasm Client",
+                bootstrap.governance_proposal_authority(),
                 &Amount {
                     quantity: 20000,
                     denom: staking_denom.clone(),
