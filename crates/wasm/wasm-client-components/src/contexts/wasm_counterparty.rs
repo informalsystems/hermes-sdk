@@ -9,6 +9,7 @@ use hermes_encoding_components::traits::decoder::CanDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
+use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::{Any, ViaAny, ViaProtobuf};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
@@ -64,11 +65,11 @@ delegate_components! {
     }
 }
 
-impl ProvideEncodingType<WasmCounterparty> for WasmCounterpartyComponents {
+impl ProvideEncodingType<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     type Encoding = WasmClientEncoding;
 }
 
-impl DefaultEncodingGetter<WasmCounterparty> for WasmCounterpartyComponents {
+impl DefaultEncodingGetter<WasmCounterparty, AsBytes> for WasmCounterpartyComponents {
     fn default_encoding() -> &'static WasmClientEncoding {
         &WasmClientEncoding
     }

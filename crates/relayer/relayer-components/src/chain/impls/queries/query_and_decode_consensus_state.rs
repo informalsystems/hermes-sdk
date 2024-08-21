@@ -1,5 +1,6 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
+use hermes_encoding_components::types::AsBytes;
 
 use cgp_core::prelude::{Async, CanRaiseError};
 use hermes_encoding_components::traits::decoder::CanDecode;
@@ -19,8 +20,9 @@ impl<Chain, Counterparty, Encoding, Strategy> ConsensusStateQuerier<Chain, Count
 where
     Chain: CanQueryRawConsensusState<Counterparty, RawConsensusState = Vec<u8>>
         + CanRaiseError<Encoding::Error>,
-    Counterparty:
-        HasConsensusStateType<Chain> + HasHeightType + HasDefaultEncoding<Encoding = Encoding>,
+    Counterparty: HasConsensusStateType<Chain>
+        + HasHeightType
+        + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: HasEncodedType<Encoded = Vec<u8>> + CanDecode<Strategy, Counterparty::ConsensusState>,
     Strategy: Async,
 {

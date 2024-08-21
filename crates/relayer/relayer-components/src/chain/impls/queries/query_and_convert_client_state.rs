@@ -4,6 +4,7 @@ use cgp_core::error::CanRaiseError;
 use cgp_core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
+use hermes_encoding_components::types::AsBytes;
 
 use crate::chain::traits::queries::client_state::{
     AllClientStatesQuerier, CanQueryAllRawClientStates, CanQueryRawClientState,
@@ -17,7 +18,7 @@ impl<Chain, Counterparty, Encoding> ClientStateQuerier<Chain, Counterparty>
     for QueryAndConvertRawClientState
 where
     Chain: CanQueryRawClientState<Counterparty> + CanRaiseError<Encoding::Error>,
-    Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<Encoding = Encoding>,
+    Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: Async + CanConvert<Chain::RawClientState, Counterparty::ClientState>,
 {
     async fn query_client_state(
@@ -39,7 +40,7 @@ impl<Chain, Counterparty, Encoding> ClientStateWithProofsQuerier<Chain, Counterp
     for QueryAndConvertRawClientState
 where
     Chain: CanQueryRawClientStateWithProofs<Counterparty> + CanRaiseError<Encoding::Error>,
-    Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<Encoding = Encoding>,
+    Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: Async + CanConvert<Chain::RawClientState, Counterparty::ClientState>,
 {
     async fn query_client_state_with_proofs(
@@ -63,7 +64,7 @@ impl<Chain, Counterparty, Encoding> AllClientStatesQuerier<Chain, Counterparty>
     for QueryAndConvertRawClientState
 where
     Chain: CanQueryAllRawClientStates<Counterparty>,
-    Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<Encoding = Encoding>,
+    Counterparty: HasClientStateType<Chain> + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding: Async + CanConvert<Chain::RawClientState, Counterparty::ClientState>,
 {
     async fn query_all_client_states(

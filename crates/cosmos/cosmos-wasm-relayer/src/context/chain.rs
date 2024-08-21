@@ -27,6 +27,7 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingGetterComponent, EncodingTypeComponent,
     HasDefaultEncoding,
 };
+use hermes_encoding_components::types::AsBytes;
 use hermes_error::types::Error;
 use hermes_logger::ProvideHermesLogger;
 use hermes_logging_components::traits::has_logger::{
@@ -624,7 +625,7 @@ pub trait CanUseWasmCosmosChain:
             CosmosChain,
             CreateClientMessageOptions = (),
         >
-    + HasDefaultEncoding<Encoding = WasmCosmosEncoding>
+    + HasDefaultEncoding<AsBytes, Encoding = WasmCosmosEncoding>
     + CanUploadWasmClientCode
 {
 }

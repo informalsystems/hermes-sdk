@@ -9,6 +9,7 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
+use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::{ViaAny, ViaProtobuf};
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
@@ -50,16 +51,16 @@ delegate_components! {
     }
 }
 
-impl<Context> ProvideEncodingType<Context> for ProvideCosmosEncoding
+impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideCosmosEncoding
 where
     Context: Async,
 {
     type Encoding = CosmosEncoding;
 }
 
-impl<Context> DefaultEncodingGetter<Context> for ProvideCosmosEncoding
+impl<Context> DefaultEncodingGetter<Context, AsBytes> for ProvideCosmosEncoding
 where
-    Context: HasEncodingType<Encoding = CosmosEncoding>,
+    Context: HasEncodingType<AsBytes, Encoding = CosmosEncoding>,
 {
     fn default_encoding() -> &'static CosmosEncoding {
         &CosmosEncoding

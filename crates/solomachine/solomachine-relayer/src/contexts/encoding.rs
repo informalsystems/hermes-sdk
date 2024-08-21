@@ -7,6 +7,7 @@ use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
+use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::{Any, ViaAny, ViaProtobuf};
 use hermes_solomachine_chain_components::encoding::components::*;
 use hermes_solomachine_chain_components::types::client_state::SolomachineClientState;
@@ -37,16 +38,16 @@ delegate_components! {
 
 pub struct ProvideSolomachineEncoding;
 
-impl<Chain> ProvideEncodingType<Chain> for ProvideSolomachineEncoding
+impl<Chain> ProvideEncodingType<Chain, AsBytes> for ProvideSolomachineEncoding
 where
     Chain: Async,
 {
     type Encoding = SolomachineEncoding;
 }
 
-impl<Chain> DefaultEncodingGetter<Chain> for ProvideSolomachineEncoding
+impl<Chain> DefaultEncodingGetter<Chain, AsBytes> for ProvideSolomachineEncoding
 where
-    Chain: HasEncodingType<Encoding = SolomachineEncoding>,
+    Chain: HasEncodingType<AsBytes, Encoding = SolomachineEncoding>,
 {
     fn default_encoding() -> &'static SolomachineEncoding {
         &SolomachineEncoding

@@ -16,6 +16,7 @@ use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetterComponent, EncodingTypeComponent, HasDefaultEncoding,
 };
+use hermes_encoding_components::types::AsBytes;
 use hermes_relayer_components::chain::traits::commitment_prefix::IbcCommitmentPrefixGetter;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     CanBuildConnectionOpenAckMessage, CanBuildConnectionOpenConfirmMessage,
@@ -278,7 +279,7 @@ impl Solomachine for MockSolomachine {
 }
 
 pub trait CanUseSolomachine:
-    HasDefaultEncoding<Encoding = SolomachineEncoding>
+    HasDefaultEncoding<AsBytes, Encoding = SolomachineEncoding>
     + HasClientStateType<CosmosChain, ClientState = SolomachineClientState>
     + HasConsensusStateType<CosmosChain, ConsensusState = SolomachineConsensusState>
     + HasInitConnectionOptionsType<CosmosChain>

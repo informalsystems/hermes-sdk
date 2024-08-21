@@ -2,6 +2,7 @@ use cgp_core::error::CanRaiseError;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::ViaProtobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
@@ -30,7 +31,7 @@ impl<Chain, Encoding> AbciQuerier<Chain> for QueryAbci
 where
     Chain: HasRpcClient
         + HasHeightType<Height = Height>
-        + HasEncoding<Encoding = Encoding>
+        + HasEncoding<AsBytes, Encoding = Encoding>
         + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
         + CanRaiseError<RpcError>
         + CanRaiseError<AbciQueryError>

@@ -10,6 +10,7 @@ use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
+use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::{ViaAny, ViaProtobuf};
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
@@ -53,16 +54,16 @@ delegate_components! {
     }
 }
 
-impl<Context> ProvideEncodingType<Context> for ProvideWasmCosmosEncoding
+impl<Context> ProvideEncodingType<Context, AsBytes> for ProvideWasmCosmosEncoding
 where
     Context: Async,
 {
     type Encoding = WasmCosmosEncoding;
 }
 
-impl<Context> DefaultEncodingGetter<Context> for ProvideWasmCosmosEncoding
+impl<Context> DefaultEncodingGetter<Context, AsBytes> for ProvideWasmCosmosEncoding
 where
-    Context: HasEncodingType<Encoding = WasmCosmosEncoding>,
+    Context: HasEncodingType<AsBytes, Encoding = WasmCosmosEncoding>,
 {
     fn default_encoding() -> &'static WasmCosmosEncoding {
         &WasmCosmosEncoding
