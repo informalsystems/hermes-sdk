@@ -2,6 +2,7 @@ use cgp_core::error::CanRaiseError;
 use cgp_core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
+use hermes_encoding_components::types::AsBytes;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
@@ -23,7 +24,7 @@ where
         + HasCreateClientMessageOptionsType<Counterparty>
         + CanRaiseError<Encoding::Error>,
     Counterparty: HasCreateClientPayloadType<Chain, CreateClientPayload = CosmosCreateClientPayload>
-        + HasDefaultEncoding<Encoding = Encoding>,
+        + HasDefaultEncoding<AsBytes, Encoding = Encoding>,
     Encoding:
         Async + CanConvert<TendermintClientState, Any> + CanConvert<TendermintConsensusState, Any>,
 {

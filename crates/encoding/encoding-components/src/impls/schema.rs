@@ -1,6 +1,6 @@
 use cgp_core::prelude::Async;
 
-use crate::traits::schema::ProvideSchemaType;
+use crate::traits::types::schema::ProvideSchemaType;
 
 pub struct ProvideStringSchema;
 

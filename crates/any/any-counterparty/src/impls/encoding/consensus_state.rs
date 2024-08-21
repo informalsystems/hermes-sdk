@@ -3,10 +3,10 @@ use core::marker::PhantomData;
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::traits::convert::Converter;
-use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
-use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::schema::HasSchema;
-use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 
 use crate::types::consensus_state::AnyConsensusState;
@@ -22,7 +22,7 @@ impl<Encoding, ConsensusState> Converter<Encoding, Any, ConsensusState> for Enco
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + HasSchemaType<Schema = &'static str>
-        + CanDecode<Protobuf, TendermintConsensusState>
+        + CanDecode<ViaProtobuf, TendermintConsensusState>
         + HasSchema<TendermintConsensusState>
         + CanRaiseError<UnknownConsensusStateType>,
     ConsensusState: From<AnyConsensusState>,

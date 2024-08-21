@@ -2,6 +2,7 @@ use cgp_core::error::CanRaiseError;
 use cgp_core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
+use hermes_encoding_components::types::AsBytes;
 
 use crate::chain::traits::queries::consensus_state::{
     CanQueryRawConsensusState, CanQueryRawConsensusStateWithProofs, ConsensusStateQuerier,
@@ -16,8 +17,9 @@ impl<Chain, Counterparty, Encoding> ConsensusStateQuerier<Chain, Counterparty>
     for QueryAndConvertRawConsensusState
 where
     Chain: CanQueryRawConsensusState<Counterparty> + CanRaiseError<Encoding::Error>,
-    Counterparty:
-        HasConsensusStateType<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightType,
+    Counterparty: HasConsensusStateType<Chain>
+        + HasDefaultEncoding<AsBytes, Encoding = Encoding>
+        + HasHeightType,
     Encoding: Async + CanConvert<Chain::RawConsensusState, Counterparty::ConsensusState>,
 {
     async fn query_consensus_state(
@@ -42,8 +44,9 @@ impl<Chain, Counterparty, Encoding> ConsensusStateWithProofsQuerier<Chain, Count
     for QueryAndConvertRawConsensusState
 where
     Chain: CanQueryRawConsensusStateWithProofs<Counterparty> + CanRaiseError<Encoding::Error>,
-    Counterparty:
-        HasConsensusStateType<Chain> + HasDefaultEncoding<Encoding = Encoding> + HasHeightType,
+    Counterparty: HasConsensusStateType<Chain>
+        + HasDefaultEncoding<AsBytes, Encoding = Encoding>
+        + HasHeightType,
     Encoding: Async + CanConvert<Chain::RawConsensusState, Counterparty::ConsensusState>,
 {
     async fn query_consensus_state_with_proofs(

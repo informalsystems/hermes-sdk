@@ -12,14 +12,16 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
-use hermes_encoding_components::traits::decoder::{CanDecode, DecoderComponent};
-use hermes_encoding_components::traits::encoded::EncodedTypeComponent;
-use hermes_encoding_components::traits::encoder::EncoderComponent;
+use hermes_encoding_components::traits::decode::{CanDecode, DecoderComponent};
+use hermes_encoding_components::traits::encode::EncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
-use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
-use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
+use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
+pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
+use hermes_encoding_components::types::AsBytes;
+use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::queries::client_state::{
@@ -99,11 +101,11 @@ delegate_components! {
     }
 }
 
-impl ProvideEncodingType<AnyCounterparty> for AnyCounterpartyComponents {
+impl ProvideEncodingType<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     type Encoding = AnyClientEncoding;
 }
 
-impl DefaultEncodingGetter<AnyCounterparty> for AnyCounterpartyComponents {
+impl DefaultEncodingGetter<AnyCounterparty, AsBytes> for AnyCounterpartyComponents {
     fn default_encoding() -> &'static AnyClientEncoding {
         &AnyClientEncoding
     }
@@ -138,10 +140,10 @@ delegate_components! {
 }
 
 pub trait CanUseAnyClientEncoding:
-    CanDecode<Protobuf, TendermintClientState>
-    + CanDecode<Protobuf, Any>
-    + CanDecode<Protobuf, AnyClientState>
-    + CanDecode<Protobuf, AnyConsensusState>
+    CanDecode<ViaProtobuf, TendermintClientState>
+    + CanDecode<ViaProtobuf, Any>
+    + CanDecode<ViaProtobuf, AnyClientState>
+    + CanDecode<ViaProtobuf, AnyConsensusState>
     + CanConvert<Any, AnyClientState>
     + CanConvert<Any, AnyConsensusState>
 {

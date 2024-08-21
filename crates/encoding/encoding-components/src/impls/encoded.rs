@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 
 use cgp_core::prelude::Async;
 
-use crate::traits::encoded::ProvideEncodedType;
+use crate::traits::types::encoded::ProvideEncodedType;
 
 pub struct ProvideEncodedBytes;
 

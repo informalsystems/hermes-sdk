@@ -3,10 +3,11 @@ use core::marker::PhantomData;
 use cgp_core::prelude::{DelegateComponent, HasErrorType};
 
 use crate::traits::convert::Converter;
-use crate::traits::decoder::Decoder;
-use crate::traits::encoded::HasEncodedType;
-use crate::traits::encoder::Encoder;
-use crate::traits::schema::{HasSchemaType, SchemaGetter};
+use crate::traits::decode::Decoder;
+use crate::traits::encode::Encoder;
+use crate::traits::schema::SchemaGetter;
+use crate::traits::types::encoded::HasEncodedType;
+use crate::traits::types::schema::HasSchemaType;
 
 pub struct DelegateEncoding<Delegate>(pub PhantomData<Delegate>);
 

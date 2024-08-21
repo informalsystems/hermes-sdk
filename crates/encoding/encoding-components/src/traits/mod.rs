@@ -1,7 +1,10 @@
 pub mod convert;
-pub mod decoder;
+pub mod decode;
+pub mod decode_mut;
+pub mod encode;
 pub mod encode_and_decode;
-pub mod encoded;
-pub mod encoder;
+pub mod encode_and_decode_mut;
+pub mod encode_mut;
 pub mod has_encoding;
 pub mod schema;
+pub mod types;

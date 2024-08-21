@@ -1,6 +1,7 @@
 use cgp_core::error::CanRaiseError;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
+use hermes_encoding_components::types::AsBytes;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,
@@ -86,7 +87,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasHeightFields
         + HasClientStateType<Counterparty>
-        + HasEncoding<Encoding = Encoding>
+        + HasEncoding<AsBytes, Encoding = Encoding>
         + CanRaiseError<Ics02Error>
         + CanRaiseError<Encoding::Error>,
     Counterparty: HasCommitmentPrefixType<CommitmentPrefix = Vec<u8>>
@@ -157,7 +158,7 @@ where
     Chain: HasIbcChainTypes<Counterparty, ClientId = ClientId, ConnectionId = ConnectionId>
         + HasClientStateType<Counterparty>
         + HasHeightFields
-        + HasEncoding<Encoding = Encoding>
+        + HasEncoding<AsBytes, Encoding = Encoding>
         + CanRaiseError<Ics02Error>
         + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,

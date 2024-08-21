@@ -1,8 +1,8 @@
 use cgp_core::error::HasErrorType;
 
-use crate::traits::decoder::Decoder;
-use crate::traits::encoded::HasEncodedType;
-use crate::traits::encoder::Encoder;
+use crate::traits::decode::Decoder;
+use crate::traits::encode::Encoder;
+use crate::traits::types::encoded::HasEncodedType;
 
 pub struct ReturnEncoded;
 

@@ -3,10 +3,10 @@ use core::marker::PhantomData;
 
 use cgp_core::prelude::*;
 use hermes_encoding_components::traits::convert::Converter;
-use hermes_encoding_components::traits::decoder::Decoder;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
-use hermes_encoding_components::traits::encoder::Encoder;
+use hermes_encoding_components::traits::decode::Decoder;
+use hermes_encoding_components::traits::encode::Encoder;
 use hermes_encoding_components::traits::schema::HasSchema;
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use prost::{DecodeError, Message};
 use prost_types::Any;
 

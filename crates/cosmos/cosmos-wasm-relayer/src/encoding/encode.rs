@@ -4,7 +4,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
     ProtoTendermintClientState, ProtoTendermintConsensusState, TendermintClientState,
     TendermintConsensusState,
 };
-use hermes_protobuf_encoding_components::types::Protobuf;
+use hermes_protobuf_encoding_components::types::{ViaAny, ViaProtobuf};
 use hermes_relayer_components::chain::traits::types::proof::ViaCommitmentProof;
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
@@ -20,31 +20,31 @@ pub struct WasmCosmosEncoderComponents;
 delegate_components! {
     WasmCosmosEncoderComponents {
         [
-            (Protobuf, Vec<u8>),
+            (ViaProtobuf, Vec<u8>),
             (ViaCommitmentProof, Vec<u8>),
 
-            (Any, TendermintClientState),
-            (Protobuf, TendermintClientState),
-            (Protobuf, ProtoTendermintClientState),
+            (ViaAny, TendermintClientState),
+            (ViaProtobuf, TendermintClientState),
+            (ViaProtobuf, ProtoTendermintClientState),
 
-            (Any, TendermintConsensusState),
-            (Protobuf,TendermintConsensusState),
-            (Protobuf, ProtoTendermintConsensusState),
+            (ViaAny, TendermintConsensusState),
+            (ViaProtobuf,TendermintConsensusState),
+            (ViaProtobuf, ProtoTendermintConsensusState),
 
             (ViaCommitmentProof, MerkleProof),
-            (Protobuf, MerkleProof),
-            (Protobuf, ProtoMerkleProof),
+            (ViaProtobuf, MerkleProof),
+            (ViaProtobuf, ProtoMerkleProof),
 
-            (Protobuf, Any),
+            (ViaProtobuf, Any),
         ]:
             CosmosEncodingComponents,
         [
-            (Any, WasmClientState),
-            (Protobuf, WasmClientState),
-            (Protobuf, ProtoWasmClientState),
-            (Any, WasmConsensusState),
-            (Protobuf, WasmConsensusState),
-            (Protobuf, ProtoWasmConsensusState),
+            (ViaAny, WasmClientState),
+            (ViaProtobuf, WasmClientState),
+            (ViaProtobuf, ProtoWasmClientState),
+            (ViaAny, WasmConsensusState),
+            (ViaProtobuf, WasmConsensusState),
+            (ViaProtobuf, ProtoWasmConsensusState),
         ]:
             WasmEncodingComponents,
     }

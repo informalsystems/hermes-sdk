@@ -1,8 +1,9 @@
 use cgp_core::error::CanRaiseError;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
-use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
-use hermes_protobuf_encoding_components::types::Protobuf;
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_encoding_components::types::AsBytes;
+use hermes_protobuf_encoding_components::types::ViaProtobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::commitment_types::merkle::MerkleProof;
@@ -30,7 +31,7 @@ impl<Chain, Encoding> AbciQuerier<Chain> for QueryAbci
 where
     Chain: HasRpcClient
         + HasHeightType<Height = Height>
-        + HasEncoding<Encoding = Encoding>
+        + HasEncoding<AsBytes, Encoding = Encoding>
         + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
         + CanRaiseError<RpcError>
         + CanRaiseError<AbciQueryError>
@@ -39,7 +40,7 @@ where
         + CanRaiseError<DecodeError>
         + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,
-    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanEncode<Protobuf, MerkleProof>,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanEncode<ViaProtobuf, MerkleProof>,
 {
     async fn query_abci(
         chain: &Chain,

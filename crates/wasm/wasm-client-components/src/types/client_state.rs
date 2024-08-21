@@ -1,8 +1,8 @@
 use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
-use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
-use hermes_encoding_components::traits::encoded::HasEncodedType;
-use hermes_protobuf_encoding_components::types::Any;
+use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_protobuf_encoding_components::types::{Any, ViaAny};
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
@@ -79,7 +79,7 @@ impl<Encoding, Value> Converter<Encoding, Any, Value> for DecodeViaWasmClientSta
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + CanConvert<Any, WasmClientState>
-        + CanDecode<Any, Value>,
+        + CanDecode<ViaAny, Value>,
 {
     fn convert(encoding: &Encoding, any: &Any) -> Result<Value, Encoding::Error> {
         let wasm_client_state = encoding.convert(any)?;
