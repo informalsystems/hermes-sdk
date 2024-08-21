@@ -26,8 +26,6 @@ use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, StakingDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, ValidatorWallet};
-use hermes_test_components::chain_driver::traits::proposal::deposit::CanDepositProposal;
-use hermes_test_components::chain_driver::traits::proposal::vote::CanVoteProposal;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 
@@ -46,8 +44,7 @@ where
         + HasChainNodeConfigType
         + HasWasmClientByteCode
         + HasGovernanceProposalAuthority
-        + CanRaiseError<Chain::Error>
-        + CanRaiseError<ChainDriver::Error>,
+        + CanRaiseError<Chain::Error>,
     Runtime: HasChildProcessType + HasFilePathType + CanSleep,
     Chain: HasWalletSigner
         + HasProposalIdType<ProposalId = u64>
@@ -60,12 +57,8 @@ where
         + CanBuildDepositProposalMessage
         + CanBuildVoteProposalMessage
         + CanSendMessagesWithSigner,
-    ChainDriver: HasChain<Chain = Chain>
-        + HasWalletAt<ValidatorWallet, 0>
-        + HasDenomAt<StakingDenom, 0>
-        + CanDepositProposal
-        + CanVoteProposal,
-    ChainDriver::Runtime: HasFilePathType<FilePath = Runtime::FilePath>,
+    ChainDriver:
+        HasChain<Chain = Chain> + HasWalletAt<ValidatorWallet, 0> + HasDenomAt<StakingDenom, 0>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
 {
     async fn build_chain_driver(
