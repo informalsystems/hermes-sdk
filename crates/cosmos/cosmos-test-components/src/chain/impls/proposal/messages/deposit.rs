@@ -15,6 +15,12 @@ use crate::chain::types::amount::Amount;
 
 pub struct BuildDepositProposalMessage;
 
+#[derive(Debug)]
+pub struct DepositMessage {
+    pub proposal_id: u64,
+    pub amount: Coin,
+}
+
 impl<Chain> DepositProposalMessageBuilder<Chain> for BuildDepositProposalMessage
 where
     Chain: HasProposalIdType<ProposalId = u64>
@@ -36,12 +42,6 @@ where
 
         message.to_cosmos_message()
     }
-}
-
-#[derive(Debug)]
-pub struct DepositMessage {
-    pub proposal_id: u64,
-    pub amount: Coin,
 }
 
 impl DynCosmosMessage for DepositMessage {

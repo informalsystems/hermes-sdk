@@ -5,11 +5,10 @@ use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use crate::chain::traits::proposal::types::vote::HasProposalVoteType;
 
 #[derive_component(VoteProposalMessageBuilderComponent, VoteProposalMessageBuilder<Chain>)]
-#[async_trait]
 pub trait CanBuildVoteProposalMessage:
-    HasProposalIdType + HasProposalVoteType + HasMessageType + HasErrorType
+    HasProposalIdType + HasProposalVoteType + HasMessageType
 {
-    async fn build_vote_proposal(
+    fn build_vote_proposal(
         &self,
         proposal_id: &Self::ProposalId,
         vote: &Self::ProposalVote,
