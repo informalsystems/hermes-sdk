@@ -21,7 +21,7 @@ where
         + HasAmountType<Amount = Amount>
         + HasMessageType<Message = CosmosMessage>,
 {
-    async fn build_deposit_proposal_message(
+    fn build_deposit_proposal_message(
         _chain: &Chain,
         proposal_id: &u64,
         amount: &Amount,

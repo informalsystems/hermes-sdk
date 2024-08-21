@@ -1,6 +1,8 @@
 use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
+use hermes_test_components::chain::traits::proposal::messages::deposit::CanBuildDepositProposalMessage;
 
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
@@ -50,7 +52,9 @@ where
         + HasAmountType<Amount = Amount, Denom = Denom>
         + CanUploadWasmClientCode
         + CanUploadWasmClientCode
-        + CanPollProposalStatus,
+        + CanPollProposalStatus
+        + CanBuildDepositProposalMessage
+        + CanSendMessagesWithSigner,
     ChainDriver: HasChain<Chain = Chain>
         + HasWalletAt<ValidatorWallet, 0>
         + HasDenomAt<StakingDenom, 0>
@@ -102,14 +106,20 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        chain_driver
-            .deposit_proposal(
+        {
+            let deposit_message = chain.build_deposit_proposal_message(
                 &proposal_id,
                 &Amount::new(100000000, staking_denom.clone()),
-                validator_wallet,
-            )
-            .await
-            .map_err(Bootstrap::raise_error)?;
+            );
+
+            chain
+                .send_messages_with_signer(
+                    Chain::wallet_signer(validator_wallet),
+                    &vec![deposit_message],
+                )
+                .await
+                .map_err(Bootstrap::raise_error)?;
+        }
 
         chain
             .poll_proposal_status(&proposal_id, &ProposalStatus::VotingPeriod)
