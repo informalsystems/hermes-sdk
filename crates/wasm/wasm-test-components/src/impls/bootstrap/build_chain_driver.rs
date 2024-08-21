@@ -47,7 +47,7 @@ where
         + CanRaiseError<Chain::Error>,
     Runtime: HasChildProcessType + HasFilePathType + CanSleep,
     Chain: HasWalletSigner
-        + HasProposalIdType<ProposalId = u64>
+        + HasProposalIdType
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasProposalVoteType<ProposalVote = ProposalVote>
         + HasAmountType<Amount = Amount, Denom = Denom>
@@ -113,7 +113,7 @@ where
             chain
                 .send_messages_with_signer(
                     Chain::wallet_signer(validator_wallet),
-                    &vec![deposit_message],
+                    &[deposit_message],
                 )
                 .await
                 .map_err(Bootstrap::raise_error)?;
@@ -130,7 +130,7 @@ where
             chain
                 .send_messages_with_signer(
                     Chain::wallet_signer(validator_wallet),
-                    &vec![vote_message],
+                    &[vote_message],
                 )
                 .await
                 .map_err(Bootstrap::raise_error)?;
