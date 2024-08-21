@@ -14,6 +14,7 @@ use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_test_components::chain::traits::proposal::poll_status::CanPollProposalStatus;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
@@ -21,7 +22,6 @@ use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, StakingDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, ValidatorWallet};
 use hermes_test_components::chain_driver::traits::proposal::deposit::CanDepositProposal;
-use hermes_test_components::chain_driver::traits::proposal::poll_status::CanPollProposalStatus;
 use hermes_test_components::chain_driver::traits::proposal::vote::CanVoteProposal;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
@@ -49,11 +49,11 @@ where
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
         + HasAmountType<Amount = Amount, Denom = Denom>
         + CanUploadWasmClientCode
-        + CanUploadWasmClientCode,
+        + CanUploadWasmClientCode
+        + CanPollProposalStatus,
     ChainDriver: HasChain<Chain = Chain>
         + HasWalletAt<ValidatorWallet, 0>
         + HasDenomAt<StakingDenom, 0>
-        + CanPollProposalStatus
         + CanDepositProposal
         + CanVoteProposal,
     ChainDriver::Runtime: HasFilePathType<FilePath = Runtime::FilePath>,
@@ -97,7 +97,7 @@ where
 
         bootstrap.runtime().sleep(Duration::from_secs(3)).await;
 
-        chain_driver
+        chain
             .poll_proposal_status(&proposal_id, &ProposalStatus::DepositPeriod)
             .await
             .map_err(Bootstrap::raise_error)?;
@@ -111,7 +111,7 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        chain_driver
+        chain
             .poll_proposal_status(&proposal_id, &ProposalStatus::VotingPeriod)
             .await
             .map_err(Bootstrap::raise_error)?;
@@ -121,7 +121,7 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        chain_driver
+        chain
             .poll_proposal_status(&proposal_id, &ProposalStatus::Passed)
             .await
             .map_err(Bootstrap::raise_error)?;

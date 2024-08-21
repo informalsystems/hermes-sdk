@@ -34,8 +34,6 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{
     RelayerWallet, UserWallet, ValidatorWallet, WalletGetterAt, WalletsGetter,
 };
 use hermes_test_components::chain_driver::traits::proposal::deposit::ProposalDepositerComponent;
-use hermes_test_components::chain_driver::traits::proposal::poll_status::ProposalStatusPollerComponent;
-use hermes_test_components::chain_driver::traits::proposal::query_status::ProposalStatusQuerierComponent;
 use hermes_test_components::chain_driver::traits::proposal::vote::ProposalVoterComponent;
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
 use ibc_relayer::config::{ChainConfig, Config};
@@ -75,8 +73,6 @@ delegate_components! {
             RandomAmountGeneratorComponent,
             ProposalIdTypeComponent,
             ProposalStatusTypeComponent,
-            ProposalStatusQuerierComponent,
-            ProposalStatusPollerComponent,
             ProposalDepositerComponent,
             ProposalVoterComponent,
         ]:

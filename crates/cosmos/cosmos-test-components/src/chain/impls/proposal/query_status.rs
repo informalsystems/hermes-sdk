@@ -10,9 +10,9 @@ use tonic::Status;
 
 use crate::chain::types::proposal_status::ProposalStatus;
 
-pub struct QueryCosmosProposalStatus;
+pub struct QueryProposalStatusWithGrpc;
 
-impl<Chain> ProposalStatusQuerier<Chain> for QueryCosmosProposalStatus
+impl<Chain> ProposalStatusQuerier<Chain> for QueryProposalStatusWithGrpc
 where
     Chain: HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>

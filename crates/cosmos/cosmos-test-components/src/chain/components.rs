@@ -7,6 +7,8 @@ pub use hermes_test_components::chain::traits::assert::eventual_amount::Eventual
 pub use hermes_test_components::chain::traits::assert::poll_assert::PollAssertDurationGetterComponent;
 pub use hermes_test_components::chain::traits::chain_id::ChainIdFromStringBuilderComponent;
 pub use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilderComponent;
+pub use hermes_test_components::chain::traits::proposal::poll_status::ProposalStatusPollerComponent;
+pub use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerierComponent;
 pub use hermes_test_components::chain::traits::proposal::types::proposal_id::ProposalIdTypeComponent;
 pub use hermes_test_components::chain::traits::proposal::types::proposal_status::ProposalStatusTypeComponent;
 pub use hermes_test_components::chain::traits::queries::balance::BalanceQuerierComponent;
@@ -28,6 +30,8 @@ pub use hermes_test_components::chain::traits::types::wallet::{
 
 use crate::chain::impls::chain_id::BuildCosmosChainIdFromString;
 use crate::chain::impls::messages::ibc_transfer::BuildCosmosIbcTransferMessage;
+use crate::chain::impls::proposal::poll_status::PollProposalStatus;
+use crate::chain::impls::proposal::query_status::QueryProposalStatusWithGrpc;
 use crate::chain::impls::queries::balance::QueryCosmosBalance;
 use crate::chain::impls::transfer::amount::ConvertCosmosIbcAmount;
 use crate::chain::impls::transfer::timeout::IbcTransferTimeoutAfterSeconds;
@@ -78,5 +82,9 @@ define_components! {
             PollAssertEventualAmount,
         PollAssertDurationGetterComponent:
             ProvideDefaultPollAssertDuration,
+        ProposalStatusQuerierComponent:
+            QueryProposalStatusWithGrpc,
+        ProposalStatusPollerComponent:
+            PollProposalStatus,
     }
 }
