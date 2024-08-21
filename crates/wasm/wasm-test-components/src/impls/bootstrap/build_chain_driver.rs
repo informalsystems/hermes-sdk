@@ -128,10 +128,7 @@ where
             let vote_message = chain.build_vote_proposal_message(&proposal_id, &ProposalVote::Yes);
 
             chain
-                .send_messages_with_signer(
-                    Chain::wallet_signer(validator_wallet),
-                    &[vote_message],
-                )
+                .send_messages_with_signer(Chain::wallet_signer(validator_wallet), &[vote_message])
                 .await
                 .map_err(Bootstrap::raise_error)?;
         }
