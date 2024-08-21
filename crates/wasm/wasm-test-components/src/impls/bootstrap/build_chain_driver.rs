@@ -104,7 +104,7 @@ where
 
         chain_driver
             .deposit_proposal(
-                &1,
+                &proposal_id,
                 &Amount::new(100000000, staking_denom.clone()),
                 validator_wallet,
             )
