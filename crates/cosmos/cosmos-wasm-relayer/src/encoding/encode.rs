@@ -4,7 +4,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
     ProtoTendermintClientState, ProtoTendermintConsensusState, TendermintClientState,
     TendermintConsensusState,
 };
-use hermes_protobuf_encoding_components::types::ViaProtobuf;
+use hermes_protobuf_encoding_components::types::{ViaAny, ViaProtobuf};
 use hermes_relayer_components::chain::traits::types::proof::ViaCommitmentProof;
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
@@ -23,11 +23,11 @@ delegate_components! {
             (ViaProtobuf, Vec<u8>),
             (ViaCommitmentProof, Vec<u8>),
 
-            (Any, TendermintClientState),
+            (ViaAny, TendermintClientState),
             (ViaProtobuf, TendermintClientState),
             (ViaProtobuf, ProtoTendermintClientState),
 
-            (Any, TendermintConsensusState),
+            (ViaAny, TendermintConsensusState),
             (ViaProtobuf,TendermintConsensusState),
             (ViaProtobuf, ProtoTendermintConsensusState),
 
@@ -39,10 +39,10 @@ delegate_components! {
         ]:
             CosmosEncodingComponents,
         [
-            (Any, WasmClientState),
+            (ViaAny, WasmClientState),
             (ViaProtobuf, WasmClientState),
             (ViaProtobuf, ProtoWasmClientState),
-            (Any, WasmConsensusState),
+            (ViaAny, WasmConsensusState),
             (ViaProtobuf, WasmConsensusState),
             (ViaProtobuf, ProtoWasmConsensusState),
         ]:
