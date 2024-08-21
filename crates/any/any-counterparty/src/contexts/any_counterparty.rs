@@ -12,8 +12,8 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
-use hermes_encoding_components::traits::decoder::{CanDecode, DecoderComponent};
-use hermes_encoding_components::traits::encoder::EncoderComponent;
+use hermes_encoding_components::traits::decode::{CanDecode, DecoderComponent};
+use hermes_encoding_components::traits::encode::EncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };

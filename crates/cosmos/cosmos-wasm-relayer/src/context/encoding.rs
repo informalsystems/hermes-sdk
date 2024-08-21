@@ -4,8 +4,8 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays};
+use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
-use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };

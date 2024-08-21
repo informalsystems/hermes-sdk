@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use hermes_encoding_components::types::AsBytes;
 
 use cgp_core::prelude::{Async, CanRaiseError};
-use hermes_encoding_components::traits::decoder::CanDecode;
+use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 

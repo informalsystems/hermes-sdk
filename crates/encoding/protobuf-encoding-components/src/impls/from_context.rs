@@ -1,5 +1,5 @@
-use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
-use hermes_encoding_components::traits::encoder::{CanEncode, Encoder};
+use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
 pub struct EncodeFromContext;
 
 impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for EncodeFromContext

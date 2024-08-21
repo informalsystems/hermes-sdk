@@ -1,5 +1,5 @@
 use cgp_core::error::CanRaiseError;
-use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;

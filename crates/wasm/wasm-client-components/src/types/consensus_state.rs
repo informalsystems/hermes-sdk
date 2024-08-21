@@ -1,7 +1,7 @@
 use cgp_core::error::HasErrorType;
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
-use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
-use hermes_encoding_components::traits::encoder::{CanEncode, Encoder};
+use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::{Any, ViaAny};
 
