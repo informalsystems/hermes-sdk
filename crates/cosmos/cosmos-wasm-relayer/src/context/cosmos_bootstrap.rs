@@ -1,6 +1,4 @@
 use alloc::sync::Arc;
-use hermes_wasm_test_components::traits::bootstrap::client_byte_code::WasmClientByteCodeGetter;
-use hermes_wasm_test_components::traits::bootstrap::gov_authority::GovernanceProposalAuthorityGetter;
 use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -41,6 +39,8 @@ use hermes_test_components::driver::traits::types::chain_driver::ChainDriverType
 use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
 use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
 use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
+use hermes_wasm_test_components::traits::bootstrap::client_byte_code::WasmClientByteCodeGetter;
+use hermes_wasm_test_components::traits::bootstrap::gov_authority::GovernanceProposalAuthorityGetter;
 use ibc_relayer::config::compat_mode::CompatMode;
 
 /**

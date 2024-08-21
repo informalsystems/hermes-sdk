@@ -1,11 +1,6 @@
 use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
-use hermes_cosmos_test_components::chain::types::proposal_vote::ProposalVote;
-use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
-use hermes_test_components::chain::traits::proposal::messages::deposit::CanBuildDepositProposalMessage;
-use hermes_test_components::chain::traits::proposal::messages::vote::CanBuildVoteProposalMessage;
-use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
 
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
@@ -14,14 +9,19 @@ use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::Has
 use hermes_cosmos_test_components::chain::types::amount::Amount;
 use hermes_cosmos_test_components::chain::types::denom::Denom;
 use hermes_cosmos_test_components::chain::types::proposal_status::ProposalStatus;
+use hermes_cosmos_test_components::chain::types::proposal_vote::ProposalVote;
 use hermes_relayer_components::multi::types::index::Index;
+use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
+use hermes_test_components::chain::traits::proposal::messages::deposit::CanBuildDepositProposalMessage;
+use hermes_test_components::chain::traits::proposal::messages::vote::CanBuildVoteProposalMessage;
 use hermes_test_components::chain::traits::proposal::poll_status::CanPollProposalStatus;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
+use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_test_components::chain::traits::types::wallet::HasWalletSigner;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, StakingDenom};

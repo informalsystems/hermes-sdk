@@ -2,7 +2,6 @@ use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 use core::str::Utf8Error;
-use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
 
 use cgp_core::error::{DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -43,6 +42,7 @@ use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::E
 use hermes_test_components::chain::impls::ibc_transfer::MissingSendPacketEventError;
 use hermes_test_components::chain::traits::types::address::HasAddressType;
 use hermes_test_components::chain::traits::types::amount::HasAmountType;
+use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::commitment_types::error::CommitmentError;
 use ibc_relayer::error::Error as RelayerError;
