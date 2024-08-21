@@ -9,7 +9,7 @@ use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
-use hermes_protobuf_encoding_components::types::Protobuf;
+use hermes_protobuf_encoding_components::types::ViaProtobuf;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost_types::Any;
@@ -68,10 +68,10 @@ where
 
 pub trait CheckCosmosEncoding:
     HasEncodedType<Encoded = Vec<u8>>
-    + CanEncodeAndDecode<Protobuf, Vec<u8>>
-    + CanEncodeAndDecode<Protobuf, TendermintClientState>
-    + CanEncodeAndDecode<Protobuf, TendermintConsensusState>
-    + CanEncodeAndDecode<Protobuf, MerkleProof>
+    + CanEncodeAndDecode<ViaProtobuf, Vec<u8>>
+    + CanEncodeAndDecode<ViaProtobuf, TendermintClientState>
+    + CanEncodeAndDecode<ViaProtobuf, TendermintConsensusState>
+    + CanEncodeAndDecode<ViaProtobuf, MerkleProof>
     + CanEncodeAndDecode<Any, TendermintClientState>
     + CanEncodeAndDecode<Any, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>

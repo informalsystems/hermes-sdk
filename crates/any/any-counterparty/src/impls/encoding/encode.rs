@@ -4,7 +4,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
     ProtoTendermintClientState, ProtoTendermintConsensusState, TendermintClientState,
     TendermintConsensusState,
 };
-use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
 
 use crate::impls::encoding::client_state::EncodeAnyClientState;
 use crate::impls::encoding::consensus_state::EncodeAnyConsensusState;
@@ -16,19 +16,19 @@ pub struct AnyClientEncoderComponents;
 delegate_components! {
     AnyClientEncoderComponents {
         [
-            (Protobuf, Any),
+            (ViaProtobuf, Any),
 
             (Any, TendermintClientState),
-            (Protobuf, TendermintClientState),
-            (Protobuf, ProtoTendermintClientState),
+            (ViaProtobuf, TendermintClientState),
+            (ViaProtobuf, ProtoTendermintClientState),
 
             (Any, TendermintConsensusState),
-            (Protobuf, TendermintConsensusState),
-            (Protobuf, ProtoTendermintConsensusState),
+            (ViaProtobuf, TendermintConsensusState),
+            (ViaProtobuf, ProtoTendermintConsensusState),
         ]:
             CosmosEncodingComponents,
 
-        (Protobuf, AnyClientState): EncodeAnyClientState,
-        (Protobuf, AnyConsensusState): EncodeAnyConsensusState,
+        (ViaProtobuf, AnyClientState): EncodeAnyClientState,
+        (ViaProtobuf, AnyConsensusState): EncodeAnyConsensusState,
     }
 }

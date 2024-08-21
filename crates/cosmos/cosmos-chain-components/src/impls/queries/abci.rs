@@ -2,7 +2,7 @@ use cgp_core::error::CanRaiseError;
 use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
-use hermes_protobuf_encoding_components::types::Protobuf;
+use hermes_protobuf_encoding_components::types::ViaProtobuf;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use ibc::core::commitment_types::merkle::MerkleProof;
@@ -39,7 +39,7 @@ where
         + CanRaiseError<DecodeError>
         + CanRaiseError<Encoding::Error>
         + CanRaiseError<&'static str>,
-    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanEncode<Protobuf, MerkleProof>,
+    Encoding: HasEncodedType<Encoded = Vec<u8>> + CanEncode<ViaProtobuf, MerkleProof>,
 {
     async fn query_abci(
         chain: &Chain,

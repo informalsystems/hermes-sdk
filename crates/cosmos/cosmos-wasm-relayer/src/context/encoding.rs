@@ -10,7 +10,7 @@ use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
-use hermes_protobuf_encoding_components::types::Protobuf;
+use hermes_protobuf_encoding_components::types::ViaProtobuf;
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
@@ -71,14 +71,14 @@ where
 
 pub trait CheckWasmCosmosEncoding:
     HasEncodedType<Encoded = Vec<u8>>
-    + CanEncodeAndDecode<Protobuf, TendermintClientState>
+    + CanEncodeAndDecode<ViaProtobuf, TendermintClientState>
     + CanEncodeAndDecode<Any, TendermintClientState>
-    + CanEncodeAndDecode<Protobuf, TendermintConsensusState>
+    + CanEncodeAndDecode<ViaProtobuf, TendermintConsensusState>
     + CanEncodeAndDecode<Any, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
-    + CanEncodeAndDecode<Protobuf, ProtoWasmClientState>
-    + CanEncode<Protobuf, WasmClientState>
+    + CanEncodeAndDecode<ViaProtobuf, ProtoWasmClientState>
+    + CanEncode<ViaProtobuf, WasmClientState>
     + CanConvert<WasmClientState, ProtoWasmClientState>
     + CanConvert<ProtoWasmClientState, WasmClientState>
     + CanEncodeAndDecode<Any, WasmClientState>

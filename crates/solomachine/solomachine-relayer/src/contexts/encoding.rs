@@ -7,7 +7,7 @@ use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
-use hermes_protobuf_encoding_components::types::{Any, Protobuf};
+use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
 use hermes_solomachine_chain_components::encoding::components::*;
 use hermes_solomachine_chain_components::types::client_state::SolomachineClientState;
 use hermes_solomachine_chain_components::types::consensus_state::SolomachineConsensusState;
@@ -60,7 +60,7 @@ delegate_components! {
 }
 
 pub trait CanUseSolomachineEncoding:
-    CanEncodeAndDecode<Protobuf, SolomachineClientState>
+    CanEncodeAndDecode<ViaProtobuf, SolomachineClientState>
     + CanEncodeAndDecode<Any, SolomachineClientState>
     + CanEncodeAndDecode<Any, SolomachineConsensusState>
     + CanConvertBothWays<Any, SolomachineClientState>
