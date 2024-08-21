@@ -1,10 +1,5 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
-use hermes_wasm_test_components::components::WasmChainComponents;
-use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
-use hermes_wasm_test_components::traits::chain::upload_client_code::{
-    CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
-};
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp_core::prelude::*;
@@ -76,8 +71,16 @@ use hermes_runtime_components::traits::runtime::{
 };
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
 use hermes_test_components::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
+use hermes_test_components::chain::traits::proposal::messages::deposit::CanBuildDepositProposalMessage;
+use hermes_test_components::chain::traits::proposal::messages::vote::CanBuildVoteProposalMessage;
+use hermes_test_components::chain::traits::proposal::query_status::CanQueryProposalStatus;
 use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
+use hermes_wasm_test_components::components::WasmChainComponents;
+use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
+use hermes_wasm_test_components::traits::chain::upload_client_code::{
+    CanUploadWasmClientCode, WasmClientCodeUploaderComponent,
+};
 use http::Uri;
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
@@ -384,6 +387,9 @@ pub trait CanUseCosmosChain:
     + CanQueryTxResponse
     + CanAssertEventualAmount
     + CanUploadWasmClientCode
+    + CanQueryProposalStatus
+    + CanBuildDepositProposalMessage
+    + CanBuildVoteProposalMessage
 {
 }
 

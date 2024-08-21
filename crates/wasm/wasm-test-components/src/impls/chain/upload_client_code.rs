@@ -1,5 +1,4 @@
-use core::str::FromStr;
-use core::str::{from_utf8, Utf8Error};
+use core::str::{from_utf8, FromStr, Utf8Error};
 use std::num::ParseIntError;
 
 use cgp_core::error::CanRaiseError;
