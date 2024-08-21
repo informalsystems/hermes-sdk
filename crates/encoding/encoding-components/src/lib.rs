@@ -1,4 +1,5 @@
 #![no_std]
+#![allow(clippy::needless_lifetimes)]
 
 extern crate alloc;
 
