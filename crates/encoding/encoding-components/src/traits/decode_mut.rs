@@ -1,13 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::traits::encoded::HasEncodedType;
-
-#[derive_component(DecodeBufferTypeComponent, ProvideDecodeBufferType<Encoding>)]
-pub trait HasDecodeBufferType: HasEncodedType {
-    type DecodeBuffer<'a>;
-
-    fn from_encoded<'a>(encoded: &'a Self::Encoded) -> Self::DecodeBuffer<'a>;
-}
+use crate::traits::types::decode_buffer::HasDecodeBufferType;
 
 #[derive_component(MutDecoderComponent, MutDecoder<Encoding>)]
 pub trait CanDecodeMut<Strategy, Value>: HasDecodeBufferType + HasErrorType {

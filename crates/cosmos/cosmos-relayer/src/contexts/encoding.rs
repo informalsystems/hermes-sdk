@@ -5,10 +5,10 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::{ViaAny, ViaProtobuf};
 use ibc::core::commitment_types::merkle::MerkleProof;

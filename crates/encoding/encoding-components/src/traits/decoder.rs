@@ -1,6 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::traits::encoded::HasEncodedType;
+use crate::traits::types::encoded::HasEncodedType;
 
 #[derive_component(DecoderComponent, Decoder<Encoding>)]
 pub trait CanDecode<Strategy, Value>: HasEncodedType + HasErrorType {

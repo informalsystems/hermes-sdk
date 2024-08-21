@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 
 use cgp_core::prelude::*;
 use hermes_encoding_components::traits::decoder::Decoder;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::Encoder;
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 
 use crate::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 use crate::impls::from_context::EncodeFromContext;

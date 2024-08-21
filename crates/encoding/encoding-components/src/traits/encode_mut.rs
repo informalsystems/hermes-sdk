@@ -1,13 +1,6 @@
 use cgp_core::prelude::*;
 
-use crate::traits::encoded::HasEncodedType;
-
-#[derive_component(EncodeBufferTypeComponent, ProvideEncodeBufferType<Encoding>)]
-pub trait HasEncodeBufferType: HasEncodedType {
-    type EncodeBuffer: Default;
-
-    fn to_encoded(buffer: Self::EncodeBuffer) -> Self::Encoded;
-}
+use crate::traits::types::encode_buffer::HasEncodeBufferType;
 
 #[derive_component(MutEncoderComponent, MutEncoder<Encoding>)]
 pub trait CanEncodeMut<Strategy, Value>: HasEncodeBufferType + HasErrorType {

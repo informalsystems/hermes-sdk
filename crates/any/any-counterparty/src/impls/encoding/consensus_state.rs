@@ -4,8 +4,8 @@ use cgp_core::error::CanRaiseError;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
-use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::schema::HasSchema;
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 

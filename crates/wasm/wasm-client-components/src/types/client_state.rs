@@ -1,7 +1,7 @@
 use cgp_core::error::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decoder::{CanDecode, Decoder};
-use hermes_encoding_components::traits::encoded::HasEncodedType;
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::{Any, ViaAny};
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;

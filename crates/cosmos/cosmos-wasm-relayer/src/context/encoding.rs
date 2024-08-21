@@ -5,11 +5,11 @@ use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays};
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::{ViaAny, ViaProtobuf};
 use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};

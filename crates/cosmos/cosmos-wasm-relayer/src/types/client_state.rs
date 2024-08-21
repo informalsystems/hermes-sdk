@@ -1,8 +1,8 @@
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decoder::CanDecode;
-use hermes_encoding_components::traits::encoded::HasEncodedType;
 use hermes_encoding_components::traits::encoder::CanEncode;
+use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::ViaAny;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use ibc::core::client::types::Height;

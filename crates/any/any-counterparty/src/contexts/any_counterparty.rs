@@ -13,12 +13,13 @@ use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
 use hermes_encoding_components::traits::decoder::{CanDecode, DecoderComponent};
-use hermes_encoding_components::traits::encoded::EncodedTypeComponent;
 use hermes_encoding_components::traits::encoder::EncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
-use hermes_encoding_components::traits::schema::{SchemaGetterComponent, SchemaTypeComponent};
+pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
+use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
+pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
