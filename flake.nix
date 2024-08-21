@@ -79,11 +79,13 @@
           ibc-go-v8-simapp
           gaia18
           gaia14
+          osmosis
         ;
 
         inherit
           (cosmos-nix-wasm)
           ibc-go-v7-wasm-simapp
+          ibc-go-v8-wasm-simapp
         ;
       };
     });

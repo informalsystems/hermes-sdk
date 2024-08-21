@@ -1,6 +1,7 @@
 pub mod channel;
 pub mod commitment_proof;
 pub mod connection;
+pub mod event;
 pub mod events;
 pub mod messages;
 pub mod nonce_guard;

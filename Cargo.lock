@@ -1871,6 +1871,7 @@ dependencies = [
  "hermes-test-components",
  "hermes-tracing-logging-components",
  "hermes-wasm-client-components",
+ "hermes-wasm-test-components",
  "http 0.2.12",
  "ibc",
  "ibc-proto",
@@ -2226,10 +2227,14 @@ version = "0.1.0"
 dependencies = [
  "cgp-core",
  "cgp-error-eyre",
+ "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
  "hermes-runtime-components",
  "hermes-test-components",
+ "ibc-proto",
+ "ibc-relayer-types",
+ "prost",
  "serde_json",
  "toml",
 ]

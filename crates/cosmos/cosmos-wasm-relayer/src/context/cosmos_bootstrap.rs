@@ -1,4 +1,6 @@
 use alloc::sync::Arc;
+use hermes_wasm_test_components::traits::bootstrap::client_byte_code::WasmClientByteCodeGetter;
+use hermes_wasm_test_components::traits::bootstrap::gov_authority::GovernanceProposalAuthorityGetter;
 use std::path::PathBuf;
 
 use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -39,7 +41,6 @@ use hermes_test_components::driver::traits::types::chain_driver::ChainDriverType
 use hermes_wasm_test_components::impls::bootstrap::build_chain_driver::BuildChainDriverAndInitWasmClient;
 use hermes_wasm_test_components::impls::bootstrap::genesis_config::ModifyWasmGenesisConfig;
 use hermes_wasm_test_components::impls::bootstrap::node_config::ModifyWasmNodeConfig;
-use hermes_wasm_test_components::traits::bootstrap::client_code_path::WasmClientCodePathGetter;
 use ibc_relayer::config::compat_mode::CompatMode;
 
 /**
@@ -56,7 +57,8 @@ pub struct CosmosWithWasmClientBootstrap {
     pub account_prefix: String,
     pub staking_denom: String,
     pub transfer_denom: String,
-    pub wasm_client_code_path: PathBuf,
+    pub wasm_client_byte_code: Vec<u8>,
+    pub governance_proposal_authority: String,
 }
 
 impl CanUseCosmosSdkChainBootstrapper for CosmosWithWasmClientBootstrap {}
@@ -171,10 +173,18 @@ impl CosmosBuilderGetter<CosmosWithWasmClientBootstrap>
     }
 }
 
-impl WasmClientCodePathGetter<CosmosWithWasmClientBootstrap>
+impl WasmClientByteCodeGetter<CosmosWithWasmClientBootstrap>
     for CosmosWithWasmClientBootstrapComponents
 {
-    fn wasm_client_code_path(bootstrap: &CosmosWithWasmClientBootstrap) -> &PathBuf {
-        &bootstrap.wasm_client_code_path
+    fn wasm_client_byte_code(bootstrap: &CosmosWithWasmClientBootstrap) -> &Vec<u8> {
+        &bootstrap.wasm_client_byte_code
+    }
+}
+
+impl GovernanceProposalAuthorityGetter<CosmosWithWasmClientBootstrap>
+    for CosmosWithWasmClientBootstrapComponents
+{
+    fn governance_proposal_authority(bootstrap: &CosmosWithWasmClientBootstrap) -> &String {
+        &bootstrap.governance_proposal_authority
     }
 }
