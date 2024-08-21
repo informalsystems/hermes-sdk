@@ -1,6 +1,9 @@
 pub mod convert;
+pub mod decode_mut;
 pub mod decoder;
 pub mod encode_and_decode;
+pub mod encode_and_decode_mut;
+pub mod encode_mut;
 pub mod encoded;
 pub mod encoder;
 pub mod has_encoding;
