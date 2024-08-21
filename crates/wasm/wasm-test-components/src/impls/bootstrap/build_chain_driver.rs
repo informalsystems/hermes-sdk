@@ -1,8 +1,11 @@
 use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
 use core::time::Duration;
+use hermes_cosmos_test_components::chain::types::proposal_vote::ProposalVote;
 use hermes_relayer_components::transaction::traits::send_messages_with_signer::CanSendMessagesWithSigner;
 use hermes_test_components::chain::traits::proposal::messages::deposit::CanBuildDepositProposalMessage;
+use hermes_test_components::chain::traits::proposal::messages::vote::CanBuildVoteProposalMessage;
+use hermes_test_components::chain::traits::proposal::types::vote::HasProposalVoteType;
 
 use cgp_core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilder;
@@ -49,11 +52,13 @@ where
     Chain: HasWalletSigner
         + HasProposalIdType<ProposalId = u64>
         + HasProposalStatusType<ProposalStatus = ProposalStatus>
+        + HasProposalVoteType<ProposalVote = ProposalVote>
         + HasAmountType<Amount = Amount, Denom = Denom>
         + CanUploadWasmClientCode
         + CanUploadWasmClientCode
         + CanPollProposalStatus
         + CanBuildDepositProposalMessage
+        + CanBuildVoteProposalMessage
         + CanSendMessagesWithSigner,
     ChainDriver: HasChain<Chain = Chain>
         + HasWalletAt<ValidatorWallet, 0>
@@ -126,10 +131,17 @@ where
             .await
             .map_err(Bootstrap::raise_error)?;
 
-        chain_driver
-            .vote_proposal(&1, validator_wallet)
-            .await
-            .map_err(Bootstrap::raise_error)?;
+        {
+            let vote_message = chain.build_vote_proposal_message(&proposal_id, &ProposalVote::Yes);
+
+            chain
+                .send_messages_with_signer(
+                    Chain::wallet_signer(validator_wallet),
+                    &vec![vote_message],
+                )
+                .await
+                .map_err(Bootstrap::raise_error)?;
+        }
 
         chain
             .poll_proposal_status(&proposal_id, &ProposalStatus::Passed)

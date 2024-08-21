@@ -26,7 +26,7 @@ where
         + HasProposalVoteType<ProposalVote = ProposalVote>
         + HasMessageType<Message = CosmosMessage>,
 {
-    fn build_vote_proposal(
+    fn build_vote_proposal_message(
         _chain: &Chain,
         proposal_id: &u64,
         vote: &ProposalVote,

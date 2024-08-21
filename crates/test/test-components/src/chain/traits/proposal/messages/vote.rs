@@ -8,7 +8,7 @@ use crate::chain::traits::proposal::types::vote::HasProposalVoteType;
 pub trait CanBuildVoteProposalMessage:
     HasProposalIdType + HasProposalVoteType + HasMessageType
 {
-    fn build_vote_proposal(
+    fn build_vote_proposal_message(
         &self,
         proposal_id: &Self::ProposalId,
         vote: &Self::ProposalVote,

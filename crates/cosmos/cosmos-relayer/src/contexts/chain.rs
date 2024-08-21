@@ -1,6 +1,7 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
 use hermes_test_components::chain::traits::proposal::messages::deposit::CanBuildDepositProposalMessage;
+use hermes_test_components::chain::traits::proposal::messages::vote::CanBuildVoteProposalMessage;
 use hermes_test_components::chain::traits::proposal::query_status::CanQueryProposalStatus;
 use hermes_wasm_test_components::components::WasmChainComponents;
 use hermes_wasm_test_components::traits::chain::messages::store_code::StoreCodeMessageBuilderComponent;
@@ -388,6 +389,7 @@ pub trait CanUseCosmosChain:
     + CanUploadWasmClientCode
     + CanQueryProposalStatus
     + CanBuildDepositProposalMessage
+    + CanBuildVoteProposalMessage
 {
 }
 
