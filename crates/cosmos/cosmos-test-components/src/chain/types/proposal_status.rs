@@ -13,4 +13,7 @@ pub enum ProposalStatus {
 
     #[serde(rename = "PROPOSAL_STATUS_REJECTED")]
     Rejected,
+
+    #[serde(rename = "PROPOSAL_STATUS_FAILED")]
+    Failed,
 }
