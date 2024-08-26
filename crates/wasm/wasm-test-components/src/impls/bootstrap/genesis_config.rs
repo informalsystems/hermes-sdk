@@ -16,25 +16,34 @@ where
         bootstrap: &Bootstrap,
         config: &mut Value,
     ) -> Result<(), Bootstrap::Error> {
-        let max_deposit_period = config
+        let gov_params = config
             .get_mut("app_state")
             .and_then(|app_state| app_state.get_mut("gov"))
             .and_then(|gov| gov.get_mut("params"))
-            .and_then(|deposit_params| deposit_params.as_object_mut())
+            .and_then(|gov_params| gov_params.as_object_mut())
             .ok_or_else(|| {
-                Bootstrap::raise_error(
-                    "Failed to retrieve `deposit_params` in genesis configuration",
-                )
+                Bootstrap::raise_error("Failed to retrieve `gov.params` in genesis configuration")
             })?;
 
-        max_deposit_period
+        gov_params
             .insert(
                 "max_deposit_period".to_owned(),
-                Value::String("10s".to_owned()),
+                Value::String("5s".to_owned()),
             )
             .ok_or_else(|| {
                 Bootstrap::raise_error(
                     "Failed to update `max_deposit_period` in genesis configuration",
+                )
+            })?;
+
+        gov_params
+            .insert(
+                "expedited_voting_period".to_owned(),
+                Value::String("5s".to_owned()),
+            )
+            .ok_or_else(|| {
+                Bootstrap::raise_error(
+                    "Failed to update `expedited_voting_period` in genesis configuration",
                 )
             })?;
 
@@ -58,20 +67,28 @@ where
                 Bootstrap::raise_error("Failed to update `voting_period` in genesis configuration")
             })?;
 
-        let allowed_clients = config
+        let client_genesis_params = config
             .get_mut("app_state")
             .and_then(|app_state| app_state.get_mut("ibc"))
             .and_then(|ibc| ibc.get_mut("client_genesis"))
             .and_then(|client_genesis| client_genesis.get_mut("params"))
-            .and_then(|params| params.get_mut("allowed_clients"))
-            .and_then(|allowed_clients| allowed_clients.as_array_mut())
+            .and_then(|client_genesis_params| client_genesis_params.as_object_mut())
             .ok_or_else(|| {
                 Bootstrap::raise_error(
-                    "Failed to retrieve `allowed_clients` in genesis configuration",
+                    "Failed to retrieve `client_genesis.params` in genesis configuration",
                 )
             })?;
 
-        allowed_clients.push(Value::String("08-wasm".to_string()));
+        client_genesis_params
+            .insert(
+                "allowed_clients".to_owned(),
+                Value::Array(vec![Value::String("08-wasm".to_owned())]),
+            )
+            .ok_or_else(|| {
+                Bootstrap::raise_error(
+                    "Failed to update `allowed_clients` in genesis configuration",
+                )
+            })?;
 
         InModifier::modify_genesis_config(bootstrap, config)?;
 

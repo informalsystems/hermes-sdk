@@ -90,7 +90,7 @@ where
                 "Wasm Client",
                 bootstrap.governance_proposal_authority(),
                 &Amount {
-                    quantity: 20000,
+                    quantity: 100000000,
                     denom: staking_denom.clone(),
                 },
             )
