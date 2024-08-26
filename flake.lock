@@ -255,16 +255,15 @@
         "wasmvm_2_1_0-src": "wasmvm_2_1_0-src"
       },
       "locked": {
-        "lastModified": 1724674759,
+        "lastModified": 1724685350,
         "narHash": "sha256-CssFaW6yHgKLRvzgVZ6ryrkVNk/eazqw+QJyKPdP9P0=",
         "owner": "informalsystems",
         "repo": "cosmos.nix",
-        "rev": "c94a2fda9a6a1efde1cbf8ad3c80c422ffdeaec1",
+        "rev": "145ce6c6a1cdbca7b32521a8bc9f5434bcbda021",
         "type": "github"
       },
       "original": {
         "owner": "informalsystems",
-        "ref": "soares/ibc-go-wasm",
         "repo": "cosmos.nix",
         "type": "github"
       }
