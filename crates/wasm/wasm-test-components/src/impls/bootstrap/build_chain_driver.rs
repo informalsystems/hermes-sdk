@@ -92,7 +92,7 @@ where
                 "Wasm Client",
                 bootstrap.governance_proposal_authority(),
                 &Amount {
-                    quantity: 100000000,
+                    quantity: 1000000,
                     denom: staking_denom.clone(),
                 },
             )
@@ -101,12 +101,14 @@ where
 
         bootstrap.runtime().sleep(Duration::from_secs(3)).await;
 
-        // chain
-        //     .poll_proposal_status(&proposal_id, &ProposalStatus::DepositPeriod)
-        //     .await
-        //     .map_err(Bootstrap::raise_error)?;
+        let status = chain
+            .poll_proposal_status(&proposal_id, &|status| {
+                status == &ProposalStatus::DepositPeriod || status == &ProposalStatus::VotingPeriod
+            })
+            .await
+            .map_err(Bootstrap::raise_error)?;
 
-        {
+        if status == ProposalStatus::DepositPeriod {
             let deposit_message = chain.build_deposit_proposal_message(
                 &proposal_id,
                 &Amount::new(1000000000, staking_denom.clone()),
@@ -122,7 +124,9 @@ where
         }
 
         chain
-            .poll_proposal_status(&proposal_id, &ProposalStatus::VotingPeriod)
+            .poll_proposal_status(&proposal_id, &|status| {
+                status == &ProposalStatus::VotingPeriod
+            })
             .await
             .map_err(Bootstrap::raise_error)?;
 
@@ -136,7 +140,7 @@ where
         }
 
         chain
-            .poll_proposal_status(&proposal_id, &ProposalStatus::Passed)
+            .poll_proposal_status(&proposal_id, &|status| status == &ProposalStatus::Passed)
             .await
             .map_err(Bootstrap::raise_error)?;
 
