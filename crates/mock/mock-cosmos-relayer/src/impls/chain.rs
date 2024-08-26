@@ -210,7 +210,7 @@ where
     fn incoming_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
         match &packet.timeout_timestamp_on_b {
             TimeoutTimestamp::Never => None,
-            TimeoutTimestamp::At(timestamp) => Some(timestamp.clone()),
+            TimeoutTimestamp::At(timestamp) => Some(*timestamp),
         }
     }
 
@@ -244,7 +244,7 @@ where
     fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
         match &packet.timeout_timestamp_on_b {
             TimeoutTimestamp::Never => None,
-            TimeoutTimestamp::At(timestamp) => Some(timestamp.clone()),
+            TimeoutTimestamp::At(timestamp) => Some(*timestamp),
         }
     }
 }

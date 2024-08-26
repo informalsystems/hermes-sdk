@@ -95,7 +95,7 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
 
         let genesis_status = Arc::new(Mutex::new(ChainStatus::new(
             genesis_height,
-            genesis_time.into(),
+            genesis_time,
         )));
 
         Self {
