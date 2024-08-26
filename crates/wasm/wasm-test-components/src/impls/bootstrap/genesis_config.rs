@@ -25,27 +25,17 @@ where
                 Bootstrap::raise_error("Failed to retrieve `gov.params` in genesis configuration")
             })?;
 
-        gov_params
-            .insert(
-                "max_deposit_period".to_owned(),
-                Value::String("6s".to_owned()),
-            )
-            .ok_or_else(|| {
-                Bootstrap::raise_error(
-                    "Failed to update `max_deposit_period` in genesis configuration",
-                )
-            })?;
+        gov_params.insert(
+            "max_deposit_period".to_owned(),
+            Value::String("6s".to_owned()),
+        );
 
-        gov_params
-            .insert(
+        if gov_params.contains_key("expedited_voting_period") {
+            gov_params.insert(
                 "expedited_voting_period".to_owned(),
                 Value::String("5s".to_owned()),
-            )
-            .ok_or_else(|| {
-                Bootstrap::raise_error(
-                    "Failed to update `expedited_voting_period` in genesis configuration",
-                )
-            })?;
+            );
+        }
 
         let voting_period = config
             .get_mut("app_state")
@@ -58,14 +48,10 @@ where
                 )
             })?;
 
-        voting_period
-            .insert(
-                "voting_period".to_owned(),
-                serde_json::Value::String("10s".to_owned()),
-            )
-            .ok_or_else(|| {
-                Bootstrap::raise_error("Failed to update `voting_period` in genesis configuration")
-            })?;
+        voting_period.insert(
+            "voting_period".to_owned(),
+            serde_json::Value::String("10s".to_owned()),
+        );
 
         let client_genesis_params = config
             .get_mut("app_state")
@@ -79,16 +65,10 @@ where
                 )
             })?;
 
-        client_genesis_params
-            .insert(
-                "allowed_clients".to_owned(),
-                Value::Array(vec![Value::String("08-wasm".to_owned())]),
-            )
-            .ok_or_else(|| {
-                Bootstrap::raise_error(
-                    "Failed to update `allowed_clients` in genesis configuration",
-                )
-            })?;
+        client_genesis_params.insert(
+            "allowed_clients".to_owned(),
+            Value::Array(vec![Value::String("08-wasm".to_owned())]),
+        );
 
         InModifier::modify_genesis_config(bootstrap, config)?;
 
