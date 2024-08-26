@@ -7,10 +7,9 @@
     flake-utils.url = github:numtide/flake-utils;
 
     cosmos-nix.url = github:informalsystems/cosmos.nix;
-    cosmos-nix-wasm.url = github:informalsystems/cosmos.nix/jonathan/ibc-go-wasm;
 
-    ibc-rs-src = {
-      url = github:cosmos/ibc-rs;
+    cosmwasm-ibc-src = {
+      url = github:informalsystems/cosmwasm-ibc;
       flake = false;
     };
 
@@ -23,7 +22,6 @@
         flake = false;
         url = github:celestiaorg/celestia-node/v0.14.1;
     };
-
   };
 
   outputs = inputs: let
@@ -45,11 +43,10 @@
       };
 
       cosmos-nix = inputs.cosmos-nix.packages.${system};
-      cosmos-nix-wasm = inputs.cosmos-nix-wasm.packages.${system};
 
       tendermint-wasm-client = import ./nix/tendermint-wasm-client {
         inherit nixpkgs;
-        inherit (inputs) ibc-rs-src;
+        inherit (inputs) cosmwasm-ibc-src;
       };
 
       celestia-app = import ./nix/celestia-app.nix {
@@ -77,15 +74,11 @@
           (cosmos-nix)
           ibc-go-v7-simapp
           ibc-go-v8-simapp
+          ibc-go-v7-wasm-simapp
+          ibc-go-v8-wasm-simapp
           gaia18
           gaia14
           osmosis
-        ;
-
-        inherit
-          (cosmos-nix-wasm)
-          ibc-go-v7-wasm-simapp
-          ibc-go-v8-wasm-simapp
         ;
       };
     });

@@ -51,8 +51,6 @@ where
             timeout_time: timeout_time.cloned(),
         };
 
-        println!("built IBC transfer message: {:?}", message);
-
         Ok(message.to_cosmos_message().into())
     }
 }
