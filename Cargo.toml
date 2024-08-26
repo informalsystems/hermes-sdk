@@ -68,23 +68,23 @@ overflow-checks = true
 
 [workspace.dependencies]
 async-trait                     = { version = "0.1.81" }
-ibc                             = { version = "0.53.0" }
-ibc-proto                       = { version = "0.46.0" }
-ibc-relayer                     = { version = "0.29" }
-ibc-relayer-types               = { version = "0.29" }
-ibc-telemetry                   = { version = "0.29" }
-tendermint                      = { version = "0.37" }
-tendermint-proto                = { version = "0.37" }
-tendermint-rpc                  = { version = "0.37" }
-tendermint-testgen              = { version = "0.37" }
-basecoin                        = { version = "0.1.0" }
+ibc                             = { version = "0.54.0" }
+ibc-proto                       = { version = "0.47.0" }
+ibc-relayer                     = { version = "0.29.2" }
+ibc-relayer-types               = { version = "0.29.2" }
+ibc-telemetry                   = { version = "0.29.2" }
+tendermint                      = { version = "0.38" }
+tendermint-proto                = { version = "0.38" }
+tendermint-rpc                  = { version = "0.38" }
+tendermint-testgen              = { version = "0.38" }
+basecoin                        = { version = "0.2.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
 cgp-component-macro             = { version = "0.1.0" }
 clap                            = { version = "4.5.16" }
 oneline-eyre                    = { version = "0.1.0" }
-prost                           = { version = "0.12.3" }
-prost-types                     = { version = "0.12.3" }
+prost                           = { version = "0.13.1" }
+prost-types                     = { version = "0.13.1" }
 serde                           = { version = "1.0.203" }
 serde_derive                    = { version = "1.0" }
 serde_json                      = { version = "1.0" }
@@ -92,7 +92,7 @@ tokio                           = { version = "1.38" }
 tracing                         = { version = "0.1.40" }
 tracing-subscriber              = { version = "0.3.18" }
 time                            = { version = "0.3.36" }
-tonic                           = { version = "0.11" }
+tonic                           = { version = "0.12" }
 toml                            = { version = "0.8.15" }
 futures                         = { version = "0.3.30", default-features = false }
 futures-core                    = { version = "0.3.30", default-features = false }
@@ -100,14 +100,14 @@ futures-util                    = { version = "0.3.30", default-features = false
 futures-channel                 = { version = "0.3.30", default-features = false }
 eyre                            = { version = "0.6.12" }
 itertools                       = { version = "0.12" }
-http                            = { version = "0.2.11" }
+http                            = { version = "1.0.0" }
 humantime                       = { version = "2.1.0" }
 flex-error                      = { version = "0.4.4", default-features = false }
 hdpath                          = { version = "0.6.3" }
 rand                            = { version = "0.8.5" }
 bech32                          = { version = "0.9.1" }
 sha2                            = { version = "0.10.8" }
-ics23                           = { version = "0.11.1" }
+ics23                           = { version = "0.12" }
 
 hermes-runtime-components               = { version = "0.1.0" }
 hermes-async-runtime-components         = { version = "0.1.0" }
@@ -152,19 +152,22 @@ hermes-solomachine-chain-components     = { version = "0.1.0" }
 hermes-solomachine-relayer              = { version = "0.1.0" }
 
 [patch.crates-io]
-ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
-ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "5dc0b09" }
+ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
+ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
 
-basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git", rev = "65c00d3" }
-tower-abci                  = { git = "https://github.com/informalsystems/tower-abci", rev = "37d952e" }
+basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git" }
+basecoin-app                = { git = "https://github.com/informalsystems/basecoin-rs.git" }
+basecoin-modules            = { git = "https://github.com/informalsystems/basecoin-rs.git" }
+basecoin-store              = { git = "https://github.com/informalsystems/basecoin-rs.git" }
+tower-abci                  = { git = "https://github.com/informalsystems/tower-abci", rev = "0992541" }
 
 cgp-core                = { git = "https://github.com/informalsystems/cgp.git" }
 cgp-component           = { git = "https://github.com/informalsystems/cgp.git" }
@@ -180,9 +183,9 @@ cgp-async-macro         = { git = "https://github.com/informalsystems/cgp.git" }
 cgp-run                 = { git = "https://github.com/informalsystems/cgp.git" }
 cgp-inner               = { git = "https://github.com/informalsystems/cgp.git" }
 
-ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git", rev = "43f3e835" }
-ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git", rev = "43f3e835" }
-ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git", rev = "43f3e835" }
+ibc-relayer             = { git = "https://github.com/informalsystems/hermes.git" }
+ibc-telemetry           = { git = "https://github.com/informalsystems/hermes.git" }
+ibc-relayer-types       = { git = "https://github.com/informalsystems/hermes.git" }
 
 hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }

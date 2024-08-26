@@ -45,7 +45,7 @@ pub trait HasRelayPacketFields: HasRelayChains {
     /**
         The timeout timestamp of a packet, which is a timestamp on the destination chain.
     */
-    fn packet_timeout_timestamp(packet: &Self::Packet) -> &TimestampOf<Self::DstChain>;
+    fn packet_timeout_timestamp(packet: &Self::Packet) -> Option<TimestampOf<Self::DstChain>>;
 }
 
 impl<Relay, SrcChain, DstChain, Packet> HasRelayPacketFields for Relay
@@ -78,7 +78,7 @@ where
         SrcChain::outgoing_packet_timeout_height(packet)
     }
 
-    fn packet_timeout_timestamp(packet: &Self::Packet) -> &TimestampOf<DstChain> {
+    fn packet_timeout_timestamp(packet: &Self::Packet) -> Option<TimestampOf<DstChain>> {
         SrcChain::outgoing_packet_timeout_timestamp(packet)
     }
 }

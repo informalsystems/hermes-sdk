@@ -155,8 +155,8 @@ impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainCompone
         Some(packet.timeout_height)
     }
 
-    fn incoming_packet_timeout_timestamp(packet: &PacketKey) -> &MockTimestamp {
-        &packet.timeout_timestamp
+    fn incoming_packet_timeout_timestamp(packet: &PacketKey) -> Option<MockTimestamp> {
+        Some(packet.timeout_timestamp.clone())
     }
 
     fn outgoing_packet_src_channel_id(packet: &PacketKey) -> &ChannelId {
@@ -183,8 +183,8 @@ impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainCompone
         Some(packet.timeout_height)
     }
 
-    fn outgoing_packet_timeout_timestamp(packet: &PacketKey) -> &MockTimestamp {
-        &packet.timeout_timestamp
+    fn outgoing_packet_timeout_timestamp(packet: &PacketKey) -> Option<MockTimestamp> {
+        Some(packet.timeout_timestamp.clone())
     }
 }
 

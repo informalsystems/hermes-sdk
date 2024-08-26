@@ -4,6 +4,7 @@ use hermes_cli_framework::output::{json, Output};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::counterparty::{channel_connection_client, unreceived_acknowledgements};
+use ibc_relayer::chain::requests::Paginate;
 use ibc_relayer::path::PathIdentifiers;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
@@ -72,8 +73,13 @@ impl QueryPendingAcks {
                 )
             })?;
 
-        unreceived_acknowledgements(&chain.handle, &counterparty_chain.handle, &path_identifiers)
-            .wrap_error("failed to get the unreceived acknowledgments")
+        unreceived_acknowledgements(
+            &chain.handle,
+            &counterparty_chain.handle,
+            &path_identifiers,
+            Paginate::All,
+        )
+        .wrap_error("failed to get the unreceived acknowledgments")
     }
 }
 

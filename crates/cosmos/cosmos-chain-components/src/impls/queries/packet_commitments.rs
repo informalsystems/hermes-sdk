@@ -3,7 +3,7 @@ use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_commitments::PacketCommitmentsQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
-use ibc_relayer::chain::requests::QueryPacketCommitmentsRequest;
+use ibc_relayer::chain::requests::{Paginate, QueryPacketCommitmentsRequest};
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
 use ibc_relayer_types::core::ics24_host::identifier::{ChannelId, PortId};
 use ibc_relayer_types::Height;
@@ -37,7 +37,7 @@ where
         let raw_request = QueryPacketCommitmentsRequest {
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
-            pagination: None,
+            pagination: Paginate::All,
         };
 
         let request = Request::new(raw_request.into());
