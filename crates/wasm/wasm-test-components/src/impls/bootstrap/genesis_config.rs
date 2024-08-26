@@ -28,7 +28,7 @@ where
         gov_params
             .insert(
                 "max_deposit_period".to_owned(),
-                Value::String("5s".to_owned()),
+                Value::String("6s".to_owned()),
             )
             .ok_or_else(|| {
                 Bootstrap::raise_error(

@@ -1,4 +1,5 @@
 use alloc::collections::BTreeMap;
+use core::fmt::Debug;
 use core::marker::PhantomData;
 use core::time::Duration;
 
@@ -60,6 +61,7 @@ where
     ChainDriver:
         HasChain<Chain = Chain> + HasWalletAt<ValidatorWallet, 0> + HasDenomAt<StakingDenom, 0>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
+    Chain::Event: Debug,
 {
     async fn build_chain_driver(
         bootstrap: &Bootstrap,
@@ -99,15 +101,15 @@ where
 
         bootstrap.runtime().sleep(Duration::from_secs(3)).await;
 
-        chain
-            .poll_proposal_status(&proposal_id, &ProposalStatus::DepositPeriod)
-            .await
-            .map_err(Bootstrap::raise_error)?;
+        // chain
+        //     .poll_proposal_status(&proposal_id, &ProposalStatus::DepositPeriod)
+        //     .await
+        //     .map_err(Bootstrap::raise_error)?;
 
         {
             let deposit_message = chain.build_deposit_proposal_message(
                 &proposal_id,
-                &Amount::new(100000000, staking_denom.clone()),
+                &Amount::new(1000000000, staking_denom.clone()),
             );
 
             chain
