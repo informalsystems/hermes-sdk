@@ -152,7 +152,7 @@ use crate::impls::queries::abci::QueryAbci;
 use crate::impls::queries::ack_packet::QueryCosmosAckPacket;
 use crate::impls::queries::ack_packets::QueryAckPacketsConcurrently;
 use crate::impls::queries::block::QueryCometBlock;
-use crate::impls::queries::chain_id::QueryChainIdWithChainHandle;
+use crate::impls::queries::chain_id::QueryChainIdFromAbci;
 use crate::impls::queries::chain_status::QueryChainStatusWithChainHandle;
 use crate::impls::queries::channel_end::QueryCosmosChannelEndFromAbci;
 use crate::impls::queries::client_state::QueryCosmosClientStateFromAbci;
@@ -163,12 +163,12 @@ use crate::impls::queries::packet_acknowledgements::QueryCosmosPacketAcknowledge
 use crate::impls::queries::packet_commitment::QueryPacketCommitmentFromAbci;
 use crate::impls::queries::packet_commitments::QueryCosmosPacketCommitments;
 use crate::impls::queries::packet_receipt::QueryPacketReceiptFromAbci;
-use crate::impls::queries::received_packet::QueryReceivedPacketWithChainHandle;
+use crate::impls::queries::received_packet::QueryReceivedPacketFromAbci;
 use crate::impls::queries::send_packet::QueryCosmosSendPacket;
 use crate::impls::queries::send_packets::QuerySendPacketsConcurrently;
 use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
-use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
+use crate::impls::queries::write_ack_event::QueryWriteAckEventFromAbci;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::{ProvideAnyRawClientState, ProvideTendermintClientState};
 use crate::impls::types::consensus_state::{
@@ -251,7 +251,7 @@ define_components! {
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,
         WriteAckQuerierComponent:
-            QueryWriteAckEventFromChainHandle,
+            QueryWriteAckEventFromAbci,
         [
             RawClientStateQuerierComponent,
             RawClientStateWithProofsQuerierComponent,
@@ -270,7 +270,7 @@ define_components! {
         UpdateClientPayloadBuilderComponent:
             BuildUpdateClientPayloadWithChainHandle,
         CounterpartyChainIdQuerierComponent:
-            QueryChainIdWithChainHandle,
+            QueryChainIdFromAbci,
 
         [
             ConnectionOpenInitPayloadBuilderComponent,
@@ -303,7 +303,7 @@ define_components! {
         PacketCommitmentsQuerierComponent:
             QueryCosmosPacketCommitments,
         ReceivedPacketQuerierComponent:
-            QueryReceivedPacketWithChainHandle,
+            QueryReceivedPacketFromAbci,
 
         UnreceivedPacketSequencesQuerierComponent:
             QueryUnreceivedCosmosPacketSequences,
