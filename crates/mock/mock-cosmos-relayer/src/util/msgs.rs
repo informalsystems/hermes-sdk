@@ -26,7 +26,10 @@ pub fn build_msg_transfer() -> MsgTransfer {
             receiver: dummy_signer(),
             memo: "".to_string().into(),
         },
-        timeout_timestamp_on_b: Timestamp::now().add(Duration::from_secs(10)).unwrap(),
+        timeout_timestamp_on_b: Timestamp::now()
+            .add(Duration::from_secs(10))
+            .unwrap()
+            .into(),
         timeout_height_on_b: Height::new(0, 1000).unwrap().into(),
     }
 }

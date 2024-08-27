@@ -57,7 +57,7 @@ where
                     let counterparty = Counterparty::new(
                         counterparty_client_id,
                         Some(counterparty_connection_id.clone()),
-                        Vec::from("ibc".as_bytes()).try_into().unwrap(),
+                        Vec::from("ibc".as_bytes()).into(),
                     );
 
                     let connection_end = ConnectionEnd::new(

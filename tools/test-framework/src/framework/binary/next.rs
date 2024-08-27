@@ -7,7 +7,7 @@ use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use ibc_relayer::chain::counterparty::unreceived_acknowledgements;
 use ibc_relayer::chain::handle::ChainHandle;
-use ibc_relayer::chain::requests::{IncludeProof, QueryChannelRequest, QueryHeight};
+use ibc_relayer::chain::requests::{IncludeProof, Paginate, QueryChannelRequest, QueryHeight};
 use ibc_relayer::foreign_client::ForeignClient;
 use ibc_relayer::path::PathIdentifiers;
 use ibc_relayer_types::core::ics04_channel::channel::{ChannelEnd, IdentifiedChannelEnd};
@@ -118,7 +118,7 @@ where
         Duration::from_secs(1),
         || {
             let unreceived_acks =
-                unreceived_acknowledgements(chain, counterparty, path_identifiers);
+                unreceived_acknowledgements(chain, counterparty, path_identifiers, Paginate::All);
 
             match unreceived_acks {
                 Ok(Some((acks, _))) => {

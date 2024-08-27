@@ -8,6 +8,7 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use ibc_relayer::chain::counterparty::{
     channel_connection_client, channel_on_destination, pending_packet_summary, PendingPackets,
 };
+use ibc_relayer::chain::requests::Paginate;
 use ibc_relayer_types::core::ics24_host::identifier::{ChainId, ChannelId, PortId};
 use oneline_eyre::eyre::eyre;
 use serde::Serialize;
@@ -129,6 +130,7 @@ impl QueryPendingPackets {
             &chain.handle,
             &counterparty_chain.handle,
             &chan_conn_cli.channel,
+            Paginate::All,
         )
         .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
 
@@ -150,6 +152,7 @@ impl QueryPendingPackets {
             &counterparty_chain.handle,
             &chain.handle,
             &counterparty_channel,
+            Paginate::All,
         )
         .map_err(|e| eyre!("failed to get pending packet summary: {}", e))?;
 

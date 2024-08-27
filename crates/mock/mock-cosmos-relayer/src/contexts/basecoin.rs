@@ -12,6 +12,7 @@ use basecoin::store::impls::RevertibleStore;
 use hermes_runtime::types::runtime::HermesRuntime;
 use ibc::core::client::types::Height;
 use ibc::core::host::types::identifiers::ChainId;
+use ibc::primitives::Timestamp;
 use tendermint::{AppHash, Time};
 use tendermint_testgen::light_block::TmLightBlock;
 use tendermint_testgen::{Generator, Header, LightBlock, Validator};
@@ -82,20 +83,17 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
 
         let genesis_height = Height::new(chain_id.revision_number(), 1).expect("never fails");
 
-        let genesis_time = Time::now();
+        let genesis_time = Timestamp::now();
 
         let genesis_block = Self::generate_block(
             &chain_id,
             genesis_height.revision_height(),
-            genesis_time,
+            genesis_time.into_tm_time(),
             &validators,
             AppHash::default(),
         );
 
-        let genesis_status = Arc::new(Mutex::new(ChainStatus::new(
-            genesis_height,
-            genesis_time.into(),
-        )));
+        let genesis_status = Arc::new(Mutex::new(ChainStatus::new(genesis_height, genesis_time)));
 
         Self {
             runtime,
@@ -133,7 +131,7 @@ impl<S: ProvableStore + Default + Debug> MockBasecoin<S> {
 
         let mut last_status = self.current_status.acquire_mutex();
 
-        *last_status = ChainStatus::new(current_height, current_time.into());
+        *last_status = ChainStatus::new(current_height, current_time.try_into().unwrap());
     }
 
     pub fn generate_block(

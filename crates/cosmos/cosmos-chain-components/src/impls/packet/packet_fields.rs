@@ -56,8 +56,8 @@ where
         }
     }
 
-    fn incoming_packet_timeout_timestamp(packet: &Packet) -> &Timestamp {
-        &packet.timeout_timestamp
+    fn incoming_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
+        Some(packet.timeout_timestamp)
     }
 
     fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
@@ -87,7 +87,7 @@ where
         }
     }
 
-    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> &Timestamp {
-        &packet.timeout_timestamp
+    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
+        Some(packet.timeout_timestamp)
     }
 }

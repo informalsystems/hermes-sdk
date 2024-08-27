@@ -61,7 +61,7 @@ use ibc::clients::tendermint::TENDERMINT_CLIENT_TYPE;
 use ibc::core::channel::types::events::{SendPacket, WriteAcknowledgement};
 use ibc::core::channel::types::msgs::{MsgAcknowledgement, MsgRecvPacket, MsgTimeout};
 use ibc::core::channel::types::packet::Packet;
-use ibc::core::channel::types::timeout::TimeoutHeight;
+use ibc::core::channel::types::timeout::{TimeoutHeight, TimeoutTimestamp};
 use ibc::core::client::context::ClientValidationContext;
 use ibc::core::client::types::events::CreateClient;
 use ibc::core::client::types::msgs::{MsgCreateClient, MsgUpdateClient};
@@ -207,8 +207,11 @@ where
         }
     }
 
-    fn incoming_packet_timeout_timestamp(packet: &Packet) -> &Timestamp {
-        &packet.timeout_timestamp_on_b
+    fn incoming_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
+        match &packet.timeout_timestamp_on_b {
+            TimeoutTimestamp::Never => None,
+            TimeoutTimestamp::At(timestamp) => Some(*timestamp),
+        }
     }
 
     fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
@@ -238,8 +241,11 @@ where
         }
     }
 
-    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> &Timestamp {
-        &packet.timeout_timestamp_on_b
+    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<Timestamp> {
+        match &packet.timeout_timestamp_on_b {
+            TimeoutTimestamp::Never => None,
+            TimeoutTimestamp::At(timestamp) => Some(*timestamp),
+        }
     }
 }
 
