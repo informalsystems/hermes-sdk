@@ -14,7 +14,7 @@ use hermes_relayer_components::relay::traits::ibc_message_sender::{MainSink, Ibc
 use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerComponent;
 use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
-use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
+use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponent;
 use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 
 use crate::relayer_mock::base::impls::relay::MockBuildUpdateClientMessage;
@@ -32,7 +32,7 @@ delegate_components! {
         IbcMessageSenderComponent<MainSink>:
             SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         PacketRelayerComponent: FullCycleRelayer,
-        ReceivePacketRelayerComponnent:
+        ReceivePacketRelayerComponent:
             SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
         AckPacketRelayerComponent:
             BaseAckPacketRelayer,

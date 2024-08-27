@@ -26,7 +26,7 @@ pub use hermes_relayer_components::relay::traits::ibc_message_sender::{
 pub use hermes_relayer_components::relay::traits::packet_clearer::PacketClearerComponent;
 pub use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayerComponent;
 pub use hermes_relayer_components::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
-pub use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
+pub use hermes_relayer_components::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponent;
 pub use hermes_relayer_components::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 pub use hermes_relayer_components::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
@@ -43,7 +43,7 @@ define_components! {
             LockPacketRelayer<LoggerRelayer<FilterRelayer<RetryRelayer<FullCycleRelayer>>>>,
         [
             TargetUpdateClientMessageBuilderComponent,
-            ReceivePacketRelayerComponnent,
+            ReceivePacketRelayerComponent,
             AckPacketRelayerComponent,
             TimeoutUnorderedPacketRelayerComponent,
             EventRelayerComponent,
