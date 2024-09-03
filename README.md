@@ -64,7 +64,7 @@ similarities with advanced OOP concepts, such as mixins and dependency injection
 The main difference is that CGP offers polymorphism at _compile time_, with no
 dynamic dispatch involved at runtime. With the use of associated types, CGP also
 allows strongly-typed relations to be established between different types, thus
-achieving type safety without any use of upcast or downcast operations.
+achieving type safety without any use of upcast or downcast operation.
 
 In Hermes SDK, we make use of the [`cgp`](https://github.com/contextgeneric/cgp)
 crate to define context-generic components. To learn more about CGP, readers are
@@ -111,13 +111,13 @@ The core relaying logic of Hermes SDK is implemented in the
 When inspecting the [`Cargo.toml` manifest](./crates/relayer/relayer-components/Cargo.toml),
 you may notice that aside from the core CGP components definition, there
 is no use of any implementation-specific crates, such as `std` and `tokio`.
-This shows that the Hermes SDK is _fully abstract_, and can be
+This shows that the core logic of Hermes SDK is _fully abstract_, and can be
 instantiated with any concrete implementation.
 
 Hermes SDK not only abstract over the concrete chain implementation,
 but also everything else, including error handling, logging, and async runtime.
 This means that one can easily build a custom IBC relayer that runs
-in restricted environment, such as on Wasm web applications, or
+in restricted environment, such as on Wasm web applications, or in
 sandboxed test environments such as [Kani](https://model-checking.github.io/kani/).
 
 ### Type-Safe Relaying
