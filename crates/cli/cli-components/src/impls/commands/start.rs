@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
+use cgp::extra::run::CanRun;
 use cgp_core::prelude::*;
-use cgp_core::run::CanRun;
 use hermes_error::traits::wrap::CanWrapError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;

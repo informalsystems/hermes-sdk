@@ -1,7 +1,7 @@
 use std::thread;
 use std::time::Duration;
 
-use cgp_core::run::CanRun;
+use cgp::extra::run::CanRun;
 use eyre::eyre;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_runtime_components::traits::runtime::HasRuntime;

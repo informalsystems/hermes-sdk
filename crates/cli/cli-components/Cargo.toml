@@ -20,6 +20,7 @@ hermes-encoding-components              = { workspace = true }
 hermes-logging-components               = { workspace = true }
 hermes-test-components                  = { workspace = true }
 
+cgp                 = { workspace = true }
 cgp-core            = { workspace = true }
 serde               = { workspace = true }
 toml                = { workspace = true }

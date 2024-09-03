@@ -12,6 +12,7 @@ description  = "Integration tests for Hermes"
 publish      = false
 
 [dependencies]
+cgp                                 = { workspace = true }
 cgp-core                            = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
 ibc-relayer                         = { workspace = true }
