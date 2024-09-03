@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::packets::ack::{

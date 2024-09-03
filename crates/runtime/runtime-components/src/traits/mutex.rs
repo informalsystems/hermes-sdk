@@ -1,6 +1,6 @@
 use core::ops::DerefMut;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(MutexComponent, ProvideMutex<Runtime>)]
 #[async_trait]

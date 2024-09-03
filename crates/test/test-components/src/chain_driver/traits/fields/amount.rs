@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::amount::{AmountOf, HasAmountType};
 use crate::chain::traits::types::denom::HasDenomType;

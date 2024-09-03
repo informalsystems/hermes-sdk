@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(ChannelOnceTypeComponent, ProvideChannelOnceType<Runtime>)]
 pub trait HasChannelOnceTypes {

@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelEndType, ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,

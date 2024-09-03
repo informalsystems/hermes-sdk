@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::child_process::HasChildProcessType;

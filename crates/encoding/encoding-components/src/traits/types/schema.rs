@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(SchemaTypeComponent, ProvideSchemaType<Encoding>)]
 pub trait HasSchemaType: Async {

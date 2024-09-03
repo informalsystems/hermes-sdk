@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::types::aliases::ChainIdOf;

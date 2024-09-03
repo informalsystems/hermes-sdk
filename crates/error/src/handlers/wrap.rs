@@ -2,7 +2,7 @@ use alloc::format;
 use alloc::sync::Arc;
 use core::fmt::Debug;
 
-use cgp_core::error::{ErrorRaiser, HasErrorType};
+use cgp::core::error::{ErrorRaiser, HasErrorType};
 
 use crate::traits::wrap::WrapError;
 use crate::types::{Error, ErrorDetail};

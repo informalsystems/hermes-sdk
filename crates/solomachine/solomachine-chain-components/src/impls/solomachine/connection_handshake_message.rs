@@ -1,4 +1,4 @@
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::commitment_prefix::HasCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilder, ConnectionOpenConfirmMessageBuilder,

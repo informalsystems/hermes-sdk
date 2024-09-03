@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::packets::ack::{AcknowledgementOf, HasAcknowledgementType};
 use crate::chain::types::aliases::HeightOf;

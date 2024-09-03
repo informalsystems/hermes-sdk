@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexGuardOf, MutexOf};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 

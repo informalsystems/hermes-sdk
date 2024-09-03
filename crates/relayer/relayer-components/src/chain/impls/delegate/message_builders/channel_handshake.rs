@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,

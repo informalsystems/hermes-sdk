@@ -1,4 +1,4 @@
-use cgp_core::prelude::CanRaiseError;
+use cgp::prelude::CanRaiseError;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 

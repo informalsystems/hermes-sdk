@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 use core::fmt::Debug;
 
-use cgp_core::error::{ErrorRaiser, HasErrorType};
+use cgp::core::error::{ErrorRaiser, HasErrorType};
 use eyre::eyre;
 
 use crate::types::{Error, ErrorDetail};

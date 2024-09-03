@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 pub use hermes_cosmos_chain_components::components::client::{
     AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
     ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,

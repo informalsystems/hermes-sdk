@@ -1,4 +1,4 @@
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;

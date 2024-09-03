@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::schema::HasSchema;

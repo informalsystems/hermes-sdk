@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(SleeperComponent, Sleeper<Runtime>)]
 #[async_trait]

@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_relayer_components::transaction::traits::nonce::nonce_guard::ProvideNonceGuard;
 use hermes_relayer_components::transaction::traits::types::fee::ProvideFeeType;
 use hermes_relayer_components::transaction::traits::types::nonce::{

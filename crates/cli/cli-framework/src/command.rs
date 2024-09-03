@@ -1,4 +1,4 @@
-use cgp_core::async_trait;
+use cgp::core::async_trait;
 
 use crate::output::Output;
 use crate::Result;

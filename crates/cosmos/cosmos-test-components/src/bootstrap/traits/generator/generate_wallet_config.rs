@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::traits::types::wallet_config::HasWalletConfigType;

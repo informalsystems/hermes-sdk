@@ -1,4 +1,4 @@
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::os::exec_command::CanExecCommandWithEnvs;
 use hermes_runtime_components::traits::runtime::HasRuntime;

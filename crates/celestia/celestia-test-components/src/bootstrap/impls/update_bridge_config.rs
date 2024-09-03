@@ -1,4 +1,4 @@
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use hermes_cosmos_test_components::chain_driver::traits::grpc_port::HasGrpcPort;
 use hermes_cosmos_test_components::chain_driver::traits::rpc_port::HasRpcPort;
 use hermes_relayer_components::chain::traits::queries::block::CanQueryBlock;

@@ -1,4 +1,4 @@
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerier;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;

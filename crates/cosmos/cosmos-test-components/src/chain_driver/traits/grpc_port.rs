@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(GrpcPortGetterComponent, GrpcPortGetter<ChainDriver>)]
 pub trait HasGrpcPort {

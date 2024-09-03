@@ -1,5 +1,5 @@
-use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_core::prelude::*;
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::prelude::*;
 use hermes_relayer_components::birelay::traits::two_way::TwoWayRelayGetter;
 use hermes_relayer_components::components::default::birelay::*;
 use hermes_relayer_components::multi::traits::chain_at::ProvideChainTypeAt;

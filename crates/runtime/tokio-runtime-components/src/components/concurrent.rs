@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_async_runtime_components::task::impls::concurrent::RunConcurrentTasks;
 pub use hermes_runtime_components::traits::channel::{
     ChannelCreatorComponent, ChannelTypeComponent, ChannelUserComponent, ReceiverStreamerComponent,

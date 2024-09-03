@@ -1,4 +1,4 @@
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::chain_status::ChainStatusQuerier;
 use hermes_relayer_components::chain::traits::types::status::HasChainStatusType;
 use ibc_relayer::chain::endpoint::ChainStatus;

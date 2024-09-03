@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 
 use crate::bootstrap::traits::types::chain_node_config::ProvideChainNodeConfigType;
 use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;

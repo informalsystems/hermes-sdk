@@ -1,4 +1,4 @@
-use cgp_core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseError, HasErrorType};
 
 pub struct WrapError<Detail, Error> {
     pub detail: Detail,

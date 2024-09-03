@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 pub use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 pub use hermes_relayer_components::components::default::transaction::DefaultTxComponents;
 pub use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;

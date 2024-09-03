@@ -1,4 +1,4 @@
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 use hermes_cosmos_relayer::contexts::birelay::CosmosBiRelay;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::contexts::relay::CosmosRelay;

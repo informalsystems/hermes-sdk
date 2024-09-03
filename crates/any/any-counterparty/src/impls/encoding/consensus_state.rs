@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};

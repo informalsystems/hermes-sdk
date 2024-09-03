@@ -1,4 +1,4 @@
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::channel_end::{
     ChannelEndQuerier, ChannelEndWithProofsQuerier,
 };

@@ -1,6 +1,6 @@
 use alloc::format;
 
-use cgp_core::error::{CanRaiseError, ErrorOf};
+use cgp::core::error::{CanRaiseError, ErrorOf};
 use hermes_relayer_components::multi::types::index::Index;
 
 use crate::bootstrap::traits::chain::CanBootstrapChain;

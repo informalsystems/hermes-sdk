@@ -1,6 +1,6 @@
 use alloc::string::String;
 
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 
 use crate::chain::traits::types::memo::ProvideMemoType;
 

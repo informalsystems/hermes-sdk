@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use toml::Value;
 
 #[derive_component(CometConfigModifierComponent, CometConfigModifier<Bootstrap>)]

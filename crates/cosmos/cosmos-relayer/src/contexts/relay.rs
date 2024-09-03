@@ -2,8 +2,8 @@ use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 use core::ops::Deref;
 
-use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_core::prelude::*;
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_error::types::Error;
 use hermes_logger::ProvideHermesLogger;

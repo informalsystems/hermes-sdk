@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use super::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::consensus_state::{

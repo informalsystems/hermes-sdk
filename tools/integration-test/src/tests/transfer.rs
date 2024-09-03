@@ -1,6 +1,6 @@
 use std::thread::sleep;
 
-use cgp_core::run::CanRun;
+use cgp::extra::run::CanRun;
 use ibc_relayer::config::PacketFilter;
 use ibc_test_framework::framework::next::chain::{HasTwoChains, HasTwoChannels};
 use ibc_test_framework::ibc::denom::derive_ibc_denom;

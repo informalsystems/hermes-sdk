@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 use core::str::FromStr;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::traits::parse::ArgParser;
 

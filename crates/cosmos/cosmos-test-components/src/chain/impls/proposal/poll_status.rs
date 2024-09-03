@@ -1,8 +1,8 @@
 use core::fmt::{Debug, Display};
 use core::time::Duration;
 
-use cgp_core::error::CanRaiseError;
-use cgp_core::Async;
+use cgp::core::error::CanRaiseError;
+use cgp::core::Async;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::sleep::CanSleep;
 use hermes_test_components::chain::traits::proposal::poll_status::ProposalStatusPoller;

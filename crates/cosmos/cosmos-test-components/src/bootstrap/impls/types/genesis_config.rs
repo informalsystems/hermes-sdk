@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 
 use crate::bootstrap::traits::types::genesis_config::ProvideChainGenesisConfigType;
 use crate::bootstrap::types::genesis_config::CosmosGenesisConfig;

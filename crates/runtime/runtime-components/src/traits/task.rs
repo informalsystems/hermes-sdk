@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::traits::stream::HasStreamType;
 

@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use ibc_relayer::config::compat_mode::CompatMode;
 
 #[derive_component(CompatModeGetterComponent, CompatModeGetter<Bootstrap>)]

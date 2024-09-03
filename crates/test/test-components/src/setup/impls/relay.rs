@@ -1,4 +1,4 @@
-use cgp_core::error::{CanRaiseError, ErrorOf};
+use cgp::core::error::{CanRaiseError, ErrorOf};
 use hermes_relayer_components::build::traits::builders::relay_from_chains_builder::CanBuildRelayFromChains;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::types::aliases::ClientIdOf;

@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;

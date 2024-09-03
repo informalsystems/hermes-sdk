@@ -2,7 +2,7 @@
    Trait definition for [`HasIbcPacketTypes`].
 */
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 /**
     Contains the abstract packet types for a chain context to send and receive

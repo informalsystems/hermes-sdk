@@ -1,4 +1,4 @@
-use cgp_core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseError, HasErrorType};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };

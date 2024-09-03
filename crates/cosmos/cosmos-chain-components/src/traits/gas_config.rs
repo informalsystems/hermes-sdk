@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 
 #[derive_component(GasConfigGetterComponent, GasConfigGetter<Chain>)]

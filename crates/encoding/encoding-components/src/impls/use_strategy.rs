@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::Async;
+use cgp::core::Async;
 
 use crate::traits::decode::{CanDecode, Decoder};
 use crate::traits::encode::{CanEncode, Encoder};

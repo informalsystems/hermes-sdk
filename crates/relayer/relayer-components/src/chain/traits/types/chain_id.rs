@@ -4,7 +4,7 @@
 
 use core::fmt::Display;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 /**
    This is implemented by a chain context to provide a `ChainId` type that

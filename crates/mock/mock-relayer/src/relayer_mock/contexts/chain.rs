@@ -15,8 +15,8 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::vec;
 
-use cgp_core::field::HasField;
-use cgp_core::prelude::*;
+use cgp::core::field::HasField;
+use cgp::prelude::*;
 use eyre::eyre;
 
 use crate::relayer_mock::base::error::{BaseError, Error};

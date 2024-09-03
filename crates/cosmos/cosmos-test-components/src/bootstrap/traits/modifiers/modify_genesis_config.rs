@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use serde_json::Value;
 
 #[derive_component(CosmosGenesisConfigModifierComponent, CosmosGenesisConfigModifier<Bootstrap>)]

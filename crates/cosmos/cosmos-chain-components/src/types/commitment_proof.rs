@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofBytesGetter, CommitmentProofHeightGetter, HasCommitmentProofType,

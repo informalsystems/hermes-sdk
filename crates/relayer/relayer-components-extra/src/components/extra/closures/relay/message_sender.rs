@@ -1,5 +1,5 @@
-use cgp_core::component::HasComponents;
-use cgp_core::error::{CanRaiseError, ErrorOf, ErrorRaiser};
+use cgp::core::component::HasComponents;
+use cgp::core::error::{CanRaiseError, ErrorOf, ErrorRaiser};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;

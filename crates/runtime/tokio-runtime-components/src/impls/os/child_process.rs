@@ -3,7 +3,7 @@ use std::io::Error as IoError;
 use std::path::Path;
 use std::process::{ExitStatus, Stdio};
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_async_runtime_components::task::types::future_task::FutureTask;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;

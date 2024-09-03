@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp_core::Async;
+use cgp::core::Async;
 
 use crate::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
 

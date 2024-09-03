@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_test_components::chain::traits::types::denom::HasDenomType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 

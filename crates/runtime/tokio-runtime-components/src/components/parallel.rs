@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_async_runtime_components::channel::impls::ProvideUnboundedChannelType;
 use hermes_async_runtime_components::channel_once::impls::ProvideOneShotChannelType;
 use hermes_async_runtime_components::mutex::impls::mutex::ProvideFuturesMutex;

@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 use core::future::Future;
 use core::pin::Pin;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use futures_core::stream::Stream;
 use hermes_runtime_components::traits::mutex::{HasMutex, MutexOf};
 

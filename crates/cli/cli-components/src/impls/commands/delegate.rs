@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::traits::command::CommandRunner;
 use crate::traits::output::HasOutputType;
