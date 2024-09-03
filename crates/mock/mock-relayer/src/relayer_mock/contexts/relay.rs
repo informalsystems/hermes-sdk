@@ -1,7 +1,7 @@
 use alloc::string::String;
 use std::sync::Arc;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::contexts::chain::MockChainContext;

@@ -1,6 +1,6 @@
 use core::str::FromStr;
 
-use cgp_core::Async;
+use cgp::core::Async;
 use hdpath::StandardHDPath;
 
 use crate::bootstrap::traits::fields::hd_path::WalletHdPathGetter;

@@ -6,7 +6,7 @@ use alloc::borrow::ToOwned;
 use core::fmt::Display;
 use core::time::Duration;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(TimestampTypeComponent, ProvideTimestampType<Chain>)]
 pub trait HasTimestampType: Async {

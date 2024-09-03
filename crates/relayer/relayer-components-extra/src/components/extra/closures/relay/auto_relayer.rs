@@ -1,7 +1,7 @@
+use cgp::core::component::HasComponents;
+use cgp::core::error::ErrorRaiser;
 use cgp::extra::run::CanRun;
-use cgp_core::component::HasComponents;
-use cgp_core::error::ErrorRaiser;
-use cgp_core::prelude::HasErrorType;
+use cgp::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::event_subscription::HasEventSubscription;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;

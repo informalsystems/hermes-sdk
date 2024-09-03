@@ -14,7 +14,6 @@ description  = """
 
 [dependencies]
 cgp                                 = { workspace = true }
-cgp-core                            = { workspace = true }
 hermes-error                        = { workspace = true }
 hermes-runtime                      = { workspace = true }
 hermes-logger                       = { workspace = true }

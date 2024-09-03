@@ -1,4 +1,4 @@
-use cgp_core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;

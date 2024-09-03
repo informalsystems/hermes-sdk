@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::async_trait;
+use cgp::core::async_trait;
 use hermes_relayer_components::chain::types::aliases::{ChannelIdOf, PortIdOf};
 use hermes_relayer_components::relay::traits::chains::HasRelayChains;
 use hermes_relayer_components::relay::traits::clear_interval::HasClearInterval;

@@ -15,7 +15,7 @@ description  = """
 [dependencies]
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
-cgp-core                            = { workspace = true }
+cgp                                 = { workspace = true }
 hermes-runtime                      = { workspace = true }
 hermes-relayer-components           = { workspace = true }
 hermes-cosmos-relayer               = { workspace = true }

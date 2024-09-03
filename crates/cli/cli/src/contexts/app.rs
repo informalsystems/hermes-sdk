@@ -1,8 +1,8 @@
 use core::fmt::Debug;
 use std::path::PathBuf;
 
-use cgp_core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp_core::prelude::*;
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
 use hermes_cli_components::impls::commands::client::create::{

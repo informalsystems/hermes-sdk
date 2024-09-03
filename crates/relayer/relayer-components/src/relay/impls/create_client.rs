@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 
 use crate::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use crate::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;

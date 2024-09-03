@@ -2,7 +2,7 @@
    Trait definitions for [`HasSendPacketEvent`].
 */
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;

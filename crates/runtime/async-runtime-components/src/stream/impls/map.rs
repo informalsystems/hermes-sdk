@@ -1,6 +1,6 @@
 use alloc::boxed::Box;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use futures_util::stream::StreamExt;
 use hermes_runtime_components::traits::stream::StreamMapper;
 

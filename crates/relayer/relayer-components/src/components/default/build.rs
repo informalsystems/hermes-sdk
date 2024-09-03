@@ -1,5 +1,5 @@
-use cgp_core::error::ProvideErrorType;
-use cgp_core::prelude::*;
+use cgp::core::error::ProvideErrorType;
+use cgp::prelude::*;
 
 use crate::build::components::birelay::BuildBiRelayFromRelays;
 use crate::build::components::chain::cache::BuildChainWithCache;

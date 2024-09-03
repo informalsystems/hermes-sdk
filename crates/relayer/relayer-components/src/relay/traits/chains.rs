@@ -1,5 +1,5 @@
-use cgp_core::error::ErrorOf;
-use cgp_core::prelude::*;
+use cgp::core::error::ErrorOf;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::traits::types::packet::HasIbcPacketTypes;

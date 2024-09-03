@@ -1,4 +1,4 @@
-use cgp_core::prelude::{Async, HasErrorType};
+use cgp::prelude::{Async, HasErrorType};
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
 use hermes_protobuf_encoding_components::types::Any;

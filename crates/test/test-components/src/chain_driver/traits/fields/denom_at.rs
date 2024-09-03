@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_relayer_components::multi::types::index::Index;
 
 use crate::chain::traits::types::denom::{DenomOf, HasDenomType};

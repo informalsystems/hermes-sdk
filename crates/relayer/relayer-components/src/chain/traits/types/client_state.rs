@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::height::HasHeightType;
 

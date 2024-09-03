@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(RetryableErrorComponent, ProvideRetryableError<Context>)]
 pub trait HasRetryableError: HasErrorType {

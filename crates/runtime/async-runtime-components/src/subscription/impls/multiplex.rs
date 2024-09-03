@@ -5,7 +5,7 @@ use core::marker::PhantomData;
 use core::ops::DerefMut;
 use core::pin::Pin;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use futures_core::stream::Stream;
 use futures_util::stream::StreamExt;
 use hermes_runtime_components::traits::channel::{

@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_protobuf_encoding_components::impl_type_url;
 
 use crate::types::client_state::WasmClientState;

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_logging_components::traits::logger::Logger;
 use hermes_logging_components::types::level::{
     LevelDebug, LevelError, LevelInfo, LevelTrace, LevelWarn,

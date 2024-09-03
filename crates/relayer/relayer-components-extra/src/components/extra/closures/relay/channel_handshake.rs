@@ -1,4 +1,4 @@
-use cgp_core::prelude::{CanRaiseError, HasComponents};
+use cgp::prelude::{CanRaiseError, HasComponents};
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::relay::impls::channel::open_init::MissingChannelInitEventError;
 use hermes_relayer_components::relay::impls::channel::open_try::MissingChannelTryEventError;

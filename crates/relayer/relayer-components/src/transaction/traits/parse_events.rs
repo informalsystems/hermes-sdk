@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::event::HasEventType;
 use crate::transaction::traits::types::tx_response::HasTxResponseType;

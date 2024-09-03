@@ -1,7 +1,7 @@
 use alloc::vec;
 
+use cgp::core::error::HasErrorType;
 use cgp::extra::run::{CanRun, Runner};
-use cgp_core::error::HasErrorType;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_runtime_components::traits::task::{CanRunConcurrentTasks, Task};
 

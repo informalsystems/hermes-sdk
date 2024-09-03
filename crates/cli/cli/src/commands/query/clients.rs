@@ -1,6 +1,6 @@
 use std::fmt;
 
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_any_counterparty::types::client_state::AnyClientState;
 use hermes_cli_components::traits::build::CanLoadBuilder;

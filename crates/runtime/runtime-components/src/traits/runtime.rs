@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(RuntimeTypeComponent, ProvideRuntimeType<Context>)]
 pub trait HasRuntimeType: Async {

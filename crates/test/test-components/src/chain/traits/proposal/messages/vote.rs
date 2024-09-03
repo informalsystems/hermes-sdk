@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 
 use crate::chain::traits::proposal::types::proposal_id::HasProposalIdType;

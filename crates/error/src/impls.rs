@@ -1,5 +1,5 @@
-use cgp_core::error::{HasErrorType, ProvideErrorType};
-use cgp_core::Async;
+use cgp::core::error::{HasErrorType, ProvideErrorType};
+use cgp::core::Async;
 use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
 
 use crate::types::Error;

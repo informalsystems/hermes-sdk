@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp_core::error::{ErrorRaiser, HasErrorType};
+use cgp::core::error::{ErrorRaiser, HasErrorType};
 use eyre::Report;
 
 use crate::types::{Error, ErrorDetail};

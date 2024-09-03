@@ -1,4 +1,4 @@
-use cgp_core::prelude::{Async, HasComponents};
+use cgp::prelude::{Async, HasComponents};
 use hermes_celestia_test_components::bridge_driver::traits::bridge_auth_token::{
     BridgeAuthTokenGetter, ProvideBridgeAuthTokenType,
 };

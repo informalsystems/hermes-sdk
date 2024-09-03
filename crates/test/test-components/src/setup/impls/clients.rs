@@ -1,5 +1,5 @@
-use cgp_core::error::CanRaiseError;
-use cgp_core::prelude::*;
+use cgp::core::error::CanRaiseError;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadOptionsType,
 };

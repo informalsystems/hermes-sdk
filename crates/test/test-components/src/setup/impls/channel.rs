@@ -1,4 +1,4 @@
-use cgp_core::error::{CanRaiseError, ErrorOf};
+use cgp::core::error::{CanRaiseError, ErrorOf};
 use hermes_relayer_components::birelay::traits::two_way::HasTwoWayRelay;
 use hermes_relayer_components::chain::traits::types::channel::HasInitChannelOptionsType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

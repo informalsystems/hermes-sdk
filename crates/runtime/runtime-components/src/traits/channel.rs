@@ -7,7 +7,7 @@
    [`std::sync::mpsc::channel`](https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html).
 */
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::traits::stream::HasStreamType;
 

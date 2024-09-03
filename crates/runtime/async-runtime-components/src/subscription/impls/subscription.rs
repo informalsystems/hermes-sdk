@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::subscription::ProvideSubscription;
 
 use crate::stream::traits::boxed::HasBoxedStreamType;

@@ -1,4 +1,4 @@
-use cgp_core::prelude::HasErrorType;
+use cgp::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasPacketCommitmentType;

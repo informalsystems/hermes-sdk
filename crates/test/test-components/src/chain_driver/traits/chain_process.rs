@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
 use hermes_runtime_components::traits::runtime::HasRuntime;
 

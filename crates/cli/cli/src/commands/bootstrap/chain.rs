@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_cli_components::traits::bootstrap::{BootstrapLoader, HasBootstrapType};
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;

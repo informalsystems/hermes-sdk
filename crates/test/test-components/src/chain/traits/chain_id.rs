@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 
 #[derive_component(ChainIdFromStringBuilderComponent, ChainIdFromStringBuilder<Chain>)]

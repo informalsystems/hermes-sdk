@@ -1,4 +1,4 @@
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 
 use crate::traits::decode::Decoder;
 use crate::traits::encode::Encoder;

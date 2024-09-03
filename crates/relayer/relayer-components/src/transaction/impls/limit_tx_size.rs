@@ -7,7 +7,7 @@
 
 use core::marker::PhantomData;
 
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 
 use crate::chain::traits::types::message::HasMessageType;
 use crate::transaction::traits::encode_tx::TxEncoder;

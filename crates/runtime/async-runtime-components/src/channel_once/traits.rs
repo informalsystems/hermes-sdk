@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use futures_channel::oneshot::{Receiver, Sender};
 use hermes_runtime_components::traits::channel_once::{
     ChannelOnceTypeComponent, HasChannelOnceTypes, ProvideChannelOnceType,

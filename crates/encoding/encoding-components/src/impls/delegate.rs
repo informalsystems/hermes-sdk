@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::prelude::{DelegateComponent, HasErrorType};
+use cgp::prelude::{DelegateComponent, HasErrorType};
 
 use crate::traits::convert::Converter;
 use crate::traits::decode::Decoder;

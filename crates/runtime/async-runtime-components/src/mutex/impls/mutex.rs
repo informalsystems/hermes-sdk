@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use futures_util::lock::{Mutex, MutexGuard};
 use hermes_runtime_components::traits::mutex::ProvideMutex;
 

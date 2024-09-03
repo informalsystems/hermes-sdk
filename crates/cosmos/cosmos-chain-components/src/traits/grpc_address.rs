@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use http::Uri;
 
 #[derive_component(GrpcAddressGetterComponent, GrpcAddressGetter<Chain>)]

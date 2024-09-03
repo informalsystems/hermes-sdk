@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::sleep::Sleeper;
 use tokio::time::sleep;
 

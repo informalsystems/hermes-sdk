@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(BlockTypeComponent, ProvideBlockType<Chain>)]
 pub trait HasBlockType: Async {

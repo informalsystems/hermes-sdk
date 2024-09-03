@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_relayer_components::chain::impls::types::payloads::channel::ProvideChannelPayloadTypes;
 use hermes_relayer_components::chain::impls::types::payloads::connection::ProvideConnectionPayloadTypes;
 use hermes_relayer_components::chain::impls::types::payloads::packet::ProvidePacketPayloadTypes;

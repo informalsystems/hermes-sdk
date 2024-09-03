@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 pub type DenomOf<Chain> = <Chain as HasDenomType>::Denom;
 

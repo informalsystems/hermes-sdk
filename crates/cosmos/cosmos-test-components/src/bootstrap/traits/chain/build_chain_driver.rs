@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::os::child_process::{ChildProcessOf, HasChildProcessType};
 use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, Wallet};

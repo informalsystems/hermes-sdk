@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use ibc_proto::google::protobuf::Any;
 
 #[derive_component(TxExtensionOptionsGetterComponent, TxExtensionOptionsGetter<Chain>)]

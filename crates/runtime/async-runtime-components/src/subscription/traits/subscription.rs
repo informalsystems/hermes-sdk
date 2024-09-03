@@ -2,7 +2,7 @@ use alloc::boxed::Box;
 use alloc::sync::Arc;
 use core::pin::Pin;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use futures_core::stream::Stream;
 
 /**

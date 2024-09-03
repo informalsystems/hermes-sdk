@@ -1,4 +1,4 @@
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldGetter, HasConsensusStateType, ProvideConsensusStateType,
     ProvideRawConsensusStateType,

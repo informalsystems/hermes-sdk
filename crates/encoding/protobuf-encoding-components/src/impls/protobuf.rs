@@ -1,4 +1,4 @@
-use cgp_core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::decode::Decoder;
 use hermes_encoding_components::traits::encode::Encoder;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;

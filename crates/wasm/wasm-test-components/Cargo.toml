@@ -13,7 +13,7 @@ description  = """
 """
 
 [dependencies]
-cgp-core                                = { workspace = true }
+cgp                                     = { workspace = true }
 cgp-error-eyre                          = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }

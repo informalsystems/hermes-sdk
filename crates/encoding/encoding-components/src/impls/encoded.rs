@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 
 use crate::traits::types::encoded::ProvideEncodedType;
 

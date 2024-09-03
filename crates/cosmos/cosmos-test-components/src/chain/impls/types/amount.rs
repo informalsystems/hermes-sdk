@@ -1,4 +1,4 @@
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use hermes_test_components::chain::traits::types::amount::{
     HasAmountType, ProvideAmountMethods, ProvideAmountType,
 };

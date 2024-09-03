@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_test_components::chain::impls::assert::default_assert_duration::ProvideDefaultPollAssertDuration;
 use hermes_test_components::chain::impls::assert::poll_assert_eventual_amount::PollAssertEventualAmount;
 use hermes_test_components::chain::impls::default_memo::ProvideDefaultMemo;

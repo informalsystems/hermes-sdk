@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 use hermes_runtime_components::traits::mutex::HasMutex;
 
 use crate::build::traits::builders::relay_builder::RelayBuilder;

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::prelude::HasErrorType;
+use cgp::prelude::HasErrorType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 

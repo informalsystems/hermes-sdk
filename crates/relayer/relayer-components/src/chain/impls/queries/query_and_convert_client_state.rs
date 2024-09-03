@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 
-use cgp_core::error::CanRaiseError;
-use cgp_core::Async;
+use cgp::core::error::CanRaiseError;
+use cgp::core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasDefaultEncoding;
 use hermes_encoding_components::types::AsBytes;

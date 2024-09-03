@@ -1,4 +1,4 @@
-use cgp_core::error::{CanRaiseError, HasErrorType};
+use cgp::core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilder, ChannelOpenConfirmMessageBuilder, ChannelOpenInitMessageBuilder,
     ChannelOpenTryMessageBuilder,

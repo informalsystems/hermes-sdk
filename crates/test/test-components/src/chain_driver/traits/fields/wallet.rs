@@ -1,7 +1,7 @@
 use alloc::collections::BTreeMap;
 use alloc::string::String;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_relayer_components::multi::types::index::Index;
 
 use crate::chain::traits::types::wallet::{HasWalletType, WalletOf};

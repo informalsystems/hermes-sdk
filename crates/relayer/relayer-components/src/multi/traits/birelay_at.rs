@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::multi::traits::chain_at::{ChainAt, HasChainTypeAt};
 use crate::multi::traits::relay_at::{HasRelayTypeAt, RelayAt};

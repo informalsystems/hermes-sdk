@@ -1,4 +1,4 @@
-use cgp_core::prelude::HasErrorType;
+use cgp::prelude::HasErrorType;
 
 use crate::chain::traits::packet::fields::CanReadPacketFields;
 use crate::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;

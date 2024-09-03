@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(CommitmentPrefixTypeComponent, ProvideCommitmentPrefixType<Chain>)]
 pub trait HasCommitmentPrefixType: Async {

@@ -23,6 +23,6 @@ hermes-cosmos-chain-components      = { workspace = true }
 
 eyre          = { workspace = true }
 flex-error    = { workspace = true }
-cgp-core      = { workspace = true }
+cgp           = { workspace = true }
 tokio         = { workspace = true, features = ["full"] }
 tracing       = { workspace = true }

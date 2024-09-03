@@ -1,7 +1,7 @@
 use std::io::Error as IoError;
 use std::net::{Ipv4Addr, SocketAddrV4};
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::os::reserve_port::TcpPortReserver;
 use rand::Rng;
 use tokio::net::TcpListener;

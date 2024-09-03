@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(EncodedTypeComponent, ProvideEncodedType<Encoding>)]
 pub trait HasEncodedType: Async {

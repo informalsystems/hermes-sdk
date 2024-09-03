@@ -1,4 +1,4 @@
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 
 use crate::traits::decode_mut::{CanDecodeMut, MutDecoder};
 use crate::traits::encode_mut::{CanEncodeMut, MutEncoder};

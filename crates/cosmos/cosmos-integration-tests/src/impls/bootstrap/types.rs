@@ -1,4 +1,4 @@
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_test_components::chain_driver::traits::types::chain::{HasChainType, ProvideChainType};
 use hermes_test_components::driver::traits::types::chain_driver::ProvideChainDriverType;

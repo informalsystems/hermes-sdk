@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_protobuf_encoding_components::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 use hermes_protobuf_encoding_components::impls::from_context::EncodeFromContext;
 use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
