@@ -142,13 +142,48 @@ to carefully audit the relayer code to ensure that it is correct. Instead,
 the Rust compiler helps to the job, and will raise an error any time a
 developer mistakenly mixes up values coming from different chains.
 
+### Context-Generic Chain Clients
 
-### Generic Chain Client Libraries
+The primary use case for Hermes SDK is to implement IBC relaying. But to do
+that, we first need to implement clients for communicating with a chain
+full node. It turns out that there are sufficiently many client-side
+features required, that we have implemented fairly rich chain client libraries
+for Hermes SDK.
+
+Most of the chain-specific client implementations in Hermes SDK are implemented
+as context-generic components. This means that one can potentially reuse some
+of the chain components to build other kinds of client-side blockchain
+applications. Compared to other chain client libraries, the chain clients
+provided by Hermes SDK is more extensible and customizable through CGP.
 
 ### Build Your Own Relayer
 
+Hermes SDK provides concrete relay contexts that are ready to use, without
+requiring the end user to understand CGP. However, the default relay context
+may not satisfy the need for all potential use cases. For example, a chain
+may have implemented some new features which require custom behavior from
+the chain client.
+
+Most commonly, users would submit feature request to the relayer's project
+to add custom behavior to specific chains. However, doing so repeatedly
+can bloat the relayer's code base, and make it more challenging to reason
+about the special case behavior. In our case, we instead offer Hermes SDK
+as a library, which users can make use of to build their own custom relayer.
+
+With CGP, developers can reuse chain components provided by Hermes SDK,
+without having to fork the entire code base. At the same time, any chain
+component is fully replaceable with customized implementations.
+
 ### Reproducible Test Framework
 
+Hermes SDK offers a comprehensive test framework for testing the relayer.
+The Hermes SDK IBC test suite is written as abstract tests that can work
+with any concrete chain and relay contexts.
+
+Hermes SDK also provides chain bootstrapping implementations, which would
+bootstrap new blockchain instances to be used for each test case. The
+bootstrapping helps ensure that each test is reproducible, and simplifies
+the need to manually setup blockchain instances before running the tests.
 
 ## Requirements
 
