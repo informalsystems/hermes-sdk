@@ -7,7 +7,6 @@ keywords     = { workspace = true }
 repository   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
-readme       = "README.md"
 description  = """
     Context-generic client components for communicating with a 08-wasm client enabled node
 """
