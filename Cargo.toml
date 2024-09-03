@@ -47,7 +47,6 @@ members = [
     "crates/solomachine/solomachine-relayer",
 
     "crates/mock/mock-relayer",
-    "crates/mock/mock-cosmos-relayer",
 
     "tools/integration-test",
     "tools/test-framework",
@@ -153,22 +152,6 @@ hermes-solomachine-chain-components     = { version = "0.1.0" }
 hermes-solomachine-relayer              = { version = "0.1.0" }
 
 [patch.crates-io]
-ibc                         = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-core                    = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-core-client             = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-core-host-cosmos        = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-client-tendermint       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-client-wasm-types       = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-app-transfer            = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-primitives              = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-query                   = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-ibc-derive                  = { git = "https://github.com/cosmos/ibc-rs.git", rev = "474909d" }
-
-basecoin                    = { git = "https://github.com/informalsystems/basecoin-rs.git" }
-basecoin-app                = { git = "https://github.com/informalsystems/basecoin-rs.git" }
-basecoin-modules            = { git = "https://github.com/informalsystems/basecoin-rs.git" }
-basecoin-store              = { git = "https://github.com/informalsystems/basecoin-rs.git" }
-tower-abci                  = { git = "https://github.com/informalsystems/tower-abci", rev = "0992541" }
 
 hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }
