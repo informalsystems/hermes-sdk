@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetter, HasClientStateType, ProvideClientStateType, ProvideRawClientStateType,

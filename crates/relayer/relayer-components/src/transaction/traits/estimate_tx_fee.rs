@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::transaction::traits::types::fee::HasFeeType;
 use crate::transaction::traits::types::transaction::HasTransactionType;

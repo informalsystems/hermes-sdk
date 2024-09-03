@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use eyre::eyre;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 

@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::impls::chain::messages::store_code::BuildStoreCodeMessage;
 use crate::impls::chain::upload_client_code::SendStoreCodeProposalMessage;

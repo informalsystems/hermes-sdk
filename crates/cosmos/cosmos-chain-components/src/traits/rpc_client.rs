@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use tendermint_rpc::{HttpClient, Url};
 
 #[derive_component(RpcClientGetterComponent, RpcClientGetter<Chain>)]

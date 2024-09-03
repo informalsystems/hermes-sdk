@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hdpath::StandardHDPath;
 
 #[derive_component(WalletHdPathComponent, WalletHdPathGetter<Bootstrap>)]

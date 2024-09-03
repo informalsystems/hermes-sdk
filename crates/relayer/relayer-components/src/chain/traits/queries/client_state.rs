@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::client_state::{HasClientStateType, HasRawClientStateType};

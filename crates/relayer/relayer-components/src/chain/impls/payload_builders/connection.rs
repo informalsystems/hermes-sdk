@@ -1,4 +1,4 @@
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 
 use crate::chain::traits::commitment_prefix::HasIbcCommitmentPrefix;
 use crate::chain::traits::payload_builders::connection_handshake::{

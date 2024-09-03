@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 use tokio::runtime::Runtime;
 
 pub trait HasTokioRuntime: Async {

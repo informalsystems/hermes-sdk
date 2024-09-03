@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::types::aliases::HeightOf;
 use crate::relay::traits::chains::HasRelayChains;

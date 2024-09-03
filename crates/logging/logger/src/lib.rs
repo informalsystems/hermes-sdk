@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_logging_components::impls::delegate::DelegateLogger;
 use hermes_logging_components::impls::global::GetGlobalLogger;
 use hermes_logging_components::traits::has_logger::{

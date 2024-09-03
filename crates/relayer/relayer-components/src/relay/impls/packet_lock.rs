@@ -1,7 +1,7 @@
 use alloc::collections::BTreeSet;
 use alloc::sync::Arc;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::channel_once::{
     CanCreateChannelsOnce, CanUseChannelsOnce, HasChannelOnceTypes, ReceiverOnce, SenderOnceOf,
 };

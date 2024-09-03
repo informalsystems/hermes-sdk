@@ -1,6 +1,6 @@
 use core::pin::Pin;
 
-use cgp_core::Async;
+use cgp::core::Async;
 use futures_core::stream::Stream;
 use hermes_runtime_components::traits::stream::HasStreamType;
 

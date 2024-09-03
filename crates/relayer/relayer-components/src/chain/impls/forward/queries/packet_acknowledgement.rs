@@ -1,6 +1,6 @@
-use cgp_core::error::CanRaiseError;
-use cgp_core::inner::HasInner;
-use cgp_core::Async;
+use cgp::core::error::CanRaiseError;
+use cgp::core::inner::HasInner;
+use cgp::core::Async;
 
 use crate::chain::traits::queries::packet_acknowledgement::{
     CanQueryPacketAcknowledgement, PacketAcknowledgementQuerier,

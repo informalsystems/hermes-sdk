@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_tokio_runtime_components::components::parallel::*;
 use hermes_tokio_runtime_components::with_tokio_parallel_runtime_components;
 

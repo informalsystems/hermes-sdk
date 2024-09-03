@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::channel::HasChannelEndType;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

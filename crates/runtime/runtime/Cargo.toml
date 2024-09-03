@@ -7,13 +7,12 @@ keywords     = { workspace = true }
 repository   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
-readme       = "README.md"
 description  = """
     Implementation of an IBC Relayer in Rust, as a library
 """
 
 [dependencies]
-cgp-core                            = { workspace = true }
+cgp                                 = { workspace = true }
 hermes-runtime-components           = { workspace = true }
 hermes-async-runtime-components     = { workspace = true }
 hermes-tokio-runtime-components     = { workspace = true }

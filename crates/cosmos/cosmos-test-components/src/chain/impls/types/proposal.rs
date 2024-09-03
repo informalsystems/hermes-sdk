@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::ProvideProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::ProvideProposalStatusType;
 use hermes_test_components::chain::traits::proposal::types::vote::ProvideProposalVoteType;

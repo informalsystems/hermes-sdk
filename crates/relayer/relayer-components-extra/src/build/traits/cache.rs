@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::multi::traits::chain_at::{ChainAt, ChainIdAt, HasChainTypeAt};
 use hermes_relayer_components::multi::traits::relay_at::ClientIdAt;

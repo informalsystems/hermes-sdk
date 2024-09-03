@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 pub type AddressOf<ChainDriver> = <ChainDriver as HasAddressType>::Address;
 

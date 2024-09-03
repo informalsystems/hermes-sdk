@@ -1,6 +1,6 @@
 use alloc::format;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;

@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::multi::traits::birelay_at::HasBiRelayTypeAt;
 use crate::multi::traits::relay_at::RelayAt;

@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_async_runtime_components::channel::types::ChannelClosedError;
 use hermes_async_runtime_components::stream::traits::boxed::HasBoxedStreamType;
 use hermes_runtime_components::traits::channel::{

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp_core::component::DelegateComponent;
+use cgp::core::component::DelegateComponent;
 
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::ibc::CounterpartyMessageHeightGetter;

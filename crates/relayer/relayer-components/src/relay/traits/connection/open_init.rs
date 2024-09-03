@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 use crate::chain::traits::types::connection::HasInitConnectionOptionsType;
 use crate::relay::traits::chains::HasRelayChains;

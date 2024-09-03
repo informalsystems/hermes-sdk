@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::impls::encoded::ProvideEncodedBytes;
 use hermes_encoding_components::impls::schema::ProvideStringSchema;

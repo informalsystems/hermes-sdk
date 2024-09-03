@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_logging_components::contexts::no_logger::ProvideNoLogger;
 use hermes_logging_components::traits::has_logger::{GlobalLoggerGetterComponent, LoggerGetterComponent, LoggerTypeComponent};
 use hermes_relayer_components::relay::impls::message_senders::chain_sender::SendIbcMessagesToChain;

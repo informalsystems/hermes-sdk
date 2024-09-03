@@ -1,6 +1,6 @@
 use alloc::collections::BTreeMap;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, HasGenesisDenom,
 };

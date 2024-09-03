@@ -4,7 +4,7 @@
 
 use core::fmt::Display;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(HeightTypeComponent, ProvideHeightType<Chain>)]
 pub trait HasHeightType: Async {

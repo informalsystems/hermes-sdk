@@ -1,4 +1,4 @@
-use cgp_core::prelude::HasErrorType;
+use cgp::prelude::HasErrorType;
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_test_components::chain::traits::messages::ibc_transfer::IbcTokenTransferMessageBuilder;

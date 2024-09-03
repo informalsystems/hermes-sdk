@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 
 use crate::chain::traits::assert::poll_assert::PollAssertDurationGetter;
 

@@ -2,8 +2,8 @@ use alloc::sync::Arc;
 use core::pin::Pin;
 use core::time::Duration;
 
-use cgp_core::prelude::*;
-use cgp_core::Async;
+use cgp::core::Async;
+use cgp::prelude::*;
 use futures::lock::Mutex;
 use futures::stream::{self, Stream, StreamExt, TryStreamExt};
 use hermes_async_runtime_components::subscription::impls::closure::CanCreateClosureSubscription;

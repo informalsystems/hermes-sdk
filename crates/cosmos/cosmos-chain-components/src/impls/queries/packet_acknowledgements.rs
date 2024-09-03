@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use cgp_core::error::CanRaiseError;
+use cgp::core::error::CanRaiseError;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgements::PacketAcknowledgementsQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

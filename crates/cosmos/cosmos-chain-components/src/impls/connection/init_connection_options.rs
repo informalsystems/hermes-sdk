@@ -1,4 +1,4 @@
-use cgp_core::prelude::Async;
+use cgp::prelude::Async;
 use hermes_relayer_components::chain::traits::types::connection::ProvideInitConnectionOptionsType;
 
 use crate::types::connection::CosmosInitConnectionOptions;

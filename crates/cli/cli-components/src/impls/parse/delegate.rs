@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use cgp_core::component::DelegateComponent;
-use cgp_core::error::HasErrorType;
+use cgp::core::component::DelegateComponent;
+use cgp::core::error::HasErrorType;
 
 use crate::traits::parse::ArgParser;
 

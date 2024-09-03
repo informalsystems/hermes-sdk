@@ -7,7 +7,6 @@ keywords     = { workspace = true }
 repository   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
-readme       = "README.md"
 description  = """
     Hermes: IBC Relayer in Rust
 """
@@ -17,7 +16,7 @@ name = "hermes"
 path = "bin/hermes.rs"
 
 [dependencies]
-cgp-core                        = { workspace = true }
+cgp                             = { workspace = true }
 cgp-error-eyre                  = { workspace = true }
 hermes-any-counterparty         = { workspace = true }
 hermes-cli-components           = { workspace = true }

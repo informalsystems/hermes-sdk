@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(PollAssertDurationGetterComponent, PollAssertDurationGetter<ChainDriver>)]
 pub trait HasPollAssertDuration: Async {

@@ -1,5 +1,5 @@
-use cgp_core::error::CanRaiseError;
-use cgp_core::inner::HasInner;
+use cgp::core::error::CanRaiseError;
+use cgp::core::inner::HasInner;
 
 use crate::chain::traits::queries::client_state::{
     CanQueryClientState, CanQueryClientStateWithProofs, ClientStateQuerier,

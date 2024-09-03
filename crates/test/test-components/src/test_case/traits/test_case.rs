@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[async_trait]
 pub trait TestCase<Driver>: Async

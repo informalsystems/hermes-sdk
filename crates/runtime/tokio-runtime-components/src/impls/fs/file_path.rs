@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_runtime_components::traits::fs::file_path::ProvideFilePathType;
 
 pub struct ProvideStdPathType;

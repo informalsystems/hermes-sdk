@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 
 #[derive_component(ConverterComponent, Converter<Encoding>)]
 pub trait CanConvert<From, To>: HasErrorType {

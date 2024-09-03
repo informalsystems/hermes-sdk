@@ -1,4 +1,4 @@
-use cgp_core::error::HasErrorType;
+use cgp::core::error::HasErrorType;
 use toml::Value;
 
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;

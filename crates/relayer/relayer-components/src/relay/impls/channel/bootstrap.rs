@@ -1,4 +1,4 @@
-use cgp_core::prelude::{async_trait, HasErrorType};
+use cgp::prelude::{async_trait, HasErrorType};
 
 use crate::chain::traits::types::channel::{HasInitChannelOptionsType, InitChannelOptions};
 use crate::chain::traits::types::ibc::HasIbcChainTypes;

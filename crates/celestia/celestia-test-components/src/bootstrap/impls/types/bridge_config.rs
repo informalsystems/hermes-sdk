@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 
 use crate::bootstrap::traits::types::bridge_config::ProvideBridgeConfigType;
 use crate::types::bridge_config::CelestiaBridgeConfig;

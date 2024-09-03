@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
-use cgp_core::prelude::{DelegateComponent, HasErrorType};
+use cgp::prelude::{DelegateComponent, HasErrorType};
 
 use crate::chain::traits::queries::client_state::{
     AllClientStatesQuerier, ClientStateQuerier, ClientStateWithProofsQuerier,

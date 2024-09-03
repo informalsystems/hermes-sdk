@@ -1,4 +1,4 @@
-use cgp_core::Async;
+use cgp::core::Async;
 use hermes_relayer_components::chain::traits::types::client_state::ProvideClientStateType;
 
 use crate::types::client_state::WasmClientState;

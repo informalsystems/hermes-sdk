@@ -1,4 +1,4 @@
-use cgp_core::prelude::HasComponents;
+use cgp::prelude::HasComponents;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     CanBuildChannelOpenTryMessage, ChannelOpenTryMessageBuilder,
 };

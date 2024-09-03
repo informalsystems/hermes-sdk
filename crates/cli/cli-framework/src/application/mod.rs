@@ -4,7 +4,7 @@ mod boot;
 use std::path::Path;
 
 pub use boot::boot;
-use cgp_core::async_trait;
+use cgp::core::async_trait;
 use hermes_runtime::types::runtime::HermesRuntime;
 
 use crate::command::CommandRunner;

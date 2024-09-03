@@ -1,7 +1,7 @@
 use std::io::Error as IoError;
 use std::path::Path;
 
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::FileAsStringReader;
 use tokio::fs::read_to_string;

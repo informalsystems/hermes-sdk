@@ -1,5 +1,5 @@
-use cgp_core::error::ErrorOf;
-use cgp_core::prelude::{async_trait, CanRaiseError, HasErrorType};
+use cgp::core::error::ErrorOf;
+use cgp::prelude::{async_trait, CanRaiseError, HasErrorType};
 
 use crate::build::traits::builders::chain_builder::CanBuildChain;
 use crate::build::traits::builders::relay_builder::CanBuildRelay;

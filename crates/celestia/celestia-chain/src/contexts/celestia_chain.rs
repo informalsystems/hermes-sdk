@@ -1,4 +1,4 @@
-use cgp_core::prelude::*;
+use cgp::prelude::*;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 
 pub struct CelestiaChain {
