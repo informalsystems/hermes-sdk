@@ -46,7 +46,7 @@ pub use crate::relay::traits::ibc_message_sender::{IbcMessageSenderComponent, Ma
 pub use crate::relay::traits::packet_clearer::PacketClearerComponent;
 pub use crate::relay::traits::packet_relayer::PacketRelayerComponent;
 pub use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayerComponent;
-pub use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponnent;
+pub use crate::relay::traits::packet_relayers::receive_packet::ReceivePacketRelayerComponent;
 pub use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayerComponent;
 pub use crate::relay::traits::update_client_message_builder::TargetUpdateClientMessageBuilderComponent;
 
@@ -55,7 +55,7 @@ define_components! {
         IbcMessageSenderComponent<MainSink>: SendIbcMessagesWithUpdateClient<SendIbcMessagesToChain>,
         TargetUpdateClientMessageBuilderComponent: SkipUpdateClient<WaitUpdateClient<BuildUpdateClientMessages>>,
         PacketRelayerComponent: LockPacketRelayer<LoggerRelayer<FilterRelayer<FullCycleRelayer>>>,
-        ReceivePacketRelayerComponnent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
+        ReceivePacketRelayerComponent: SkipReceivedPacketRelayer<BaseReceivePacketRelayer>,
         AckPacketRelayerComponent: BaseAckPacketRelayer,
         TimeoutUnorderedPacketRelayerComponent: BaseTimeoutUnorderedPacketRelayer,
         EventRelayerComponent: PacketEventRelayer,
