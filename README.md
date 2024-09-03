@@ -60,7 +60,7 @@ crate to define context-generic components. To learn more about CGP, readers are
 encouraged to read the in-progress book,
 [Context-Generic Programming Patterns](https://patterns.contextgeneric.dev/).
 
-### Heterogeneous Chain Communication
+### Heterogeneous Chain Relaying
 
 Compared to alternative IBC relayers, Hermes SDK is built with first-class
 support for IBC relaying between different implementations of blockchains.
@@ -79,7 +79,7 @@ how to interact with the chain, including how queries are made, how
 messages and events are formatted, how transactions are signed and submitted,
 how to track the consensus finality of chains, etc.
 
-To expand beyond Cosmos, the cor relaying logic of Hermes SDK is fully
+To expand beyond Cosmos, the core relaying logic of Hermes SDK is fully
 abstract, and makes no assumption about how to interact with a chain.
 All chain types in Hermes SDK, including height, message, event,
 transaction, and errors, are defined as _abstract_ associated types
@@ -95,11 +95,57 @@ to implement Cosmos to non-Cosmos relaying for
 
 ### Fully Abstract Core Relayer Logic
 
+The core relaying logic of Hermes SDK is implemented in the
+[`hermes-relayer-components`](./crates/relayer/relayer-components/) crate.
+When inspecting the [`Cargo.toml` manifest](./crates/relayer/relayer-components/Cargo.toml),
+you may notice that aside from the core CGP components definition, there
+is no use of any implementation-specific crates, such as `std` and `tokio`.
+This shows that the Hermes SDK is _fully abstract_, and can be
+instantiated with any concrete implementation.
+
+Hermes SDK not only abstract over the concrete chain implementation,
+but also everything else, including error handling, logging, and async runtime.
+This means that one can easily build a custom IBC relayer that runs
+in restricted environment, such as on Wasm web applications, or
+sandboxed test environments such as [Kani](https://model-checking.github.io/kani/).
+
 ### Type-Safe Relaying
 
-### Build Your Own Relayer
+Hermes SDK makes heavy use of associated types to make use of types abstractly.
+This allows the core relaying logic to differentiate values coming from different
+chains as different abstract types, even when they have the same underlying
+concrete type. Because of that, we can make use of the strong type system in
+Rust to ensure that the core relaying logic is implemented correctly.
+
+For a simplified demonstraction, consider the implementation of the mailman
+delivery example that we covered earlier. After the mailman collects Alice's
+letter, it is supposed read the recipient's address on the envelop, and deliver
+it to Bob. However, we may make a mistake in the mailman's program, and read
+the sender's address. When using common programming techniques, such an error
+would only be caught during runtime, when the mailman knocks Alice's door
+and try to deliver the letter she sent to Bob. But with the techniques used
+in Hermes SDK, the sender's address would have a different abstract type than
+the recipient's address, and hence it would result in a compilation error
+in the mailman's program.
+
+The actual logic for IBC relaying is more complicated than the simplified
+mailman delivery example, so there are many more places to potentially make
+such mistakes. Furthermore, it can be difficult to track where the mistake
+happens, because errors may happen only after the mistaken value has flowed
+to other parts of the code base.
+
+By making use of CGP and the strong type system provided by Rust, Hermes SDK
+offers unique advantage over other IBC relaying implementations that the
+core relaying logic is not only correct _now_, but that it will always
+remain correct in the _future_. We do not need to rely on an expert developer
+to carefully audit the relayer code to ensure that it is correct. Instead,
+the Rust compiler helps to the job, and will raise an error any time a
+developer mistakenly mixes up values coming from different chains.
+
 
 ### Generic Chain Client Libraries
+
+### Build Your Own Relayer
 
 ### Reproducible Test Framework
 
