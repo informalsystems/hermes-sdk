@@ -1,52 +1,112 @@
-# Hermes IBC relayer V2
-
-[![Cosmos ecosystem][cosmos-shield]][cosmos-link]
+# Hermes SDK - Next Generation IBC Relayer Framework
 
 [![Build Status][build-image]][build-link]
-[![End to End testing][e2e-image]][e2e-link]
 [![Apache 2.0 Licensed][license-image]][license-link]
 ![Rust Stable][rustc-image]
-![Rust 1.70+][rustc-version]
+![Rust 1.79+][rustc-version]
 
-Rust implementation of an Inter-Blockchain Communication (IBC) relayer.
+## Overview
 
-This project comprises primarily of 5 crates:
+Hermes SDK is a next-generation [IBC](https://www.ibcprotocol.dev/) relayer framework
+for building high performance and modular IBC relayers. At its core, Hermes SDK makes
+use of [_context-generic programming_](https://patterns.contextgeneric.dev/),
+a new programming paradigm in Rust, to implement the IBC relayer as highly modular
+components that can be customized and reused easily.
 
-- [`ibc-relayer`][relayer-crate-link] provides an implementation of an IBC relayer, as a _library_.
-- [`ibc-relayer-cli`][relayer-cli-crate-link] is a CLI (a wrapper over the `ibc-relayer` library),
-  comprising the [`hermes`](https://hermes.informal.systems) binary.
-- [`ibc-chain-registry`][ibc-chain-registry-crate-link] provides functions to fetch data from
-  the [chain registry](https://github.com/cosmos/chain-registry) and automatically generate chain
-  configuration for Hermes.
-- [`ibc-telemetry`][ibc-telemetry-crate-link] is a library for use in the Hermes CLI,
-  for gathering telemetry data and exposing that in a Prometheus endpoint.
-- [`ibc-relayer-rest`][ibc-telemetry-crate-link] is a library for use in the Hermes CLI,
-  for exposing a REST API to inspect the state of the relayer.
-- [`ibc-test-framework`][ibc-test-framework-crate-link] provides the infrastructure and framework
-  for writing end-to-end (E2E) tests that include the spawning of the relayer together with Cosmos full nodes.
+### Inter-Blockchain Communication (IBC) and Relaying
 
+For readers who are new to the project, [IBC](https://www.ibcprotocol.dev/) is a protocol
+that enables secure communication between two blockchains in a permissionless way.
+IBC mirrors the concepts of networking protocols, with each message sent from one
+chain to another being represented as an _IBC packet_.
+At a high level, we can think of blockchains as _pure state machines_ that have no access
+to external I/O. To facilitate communication between two blockchains, a _relayer_ is
+used to deliver the IBC packets from a _source_ chain to a _destination_ chain.
 
-See the table below for more details.
+We can think of IBC relaying similar to mail delivery in the real life. Consider the
+case which Alice wants to send a letter to Bob. She would first put her letter in
+an envelop, and write down the sender and recipient address. The letter is placed
+in a mailbox at Alice's home, which is picked up by a mailman who delivers it
+to Bob's home. In the case of IBC, Alice and Bob would be two chains A and B,
+and the mailman would be an IBC relayer. The envelop would be an IBC packet,
+and the mailboxes would be _provable storage locations_ on the respective chains.
 
-> ⚠️  The [`ibc`][ibc-rs-repo] and [`ibc-proto`][ibc-proto-rs-repo] crates have been moved to their own repositories.
+Although the concept of IBC relaying is relatively simple, similar to real world
+mail delivery, complexity arises when there are many packets need to be delivered.
+There are many cross-cutting concerns in IBC relaying, including latency
+(time for a packet to be delivered), throughput (number of packets delivered per timeframe),
+reliability (failure recovery), efficiency (avoid delivering the same packet multiple times),
+and cost (batch delivery to reduce transaction cost). Instead of choosing a specific
+strategy, Hermes SDK allows different relaying strategies to be implemented to
+balance different trade offs.
 
-The repository also includes [TLA+ specifications](docs/spec).
+### Context-Generic Programming (CGP)
 
-## Status
+Hermes SDK makes heavy use of a new programming paradigm, context-generic programming,
+which is developed by us to implement the relayer as a collection of loosely-coupled
+components. At a high level, CGP allows code to be written to be generic over a
+context type, i.e. the type that is used as `Self`. With that, we can easily define
+multiple context types that re-use the same context-generic code through minimal wiring.
 
-| Crate name                                   |   Type                     |     Version                                                                                  | Docs   |
-|:-------------:|:------:|:-------------:|:-----:|
-| [ibc-relayer-cli](crates/relayer-cli)             | bin: [hermes](crates/relayer-cli/) | [![IBC Relayer CLI Crate][relayer-cli-crate-image]][relayer-cli-crate-link]                  | [![IBC Relayer CLI Docs][relayer-cli-docs-image]][relayer-cli-docs-link]                  |
-| [ibc-relayer](crates/relayer)                     | lib                         | [![IBC Relayer Crate][relayer-crate-image]][relayer-crate-link]                              | [![IBC Relayer Docs][relayer-docs-image]][relayer-docs-link]                              |
-| [ibc-chain-registry](crates/chain-registry)                             | lib                         | [![Chain Registry Crate][ibc-chain-registry-crate-image]][ibc-chain-registry-crate-link]                                              | [![Chain Registry Docs][ibc-chain-registry-docs-image]][ibc-chain-registry-docs-link]                                              |
-| [ibc-relayer-rest](crates/relayer-rest)           | lib                         | [![IBC Relayer REST Crate][relayer-rest-crate-image]][relayer-rest-crate-link]               | [![IBC Relayer REST Docs][relayer-rest-docs-image]][relayer-rest-docs-link]               |
-| [ibc-telemetry](crates/telemetry)                 | lib                         | [![IBC Telemetry Crate][ibc-telemetry-crate-image]][ibc-telemetry-crate-link]                | [![IBC Telemetry Docs][ibc-telemetry-docs-image]][ibc-telemetry-docs-link]                |
-| [ibc-test-framework](./tools/test-framework) | lib                         | [![IBC Test Framework Crate][ibc-test-framework-crate-image]][ibc-test-framework-crate-link] | [![IBC Test Framework Docs][ibc-test-framework-docs-image]][ibc-test-framework-docs-link] |
+For readers with object-oriented programming (OOP) background, CGP shares some
+similarities with advanced OOP concepts, such as mixins and dependency injection.
+The main difference is that CGP offers polymorphism at _compile time_, with no
+dynamic dispatch involved at runtime. With the use of associated types, CGP also
+allows strongly-typed relations to be established between different types, thus
+achieving type safety without any use of upcast or downcast operations.
+
+In Hermes SDK, we make use of the [`cgp`](https://github.com/contextgeneric/cgp)
+crate to define context-generic components. To learn more about CGP, readers are
+encouraged to read the in-progress book,
+[Context-Generic Programming Patterns](https://patterns.contextgeneric.dev/).
+
+### Heterogeneous Chain Communication
+
+Compared to alternative IBC relayers, Hermes SDK is built with first-class
+support for IBC relaying between different implementations of blockchains.
+When IBC was first developed, the initial focus was on supporting communication
+between blockchains in the Cosmos ecosystem, which are implemented using
+[CometBFT](https://github.com/cometbft/cometbft) and
+[CosmosSDK](https://github.com/cosmos/cosmos-sdk).
+As a result, many early IBC relayer implementations are strongly coupled
+with Cosmos-specific assumptions on how the chain is implemented.
+
+As IBC gains traction within Cosmos, the use of IBC is now expanding beyond
+the Cosmos ecosystem, to other blockchain ecosystems such as Starknet.
+A main challenge in supporting non-Cosmos blockchains with existing IBC
+relayers is that these blockchains may have entirely different ways of
+how to interact with the chain, including how queries are made, how
+messages and events are formatted, how transactions are signed and submitted,
+how to track the consensus finality of chains, etc.
+
+To expand beyond Cosmos, the cor relaying logic of Hermes SDK is fully
+abstract, and makes no assumption about how to interact with a chain.
+All chain types in Hermes SDK, including height, message, event,
+transaction, and errors, are defined as _abstract_ associated types
+that can be instantiated with any concrete chain-specific types.
+Hermes SDK provides abstract interfaces such as the `MessageSender`
+trait, with very little restriction on how chains can implement these
+interfaces.
+
+At the moment, we have two sub-projects that make use of Hermes SDK
+to implement Cosmos to non-Cosmos relaying for
+[Starknet](https://github.com/informalsystems/ibc-starknet) and
+[Sovereign SDK](https://github.com/informalsystems/hermes-sovereign-relayer).
+
+### Fully Abstract Core Relayer Logic
+
+### Type-Safe Relaying
+
+### Build Your Own Relayer
+
+### Generic Chain Client Libraries
+
+### Reproducible Test Framework
 
 
 ## Requirements
 
-The crates in this project require Rust `1.70.0`.
+The crates in this project require Rust with version `1.79.0` or later.
 
 ## Hermes Guide
 
@@ -54,13 +114,7 @@ We have a comprehensive guide at [hermes.informal.systems](http://hermes.informa
 
 ## Contributing
 
-IBC is specified in English in the [cosmos/ibc repo](https://github.com/cosmos/ibc). Any
-protocol changes or clarifications should be contributed there.
-
-This repo contains the TLA+ specification and Rust implementation for the IBC
-modules and relayer. If you're interested in contributing, please comment on an issue or open a new one!
-
-See also [CONTRIBUTING.md](./CONTRIBUTING.md).
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Versioning
 
@@ -85,43 +139,9 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-[relayer-crate-image]: https://img.shields.io/crates/v/ibc-relayer.svg
-[relayer-crate-link]: https://crates.io/crates/ibc-relayer
-[relayer-docs-image]: https://docs.rs/ibc-relayer/badge.svg
-[relayer-docs-link]: https://docs.rs/ibc-relayer/
-[relayer-cli-crate-image]: https://img.shields.io/crates/v/ibc-relayer-cli.svg
-[relayer-cli-crate-link]: https://crates.io/crates/ibc-relayer-cli
-[relayer-cli-docs-image]: https://docs.rs/ibc-relayer-cli/badge.svg
-[relayer-cli-docs-link]: https://docs.rs/ibc-relayer-cli/
-[relayer-rest-crate-image]: https://img.shields.io/crates/v/ibc-relayer-rest.svg
-[relayer-rest-crate-link]: https://crates.io/crates/ibc-relayer-rest
-[relayer-rest-docs-image]: https://docs.rs/ibc-relayer-rest/badge.svg
-[relayer-rest-docs-link]: https://docs.rs/ibc-relayer-rest/
-[ibc-telemetry-crate-image]: https://img.shields.io/crates/v/ibc-telemetry.svg
-[ibc-telemetry-crate-link]: https://crates.io/crates/ibc-telemetry
-[ibc-telemetry-docs-image]: https://docs.rs/ibc-telemetry/badge.svg
-[ibc-telemetry-docs-link]: https://docs.rs/ibc-telemetry/
-[ibc-test-framework-crate-image]: https://img.shields.io/crates/v/ibc-test-framework.svg
-[ibc-test-framework-crate-link]: https://crates.io/crates/ibc-test-framework
-[ibc-test-framework-docs-image]: https://docs.rs/ibc-test-framework/badge.svg
-[ibc-test-framework-docs-link]: https://docs.rs/ibc-test-framework/
-[ibc-chain-registry-crate-image]: https://img.shields.io/crates/v/ibc-chain-registry.svg
-[ibc-chain-registry-crate-link]: https://crates.io/crates/ibc-chain-registry
-[ibc-chain-registry-docs-image]: https://docs.rs/ibc-chain-registry/badge.svg
-<!-- markdown-link-check-disable -->
-[ibc-chain-registry-docs-link]: https://docs.rs/ibc-chain-registry/
-<!-- markdown-link-check-enabled -->
-[ibc-rs-repo]: https://github.com/cosmos/ibc-rs
-[ibc-proto-rs-repo]: https://github.com/cosmos/ibc-proto-rs
-
-[build-image]: https://github.com/informalsystems/hermes/workflows/Rust/badge.svg
-[build-link]: https://github.com/informalsystems/hermes/actions?query=workflow%3ARust
-[e2e-image]: https://github.com/informalsystems/hermes/workflows/End%20to%20End%20testing/badge.svg
-[e2e-link]: https://github.com/informalsystems/hermes/actions?query=workflow%3A%22End+to+End+testing%22
+[build-image]: https://github.com/informalsystems/hermes-sdk/workflows/Rust/badge.svg
+[build-link]: https://github.com/informalsystems/hermes-sdk/actions?query=workflow%3ARust
 [license-image]: https://img.shields.io/badge/license-Apache_2.0-blue.svg
 [license-link]: https://github.com/informalsystems/hermes/blob/master/LICENSE
 [rustc-image]: https://img.shields.io/badge/rustc-stable-blue.svg
-[rustc-version]: https://img.shields.io/badge/rustc-1.70+-blue.svg
-[cosmos-shield]: https://img.shields.io/static/v1?label=&labelColor=1B1E36&color=1B1E36&message=cosmos%20ecosystem&style=for-the-badge&logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjMuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAyNTAwIDI1MDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI1MDAgMjUwMDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiM2RjczOTA7fQoJLnN0MXtmaWxsOiNCN0I5Qzg7fQo8L3N0eWxlPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTI1Mi42LDE1OS41Yy0xMzQuOSwwLTI0NC4zLDQ4OS40LTI0NC4zLDEwOTMuMXMxMDkuNCwxMDkzLjEsMjQ0LjMsMTA5My4xczI0NC4zLTQ4OS40LDI0NC4zLTEwOTMuMQoJUzEzODcuNSwxNTkuNSwxMjUyLjYsMTU5LjV6IE0xMjY5LjQsMjI4NGMtMTUuNCwyMC42LTMwLjksNS4xLTMwLjksNS4xYy02Mi4xLTcyLTkzLjItMjA1LjgtOTMuMi0yMDUuOAoJYy0xMDguNy0zNDkuOC04Mi44LTExMDAuOC04Mi44LTExMDAuOGM1MS4xLTU5Ni4yLDE0NC03MzcuMSwxNzUuNi03NjguNGM2LjctNi42LDE3LjEtNy40LDI0LjctMmM0NS45LDMyLjUsODQuNCwxNjguNSw4NC40LDE2OC41CgljMTEzLjYsNDIxLjgsMTAzLjMsODE3LjksMTAzLjMsODE3LjljMTAuMywzNDQuNy01Ni45LDczMC41LTU2LjksNzMwLjVDMTM0MS45LDIyMjIuMiwxMjY5LjQsMjI4NCwxMjY5LjQsMjI4NHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIyMDAuNyw3MDguNmMtNjcuMi0xMTcuMS01NDYuMSwzMS42LTEwNzAsMzMycy04OTMuNSw2MzguOS04MjYuMyw3NTUuOXM1NDYuMS0zMS42LDEwNzAtMzMyCglTMjI2Ny44LDgyNS42LDIyMDAuNyw3MDguNkwyMjAwLjcsNzA4LjZ6IE0zNjYuNCwxNzgwLjRjLTI1LjctMy4yLTE5LjktMjQuNC0xOS45LTI0LjRjMzEuNi04OS43LDEzMi0xODMuMiwxMzItMTgzLjIKCWMyNDkuNC0yNjguNCw5MTMuOC02MTkuNyw5MTMuOC02MTkuN2M1NDIuNS0yNTIuNCw3MTEuMS0yNDEuOCw3NTMuOC0yMzBjOS4xLDIuNSwxNSwxMS4yLDE0LDIwLjZjLTUuMSw1Ni0xMDQuMiwxNTctMTA0LjIsMTU3CgljLTMwOS4xLDMwOC42LTY1Ny44LDQ5Ni44LTY1Ny44LDQ5Ni44Yy0yOTMuOCwxODAuNS02NjEuOSwzMTQuMS02NjEuOSwzMTQuMUM0NTYsMTgxMi42LDM2Ni40LDE3ODAuNCwzNjYuNCwxNzgwLjRMMzY2LjQsMTc4MC40CglMMzY2LjQsMTc4MC40eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjE5OC40LDE4MDAuNGM2Ny43LTExNi44LTMwMC45LTQ1Ni44LTgyMy03NTkuNVMzNzQuNCw1ODcuOCwzMDYuOCw3MDQuN3MzMDAuOSw0NTYuOCw4MjMuMyw3NTkuNQoJUzIxMzAuNywxOTE3LjQsMjE5OC40LDE4MDAuNHogTTM1MS42LDc0OS44Yy0xMC0yMy43LDExLjEtMjkuNCwxMS4xLTI5LjRjOTMuNS0xNy42LDIyNC43LDIyLjYsMjI0LjcsMjIuNgoJYzM1Ny4yLDgxLjMsOTk0LDQ4MC4yLDk5NCw0ODAuMmM0OTAuMywzNDMuMSw1NjUuNSw0OTQuMiw1NzYuOCw1MzcuMWMyLjQsOS4xLTIuMiwxOC42LTEwLjcsMjIuNGMtNTEuMSwyMy40LTE4OC4xLTExLjUtMTg4LjEtMTEuNQoJYy00MjIuMS0xMTMuMi03NTkuNi0zMjAuNS03NTkuNi0zMjAuNWMtMzAzLjMtMTYzLjYtNjAzLjItNDE1LjMtNjAzLjItNDE1LjNjLTIyNy45LTE5MS45LTI0NS0yODUuNC0yNDUtMjg1LjRMMzUxLjYsNzQ5Ljh6Ii8+CjxjaXJjbGUgY2xhc3M9InN0MSIgY3g9IjEyNTAiIGN5PSIxMjUwIiByPSIxMjguNiIvPgo8ZWxsaXBzZSBjbGFzcz0ic3QxIiBjeD0iMTc3Ny4zIiBjeT0iNzU2LjIiIHJ4PSI3NC42IiByeT0iNzcuMiIvPgo8ZWxsaXBzZSBjbGFzcz0ic3QxIiBjeD0iNTUzIiBjeT0iMTAxOC41IiByeD0iNzQuNiIgcnk9Ijc3LjIiLz4KPGVsbGlwc2UgY2xhc3M9InN0MSIgY3g9IjEwOTguMiIgY3k9IjE5NjUiIHJ4PSI3NC42IiByeT0iNzcuMiIvPgo8L3N2Zz4K
-[cosmos-link]: https://cosmos.network
-
+[rustc-version]: https://img.shields.io/badge/rustc-1.79+-blue.svg
