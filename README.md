@@ -5,6 +5,17 @@
 ![Rust Stable][rustc-image]
 ![Rust 1.79+][rustc-version]
 
+## Work in Progress
+
+Hermes SDK is work-in-progress. At the current stage, a minimal implementation
+of Cosmos-to-Cosmos relaying has been implemented, however
+_this is not yet ready for production use_. We are also experimenting or
+actively working to support relaying for
+[Starknet](https://github.com/informalsystems/ibc-starknet) and Sovereign SDK
+at the moment.
+
+For any questions or concerns, please open an issue in this repo, or send an email to [`hermes@informal.systems`](mailto:hermes@informal.systems).
+
 ## Overview
 
 Hermes SDK is a next-generation [IBC](https://www.ibcprotocol.dev/) relayer framework
