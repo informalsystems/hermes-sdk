@@ -7,7 +7,6 @@ keywords     = { workspace = true }
 repository   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
-readme       = "README.md"
 description  = """
     Implementation of an IBC Relayer in Rust, as a library
 """
@@ -29,10 +28,8 @@ hermes-cosmos-test-components       = { workspace = true }
 hermes-cosmos-integration-tests     = { workspace = true }
 hermes-celestia-test-components     = { workspace = true }
 
-ibc-proto                           = { workspace = true }
 ibc-relayer                         = { workspace = true }
 ibc-relayer-types                   = { workspace = true }
-tendermint-rpc                      = { workspace = true }
 
 eyre            = { workspace = true }
 tokio           = { workspace = true }
