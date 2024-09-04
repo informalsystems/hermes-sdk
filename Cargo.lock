@@ -1495,18 +1495,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-celestia-chain"
-version = "0.1.0"
-dependencies = [
- "cgp",
- "hermes-cosmos-relayer",
- "hermes-relayer-components",
- "hermes-runtime",
- "ibc-relayer",
- "ibc-relayer-types",
-]
-
-[[package]]
 name = "hermes-celestia-integration-tests"
 version = "0.1.0"
 dependencies = [
@@ -1526,15 +1514,12 @@ dependencies = [
  "hermes-runtime",
  "hermes-runtime-components",
  "hermes-test-components",
- "ibc-proto",
  "ibc-relayer",
- "ibc-relayer-types",
  "prost",
  "serde_json",
  "sha2 0.10.8",
  "stable-eyre",
  "subtle-encoding",
- "tendermint-rpc",
  "tokio",
  "toml",
 ]
