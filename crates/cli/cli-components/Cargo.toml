@@ -20,6 +20,6 @@ hermes-logging-components               = { workspace = true }
 hermes-test-components                  = { workspace = true }
 
 cgp                 = { workspace = true }
-serde               = { workspace = true }
+serde               = { workspace = true, features = ["derive"] }
 toml                = { workspace = true }
 clap                = { workspace = true, features = ["derive"] }
