@@ -1507,17 +1507,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-celestia-client-components"
-version = "0.1.0"
-dependencies = [
- "cgp",
- "hermes-relayer-components",
- "hermes-runtime",
- "ibc-relayer",
- "ibc-relayer-types",
-]
-
-[[package]]
 name = "hermes-celestia-integration-tests"
 version = "0.1.0"
 dependencies = [
@@ -1557,12 +1546,9 @@ dependencies = [
  "cgp",
  "hermes-cosmos-test-components",
  "hermes-relayer-components",
- "hermes-runtime",
  "hermes-runtime-components",
  "hermes-test-components",
- "ibc-relayer",
  "ibc-relayer-types",
- "tendermint",
  "tokio",
  "toml",
 ]
