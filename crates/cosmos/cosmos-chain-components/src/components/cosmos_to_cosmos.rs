@@ -28,7 +28,7 @@ use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
-use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
+use crate::impls::types::create_client_options::ProvideNoCreateClientMessageOptionsType;
 
 define_components! {
     CosmosToCosmosComponents {
@@ -44,7 +44,7 @@ define_components! {
         ]:
             QueryAndConvertRawConsensusState,
         CreateClientMessageOptionsTypeComponent:
-            ProvideCosmosCreateClientSettings,
+            ProvideNoCreateClientMessageOptionsType,
         CreateClientMessageBuilderComponent:
             BuildAnyCreateClientMessage,
         UpdateClientMessageBuilderComponent:
