@@ -23,12 +23,12 @@ use hermes_relayer_components::chain::traits::types::create_client::CreateClient
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 
 use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
-use crate::impls::client::create_client_message::BuildCosmosCreateClientMessage;
+use crate::impls::client::create_client_message::BuildAnyCreateClientMessage;
 use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
-use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
+use crate::impls::types::create_client_options::ProvideNoCreateClientMessageOptionsType;
 
 define_components! {
     CosmosToCosmosComponents {
@@ -44,9 +44,9 @@ define_components! {
         ]:
             QueryAndConvertRawConsensusState,
         CreateClientMessageOptionsTypeComponent:
-            ProvideCosmosCreateClientSettings,
+            ProvideNoCreateClientMessageOptionsType,
         CreateClientMessageBuilderComponent:
-            BuildCosmosCreateClientMessage,
+            BuildAnyCreateClientMessage,
         UpdateClientMessageBuilderComponent:
             BuildCosmosUpdateClientMessage,
         [

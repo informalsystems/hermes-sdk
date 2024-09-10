@@ -15,11 +15,12 @@ where
     type CreateClientPayloadOptions = Settings;
 }
 
+pub struct ProvideNoCreateClientMessageOptionsType;
+
 impl<Chain, Counterparty> ProvideCreateClientMessageOptionsType<Chain, Counterparty>
-    for ProvideCosmosCreateClientSettings
+    for ProvideNoCreateClientMessageOptionsType
 where
     Chain: Async,
-    Counterparty: Async,
 {
     type CreateClientMessageOptions = ();
 }

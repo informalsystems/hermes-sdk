@@ -2,8 +2,6 @@
    Trait definition for [`HasTimestampType`].
 */
 
-use alloc::borrow::ToOwned;
-use core::fmt::Display;
 use core::time::Duration;
 
 use cgp::prelude::*;
@@ -32,7 +30,7 @@ pub trait HasTimestampType: Async {
        concrete context implementers to decide which exact time type
        they would like to use.
     */
-    type Timestamp: Ord + Display + ToOwned<Owned = Self::Timestamp> + Async;
+    type Timestamp: Ord + Async;
 
     /**
        Returns the amount of time elapsed from an `earlier` instant to a `later` one,
