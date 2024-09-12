@@ -7,4 +7,5 @@ pub mod encode_and_decode_mut;
 pub mod encode_mut;
 pub mod has_encoding;
 pub mod schema;
+pub mod transform;
 pub mod types;

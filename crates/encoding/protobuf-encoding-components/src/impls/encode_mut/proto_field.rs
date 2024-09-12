@@ -15,10 +15,10 @@ use crate::impls::encode_mut::chunk::{
 };
 use crate::traits::length::EncodedLengthGetter;
 
-pub struct EncodeField<InEncoder, const TAG: u32>(pub PhantomData<InEncoder>);
+pub struct EncodeProtoField<InEncoder, const TAG: u32>(pub PhantomData<InEncoder>);
 
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
-    for EncodeField<InEncoder, TAG>
+    for EncodeProtoField<InEncoder, TAG>
 where
     Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
     Encoding::EncodeBuffer: BufMut,
@@ -40,7 +40,7 @@ where
 }
 
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32>
-    MutDecoder<Encoding, Strategy, Option<Value>> for EncodeField<InEncoder, TAG>
+    MutDecoder<Encoding, Strategy, Option<Value>> for EncodeProtoField<InEncoder, TAG>
 where
     Encoding: CanDecodeProtoChunks + HasProtoChunksDecodeBuffer + CanRaiseError<DecodeError>,
     InEncoder: MutDecoder<Encoding, Strategy, Value>,
@@ -65,7 +65,7 @@ where
 }
 
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32>
-    EncodedLengthGetter<Encoding, Strategy, Value> for EncodeField<InEncoder, TAG>
+    EncodedLengthGetter<Encoding, Strategy, Value> for EncodeProtoField<InEncoder, TAG>
 where
     InEncoder: EncodedLengthGetter<Encoding, Strategy, Value>,
 {
