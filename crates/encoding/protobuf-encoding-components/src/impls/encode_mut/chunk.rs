@@ -20,26 +20,22 @@ pub struct UnsupportedWireType {
 }
 
 pub trait CanDecodeProtoChunks: HasErrorType {
-    fn decode_protochunks<'a>(&self, buffer: &mut &'a [u8])
-        -> Result<ProtoChunks<'a>, Self::Error>;
+    fn decode_protochunks<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunks<'a>, Self::Error>;
 }
 
 pub trait CanDecodeProtoChunk: HasErrorType {
-    fn decode_protochunk<'a>(&self, buffer: &mut &'a [u8]) -> Result<ProtoChunk<'a>, Self::Error>;
+    fn decode_protochunk<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunk<'a>, Self::Error>;
 }
 
 impl<Encoding> CanDecodeProtoChunks for Encoding
 where
     Encoding: CanDecodeProtoChunk,
 {
-    fn decode_protochunks<'a>(
-        &self,
-        buffer: &mut &'a [u8],
-    ) -> Result<ProtoChunks<'a>, Self::Error> {
+    fn decode_protochunks<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunks<'a>, Self::Error> {
         let mut chunks = BTreeMap::new();
 
         while buffer.len() > 0 {
-            let chunk = self.decode_protochunk(buffer)?;
+            let chunk = Self::decode_protochunk(buffer)?;
             chunks.insert(chunk.tag, (chunk.wire_type, chunk.chunk));
         }
 
@@ -51,10 +47,7 @@ impl<Encoding> CanDecodeProtoChunk for Encoding
 where
     Encoding: CanRaiseError<DecodeError> + CanRaiseError<UnsupportedWireType>,
 {
-    fn decode_protochunk<'a>(
-        &self,
-        buffer: &mut &'a [u8],
-    ) -> Result<ProtoChunk<'a>, Encoding::Error> {
+    fn decode_protochunk<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunk<'a>, Encoding::Error> {
         let (tag, wire_type) = decode_key(buffer).map_err(Encoding::raise_error)?;
 
         let length = match wire_type {

@@ -2,6 +2,7 @@ use alloc::string::FromUtf8Error;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 use core::str::Utf8Error;
+use hermes_protobuf_encoding_components::impls::encode_mut::chunk::UnsupportedWireType;
 
 use cgp::core::error::{
     DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent,
@@ -140,6 +141,7 @@ delegate_components! {
             DisplayError,
         [
             TypeUrlMismatchError,
+            UnsupportedWireType,
             UnknownClientStateType,
             UnknownConsensusStateType,
             AbciQueryError,

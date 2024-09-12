@@ -53,7 +53,7 @@ where
             check_wire_type(WireType::LengthDelimited, *wire_type)
                 .map_err(Encoding::raise_error)?;
 
-            let mut in_chunks = encoding.decode_protochunks(&mut bytes)?;
+            let mut in_chunks = Encoding::decode_protochunks(&mut bytes)?;
 
             let value = InEncoder::decode_mut(encoding, &mut in_chunks)?;
 

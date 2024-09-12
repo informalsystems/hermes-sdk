@@ -5,14 +5,22 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
+use hermes_encoding_components::traits::encode_and_decode_mut::CanEncodeAndDecodeMut;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
+use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
+use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
+use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
+    CanDecodeProtoChunk, CanDecodeProtoChunks, ProtoChunks,
+};
+use hermes_protobuf_encoding_components::traits::length::HasEncodedLength;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
+use prost::bytes::BufMut;
 use prost_types::Any;
 
 use crate::impls::error::HandleCosmosError;
@@ -69,6 +77,9 @@ where
 
 pub trait CheckCosmosEncoding:
     HasEncodedType<Encoded = Vec<u8>>
+    + HasEncodeBufferType<EncodeBuffer = Vec<u8>>
+    + HasEncodeBufferType<EncodeBuffer: BufMut>
+    + for<'a> HasDecodeBufferType<DecodeBuffer<'a> = ProtoChunks<'a>>
     + CanEncodeAndDecode<ViaProtobuf, Vec<u8>>
     + CanEncodeAndDecode<ViaProtobuf, TendermintClientState>
     + CanEncodeAndDecode<ViaProtobuf, TendermintConsensusState>
@@ -77,6 +88,10 @@ pub trait CheckCosmosEncoding:
     + CanEncodeAndDecode<ViaAny, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
+    + CanEncodeAndDecodeMut<ViaProtobuf, String>
+    + HasEncodedLength<ViaProtobuf, String>
+    + CanDecodeProtoChunks
+    + CanDecodeProtoChunk
 {
 }
 
