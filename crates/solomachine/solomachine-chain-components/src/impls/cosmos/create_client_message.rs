@@ -1,7 +1,7 @@
 use cgp::prelude::{Async, HasErrorType};
 use hermes_cosmos_chain_components::traits::message::{CosmosMessage, ToCosmosMessage};
 use hermes_cosmos_chain_components::types::messages::client::create::CosmosCreateClientMessage;
-use hermes_protobuf_encoding_components::types::Any;
+use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilder;
 use hermes_relayer_components::chain::traits::types::create_client::{
     HasCreateClientMessageOptionsType, HasCreateClientPayloadType,

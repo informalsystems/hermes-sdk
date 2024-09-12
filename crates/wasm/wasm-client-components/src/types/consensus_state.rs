@@ -3,7 +3,8 @@ use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
-use hermes_protobuf_encoding_components::types::{Any, ViaAny};
+use hermes_protobuf_encoding_components::types::any::Any;
+use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

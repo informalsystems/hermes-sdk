@@ -21,7 +21,8 @@ pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
 pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
 use hermes_encoding_components::types::AsBytes;
-use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
+use hermes_protobuf_encoding_components::types::any::Any;
+use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
 use hermes_relayer_components::chain::traits::queries::client_state::{
