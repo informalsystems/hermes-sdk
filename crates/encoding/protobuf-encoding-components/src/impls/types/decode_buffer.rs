@@ -10,8 +10,4 @@ where
     Encoding: HasEncodedType<Encoded = Vec<u8>> + CanDecodeProtoChunks,
 {
     type DecodeBuffer<'a> = ProtoChunks<'a>;
-
-    fn from_encoded<'a>(encoded: &'a Vec<u8>) -> ProtoChunks<'a> {
-        Encoding::decode_protochunks(&mut encoded.as_ref()).unwrap()
-    }
 }
