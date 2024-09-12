@@ -1,54 +1,30 @@
-use cgp::prelude::HasErrorType;
+use cgp::prelude::CanRaiseError;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
-use hermes_encoding_components::traits::encode_mut::MutEncoder;
-use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
-use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
-use prost::bytes::BufMut;
-use prost::encoding::message::{encode, encoded_len};
-use prost::Message;
+use prost::{DecodeError, Message};
 
-use crate::traits::length::EncodedLengthGetter;
+use crate::impls::encode_mut::chunk::{
+    CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunks,
+};
 
-pub struct EncodeMutMessageField<const TAG: u32>;
+pub struct EncodeProstMessage;
 
-impl<Encoding, Strategy, Value, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
-    for EncodeMutMessageField<TAG>
+impl<Encoding, Strategy, Value> MutDecoder<Encoding, Strategy, Value> for EncodeProstMessage
 where
-    Value: Message,
-    Encoding: HasEncodeBufferType + HasErrorType,
-    Encoding::EncodeBuffer: BufMut,
-{
-    fn encode_mut(
-        _encoding: &Encoding,
-        value: &Value,
-        buffer: &mut Encoding::EncodeBuffer,
-    ) -> Result<(), Encoding::Error> {
-        encode(TAG, value, buffer);
-
-        Ok(())
-    }
-}
-
-impl<Encoding, Strategy, Value, const TAG: u32> MutDecoder<Encoding, Strategy, Option<Value>>
-    for EncodeMutMessageField<TAG>
-where
-    Value: Message,
-    Encoding: HasDecodeBufferType + HasErrorType,
+    Value: Message + Default,
+    Encoding: CanDecodeProtoChunks + HasProtoChunksDecodeBuffer + CanRaiseError<DecodeError>,
 {
     fn decode_mut(
         _encoding: &Encoding,
-        _buffer: &mut Encoding::DecodeBuffer<'_>,
-    ) -> Result<Option<Value>, Encoding::Error> {
-        todo!()
-    }
-}
+        chunks: &mut ProtoChunks<'_>,
+    ) -> Result<Value, Encoding::Error> {
+        let mut value = Value::default();
 
-impl<Encoding, Strategy, Value, const TAG: u32> EncodedLengthGetter<Encoding, Strategy, Value>
-    for EncodeMutMessageField<TAG>
-where
-    Value: Message,
-{
-    fn encoded_length(_encoding: &Encoding, value: &Value) -> u64 {
-        encoded_len(TAG, value) as u64
+        for (tag, (wire_type, mut bytes)) in chunks.iter() {
+            value
+                .merge_field(*tag, *wire_type, &mut bytes, Default::default())
+                .map_err(Encoding::raise_error)?;
+        }
+
+        Ok(value)
     }
 }

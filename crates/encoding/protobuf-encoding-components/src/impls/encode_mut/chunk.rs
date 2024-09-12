@@ -1,10 +1,18 @@
+use std::collections::BTreeMap;
+
 use cgp::prelude::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use prost::bytes::Buf;
 use prost::encoding::{decode_key, decode_varint, WireType};
 use prost::DecodeError;
 
-use crate::types::chunk::ProtoChunk;
+pub struct ProtoChunk<'a> {
+    pub tag: u32,
+    pub wire_type: WireType,
+    pub chunk: &'a [u8],
+}
+
+pub type ProtoChunks<'a> = BTreeMap<u32, (WireType, &'a [u8])>;
 
 #[derive(Debug)]
 pub struct UnsupportedWireType {
@@ -12,10 +20,8 @@ pub struct UnsupportedWireType {
 }
 
 pub trait CanDecodeProtoChunks: HasErrorType {
-    fn decode_protochunks<'a>(
-        &self,
-        buffer: &mut &'a [u8],
-    ) -> Result<Vec<ProtoChunk<'a>>, Self::Error>;
+    fn decode_protochunks<'a>(&self, buffer: &mut &'a [u8])
+        -> Result<ProtoChunks<'a>, Self::Error>;
 }
 
 pub trait CanDecodeProtoChunk: HasErrorType {
@@ -29,12 +35,12 @@ where
     fn decode_protochunks<'a>(
         &self,
         buffer: &mut &'a [u8],
-    ) -> Result<Vec<ProtoChunk<'a>>, Self::Error> {
-        let mut chunks = Vec::new();
+    ) -> Result<ProtoChunks<'a>, Self::Error> {
+        let mut chunks = BTreeMap::new();
 
         while buffer.len() > 0 {
             let chunk = self.decode_protochunk(buffer)?;
-            chunks.push(chunk);
+            chunks.insert(chunk.tag, (chunk.wire_type, chunk.chunk));
         }
 
         Ok(chunks)
@@ -77,12 +83,12 @@ where
     }
 }
 
-pub trait HasProtoChunkDecodeBuffer:
-    for<'a> HasDecodeBufferType<DecodeBuffer<'a> = ProtoChunk<'a>>
+pub trait HasProtoChunksDecodeBuffer:
+    for<'a> HasDecodeBufferType<DecodeBuffer<'a> = ProtoChunks<'a>>
 {
 }
 
-impl<Encoding> HasProtoChunkDecodeBuffer for Encoding where
-    Encoding: for<'a> HasDecodeBufferType<DecodeBuffer<'a> = ProtoChunk<'a>>
+impl<Encoding> HasProtoChunksDecodeBuffer for Encoding where
+    Encoding: for<'a> HasDecodeBufferType<DecodeBuffer<'a> = ProtoChunks<'a>>
 {
 }
