@@ -1,10 +1,16 @@
-use hermes_encoding_components::traits::encode_mut::{CanEncodeMut, MutEncoder};
+use core::marker::PhantomData;
 
-pub struct EncodeOption;
+use cgp::prelude::HasErrorType;
+use hermes_encoding_components::traits::encode_mut::MutEncoder;
+use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 
-impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Option<Value>> for EncodeOption
+pub struct EncodeOption<InEncoder>(pub PhantomData<InEncoder>);
+
+impl<Encoding, Strategy, Value, InEncoder> MutEncoder<Encoding, Strategy, Option<Value>>
+    for EncodeOption<InEncoder>
 where
-    Encoding: CanEncodeMut<Strategy, Value>,
+    Encoding: HasEncodeBufferType + HasErrorType,
+    InEncoder: MutEncoder<Encoding, Strategy, Value>,
 {
     fn encode_mut(
         encoding: &Encoding,
@@ -12,7 +18,7 @@ where
         buffer: &mut Encoding::EncodeBuffer,
     ) -> Result<(), Encoding::Error> {
         if let Some(value) = value {
-            encoding.encode_mut(value, buffer)?;
+            InEncoder::encode_mut(encoding, value, buffer)?;
         }
 
         Ok(())
