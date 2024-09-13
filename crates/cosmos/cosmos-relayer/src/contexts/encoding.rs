@@ -24,22 +24,22 @@ use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosEncoding;
 
-pub struct CosmosEncodingComponents2;
+pub struct CosmosEncodingContextComponents;
 
 impl HasComponents for CosmosEncoding {
-    type Components = CosmosEncodingComponents2;
+    type Components = CosmosEncodingContextComponents;
 }
 
 with_cosmos_encoding_components! {
     delegate_components! {
-        CosmosEncodingComponents2 {
+        CosmosEncodingContextComponents {
             @CosmosEncodingComponents: CosmosEncodingComponents,
         }
     }
 }
 
 delegate_components! {
-    CosmosEncodingComponents2 {
+    CosmosEncodingContextComponents {
         [
             ErrorTypeComponent,
             ErrorRaiserComponent,

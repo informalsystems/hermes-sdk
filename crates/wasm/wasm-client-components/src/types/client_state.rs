@@ -19,7 +19,7 @@ use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
 
-#[derive(Clone, Debug, HasField)]
+#[derive(Clone, Debug, HasField, PartialEq, Eq)]
 pub struct WasmClientState {
     pub data: Vec<u8>,
     pub checksum: Vec<u8>,

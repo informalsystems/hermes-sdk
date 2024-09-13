@@ -79,8 +79,6 @@ where
             chunks.insert(tag, chunk);
         }
 
-        println!("decoded proto chunks: {:?}", chunks);
-
         Ok(chunks)
     }
 }

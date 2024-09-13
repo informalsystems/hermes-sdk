@@ -100,6 +100,7 @@ impl CheckWasmCosmosEncoding for WasmCosmosEncoding {}
 
 #[cfg(test)]
 mod test {
+    use hermes_encoding_components::traits::decode::Decoder;
     use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
     use hermes_error::types::HermesError;
     use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
@@ -133,6 +134,16 @@ mod test {
         println!("bytes2: {:?}", bytes2);
 
         assert_eq!(bytes1, bytes2);
+
+        let client_state_2 = <EncodeProtoWithMutBuffer as Decoder<
+            WasmCosmosEncoding,
+            ViaProtobuf,
+            WasmClientState,
+        >>::decode(&WasmCosmosEncoding, &bytes1)?;
+
+        println!("decoded client state: {:?}", client_state_2);
+
+        assert_eq!(client_state_2, wasm_client_state);
 
         Ok(())
     }
