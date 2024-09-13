@@ -2,8 +2,6 @@ use cgp::prelude::*;
 use hermes_encoding_components::impls::encode_mut::combine::CombineEncoders;
 use hermes_encoding_components::impls::encode_mut::field::EncodeField;
 use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
-use hermes_encoding_components::impls::encode_mut::pair::EncoderPair;
-use hermes_encoding_components::impls::encode_mut::unit::EncodeNothing;
 use hermes_encoding_components::impls::from_context::EncodeFromContext;
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
@@ -48,16 +46,11 @@ delegate_components! {
             ]>,
         MutDecoderComponent: DecodeFrom<
             Self,
-            EncoderPair<
+            CombineEncoders<HList![
                 EncodeByteField<1>,
-                EncoderPair<
-                    EncodeByteField<2>,
-                    EncoderPair<
-                        DecodeRequiredProtoField<3, EncodeFromContext>,
-                        EncodeNothing,
-                    >,
-                >,
-            >,
+                EncodeByteField<2>,
+                DecodeRequiredProtoField<3, EncodeFromContext>,
+            ]>
         >,
     }
 }
