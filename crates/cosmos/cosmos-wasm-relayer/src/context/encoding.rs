@@ -90,6 +90,7 @@ pub trait CheckWasmCosmosEncoding:
     + CanEncode<ViaAny, TendermintConsensusState>
     + CanEncodeAndDecode<ViaProtobuf, Height>
     + CanEncodeAndDecodeMut<ViaProtobuf, WasmClientState>
+    + CanEncodeAndDecodeMut<ViaProtobuf, WasmConsensusState>
 {
 }
 
