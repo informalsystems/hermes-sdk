@@ -13,15 +13,6 @@ use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProtoWasmConsensusState {
-    /// bytes encoding the consensus state of the underlying light client
-    /// implemented as a Wasm contract.
-    #[prost(bytes = "vec", tag = "1")]
-    pub data: ::prost::alloc::vec::Vec<u8>,
-}
-
 #[derive(Debug, HasField)]
 pub struct WasmConsensusState {
     pub data: Vec<u8>,
@@ -50,38 +41,6 @@ impl Transformer for EncodeWasmConsensusState {
 
     fn transform(data: Vec<u8>) -> WasmConsensusState {
         WasmConsensusState { data }
-    }
-}
-
-pub struct ProtoConvertWasmConsensusState;
-
-impl<Encoding> Converter<Encoding, WasmConsensusState, ProtoWasmConsensusState>
-    for ProtoConvertWasmConsensusState
-where
-    Encoding: HasErrorType,
-{
-    fn convert(
-        _encoding: &Encoding,
-        consensus_state: &WasmConsensusState,
-    ) -> Result<ProtoWasmConsensusState, Encoding::Error> {
-        Ok(ProtoWasmConsensusState {
-            data: consensus_state.data.clone(),
-        })
-    }
-}
-
-impl<Encoding> Converter<Encoding, ProtoWasmConsensusState, WasmConsensusState>
-    for ProtoConvertWasmConsensusState
-where
-    Encoding: HasErrorType,
-{
-    fn convert(
-        _encoding: &Encoding,
-        consensus_state: &ProtoWasmConsensusState,
-    ) -> Result<WasmConsensusState, Encoding::Error> {
-        Ok(WasmConsensusState {
-            data: consensus_state.data.clone(),
-        })
     }
 }
 
