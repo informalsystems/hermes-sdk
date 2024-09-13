@@ -4,9 +4,7 @@ use hermes_protobuf_encoding_components::impls::from_context::EncodeFromContext;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 
-use crate::types::client_state::{
-    ProtoConvertWasmClientState, ProtoWasmClientState, WasmClientState,
-};
+use crate::types::client_state::WasmClientState;
 use crate::types::consensus_state::{
     ProtoConvertWasmConsensusState, ProtoWasmConsensusState, WasmConsensusState,
 };
@@ -15,8 +13,6 @@ pub struct WasmConverterComponents;
 
 delegate_components! {
     WasmConverterComponents {
-        (WasmClientState, ProtoWasmClientState): ProtoConvertWasmClientState,
-        (ProtoWasmClientState, WasmClientState): ProtoConvertWasmClientState,
         (WasmConsensusState, ProtoWasmConsensusState): ProtoConvertWasmConsensusState,
         (ProtoWasmConsensusState, WasmConsensusState): ProtoConvertWasmConsensusState,
         (WasmClientState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeFromContext>,

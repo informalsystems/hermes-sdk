@@ -24,7 +24,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 
 use crate::impls::encoding::components::*;
 use crate::impls::types::client_state::ProvideWasmClientState;
-use crate::types::client_state::{ProtoWasmClientState, WasmClientState};
+use crate::types::client_state::WasmClientState;
 
 pub struct WasmCounterparty;
 
@@ -100,8 +100,7 @@ delegate_components! {
 }
 
 pub trait CanUseWasmClientEncoding:
-    CanDecode<ViaProtobuf, ProtoWasmClientState>
-    + CanDecode<ViaProtobuf, WasmClientState>
+    CanDecode<ViaProtobuf, WasmClientState>
     + CanDecode<ViaAny, WasmClientState>
     + CanConvert<Any, WasmClientState>
 {

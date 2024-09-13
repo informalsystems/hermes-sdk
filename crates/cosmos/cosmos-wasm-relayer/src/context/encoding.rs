@@ -13,7 +13,7 @@ use hermes_encoding_components::traits::has_encoding::{
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
-use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
+use hermes_wasm_client_components::types::client_state::WasmClientState;
 use hermes_wasm_client_components::types::consensus_state::WasmConsensusState;
 use ibc::core::client::types::Height;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
@@ -80,10 +80,7 @@ pub trait CheckWasmCosmosEncoding:
     + CanEncodeAndDecode<ViaAny, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
-    + CanEncodeAndDecode<ViaProtobuf, ProtoWasmClientState>
     + CanEncode<ViaProtobuf, WasmClientState>
-    + CanConvert<WasmClientState, ProtoWasmClientState>
-    + CanConvert<ProtoWasmClientState, WasmClientState>
     + CanEncodeAndDecode<ViaAny, WasmClientState>
     + CanEncodeAndDecode<ViaAny, WasmConsensusState>
     + CanConvertBothWays<Any, WrappedTendermintClientState>

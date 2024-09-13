@@ -5,7 +5,7 @@ use hermes_cosmos_chain_components::types::tendermint::{
     TendermintConsensusState,
 };
 use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
-use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, WasmClientState};
+use hermes_wasm_client_components::types::client_state::WasmClientState;
 use hermes_wasm_client_components::types::consensus_state::{
     DecodeViaWasmConsensusState, EncodeViaWasmConsensusState, ProtoWasmConsensusState,
     WasmConsensusState,
@@ -34,8 +34,6 @@ delegate_components! {
         ]:
             CosmosEncodingComponents,
         [
-            (WasmClientState, ProtoWasmClientState),
-            (ProtoWasmClientState, WasmClientState),
             (WasmConsensusState, ProtoWasmConsensusState),
             (ProtoWasmConsensusState, WasmConsensusState),
             (WasmClientState, Any),
