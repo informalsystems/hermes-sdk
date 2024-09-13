@@ -39,7 +39,7 @@ delegate_components! {
                 >,
                 EncodeField<
                     GetField<symbol!("latest_height")>,
-                    EncodeProtoField<2, EncodeWithContext>,
+                    EncodeProtoField<3, EncodeWithContext>,
                 >,
             ]>,
     }

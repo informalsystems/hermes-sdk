@@ -100,8 +100,9 @@ impl CheckWasmCosmosEncoding for WasmCosmosEncoding {}
 
 #[cfg(test)]
 mod test {
-    use hermes_encoding_components::traits::encode::CanEncode;
+    use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
     use hermes_error::types::HermesError;
+    use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
     use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
     use hermes_wasm_client_components::types::client_state::WasmClientState;
     use ibc::core::client::types::Height;
@@ -113,13 +114,25 @@ mod test {
         let wasm_client_state = WasmClientState {
             data: vec![1, 2, 3],
             checksum: vec![4, 5, 6],
-            latest_height: Height::new(0, 12)?,
+            latest_height: Height::new(0, 1)?,
         };
 
         let bytes1 = <WasmCosmosEncoding as CanEncode<ViaProtobuf, WasmClientState>>::encode(
             &WasmCosmosEncoding,
             &wasm_client_state,
         )?;
+
+        println!("bytes1: {:?}", bytes1);
+
+        let bytes2 = <EncodeProtoWithMutBuffer as Encoder<
+            WasmCosmosEncoding,
+            ViaProtobuf,
+            WasmClientState,
+        >>::encode(&WasmCosmosEncoding, &wasm_client_state)?;
+
+        println!("bytes2: {:?}", bytes2);
+
+        assert_eq!(bytes1, bytes2);
 
         Ok(())
     }
