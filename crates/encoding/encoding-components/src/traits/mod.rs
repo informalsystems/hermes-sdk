@@ -5,6 +5,7 @@ pub mod encode;
 pub mod encode_and_decode;
 pub mod encode_and_decode_mut;
 pub mod encode_mut;
+pub mod field;
 pub mod has_encoding;
 pub mod schema;
 pub mod transform;

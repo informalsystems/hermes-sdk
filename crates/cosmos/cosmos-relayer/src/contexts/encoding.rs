@@ -4,6 +4,7 @@ use hermes_cosmos_chain_components::encoding::components::*;
 use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
+use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
@@ -14,6 +15,7 @@ use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::ProtoChunks;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
+use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost::bytes::BufMut;
@@ -85,7 +87,22 @@ pub trait CheckCosmosEncoding:
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
     + CanEncodeAndDecode<ViaProtobuf, String>
+    + CanEncode<ViaProtobuf, Height>
 {
 }
 
 impl CheckCosmosEncoding for CosmosEncoding {}
+
+#[cfg(test)]
+#[test]
+fn test_height_encoding() {
+    use ibc_proto::Protobuf;
+
+    let height = Height::new(8888, 9999).unwrap();
+
+    let bytes1 = height.encode_vec();
+
+    let bytes2 = CosmosEncoding.encode(&height).unwrap();
+
+    assert_eq!(bytes1, bytes2);
+}
