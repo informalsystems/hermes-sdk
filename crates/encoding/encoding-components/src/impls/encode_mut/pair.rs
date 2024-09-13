@@ -2,16 +2,15 @@ use core::marker::PhantomData;
 
 use cgp::core::error::HasErrorType;
 
+use crate::impls::from_context::EncodeFromContext;
 use crate::traits::decode_mut::MutDecoder;
 use crate::traits::encode_mut::MutEncoder;
 use crate::traits::types::decode_buffer::HasDecodeBufferType;
 use crate::traits::types::encode_buffer::HasEncodeBufferType;
 
-use crate::impls::encode_mut::with_context::EncodeWithContext;
-
 pub struct EncoderPair<EncoderA, EncoderB>(pub PhantomData<(EncoderA, EncoderB)>);
 
-pub type EncodeCons<NextEncode> = EncoderPair<EncodeWithContext, NextEncode>;
+pub type EncodeCons<NextEncode> = EncoderPair<EncodeFromContext, NextEncode>;
 
 impl<Encoding, Strategy, EncoderA, EncoderB, ValueA, ValueB>
     MutEncoder<Encoding, Strategy, (ValueA, ValueB)> for EncoderPair<EncoderA, EncoderB>

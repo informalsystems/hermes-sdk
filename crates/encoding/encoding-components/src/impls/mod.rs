@@ -4,6 +4,7 @@ pub mod default_encoding;
 pub mod delegate;
 pub mod encode_mut;
 pub mod encoded;
+pub mod from_context;
 pub mod return_encoded;
 pub mod schema;
 pub mod use_strategy;

@@ -10,6 +10,7 @@ pub struct WasmEncodeMutComponents;
 delegate_components! {
     WasmEncodeMutComponents {
         [
+            <A, B> (ViaProtobuf, (A, B)),
             (ViaProtobuf, Height),
         ]: CosmosEncodingComponents,
 

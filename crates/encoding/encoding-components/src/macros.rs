@@ -3,6 +3,12 @@ macro_rules! HList {
   ( $(,)? ) => {
     ()
   };
+  ( $e:ident ) => {
+    ( $e, () )
+  };
+  ( $e:ident, $($tail:tt)* ) => {
+    ( $e, $crate::HList!( $($tail)* ) )
+  };
   ( $e:ty ) => {
     ( $e, () )
   };

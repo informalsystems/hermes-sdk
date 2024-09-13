@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_encoding_components::impls::from_context::EncodeFromContext;
 use hermes_encoding_components::traits::decode::Decoder;
 use hermes_encoding_components::traits::encode::Encoder;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 
 use crate::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
-use crate::impls::from_context::EncodeFromContext;
 
 pub struct EncodeViaAny<InStrategy>(pub PhantomData<InStrategy>);
 
