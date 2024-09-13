@@ -1,18 +1,48 @@
-use cgp::core::error::{CanRaiseError, HasErrorType};
+use cgp::prelude::*;
+use hermes_encoding_components::impls::encode_mut::combine::CombineEncoders;
+use hermes_encoding_components::impls::encode_mut::field::EncodeField;
+use hermes_encoding_components::impls::encode_mut::with_context::EncodeWithContext;
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
+use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
+use hermes_encoding_components::traits::field::GetField;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
+use hermes_encoding_components::HList;
+use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
+use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::encode::EncodeProtoField;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
 use ibc_proto::ibc::core::client::v1::Height as ProtoHeight;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, HasField)]
 pub struct WasmClientState {
     pub data: Vec<u8>,
     pub checksum: Vec<u8>,
     pub latest_height: Height,
+}
+
+pub struct EncodeWasmClientState;
+
+delegate_components! {
+    EncodeWasmClientState {
+        MutEncoderComponent:
+            CombineEncoders<HList![
+                EncodeField<
+                    GetField<symbol!("data")>,
+                    EncodeByteField<1>,
+                >,
+                EncodeField<
+                    GetField<symbol!("checksum")>,
+                    EncodeByteField<2>,
+                >,
+                EncodeField<
+                    GetField<symbol!("latest_height")>,
+                    EncodeProtoField<2, EncodeWithContext>,
+                >,
+            ]>,
+    }
 }
 
 #[allow(clippy::derive_partial_eq_without_eq)]

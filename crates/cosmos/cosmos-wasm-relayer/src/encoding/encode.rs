@@ -11,6 +11,7 @@ use hermes_wasm_client_components::types::client_state::{ProtoWasmClientState, W
 use hermes_wasm_client_components::types::consensus_state::{
     ProtoWasmConsensusState, WasmConsensusState,
 };
+use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;
 use prost_types::Any;
@@ -36,6 +37,8 @@ delegate_components! {
             (ViaProtobuf, ProtoMerkleProof),
 
             (ViaProtobuf, Any),
+
+            (ViaProtobuf, Height),
         ]:
             CosmosEncodingComponents,
         [
