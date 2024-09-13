@@ -38,9 +38,9 @@ where
         HasProtoChunksDecodeBuffer + CanRaiseError<InvalidWireType> + CanRaiseError<Value::Error>,
     Value: TryFrom<u64>,
 {
-    fn decode_mut<'a>(
+    fn decode_mut(
         _encoding: &Encoding,
-        chunks: &mut ProtoChunks<'a>,
+        chunks: &mut ProtoChunks<'_>,
     ) -> Result<Value, Encoding::Error> {
         let value = match chunks.get(&TAG) {
             Some(chunk) => chunk.to_varint().map_err(Encoding::raise_error)?,

@@ -55,9 +55,9 @@ where
     EncodeByteField<2>: MutDecoder<Encoding, Strategy, Vec<u8>>,
     DecodeRequiredProtoField<3, EncodeWithContext>: MutDecoder<Encoding, Strategy, Height>,
 {
-    fn decode_mut<'a>(
+    fn decode_mut(
         encoding: &Encoding,
-        buffer: &mut Encoding::DecodeBuffer<'a>,
+        buffer: &mut Encoding::DecodeBuffer<'_>,
     ) -> Result<WasmClientState, <Encoding as HasErrorType>::Error> {
         let data = <EncodeByteField<1>>::decode_mut(encoding, buffer)?;
         let checksum = <EncodeByteField<2>>::decode_mut(encoding, buffer)?;

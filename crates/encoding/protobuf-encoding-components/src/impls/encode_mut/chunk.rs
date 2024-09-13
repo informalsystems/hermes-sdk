@@ -74,7 +74,7 @@ where
     fn decode_protochunks<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunks<'a>, Self::Error> {
         let mut chunks = BTreeMap::new();
 
-        while buffer.len() > 0 {
+        while !buffer.is_empty() {
             let (tag, chunk) = Self::decode_protochunk(buffer)?;
             chunks.insert(tag, chunk);
         }

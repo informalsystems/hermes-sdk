@@ -20,7 +20,7 @@ where
         value: &Vec<u8>,
         buffer: &mut Encoding::EncodeBuffer,
     ) -> Result<(), Encoding::Error> {
-        if value.len() > 0 {
+        if !value.is_empty() {
             <EncodeLengthDelimited<TAG>>::encode_mut(encoding, &(value.len() as u64), buffer)?;
             buffer.put(value.as_ref());
         }
@@ -34,9 +34,9 @@ impl<Encoding, Strategy, const TAG: u32> MutDecoder<Encoding, Strategy, Vec<u8>>
 where
     Encoding: HasProtoChunksDecodeBuffer + CanRaiseError<InvalidWireType>,
 {
-    fn decode_mut<'a>(
+    fn decode_mut(
         _encoding: &Encoding,
-        chunks: &mut ProtoChunks<'a>,
+        chunks: &mut ProtoChunks<'_>,
     ) -> Result<Vec<u8>, Encoding::Error> {
         match chunks.get(&TAG) {
             Some(chunk) => {
