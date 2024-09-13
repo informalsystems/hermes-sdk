@@ -8,6 +8,12 @@ pub trait FieldGetter<Context> {
     fn get_field(context: &Context) -> &Self::Field;
 }
 
+pub trait OwnedFieldGetter<Context> {
+    type Field;
+
+    fn get_field(context: &Context) -> Self::Field;
+}
+
 pub struct GetField<Tag>(pub PhantomData<Tag>);
 
 impl<Context, Tag> FieldGetter<Context> for GetField<Tag>
