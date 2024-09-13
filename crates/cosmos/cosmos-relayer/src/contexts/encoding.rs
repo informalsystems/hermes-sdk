@@ -98,11 +98,15 @@ impl CheckCosmosEncoding for CosmosEncoding {}
 fn test_height_encoding() {
     use ibc_proto::Protobuf;
 
-    let height = Height::new(8888, 9999).unwrap();
+    let height = Height::new(0, 12).unwrap();
 
     let bytes1 = height.encode_vec();
 
+    println!("bytes1: {:?}", bytes1);
+
     let bytes2 = CosmosEncoding.encode(&height).unwrap();
+
+    println!("bytes2: {:?}", bytes2);
 
     assert_eq!(bytes1, bytes2);
 }
