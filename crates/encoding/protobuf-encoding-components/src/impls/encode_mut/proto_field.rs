@@ -1,15 +1,9 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::{CanRaiseError, HasErrorType};
-use hermes_encoding_components::traits::decode_mut::MutDecoder;
+use cgp::prelude::HasErrorType;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
-use prost::encoding::{check_wire_type, encode_key, encode_varint, WireType};
-use prost::DecodeError;
-
-use crate::impls::encode_mut::chunk::{
-    CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunks,
-};
+use prost::encoding::{encode_key, encode_varint, WireType};
 
 pub struct EncodeProtoField<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
 
@@ -34,30 +28,5 @@ where
         buffer.append(&mut in_buffer);
 
         Ok(())
-    }
-}
-
-impl<Encoding, Strategy, Value, InEncoder, const TAG: u32>
-    MutDecoder<Encoding, Strategy, Option<Value>> for EncodeProtoField<TAG, InEncoder>
-where
-    Encoding: CanDecodeProtoChunks + HasProtoChunksDecodeBuffer + CanRaiseError<DecodeError>,
-    InEncoder: MutDecoder<Encoding, Strategy, Value>,
-{
-    fn decode_mut(
-        encoding: &Encoding,
-        chunks: &mut ProtoChunks<'_>,
-    ) -> Result<Option<Value>, Encoding::Error> {
-        if let Some((wire_type, mut bytes)) = chunks.get(&TAG) {
-            check_wire_type(WireType::LengthDelimited, *wire_type)
-                .map_err(Encoding::raise_error)?;
-
-            let mut in_chunks = Encoding::decode_protochunks(&mut bytes)?;
-
-            let value = InEncoder::decode_mut(encoding, &mut in_chunks)?;
-
-            Ok(Some(value))
-        } else {
-            Ok(None)
-        }
     }
 }

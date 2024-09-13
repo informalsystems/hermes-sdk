@@ -1,22 +1,14 @@
 use core::marker::PhantomData;
 
-use cgp::prelude::{DelegateComponent, HasErrorType};
-use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
+use cgp::prelude::HasErrorType;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, encoded_len_varint, key_len, WireType};
 
-use crate::impls::encode_mut::proto_field::EncodeProtoField;
 use crate::traits::length::EncodedLengthGetter;
 
 pub struct EncodeProtoFieldWithKnownLength<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
-
-impl<InEncoder, const TAG: u32> DelegateComponent<MutDecoderComponent>
-    for EncodeProtoFieldWithKnownLength<TAG, InEncoder>
-{
-    type Delegate = EncodeProtoField<TAG, InEncoder>;
-}
 
 impl<Encoding, Strategy, Value, InEncoder, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeProtoFieldWithKnownLength<TAG, InEncoder>
