@@ -5,9 +5,7 @@ use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferTyp
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, WireType};
 
-use crate::impls::encode_mut::chunk::{
-    HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunk, ProtoChunks,
-};
+use crate::impls::encode_mut::chunk::{HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks};
 
 pub struct EncodeU64ProtoField<const TAG: u32>;
 
@@ -45,15 +43,7 @@ where
         chunks: &mut ProtoChunks<'a>,
     ) -> Result<Value, Encoding::Error> {
         let value = match chunks.get(&TAG) {
-            Some(chunk) => match chunk {
-                ProtoChunk::Varint(value) => *value,
-                _ => {
-                    return Err(Encoding::raise_error(InvalidWireType {
-                        expected: WireType::Varint,
-                        actual: chunk.wire_type(),
-                    }))
-                }
-            },
+            Some(chunk) => chunk.to_varint().map_err(Encoding::raise_error)?,
             None => 0,
         };
 

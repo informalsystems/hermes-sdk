@@ -45,6 +45,26 @@ impl<'a> ProtoChunk<'a> {
             Self::SixtyFourBit(_) => WireType::SixtyFourBit,
         }
     }
+
+    pub fn to_length_delimited(&self) -> Result<&'a [u8], InvalidWireType> {
+        match self {
+            Self::LengthDelimited(bytes) => Ok(bytes),
+            _ => Err(InvalidWireType {
+                expected: WireType::LengthDelimited,
+                actual: self.wire_type(),
+            }),
+        }
+    }
+
+    pub fn to_varint(&self) -> Result<u64, InvalidWireType> {
+        match self {
+            Self::Varint(value) => Ok(*value),
+            _ => Err(InvalidWireType {
+                expected: WireType::Varint,
+                actual: self.wire_type(),
+            }),
+        }
+    }
 }
 
 impl<Encoding> CanDecodeProtoChunks for Encoding

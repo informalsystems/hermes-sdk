@@ -2,10 +2,9 @@ use core::marker::PhantomData;
 
 use cgp::prelude::CanRaiseError;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
-use prost::encoding::WireType;
 
 use crate::impls::encode_mut::chunk::{
-    CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunk, ProtoChunks,
+    CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks,
 };
 
 pub struct DecodeRequiredProtoField<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
@@ -32,18 +31,12 @@ where
             .get(&TAG)
             .ok_or_else(|| Encoding::raise_error(RequiredFieldTagNotFound { tag: TAG }))?;
 
-        match chunk {
-            ProtoChunk::LengthDelimited(mut bytes) => {
-                let mut in_chunks = Encoding::decode_protochunks(&mut bytes)?;
+        let mut bytes = chunk.to_length_delimited().map_err(Encoding::raise_error)?;
 
-                let value = InEncoder::decode_mut(encoding, &mut in_chunks)?;
+        let mut in_chunks = Encoding::decode_protochunks(&mut bytes)?;
 
-                Ok(value)
-            }
-            _ => Err(Encoding::raise_error(InvalidWireType {
-                expected: WireType::LengthDelimited,
-                actual: chunk.wire_type(),
-            })),
-        }
+        let value = InEncoder::decode_mut(encoding, &mut in_chunks)?;
+
+        Ok(value)
     }
 }
