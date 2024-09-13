@@ -1,3 +1,4 @@
+use core::array::TryFromSliceError;
 use std::collections::BTreeMap;
 
 use cgp::prelude::{CanRaiseError, HasErrorType};
@@ -6,17 +7,25 @@ use prost::bytes::Buf;
 use prost::encoding::{decode_key, decode_varint, WireType};
 use prost::DecodeError;
 
-pub struct ProtoChunk<'a> {
-    pub tag: u32,
-    pub wire_type: WireType,
-    pub chunk: &'a [u8],
+#[derive(Debug)]
+pub enum ProtoChunk<'a> {
+    Varint(u64),
+    LengthDelimited(&'a [u8]),
+    ThirtyTwoBit([u8; 4]),
+    SixtyFourBit([u8; 8]),
 }
 
-pub type ProtoChunks<'a> = BTreeMap<u32, (WireType, &'a [u8])>;
+pub type ProtoChunks<'a> = BTreeMap<u32, ProtoChunk<'a>>;
 
 #[derive(Debug)]
 pub struct UnsupportedWireType {
     pub wire_type: WireType,
+}
+
+#[derive(Debug)]
+pub struct InvalidWireType {
+    pub expected: WireType,
+    pub actual: WireType,
 }
 
 pub trait CanDecodeProtoChunks: HasErrorType {
@@ -24,7 +33,18 @@ pub trait CanDecodeProtoChunks: HasErrorType {
 }
 
 pub trait CanDecodeProtoChunk: HasErrorType {
-    fn decode_protochunk<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunk<'a>, Self::Error>;
+    fn decode_protochunk<'a>(buffer: &mut &'a [u8]) -> Result<(u32, ProtoChunk<'a>), Self::Error>;
+}
+
+impl<'a> ProtoChunk<'a> {
+    pub fn wire_type(&self) -> WireType {
+        match self {
+            Self::Varint(_) => WireType::Varint,
+            Self::LengthDelimited(_) => WireType::LengthDelimited,
+            Self::ThirtyTwoBit(_) => WireType::ThirtyTwoBit,
+            Self::SixtyFourBit(_) => WireType::SixtyFourBit,
+        }
+    }
 }
 
 impl<Encoding> CanDecodeProtoChunks for Encoding
@@ -35,9 +55,11 @@ where
         let mut chunks = BTreeMap::new();
 
         while buffer.len() > 0 {
-            let chunk = Self::decode_protochunk(buffer)?;
-            chunks.insert(chunk.tag, (chunk.wire_type, chunk.chunk));
+            let (tag, chunk) = Self::decode_protochunk(buffer)?;
+            chunks.insert(tag, chunk);
         }
+
+        println!("decoded proto chunks: {:?}", chunks);
 
         Ok(chunks)
     }
@@ -45,34 +67,42 @@ where
 
 impl<Encoding> CanDecodeProtoChunk for Encoding
 where
-    Encoding: CanRaiseError<DecodeError> + CanRaiseError<UnsupportedWireType>,
+    Encoding: CanRaiseError<DecodeError>
+        + CanRaiseError<UnsupportedWireType>
+        + CanRaiseError<TryFromSliceError>,
 {
-    fn decode_protochunk<'a>(buffer: &mut &'a [u8]) -> Result<ProtoChunk<'a>, Encoding::Error> {
+    fn decode_protochunk<'a>(
+        buffer: &mut &'a [u8],
+    ) -> Result<(u32, ProtoChunk<'a>), Encoding::Error> {
         let (tag, wire_type) = decode_key(buffer).map_err(Encoding::raise_error)?;
 
-        let length = match wire_type {
-            WireType::Varint => decode_varint(buffer)
-                .map(|_| 0)
-                .map_err(Encoding::raise_error)?,
-            WireType::ThirtyTwoBit => 4,
-            WireType::SixtyFourBit => 8,
-            WireType::LengthDelimited => decode_varint(buffer).map_err(Encoding::raise_error)?,
+        let chunk = match wire_type {
+            WireType::Varint => {
+                let value = decode_varint(buffer).map_err(Encoding::raise_error)?;
+
+                ProtoChunk::Varint(value)
+            }
+            WireType::LengthDelimited => {
+                let length = decode_varint(buffer).map_err(Encoding::raise_error)? as usize;
+                let bytes = &buffer[..length];
+                buffer.advance(length);
+
+                ProtoChunk::LengthDelimited(bytes)
+            }
+            WireType::ThirtyTwoBit => {
+                let bytes = <[u8; 4]>::try_from(&buffer[..4]).map_err(Encoding::raise_error)?;
+
+                ProtoChunk::ThirtyTwoBit(bytes)
+            }
+            WireType::SixtyFourBit => {
+                let bytes = <[u8; 8]>::try_from(&buffer[..8]).map_err(Encoding::raise_error)?;
+
+                ProtoChunk::SixtyFourBit(bytes)
+            }
             _ => return Err(Encoding::raise_error(UnsupportedWireType { wire_type })),
-        } as usize;
+        };
 
-        if length > buffer.len() {
-            return Err(Encoding::raise_error(DecodeError::new("buffer underflow")));
-        }
-
-        let chunk = &buffer[..length];
-
-        buffer.advance(length);
-
-        Ok(ProtoChunk {
-            tag,
-            wire_type,
-            chunk,
-        })
+        Ok((tag, chunk))
     }
 }
 

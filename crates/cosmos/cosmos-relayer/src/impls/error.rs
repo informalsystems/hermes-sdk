@@ -1,8 +1,11 @@
 use alloc::string::FromUtf8Error;
+use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::ParseIntError;
 use core::str::Utf8Error;
-use hermes_protobuf_encoding_components::impls::encode_mut::chunk::UnsupportedWireType;
+use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
+    InvalidWireType, UnsupportedWireType,
+};
 
 use cgp::core::error::{
     DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent,
@@ -130,6 +133,7 @@ delegate_components! {
             ClientError,
             CommitmentError,
             Utf8Error,
+            TryFromSliceError,
 
             // TODO: make it retryable?
             TransportError,
@@ -142,6 +146,7 @@ delegate_components! {
         [
             TypeUrlMismatchError,
             UnsupportedWireType,
+            InvalidWireType,
             UnknownClientStateType,
             UnknownConsensusStateType,
             AbciQueryError,

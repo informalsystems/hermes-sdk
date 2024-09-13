@@ -93,25 +93,33 @@ pub trait CheckCosmosEncoding:
 impl CheckCosmosEncoding for CosmosEncoding {}
 
 #[cfg(test)]
-#[test]
-fn test_height_encoding() {
+mod test {
     use hermes_encoding_components::traits::decode::CanDecode;
     use hermes_encoding_components::traits::encode::CanEncode;
+    use hermes_error::types::HermesError;
+    use ibc::core::client::types::Height;
     use ibc_proto::Protobuf;
 
-    let height = Height::new(0, 12).unwrap();
+    use crate::contexts::encoding::CosmosEncoding;
 
-    let bytes1 = height.encode_vec();
+    #[test]
+    fn test_height_encoding() -> Result<(), HermesError> {
+        let height = Height::new(1, 12)?;
 
-    println!("bytes1: {:?}", bytes1);
+        let bytes1 = height.encode_vec();
 
-    let bytes2 = CosmosEncoding.encode(&height).unwrap();
+        println!("bytes1: {:?}", bytes1);
 
-    println!("bytes2: {:?}", bytes2);
+        let bytes2 = CosmosEncoding.encode(&height)?;
 
-    assert_eq!(bytes1, bytes2);
+        println!("bytes2: {:?}", bytes2);
 
-    let height2: Height = CosmosEncoding.decode(&bytes2).unwrap();
+        assert_eq!(bytes1, bytes2);
 
-    assert_eq!(height, height2);
+        let height2: Height = CosmosEncoding.decode(&bytes2)?;
+
+        assert_eq!(height, height2);
+
+        Ok(())
+    }
 }

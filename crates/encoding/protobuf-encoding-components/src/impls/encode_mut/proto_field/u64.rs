@@ -3,10 +3,11 @@ use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use prost::bytes::BufMut;
-use prost::encoding::{check_wire_type, decode_varint, encode_key, encode_varint, WireType};
-use prost::DecodeError;
+use prost::encoding::{encode_key, encode_varint, WireType};
 
-use crate::impls::encode_mut::chunk::{HasProtoChunksDecodeBuffer, ProtoChunks};
+use crate::impls::encode_mut::chunk::{
+    HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunk, ProtoChunks,
+};
 
 pub struct EncodeU64ProtoField<const TAG: u32>;
 
@@ -35,7 +36,8 @@ where
 impl<Encoding, Strategy, Value, const TAG: u32> MutDecoder<Encoding, Strategy, Value>
     for EncodeU64ProtoField<TAG>
 where
-    Encoding: HasProtoChunksDecodeBuffer + CanRaiseError<DecodeError> + CanRaiseError<Value::Error>,
+    Encoding:
+        HasProtoChunksDecodeBuffer + CanRaiseError<InvalidWireType> + CanRaiseError<Value::Error>,
     Value: TryFrom<u64>,
 {
     fn decode_mut<'a>(
@@ -43,11 +45,15 @@ where
         chunks: &mut ProtoChunks<'a>,
     ) -> Result<Value, Encoding::Error> {
         let value = match chunks.get(&TAG) {
-            Some((wire_type, mut bytes)) => {
-                check_wire_type(WireType::Varint, *wire_type).map_err(Encoding::raise_error)?;
-
-                decode_varint(&mut bytes).map_err(Encoding::raise_error)?
-            }
+            Some(chunk) => match chunk {
+                ProtoChunk::Varint(value) => *value,
+                _ => {
+                    return Err(Encoding::raise_error(InvalidWireType {
+                        expected: WireType::Varint,
+                        actual: chunk.wire_type(),
+                    }))
+                }
+            },
             None => 0,
         };
 

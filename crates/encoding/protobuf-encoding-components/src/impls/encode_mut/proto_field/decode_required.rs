@@ -2,11 +2,10 @@ use core::marker::PhantomData;
 
 use cgp::prelude::CanRaiseError;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
-use prost::encoding::{check_wire_type, WireType};
-use prost::DecodeError;
+use prost::encoding::WireType;
 
 use crate::impls::encode_mut::chunk::{
-    CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, ProtoChunks,
+    CanDecodeProtoChunks, HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunk, ProtoChunks,
 };
 
 pub struct DecodeRequiredProtoField<const TAG: u32, InEncoder>(pub PhantomData<InEncoder>);
@@ -21,24 +20,30 @@ impl<Encoding, Strategy, Value, InEncoder, const TAG: u32> MutDecoder<Encoding, 
 where
     Encoding: CanDecodeProtoChunks
         + HasProtoChunksDecodeBuffer
-        + CanRaiseError<DecodeError>
-        + CanRaiseError<RequiredFieldTagNotFound>,
+        + CanRaiseError<RequiredFieldTagNotFound>
+        + CanRaiseError<InvalidWireType>,
     InEncoder: MutDecoder<Encoding, Strategy, Value>,
 {
     fn decode_mut(
         encoding: &Encoding,
         chunks: &mut ProtoChunks<'_>,
     ) -> Result<Value, Encoding::Error> {
-        let (wire_type, mut bytes) = chunks
+        let chunk = chunks
             .get(&TAG)
             .ok_or_else(|| Encoding::raise_error(RequiredFieldTagNotFound { tag: TAG }))?;
 
-        check_wire_type(WireType::LengthDelimited, *wire_type).map_err(Encoding::raise_error)?;
+        match chunk {
+            ProtoChunk::LengthDelimited(mut bytes) => {
+                let mut in_chunks = Encoding::decode_protochunks(&mut bytes)?;
 
-        let mut in_chunks = Encoding::decode_protochunks(&mut bytes)?;
+                let value = InEncoder::decode_mut(encoding, &mut in_chunks)?;
 
-        let value = InEncoder::decode_mut(encoding, &mut in_chunks)?;
-
-        Ok(value)
+                Ok(value)
+            }
+            _ => Err(Encoding::raise_error(InvalidWireType {
+                expected: WireType::LengthDelimited,
+                actual: chunk.wire_type(),
+            })),
+        }
     }
 }
