@@ -6,7 +6,7 @@ use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays};
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
-use hermes_encoding_components::traits::encode_mut::CanEncodeMut;
+use hermes_encoding_components::traits::encode_and_decode_mut::CanEncodeAndDecodeMut;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
@@ -92,7 +92,7 @@ pub trait CheckWasmCosmosEncoding:
     + CanEncode<ViaAny, TendermintClientState>
     + CanEncode<ViaAny, TendermintConsensusState>
     + CanEncodeAndDecode<ViaProtobuf, Height>
-    + CanEncodeMut<ViaProtobuf, WasmClientState>
+    + CanEncodeAndDecodeMut<ViaProtobuf, WasmClientState>
 {
 }
 
