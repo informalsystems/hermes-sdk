@@ -1614,6 +1614,7 @@ dependencies = [
  "cgp",
  "eyre",
  "futures",
+ "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
@@ -1635,6 +1636,18 @@ dependencies = [
  "tokio",
  "tonic",
  "tracing",
+]
+
+[[package]]
+name = "hermes-cosmos-encoding-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "ibc",
+ "prost",
+ "prost-types",
 ]
 
 [[package]]
@@ -1764,6 +1777,7 @@ dependencies = [
  "hermes-test-components",
  "hermes-tracing-logging-components",
  "hermes-wasm-client-components",
+ "hermes-wasm-encoding-components",
  "hermes-wasm-test-components",
  "http 1.1.0",
  "ibc",
@@ -2009,14 +2023,29 @@ dependencies = [
  "cgp",
  "cgp-error-eyre",
  "hermes-cosmos-chain-components",
+ "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
+ "hermes-wasm-encoding-components",
  "ibc",
  "ibc-proto",
  "ibc-relayer-types",
  "prost",
  "tendermint-proto",
+]
+
+[[package]]
+name = "hermes-wasm-encoding-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-cosmos-encoding-components",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "ibc",
+ "prost",
+ "prost-types",
 ]
 
 [[package]]

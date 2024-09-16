@@ -2,7 +2,6 @@ pub mod channel;
 pub mod client;
 pub mod commitment_prefix;
 pub mod connection;
-pub mod encoding;
 pub mod events;
 pub mod message_height;
 pub mod packet;

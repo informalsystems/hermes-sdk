@@ -7,7 +7,7 @@ use hermes_cosmos_chain_components::components::client::{
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
-    CosmosEncodingComponents, DecodeBufferTypeComponent, EncodeBufferTypeComponent,
+    CosmosClientEncodingComponents, DecodeBufferTypeComponent, EncodeBufferTypeComponent,
 };
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
@@ -144,7 +144,7 @@ delegate_components! {
             DecodeBufferTypeComponent,
             EncodedLengthGetterComponent,
         ]:
-            CosmosEncodingComponents,
+            CosmosClientEncodingComponents,
         ConverterComponent:
             DelegateEncoding<AnyClientConverterComponents>,
     }

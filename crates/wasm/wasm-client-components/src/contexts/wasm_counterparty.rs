@@ -21,10 +21,10 @@ use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_wasm_encoding_components::components::*;
+use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 
-use crate::impls::encoding::components::*;
 use crate::impls::types::client_state::ProvideWasmClientState;
-use crate::types::client_state::WasmClientState;
 
 pub struct WasmCounterparty;
 

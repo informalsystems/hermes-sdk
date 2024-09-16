@@ -34,6 +34,7 @@ hermes-cosmos-integration-tests         = { workspace = true }
 hermes-cosmos-relayer                   = { workspace = true }
 hermes-any-counterparty                 = { workspace = true }
 hermes-wasm-client-components           = { workspace = true }
+hermes-wasm-encoding-components         = { workspace = true }
 hermes-wasm-test-components             = { workspace = true }
 
 ibc                                     = { workspace = true }

@@ -30,6 +30,7 @@ members = [
     "crates/logging/logger",
 
     "crates/cosmos/cosmos-chain-components",
+    "crates/cosmos/cosmos-encoding-components",
     "crates/cosmos/cosmos-test-components",
     "crates/cosmos/cosmos-integration-tests",
     "crates/cosmos/cosmos-relayer",
@@ -39,6 +40,7 @@ members = [
     "crates/celestia/celestia-integration-tests",
 
     "crates/wasm/wasm-client-components",
+    "crates/wasm/wasm-encoding-components",
     "crates/wasm/wasm-test-components",
 
     "crates/solomachine/solomachine-chain-components",
@@ -133,6 +135,7 @@ hermes-cli-components                   = { version = "0.1.0" }
 hermes-cli-framework                    = { version = "0.1.0" }
 
 hermes-cosmos-chain-components          = { version = "0.1.0" }
+hermes-cosmos-encoding-components          = { version = "0.1.0" }
 hermes-cosmos-relayer                   = { version = "0.1.0" }
 hermes-cosmos-wasm-relayer              = { version = "0.1.0" }
 hermes-cosmos-test-components           = { version = "0.1.0" }
@@ -142,6 +145,7 @@ hermes-celestia-test-components         = { version = "0.1.0" }
 hermes-celestia-integration-tests       = { version = "0.1.0" }
 
 hermes-wasm-client-components           = { version = "0.1.0" }
+hermes-wasm-encoding-components         = { version = "0.1.0" }
 hermes-wasm-test-components             = { version = "0.1.0" }
 
 hermes-solomachine-chain-components     = { version = "0.1.0" }
@@ -176,6 +180,7 @@ hermes-cli-components               = { path = "./crates/cli/cli-components" }
 hermes-cli-framework                = { path = "./crates/cli/cli-framework" }
 
 hermes-cosmos-chain-components      = { path = "./crates/cosmos/cosmos-chain-components" }
+hermes-cosmos-encoding-components   = { path = "./crates/cosmos/cosmos-encoding-components" }
 hermes-cosmos-relayer               = { path = "./crates/cosmos/cosmos-relayer" }
 hermes-cosmos-wasm-relayer          = { path = "./crates/cosmos/cosmos-wasm-relayer" }
 hermes-cosmos-test-components       = { path = "./crates/cosmos/cosmos-test-components" }
@@ -185,6 +190,7 @@ hermes-celestia-test-components     = { path = "./crates/celestia/celestia-test-
 hermes-celestia-integration-tests   = { path = "./crates/celestia/celestia-integration-tests" }
 
 hermes-wasm-client-components       = { path = "./crates/wasm/wasm-client-components" }
+hermes-wasm-encoding-components     = { path = "./crates/wasm/wasm-encoding-components" }
 hermes-wasm-test-components         = { path = "./crates/wasm/wasm-test-components" }
 
 hermes-solomachine-chain-components = { path = "./crates/solomachine/solomachine-chain-components" }

@@ -2,6 +2,12 @@
 
 ## v0.2.0 (pre-release)
 
+-  Introduce cosmos- and wasm- encoding components crates [#431](https://github.com/informalsystems/hermes-sdk/pull/431)
+    - Add new `hermes-cosmos-encoding-components` crate.
+    - Add new `hermes-wasm-encoding-components` crate.
+    - Move `Height` encoding implementation to `hermes-cosmos-encoding-components`.
+    - Move `WasmClientState`, `WasmConsensusState`, and related encoding implementations to `hermes-wasm-encoding-components`.
+
 - Implement Protobuf encoding components for direct encoding from domain types [#430](https://github.com/informalsystems/hermes-sdk/pull/430)
     - Implement generic `MutEncoder` components for `hermes-encoding-components`.
     - Implement Protobuf `MutEncoder` components for direct Protobuf encoding without requiring all types to implement `prost::Message`.
