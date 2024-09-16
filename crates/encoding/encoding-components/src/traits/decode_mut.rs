@@ -4,7 +4,7 @@ use crate::traits::types::decode_buffer::HasDecodeBufferType;
 
 #[derive_component(MutDecoderComponent, MutDecoder<Encoding>)]
 pub trait CanDecodeMut<Strategy, Value>: HasDecodeBufferType + HasErrorType {
-    fn decode_mut(&self, buffer: &mut Self::DecodeBuffer<'_>) -> Result<Value, Self::Error>;
+    fn decode_mut<'a>(&self, buffer: &mut Self::DecodeBuffer<'a>) -> Result<Value, Self::Error>;
 }
 
 #[derive_component(DecodeBufferPeekerComponent, DecodeBufferPeeker<Encoding>)]

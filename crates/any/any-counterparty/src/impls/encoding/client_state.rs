@@ -5,7 +5,8 @@ use hermes_encoding_components::traits::convert::Converter;
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::schema::HasSchema;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
-use hermes_protobuf_encoding_components::types::{Any, ViaProtobuf};
+use hermes_protobuf_encoding_components::types::any::Any;
+use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_protobuf_encoding_components::vendor::HasSchemaType;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 

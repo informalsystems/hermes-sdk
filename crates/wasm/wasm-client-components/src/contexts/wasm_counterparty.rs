@@ -10,7 +10,8 @@ use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
 use hermes_encoding_components::types::AsBytes;
-use hermes_protobuf_encoding_components::types::{Any, ViaAny, ViaProtobuf};
+use hermes_protobuf_encoding_components::types::any::Any;
+use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
 use hermes_relayer_components::chain::traits::queries::client_state::ClientStateQuerierComponent;
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
@@ -23,7 +24,7 @@ use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeCom
 
 use crate::impls::encoding::components::*;
 use crate::impls::types::client_state::ProvideWasmClientState;
-use crate::types::client_state::{ProtoWasmClientState, WasmClientState};
+use crate::types::client_state::WasmClientState;
 
 pub struct WasmCounterparty;
 
@@ -99,8 +100,7 @@ delegate_components! {
 }
 
 pub trait CanUseWasmClientEncoding:
-    CanDecode<ViaProtobuf, ProtoWasmClientState>
-    + CanDecode<ViaProtobuf, WasmClientState>
+    CanDecode<ViaProtobuf, WasmClientState>
     + CanDecode<ViaAny, WasmClientState>
     + CanConvert<Any, WasmClientState>
 {

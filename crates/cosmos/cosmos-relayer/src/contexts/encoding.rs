@@ -8,33 +8,38 @@ use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
+use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
+use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
-use hermes_protobuf_encoding_components::types::{ViaAny, ViaProtobuf};
+use hermes_protobuf_encoding_components::impls::encode_mut::chunk::ProtoChunks;
+use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
+use ibc::core::client::types::Height;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
+use prost::bytes::BufMut;
 use prost_types::Any;
 
 use crate::impls::error::HandleCosmosError;
 
 pub struct CosmosEncoding;
 
-pub struct CosmosEncodingComponents2;
+pub struct CosmosEncodingContextComponents;
 
 impl HasComponents for CosmosEncoding {
-    type Components = CosmosEncodingComponents2;
+    type Components = CosmosEncodingContextComponents;
 }
 
 with_cosmos_encoding_components! {
     delegate_components! {
-        CosmosEncodingComponents2 {
+        CosmosEncodingContextComponents {
             @CosmosEncodingComponents: CosmosEncodingComponents,
         }
     }
 }
 
 delegate_components! {
-    CosmosEncodingComponents2 {
+    CosmosEncodingContextComponents {
         [
             ErrorTypeComponent,
             ErrorRaiserComponent,
@@ -69,6 +74,9 @@ where
 
 pub trait CheckCosmosEncoding:
     HasEncodedType<Encoded = Vec<u8>>
+    + HasEncodeBufferType<EncodeBuffer = Vec<u8>>
+    + HasEncodeBufferType<EncodeBuffer: BufMut>
+    + for<'a> HasDecodeBufferType<DecodeBuffer<'a> = ProtoChunks<'a>>
     + CanEncodeAndDecode<ViaProtobuf, Vec<u8>>
     + CanEncodeAndDecode<ViaProtobuf, TendermintClientState>
     + CanEncodeAndDecode<ViaProtobuf, TendermintConsensusState>
@@ -77,7 +85,41 @@ pub trait CheckCosmosEncoding:
     + CanEncodeAndDecode<ViaAny, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
+    + CanEncodeAndDecode<ViaProtobuf, String>
+    + CanEncodeAndDecode<ViaProtobuf, Height>
 {
 }
 
 impl CheckCosmosEncoding for CosmosEncoding {}
+
+#[cfg(test)]
+mod test {
+    use hermes_encoding_components::traits::decode::CanDecode;
+    use hermes_encoding_components::traits::encode::CanEncode;
+    use hermes_error::types::HermesError;
+    use ibc::core::client::types::Height;
+    use ibc_proto::Protobuf;
+
+    use crate::contexts::encoding::CosmosEncoding;
+
+    #[test]
+    fn test_height_encoding() -> Result<(), HermesError> {
+        let height = Height::new(1, 12)?;
+
+        let bytes1 = height.encode_vec();
+
+        println!("bytes1: {:?}", bytes1);
+
+        let bytes2 = CosmosEncoding.encode(&height)?;
+
+        println!("bytes2: {:?}", bytes2);
+
+        assert_eq!(bytes1, bytes2);
+
+        let height2: Height = CosmosEncoding.decode(&bytes2)?;
+
+        assert_eq!(height, height2);
+
+        Ok(())
+    }
+}

@@ -3,7 +3,7 @@ use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decode::CanDecode;
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
-use hermes_protobuf_encoding_components::types::ViaAny;
+use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use hermes_wasm_client_components::types::client_state::WasmClientState;
 use ibc::core::client::types::Height;
 use prost_types::Any;
