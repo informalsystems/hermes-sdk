@@ -12,7 +12,7 @@ pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 pub use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
 pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
 pub use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
-use hermes_wasm_client_components::impls::encoding::components::WasmEncodingComponents;
+use hermes_wasm_encoding_components::components::WasmEncodingComponents;
 
 use crate::encoding::convert::WasmCosmosConverterComponents;
 use crate::encoding::encode::WasmCosmosEncoderComponents;
