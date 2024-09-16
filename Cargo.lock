@@ -2023,6 +2023,7 @@ dependencies = [
  "cgp",
  "cgp-error-eyre",
  "hermes-cosmos-chain-components",
+ "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",

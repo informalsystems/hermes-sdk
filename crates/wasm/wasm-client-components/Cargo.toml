@@ -18,6 +18,7 @@ hermes-cosmos-chain-components          = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-encoding-components              = { workspace = true }
 hermes-protobuf-encoding-components     = { workspace = true }
+hermes-cosmos-encoding-components       = { workspace = true }
 
 ibc-relayer-types                       = { workspace = true }
 tendermint-proto                        = { workspace = true }

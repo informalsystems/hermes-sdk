@@ -30,10 +30,10 @@ impl HasComponents for CosmosEncoding {
     type Components = CosmosEncodingContextComponents;
 }
 
-with_cosmos_encoding_components! {
+with_cosmos_client_encoding_components! {
     delegate_components! {
         CosmosEncodingContextComponents {
-            @CosmosEncodingComponents: CosmosEncodingComponents,
+            @CosmosClientEncodingComponents: CosmosClientEncodingComponents,
         }
     }
 }
@@ -85,7 +85,6 @@ pub trait CheckCosmosEncoding:
     + CanEncodeAndDecode<ViaAny, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
-    + CanEncodeAndDecode<ViaProtobuf, String>
     + CanEncodeAndDecode<ViaProtobuf, Height>
 {
 }

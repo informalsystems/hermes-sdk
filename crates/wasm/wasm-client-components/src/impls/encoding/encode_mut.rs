@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
+use hermes_cosmos_chain_components::encoding::components::CosmosClientEncodingComponents;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use ibc::core::client::types::Height;
 
@@ -12,7 +12,7 @@ delegate_components! {
     WasmEncodeMutComponents {
         [
             (ViaProtobuf, Height),
-        ]: CosmosEncodingComponents,
+        ]: CosmosClientEncodingComponents,
 
         (ViaProtobuf, WasmClientState):
             EncodeWasmClientState,

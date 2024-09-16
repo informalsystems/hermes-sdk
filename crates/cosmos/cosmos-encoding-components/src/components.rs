@@ -1,11 +1,10 @@
 use cgp::prelude::*;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
-use hermes_protobuf_encoding_components::components::{
-    DecodeBufferTypeComponent, DecoderComponent, EncodeBufferTypeComponent, EncodedTypeComponent,
-    EncoderComponent, MutDecoderComponent, MutEncoderComponent, ProtobufEncodingComponents,
-    SchemaTypeComponent,
+pub use hermes_protobuf_encoding_components::components::{
+    DecodeBufferTypeComponent, DecoderComponent, EncodeBufferTypeComponent,
+    EncodedLengthGetterComponent, EncodedTypeComponent, EncoderComponent, MutDecoderComponent,
+    MutEncoderComponent, ProtobufEncodingComponents, SchemaTypeComponent,
 };
-use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use ibc::core::client::types::Height;
 use prost_types::Any;
