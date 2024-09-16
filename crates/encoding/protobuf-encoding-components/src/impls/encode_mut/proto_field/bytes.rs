@@ -9,41 +9,44 @@ use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimited;
 
 pub struct EncodeByteField<const TAG: u32>;
 
-impl<Encoding, Strategy, const TAG: u32> MutEncoder<Encoding, Strategy, Vec<u8>>
+impl<Encoding, Strategy, Value, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeByteField<TAG>
 where
     Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
     EncodeLengthDelimited<TAG>: MutEncoder<Encoding, Strategy, u64>,
+    Value: AsRef<[u8]>,
 {
     fn encode_mut(
         encoding: &Encoding,
-        value: &Vec<u8>,
+        value: &Value,
         buffer: &mut Encoding::EncodeBuffer,
     ) -> Result<(), Encoding::Error> {
-        if !value.is_empty() {
-            <EncodeLengthDelimited<TAG>>::encode_mut(encoding, &(value.len() as u64), buffer)?;
-            buffer.put(value.as_ref());
+        let bytes = value.as_ref();
+        if !bytes.is_empty() {
+            <EncodeLengthDelimited<TAG>>::encode_mut(encoding, &(bytes.len() as u64), buffer)?;
+            buffer.put(bytes);
         }
 
         Ok(())
     }
 }
 
-impl<Encoding, Strategy, const TAG: u32> MutDecoder<Encoding, Strategy, Vec<u8>>
+impl<Encoding, Strategy, Value, const TAG: u32> MutDecoder<Encoding, Strategy, Value>
     for EncodeByteField<TAG>
 where
     Encoding: HasProtoChunksDecodeBuffer + CanRaiseError<InvalidWireType>,
+    Value: Default + for<'a> From<&'a [u8]>,
 {
     fn decode_mut(
         _encoding: &Encoding,
         chunks: &mut ProtoChunks<'_>,
-    ) -> Result<Vec<u8>, Encoding::Error> {
+    ) -> Result<Value, Encoding::Error> {
         match chunks.get(&TAG) {
             Some(chunk) => {
                 let bytes = chunk.to_length_delimited().map_err(Encoding::raise_error)?;
-                Ok(Vec::from(bytes))
+                Ok(Value::from(bytes))
             }
-            None => Ok(Vec::new()),
+            None => Ok(Value::default()),
         }
     }
 }
