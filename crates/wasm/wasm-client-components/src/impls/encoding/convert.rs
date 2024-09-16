@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_encoding_components::impls::from_context::EncodeFromContext;
+use hermes_encoding_components::impls::with_context::EncodeWithContext;
 use hermes_protobuf_encoding_components::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
@@ -11,9 +11,9 @@ pub struct WasmConverterComponents;
 
 delegate_components! {
     WasmConverterComponents {
-        (WasmClientState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeFromContext>,
-        (Any, WasmClientState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeFromContext>,
-        (WasmConsensusState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeFromContext>,
-        (Any, WasmConsensusState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeFromContext>,
+        (WasmClientState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        (Any, WasmClientState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        (WasmConsensusState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        (Any, WasmConsensusState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
     }
 }

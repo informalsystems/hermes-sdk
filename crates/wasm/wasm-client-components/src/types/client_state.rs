@@ -2,7 +2,7 @@ use cgp::prelude::*;
 use hermes_encoding_components::impls::encode_mut::combine::CombineEncoders;
 use hermes_encoding_components::impls::encode_mut::field::EncodeField;
 use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
-use hermes_encoding_components::impls::from_context::EncodeFromContext;
+use hermes_encoding_components::impls::with_context::EncodeWithContext;
 use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
@@ -40,7 +40,7 @@ delegate_components! {
                 >,
                 EncodeField<
                     symbol!("latest_height"),
-                    EncodeLengthDelimitedProtoField<3, EncodeFromContext>,
+                    EncodeLengthDelimitedProtoField<3, EncodeWithContext>,
                 >,
             ]>,
         MutDecoderComponent: DecodeFrom<
@@ -48,7 +48,7 @@ delegate_components! {
             CombineEncoders<HList![
                 EncodeByteField<1>,
                 EncodeByteField<2>,
-                DecodeRequiredProtoField<3, EncodeFromContext>,
+                DecodeRequiredProtoField<3, EncodeWithContext>,
             ]>
         >,
     }
