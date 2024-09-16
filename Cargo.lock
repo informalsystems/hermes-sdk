@@ -1646,7 +1646,6 @@ dependencies = [
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "ibc",
- "ibc-proto",
  "prost",
  "prost-types",
 ]
@@ -2032,6 +2031,19 @@ dependencies = [
  "ibc-relayer-types",
  "prost",
  "tendermint-proto",
+]
+
+[[package]]
+name = "hermes-wasm-encoding-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-cosmos-encoding-components",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "ibc",
+ "prost",
+ "prost-types",
 ]
 
 [[package]]
