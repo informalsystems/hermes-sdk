@@ -34,8 +34,10 @@ where
 impl<Encoding, Strategy, Value, const TAG: u32> MutDecoder<Encoding, Strategy, Value>
     for EncodeByteField<TAG>
 where
-    Encoding: HasProtoChunksDecodeBuffer + CanRaiseError<InvalidWireType>,
-    Value: Default + for<'a> From<&'a [u8]>,
+    Encoding: HasProtoChunksDecodeBuffer
+        + CanRaiseError<InvalidWireType>
+        + for<'a> CanRaiseError<<Value as TryFrom<&'a [u8]>>::Error>,
+    Value: Default + for<'a> TryFrom<&'a [u8]>,
 {
     fn decode_mut(
         _encoding: &Encoding,
@@ -44,7 +46,7 @@ where
         match chunks.get(&TAG) {
             Some(chunk) => {
                 let bytes = chunk.to_length_delimited().map_err(Encoding::raise_error)?;
-                Ok(Value::from(bytes))
+                Value::try_from(bytes).map_err(Encoding::raise_error)
             }
             None => Ok(Value::default()),
         }

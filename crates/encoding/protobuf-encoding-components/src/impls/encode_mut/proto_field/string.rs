@@ -5,7 +5,6 @@ use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 
-use crate::impls::encode_mut::chunk::InvalidWireType;
 use crate::impls::encode_mut::proto_field::bytes::EncodeByteField;
 
 pub struct EncodeStringField<const TAG: u32>;
@@ -20,7 +19,7 @@ delegate_components! {
 impl<Encoding, Strategy, const TAG: u32> MutDecoder<Encoding, Strategy, String>
     for EncodeStringField<TAG>
 where
-    Encoding: HasDecodeBufferType + CanRaiseError<InvalidWireType>,
+    Encoding: HasDecodeBufferType + HasErrorType,
     EncodeByteField<TAG>: MutDecoder<Encoding, Strategy, Utf8String>,
 {
     fn decode_mut(
@@ -32,6 +31,7 @@ where
     }
 }
 
+#[derive(Default)]
 pub struct Utf8String {
     pub string: String,
 }

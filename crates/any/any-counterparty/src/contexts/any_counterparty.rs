@@ -6,14 +6,18 @@ use hermes_cosmos_chain_components::components::client::{
     ConsensusStateWithProofsQuerierComponent, HeightFieldComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
-use hermes_cosmos_chain_components::encoding::components::CosmosEncodingComponents;
+use hermes_cosmos_chain_components::encoding::components::{
+    CosmosEncodingComponents, DecodeBufferTypeComponent, EncodeBufferTypeComponent,
+};
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
 use hermes_encoding_components::traits::decode::{CanDecode, DecoderComponent};
+use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode::EncoderComponent;
+use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, ProvideEncodingType,
 };
@@ -21,6 +25,7 @@ pub use hermes_encoding_components::traits::schema::SchemaGetterComponent;
 use hermes_encoding_components::traits::types::encoded::EncodedTypeComponent;
 pub use hermes_encoding_components::traits::types::schema::SchemaTypeComponent;
 use hermes_encoding_components::types::AsBytes;
+use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
@@ -133,6 +138,11 @@ delegate_components! {
             EncodedTypeComponent,
             SchemaTypeComponent,
             SchemaGetterComponent,
+            MutEncoderComponent,
+            MutDecoderComponent,
+            EncodeBufferTypeComponent,
+            DecodeBufferTypeComponent,
+            EncodedLengthGetterComponent,
         ]:
             CosmosEncodingComponents,
         ConverterComponent:

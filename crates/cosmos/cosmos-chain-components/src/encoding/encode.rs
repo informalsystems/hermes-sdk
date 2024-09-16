@@ -38,9 +38,10 @@ delegate_components! {
         (ViaProtobuf, MerkleProof): ConvertAndEncode<ProtoMerkleProof>,
         (ViaProtobuf, ProtoMerkleProof): EncodeAsProtobuf,
 
-        (ViaProtobuf, Any): EncodeAsProtobuf,
+        // (ViaProtobuf, Any): EncodeAsProtobuf,
 
         [
+            (ViaProtobuf, Any),
             (ViaProtobuf, String),
             (ViaProtobuf, Height),
         ]: EncodeProtoWithMutBuffer,
