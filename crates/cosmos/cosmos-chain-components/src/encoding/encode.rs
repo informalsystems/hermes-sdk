@@ -1,7 +1,7 @@
 use cgp::prelude::*;
-use hermes_encoding_components::impls::convert_and_encode::ConvertAndEncode;
-use hermes_encoding_components::impls::return_encoded::ReturnEncoded;
-use hermes_encoding_components::impls::use_strategy::EncodeUsingStrategy;
+use hermes_encoding_components::impls::encode::convert_and_encode::ConvertAndEncode;
+use hermes_encoding_components::impls::encode::return_encoded::ReturnEncoded;
+use hermes_encoding_components::impls::encode::use_strategy::EncodeUsingStrategy;
 use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithMutBuffer;
 use hermes_protobuf_encoding_components::impls::protobuf::EncodeAsProtobuf;
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
@@ -37,8 +37,6 @@ delegate_components! {
         (ViaCommitmentProof, MerkleProof): EncodeUsingStrategy<ViaProtobuf>,
         (ViaProtobuf, MerkleProof): ConvertAndEncode<ProtoMerkleProof>,
         (ViaProtobuf, ProtoMerkleProof): EncodeAsProtobuf,
-
-        // (ViaProtobuf, Any): EncodeAsProtobuf,
 
         [
             (ViaProtobuf, Any),

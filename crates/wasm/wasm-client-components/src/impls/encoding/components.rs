@@ -3,8 +3,8 @@ pub use hermes_cosmos_chain_components::encoding::components::{
     DecodeBufferTypeComponent, EncodeBufferTypeComponent,
 };
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
-use hermes_encoding_components::impls::encoded::ProvideEncodedBytes;
-use hermes_encoding_components::impls::schema::ProvideStringSchema;
+use hermes_encoding_components::impls::types::encoded::ProvideEncodedBytes;
+use hermes_encoding_components::impls::types::schema::ProvideStringSchema;
 pub use hermes_encoding_components::traits::convert::ConverterComponent;
 pub use hermes_encoding_components::traits::decode::DecoderComponent;
 pub use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;

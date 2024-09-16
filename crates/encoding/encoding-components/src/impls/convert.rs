@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::{CanRaiseError, HasErrorType};
 
 use crate::traits::convert::Converter;
@@ -23,5 +25,22 @@ where
 {
     fn convert(_encoding: &Encoding, from: &From) -> Result<To, Encoding::Error> {
         Ok(from.clone().into())
+    }
+}
+
+pub struct ConvertVia<ViaValue, ConvertA, ConvertB>(
+    pub PhantomData<(ViaValue, ConvertA, ConvertB)>,
+);
+
+impl<Encoding, From, To, ViaValue, ConvertA, ConvertB> Converter<Encoding, From, To>
+    for ConvertVia<ViaValue, ConvertA, ConvertB>
+where
+    Encoding: HasErrorType,
+    ConvertA: Converter<Encoding, From, ViaValue>,
+    ConvertB: Converter<Encoding, ViaValue, To>,
+{
+    fn convert(encoding: &Encoding, from: &From) -> Result<To, Encoding::Error> {
+        let intermediate = ConvertA::convert(encoding, from)?;
+        ConvertB::convert(encoding, &intermediate)
     }
 }

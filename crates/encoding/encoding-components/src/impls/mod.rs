@@ -1,10 +1,7 @@
 pub mod convert;
-pub mod convert_and_encode;
 pub mod default_encoding;
 pub mod delegate;
+pub mod encode;
 pub mod encode_mut;
-pub mod encoded;
 pub mod from_context;
-pub mod return_encoded;
-pub mod schema;
-pub mod use_strategy;
+pub mod types;
