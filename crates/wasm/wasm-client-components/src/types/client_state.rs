@@ -12,7 +12,7 @@ use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::HList;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::DecodeRequiredProtoField;
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::encode::EncodeProtoField;
+use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::encode::EncodeLengthDelimitedProtoField;
 use hermes_protobuf_encoding_components::types::any::Any;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use ibc::core::client::types::Height;
@@ -40,7 +40,7 @@ delegate_components! {
                 >,
                 EncodeField<
                     symbol!("latest_height"),
-                    EncodeProtoField<3, EncodeFromContext>,
+                    EncodeLengthDelimitedProtoField<3, EncodeFromContext>,
                 >,
             ]>,
         MutDecoderComponent: DecodeFrom<

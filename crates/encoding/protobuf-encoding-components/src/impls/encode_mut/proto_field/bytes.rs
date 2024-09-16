@@ -5,7 +5,7 @@ use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferTyp
 use prost::bytes::BufMut;
 
 use crate::impls::encode_mut::chunk::{HasProtoChunksDecodeBuffer, InvalidWireType, ProtoChunks};
-use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimited;
+use crate::impls::encode_mut::proto_field::length_delim::EncodeLengthDelimitedHeader;
 
 pub struct EncodeByteField<const TAG: u32>;
 
@@ -13,7 +13,7 @@ impl<Encoding, Strategy, Value, const TAG: u32> MutEncoder<Encoding, Strategy, V
     for EncodeByteField<TAG>
 where
     Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
-    EncodeLengthDelimited<TAG>: MutEncoder<Encoding, Strategy, u64>,
+    EncodeLengthDelimitedHeader<TAG>: MutEncoder<Encoding, Strategy, u64>,
     Value: AsRef<[u8]>,
 {
     fn encode_mut(
@@ -23,7 +23,11 @@ where
     ) -> Result<(), Encoding::Error> {
         let bytes = value.as_ref();
         if !bytes.is_empty() {
-            <EncodeLengthDelimited<TAG>>::encode_mut(encoding, &(bytes.len() as u64), buffer)?;
+            <EncodeLengthDelimitedHeader<TAG>>::encode_mut(
+                encoding,
+                &(bytes.len() as u64),
+                buffer,
+            )?;
             buffer.put(bytes);
         }
 

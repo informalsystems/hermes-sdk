@@ -4,10 +4,10 @@ use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferTyp
 use prost::bytes::BufMut;
 use prost::encoding::{encode_key, encode_varint, WireType};
 
-pub struct EncodeLengthDelimited<const TAG: u32>;
+pub struct EncodeLengthDelimitedHeader<const TAG: u32>;
 
 impl<Encoding, Strategy, const TAG: u32> MutEncoder<Encoding, Strategy, u64>
-    for EncodeLengthDelimited<TAG>
+    for EncodeLengthDelimitedHeader<TAG>
 where
     Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
 {
