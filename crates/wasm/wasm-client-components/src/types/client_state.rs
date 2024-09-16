@@ -7,7 +7,6 @@ use hermes_encoding_components::traits::convert::{CanConvert, Converter};
 use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
-use hermes_encoding_components::traits::field::GetField;
 use hermes_encoding_components::traits::transform::Transformer;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::HList;
@@ -32,15 +31,15 @@ delegate_components! {
         MutEncoderComponent:
             CombineEncoders<HList![
                 EncodeField<
-                    GetField<symbol!("data")>,
+                    symbol!("data"),
                     EncodeByteField<1>,
                 >,
                 EncodeField<
-                    GetField<symbol!("checksum")>,
+                    symbol!("checksum"),
                     EncodeByteField<2>,
                 >,
                 EncodeField<
-                    GetField<symbol!("latest_height")>,
+                    symbol!("latest_height"),
                     EncodeProtoField<3, EncodeFromContext>,
                 >,
             ]>,

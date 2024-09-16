@@ -6,7 +6,6 @@ use hermes_encoding_components::traits::decode::{CanDecode, Decoder};
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode::{CanEncode, Encoder};
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
-use hermes_encoding_components::traits::field::GetField;
 use hermes_encoding_components::traits::transform::Transformer;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::bytes::EncodeByteField;
@@ -24,7 +23,7 @@ delegate_components! {
     EncodeWasmConsensusState {
         MutEncoderComponent:
             EncodeField<
-                GetField<symbol!("data")>,
+                symbol!("data"),
                 EncodeByteField<1>,
             >,
         MutDecoderComponent: DecodeFrom<

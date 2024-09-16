@@ -2,10 +2,10 @@ use core::marker::PhantomData;
 
 use cgp::prelude::HasField;
 
-pub trait FieldGetter<Context> {
+pub trait FieldGetter<Context, Tag> {
     type Field;
 
-    fn get_field(context: &Context) -> &Self::Field;
+    fn get_field(context: &Context, tag: PhantomData<Tag>) -> &Self::Field;
 }
 
 pub trait OwnedFieldGetter<Context> {
@@ -14,15 +14,15 @@ pub trait OwnedFieldGetter<Context> {
     fn get_field(context: &Context) -> Self::Field;
 }
 
-pub struct GetField<Tag>(pub PhantomData<Tag>);
+pub struct GetField;
 
-impl<Context, Tag> FieldGetter<Context> for GetField<Tag>
+impl<Context, Tag> FieldGetter<Context, Tag> for GetField
 where
     Context: HasField<Tag>,
 {
     type Field = Context::Field;
 
-    fn get_field(context: &Context) -> &Context::Field {
-        context.get_field(PhantomData)
+    fn get_field(context: &Context, tag: PhantomData<Tag>) -> &Context::Field {
+        context.get_field(tag)
     }
 }

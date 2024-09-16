@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 use hermes_encoding_components::impls::encode_mut::combine::CombineEncoders;
-use hermes_encoding_components::impls::encode_mut::field::EncodeField;
+use hermes_encoding_components::impls::encode_mut::field::EncodeFieldWithGetter;
 use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
@@ -16,18 +16,18 @@ use crate::impls::encode_mut::proto_field::string::EncodeStringField;
 
 pub struct EncodeAny;
 
-pub struct GetAnyField<Tag>(pub PhantomData<Tag>);
-
 delegate_components! {
     EncodeAny {
         MutEncoderComponent:
             CombineEncoders<HList![
-                EncodeField<
-                    GetAnyField<symbol!("type_url")>,
+                EncodeFieldWithGetter<
+                    Self,
+                    symbol!("type_url"),
                     EncodeStringField<1>,
                 >,
-                EncodeField<
-                    GetAnyField<symbol!("value")>,
+                EncodeFieldWithGetter<
+                    Self,
+                    symbol!("value"),
                     EncodeByteField<2>,
                 >,
             ]>,
@@ -41,18 +41,18 @@ delegate_components! {
     }
 }
 
-impl FieldGetter<Any> for GetAnyField<symbol!("type_url")> {
+impl FieldGetter<Any, symbol!("type_url")> for EncodeAny {
     type Field = String;
 
-    fn get_field(any: &Any) -> &String {
+    fn get_field(any: &Any, _tag: PhantomData<symbol!("type_url")>) -> &String {
         &any.type_url
     }
 }
 
-impl FieldGetter<Any> for GetAnyField<symbol!("value")> {
+impl FieldGetter<Any, symbol!("value")> for EncodeAny {
     type Field = Vec<u8>;
 
-    fn get_field(any: &Any) -> &Vec<u8> {
+    fn get_field(any: &Any, _tag: PhantomData<symbol!("value")>) -> &Vec<u8> {
         &any.value
     }
 }
