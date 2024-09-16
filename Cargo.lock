@@ -1638,6 +1638,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-cosmos-encoding-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-encoding-components",
+ "hermes-protobuf-encoding-components",
+ "ibc",
+ "ibc-proto",
+ "prost",
+ "prost-types",
+]
+
+[[package]]
 name = "hermes-cosmos-integration-tests"
 version = "0.1.0"
 dependencies = [
