@@ -1614,6 +1614,7 @@ dependencies = [
  "cgp",
  "eyre",
  "futures",
+ "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "hermes-relayer-components",
