@@ -1,7 +1,7 @@
 use alloc::string::FromUtf8Error;
 use core::array::TryFromSliceError;
 use core::convert::Infallible;
-use core::num::ParseIntError;
+use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
     InvalidWireType, UnsupportedWireType,
@@ -136,6 +136,7 @@ delegate_components! {
             ClientError,
             CommitmentError,
             Utf8Error,
+            TryFromIntError,
             TryFromSliceError,
 
             // TODO: make it retryable?

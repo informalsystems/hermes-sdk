@@ -1,9 +1,12 @@
+use core::num::TryFromIntError;
+
 use cgp::prelude::{CanRaiseError, HasErrorType};
+use hermes_encoding_components::impls::encode_mut::pair::EncoderPair;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
-use hermes_protobuf_encoding_components::impls::encode_mut::message::EncodeProstMessage;
+use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::u64::EncodeU64ProtoField;
 use ibc::core::primitives::{Timestamp, TimestampError};
 use ibc_proto::google::protobuf::Timestamp as ProtoTimestamp;
 
@@ -12,7 +15,8 @@ pub struct EncodeTimestamp;
 impl<Encoding, Strategy> MutEncoder<Encoding, Strategy, Timestamp> for EncodeTimestamp
 where
     Encoding: HasEncodeBufferType + HasErrorType,
-    EncodeProstMessage: MutEncoder<Encoding, Strategy, ProtoTimestamp>,
+    EncoderPair<EncodeU64ProtoField<1>, EncodeU64ProtoField<2>>:
+        MutEncoder<Encoding, Strategy, (i64, i32)>,
 {
     fn encode_mut(
         encoding: &Encoding,
@@ -26,7 +30,11 @@ where
 
         let proto_timestamp = ProtoTimestamp::from(value.clone());
 
-        EncodeProstMessage::encode_mut(encoding, &proto_timestamp, buffer)?;
+        EncoderPair::encode_mut(
+            encoding,
+            &(proto_timestamp.seconds, proto_timestamp.nanos),
+            buffer,
+        )?;
 
         Ok(())
     }
@@ -34,16 +42,21 @@ where
 
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, Timestamp> for EncodeTimestamp
 where
-    Encoding: HasDecodeBufferType + CanRaiseError<TimestampError>,
-    EncodeProstMessage: MutDecoder<Encoding, Strategy, ProtoTimestamp>,
+    Encoding: HasDecodeBufferType + CanRaiseError<TryFromIntError> + CanRaiseError<TimestampError>,
+    EncoderPair<EncodeU64ProtoField<1>, EncodeU64ProtoField<2>>:
+        MutDecoder<Encoding, Strategy, (i64, i32)>,
 {
     fn decode_mut(
         encoding: &Encoding,
         buffer: &mut Encoding::DecodeBuffer<'_>,
     ) -> Result<Timestamp, Encoding::Error> {
-        let proto_timestamp = EncodeProstMessage::decode_mut(encoding, buffer)?;
+        let (seconds, nanos) = EncoderPair::decode_mut(encoding, buffer)?;
 
-        let timestamp = Timestamp::try_from(proto_timestamp).map_err(Encoding::raise_error)?;
+        let timestamp = Timestamp::from_unix_timestamp(
+            seconds.try_into().map_err(Encoding::raise_error)?,
+            nanos.try_into().map_err(Encoding::raise_error)?,
+        )
+        .map_err(Encoding::raise_error)?;
 
         Ok(timestamp)
     }
