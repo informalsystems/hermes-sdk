@@ -28,7 +28,7 @@ where
         // impossible to get the seconds and nanoseconds without first
         // converting it to ProtoTimestamp.
 
-        let proto_timestamp = ProtoTimestamp::from(value.clone());
+        let proto_timestamp = ProtoTimestamp::from(*value);
 
         EncoderPair::encode_mut(
             encoding,
