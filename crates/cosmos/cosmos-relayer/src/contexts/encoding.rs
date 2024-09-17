@@ -5,6 +5,7 @@ use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::CanConvertBothWays;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
+use hermes_encoding_components::traits::encode_and_decode_mut::CanEncodeAndDecodeMut;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
@@ -15,7 +16,9 @@ use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::ProtoChunks;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
 use ibc::core::client::types::Height;
+use ibc::core::commitment_types::commitment::CommitmentRoot;
 use ibc::core::commitment_types::merkle::MerkleProof;
+use ibc::primitives::Timestamp;
 use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as TendermintClientState;
 use prost::bytes::BufMut;
 use prost_types::Any;
@@ -85,7 +88,9 @@ pub trait CheckCosmosEncoding:
     + CanEncodeAndDecode<ViaAny, TendermintConsensusState>
     + CanConvertBothWays<Any, TendermintClientState>
     + CanConvertBothWays<Any, TendermintConsensusState>
-    + CanEncodeAndDecode<ViaProtobuf, Height>
+    + CanEncodeAndDecodeMut<ViaProtobuf, Height>
+    + CanEncodeAndDecodeMut<ViaProtobuf, Timestamp>
+    + CanEncodeAndDecodeMut<ViaProtobuf, CommitmentRoot>
 {
 }
 

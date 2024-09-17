@@ -7,6 +7,7 @@ use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
     InvalidWireType, UnsupportedWireType,
 };
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
+use ibc::primitives::TimestampError;
 
 use cgp::core::error::{
     DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent,
@@ -121,6 +122,7 @@ delegate_components! {
             TendermintProtoError,
             TendermintRpcError,
             TendermintClientError,
+            TimestampError,
             Ics02Error,
             Ics03Error,
             Ics23Error,
