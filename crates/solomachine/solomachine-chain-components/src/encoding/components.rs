@@ -27,6 +27,6 @@ define_components! {
         ]:
             DelegateEncoding<SolomachineEncoderComponents>,
         SchemaGetterComponent:
-            DelegateEncoding<SolomachineTypeUrlSchemas>,
+            SolomachineTypeUrlSchemas,
     }
 }

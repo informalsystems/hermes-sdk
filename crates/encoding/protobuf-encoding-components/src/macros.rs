@@ -1,15 +1,13 @@
 #[macro_export]
 macro_rules! impl_type_url {
-    ($component:ident, $type_url:literal $(,)?) => {
-        pub struct $component;
-
-        impl<Encoding, Value> $crate::vendor::SchemaGetter<Encoding, Value> for $component
+    ($component:ident, $type:ty, $type_url:tt $(,)?) => {
+        impl<Encoding> $crate::vendor::SchemaGetter<Encoding, $type> for $component
         where
             Encoding: $crate::vendor::HasSchemaType<Schema = &'static str>,
         {
             fn schema(
                 _encoding: &Encoding,
-                _phantom: core::marker::PhantomData<Value>,
+                _phantom: core::marker::PhantomData<$type>,
             ) -> &&'static str {
                 &$type_url
             }

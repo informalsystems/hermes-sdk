@@ -10,7 +10,8 @@ use crate::methods::encode::public_key::{
     decode_public_key_from_any, encode_public_key, PublicKey,
 };
 
-const TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.ConsensusState";
+pub const SOLOMACHINE_CONSENSUS_STATE_TYPE_URL: &str =
+    "/ibc.lightclients.solomachine.v3.ConsensusState";
 
 #[derive(Clone, Debug)]
 pub struct SolomachineConsensusState {
@@ -28,7 +29,7 @@ impl Msg for SolomachineConsensusState {
     }
 
     fn type_url(&self) -> String {
-        TYPE_URL.to_string()
+        SOLOMACHINE_CONSENSUS_STATE_TYPE_URL.to_string()
     }
 }
 

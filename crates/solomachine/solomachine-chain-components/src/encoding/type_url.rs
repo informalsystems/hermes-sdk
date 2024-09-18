@@ -1,24 +1,20 @@
-use cgp::prelude::*;
 use hermes_protobuf_encoding_components::impl_type_url;
 
-use crate::types::client_state::SolomachineClientState;
-use crate::types::consensus_state::SolomachineConsensusState;
+use crate::types::client_state::{SolomachineClientState, SOLOMACHINE_CLIENT_STATE_TYPE_URL};
+use crate::types::consensus_state::{
+    SolomachineConsensusState, SOLOMACHINE_CONSENSUS_STATE_TYPE_URL,
+};
 
 pub struct SolomachineTypeUrlSchemas;
 
-delegate_components! {
-    SolomachineTypeUrlSchemas {
-        SolomachineClientState: SolomachineClientStateUrl,
-        SolomachineConsensusState: SolomachineConsensusStateUrl,
-    }
-}
-
 impl_type_url!(
-    SolomachineClientStateUrl,
-    "/ibc.lightclients.solomachine.v3.ClientState"
+    SolomachineTypeUrlSchemas,
+    SolomachineClientState,
+    SOLOMACHINE_CLIENT_STATE_TYPE_URL,
 );
 
 impl_type_url!(
-    SolomachineConsensusStateUrl,
-    "/ibc.lightclients.solomachine.v3.ConsensusState"
+    SolomachineTypeUrlSchemas,
+    SolomachineConsensusState,
+    SOLOMACHINE_CONSENSUS_STATE_TYPE_URL,
 );

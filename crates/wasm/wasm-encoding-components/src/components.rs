@@ -51,7 +51,7 @@ define_components! {
         ]:
             DelegateEncoding<WasmEncodeMutComponents>,
         SchemaGetterComponent:
-            DelegateEncoding<WasmTypeUrlSchemas>,
+            WasmTypeUrlSchemas,
     }
 }
 
@@ -95,16 +95,14 @@ delegate_components! {
 
 pub struct WasmTypeUrlSchemas;
 
-delegate_components! {
-    WasmTypeUrlSchemas {
-        WasmClientState: WasmClientStateUrl,
-        WasmConsensusState: WasmConsensusStateUrl,
-    }
-}
-
-impl_type_url!(WasmClientStateUrl, "/ibc.lightclients.wasm.v1.ClientState");
+impl_type_url!(
+    WasmTypeUrlSchemas,
+    WasmClientState,
+    "/ibc.lightclients.wasm.v1.ClientState"
+);
 
 impl_type_url!(
-    WasmConsensusStateUrl,
+    WasmTypeUrlSchemas,
+    WasmConsensusState,
     "/ibc.lightclients.wasm.v1.ConsensusState"
 );

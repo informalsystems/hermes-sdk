@@ -40,6 +40,6 @@ define_components! {
         ]:
             CosmosEncodingComponents,
         SchemaGetterComponent:
-            DelegateEncoding<CosmosTypeUrlSchemas>,
+            CosmosTypeUrlSchemas,
     }
 }
