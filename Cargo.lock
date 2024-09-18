@@ -1646,6 +1646,7 @@ dependencies = [
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
  "ibc",
+ "ibc-proto",
  "prost",
  "prost-types",
 ]

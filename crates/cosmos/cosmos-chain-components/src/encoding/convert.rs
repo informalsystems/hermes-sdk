@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_encoding_components::impls::convert::{ConvertFrom, TryConvertFrom};
-use hermes_encoding_components::impls::with_context::EncodeWithContext;
+use hermes_encoding_components::impls::with_context::WithContext;
 use hermes_protobuf_encoding_components::impls::any::{DecodeAsAnyProtobuf, EncodeAsAnyProtobuf};
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use ibc::core::commitment_types::merkle::MerkleProof;
@@ -25,10 +25,10 @@ delegate_components! {
         (MerkleProof, ProtoMerkleProof): ConvertFrom,
         (ProtoMerkleProof, MerkleProof): TryConvertFrom,
 
-        (TendermintClientState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
-        (Any, TendermintClientState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        (TendermintClientState, Any): EncodeAsAnyProtobuf<ViaProtobuf, WithContext>,
+        (Any, TendermintClientState): DecodeAsAnyProtobuf<ViaProtobuf, WithContext>,
 
-        (TendermintConsensusState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
-        (Any, TendermintConsensusState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        (TendermintConsensusState, Any): EncodeAsAnyProtobuf<ViaProtobuf, WithContext>,
+        (Any, TendermintConsensusState): DecodeAsAnyProtobuf<ViaProtobuf, WithContext>,
     }
 }

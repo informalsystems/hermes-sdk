@@ -9,7 +9,7 @@ use prost::Message;
 
 use crate::types::consensus_state::SolomachineConsensusState;
 
-const TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.ClientState";
+pub const SOLOMACHINE_CLIENT_STATE_TYPE_URL: &str = "/ibc.lightclients.solomachine.v3.ClientState";
 
 #[derive(Clone, Debug)]
 pub struct SolomachineClientState {
@@ -33,7 +33,9 @@ impl TryFrom<Any> for SolomachineClientState {
         }
 
         match raw.type_url.as_str() {
-            TYPE_URL => decode_client_state(raw.value.deref()).map_err(Into::into),
+            SOLOMACHINE_CLIENT_STATE_TYPE_URL => {
+                decode_client_state(raw.value.deref()).map_err(Into::into)
+            }
             _ => Err(eyre!("unknown client state: {}", raw.type_url).into()),
         }
     }
@@ -48,7 +50,7 @@ impl Msg for SolomachineClientState {
     }
 
     fn type_url(&self) -> String {
-        TYPE_URL.to_string()
+        SOLOMACHINE_CLIENT_STATE_TYPE_URL.to_string()
     }
 }
 

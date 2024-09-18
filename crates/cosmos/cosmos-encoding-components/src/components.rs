@@ -7,9 +7,13 @@ pub use hermes_protobuf_encoding_components::components::{
 };
 use hermes_protobuf_encoding_components::types::strategy::ViaProtobuf;
 use ibc::core::client::types::Height;
+use ibc::core::commitment_types::commitment::CommitmentRoot;
+use ibc::primitives::Timestamp;
 use prost_types::Any;
 
+use crate::impls::commitment_root::EncodeCommitmentRoot;
 use crate::impls::height::EncodeHeight;
+use crate::impls::timestamp::EncodeTimestamp;
 
 define_components! {
     CosmosEncodingComponents {
@@ -54,5 +58,11 @@ delegate_components! {
 
         (ViaProtobuf, Height):
             EncodeHeight,
+
+        (ViaProtobuf, CommitmentRoot):
+            EncodeCommitmentRoot,
+
+        (ViaProtobuf, Timestamp):
+            EncodeTimestamp,
     }
 }

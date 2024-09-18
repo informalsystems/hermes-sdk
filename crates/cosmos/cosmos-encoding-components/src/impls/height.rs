@@ -1,11 +1,9 @@
 use cgp::prelude::{CanRaiseError, HasErrorType};
-use hermes_encoding_components::impls::encode_mut::combine::CombineEncoders;
 use hermes_encoding_components::impls::encode_mut::pair::EncoderPair;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::decode_buffer::HasDecodeBufferType;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
-use hermes_encoding_components::HList;
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::u64::EncodeU64ProtoField;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::client::types::Height;
@@ -36,15 +34,14 @@ where
 impl<Encoding, Strategy> MutDecoder<Encoding, Strategy, Height> for EncodeHeight
 where
     Encoding: HasDecodeBufferType + CanRaiseError<ClientError>,
-    CombineEncoders<HList![EncodeU64ProtoField<1>, EncodeU64ProtoField<2>,]>:
-        MutDecoder<Encoding, Strategy, HList![u64, u64]>,
+    EncoderPair<EncodeU64ProtoField<1>, EncodeU64ProtoField<2>>:
+        MutDecoder<Encoding, Strategy, (u64, u64)>,
 {
     fn decode_mut(
         encoding: &Encoding,
         buffer: &mut Encoding::DecodeBuffer<'_>,
     ) -> Result<Height, Encoding::Error> {
-        let HList![revision_number, revision_height] =
-            CombineEncoders::decode_mut(encoding, buffer)?;
+        let (revision_number, revision_height) = EncoderPair::decode_mut(encoding, buffer)?;
 
         Height::new(revision_number, revision_height).map_err(Encoding::raise_error)
     }

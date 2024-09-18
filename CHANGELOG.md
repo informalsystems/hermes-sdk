@@ -2,6 +2,15 @@
 
 ## v0.2.0 (pre-release)
 
+-  Protobuf encoding improvements [#432](https://github.com/informalsystems/hermes-sdk/pull/432)
+    - Redesign `impl_type_url!` macro to implement `SchemaGetter` on existing component type.
+    - Schema components that only use `impl_type_url!` directly are no longer wrapped with `DelegateEncoding`.
+    - Rename `EncodeWithContext` to `WithContext`.
+    - Rename `WrappedTendermintClientState` to `WasmTendermintClientState`.
+    - Implement Protobuf encoding for `WasmClientMessage`.
+    - Implement `MutEncoder` for `Timestamp` and `CommitmentRoot`.
+    - Relax `MutEncoder` constraint for `EncodeU64ProtoField` to use `TryInto`.
+
 -  Introduce cosmos- and wasm- encoding components crates [#431](https://github.com/informalsystems/hermes-sdk/pull/431)
     - Add new `hermes-cosmos-encoding-components` crate.
     - Add new `hermes-wasm-encoding-components` crate.

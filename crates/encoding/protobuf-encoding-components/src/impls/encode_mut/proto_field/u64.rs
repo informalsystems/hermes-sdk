@@ -1,4 +1,4 @@
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::CanRaiseError;
 use hermes_encoding_components::traits::decode_mut::MutDecoder;
 use hermes_encoding_components::traits::encode_mut::MutEncoder;
 use hermes_encoding_components::traits::types::encode_buffer::HasEncodeBufferType;
@@ -12,15 +12,15 @@ pub struct EncodeU64ProtoField<const TAG: u32>;
 impl<Encoding, Strategy, Value, const TAG: u32> MutEncoder<Encoding, Strategy, Value>
     for EncodeU64ProtoField<TAG>
 where
-    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + HasErrorType,
-    Value: Clone + Into<u64>,
+    Encoding: HasEncodeBufferType<EncodeBuffer: BufMut> + CanRaiseError<Value::Error>,
+    Value: Clone + TryInto<u64>,
 {
     fn encode_mut(
         _encoding: &Encoding,
         value: &Value,
         buffer: &mut Encoding::EncodeBuffer,
     ) -> Result<(), Encoding::Error> {
-        let value2 = value.clone().into();
+        let value2 = value.clone().try_into().map_err(Encoding::raise_error)?;
 
         if value2 != 0 {
             encode_key(TAG, WireType::Varint, buffer);

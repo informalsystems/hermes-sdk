@@ -8,21 +8,21 @@ use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
-pub struct WrappedTendermintClientState {
+pub struct WasmTendermintClientState {
     pub tendermint_client_state: TendermintClientState,
     pub wasm_code_hash: Vec<u8>,
 }
 
-impl From<WrappedTendermintClientState> for TendermintClientState {
-    fn from(value: WrappedTendermintClientState) -> Self {
+impl From<WasmTendermintClientState> for TendermintClientState {
+    fn from(value: WasmTendermintClientState) -> Self {
         value.tendermint_client_state
     }
 }
 
-pub struct EncodeWrappedTendermintClientState;
+pub struct EncodeWasmTendermintClientState;
 
-impl<Encoding> Converter<Encoding, WrappedTendermintClientState, Any>
-    for EncodeWrappedTendermintClientState
+impl<Encoding> Converter<Encoding, WasmTendermintClientState, Any>
+    for EncodeWasmTendermintClientState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + CanEncode<ViaAny, TendermintClientState>
@@ -30,7 +30,7 @@ where
 {
     fn convert(
         encoding: &Encoding,
-        client_state: &WrappedTendermintClientState,
+        client_state: &WasmTendermintClientState,
     ) -> Result<Any, Encoding::Error> {
         let tendermint_client_state_bytes =
             encoding.encode(&client_state.tendermint_client_state)?;
@@ -51,8 +51,8 @@ where
     }
 }
 
-impl<Encoding> Converter<Encoding, Any, WrappedTendermintClientState>
-    for EncodeWrappedTendermintClientState
+impl<Encoding> Converter<Encoding, Any, WasmTendermintClientState>
+    for EncodeWasmTendermintClientState
 where
     Encoding: HasEncodedType<Encoded = Vec<u8>>
         + CanDecode<ViaAny, TendermintClientState>
@@ -61,12 +61,12 @@ where
     fn convert(
         encoding: &Encoding,
         client_state_any: &Any,
-    ) -> Result<WrappedTendermintClientState, Encoding::Error> {
+    ) -> Result<WasmTendermintClientState, Encoding::Error> {
         let wasm_client_state = encoding.convert(client_state_any)?;
 
         let tendermint_client_state = encoding.decode(&wasm_client_state.data)?;
 
-        let wrapped_tendermint_client_state = WrappedTendermintClientState {
+        let wrapped_tendermint_client_state = WasmTendermintClientState {
             tendermint_client_state,
             wasm_code_hash: wasm_client_state.checksum,
         };

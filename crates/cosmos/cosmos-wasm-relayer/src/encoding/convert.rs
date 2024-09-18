@@ -8,15 +8,14 @@ use hermes_wasm_encoding_components::components::WasmEncodingComponents;
 use hermes_wasm_encoding_components::impls::strategies::consensus_state::{
     DecodeViaWasmConsensusState, EncodeViaWasmConsensusState,
 };
+use hermes_wasm_encoding_components::types::client_message::WasmClientMessage;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
 use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;
 use prost_types::Any;
 
-use crate::types::client_state::{
-    EncodeWrappedTendermintClientState, WrappedTendermintClientState,
-};
+use crate::types::client_state::{EncodeWasmTendermintClientState, WasmTendermintClientState};
 
 pub struct WasmCosmosConverterComponents;
 
@@ -35,17 +34,20 @@ delegate_components! {
             CosmosClientEncodingComponents,
         [
             (WasmClientState, Any),
-            (Any, WasmClientState),
             (WasmConsensusState, Any),
+            (WasmClientMessage, Any),
+
+            (Any, WasmClientState),
             (Any, WasmConsensusState),
+            (Any, WasmClientMessage),
         ]:
             WasmEncodingComponents,
 
         [
-            (Any, WrappedTendermintClientState),
-            (WrappedTendermintClientState, Any),
+            (Any, WasmTendermintClientState),
+            (WasmTendermintClientState, Any),
         ]:
-            EncodeWrappedTendermintClientState,
+            EncodeWasmTendermintClientState,
 
         (TendermintConsensusState, Any):
             EncodeViaWasmConsensusState,

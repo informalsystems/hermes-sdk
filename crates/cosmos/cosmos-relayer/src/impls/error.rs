@@ -1,12 +1,13 @@
 use alloc::string::FromUtf8Error;
 use core::array::TryFromSliceError;
 use core::convert::Infallible;
-use core::num::ParseIntError;
+use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
 use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
     InvalidWireType, UnsupportedWireType,
 };
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
+use ibc::primitives::TimestampError;
 
 use cgp::core::error::{
     DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent,
@@ -121,6 +122,7 @@ delegate_components! {
             TendermintProtoError,
             TendermintRpcError,
             TendermintClientError,
+            TimestampError,
             Ics02Error,
             Ics03Error,
             Ics23Error,
@@ -134,6 +136,7 @@ delegate_components! {
             ClientError,
             CommitmentError,
             Utf8Error,
+            TryFromIntError,
             TryFromSliceError,
 
             // TODO: make it retryable?

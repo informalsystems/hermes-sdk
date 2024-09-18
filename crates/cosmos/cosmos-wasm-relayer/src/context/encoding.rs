@@ -6,13 +6,13 @@ use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, CanConvertBothWays};
 use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::encode_and_decode::CanEncodeAndDecode;
-use hermes_encoding_components::traits::encode_and_decode_mut::CanEncodeAndDecodeMut;
 use hermes_encoding_components::traits::has_encoding::{
     DefaultEncodingGetter, EncodingGetterComponent, HasEncodingType, ProvideEncodingType,
 };
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_encoding_components::types::AsBytes;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
+use hermes_wasm_encoding_components::types::client_message::WasmClientMessage;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
 use ibc::core::client::types::Height;
@@ -20,7 +20,7 @@ use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as T
 use prost_types::Any;
 
 use crate::encoding::components::*;
-use crate::types::client_state::WrappedTendermintClientState;
+use crate::types::client_state::WasmTendermintClientState;
 
 pub struct WasmCosmosEncoding;
 
@@ -83,14 +83,16 @@ pub trait CheckWasmCosmosEncoding:
     + CanEncode<ViaProtobuf, WasmClientState>
     + CanEncodeAndDecode<ViaAny, WasmClientState>
     + CanEncodeAndDecode<ViaAny, WasmConsensusState>
-    + CanConvertBothWays<Any, WrappedTendermintClientState>
+    + CanEncodeAndDecode<ViaAny, WasmClientMessage>
+    + CanConvertBothWays<Any, WasmTendermintClientState>
     + CanConvert<WasmClientState, Any>
     + CanConvert<WasmConsensusState, Any>
     + CanEncode<ViaAny, TendermintClientState>
     + CanEncode<ViaAny, TendermintConsensusState>
     + CanEncodeAndDecode<ViaProtobuf, Height>
-    + CanEncodeAndDecodeMut<ViaProtobuf, WasmClientState>
-    + CanEncodeAndDecodeMut<ViaProtobuf, WasmConsensusState>
+    + CanEncodeAndDecode<ViaProtobuf, WasmClientState>
+    + CanEncodeAndDecode<ViaProtobuf, WasmConsensusState>
+    + CanEncodeAndDecode<ViaProtobuf, WasmClientMessage>
 {
 }
 
