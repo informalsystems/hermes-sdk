@@ -5,7 +5,7 @@ pub use hermes_cosmos_encoding_components::components::{
     DecodeBufferTypeComponent, EncodeBufferTypeComponent,
 };
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
-use hermes_encoding_components::impls::with_context::EncodeWithContext;
+use hermes_encoding_components::impls::with_context::WithContext;
 pub use hermes_encoding_components::traits::convert::ConverterComponent;
 pub use hermes_encoding_components::traits::decode::DecoderComponent;
 pub use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
@@ -69,12 +69,12 @@ delegate_components! {
         [
             (WasmClientState, Any),
             (WasmConsensusState, Any),
-        ]: EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        ]: EncodeAsAnyProtobuf<ViaProtobuf, WithContext>,
 
         [
             (Any, WasmClientState),
             (Any, WasmConsensusState),
-        ]: DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        ]: DecodeAsAnyProtobuf<ViaProtobuf, WithContext>,
     }
 }
 

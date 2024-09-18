@@ -3,9 +3,9 @@ use crate::traits::decode_mut::{CanDecodeMut, MutDecoder};
 use crate::traits::encode::{CanEncode, Encoder};
 use crate::traits::encode_mut::{CanEncodeMut, MutEncoder};
 
-pub struct EncodeWithContext;
+pub struct WithContext;
 
-impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for EncodeWithContext
+impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for WithContext
 where
     Encoding: CanEncode<Strategy, Value>,
 {
@@ -14,7 +14,7 @@ where
     }
 }
 
-impl<Encoding, Strategy, Value> Decoder<Encoding, Strategy, Value> for EncodeWithContext
+impl<Encoding, Strategy, Value> Decoder<Encoding, Strategy, Value> for WithContext
 where
     Encoding: CanDecode<Strategy, Value>,
 {
@@ -23,7 +23,7 @@ where
     }
 }
 
-impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for EncodeWithContext
+impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for WithContext
 where
     Encoding: CanEncodeMut<Strategy, Value>,
 {
@@ -36,7 +36,7 @@ where
     }
 }
 
-impl<Encoding, Strategy, Value> MutDecoder<Encoding, Strategy, Value> for EncodeWithContext
+impl<Encoding, Strategy, Value> MutDecoder<Encoding, Strategy, Value> for WithContext
 where
     Encoding: CanDecodeMut<Strategy, Value>,
 {
