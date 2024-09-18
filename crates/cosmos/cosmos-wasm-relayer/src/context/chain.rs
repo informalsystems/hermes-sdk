@@ -235,7 +235,7 @@ use tendermint_rpc::{HttpClient, Url};
 use crate::components::cosmos_to_wasm_cosmos::CosmosToWasmCosmosComponents;
 use crate::context::encoding::{ProvideWasmCosmosEncoding, WasmCosmosEncoding};
 use crate::impls::client_state::ProvideWrappedTendermintClientState;
-use crate::types::client_state::WrappedTendermintClientState;
+use crate::types::client_state::WasmTendermintClientState;
 
 #[derive(Clone)]
 pub struct WasmCosmosChain {
@@ -564,7 +564,7 @@ impl HasEventSubscription for WasmCosmosChain {
 }
 
 pub trait CanUseWasmCosmosChain:
-    HasClientStateType<WasmCosmosChain, ClientState = WrappedTendermintClientState>
+    HasClientStateType<WasmCosmosChain, ClientState = WasmTendermintClientState>
     + HasConsensusStateType<WasmCosmosChain, ConsensusState = TendermintConsensusState>
     + CanQueryBalance
     // + CanIbcTransferToken<WasmCosmosChain>

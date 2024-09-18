@@ -20,7 +20,7 @@ use ibc_relayer_types::clients::ics07_tendermint::client_state::ClientState as T
 use prost_types::Any;
 
 use crate::encoding::components::*;
-use crate::types::client_state::WrappedTendermintClientState;
+use crate::types::client_state::WasmTendermintClientState;
 
 pub struct WasmCosmosEncoding;
 
@@ -84,7 +84,7 @@ pub trait CheckWasmCosmosEncoding:
     + CanEncodeAndDecode<ViaAny, WasmClientState>
     + CanEncodeAndDecode<ViaAny, WasmConsensusState>
     + CanEncodeAndDecode<ViaAny, WasmClientMessage>
-    + CanConvertBothWays<Any, WrappedTendermintClientState>
+    + CanConvertBothWays<Any, WasmTendermintClientState>
     + CanConvert<WasmClientState, Any>
     + CanConvert<WasmConsensusState, Any>
     + CanEncode<ViaAny, TendermintClientState>

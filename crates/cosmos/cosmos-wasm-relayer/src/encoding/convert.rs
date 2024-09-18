@@ -15,9 +15,7 @@ use ibc::core::commitment_types::merkle::MerkleProof;
 use ibc_proto::ibc::core::commitment::v1::MerkleProof as ProtoMerkleProof;
 use prost_types::Any;
 
-use crate::types::client_state::{
-    EncodeWrappedTendermintClientState, WrappedTendermintClientState,
-};
+use crate::types::client_state::{EncodeWasmTendermintClientState, WasmTendermintClientState};
 
 pub struct WasmCosmosConverterComponents;
 
@@ -46,10 +44,10 @@ delegate_components! {
             WasmEncodingComponents,
 
         [
-            (Any, WrappedTendermintClientState),
-            (WrappedTendermintClientState, Any),
+            (Any, WasmTendermintClientState),
+            (WasmTendermintClientState, Any),
         ]:
-            EncodeWrappedTendermintClientState,
+            EncodeWasmTendermintClientState,
 
         (TendermintConsensusState, Any):
             EncodeViaWasmConsensusState,
