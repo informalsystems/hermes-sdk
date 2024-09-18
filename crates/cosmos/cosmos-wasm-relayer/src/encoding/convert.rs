@@ -8,6 +8,7 @@ use hermes_wasm_encoding_components::components::WasmEncodingComponents;
 use hermes_wasm_encoding_components::impls::strategies::consensus_state::{
     DecodeViaWasmConsensusState, EncodeViaWasmConsensusState,
 };
+use hermes_wasm_encoding_components::types::client_message::WasmClientMessage;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 use hermes_wasm_encoding_components::types::consensus_state::WasmConsensusState;
 use ibc::core::commitment_types::merkle::MerkleProof;
@@ -35,9 +36,12 @@ delegate_components! {
             CosmosClientEncodingComponents,
         [
             (WasmClientState, Any),
-            (Any, WasmClientState),
             (WasmConsensusState, Any),
+            (WasmClientMessage, Any),
+
+            (Any, WasmClientState),
             (Any, WasmConsensusState),
+            (Any, WasmClientMessage),
         ]:
             WasmEncodingComponents,
 

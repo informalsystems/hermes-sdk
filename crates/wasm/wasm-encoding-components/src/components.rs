@@ -20,11 +20,14 @@ use hermes_protobuf_encoding_components::impls::encode::buffer::EncodeProtoWithM
 use hermes_protobuf_encoding_components::impls::via_any::EncodeViaAny;
 pub use hermes_protobuf_encoding_components::traits::length::EncodedLengthGetterComponent;
 use hermes_protobuf_encoding_components::types::strategy::{ViaAny, ViaProtobuf};
+use ibc::clients::wasm_types::client_message::WASM_CLIENT_MESSAGE_TYPE_URL;
 use ibc::core::client::types::Height;
 use prost_types::Any;
 
+use crate::impls::encode::client_message::EncodeWasmClientMessage;
 use crate::impls::encode::client_state::EncodeWasmClientState;
 use crate::impls::encode::consensus_state::EncodeWasmConsensusState;
+use crate::types::client_message::WasmClientMessage;
 use crate::types::client_state::WasmClientState;
 use crate::types::consensus_state::WasmConsensusState;
 
@@ -63,10 +66,15 @@ pub struct WasmEncoderComponents;
 
 delegate_components! {
     WasmConverterComponents {
-        (WasmClientState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
-        (Any, WasmClientState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
-        (WasmConsensusState, Any): EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
-        (Any, WasmConsensusState): DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+        [
+            (WasmClientState, Any),
+            (WasmConsensusState, Any),
+        ]: EncodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
+
+        [
+            (Any, WasmClientState),
+            (Any, WasmConsensusState),
+        ]: DecodeAsAnyProtobuf<ViaProtobuf, EncodeWithContext>,
     }
 }
 
@@ -81,15 +89,25 @@ delegate_components! {
 
         (ViaProtobuf, WasmConsensusState):
             EncodeWasmConsensusState,
+
+        (ViaProtobuf, WasmClientMessage):
+            EncodeWasmClientMessage,
     }
 }
 
 delegate_components! {
     WasmEncoderComponents {
-        (ViaAny, WasmClientState): EncodeViaAny<ViaProtobuf>,
-        (ViaProtobuf, WasmClientState): EncodeProtoWithMutBuffer,
-        (ViaAny, WasmConsensusState): EncodeViaAny<ViaProtobuf>,
-        (ViaProtobuf, WasmConsensusState): EncodeProtoWithMutBuffer,
+        [
+            (ViaAny, WasmClientState),
+            (ViaAny, WasmConsensusState),
+            (ViaAny, WasmClientMessage),
+        ]: EncodeViaAny<ViaProtobuf>,
+
+        [
+            (ViaProtobuf, WasmClientState),
+            (ViaProtobuf, WasmConsensusState),
+            (ViaProtobuf, WasmClientMessage),
+        ]: EncodeProtoWithMutBuffer,
     }
 }
 
@@ -98,11 +116,17 @@ pub struct WasmTypeUrlSchemas;
 impl_type_url!(
     WasmTypeUrlSchemas,
     WasmClientState,
-    "/ibc.lightclients.wasm.v1.ClientState"
+    "/ibc.lightclients.wasm.v1.ClientState",
 );
 
 impl_type_url!(
     WasmTypeUrlSchemas,
     WasmConsensusState,
-    "/ibc.lightclients.wasm.v1.ConsensusState"
+    "/ibc.lightclients.wasm.v1.ConsensusState",
+);
+
+impl_type_url!(
+    WasmTypeUrlSchemas,
+    WasmClientMessage,
+    WASM_CLIENT_MESSAGE_TYPE_URL,
 );
