@@ -4,7 +4,7 @@ use hermes_encoding_components::traits::encode::CanEncode;
 use hermes_encoding_components::traits::types::encoded::HasEncodedType;
 use hermes_protobuf_encoding_components::types::strategy::ViaAny;
 use ibc::clients::wasm_types::client_message::ClientMessage;
-use ibc::primitives::proto::Any;
+use prost_types::Any;
 
 pub struct EncodeViaClientMessage;
 
