@@ -1,3 +1,4 @@
+use crate::traits::convert::{CanConvert, Converter};
 use crate::traits::decode::{CanDecode, Decoder};
 use crate::traits::decode_mut::{CanDecodeMut, MutDecoder};
 use crate::traits::encode::{CanEncode, Encoder};
@@ -45,5 +46,14 @@ where
         buffer: &mut Encoding::DecodeBuffer<'_>,
     ) -> Result<Value, Encoding::Error> {
         encoding.decode_mut(buffer)
+    }
+}
+
+impl<Encoding, From, To> Converter<Encoding, From, To> for WithContext
+where
+    Encoding: CanConvert<From, To>,
+{
+    fn convert(encoding: &Encoding, from: &From) -> Result<To, Encoding::Error> {
+        encoding.convert(from)
     }
 }
