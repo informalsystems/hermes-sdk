@@ -35,11 +35,10 @@ use hermes_relayer_components::chain::traits::types::proof::{
 };
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimeoutType, ProvideTimeType, ProvideTimeoutType, UnixTimestampBuilder,
+    HasTimeType, ProvideTimeType, ProvideTimeoutType,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
@@ -50,10 +49,11 @@ use ibc_relayer_types::Height;
 use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
-use tendermint::{Error as TendermintError, Hash, Time};
+use tendermint::{Hash, Time};
 
 use crate::traits::message::CosmosMessage;
 use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
+use crate::types::status::ChainStatus;
 pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
@@ -118,30 +118,20 @@ where
     Chain: Async,
 {
     type Time = Time;
+
+    fn duration_since(earlier: &Time, later: &Time) -> Option<Duration> {
+        earlier.duration_since(*later).ok()
+    }
 }
 
 impl<Chain> ProvideTimeoutType<Chain> for ProvideCosmosChainTypes
 where
-    Chain: Async,
+    Chain: HasTimeType<Time = Time>,
 {
     type Timeout = Timestamp;
 
-    fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
-        later.duration_since(earlier)
-    }
-}
-
-impl<Chain> UnixTimestampBuilder<Chain> for ProvideCosmosChainTypes
-where
-    Chain: HasTimeoutType<Timeout = Timestamp> + CanRaiseError<TendermintError>,
-{
-    fn time_from_unix_timestamp(
-        seconds: i64,
-        nanoseconds: u32,
-    ) -> Result<Chain::Timeout, Chain::Error> {
-        let time = Time::from_unix_timestamp(seconds, nanoseconds).map_err(Chain::raise_error)?;
-
-        Ok(time.into())
+    fn has_timed_out(time: &Time, timeout: &Timestamp) -> bool {
+        &Timestamp::from(*time) < timeout
     }
 }
 
@@ -172,7 +162,7 @@ where
 
 impl<Chain> ProvideChainStatusType<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasHeightType<Height = Height> + HasTimeoutType<Timeout = Timestamp>,
+    Chain: HasHeightType<Height = Height> + HasTimeType<Time = Time>,
 {
     type ChainStatus = ChainStatus;
 
@@ -180,8 +170,8 @@ where
         &status.height
     }
 
-    fn chain_status_timestamp(status: &ChainStatus) -> &Timestamp {
-        &status.timestamp
+    fn chain_status_time(status: &ChainStatus) -> &Time {
+        &status.time
     }
 }
 

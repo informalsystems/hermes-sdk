@@ -9,7 +9,7 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
     ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
-    PortIdTypeComponent, SequenceTypeComponent,
+    PortIdTypeComponent, SequenceTypeComponent, TimeTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
@@ -301,6 +301,7 @@ delegate_components! {
             HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
+            TimeTypeComponent,
             TimeoutTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,

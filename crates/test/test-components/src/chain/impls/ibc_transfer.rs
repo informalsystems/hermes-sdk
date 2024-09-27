@@ -46,7 +46,7 @@ where
 
         let current_height = Chain::chain_status_height(&chain_status);
 
-        let current_time = Chain::chain_status_timestamp(&chain_status);
+        let current_time = Chain::chain_status_time(&chain_status);
 
         let timeout_height = chain.ibc_transfer_timeout_height(current_height);
 

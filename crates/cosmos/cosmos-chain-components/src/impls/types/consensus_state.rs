@@ -3,9 +3,9 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldGetter, HasConsensusStateType, ProvideConsensusStateType,
     ProvideRawConsensusStateType,
 };
-use hermes_relayer_components::chain::traits::types::timestamp::CanBuildUnixTimestamp;
+use hermes_relayer_components::chain::traits::types::timestamp::HasTimeType;
 use prost_types::Any;
-use tendermint_proto::google::protobuf::Timestamp;
+use tendermint::Time;
 
 use crate::types::tendermint::TendermintConsensusState;
 
@@ -23,15 +23,10 @@ impl<Chain, Counterparty> ConsensusStateFieldGetter<Chain, Counterparty>
     for ProvideTendermintConsensusState
 where
     Chain: HasConsensusStateType<Counterparty, ConsensusState = TendermintConsensusState>,
-    Counterparty: CanBuildUnixTimestamp,
+    Counterparty: HasTimeType<Time = Time>,
 {
-    fn consensus_state_timestamp(
-        consensus_state: &TendermintConsensusState,
-    ) -> Counterparty::Timeout {
-        let timestamp: Timestamp = consensus_state.timestamp.into();
-
-        // FIXME: handle unwrap
-        Counterparty::time_from_unix_timestamp(timestamp.seconds, timestamp.nanos as u32).unwrap()
+    fn consensus_state_timestamp(consensus_state: &TendermintConsensusState) -> Counterparty::Time {
+        consensus_state.timestamp.clone()
     }
 }
 

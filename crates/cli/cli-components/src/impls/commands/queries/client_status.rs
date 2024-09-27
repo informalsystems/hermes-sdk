@@ -193,10 +193,10 @@ where
             .await
             .map_err(|e| Chain::wrap_error("Failed to query chain status".to_owned(), e))?;
 
-        let current_network_time = Self::chain_status_timestamp(&chain_status);
+        let current_network_time = Self::chain_status_time(&chain_status);
 
         let elapsed =
-            Self::timestamp_duration_since(&latest_consensus_state_timestamp, current_network_time);
+            Self::duration_since(&latest_consensus_state_timestamp, &current_network_time);
 
         let has_expired = elapsed.map_or(false, |elapsed| {
             Counterparty::client_state_has_expired(&client_state, elapsed)

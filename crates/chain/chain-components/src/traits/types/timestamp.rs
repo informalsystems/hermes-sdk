@@ -9,10 +9,12 @@ use cgp::prelude::*;
 #[derive_component(TimeTypeComponent, ProvideTimeType<Chain>)]
 pub trait HasTimeType: Async {
     type Time: Async;
+
+    fn duration_since(earlier: &Self::Time, later: &Self::Time) -> Option<Duration>;
 }
 
 #[derive_component(TimeoutTypeComponent, ProvideTimeoutType<Chain>)]
-pub trait HasTimeoutType: Async {
+pub trait HasTimeoutType: HasTimeType {
     /**
        The timestamp of a chain, which should increment monotonically.
 
@@ -37,18 +39,5 @@ pub trait HasTimeoutType: Async {
     */
     type Timeout: Async;
 
-    /**
-       Returns the amount of time elapsed from an `earlier` instant to a `later` one,
-       or `None` if the supposedly `earlier` instant is later than the `later` one.
-    */
-    fn timestamp_duration_since(earlier: &Self::Timeout, later: &Self::Timeout)
-        -> Option<Duration>;
-}
-
-#[derive_component(UnixTimestampBuilderComponent, UnixTimestampBuilder<Chain>)]
-pub trait CanBuildUnixTimestamp: HasTimeoutType + HasErrorType {
-    fn time_from_unix_timestamp(
-        seconds: i64,
-        nanoseconds: u32,
-    ) -> Result<Self::Timeout, Self::Error>;
+    fn has_timed_out(time: &Self::Time, timeout: &Self::Timeout) -> bool;
 }

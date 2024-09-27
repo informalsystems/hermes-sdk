@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::traits::types::timestamp::HasTimeoutType;
+use crate::traits::types::timestamp::HasTimeType;
 
 #[derive_component(ConsensusStateTypeComponent, ProvideConsensusStateType<Chain>)]
 pub trait HasConsensusStateType<Counterparty>: Async {
@@ -21,7 +21,7 @@ pub trait HasRawConsensusStateType: Async {
 #[derive_component(ConsensusStateFieldComponent, ConsensusStateFieldGetter<Chain>)]
 pub trait HasConsensusStateFields<Counterparty>: HasConsensusStateType<Counterparty>
 where
-    Counterparty: HasTimeoutType,
+    Counterparty: HasTimeType,
 {
-    fn consensus_state_timestamp(consensus_state: &Self::ConsensusState) -> Counterparty::Timeout;
+    fn consensus_state_timestamp(consensus_state: &Self::ConsensusState) -> Counterparty::Time;
 }

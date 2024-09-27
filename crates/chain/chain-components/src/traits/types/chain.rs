@@ -6,7 +6,7 @@ use crate::traits::types::chain_id::HasChainIdType;
 use crate::traits::types::event::HasEventType;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::message::HasMessageType;
-use crate::traits::types::timestamp::HasTimeoutType;
+use crate::traits::types::timestamp::{HasTimeType, HasTimeoutType};
 
 /**
    This covers the minimal abstract types that are used inside a chain context.
@@ -37,11 +37,16 @@ use crate::traits::types::timestamp::HasTimeoutType;
     about the transaction context.
 */
 pub trait HasChainTypes:
-    HasHeightType + HasMessageType + HasEventType + HasChainIdType + HasTimeoutType
+    HasHeightType + HasMessageType + HasEventType + HasChainIdType + HasTimeType + HasTimeoutType
 {
 }
 
 impl<Chain> HasChainTypes for Chain where
-    Chain: HasHeightType + HasMessageType + HasEventType + HasChainIdType + HasTimeoutType
+    Chain: HasHeightType
+        + HasMessageType
+        + HasEventType
+        + HasChainIdType
+        + HasTimeType
+        + HasTimeoutType
 {
 }

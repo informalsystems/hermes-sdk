@@ -98,16 +98,17 @@ impl ProvideEventType<MockChainContext> for MockChainComponents {
 
 impl ProvideTimeType<MockChainContext> for MockChainComponents {
     type Time = MockTimestamp;
+
+    fn duration_since(earlier: &MockTimestamp, later: &MockTimestamp) -> Option<Duration> {
+        later.duration_since(earlier)
+    }
 }
 
 impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
     type Timeout = MockTimestamp;
 
-    fn timestamp_duration_since(
-        earlier: &MockTimestamp,
-        later: &MockTimestamp,
-    ) -> Option<Duration> {
-        later.duration_since(earlier)
+    fn has_timed_out(time: &MockTimestamp, timeout: &MockTimestamp) -> bool {
+        time < timeout
     }
 }
 
@@ -234,7 +235,7 @@ impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
         &status.height
     }
 
-    fn chain_status_timestamp(status: &Self::ChainStatus) -> &MockTimestamp {
+    fn chain_status_time(status: &Self::ChainStatus) -> &MockTimestamp {
         &status.timestamp
     }
 }

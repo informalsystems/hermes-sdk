@@ -1,4 +1,5 @@
 use cgp::prelude::CanRaiseError;
+use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -42,8 +43,7 @@ where
         + CanRaiseError<SrcChain::Error>
         + CanRaiseError<DstChain::Error>,
     SrcChain: CanQueryChainStatus,
-    DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain>,
-    DstChain::Timeout: Ord,
+    DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain> + HasTimeoutType,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Packet<Relay>) -> Result<(), Relay::Error> {
@@ -57,17 +57,18 @@ where
             .map_err(Relay::raise_error)?;
 
         let destination_height = DstChain::chain_status_height(&destination_status);
-        let destination_timestamp = DstChain::chain_status_timestamp(&destination_status);
+        let destination_timestamp = DstChain::chain_status_time(&destination_status);
 
         let packet_timeout_height = Relay::packet_timeout_height(packet);
         let packet_timeout_timestamp = Relay::packet_timeout_timestamp(packet);
 
         let has_packet_timed_out = match (packet_timeout_height, packet_timeout_timestamp) {
             (Some(height), Some(timestamp)) => {
-                destination_height > &height || destination_timestamp > &timestamp
+                destination_height > &height
+                    || DstChain::has_timed_out(destination_timestamp, &timestamp)
             }
             (Some(height), None) => destination_height > &height,
-            (None, Some(timestamp)) => destination_timestamp > &timestamp,
+            (None, Some(timestamp)) => DstChain::has_timed_out(destination_timestamp, &timestamp),
             (None, None) => {
                 // TODO: raise error?
                 false

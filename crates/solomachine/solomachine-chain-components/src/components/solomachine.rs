@@ -10,7 +10,7 @@ pub use hermes_cosmos_chain_components::components::client::{
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
     InitConnectionOptionsTypeComponent, PortIdTypeComponent, ReceivePacketPayloadTypeComponent,
-    SequenceTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    SequenceTypeComponent, TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
     UpdateClientPayloadTypeComponent,
 };
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
@@ -71,6 +71,7 @@ define_components! {
         [
             HeightTypeComponent,
             HeightFieldComponent,
+            TimeTypeComponent,
             TimeoutTypeComponent,
             ChainIdTypeComponent,
             ClientIdTypeComponent,

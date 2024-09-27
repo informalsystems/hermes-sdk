@@ -6,4 +6,5 @@ pub mod events;
 pub mod messages;
 pub mod nonce_guard;
 pub mod payloads;
+pub mod status;
 pub mod tendermint;

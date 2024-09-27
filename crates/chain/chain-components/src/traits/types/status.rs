@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 
 use crate::traits::types::height::HasHeightType;
-use crate::traits::types::timestamp::HasTimeoutType;
+use crate::traits::types::timestamp::HasTimeType;
 
 /**
    A chain context that offers a `ChainStatus` type to
@@ -23,7 +23,7 @@ use crate::traits::types::timestamp::HasTimeoutType;
    inside the chain status.
 */
 #[derive_component(ChainStatusTypeComponent, ProvideChainStatusType<Chain>)]
-pub trait HasChainStatusType: HasHeightType + HasTimeoutType {
+pub trait HasChainStatusType: HasHeightType + HasTimeType {
     /**
        Contains information about the current status of the blockchain.
     */
@@ -37,5 +37,5 @@ pub trait HasChainStatusType: HasHeightType + HasTimeoutType {
     /**
         Get the blockchain's current timestamp from the chain status result.
     */
-    fn chain_status_timestamp(status: &Self::ChainStatus) -> &Self::Timeout;
+    fn chain_status_time(status: &Self::ChainStatus) -> &Self::Time;
 }
