@@ -6,6 +6,11 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
+#[derive_component(TimeTypeComponent, ProvideTimeType<Chain>)]
+pub trait HasTimeType: Async {
+    type Time: Async;
+}
+
 #[derive_component(TimeoutTypeComponent, ProvideTimeoutType<Chain>)]
 pub trait HasTimeoutType: Async {
     /**
@@ -30,7 +35,7 @@ pub trait HasTimeoutType: Async {
        concrete context implementers to decide which exact time type
        they would like to use.
     */
-    type Timeout: Ord + Async;
+    type Timeout: Async;
 
     /**
        Returns the amount of time elapsed from an `earlier` instant to a `later` one,

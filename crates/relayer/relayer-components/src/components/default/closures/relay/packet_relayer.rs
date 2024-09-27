@@ -85,6 +85,7 @@ where
         + CanBuildReceivePacketMessage<SrcChain>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
+    DstChain::Timeout: Ord,
     SrcChain::Runtime: CanSleep,
     DstChain::Runtime: CanSleep,
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>

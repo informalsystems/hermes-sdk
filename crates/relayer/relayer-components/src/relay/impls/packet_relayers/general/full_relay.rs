@@ -43,6 +43,7 @@ where
         + CanRaiseError<DstChain::Error>,
     SrcChain: CanQueryChainStatus,
     DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain>,
+    DstChain::Timeout: Ord,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
     async fn relay_packet(relay: &Relay, packet: &Packet<Relay>) -> Result<(), Relay::Error> {

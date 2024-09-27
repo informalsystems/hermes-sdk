@@ -49,7 +49,9 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
-use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimeoutType;
+use hermes_relayer_components::chain::traits::types::timestamp::{
+    ProvideTimeType, ProvideTimeoutType,
+};
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
@@ -92,6 +94,10 @@ impl ProvideHeightType<MockChainContext> for MockChainComponents {
 
 impl ProvideEventType<MockChainContext> for MockChainComponents {
     type Event = Event;
+}
+
+impl ProvideTimeType<MockChainContext> for MockChainComponents {
+    type Time = MockTimestamp;
 }
 
 impl ProvideTimeoutType<MockChainContext> for MockChainComponents {

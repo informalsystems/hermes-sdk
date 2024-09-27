@@ -35,7 +35,7 @@ use hermes_relayer_components::chain::traits::types::proof::{
 };
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimeoutType, ProvideTimeoutType, UnixTimestampBuilder,
+    HasTimeoutType, ProvideTimeType, ProvideTimeoutType, UnixTimestampBuilder,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
@@ -111,6 +111,13 @@ where
     fn genesis_height(chain: &Chain) -> Height {
         Height::from_tm(1_i64.try_into().unwrap(), chain.chain_id())
     }
+}
+
+impl<Chain> ProvideTimeType<Chain> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type Time = Time;
 }
 
 impl<Chain> ProvideTimeoutType<Chain> for ProvideCosmosChainTypes

@@ -36,6 +36,7 @@ where
     DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
         + UseExtraChainComponentsForPacketRelayer<SrcChain>
         + HasWriteAckEvent<SrcChain>,
+    DstChain::Timeout: Ord,
     Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketAction<'a, Relay>>
         + for<'a> CanLog<LogRelayPacketStatus<'a, Relay>>,
