@@ -1,4 +1,5 @@
 use cgp::prelude::HasErrorType;
+use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 
 use crate::traits::packet::fields::CanReadPacketFields;
 use crate::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
@@ -8,7 +9,6 @@ use crate::traits::queries::packet_acknowledgement::CanQueryPacketAcknowledgemen
 use crate::traits::queries::packet_commitment::CanQueryPacketCommitment;
 use crate::traits::queries::packet_receipt::CanQueryPacketReceipt;
 use crate::traits::types::client_state::HasClientStateType;
-use crate::traits::types::height::CanIncrementHeight;
 use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::packets::ack::{HasAckPacketPayloadType, HasAcknowledgementType};
 use crate::traits::types::packets::receive::HasReceivePacketPayloadType;

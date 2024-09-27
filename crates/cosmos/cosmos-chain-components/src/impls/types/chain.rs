@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use core::time::Duration;
+use hermes_chain_type_components::traits::fields::height::HeightIncrementer;
 use hermes_relayer_components::chain::traits::types::packet::{
     ProvideIncomingPacketType, ProvideOutgoingPacketType,
 };
@@ -19,7 +20,7 @@ use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndT
 use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetter, HasHeightType, HeightFieldGetter, HeightIncrementer, ProvideHeightType,
+    GenesisHeightGetter, HasHeightType, HeightFieldGetter, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     ProvideChannelIdType, ProvideClientIdType, ProvideConnectionIdType, ProvidePortIdType,

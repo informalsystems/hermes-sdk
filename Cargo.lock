@@ -1631,6 +1631,7 @@ dependencies = [
  "cgp",
  "eyre",
  "futures",
+ "hermes-chain-type-components",
  "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
@@ -1907,6 +1908,7 @@ name = "hermes-relayer-components-extra"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-chain-type-components",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime-components",

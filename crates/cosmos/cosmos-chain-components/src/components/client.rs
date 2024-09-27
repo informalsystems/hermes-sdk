@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+pub use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
@@ -102,8 +103,7 @@ pub use hermes_relayer_components::chain::traits::types::create_client::{
 };
 pub use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
-    HeightTypeComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::ibc::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
