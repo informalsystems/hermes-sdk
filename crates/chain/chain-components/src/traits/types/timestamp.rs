@@ -6,19 +6,10 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
-#[derive_component(TimeTypeComponent, ProvideTimeType<Chain>)]
-pub trait HasTimeType: Async {
-    type Time: Async;
-}
+pub use hermes_chain_type_components::traits::time::*;
+pub use hermes_chain_type_components::traits::timeout::*;
 
 #[derive_component(TimeMeasurerComponent, TimeMeasurer<Chain>)]
 pub trait CanMeasureTime: HasTimeType {
     fn duration_since(earlier: &Self::Time, later: &Self::Time) -> Option<Duration>;
-}
-
-#[derive_component(TimeoutTypeComponent, ProvideTimeoutType<Chain>)]
-pub trait HasTimeoutType: HasTimeType {
-    type Timeout: Async;
-
-    fn has_timed_out(time: &Self::Time, timeout: &Self::Timeout) -> bool;
 }
