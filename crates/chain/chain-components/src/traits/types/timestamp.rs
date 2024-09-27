@@ -6,8 +6,8 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
-#[derive_component(TimestampTypeComponent, ProvideTimestampType<Chain>)]
-pub trait HasTimestampType: Async {
+#[derive_component(TimeoutTypeComponent, ProvideTimeoutType<Chain>)]
+pub trait HasTimeoutType: Async {
     /**
        The timestamp of a chain, which should increment monotonically.
 
@@ -30,22 +30,20 @@ pub trait HasTimestampType: Async {
        concrete context implementers to decide which exact time type
        they would like to use.
     */
-    type Timestamp: Ord + Async;
+    type Timeout: Ord + Async;
 
     /**
        Returns the amount of time elapsed from an `earlier` instant to a `later` one,
        or `None` if the supposedly `earlier` instant is later than the `later` one.
     */
-    fn timestamp_duration_since(
-        earlier: &Self::Timestamp,
-        later: &Self::Timestamp,
-    ) -> Option<Duration>;
+    fn timestamp_duration_since(earlier: &Self::Timeout, later: &Self::Timeout)
+        -> Option<Duration>;
 }
 
 #[derive_component(UnixTimestampBuilderComponent, UnixTimestampBuilder<Chain>)]
-pub trait CanBuildUnixTimestamp: HasTimestampType + HasErrorType {
+pub trait CanBuildUnixTimestamp: HasTimeoutType + HasErrorType {
     fn time_from_unix_timestamp(
         seconds: i64,
         nanoseconds: u32,
-    ) -> Result<Self::Timestamp, Self::Error>;
+    ) -> Result<Self::Timeout, Self::Error>;
 }

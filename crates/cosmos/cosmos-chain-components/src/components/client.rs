@@ -136,7 +136,7 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::{
-    TimestampTypeComponent, UnixTimestampBuilderComponent,
+    TimeoutTypeComponent, UnixTimestampBuilderComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
@@ -186,7 +186,7 @@ define_components! {
             HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
-            TimestampTypeComponent,
+            TimeoutTypeComponent,
             UnixTimestampBuilderComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,

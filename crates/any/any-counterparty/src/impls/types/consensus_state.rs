@@ -23,7 +23,7 @@ where
     Chain: HasConsensusStateType<Counterparty, ConsensusState = AnyConsensusState>,
     Counterparty: CanBuildUnixTimestamp,
 {
-    fn consensus_state_timestamp(consensus_state: &AnyConsensusState) -> Counterparty::Timestamp {
+    fn consensus_state_timestamp(consensus_state: &AnyConsensusState) -> Counterparty::Timeout {
         match consensus_state {
             AnyConsensusState::Tendermint(consensus_state) => {
                 let timestamp: Timestamp = consensus_state.timestamp.into();

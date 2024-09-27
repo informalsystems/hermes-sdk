@@ -14,14 +14,14 @@ where
     Chain: HasIbcPacketTypes<Counterparty, IncomingPacket = Packet, OutgoingPacket = Packet>
         + HasIbcChainTypes<
             Counterparty,
-            Timestamp = Timestamp,
+            Timeout = Timestamp,
             ChannelId = ChannelId,
             PortId = PortId,
             Sequence = Sequence,
         >,
     Counterparty: HasIbcChainTypes<
         Chain,
-        Timestamp = Timestamp,
+        Timeout = Timestamp,
         ChannelId = ChannelId,
         PortId = PortId,
         Sequence = Sequence,

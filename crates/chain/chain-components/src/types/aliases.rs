@@ -7,7 +7,7 @@ use crate::traits::types::ibc::{
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::traits::types::message::HasMessageType;
 use crate::traits::types::packet::HasIbcPacketTypes;
-use crate::traits::types::timestamp::HasTimestampType;
+use crate::traits::types::timestamp::HasTimeoutType;
 
 pub type IncomingPacketOf<Chain, Counterparty> =
     <Chain as HasIbcPacketTypes<Counterparty>>::IncomingPacket;
@@ -34,7 +34,7 @@ pub type EventOf<Chain> = <Chain as HasEventType>::Event;
 
 pub type HeightOf<Chain> = <Chain as HasHeightType>::Height;
 
-pub type TimestampOf<Chain> = <Chain as HasTimestampType>::Timestamp;
+pub type TimestampOf<Chain> = <Chain as HasTimeoutType>::Timeout;
 
 pub type WriteAckEventOf<Chain, Counterparty> =
     <Chain as HasWriteAckEvent<Counterparty>>::WriteAckEvent;

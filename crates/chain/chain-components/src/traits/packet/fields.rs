@@ -21,7 +21,7 @@ where
 
     fn incoming_packet_timeout_height(packet: &Self::IncomingPacket) -> Option<Self::Height>;
 
-    fn incoming_packet_timeout_timestamp(packet: &Self::IncomingPacket) -> Option<Self::Timestamp>;
+    fn incoming_packet_timeout_timestamp(packet: &Self::IncomingPacket) -> Option<Self::Timeout>;
 
     fn outgoing_packet_src_channel_id(packet: &Self::OutgoingPacket) -> &Self::ChannelId;
 
@@ -39,5 +39,5 @@ where
 
     fn outgoing_packet_timeout_timestamp(
         packet: &Self::OutgoingPacket,
-    ) -> Option<Counterparty::Timestamp>;
+    ) -> Option<Counterparty::Timeout>;
 }

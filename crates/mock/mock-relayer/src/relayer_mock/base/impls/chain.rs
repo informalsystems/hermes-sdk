@@ -49,7 +49,7 @@ use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPac
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
-use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
+use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimeoutType;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
@@ -94,8 +94,8 @@ impl ProvideEventType<MockChainContext> for MockChainComponents {
     type Event = Event;
 }
 
-impl ProvideTimestampType<MockChainContext> for MockChainComponents {
-    type Timestamp = MockTimestamp;
+impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
+    type Timeout = MockTimestamp;
 
     fn timestamp_duration_since(
         earlier: &MockTimestamp,

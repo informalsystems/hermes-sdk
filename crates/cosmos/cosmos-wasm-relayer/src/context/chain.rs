@@ -197,7 +197,7 @@ use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
@@ -301,7 +301,7 @@ delegate_components! {
             HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
-            TimestampTypeComponent,
+            TimeoutTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
             MessageSizeEstimatorComponent,

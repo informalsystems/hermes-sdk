@@ -50,7 +50,7 @@ pub use hermes_relayer_components::chain::traits::types::message::MessageTypeCom
 pub use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 pub use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+pub use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
 use crate::impls::solomachine::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::solomachine::client_state::ProvideSolomachineClientState;
@@ -71,7 +71,7 @@ define_components! {
         [
             HeightTypeComponent,
             HeightFieldComponent,
-            TimestampTypeComponent,
+            TimeoutTypeComponent,
             ChainIdTypeComponent,
             ClientIdTypeComponent,
             ConnectionIdTypeComponent,

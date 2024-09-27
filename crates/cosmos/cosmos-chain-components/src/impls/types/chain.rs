@@ -35,7 +35,7 @@ use hermes_relayer_components::chain::traits::types::proof::{
 };
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimestampType, ProvideTimestampType, UnixTimestampBuilder,
+    HasTimeoutType, ProvideTimeoutType, UnixTimestampBuilder,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
@@ -113,11 +113,11 @@ where
     }
 }
 
-impl<Chain> ProvideTimestampType<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideTimeoutType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
-    type Timestamp = Timestamp;
+    type Timeout = Timestamp;
 
     fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
         later.duration_since(earlier)
@@ -126,12 +126,12 @@ where
 
 impl<Chain> UnixTimestampBuilder<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasTimestampType<Timestamp = Timestamp> + CanRaiseError<TendermintError>,
+    Chain: HasTimeoutType<Timeout = Timestamp> + CanRaiseError<TendermintError>,
 {
     fn time_from_unix_timestamp(
         seconds: i64,
         nanoseconds: u32,
-    ) -> Result<Chain::Timestamp, Chain::Error> {
+    ) -> Result<Chain::Timeout, Chain::Error> {
         let time = Time::from_unix_timestamp(seconds, nanoseconds).map_err(Chain::raise_error)?;
 
         Ok(time.into())
@@ -165,7 +165,7 @@ where
 
 impl<Chain> ProvideChainStatusType<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasHeightType<Height = Height> + HasTimestampType<Timestamp = Timestamp>,
+    Chain: HasHeightType<Height = Height> + HasTimeoutType<Timeout = Timestamp>,
 {
     type ChainStatus = ChainStatus;
 

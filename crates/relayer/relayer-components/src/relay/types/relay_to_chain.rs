@@ -9,7 +9,7 @@ use crate::chain::traits::types::chain_id::HasChainIdType;
 use crate::chain::traits::types::event::HasEventType;
 use crate::chain::traits::types::height::HasHeightType;
 use crate::chain::traits::types::message::{CanEstimateMessageSize, HasMessageType};
-use crate::chain::traits::types::timestamp::HasTimestampType;
+use crate::chain::traits::types::timestamp::HasTimeoutType;
 use crate::relay::traits::chains::HasRelayChains;
 use crate::relay::traits::target::ChainTarget;
 
@@ -92,16 +92,16 @@ where
     type ChainId = <Target::TargetChain as HasChainIdType>::ChainId;
 }
 
-impl<Relay, Target> HasTimestampType for RelayToChain<Relay, Target>
+impl<Relay, Target> HasTimeoutType for RelayToChain<Relay, Target>
 where
     Relay: HasRelayChains,
     Target: ChainTarget<Relay>,
 {
-    type Timestamp = <Target::TargetChain as HasTimestampType>::Timestamp;
+    type Timeout = <Target::TargetChain as HasTimeoutType>::Timeout;
 
     fn timestamp_duration_since(
-        earlier: &Self::Timestamp,
-        later: &Self::Timestamp,
+        earlier: &Self::Timeout,
+        later: &Self::Timeout,
     ) -> Option<Duration> {
         Target::TargetChain::timestamp_duration_since(earlier, later)
     }

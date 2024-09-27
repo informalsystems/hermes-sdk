@@ -27,7 +27,7 @@ where
 {
     fn consensus_state_timestamp(
         consensus_state: &TendermintConsensusState,
-    ) -> Counterparty::Timestamp {
+    ) -> Counterparty::Timeout {
         let timestamp: Timestamp = consensus_state.timestamp.into();
 
         // FIXME: handle unwrap

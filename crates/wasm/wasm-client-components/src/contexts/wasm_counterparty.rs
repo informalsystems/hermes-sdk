@@ -23,7 +23,7 @@ use hermes_relayer_components::chain::traits::types::client_state::ClientStateTy
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 use hermes_wasm_encoding_components::components::*;
 use hermes_wasm_encoding_components::types::client_state::WasmClientState;
 
@@ -41,7 +41,7 @@ delegate_components! {
     WasmCounterpartyComponents {
         [
             HeightTypeComponent,
-            TimestampTypeComponent,
+            TimeoutTypeComponent,
             ChainIdTypeComponent,
             ClientIdTypeComponent,
             ConnectionIdTypeComponent,
