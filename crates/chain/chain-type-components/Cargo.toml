@@ -1,5 +1,5 @@
 [package]
-name         = "hermes-chain-components"
+name         = "hermes-chain-type-components"
 version      = { workspace = true }
 edition      = { workspace = true }
 license      = { workspace = true }
@@ -13,5 +13,3 @@ description  = """
 
 [dependencies]
 cgp                         = { workspace = true }
-hermes-runtime-components   = { workspace = true }
-hermes-encoding-components  = { workspace = true }

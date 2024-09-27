@@ -4,6 +4,7 @@ resolver = "2"
 
 members = [
     "crates/chain/chain-components",
+    "crates/chain/chain-type-components",
 
     "crates/relayer/relayer-components",
     "crates/relayer/relayer-components-extra",
@@ -125,6 +126,7 @@ hermes-tracing-logging-components       = { version = "0.1.0" }
 hermes-logger                           = { version = "0.1.0" }
 
 hermes-chain-components                 = { version = "0.1.0" }
+hermes-chain-type-components           = { version = "0.1.0" }
 
 hermes-relayer-components               = { version = "0.1.0" }
 hermes-relayer-components-extra         = { version = "0.1.0" }
@@ -158,6 +160,7 @@ hermes-solomachine-relayer              = { version = "0.1.0" }
 [patch.crates-io]
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
+hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }
 
 hermes-relayer-components           = { path = "./crates/relayer/relayer-components" }
 hermes-relayer-components-extra     = { path = "./crates/relayer/relayer-components-extra" }
