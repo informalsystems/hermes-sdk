@@ -84,7 +84,7 @@ cgp-component-macro             = { version = "0.1.0" }
 clap                            = { version = "4.5.17" }
 oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.13.2" }
-prost-types                     = { version = "0.13.1" }
+prost-types                     = { version = "0.13.2" }
 serde                           = { version = "1.0.203" }
 serde_derive                    = { version = "1.0" }
 serde_json                      = { version = "1.0" }
