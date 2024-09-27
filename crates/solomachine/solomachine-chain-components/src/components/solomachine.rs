@@ -1,16 +1,17 @@
 use cgp::prelude::*;
-pub use hermes_cosmos_chain_components::components::client::ClientIdTypeComponent;
 pub use hermes_cosmos_chain_components::components::client::{
-    AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
-    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
-    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
-    ConnectionOpenInitEventComponent, ConnectionOpenInitPayloadTypeComponent,
-    ConnectionOpenTryPayloadTypeComponent, ConsensusStateTypeComponent, CreateClientEventComponent,
+    AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelIdTypeComponent,
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
+    ClientStateTypeComponent, ConnectionIdTypeComponent, ConnectionOpenAckPayloadTypeComponent,
+    ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitEventComponent,
+    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    ConsensusStateTypeComponent, CreateClientEventComponent,
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
-    InitConnectionOptionsTypeComponent, ReceivePacketPayloadTypeComponent,
-    TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
+    InitConnectionOptionsTypeComponent, PortIdTypeComponent, ReceivePacketPayloadTypeComponent,
+    SequenceTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    UpdateClientPayloadTypeComponent,
 };
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -45,7 +46,6 @@ pub use hermes_relayer_components::chain::traits::types::event::EventTypeCompone
 pub use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightTypeComponent,
 };
-pub use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 pub use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 pub use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
@@ -74,7 +74,10 @@ define_components! {
             TimestampTypeComponent,
             ChainIdTypeComponent,
             ClientIdTypeComponent,
-            IbcChainTypesComponent,
+            ConnectionIdTypeComponent,
+            ChannelIdTypeComponent,
+            PortIdTypeComponent,
+            SequenceTypeComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,
             CommitmentProofTypeComponent,

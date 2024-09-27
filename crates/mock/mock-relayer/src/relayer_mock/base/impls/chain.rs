@@ -36,7 +36,8 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
-    CounterpartyMessageHeightGetter, ProvideClientIdType, ProvideIbcChainTypes,
+    CounterpartyMessageHeightGetter, ProvideChannelIdType, ProvideClientIdType,
+    ProvideConnectionIdType, ProvidePortIdType, ProvideSequenceType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
@@ -116,13 +117,19 @@ impl ProvideClientIdType<MockChainContext, MockChainContext> for MockChainCompon
     type ClientId = ClientId;
 }
 
-impl ProvideIbcChainTypes<MockChainContext, MockChainContext> for MockChainComponents {
+impl ProvideConnectionIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ConnectionId = String;
+}
 
+impl ProvideChannelIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ChannelId = ChannelId;
+}
 
+impl ProvidePortIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type PortId = PortId;
+}
 
+impl ProvideSequenceType<MockChainContext, MockChainContext> for MockChainComponents {
     type Sequence = Sequence;
 }
 

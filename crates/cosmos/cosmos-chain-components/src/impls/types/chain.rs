@@ -11,7 +11,6 @@ use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefi
 use hermes_relayer_components::chain::traits::types::block::{
     HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
-use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
 use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
@@ -20,7 +19,8 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetter, HasHeightType, HeightFieldGetter, HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
-    HasClientIdType, ProvideClientIdType, ProvideIbcChainTypes,
+    ProvideChannelIdType, ProvideClientIdType, ProvideConnectionIdType, ProvidePortIdType,
+    ProvideSequenceType,
 };
 use hermes_relayer_components::chain::traits::types::message::{
     HasMessageType, MessageSizeEstimator, ProvideMessageType,
@@ -192,16 +192,31 @@ where
     type ClientId = ClientId;
 }
 
-impl<Chain, Counterparty> ProvideIbcChainTypes<Chain, Counterparty> for ProvideCosmosChainTypes
+impl<Chain, Counterparty> ProvideConnectionIdType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
-    Chain: HasChainTypes + HasClientIdType<Counterparty>,
+    Chain: Async,
 {
     type ConnectionId = ConnectionId;
+}
 
+impl<Chain, Counterparty> ProvideChannelIdType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
     type ChannelId = ChannelId;
+}
 
+impl<Chain, Counterparty> ProvidePortIdType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
     type PortId = PortId;
+}
 
+impl<Chain, Counterparty> ProvideSequenceType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
     type Sequence = Sequence;
 }
 

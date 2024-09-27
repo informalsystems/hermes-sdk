@@ -19,6 +19,45 @@ pub trait HasClientIdType<Counterparty>: Async {
     type ClientId: Debug + Display + Async;
 }
 
+#[derive_component(ConnectionIdTypeComponent, ProvideConnectionIdType<Chain>)]
+pub trait HasConnectionIdType<Counterparty>: Async {
+    /**
+       The connection ID of the counterparty chain, that is stored on the self
+       chain.
+    */
+    type ConnectionId: Debug + Display + Async;
+}
+
+#[derive_component(ChannelIdTypeComponent, ProvideChannelIdType<Chain>)]
+pub trait HasChannelIdType<Counterparty>: Async {
+    /**
+       The channel ID of the counterparty chain, that is stored on the self
+       chain.
+    */
+    type ChannelId: Debug + Display + Async;
+}
+
+#[derive_component(PortIdTypeComponent, ProvidePortIdType<Chain>)]
+pub trait HasPortIdType<Counterparty>: Async {
+    /**
+       The port ID of the counterparty chain, that is stored on the self
+       chain.
+    */
+    type PortId: Debug + Display + Async;
+}
+
+#[derive_component(SequenceTypeComponent, ProvideSequenceType<Chain>)]
+pub trait HasSequenceType<Counterparty>: Async {
+    /**
+       The IBC packet sequence for the packet that is sent from the self chain
+       to the counterparty chain.
+
+       Note that for sequences of packets that are sent from the counterparty
+       chain to self, the `Counterparty::Sequence` will be used.
+    */
+    type Sequence: Debug + Display + Async;
+}
+
 /**
    The abstract types for a chain context when it is used for IBC
    communication with a `Counterparty` chain context.
@@ -54,34 +93,24 @@ pub trait HasClientIdType<Counterparty>: Async {
    access to two chain contexts are handled by the
    [relay context](crate::relay).
 */
-#[derive_component(IbcChainTypesComponent, ProvideIbcChainTypes<Chain>)]
-pub trait HasIbcChainTypes<Counterparty>: HasChainTypes + HasClientIdType<Counterparty> {
-    /**
-       The connection ID of the counterparty chain, that is stored on the self
-       chain.
-    */
-    type ConnectionId: Debug + Display + Async;
+pub trait HasIbcChainTypes<Counterparty>:
+    HasChainTypes
+    + HasClientIdType<Counterparty>
+    + HasConnectionIdType<Counterparty>
+    + HasChannelIdType<Counterparty>
+    + HasPortIdType<Counterparty>
+    + HasSequenceType<Counterparty>
+{
+}
 
-    /**
-       The channel ID of the counterparty chain, that is stored on the self
-       chain.
-    */
-    type ChannelId: Debug + Display + Async;
-
-    /**
-       The port ID of the counterparty chain, that is stored on the self
-       chain.
-    */
-    type PortId: Debug + Display + Async;
-
-    /**
-       The IBC packet sequence for the packet that is sent from the self chain
-       to the counterparty chain.
-
-       Note that for sequences of packets that are sent from the counterparty
-       chain to self, the `Counterparty::Sequence` will be used.
-    */
-    type Sequence: Debug + Display + Async;
+impl<Chain, Counterparty> HasIbcChainTypes<Counterparty> for Chain where
+    Chain: HasChainTypes
+        + HasClientIdType<Counterparty>
+        + HasConnectionIdType<Counterparty>
+        + HasChannelIdType<Counterparty>
+        + HasPortIdType<Counterparty>
+        + HasSequenceType<Counterparty>
+{
 }
 
 #[derive_component(CounterpartyMessageHeightGetterComponent, CounterpartyMessageHeightGetter<Chain>)]

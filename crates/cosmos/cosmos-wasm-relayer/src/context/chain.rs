@@ -7,8 +7,9 @@ use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cosmos_chain_components::components::client::{
-    ClientIdTypeComponent, ClientStateFieldsGetterComponent, ClientStateTypeComponent,
-    CosmosClientComponents,
+    ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
+    ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
+    PortIdTypeComponent, SequenceTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
@@ -169,9 +170,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::{
-    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
-};
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent,
 };
@@ -311,7 +310,10 @@ delegate_components! {
             RawConsensusStateTypeComponent,
             ConsensusStateTypeComponent,
             ClientIdTypeComponent,
-            IbcChainTypesComponent,
+            ConnectionIdTypeComponent,
+            ChannelIdTypeComponent,
+            PortIdTypeComponent,
+            SequenceTypeComponent,
 
             ConnectionEndQuerierComponent,
             ConnectionEndWithProofsQuerierComponent,

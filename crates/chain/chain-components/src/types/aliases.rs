@@ -1,7 +1,9 @@
 use crate::traits::types::chain_id::HasChainIdType;
 use crate::traits::types::event::HasEventType;
 use crate::traits::types::height::HasHeightType;
-use crate::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
+use crate::traits::types::ibc::{
+    HasChannelIdType, HasClientIdType, HasConnectionIdType, HasPortIdType, HasSequenceType,
+};
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::traits::types::message::HasMessageType;
 use crate::traits::types::packet::HasIbcPacketTypes;
@@ -16,13 +18,13 @@ pub type OutgoingPacketOf<Chain, Counterparty> =
 pub type ClientIdOf<Chain, Counterparty> = <Chain as HasClientIdType<Counterparty>>::ClientId;
 
 pub type ConnectionIdOf<Chain, Counterparty> =
-    <Chain as HasIbcChainTypes<Counterparty>>::ConnectionId;
+    <Chain as HasConnectionIdType<Counterparty>>::ConnectionId;
 
-pub type ChannelIdOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::ChannelId;
+pub type ChannelIdOf<Chain, Counterparty> = <Chain as HasChannelIdType<Counterparty>>::ChannelId;
 
-pub type PortIdOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::PortId;
+pub type PortIdOf<Chain, Counterparty> = <Chain as HasPortIdType<Counterparty>>::PortId;
 
-pub type SequenceOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::Sequence;
+pub type SequenceOf<Chain, Counterparty> = <Chain as HasSequenceType<Counterparty>>::Sequence;
 
 pub type ChainIdOf<Chain> = <Chain as HasChainIdType>::ChainId;
 
