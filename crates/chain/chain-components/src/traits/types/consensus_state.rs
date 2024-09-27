@@ -2,13 +2,7 @@ use cgp::prelude::*;
 
 use crate::traits::types::timestamp::HasTimeType;
 
-#[derive_component(ConsensusStateTypeComponent, ProvideConsensusStateType<Chain>)]
-pub trait HasConsensusStateType<Counterparty>: Async {
-    /**
-        The consensus state of the `Self` chain's client on the `Counterparty` chain
-    */
-    type ConsensusState: Async;
-}
+pub use hermes_chain_type_components::traits::ibc::consensus_state::*;
 
 #[derive_component(RawConsensusStateTypeComponent, ProvideRawConsensusStateType<Chain>)]
 pub trait HasRawConsensusStateType: Async {

@@ -4,13 +4,7 @@ use cgp::prelude::*;
 
 use crate::traits::types::height::HasHeightType;
 
-#[derive_component(ClientStateTypeComponent, ProvideClientStateType<Chain>)]
-pub trait HasClientStateType<Counterparty>: Async {
-    /**
-        The client state of the `Self` chain's client on the `Counterparty` chain
-    */
-    type ClientState: Async;
-}
+pub use hermes_chain_type_components::traits::ibc::client_state::*;
 
 #[derive_component(RawClientStateTypeComponent, ProvideRawClientStateType<Chain>)]
 pub trait HasRawClientStateType: Async {
