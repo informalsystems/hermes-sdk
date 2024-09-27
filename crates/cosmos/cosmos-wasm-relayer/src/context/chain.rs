@@ -9,7 +9,8 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
     ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
-    PortIdTypeComponent, SequenceTypeComponent, TimeTypeComponent,
+    IncomingPacketTypeComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
+    SequenceTypeComponent, TimeTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
@@ -182,7 +183,6 @@ use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::Writ
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::{
     AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
 };
@@ -324,7 +324,8 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
             ChannelEndTypeComponent,
 
-            IbcPacketTypesProviderComponent,
+            IncomingPacketTypeComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,

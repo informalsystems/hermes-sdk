@@ -120,7 +120,9 @@ pub use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::
 pub use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
-pub use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+pub use hermes_relayer_components::chain::traits::types::packet::{
+    IncomingPacketTypeComponent, OutgoingPacketTypeComponent,
+};
 pub use hermes_relayer_components::chain::traits::types::packets::ack::{
     AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
 };
@@ -201,7 +203,8 @@ define_components! {
             SequenceTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
-            IbcPacketTypesProviderComponent,
+            IncomingPacketTypeComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,

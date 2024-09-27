@@ -1,5 +1,8 @@
 use alloc::sync::Arc;
 use core::time::Duration;
+use hermes_relayer_components::chain::traits::types::packet::{
+    ProvideIncomingPacketType, ProvideOutgoingPacketType,
+};
 
 use cgp::core::error::CanRaiseError;
 use cgp::prelude::*;
@@ -25,7 +28,6 @@ use hermes_relayer_components::chain::traits::types::ibc::{
 use hermes_relayer_components::chain::traits::types::message::{
     HasMessageType, MessageSizeEstimator, ProvideMessageType,
 };
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
@@ -222,12 +224,17 @@ where
     type Sequence = Sequence;
 }
 
-impl<Chain, Counterparty> IbcPacketTypesProvider<Chain, Counterparty> for ProvideCosmosChainTypes
+impl<Chain, Counterparty> ProvideIncomingPacketType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
     type IncomingPacket = Packet;
+}
 
+impl<Chain, Counterparty> ProvideOutgoingPacketType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
     type OutgoingPacket = Packet;
 }
 

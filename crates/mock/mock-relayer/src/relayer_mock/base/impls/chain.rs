@@ -42,7 +42,9 @@ use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::Prov
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimator, ProvideMessageType,
 };
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
+use hermes_relayer_components::chain::traits::types::packet::{
+    ProvideIncomingPacketType, ProvideOutgoingPacketType,
+};
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
@@ -134,9 +136,11 @@ impl ProvideSequenceType<MockChainContext, MockChainContext> for MockChainCompon
     type Sequence = Sequence;
 }
 
-impl IbcPacketTypesProvider<MockChainContext, MockChainContext> for MockChainComponents {
+impl ProvideIncomingPacketType<MockChainContext, MockChainContext> for MockChainComponents {
     type IncomingPacket = PacketKey;
+}
 
+impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChainComponents {
     type OutgoingPacket = PacketKey;
 }
 

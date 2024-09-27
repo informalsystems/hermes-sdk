@@ -13,6 +13,9 @@ pub use hermes_cosmos_chain_components::components::client::{
     SequenceTypeComponent, TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
     UpdateClientPayloadTypeComponent,
 };
+pub use hermes_cosmos_chain_components::components::client::{
+    IncomingPacketTypeComponent, OutgoingPacketTypeComponent,
+};
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 pub use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
@@ -47,7 +50,6 @@ pub use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 pub use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
@@ -79,7 +81,8 @@ define_components! {
             ChannelIdTypeComponent,
             PortIdTypeComponent,
             SequenceTypeComponent,
-            IbcPacketTypesProviderComponent,
+            IncomingPacketTypeComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
             CommitmentProofTypeComponent,
             ConnectionEndTypeComponent,

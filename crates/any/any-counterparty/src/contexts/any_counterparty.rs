@@ -4,8 +4,8 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
     ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, PortIdTypeComponent,
-    SequenceTypeComponent,
+    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, IncomingPacketTypeComponent,
+    OutgoingPacketTypeComponent, PortIdTypeComponent, SequenceTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
@@ -40,7 +40,6 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
@@ -71,7 +70,8 @@ delegate_components! {
             ChannelIdTypeComponent,
             PortIdTypeComponent,
             SequenceTypeComponent,
-            IbcPacketTypesProviderComponent,
+            IncomingPacketTypeComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
         ]:
             ProvideCosmosChainTypes,

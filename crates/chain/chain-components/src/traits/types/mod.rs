@@ -17,6 +17,7 @@ pub mod height;
 pub mod ibc;
 pub mod ibc_events;
 pub mod message;
+pub mod packet;
 pub mod packets;
 pub mod proof;
 pub mod status;
@@ -24,4 +25,3 @@ pub mod timestamp;
 pub mod update_client;
 
 pub use hermes_chain_type_components::traits::event;
-pub use hermes_chain_type_components::traits::ibc::packet;
