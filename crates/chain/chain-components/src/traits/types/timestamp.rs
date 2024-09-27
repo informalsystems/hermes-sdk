@@ -9,7 +9,10 @@ use cgp::prelude::*;
 #[derive_component(TimeTypeComponent, ProvideTimeType<Chain>)]
 pub trait HasTimeType: Async {
     type Time: Async;
+}
 
+#[derive_component(TimeMeasurerComponent, TimeMeasurer<Chain>)]
+pub trait CanMeasureTime: HasTimeType {
     fn duration_since(earlier: &Self::Time, later: &Self::Time) -> Option<Duration>;
 }
 

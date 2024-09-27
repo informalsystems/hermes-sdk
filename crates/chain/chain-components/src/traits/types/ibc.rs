@@ -3,8 +3,6 @@
   [`HasCounterpartyMessageHeight`].
 */
 
-use core::fmt::{Debug, Display};
-
 use cgp::prelude::*;
 
 use crate::traits::types::chain::HasChainTypes;

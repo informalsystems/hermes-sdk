@@ -35,7 +35,7 @@ use hermes_relayer_components::chain::traits::types::proof::{
 };
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimeType, ProvideTimeType, ProvideTimeoutType,
+    HasTimeType, ProvideTimeType, ProvideTimeoutType, TimeMeasurer,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
@@ -118,7 +118,12 @@ where
     Chain: Async,
 {
     type Time = Time;
+}
 
+impl<Chain> TimeMeasurer<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasTimeType<Time = Time>,
+{
     fn duration_since(earlier: &Time, later: &Time) -> Option<Duration> {
         earlier.duration_since(*later).ok()
     }

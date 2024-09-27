@@ -135,6 +135,7 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
+pub use hermes_relayer_components::chain::traits::types::timestamp::TimeMeasurerComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::{
     TimeTypeComponent, TimeoutTypeComponent,
 };
@@ -187,6 +188,7 @@ define_components! {
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
             TimeTypeComponent,
+            TimeMeasurerComponent,
             TimeoutTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,

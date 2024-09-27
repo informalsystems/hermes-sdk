@@ -20,6 +20,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
     HasConsensusStateFields, HasConsensusStateType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::timestamp::CanMeasureTime;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::Index;
 use serde::Serialize;
@@ -148,6 +149,7 @@ where
         + CanQueryClientStateWithLatestHeight<Counterparty>
         + CanQueryChainStatus
         + CanQueryConsensusState<Counterparty>
+        + CanMeasureTime
         + CanWrapError<String>,
     Counterparty: HasIbcChainTypes<Chain>
         + HasClientStateType<Chain>

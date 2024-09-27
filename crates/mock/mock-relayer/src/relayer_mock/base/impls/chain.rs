@@ -8,8 +8,6 @@
 //!   have been sent, received, acknowledged, and timed out.
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
-use core::time::Duration;
-
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
@@ -98,10 +96,6 @@ impl ProvideEventType<MockChainContext> for MockChainComponents {
 
 impl ProvideTimeType<MockChainContext> for MockChainComponents {
     type Time = MockTimestamp;
-
-    fn duration_since(earlier: &MockTimestamp, later: &MockTimestamp) -> Option<Duration> {
-        later.duration_since(earlier)
-    }
 }
 
 impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
