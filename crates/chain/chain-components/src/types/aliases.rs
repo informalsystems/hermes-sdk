@@ -1,4 +1,4 @@
-use hermes_chain_type_components::traits::ibc::packet::{
+use hermes_chain_type_components::traits::types::ibc::packet::{
     HasIncomingPacketType, HasOutgoingPacketType,
 };
 

@@ -6,8 +6,8 @@ use core::time::Duration;
 
 use cgp::prelude::*;
 
-pub use hermes_chain_type_components::traits::time::*;
-pub use hermes_chain_type_components::traits::timeout::*;
+pub use hermes_chain_type_components::traits::types::time::*;
+pub use hermes_chain_type_components::traits::types::timeout::*;
 
 #[derive_component(TimeMeasurerComponent, TimeMeasurer<Chain>)]
 pub trait CanMeasureTime: HasTimeType {

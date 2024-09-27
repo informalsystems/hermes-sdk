@@ -24,4 +24,4 @@ pub mod status;
 pub mod timestamp;
 pub mod update_client;
 
-pub use hermes_chain_type_components::traits::event;
+pub use hermes_chain_type_components::traits::types::event;

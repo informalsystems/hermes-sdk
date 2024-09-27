@@ -1,4 +1,4 @@
-pub use hermes_chain_type_components::traits::ibc::packet::*;
+pub use hermes_chain_type_components::traits::types::ibc::packet::*;
 
 /**
     Contains the abstract packet types for a chain context to send and receive

@@ -4,7 +4,7 @@ use cgp::prelude::*;
 
 use crate::traits::types::height::HasHeightType;
 
-pub use hermes_chain_type_components::traits::ibc::client_state::*;
+pub use hermes_chain_type_components::traits::types::ibc::client_state::*;
 
 #[derive_component(RawClientStateTypeComponent, ProvideRawClientStateType<Chain>)]
 pub trait HasRawClientStateType: Async {

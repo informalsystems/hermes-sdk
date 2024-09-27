@@ -4,7 +4,7 @@
 
 use cgp::prelude::*;
 
-pub use hermes_chain_type_components::traits::message::*;
+pub use hermes_chain_type_components::traits::types::message::*;
 
 #[derive_component(MessageSizeEstimatorComponent, MessageSizeEstimator<Chain>)]
 pub trait CanEstimateMessageSize: HasMessageType + HasErrorType {

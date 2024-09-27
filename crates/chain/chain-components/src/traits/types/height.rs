@@ -4,7 +4,7 @@
 
 use cgp::prelude::*;
 
-pub use hermes_chain_type_components::traits::height::*;
+pub use hermes_chain_type_components::traits::types::height::*;
 
 #[derive_component(HeightFieldComponent, HeightFieldGetter<Chain>)]
 pub trait HasHeightFields: HasHeightType {

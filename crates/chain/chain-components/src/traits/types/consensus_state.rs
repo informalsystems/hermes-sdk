@@ -2,7 +2,7 @@ use cgp::prelude::*;
 
 use crate::traits::types::timestamp::HasTimeType;
 
-pub use hermes_chain_type_components::traits::ibc::consensus_state::*;
+pub use hermes_chain_type_components::traits::types::ibc::consensus_state::*;
 
 #[derive_component(RawConsensusStateTypeComponent, ProvideRawConsensusStateType<Chain>)]
 pub trait HasRawConsensusStateType: Async {

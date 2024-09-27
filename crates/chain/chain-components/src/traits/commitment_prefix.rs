@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-pub use hermes_chain_type_components::traits::commitment_prefix::*;
+pub use hermes_chain_type_components::traits::types::commitment_prefix::*;
 
 #[derive_component(IbcCommitmentPrefixGetterComponent, IbcCommitmentPrefixGetter<Chain>)]
 pub trait HasIbcCommitmentPrefix: HasCommitmentPrefixType {

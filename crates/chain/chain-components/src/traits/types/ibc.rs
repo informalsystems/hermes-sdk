@@ -9,11 +9,11 @@ use crate::traits::types::chain::HasChainTypes;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::message::HasMessageType;
 
-pub use hermes_chain_type_components::traits::ibc::channel_id::*;
-pub use hermes_chain_type_components::traits::ibc::client_id::*;
-pub use hermes_chain_type_components::traits::ibc::connection_id::*;
-pub use hermes_chain_type_components::traits::ibc::port_id::*;
-pub use hermes_chain_type_components::traits::ibc::sequence::*;
+pub use hermes_chain_type_components::traits::types::ibc::channel_id::*;
+pub use hermes_chain_type_components::traits::types::ibc::client_id::*;
+pub use hermes_chain_type_components::traits::types::ibc::connection_id::*;
+pub use hermes_chain_type_components::traits::types::ibc::port_id::*;
+pub use hermes_chain_type_components::traits::types::ibc::sequence::*;
 
 /**
    The abstract types for a chain context when it is used for IBC
