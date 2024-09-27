@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+pub use hermes_cosmos_chain_components::components::client::ClientIdTypeComponent;
 pub use hermes_cosmos_chain_components::components::client::{
     AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
     ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
@@ -72,6 +73,7 @@ define_components! {
             HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
+            ClientIdTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,

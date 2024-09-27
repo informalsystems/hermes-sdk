@@ -2,8 +2,8 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
-    ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent,
+    ClientIdTypeComponent, ConsensusStateFieldComponent, ConsensusStateQuerierComponent,
+    ConsensusStateTypeComponent, ConsensusStateWithProofsQuerierComponent, HeightFieldComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
@@ -65,6 +65,7 @@ delegate_components! {
             HeightFieldComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
+            ClientIdTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,

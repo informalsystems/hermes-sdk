@@ -1,7 +1,7 @@
 use crate::traits::types::chain_id::HasChainIdType;
 use crate::traits::types::event::HasEventType;
 use crate::traits::types::height::HasHeightType;
-use crate::traits::types::ibc::HasIbcChainTypes;
+use crate::traits::types::ibc::{HasClientIdType, HasIbcChainTypes};
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::traits::types::message::HasMessageType;
 use crate::traits::types::packet::HasIbcPacketTypes;
@@ -13,7 +13,7 @@ pub type IncomingPacketOf<Chain, Counterparty> =
 pub type OutgoingPacketOf<Chain, Counterparty> =
     <Chain as HasIbcPacketTypes<Counterparty>>::OutgoingPacket;
 
-pub type ClientIdOf<Chain, Counterparty> = <Chain as HasIbcChainTypes<Counterparty>>::ClientId;
+pub type ClientIdOf<Chain, Counterparty> = <Chain as HasClientIdType<Counterparty>>::ClientId;
 
 pub type ConnectionIdOf<Chain, Counterparty> =
     <Chain as HasIbcChainTypes<Counterparty>>::ConnectionId;

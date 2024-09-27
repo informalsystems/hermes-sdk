@@ -105,6 +105,7 @@ pub use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
+pub use hermes_relayer_components::chain::traits::types::ibc::ClientIdTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::ibc::{
     CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
 };
@@ -191,6 +192,7 @@ define_components! {
             MessageTypeComponent,
             MessageSizeEstimatorComponent,
             EventTypeComponent,
+            ClientIdTypeComponent,
             IbcChainTypesComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,

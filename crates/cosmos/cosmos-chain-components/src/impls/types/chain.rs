@@ -19,7 +19,9 @@ use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetter, HasHeightType, HeightFieldGetter, HeightIncrementer, ProvideHeightType,
 };
-use hermes_relayer_components::chain::traits::types::ibc::ProvideIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasClientIdType, ProvideClientIdType, ProvideIbcChainTypes,
+};
 use hermes_relayer_components::chain::traits::types::message::{
     HasMessageType, MessageSizeEstimator, ProvideMessageType,
 };
@@ -183,12 +185,17 @@ where
     type ChainId = ChainId;
 }
 
-impl<Chain, Counterparty> ProvideIbcChainTypes<Chain, Counterparty> for ProvideCosmosChainTypes
+impl<Chain, Counterparty> ProvideClientIdType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
-    Chain: HasChainTypes,
+    Chain: Async,
 {
     type ClientId = ClientId;
+}
 
+impl<Chain, Counterparty> ProvideIbcChainTypes<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: HasChainTypes + HasClientIdType<Counterparty>,
+{
     type ConnectionId = ConnectionId;
 
     type ChannelId = ChannelId;

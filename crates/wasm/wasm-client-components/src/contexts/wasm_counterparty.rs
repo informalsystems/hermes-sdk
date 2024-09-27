@@ -1,6 +1,7 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
+use hermes_cosmos_chain_components::components::client::ClientIdTypeComponent;
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
@@ -40,6 +41,7 @@ delegate_components! {
             HeightTypeComponent,
             TimestampTypeComponent,
             ChainIdTypeComponent,
+            ClientIdTypeComponent,
             IbcChainTypesComponent,
             IbcPacketTypesProviderComponent,
             ChainStatusTypeComponent,

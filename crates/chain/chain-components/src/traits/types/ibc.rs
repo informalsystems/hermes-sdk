@@ -11,6 +11,14 @@ use crate::traits::types::chain::HasChainTypes;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::message::HasMessageType;
 
+#[derive_component(ClientIdTypeComponent, ProvideClientIdType<Chain>)]
+pub trait HasClientIdType<Counterparty>: Async {
+    /**
+       The client ID of the counterparty chain, that is stored on the local chain.
+    */
+    type ClientId: Debug + Display + Async;
+}
+
 /**
    The abstract types for a chain context when it is used for IBC
    communication with a `Counterparty` chain context.
@@ -47,13 +55,7 @@ use crate::traits::types::message::HasMessageType;
    [relay context](crate::relay).
 */
 #[derive_component(IbcChainTypesComponent, ProvideIbcChainTypes<Chain>)]
-pub trait HasIbcChainTypes<Counterparty>: HasChainTypes {
-    /**
-       The client ID of the counterparty chain, that is stored on the self
-       chain.
-    */
-    type ClientId: Debug + Display + Async;
-
+pub trait HasIbcChainTypes<Counterparty>: HasChainTypes + HasClientIdType<Counterparty> {
     /**
        The connection ID of the counterparty chain, that is stored on the self
        chain.
