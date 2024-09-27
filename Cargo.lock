@@ -1544,6 +1544,7 @@ name = "hermes-chain-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-chain-type-components",
  "hermes-encoding-components",
  "hermes-runtime-components",
 ]

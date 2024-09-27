@@ -13,7 +13,6 @@ pub mod client_state;
 pub mod connection;
 pub mod consensus_state;
 pub mod create_client;
-pub mod event;
 pub mod height;
 pub mod ibc;
 pub mod ibc_events;
@@ -24,3 +23,5 @@ pub mod proof;
 pub mod status;
 pub mod timestamp;
 pub mod update_client;
+
+pub use hermes_chain_type_components::traits::event;

@@ -11,52 +11,11 @@ use crate::traits::types::chain::HasChainTypes;
 use crate::traits::types::height::HasHeightType;
 use crate::traits::types::message::HasMessageType;
 
-#[derive_component(ClientIdTypeComponent, ProvideClientIdType<Chain>)]
-pub trait HasClientIdType<Counterparty>: Async {
-    /**
-       The client ID of the counterparty chain, that is stored on the local chain.
-    */
-    type ClientId: Debug + Display + Async;
-}
-
-#[derive_component(ConnectionIdTypeComponent, ProvideConnectionIdType<Chain>)]
-pub trait HasConnectionIdType<Counterparty>: Async {
-    /**
-       The connection ID of the counterparty chain, that is stored on the self
-       chain.
-    */
-    type ConnectionId: Debug + Display + Async;
-}
-
-#[derive_component(ChannelIdTypeComponent, ProvideChannelIdType<Chain>)]
-pub trait HasChannelIdType<Counterparty>: Async {
-    /**
-       The channel ID of the counterparty chain, that is stored on the self
-       chain.
-    */
-    type ChannelId: Debug + Display + Async;
-}
-
-#[derive_component(PortIdTypeComponent, ProvidePortIdType<Chain>)]
-pub trait HasPortIdType<Counterparty>: Async {
-    /**
-       The port ID of the counterparty chain, that is stored on the self
-       chain.
-    */
-    type PortId: Debug + Display + Async;
-}
-
-#[derive_component(SequenceTypeComponent, ProvideSequenceType<Chain>)]
-pub trait HasSequenceType<Counterparty>: Async {
-    /**
-       The IBC packet sequence for the packet that is sent from the self chain
-       to the counterparty chain.
-
-       Note that for sequences of packets that are sent from the counterparty
-       chain to self, the `Counterparty::Sequence` will be used.
-    */
-    type Sequence: Debug + Display + Async;
-}
+pub use hermes_chain_type_components::traits::ibc::channel_id::*;
+pub use hermes_chain_type_components::traits::ibc::client_id::*;
+pub use hermes_chain_type_components::traits::ibc::connection_id::*;
+pub use hermes_chain_type_components::traits::ibc::port_id::*;
+pub use hermes_chain_type_components::traits::ibc::sequence::*;
 
 /**
    The abstract types for a chain context when it is used for IBC
