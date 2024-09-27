@@ -1,9 +1,6 @@
 use cgp::prelude::*;
 
-#[derive_component(CommitmentPrefixTypeComponent, ProvideCommitmentPrefixType<Chain>)]
-pub trait HasCommitmentPrefixType: Async {
-    type CommitmentPrefix: Async;
-}
+pub use hermes_chain_type_components::traits::commitment_prefix::*;
 
 #[derive_component(IbcCommitmentPrefixGetterComponent, IbcCommitmentPrefixGetter<Chain>)]
 pub trait HasIbcCommitmentPrefix: HasCommitmentPrefixType {
