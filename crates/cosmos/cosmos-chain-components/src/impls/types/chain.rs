@@ -136,7 +136,7 @@ where
     type Timeout = Timestamp;
 
     fn has_timed_out(time: &Time, timeout: &Timestamp) -> bool {
-        &Timestamp::from(*time) < timeout
+        &Timestamp::from(*time) > timeout
     }
 }
 

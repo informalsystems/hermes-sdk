@@ -102,7 +102,7 @@ impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
     type Timeout = MockTimestamp;
 
     fn has_timed_out(time: &MockTimestamp, timeout: &MockTimestamp) -> bool {
-        time < timeout
+        time > timeout
     }
 }
 
