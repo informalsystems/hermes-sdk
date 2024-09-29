@@ -1,14 +1,14 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 use crate::traits::types::ibc::HasIbcChainTypes;
-use crate::traits::types::packet::HasIbcPacketTypes;
 
 #[derive_component(SendPacketsQuerierComponent, SendPacketsQuerier<Chain>)]
 #[async_trait]
 pub trait CanQuerySendPackets<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasIbcPacketTypes<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty> + HasOutgoingPacketType<Counterparty> + HasErrorType
 where
     Counterparty: HasIbcChainTypes<Self>,
 {
@@ -31,7 +31,7 @@ where
 #[derive_component(SendPacketQuerierComponent, SendPacketQuerier<Chain>)]
 #[async_trait]
 pub trait CanQuerySendPacket<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasIbcPacketTypes<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty> + HasOutgoingPacketType<Counterparty> + HasErrorType
 where
     Counterparty: HasIbcChainTypes<Self>,
 {

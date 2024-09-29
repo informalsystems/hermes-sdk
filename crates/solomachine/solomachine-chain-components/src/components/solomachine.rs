@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+pub use hermes_cosmos_chain_components::components::client::OutgoingPacketFieldsReaderComponent;
 pub use hermes_cosmos_chain_components::components::client::OutgoingPacketTypeComponent;
 pub use hermes_cosmos_chain_components::components::client::{
     AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelIdTypeComponent,
@@ -27,7 +28,6 @@ pub use hermes_relayer_components::chain::traits::message_builders::connection_h
 pub use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-pub use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
     ChannelOpenTryPayloadBuilderComponent,
@@ -117,7 +117,7 @@ define_components! {
             ProvideSolomachineClientState,
         ConsensusStateTypeComponent:
             ProvideSolomachineConsensusState,
-        PacketFieldsReaderComponent:
+        OutgoingPacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         MessageSenderComponent:
             ProcessSolomachineMessages,

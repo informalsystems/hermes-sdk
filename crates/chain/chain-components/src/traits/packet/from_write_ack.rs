@@ -1,11 +1,12 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::traits::types::packet::HasIbcPacketTypes;
 
 #[derive_component(PacketFromWriteAckBuilderComponent, PacketFromWriteAckBuilder<Chain>)]
-pub trait CanBuildPacketFromWriteAck<Counterparty>:
-    HasWriteAckEvent<Counterparty> + HasIbcPacketTypes<Counterparty>
+pub trait CanBuildPacketFromWriteAck<Counterparty>: HasWriteAckEvent<Counterparty>
+where
+    Counterparty: HasOutgoingPacketType<Self>,
 {
     /**
        Extract the [`IncomingPacket`](HasIbcPacketTypes::IncomingPacket)
@@ -21,5 +22,7 @@ pub trait CanBuildPacketFromWriteAck<Counterparty>:
        refactored into a method like
        `query_packet_from_write_ack_event`.
     */
-    fn build_packet_from_write_ack_event(ack: &Self::WriteAckEvent) -> &Self::IncomingPacket;
+    fn build_packet_from_write_ack_event(
+        ack: &Self::WriteAckEvent,
+    ) -> &Counterparty::OutgoingPacket;
 }

@@ -9,7 +9,8 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
     ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
-    OutgoingPacketTypeComponent, PortIdTypeComponent, SequenceTypeComponent, TimeTypeComponent,
+    OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
+    SequenceTypeComponent, TimeTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
@@ -66,7 +67,6 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
     AckPacketPayloadBuilderComponent, CanBuildAckPacketPayload,
@@ -358,7 +358,7 @@ delegate_components! {
             AckPacketPayloadTypeComponent,
             TimeoutUnorderedPacketPayloadTypeComponent,
 
-            PacketFieldsReaderComponent,
+            OutgoingPacketFieldsReaderComponent,
             WriteAckQuerierComponent,
 
             ClientStateQuerierComponent,

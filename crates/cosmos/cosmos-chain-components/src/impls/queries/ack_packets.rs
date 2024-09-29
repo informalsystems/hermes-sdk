@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::traits::queries::ack_packets::{
 };
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::types::aliases::WriteAckEventOf;
 
 pub struct QueryAckPacketsConcurrently;
@@ -11,7 +12,7 @@ pub struct QueryAckPacketsConcurrently;
 impl<Chain, Counterparty> AckPacketsQuerier<Chain, Counterparty> for QueryAckPacketsConcurrently
 where
     Chain: CanQueryAckPacket<Counterparty>,
-    Counterparty: HasIbcChainTypes<Chain> + HasWriteAckEvent<Chain>,
+    Counterparty: HasIbcChainTypes<Chain> + HasWriteAckEvent<Chain> + HasOutgoingPacketType<Chain>,
 {
     async fn query_ack_packets_from_sequences(
         chain: &Chain,
@@ -19,10 +20,15 @@ where
         port_id: &Counterparty::PortId,
         counterparty_channel_id: &Chain::ChannelId,
         counterparty_port_id: &Chain::PortId,
-        sequences: &[Chain::Sequence],
+        sequences: &[Counterparty::Sequence],
         height: &Chain::Height,
-    ) -> Result<Vec<(Chain::OutgoingPacket, WriteAckEventOf<Chain, Counterparty>)>, Chain::Error>
-    {
+    ) -> Result<
+        Vec<(
+            Counterparty::OutgoingPacket,
+            WriteAckEventOf<Chain, Counterparty>,
+        )>,
+        Chain::Error,
+    > {
         let ack_packets = stream::iter(sequences)
             // TODO: use `flat_map_unordered`
             .then(|sequence| {

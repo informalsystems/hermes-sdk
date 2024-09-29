@@ -2,7 +2,7 @@ use cgp::prelude::*;
 
 use crate::chain::traits::types::packets::ack::{AcknowledgementOf, HasAcknowledgementType};
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
 #[derive_component(AckPacketRelayerComponent, AckPacketRelayer<Relay>)]
 #[async_trait]
@@ -12,7 +12,7 @@ pub trait CanRelayAckPacket:
     async fn relay_ack_packet(
         &self,
         destination_height: &HeightOf<Self::DstChain>,
-        packet: &Self::Packet,
+        packet: &PacketOf<Self>,
         ack: &AcknowledgementOf<Self::DstChain, Self::SrcChain>,
     ) -> Result<(), Self::Error>;
 }

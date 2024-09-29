@@ -3,12 +3,11 @@ use alloc::vec::Vec;
 use cgp::prelude::*;
 
 use crate::traits::types::ibc::HasIbcChainTypes;
-use crate::traits::types::packet::HasIbcPacketTypes;
 
 #[derive_component(UnreceivedPacketSequencesQuerierComponent, UnreceivedPacketSequencesQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryUnreceivedPacketSequences<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasIbcPacketTypes<Counterparty> + HasErrorType
+    HasIbcChainTypes<Counterparty> + HasErrorType
 where
     Counterparty: HasIbcChainTypes<Self>,
 {

@@ -3,9 +3,8 @@ use core::marker::PhantomData;
 use cgp::prelude::CanRaiseError;
 use hermes_relayer_components::error::impls::error::MaxRetryExceededError;
 use hermes_relayer_components::error::traits::retry::{HasMaxErrorRetry, HasRetryableError};
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
 use hermes_relayer_components::relay::traits::packet_relayer::PacketRelayer;
-use hermes_relayer_components::relay::types::aliases::Packet;
 
 pub struct RetryRelayer<InRelay> {
     pub phantom: PhantomData<InRelay>,
@@ -19,7 +18,7 @@ where
         + for<'a> CanRaiseError<MaxRetryExceededError<'a, Relay>>,
     InRelayer: PacketRelayer<Relay>,
 {
-    async fn relay_packet(relay: &Relay, packet: &Packet<Relay>) -> Result<(), Relay::Error> {
+    async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {
         let max_retry = relay.max_retry();
         let mut retries_made: usize = 0;
 

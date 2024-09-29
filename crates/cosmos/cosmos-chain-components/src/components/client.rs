@@ -26,7 +26,7 @@ pub use hermes_relayer_components::chain::traits::message_builders::create_clien
 pub use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-pub use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
+pub use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReaderComponent;
 pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
@@ -253,7 +253,7 @@ define_components! {
             ConsensusStateFieldComponent,
         ]:
             ProvideTendermintConsensusState,
-        PacketFieldsReaderComponent:
+        OutgoingPacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,

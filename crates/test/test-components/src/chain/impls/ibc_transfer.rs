@@ -2,7 +2,6 @@ use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use hermes_relayer_components::transaction::impls::send_single_message_with_signer::CanSendSingleMessageWithSigner;
 
 use crate::chain::traits::messages::ibc_transfer::CanBuildIbcTokenTransferMessage;
@@ -28,7 +27,6 @@ where
         + CanCalculateIbcTransferTimeout
         + CanBuildIbcTokenTransferMessage<Counterparty>
         + HasIbcChainTypes<Counterparty>
-        + HasIbcPacketTypes<Counterparty>
         + HasSendPacketEvent<Counterparty>
         + CanRaiseError<MissingSendPacketEventError>
         + CanSendSingleMessageWithSigner,

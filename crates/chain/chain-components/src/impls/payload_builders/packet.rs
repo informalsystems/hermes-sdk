@@ -1,7 +1,7 @@
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 
-use crate::traits::packet::fields::CanReadPacketFields;
+use crate::traits::packet::fields::{CanReadIncomingPacketFields, CanReadOutgoingPacketFields};
 use crate::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use crate::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use crate::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -25,7 +25,7 @@ where
     Chain: HasReceivePacketPayloadType<
             Counterparty,
             ReceivePacketPayload = ReceivePacketPayload<Chain>,
-        > + CanReadPacketFields<Counterparty>
+        > + CanReadOutgoingPacketFields<Counterparty>
         + HasClientStateType<Counterparty>
         + CanQueryPacketCommitment<Counterparty>
         + HasCommitmentProofHeight
@@ -67,20 +67,19 @@ where
             Counterparty,
             AckPacketPayload = AckPacketPayload<Chain, Counterparty>,
         > + HasAcknowledgementType<Counterparty>
-        + CanReadPacketFields<Counterparty>
         + HasClientStateType<Counterparty>
         + CanQueryPacketAcknowledgement<Counterparty>
         + CanIncrementHeight
         + HasCommitmentProofHeight
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain>,
+    Counterparty: HasIbcChainTypes<Chain> + CanReadOutgoingPacketFields<Chain>,
     Chain::Acknowledgement: Clone,
 {
     async fn build_ack_packet_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
         height: &Chain::Height,
-        packet: &Chain::IncomingPacket,
+        packet: &Counterparty::OutgoingPacket,
         ack: &Chain::Acknowledgement,
     ) -> Result<Chain::AckPacketPayload, Chain::Error> {
         let (_, proof_ack) = chain
@@ -113,19 +112,18 @@ where
     Chain: HasTimeoutUnorderedPacketPayloadType<
             Counterparty,
             TimeoutUnorderedPacketPayload = TimeoutUnorderedPacketPayload<Chain>,
-        > + CanReadPacketFields<Counterparty>
-        + HasClientStateType<Counterparty>
+        > + HasClientStateType<Counterparty>
         + CanQueryPacketReceipt<Counterparty>
         + HasCommitmentProofHeight
         + HasCommitmentProofType
         + HasErrorType,
-    Counterparty: HasIbcChainTypes<Chain>,
+    Counterparty: HasIbcChainTypes<Chain> + CanReadOutgoingPacketFields<Chain>,
 {
     async fn build_timeout_unordered_packet_payload(
         chain: &Chain,
         _client_state: &Chain::ClientState,
         height: &Chain::Height,
-        packet: &Chain::IncomingPacket,
+        packet: &Counterparty::OutgoingPacket,
     ) -> Result<TimeoutUnorderedPacketPayload<Chain>, Chain::Error> {
         let (_, proof_unreceived) = chain
             .query_packet_receipt(

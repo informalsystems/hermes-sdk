@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::relay::traits::chains::ProvideRelayChains;
 
 pub struct ProvideRelayFields<SrcChainField, DstChainField, SrcClientIdField, DstClientIdField>(
@@ -26,7 +26,6 @@ impl<
         Relay,
         SrcChain,
         DstChain,
-        Packet: Async,
         SrcChainField: Async,
         DstChainField: Async,
         SrcClientIdField: Async,
@@ -40,18 +39,12 @@ where
         + HasField<DstChainField, Field = DstChain>
         + HasField<SrcClientIdField, Field = SrcChain::ClientId>
         + HasField<DstClientIdField, Field = DstChain::ClientId>,
-    SrcChain: HasErrorType
-        + HasIbcChainTypes<DstChain>
-        + HasIbcPacketTypes<DstChain, OutgoingPacket = Packet>,
-    DstChain: HasErrorType
-        + HasIbcChainTypes<SrcChain>
-        + HasIbcPacketTypes<SrcChain, IncomingPacket = Packet>,
+    SrcChain: HasErrorType + HasIbcChainTypes<DstChain> + HasOutgoingPacketType<DstChain>,
+    DstChain: HasErrorType + HasIbcChainTypes<SrcChain>,
 {
     type SrcChain = SrcChain;
 
     type DstChain = DstChain;
-
-    type Packet = Packet;
 
     fn src_chain(relay: &Relay) -> &SrcChain {
         relay.get_field(PhantomData::<SrcChainField>)

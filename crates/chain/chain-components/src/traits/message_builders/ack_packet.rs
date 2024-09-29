@@ -1,13 +1,13 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 use crate::traits::types::message::HasMessageType;
-use crate::traits::types::packet::HasIbcPacketTypes;
 use crate::traits::types::packets::ack::HasAckPacketPayloadType;
 
 #[derive_component(AckPacketMessageBuilderComponent, AckPacketMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildAckPacketMessage<Counterparty>:
-    HasMessageType + HasIbcPacketTypes<Counterparty> + HasErrorType
+    HasMessageType + HasOutgoingPacketType<Counterparty> + HasErrorType
 where
     Counterparty: HasAckPacketPayloadType<Self>,
 {

@@ -42,8 +42,6 @@ delegate_components! {
 }
 
 impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
-    type Packet = Packet;
-
     type SrcChain = MockChainContext;
 
     type DstChain = MockChainContext;

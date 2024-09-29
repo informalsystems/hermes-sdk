@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
@@ -13,7 +13,7 @@ pub trait CanIbcTransferToken<Counterparty>:
     + HasWalletType
     + HasAmountType
     + HasIbcChainTypes<Counterparty>
-    + HasIbcPacketTypes<Counterparty>
+    + HasOutgoingPacketType<Counterparty>
 where
     Counterparty: HasAddressType,
 {

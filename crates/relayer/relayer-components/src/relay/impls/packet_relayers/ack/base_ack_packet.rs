@@ -1,11 +1,10 @@
-use cgp::core::Async;
+use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::traits::types::client_state::HasClientStateType;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::packet_relayers::ack_packet::AckPacketRelayer;
@@ -16,24 +15,21 @@ use crate::relay::traits::target::SourceTarget;
 /// on top of this base type.
 pub struct BaseAckPacketRelayer;
 
-impl<Relay, SrcChain, DstChain, Packet> AckPacketRelayer<Relay> for BaseAckPacketRelayer
+impl<Relay, SrcChain, DstChain> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
-    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>
-        + CanRaiseRelayChainErrors,
+    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanRaiseRelayChainErrors,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
     SrcChain: CanQueryClientStateWithLatestHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
-        + HasIbcPacketTypes<DstChain, OutgoingPacket = Packet>,
+        + HasOutgoingPacketType<DstChain>,
     DstChain: HasClientStateType<SrcChain>
         + CanBuildAckPacketPayload<SrcChain>
-        + HasIbcPacketTypes<SrcChain, IncomingPacket = Packet>
         + HasWriteAckEvent<SrcChain>,
-    Packet: Async,
 {
     async fn relay_ack_packet(
         relay: &Relay,
         destination_height: &DstChain::Height,
-        packet: &Packet,
+        packet: &SrcChain::OutgoingPacket,
         ack: &DstChain::Acknowledgement,
     ) -> Result<(), Relay::Error> {
         let src_client_state = relay

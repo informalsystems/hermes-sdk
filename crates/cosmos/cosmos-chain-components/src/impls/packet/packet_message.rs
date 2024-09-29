@@ -4,7 +4,7 @@ use hermes_relayer_components::chain::traits::message_builders::receive_packet::
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::types::height::HasHeightFields;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::ack::{
     HasAckPacketPayloadType, HasAcknowledgementType,
 };
@@ -28,13 +28,12 @@ pub struct BuildCosmosPacketMessages;
 impl<Chain, Counterparty> ReceivePacketMessageBuilder<Chain, Counterparty>
     for BuildCosmosPacketMessages
 where
-    Chain: HasMessageType
-        + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
-        + CanRaiseError<Ics02Error>,
+    Chain: HasMessageType + CanRaiseError<Ics02Error>,
     Counterparty: HasReceivePacketPayloadType<
             Chain,
             ReceivePacketPayload = ReceivePacketPayload<Counterparty>,
         > + HasHeightFields
+        + HasOutgoingPacketType<Chain, OutgoingPacket = Packet>
         + HasCommitmentProofBytes,
     Chain::Message: From<CosmosMessage>,
 {
@@ -65,7 +64,7 @@ where
 impl<Chain, Counterparty> AckPacketMessageBuilder<Chain, Counterparty> for BuildCosmosPacketMessages
 where
     Chain: HasMessageType
-        + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
+        + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasAckPacketPayloadType<Chain, AckPacketPayload = AckPacketPayload<Counterparty, Chain>>
         + HasHeightFields
@@ -101,7 +100,7 @@ impl<Chain, Counterparty> TimeoutUnorderedPacketMessageBuilder<Chain, Counterpar
     for BuildCosmosPacketMessages
 where
     Chain: HasMessageType
-        + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
+        + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + CanRaiseError<Ics02Error>,
     Counterparty: HasTimeoutUnorderedPacketPayloadType<
             Chain,

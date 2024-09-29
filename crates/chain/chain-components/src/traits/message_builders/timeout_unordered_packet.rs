@@ -1,13 +1,13 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 use crate::traits::types::message::HasMessageType;
-use crate::traits::types::packet::HasIbcPacketTypes;
 use crate::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 
 #[derive_component(TimeoutUnorderedPacketMessageBuilderComponent, TimeoutUnorderedPacketMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildTimeoutUnorderedPacketMessage<Counterparty>:
-    HasMessageType + HasIbcPacketTypes<Counterparty> + HasErrorType
+    HasMessageType + HasOutgoingPacketType<Counterparty> + HasErrorType
 where
     Counterparty: HasTimeoutUnorderedPacketPayloadType<Self>,
 {

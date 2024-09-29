@@ -4,7 +4,7 @@ use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use hermes_relayer_components::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use hermes_relayer_components::chain::traits::packet::fields::CanReadPacketFields;
+use hermes_relayer_components::chain::traits::packet::fields::CanReadOutgoingPacketFields;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use hermes_relayer_components::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -15,7 +15,9 @@ use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
-use hermes_relayer_components::chain::traits::types::ibc::HasCounterpartyMessageHeight;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    HasCounterpartyMessageHeight, HasIbcChainTypes,
+};
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
@@ -55,7 +57,7 @@ where
         + CanQueryChainStatus
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
-        + CanReadPacketFields<DstChain, OutgoingPacket = Relay::Packet>
+        + CanReadOutgoingPacketFields<DstChain>
         + CanQueryClientState<DstChain>
         + CanQueryConsensusState<DstChain>
         + CanQueryConsensusStateHeight<DstChain>
@@ -66,10 +68,10 @@ where
         + HasRuntime
         + HasChainId
         + CanQueryChainStatus
+        + HasIbcChainTypes<SrcChain>
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
         + HasWriteAckEvent<SrcChain>
-        + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
         + CanBuildAckPacketPayload<SrcChain>
         + CanBuildUpdateClientPayload<SrcChain>
         + CanRaiseError<ErrorOf<DstChain>>,

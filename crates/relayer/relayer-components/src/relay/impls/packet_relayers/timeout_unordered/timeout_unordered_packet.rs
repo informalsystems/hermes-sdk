@@ -2,11 +2,10 @@ use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTi
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::ibc_message_sender::{CanSendSingleIbcMessage, MainSink};
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::TimeoutUnorderedPacketRelayer;
 use crate::relay::traits::target::SourceTarget;
-use crate::relay::types::aliases::Packet;
 
 /// The minimal component that implements timeout packet relayer
 /// capabilities. Timeout packet relayers with more capabilities can be
@@ -24,7 +23,7 @@ where
     async fn relay_timeout_unordered_packet(
         relay: &Relay,
         destination_height: &HeightOf<Relay::DstChain>,
-        packet: &Packet<Relay>,
+        packet: &PacketOf<Relay>,
     ) -> Result<(), Relay::Error> {
         let dst_client_state = relay
             .src_chain()

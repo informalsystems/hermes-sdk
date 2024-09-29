@@ -4,7 +4,7 @@ use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::send_packets::SendPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use ibc_relayer::chain::cosmos::query::packet_query;
 use ibc_relayer::chain::requests::{Qualified, QueryHeight, QueryPacketEventDataRequest};
 use ibc_relayer_types::core::ics04_channel::events::SendPacket;
@@ -28,7 +28,7 @@ where
             PortId = PortId,
             Sequence = Sequence,
             Event = Arc<AbciEvent>,
-        > + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
+        > + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + HasSendPacketEvent<Counterparty, SendPacketEvent = SendPacket>
         + HasRpcClient
         + CanRaiseError<RpcError>

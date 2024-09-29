@@ -10,7 +10,7 @@ use hermes_runtime_components::traits::runtime::{HasRuntime, RuntimeOf};
 use hermes_runtime_components::traits::spawn::CanSpawnTask;
 use hermes_runtime_components::traits::task::Task;
 
-use crate::chain::traits::packet::fields::CanReadPacketFields;
+use crate::chain::traits::packet::fields::CanReadOutgoingPacketFields;
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
 use crate::chain::types::aliases::{ChannelIdOf, PortIdOf, SequenceOf};
 use crate::relay::traits::chains::{DstChainOf, HasRelayChains, SrcChainOf};
@@ -62,27 +62,25 @@ where
     }
 }
 
-impl<Relay, SrcChain, DstChain, Packet, Runtime> ProvidePacketLock<Relay>
-    for ProvidePacketLockWithMutex
+impl<Relay, SrcChain, DstChain, Runtime> ProvidePacketLock<Relay> for ProvidePacketLockWithMutex
 where
-    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain, Packet = Packet>
+    Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + HasRuntime<Runtime = Runtime>
         + HasPacketMutex,
     Runtime: CanUseChannelsOnce + CanCreateChannelsOnce + CanSpawnTask,
-    SrcChain: CanReadPacketFields<DstChain, OutgoingPacket = Packet>,
+    SrcChain: CanReadOutgoingPacketFields<DstChain>,
     DstChain: HasIbcChainTypes<SrcChain>,
     SrcChain::ChannelId: Clone + Ord,
     SrcChain::PortId: Clone + Ord,
     SrcChain::Sequence: Clone + Ord,
     DstChain::ChannelId: Clone + Ord,
     DstChain::PortId: Clone + Ord,
-    Packet: Async,
 {
     type PacketLock<'a> = PacketLock<Relay>;
 
     async fn try_acquire_packet_lock<'a>(
         relay: &'a Relay,
-        packet: &'a Relay::Packet,
+        packet: &'a SrcChain::OutgoingPacket,
     ) -> Option<PacketLock<Relay>> {
         let packet_key: PacketKey<Relay> = (
             SrcChain::outgoing_packet_src_channel_id(packet).clone(),

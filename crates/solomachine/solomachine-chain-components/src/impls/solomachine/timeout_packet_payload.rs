@@ -3,7 +3,7 @@ use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::path::CommitmentsPath;
@@ -26,10 +26,10 @@ where
         + HasTimeoutUnorderedPacketPayloadType<
             Counterparty,
             TimeoutUnorderedPacketPayload = SolomachineTimeoutUnorderedPacketPayload,
-        > + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
-        + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
+        > + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + HasHeightType<Height = Height>
         + HasErrorType,
+    Counterparty: HasOutgoingPacketType<Chain, OutgoingPacket = Packet>,
 {
     async fn build_timeout_unordered_packet_payload(
         chain: &Chain,

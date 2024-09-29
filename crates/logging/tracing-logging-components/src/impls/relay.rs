@@ -12,7 +12,7 @@ use hermes_relayer_components::relay::impls::packet_relayers::general::log::{
 };
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
-use hermes_relayer_components::relay::traits::chains::HasRelayChains;
+use hermes_relayer_components::relay::traits::chains::{HasRelayChains, PacketOf};
 use hermes_relayer_components::relay::traits::target::ChainTarget;
 use hermes_relayer_components_extra::batch::worker::LogBatchWorker;
 use tracing::{error, trace};
@@ -23,7 +23,7 @@ impl<'a, Logging, Relay> Logger<Logging, LogSkipRelayLockedPacket<'a, Relay>> fo
 where
     Logging: Async,
     Relay: HasRelayChains,
-    Relay::Packet: Display,
+    PacketOf<Relay>: Display,
     Relay::SrcChain: HasChainId,
     Relay::DstChain: HasChainId,
 {
@@ -41,7 +41,7 @@ impl<'a, Logging, Relay> Logger<Logging, LogRelayPacketAction<'a, Relay>> for Tr
 where
     Logging: Async,
     Relay: HasRelayChains,
-    Relay::Packet: Display,
+    PacketOf<Relay>: Display,
     Relay::SrcChain: HasChainId,
     Relay::DstChain: HasChainId,
 {
@@ -60,7 +60,7 @@ impl<'a, Logging, Relay> Logger<Logging, LogClearPacketError<'a, Relay>> for Tra
 where
     Logging: Async,
     Relay: HasRelayChains,
-    Relay::Packet: Display,
+    PacketOf<Relay>: Display,
     Relay::SrcChain: HasChainId,
     Relay::DstChain: HasChainId,
 {
@@ -80,7 +80,7 @@ impl<'a, Logging, Relay> Logger<Logging, LogRelayPacketStatus<'a, Relay>> for Tr
 where
     Logging: Async,
     Relay: HasRelayChains,
-    Relay::Packet: Display,
+    PacketOf<Relay>: Display,
     Relay::SrcChain: HasChainId,
     Relay::DstChain: HasChainId,
 {

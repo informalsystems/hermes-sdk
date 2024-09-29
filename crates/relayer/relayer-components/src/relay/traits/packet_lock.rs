@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
 /**
    Provides a packet lock mutex for packet relayers to coordinate and avoid
@@ -42,6 +42,6 @@ pub trait HasPacketLock: HasRelayChains {
     */
     async fn try_acquire_packet_lock<'a>(
         &'a self,
-        packet: &'a Self::Packet,
+        packet: &'a PacketOf<Self>,
     ) -> Option<Self::PacketLock<'a>>;
 }

@@ -1,8 +1,8 @@
 use cgp::core::error::ErrorOf;
 use cgp::prelude::*;
+use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::types::ibc::HasIbcChainTypes;
-use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::types::aliases::ClientIdOf;
 
 /**
@@ -34,23 +34,19 @@ use crate::chain::types::aliases::ClientIdOf;
 */
 #[derive_component(RelayChainsComponent, ProvideRelayChains<Relay>)]
 pub trait HasRelayChains: Async + HasErrorType {
-    type Packet: Async;
-
     /**
         A source chain context that has the IBC chain types that are correspond
         to the destination chain.
     */
     type SrcChain: HasErrorType
         + HasIbcChainTypes<Self::DstChain>
-        + HasIbcPacketTypes<Self::DstChain, OutgoingPacket = Self::Packet>;
+        + HasOutgoingPacketType<Self::DstChain>;
 
     /**
         A destination chain context that has the IBC chain types that are correspond
         to the source chain.
     */
-    type DstChain: HasErrorType
-        + HasIbcChainTypes<Self::SrcChain>
-        + HasIbcPacketTypes<Self::SrcChain, IncomingPacket = Self::Packet>;
+    type DstChain: HasErrorType + HasIbcChainTypes<Self::SrcChain>;
 
     /**
         Get a reference to the source chain context from the relay context.
@@ -83,6 +79,9 @@ pub trait HasRelayChains: Async + HasErrorType {
 pub type SrcChainOf<Relay> = <Relay as HasRelayChains>::SrcChain;
 
 pub type DstChainOf<Relay> = <Relay as HasRelayChains>::DstChain;
+
+pub type PacketOf<Relay> =
+    <SrcChainOf<Relay> as HasOutgoingPacketType<DstChainOf<Relay>>>::OutgoingPacket;
 
 pub trait CanRaiseRelayChainErrors:
     HasRelayChains + CanRaiseError<ErrorOf<Self::SrcChain>> + CanRaiseError<ErrorOf<Self::DstChain>>

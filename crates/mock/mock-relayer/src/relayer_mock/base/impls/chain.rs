@@ -14,7 +14,7 @@ use eyre::eyre;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
-use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader;
+use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReader;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -138,35 +138,7 @@ impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChain
     type OutgoingPacket = Packet;
 }
 
-impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
-    fn incoming_packet_src_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.src_channel_id
-    }
-
-    fn incoming_packet_src_port(packet: &Packet) -> &PortId {
-        &packet.src_port_id
-    }
-
-    fn incoming_packet_dst_port(packet: &Packet) -> &PortId {
-        &packet.dst_port_id
-    }
-
-    fn incoming_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
-        &packet.dst_channel_id
-    }
-
-    fn incoming_packet_sequence(packet: &Packet) -> &Sequence {
-        &packet.sequence
-    }
-
-    fn incoming_packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
-        Some(packet.timeout_height)
-    }
-
-    fn incoming_packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
-        Some(packet.timeout_timestamp.clone())
-    }
-
+impl OutgoingPacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
     fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.src_channel_id
     }

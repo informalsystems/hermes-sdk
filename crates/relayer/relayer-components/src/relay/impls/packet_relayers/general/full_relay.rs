@@ -1,17 +1,17 @@
 use cgp::prelude::CanRaiseError;
+use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields;
+use hermes_chain_components::traits::types::ibc::{HasChannelIdType, HasPortIdType};
 use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::relay::traits::chains::HasRelayChains;
-use crate::relay::traits::packet::HasRelayPacketFields;
+use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 use crate::relay::traits::packet_relayer::PacketRelayer;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 use crate::relay::traits::packet_relayers::receive_packet::CanRelayReceivePacket;
 use crate::relay::traits::packet_relayers::timeout_unordered_packet::CanRelayTimeoutUnorderedPacket;
-use crate::relay::types::aliases::Packet;
 
 pub struct FullCycleRelayer;
 
@@ -20,7 +20,7 @@ where
     Relay: HasRelayChains,
 {
     pub relay: &'a Relay,
-    pub packet: &'a Relay::Packet,
+    pub packet: &'a PacketOf<Relay>,
     pub relay_progress: RelayPacketProgress,
 }
 
@@ -37,16 +37,19 @@ where
     Relay: CanRelayAckPacket
         + CanRelayReceivePacket
         + CanRelayTimeoutUnorderedPacket
-        + HasRelayPacketFields
         + HasLogger
         + HasRelayChains<SrcChain = SrcChain, DstChain = DstChain>
         + CanRaiseError<SrcChain::Error>
         + CanRaiseError<DstChain::Error>,
-    SrcChain: CanQueryChainStatus,
-    DstChain: CanQueryChainStatus + HasWriteAckEvent<Relay::SrcChain> + HasTimeoutType,
+    SrcChain: CanQueryChainStatus + CanReadOutgoingPacketFields<DstChain>,
+    DstChain: CanQueryChainStatus
+        + HasWriteAckEvent<Relay::SrcChain>
+        + HasChannelIdType<SrcChain>
+        + HasPortIdType<SrcChain>
+        + HasTimeoutType,
     Relay::Logger: for<'a> CanLog<LogRelayPacketAction<'a, Relay>>,
 {
-    async fn relay_packet(relay: &Relay, packet: &Packet<Relay>) -> Result<(), Relay::Error> {
+    async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {
         let src_chain = relay.src_chain();
         let dst_chain = relay.dst_chain();
         let logger = relay.logger();
@@ -59,8 +62,8 @@ where
         let destination_height = DstChain::chain_status_height(&destination_status);
         let destination_timestamp = DstChain::chain_status_time(&destination_status);
 
-        let packet_timeout_height = Relay::packet_timeout_height(packet);
-        let packet_timeout_timestamp = Relay::packet_timeout_timestamp(packet);
+        let packet_timeout_height = SrcChain::outgoing_packet_timeout_height(packet);
+        let packet_timeout_timestamp = SrcChain::outgoing_packet_timeout_timestamp(packet);
 
         let has_packet_timed_out = match (packet_timeout_height, packet_timeout_timestamp) {
             (Some(height), Some(timestamp)) => {
