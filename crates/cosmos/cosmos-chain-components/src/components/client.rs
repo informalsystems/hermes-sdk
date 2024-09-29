@@ -1,13 +1,6 @@
+use cgp::core::component::DelegateTo;
 use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
-use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
-use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
-use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
-use hermes_relayer_components::chain::impls::delegate::message_builders::update_client::DelegateBuildUpdateClientMessage;
-use hermes_relayer_components::chain::impls::delegate::message_height::DelegateCounterpartyMessageHeightGetter;
-use hermes_relayer_components::chain::impls::delegate::queries::client_state::DelegateQueryClientState;
-use hermes_relayer_components::chain::impls::delegate::queries::consensus_state::DelegateQueryConsensusState;
-use hermes_relayer_components::chain::impls::delegate::queries::consensus_state_heights::DelegateQueryConsensusStateHeights;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
@@ -357,47 +350,31 @@ define_components! {
             QueryCosmosChannelEndFromAbci,
 
         [
+            ConsensusStateHeightsQuerierComponent,
+            CounterpartyMessageHeightGetterComponent,
+
+            UpdateClientMessageBuilderComponent,
+
+            CreateClientMessageBuilderComponent,
+            CreateClientMessageOptionsTypeComponent,
+
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,
-        ]:
-            DelegateQueryClientState<DelegateCosmosChainComponents>,
 
-        [
-            CreateClientMessageBuilderComponent,
-            CreateClientMessageOptionsTypeComponent,
-        ]:
-            DelegateBuildCreateClientMessage<DelegateCosmosChainComponents>,
-
-        [
             ConsensusStateQuerierComponent,
             ConsensusStateWithProofsQuerierComponent,
-        ]:
-            DelegateQueryConsensusState<DelegateCosmosChainComponents>,
 
-        ConsensusStateHeightsQuerierComponent:
-            DelegateQueryConsensusStateHeights<DelegateCosmosChainComponents>,
-
-        UpdateClientMessageBuilderComponent:
-            DelegateBuildUpdateClientMessage<DelegateCosmosChainComponents>,
-
-        [
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,
             ConnectionOpenAckMessageBuilderComponent,
             ConnectionOpenConfirmMessageBuilderComponent,
-        ]:
-            DelegateBuildConnectionHandshakeMessage<DelegateCosmosChainComponents>,
 
-        [
             ChannelOpenInitMessageBuilderComponent,
             ChannelOpenTryMessageBuilderComponent,
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
-            DelegateBuildChannelHandshakeMessage<DelegateCosmosChainComponents>,
-
-        CounterpartyMessageHeightGetterComponent:
-            DelegateCounterpartyMessageHeightGetter<DelegateCosmosChainComponents>,
+            DelegateTo<DelegateCosmosChainComponents>,
     }
 }

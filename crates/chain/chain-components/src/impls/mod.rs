@@ -1,4 +1,3 @@
-pub mod delegate;
 pub mod forward;
 pub mod payload_builders;
 pub mod queries;
