@@ -14,21 +14,3 @@ pub trait HasOutgoingPacketType<Counterparty>: Async {
     */
     type OutgoingPacket: Async;
 }
-
-pub trait HasIncomingPacketType<Counterparty>: Async {
-    /**
-       A packet sent from counterparty to self.
-
-       - Packet source: `Counterparty`
-       - Packet destination: `Self`
-    */
-    type IncomingPacket: Async;
-}
-
-impl<Chain, Counterparty> HasIncomingPacketType<Counterparty> for Chain
-where
-    Chain: Async,
-    Counterparty: HasOutgoingPacketType<Chain>,
-{
-    type IncomingPacket = Counterparty::OutgoingPacket;
-}

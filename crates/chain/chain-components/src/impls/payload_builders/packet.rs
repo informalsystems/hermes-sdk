@@ -1,7 +1,7 @@
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::fields::height::CanIncrementHeight;
 
-use crate::traits::packet::fields::{CanReadIncomingPacketFields, CanReadOutgoingPacketFields};
+use crate::traits::packet::fields::CanReadOutgoingPacketFields;
 use crate::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use crate::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use crate::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -84,9 +84,9 @@ where
     ) -> Result<Chain::AckPacketPayload, Chain::Error> {
         let (_, proof_ack) = chain
             .query_packet_acknowledgement(
-                Chain::incoming_packet_dst_channel_id(packet),
-                Chain::incoming_packet_dst_port(packet),
-                Chain::incoming_packet_sequence(packet),
+                Counterparty::outgoing_packet_dst_channel_id(packet),
+                Counterparty::outgoing_packet_dst_port(packet),
+                Counterparty::outgoing_packet_sequence(packet),
                 height,
             )
             .await?;
@@ -127,9 +127,9 @@ where
     ) -> Result<TimeoutUnorderedPacketPayload<Chain>, Chain::Error> {
         let (_, proof_unreceived) = chain
             .query_packet_receipt(
-                Chain::incoming_packet_dst_channel_id(packet),
-                Chain::incoming_packet_dst_port(packet),
-                Chain::incoming_packet_sequence(packet),
+                Counterparty::outgoing_packet_dst_channel_id(packet),
+                Counterparty::outgoing_packet_dst_port(packet),
+                Counterparty::outgoing_packet_sequence(packet),
                 height,
             )
             .await?;

@@ -1,6 +1,4 @@
-use hermes_chain_type_components::traits::types::ibc::packet::{
-    HasIncomingPacketType, HasOutgoingPacketType,
-};
+use hermes_chain_type_components::traits::types::ibc::packet::HasOutgoingPacketType;
 
 use crate::traits::types::chain_id::HasChainIdType;
 use crate::traits::types::event::HasEventType;
@@ -11,9 +9,6 @@ use crate::traits::types::ibc::{
 use crate::traits::types::ibc_events::write_ack::HasWriteAckEvent;
 use crate::traits::types::message::HasMessageType;
 use crate::traits::types::timestamp::HasTimeoutType;
-
-pub type IncomingPacketOf<Chain, Counterparty> =
-    <Chain as HasIncomingPacketType<Counterparty>>::IncomingPacket;
 
 pub type OutgoingPacketOf<Chain, Counterparty> =
     <Chain as HasOutgoingPacketType<Counterparty>>::OutgoingPacket;
