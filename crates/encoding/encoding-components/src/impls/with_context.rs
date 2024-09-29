@@ -1,12 +1,12 @@
+use cgp::core::component::UseContext;
+
 use crate::traits::convert::{CanConvert, Converter};
 use crate::traits::decode::{CanDecode, Decoder};
 use crate::traits::decode_mut::{CanDecodeMut, MutDecoder};
 use crate::traits::encode::{CanEncode, Encoder};
 use crate::traits::encode_mut::{CanEncodeMut, MutEncoder};
 
-pub struct WithContext;
-
-impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for WithContext
+impl<Encoding, Strategy, Value> Encoder<Encoding, Strategy, Value> for UseContext
 where
     Encoding: CanEncode<Strategy, Value>,
 {
@@ -15,7 +15,7 @@ where
     }
 }
 
-impl<Encoding, Strategy, Value> Decoder<Encoding, Strategy, Value> for WithContext
+impl<Encoding, Strategy, Value> Decoder<Encoding, Strategy, Value> for UseContext
 where
     Encoding: CanDecode<Strategy, Value>,
 {
@@ -24,7 +24,7 @@ where
     }
 }
 
-impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for WithContext
+impl<Encoding, Strategy, Value> MutEncoder<Encoding, Strategy, Value> for UseContext
 where
     Encoding: CanEncodeMut<Strategy, Value>,
 {
@@ -37,7 +37,7 @@ where
     }
 }
 
-impl<Encoding, Strategy, Value> MutDecoder<Encoding, Strategy, Value> for WithContext
+impl<Encoding, Strategy, Value> MutDecoder<Encoding, Strategy, Value> for UseContext
 where
     Encoding: CanDecodeMut<Strategy, Value>,
 {
@@ -49,7 +49,7 @@ where
     }
 }
 
-impl<Encoding, From, To> Converter<Encoding, From, To> for WithContext
+impl<Encoding, From, To> Converter<Encoding, From, To> for UseContext
 where
     Encoding: CanConvert<From, To>,
 {
