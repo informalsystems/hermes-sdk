@@ -63,7 +63,7 @@ use crate::relayer_mock::base::types::chain::MockChainStatus;
 use crate::relayer_mock::base::types::events::{Event, SendPacketEvent, WriteAckEvent};
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
-use crate::relayer_mock::base::types::packet::PacketKey;
+use crate::relayer_mock::base::types::packet::Packet;
 use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
@@ -135,63 +135,63 @@ impl ProvideSequenceType<MockChainContext, MockChainContext> for MockChainCompon
 }
 
 impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChainComponents {
-    type OutgoingPacket = PacketKey;
+    type OutgoingPacket = Packet;
 }
 
 impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
-    fn incoming_packet_src_channel_id(packet: &PacketKey) -> &ChannelId {
+    fn incoming_packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.src_channel_id
     }
 
-    fn incoming_packet_src_port(packet: &PacketKey) -> &PortId {
+    fn incoming_packet_src_port(packet: &Packet) -> &PortId {
         &packet.src_port_id
     }
 
-    fn incoming_packet_dst_port(packet: &PacketKey) -> &PortId {
+    fn incoming_packet_dst_port(packet: &Packet) -> &PortId {
         &packet.dst_port_id
     }
 
-    fn incoming_packet_dst_channel_id(packet: &PacketKey) -> &ChannelId {
+    fn incoming_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
         &packet.dst_channel_id
     }
 
-    fn incoming_packet_sequence(packet: &PacketKey) -> &Sequence {
+    fn incoming_packet_sequence(packet: &Packet) -> &Sequence {
         &packet.sequence
     }
 
-    fn incoming_packet_timeout_height(packet: &PacketKey) -> Option<MockHeight> {
+    fn incoming_packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
         Some(packet.timeout_height)
     }
 
-    fn incoming_packet_timeout_timestamp(packet: &PacketKey) -> Option<MockTimestamp> {
+    fn incoming_packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
         Some(packet.timeout_timestamp.clone())
     }
 
-    fn outgoing_packet_src_channel_id(packet: &PacketKey) -> &ChannelId {
+    fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.src_channel_id
     }
 
-    fn outgoing_packet_src_port(packet: &PacketKey) -> &PortId {
+    fn outgoing_packet_src_port(packet: &Packet) -> &PortId {
         &packet.src_port_id
     }
 
-    fn outgoing_packet_dst_port(packet: &PacketKey) -> &PortId {
+    fn outgoing_packet_dst_port(packet: &Packet) -> &PortId {
         &packet.dst_port_id
     }
 
-    fn outgoing_packet_dst_channel_id(packet: &PacketKey) -> &ChannelId {
+    fn outgoing_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
         &packet.dst_channel_id
     }
 
-    fn outgoing_packet_sequence(packet: &PacketKey) -> &Sequence {
+    fn outgoing_packet_sequence(packet: &Packet) -> &Sequence {
         &packet.sequence
     }
 
-    fn outgoing_packet_timeout_height(packet: &PacketKey) -> Option<MockHeight> {
+    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
         Some(packet.timeout_height)
     }
 
-    fn outgoing_packet_timeout_timestamp(packet: &PacketKey) -> Option<MockTimestamp> {
+    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
         Some(packet.timeout_timestamp.clone())
     }
 }
@@ -242,8 +242,8 @@ impl ProvideSendPacketEvent<MockChainContext, MockChainContext> for MockChainCom
         }
     }
 
-    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> PacketKey {
-        PacketKey::from(event.clone())
+    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> Packet {
+        Packet::from(event.clone())
     }
 }
 
@@ -336,7 +336,7 @@ impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComp
 impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_write_ack_event(
         chain: &MockChainContext,
-        packet: &PacketKey,
+        packet: &Packet,
     ) -> Result<Option<WriteAckEvent>, Error> {
         let received = chain.get_received_packet_information(
             packet.dst_port_id.clone(),
@@ -370,7 +370,7 @@ impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockCha
         chain: &MockChainContext,
         _client_state: &(),
         height: &MockHeight,
-        packet: &PacketKey,
+        packet: &Packet,
     ) -> Result<MockMessage, Error> {
         // If the latest state of the source chain doesn't have the packet as sent, return an error.
         let state = chain.get_current_state();
@@ -392,7 +392,7 @@ impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockCha
 impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_message(
         _chain: &MockChainContext,
-        _packet: &PacketKey,
+        _packet: &Packet,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)
@@ -408,7 +408,7 @@ impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainCo
         chain: &MockChainContext,
         _client_state: &(),
         height: &MockHeight,
-        packet: &PacketKey,
+        packet: &Packet,
         _ack: &Vec<u8>,
     ) -> Result<MockMessage, Error> {
         // If the latest state of the destination chain doesn't have the packet as received, return an error.
@@ -433,7 +433,7 @@ impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainCo
 impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_message(
         _chain: &MockChainContext,
-        _packet: &PacketKey,
+        _packet: &Packet,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)
@@ -453,7 +453,7 @@ impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext>
         chain: &MockChainContext,
         _client_state: &(),
         height: &MockHeight,
-        packet: &PacketKey,
+        packet: &Packet,
     ) -> Result<MockMessage, Error> {
         let state = chain.get_current_state();
         let current_timestamp = chain.runtime.get_time();
@@ -475,7 +475,7 @@ impl TimeoutUnorderedPacketMessageBuilder<MockChainContext, MockChainContext>
 {
     async fn build_timeout_unordered_packet_message(
         _chain: &MockChainContext,
-        _packet: &PacketKey,
+        _packet: &Packet,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)

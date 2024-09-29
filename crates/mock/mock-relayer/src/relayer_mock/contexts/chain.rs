@@ -26,7 +26,7 @@ use crate::relayer_mock::base::types::aliases::{
 use crate::relayer_mock::base::types::events::Event;
 use crate::relayer_mock::base::types::height::{Height, Height as MockHeight};
 use crate::relayer_mock::base::types::message::Message as MockMessage;
-use crate::relayer_mock::base::types::packet::PacketKey;
+use crate::relayer_mock::base::types::packet::Packet;
 use crate::relayer_mock::base::types::runtime::MockRuntimeContext;
 use crate::relayer_mock::base::types::state::State;
 use crate::relayer_mock::util::clock::MockClock;
@@ -177,7 +177,7 @@ impl MockChainContext {
 
     /// Sending a packet adds a new ChainState with the sent packet information
     /// at a Height + 1.
-    pub fn send_packet(&self, height: Height, packet: PacketKey) -> Result<(), Error> {
+    pub fn send_packet(&self, height: Height, packet: Packet) -> Result<(), Error> {
         // Retrieve the current_state and update it with the newly sent packet
         let mut new_state = self.get_current_state();
 
@@ -204,7 +204,7 @@ impl MockChainContext {
     pub fn receive_packet(
         &self,
         height: Height,
-        packet: PacketKey,
+        packet: Packet,
         mut current_state: State,
     ) -> Result<State, Error> {
         // Verify via the consensus state that the packet was sent by the source chain.
@@ -267,7 +267,7 @@ impl MockChainContext {
     pub fn acknowledge_packet(
         &self,
         height: Height,
-        packet: PacketKey,
+        packet: Packet,
         mut current_state: State,
     ) -> Result<State, Error> {
         // Verify that with the consensus state that the packet was received by the destination chain.
@@ -314,7 +314,7 @@ impl MockChainContext {
     pub fn timeout_packet(
         &self,
         height: Height,
-        packet: PacketKey,
+        packet: Packet,
         current_state: State,
     ) -> Result<State, Error> {
         // Verify that with the consensus state that the packet was not received by the destination chain.
@@ -350,7 +350,7 @@ impl MockChainContext {
         port_id: PortId,
         channel_id: ChannelId,
         sequence: Sequence,
-    ) -> Option<(PacketKey, Height)> {
+    ) -> Option<(Packet, Height)> {
         let state = self.get_current_state();
         state.get_received((port_id, channel_id, sequence)).cloned()
     }
@@ -365,8 +365,8 @@ impl MockChainContext {
         sequence: u128,
         timeout_height: Height,
         timeout_timestamp: MockTimestamp,
-    ) -> PacketKey {
-        PacketKey::new(
+    ) -> Packet {
+        Packet::new(
             src_channel_id,
             src_port_id,
             dst_channel_id,

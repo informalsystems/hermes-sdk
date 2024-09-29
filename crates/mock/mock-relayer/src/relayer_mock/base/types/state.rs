@@ -4,17 +4,17 @@ use std::fmt::Display;
 use super::aliases::MockTimestamp;
 use crate::relayer_mock::base::types::aliases::PacketUID;
 use crate::relayer_mock::base::types::height::Height;
-use crate::relayer_mock::base::types::packet::PacketKey;
+use crate::relayer_mock::base::types::packet::Packet;
 
 /// A snapshot of the mock chain's state at a point in time.
 #[derive(Clone, Default, Debug, PartialEq, Eq)]
 pub struct State {
     /// The packets that the mock chain has sent.
-    sent_packets: HashMap<PacketUID, (PacketKey, Height)>,
+    sent_packets: HashMap<PacketUID, (Packet, Height)>,
     /// The packets that the mock chain has received.
-    recv_packets: HashMap<PacketUID, (PacketKey, Height)>,
+    recv_packets: HashMap<PacketUID, (Packet, Height)>,
     /// The ack_packets that the mock chain has received.
-    ack_packets: HashMap<PacketUID, (PacketKey, Height)>,
+    ack_packets: HashMap<PacketUID, (Packet, Height)>,
 }
 
 impl Display for State {
@@ -78,7 +78,7 @@ impl State {
     /// height.
     pub fn check_timeout(
         &self,
-        packet: PacketKey,
+        packet: Packet,
         current_height: Height,
         current_timestamp: MockTimestamp,
     ) -> bool {
@@ -97,24 +97,19 @@ impl State {
         ))
     }
 
-    pub fn update_sent(&mut self, packet_uid: PacketUID, packet: PacketKey, height: Height) {
+    pub fn update_sent(&mut self, packet_uid: PacketUID, packet: Packet, height: Height) {
         self.sent_packets.insert(packet_uid, (packet, height));
     }
 
-    pub fn update_received(&mut self, packet_uid: PacketUID, packet: PacketKey, height: Height) {
+    pub fn update_received(&mut self, packet_uid: PacketUID, packet: Packet, height: Height) {
         self.recv_packets.insert(packet_uid, (packet, height));
     }
 
-    pub fn update_acknowledged(
-        &mut self,
-        packet_uid: PacketUID,
-        packet: PacketKey,
-        height: Height,
-    ) {
+    pub fn update_acknowledged(&mut self, packet_uid: PacketUID, packet: Packet, height: Height) {
         self.ack_packets.insert(packet_uid, (packet, height));
     }
 
-    pub fn get_received(&self, packet_uid: PacketUID) -> Option<&(PacketKey, Height)> {
+    pub fn get_received(&self, packet_uid: PacketUID) -> Option<&(Packet, Height)> {
         self.recv_packets.get(&packet_uid)
     }
 }

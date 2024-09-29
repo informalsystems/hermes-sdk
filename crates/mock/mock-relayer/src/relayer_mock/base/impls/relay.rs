@@ -17,7 +17,7 @@ use crate::relayer_mock::base::impls::error::HandleMockError;
 use crate::relayer_mock::base::types::aliases::ClientId;
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
-use crate::relayer_mock::base::types::packet::PacketKey;
+use crate::relayer_mock::base::types::packet::Packet;
 use crate::relayer_mock::components::relay::MockRelayComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 use crate::relayer_mock::contexts::relay::MockRelayContext;
@@ -42,7 +42,7 @@ delegate_components! {
 }
 
 impl ProvideRelayChains<MockRelayContext> for MockRelayComponents {
-    type Packet = PacketKey;
+    type Packet = Packet;
 
     type SrcChain = MockChainContext;
 
@@ -106,7 +106,7 @@ impl ProvidePacketLock<MockRelayContext> for MockRelayComponents {
 
     async fn try_acquire_packet_lock<'a>(
         _relay: &'a MockRelayContext,
-        _packet: &'a PacketKey,
+        _packet: &'a Packet,
     ) -> Option<()> {
         Some(())
     }

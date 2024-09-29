@@ -2,13 +2,13 @@ use std::fmt::{Display, Formatter, Result};
 
 use crate::relayer_mock::base::types::aliases::{ChainState, ClientId};
 use crate::relayer_mock::base::types::height::Height;
-use crate::relayer_mock::base::types::packet::PacketKey;
+use crate::relayer_mock::base::types::packet::Packet;
 
 #[derive(Debug)]
 pub enum Message {
-    RecvPacket(Height, PacketKey),
-    AckPacket(Height, PacketKey),
-    TimeoutPacket(Height, PacketKey),
+    RecvPacket(Height, Packet),
+    AckPacket(Height, Packet),
+    TimeoutPacket(Height, Packet),
     UpdateClient(ClientId, Height, ChainState),
 }
 
