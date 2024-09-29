@@ -1,6 +1,10 @@
 use alloc::sync::Arc;
+use cgp::core::types::impls::WithType;
 use core::time::Duration;
 use hermes_chain_type_components::traits::fields::height::HeightIncrementer;
+use hermes_chain_type_components::traits::types::event::EventTypeComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
+use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
 use hermes_relayer_components::chain::traits::types::packet::ProvideOutgoingPacketType;
 
 use cgp::core::error::CanRaiseError;
@@ -16,16 +20,15 @@ use hermes_relayer_components::chain::traits::types::block::{
 use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
 use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
-use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetter, HasHeightType, HeightFieldGetter, ProvideHeightType,
+    GenesisHeightGetter, HasHeightType, HeightFieldGetter,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
     ProvideChannelIdType, ProvideClientIdType, ProvideConnectionIdType, ProvidePortIdType,
     ProvideSequenceType,
 };
 use hermes_relayer_components::chain::traits::types::message::{
-    HasMessageType, MessageSizeEstimator, ProvideMessageType,
+    HasMessageType, MessageSizeEstimator,
 };
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
@@ -59,6 +62,12 @@ pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
     ProvideCosmosChainTypes {
+        HeightTypeComponent:
+            WithType<Height>,
+        MessageTypeComponent:
+            WithType<CosmosMessage>,
+        EventTypeComponent:
+            WithType<Arc<AbciEvent>>,
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
         [
@@ -74,13 +83,6 @@ delegate_components! {
         PacketReceiptTypeComponent:
             ProvideBytesPacketReceipt,
     }
-}
-
-impl<Chain> ProvideHeightType<Chain> for ProvideCosmosChainTypes
-where
-    Chain: Async,
-{
-    type Height = Height;
 }
 
 impl<Chain> HeightFieldGetter<Chain> for ProvideCosmosChainTypes
@@ -141,13 +143,6 @@ where
     }
 }
 
-impl<Chain> ProvideMessageType<Chain> for ProvideCosmosChainTypes
-where
-    Chain: Async,
-{
-    type Message = CosmosMessage;
-}
-
 impl<Chain> MessageSizeEstimator<Chain> for ProvideCosmosChainTypes
 where
     Chain: HasMessageType<Message = CosmosMessage> + CanRaiseError<EncodeError>,
@@ -157,13 +152,6 @@ where
 
         Ok(raw.encoded_len())
     }
-}
-
-impl<Chain> ProvideEventType<Chain> for ProvideCosmosChainTypes
-where
-    Chain: Async,
-{
-    type Event = Arc<AbciEvent>;
 }
 
 impl<Chain> ProvideChainStatusType<Chain> for ProvideCosmosChainTypes

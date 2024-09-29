@@ -1,3 +1,5 @@
+use cgp::core::component::WithProvider;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 /**
@@ -47,4 +49,13 @@ pub trait HasMessageType: Async {
        `UpdateCientMesssage`.
     */
     type Message: Async;
+}
+
+impl<Chain, Provider, Message> ProvideMessageType<Chain> for WithProvider<Provider>
+where
+    Chain: Async,
+    Provider: ProvideType<Chain, MessageTypeComponent, Type = Message>,
+    Message: Async,
+{
+    type Message = Message;
 }
