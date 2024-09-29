@@ -1,7 +1,6 @@
 use cgp::core::error::{CanRaiseError, HasErrorType};
 use hermes_relayer_components::chain::traits::queries::unreceived_acks_sequences::UnreceivedAcksSequencesQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
 use ibc_proto::ibc::core::channel::v1::query_client::QueryClient as ChannelQueryClient;
 use ibc_relayer::chain::requests::QueryUnreceivedAcksRequest;
 use ibc_relayer_types::core::ics04_channel::packet::Sequence;
@@ -16,7 +15,6 @@ impl<Chain, Counterparty> UnreceivedAcksSequencesQuerier<Chain, Counterparty>
     for QueryUnreceivedCosmosAcksSequences
 where
     Chain: HasIbcChainTypes<Counterparty, ChannelId = ChannelId, PortId = PortId, Sequence = Sequence>
-        + HasIbcPacketTypes<Counterparty>
         + HasErrorType
         + HasGrpcAddress
         + CanRaiseError<eyre::Report>,

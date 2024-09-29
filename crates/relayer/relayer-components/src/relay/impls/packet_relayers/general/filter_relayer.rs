@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use crate::relay::traits::chains::PacketOf;
 use crate::relay::traits::packet_filter::CanFilterPackets;
 use crate::relay::traits::packet_relayer::PacketRelayer;
 
@@ -12,7 +13,7 @@ where
     Relay: CanFilterPackets,
     InRelayer: PacketRelayer<Relay>,
 {
-    async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
+    async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {
         if relay.should_relay_packet(packet).await? {
             InRelayer::relay_packet(relay, packet).await
         } else {

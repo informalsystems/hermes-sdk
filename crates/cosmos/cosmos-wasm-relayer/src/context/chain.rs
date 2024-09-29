@@ -7,7 +7,10 @@ use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cosmos_chain_components::components::client::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent, CosmosClientComponents,
+    ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
+    ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
+    OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
+    SequenceTypeComponent, TimeTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
@@ -64,7 +67,6 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
 use hermes_relayer_components::chain::traits::message_builders::update_client::{
     CanBuildUpdateClientMessage, UpdateClientMessageBuilderComponent,
 };
-use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
     AckPacketPayloadBuilderComponent, CanBuildAckPacketPayload,
@@ -168,9 +170,7 @@ use hermes_relayer_components::chain::traits::types::height::{
     GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
     HeightTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::ibc::{
-    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
-};
+use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
 use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent,
 };
@@ -182,7 +182,6 @@ use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::Writ
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::packets::ack::{
     AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
 };
@@ -197,7 +196,7 @@ use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
@@ -301,7 +300,8 @@ delegate_components! {
             HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
-            TimestampTypeComponent,
+            TimeTypeComponent,
+            TimeoutTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
             MessageSizeEstimatorComponent,
@@ -309,7 +309,11 @@ delegate_components! {
             RawClientStateTypeComponent,
             RawConsensusStateTypeComponent,
             ConsensusStateTypeComponent,
-            IbcChainTypesComponent,
+            ClientIdTypeComponent,
+            ConnectionIdTypeComponent,
+            ChannelIdTypeComponent,
+            PortIdTypeComponent,
+            SequenceTypeComponent,
 
             ConnectionEndQuerierComponent,
             ConnectionEndWithProofsQuerierComponent,
@@ -319,7 +323,7 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
             ChannelEndTypeComponent,
 
-            IbcPacketTypesProviderComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
@@ -354,7 +358,7 @@ delegate_components! {
             AckPacketPayloadTypeComponent,
             TimeoutUnorderedPacketPayloadTypeComponent,
 
-            PacketFieldsReaderComponent,
+            OutgoingPacketFieldsReaderComponent,
             WriteAckQuerierComponent,
 
             ClientStateQuerierComponent,

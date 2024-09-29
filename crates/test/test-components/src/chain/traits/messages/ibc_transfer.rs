@@ -2,7 +2,7 @@ use cgp::prelude::*;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
-use hermes_relayer_components::chain::traits::types::timestamp::HasTimestampType;
+use hermes_relayer_components::chain::traits::types::timestamp::HasTimeoutType;
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
@@ -16,7 +16,7 @@ pub trait CanBuildIbcTokenTransferMessage<Counterparty>:
     + HasMemoType
     + HasMessageType
     + HasHeightType
-    + HasTimestampType
+    + HasTimeoutType
     + HasIbcChainTypes<Counterparty>
 where
     Counterparty: HasAddressType,
@@ -29,6 +29,6 @@ where
         amount: &Self::Amount,
         memo: &Self::Memo,
         timeout_height: Option<&Self::Height>,
-        timeout_time: Option<&Self::Timestamp>,
+        timeout_time: Option<&Self::Timeout>,
     ) -> Result<Self::Message, Self::Error>;
 }

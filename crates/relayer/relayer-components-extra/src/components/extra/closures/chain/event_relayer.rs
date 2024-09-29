@@ -10,6 +10,7 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::HasSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 
 pub trait UseExtraChainComponentsForEventRelayer<Counterparty>:
     HasChainId
@@ -17,7 +18,7 @@ pub trait UseExtraChainComponentsForEventRelayer<Counterparty>:
     + CanQueryCounterpartyChainId<Counterparty>
     + CanBuildPacketFromWriteAck<Counterparty>
 where
-    Counterparty: HasIbcChainTypes<Self>,
+    Counterparty: HasIbcChainTypes<Self> + HasOutgoingPacketType<Self>,
 {
 }
 
@@ -30,7 +31,7 @@ where
         + HasClientStateType<Counterparty>
         + HasWriteAckEvent<Counterparty>
         + HasComponents<Components = Components>,
-    Counterparty: HasIbcChainTypes<Chain>,
+    Counterparty: HasIbcChainTypes<Chain> + HasOutgoingPacketType<Chain>,
     Components: CounterpartyChainIdQuerier<Chain, Counterparty>
         + PacketFromWriteAckBuilder<Chain, Counterparty>,
 {

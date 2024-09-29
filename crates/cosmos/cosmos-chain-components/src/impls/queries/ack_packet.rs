@@ -4,7 +4,7 @@ use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::queries::ack_packets::AckPacketQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use ibc_relayer::chain::cosmos::query::packet_query;
 use ibc_relayer::chain::requests::{Qualified, QueryHeight, QueryPacketEventDataRequest};
 use ibc_relayer_types::core::ics04_channel::events::WriteAcknowledgement;
@@ -26,15 +26,14 @@ where
             Height = Height,
             ChannelId = ChannelId,
             PortId = PortId,
-            Sequence = Sequence,
             Event = Arc<AbciEvent>,
-        > + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
-        + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>
+        > + HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>
         + HasRpcClient
         + CanRaiseError<RpcError>
         + CanRaiseError<&'static str>,
-    Counterparty:
-        HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId> + HasWriteAckEvent<Chain>,
+    Counterparty: HasIbcChainTypes<Chain, ChannelId = ChannelId, PortId = PortId, Sequence = Sequence>
+        + HasOutgoingPacketType<Chain, OutgoingPacket = Packet>
+        + HasWriteAckEvent<Chain>,
 {
     async fn query_ack_packet_from_sequence(
         chain: &Chain,

@@ -9,7 +9,7 @@ use hermes_relayer_components::chain::traits::message_builders::timeout_unordere
     CanBuildTimeoutUnorderedPacketMessage, TimeoutUnorderedPacketMessageBuilder,
 };
 use hermes_relayer_components::chain::traits::packet::fields::{
-    CanReadPacketFields, PacketFieldsReader,
+    CanReadOutgoingPacketFields, OutgoingPacketFieldsReader,
 };
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::{
     AckPacketPayloadBuilder, CanBuildAckPacketPayload,
@@ -27,7 +27,7 @@ use hermes_relayer_components::chain::traits::types::client_state::HasClientStat
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::ack::HasAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasTimeoutUnorderedPacketPayloadType;
@@ -37,7 +37,7 @@ use crate::components::extra::closures::chain::message_sender::UseExtraChainComp
 
 pub trait UseExtraChainComponentsForPacketRelayer<Counterparty>:
     CanQueryPacketIsReceived<Counterparty>
-    + CanReadPacketFields<Counterparty>
+    + CanReadOutgoingPacketFields<Counterparty>
     + CanBuildReceivePacketPayload<Counterparty>
     + CanBuildReceivePacketMessage<Counterparty>
     + CanBuildAckPacketPayload<Counterparty>
@@ -49,6 +49,7 @@ where
     Counterparty: HasClientStateType<Self>
         + HasConsensusStateType<Self>
         + HasIbcChainTypes<Self>
+        + HasOutgoingPacketType<Self>
         + HasUpdateClientPayloadType<Self>
         + HasReceivePacketPayloadType<Self>
         + HasAckPacketPayloadType<Self>
@@ -59,7 +60,8 @@ where
 impl<Chain, Counterparty, Components> UseExtraChainComponentsForPacketRelayer<Counterparty>
     for Chain
 where
-    Chain: HasIbcPacketTypes<Counterparty>
+    Chain: HasIbcChainTypes<Counterparty>
+        + HasOutgoingPacketType<Counterparty>
         + HasReceivePacketPayloadType<Counterparty>
         + HasWriteAckEvent<Counterparty>
         + HasAckPacketPayloadType<Counterparty>
@@ -67,13 +69,14 @@ where
         + UseExtraChainComponentsForIbcMessageSender<Counterparty>
         + HasComponents<Components = Components>,
     Counterparty: HasIbcChainTypes<Chain>
+        + HasOutgoingPacketType<Chain>
         + HasClientStateType<Chain>
         + HasConsensusStateType<Chain>
         + HasUpdateClientPayloadType<Chain>
         + HasAckPacketPayloadType<Chain>
         + HasTimeoutUnorderedPacketPayloadType<Chain>
         + HasReceivePacketPayloadType<Chain>,
-    Components: PacketFieldsReader<Chain, Counterparty>
+    Components: OutgoingPacketFieldsReader<Chain, Counterparty>
         + ReceivedPacketQuerier<Chain, Counterparty>
         + ReceivePacketPayloadBuilder<Chain, Counterparty>
         + ReceivePacketMessageBuilder<Chain, Counterparty>

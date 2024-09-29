@@ -1,7 +1,7 @@
 use cgp::prelude::*;
 
 use crate::chain::types::aliases::HeightOf;
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 
 /// Encapsulates the capability of a relayer to send timeout packets over
 /// unordered channels.
@@ -19,6 +19,6 @@ pub trait CanRelayTimeoutUnorderedPacket: HasRelayChains {
     async fn relay_timeout_unordered_packet(
         &self,
         destination_height: &HeightOf<Self::DstChain>,
-        packet: &Self::Packet,
+        packet: &PacketOf<Self>,
     ) -> Result<(), Self::Error>;
 }

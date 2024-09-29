@@ -1,6 +1,6 @@
 use hermes_relayer_components::chain::traits::queries::write_ack::WriteAckQuerier;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use ibc_relayer::chain::handle::ChainHandle;
 use ibc_relayer::chain::requests::Qualified;
 use ibc_relayer::link::packet_events::query_write_ack_events;
@@ -16,8 +16,8 @@ pub struct QueryWriteAckEventFromChainHandle;
 impl<Chain, Counterparty> WriteAckQuerier<Chain, Counterparty> for QueryWriteAckEventFromChainHandle
 where
     Chain: HasWriteAckEvent<Counterparty, WriteAckEvent = WriteAcknowledgement>
-        + HasIbcPacketTypes<Counterparty, IncomingPacket = Packet>
         + HasBlockingChainHandle,
+    Counterparty: HasOutgoingPacketType<Chain, OutgoingPacket = Packet>,
 {
     async fn query_write_ack_event(
         chain: &Chain,

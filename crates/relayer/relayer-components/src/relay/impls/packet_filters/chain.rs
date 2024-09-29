@@ -1,7 +1,8 @@
+use hermes_chain_components::traits::packet::fields::CanReadOutgoingPacketFields;
+
 use crate::chain::traits::queries::counterparty_chain_id::CanQueryCounterpartyChainId;
 use crate::chain::traits::types::chain_id::HasChainId;
-use crate::relay::traits::chains::CanRaiseRelayChainErrors;
-use crate::relay::traits::packet::HasRelayPacketFields;
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, PacketOf};
 use crate::relay::traits::packet_filter::PacketFilter;
 
 pub struct MatchPacketSourceChain;
@@ -10,16 +11,16 @@ pub struct MatchPacketDestinationChain;
 
 impl<Relay> PacketFilter<Relay> for MatchPacketSourceChain
 where
-    Relay: HasRelayPacketFields + CanRaiseRelayChainErrors,
+    Relay: CanRaiseRelayChainErrors,
     Relay::DstChain: CanQueryCounterpartyChainId<Relay::SrcChain>,
-    Relay::SrcChain: HasChainId,
+    Relay::SrcChain: HasChainId + CanReadOutgoingPacketFields<Relay::DstChain>,
 {
     async fn should_relay_packet(
         relay: &Relay,
-        packet: &Relay::Packet,
+        packet: &PacketOf<Relay>,
     ) -> Result<bool, Relay::Error> {
-        let dst_channel_id = Relay::packet_dst_channel_id(packet);
-        let dst_port = Relay::packet_dst_port(packet);
+        let dst_channel_id = Relay::SrcChain::outgoing_packet_dst_channel_id(packet);
+        let dst_port = Relay::SrcChain::outgoing_packet_dst_port(packet);
 
         let src_chain_id = relay
             .dst_chain()
@@ -35,16 +36,17 @@ where
 
 impl<Relay> PacketFilter<Relay> for MatchPacketDestinationChain
 where
-    Relay: HasRelayPacketFields + CanRaiseRelayChainErrors,
-    Relay::SrcChain: CanQueryCounterpartyChainId<Relay::DstChain>,
+    Relay: CanRaiseRelayChainErrors,
+    Relay::SrcChain:
+        CanQueryCounterpartyChainId<Relay::DstChain> + CanReadOutgoingPacketFields<Relay::DstChain>,
     Relay::DstChain: HasChainId,
 {
     async fn should_relay_packet(
         relay: &Relay,
-        packet: &Relay::Packet,
+        packet: &PacketOf<Relay>,
     ) -> Result<bool, Relay::Error> {
-        let src_channel_id = Relay::packet_src_channel_id(packet);
-        let src_port = Relay::packet_src_port(packet);
+        let src_channel_id = Relay::SrcChain::outgoing_packet_src_channel_id(packet);
+        let src_port = Relay::SrcChain::outgoing_packet_src_port(packet);
 
         let dst_chain_id = relay
             .src_chain()

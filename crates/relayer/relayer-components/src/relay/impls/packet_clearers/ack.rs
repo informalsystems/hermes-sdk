@@ -8,12 +8,11 @@ use crate::chain::traits::queries::packet_acknowledgements::CanQueryPacketAcknow
 use crate::chain::traits::queries::packet_commitments::CanQueryPacketCommitments;
 use crate::chain::traits::queries::unreceived_acks_sequences::CanQueryUnreceivedAcksSequences;
 use crate::chain::traits::types::ibc_events::write_ack::HasWriteAckEvent;
-use crate::chain::traits::types::packet::HasIbcPacketTypes;
 use crate::chain::types::aliases::{ChannelIdOf, HeightOf, PortIdOf, WriteAckEventOf};
 use crate::relay::impls::packet_clearers::receive_packet::{
     ClearPacketAction, LogClearPacketError,
 };
-use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
+use crate::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains, PacketOf};
 use crate::relay::traits::packet_clearer::PacketClearer;
 use crate::relay::traits::packet_relayers::ack_packet::CanRelayAckPacket;
 
@@ -26,7 +25,7 @@ where
 {
     pub relay: Relay,
     pub height: HeightOf<Relay::DstChain>,
-    pub packet: Relay::Packet,
+    pub packet: PacketOf<Relay>,
     pub ack: WriteAckEventOf<Relay::DstChain, Relay::SrcChain>,
 }
 
@@ -66,9 +65,8 @@ where
 impl<Relay> PacketClearer<Relay> for ClearAckPackets
 where
     Relay: Clone + HasRuntime + CanRaiseRelayChainErrors + HasLogger,
-    Relay::DstChain: CanQueryAckPackets<Relay::SrcChain>
-        + HasIbcPacketTypes<Relay::SrcChain, OutgoingPacket = Relay::Packet>
-        + CanQueryPacketAcknowledgements<Relay::SrcChain>,
+    Relay::DstChain:
+        CanQueryAckPackets<Relay::SrcChain> + CanQueryPacketAcknowledgements<Relay::SrcChain>,
     Relay::SrcChain: CanQueryPacketCommitments<Relay::DstChain>
         + CanQueryUnreceivedAcksSequences<Relay::DstChain>,
     Relay::Runtime: CanRunConcurrentTasks,

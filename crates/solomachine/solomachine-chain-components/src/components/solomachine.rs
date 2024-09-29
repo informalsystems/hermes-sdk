@@ -1,15 +1,19 @@
 use cgp::prelude::*;
+pub use hermes_cosmos_chain_components::components::client::OutgoingPacketFieldsReaderComponent;
+pub use hermes_cosmos_chain_components::components::client::OutgoingPacketTypeComponent;
 pub use hermes_cosmos_chain_components::components::client::{
-    AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelOpenAckPayloadTypeComponent,
-    ChannelOpenConfirmPayloadTypeComponent, ChannelOpenTryPayloadTypeComponent,
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
-    ConnectionOpenAckPayloadTypeComponent, ConnectionOpenConfirmPayloadTypeComponent,
-    ConnectionOpenInitEventComponent, ConnectionOpenInitPayloadTypeComponent,
-    ConnectionOpenTryPayloadTypeComponent, ConsensusStateTypeComponent, CreateClientEventComponent,
+    AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelIdTypeComponent,
+    ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
+    ChannelOpenTryPayloadTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
+    ClientStateTypeComponent, ConnectionIdTypeComponent, ConnectionOpenAckPayloadTypeComponent,
+    ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitEventComponent,
+    ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
+    ConsensusStateTypeComponent, CreateClientEventComponent,
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
-    InitConnectionOptionsTypeComponent, ReceivePacketPayloadTypeComponent,
-    TimeoutUnorderedPacketPayloadTypeComponent, UpdateClientPayloadTypeComponent,
+    InitConnectionOptionsTypeComponent, PortIdTypeComponent, ReceivePacketPayloadTypeComponent,
+    SequenceTypeComponent, TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    UpdateClientPayloadTypeComponent,
 };
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -24,7 +28,6 @@ pub use hermes_relayer_components::chain::traits::message_builders::connection_h
 pub use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-pub use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
     ChannelOpenAckPayloadBuilderComponent, ChannelOpenConfirmPayloadBuilderComponent,
     ChannelOpenTryPayloadBuilderComponent,
@@ -44,12 +47,10 @@ pub use hermes_relayer_components::chain::traits::types::event::EventTypeCompone
 pub use hermes_relayer_components::chain::traits::types::height::{
     HeightFieldComponent, HeightTypeComponent,
 };
-pub use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
 pub use hermes_relayer_components::chain::traits::types::message::MessageTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 pub use hermes_relayer_components::chain::traits::types::proof::CommitmentProofTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+pub use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
 use crate::impls::solomachine::channel_handshake_payload::BuildSolomachineChannelHandshakePayloads;
 use crate::impls::solomachine::client_state::ProvideSolomachineClientState;
@@ -70,10 +71,15 @@ define_components! {
         [
             HeightTypeComponent,
             HeightFieldComponent,
-            TimestampTypeComponent,
+            TimeTypeComponent,
+            TimeoutTypeComponent,
             ChainIdTypeComponent,
-            IbcChainTypesComponent,
-            IbcPacketTypesProviderComponent,
+            ClientIdTypeComponent,
+            ConnectionIdTypeComponent,
+            ChannelIdTypeComponent,
+            PortIdTypeComponent,
+            SequenceTypeComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
             CommitmentProofTypeComponent,
             ConnectionEndTypeComponent,
@@ -111,7 +117,7 @@ define_components! {
             ProvideSolomachineClientState,
         ConsensusStateTypeComponent:
             ProvideSolomachineConsensusState,
-        PacketFieldsReaderComponent:
+        OutgoingPacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         MessageSenderComponent:
             ProcessSolomachineMessages,

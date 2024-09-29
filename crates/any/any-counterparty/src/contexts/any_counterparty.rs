@@ -2,8 +2,10 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
+    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
     ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent,
+    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, OutgoingPacketTypeComponent,
+    PortIdTypeComponent, SequenceTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
@@ -38,10 +40,8 @@ use hermes_relayer_components::chain::traits::types::client_state::{
     ClientStateFieldsGetterComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
-use hermes_relayer_components::chain::traits::types::ibc::IbcChainTypesComponent;
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-use hermes_relayer_components::chain::traits::types::timestamp::TimestampTypeComponent;
+use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
 
 use crate::impls::encoding::convert::AnyClientConverterComponents;
 use crate::impls::encoding::encode::AnyClientEncoderComponents;
@@ -63,10 +63,14 @@ delegate_components! {
         [
             HeightTypeComponent,
             HeightFieldComponent,
-            TimestampTypeComponent,
+            TimeoutTypeComponent,
             ChainIdTypeComponent,
-            IbcChainTypesComponent,
-            IbcPacketTypesProviderComponent,
+            ClientIdTypeComponent,
+            ConnectionIdTypeComponent,
+            ChannelIdTypeComponent,
+            PortIdTypeComponent,
+            SequenceTypeComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
         ]:
             ProvideCosmosChainTypes,

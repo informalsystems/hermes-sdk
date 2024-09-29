@@ -1540,6 +1540,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-chain-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-chain-type-components",
+ "hermes-encoding-components",
+ "hermes-runtime-components",
+]
+
+[[package]]
+name = "hermes-chain-type-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+]
+
+[[package]]
 name = "hermes-cli"
 version = "0.1.0"
 dependencies = [
@@ -1614,6 +1631,7 @@ dependencies = [
  "cgp",
  "eyre",
  "futures",
+ "hermes-chain-type-components",
  "hermes-cosmos-encoding-components",
  "hermes-encoding-components",
  "hermes-protobuf-encoding-components",
@@ -1879,6 +1897,7 @@ name = "hermes-relayer-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-chain-components",
  "hermes-encoding-components",
  "hermes-logging-components",
  "hermes-runtime-components",
@@ -1889,6 +1908,7 @@ name = "hermes-relayer-components-extra"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "hermes-chain-type-components",
  "hermes-logging-components",
  "hermes-relayer-components",
  "hermes-runtime-components",

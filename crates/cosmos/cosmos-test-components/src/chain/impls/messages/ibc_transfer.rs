@@ -26,7 +26,7 @@ where
             ChannelId = ChannelId,
             PortId = PortId,
             Height = Height,
-            Timestamp = Timestamp,
+            Timeout = Timestamp,
         >,
     Counterparty: HasAddressType,
     Chain::Message: From<CosmosMessage>,

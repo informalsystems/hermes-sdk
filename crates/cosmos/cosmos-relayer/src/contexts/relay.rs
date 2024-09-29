@@ -138,8 +138,6 @@ impl ProvideRelayChains<CosmosRelay> for CosmosRelayComponents {
 
     type DstChain = CosmosChain;
 
-    type Packet = Packet;
-
     fn src_chain(relay: &CosmosRelay) -> &CosmosChain {
         &relay.src_chain
     }

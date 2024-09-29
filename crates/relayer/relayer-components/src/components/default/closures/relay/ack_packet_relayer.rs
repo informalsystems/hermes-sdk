@@ -1,5 +1,7 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::{ErrorRaiser, HasErrorType};
+use hermes_chain_components::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -7,7 +9,7 @@ use hermes_runtime_components::traits::sleep::CanSleep;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
-use crate::chain::traits::packet::fields::CanReadPacketFields;
+use crate::chain::traits::packet::fields::CanReadOutgoingPacketFields;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainStatus;
@@ -40,9 +42,10 @@ where
         + HasChainId
         + CanSendMessages
         + CanQueryChainStatus
+        + CanReadOutgoingPacketFields<DstChain>
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
-        + CanReadPacketFields<DstChain, OutgoingPacket = Relay::Packet>
+        + CanReadOutgoingPacketFields<DstChain>
         + CanQueryClientState<DstChain>
         + CanQueryConsensusState<DstChain>
         + CanQueryConsensusStateHeight<DstChain>
@@ -52,9 +55,11 @@ where
         + HasRuntime
         + HasChainId
         + CanQueryChainStatus
+        + HasTimeoutType
+        + HasIbcChainTypes<SrcChain>
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
-        + CanReadPacketFields<SrcChain, IncomingPacket = Relay::Packet>
+        + CanReadOutgoingPacketFields<SrcChain>
         + CanBuildAckPacketPayload<SrcChain>
         + CanBuildUpdateClientPayload<SrcChain>
         + HasWriteAckEvent<SrcChain>,

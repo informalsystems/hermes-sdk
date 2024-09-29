@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+pub use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::impls::delegate::message_builders::channel_handshake::DelegateBuildChannelHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::connection_handshake::DelegateBuildConnectionHandshakeMessage;
 use hermes_relayer_components::chain::impls::delegate::message_builders::create_client::DelegateBuildCreateClientMessage;
@@ -25,7 +26,7 @@ pub use hermes_relayer_components::chain::traits::message_builders::create_clien
 pub use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilderComponent;
 pub use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
-pub use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReaderComponent;
+pub use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReaderComponent;
 pub use hermes_relayer_components::chain::traits::packet::from_write_ack::PacketFromWriteAckBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilderComponent;
 pub use hermes_relayer_components::chain::traits::payload_builders::channel_handshake::{
@@ -102,11 +103,11 @@ pub use hermes_relayer_components::chain::traits::types::create_client::{
 };
 pub use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetterComponent, HeightFieldComponent, HeightIncrementerComponent,
-    HeightTypeComponent,
+    GenesisHeightGetterComponent, HeightFieldComponent, HeightTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::ibc::{
-    CounterpartyMessageHeightGetterComponent, IbcChainTypesComponent,
+    ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
+    CounterpartyMessageHeightGetterComponent, PortIdTypeComponent, SequenceTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::ibc_events::channel::{
     ChannelOpenInitEventComponent, ChannelOpenTryEventComponent,
@@ -119,7 +120,7 @@ pub use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::
 pub use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimatorComponent, MessageTypeComponent,
 };
-pub use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProviderComponent;
+pub use hermes_relayer_components::chain::traits::types::packet::OutgoingPacketTypeComponent;
 pub use hermes_relayer_components::chain::traits::types::packets::ack::{
     AckPacketPayloadTypeComponent, AcknowledgementTypeComponent,
 };
@@ -134,8 +135,9 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
+pub use hermes_relayer_components::chain::traits::types::timestamp::TimeMeasurerComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::{
-    TimestampTypeComponent, UnixTimestampBuilderComponent,
+    TimeTypeComponent, TimeoutTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
@@ -185,16 +187,21 @@ define_components! {
             HeightFieldComponent,
             HeightIncrementerComponent,
             GenesisHeightGetterComponent,
-            TimestampTypeComponent,
-            UnixTimestampBuilderComponent,
+            TimeTypeComponent,
+            TimeMeasurerComponent,
+            TimeoutTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
             MessageSizeEstimatorComponent,
             EventTypeComponent,
-            IbcChainTypesComponent,
+            ClientIdTypeComponent,
+            ConnectionIdTypeComponent,
+            ChannelIdTypeComponent,
+            PortIdTypeComponent,
+            SequenceTypeComponent,
             ConnectionEndTypeComponent,
             ChannelEndTypeComponent,
-            IbcPacketTypesProviderComponent,
+            OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,
             BlockHashComponent,
@@ -246,7 +253,7 @@ define_components! {
             ConsensusStateFieldComponent,
         ]:
             ProvideTendermintConsensusState,
-        PacketFieldsReaderComponent:
+        OutgoingPacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:
             QueryConsensusStateHeightsAndFindHeightBefore,

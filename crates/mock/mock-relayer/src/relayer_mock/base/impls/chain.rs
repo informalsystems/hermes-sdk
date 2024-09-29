@@ -8,15 +8,13 @@
 //!   have been sent, received, acknowledged, and timed out.
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
-use core::time::Duration;
-
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
-use hermes_relayer_components::chain::traits::packet::fields::PacketFieldsReader;
+use hermes_relayer_components::chain::traits::packet::fields::OutgoingPacketFieldsReader;
 use hermes_relayer_components::chain::traits::payload_builders::ack_packet::AckPacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::payload_builders::timeout_unordered_packet::TimeoutUnorderedPacketPayloadBuilder;
@@ -36,19 +34,22 @@ use hermes_relayer_components::chain::traits::types::height::{
     HeightIncrementer, ProvideHeightType,
 };
 use hermes_relayer_components::chain::traits::types::ibc::{
-    CounterpartyMessageHeightGetter, ProvideIbcChainTypes,
+    CounterpartyMessageHeightGetter, ProvideChannelIdType, ProvideClientIdType,
+    ProvideConnectionIdType, ProvidePortIdType, ProvideSequenceType,
 };
 use hermes_relayer_components::chain::traits::types::ibc_events::send_packet::ProvideSendPacketEvent;
 use hermes_relayer_components::chain::traits::types::ibc_events::write_ack::ProvideWriteAckEvent;
 use hermes_relayer_components::chain::traits::types::message::{
     MessageSizeEstimator, ProvideMessageType,
 };
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
+use hermes_relayer_components::chain::traits::types::packet::ProvideOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::receive::ProvideReceivePacketPayloadType;
 use hermes_relayer_components::chain::traits::types::packets::timeout::ProvideTimeoutUnorderedPacketPayloadType;
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
-use hermes_relayer_components::chain::traits::types::timestamp::ProvideTimestampType;
+use hermes_relayer_components::chain::traits::types::timestamp::{
+    ProvideTimeType, ProvideTimeoutType,
+};
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
@@ -62,7 +63,7 @@ use crate::relayer_mock::base::types::chain::MockChainStatus;
 use crate::relayer_mock::base::types::events::{Event, SendPacketEvent, WriteAckEvent};
 use crate::relayer_mock::base::types::height::Height as MockHeight;
 use crate::relayer_mock::base::types::message::Message as MockMessage;
-use crate::relayer_mock::base::types::packet::PacketKey;
+use crate::relayer_mock::base::types::packet::Packet;
 use crate::relayer_mock::components::chain::MockChainComponents;
 use crate::relayer_mock::contexts::chain::MockChainContext;
 
@@ -93,14 +94,15 @@ impl ProvideEventType<MockChainContext> for MockChainComponents {
     type Event = Event;
 }
 
-impl ProvideTimestampType<MockChainContext> for MockChainComponents {
-    type Timestamp = MockTimestamp;
+impl ProvideTimeType<MockChainContext> for MockChainComponents {
+    type Time = MockTimestamp;
+}
 
-    fn timestamp_duration_since(
-        earlier: &MockTimestamp,
-        later: &MockTimestamp,
-    ) -> Option<Duration> {
-        later.duration_since(earlier)
+impl ProvideTimeoutType<MockChainContext> for MockChainComponents {
+    type Timeout = MockTimestamp;
+
+    fn has_timed_out(time: &MockTimestamp, timeout: &MockTimestamp) -> bool {
+        time > timeout
     }
 }
 
@@ -112,78 +114,56 @@ impl ProvideChainIdType<MockChainContext> for MockChainComponents {
     type ChainId = String;
 }
 
-impl ProvideIbcChainTypes<MockChainContext, MockChainContext> for MockChainComponents {
+impl ProvideClientIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ClientId = ClientId;
+}
 
+impl ProvideConnectionIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ConnectionId = String;
+}
 
+impl ProvideChannelIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type ChannelId = ChannelId;
+}
 
+impl ProvidePortIdType<MockChainContext, MockChainContext> for MockChainComponents {
     type PortId = PortId;
+}
 
+impl ProvideSequenceType<MockChainContext, MockChainContext> for MockChainComponents {
     type Sequence = Sequence;
 }
 
-impl IbcPacketTypesProvider<MockChainContext, MockChainContext> for MockChainComponents {
-    type IncomingPacket = PacketKey;
-
-    type OutgoingPacket = PacketKey;
+impl ProvideOutgoingPacketType<MockChainContext, MockChainContext> for MockChainComponents {
+    type OutgoingPacket = Packet;
 }
 
-impl PacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
-    fn incoming_packet_src_channel_id(packet: &PacketKey) -> &ChannelId {
+impl OutgoingPacketFieldsReader<MockChainContext, MockChainContext> for MockChainComponents {
+    fn outgoing_packet_src_channel_id(packet: &Packet) -> &ChannelId {
         &packet.src_channel_id
     }
 
-    fn incoming_packet_src_port(packet: &PacketKey) -> &PortId {
+    fn outgoing_packet_src_port(packet: &Packet) -> &PortId {
         &packet.src_port_id
     }
 
-    fn incoming_packet_dst_port(packet: &PacketKey) -> &PortId {
+    fn outgoing_packet_dst_port(packet: &Packet) -> &PortId {
         &packet.dst_port_id
     }
 
-    fn incoming_packet_dst_channel_id(packet: &PacketKey) -> &ChannelId {
+    fn outgoing_packet_dst_channel_id(packet: &Packet) -> &ChannelId {
         &packet.dst_channel_id
     }
 
-    fn incoming_packet_sequence(packet: &PacketKey) -> &Sequence {
+    fn outgoing_packet_sequence(packet: &Packet) -> &Sequence {
         &packet.sequence
     }
 
-    fn incoming_packet_timeout_height(packet: &PacketKey) -> Option<MockHeight> {
+    fn outgoing_packet_timeout_height(packet: &Packet) -> Option<MockHeight> {
         Some(packet.timeout_height)
     }
 
-    fn incoming_packet_timeout_timestamp(packet: &PacketKey) -> Option<MockTimestamp> {
-        Some(packet.timeout_timestamp.clone())
-    }
-
-    fn outgoing_packet_src_channel_id(packet: &PacketKey) -> &ChannelId {
-        &packet.src_channel_id
-    }
-
-    fn outgoing_packet_src_port(packet: &PacketKey) -> &PortId {
-        &packet.src_port_id
-    }
-
-    fn outgoing_packet_dst_port(packet: &PacketKey) -> &PortId {
-        &packet.dst_port_id
-    }
-
-    fn outgoing_packet_dst_channel_id(packet: &PacketKey) -> &ChannelId {
-        &packet.dst_channel_id
-    }
-
-    fn outgoing_packet_sequence(packet: &PacketKey) -> &Sequence {
-        &packet.sequence
-    }
-
-    fn outgoing_packet_timeout_height(packet: &PacketKey) -> Option<MockHeight> {
-        Some(packet.timeout_height)
-    }
-
-    fn outgoing_packet_timeout_timestamp(packet: &PacketKey) -> Option<MockTimestamp> {
+    fn outgoing_packet_timeout_timestamp(packet: &Packet) -> Option<MockTimestamp> {
         Some(packet.timeout_timestamp.clone())
     }
 }
@@ -219,7 +199,7 @@ impl ProvideChainStatusType<MockChainContext> for MockChainComponents {
         &status.height
     }
 
-    fn chain_status_timestamp(status: &Self::ChainStatus) -> &MockTimestamp {
+    fn chain_status_time(status: &Self::ChainStatus) -> &MockTimestamp {
         &status.timestamp
     }
 }
@@ -234,8 +214,8 @@ impl ProvideSendPacketEvent<MockChainContext, MockChainContext> for MockChainCom
         }
     }
 
-    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> PacketKey {
-        PacketKey::from(event.clone())
+    fn extract_packet_from_send_packet_event(event: &Self::SendPacketEvent) -> Packet {
+        Packet::from(event.clone())
     }
 }
 
@@ -328,7 +308,7 @@ impl ReceivedPacketQuerier<MockChainContext, MockChainContext> for MockChainComp
 impl WriteAckQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_write_ack_event(
         chain: &MockChainContext,
-        packet: &PacketKey,
+        packet: &Packet,
     ) -> Result<Option<WriteAckEvent>, Error> {
         let received = chain.get_received_packet_information(
             packet.dst_port_id.clone(),
@@ -362,7 +342,7 @@ impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockCha
         chain: &MockChainContext,
         _client_state: &(),
         height: &MockHeight,
-        packet: &PacketKey,
+        packet: &Packet,
     ) -> Result<MockMessage, Error> {
         // If the latest state of the source chain doesn't have the packet as sent, return an error.
         let state = chain.get_current_state();
@@ -384,7 +364,7 @@ impl ReceivePacketPayloadBuilder<MockChainContext, MockChainContext> for MockCha
 impl ReceivePacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_receive_packet_message(
         _chain: &MockChainContext,
-        _packet: &PacketKey,
+        _packet: &Packet,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)
@@ -400,7 +380,7 @@ impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainCo
         chain: &MockChainContext,
         _client_state: &(),
         height: &MockHeight,
-        packet: &PacketKey,
+        packet: &Packet,
         _ack: &Vec<u8>,
     ) -> Result<MockMessage, Error> {
         // If the latest state of the destination chain doesn't have the packet as received, return an error.
@@ -425,7 +405,7 @@ impl AckPacketPayloadBuilder<MockChainContext, MockChainContext> for MockChainCo
 impl AckPacketMessageBuilder<MockChainContext, MockChainContext> for MockChainComponents {
     async fn build_ack_packet_message(
         _chain: &MockChainContext,
-        _packet: &PacketKey,
+        _packet: &Packet,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)
@@ -445,7 +425,7 @@ impl TimeoutUnorderedPacketPayloadBuilder<MockChainContext, MockChainContext>
         chain: &MockChainContext,
         _client_state: &(),
         height: &MockHeight,
-        packet: &PacketKey,
+        packet: &Packet,
     ) -> Result<MockMessage, Error> {
         let state = chain.get_current_state();
         let current_timestamp = chain.runtime.get_time();
@@ -467,7 +447,7 @@ impl TimeoutUnorderedPacketMessageBuilder<MockChainContext, MockChainContext>
 {
     async fn build_timeout_unordered_packet_message(
         _chain: &MockChainContext,
-        _packet: &PacketKey,
+        _packet: &Packet,
         payload: MockMessage,
     ) -> Result<MockMessage, Error> {
         Ok(payload)

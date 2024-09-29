@@ -3,7 +3,7 @@ use hermes_cosmos_chain_components::methods::encode::encode_protobuf;
 use hermes_relayer_components::chain::traits::payload_builders::receive_packet::ReceivePacketPayloadBuilder;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::chain::traits::types::packets::receive::HasReceivePacketPayloadType;
 use ibc_relayer_types::core::ics04_channel::packet::Packet;
 use ibc_relayer_types::core::ics24_host::path::CommitmentsPath;
@@ -26,7 +26,7 @@ where
         + HasReceivePacketPayloadType<
             Counterparty,
             ReceivePacketPayload = SolomachineReceivePacketPayload,
-        > + HasIbcPacketTypes<Counterparty, OutgoingPacket = Packet>
+        > + HasOutgoingPacketType<Counterparty, OutgoingPacket = Packet>
         + HasClientStateType<Counterparty, ClientState = SolomachineClientState>
         + HasHeightType<Height = Height>
         + HasErrorType,

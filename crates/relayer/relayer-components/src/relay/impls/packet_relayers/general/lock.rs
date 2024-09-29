@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
-use crate::relay::traits::chains::HasRelayChains;
+use crate::relay::traits::chains::{HasRelayChains, PacketOf};
 use crate::relay::traits::packet_lock::HasPacketLock;
 use crate::relay::traits::packet_relayer::PacketRelayer;
 
@@ -21,7 +21,7 @@ where
     Relay: HasRelayChains,
 {
     pub relay: &'a Relay,
-    pub packet: &'a Relay::Packet,
+    pub packet: &'a PacketOf<Relay>,
 }
 
 impl<Relay, InRelayer> PacketRelayer<Relay> for LockPacketRelayer<InRelayer>
@@ -30,7 +30,7 @@ where
     InRelayer: PacketRelayer<Relay>,
     Relay::Logger: for<'a> CanLog<LogSkipRelayLockedPacket<'a, Relay>>,
 {
-    async fn relay_packet(relay: &Relay, packet: &Relay::Packet) -> Result<(), Relay::Error> {
+    async fn relay_packet(relay: &Relay, packet: &PacketOf<Relay>) -> Result<(), Relay::Error> {
         let m_lock = relay.try_acquire_packet_lock(packet).await;
 
         match m_lock {

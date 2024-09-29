@@ -5,7 +5,7 @@ use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLogMessage;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
 use hermes_relayer_components::multi::types::index::{Index, Twindex};
 use hermes_test_components::chain::traits::assert::eventual_amount::CanAssertEventualAmount;
@@ -46,7 +46,7 @@ where
     RelayDriver: CanRunRelayerInBackground,
     ChainA: HasIbcChainTypes<ChainB>
         + HasChainId
-        + HasIbcPacketTypes<ChainB>
+        + HasOutgoingPacketType<ChainB>
         + CanQueryBalance
         + HasAmountMethods
         + CanConvertIbcTransferredAmount<ChainB>
@@ -54,7 +54,7 @@ where
         + CanAssertEventualAmount,
     ChainB: HasIbcChainTypes<ChainA>
         + HasChainId
-        + HasIbcPacketTypes<ChainA>
+        + HasOutgoingPacketType<ChainA>
         + HasAmountMethods
         + CanQueryBalance
         + CanIbcTransferToken<ChainA>

@@ -1,5 +1,7 @@
 use alloc::sync::Arc;
 use core::time::Duration;
+use hermes_chain_type_components::traits::fields::height::HeightIncrementer;
+use hermes_relayer_components::chain::traits::types::packet::ProvideOutgoingPacketType;
 
 use cgp::core::error::CanRaiseError;
 use cgp::prelude::*;
@@ -11,19 +13,20 @@ use hermes_relayer_components::chain::traits::commitment_prefix::CommitmentPrefi
 use hermes_relayer_components::chain::traits::types::block::{
     HasBlockType, ProvideBlockHash, ProvideBlockType,
 };
-use hermes_relayer_components::chain::traits::types::chain::HasChainTypes;
 use hermes_relayer_components::chain::traits::types::chain_id::{HasChainId, ProvideChainIdType};
 use hermes_relayer_components::chain::traits::types::channel::ProvideChannelEndType;
 use hermes_relayer_components::chain::traits::types::connection::ProvideConnectionEndType;
 use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
 use hermes_relayer_components::chain::traits::types::height::{
-    GenesisHeightGetter, HasHeightType, HeightFieldGetter, HeightIncrementer, ProvideHeightType,
+    GenesisHeightGetter, HasHeightType, HeightFieldGetter, ProvideHeightType,
 };
-use hermes_relayer_components::chain::traits::types::ibc::ProvideIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::ibc::{
+    ProvideChannelIdType, ProvideClientIdType, ProvideConnectionIdType, ProvidePortIdType,
+    ProvideSequenceType,
+};
 use hermes_relayer_components::chain::traits::types::message::{
     HasMessageType, MessageSizeEstimator, ProvideMessageType,
 };
-use hermes_relayer_components::chain::traits::types::packet::IbcPacketTypesProvider;
 use hermes_relayer_components::chain::traits::types::packets::ack::AcknowledgementTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::receive::PacketCommitmentTypeComponent;
 use hermes_relayer_components::chain::traits::types::packets::timeout::PacketReceiptTypeComponent;
@@ -33,11 +36,10 @@ use hermes_relayer_components::chain::traits::types::proof::{
 };
 use hermes_relayer_components::chain::traits::types::status::ProvideChainStatusType;
 use hermes_relayer_components::chain::traits::types::timestamp::{
-    HasTimestampType, ProvideTimestampType, UnixTimestampBuilder,
+    HasTimeType, ProvideTimeType, ProvideTimeoutType, TimeMeasurer,
 };
 use ibc::core::channel::types::channel::ChannelEnd;
 use ibc::core::connection::types::ConnectionEnd;
-use ibc_relayer::chain::endpoint::ChainStatus;
 use ibc_relayer_types::core::ics04_channel::packet::{Packet, Sequence};
 use ibc_relayer_types::core::ics24_host::identifier::{
     ChainId, ChannelId, ClientId, ConnectionId, PortId,
@@ -48,10 +50,11 @@ use ibc_relayer_types::Height;
 use prost::{EncodeError, Message};
 use tendermint::abci::Event as AbciEvent;
 use tendermint::block::{Block, Id as BlockId};
-use tendermint::{Error as TendermintError, Hash, Time};
+use tendermint::{Hash, Time};
 
 use crate::traits::message::CosmosMessage;
 use crate::types::commitment_proof::ProvideCosmosCommitmentProof;
+use crate::types::status::ChainStatus;
 pub struct ProvideCosmosChainTypes;
 
 delegate_components! {
@@ -111,28 +114,30 @@ where
     }
 }
 
-impl<Chain> ProvideTimestampType<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideTimeType<Chain> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
-    type Timestamp = Timestamp;
+    type Time = Time;
+}
 
-    fn timestamp_duration_since(earlier: &Timestamp, later: &Timestamp) -> Option<Duration> {
-        later.duration_since(earlier)
+impl<Chain> TimeMeasurer<Chain> for ProvideCosmosChainTypes
+where
+    Chain: HasTimeType<Time = Time>,
+{
+    fn duration_since(earlier: &Time, later: &Time) -> Option<Duration> {
+        earlier.duration_since(*later).ok()
     }
 }
 
-impl<Chain> UnixTimestampBuilder<Chain> for ProvideCosmosChainTypes
+impl<Chain> ProvideTimeoutType<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasTimestampType<Timestamp = Timestamp> + CanRaiseError<TendermintError>,
+    Chain: HasTimeType<Time = Time>,
 {
-    fn time_from_unix_timestamp(
-        seconds: i64,
-        nanoseconds: u32,
-    ) -> Result<Chain::Timestamp, Chain::Error> {
-        let time = Time::from_unix_timestamp(seconds, nanoseconds).map_err(Chain::raise_error)?;
+    type Timeout = Timestamp;
 
-        Ok(time.into())
+    fn has_timed_out(time: &Time, timeout: &Timestamp) -> bool {
+        &Timestamp::from(*time) > timeout
     }
 }
 
@@ -163,7 +168,7 @@ where
 
 impl<Chain> ProvideChainStatusType<Chain> for ProvideCosmosChainTypes
 where
-    Chain: HasHeightType<Height = Height> + HasTimestampType<Timestamp = Timestamp>,
+    Chain: HasHeightType<Height = Height> + HasTimeType<Time = Time>,
 {
     type ChainStatus = ChainStatus;
 
@@ -171,8 +176,8 @@ where
         &status.height
     }
 
-    fn chain_status_timestamp(status: &ChainStatus) -> &Timestamp {
-        &status.timestamp
+    fn chain_status_time(status: &ChainStatus) -> &Time {
+        &status.time
     }
 }
 
@@ -183,27 +188,45 @@ where
     type ChainId = ChainId;
 }
 
-impl<Chain, Counterparty> ProvideIbcChainTypes<Chain, Counterparty> for ProvideCosmosChainTypes
-where
-    Chain: HasChainTypes,
-{
-    type ClientId = ClientId;
-
-    type ConnectionId = ConnectionId;
-
-    type ChannelId = ChannelId;
-
-    type PortId = PortId;
-
-    type Sequence = Sequence;
-}
-
-impl<Chain, Counterparty> IbcPacketTypesProvider<Chain, Counterparty> for ProvideCosmosChainTypes
+impl<Chain, Counterparty> ProvideClientIdType<Chain, Counterparty> for ProvideCosmosChainTypes
 where
     Chain: Async,
 {
-    type IncomingPacket = Packet;
+    type ClientId = ClientId;
+}
 
+impl<Chain, Counterparty> ProvideConnectionIdType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type ConnectionId = ConnectionId;
+}
+
+impl<Chain, Counterparty> ProvideChannelIdType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type ChannelId = ChannelId;
+}
+
+impl<Chain, Counterparty> ProvidePortIdType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type PortId = PortId;
+}
+
+impl<Chain, Counterparty> ProvideSequenceType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
+    type Sequence = Sequence;
+}
+
+impl<Chain, Counterparty> ProvideOutgoingPacketType<Chain, Counterparty> for ProvideCosmosChainTypes
+where
+    Chain: Async,
+{
     type OutgoingPacket = Packet;
 }
 

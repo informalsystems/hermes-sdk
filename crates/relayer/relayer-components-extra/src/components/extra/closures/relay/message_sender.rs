@@ -2,7 +2,7 @@ use cgp::core::component::HasComponents;
 use cgp::core::error::{CanRaiseError, ErrorOf, ErrorRaiser};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
-use hermes_relayer_components::chain::traits::types::packet::HasIbcPacketTypes;
+use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
 use hermes_relayer_components::relay::traits::chains::{CanRaiseRelayChainErrors, HasRelayChains};
@@ -34,11 +34,10 @@ where
         + HasMessageBatchSender<SourceTarget>
         + HasMessageBatchSender<DestinationTarget>
         + HasComponents<Components = Components>,
-    SrcChain: HasIbcPacketTypes<DstChain, OutgoingPacket = Relay::Packet>
+    SrcChain: HasOutgoingPacketType<DstChain>
         + UseExtraChainComponentsForIbcMessageSender<DstChain>
         + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
-    DstChain: HasIbcPacketTypes<SrcChain, IncomingPacket = Relay::Packet>
-        + UseExtraChainComponentsForIbcMessageSender<SrcChain>
+    DstChain: UseExtraChainComponentsForIbcMessageSender<SrcChain>
         + CanRaiseError<ErrorOf<DstChain::Runtime>>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,
