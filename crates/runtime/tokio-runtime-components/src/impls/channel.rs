@@ -15,11 +15,13 @@ impl<Runtime> ProvideChannelType<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: Async,
 {
-    type Sender<T> = mpsc::UnboundedSender<T>
+    type Sender<T>
+        = mpsc::UnboundedSender<T>
     where
         T: Async;
 
-    type Receiver<T> = mpsc::UnboundedReceiver<T>
+    type Receiver<T>
+        = mpsc::UnboundedReceiver<T>
     where
         T: Async;
 }

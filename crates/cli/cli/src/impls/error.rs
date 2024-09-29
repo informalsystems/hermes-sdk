@@ -1,8 +1,7 @@
 use core::convert::Infallible;
 
-use cgp::core::error::{
-    DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent,
-};
+use cgp::core::component::DelegateTo;
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_error::handlers::display::DisplayError;
@@ -42,7 +41,7 @@ delegate_components! {
             ErrorTypeComponent,
             RetryableErrorComponent,
         ]: ProvideHermesError,
-        ErrorRaiserComponent: DelegateErrorRaiser<CliErrorHandlers>,
+        ErrorRaiserComponent: DelegateTo<CliErrorHandlers>,
     }
 }
 

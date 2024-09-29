@@ -19,11 +19,13 @@ impl<Runtime> ProvideChannelType<Runtime> for ProvideUnboundedChannelType
 where
     Runtime: Async,
 {
-    type Sender<T> = Arc<Mutex<mpsc::UnboundedSender<T>>>
+    type Sender<T>
+        = Arc<Mutex<mpsc::UnboundedSender<T>>>
     where
         T: Async;
 
-    type Receiver<T> = mpsc::UnboundedReceiver<T>
+    type Receiver<T>
+        = mpsc::UnboundedReceiver<T>
     where
         T: Async;
 }
