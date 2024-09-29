@@ -1,5 +1,9 @@
 use core::marker::PhantomData;
 
+use cgp::core::component::WithProvider;
+use cgp::core::field::impls::use_field::WithField;
+use cgp::core::field::FieldGetter;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(RuntimeTypeComponent, ProvideRuntimeType<Context>)]
@@ -14,22 +18,34 @@ pub trait HasRuntime: HasRuntimeType {
 
 pub type RuntimeOf<Context> = <Context as HasRuntimeType>::Runtime;
 
-pub struct ProvideRuntimeField<Field>(pub PhantomData<Field>);
-
-impl<Context, Field: Async, Runtime> ProvideRuntimeType<Context> for ProvideRuntimeField<Field>
+impl<Context, Provider, Runtime> ProvideRuntimeType<Context> for WithProvider<Provider>
 where
-    Context: HasField<Field, Field = Runtime> + Async,
+    Context: Async,
+    Provider: ProvideType<Context, RuntimeTypeComponent, Type = Runtime>,
     Runtime: HasErrorType,
 {
     type Runtime = Runtime;
 }
 
-impl<Context, Field: Async> RuntimeGetter<Context> for ProvideRuntimeField<Field>
+impl<Context, Provider, Runtime> RuntimeGetter<Context> for WithProvider<Provider>
 where
-    Context: HasRuntimeType + HasField<Field, Field = Context::Runtime>,
+    Context: HasRuntimeType<Runtime = Runtime>,
+    Provider: FieldGetter<Context, RuntimeGetterComponent, Field = Runtime>,
 {
-    fn runtime(context: &Context) -> &Context::Runtime {
-        context.get_field(PhantomData)
+    fn runtime(context: &Context) -> &Runtime {
+        Provider::get_field(context, PhantomData)
+    }
+}
+
+pub struct ProvideRuntimeField<Tag>(pub PhantomData<Tag>);
+
+delegate_components! {
+    <Tag>
+    ProvideRuntimeField<Tag> {
+        [
+            RuntimeTypeComponent,
+            RuntimeGetterComponent,
+        ]: WithField<Tag>,
     }
 }
 
