@@ -4,8 +4,8 @@ use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ConnectionIdTypeComponent,
     ConsensusStateFieldComponent, ConsensusStateQuerierComponent, ConsensusStateTypeComponent,
-    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, IncomingPacketTypeComponent,
-    OutgoingPacketTypeComponent, PortIdTypeComponent, SequenceTypeComponent,
+    ConsensusStateWithProofsQuerierComponent, HeightFieldComponent, OutgoingPacketTypeComponent,
+    PortIdTypeComponent, SequenceTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::encoding::components::{
@@ -70,7 +70,6 @@ delegate_components! {
             ChannelIdTypeComponent,
             PortIdTypeComponent,
             SequenceTypeComponent,
-            IncomingPacketTypeComponent,
             OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
         ]:

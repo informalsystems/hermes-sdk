@@ -9,8 +9,7 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
     ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
-    IncomingPacketTypeComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
-    SequenceTypeComponent, TimeTypeComponent,
+    OutgoingPacketTypeComponent, PortIdTypeComponent, SequenceTypeComponent, TimeTypeComponent,
 };
 use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainComponents;
 use hermes_cosmos_chain_components::components::transaction::*;
@@ -324,7 +323,6 @@ delegate_components! {
             ChannelEndWithProofsQuerierComponent,
             ChannelEndTypeComponent,
 
-            IncomingPacketTypeComponent,
             OutgoingPacketTypeComponent,
             ChainStatusTypeComponent,
             BlockTypeComponent,

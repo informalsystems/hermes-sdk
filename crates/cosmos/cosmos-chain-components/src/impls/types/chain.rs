@@ -1,9 +1,7 @@
 use alloc::sync::Arc;
 use core::time::Duration;
 use hermes_chain_type_components::traits::fields::height::HeightIncrementer;
-use hermes_relayer_components::chain::traits::types::packet::{
-    ProvideIncomingPacketType, ProvideOutgoingPacketType,
-};
+use hermes_relayer_components::chain::traits::types::packet::ProvideOutgoingPacketType;
 
 use cgp::core::error::CanRaiseError;
 use cgp::prelude::*;
@@ -223,13 +221,6 @@ where
     Chain: Async,
 {
     type Sequence = Sequence;
-}
-
-impl<Chain, Counterparty> ProvideIncomingPacketType<Chain, Counterparty> for ProvideCosmosChainTypes
-where
-    Chain: Async,
-{
-    type IncomingPacket = Packet;
 }
 
 impl<Chain, Counterparty> ProvideOutgoingPacketType<Chain, Counterparty> for ProvideCosmosChainTypes
