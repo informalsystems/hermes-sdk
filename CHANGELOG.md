@@ -2,6 +2,16 @@
 
 ## v0.2.0 (pre-release)
 
+- Chain components refactoring [#438](https://github.com/informalsystems/hermes-sdk/pull/438)
+    - Introduce `hermes-chain-type-components` and `hermes-chain-components` crates, and move abstract chain
+      constructs from `hermes-relayer-components`.
+    - Split out `HasIbChainTypes` to the respective type traits - `HasConnectionIdType`, `HasChannelIdType`,
+      `HasPortIdType`, `HasSequenceType`.
+    - Separate `HasTimestampType` into `HasTimeType` and `HasTimeoutType`.
+    - Refactor `HasIbcPacketTypes` to only `HasOutgoingPacketType`, and use `Counterparty::OutgoingPacket`
+      as incoming packet.
+    - Remove `HasRelayChains::Packet` associated alias type.
+
 -  Protobuf encoding improvements [#432](https://github.com/informalsystems/hermes-sdk/pull/432)
     - Redesign `impl_type_url!` macro to implement `SchemaGetter` on existing component type.
     - Schema components that only use `impl_type_url!` directly are no longer wrapped with `DelegateEncoding`.
