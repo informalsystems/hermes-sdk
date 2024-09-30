@@ -9,7 +9,7 @@ use crate::types::any_app::AnyApp;
 pub trait HasPacketEntries<Counterparty>:
     HasPacketType<Counterparty>
     + HasPacketEntryHeaderType<Counterparty>
-    + HasPacketDataType<Counterparty, AnyApp>
+    + HasPacketDataType<AnyApp, Counterparty>
 {
     fn packet_entries(packet: &Self::Packet) -> &[(Self::PacketEntryHeader, Self::PacketData)];
 }

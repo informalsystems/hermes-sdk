@@ -7,5 +7,5 @@ use crate::traits::types::packet::nonce::HasPacketNonceType;
 pub trait HasPacketNonce<Counterparty>:
     HasPacketHeaderType<Counterparty> + HasPacketNonceType<Counterparty>
 {
-    fn packet_nonce(packet: &Self::PacketHeader) -> &Self::PacketNonce;
+    fn packet_nonce(packet_header: &Self::PacketHeader) -> &Self::PacketNonce;
 }

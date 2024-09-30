@@ -18,7 +18,7 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for StorePacketAck<InHandler>
 where
     Chain: CanStoreCommitment
-        + HasPacketAckType<Counterparty, AnyApp>
+        + HasPacketAckType<AnyApp, Counterparty>
         + CanBuildAckPacketCommitmentPath<Counterparty>
         + CanBuildAckPacketCommitmentValue<Counterparty>,
     Counterparty: HasCommitmentProofType + HasPacketType<Chain> + HasPacketHeader<Chain>,

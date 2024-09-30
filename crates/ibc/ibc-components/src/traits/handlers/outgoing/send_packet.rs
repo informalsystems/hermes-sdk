@@ -14,7 +14,7 @@ pub trait CanSendPacket<Counterparty>:
     + HasClientIdType<Counterparty>
     + HasPacketHeaderType<Counterparty>
     + HasPacketEntryHeaderType<Counterparty>
-    + HasPacketDataType<Counterparty, AnyApp>
+    + HasPacketDataType<AnyApp, Counterparty>
 where
     Counterparty: HasClientIdType<Self> + HasPacketTimeoutType<Self>,
 {

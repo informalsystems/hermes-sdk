@@ -12,7 +12,7 @@ pub trait CanVerifyAckPacketCommitment<Counterparty>:
     HasErrorType
     + HasCommitmentProofType
     + HasPacketHeaderType<Counterparty>
-    + HasPacketAckType<Counterparty, AnyApp>
+    + HasPacketAckType<AnyApp, Counterparty>
     + HasClientStateType<Counterparty>
     + HasConsensusStateType<Counterparty>
     + HasClientIdType<Counterparty>

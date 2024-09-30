@@ -21,7 +21,7 @@ pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where
-    Chain: HasPacketAckType<Counterparty, AnyApp>
+    Chain: HasPacketAckType<AnyApp, Counterparty>
         + CanQueryConsensusState<Counterparty>
         + CanRaiseError<Counterparty::Error>,
     Counterparty: HasHeightType
@@ -40,7 +40,7 @@ where
         send_proof: &Counterparty::CommitmentProof,
     ) -> Result<Vec<Chain::PacketAck>, Chain::Error> {
         let header = Counterparty::packet_header(packet);
-        let client_id = Counterparty::packet_destination_client_id(header);
+        let client_id = Counterparty::packet_dst_client_id(header);
         let proof_height = Counterparty::commitment_proof_height(send_proof);
 
         let consensus_state = chain.query_consensus_state(client_id, proof_height).await?;

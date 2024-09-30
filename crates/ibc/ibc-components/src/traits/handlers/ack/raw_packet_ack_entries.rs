@@ -10,7 +10,7 @@ use crate::types::any_app::AnyApp;
 pub trait CanHandleRawPacketAckEntries<Counterparty>:
     HasErrorType + HasPacketHeaderType<Counterparty> + HasPacketEntryHeaderType<Counterparty>
 where
-    Counterparty: HasPacketAckType<Self, AnyApp>,
+    Counterparty: HasPacketAckType<AnyApp, Self>,
 {
     async fn handle_raw_packet_ack_entries(
         &self,

@@ -9,7 +9,7 @@ use crate::types::any_app::AnyApp;
 #[derive_component(IncomingPacketHandlerComponent, IncomingPacketHandler<Chain>)]
 #[async_trait]
 pub trait CanHandleIncomingPacket<Counterparty>:
-    HasErrorType + HasPacketAckType<Counterparty, AnyApp>
+    HasErrorType + HasPacketAckType<AnyApp, Counterparty>
 where
     Counterparty: HasCommitmentProofType + HasPacketType<Self>,
 {

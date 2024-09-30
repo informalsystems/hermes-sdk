@@ -7,7 +7,7 @@ use crate::types::any_app::AnyApp;
 
 #[derive_component(AckPacketCommitmentValueBuilderComponent, AckPacketCommitmentValueBuilder<Chain>)]
 pub trait CanBuildAckPacketCommitmentValue<Counterparty>:
-    HasPacketAckType<Counterparty, AnyApp> + HasCommitmentValueType + HasErrorType
+    HasPacketAckType<AnyApp, Counterparty> + HasCommitmentValueType + HasErrorType
 where
     Counterparty: HasPacketHeaderType<Self>,
 {

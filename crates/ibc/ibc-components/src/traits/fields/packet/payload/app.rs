@@ -9,7 +9,7 @@ pub trait HasPacketApplications<Counterparty>:
 where
     Counterparty: HasAppIdType<Self>,
 {
-    fn source_app_id(payload: &Self::PacketEntryHeader) -> &Self::AppId;
+    fn packet_src_app_id(payload: &Self::PacketEntryHeader) -> &Self::AppId;
 
-    fn destination_app_id(payload: &Self::PacketEntryHeader) -> &Counterparty::AppId;
+    fn packet_dst_app_id(payload: &Self::PacketEntryHeader) -> &Counterparty::AppId;
 }

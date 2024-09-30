@@ -9,7 +9,7 @@ pub trait HasPacketClients<Counterparty>:
 where
     Counterparty: HasClientIdType<Self>,
 {
-    fn packet_source_client_id(packet_header: &Self::PacketHeader) -> &Self::ClientId;
+    fn packet_src_client_id(packet_header: &Self::PacketHeader) -> &Self::ClientId;
 
-    fn packet_destination_client_id(packet_header: &Self::PacketHeader) -> &Counterparty::ClientId;
+    fn packet_dst_client_id(packet_header: &Self::PacketHeader) -> &Counterparty::ClientId;
 }
