@@ -5,7 +5,7 @@ use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 
-#[derive_component(IncomingPacketEntryHandlerComponent, IncomingPacketPayloadHandler<Chain>)]
+#[derive_component(IncomingPacketEntryHandlerComponent, IncomingPacketEntryHandler<Chain>)]
 #[async_trait]
 pub trait CanHandleIncomingPacketEntry<App, Counterparty>:
     HasErrorType + HasPacketDataType<App, Counterparty> + HasPacketAckType<App, Counterparty>
