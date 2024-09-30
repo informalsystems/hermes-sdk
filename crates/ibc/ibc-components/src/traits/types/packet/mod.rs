@@ -1,4 +1,5 @@
 pub mod ack;
+pub mod commitment_hash;
 pub mod data;
 pub mod entry;
 pub mod header;

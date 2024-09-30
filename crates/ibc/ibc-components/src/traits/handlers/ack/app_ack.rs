@@ -15,7 +15,7 @@ pub trait CanHandlePacketAck<App, Counterparty>:
 where
     Counterparty: HasPacketAckType<App, Self>,
 {
-    async fn handle_incoming_packet(
+    async fn handle_packet_ack(
         &self,
         packet_header: &Self::PacketHeader,
         entry_header: &Self::PacketEntryHeader,
