@@ -12,7 +12,7 @@ pub trait CanHandleIncomingPacket<App, Counterparty>:
 where
     Counterparty: HasPacketHeaderType<Self> + HasPacketPayloadHeaderType<Self>,
 {
-    async fn handle_incoming_raw_packet_payload(
+    async fn handle_incoming_packet(
         &self,
         header: &Counterparty::PacketHeader,
         payload_header: &Counterparty::PacketPayloadHeader,
