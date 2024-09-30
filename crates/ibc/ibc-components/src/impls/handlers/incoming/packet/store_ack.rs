@@ -7,6 +7,7 @@ use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::ack_packet::CanBuildAckPacketCommitmentValue;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::packet::raw_ack::HasPacketRawAckType;
 
@@ -19,14 +20,15 @@ where
         + HasPacketRawAckType<Counterparty>
         + CanBuildAckPacketCommitmentPath<Counterparty>
         + CanBuildAckPacketCommitmentValue<Counterparty>,
-    Counterparty: HasPacketType<Chain> + HasPacketHeader<Chain>,
+    Counterparty: HasCommitmentProofType + HasPacketType<Chain> + HasPacketHeader<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,
         packet: &Counterparty::Packet,
+        send_proof: &Counterparty::CommitmentProof,
     ) -> Result<Vec<Chain::PacketRawAck>, Chain::Error> {
-        let acks = InHandler::handle_incoming_packet(chain, packet).await?;
+        let acks = InHandler::handle_incoming_packet(chain, packet, send_proof).await?;
 
         let packet_header = Counterparty::packet_header(packet);
 

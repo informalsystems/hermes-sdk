@@ -12,6 +12,6 @@ where
     async fn query_consensus_state(
         &self,
         client_id: &Self::ClientId,
-        height: Counterparty::Height,
+        height: &Counterparty::Height,
     ) -> Result<Counterparty::ConsensusState, Self::Error>;
 }
