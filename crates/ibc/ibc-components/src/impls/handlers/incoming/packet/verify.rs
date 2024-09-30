@@ -13,14 +13,15 @@ use crate::traits::fields::packet::header::client::HasPacketClients;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
-use crate::traits::types::packet::raw_ack::HasPacketRawAckType;
+use crate::traits::types::packet::ack::HasPacketAckType;
+use crate::types::any_app::AnyApp;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where
-    Chain: HasPacketRawAckType<Counterparty>
+    Chain: HasPacketAckType<Counterparty, AnyApp>
         + CanQueryConsensusState<Counterparty>
         + CanRaiseError<Counterparty::Error>,
     Counterparty: HasHeightType
@@ -37,7 +38,7 @@ where
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Chain::PacketRawAck>, Chain::Error> {
+    ) -> Result<Vec<Chain::PacketAck>, Chain::Error> {
         let header = Counterparty::packet_header(packet);
         let client_id = Counterparty::packet_destination_client_id(header);
         let proof_height = Counterparty::commitment_proof_height(send_proof);

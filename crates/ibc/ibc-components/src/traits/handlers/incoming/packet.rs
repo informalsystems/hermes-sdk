@@ -2,13 +2,14 @@ use alloc::vec::Vec;
 use cgp::prelude::*;
 
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
-use crate::traits::types::packet::raw_ack::HasPacketRawAckType;
+use crate::types::any_app::AnyApp;
 
 #[derive_component(IncomingPacketHandlerComponent, IncomingPacketHandler<Chain>)]
 #[async_trait]
 pub trait CanHandleIncomingPacket<Counterparty>:
-    HasErrorType + HasPacketRawAckType<Counterparty>
+    HasErrorType + HasPacketAckType<Counterparty, AnyApp>
 where
     Counterparty: HasCommitmentProofType + HasPacketType<Self>,
 {
@@ -16,5 +17,5 @@ where
         &self,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Self::PacketRawAck>, Self::Error>;
+    ) -> Result<Vec<Self::PacketAck>, Self::Error>;
 }

@@ -1,14 +1,15 @@
 use cgp::prelude::*;
 
+use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
 use crate::traits::types::packet::packet::HasPacketType;
-use crate::traits::types::packet::raw_data::HasPacketRawDataType;
+use crate::types::any_app::AnyApp;
 
 #[derive_component(PacketEntriesGetterComponent, PacketEntriesGetter<Chain>)]
 pub trait HasPacketEntries<Counterparty>:
     HasPacketType<Counterparty>
     + HasPacketEntryHeaderType<Counterparty>
-    + HasPacketRawDataType<Counterparty>
+    + HasPacketDataType<Counterparty, AnyApp>
 {
-    fn packet_entries(packet: &Self::Packet) -> &[(Self::PacketEntryHeader, Self::PacketRawData)];
+    fn packet_entries(packet: &Self::Packet) -> &[(Self::PacketEntryHeader, Self::PacketData)];
 }

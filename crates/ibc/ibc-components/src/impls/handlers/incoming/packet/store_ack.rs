@@ -8,8 +8,9 @@ use crate::traits::commitment::value::ack_packet::CanBuildAckPacketCommitmentVal
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
-use crate::traits::types::packet::raw_ack::HasPacketRawAckType;
+use crate::types::any_app::AnyApp;
 
 pub struct StorePacketAck<InHandler>(pub PhantomData<InHandler>);
 
@@ -17,7 +18,7 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for StorePacketAck<InHandler>
 where
     Chain: CanStoreCommitment
-        + HasPacketRawAckType<Counterparty>
+        + HasPacketAckType<Counterparty, AnyApp>
         + CanBuildAckPacketCommitmentPath<Counterparty>
         + CanBuildAckPacketCommitmentValue<Counterparty>,
     Counterparty: HasCommitmentProofType + HasPacketType<Chain> + HasPacketHeader<Chain>,
@@ -27,7 +28,7 @@ where
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Chain::PacketRawAck>, Chain::Error> {
+    ) -> Result<Vec<Chain::PacketAck>, Chain::Error> {
         let acks = InHandler::handle_incoming_packet(chain, packet, send_proof).await?;
 
         let packet_header = Counterparty::packet_header(packet);

@@ -4,14 +4,15 @@ use hermes_chain_type_components::traits::types::ibc::client_state::HasClientSta
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
-use crate::traits::types::packet::raw_ack::HasPacketRawAckType;
+use crate::types::any_app::AnyApp;
 
 pub trait CanVerifyAckPacketCommitment<Counterparty>:
     HasErrorType
     + HasCommitmentProofType
     + HasPacketHeaderType<Counterparty>
-    + HasPacketRawAckType<Counterparty>
+    + HasPacketAckType<Counterparty, AnyApp>
     + HasClientStateType<Counterparty>
     + HasConsensusStateType<Counterparty>
     + HasClientIdType<Counterparty>
@@ -21,7 +22,7 @@ pub trait CanVerifyAckPacketCommitment<Counterparty>:
         client_state: &Self::ClientState,
         consensus_state: &Self::ConsensusState,
         packet_header: &Self::PacketHeader,
-        packet_acks: &[&Self::PacketRawAck],
+        packet_acks: &[&Self::PacketAck],
         proof: &Self::CommitmentProof,
     ) -> Result<(), Self::Error>;
 }
