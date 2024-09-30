@@ -3,6 +3,7 @@ use cgp::prelude::*;
 use crate::impls::handlers::incoming::packet::entries::HandleIncomingPacketEntries;
 use crate::impls::handlers::incoming::packet::no_replay::DisallowDoubleReceive;
 use crate::impls::handlers::incoming::packet::store_ack::StorePacketAck;
+use crate::impls::handlers::incoming::packet::timeout::DisallowTimedOutIncomingPacket;
 use crate::impls::handlers::incoming::packet::verify::VerifySendPacketCommitmentProof;
 pub use crate::traits::handlers::incoming::packet::IncomingPacketHandlerComponent;
 
@@ -12,7 +13,9 @@ define_components! {
             StorePacketAck<
                 VerifySendPacketCommitmentProof<
                     DisallowDoubleReceive<
-                        HandleIncomingPacketEntries
+                        DisallowTimedOutIncomingPacket<
+                            HandleIncomingPacketEntries
+                        >
                     >
                 >
             >,

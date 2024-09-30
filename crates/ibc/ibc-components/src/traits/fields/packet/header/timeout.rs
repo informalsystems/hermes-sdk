@@ -8,5 +8,5 @@ pub trait HasPacketTimeout<Counterparty>: HasPacketHeaderType<Counterparty>
 where
     Counterparty: HasPacketTimeoutType<Self>,
 {
-    fn packet_timeout(packet: &Self::PacketHeader) -> &Counterparty::PacketTimeout;
+    fn packet_timeout(packet_header: &Self::PacketHeader) -> &Counterparty::PacketTimeout;
 }
