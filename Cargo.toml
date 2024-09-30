@@ -53,6 +53,8 @@ members = [
 
     "tools/integration-test",
     "tools/test-framework",
+
+    "crates/ibc/ibc-components",
 ]
 
 [workspace.package]
@@ -157,6 +159,8 @@ hermes-wasm-test-components             = { version = "0.1.0" }
 hermes-solomachine-chain-components     = { version = "0.1.0" }
 hermes-solomachine-relayer              = { version = "0.1.0" }
 
+hermes-ibc-components                   = { version = "0.1.0" }
+
 [patch.crates-io]
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
@@ -219,3 +223,5 @@ hermes-wasm-test-components         = { path = "./crates/wasm/wasm-test-componen
 
 hermes-solomachine-chain-components = { path = "./crates/solomachine/solomachine-chain-components" }
 hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
+
+hermes-ibc-components               = { path = "./crates/ibc/ibc-components" }
