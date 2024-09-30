@@ -14,7 +14,6 @@ pub trait CanVerifySendPacketCommitment<Counterparty>:
 {
     // Note: this will be called by the counterparty chain, thus the lack of access to &self.
     fn verify_send_packet_commitment(
-        client_id: &Self::ClientId,
         consensus_state: &Self::ConsensusState,
         packet_header: &Self::PacketHeader,
         proof: &Self::CommitmentProof,

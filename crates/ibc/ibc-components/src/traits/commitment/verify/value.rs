@@ -6,7 +6,7 @@ use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsen
 use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::commitment::value::HasCommitmentValueType;
 
-pub trait CanVerifyCommitmentValue<Counterparty>:
+pub trait CanVerifyValueCommitment<Counterparty>:
     HasErrorType
     + HasCommitmentPathType
     + HasCommitmentValueType
@@ -14,8 +14,7 @@ pub trait CanVerifyCommitmentValue<Counterparty>:
     + HasClientIdType<Counterparty>
     + HasConsensusStateType<Counterparty>
 {
-    fn verify_commitment_value(
-        client_id: &Self::ClientId,
+    fn verify_value_commitment(
         consensus_state: &Self::ConsensusState,
         commitment_path: &Self::CommitmentPath,
         commitment_value: &Self::CommitmentValue,
