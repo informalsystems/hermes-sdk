@@ -2,6 +2,13 @@
 
 ## v0.2.0 (pre-release)
 
+-  CGP Refactoring [#440](https://github.com/informalsystems/hermes-sdk/pull/440)
+    - Update `cgp` version to include the addition of `cgp-type`. [cgp#23](https://github.com/contextgeneric/cgp/pull/23)
+    - Use `DelegateTo` from `cgp-component` instead of custom constructs to implement delegated chain implementations.
+    - Use `UseContext` from `cgp-component` instead of custom `WithContext` for encoding forwarding implementations.
+    - Experiment on using `WithProvider` and `HasType` from `cgp-type` to simplify chain type implementations for
+      `HasHeight`, `HasMessageType`, and `HasEventType`.
+
 - Chain components refactoring [#438](https://github.com/informalsystems/hermes-sdk/pull/438)
     - Introduce `hermes-chain-type-components` and `hermes-chain-components` crates, and move abstract chain
       constructs from `hermes-relayer-components`.
@@ -37,8 +44,11 @@
 - Minor Refactoring[(#428)](https://github.com/informalsystems/hermes-sdk/pull/428)
     - Remove unused constraints in `HasTimestampType::Timestamp`.
     - Update the `header` field in `CosmosUpdateClientMessage` to use `prost_types::Any` instead of `ibc_proto::Any`.
-    - Generalize the `CreateClientMessageBuilder` instance `BuildCosmosCreateClientMessage` to `BuildAnyCreateClientMessage`, and allows generic `CreateClientPayload` that has `client_state: Counterparty::ClientState` and `consensus_state: Counterparty::ConsensusState` fields.
-    - Rename the `ProvideCreateClientMessageOptionsType` instance in Cosmos from `ProvideCosmosCreateClientSettings` to `ProvideNoCreateClientMessageOptionsType`, with `CreateClientMessageOptions = ()`.
+    - Generalize the `CreateClientMessageBuilder` instance `BuildCosmosCreateClientMessage` to
+      `BuildAnyCreateClientMessage`, and allows generic `CreateClientPayload` that has `client_state: Counterparty::ClientState`
+      and `consensus_state: Counterparty::ConsensusState` fields.
+    - Rename the `ProvideCreateClientMessageOptionsType` instance in Cosmos from `ProvideCosmosCreateClientSettings`
+      to `ProvideNoCreateClientMessageOptionsType`, with `CreateClientMessageOptions = ()`.
 
 ## v0.1.0 (2024-09-03)
 
