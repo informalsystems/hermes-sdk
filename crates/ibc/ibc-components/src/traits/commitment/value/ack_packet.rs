@@ -6,7 +6,7 @@ use crate::traits::types::packet::raw_ack::HasPacketRawAckType;
 
 #[derive_component(AckPacketCommitmentValueBuilderComponent, AckPacketCommitmentValueBuilder<Chain>)]
 pub trait CanBuildAckPacketCommitmentValue<Counterparty>:
-    HasPacketRawAckType<Counterparty> + HasCommitmentValueType
+    HasPacketRawAckType<Counterparty> + HasCommitmentValueType + HasErrorType
 where
     Counterparty: HasPacketHeaderType<Self>,
 {
@@ -14,5 +14,5 @@ where
     fn build_ack_packet_commitment_value(
         packet_header: &Counterparty::PacketHeader,
         acks: &[Self::PacketRawAck],
-    ) -> Self::CommitmentValue;
+    ) -> Result<Self::CommitmentValue, Self::Error>;
 }
