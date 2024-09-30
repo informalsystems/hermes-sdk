@@ -133,14 +133,14 @@ impl Deref for CosmosChain {
     }
 }
 
-pub struct CosmosChainComponents;
+pub struct CosmosChainContextComponents;
 
 impl HasComponents for CosmosChain {
-    type Components = CosmosChainComponents;
+    type Components = CosmosChainContextComponents;
 }
 
 delegate_components! {
-    CosmosChainComponents {
+    CosmosChainContextComponents {
         [
             ErrorTypeComponent,
             ErrorRaiserComponent,
@@ -174,7 +174,7 @@ delegate_components! {
 
 with_cosmos_client_components! {
     delegate_components! {
-        CosmosChainComponents {
+        CosmosChainContextComponents {
             @CosmosClientComponents: CosmosClientComponents,
         }
     }
@@ -182,7 +182,7 @@ with_cosmos_client_components! {
 
 with_cosmos_tx_components! {
     delegate_components! {
-        CosmosChainComponents {
+        CosmosChainContextComponents {
             @CosmosTxComponents : CosmosTxComponents,
         }
     }
@@ -190,7 +190,7 @@ with_cosmos_tx_components! {
 
 with_cosmmos_chain_test_components! {
     delegate_components! {
-        CosmosChainComponents {
+        CosmosChainContextComponents {
             @CosmmosChainTestComponents: CosmmosChainTestComponents,
         }
     }
@@ -202,31 +202,31 @@ delegate_components! {
     }
 }
 
-impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainComponents {
+impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainContextComponents {
     fn tx_extension_options(chain: &CosmosChain) -> &Vec<ibc_proto::google::protobuf::Any> {
         &chain.tx_config.extension_options
     }
 }
 
-impl GasConfigGetter<CosmosChain> for CosmosChainComponents {
+impl GasConfigGetter<CosmosChain> for CosmosChainContextComponents {
     fn gas_config(chain: &CosmosChain) -> &GasConfig {
         &chain.tx_config.gas_config
     }
 }
 
-impl DefaultSignerGetter<CosmosChain> for CosmosChainComponents {
+impl DefaultSignerGetter<CosmosChain> for CosmosChainContextComponents {
     fn get_default_signer(chain: &CosmosChain) -> &Secp256k1KeyPair {
         &chain.key_entry
     }
 }
 
-impl FeeForSimulationGetter<CosmosChain> for CosmosChainComponents {
+impl FeeForSimulationGetter<CosmosChain> for CosmosChainContextComponents {
     fn fee_for_simulation(chain: &CosmosChain) -> &Fee {
         &chain.tx_config.gas_config.max_fee
     }
 }
 
-impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainComponents {
+impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainContextComponents {
     fn mutex_for_nonce_allocation<'a>(
         chain: &'a CosmosChain,
         _signer: &Secp256k1KeyPair,
@@ -245,7 +245,7 @@ impl ProvideMutexForNonceAllocation<CosmosChain> for CosmosChainComponents {
     }
 }
 
-impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainComponents {
+impl IbcCommitmentPrefixGetter<CosmosChain> for CosmosChainContextComponents {
     fn ibc_commitment_prefix(chain: &CosmosChain) -> &Vec<u8> {
         &chain.ibc_commitment_prefix
     }
@@ -310,13 +310,13 @@ impl HasTelemetry for CosmosChain {
     }
 }
 
-impl GrpcAddressGetter<CosmosChain> for CosmosChainComponents {
+impl GrpcAddressGetter<CosmosChain> for CosmosChainContextComponents {
     fn grpc_address(chain: &CosmosChain) -> &Uri {
         &chain.tx_config.grpc_address
     }
 }
 
-impl RpcClientGetter<CosmosChain> for CosmosChainComponents {
+impl RpcClientGetter<CosmosChain> for CosmosChainContextComponents {
     fn rpc_client(chain: &CosmosChain) -> &HttpClient {
         &chain.rpc_client
     }
@@ -345,7 +345,7 @@ impl HasBlockingChainHandle for CosmosChain {
     }
 }
 
-impl ChainIdGetter<CosmosChain> for CosmosChainComponents {
+impl ChainIdGetter<CosmosChain> for CosmosChainContextComponents {
     fn chain_id(chain: &CosmosChain) -> &ChainId {
         &chain.chain_id
     }

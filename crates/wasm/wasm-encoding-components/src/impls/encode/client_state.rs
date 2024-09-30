@@ -1,8 +1,8 @@
+use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use hermes_encoding_components::impls::encode_mut::combine::CombineEncoders;
 use hermes_encoding_components::impls::encode_mut::field::EncodeField;
 use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
-use hermes_encoding_components::impls::with_context::WithContext;
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
 use hermes_encoding_components::traits::transform::Transformer;
@@ -30,7 +30,7 @@ delegate_components! {
                 >,
                 EncodeField<
                     symbol!("latest_height"),
-                    EncodeLengthDelimitedProtoField<3, WithContext>,
+                    EncodeLengthDelimitedProtoField<3, UseContext>,
                 >,
             ]>,
         MutDecoderComponent: DecodeFrom<
@@ -38,7 +38,7 @@ delegate_components! {
             CombineEncoders<HList![
                 EncodeByteField<1>,
                 EncodeByteField<2>,
-                DecodeRequiredProtoField<3, WithContext>,
+                DecodeRequiredProtoField<3, UseContext>,
             ]>
         >,
     }

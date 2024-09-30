@@ -2,6 +2,8 @@
    Trait definition for [`HasEventType`].
 */
 
+use cgp::core::component::WithProvider;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 /**
@@ -43,4 +45,13 @@ pub trait HasEventType: Async {
        and _extraction_ methods to parse the variant information from the event.
     */
     type Event: Async;
+}
+
+impl<Chain, Provider, Event> ProvideEventType<Chain> for WithProvider<Provider>
+where
+    Chain: Async,
+    Provider: ProvideType<Chain, EventTypeComponent, Type = Event>,
+    Event: Async,
+{
+    type Event = Event;
 }

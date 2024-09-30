@@ -1,5 +1,6 @@
 use alloc::vec::Vec;
 
+use cgp::core::component::DelegateTo;
 use cgp::prelude::*;
 
 use crate::traits::types::height::HasHeightType;
@@ -38,4 +39,20 @@ where
         &self,
         client_id: &Self::ClientId,
     ) -> Result<Vec<Counterparty::Height>, Self::Error>;
+}
+
+impl<Chain, Counterparty, Components, Delegate> ConsensusStateHeightsQuerier<Chain, Counterparty>
+    for DelegateTo<Components>
+where
+    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Counterparty: HasHeightType,
+    Delegate: ConsensusStateHeightsQuerier<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
+    async fn query_consensus_state_heights(
+        chain: &Chain,
+        client_id: &Chain::ClientId,
+    ) -> Result<Vec<Counterparty::Height>, Chain::Error> {
+        Delegate::query_consensus_state_heights(chain, client_id).await
+    }
 }

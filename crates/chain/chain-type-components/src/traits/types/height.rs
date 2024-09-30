@@ -1,5 +1,7 @@
 use core::fmt::Display;
 
+use cgp::core::component::WithProvider;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(HeightTypeComponent, ProvideHeightType<Chain>)]
@@ -19,4 +21,13 @@ pub trait HasHeightType: Async {
        more complex Cosmos height type during production.
     */
     type Height: Ord + Display + Async + Clone;
+}
+
+impl<Chain, Provider, Height> ProvideHeightType<Chain> for WithProvider<Provider>
+where
+    Chain: Async,
+    Provider: ProvideType<Chain, HeightTypeComponent, Type = Height>,
+    Height: Ord + Display + Async + Clone,
+{
+    type Height = Height;
 }

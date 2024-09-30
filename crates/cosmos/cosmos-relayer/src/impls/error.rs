@@ -1,4 +1,5 @@
 use alloc::string::FromUtf8Error;
+use cgp::core::component::DelegateTo;
 use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
@@ -10,9 +11,7 @@ use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_
 use ibc::core::host::types::error::DecodingError;
 use ibc::primitives::TimestampError;
 
-use cgp::core::error::{
-    DelegateErrorRaiser, ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent,
-};
+use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
@@ -104,7 +103,7 @@ delegate_components! {
             RetryableErrorComponent,
         ]: ProvideHermesError,
         ErrorRaiserComponent:
-            DelegateErrorRaiser<CosmosErrorHandlers>,
+            DelegateTo<CosmosErrorHandlers>,
     }
 }
 

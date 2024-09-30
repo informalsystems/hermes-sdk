@@ -1,3 +1,4 @@
+use cgp::core::component::DelegateTo;
 use cgp::prelude::*;
 
 use crate::traits::types::ibc::HasIbcChainTypes;
@@ -30,4 +31,14 @@ pub trait HasCreateClientEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
     fn try_extract_create_client_event(event: Self::Event) -> Option<Self::CreateClientEvent>;
 
     fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &Self::ClientId;
+}
+
+impl<Chain, Counterparty, Components, Delegate>
+    ProvideCreateClientMessageOptionsType<Chain, Counterparty> for DelegateTo<Components>
+where
+    Chain: Async,
+    Delegate: ProvideCreateClientMessageOptionsType<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
+    type CreateClientMessageOptions = Delegate::CreateClientMessageOptions;
 }

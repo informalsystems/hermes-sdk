@@ -13,11 +13,13 @@ impl<Runtime> ProvideChannelOnceType<Runtime> for ProvideOneShotChannelType
 where
     Runtime: Async,
 {
-    type SenderOnce<T> = Sender<T>
+    type SenderOnce<T>
+        = Sender<T>
     where
         T: Async;
 
-    type ReceiverOnce<T> = Receiver<T>
+    type ReceiverOnce<T>
+        = Receiver<T>
     where
         T: Async;
 }

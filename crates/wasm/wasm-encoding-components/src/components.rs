@@ -1,3 +1,4 @@
+use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
 use hermes_cosmos_encoding_components::components::CosmosEncodingComponents;
@@ -5,7 +6,6 @@ pub use hermes_cosmos_encoding_components::components::{
     DecodeBufferTypeComponent, EncodeBufferTypeComponent,
 };
 use hermes_encoding_components::impls::delegate::DelegateEncoding;
-use hermes_encoding_components::impls::with_context::WithContext;
 pub use hermes_encoding_components::traits::convert::ConverterComponent;
 pub use hermes_encoding_components::traits::decode::DecoderComponent;
 pub use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
@@ -69,12 +69,12 @@ delegate_components! {
         [
             (WasmClientState, Any),
             (WasmConsensusState, Any),
-        ]: EncodeAsAnyProtobuf<ViaProtobuf, WithContext>,
+        ]: EncodeAsAnyProtobuf<ViaProtobuf, UseContext>,
 
         [
             (Any, WasmClientState),
             (Any, WasmConsensusState),
-        ]: DecodeAsAnyProtobuf<ViaProtobuf, WithContext>,
+        ]: DecodeAsAnyProtobuf<ViaProtobuf, UseContext>,
     }
 }
 
