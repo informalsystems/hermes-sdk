@@ -1,4 +1,6 @@
 pub mod entries;
+pub mod full;
+pub mod ignore_replay;
 pub mod no_replay;
 pub mod store_ack;
 pub mod timeout;

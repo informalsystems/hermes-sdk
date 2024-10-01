@@ -2,7 +2,7 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 
 use alloc::vec::Vec;
-use cgp::prelude::{CanRaiseError, HasErrorType};
+use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
@@ -31,8 +31,7 @@ where
 impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
     for DisallowDoubleReceive<InHandler>
 where
-    Chain: HasErrorType
-        + HasPacketAckType<Counterparty, App>
+    Chain: HasPacketAckType<Counterparty, App>
         + CanQueryPacketAck<Counterparty, App>
         + for<'a> CanRaiseError<DoublePacketReceive<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType

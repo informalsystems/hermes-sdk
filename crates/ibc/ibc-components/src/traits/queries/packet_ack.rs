@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
@@ -15,5 +16,5 @@ where
         src_client_id: &Counterparty::ClientId,
         dst_client_id: &Self::ClientId,
         nonce: &Counterparty::PacketNonce,
-    ) -> Result<Option<Self::PacketAck>, Self::Error>;
+    ) -> Result<Option<Vec<Self::PacketAck>>, Self::Error>;
 }
