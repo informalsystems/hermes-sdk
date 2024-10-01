@@ -7,6 +7,7 @@ use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::os::exec_command::{CommandWithEnvsExecutor, ExecOutput};
 use tokio::process::Command;
+use tracing::error;
 
 pub struct TokioExecCommand;
 
@@ -31,13 +32,22 @@ where
         args: &[&str],
         envs: &[(&str, &str)],
     ) -> Result<ExecOutput, Runtime::Error> {
-        let output = Command::new(command_path)
+        let output = match Command::new(command_path)
             .args(args)
             .envs(Vec::from(envs))
             .kill_on_drop(true)
             .output()
             .await
-            .map_err(Runtime::raise_error)?;
+        {
+            Ok(out) => out,
+            Err(_) => {
+                error!(
+                    "\"{}\" cannot be found",
+                    Runtime::file_path_to_string(command_path)
+                );
+                panic!();
+            }
+        };
 
         let stdout = str::from_utf8(&output.stdout).map_err(Runtime::raise_error)?;
 
