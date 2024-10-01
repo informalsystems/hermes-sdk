@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 

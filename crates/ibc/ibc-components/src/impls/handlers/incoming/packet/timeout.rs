@@ -1,6 +1,7 @@
 use alloc::vec::Vec;
 use core::fmt::Debug;
 use core::marker::PhantomData;
+use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::time::HasTimeType;
@@ -10,7 +11,6 @@ use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::timeout::CanCompareTimeoutTime;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::time::CanQueryCurrentTime;
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;

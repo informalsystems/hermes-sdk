@@ -1,9 +1,9 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::ibc::client_state::HasClientStateType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 

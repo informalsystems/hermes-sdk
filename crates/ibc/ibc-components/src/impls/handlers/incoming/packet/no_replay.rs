@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 
 use alloc::vec::Vec;
 use cgp::prelude::{CanRaiseError, HasErrorType};
+use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use crate::traits::fields::packet::header::client::HasPacketClients;
@@ -10,7 +11,6 @@ use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::packet_ack::CanQueryPacketAck;
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;

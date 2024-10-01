@@ -1,13 +1,13 @@
 use core::marker::PhantomData;
 
 use alloc::vec::Vec;
+use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
 use crate::traits::commitment::path::ack_packet::CanBuildAckPacketCommitmentPath;
 use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::ack_packet::CanBuildAckPacketCommitmentValue;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 

@@ -1,11 +1,11 @@
 use alloc::vec::Vec;
 use cgp::prelude::HasErrorType;
+use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
 use crate::traits::fields::packet::packet::entries::HasPacketEntries;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::app_packet::CanHandleIncomingPacketEntry;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 
