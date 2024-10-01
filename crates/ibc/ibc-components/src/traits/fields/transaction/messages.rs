@@ -10,7 +10,5 @@ pub trait HasIbcTransactionMessages<Counterparty, App>:
     + HasIbcMessageType<Counterparty, App>
     + HasAppIdType<Counterparty>
 {
-    fn ibc_transcation_messages(
-        transaction: &Self::IbcTransaction,
-    ) -> &[(Self::AppId, Self::IbcMessage)];
+    fn ibc_transcation_messages(transaction: &Self::IbcTransaction) -> &[Self::IbcMessage];
 }
