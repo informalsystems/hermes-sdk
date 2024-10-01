@@ -5,12 +5,13 @@ use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
 #[derive_component(IbcTransactionHandlerComponent, IbcTransactionHandler<Chain>)]
+#[async_trait]
 pub trait CanHandleIbcTransaction<Counterparty>:
     HasErrorType + HasIbcTransactionType<Counterparty> + HasPacketType<Counterparty>
 where
     Counterparty: HasClientIdType<Self>,
 {
-    fn handle_ibc_transaction(
+    async fn handle_ibc_transaction(
         &self,
         transaction: &Self::IbcTransaction,
     ) -> Result<Self::Packet, Self::Error>;
