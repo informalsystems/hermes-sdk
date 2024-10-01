@@ -36,6 +36,7 @@ where
             let ack = chain
                 .handle_incoming_packet_entry(packet_header, entry_header, entry_data)
                 .await?;
+
             acks.push(ack);
         }
 

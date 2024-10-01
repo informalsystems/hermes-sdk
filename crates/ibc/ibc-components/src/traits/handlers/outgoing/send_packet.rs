@@ -3,7 +3,7 @@ use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType
 
 use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
-use crate::traits::types::packet::header::HasPacketHeaderType;
+use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 
 #[derive_component(PacketSenderComponent, PacketSender<Chain>)]
@@ -11,7 +11,7 @@ use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 pub trait CanSendPacket<Counterparty, App>:
     HasErrorType
     + HasClientIdType<Counterparty>
-    + HasPacketHeaderType<Counterparty>
+    + HasPacketType<Counterparty>
     + HasPacketEntryHeaderType<Counterparty>
     + HasPacketDataType<Counterparty, App>
 where
@@ -23,5 +23,5 @@ where
         destination_client_id: &Counterparty::ClientId,
         timeout: &Counterparty::PacketTimeout,
         payloads: &[(Self::PacketEntryHeader, Self::PacketData)],
-    ) -> Result<Self::PacketHeader, Self::Error>;
+    ) -> Result<Self::Packet, Self::Error>;
 }
