@@ -4,8 +4,8 @@ use hermes_chain_type_components::traits::types::commitment_proof::HasCommitment
 
 use crate::traits::fields::packet::packet::entries::HasPacketEntries;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
-use crate::traits::handlers::incoming::app_packet::CanHandleIncomingPacketEntry;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::handlers::incoming::packet_entry::CanHandleIncomingPacketEntry;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 
