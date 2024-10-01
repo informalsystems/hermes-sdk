@@ -8,7 +8,7 @@ use crate::traits::fields::packet::header::client::HasPacketClients;
 use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
-use crate::traits::queries::packet_ack::CanQueryPacketAck;
+use crate::traits::queries::ack_packet_commitment::CanQueryAckPacketCommitment;
 use crate::traits::types::packet::ack::HasPacketAckType;
 
 pub struct IgnoreDoubleReceive<InHandler>(pub PhantomData<InHandler>);
@@ -16,7 +16,7 @@ pub struct IgnoreDoubleReceive<InHandler>(pub PhantomData<InHandler>);
 impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
     for IgnoreDoubleReceive<InHandler>
 where
-    Chain: HasPacketAckType<Counterparty, App> + CanQueryPacketAck<Counterparty, App>,
+    Chain: HasPacketAckType<Counterparty, App> + CanQueryAckPacketCommitment<Counterparty, App>,
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
@@ -35,7 +35,7 @@ where
         let dst_client_id = Counterparty::packet_dst_client_id(packet_header);
 
         let m_ack = chain
-            .query_packet_ack(src_client_id, dst_client_id, nonce)
+            .query_ack_packet_commitment(src_client_id, dst_client_id, nonce)
             .await?;
 
         match m_ack {

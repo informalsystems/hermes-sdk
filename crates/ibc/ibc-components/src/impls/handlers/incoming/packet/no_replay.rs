@@ -10,7 +10,7 @@ use crate::traits::fields::packet::header::client::HasPacketClients;
 use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
-use crate::traits::queries::packet_ack::CanQueryPacketAck;
+use crate::traits::queries::ack_packet_commitment::CanQueryAckPacketCommitment;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;
@@ -32,7 +32,7 @@ impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterpa
     for DisallowDoubleReceive<InHandler>
 where
     Chain: HasPacketAckType<Counterparty, App>
-        + CanQueryPacketAck<Counterparty, App>
+        + CanQueryAckPacketCommitment<Counterparty, App>
         + for<'a> CanRaiseError<DoublePacketReceive<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
@@ -52,7 +52,7 @@ where
         let dst_client_id = Counterparty::packet_dst_client_id(packet_header);
 
         let m_ack = chain
-            .query_packet_ack(src_client_id, dst_client_id, nonce)
+            .query_ack_packet_commitment(src_client_id, dst_client_id, nonce)
             .await?;
 
         if m_ack.is_some() {
