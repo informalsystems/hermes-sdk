@@ -7,8 +7,8 @@ use crate::traits::types::packet::packet::HasPacketType;
 
 #[derive_component(IncomingPacketHandlerComponent, IncomingPacketHandler<Chain>)]
 #[async_trait]
-pub trait CanHandleIncomingPacket<App, Counterparty>:
-    HasErrorType + HasPacketAckType<App, Counterparty>
+pub trait CanHandleIncomingPacket<Counterparty, App>:
+    HasErrorType + HasPacketAckType<Counterparty, App>
 where
     Counterparty: HasCommitmentProofType + HasPacketType<Self>,
 {

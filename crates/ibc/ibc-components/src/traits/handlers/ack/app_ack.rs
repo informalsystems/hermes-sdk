@@ -7,13 +7,13 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 
 #[derive_component(PacketAckHandlerComponent, PacketPayloadHandler<Chain>)]
 #[async_trait]
-pub trait CanHandlePacketAck<App, Counterparty>:
+pub trait CanHandlePacketAck<Counterparty, App>:
     HasErrorType
     + HasPacketHeaderType<Counterparty>
     + HasPacketEntryHeaderType<Counterparty>
-    + HasPacketDataType<App, Counterparty>
+    + HasPacketDataType<Counterparty, App>
 where
-    Counterparty: HasPacketAckType<App, Self>,
+    Counterparty: HasPacketAckType<Self, App>,
 {
     async fn handle_packet_ack(
         &self,

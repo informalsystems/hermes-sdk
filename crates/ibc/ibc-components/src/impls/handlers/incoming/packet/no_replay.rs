@@ -28,19 +28,19 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
-impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, App, Counterparty>
+impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
     for DisallowDoubleReceive<InHandler>
 where
     Chain: HasErrorType
-        + HasPacketAckType<App, Counterparty>
-        + CanQueryPacketAck<App, Counterparty>
+        + HasPacketAckType<Counterparty, App>
+        + CanQueryPacketAck<Counterparty, App>
         + for<'a> CanRaiseError<DoublePacketReceive<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
         + HasClientIdType<Chain>
         + HasPacketClients<Chain>,
-    InHandler: IncomingPacketHandler<Chain, App, Counterparty>,
+    InHandler: IncomingPacketHandler<Chain, Counterparty, App>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

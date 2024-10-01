@@ -5,8 +5,8 @@ use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 
 #[derive_component(AckPacketCommitmentValueBuilderComponent, AckPacketCommitmentValueBuilder<Chain>)]
-pub trait CanBuildAckPacketCommitmentValue<App, Counterparty>:
-    HasPacketAckType<App, Counterparty> + HasCommitmentValueType + HasErrorType
+pub trait CanBuildAckPacketCommitmentValue<Counterparty, App>:
+    HasPacketAckType<Counterparty, App> + HasCommitmentValueType + HasErrorType
 where
     Counterparty: HasPacketHeaderType<Self>,
 {

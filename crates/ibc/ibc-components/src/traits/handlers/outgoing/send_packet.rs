@@ -5,16 +5,15 @@ use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
-use crate::types::any_app::AnyApp;
 
 #[derive_component(PacketSenderComponent, PacketSender<Chain>)]
 #[async_trait]
-pub trait CanSendPacket<Counterparty>:
+pub trait CanSendPacket<Counterparty, App>:
     HasErrorType
     + HasClientIdType<Counterparty>
     + HasPacketHeaderType<Counterparty>
     + HasPacketEntryHeaderType<Counterparty>
-    + HasPacketDataType<AnyApp, Counterparty>
+    + HasPacketDataType<Counterparty, App>
 where
     Counterparty: HasClientIdType<Self> + HasPacketTimeoutType<Self>,
 {

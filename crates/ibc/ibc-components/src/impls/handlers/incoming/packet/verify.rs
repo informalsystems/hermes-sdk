@@ -17,10 +17,10 @@ use crate::traits::types::packet::ack::HasPacketAckType;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
-impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, App, Counterparty>
+impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
     for VerifySendPacketCommitmentProof<InHandler>
 where
-    Chain: HasPacketAckType<App, Counterparty>
+    Chain: HasPacketAckType<Counterparty, App>
         + CanQueryConsensusState<Counterparty>
         + CanRaiseError<Counterparty::Error>,
     Counterparty: HasHeightType
@@ -31,7 +31,7 @@ where
         + CanVerifyValueCommitment<Chain>
         + CanBuildSendPacketCommitmentPath<Chain>
         + CanBuildSendPacketCommitmentValue<Chain>,
-    InHandler: IncomingPacketHandler<Chain, App, Counterparty>,
+    InHandler: IncomingPacketHandler<Chain, Counterparty, App>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

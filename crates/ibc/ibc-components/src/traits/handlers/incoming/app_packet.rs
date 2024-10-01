@@ -7,11 +7,11 @@ use crate::traits::types::packet::header::HasPacketHeaderType;
 
 #[derive_component(IncomingPacketEntryHandlerComponent, IncomingPacketEntryHandler<Chain>)]
 #[async_trait]
-pub trait CanHandleIncomingPacketEntry<App, Counterparty>:
-    HasErrorType + HasPacketAckType<App, Counterparty>
+pub trait CanHandleIncomingPacketEntry<Counterparty, App>:
+    HasErrorType + HasPacketAckType<Counterparty, App>
 where
     Counterparty:
-        HasPacketHeaderType<Self> + HasPacketEntryHeaderType<Self> + HasPacketDataType<App, Self>,
+        HasPacketHeaderType<Self> + HasPacketEntryHeaderType<Self> + HasPacketDataType<Self, App>,
 {
     async fn handle_incoming_packet_entry(
         &self,

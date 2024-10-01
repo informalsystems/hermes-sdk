@@ -6,13 +6,12 @@ use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsen
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
-use crate::types::any_app::AnyApp;
 
-pub trait CanVerifyAckPacketCommitment<Counterparty>:
+pub trait CanVerifyAckPacketCommitment<Counterparty, App>:
     HasErrorType
     + HasCommitmentProofType
     + HasPacketHeaderType<Counterparty>
-    + HasPacketAckType<AnyApp, Counterparty>
+    + HasPacketAckType<Counterparty, App>
     + HasClientStateType<Counterparty>
     + HasConsensusStateType<Counterparty>
     + HasClientIdType<Counterparty>

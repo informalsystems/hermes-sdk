@@ -11,16 +11,16 @@ use crate::traits::types::packet::packet::HasPacketType;
 
 pub struct HandleIncomingPacketEntries;
 
-impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, App, Counterparty>
+impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty, App>
     for HandleIncomingPacketEntries
 where
     Chain: HasErrorType
-        + HasPacketAckType<App, Counterparty>
-        + CanHandleIncomingPacketEntry<App, Counterparty>,
+        + HasPacketAckType<Counterparty, App>
+        + CanHandleIncomingPacketEntry<Counterparty, App>,
     Counterparty: HasCommitmentProofType
         + HasPacketType<Chain>
         + HasPacketHeader<Chain>
-        + HasPacketEntries<App, Chain>,
+        + HasPacketEntries<Chain, App>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

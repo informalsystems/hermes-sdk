@@ -27,15 +27,15 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
-impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, App, Counterparty>
+impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
     for DisallowTimedOutIncomingPacket<InHandler>
 where
     Chain: CanQueryCurrentTime
-        + HasPacketAckType<App, Counterparty>
+        + HasPacketAckType<Counterparty, App>
         + CanCompareTimeoutTime<Counterparty>
         + for<'a> CanRaiseError<PacketTimedOut<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType + HasPacketHeader<Chain> + HasPacketTimeout<Chain>,
-    InHandler: IncomingPacketHandler<Chain, App, Counterparty>,
+    InHandler: IncomingPacketHandler<Chain, Counterparty, App>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

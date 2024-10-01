@@ -5,8 +5,8 @@ use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 
 #[async_trait]
-pub trait CanQueryPacketAck<App, Counterparty>:
-    HasPacketAckType<App, Counterparty> + HasClientIdType<Counterparty> + HasErrorType
+pub trait CanQueryPacketAck<Counterparty, App>:
+    HasPacketAckType<Counterparty, App> + HasClientIdType<Counterparty> + HasErrorType
 where
     Counterparty: HasClientIdType<Self> + HasPacketNonceType<Self>,
 {

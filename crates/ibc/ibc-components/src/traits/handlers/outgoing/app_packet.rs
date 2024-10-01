@@ -6,10 +6,10 @@ use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::packet::data::HasPacketDataType;
 
 #[derive_component(OutgoingPacketDataBuilderComponent, OutgoingPacketDataBuilder<Chain>)]
-pub trait CanBuildOutgoingPacketData<App, Counterparty>:
+pub trait CanBuildOutgoingPacketData<Counterparty, App>:
     HasErrorType
-    + HasIbcMessageType<App, Counterparty>
-    + HasPacketDataType<App, Counterparty>
+    + HasIbcMessageType<Counterparty, App>
+    + HasPacketDataType<Counterparty, App>
     + HasClientIdType<Counterparty>
     + HasAppIdType<Counterparty>
 where

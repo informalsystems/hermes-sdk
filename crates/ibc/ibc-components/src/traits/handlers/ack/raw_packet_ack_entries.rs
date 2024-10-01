@@ -3,14 +3,13 @@ use cgp::prelude::*;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
-use crate::types::any_app::AnyApp;
 
 #[derive_component(RawPacketAckEntriesHandlerComponent, RawPacketAckEntriesHandler<Chain>)]
 #[async_trait]
-pub trait CanHandleRawPacketAckEntries<Counterparty>:
+pub trait CanHandleRawPacketAckEntries<Counterparty, App>:
     HasErrorType + HasPacketHeaderType<Counterparty> + HasPacketEntryHeaderType<Counterparty>
 where
-    Counterparty: HasPacketAckType<AnyApp, Self>,
+    Counterparty: HasPacketAckType<Self, App>,
 {
     async fn handle_raw_packet_ack_entries(
         &self,

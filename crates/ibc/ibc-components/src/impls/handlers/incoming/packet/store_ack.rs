@@ -13,15 +13,15 @@ use crate::traits::types::packet::packet::HasPacketType;
 
 pub struct StorePacketAck<InHandler>(pub PhantomData<InHandler>);
 
-impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, App, Counterparty>
+impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
     for StorePacketAck<InHandler>
 where
     Chain: CanStoreCommitment
-        + HasPacketAckType<App, Counterparty>
+        + HasPacketAckType<Counterparty, App>
         + CanBuildAckPacketCommitmentPath<Counterparty>
-        + CanBuildAckPacketCommitmentValue<App, Counterparty>,
+        + CanBuildAckPacketCommitmentValue<Counterparty, App>,
     Counterparty: HasCommitmentProofType + HasPacketType<Chain> + HasPacketHeader<Chain>,
-    InHandler: IncomingPacketHandler<Chain, App, Counterparty>,
+    InHandler: IncomingPacketHandler<Chain, Counterparty, App>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,
