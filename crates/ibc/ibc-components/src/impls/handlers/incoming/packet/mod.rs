@@ -1,4 +1,5 @@
 pub mod entries;
+pub mod error_ack;
 pub mod full;
 pub mod ignore_replay;
 pub mod no_replay;
