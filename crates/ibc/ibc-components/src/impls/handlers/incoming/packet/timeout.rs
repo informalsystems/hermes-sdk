@@ -1,4 +1,3 @@
-use alloc::vec::Vec;
 use core::fmt::Debug;
 use core::marker::PhantomData;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
@@ -27,21 +26,21 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
-impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
+impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for DisallowTimedOutIncomingPacket<InHandler>
 where
     Chain: CanQueryCurrentTime
-        + HasPacketAckType<Counterparty, App>
+        + HasPacketAckType<Counterparty>
         + CanCompareTimeoutTime<Counterparty>
         + for<'a> CanRaiseError<PacketTimedOut<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType + HasPacketHeader<Chain> + HasPacketTimeout<Chain>,
-    InHandler: IncomingPacketHandler<Chain, Counterparty, App>,
+    InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Chain::PacketAck>, Chain::Error> {
+    ) -> Result<Chain::PacketAck, Chain::Error> {
         let current_time = &chain.get_current_time();
 
         let packet_header = Counterparty::packet_header(packet);

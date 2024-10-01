@@ -1,4 +1,3 @@
-use alloc::vec::Vec;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
@@ -7,8 +6,8 @@ use crate::traits::types::packet::packet::HasPacketType;
 
 #[derive_component(IncomingPacketHandlerComponent, IncomingPacketHandler<Chain>)]
 #[async_trait]
-pub trait CanHandleIncomingPacket<Counterparty, App>:
-    HasErrorType + HasPacketAckType<Counterparty, App>
+pub trait CanHandleIncomingPacket<Counterparty>:
+    HasErrorType + HasPacketAckType<Counterparty>
 where
     Counterparty: HasCommitmentProofType + HasPacketType<Self>,
 {
@@ -16,5 +15,5 @@ where
         &self,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Self::PacketAck>, Self::Error>;
+    ) -> Result<Self::PacketAck, Self::Error>;
 }

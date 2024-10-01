@@ -7,11 +7,11 @@ use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsen
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 
-pub trait CanVerifyAckPacketCommitment<Counterparty, App>:
+pub trait CanVerifyAckPacketCommitment<Counterparty>:
     HasErrorType
     + HasCommitmentProofType
     + HasPacketHeaderType<Counterparty>
-    + HasPacketAckType<Counterparty, App>
+    + HasPacketAckType<Counterparty>
     + HasClientStateType<Counterparty>
     + HasConsensusStateType<Counterparty>
     + HasClientIdType<Counterparty>

@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::vec::Vec;
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
@@ -9,13 +11,13 @@ use crate::traits::handlers::incoming::packet_entry::CanHandleIncomingPacketEntr
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 
-pub struct HandleIncomingPacketEntries;
+pub struct HandleIncomingPacketEntries<App>(pub PhantomData<App>);
 
-impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty, App>
-    for HandleIncomingPacketEntries
+impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty>
+    for HandleIncomingPacketEntries<App>
 where
     Chain: HasErrorType
-        + HasPacketAckType<Counterparty, App>
+        + HasPacketAckType<Counterparty>
         + CanHandleIncomingPacketEntry<Counterparty, App>,
     Counterparty: HasCommitmentProofType
         + HasPacketType<Chain>
@@ -26,7 +28,7 @@ where
         chain: &Chain,
         packet: &Counterparty::Packet,
         _send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Chain::PacketAck>, Chain::Error> {
+    ) -> Result<Chain::PacketAck, Chain::Error> {
         let packet_header = Counterparty::packet_header(packet);
         let packet_entries = Counterparty::packet_entries(packet);
 
@@ -40,6 +42,7 @@ where
             acks.push(ack);
         }
 
-        Ok(acks)
+        todo!()
+        // Ok(acks)
     }
 }

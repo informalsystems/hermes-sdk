@@ -7,6 +7,7 @@ use crate::traits::handlers::incoming::packet_entry::IncomingPacketEntryHandler;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
+use crate::traits::types::packet::entry_ack::HasPacketEntryAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 
 pub struct WrapHandlerErrorAsAck<ErrorHandler, InHandler>(
@@ -17,7 +18,7 @@ impl<Chain, Counterparty, App, ErrorHandler, InHandler>
     IncomingPacketEntryHandler<Chain, Counterparty, App>
     for WrapHandlerErrorAsAck<ErrorHandler, InHandler>
 where
-    Chain: HasErrorType + HasPacketAckType<Counterparty, App>,
+    Chain: HasErrorType + HasPacketEntryAckType<Counterparty, App>,
     Counterparty: HasPacketHeaderType<Chain>
         + HasPacketEntryHeaderType<Chain>
         + HasPacketDataType<Chain, App>,

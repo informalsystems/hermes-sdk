@@ -9,9 +9,9 @@ use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEn
 use crate::traits::handlers::incoming::packet_entry::{
     CanHandleIncomingPacketEntry, IncomingPacketEntryHandler,
 };
-use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
+use crate::traits::types::packet::entry_ack::HasPacketEntryAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 
 pub struct EncodeAndHandlePacketEntry<InApp>(pub PhantomData<InApp>);
@@ -19,8 +19,8 @@ pub struct EncodeAndHandlePacketEntry<InApp>(pub PhantomData<InApp>);
 impl<Chain, Counterparty, App, InApp, RawPacketData, PacketData, RawPacketAck, PacketAck>
     IncomingPacketEntryHandler<Chain, Counterparty, App> for EncodeAndHandlePacketEntry<InApp>
 where
-    Chain: HasPacketAckType<Counterparty, App, PacketAck = RawPacketAck>
-        + HasPacketAckType<Counterparty, InApp, PacketAck = PacketAck>
+    Chain: HasPacketEntryAckType<Counterparty, App, PacketEntryAck = RawPacketAck>
+        + HasPacketEntryAckType<Counterparty, InApp, PacketEntryAck = PacketAck>
         + CanHandleIncomingPacketEntry<Counterparty, InApp>
         + HasEncoding<App>
         + CanRaiseError<ErrorOf<Chain::Encoding>>

@@ -1,7 +1,6 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use alloc::vec::Vec;
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
@@ -28,24 +27,24 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
-impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
+impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for DisallowDoubleReceive<InHandler>
 where
-    Chain: HasPacketAckType<Counterparty, App>
-        + CanQueryAckPacketCommitment<Counterparty, App>
+    Chain: HasPacketAckType<Counterparty>
+        + CanQueryAckPacketCommitment<Counterparty>
         + for<'a> CanRaiseError<DoublePacketReceive<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
         + HasClientIdType<Chain>
         + HasPacketClients<Chain>,
-    InHandler: IncomingPacketHandler<Chain, Counterparty, App>,
+    InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Chain::PacketAck>, Chain::Error> {
+    ) -> Result<Chain::PacketAck, Chain::Error> {
         let packet_header = Counterparty::packet_header(packet);
         let nonce = Counterparty::packet_nonce(packet_header);
         let src_client_id = Counterparty::packet_src_client_id(packet_header);

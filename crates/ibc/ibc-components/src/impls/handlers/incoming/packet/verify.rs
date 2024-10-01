@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use alloc::vec::Vec;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
@@ -17,10 +16,10 @@ use crate::traits::types::packet::ack::HasPacketAckType;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
-impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, Counterparty, App>
+impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where
-    Chain: HasPacketAckType<Counterparty, App>
+    Chain: HasPacketAckType<Counterparty>
         + CanQueryConsensusState<Counterparty>
         + CanRaiseError<Counterparty::Error>,
     Counterparty: HasHeightType
@@ -31,13 +30,13 @@ where
         + CanVerifyValueCommitment<Chain>
         + CanBuildSendPacketCommitmentPath<Chain>
         + CanBuildSendPacketCommitmentValue<Chain>,
-    InHandler: IncomingPacketHandler<Chain, Counterparty, App>,
+    InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Vec<Chain::PacketAck>, Chain::Error> {
+    ) -> Result<Chain::PacketAck, Chain::Error> {
         let header = Counterparty::packet_header(packet);
         let client_id = Counterparty::packet_dst_client_id(header);
         let proof_height = Counterparty::commitment_proof_height(send_proof);
