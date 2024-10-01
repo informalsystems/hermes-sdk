@@ -14,14 +14,13 @@ use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
 use crate::traits::types::packet::ack::HasPacketAckType;
-use crate::types::any_app::AnyApp;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
-impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
+impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, App, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where
-    Chain: HasPacketAckType<AnyApp, Counterparty>
+    Chain: HasPacketAckType<App, Counterparty>
         + CanQueryConsensusState<Counterparty>
         + CanRaiseError<Counterparty::Error>,
     Counterparty: HasHeightType
@@ -32,7 +31,7 @@ where
         + CanVerifyValueCommitment<Chain>
         + CanBuildSendPacketCommitmentPath<Chain>
         + CanBuildSendPacketCommitmentValue<Chain>,
-    InHandler: IncomingPacketHandler<Chain, Counterparty>,
+    InHandler: IncomingPacketHandler<Chain, App, Counterparty>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

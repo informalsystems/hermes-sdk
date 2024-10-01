@@ -14,7 +14,6 @@ use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;
-use crate::types::any_app::AnyApp;
 
 pub struct DisallowDoubleReceive<InHandler>(pub PhantomData<InHandler>);
 
@@ -29,19 +28,19 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
-impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
+impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, App, Counterparty>
     for DisallowDoubleReceive<InHandler>
 where
     Chain: HasErrorType
-        + HasPacketAckType<AnyApp, Counterparty>
-        + CanQueryPacketAck<AnyApp, Counterparty>
+        + HasPacketAckType<App, Counterparty>
+        + CanQueryPacketAck<App, Counterparty>
         + for<'a> CanRaiseError<DoublePacketReceive<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
         + HasClientIdType<Chain>
         + HasPacketClients<Chain>,
-    InHandler: IncomingPacketHandler<Chain, Counterparty>,
+    InHandler: IncomingPacketHandler<Chain, App, Counterparty>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

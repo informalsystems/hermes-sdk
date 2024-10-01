@@ -14,7 +14,6 @@ use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
-use crate::types::any_app::AnyApp;
 
 pub struct DisallowTimedOutIncomingPacket<InHandler>(pub PhantomData<InHandler>);
 
@@ -28,15 +27,15 @@ where
     pub packet: &'a Counterparty::Packet,
 }
 
-impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
+impl<Chain, Counterparty, App, InHandler> IncomingPacketHandler<Chain, App, Counterparty>
     for DisallowTimedOutIncomingPacket<InHandler>
 where
     Chain: CanQueryCurrentTime
-        + HasPacketAckType<AnyApp, Counterparty>
+        + HasPacketAckType<App, Counterparty>
         + CanCompareTimeoutTime<Counterparty>
         + for<'a> CanRaiseError<PacketTimedOut<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType + HasPacketHeader<Chain> + HasPacketTimeout<Chain>,
-    InHandler: IncomingPacketHandler<Chain, Counterparty>,
+    InHandler: IncomingPacketHandler<Chain, App, Counterparty>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

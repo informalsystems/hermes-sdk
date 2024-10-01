@@ -8,19 +8,19 @@ use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
-use crate::types::any_app::AnyApp;
 
 pub struct HandleIncomingPacketEntries;
 
-impl<Chain, Counterparty> IncomingPacketHandler<Chain, Counterparty> for HandleIncomingPacketEntries
+impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, App, Counterparty>
+    for HandleIncomingPacketEntries
 where
     Chain: HasErrorType
-        + HasPacketAckType<AnyApp, Counterparty>
-        + CanHandleIncomingPacketEntry<AnyApp, Counterparty>,
+        + HasPacketAckType<App, Counterparty>
+        + CanHandleIncomingPacketEntry<App, Counterparty>,
     Counterparty: HasCommitmentProofType
         + HasPacketType<Chain>
         + HasPacketHeader<Chain>
-        + HasPacketEntries<Chain>,
+        + HasPacketEntries<App, Chain>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,

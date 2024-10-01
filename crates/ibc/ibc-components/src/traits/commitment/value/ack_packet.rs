@@ -3,11 +3,10 @@ use cgp::prelude::*;
 use crate::traits::types::commitment::value::HasCommitmentValueType;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
-use crate::types::any_app::AnyApp;
 
 #[derive_component(AckPacketCommitmentValueBuilderComponent, AckPacketCommitmentValueBuilder<Chain>)]
-pub trait CanBuildAckPacketCommitmentValue<Counterparty>:
-    HasPacketAckType<AnyApp, Counterparty> + HasCommitmentValueType + HasErrorType
+pub trait CanBuildAckPacketCommitmentValue<App, Counterparty>:
+    HasPacketAckType<App, Counterparty> + HasCommitmentValueType + HasErrorType
 where
     Counterparty: HasPacketHeaderType<Self>,
 {
