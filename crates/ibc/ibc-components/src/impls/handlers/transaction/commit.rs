@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::HasErrorType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPath;
 use crate::traits::commitment::store::CanStoreCommitment;
@@ -23,7 +22,6 @@ where
         + CanBuildSendPacketCommitmentPath<Counterparty>
         + CanBuildSendPacketCommitmentValue<Counterparty>
         + CanStoreCommitment,
-    Counterparty: HasClientIdType<Chain>,
     InHandler: IbcTransactionHandler<Chain, Counterparty>,
 {
     async fn handle_ibc_transaction(

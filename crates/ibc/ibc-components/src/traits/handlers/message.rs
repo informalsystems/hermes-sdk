@@ -1,7 +1,5 @@
 use cgp::prelude::*;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
-use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
@@ -15,10 +13,6 @@ pub trait CanHandleIbcMessage<Counterparty, App>:
     + HasIbcMessageType<Counterparty, App>
     + HasPacketDataType<Counterparty, App>
     + HasPacketEntryHeaderType<Counterparty>
-    + HasClientIdType<Counterparty>
-    + HasAppIdType<Counterparty>
-where
-    Counterparty: HasClientIdType<Self>,
 {
     async fn handle_ibc_message(
         &self,
