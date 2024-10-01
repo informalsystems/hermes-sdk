@@ -1,6 +1,6 @@
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 
 use crate::traits::types::commitment::path::HasCommitmentPathType;
@@ -11,7 +11,7 @@ pub trait CanVerifyValueCommitment<Counterparty>:
     + HasCommitmentPathType
     + HasCommitmentValueType
     + HasCommitmentProofType
-    + HasClientIdType<Counterparty>
+    + HasChannelIdType<Counterparty>
     + HasConsensusStateType<Counterparty>
 {
     fn verify_value_commitment(

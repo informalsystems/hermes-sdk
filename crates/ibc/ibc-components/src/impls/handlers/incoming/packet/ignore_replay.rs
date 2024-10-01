@@ -1,9 +1,9 @@
 use core::marker::PhantomData;
 
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::traits::fields::packet::header::client::HasPacketClients;
+use crate::traits::fields::packet::header::channel::HasPacketChannels;
 use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
@@ -19,8 +19,8 @@ where
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
-        + HasClientIdType<Chain>
-        + HasPacketClients<Chain>,
+        + HasChannelIdType<Chain>
+        + HasPacketChannels<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(
@@ -30,11 +30,11 @@ where
     ) -> Result<Chain::PacketAck, Chain::Error> {
         let packet_header = Counterparty::packet_header(packet);
         let nonce = Counterparty::packet_nonce(packet_header);
-        let src_client_id = Counterparty::packet_src_client_id(packet_header);
-        let dst_client_id = Counterparty::packet_dst_client_id(packet_header);
+        let src_channel_id = Counterparty::packet_src_channel_id(packet_header);
+        let dst_channel_id = Counterparty::packet_dst_channel_id(packet_header);
 
         let m_ack = chain
-            .query_ack_packet_commitment(src_client_id, dst_client_id, nonce)
+            .query_ack_packet_commitment(src_channel_id, dst_channel_id, nonce)
             .await?;
 
         match m_ack {

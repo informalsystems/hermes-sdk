@@ -2,9 +2,9 @@ use core::marker::PhantomData;
 
 use alloc::vec::Vec;
 use cgp::prelude::HasErrorType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::traits::fields::transaction::clients::HasIbcTransactionClients;
+use crate::traits::fields::transaction::channel::HasIbcTransactionChannels;
 use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
 use crate::traits::handlers::build_packet::CanBuildPacket;
@@ -23,21 +23,21 @@ where
         + HasIbcTransactionType<Counterparty>
         + HasPacketType<Counterparty>
         + HasIbcTransactionHeader<Counterparty>
-        + HasIbcTransactionClients<Counterparty>
+        + HasIbcTransactionChannels<Counterparty>
         + HasIbcTransactionMessages<Counterparty, App>
         + CanHandleIbcMessage<Counterparty, App>
         + CanBuildPacket<Counterparty, App>
         + CanAllocatePacketNonce<Counterparty>
-        + HasClientIdType<Counterparty>,
-    Counterparty: HasClientIdType<Chain>,
+        + HasChannelIdType<Counterparty>,
+    Counterparty: HasChannelIdType<Chain>,
 {
     async fn handle_ibc_transaction(
         chain: &Chain,
         transaction: &Chain::IbcTransaction,
     ) -> Result<Chain::Packet, Chain::Error> {
         let transaction_header = Chain::ibc_transcation_header(transaction);
-        let src_client_id = Chain::transaction_src_client_id(transaction_header);
-        let dst_client_id = Chain::transaction_dst_client_id(transaction_header);
+        let src_channel_id = Chain::transaction_src_channel_id(transaction_header);
+        let dst_channel_id = Chain::transaction_dst_channel_id(transaction_header);
         let messages = Chain::ibc_transcation_messages(transaction);
 
         let mut entries = Vec::new();
@@ -51,7 +51,7 @@ where
         }
 
         let nonce = chain
-            .allocate_packet_nonce(src_client_id, dst_client_id)
+            .allocate_packet_nonce(src_channel_id, dst_channel_id)
             .await?;
 
         let packet = chain

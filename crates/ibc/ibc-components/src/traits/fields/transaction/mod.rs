@@ -1,3 +1,3 @@
-pub mod clients;
+pub mod channel;
 pub mod header;
 pub mod messages;

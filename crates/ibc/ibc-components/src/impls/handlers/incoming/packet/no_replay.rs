@@ -3,9 +3,9 @@ use core::marker::PhantomData;
 
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
-use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::traits::fields::packet::header::client::HasPacketClients;
+use crate::traits::fields::packet::header::channel::HasPacketChannels;
 use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
@@ -18,11 +18,11 @@ pub struct DisallowDoubleReceive<InHandler>(pub PhantomData<InHandler>);
 
 pub struct DoublePacketReceive<'a, Chain, Counterparty>
 where
-    Chain: HasClientIdType<Counterparty>,
-    Counterparty: HasClientIdType<Chain> + HasPacketNonceType<Chain> + HasPacketType<Chain>,
+    Chain: HasChannelIdType<Counterparty>,
+    Counterparty: HasChannelIdType<Chain> + HasPacketNonceType<Chain> + HasPacketType<Chain>,
 {
-    pub src_client_id: &'a Counterparty::ClientId,
-    pub dst_client_id: &'a Chain::ClientId,
+    pub src_channel_id: &'a Counterparty::ChannelId,
+    pub dst_channel_id: &'a Chain::ChannelId,
     pub nonce: &'a Counterparty::PacketNonce,
     pub packet: &'a Counterparty::Packet,
 }
@@ -36,8 +36,8 @@ where
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
-        + HasClientIdType<Chain>
-        + HasPacketClients<Chain>,
+        + HasChannelIdType<Chain>
+        + HasPacketChannels<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(
@@ -47,17 +47,17 @@ where
     ) -> Result<Chain::PacketAck, Chain::Error> {
         let packet_header = Counterparty::packet_header(packet);
         let nonce = Counterparty::packet_nonce(packet_header);
-        let src_client_id = Counterparty::packet_src_client_id(packet_header);
-        let dst_client_id = Counterparty::packet_dst_client_id(packet_header);
+        let src_channel_id = Counterparty::packet_src_channel_id(packet_header);
+        let dst_channel_id = Counterparty::packet_dst_channel_id(packet_header);
 
         let m_ack = chain
-            .query_ack_packet_commitment(src_client_id, dst_client_id, nonce)
+            .query_ack_packet_commitment(src_channel_id, dst_channel_id, nonce)
             .await?;
 
         if m_ack.is_some() {
             Err(Chain::raise_error(DoublePacketReceive {
-                src_client_id,
-                dst_client_id,
+                src_channel_id,
+                dst_channel_id,
                 nonce,
                 packet,
             }))
@@ -69,17 +69,17 @@ where
 
 impl<'a, Chain, Counterparty> Debug for DoublePacketReceive<'a, Chain, Counterparty>
 where
-    Chain: HasClientIdType<Counterparty>,
-    Counterparty: HasClientIdType<Chain> + HasPacketNonceType<Chain> + HasPacketType<Chain>,
-    Chain::ClientId: Debug,
-    Counterparty::ClientId: Debug,
+    Chain: HasChannelIdType<Counterparty>,
+    Counterparty: HasChannelIdType<Chain> + HasPacketNonceType<Chain> + HasPacketType<Chain>,
+    Chain::ChannelId: Debug,
+    Counterparty::ChannelId: Debug,
     Counterparty::PacketNonce: Debug,
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(
             f,
             "chain has already received incoming packet from {:?} to {:?} with nonce {:?}",
-            self.src_client_id, self.dst_client_id, self.nonce,
+            self.src_channel_id, self.dst_channel_id, self.nonce,
         )?;
 
         Ok(())
