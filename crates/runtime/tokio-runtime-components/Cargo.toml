@@ -19,4 +19,5 @@ hermes-async-runtime-components     = { workspace = true }
 tokio           = { workspace = true, features = ["full"] }
 futures         = { workspace = true }
 rand            = { workspace = true }
+tracing         = { workspace = true }
 tokio-stream    = { version = "0.1" }
