@@ -21,6 +21,6 @@ pub trait CanBuildPacket<Counterparty, App>:
         &self,
         transaction_header: &Self::IbcTransactionHeader,
         nonce: Self::PacketNonce,
-        entries: Vec<(Self::PayloadHeader, Self::PayloadData)>,
+        payloads: Vec<(Self::PayloadHeader, Self::PayloadData)>,
     ) -> Result<Self::Packet, Self::Error>;
 }
