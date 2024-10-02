@@ -8,16 +8,16 @@ use crate::traits::builders::packet::CanBuildPacket;
 use crate::traits::fields::transaction::channel::HasIbcTransactionChannels;
 use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
-use crate::traits::handlers::outgoing::message::CanHandleIbcMessage;
+use crate::traits::handlers::outgoing::message::IbcMessageHandler;
 use crate::traits::handlers::outgoing::transaction::IbcTransactionHandler;
 use crate::traits::nonce::CanAllocatePacketNonce;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
-pub struct HandleIbcTransactionMessages<App>(pub PhantomData<App>);
+pub struct HandleIbcTransactionMessages<App, InHandler>(pub PhantomData<(App, InHandler)>);
 
-impl<Chain, Counterparty, App> IbcTransactionHandler<Chain, Counterparty>
-    for HandleIbcTransactionMessages<App>
+impl<Chain, Counterparty, App, InHandler> IbcTransactionHandler<Chain, Counterparty>
+    for HandleIbcTransactionMessages<App, InHandler>
 where
     Chain: HasErrorType
         + HasIbcTransactionType<Counterparty>
@@ -25,11 +25,11 @@ where
         + HasIbcTransactionHeader<Counterparty>
         + HasIbcTransactionChannels<Counterparty>
         + HasIbcTransactionMessages<Counterparty, App>
-        + CanHandleIbcMessage<Counterparty, App>
         + CanBuildPacket<Counterparty, App>
         + CanAllocatePacketNonce<Counterparty>
         + HasChannelIdType<Counterparty>,
     Counterparty: HasChannelIdType<Chain>,
+    InHandler: IbcMessageHandler<Chain, Counterparty, App>,
 {
     async fn handle_ibc_transaction(
         chain: &Chain,
@@ -44,9 +44,9 @@ where
         let mut payloads = Vec::new();
 
         for (message_header, message) in messages {
-            let payload = chain
-                .handle_ibc_message(transaction_header, message_header, message)
-                .await?;
+            let payload =
+                InHandler::handle_ibc_message(chain, transaction_header, message_header, message)
+                    .await?;
 
             payloads.push(payload);
         }
