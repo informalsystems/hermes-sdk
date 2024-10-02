@@ -8,7 +8,7 @@ use crate::traits::builders::ack::CanBuildPacketAckFromEntries;
 use crate::traits::fields::packet::packet::entries::HasPacketEntries;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
-use crate::traits::handlers::incoming::packet_entry::CanHandleIncomingPacketEntry;
+use crate::traits::handlers::incoming::payload::CanHandleIncomingPayload;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 
@@ -19,7 +19,7 @@ impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty>
 where
     Chain: HasErrorType
         + HasPacketAckType<Counterparty>
-        + CanHandleIncomingPacketEntry<Counterparty, App>
+        + CanHandleIncomingPayload<Counterparty, App>
         + CanBuildPacketAckFromEntries<Counterparty, App>,
     Counterparty: HasCommitmentProofType
         + HasPacketType<Chain>
@@ -36,9 +36,9 @@ where
 
         let mut acks = Vec::new();
 
-        for (entry_header, entry_data) in packet_entries {
+        for (payload_header, payload_data) in packet_entries {
             let ack = chain
-                .handle_incoming_packet_entry(packet_header, entry_header, entry_data)
+                .handle_incoming_payload(packet_header, payload_header, payload_data)
                 .await?;
 
             acks.push(ack);

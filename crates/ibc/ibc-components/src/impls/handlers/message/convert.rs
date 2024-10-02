@@ -53,12 +53,12 @@ where
 
         let message = encoding.convert(any_message).map_err(Chain::raise_error)?;
 
-        let (entry_header, packet_data) =
+        let (payload_header, packet_data) =
             InHandler::handle_ibc_message(chain, transaction_header, message_header, &message)
                 .await?;
 
         let any_packet_data = encoding.convert(&packet_data).map_err(Chain::raise_error)?;
 
-        Ok((entry_header, any_packet_data))
+        Ok((payload_header, any_packet_data))
     }
 }

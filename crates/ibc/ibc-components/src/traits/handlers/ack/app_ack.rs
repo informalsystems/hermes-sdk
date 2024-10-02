@@ -18,7 +18,7 @@ where
     async fn handle_packet_ack(
         &self,
         packet_header: &Self::PacketHeader,
-        entry_header: &Self::PayloadHeader,
-        entry_ack: &Counterparty::PayloadAck,
+        payload_header: &Self::PayloadHeader,
+        payload_ack: &Counterparty::PayloadAck,
     ) -> Result<(), Self::Error>;
 }
