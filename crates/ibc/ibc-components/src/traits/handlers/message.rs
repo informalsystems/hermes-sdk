@@ -1,3 +1,4 @@
+use cgp::core::component::UseContext;
 use cgp::prelude::*;
 
 use crate::traits::types::message::HasIbcMessageType;
@@ -22,4 +23,20 @@ pub trait CanHandleIbcMessage<Counterparty, App>:
         message_header: &Self::IbcMessageHeader,
         message: &Self::IbcMessage,
     ) -> Result<(Self::PacketEntryHeader, Self::PacketData), Self::Error>;
+}
+
+impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App> for UseContext
+where
+    Chain: CanHandleIbcMessage<Counterparty, App>,
+{
+    async fn handle_ibc_message(
+        chain: &Chain,
+        transaction_header: &Chain::IbcTransactionHeader,
+        message_header: &Chain::IbcMessageHeader,
+        message: &Chain::IbcMessage,
+    ) -> Result<(Chain::PacketEntryHeader, Chain::PacketData), Chain::Error> {
+        chain
+            .handle_ibc_message(transaction_header, message_header, message)
+            .await
+    }
 }
