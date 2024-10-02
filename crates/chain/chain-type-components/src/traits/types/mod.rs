@@ -1,4 +1,5 @@
 pub mod address;
+pub mod amount;
 pub mod chain_id;
 pub mod commitment_prefix;
 pub mod commitment_proof;
