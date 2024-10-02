@@ -7,7 +7,7 @@ use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 #[derive_component(PacketAckHandlerComponent, PacketPayloadHandler<Chain>)]
 #[async_trait]
-pub trait CanHandlePacketAck<Counterparty, App>:
+pub trait CanHandlePayloadAck<Counterparty, App>:
     HasErrorType
     + HasPacketHeaderType<Counterparty>
     + HasPayloadHeaderType<Counterparty>
@@ -15,7 +15,7 @@ pub trait CanHandlePacketAck<Counterparty, App>:
 where
     Counterparty: HasPayloadAckType<Self, App>,
 {
-    async fn handle_packet_ack(
+    async fn handle_payload_ack(
         &self,
         packet_header: &Self::PacketHeader,
         payload_header: &Self::PayloadHeader,
