@@ -12,9 +12,10 @@ pub struct Unescrow;
 
 #[derive_component(TokenTransfererComponent, TokenTransferer<Chain>)]
 #[async_trait]
-pub trait CanTransferToken<Mode>: HasAddressType + HasAmountType + HasErrorType {
+pub trait CanTransferToken<Mode: Async>: HasAddressType + HasAmountType + HasErrorType {
     async fn transfer_token(
         &self,
+        mode: Mode,
         target: &Self::Address,
         amount: &Self::Amount,
     ) -> Result<(), Self::Error>;

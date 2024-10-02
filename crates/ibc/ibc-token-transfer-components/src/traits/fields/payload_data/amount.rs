@@ -12,12 +12,12 @@ where
 }
 
 #[derive_component(IbcTransferReceiverGetterComponent, IbcTransferReceiverGetter<Chain>)]
-pub trait HasIbcTransferDenom<Counterparty, App>:
+pub trait HasIbcTransferAmount<Counterparty, App>:
     HasAmountType + HasPayloadDataType<Counterparty, App>
 where
     Counterparty: HasAmountType,
 {
-    fn ibc_transfer_denom(
+    fn ibc_transfer_amount(
         payload_data: &Self::PayloadData,
     ) -> &IbcTransferAmount<Self, Counterparty>;
 }
