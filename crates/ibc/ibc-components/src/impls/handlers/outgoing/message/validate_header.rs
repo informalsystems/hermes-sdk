@@ -5,7 +5,7 @@ use cgp::prelude::{CanRaiseError, HasErrorType};
 
 use crate::traits::fields::message::app_id::HasIbcMessageAppIds;
 use crate::traits::fields::payload::app::HasPayloadAppIds;
-use crate::traits::handlers::message::IbcMessageHandler;
+use crate::traits::handlers::outgoing::message::IbcMessageHandler;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;

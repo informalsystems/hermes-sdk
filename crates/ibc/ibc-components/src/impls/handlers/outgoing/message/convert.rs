@@ -6,7 +6,7 @@ use cgp::prelude::{CanRaiseError, HasErrorType};
 use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::HasEncoding;
 
-use crate::traits::handlers::message::IbcMessageHandler;
+use crate::traits::handlers::outgoing::message::IbcMessageHandler;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
 use crate::traits::types::payload::data::HasPayloadDataType;

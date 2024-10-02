@@ -6,7 +6,7 @@ use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPa
 use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentValue;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
-use crate::traits::handlers::transaction::IbcTransactionHandler;
+use crate::traits::handlers::outgoing::transaction::IbcTransactionHandler;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
