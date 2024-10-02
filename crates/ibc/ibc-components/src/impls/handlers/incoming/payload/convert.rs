@@ -12,7 +12,7 @@ use crate::traits::types::payload::ack::HasPayloadAckType;
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
-pub struct ConvertAndHandlePacketEntry<InApp, InHandler>(pub PhantomData<(InApp, InHandler)>);
+pub struct ConvertAndHandlePayload<InApp, InHandler>(pub PhantomData<(InApp, InHandler)>);
 
 impl<
         Chain,
@@ -24,8 +24,7 @@ impl<
         PacketData,
         AnyPacketAck,
         PacketAck,
-    > IncomingPayloadHandler<Chain, Counterparty, App>
-    for ConvertAndHandlePacketEntry<InApp, InHandler>
+    > IncomingPayloadHandler<Chain, Counterparty, App> for ConvertAndHandlePayload<InApp, InHandler>
 where
     Chain: HasPayloadAckType<Counterparty, App, PayloadAck = AnyPacketAck>
         + HasPayloadAckType<Counterparty, InApp, PayloadAck = PacketAck>

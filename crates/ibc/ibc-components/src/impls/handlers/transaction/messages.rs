@@ -41,14 +41,14 @@ where
 
         let messages = Chain::ibc_transcation_messages(transaction);
 
-        let mut entries = Vec::new();
+        let mut payloads = Vec::new();
 
         for (message_header, message) in messages {
-            let entry = chain
+            let payload = chain
                 .handle_ibc_message(transaction_header, message_header, message)
                 .await?;
 
-            entries.push(entry);
+            payloads.push(payload);
         }
 
         let nonce = chain
@@ -56,7 +56,7 @@ where
             .await?;
 
         let packet = chain
-            .build_packet(transaction_header, nonce, entries)
+            .build_packet(transaction_header, nonce, payloads)
             .await?;
 
         Ok(packet)

@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 use cgp::prelude::{CanRaiseError, HasErrorType};
 
 use crate::traits::fields::message::app_id::HasIbcMessageAppIds;
-use crate::traits::fields::packet::entry::app::HasPacketApplications;
+use crate::traits::fields::payload::app::HasPayloadAppIds;
 use crate::traits::handlers::message::IbcMessageHandler;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;
@@ -48,7 +48,7 @@ where
         + HasPayloadDataType<Counterparty, App>
         + HasPayloadHeaderType<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
-        + HasPacketApplications<Counterparty>
+        + HasPayloadAppIds<Counterparty>
         + for<'a> CanRaiseError<MismatchSrcAppId<'a, Chain, Counterparty>>
         + for<'a> CanRaiseError<MismatchDstAppId<'a, Chain, Counterparty>>,
     Counterparty: HasAppIdType<Chain>,
@@ -69,8 +69,8 @@ where
         let src_message_app_id = Chain::ibc_message_src_app_id(message_header);
         let dst_message_app_id = Chain::ibc_message_dst_app_id(message_header);
 
-        let src_packet_app_id = Chain::packet_src_app_id(&packet_payload_header);
-        let dst_packet_app_id = Chain::packet_dst_app_id(&packet_payload_header);
+        let src_packet_app_id = Chain::payload_src_app_id(&packet_payload_header);
+        let dst_packet_app_id = Chain::payload_dst_app_id(&packet_payload_header);
 
         if src_message_app_id != src_packet_app_id {
             return Err(Chain::raise_error(MismatchSrcAppId {
@@ -102,7 +102,7 @@ where
     Chain::AppId: Debug,
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "packet entry header produced by application has a different source app ID ({:?}) specified in message header ({:?})",
+        write!(f, "payload header produced by application has a different source app ID ({:?}) specified in message header ({:?})",
             self.src_message_app_id,
             self.src_packet_app_id,
         )
@@ -116,7 +116,7 @@ where
     Counterparty::AppId: Debug,
 {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "packet entry header produced by application has a different destination app ID ({:?}) specified in message header ({:?})",
+        write!(f, "payload header produced by application has a different destination app ID ({:?}) specified in message header ({:?})",
             self.dst_message_app_id,
             self.dst_packet_app_id,
         )
