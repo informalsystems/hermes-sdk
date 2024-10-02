@@ -9,7 +9,7 @@ use hermes_encoding_components::traits::has_encoding::HasEncoding;
 use crate::traits::handlers::message::IbcMessageHandler;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
-use crate::traits::types::packet::data::HasPacketDataType;
+use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 use crate::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
@@ -32,8 +32,8 @@ where
         + HasIbcMessageHeaderType<Counterparty>
         + HasIbcMessageType<Counterparty, App, IbcMessage = AnyMessage>
         + HasIbcMessageType<Counterparty, InApp, IbcMessage = Message>
-        + HasPacketDataType<Counterparty, App, PacketData = AnyPacketData>
-        + HasPacketDataType<Counterparty, InApp, PacketData = PacketData>
+        + HasPayloadDataType<Counterparty, App, PayloadData = AnyPacketData>
+        + HasPayloadDataType<Counterparty, InApp, PayloadData = PacketData>
         + HasPayloadHeaderType<Counterparty>
         + HasEncoding<App>
         + CanRaiseError<ErrorOf<Chain::Encoding>>,

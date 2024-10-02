@@ -7,9 +7,9 @@ use hermes_encoding_components::traits::convert::CanConvert;
 use hermes_encoding_components::traits::has_encoding::{HasDefaultEncoding, HasEncoding};
 
 use crate::traits::handlers::incoming::packet_entry::IncomingPacketEntryHandler;
-use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::ack::HasPayloadAckType;
+use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 pub struct ConvertAndHandlePacketEntry<InApp, InHandler>(pub PhantomData<(InApp, InHandler)>);
@@ -34,8 +34,8 @@ where
         + CanRaiseError<ErrorOf<Counterparty::Encoding>>,
     Counterparty: HasPacketHeaderType<Chain>
         + HasPayloadHeaderType<Chain>
-        + HasPacketDataType<Chain, App, PacketData = AnyPacketData>
-        + HasPacketDataType<Chain, InApp, PacketData = PacketData>
+        + HasPayloadDataType<Chain, App, PayloadData = AnyPacketData>
+        + HasPayloadDataType<Chain, InApp, PayloadData = PacketData>
         + HasDefaultEncoding<App>,
     InHandler: IncomingPacketEntryHandler<Chain, Counterparty, InApp>,
     Chain::Encoding: CanConvert<PacketAck, AnyPacketAck>,

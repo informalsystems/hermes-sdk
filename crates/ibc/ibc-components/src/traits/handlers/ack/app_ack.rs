@@ -1,8 +1,8 @@
 use cgp::prelude::*;
 
-use crate::traits::types::packet::data::HasPacketDataType;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::ack::HasPayloadAckType;
+use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 
 #[derive_component(PacketAckHandlerComponent, PacketPayloadHandler<Chain>)]
@@ -11,7 +11,7 @@ pub trait CanHandlePacketAck<Counterparty, App>:
     HasErrorType
     + HasPacketHeaderType<Counterparty>
     + HasPayloadHeaderType<Counterparty>
-    + HasPacketDataType<Counterparty, App>
+    + HasPayloadDataType<Counterparty, App>
 where
     Counterparty: HasPayloadAckType<Self, App>,
 {

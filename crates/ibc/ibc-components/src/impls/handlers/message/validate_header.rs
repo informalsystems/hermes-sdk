@@ -9,7 +9,7 @@ use crate::traits::handlers::message::IbcMessageHandler;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
-use crate::traits::types::packet::data::HasPacketDataType;
+use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
 use crate::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
@@ -45,7 +45,7 @@ where
         + HasIbcTransactionHeaderType<Counterparty>
         + HasIbcMessageHeaderType<Counterparty>
         + HasIbcMessageType<Counterparty, App>
-        + HasPacketDataType<Counterparty, App>
+        + HasPayloadDataType<Counterparty, App>
         + HasPayloadHeaderType<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
         + HasPacketApplications<Counterparty>
@@ -61,7 +61,7 @@ where
         transaction_header: &Chain::IbcTransactionHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,
-    ) -> Result<(Chain::PayloadHeader, Chain::PacketData), Chain::Error> {
+    ) -> Result<(Chain::PayloadHeader, Chain::PayloadData), Chain::Error> {
         let (packet_entry_header, packet_data) =
             InHandler::handle_ibc_message(chain, transaction_header, message_header, message)
                 .await?;
