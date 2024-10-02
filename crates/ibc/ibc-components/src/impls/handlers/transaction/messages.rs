@@ -4,10 +4,10 @@ use alloc::vec::Vec;
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
+use crate::traits::builders::packet::CanBuildPacket;
 use crate::traits::fields::transaction::channel::HasIbcTransactionChannels;
 use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
-use crate::traits::handlers::build_packet::CanBuildPacket;
 use crate::traits::handlers::message::CanHandleIbcMessage;
 use crate::traits::handlers::transaction::IbcTransactionHandler;
 use crate::traits::nonce::CanAllocatePacketNonce;

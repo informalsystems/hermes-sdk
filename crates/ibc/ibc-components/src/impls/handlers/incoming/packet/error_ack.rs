@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
-use crate::traits::fields::packet::ack::error::ErrorAsAckWrapper;
+use crate::traits::builders::ack_error::ErrorAsAckWrapper;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;

@@ -4,7 +4,7 @@ use alloc::vec::Vec;
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
-use crate::traits::fields::packet::ack::build::CanBuildPacketAckFromEntries;
+use crate::traits::builders::ack::CanBuildPacketAckFromEntries;
 use crate::traits::fields::packet::packet::entries::HasPacketEntries;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
