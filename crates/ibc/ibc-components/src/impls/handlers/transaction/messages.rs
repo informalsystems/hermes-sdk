@@ -38,13 +38,14 @@ where
         let transaction_header = Chain::ibc_transcation_header(transaction);
         let src_channel_id = Chain::transaction_src_channel_id(transaction_header);
         let dst_channel_id = Chain::transaction_dst_channel_id(transaction_header);
+
         let messages = Chain::ibc_transcation_messages(transaction);
 
         let mut entries = Vec::new();
 
-        for message in messages {
+        for (message_header, message) in messages {
             let entry = chain
-                .handle_ibc_message(transaction_header, message)
+                .handle_ibc_message(transaction_header, message_header, message)
                 .await?;
 
             entries.push(entry);
