@@ -10,7 +10,7 @@ use crate::traits::handlers::message::IbcMessageHandler;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
 use crate::traits::types::packet::data::HasPacketDataType;
-use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
+use crate::traits::types::payload::header::HasPayloadHeaderType;
 use crate::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
 pub struct ConvertAndHandleIbcMessage<InApp, InHandler>(pub PhantomData<(InApp, InHandler)>);
@@ -34,7 +34,7 @@ where
         + HasIbcMessageType<Counterparty, InApp, IbcMessage = Message>
         + HasPacketDataType<Counterparty, App, PacketData = AnyPacketData>
         + HasPacketDataType<Counterparty, InApp, PacketData = PacketData>
-        + HasPacketEntryHeaderType<Counterparty>
+        + HasPayloadHeaderType<Counterparty>
         + HasEncoding<App>
         + CanRaiseError<ErrorOf<Chain::Encoding>>,
     InHandler: IbcMessageHandler<Chain, Counterparty, InApp>,
@@ -48,7 +48,7 @@ where
         transaction_header: &Chain::IbcTransactionHeader,
         message_header: &Chain::IbcMessageHeader,
         any_message: &AnyMessage,
-    ) -> Result<(Chain::PacketEntryHeader, AnyPacketData), Chain::Error> {
+    ) -> Result<(Chain::PayloadHeader, AnyPacketData), Chain::Error> {
         let encoding = chain.encoding();
 
         let message = encoding.convert(any_message).map_err(Chain::raise_error)?;

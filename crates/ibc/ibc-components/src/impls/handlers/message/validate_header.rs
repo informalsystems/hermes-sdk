@@ -10,7 +10,7 @@ use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
 use crate::traits::types::packet::data::HasPacketDataType;
-use crate::traits::types::packet::entry::HasPacketEntryHeaderType;
+use crate::traits::types::payload::header::HasPayloadHeaderType;
 use crate::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
 pub struct ValidateHeaderAppIds<InHandler>(pub PhantomData<InHandler>);
@@ -18,24 +18,24 @@ pub struct ValidateHeaderAppIds<InHandler>(pub PhantomData<InHandler>);
 pub struct MismatchSrcAppId<'a, Chain, Counterparty>
 where
     Chain: HasAppIdType<Counterparty>
-        + HasPacketEntryHeaderType<Counterparty>
+        + HasPayloadHeaderType<Counterparty>
         + HasIbcMessageHeaderType<Counterparty>,
 {
     pub src_message_app_id: &'a Chain::AppId,
     pub src_packet_app_id: &'a Chain::AppId,
     pub message_header: &'a Chain::IbcMessageHeader,
-    pub packet_entry_header: &'a Chain::PacketEntryHeader,
+    pub packet_entry_header: &'a Chain::PayloadHeader,
 }
 
 pub struct MismatchDstAppId<'a, Chain, Counterparty>
 where
-    Chain: HasPacketEntryHeaderType<Counterparty> + HasIbcMessageHeaderType<Counterparty>,
+    Chain: HasPayloadHeaderType<Counterparty> + HasIbcMessageHeaderType<Counterparty>,
     Counterparty: HasAppIdType<Chain>,
 {
     pub dst_message_app_id: &'a Counterparty::AppId,
     pub dst_packet_app_id: &'a Counterparty::AppId,
     pub message_header: &'a Chain::IbcMessageHeader,
-    pub packet_entry_header: &'a Chain::PacketEntryHeader,
+    pub packet_entry_header: &'a Chain::PayloadHeader,
 }
 
 impl<Chain, Counterparty, App, InHandler> IbcMessageHandler<Chain, Counterparty, App>
@@ -46,7 +46,7 @@ where
         + HasIbcMessageHeaderType<Counterparty>
         + HasIbcMessageType<Counterparty, App>
         + HasPacketDataType<Counterparty, App>
-        + HasPacketEntryHeaderType<Counterparty>
+        + HasPayloadHeaderType<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
         + HasPacketApplications<Counterparty>
         + for<'a> CanRaiseError<MismatchSrcAppId<'a, Chain, Counterparty>>
@@ -61,7 +61,7 @@ where
         transaction_header: &Chain::IbcTransactionHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,
-    ) -> Result<(Chain::PacketEntryHeader, Chain::PacketData), Chain::Error> {
+    ) -> Result<(Chain::PayloadHeader, Chain::PacketData), Chain::Error> {
         let (packet_entry_header, packet_data) =
             InHandler::handle_ibc_message(chain, transaction_header, message_header, message)
                 .await?;
@@ -97,7 +97,7 @@ where
 impl<'a, Chain, Counterparty> Debug for MismatchSrcAppId<'a, Chain, Counterparty>
 where
     Chain: HasAppIdType<Counterparty>
-        + HasPacketEntryHeaderType<Counterparty>
+        + HasPayloadHeaderType<Counterparty>
         + HasIbcMessageHeaderType<Counterparty>,
     Chain::AppId: Debug,
 {
@@ -111,7 +111,7 @@ where
 
 impl<'a, Chain, Counterparty> Debug for MismatchDstAppId<'a, Chain, Counterparty>
 where
-    Chain: HasPacketEntryHeaderType<Counterparty> + HasIbcMessageHeaderType<Counterparty>,
+    Chain: HasPayloadHeaderType<Counterparty> + HasIbcMessageHeaderType<Counterparty>,
     Counterparty: HasAppIdType<Chain>,
     Counterparty::AppId: Debug,
 {
