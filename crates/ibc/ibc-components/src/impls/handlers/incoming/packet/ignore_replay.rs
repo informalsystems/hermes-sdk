@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::traits::fields::packet::header::channel::HasPacketChannels;
+use crate::traits::fields::packet::header::channel::HasPacketChannelIds;
 use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
@@ -20,7 +20,7 @@ where
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
         + HasChannelIdType<Chain>
-        + HasPacketChannels<Chain>,
+        + HasPacketChannelIds<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(

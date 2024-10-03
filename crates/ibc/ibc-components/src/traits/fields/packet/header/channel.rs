@@ -3,8 +3,8 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 
 use crate::traits::types::packet::header::HasPacketHeaderType;
 
-#[derive_component(PacketClientGetterComponent, PacketClientGetter<Chain>)]
-pub trait HasPacketChannels<Counterparty>:
+#[derive_component(PacketChannelIdGetterComponent, PacketChannelIdGetter<Chain>)]
+pub trait HasPacketChannelIds<Counterparty>:
     HasPacketHeaderType<Counterparty> + HasChannelIdType<Counterparty>
 where
     Counterparty: HasChannelIdType<Self>,

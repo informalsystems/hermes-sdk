@@ -2,7 +2,7 @@ use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_ibc_components::traits::fields::packet::header::channel::HasPacketChannels;
+use hermes_ibc_components::traits::fields::packet::header::channel::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::payload::app::HasPayloadAppIds;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
@@ -34,7 +34,7 @@ where
         + HasAmountQuantity
         + HasChannelIdType<Chain>
         + HasAppIdType<Chain>
-        + HasPacketChannels<Chain>
+        + HasPacketChannelIds<Chain>
         + HasPayloadAppIds<Chain>
         + HasPayloadMintAmount<Chain, App>
         + HasIbcTransferReceiver<Chain, App>,
