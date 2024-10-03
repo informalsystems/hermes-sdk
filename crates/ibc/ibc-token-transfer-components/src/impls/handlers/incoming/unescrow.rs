@@ -95,10 +95,10 @@ where
         chain
             .update_escrowed_token(
                 Decrease,
-                src_channel_id,
                 dst_channel_id,
-                src_app_id,
+                src_channel_id,
                 dst_app_id,
+                src_app_id,
                 amount,
             )
             .await?;

@@ -1,19 +1,16 @@
-use cgp::prelude::HasErrorType;
+use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::transaction::caller::HasIbcTransactionCaller;
 use hermes_ibc_components::traits::fields::transaction::channel_id::HasIbcTransactionChannelIds;
 use hermes_ibc_components::traits::handlers::outgoing::message::IbcMessageHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
-use hermes_ibc_components::traits::types::message::HasIbcMessageType;
-use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderType;
-use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
-use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
-use hermes_ibc_components::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
+use crate::traits::builders::mint::CanBuildOutgoingMintPayload;
+use crate::traits::builders::unescrow::CanBuildOutgoingUnescrowPayload;
+use crate::traits::escrow_registry::update::{CanUpdateEscrowedToken, Increase};
 use crate::traits::fields::message::amount::HasMessageSendTransferAmount;
 use crate::traits::mint_registry::lookup_outgoing::CanLookupOutgoingBurnToken;
 use crate::traits::token::transfer::{Burn, CanTransferToken, Escrow};
@@ -22,13 +19,7 @@ pub struct SendIbcTransfer;
 
 impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App> for SendIbcTransfer
 where
-    Chain: HasErrorType
-        + HasIbcTransactionHeaderType<Counterparty>
-        + HasIbcMessageHeaderType<Counterparty>
-        + HasIbcMessageType<Counterparty, App>
-        + HasPayloadDataType<Counterparty, App>
-        + HasPayloadHeaderType<Counterparty>
-        + HasIbcTransactionChannelIds<Counterparty>
+    Chain: HasIbcTransactionChannelIds<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
         + HasMessageSendTransferAmount<Counterparty, App>
         + HasAmountDenom
@@ -36,8 +27,12 @@ where
         + HasIbcTransactionCaller<Counterparty>
         + CanLookupOutgoingBurnToken<Counterparty>
         + CanTransferToken<Burn>
-        + CanTransferToken<Escrow>,
-    Counterparty: HasDenomType + HasChannelIdType<Chain> + HasAppIdType<Chain>,
+        + CanTransferToken<Escrow>
+        + CanUpdateEscrowedToken<Counterparty, Increase>
+        + CanBuildOutgoingMintPayload<Counterparty, App>
+        + CanBuildOutgoingUnescrowPayload<Counterparty, App>,
+    Counterparty: HasChannelIdType<Chain> + HasAppIdType<Chain> + CanBuildAmount,
+    Chain::Quantity: Clone + Into<Counterparty::Quantity>,
 {
     async fn handle_ibc_message(
         chain: &Chain,
@@ -69,11 +64,25 @@ where
         if let Some(dst_denom) = m_dst_denom {
             chain.transfer_token(Burn, sender, src_amount).await?;
 
-            todo!()
+            let src_quantity = Chain::amount_quantity(src_amount);
+            let dst_amount = Counterparty::build_amount(&dst_denom, &src_quantity.clone().into());
+
+            chain.build_outgoing_unescrow_payload(message_header, message, &dst_amount)
         } else {
             chain.transfer_token(Escrow, sender, src_amount).await?;
 
-            todo!()
+            chain
+                .update_escrowed_token(
+                    Increase,
+                    src_channel_id,
+                    dst_channel_id,
+                    src_app_id,
+                    dst_app_id,
+                    src_amount,
+                )
+                .await?;
+
+            chain.build_outgoing_mint_payload(message_header, message)
         }
     }
 }

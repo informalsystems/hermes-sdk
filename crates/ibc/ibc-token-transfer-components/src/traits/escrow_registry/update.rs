@@ -22,10 +22,10 @@ where
     async fn update_escrowed_token(
         &self,
         mode: Mode,
-        src_channel_id: &Counterparty::ChannelId,
-        dst_channel_id: &Self::ChannelId,
-        src_app_id: &Counterparty::AppId,
-        dst_app_id: &Self::AppId,
+        local_channel_id: &Self::ChannelId,
+        counterparty_channel_id: &Counterparty::ChannelId,
+        local_app_id: &Self::AppId,
+        counterparty_app_id: &Counterparty::AppId,
         amount: &Self::Amount,
     ) -> Result<(), Self::Error>;
 }
