@@ -10,5 +10,5 @@ where
 {
     // Note: the returned unescrow amount is from `Counterparty`, because as incoming packet,
     // it would be used as `Counterparty::PayloadData` where `Counterparty::Counterparty` = `Self`.
-    fn payload_mint_amount(payload_data: &Self::PayloadData) -> &Counterparty::Amount;
+    fn payload_unescrow_amount(payload_data: &Self::PayloadData) -> &Counterparty::Amount;
 }
