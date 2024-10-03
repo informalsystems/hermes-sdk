@@ -2,15 +2,15 @@ use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_ibc_components::traits::fields::packet::header::channel::HasPacketChannelIds;
-use hermes_ibc_components::traits::fields::payload::app::HasPayloadAppIds;
+use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
+use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::payload::ack::HasPayloadAckType;
 
 use crate::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
 use crate::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
-use crate::traits::mint_registry::lookup::CanLookupMintedToken;
+use crate::traits::mint_registry::lookup_incoming::CanLookupIncomingMintedToken;
 use crate::traits::mint_registry::register::CanRegisterMintedToken;
 use crate::traits::token::create::CanCreateToken;
 use crate::traits::token::transfer::{CanTransferToken, Mint};
@@ -28,7 +28,7 @@ where
         + HasAppIdType<Counterparty>
         + HasPayloadAckType<Counterparty, App, PayloadAck = ()>
         + CanTransferToken<Mint>
-        + CanLookupMintedToken<Counterparty>
+        + CanLookupIncomingMintedToken<Counterparty>
         + CanRegisterMintedToken<Counterparty>,
     Counterparty: HasAmountDenom
         + HasAmountQuantity
@@ -61,7 +61,7 @@ where
         let quantity = Counterparty::amount_quantity(amount);
 
         let m_dst_denom = chain
-            .lookup_minted_token(
+            .lookup_incoming_minted_token(
                 src_channel_id,
                 dst_channel_id,
                 src_app_id,

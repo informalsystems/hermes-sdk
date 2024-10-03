@@ -5,7 +5,7 @@ use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
-use crate::traits::fields::packet::header::channel::HasPacketChannelIds;
+use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;

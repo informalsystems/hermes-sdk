@@ -5,7 +5,7 @@ use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::builders::packet::CanBuildPacket;
-use crate::traits::fields::transaction::channel::HasIbcTransactionChannels;
+use crate::traits::fields::transaction::channel_id::HasIbcTransactionChannelIds;
 use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
 use crate::traits::handlers::outgoing::message::IbcMessageHandler;
@@ -23,7 +23,7 @@ where
         + HasIbcTransactionType<Counterparty>
         + HasPacketType<Counterparty>
         + HasIbcTransactionHeader<Counterparty>
-        + HasIbcTransactionChannels<Counterparty>
+        + HasIbcTransactionChannelIds<Counterparty>
         + HasIbcTransactionMessages<Counterparty, App>
         + CanBuildPacket<Counterparty, App>
         + CanAllocatePacketNonce<Counterparty>

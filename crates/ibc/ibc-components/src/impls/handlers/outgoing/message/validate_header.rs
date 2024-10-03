@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 use cgp::prelude::{CanRaiseError, HasErrorType};
 
 use crate::traits::fields::message::app_id::HasIbcMessageAppIds;
-use crate::traits::fields::payload::app::HasPayloadAppIds;
+use crate::traits::fields::payload::app_id::HasPayloadAppIds;
 use crate::traits::handlers::outgoing::message::IbcMessageHandler;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;

@@ -8,7 +8,7 @@ use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPa
 use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentValue;
 use crate::traits::commitment::verify::value::CanVerifyValueCommitment;
 use crate::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
-use crate::traits::fields::packet::header::channel::HasPacketChannelIds;
+use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
