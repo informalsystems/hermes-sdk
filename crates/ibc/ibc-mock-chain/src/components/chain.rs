@@ -18,7 +18,9 @@ use hermes_ibc_components::traits::types::packet::packet::PacketTypeComponent;
 use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;
 use hermes_ibc_components::traits::types::payload::data::PayloadDataTypeComponent;
 use hermes_ibc_components::traits::types::payload::header::PayloadHeaderTypeComponent;
+use hermes_ibc_components::types::with_app_provider::WithAppProvider;
 
+use crate::components::packet_data::PacketDataTypes;
 use crate::components::types::MockChainTypes;
 use crate::impls::error::RaiseDebugString;
 
@@ -35,7 +37,6 @@ define_components! {
             PacketTypeComponent,
             PacketHeaderTypeComponent,
             PayloadHeaderTypeComponent,
-            PayloadDataTypeComponent,
             IbcMessageHeaderTypeComponent,
 
             PacketChannelIdGetterComponent,
@@ -46,6 +47,8 @@ define_components! {
             IbcMessageAppIdGetterComponent,
         ]:
             WithContext,
+        PayloadDataTypeComponent:
+            WithAppProvider<UseDelegatedType<PacketDataTypes>>,
         ErrorRaiserComponent:
             RaiseDebugString,
     }

@@ -2,6 +2,8 @@ use cgp::core::component::{DelegateTo, WithProvider};
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
+use crate::types::with_app_provider::WithAppProvider;
+
 #[derive_component(PayloadDataTypeComponent, ProvidePayloadDataType<Chain>)]
 pub trait HasPayloadDataType<Counterparty, App>: Async {
     type PayloadData: Async;
@@ -15,6 +17,16 @@ impl<Chain, Counterparty, App, Provider, PayloadData>
 where
     Chain: Async,
     Provider: ProvideType<Chain, PayloadDataTypeComponent, Type = PayloadData>,
+    PayloadData: Async,
+{
+    type PayloadData = PayloadData;
+}
+
+impl<Chain, Counterparty, App, Provider, PayloadData>
+    ProvidePayloadDataType<Chain, Counterparty, App> for WithAppProvider<Provider>
+where
+    Chain: Async,
+    Provider: ProvideType<Chain, App, Type = PayloadData>,
     PayloadData: Async,
 {
     type PayloadData = PayloadData;

@@ -24,6 +24,7 @@ use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
 use crate::components::chain::MockChainComponents;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
+use crate::types::packet_data::MockAnyPacketData;
 
 pub struct MockChain;
 
@@ -42,7 +43,7 @@ pub trait CanUseMockChain:
     + HasPayloadHeaderType<MockChain, PayloadHeader = IbcPayloadHeader<MockChain, MockChain>>
     + HasIbcMessageHeaderType<MockChain, IbcMessageHeader = IbcMessageHeader<MockChain, MockChain>>
     + HasPacketPayloads<MockChain, AnyApp>
-    + HasPayloadDataType<MockChain, AnyApp>
+    + HasPayloadDataType<MockChain, AnyApp, PayloadData = MockAnyPacketData>
     + HasPacketChannelIds<MockChain>
     + HasPacketNonce<MockChain>
     + HasPacketTimeout<MockChain>
