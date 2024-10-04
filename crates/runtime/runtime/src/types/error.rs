@@ -1,11 +1,11 @@
 use alloc::sync::Arc;
-use core::fmt::Display;
+use core::fmt::{Debug, Display};
 use core::str::Utf8Error;
 use std::error::Error;
 use std::io::Error as IoError;
 use std::process::ExitStatus;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub enum TokioRuntimeError {
     ChannelClosed,
     PoisonedLock,
@@ -24,6 +24,9 @@ pub enum TokioRuntimeError {
         exit_code: Option<i32>,
         stdout: String,
         stderr: String,
+    },
+    CommandNotFound {
+        command: String,
     },
 }
 
@@ -68,9 +71,22 @@ impl Display for TokioRuntimeError {
                     exit_status
                 )?;
             }
+            Self::CommandNotFound { command } => {
+                write!(
+                    f,
+                    "failed to execute command due to command not found: {}",
+                    command
+                )?;
+            }
         };
 
         Ok(())
+    }
+}
+
+impl Debug for TokioRuntimeError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "{self}")
     }
 }
 
