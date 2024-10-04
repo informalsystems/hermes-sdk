@@ -6,6 +6,7 @@ use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
 use hermes_ibc_components::traits::types::packet::packet::PacketTypeComponent;
+use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;
 use hermes_ibc_components::traits::types::payload::data::PayloadDataTypeComponent;
 use hermes_ibc_components::traits::types::payload::header::PayloadHeaderTypeComponent;
 use hermes_ibc_components::types::any_app::AnyApp;
@@ -24,6 +25,7 @@ define_components! {
         AppIdTypeComponent: MockAppId,
         ChannelIdTypeComponent: MockChannelId,
         PacketNonceTypeComponent: u8,
+        PacketTimeoutTypeComponent: u8,
         PacketTypeComponent: IbcPacket<MockChain, MockChain, AnyApp>,
         PacketHeaderTypeComponent: IbcPacketHeader<MockChain, MockChain>,
         PayloadHeaderTypeComponent: IbcPayloadHeader<MockChain, MockChain>,
