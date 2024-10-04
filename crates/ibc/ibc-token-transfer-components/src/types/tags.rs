@@ -2,4 +2,4 @@ pub struct IbcTransferApp;
 
 pub struct IbcTransferMintApp;
 
-pub struct IbcTransferUnesrowApp;
+pub struct IbcTransferUnescrowApp;

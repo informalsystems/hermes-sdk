@@ -23,6 +23,12 @@ use hermes_ibc_components::types::message_header::IbcMessageHeader;
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
+use hermes_ibc_token_transfer_components::types::packet_data::mint::IbcTransferMintPacketData;
+use hermes_ibc_token_transfer_components::types::packet_data::transfer::IbcTransferPacketData;
+use hermes_ibc_token_transfer_components::types::packet_data::unescrow::IbcTransferUnescrowPacketData;
+use hermes_ibc_token_transfer_components::types::tags::{
+    IbcTransferApp, IbcTransferMintApp, IbcTransferUnescrowApp,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::types::address::MockAddress;
@@ -53,7 +59,19 @@ pub trait CanUseMockChain:
     + HasIbcMessageHeaderType<MockChain, IbcMessageHeader = IbcMessageHeader<MockChain, MockChain>>
     + HasPacketPayloads<MockChain, AnyApp>
     + HasPayloadDataType<MockChain, AnyApp, PayloadData = MockAnyPacketData>
-    + HasPacketChannelIds<MockChain>
+    + HasPayloadDataType<
+        MockChain,
+        IbcTransferApp,
+        PayloadData = IbcTransferPacketData<MockChain, MockChain>,
+    > + HasPayloadDataType<
+        MockChain,
+        IbcTransferMintApp,
+        PayloadData = IbcTransferMintPacketData<MockChain, MockChain>,
+    > + HasPayloadDataType<
+        MockChain,
+        IbcTransferUnescrowApp,
+        PayloadData = IbcTransferUnescrowPacketData<MockChain>,
+    > + HasPacketChannelIds<MockChain>
     + HasPacketNonce<MockChain>
     + HasPacketTimeout<MockChain>
     + HasPayloadAppIds<MockChain>
