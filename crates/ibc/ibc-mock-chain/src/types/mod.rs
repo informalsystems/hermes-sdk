@@ -4,3 +4,5 @@ pub mod app_id;
 pub mod channel_id;
 pub mod denom;
 pub mod packet_data;
+pub mod tagged;
+pub mod tags;

@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::string::String;
 use cgp::core::error::ErrorTypeComponent;
 use cgp::prelude::*;
@@ -26,9 +28,13 @@ use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::denom::MockDenom;
 use crate::types::packet_data::MockAnyPacketData;
+use crate::types::tagged::Tagged;
 
-define_components! {
-    MockChainTypes {
+pub struct MockChainTypes<Chain, Counterparty>(pub PhantomData<(Chain, Counterparty)>);
+
+delegate_components! {
+    <A: Async, B: Async>
+    MockChainTypes<A, B> {
         ErrorTypeComponent: String,
         AddressTypeComponent: MockAddress,
         DenomTypeComponent: MockDenom,
@@ -37,10 +43,10 @@ define_components! {
         ChannelIdTypeComponent: MockChannelId,
         PacketNonceTypeComponent: u8,
         PacketTimeoutTypeComponent: u8,
-        PacketTypeComponent: IbcPacket<MockChain, MockChain, AnyApp>,
-        PacketHeaderTypeComponent: IbcPacketHeader<MockChain, MockChain>,
-        PayloadHeaderTypeComponent: IbcPayloadHeader<MockChain, MockChain>,
-        PayloadDataTypeComponent: MockAnyPacketData,
-        IbcMessageHeaderTypeComponent: IbcMessageHeader<MockChain, MockChain>,
+        PacketTypeComponent: IbcPacket<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>, AnyApp>,
+        PacketHeaderTypeComponent: IbcPacketHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
+        PayloadHeaderTypeComponent: IbcPayloadHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
+        PayloadDataTypeComponent: MockAnyPacketData<A, B>,
+        IbcMessageHeaderTypeComponent: IbcMessageHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
     }
 }

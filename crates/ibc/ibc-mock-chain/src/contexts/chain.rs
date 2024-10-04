@@ -37,46 +37,50 @@ use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::denom::MockDenom;
 use crate::types::packet_data::MockAnyPacketData;
+use crate::types::tagged::Tagged;
+use crate::types::tags::{ChainA, ChainB};
 
 pub struct MockChain;
 
-impl HasComponents for MockChain {
-    type Components = MockChainComponents;
+impl<Chain, Counterparty> HasComponents for Tagged<Chain, Counterparty, MockChain> {
+    type Components = MockChainComponents<Chain, Counterparty>;
 }
 
-pub trait CanUseMockChain:
-    HasErrorType<Error = String>
+pub type MockChainA = Tagged<ChainA, ChainB, MockChain>;
+pub type MockChainB = Tagged<ChainB, ChainA, MockChain>;
+
+pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasAddressType<Address = MockAddress>
     + HasDenomType<Denom = MockDenom>
     + HasAmountType<Amount = MockAmount>
-    + HasAppIdType<MockChain, AppId = MockAppId>
-    + HasChannelIdType<MockChain, ChannelId = MockChannelId>
-    + HasPacketTimeoutType<MockChain, PacketTimeout = u8>
-    + HasPacketNonceType<MockChain, PacketNonce = u8>
-    + HasPacketType<MockChain, Packet = IbcPacket<MockChain, MockChain, AnyApp>>
-    + HasPacketHeaderType<MockChain, PacketHeader = IbcPacketHeader<MockChain, MockChain>>
-    + HasPayloadHeaderType<MockChain, PayloadHeader = IbcPayloadHeader<MockChain, MockChain>>
-    + HasIbcMessageHeaderType<MockChain, IbcMessageHeader = IbcMessageHeader<MockChain, MockChain>>
+    + HasAppIdType<MockChainB, AppId = MockAppId>
+    + HasChannelIdType<MockChainB, ChannelId = MockChannelId>
+    + HasPacketTimeoutType<MockChainB, PacketTimeout = u8>
+    + HasPacketNonceType<MockChainB, PacketNonce = u8>
+    + HasPacketType<MockChainB, Packet = IbcPacket<MockChainA, MockChainB, AnyApp>>
+    + HasPacketHeaderType<MockChain, PacketHeader = IbcPacketHeader<MockChainA, MockChainB>>
+    + HasPayloadHeaderType<MockChain, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
+    + HasIbcMessageHeaderType<MockChain, IbcMessageHeader = IbcMessageHeader<MockChainA, MockChainB>>
     + HasPacketPayloads<MockChain, AnyApp>
-    + HasPayloadDataType<MockChain, AnyApp, PayloadData = MockAnyPacketData>
+    + HasPayloadDataType<MockChain, AnyApp, PayloadData = MockAnyPacketData<ChainA, ChainB>>
     + HasPayloadDataType<
         MockChain,
         IbcTransferApp,
-        PayloadData = IbcTransferPacketData<MockChain, MockChain>,
+        PayloadData = IbcTransferPacketData<MockChainA, MockChainB>,
     > + HasPayloadDataType<
         MockChain,
         IbcTransferMintApp,
-        PayloadData = IbcTransferMintPacketData<MockChain, MockChain>,
+        PayloadData = IbcTransferMintPacketData<MockChainA, MockChainB>,
     > + HasPayloadDataType<
         MockChain,
         IbcTransferUnescrowApp,
-        PayloadData = IbcTransferUnescrowPacketData<MockChain>,
-    > + HasPacketChannelIds<MockChain>
-    + HasPacketNonce<MockChain>
-    + HasPacketTimeout<MockChain>
-    + HasPayloadAppIds<MockChain>
-    + HasIbcMessageAppIds<MockChain>
+        PayloadData = IbcTransferUnescrowPacketData<MockChainB>,
+    > + HasPacketChannelIds<MockChainB>
+    + HasPacketNonce<MockChainB>
+    + HasPacketTimeout<MockChainB>
+    + HasPayloadAppIds<MockChainB>
+    + HasIbcMessageAppIds<MockChainB>
 {
 }
 
-impl CanUseMockChain for MockChain {}
+impl CanUseMockChain for MockChainA {}

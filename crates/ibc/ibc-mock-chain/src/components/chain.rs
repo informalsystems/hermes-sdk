@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::component::WithContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::UseDelegatedType;
@@ -27,10 +29,13 @@ use crate::components::packet_data::PacketDataTypes;
 use crate::components::types::MockChainTypes;
 use crate::impls::error::RaiseDebugString;
 
-define_components! {
-    MockChainComponents {
+pub struct MockChainComponents<Chain, Counterparty>(pub PhantomData<(Chain, Counterparty)>);
+
+delegate_components! {
+    <Chain, Counterparty>
+    MockChainComponents<Chain, Counterparty> {
         TypeComponent:
-            UseDelegatedType<MockChainTypes>,
+            UseDelegatedType<MockChainTypes<Chain, Counterparty>>,
         [
             ErrorTypeComponent,
             AddressTypeComponent,
@@ -54,7 +59,7 @@ define_components! {
         ]:
             WithContext,
         PayloadDataTypeComponent:
-            WithAppProvider<UseDelegatedType<PacketDataTypes>>,
+            WithAppProvider<UseDelegatedType<PacketDataTypes<Chain, Counterparty>>>,
         ErrorRaiserComponent:
             RaiseDebugString,
     }
