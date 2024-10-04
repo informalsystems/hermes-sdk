@@ -4,6 +4,8 @@ use cgp::core::types::impls::UseDelegatedType;
 use cgp::core::types::traits::TypeComponent;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
+use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
+use hermes_chain_type_components::traits::types::denom::DenomTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
@@ -32,6 +34,8 @@ define_components! {
         [
             ErrorTypeComponent,
             AddressTypeComponent,
+            DenomTypeComponent,
+            AmountTypeComponent,
             AppIdTypeComponent,
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
