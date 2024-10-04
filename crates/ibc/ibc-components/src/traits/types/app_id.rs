@@ -1,5 +1,5 @@
 use cgp::core::component::WithProvider;
-use cgp::core::types::traits::HasType;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(AppIdTypeComponent, ProvideAppIdType<Chain>)]
@@ -11,7 +11,7 @@ impl<Chain, Counterparty, Provider, AppId> ProvideAppIdType<Chain, Counterparty>
     for WithProvider<Provider>
 where
     Chain: Async,
-    Provider: HasType<AppIdTypeComponent, Type = AppId>,
+    Provider: ProvideType<Chain, AppIdTypeComponent, Type = AppId>,
     AppId: Async,
 {
     type AppId = AppId;
