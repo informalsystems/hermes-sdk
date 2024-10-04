@@ -4,7 +4,7 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 
 #[derive(HasField)]
-pub struct PacketHeader<Chain, Counterparty>
+pub struct IbcPacketHeader<Chain, Counterparty>
 where
     Chain: HasChannelIdType<Counterparty> + HasPacketNonceType<Counterparty>,
     Counterparty: HasChannelIdType<Chain>,

@@ -5,11 +5,18 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeC
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
-use hermes_ibc_components::types::packet_header::PacketHeader;
+use hermes_ibc_components::traits::types::packet::packet::PacketTypeComponent;
+use hermes_ibc_components::traits::types::payload::data::PayloadDataTypeComponent;
+use hermes_ibc_components::traits::types::payload::header::PayloadHeaderTypeComponent;
+use hermes_ibc_components::types::any_app::AnyApp;
+use hermes_ibc_components::types::packet::IbcPacket;
+use hermes_ibc_components::types::packet_header::IbcPacketHeader;
+use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
 
 use crate::contexts::chain::MockChain;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
+use crate::types::packet_data::MockAnyPacketData;
 
 define_components! {
     MockChainTypes {
@@ -17,6 +24,9 @@ define_components! {
         AppIdTypeComponent: MockAppId,
         ChannelIdTypeComponent: MockChannelId,
         PacketNonceTypeComponent: u8,
-        PacketHeaderTypeComponent: PacketHeader<MockChain, MockChain>,
+        PacketTypeComponent: IbcPacket<MockChain, MockChain, AnyApp>,
+        PacketHeaderTypeComponent: IbcPacketHeader<MockChain, MockChain>,
+        PayloadHeaderTypeComponent: IbcPayloadHeader<MockChain, MockChain>,
+        PayloadDataTypeComponent: MockAnyPacketData,
     }
 }
