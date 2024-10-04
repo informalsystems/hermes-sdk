@@ -4,6 +4,7 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
+use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
 use hermes_ibc_components::types::packet_header::PacketHeader;
 
 use crate::contexts::chain::MockChain;
@@ -15,6 +16,7 @@ define_components! {
         ErrorTypeComponent: String,
         AppIdTypeComponent: MockAppId,
         ChannelIdTypeComponent: MockChannelId,
+        PacketNonceTypeComponent: u8,
         PacketHeaderTypeComponent: PacketHeader<MockChain, MockChain>,
     }
 }
