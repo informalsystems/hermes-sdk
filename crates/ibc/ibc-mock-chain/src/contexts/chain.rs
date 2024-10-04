@@ -76,7 +76,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     > + HasPayloadDataType<
         MockChain,
         IbcTransferUnescrowApp,
-        PayloadData = IbcTransferUnescrowPacketData<MockChainB>,
+        PayloadData = IbcTransferUnescrowPacketData<MockChainA, MockChainB>,
     > + HasPacketChannelIds<MockChainB>
     + HasPacketNonce<MockChainB>
     + HasPacketTimeout<MockChainB>

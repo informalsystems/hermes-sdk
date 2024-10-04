@@ -21,6 +21,6 @@ delegate_components! {
         AnyApp: MockAnyPacketData<A, B>,
         IbcTransferApp: IbcTransferPacketData<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
         IbcTransferMintApp: IbcTransferMintPacketData<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
-        IbcTransferUnescrowApp: IbcTransferUnescrowPacketData<Tagged<B, A, MockChain>>,
+        IbcTransferUnescrowApp: IbcTransferUnescrowPacketData<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
     }
 }
