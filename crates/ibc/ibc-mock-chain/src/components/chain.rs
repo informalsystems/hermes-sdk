@@ -8,6 +8,7 @@ use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketCha
 use hermes_ibc_components::traits::fields::packet::header::nonce::PacketNonceGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::timeout::PacketTimeoutGetterComponent;
 use hermes_ibc_components::traits::fields::packet::packet::payloads::PacketPayloadsGetterComponent;
+use hermes_ibc_components::traits::fields::payload::app_id::PayloadAppIdGetterComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
@@ -38,6 +39,7 @@ define_components! {
             PacketNonceGetterComponent,
             PacketTimeoutGetterComponent,
             PacketPayloadsGetterComponent,
+            PayloadAppIdGetterComponent,
         ]:
             WithContext,
         ErrorRaiserComponent:

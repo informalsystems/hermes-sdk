@@ -5,6 +5,7 @@ use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacket
 use hermes_ibc_components::traits::fields::packet::header::nonce::HasPacketNonce;
 use hermes_ibc_components::traits::fields::packet::header::timeout::HasPacketTimeout;
 use hermes_ibc_components::traits::fields::packet::packet::payloads::HasPacketPayloads;
+use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
 use hermes_ibc_components::traits::types::packet::nonce::HasPacketNonceType;
@@ -41,6 +42,7 @@ pub trait CanUseMockChain:
     + HasPacketChannelIds<MockChain>
     + HasPacketNonce<MockChain>
     + HasPacketTimeout<MockChain>
+    + HasPayloadAppIds<MockChain>
 {
 }
 
