@@ -2,19 +2,12 @@ use alloc::format;
 use alloc::string::String;
 use core::fmt::Debug;
 
-use cgp::core::error::{ErrorRaiser, ErrorTypeComponent};
-use cgp::core::types::impls::WithType;
+use cgp::core::error::ErrorRaiser;
 use cgp::prelude::*;
 
-pub struct ProvideStringError;
+pub struct RaiseDebugString;
 
-delegate_components! {
-    ProvideStringError {
-        ErrorTypeComponent: WithType<String>,
-    }
-}
-
-impl<Context, Error> ErrorRaiser<Context, Error> for ProvideStringError
+impl<Context, Error> ErrorRaiser<Context, Error> for RaiseDebugString
 where
     Context: HasErrorType,
     Error: Debug,

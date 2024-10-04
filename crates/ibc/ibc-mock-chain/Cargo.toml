@@ -12,7 +12,8 @@ description  = """
 """
 
 [dependencies]
-cgp                             = { workspace = true }
-hermes-chain-type-components    = { workspace = true }
-hermes-encoding-components      = { workspace = true }
-hermes-ibc-components           = { workspace = true }
+cgp                                     = { workspace = true }
+hermes-chain-type-components            = { workspace = true }
+hermes-encoding-components              = { workspace = true }
+hermes-ibc-components                   = { workspace = true }
+hermes-ibc-token-transfer-components    = { workspace = true }

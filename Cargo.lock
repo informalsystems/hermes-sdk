@@ -1853,6 +1853,7 @@ dependencies = [
  "hermes-chain-type-components",
  "hermes-encoding-components",
  "hermes-ibc-components",
+ "hermes-ibc-token-transfer-components",
 ]
 
 [[package]]
