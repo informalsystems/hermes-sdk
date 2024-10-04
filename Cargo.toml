@@ -56,6 +56,7 @@ members = [
 
     "crates/ibc/ibc-components",
     "crates/ibc/ibc-token-transfer-components",
+    "crates/ibc/ibc-mock-chain",
 ]
 
 [workspace.package]
@@ -162,6 +163,7 @@ hermes-solomachine-relayer              = { version = "0.1.0" }
 
 hermes-ibc-components                   = { version = "0.1.0" }
 hermes-ibc-token-transfer-components    = { version = "0.1.0" }
+hermes-ibc-mock-chain                   = { version = "0.1.0" }
 
 [patch.crates-io]
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
@@ -228,3 +230,4 @@ hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine
 
 hermes-ibc-components                   = { path = "./crates/ibc/ibc-components" }
 hermes-ibc-token-transfer-components    = { path = "./crates/ibc/ibc-token-transfer-components" }
+hermes-ibc-mock-chain                   = { path = "./crates/ibc/ibc-mock-chain" }

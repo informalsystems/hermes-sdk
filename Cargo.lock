@@ -1846,6 +1846,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "hermes-ibc-mock-chain"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hermes-chain-type-components",
+ "hermes-encoding-components",
+ "hermes-ibc-components",
+]
+
+[[package]]
 name = "hermes-ibc-test-suite"
 version = "0.1.0"
 dependencies = [
