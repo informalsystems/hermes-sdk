@@ -3,6 +3,8 @@ pub mod amount;
 pub mod app_id;
 pub mod channel_id;
 pub mod denom;
+pub mod height;
+pub mod nonce;
 pub mod packet_data;
 pub mod tagged;
 pub mod tags;

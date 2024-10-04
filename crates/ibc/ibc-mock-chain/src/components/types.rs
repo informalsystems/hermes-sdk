@@ -27,6 +27,8 @@ use crate::types::amount::MockAmount;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::denom::MockDenom;
+use crate::types::height::MockHeight;
+use crate::types::nonce::MockNonce;
 use crate::types::packet_data::MockAnyPacketData;
 use crate::types::tagged::Tagged;
 
@@ -36,13 +38,13 @@ delegate_components! {
     <A: Async, B: Async>
     MockChainTypes<A, B> {
         ErrorTypeComponent: String,
-        AddressTypeComponent: MockAddress,
-        DenomTypeComponent: MockDenom,
-        AmountTypeComponent: MockAmount,
-        AppIdTypeComponent: MockAppId,
-        ChannelIdTypeComponent: MockChannelId,
-        PacketNonceTypeComponent: u8,
-        PacketTimeoutTypeComponent: u8,
+        AddressTypeComponent: Tagged<A, B, MockAddress>,
+        DenomTypeComponent: Tagged<A, B, MockDenom>,
+        AmountTypeComponent: Tagged<A, B, MockAmount>,
+        AppIdTypeComponent: Tagged<A, B, MockAppId>,
+        ChannelIdTypeComponent: Tagged<A, B, MockChannelId>,
+        PacketNonceTypeComponent: Tagged<A, B, MockNonce>,
+        PacketTimeoutTypeComponent: Tagged<A, B, MockHeight>,
         PacketTypeComponent: IbcPacket<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>, AnyApp>,
         PacketHeaderTypeComponent: IbcPacketHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
         PayloadHeaderTypeComponent: IbcPayloadHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,

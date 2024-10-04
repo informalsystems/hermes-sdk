@@ -36,6 +36,8 @@ use crate::types::amount::MockAmount;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::denom::MockDenom;
+use crate::types::height::MockHeight;
+use crate::types::nonce::MockNonce;
 use crate::types::packet_data::MockAnyPacketData;
 use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
@@ -50,13 +52,13 @@ pub type MockChainA = Tagged<ChainA, ChainB, MockChain>;
 pub type MockChainB = Tagged<ChainB, ChainA, MockChain>;
 
 pub trait CanUseMockChain: HasErrorType<Error = String>
-    + HasAddressType<Address = MockAddress>
-    + HasDenomType<Denom = MockDenom>
-    + HasAmountType<Amount = MockAmount>
-    + HasAppIdType<MockChainB, AppId = MockAppId>
-    + HasChannelIdType<MockChainB, ChannelId = MockChannelId>
-    + HasPacketTimeoutType<MockChainB, PacketTimeout = u8>
-    + HasPacketNonceType<MockChainB, PacketNonce = u8>
+    + HasAddressType<Address = Tagged<ChainA, ChainB, MockAddress>>
+    + HasDenomType<Denom = Tagged<ChainA, ChainB, MockDenom>>
+    + HasAmountType<Amount = Tagged<ChainA, ChainB, MockAmount>>
+    + HasAppIdType<MockChainB, AppId = Tagged<ChainA, ChainB, MockAppId>>
+    + HasChannelIdType<MockChainB, ChannelId = Tagged<ChainA, ChainB, MockChannelId>>
+    + HasPacketTimeoutType<MockChainB, PacketTimeout = Tagged<ChainA, ChainB, MockHeight>>
+    + HasPacketNonceType<MockChainB, PacketNonce = Tagged<ChainA, ChainB, MockNonce>>
     + HasPacketType<MockChainB, Packet = IbcPacket<MockChainA, MockChainB, AnyApp>>
     + HasPacketHeaderType<MockChain, PacketHeader = IbcPacketHeader<MockChainA, MockChainB>>
     + HasPayloadHeaderType<MockChain, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
