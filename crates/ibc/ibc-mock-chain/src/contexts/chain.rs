@@ -1,5 +1,6 @@
 use alloc::string::String;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -22,6 +23,7 @@ use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
 
 use crate::components::chain::MockChainComponents;
+use crate::types::address::MockAddress;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::packet_data::MockAnyPacketData;
@@ -34,6 +36,7 @@ impl HasComponents for MockChain {
 
 pub trait CanUseMockChain:
     HasErrorType<Error = String>
+    + HasAddressType<Address = MockAddress>
     + HasAppIdType<MockChain, AppId = MockAppId>
     + HasChannelIdType<MockChain, ChannelId = MockChannelId>
     + HasPacketTimeoutType<MockChain, PacketTimeout = u8>
