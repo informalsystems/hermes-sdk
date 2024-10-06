@@ -45,7 +45,7 @@ use crate::types::tags::{ChainA, ChainB};
 pub struct MockChain;
 
 impl<Chain, Counterparty> HasComponents for Tagged<Chain, Counterparty, MockChain> {
-    type Components = MockChainComponents<Chain, Counterparty>;
+    type Components = MockChainComponents;
 }
 
 pub type MockChainA = Tagged<ChainA, ChainB, MockChain>;

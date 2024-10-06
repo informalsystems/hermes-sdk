@@ -1,9 +1,7 @@
-use core::marker::PhantomData;
-
-use cgp::core::component::{UseDelegate, WithContext};
+use alloc::string::String;
+use cgp::core::component::{UseDelegate, WithContext, WithProvider};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::UseDelegatedType;
-use cgp::core::types::traits::TypeComponent;
+use cgp::core::types::impls::{UseDelegatedType, WithType};
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
@@ -29,19 +27,14 @@ use hermes_ibc_components::types::packet::UseIbcPacket;
 use hermes_ibc_components::types::packet_header::UseIbcPacketHeader;
 use hermes_ibc_components::types::payload_header::UseIbcPayloadHeader;
 
+use crate::components::ibc_types::MockIbcChainTypes;
 use crate::components::packet_data::MockPacketDataTypes;
-use crate::components::types::MockChainTypes;
 use crate::impls::error::RaiseDebugString;
+use crate::impls::tagged::UseTaggedType;
 
-pub struct MockChainComponents<Chain, Counterparty>(pub PhantomData<(Chain, Counterparty)>);
-
-delegate_components! {
-    <A, B>
-    MockChainComponents<A, B> {
-        TypeComponent:
-            UseDelegatedType<MockChainTypes<A, B>>,
+define_components! {
+    MockChainComponents {
         [
-            ErrorTypeComponent,
             AddressTypeComponent,
             DenomTypeComponent,
             AmountTypeComponent,
@@ -49,7 +42,9 @@ delegate_components! {
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
             PacketTimeoutTypeComponent,
-
+        ]:
+            WithProvider<UseTaggedType<UseDelegatedType<MockIbcChainTypes>>>,
+        [
             PacketChannelIdGetterComponent,
             PacketNonceGetterComponent,
             PacketTimeoutGetterComponent,
@@ -58,6 +53,8 @@ delegate_components! {
             IbcMessageAppIdGetterComponent,
         ]:
             WithContext,
+        ErrorTypeComponent:
+            WithType<String>,
         PacketTypeComponent:
             UseIbcPacket<AnyApp>,
         PacketHeaderTypeComponent:
