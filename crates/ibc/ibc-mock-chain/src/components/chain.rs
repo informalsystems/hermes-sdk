@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::component::WithContext;
+use cgp::core::component::{DelegateTo, WithContext};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::UseDelegatedType;
 use cgp::core::types::traits::TypeComponent;
@@ -23,9 +23,8 @@ use hermes_ibc_components::traits::types::packet::packet::PacketTypeComponent;
 use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;
 use hermes_ibc_components::traits::types::payload::data::PayloadDataTypeComponent;
 use hermes_ibc_components::traits::types::payload::header::PayloadHeaderTypeComponent;
-use hermes_ibc_components::types::with_app_provider::WithAppProvider;
 
-use crate::components::packet_data::PacketDataTypes;
+use crate::components::packet_data::MockPacketDataTypes;
 use crate::components::types::MockChainTypes;
 use crate::impls::error::RaiseDebugString;
 
@@ -59,7 +58,7 @@ delegate_components! {
         ]:
             WithContext,
         PayloadDataTypeComponent:
-            WithAppProvider<UseDelegatedType<PacketDataTypes<Chain, Counterparty>>>,
+            DelegateTo<MockPacketDataTypes>,
         ErrorRaiserComponent:
             RaiseDebugString,
     }

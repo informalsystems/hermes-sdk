@@ -23,9 +23,9 @@ use hermes_ibc_components::types::message_header::IbcMessageHeader;
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
-use hermes_ibc_token_transfer_components::types::packet_data::mint::IbcTransferMintPacketData;
-use hermes_ibc_token_transfer_components::types::packet_data::transfer::IbcTransferPacketData;
-use hermes_ibc_token_transfer_components::types::packet_data::unescrow::IbcTransferUnescrowPacketData;
+use hermes_ibc_token_transfer_components::types::packet_data::mint::IbcTransferMintPayloadData;
+use hermes_ibc_token_transfer_components::types::packet_data::transfer::IbcTransferPayloadData;
+use hermes_ibc_token_transfer_components::types::packet_data::unescrow::IbcTransferUnescrowPayloadData;
 use hermes_ibc_token_transfer_components::types::tags::{
     IbcTransferApp, IbcTransferMintApp, IbcTransferUnescrowApp,
 };
@@ -38,7 +38,7 @@ use crate::types::channel_id::MockChannelId;
 use crate::types::denom::MockDenom;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
-use crate::types::packet_data::MockAnyPacketData;
+use crate::types::packet_data::MockAnyPayloadData;
 use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
@@ -63,20 +63,20 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPacketHeaderType<MockChain, PacketHeader = IbcPacketHeader<MockChainA, MockChainB>>
     + HasPayloadHeaderType<MockChain, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
     + HasIbcMessageHeaderType<MockChain, IbcMessageHeader = IbcMessageHeader<MockChainA, MockChainB>>
-    + HasPacketPayloads<MockChain, AnyApp>
-    + HasPayloadDataType<MockChain, AnyApp, PayloadData = MockAnyPacketData<ChainA, ChainB>>
+    + HasPacketPayloads<MockChainB, AnyApp>
+    + HasPayloadDataType<MockChainB, AnyApp, PayloadData = MockAnyPayloadData<ChainA, ChainB>>
     + HasPayloadDataType<
-        MockChain,
+        MockChainB,
         IbcTransferApp,
-        PayloadData = IbcTransferPacketData<MockChainA, MockChainB>,
+        PayloadData = IbcTransferPayloadData<MockChainA, MockChainB>,
     > + HasPayloadDataType<
-        MockChain,
+        MockChainB,
         IbcTransferMintApp,
-        PayloadData = IbcTransferMintPacketData<MockChainA, MockChainB>,
+        PayloadData = IbcTransferMintPayloadData<MockChainA, MockChainB>,
     > + HasPayloadDataType<
-        MockChain,
+        MockChainB,
         IbcTransferUnescrowApp,
-        PayloadData = IbcTransferUnescrowPacketData<MockChainA, MockChainB>,
+        PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
     > + HasPacketChannelIds<MockChainB>
     + HasPacketNonce<MockChainB>
     + HasPacketTimeout<MockChainB>

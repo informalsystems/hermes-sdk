@@ -29,7 +29,7 @@ use crate::types::channel_id::MockChannelId;
 use crate::types::denom::MockDenom;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
-use crate::types::packet_data::MockAnyPacketData;
+use crate::types::packet_data::MockAnyPayloadData;
 use crate::types::tagged::Tagged;
 
 pub struct MockChainTypes<Chain, Counterparty>(pub PhantomData<(Chain, Counterparty)>);
@@ -48,7 +48,7 @@ delegate_components! {
         PacketTypeComponent: IbcPacket<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>, AnyApp>,
         PacketHeaderTypeComponent: IbcPacketHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
         PayloadHeaderTypeComponent: IbcPayloadHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
-        PayloadDataTypeComponent: MockAnyPacketData<A, B>,
+        PayloadDataTypeComponent: MockAnyPayloadData<A, B>,
         IbcMessageHeaderTypeComponent: IbcMessageHeader<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>,
     }
 }
