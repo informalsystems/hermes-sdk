@@ -3,7 +3,7 @@
   [`HasCounterpartyMessageHeight`].
 */
 
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::types::chain::HasChainTypes;
@@ -104,7 +104,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> CounterpartyMessageHeightGetter<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasMessageType,
     Counterparty: HasHeightType,

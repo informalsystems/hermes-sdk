@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use cgp::core::component::{DelegateTo, WithContext};
+use cgp::core::component::{UseDelegate, WithContext};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::UseDelegatedType;
 use cgp::core::types::traits::TypeComponent;
@@ -65,7 +65,7 @@ delegate_components! {
         PayloadHeaderTypeComponent:
             UseIbcPayloadHeader,
         PayloadDataTypeComponent:
-            DelegateTo<MockPacketDataTypes>,
+            UseDelegate<MockPacketDataTypes>,
         IbcMessageHeaderTypeComponent:
             UseIbcMessageHeader,
         ErrorRaiserComponent:

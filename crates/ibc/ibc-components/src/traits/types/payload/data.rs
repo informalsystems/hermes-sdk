@@ -1,4 +1,4 @@
-use cgp::core::component::{DelegateTo, WithProvider};
+use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
@@ -33,7 +33,7 @@ where
 }
 
 impl<Chain, Counterparty, App, Components, Delegate>
-    ProvidePayloadDataType<Chain, Counterparty, App> for DelegateTo<Components>
+    ProvidePayloadDataType<Chain, Counterparty, App> for UseDelegate<Components>
 where
     Chain: Async,
     Components: DelegateComponent<App, Delegate = Delegate>,

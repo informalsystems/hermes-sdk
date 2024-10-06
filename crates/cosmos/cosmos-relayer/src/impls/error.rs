@@ -1,5 +1,5 @@
 use alloc::string::FromUtf8Error;
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
@@ -103,7 +103,7 @@ delegate_components! {
             RetryableErrorComponent,
         ]: ProvideHermesError,
         ErrorRaiserComponent:
-            DelegateTo<CosmosErrorHandlers>,
+            UseDelegate<CosmosErrorHandlers>,
     }
 }
 

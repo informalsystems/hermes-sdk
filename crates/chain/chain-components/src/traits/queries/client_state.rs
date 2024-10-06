@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::queries::chain_status::CanQueryChainStatus;
@@ -138,7 +138,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ClientStateQuerier<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasClientStateType<Chain>,
@@ -155,7 +155,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ClientStateWithProofsQuerier<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType,
     Counterparty: HasClientStateType<Chain>,
@@ -172,7 +172,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> AllClientStatesQuerier<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasClientStateType<Chain>,
