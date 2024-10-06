@@ -22,10 +22,10 @@ where
     Unescrow(Counterparty::Amount),
 }
 
-pub struct ProvideIbcTransferPayloadData;
+pub struct UseIbcTransferPayloadData;
 
 impl<Chain, Counterparty, App> ProvidePayloadDataType<Chain, Counterparty, App>
-    for ProvideIbcTransferPayloadData
+    for UseIbcTransferPayloadData
 where
     Chain: HasAmountType,
     Counterparty: HasAmountType + HasAddressType,

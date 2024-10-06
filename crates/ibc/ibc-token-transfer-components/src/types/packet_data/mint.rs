@@ -13,10 +13,10 @@ where
     pub amount: Chain::Amount,
 }
 
-pub struct ProvideIbcTransferMintPayloadData;
+pub struct UseIbcTransferMintPayloadData;
 
 impl<Chain, Counterparty, App> ProvidePayloadDataType<Chain, Counterparty, App>
-    for ProvideIbcTransferMintPayloadData
+    for UseIbcTransferMintPayloadData
 where
     Chain: HasAmountType,
     Counterparty: HasAddressType,

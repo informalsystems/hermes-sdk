@@ -36,10 +36,10 @@ use crate::impls::error::RaiseDebugString;
 pub struct MockChainComponents<Chain, Counterparty>(pub PhantomData<(Chain, Counterparty)>);
 
 delegate_components! {
-    <Chain, Counterparty>
-    MockChainComponents<Chain, Counterparty> {
+    <A, B>
+    MockChainComponents<A, B> {
         TypeComponent:
-            UseDelegatedType<MockChainTypes<Chain, Counterparty>>,
+            UseDelegatedType<MockChainTypes<A, B>>,
         [
             ErrorTypeComponent,
             AddressTypeComponent,

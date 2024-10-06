@@ -15,10 +15,10 @@ where
     pub phantom: PhantomData<Chain>,
 }
 
-pub struct ProvideIbcTransferUnescrowPayloadData;
+pub struct UseIbcTransferUnescrowPayloadData;
 
 impl<Chain, Counterparty, App> ProvidePayloadDataType<Chain, Counterparty, App>
-    for ProvideIbcTransferUnescrowPayloadData
+    for UseIbcTransferUnescrowPayloadData
 where
     Chain: Async,
     Counterparty: HasAmountType + HasAddressType,

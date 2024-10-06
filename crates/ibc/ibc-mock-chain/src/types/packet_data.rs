@@ -9,11 +9,11 @@ pub enum MockAnyPayloadData<A: Async, B: Async> {
     IbcTransfer(IbcTransferPayloadData<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>>),
 }
 
-pub struct ProvideMockAnyPayloadData;
+pub struct UseMockAnyPayloadData;
 
 impl<A: Async, B: Async, App>
     ProvidePayloadDataType<Tagged<A, B, MockChain>, Tagged<B, A, MockChain>, App>
-    for ProvideMockAnyPayloadData
+    for UseMockAnyPayloadData
 {
     type PayloadData = MockAnyPayloadData<A, B>;
 }
