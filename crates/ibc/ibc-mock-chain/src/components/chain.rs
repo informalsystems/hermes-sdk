@@ -23,6 +23,11 @@ use hermes_ibc_components::traits::types::packet::packet::PacketTypeComponent;
 use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;
 use hermes_ibc_components::traits::types::payload::data::PayloadDataTypeComponent;
 use hermes_ibc_components::traits::types::payload::header::PayloadHeaderTypeComponent;
+use hermes_ibc_components::types::any_app::AnyApp;
+use hermes_ibc_components::types::message_header::UseIbcMessageHeader;
+use hermes_ibc_components::types::packet::UseIbcPacket;
+use hermes_ibc_components::types::packet_header::UseIbcPacketHeader;
+use hermes_ibc_components::types::payload_header::UseIbcPayloadHeader;
 
 use crate::components::packet_data::MockPacketDataTypes;
 use crate::components::types::MockChainTypes;
@@ -44,10 +49,6 @@ delegate_components! {
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
             PacketTimeoutTypeComponent,
-            PacketTypeComponent,
-            PacketHeaderTypeComponent,
-            PayloadHeaderTypeComponent,
-            IbcMessageHeaderTypeComponent,
 
             PacketChannelIdGetterComponent,
             PacketNonceGetterComponent,
@@ -57,8 +58,16 @@ delegate_components! {
             IbcMessageAppIdGetterComponent,
         ]:
             WithContext,
+        PacketTypeComponent:
+            UseIbcPacket<AnyApp>,
+        PacketHeaderTypeComponent:
+            UseIbcPacketHeader,
+        PayloadHeaderTypeComponent:
+            UseIbcPayloadHeader,
         PayloadDataTypeComponent:
             DelegateTo<MockPacketDataTypes>,
+        IbcMessageHeaderTypeComponent:
+            UseIbcMessageHeader,
         ErrorRaiserComponent:
             RaiseDebugString,
     }

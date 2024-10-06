@@ -60,9 +60,9 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPacketTimeoutType<MockChainB, PacketTimeout = Tagged<ChainA, ChainB, MockHeight>>
     + HasPacketNonceType<MockChainB, PacketNonce = Tagged<ChainA, ChainB, MockNonce>>
     + HasPacketType<MockChainB, Packet = IbcPacket<MockChainA, MockChainB, AnyApp>>
-    + HasPacketHeaderType<MockChain, PacketHeader = IbcPacketHeader<MockChainA, MockChainB>>
-    + HasPayloadHeaderType<MockChain, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
-    + HasIbcMessageHeaderType<MockChain, IbcMessageHeader = IbcMessageHeader<MockChainA, MockChainB>>
+    + HasPacketHeaderType<MockChainB, PacketHeader = IbcPacketHeader<MockChainA, MockChainB>>
+    + HasPayloadHeaderType<MockChainB, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
+    + HasIbcMessageHeaderType<MockChainB, IbcMessageHeader = IbcMessageHeader<MockChainA, MockChainB>>
     + HasPacketPayloads<MockChainB, AnyApp>
     + HasPayloadDataType<MockChainB, AnyApp, PayloadData = MockAnyPayloadData<ChainA, ChainB>>
     + HasPayloadDataType<
