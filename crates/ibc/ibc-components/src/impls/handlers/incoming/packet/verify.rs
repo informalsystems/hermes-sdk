@@ -36,7 +36,7 @@ where
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Chain::PacketAck, Chain::Error> {
+    ) -> Result<(), Chain::Error> {
         let header = Counterparty::packet_header(packet);
         let channel_id = Counterparty::packet_dst_channel_id(header);
         let proof_height = Counterparty::commitment_proof_height(send_proof);

@@ -12,3 +12,15 @@ pub trait CanBuildSendPacketCommitmentValue<Counterparty>:
         packet: &Self::Packet,
     ) -> Result<Self::CommitmentValue, Self::Error>;
 }
+
+#[derive_component(RecvPacketCommitmentValueBuilderComponent, RecvPacketCommitmentValueBuilder<Chain>)]
+pub trait CanBuildRecvPacketCommitmentValue<Counterparty>:
+    HasCommitmentValueType + HasErrorType
+where
+    Counterparty: HasPacketType<Self>,
+{
+    // Note: this may be called by the counterparty chain, thus the lack of access to &self.
+    fn build_recv_packet_commitment_value(
+        packet: &Counterparty::Packet,
+    ) -> Result<Self::CommitmentValue, Self::Error>;
+}

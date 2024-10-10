@@ -40,7 +40,7 @@ where
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Chain::PacketAck, Chain::Error> {
+    ) -> Result<(), Chain::Error> {
         let current_time = &chain.get_current_time();
 
         let packet_header = Counterparty::packet_header(packet);

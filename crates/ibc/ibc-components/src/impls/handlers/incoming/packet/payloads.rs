@@ -30,7 +30,7 @@ where
         chain: &Chain,
         packet: &Counterparty::Packet,
         _send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Chain::PacketAck, Chain::Error> {
+    ) -> Result<(), Chain::Error> {
         let packet_header = Counterparty::packet_header(packet);
         let payloads = Counterparty::packet_payloads(packet);
 
@@ -44,8 +44,8 @@ where
             acks.push(ack);
         }
 
-        let ack = Chain::build_packet_ack_from_payload_acks(acks);
+        // let ack = Chain::build_packet_ack_from_payload_acks(acks);
 
-        Ok(ack)
+        Ok(())
     }
 }

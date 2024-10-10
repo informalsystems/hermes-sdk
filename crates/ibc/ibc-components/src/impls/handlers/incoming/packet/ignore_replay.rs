@@ -27,7 +27,7 @@ where
         chain: &Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
-    ) -> Result<Chain::PacketAck, Chain::Error> {
+    ) -> Result<(), Chain::Error> {
         let packet_header = Counterparty::packet_header(packet);
         let nonce = Counterparty::packet_nonce(packet_header);
         let src_channel_id = Counterparty::packet_src_channel_id(packet_header);
@@ -38,7 +38,7 @@ where
             .await?;
 
         match m_ack {
-            Some(ack) => Ok(ack),
+            Some(_ack) => Ok(()),
             None => InHandler::handle_incoming_packet(chain, packet, send_proof).await,
         }
     }
