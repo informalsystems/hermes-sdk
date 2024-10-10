@@ -12,16 +12,13 @@ use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
-use crate::traits::types::packet::ack::HasPacketAckType;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where
-    Chain: HasPacketAckType<Counterparty>
-        + CanQueryConsensusState<Counterparty>
-        + CanRaiseError<Counterparty::Error>,
+    Chain: CanQueryConsensusState<Counterparty> + CanRaiseError<Counterparty::Error>,
     Counterparty: HasHeightType
         + HasCommitmentProofHeight
         + HasPacketHeader<Chain>

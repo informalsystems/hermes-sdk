@@ -4,12 +4,10 @@ use alloc::vec::Vec;
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
-use crate::traits::builders::ack::CanBuildPacketAckFromPayloads;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::payloads::HasPacketPayloads;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::handlers::incoming::payload::CanHandleIncomingPayload;
-use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 
 pub struct HandleIncomingPacketPayloads<App>(pub PhantomData<App>);
@@ -17,10 +15,7 @@ pub struct HandleIncomingPacketPayloads<App>(pub PhantomData<App>);
 impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty>
     for HandleIncomingPacketPayloads<App>
 where
-    Chain: HasErrorType
-        + HasPacketAckType<Counterparty>
-        + CanHandleIncomingPayload<Counterparty, App>
-        + CanBuildPacketAckFromPayloads<Counterparty, App>,
+    Chain: HasErrorType + CanHandleIncomingPayload<Counterparty, App>,
     Counterparty: HasCommitmentProofType
         + HasPacketType<Chain>
         + HasPacketHeader<Chain>

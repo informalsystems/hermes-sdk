@@ -7,15 +7,14 @@ use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::header::nonce::HasPacketNonce;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
-use crate::traits::queries::ack_packet_commitment::CanQueryAckPacketCommitment;
-use crate::traits::types::packet::ack::HasPacketAckType;
+use crate::traits::queries::recv_packet_commitment::CanQueryHasPacketReceived;
 
 pub struct IgnoreDoubleReceive<InHandler>(pub PhantomData<InHandler>);
 
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for IgnoreDoubleReceive<InHandler>
 where
-    Chain: HasPacketAckType<Counterparty> + CanQueryAckPacketCommitment<Counterparty>,
+    Chain: CanQueryHasPacketReceived<Counterparty>,
     Counterparty: HasCommitmentProofType
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
@@ -33,13 +32,14 @@ where
         let src_channel_id = Counterparty::packet_src_channel_id(packet_header);
         let dst_channel_id = Counterparty::packet_dst_channel_id(packet_header);
 
-        let m_ack = chain
-            .query_ack_packet_commitment(src_channel_id, dst_channel_id, nonce)
+        let received = chain
+            .query_has_packet_received(src_channel_id, dst_channel_id, nonce)
             .await?;
 
-        match m_ack {
-            Some(_ack) => Ok(()),
-            None => InHandler::handle_incoming_packet(chain, packet, send_proof).await,
+        if received {
+            Ok(())
+        } else {
+            InHandler::handle_incoming_packet(chain, packet, send_proof).await
         }
     }
 }

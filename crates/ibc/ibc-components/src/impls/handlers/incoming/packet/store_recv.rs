@@ -7,7 +7,6 @@ use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::send_packet::CanBuildRecvPacketCommitmentValue;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
-use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 
 pub struct StoreRecvPacket<InHandler>(pub PhantomData<InHandler>);
@@ -16,7 +15,6 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for StoreRecvPacket<InHandler>
 where
     Chain: CanStoreCommitment
-        + HasPacketAckType<Counterparty>
         + CanBuildRecvPacketCommitmentPath<Counterparty>
         + CanBuildRecvPacketCommitmentValue<Counterparty>,
     Counterparty: HasCommitmentProofType + HasPacketType<Chain> + HasPacketHeader<Chain>,

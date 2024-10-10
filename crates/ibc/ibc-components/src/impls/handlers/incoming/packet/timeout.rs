@@ -10,7 +10,6 @@ use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::timeout::CanCompareTimeoutTime;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::time::CanQueryCurrentTime;
-use crate::traits::types::packet::ack::HasPacketAckType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
 
@@ -30,7 +29,6 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for DisallowTimedOutIncomingPacket<InHandler>
 where
     Chain: CanQueryCurrentTime
-        + HasPacketAckType<Counterparty>
         + CanCompareTimeoutTime<Counterparty>
         + for<'a> CanRaiseError<PacketTimedOut<'a, Chain, Counterparty>>,
     Counterparty: HasCommitmentProofType + HasPacketHeader<Chain> + HasPacketTimeout<Chain>,
