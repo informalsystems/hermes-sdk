@@ -53,6 +53,10 @@ members = [
 
     "tools/integration-test",
     "tools/test-framework",
+
+    "crates/ibc/ibc-components",
+    "crates/ibc/ibc-token-transfer-components",
+    "crates/ibc/ibc-mock-chain",
 ]
 
 [workspace.package]
@@ -157,22 +161,26 @@ hermes-wasm-test-components             = { version = "0.1.0" }
 hermes-solomachine-chain-components     = { version = "0.1.0" }
 hermes-solomachine-relayer              = { version = "0.1.0" }
 
+hermes-ibc-components                   = { version = "0.1.0" }
+hermes-ibc-token-transfer-components    = { version = "0.1.0" }
+hermes-ibc-mock-chain                   = { version = "0.1.0" }
+
 [patch.crates-io]
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-component-macro         = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-component-macro-lib     = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-field-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-field-macro-lib         = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "component-improvements" }
 
 hermes-chain-components             = { path = "./crates/chain/chain-components" }
 hermes-chain-type-components        = { path = "./crates/chain/chain-type-components" }
@@ -219,3 +227,7 @@ hermes-wasm-test-components         = { path = "./crates/wasm/wasm-test-componen
 
 hermes-solomachine-chain-components = { path = "./crates/solomachine/solomachine-chain-components" }
 hermes-solomachine-relayer          = { path = "./crates/solomachine/solomachine-relayer" }
+
+hermes-ibc-components                   = { path = "./crates/ibc/ibc-components" }
+hermes-ibc-token-transfer-components    = { path = "./crates/ibc/ibc-token-transfer-components" }
+hermes-ibc-mock-chain                   = { path = "./crates/ibc/ibc-mock-chain" }

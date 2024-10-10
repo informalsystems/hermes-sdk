@@ -1,12 +1,13 @@
 use core::marker::PhantomData;
 
+use cgp::core::component::UseContext;
+use cgp::core::field::FieldGetter;
 use cgp::prelude::HasErrorType;
 
 use crate::traits::encode_mut::MutEncoder;
-use crate::traits::field::{FieldGetter, GetField};
 use crate::traits::types::encode_buffer::HasEncodeBufferType;
 
-pub type EncodeField<Tag, InEncoder> = EncodeFieldWithGetter<GetField, Tag, InEncoder>;
+pub type EncodeField<Tag, InEncoder> = EncodeFieldWithGetter<UseContext, Tag, InEncoder>;
 
 pub struct EncodeFieldWithGetter<Getter, Tag, InEncoder>(pub PhantomData<(Getter, Tag, InEncoder)>);
 

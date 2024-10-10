@@ -1,4 +1,4 @@
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
@@ -375,6 +375,6 @@ define_components! {
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
-            DelegateTo<DelegateCosmosChainComponents>,
+            UseDelegate<DelegateCosmosChainComponents>,
     }
 }

@@ -1,4 +1,4 @@
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::types::create_client::{
@@ -21,7 +21,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> CreateClientMessageBuilder<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasCreateClientMessageOptionsType<Counterparty> + HasMessageType + HasErrorType,
     Counterparty: HasCreateClientPayloadType<Chain>,

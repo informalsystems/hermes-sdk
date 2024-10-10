@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::types::height::HasHeightType;
@@ -42,7 +42,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateHeightsQuerier<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasHeightType,

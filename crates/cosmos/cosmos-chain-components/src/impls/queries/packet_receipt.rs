@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 use hermes_relayer_components::chain::traits::queries::packet_receipt::PacketReceiptQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packets::timeout::HasPacketReceiptType;
@@ -15,6 +17,7 @@ where
         + HasCommitmentProofType
         + CanQueryAbci,
     Counterparty: HasIbcChainTypes<Chain>,
+    Chain::ChannelId: Display,
 {
     async fn query_packet_receipt(
         chain: &Chain,

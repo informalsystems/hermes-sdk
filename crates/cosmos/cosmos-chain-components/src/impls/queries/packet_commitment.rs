@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 use cgp::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::packet_commitment::PacketCommitmentQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -17,6 +19,7 @@ where
         + HasCommitmentProofType
         + CanQueryAbci
         + HasErrorType,
+    Chain::ChannelId: Display,
 {
     async fn query_packet_commitment(
         chain: &Chain,
