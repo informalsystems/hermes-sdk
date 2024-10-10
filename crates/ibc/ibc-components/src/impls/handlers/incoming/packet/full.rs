@@ -6,7 +6,7 @@ use cgp::prelude::*;
 // use crate::impls::handlers::incoming::packet::error_ack::WrapHandlerErrorAsAck;
 use crate::impls::handlers::incoming::packet::no_replay::DisallowDoubleReceive;
 use crate::impls::handlers::incoming::packet::payloads::HandleIncomingPacketPayloads;
-use crate::impls::handlers::incoming::packet::store_ack::StorePacketAck;
+use crate::impls::handlers::incoming::packet::store_recv::StoreRecvPacket;
 use crate::impls::handlers::incoming::packet::timeout::DisallowTimedOutIncomingPacket;
 use crate::impls::handlers::incoming::packet::verify::VerifySendPacketCommitmentProof;
 pub use crate::traits::handlers::incoming::packet::IncomingPacketHandlerComponent;
@@ -20,7 +20,7 @@ delegate_components! {
             VerifySendPacketCommitmentProof<
                 DisallowDoubleReceive<
                     DisallowTimedOutIncomingPacket<
-                        StorePacketAck<
+                        StoreRecvPacket<
                             // WrapHandlerErrorAsAck<
                                 // UseContext,
                                 HandleIncomingPacketPayloads<App>
