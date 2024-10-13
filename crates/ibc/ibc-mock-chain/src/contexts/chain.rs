@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::string::String;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
@@ -42,14 +44,14 @@ use crate::types::packet_data::MockAnyPayloadData;
 use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
-pub struct MockChain;
+pub struct MockChain<Chain, Counterparty>(pub PhantomData<(Chain, Counterparty)>);
 
-impl<Chain, Counterparty> HasComponents for Tagged<Chain, Counterparty, MockChain> {
+impl<Chain, Counterparty> HasComponents for MockChain<Chain, Counterparty> {
     type Components = MockChainComponents;
 }
 
-pub type MockChainA = Tagged<ChainA, ChainB, MockChain>;
-pub type MockChainB = Tagged<ChainB, ChainA, MockChain>;
+pub type MockChainA = MockChain<ChainA, ChainB>;
+pub type MockChainB = MockChain<ChainB, ChainA>;
 
 pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasAddressType<Address = Tagged<ChainA, ChainB, MockAddress>>
