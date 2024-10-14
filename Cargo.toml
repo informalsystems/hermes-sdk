@@ -84,7 +84,7 @@ cgp                             = { version = "0.1.0" }
 cgp-core                        = { version = "0.1.0" }
 cgp-error-eyre                  = { version = "0.1.0" }
 cgp-component-macro             = { version = "0.1.0" }
-clap                            = { version = "4.5.17" }
+clap                            = { version = "4.5.20" }
 oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.13.3" }
 prost-types                     = { version = "0.13.2" }
