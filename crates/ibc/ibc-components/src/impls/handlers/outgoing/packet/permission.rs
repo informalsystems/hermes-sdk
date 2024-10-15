@@ -2,8 +2,8 @@ use core::marker::PhantomData;
 
 use alloc::vec::Vec;
 
+use crate::traits::fields::caller::HasCaller;
 use crate::traits::fields::payload::header::HasPayloadHeader;
-use crate::traits::fields::transaction::caller::HasIbcTransactionCaller;
 use crate::traits::handlers::outgoing::packet::PacketSender;
 use crate::traits::handlers::outgoing::permission::CanCheckSendPayloadPermission;
 use crate::traits::types::packet::packet::HasPacketType;
@@ -17,7 +17,7 @@ where
     Chain: HasIbcTransactionHeaderType<Counterparty>
         + HasPayloadHeader<Counterparty>
         + HasPacketType<Counterparty>
-        + HasIbcTransactionCaller<Counterparty>
+        + HasCaller
         + CanCheckSendPayloadPermission<Counterparty>,
     InHandler: PacketSender<Chain, Counterparty>,
 {
@@ -26,7 +26,7 @@ where
         transaction_header: &Chain::IbcTransactionHeader,
         payloads: Vec<Chain::Payload>,
     ) -> Result<Chain::Packet, Chain::Error> {
-        let sender = Chain::ibc_transaction_caller(transaction_header);
+        let sender = chain.caller();
 
         for payload in payloads.iter() {
             let payload_header = Chain::payload_header(payload);

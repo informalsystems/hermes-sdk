@@ -2,8 +2,8 @@ use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_ibc_components::traits::fields::caller::HasCaller;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
-use hermes_ibc_components::traits::fields::transaction::caller::HasIbcTransactionCaller;
 use hermes_ibc_components::traits::fields::transaction::channel_id::HasIbcTransactionChannelIds;
 use hermes_ibc_components::traits::handlers::outgoing::message::IbcMessageHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
@@ -22,9 +22,9 @@ where
     Chain: HasIbcTransactionChannelIds<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
         + HasMessageSendTransferAmount<Counterparty, App>
+        + HasCaller
         + HasAmountDenom
         + HasAmountQuantity
-        + HasIbcTransactionCaller<Counterparty>
         + CanLookupOutgoingBurnToken<Counterparty>
         + CanTransferToken<Burn>
         + CanTransferToken<Escrow>
@@ -49,7 +49,7 @@ where
         let src_amount = Chain::message_send_transfer_amount(message);
         let src_denom = Chain::amount_denom(src_amount);
 
-        let sender = Chain::ibc_transaction_caller(transaction_header);
+        let sender = chain.caller();
 
         let m_dst_denom = chain
             .lookup_outgoing_burn_token(
