@@ -1,7 +1,6 @@
 use core::marker::PhantomData;
 use core::ops::Deref;
 
-use alloc::boxed::Box;
 use alloc::collections::btree_map::BTreeMap;
 use alloc::string::String;
 use alloc::sync::Arc;
@@ -55,6 +54,7 @@ pub struct MockChain<Chain: Async, Counterparty: Async> {
     pub phantom: PhantomData<(Chain, Counterparty)>,
 }
 
+#[derive(HasField)]
 pub struct MockChainFields<Chain: Async, Counterparty: Async> {
     pub current_height: MockHeight,
     pub channel_clients: BTreeMap<
@@ -113,6 +113,51 @@ impl<Chain: Async, Counterparty: Async> Deref for MockChain<Chain, Counterparty>
 
 impl<Chain: Async, Counterparty: Async> HasComponents for MockChain<Chain, Counterparty> {
     type Components = MockChainComponents;
+}
+
+impl<Chain: Async, Counterparty: Async> Clone for MockChainFields<Chain, Counterparty> {
+    fn clone(&self) -> Self {
+        Self {
+            current_height: self.current_height.clone(),
+            channel_clients: self.channel_clients.clone(),
+            consensus_states: self.consensus_states.clone(),
+            received_packets: self.received_packets.clone(),
+            sent_packets: self.sent_packets.clone(),
+        }
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> Clone for MockChain<Chain, Counterparty> {
+    fn clone(&self) -> Self {
+        Self {
+            fields: Arc::new(self.fields.mock_chain_fields().clone()),
+            phantom: PhantomData,
+        }
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> Default for MockChain<Chain, Counterparty> {
+    fn default() -> Self {
+        Self {
+            fields: Arc::new(MockChainFields {
+                current_height: MockHeight(0),
+                channel_clients: BTreeMap::default(),
+                consensus_states: BTreeMap::default(),
+                received_packets: BTreeMap::default(),
+                sent_packets: BTreeMap::default(),
+            }),
+            phantom: PhantomData,
+        }
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> MockChain<Chain, Counterparty> {
+    pub fn fork(&self) -> Self {
+        Self {
+            fields: self.fields.clone(),
+            phantom: PhantomData,
+        }
+    }
 }
 
 pub type MockChainA = MockChain<ChainA, ChainB>;

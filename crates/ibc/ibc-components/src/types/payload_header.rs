@@ -22,3 +22,16 @@ where
 {
     type PayloadHeader = IbcPayloadHeader<Chain, Counterparty>;
 }
+
+impl<Chain, Counterparty> Clone for IbcPayloadHeader<Chain, Counterparty>
+where
+    Chain: HasAppIdType<Counterparty, AppId: Clone>,
+    Counterparty: HasAppIdType<Chain, AppId: Clone>,
+{
+    fn clone(&self) -> Self {
+        Self {
+            src_app_id: self.src_app_id.clone(),
+            dst_app_id: self.dst_app_id.clone(),
+        }
+    }
+}

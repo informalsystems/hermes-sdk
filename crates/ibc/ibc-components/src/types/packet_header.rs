@@ -26,3 +26,20 @@ where
 {
     type PacketHeader = IbcPacketHeader<Chain, Counterparty>;
 }
+
+impl<Chain, Counterparty> Clone for IbcPacketHeader<Chain, Counterparty>
+where
+    Chain: HasChannelIdType<Counterparty, ChannelId: Clone>
+        + HasPacketNonceType<Counterparty, PacketNonce: Clone>,
+    Counterparty: HasChannelIdType<Chain, ChannelId: Clone>
+        + HasPacketTimeoutType<Chain, PacketTimeout: Clone>,
+{
+    fn clone(&self) -> Self {
+        Self {
+            src_channel_id: self.src_channel_id.clone(),
+            dst_channel_id: self.dst_channel_id.clone(),
+            nonce: self.nonce.clone(),
+            timeout: self.timeout.clone(),
+        }
+    }
+}

@@ -32,3 +32,29 @@ where
 {
     type PayloadData = IbcTransferPayloadData<Chain, Counterparty>;
 }
+
+impl<Chain, Counterparty> Clone for IbcTransferPayloadData<Chain, Counterparty>
+where
+    Chain: HasAmountType<Amount: Clone>,
+    Counterparty: HasAmountType<Amount: Clone> + HasAddressType<Address: Clone>,
+{
+    fn clone(&self) -> Self {
+        Self {
+            receiver: self.receiver.clone(),
+            amount: self.amount.clone(),
+        }
+    }
+}
+
+impl<Chain, Counterparty> Clone for IbcTransferAmount<Chain, Counterparty>
+where
+    Chain: HasAmountType<Amount: Clone>,
+    Counterparty: HasAmountType<Amount: Clone>,
+{
+    fn clone(&self) -> Self {
+        match self {
+            Self::Mint(amount) => Self::Mint(amount.clone()),
+            Self::Unescrow(amount) => Self::Unescrow(amount.clone()),
+        }
+    }
+}

@@ -15,3 +15,11 @@ impl<A: Async, B: Async, App> ProvidePayloadDataType<MockChain<A, B>, MockChain<
 {
     type PayloadData = MockAnyPayloadData<A, B>;
 }
+
+impl<A: Async, B: Async> Clone for MockAnyPayloadData<A, B> {
+    fn clone(&self) -> Self {
+        match self {
+            Self::IbcTransfer(data) => Self::IbcTransfer(data.clone()),
+        }
+    }
+}

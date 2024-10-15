@@ -31,3 +31,17 @@ where
 {
     type Packet = IbcPacket<Chain, Counterparty, App>;
 }
+
+impl<Chain, Counterparty, App> Clone for IbcPacket<Chain, Counterparty, App>
+where
+    Chain: HasPacketHeaderType<Counterparty, PacketHeader: Clone>
+        + HasPayloadHeaderType<Counterparty, PayloadHeader: Clone>
+        + HasPayloadDataType<Counterparty, App, PayloadData: Clone>,
+{
+    fn clone(&self) -> Self {
+        Self {
+            header: self.header.clone(),
+            payloads: self.payloads.clone(),
+        }
+    }
+}

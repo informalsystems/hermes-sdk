@@ -1,7 +1,7 @@
 use alloc::string::String;
 use cgp::core::component::{UseDelegate, WithContext, WithProvider};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::{UseDelegatedType, UseType, WithType};
+use cgp::core::types::impls::{UseDelegatedType, WithType};
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
