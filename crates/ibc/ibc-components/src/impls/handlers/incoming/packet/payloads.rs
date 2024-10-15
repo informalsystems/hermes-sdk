@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use alloc::vec::Vec;
 use cgp::prelude::HasErrorType;
 use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
@@ -29,17 +28,11 @@ where
         let packet_header = Counterparty::packet_header(packet);
         let payloads = Counterparty::packet_payloads(packet);
 
-        let mut acks = Vec::new();
-
         for (payload_header, payload_data) in payloads {
-            let ack = chain
+            chain
                 .handle_incoming_payload(packet_header, payload_header, payload_data)
                 .await?;
-
-            acks.push(ack);
         }
-
-        // let ack = Chain::build_packet_ack_from_payload_acks(acks);
 
         Ok(())
     }

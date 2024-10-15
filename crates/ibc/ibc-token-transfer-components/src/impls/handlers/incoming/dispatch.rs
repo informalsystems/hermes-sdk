@@ -4,7 +4,6 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
-use hermes_ibc_components::traits::types::payload::ack::HasPayloadAckType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
@@ -27,16 +26,12 @@ impl<
         TransferPayload,
         MintPayload,
         UnescrowPayload,
-        Ack,
     > IncomingPayloadHandler<Chain, Counterparty, App>
     for DispatchMintOrUnescrow<MintHandler, UnescrowHandler>
 where
     Chain: HasErrorType
         + HasAmountType
         + HasIncomingTransferApps<MintApp = MintApp, UnescrowApp = UnescrowApp>
-        + HasPayloadAckType<Counterparty, App, PayloadAck = Ack>
-        + HasPayloadAckType<Counterparty, MintApp, PayloadAck = Ack>
-        + HasPayloadAckType<Counterparty, UnescrowApp, PayloadAck = Ack>
         + CanParseIncomingTransferData<Counterparty, App>,
     Counterparty: HasAmountType
         + HasPacketHeaderType<Chain>
@@ -55,7 +50,7 @@ where
         packet_header: &Counterparty::PacketHeader,
         payload_header: &Counterparty::PayloadHeader,
         payload_data: &TransferPayload,
-    ) -> Result<Ack, Chain::Error> {
+    ) -> Result<(), Chain::Error> {
         let payload = chain.parse_incoming_transfer_data(payload_data)?;
 
         match payload {

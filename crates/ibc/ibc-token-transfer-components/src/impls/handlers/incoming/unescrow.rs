@@ -9,7 +9,6 @@ use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacket
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
-use hermes_ibc_components::traits::types::payload::ack::HasPayloadAckType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
 use crate::traits::escrow_registry::lookup::CanLookupEscrowedToken;
@@ -37,7 +36,6 @@ impl<Chain, Counterparty, App> IncomingPayloadHandler<Chain, Counterparty, App>
 where
     Chain: HasAmountDenom
         + HasAmountQuantity
-        + HasPayloadAckType<Counterparty, App, PayloadAck = ()>
         + CanTransferToken<Unescrow>
         + CanLookupEscrowedToken<Counterparty>
         + CanUpdateEscrowedToken<Counterparty, Decrease>

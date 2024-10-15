@@ -6,7 +6,6 @@ use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacket
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
-use hermes_ibc_components::traits::types::payload::ack::HasPayloadAckType;
 
 use crate::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
 use crate::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
@@ -26,7 +25,6 @@ where
         + CanCreateToken
         + HasChannelIdType<Counterparty>
         + HasAppIdType<Counterparty>
-        + HasPayloadAckType<Counterparty, App, PayloadAck = ()>
         + CanTransferToken<Mint>
         + CanLookupIncomingMintedToken<Counterparty>
         + CanRegisterMintedToken<Counterparty>,
