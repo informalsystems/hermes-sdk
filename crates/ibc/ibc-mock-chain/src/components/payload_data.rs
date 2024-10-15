@@ -10,7 +10,7 @@ use hermes_ibc_token_transfer_components::types::tags::{
 use crate::types::packet_data::UseMockAnyPayloadData;
 
 define_components! {
-    MockPacketDataTypes {
+    MockPayloadDataTypes {
         AnyApp: UseMockAnyPayloadData,
         IbcTransferApp: UseIbcTransferPayloadData,
         IbcTransferMintApp: UseIbcTransferMintPayloadData,

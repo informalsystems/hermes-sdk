@@ -24,10 +24,12 @@ use hermes_ibc_components::traits::types::packet::packet::HasPacketType;
 use hermes_ibc_components::traits::types::packet::timeout::HasPacketTimeoutType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
+use hermes_ibc_components::traits::types::payload::payload::HasPayloadType;
 use hermes_ibc_components::types::any_app::AnyApp;
 use hermes_ibc_components::types::message_header::IbcMessageHeader;
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::packet_header::IbcPacketHeader;
+use hermes_ibc_components::types::payload::IbcPayload;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
 use hermes_ibc_token_transfer_components::types::packet_data::mint::IbcTransferMintPayloadData;
 use hermes_ibc_token_transfer_components::types::packet_data::transfer::IbcTransferPayloadData;
@@ -177,6 +179,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPayloadHeaderType<MockChainB, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
     + HasIbcMessageHeaderType<MockChainB, IbcMessageHeader = IbcMessageHeader<MockChainA, MockChainB>>
     + HasPacketPayloads<MockChainB, AnyApp>
+    + HasPayloadType<MockChainB, Payload = IbcPayload<MockChainA, MockChainB, AnyApp>>
     + HasPayloadDataType<MockChainB, AnyApp, PayloadData = MockAnyPayloadData<ChainA, ChainB>>
     + HasPayloadDataType<
         MockChainB,
