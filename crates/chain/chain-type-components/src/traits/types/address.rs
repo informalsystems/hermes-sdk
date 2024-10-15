@@ -9,7 +9,7 @@ pub trait HasAddressType: Async {
     type Address: Display + Async;
 }
 
-pub type AddressOf<ChainDriver> = <ChainDriver as HasAddressType>::Address;
+pub type AddressOf<Chain> = <Chain as HasAddressType>::Address;
 
 impl<Chain, Provider, Address> ProvideAddressType<Chain> for WithProvider<Provider>
 where

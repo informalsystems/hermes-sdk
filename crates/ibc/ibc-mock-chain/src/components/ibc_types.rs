@@ -2,6 +2,7 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
 use hermes_chain_type_components::traits::types::denom::DenomTypeComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
@@ -17,6 +18,7 @@ use crate::types::nonce::MockNonce;
 
 define_components! {
     MockIbcChainTypes {
+        HeightTypeComponent: MockHeight,
         AddressTypeComponent: MockAddress,
         DenomTypeComponent: MockDenom,
         AmountTypeComponent: MockAmount,

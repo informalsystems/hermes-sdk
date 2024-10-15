@@ -1,11 +1,12 @@
 use alloc::string::String;
 use cgp::core::component::{UseDelegate, WithContext, WithProvider};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
-use cgp::core::types::impls::{UseDelegatedType, WithType};
+use cgp::core::types::impls::{UseDelegatedType, UseType, WithType};
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
 use hermes_chain_type_components::traits::types::denom::DenomTypeComponent;
+use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
@@ -35,6 +36,7 @@ use crate::impls::tagged::UseTaggedType;
 define_components! {
     MockChainComponents {
         [
+            HeightTypeComponent,
             AddressTypeComponent,
             DenomTypeComponent,
             AmountTypeComponent,

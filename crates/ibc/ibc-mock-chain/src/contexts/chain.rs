@@ -1,10 +1,15 @@
 use core::marker::PhantomData;
+use core::ops::Deref;
 
+use alloc::boxed::Box;
+use alloc::collections::btree_map::BTreeMap;
 use alloc::string::String;
+use alloc::sync::Arc;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -37,6 +42,7 @@ use crate::types::address::MockAddress;
 use crate::types::amount::MockAmount;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
+use crate::types::client_id::MockClientId;
 use crate::types::denom::MockDenom;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
@@ -44,9 +50,68 @@ use crate::types::packet_data::MockAnyPayloadData;
 use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
-pub struct MockChain<Chain, Counterparty>(pub PhantomData<(Chain, Counterparty)>);
+pub struct MockChain<Chain: Async, Counterparty: Async> {
+    pub fields: Arc<dyn HasMockChainFields<Chain, Counterparty>>,
+    pub phantom: PhantomData<(Chain, Counterparty)>,
+}
 
-impl<Chain, Counterparty> HasComponents for MockChain<Chain, Counterparty> {
+pub struct MockChainFields<Chain: Async, Counterparty: Async> {
+    pub current_height: MockHeight,
+    pub channel_clients: BTreeMap<
+        Tagged<Chain, Counterparty, MockChannelId>,
+        Tagged<Chain, Counterparty, MockClientId>,
+    >,
+    pub consensus_states: BTreeMap<
+        Tagged<Chain, Counterparty, MockClientId>,
+        BTreeMap<Tagged<Counterparty, Chain, MockHeight>, MockChain<Counterparty, Chain>>,
+    >,
+    pub received_packets: BTreeMap<
+        (
+            Tagged<Chain, Counterparty, MockChannelId>,
+            Tagged<Counterparty, Chain, MockChannelId>,
+            Tagged<Chain, Counterparty, MockAppId>,
+            Tagged<Counterparty, Chain, MockAppId>,
+        ),
+        BTreeMap<
+            Tagged<Counterparty, Chain, MockNonce>,
+            IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>, AnyApp>,
+        >,
+    >,
+    pub sent_packets: BTreeMap<
+        (
+            Tagged<Chain, Counterparty, MockChannelId>,
+            Tagged<Counterparty, Chain, MockChannelId>,
+            Tagged<Chain, Counterparty, MockAppId>,
+            Tagged<Counterparty, Chain, MockAppId>,
+        ),
+        BTreeMap<
+            Tagged<Chain, Counterparty, MockNonce>,
+            IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, AnyApp>,
+        >,
+    >,
+}
+
+pub trait HasMockChainFields<Chain: Async, Counterparty: Async>: Send + Sync + 'static {
+    fn mock_chain_fields(&self) -> &MockChainFields<Chain, Counterparty>;
+}
+
+impl<Chain: Async, Counterparty: Async> HasMockChainFields<Chain, Counterparty>
+    for MockChainFields<Chain, Counterparty>
+{
+    fn mock_chain_fields(&self) -> &MockChainFields<Chain, Counterparty> {
+        self
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> Deref for MockChain<Chain, Counterparty> {
+    type Target = MockChainFields<Chain, Counterparty>;
+
+    fn deref(&self) -> &Self::Target {
+        self.fields.mock_chain_fields()
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> HasComponents for MockChain<Chain, Counterparty> {
     type Components = MockChainComponents;
 }
 
@@ -54,6 +119,7 @@ pub type MockChainA = MockChain<ChainA, ChainB>;
 pub type MockChainB = MockChain<ChainB, ChainA>;
 
 pub trait CanUseMockChain: HasErrorType<Error = String>
+    + HasHeightType<Height = Tagged<ChainA, ChainB, MockHeight>>
     + HasAddressType<Address = Tagged<ChainA, ChainB, MockAddress>>
     + HasDenomType<Denom = Tagged<ChainA, ChainB, MockDenom>>
     + HasAmountType<Amount = Tagged<ChainA, ChainB, MockAmount>>

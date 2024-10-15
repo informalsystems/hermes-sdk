@@ -50,3 +50,32 @@ where
         self.value.clone().into()
     }
 }
+
+impl<A, B, Value> PartialEq for Tagged<A, B, Value>
+where
+    Value: PartialEq,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.value.eq(other)
+    }
+}
+
+impl<A, B, Value> PartialOrd for Tagged<A, B, Value>
+where
+    Value: PartialOrd,
+{
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
+        self.value.partial_cmp(other)
+    }
+}
+
+impl<A, B, Value> Eq for Tagged<A, B, Value> where Value: Eq {}
+
+impl<A, B, Value> Ord for Tagged<A, B, Value>
+where
+    Value: Ord,
+{
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
+        self.value.cmp(other)
+    }
+}
