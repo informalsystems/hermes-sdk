@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use cgp::prelude::*;
 
 use crate::traits::types::packet::packet::HasPacketType;
@@ -15,6 +16,6 @@ pub trait CanSendPacket<Counterparty>:
     async fn send_packet(
         &self,
         transaction_header: &Self::IbcTransactionHeader,
-        payloads: &[Self::Payload],
+        payloads: Vec<Self::Payload>,
     ) -> Result<Self::Packet, Self::Error>;
 }
