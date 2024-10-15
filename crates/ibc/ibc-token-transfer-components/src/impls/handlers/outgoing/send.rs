@@ -39,7 +39,7 @@ where
         transaction_header: &Chain::IbcTransactionHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,
-    ) -> Result<Chain::Payload, Chain::Error> {
+    ) -> Result<(Chain::PayloadHeader, Chain::PayloadData), Chain::Error> {
         let src_channel_id = Chain::transaction_src_channel_id(transaction_header);
         let dst_channel_id = Chain::transaction_dst_channel_id(transaction_header);
 

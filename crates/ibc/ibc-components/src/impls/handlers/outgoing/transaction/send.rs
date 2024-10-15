@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use alloc::vec::Vec;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
+use crate::traits::builders::payload::CanBuildPayload;
 use crate::traits::fields::transaction::channel_id::HasIbcTransactionChannelIds;
 use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
@@ -20,6 +21,7 @@ where
         + HasIbcTransactionHeader<Counterparty>
         + HasIbcTransactionChannelIds<Counterparty>
         + HasIbcTransactionMessages<Counterparty, App>
+        + CanBuildPayload<Counterparty, App>
         + CanSendPacket<Counterparty>,
     Counterparty: HasChannelIdType<Chain>,
     InHandler: IbcMessageHandler<Chain, Counterparty, App>,
@@ -35,9 +37,11 @@ where
         let mut payloads = Vec::new();
 
         for (message_header, message) in messages {
-            let payload =
+            let (payload_header, payload_data) =
                 InHandler::handle_ibc_message(chain, transaction_header, message_header, message)
                     .await?;
+
+            let payload = Chain::build_payload(payload_header, payload_data)?;
 
             payloads.push(payload);
         }

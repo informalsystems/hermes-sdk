@@ -11,7 +11,6 @@ pub trait CanBuildPayload<Counterparty, App>:
     + HasErrorType
 {
     fn build_payload(
-        &self,
         header: Self::PayloadHeader,
         data: Self::PayloadData,
     ) -> Result<Self::Payload, Self::Error>;
