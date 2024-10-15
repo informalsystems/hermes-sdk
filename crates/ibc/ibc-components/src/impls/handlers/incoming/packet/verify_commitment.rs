@@ -11,6 +11,7 @@ use crate::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::queries::client_id::CanQueryClientIdFromChannelId;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
@@ -18,7 +19,9 @@ pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for VerifySendPacketCommitmentProof<InHandler>
 where
-    Chain: CanQueryConsensusState<Counterparty> + CanRaiseError<Counterparty::Error>,
+    Chain: CanQueryConsensusState<Counterparty>
+        + CanRaiseError<Counterparty::Error>
+        + CanQueryClientIdFromChannelId<Counterparty>,
     Counterparty: HasHeightType
         + HasCommitmentProofHeight
         + HasPacketHeader<Chain>
@@ -38,8 +41,10 @@ where
         let channel_id = Counterparty::packet_dst_channel_id(header);
         let proof_height = Counterparty::commitment_proof_height(send_proof);
 
+        let client_id = chain.query_client_id_from_channel_id(channel_id).await?;
+
         let consensus_state = chain
-            .query_consensus_state(channel_id, proof_height)
+            .query_consensus_state(&client_id, proof_height)
             .await?;
 
         let commitment_path =
