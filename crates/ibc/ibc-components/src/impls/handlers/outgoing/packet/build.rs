@@ -9,15 +9,16 @@ use crate::traits::fields::transaction::channel_id::HasIbcTransactionChannelIds;
 use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
 use crate::traits::handlers::outgoing::message::IbcMessageHandler;
+use crate::traits::handlers::outgoing::packet::PacketSender;
 use crate::traits::handlers::outgoing::transaction::IbcTransactionHandler;
 use crate::traits::nonce::CanAllocatePacketNonce;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::transaction::HasIbcTransactionType;
 
-pub struct HandleIbcTransactionMessages<App, InHandler>(pub PhantomData<(App, InHandler)>);
+pub struct BuildSendPacket;
 
-impl<Chain, Counterparty, App, InHandler> IbcTransactionHandler<Chain, Counterparty>
-    for HandleIbcTransactionMessages<App, InHandler>
+impl<Chain, Counterparty, App> PacketSender<Chain, Counterparty>
+    for BuildSendPacket<App>
 where
     Chain: HasErrorType
         + HasIbcTransactionType<Counterparty>
@@ -25,7 +26,7 @@ where
         + HasIbcTransactionHeader<Counterparty>
         + HasIbcTransactionChannelIds<Counterparty>
         + HasIbcTransactionMessages<Counterparty, App>
-        + CanBuildPacket<Counterparty>
+        + CanBuildPacket<Counterparty, App>
         + CanAllocatePacketNonce<Counterparty>
         + HasChannelIdType<Counterparty>,
     Counterparty: HasChannelIdType<Chain>,
