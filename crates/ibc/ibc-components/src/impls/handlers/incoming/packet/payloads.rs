@@ -5,6 +5,8 @@ use hermes_chain_type_components::traits::types::commitment_proof::HasCommitment
 
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::payloads::HasPacketPayloads;
+use crate::traits::fields::payload::data::HasPayloadData;
+use crate::traits::fields::payload::header::HasPayloadHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::handlers::incoming::payload::CanHandleIncomingPayload;
 use crate::traits::types::packet::packet::HasPacketType;
@@ -18,7 +20,9 @@ where
     Counterparty: HasCommitmentProofType
         + HasPacketType<Chain>
         + HasPacketHeader<Chain>
-        + HasPacketPayloads<Chain, App>,
+        + HasPacketPayloads<Chain>
+        + HasPayloadHeader<Chain>
+        + HasPayloadData<Chain, App>,
 {
     async fn handle_incoming_packet(
         chain: &Chain,
@@ -28,7 +32,10 @@ where
         let packet_header = Counterparty::packet_header(packet);
         let payloads = Counterparty::packet_payloads(packet);
 
-        for (payload_header, payload_data) in payloads {
+        for payload in payloads {
+            let payload_header = Counterparty::payload_header(payload);
+            let payload_data = Counterparty::payload_data(payload);
+
             chain
                 .handle_incoming_payload(packet_header, payload_header, payload_data)
                 .await?;

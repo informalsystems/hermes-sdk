@@ -11,7 +11,7 @@ use crate::traits::types::payload::payload::HasPayloadType;
 pub trait HasPayloadHeader<Counterparty>:
     HasPayloadType<Counterparty> + HasPayloadHeaderType<Counterparty>
 {
-    fn payload_header(packet: &Self::Payload) -> &Self::PayloadHeader;
+    fn payload_header(payload: &Self::Payload) -> &Self::PayloadHeader;
 }
 
 impl<Chain, Counterparty, Provider> PayloadHeaderGetter<Chain, Counterparty>
@@ -20,7 +20,7 @@ where
     Chain: HasPayloadType<Counterparty> + HasPayloadHeaderType<Counterparty>,
     Provider: FieldGetter<Chain::Payload, symbol!("header"), Field = Chain::PayloadHeader>,
 {
-    fn payload_header(packet: &Chain::Payload) -> &Chain::PayloadHeader {
-        Provider::get_field(packet, PhantomData)
+    fn payload_header(payload: &Chain::Payload) -> &Chain::PayloadHeader {
+        Provider::get_field(payload, PhantomData)
     }
 }

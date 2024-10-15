@@ -5,28 +5,23 @@ use cgp::core::field::FieldGetter;
 use cgp::prelude::*;
 
 use crate::traits::types::packet::packet::HasPacketType;
-use crate::traits::types::payload::data::HasPayloadDataType;
-use crate::traits::types::payload::header::HasPayloadHeaderType;
+use crate::traits::types::payload::payload::HasPayloadType;
 
 #[derive_component(PacketPayloadsGetterComponent, PacketPayloadsGetter<Chain>)]
-pub trait HasPacketPayloads<Counterparty, App>:
-    HasPacketType<Counterparty>
-    + HasPayloadHeaderType<Counterparty>
-    + HasPayloadDataType<Counterparty, App>
+pub trait HasPacketPayloads<Counterparty>:
+    HasPacketType<Counterparty> + HasPayloadType<Counterparty>
 {
-    fn packet_payloads(packet: &Self::Packet) -> &[(Self::PayloadHeader, Self::PayloadData)];
+    fn packet_payloads(packet: &Self::Packet) -> &[Self::Payload];
 }
 
-impl<Chain, Counterparty, App, Provider, Payloads> PacketPayloadsGetter<Chain, Counterparty, App>
+impl<Chain, Counterparty, Provider, Payloads> PacketPayloadsGetter<Chain, Counterparty>
     for WithProvider<Provider>
 where
-    Chain: HasPacketType<Counterparty>
-        + HasPayloadHeaderType<Counterparty>
-        + HasPayloadDataType<Counterparty, App>,
+    Chain: HasPacketType<Counterparty> + HasPayloadType<Counterparty>,
     Provider: FieldGetter<Chain::Packet, symbol!("payloads"), Field = Payloads>,
-    Payloads: AsRef<[(Chain::PayloadHeader, Chain::PayloadData)]> + 'static,
+    Payloads: AsRef<[Chain::Payload]> + 'static,
 {
-    fn packet_payloads(packet: &Chain::Packet) -> &[(Chain::PayloadHeader, Chain::PayloadData)] {
+    fn packet_payloads(packet: &Chain::Packet) -> &[Chain::Payload] {
         Provider::get_field(packet, PhantomData).as_ref()
     }
 }

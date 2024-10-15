@@ -76,7 +76,7 @@ pub struct MockChainFields<Chain: Async, Counterparty: Async> {
         ),
         BTreeMap<
             Tagged<Counterparty, Chain, MockNonce>,
-            IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>, AnyApp>,
+            IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>>,
         >,
     >,
     pub sent_packets: BTreeMap<
@@ -88,7 +88,7 @@ pub struct MockChainFields<Chain: Async, Counterparty: Async> {
         ),
         BTreeMap<
             Tagged<Chain, Counterparty, MockNonce>,
-            IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, AnyApp>,
+            IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>,
         >,
     >,
 }
@@ -174,11 +174,11 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasChannelIdType<MockChainB, ChannelId = Tagged<ChainA, ChainB, MockChannelId>>
     + HasPacketTimeoutType<MockChainB, PacketTimeout = Tagged<ChainA, ChainB, MockHeight>>
     + HasPacketNonceType<MockChainB, PacketNonce = Tagged<ChainA, ChainB, MockNonce>>
-    + HasPacketType<MockChainB, Packet = IbcPacket<MockChainA, MockChainB, AnyApp>>
+    + HasPacketType<MockChainB, Packet = IbcPacket<MockChainA, MockChainB>>
     + HasPacketHeaderType<MockChainB, PacketHeader = IbcPacketHeader<MockChainA, MockChainB>>
     + HasPayloadHeaderType<MockChainB, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
     + HasIbcMessageHeaderType<MockChainB, IbcMessageHeader = IbcMessageHeader<MockChainA, MockChainB>>
-    + HasPacketPayloads<MockChainB, AnyApp>
+    + HasPacketPayloads<MockChainB>
     + HasPayloadType<MockChainB, Payload = IbcPayload<MockChainA, MockChainB, AnyApp>>
     + HasPayloadDataType<MockChainB, AnyApp, PayloadData = MockAnyPayloadData<ChainA, ChainB>>
     + HasPayloadDataType<

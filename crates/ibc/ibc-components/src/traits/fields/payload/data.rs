@@ -11,16 +11,16 @@ use crate::traits::types::payload::payload::HasPayloadType;
 pub trait HasPayloadData<Counterparty, App>:
     HasPayloadType<Counterparty> + HasPayloadDataType<Counterparty, App>
 {
-    fn payload_header(packet: &Self::Payload) -> &Self::PayloadData;
+    fn payload_data(payload: &Self::Payload) -> &Self::PayloadData;
 }
 
 impl<Chain, Counterparty, App, Provider> PayloadDataGetter<Chain, Counterparty, App>
     for WithProvider<Provider>
 where
     Chain: HasPayloadType<Counterparty> + HasPayloadDataType<Counterparty, App>,
-    Provider: FieldGetter<Chain::Payload, symbol!("header"), Field = Chain::PayloadData>,
+    Provider: FieldGetter<Chain::Payload, symbol!("data"), Field = Chain::PayloadData>,
 {
-    fn payload_header(packet: &Chain::Payload) -> &Chain::PayloadData {
-        Provider::get_field(packet, PhantomData)
+    fn payload_data(payload: &Chain::Payload) -> &Chain::PayloadData {
+        Provider::get_field(payload, PhantomData)
     }
 }
