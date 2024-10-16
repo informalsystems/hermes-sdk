@@ -2,8 +2,15 @@ use cgp::core::component::WithProvider;
 use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
-/// Represents an outgoing packet. Incoming packets will be represented as
-/// `Counterparty::Packet`
+/**
+   This is an abstract type for an outgoing IBC packet. Incoming IBC packets
+   will be represented as `Counterparty::Packet`.
+
+   An IBC packet may contain three fields:
+   - Packet nonce, via `HasPacketNonce`
+   - Packet headers, via `HasPacketHeader`
+   - Packet payloads, via `HasPacketPayloads`
+*/
 #[derive_component(PacketTypeComponent, ProvidePacketType<Chain>)]
 pub trait HasPacketType<Counterparty>: Async {
     type Packet: Async;
