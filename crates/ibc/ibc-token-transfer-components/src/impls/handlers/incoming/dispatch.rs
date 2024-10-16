@@ -46,7 +46,7 @@ where
     ) -> Result<(), Chain::Error> {
         match payload_data {
             IbcTransferPayloadData::Mint(payload) => {
-                MintHandler::handle_incoming_payload(chain, packet_header, payload_header, &payload)
+                MintHandler::handle_incoming_payload(chain, packet_header, payload_header, payload)
                     .await
             }
             IbcTransferPayloadData::Unescrow(payload) => {
@@ -54,7 +54,7 @@ where
                     chain,
                     packet_header,
                     payload_header,
-                    &payload,
+                    payload,
                 )
                 .await
             }
