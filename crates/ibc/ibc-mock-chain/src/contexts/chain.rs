@@ -48,6 +48,7 @@ use crate::types::denom::MockDenom;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
 use crate::types::packet_data::MockAnyPayloadData;
+use crate::types::quantity::MockQuantity;
 use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
@@ -90,6 +91,10 @@ pub struct MockChainState<Chain: Async, Counterparty: Async> {
             IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>,
         >,
     >,
+    pub balances: BTreeMap<
+        MockDenom<Chain, Counterparty>,
+        BTreeMap<Tagged<Chain, Counterparty, MockAddress>, MockQuantity>,
+    >,
 }
 
 /**
@@ -124,6 +129,7 @@ impl<Chain: Async, Counterparty: Async> Clone for MockChainState<Chain, Counterp
             consensus_states: self.consensus_states.clone(),
             received_packets: self.received_packets.clone(),
             sent_packets: self.sent_packets.clone(),
+            balances: self.balances.clone(),
         }
     }
 }
@@ -136,6 +142,7 @@ impl<Chain: Async, Counterparty: Async> Default for MockChainState<Chain, Counte
             consensus_states: Default::default(),
             received_packets: Default::default(),
             sent_packets: Default::default(),
+            balances: Default::default(),
         }
     }
 }

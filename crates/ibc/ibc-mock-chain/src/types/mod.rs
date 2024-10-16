@@ -7,5 +7,6 @@ pub mod denom;
 pub mod height;
 pub mod nonce;
 pub mod packet_data;
+pub mod quantity;
 pub mod tagged;
 pub mod tags;

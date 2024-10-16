@@ -5,9 +5,11 @@ use hermes_chain_type_components::traits::types::amount::ProvideAmountType;
 
 use crate::contexts::chain::MockChain;
 use crate::types::denom::MockDenom;
+use crate::types::quantity::MockQuantity;
+use crate::types::tagged::Tagged;
 
 pub struct MockAmount<Chain, Counterparty> {
-    pub quantity: u8,
+    pub quantity: Tagged<Chain, Counterparty, MockQuantity>,
     pub denom: MockDenom<Chain, Counterparty>,
 }
 
