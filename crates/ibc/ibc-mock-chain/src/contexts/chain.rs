@@ -11,6 +11,7 @@ use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::packet::header::timeout::HasPacketTimeout;
@@ -167,6 +168,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasAddressType<Address = Tagged<ChainA, ChainB, MockAddress>>
     + HasDenomType<Denom = MockDenom<ChainA, ChainB>>
     + HasAmountType<Amount = MockAmount<ChainA, ChainB>>
+    + HasQuantityType<Quantity = Tagged<ChainA, ChainB, MockQuantity>>
     + HasAppIdType<MockChainB, AppId = Tagged<ChainA, ChainB, MockAppId>>
     + HasChannelIdType<MockChainB, ChannelId = Tagged<ChainA, ChainB, MockChannelId>>
     + HasPacketTimeoutType<MockChainB, PacketTimeout = Tagged<ChainA, ChainB, MockHeight>>
@@ -175,7 +177,6 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPacketHeaderType<MockChainB, PacketHeader = IbcPacketHeader<MockChainA, MockChainB>>
     + HasPayloadHeaderType<MockChainB, PayloadHeader = IbcPayloadHeader<MockChainA, MockChainB>>
     + HasIbcMessageHeaderType<MockChainB, IbcMessageHeader = IbcMessageHeader<MockChainA, MockChainB>>
-    + HasPacketPayloads<MockChainB>
     + HasPayloadType<MockChainB, Payload = IbcPayload<MockChainA, MockChainB, AnyApp>>
     + HasPayloadDataType<MockChainB, AnyApp, PayloadData = MockAnyPayloadData<ChainA, ChainB>>
     + HasPayloadDataType<
@@ -191,6 +192,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
         IbcTransferUnescrowApp,
         PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
     > + HasPacketChannelIds<MockChainB>
+    + HasPacketPayloads<MockChainB>
     + HasPacketNonce<MockChainB>
     + HasPacketTimeout<MockChainB>
     + HasPayloadAppIds<MockChainB>

@@ -1,6 +1,9 @@
 use core::fmt::{Debug, Display};
 
 use cgp::core::Async;
+use hermes_chain_type_components::traits::builders::amount::AmountBuilder;
+use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGetter;
+use hermes_chain_type_components::traits::fields::amount::quantity::AmountQuantityGetter;
 use hermes_chain_type_components::traits::types::amount::ProvideAmountType;
 
 use crate::contexts::chain::MockChain;
@@ -19,6 +22,38 @@ impl<Chain: Async, Counterparty: Async> ProvideAmountType<MockChain<Chain, Count
     for UseMockAmountType
 {
     type Amount = MockAmount<Chain, Counterparty>;
+}
+
+impl<Chain: Async, Counterparty: Async> AmountDenomGetter<MockChain<Chain, Counterparty>>
+    for UseMockAmountType
+{
+    fn amount_denom(amount: &MockAmount<Chain, Counterparty>) -> &MockDenom<Chain, Counterparty> {
+        &amount.denom
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> AmountQuantityGetter<MockChain<Chain, Counterparty>>
+    for UseMockAmountType
+{
+    fn amount_quantity(
+        amount: &MockAmount<Chain, Counterparty>,
+    ) -> &Tagged<Chain, Counterparty, MockQuantity> {
+        &amount.quantity
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> AmountBuilder<MockChain<Chain, Counterparty>>
+    for UseMockAmountType
+{
+    fn build_amount(
+        denom: &MockDenom<Chain, Counterparty>,
+        quantity: &Tagged<Chain, Counterparty, MockQuantity>,
+    ) -> MockAmount<Chain, Counterparty> {
+        MockAmount {
+            denom: denom.clone(),
+            quantity: quantity.clone(),
+        }
+    }
 }
 
 impl<Chain, Counterparty> Debug for MockAmount<Chain, Counterparty> {

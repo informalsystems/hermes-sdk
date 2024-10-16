@@ -1,11 +1,9 @@
 use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
-use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
 use crate::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
 use crate::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
@@ -23,15 +21,11 @@ where
         + HasAmountQuantity
         + CanBuildAmount
         + CanCreateToken<Counterparty>
-        + HasChannelIdType<Counterparty>
-        + HasAppIdType<Counterparty>
         + CanTransferToken<Mint>
         + CanLookupIncomingMintedToken<Counterparty>
         + CanRegisterMintedToken<Counterparty>,
     Counterparty: HasAmountDenom
         + HasAmountQuantity
-        + HasChannelIdType<Chain>
-        + HasAppIdType<Chain>
         + HasPacketChannelIds<Chain>
         + HasPayloadAppIds<Chain>
         + HasPayloadMintAmount<Chain, App>

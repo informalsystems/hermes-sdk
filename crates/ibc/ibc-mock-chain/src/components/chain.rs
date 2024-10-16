@@ -3,11 +3,15 @@ use cgp::core::component::{UseDelegate, WithContext, WithProvider};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::{UseDelegatedType, WithType};
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::builders::amount::AmountBuilderComponent;
+use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGetterComponent;
+use hermes_chain_type_components::traits::fields::amount::quantity::AmountQuantityGetterComponent;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
 use hermes_chain_type_components::traits::types::denom::DenomTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
+use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::timeout::PacketTimeoutGetterComponent;
@@ -42,6 +46,7 @@ define_components! {
         [
             HeightTypeComponent,
             AddressTypeComponent,
+            QuantityTypeComponent,
             AppIdTypeComponent,
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
@@ -73,7 +78,12 @@ define_components! {
             UseIbcMessageHeader,
         DenomTypeComponent:
             UseMockDenomType,
-        AmountTypeComponent:
+        [
+            AmountTypeComponent,
+            AmountDenomGetterComponent,
+            AmountQuantityGetterComponent,
+            AmountBuilderComponent,
+        ]:
             UseMockAmountType,
         ErrorRaiserComponent:
             RaiseDebugString,
