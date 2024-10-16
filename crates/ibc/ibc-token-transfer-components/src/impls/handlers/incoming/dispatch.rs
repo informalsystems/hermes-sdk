@@ -1,64 +1,55 @@
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
-use crate::traits::parse::{
-    CanParseIncomingTransferData, HasIncomingTransferApps, IncomingTransferData,
-};
+use crate::types::packet_data::mint::IbcTransferMintPayloadData;
+use crate::types::packet_data::transfer::IbcTransferPayloadData;
+use crate::types::packet_data::unescrow::IbcTransferUnescrowPayloadData;
+use crate::types::tags::{IbcTransferMintApp, IbcTransferUnescrowApp};
 
 pub struct DispatchMintOrUnescrow<MintHandler, UnescrowHandler>(
     pub PhantomData<(MintHandler, UnescrowHandler)>,
 );
 
-impl<
-        Chain,
-        Counterparty,
-        App,
-        MintApp,
-        UnescrowApp,
-        MintHandler,
-        UnescrowHandler,
-        TransferPayload,
-        MintPayload,
-        UnescrowPayload,
-    > IncomingPayloadHandler<Chain, Counterparty, App>
+impl<Chain, Counterparty, App, MintHandler, UnescrowHandler>
+    IncomingPayloadHandler<Chain, Counterparty, App>
     for DispatchMintOrUnescrow<MintHandler, UnescrowHandler>
 where
-    Chain: HasErrorType
-        + HasAmountType
-        + HasIncomingTransferApps<MintApp = MintApp, UnescrowApp = UnescrowApp>
-        + CanParseIncomingTransferData<Counterparty, App>,
+    Chain: HasErrorType + HasAmountType + HasAddressType,
     Counterparty: HasAmountType
         + HasPacketHeaderType<Chain>
         + HasPayloadHeaderType<Chain>
-        + HasPayloadDataType<Chain, App, PayloadData = TransferPayload>
-        + HasPayloadDataType<Chain, MintApp, PayloadData = MintPayload>
-        + HasPayloadDataType<Chain, UnescrowApp, PayloadData = UnescrowPayload>,
-    MintHandler: IncomingPayloadHandler<Chain, Counterparty, MintApp>,
-    UnescrowHandler: IncomingPayloadHandler<Chain, Counterparty, UnescrowApp>,
-    TransferPayload: Async,
-    MintPayload: Async,
-    UnescrowPayload: Async,
+        + HasPayloadDataType<Chain, App, PayloadData = IbcTransferPayloadData<Counterparty, Chain>>
+        + HasPayloadDataType<
+            Chain,
+            IbcTransferMintApp,
+            PayloadData = IbcTransferMintPayloadData<Counterparty, Chain>,
+        > + HasPayloadDataType<
+            Chain,
+            IbcTransferUnescrowApp,
+            PayloadData = IbcTransferUnescrowPayloadData<Counterparty, Chain>,
+        >,
+    MintHandler: IncomingPayloadHandler<Chain, Counterparty, IbcTransferMintApp>,
+    UnescrowHandler: IncomingPayloadHandler<Chain, Counterparty, IbcTransferUnescrowApp>,
 {
     async fn handle_incoming_payload(
         chain: &Chain,
         packet_header: &Counterparty::PacketHeader,
         payload_header: &Counterparty::PayloadHeader,
-        payload_data: &TransferPayload,
+        payload_data: &IbcTransferPayloadData<Counterparty, Chain>,
     ) -> Result<(), Chain::Error> {
-        let payload = chain.parse_incoming_transfer_data(payload_data)?;
-
-        match payload {
-            IncomingTransferData::Mint(payload) => {
+        match payload_data {
+            IbcTransferPayloadData::Mint(payload) => {
                 MintHandler::handle_incoming_payload(chain, packet_header, payload_header, &payload)
                     .await
             }
-            IncomingTransferData::Unescrow(payload) => {
+            IbcTransferPayloadData::Unescrow(payload) => {
                 UnescrowHandler::handle_incoming_payload(
                     chain,
                     packet_header,
