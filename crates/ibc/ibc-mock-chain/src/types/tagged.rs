@@ -79,3 +79,12 @@ where
         self.value.cmp(other)
     }
 }
+
+impl<A, B, Value> Default for Tagged<A, B, Value>
+where
+    Value: Default,
+{
+    fn default() -> Self {
+        Value::default().into()
+    }
+}

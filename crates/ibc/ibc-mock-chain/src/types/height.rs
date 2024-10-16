@@ -8,3 +8,9 @@ impl Display for MockHeight {
         Debug::fmt(self, f)
     }
 }
+
+impl Default for MockHeight {
+    fn default() -> Self {
+        Self(0)
+    }
+}

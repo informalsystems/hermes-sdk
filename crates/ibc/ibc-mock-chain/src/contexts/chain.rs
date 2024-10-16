@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
-use core::ops::Deref;
 
+use alloc::boxed::Box;
 use alloc::collections::btree_map::BTreeMap;
 use alloc::string::String;
-use alloc::sync::Arc;
 use cgp::prelude::*;
+use futures::lock::Mutex;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
@@ -52,13 +52,12 @@ use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
 pub struct MockChain<Chain: Async, Counterparty: Async> {
-    pub state: Arc<dyn HasMockChainState<Chain, Counterparty>>,
+    pub state: Box<Mutex<dyn HasMockChainState<Chain, Counterparty>>>,
     pub phantom: PhantomData<(Chain, Counterparty)>,
 }
 
-#[derive(HasField)]
 pub struct MockChainState<Chain: Async, Counterparty: Async> {
-    pub current_height: MockHeight,
+    pub current_height: Tagged<Chain, Counterparty, MockHeight>,
     pub channel_clients: BTreeMap<
         Tagged<Chain, Counterparty, MockChannelId>,
         Tagged<Chain, Counterparty, MockClientId>,
@@ -113,14 +112,6 @@ impl<Chain: Async, Counterparty: Async> HasMockChainState<Chain, Counterparty>
     }
 }
 
-impl<Chain: Async, Counterparty: Async> Deref for MockChain<Chain, Counterparty> {
-    type Target = MockChainState<Chain, Counterparty>;
-
-    fn deref(&self) -> &Self::Target {
-        self.state.mock_chain_state()
-    }
-}
-
 impl<Chain: Async, Counterparty: Async> HasComponents for MockChain<Chain, Counterparty> {
     type Components = MockChainComponents;
 }
@@ -137,35 +128,14 @@ impl<Chain: Async, Counterparty: Async> Clone for MockChainState<Chain, Counterp
     }
 }
 
-impl<Chain: Async, Counterparty: Async> Clone for MockChain<Chain, Counterparty> {
-    fn clone(&self) -> Self {
-        Self {
-            state: Arc::new(self.state.mock_chain_state().clone()),
-            phantom: PhantomData,
-        }
-    }
-}
-
-impl<Chain: Async, Counterparty: Async> Default for MockChain<Chain, Counterparty> {
+impl<Chain: Async, Counterparty: Async> Default for MockChainState<Chain, Counterparty> {
     fn default() -> Self {
         Self {
-            state: Arc::new(MockChainState {
-                current_height: MockHeight(0),
-                channel_clients: BTreeMap::default(),
-                consensus_states: BTreeMap::default(),
-                received_packets: BTreeMap::default(),
-                sent_packets: BTreeMap::default(),
-            }),
-            phantom: PhantomData,
-        }
-    }
-}
-
-impl<Chain: Async, Counterparty: Async> MockChain<Chain, Counterparty> {
-    pub fn fork(&self) -> Self {
-        Self {
-            state: self.state.clone(),
-            phantom: PhantomData,
+            current_height: Default::default(),
+            channel_clients: Default::default(),
+            consensus_states: Default::default(),
+            received_packets: Default::default(),
+            sent_packets: Default::default(),
         }
     }
 }
