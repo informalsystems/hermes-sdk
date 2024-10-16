@@ -34,14 +34,14 @@ use crate::components::ibc_types::MockIbcChainTypes;
 use crate::components::payload_data::MockPayloadDataTypes;
 use crate::impls::error::RaiseDebugString;
 use crate::impls::tagged::UseTaggedType;
+use crate::types::amount::UseMockAmountType;
+use crate::types::denom::UseMockDenomType;
 
 define_components! {
     MockChainComponents {
         [
             HeightTypeComponent,
             AddressTypeComponent,
-            DenomTypeComponent,
-            AmountTypeComponent,
             AppIdTypeComponent,
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
@@ -71,6 +71,10 @@ define_components! {
             UseDelegate<MockPayloadDataTypes>,
         IbcMessageHeaderTypeComponent:
             UseIbcMessageHeader,
+        DenomTypeComponent:
+            UseMockDenomType,
+        AmountTypeComponent:
+            UseMockAmountType,
         ErrorRaiserComponent:
             RaiseDebugString,
     }
