@@ -22,7 +22,7 @@ where
     Chain: HasAmountDenom
         + HasAmountQuantity
         + CanBuildAmount
-        + CanCreateToken
+        + CanCreateToken<Counterparty>
         + HasChannelIdType<Counterparty>
         + HasAppIdType<Counterparty>
         + CanTransferToken<Mint>
@@ -71,7 +71,15 @@ where
         let dst_denom = match m_dst_denom {
             Some(dst_denom) => dst_denom,
             None => {
-                let dst_denom = chain.create_token().await?;
+                let dst_denom = chain
+                    .create_token(
+                        src_channel_id,
+                        dst_channel_id,
+                        src_app_id,
+                        dst_app_id,
+                        src_denom,
+                    )
+                    .await?;
 
                 chain
                     .register_minted_token(

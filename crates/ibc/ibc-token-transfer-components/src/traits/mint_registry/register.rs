@@ -3,7 +3,7 @@ use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
-#[derive_component(MintedTokenLookuperComponent, MintedTokenLookuper<Chain>)]
+#[derive_component(MintedTokenRegistrarComponent, MintedTokenRegistrar<Chain>)]
 #[async_trait]
 pub trait CanRegisterMintedToken<Counterparty>:
     HasDenomType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty> + HasErrorType
