@@ -18,6 +18,7 @@ use hermes_ibc_components::traits::fields::packet::header::timeout::PacketTimeou
 use hermes_ibc_components::traits::fields::packet::packet::nonce::PacketNonceGetterComponent;
 use hermes_ibc_components::traits::fields::packet::packet::payloads::PacketPayloadsGetterComponent;
 use hermes_ibc_components::traits::fields::payload::app_id::PayloadAppIdGetterComponent;
+use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::message_header::IbcMessageHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
@@ -33,37 +34,33 @@ use hermes_ibc_components::types::packet::UseIbcPacket;
 use hermes_ibc_components::types::packet_header::UseIbcPacketHeader;
 use hermes_ibc_components::types::payload::UseIbcPayload;
 use hermes_ibc_components::types::payload_header::UseIbcPayloadHeader;
+use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::PayloadMintAmountGetterComponent;
+use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::IbcTransferReceiverGetterComponent;
 
+use crate::components::handlers::incoming_payload::MockIncomingPayloadHandlers;
 use crate::components::ibc_types::MockIbcChainTypes;
 use crate::components::payload_data::MockPayloadDataTypes;
 use crate::impls::error::RaiseDebugString;
 use crate::impls::tagged::UseTaggedType;
 use crate::types::amount::UseMockAmountType;
 use crate::types::denom::UseMockDenomType;
+use crate::types::quantity::MockQuantity;
 
 define_components! {
     MockChainComponents {
         [
             HeightTypeComponent,
             AddressTypeComponent,
-            QuantityTypeComponent,
             AppIdTypeComponent,
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
             PacketTimeoutTypeComponent,
         ]:
             WithProvider<UseTaggedType<UseDelegatedType<MockIbcChainTypes>>>,
-        [
-            PacketChannelIdGetterComponent,
-            PacketNonceGetterComponent,
-            PacketTimeoutGetterComponent,
-            PacketPayloadsGetterComponent,
-            PayloadAppIdGetterComponent,
-            IbcMessageAppIdGetterComponent,
-        ]:
-            WithContext,
         ErrorTypeComponent:
             WithType<String>,
+        QuantityTypeComponent:
+            WithType<MockQuantity>,
         PacketTypeComponent:
             UseIbcPacket<AnyApp>,
         PacketHeaderTypeComponent:
@@ -72,8 +69,6 @@ define_components! {
             UseIbcPayload<AnyApp>,
         PayloadHeaderTypeComponent:
             UseIbcPayloadHeader,
-        PayloadDataTypeComponent:
-            UseDelegate<MockPayloadDataTypes>,
         IbcMessageHeaderTypeComponent:
             UseIbcMessageHeader,
         DenomTypeComponent:
@@ -85,7 +80,22 @@ define_components! {
             AmountBuilderComponent,
         ]:
             UseMockAmountType,
+        PayloadDataTypeComponent:
+            UseDelegate<MockPayloadDataTypes>,
+        [
+            PacketChannelIdGetterComponent,
+            PacketNonceGetterComponent,
+            PacketTimeoutGetterComponent,
+            PacketPayloadsGetterComponent,
+            PayloadAppIdGetterComponent,
+            IbcMessageAppIdGetterComponent,
+            IbcTransferReceiverGetterComponent,
+            PayloadMintAmountGetterComponent,
+        ]:
+            WithContext,
         ErrorRaiserComponent:
             RaiseDebugString,
+        IncomingPayloadHandlerComponent:
+            UseDelegate<MockIncomingPayloadHandlers>,
     }
 }

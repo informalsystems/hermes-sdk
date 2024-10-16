@@ -34,7 +34,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
 
         target_balance.value = target_balance
             .value
-            .checked_add(amount.quantity.value.value)
+            .checked_add(amount.quantity.value)
             .ok_or_else(|| "add quantity overflow".to_owned())?;
 
         Ok(())
@@ -64,7 +64,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
 
         source_balance.value = source_balance
             .value
-            .checked_sub(amount.quantity.value.value)
+            .checked_sub(amount.quantity.value)
             .ok_or_else(|| "transfer app has insufficient fund to unescrow".to_owned())?;
 
         let target_balance = denom_balance
@@ -73,7 +73,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
 
         target_balance.value = target_balance
             .value
-            .checked_add(amount.quantity.value.value)
+            .checked_add(amount.quantity.value)
             .ok_or_else(|| "add quantity overflow".to_owned())?;
 
         Ok(())
@@ -103,7 +103,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
 
         source_balance.value = source_balance
             .value
-            .checked_sub(amount.quantity.value.value)
+            .checked_sub(amount.quantity.value)
             .ok_or_else(|| "user has insufficient fund to unescrow".to_owned())?;
 
         let target_balance = denom_balance
@@ -112,7 +112,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
 
         target_balance.value = target_balance
             .value
-            .checked_add(amount.quantity.value.value)
+            .checked_add(amount.quantity.value)
             .ok_or_else(|| "add quantity overflow".to_owned())?;
 
         Ok(())
@@ -142,7 +142,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
 
         target_balance.value = target_balance
             .value
-            .checked_sub(amount.quantity.value.value)
+            .checked_sub(amount.quantity.value)
             .ok_or_else(|| "user has insufficient balance".to_owned())?;
 
         Ok(())

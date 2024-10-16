@@ -9,10 +9,9 @@ use hermes_chain_type_components::traits::types::amount::ProvideAmountType;
 use crate::contexts::chain::MockChain;
 use crate::types::denom::MockDenom;
 use crate::types::quantity::MockQuantity;
-use crate::types::tagged::Tagged;
 
 pub struct MockAmount<Chain, Counterparty> {
-    pub quantity: Tagged<Chain, Counterparty, MockQuantity>,
+    pub quantity: MockQuantity,
     pub denom: MockDenom<Chain, Counterparty>,
 }
 
@@ -35,9 +34,7 @@ impl<Chain: Async, Counterparty: Async> AmountDenomGetter<MockChain<Chain, Count
 impl<Chain: Async, Counterparty: Async> AmountQuantityGetter<MockChain<Chain, Counterparty>>
     for UseMockAmountType
 {
-    fn amount_quantity(
-        amount: &MockAmount<Chain, Counterparty>,
-    ) -> &Tagged<Chain, Counterparty, MockQuantity> {
+    fn amount_quantity(amount: &MockAmount<Chain, Counterparty>) -> &MockQuantity {
         &amount.quantity
     }
 }
@@ -47,7 +44,7 @@ impl<Chain: Async, Counterparty: Async> AmountBuilder<MockChain<Chain, Counterpa
 {
     fn build_amount(
         denom: &MockDenom<Chain, Counterparty>,
-        quantity: &Tagged<Chain, Counterparty, MockQuantity>,
+        quantity: &MockQuantity,
     ) -> MockAmount<Chain, Counterparty> {
         MockAmount {
             denom: denom.clone(),

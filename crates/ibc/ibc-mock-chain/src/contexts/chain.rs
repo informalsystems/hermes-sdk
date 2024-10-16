@@ -6,6 +6,9 @@ use alloc::string::String;
 use alloc::sync::Arc;
 use cgp::prelude::*;
 use futures::lock::Mutex;
+use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
+use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
+use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
@@ -18,6 +21,7 @@ use hermes_ibc_components::traits::fields::packet::header::timeout::HasPacketTim
 use hermes_ibc_components::traits::fields::packet::packet::nonce::HasPacketNonce;
 use hermes_ibc_components::traits::fields::packet::packet::payloads::HasPacketPayloads;
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
+use hermes_ibc_components::traits::handlers::incoming::payload::CanHandleIncomingPayload;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderType;
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
@@ -33,6 +37,12 @@ use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload::IbcPayload;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
+use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
+use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
+use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_incoming::CanLookupIncomingMintedToken;
+use hermes_ibc_token_transfer_components::traits::mint_registry::register::CanRegisterMintedToken;
+use hermes_ibc_token_transfer_components::traits::token::create::CanCreateToken;
+use hermes_ibc_token_transfer_components::traits::token::transfer::{CanTransferToken, Mint};
 use hermes_ibc_token_transfer_components::types::packet_data::mint::IbcTransferMintPayloadData;
 use hermes_ibc_token_transfer_components::types::packet_data::transfer::IbcTransferPayloadData;
 use hermes_ibc_token_transfer_components::types::packet_data::unescrow::IbcTransferUnescrowPayloadData;
@@ -168,7 +178,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasAddressType<Address = Tagged<ChainA, ChainB, MockAddress>>
     + HasDenomType<Denom = MockDenom<ChainA, ChainB>>
     + HasAmountType<Amount = MockAmount<ChainA, ChainB>>
-    + HasQuantityType<Quantity = Tagged<ChainA, ChainB, MockQuantity>>
+    + HasQuantityType<Quantity = MockQuantity>
     + HasAppIdType<MockChainB, AppId = Tagged<ChainA, ChainB, MockAppId>>
     + HasChannelIdType<MockChainB, ChannelId = Tagged<ChainA, ChainB, MockChannelId>>
     + HasPacketTimeoutType<MockChainB, PacketTimeout = Tagged<ChainA, ChainB, MockHeight>>
@@ -197,6 +207,16 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPacketTimeout<MockChainB>
     + HasPayloadAppIds<MockChainB>
     + HasIbcMessageAppIds<MockChainB>
+    + HasAmountDenom
+    + HasAmountQuantity
+    + CanBuildAmount
+    + CanCreateToken<MockChainB>
+    + CanTransferToken<Mint>
+    + CanLookupIncomingMintedToken<MockChainB>
+    + CanRegisterMintedToken<MockChainB>
+    + HasPayloadMintAmount<MockChainB, IbcTransferMintApp>
+    + HasIbcTransferReceiver<MockChainB, IbcTransferMintApp>
+    + CanHandleIncomingPayload<MockChainB, IbcTransferMintApp>
 {
 }
 
