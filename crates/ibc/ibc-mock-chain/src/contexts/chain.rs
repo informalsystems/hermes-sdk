@@ -52,12 +52,12 @@ use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
 pub struct MockChain<Chain: Async, Counterparty: Async> {
-    pub fields: Arc<dyn HasMockChainFields<Chain, Counterparty>>,
+    pub state: Arc<dyn HasMockChainState<Chain, Counterparty>>,
     pub phantom: PhantomData<(Chain, Counterparty)>,
 }
 
 #[derive(HasField)]
-pub struct MockChainFields<Chain: Async, Counterparty: Async> {
+pub struct MockChainState<Chain: Async, Counterparty: Async> {
     pub current_height: MockHeight,
     pub channel_clients: BTreeMap<
         Tagged<Chain, Counterparty, MockChannelId>,
@@ -65,7 +65,7 @@ pub struct MockChainFields<Chain: Async, Counterparty: Async> {
     >,
     pub consensus_states: BTreeMap<
         Tagged<Chain, Counterparty, MockClientId>,
-        BTreeMap<Tagged<Counterparty, Chain, MockHeight>, MockChain<Counterparty, Chain>>,
+        BTreeMap<Tagged<Counterparty, Chain, MockHeight>, MockChainState<Counterparty, Chain>>,
     >,
     pub received_packets: BTreeMap<
         (
@@ -93,23 +93,31 @@ pub struct MockChainFields<Chain: Async, Counterparty: Async> {
     >,
 }
 
-pub trait HasMockChainFields<Chain: Async, Counterparty: Async>: Send + Sync + 'static {
-    fn mock_chain_fields(&self) -> &MockChainFields<Chain, Counterparty>;
+/**
+   This is a type wrapper to allow [`MockChain`] to contain fields that refer
+   to `Self`, such as [`IbcPacket`], via [`MockChainState`].
+
+   By moving the fields to a separate [`MockChainState`] struct and wrap it inside
+   a `dyn HasMockChainState`, we prevent the Rust compiler from overflowing the
+   trait resolution when resolving the trait bound of the mock chain fields.
+*/
+pub trait HasMockChainState<Chain: Async, Counterparty: Async>: Send + Sync + 'static {
+    fn mock_chain_state(&self) -> &MockChainState<Chain, Counterparty>;
 }
 
-impl<Chain: Async, Counterparty: Async> HasMockChainFields<Chain, Counterparty>
-    for MockChainFields<Chain, Counterparty>
+impl<Chain: Async, Counterparty: Async> HasMockChainState<Chain, Counterparty>
+    for MockChainState<Chain, Counterparty>
 {
-    fn mock_chain_fields(&self) -> &MockChainFields<Chain, Counterparty> {
+    fn mock_chain_state(&self) -> &MockChainState<Chain, Counterparty> {
         self
     }
 }
 
 impl<Chain: Async, Counterparty: Async> Deref for MockChain<Chain, Counterparty> {
-    type Target = MockChainFields<Chain, Counterparty>;
+    type Target = MockChainState<Chain, Counterparty>;
 
     fn deref(&self) -> &Self::Target {
-        self.fields.mock_chain_fields()
+        self.state.mock_chain_state()
     }
 }
 
@@ -117,7 +125,7 @@ impl<Chain: Async, Counterparty: Async> HasComponents for MockChain<Chain, Count
     type Components = MockChainComponents;
 }
 
-impl<Chain: Async, Counterparty: Async> Clone for MockChainFields<Chain, Counterparty> {
+impl<Chain: Async, Counterparty: Async> Clone for MockChainState<Chain, Counterparty> {
     fn clone(&self) -> Self {
         Self {
             current_height: self.current_height.clone(),
@@ -132,7 +140,7 @@ impl<Chain: Async, Counterparty: Async> Clone for MockChainFields<Chain, Counter
 impl<Chain: Async, Counterparty: Async> Clone for MockChain<Chain, Counterparty> {
     fn clone(&self) -> Self {
         Self {
-            fields: Arc::new(self.fields.mock_chain_fields().clone()),
+            state: Arc::new(self.state.mock_chain_state().clone()),
             phantom: PhantomData,
         }
     }
@@ -141,7 +149,7 @@ impl<Chain: Async, Counterparty: Async> Clone for MockChain<Chain, Counterparty>
 impl<Chain: Async, Counterparty: Async> Default for MockChain<Chain, Counterparty> {
     fn default() -> Self {
         Self {
-            fields: Arc::new(MockChainFields {
+            state: Arc::new(MockChainState {
                 current_height: MockHeight(0),
                 channel_clients: BTreeMap::default(),
                 consensus_states: BTreeMap::default(),
@@ -156,7 +164,7 @@ impl<Chain: Async, Counterparty: Async> Default for MockChain<Chain, Counterpart
 impl<Chain: Async, Counterparty: Async> MockChain<Chain, Counterparty> {
     pub fn fork(&self) -> Self {
         Self {
-            fields: self.fields.clone(),
+            state: self.state.clone(),
             phantom: PhantomData,
         }
     }
