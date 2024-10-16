@@ -1,7 +1,9 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 use cgp::core::Async;
-use hermes_ibc_token_transfer_components::traits::token::transfer::{Mint, TokenTransferer};
+use hermes_ibc_token_transfer_components::traits::token::transfer::{
+    Burn, Escrow, Mint, TokenTransferer, Unescrow,
+};
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -18,7 +20,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
         target: &Tagged<Chain, Counterparty, MockAddress>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        let mut lock = chain.state.lock().await;
+        let mut lock = chain.pending_state.lock().await;
         let state = lock.mock_chain_state_mut();
 
         let denom_balance = state
@@ -30,10 +32,118 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
             .entry(target.clone())
             .or_insert_with(Default::default);
 
-        target_balance.0 = target_balance
-            .0
-            .checked_add(amount.quantity.0)
+        target_balance.value = target_balance
+            .value
+            .checked_add(amount.quantity.value.value)
             .ok_or_else(|| "add quantity overflow".to_owned())?;
+
+        Ok(())
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counterparty>, Unescrow>
+    for MockChainComponents
+{
+    async fn transfer_token(
+        chain: &MockChain<Chain, Counterparty>,
+        _mode: Unescrow,
+        target: &Tagged<Chain, Counterparty, MockAddress>,
+        amount: &MockAmount<Chain, Counterparty>,
+    ) -> Result<(), String> {
+        let mut lock = chain.pending_state.lock().await;
+        let state = lock.mock_chain_state_mut();
+
+        let denom_balance = state
+            .balances
+            .entry(amount.denom.clone())
+            .or_insert_with(Default::default);
+
+        let source_balance = denom_balance
+            .entry(MockAddress::TransferApp.into())
+            .or_insert_with(Default::default);
+
+        source_balance.value = source_balance
+            .value
+            .checked_sub(amount.quantity.value.value)
+            .ok_or_else(|| "transfer app has insufficient fund to unescrow".to_owned())?;
+
+        let target_balance = denom_balance
+            .entry(target.clone())
+            .or_insert_with(Default::default);
+
+        target_balance.value = target_balance
+            .value
+            .checked_add(amount.quantity.value.value)
+            .ok_or_else(|| "add quantity overflow".to_owned())?;
+
+        Ok(())
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counterparty>, Escrow>
+    for MockChainComponents
+{
+    async fn transfer_token(
+        chain: &MockChain<Chain, Counterparty>,
+        _mode: Escrow,
+        target: &Tagged<Chain, Counterparty, MockAddress>,
+        amount: &MockAmount<Chain, Counterparty>,
+    ) -> Result<(), String> {
+        let mut lock = chain.pending_state.lock().await;
+        let state = lock.mock_chain_state_mut();
+
+        let denom_balance = state
+            .balances
+            .entry(amount.denom.clone())
+            .or_insert_with(Default::default);
+
+        let source_balance = denom_balance
+            .entry(target.clone())
+            .or_insert_with(Default::default);
+
+        source_balance.value = source_balance
+            .value
+            .checked_sub(amount.quantity.value.value)
+            .ok_or_else(|| "user has insufficient fund to unescrow".to_owned())?;
+
+        let target_balance = denom_balance
+            .entry(MockAddress::TransferApp.into())
+            .or_insert_with(Default::default);
+
+        target_balance.value = target_balance
+            .value
+            .checked_add(amount.quantity.value.value)
+            .ok_or_else(|| "add quantity overflow".to_owned())?;
+
+        Ok(())
+    }
+}
+
+impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counterparty>, Burn>
+    for MockChainComponents
+{
+    async fn transfer_token(
+        chain: &MockChain<Chain, Counterparty>,
+        _mode: Burn,
+        target: &Tagged<Chain, Counterparty, MockAddress>,
+        amount: &MockAmount<Chain, Counterparty>,
+    ) -> Result<(), String> {
+        let mut lock = chain.pending_state.lock().await;
+        let state = lock.mock_chain_state_mut();
+
+        let denom_balance = state
+            .balances
+            .entry(amount.denom.clone())
+            .or_insert_with(Default::default);
+
+        let target_balance = denom_balance
+            .entry(target.clone())
+            .or_insert_with(Default::default);
+
+        target_balance.value = target_balance
+            .value
+            .checked_sub(amount.quantity.value.value)
+            .ok_or_else(|| "user has insufficient balance".to_owned())?;
 
         Ok(())
     }

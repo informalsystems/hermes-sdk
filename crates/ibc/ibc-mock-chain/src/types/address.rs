@@ -5,6 +5,7 @@ pub enum MockAddress {
     UserA,
     UserB,
     UserC,
+    TransferApp,
     RelayerA,
 }
 

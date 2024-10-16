@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use alloc::boxed::Box;
 use alloc::collections::btree_map::BTreeMap;
 use alloc::string::String;
+use alloc::sync::Arc;
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
@@ -53,7 +54,12 @@ use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
 pub struct MockChain<Chain: Async, Counterparty: Async> {
-    pub state: Box<Mutex<dyn HasMockChainState<Chain, Counterparty>>>,
+    /// The current state of the mock chain is a mutable pointer to an immutable chain state
+    pub current_state: Box<Mutex<Arc<dyn HasMockChainState<Chain, Counterparty>>>>,
+
+    /// The pending state of the mock chain is a mutable pointer to the chain state
+    pub pending_state: Box<Mutex<dyn HasMockChainState<Chain, Counterparty>>>,
+
     pub phantom: PhantomData<(Chain, Counterparty)>,
 }
 
