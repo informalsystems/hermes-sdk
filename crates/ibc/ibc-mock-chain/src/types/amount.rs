@@ -48,7 +48,7 @@ impl<Chain: Async, Counterparty: Async> AmountBuilder<MockChain<Chain, Counterpa
     ) -> MockAmount<Chain, Counterparty> {
         MockAmount {
             denom: denom.clone(),
-            quantity: quantity.clone(),
+            quantity: *quantity,
         }
     }
 }
@@ -71,7 +71,7 @@ impl<Chain, Counterparty> Display for MockAmount<Chain, Counterparty> {
 impl<Chain, Counterparty> Clone for MockAmount<Chain, Counterparty> {
     fn clone(&self) -> Self {
         Self {
-            quantity: self.quantity.clone(),
+            quantity: self.quantity,
             denom: self.denom.clone(),
         }
     }
