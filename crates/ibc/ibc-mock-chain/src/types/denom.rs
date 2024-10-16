@@ -1,3 +1,5 @@
+use core::cmp::Ordering;
+use core::f32::consts::PI;
 use core::fmt::{Debug, Display};
 
 use alloc::boxed::Box;
@@ -14,7 +16,7 @@ pub enum MockDenom<Chain, Counterparty> {
     Ibc(MockIbcDenom<Chain, Counterparty>),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MockNativeDenom {
     CoinA,
     CoinB,
@@ -81,6 +83,75 @@ impl<Chain, Counterparty> Clone for MockIbcDenom<Chain, Counterparty> {
             src_app_id: self.src_app_id.clone(),
             dst_app_id: self.dst_app_id.clone(),
             src_denom: self.src_denom.clone(),
+        }
+    }
+}
+
+impl<Chain, Counterparty> PartialEq for MockIbcDenom<Chain, Counterparty> {
+    fn eq(&self, other: &Self) -> bool {
+        self.src_channel_id == other.src_channel_id
+            && self.dst_channel_id == other.dst_channel_id
+            && self.src_app_id == other.src_app_id
+            && self.dst_app_id == other.dst_app_id
+            && self.src_denom == other.src_denom
+    }
+}
+
+impl<Chain, Counterparty> PartialEq for MockDenom<Chain, Counterparty> {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Native(l0), Self::Native(r0)) => l0 == r0,
+            (Self::Ibc(l0), Self::Ibc(r0)) => l0 == r0,
+            _ => false,
+        }
+    }
+}
+
+impl<Chain, Counterparty> Eq for MockIbcDenom<Chain, Counterparty> {}
+
+impl<Chain, Counterparty> Eq for MockDenom<Chain, Counterparty> {}
+
+impl<Chain, Counterparty> PartialOrd for MockIbcDenom<Chain, Counterparty> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl<Chain, Counterparty> PartialOrd for MockDenom<Chain, Counterparty> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl<Chain, Counterparty> Ord for MockIbcDenom<Chain, Counterparty> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match self.src_channel_id.cmp(&other.src_channel_id) {
+            core::cmp::Ordering::Equal => {}
+            ord => return ord,
+        }
+        match self.dst_channel_id.cmp(&other.dst_channel_id) {
+            core::cmp::Ordering::Equal => {}
+            ord => return ord,
+        }
+        match self.src_app_id.cmp(&other.src_app_id) {
+            core::cmp::Ordering::Equal => {}
+            ord => return ord,
+        }
+        match self.dst_app_id.cmp(&other.dst_app_id) {
+            core::cmp::Ordering::Equal => {}
+            ord => return ord,
+        }
+        self.src_denom.cmp(&other.src_denom)
+    }
+}
+
+impl<Chain, Counterparty> Ord for MockDenom<Chain, Counterparty> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match (self, other) {
+            (MockDenom::Native(target), MockDenom::Native(other)) => target.cmp(other),
+            (MockDenom::Native(_), MockDenom::Ibc(_)) => Ordering::Less,
+            (MockDenom::Ibc(_), MockDenom::Native(_)) => Ordering::Greater,
+            (MockDenom::Ibc(target), MockDenom::Ibc(other)) => target.cmp(other),
         }
     }
 }

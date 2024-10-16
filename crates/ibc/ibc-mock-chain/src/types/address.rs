@@ -1,6 +1,6 @@
 use core::fmt::{Debug, Display};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MockAddress {
     UserA,
     UserB,

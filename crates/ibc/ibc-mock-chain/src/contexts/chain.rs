@@ -107,12 +107,18 @@ pub struct MockChainState<Chain: Async, Counterparty: Async> {
 */
 pub trait HasMockChainState<Chain: Async, Counterparty: Async>: Send + Sync + 'static {
     fn mock_chain_state(&self) -> &MockChainState<Chain, Counterparty>;
+
+    fn mock_chain_state_mut(&mut self) -> &mut MockChainState<Chain, Counterparty>;
 }
 
 impl<Chain: Async, Counterparty: Async> HasMockChainState<Chain, Counterparty>
     for MockChainState<Chain, Counterparty>
 {
     fn mock_chain_state(&self) -> &MockChainState<Chain, Counterparty> {
+        self
+    }
+
+    fn mock_chain_state_mut(&mut self) -> &mut MockChainState<Chain, Counterparty> {
         self
     }
 }
