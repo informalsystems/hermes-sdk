@@ -4,7 +4,7 @@ use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQua
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_ibc_components::traits::fields::caller::HasCaller;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
-use hermes_ibc_components::traits::fields::transaction::channel_id::HasIbcTransactionChannelIds;
+use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::handlers::outgoing::message::IbcMessageHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
@@ -19,7 +19,7 @@ pub struct SendIbcTransfer;
 
 impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App> for SendIbcTransfer
 where
-    Chain: HasIbcTransactionChannelIds<Counterparty>
+    Chain: HasPacketChannelIds<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
         + HasMessageSendTransferAmount<Counterparty, App>
         + HasCaller
@@ -36,12 +36,12 @@ where
 {
     async fn handle_ibc_message(
         chain: &Chain,
-        transaction_header: &Chain::IbcTransactionHeader,
+        packet_header: &Chain::PacketHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,
     ) -> Result<(Chain::PayloadHeader, Chain::PayloadData), Chain::Error> {
-        let src_channel_id = Chain::transaction_src_channel_id(transaction_header);
-        let dst_channel_id = Chain::transaction_dst_channel_id(transaction_header);
+        let src_channel_id = Chain::packet_src_channel_id(packet_header);
+        let dst_channel_id = Chain::packet_dst_channel_id(packet_header);
 
         let src_app_id = Chain::ibc_message_src_app_id(message_header);
         let dst_app_id = Chain::ibc_message_dst_app_id(message_header);

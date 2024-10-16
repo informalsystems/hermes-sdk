@@ -7,15 +7,15 @@ use crate::traits::commitment::store::CanStoreCommitment;
 use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentValue;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::handlers::outgoing::packet::PacketSender;
+use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::payload::HasPayloadType;
-use crate::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
 pub struct CommitSendPacket<InHandler>(pub PhantomData<InHandler>);
 
 impl<Chain, Counterparty, InHandler> PacketSender<Chain, Counterparty>
     for CommitSendPacket<InHandler>
 where
-    Chain: HasIbcTransactionHeaderType<Counterparty>
+    Chain: HasPacketHeaderType<Counterparty>
         + HasPayloadType<Counterparty>
         + HasPacketHeader<Counterparty>
         + CanBuildSendPacketCommitmentPath<Counterparty>
@@ -25,10 +25,10 @@ where
 {
     async fn send_packet(
         chain: &Chain,
-        transaction_header: &Chain::IbcTransactionHeader,
+        packet_header: &Chain::PacketHeader,
         payloads: Vec<Chain::Payload>,
     ) -> Result<Chain::Packet, Chain::Error> {
-        let packet = InHandler::send_packet(chain, transaction_header, payloads).await?;
+        let packet = InHandler::send_packet(chain, packet_header, payloads).await?;
 
         let packet_header = Chain::packet_header(&packet);
 

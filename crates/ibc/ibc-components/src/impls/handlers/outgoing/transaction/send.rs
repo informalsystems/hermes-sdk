@@ -4,7 +4,7 @@ use alloc::vec::Vec;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::builders::payload::CanBuildPayload;
-use crate::traits::fields::transaction::channel_id::HasIbcTransactionChannelIds;
+use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::transaction::header::HasIbcTransactionHeader;
 use crate::traits::fields::transaction::messages::HasIbcTransactionMessages;
 use crate::traits::handlers::outgoing::message::IbcMessageHandler;
@@ -19,7 +19,7 @@ impl<Chain, Counterparty, App, InHandler> IbcTransactionHandler<Chain, Counterpa
 where
     Chain: HasIbcTransactionType<Counterparty>
         + HasIbcTransactionHeader<Counterparty>
-        + HasIbcTransactionChannelIds<Counterparty>
+        + HasPacketChannelIds<Counterparty>
         + HasIbcTransactionMessages<Counterparty, App>
         + CanBuildPayload<Counterparty, App>
         + CanSendPacket<Counterparty>,
@@ -30,7 +30,7 @@ where
         chain: &Chain,
         transaction: &Chain::IbcTransaction,
     ) -> Result<Chain::Packet, Chain::Error> {
-        let transaction_header = Chain::ibc_transcation_header(transaction);
+        let packet_header = Chain::ibc_transcation_header(transaction);
 
         let messages = Chain::ibc_transcation_messages(transaction);
 
@@ -38,7 +38,7 @@ where
 
         for (message_header, message) in messages {
             let (payload_header, payload_data) =
-                InHandler::handle_ibc_message(chain, transaction_header, message_header, message)
+                InHandler::handle_ibc_message(chain, packet_header, message_header, message)
                     .await?;
 
             let payload = Chain::build_payload(payload_header, payload_data)?;
@@ -46,6 +46,6 @@ where
             payloads.push(payload);
         }
 
-        chain.send_packet(transaction_header, payloads).await
+        chain.send_packet(packet_header, payloads).await
     }
 }

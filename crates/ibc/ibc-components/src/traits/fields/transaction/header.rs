@@ -1,11 +1,11 @@
 use cgp::prelude::*;
 
+use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::transaction::HasIbcTransactionType;
-use crate::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
 #[derive_component(IbcTransactionHeaderGetterComponent, IbcTransactionHeaderGetter<Chain>)]
 pub trait HasIbcTransactionHeader<Counterparty>:
-    HasIbcTransactionType<Counterparty> + HasIbcTransactionHeaderType<Counterparty>
+    HasIbcTransactionType<Counterparty> + HasPacketHeaderType<Counterparty>
 {
-    fn ibc_transcation_header(transaction: &Self::IbcTransaction) -> &Self::IbcTransactionHeader;
+    fn ibc_transcation_header(transaction: &Self::IbcTransaction) -> &Self::PacketHeader;
 }

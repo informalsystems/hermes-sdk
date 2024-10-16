@@ -10,9 +10,9 @@ use crate::traits::handlers::outgoing::message::IbcMessageHandler;
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::message::HasIbcMessageType;
 use crate::traits::types::message_header::HasIbcMessageHeaderType;
+use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::data::HasPayloadDataType;
 use crate::traits::types::payload::header::HasPayloadHeaderType;
-use crate::traits::types::transaction_header::HasIbcTransactionHeaderType;
 
 pub struct ValidateHeaderAppIds<InHandler>(pub PhantomData<InHandler>);
 
@@ -43,7 +43,7 @@ impl<Chain, Counterparty, App, InHandler> IbcMessageHandler<Chain, Counterparty,
     for ValidateHeaderAppIds<InHandler>
 where
     Chain: HasErrorType
-        + HasIbcTransactionHeaderType<Counterparty>
+        + HasPacketHeaderType<Counterparty>
         + HasIbcMessageHeaderType<Counterparty>
         + HasIbcMessageType<Counterparty, App>
         + HasPayloadHeader<Counterparty>
@@ -59,13 +59,12 @@ where
 {
     async fn handle_ibc_message(
         chain: &Chain,
-        transaction_header: &Chain::IbcTransactionHeader,
+        packet_header: &Chain::PacketHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,
     ) -> Result<(Chain::PayloadHeader, Chain::PayloadData), Chain::Error> {
         let (payload_header, payload_data) =
-            InHandler::handle_ibc_message(chain, transaction_header, message_header, message)
-                .await?;
+            InHandler::handle_ibc_message(chain, packet_header, message_header, message).await?;
 
         let src_message_app_id = Chain::ibc_message_src_app_id(message_header);
         let dst_message_app_id = Chain::ibc_message_dst_app_id(message_header);
