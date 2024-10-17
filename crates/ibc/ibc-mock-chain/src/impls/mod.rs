@@ -1,4 +1,5 @@
 pub mod commitment;
+pub mod consensus_state;
 pub mod error;
 pub mod escrow_registry;
 pub mod handlers;

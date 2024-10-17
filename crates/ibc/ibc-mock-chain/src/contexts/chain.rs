@@ -15,6 +15,7 @@ use hermes_chain_type_components::traits::types::commitment_proof::HasCommitment
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -91,7 +92,7 @@ pub struct MockChainState<Chain: Async, Counterparty: Async> {
     >,
     pub consensus_states: BTreeMap<
         Tagged<Chain, Counterparty, MockClientId>,
-        BTreeMap<Tagged<Counterparty, Chain, MockHeight>, MockChainState<Counterparty, Chain>>,
+        BTreeMap<Tagged<Counterparty, Chain, MockHeight>, Arc<MockChainState<Counterparty, Chain>>>,
     >,
     pub received_packets: BTreeMap<
         (
@@ -224,6 +225,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
         IbcTransferUnescrowApp,
         PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
     > + HasCommitmentPathType<CommitmentPath = MockCommitmentPath<ChainA, ChainB>>
+    + HasConsensusStateType<MockChainB, ConsensusState = Arc<MockChainState<ChainA, ChainB>>>
     + HasPacketHeader<MockChainB>
     + HasPacketChannelIds<MockChainB>
     + HasPacketPayloads<MockChainB>
