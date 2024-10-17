@@ -39,3 +39,24 @@ where
         }
     }
 }
+
+impl<Chain, Counterparty> PartialEq for IbcPacketHeader<Chain, Counterparty>
+where
+    Chain: HasChannelIdType<Counterparty, ChannelId: Eq>,
+    Counterparty:
+        HasChannelIdType<Chain, ChannelId: Eq> + HasPacketTimeoutType<Chain, PacketTimeout: Eq>,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.src_channel_id == other.src_channel_id
+            && self.dst_channel_id == other.dst_channel_id
+            && self.timeout == other.timeout
+    }
+}
+
+impl<Chain, Counterparty> Eq for IbcPacketHeader<Chain, Counterparty>
+where
+    Chain: HasChannelIdType<Counterparty, ChannelId: Eq>,
+    Counterparty:
+        HasChannelIdType<Chain, ChannelId: Eq> + HasPacketTimeoutType<Chain, PacketTimeout: Eq>,
+{
+}

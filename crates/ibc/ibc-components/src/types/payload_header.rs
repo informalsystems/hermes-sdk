@@ -35,3 +35,20 @@ where
         }
     }
 }
+
+impl<Chain, Counterparty> PartialEq for IbcPayloadHeader<Chain, Counterparty>
+where
+    Chain: HasAppIdType<Counterparty, AppId: Eq>,
+    Counterparty: HasAppIdType<Chain, AppId: Eq>,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.src_app_id == other.src_app_id && self.dst_app_id == other.dst_app_id
+    }
+}
+
+impl<Chain, Counterparty> Eq for IbcPayloadHeader<Chain, Counterparty>
+where
+    Chain: HasAppIdType<Counterparty, AppId: Eq>,
+    Counterparty: HasAppIdType<Chain, AppId: Eq>,
+{
+}

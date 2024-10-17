@@ -101,8 +101,6 @@ pub struct MockChainState<Chain: Async, Counterparty: Async> {
         (
             Tagged<Chain, Counterparty, MockChannelId>,
             Tagged<Counterparty, Chain, MockChannelId>,
-            Tagged<Chain, Counterparty, MockAppId>,
-            Tagged<Counterparty, Chain, MockAppId>,
         ),
         BTreeMap<
             Tagged<Counterparty, Chain, MockNonce>,
@@ -113,8 +111,6 @@ pub struct MockChainState<Chain: Async, Counterparty: Async> {
         (
             Tagged<Chain, Counterparty, MockChannelId>,
             Tagged<Counterparty, Chain, MockChannelId>,
-            Tagged<Chain, Counterparty, MockAppId>,
-            Tagged<Counterparty, Chain, MockAppId>,
         ),
         BTreeMap<
             Tagged<Chain, Counterparty, MockNonce>,

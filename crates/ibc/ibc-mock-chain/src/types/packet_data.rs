@@ -23,3 +23,13 @@ impl<A: Async, B: Async> Clone for MockAnyPayloadData<A, B> {
         }
     }
 }
+
+impl<A: Async, B: Async> PartialEq for MockAnyPayloadData<A, B> {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::IbcTransfer(data), Self::IbcTransfer(other)) => data == other,
+        }
+    }
+}
+
+impl<A: Async, B: Async> Eq for MockAnyPayloadData<A, B> {}

@@ -38,3 +38,17 @@ where
         }
     }
 }
+
+impl<Chain, Counterparty> PartialEq for IbcTransferUnescrowPayloadData<Chain, Counterparty>
+where
+    Counterparty: HasAmountType<Amount: Eq> + HasAddressType<Address: Eq>,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.receiver == other.receiver && self.amount == other.amount
+    }
+}
+
+impl<Chain, Counterparty> Eq for IbcTransferUnescrowPayloadData<Chain, Counterparty> where
+    Counterparty: HasAmountType<Amount: Eq> + HasAddressType<Address: Eq>
+{
+}

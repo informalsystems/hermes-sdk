@@ -76,3 +76,11 @@ impl<Chain, Counterparty> Clone for MockAmount<Chain, Counterparty> {
         }
     }
 }
+
+impl<Chain, Counterparty> PartialEq for MockAmount<Chain, Counterparty> {
+    fn eq(&self, other: &Self) -> bool {
+        self.quantity == other.quantity && self.denom == other.denom
+    }
+}
+
+impl<Chain, Counterparty> Eq for MockAmount<Chain, Counterparty> {}

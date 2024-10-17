@@ -6,7 +6,7 @@ use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsen
 
 use crate::traits::commitment::path::send_packet::CanBuildSendPacketCommitmentPath;
 use crate::traits::commitment::value::send_packet::CanBuildSendPacketCommitmentValue;
-use crate::traits::commitment::verify::value::CanVerifyValueCommitment;
+use crate::traits::commitment::verify::CanVerifyCommitment;
 use crate::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
@@ -29,7 +29,7 @@ where
         + HasPacketChannelIds<Chain>
         + HasPacketNonce<Chain>
         + HasConsensusStateType<Chain>
-        + CanVerifyValueCommitment<Chain>
+        + CanVerifyCommitment<Chain>
         + CanBuildSendPacketCommitmentPath<Chain>
         + CanBuildSendPacketCommitmentValue<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,
@@ -62,7 +62,7 @@ where
         let commitment_value =
             Counterparty::build_send_packet_commitment_value(packet).map_err(Chain::raise_error)?;
 
-        Counterparty::verify_value_commitment(
+        Counterparty::verify_commitment(
             &consensus_state,
             &commitment_path,
             &commitment_value,

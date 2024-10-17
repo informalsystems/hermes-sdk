@@ -37,3 +37,24 @@ where
         }
     }
 }
+
+impl<Chain, Counterparty> PartialEq for IbcTransferPayloadData<Chain, Counterparty>
+where
+    Chain: HasAmountType<Amount: Eq>,
+    Counterparty: HasAmountType<Amount: Eq> + HasAddressType<Address: Eq>,
+{
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Mint(data), Self::Mint(other)) => data == other,
+            (Self::Unescrow(data), Self::Unescrow(other)) => data == other,
+            _ => false,
+        }
+    }
+}
+
+impl<Chain, Counterparty> Eq for IbcTransferPayloadData<Chain, Counterparty>
+where
+    Chain: HasAmountType<Amount: Eq>,
+    Counterparty: HasAmountType<Amount: Eq> + HasAddressType<Address: Eq>,
+{
+}

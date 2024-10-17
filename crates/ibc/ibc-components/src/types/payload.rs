@@ -38,3 +38,19 @@ where
         }
     }
 }
+
+impl<Chain, Counterparty, App> PartialEq for IbcPayload<Chain, Counterparty, App>
+where
+    Chain: HasPayloadHeaderType<Counterparty, PayloadHeader: Eq>
+        + HasPayloadDataType<Counterparty, App, PayloadData: Eq>,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.header == other.header && self.data == other.data
+    }
+}
+
+impl<Chain, Counterparty, App> Eq for IbcPayload<Chain, Counterparty, App> where
+    Chain: HasPayloadHeaderType<Counterparty, PayloadHeader: Eq>
+        + HasPayloadDataType<Counterparty, App, PayloadData: Eq>
+{
+}

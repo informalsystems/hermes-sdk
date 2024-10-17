@@ -47,3 +47,21 @@ where
         }
     }
 }
+
+impl<Chain, Counterparty> PartialEq for IbcPacket<Chain, Counterparty>
+where
+    Chain: HasPacketHeaderType<Counterparty, PacketHeader: Eq>
+        + HasPacketNonceType<Counterparty, PacketNonce: Eq>
+        + HasPayloadType<Counterparty, Payload: Eq>,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.header == other.header && self.nonce == other.nonce && self.payloads == other.payloads
+    }
+}
+
+impl<Chain, Counterparty> Eq for IbcPacket<Chain, Counterparty> where
+    Chain: HasPacketHeaderType<Counterparty, PacketHeader: Eq>
+        + HasPacketNonceType<Counterparty, PacketNonce: Eq>
+        + HasPayloadType<Counterparty, Payload: Eq>
+{
+}
