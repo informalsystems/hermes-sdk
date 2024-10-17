@@ -19,6 +19,7 @@ use hermes_ibc_components::components::chain::IncomingPacketHandlerComponent;
 use hermes_ibc_components::impls::handlers::incoming::packet::full::FullIncomingPacketHandler;
 use hermes_ibc_components::impls::handlers::outgoing::packet::build::AllocateNonceAndBuildPacket;
 use hermes_ibc_components::impls::handlers::outgoing::packet::commit::CommitSendPacket;
+use hermes_ibc_components::traits::builders::packet::PacketBuilderComponent;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::timeout::PacketTimeoutGetterComponent;
@@ -79,8 +80,11 @@ define_components! {
             WithType<String>,
         QuantityTypeComponent:
             WithType<MockQuantity>,
-        PacketTypeComponent:
-            UseIbcPacket<AnyApp>,
+        [
+            PacketTypeComponent,
+            PacketBuilderComponent,
+        ]:
+            UseIbcPacket,
         PacketHeaderTypeComponent:
             UseIbcPacketHeader,
         PayloadTypeComponent:
@@ -126,7 +130,6 @@ define_components! {
         IncomingPacketHandlerComponent:
             FullIncomingPacketHandler<AnyApp>,
         PacketSenderComponent:
-            AllocateNonceAndBuildPacket,
-            // CommitSendPacket<AllocateNonceAndBuildPacket>,
+            CommitSendPacket<AllocateNonceAndBuildPacket>,
     }
 }

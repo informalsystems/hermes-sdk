@@ -32,7 +32,7 @@ where
             .allocate_packet_nonce(src_channel_id, dst_channel_id)
             .await?;
 
-        let packet = chain.build_packet(packet_header, nonce, payloads).await?;
+        let packet = Chain::build_packet(packet_header, nonce, payloads)?;
 
         Ok(packet)
     }

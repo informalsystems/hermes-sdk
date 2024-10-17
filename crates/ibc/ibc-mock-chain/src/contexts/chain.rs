@@ -3,6 +3,7 @@ use alloc::collections::btree_map::BTreeMap;
 use alloc::string::String;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
+use hermes_ibc_components::traits::builders::packet::CanBuildPacket;
 use hermes_ibc_components::traits::handlers::outgoing::packet::CanSendPacket;
 use hermes_ibc_components::traits::nonce::CanAllocatePacketNonce;
 
@@ -278,7 +279,9 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + CanHandleIncomingPacket<MockChainB>
     + CanQueryHasPacketReceived<MockChainB>
     + CanQueryConsensusState<MockChainB>
-    + CanAllocatePacketNonce<MockChainB> // + CanSendPacket<MockChainB>
+    + CanAllocatePacketNonce<MockChainB>
+    + CanBuildPacket<MockChainB>
+    + CanSendPacket<MockChainB>
 {
 }
 
