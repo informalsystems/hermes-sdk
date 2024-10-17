@@ -27,6 +27,7 @@ use hermes_ibc_components::traits::fields::payload::header::PayloadHeaderGetterC
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::commitment::path::CommitmentPathTypeComponent;
+use hermes_ibc_components::traits::types::commitment::value::CommitmentValueTypeComponent;
 use hermes_ibc_components::traits::types::message_header::IbcMessageHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
@@ -52,6 +53,7 @@ use crate::impls::error::RaiseDebugString;
 use crate::impls::tagged::UseTaggedType;
 use crate::types::amount::UseMockAmountType;
 use crate::types::commitment::path::UseMockCommitmentPath;
+use crate::types::commitment::value::UseMockCommitmentValue;
 use crate::types::denom::UseMockDenomType;
 use crate::types::quantity::MockQuantity;
 
@@ -83,6 +85,8 @@ define_components! {
             UseIbcMessageHeader,
         CommitmentPathTypeComponent:
             UseMockCommitmentPath,
+        CommitmentValueTypeComponent:
+            UseMockCommitmentValue,
         DenomTypeComponent:
             UseMockDenomType,
         [

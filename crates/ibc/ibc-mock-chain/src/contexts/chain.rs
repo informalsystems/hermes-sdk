@@ -30,6 +30,7 @@ use hermes_ibc_components::traits::handlers::incoming::packet::CanHandleIncoming
 use hermes_ibc_components::traits::handlers::incoming::payload::CanHandleIncomingPayload;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::commitment::path::HasCommitmentPathType;
+use hermes_ibc_components::traits::types::commitment::value::HasCommitmentValueType;
 use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderType;
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
 use hermes_ibc_components::traits::types::packet::nonce::HasPacketNonceType;
@@ -66,6 +67,7 @@ use crate::types::channel_id::MockChannelId;
 use crate::types::client_id::MockClientId;
 use crate::types::commitment::path::MockCommitmentPath;
 use crate::types::commitment::proof::MockCommitmentProof;
+use crate::types::commitment::value::MockCommitmentValue;
 use crate::types::denom::MockDenom;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
@@ -225,6 +227,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
         IbcTransferUnescrowApp,
         PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
     > + HasCommitmentPathType<CommitmentPath = MockCommitmentPath<ChainA, ChainB>>
+    + HasCommitmentValueType<CommitmentValue = MockCommitmentValue<ChainA, ChainB>>
     + HasConsensusStateType<MockChainB, ConsensusState = Arc<MockChainState<ChainA, ChainB>>>
     + HasPacketHeader<MockChainB>
     + HasPacketChannelIds<MockChainB>
