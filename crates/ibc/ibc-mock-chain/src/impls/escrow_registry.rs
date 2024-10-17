@@ -2,9 +2,7 @@ use alloc::borrow::ToOwned;
 use alloc::string::String;
 use cgp::core::Async;
 use hermes_ibc_token_transfer_components::traits::escrow_registry::lookup::UnescrowTokenRegistrar;
-use hermes_ibc_token_transfer_components::traits::escrow_registry::update::{
-    Decrease, EscrowedTokenUpdater,
-};
+use hermes_ibc_token_transfer_components::traits::escrow_registry::update::EscrowTokenRegistrar;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
@@ -49,18 +47,36 @@ impl<Chain: Async, Counterparty: Async>
 }
 
 impl<Chain: Async, Counterparty: Async>
-    EscrowedTokenUpdater<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, Decrease>
+    EscrowTokenRegistrar<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
     for MockChainComponents
 {
-    async fn update_escrowed_token(
+    async fn register_escrowed_token(
         chain: &MockChain<Chain, Counterparty>,
-        mode: Decrease,
-        local_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
-        counterparty_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
-        local_app_id: &Tagged<Chain, Counterparty, MockAppId>,
-        counterparty_app_id: &Tagged<Counterparty, Chain, MockAppId>,
+        src_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
+        dst_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
+        src_app_id: &Tagged<Chain, Counterparty, MockAppId>,
+        dst_app_id: &Tagged<Counterparty, Chain, MockAppId>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        todo!()
+        let mut lock = chain.pending_state.lock().await;
+        let state = lock.mock_chain_state_mut();
+
+        let quantity = state
+            .escrow_balances
+            .entry((
+                src_channel_id.clone(),
+                dst_channel_id.clone(),
+                src_app_id.clone(),
+                dst_app_id.clone(),
+                amount.denom.clone(),
+            ))
+            .or_insert_with(Default::default);
+
+        quantity.value = quantity
+            .value
+            .checked_add(amount.quantity.value)
+            .ok_or_else(|| "escrow amount overflow".to_owned())?;
+
+        Ok(())
     }
 }

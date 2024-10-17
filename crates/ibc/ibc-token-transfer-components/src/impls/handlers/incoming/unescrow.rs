@@ -12,7 +12,7 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
 use crate::traits::escrow_registry::lookup::CanRegisterUnescrowToken;
-use crate::traits::escrow_registry::update::{CanUpdateEscrowedToken, Decrease};
+use crate::traits::escrow_registry::update::CanRegisterEscrowToken;
 use crate::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
 use crate::traits::fields::payload_data::unescrow_amount::HasPayloadUnescrowAmount;
 use crate::traits::token::transfer::{CanTransferToken, Unescrow};
@@ -38,7 +38,6 @@ where
         + HasAmountQuantity
         + CanTransferToken<Unescrow>
         + CanRegisterUnescrowToken<Counterparty>
-        + CanUpdateEscrowedToken<Counterparty, Decrease>
         + for<'a> CanRaiseError<UnescrowAmountExceeded<'a, Chain, Counterparty>>,
     Counterparty: HasAmountDenom
         + HasAmountQuantity
