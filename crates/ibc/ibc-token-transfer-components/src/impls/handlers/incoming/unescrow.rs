@@ -1,14 +1,8 @@
-use core::fmt::Debug;
-
-use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
-use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandler;
-use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
 use crate::traits::escrow_registry::unescrow::CanRegisterUnescrowToken;
@@ -18,26 +12,13 @@ use crate::traits::token::transfer::{CanTransferToken, Unescrow};
 
 pub struct HandleIncomingUnescrowTransfer;
 
-pub struct UnescrowAmountExceeded<'a, Chain, Counterparty>
-where
-    Chain: HasAmountType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty>,
-    Counterparty: HasChannelIdType<Chain> + HasAppIdType<Chain>,
-{
-    pub amount: &'a Chain::Amount,
-    pub src_channel_id: &'a Counterparty::ChannelId,
-    pub dst_channel_id: &'a Chain::ChannelId,
-    pub src_app_id: &'a Counterparty::AppId,
-    pub dst_app_id: &'a Chain::AppId,
-}
-
 impl<Chain, Counterparty, App> IncomingPayloadHandler<Chain, Counterparty, App>
     for HandleIncomingUnescrowTransfer
 where
     Chain: HasAmountDenom
         + HasAmountQuantity
         + CanTransferToken<Unescrow>
-        + CanRegisterUnescrowToken<Counterparty>
-        + for<'a> CanRaiseError<UnescrowAmountExceeded<'a, Chain, Counterparty>>,
+        + CanRegisterUnescrowToken<Counterparty>,
     Counterparty: HasAmountDenom
         + HasAmountQuantity
         + HasPacketChannelIds<Chain>
@@ -75,19 +56,5 @@ where
         chain.transfer_token(Unescrow, receiver, amount).await?;
 
         Ok(())
-    }
-}
-
-impl<'a, Chain, Counterparty> Debug for UnescrowAmountExceeded<'a, Chain, Counterparty>
-where
-    Chain: HasAmountType + HasChannelIdType<Counterparty> + HasAppIdType<Counterparty>,
-    Counterparty: HasChannelIdType<Chain> + HasAppIdType<Chain>,
-{
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(
-            f,
-            "requested unescrow amount {} exceeds the total escrowed amount for the given channel",
-            self.amount
-        )
     }
 }
