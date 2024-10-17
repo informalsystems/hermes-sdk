@@ -1,10 +1,10 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
-use hermes_chain_type_components::traits::types::commitment_proof::CommitmentProofTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
+use hermes_ibc_components::traits::types::commitment::proof::CommitmentProofTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
 use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;
 

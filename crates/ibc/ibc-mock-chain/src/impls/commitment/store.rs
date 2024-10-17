@@ -8,7 +8,7 @@ use crate::contexts::chain::MockChain;
 use crate::types::commitment::path::MockCommitmentPath;
 use crate::types::commitment::value::MockCommitmentValue;
 
-impl<Chain: Async, Counterparty: Async> CommitmentStorage<MockChain<Chain, Counterparty>>
+impl<Chain: Async, Counterparty: Async, Tag> CommitmentStorage<MockChain<Chain, Counterparty>, Tag>
     for MockChainComponents
 {
     async fn store_commitment(

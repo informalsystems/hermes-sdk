@@ -1,7 +1,8 @@
 use core::marker::PhantomData;
 
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::types::tags::commitment::send::SendPacket;
 use cgp::prelude::HasErrorType;
-use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::payloads::HasPacketPayloads;
@@ -17,7 +18,7 @@ impl<Chain, Counterparty, App> IncomingPacketHandler<Chain, Counterparty>
     for HandleIncomingPacketPayloads<App>
 where
     Chain: HasErrorType + CanHandleIncomingPayload<Counterparty, App>,
-    Counterparty: HasCommitmentProofType
+    Counterparty: HasCommitmentProofType<SendPacket>
         + HasPacketType<Chain>
         + HasPacketHeader<Chain>
         + HasPacketPayloads<Chain>

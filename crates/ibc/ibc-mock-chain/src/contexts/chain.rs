@@ -11,7 +11,6 @@ use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
@@ -31,6 +30,7 @@ use hermes_ibc_components::traits::handlers::incoming::packet::CanHandleIncoming
 use hermes_ibc_components::traits::handlers::incoming::payload::CanHandleIncomingPayload;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::commitment::path::HasCommitmentPathType;
+use hermes_ibc_components::traits::types::commitment::proof::HasCommitmentProofType;
 use hermes_ibc_components::traits::types::commitment::value::HasCommitmentValueType;
 use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderType;
 use hermes_ibc_components::traits::types::packet::header::HasPacketHeaderType;
@@ -40,12 +40,13 @@ use hermes_ibc_components::traits::types::packet::timeout::HasPacketTimeoutType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 use hermes_ibc_components::traits::types::payload::payload::HasPayloadType;
-use hermes_ibc_components::types::any_app::AnyApp;
 use hermes_ibc_components::types::message_header::IbcMessageHeader;
 use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload::IbcPayload;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
+use hermes_ibc_components::types::tags::apps::any::AnyApp;
+use hermes_ibc_components::types::tags::commitment::send::SendPacket;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::unescrow_amount::HasPayloadUnescrowAmount;
@@ -200,7 +201,6 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasDenomType<Denom = MockDenom<ChainA, ChainB>>
     + HasAmountType<Amount = MockAmount<ChainA, ChainB>>
     + HasQuantityType<Quantity = MockQuantity>
-    + HasCommitmentProofType<CommitmentProof = Tagged<ChainA, ChainB, MockCommitmentProof>>
     + HasAppIdType<MockChainB, AppId = Tagged<ChainA, ChainB, MockAppId>>
     + HasClientIdType<MockChainB, ClientId = Tagged<ChainA, ChainB, MockClientId>>
     + HasChannelIdType<MockChainB, ChannelId = Tagged<ChainA, ChainB, MockChannelId>>
@@ -224,8 +224,11 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
         MockChainB,
         IbcTransferUnescrowApp,
         PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
-    > + HasCommitmentPathType<CommitmentPath = MockCommitmentPath<ChainA, ChainB>>
-    + HasCommitmentValueType<CommitmentValue = MockCommitmentValue<ChainA, ChainB>>
+    > + HasCommitmentProofType<
+        SendPacket,
+        CommitmentProof = Tagged<ChainA, ChainB, MockCommitmentProof>,
+    > + HasCommitmentPathType<SendPacket, CommitmentPath = MockCommitmentPath<ChainA, ChainB>>
+    + HasCommitmentValueType<SendPacket, CommitmentValue = MockCommitmentValue<ChainA, ChainB>>
     + HasConsensusStateType<MockChainB, ConsensusState = Arc<MockChainState<ChainA, ChainB>>>
     + HasPacketHeader<MockChainB>
     + HasPacketChannelIds<MockChainB>

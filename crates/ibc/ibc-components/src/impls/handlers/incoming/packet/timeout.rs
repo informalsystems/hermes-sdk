@@ -1,6 +1,7 @@
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::types::tags::commitment::send::SendPacket;
 use core::fmt::Debug;
 use core::marker::PhantomData;
-use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::time::HasTimeType;
@@ -31,7 +32,8 @@ where
     Chain: CanQueryCurrentTime
         + CanCompareTimeoutTime<Counterparty>
         + for<'a> CanRaiseError<PacketTimedOut<'a, Chain, Counterparty>>,
-    Counterparty: HasCommitmentProofType + HasPacketHeader<Chain> + HasPacketTimeout<Chain>,
+    Counterparty:
+        HasCommitmentProofType<SendPacket> + HasPacketHeader<Chain> + HasPacketTimeout<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(

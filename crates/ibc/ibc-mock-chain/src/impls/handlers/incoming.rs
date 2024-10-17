@@ -3,9 +3,9 @@ use cgp::core::Async;
 use hermes_ibc_components::traits::handlers::incoming::payload::{
     CanHandleIncomingPayload, IncomingPayloadHandler,
 };
-use hermes_ibc_components::types::any_app::AnyApp;
 use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
+use hermes_ibc_components::types::tags::apps::any::AnyApp;
 use hermes_ibc_token_transfer_components::types::tags::IbcTransferApp;
 
 use crate::contexts::chain::MockChain;

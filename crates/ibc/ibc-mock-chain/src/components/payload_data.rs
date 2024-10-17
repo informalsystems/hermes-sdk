@@ -1,5 +1,5 @@
 use cgp::prelude::*;
-use hermes_ibc_components::types::any_app::AnyApp;
+use hermes_ibc_components::types::tags::apps::any::AnyApp;
 use hermes_ibc_token_transfer_components::types::packet_data::mint::UseIbcTransferMintPayloadData;
 use hermes_ibc_token_transfer_components::types::packet_data::transfer::UseIbcTransferPayloadData;
 use hermes_ibc_token_transfer_components::types::packet_data::unescrow::UseIbcTransferUnescrowPayloadData;

@@ -11,8 +11,8 @@ pub enum MockCommitmentValue<Chain: Async, Counterparty: Async> {
 
 pub struct UseMockCommitmentValue;
 
-impl<Chain: Async, Counterparty: Async> ProvideCommitmentValueType<MockChain<Chain, Counterparty>>
-    for UseMockCommitmentValue
+impl<Chain: Async, Counterparty: Async, Tag>
+    ProvideCommitmentValueType<MockChain<Chain, Counterparty>, Tag> for UseMockCommitmentValue
 {
     type CommitmentValue = MockCommitmentValue<Chain, Counterparty>;
 }

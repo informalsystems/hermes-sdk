@@ -5,8 +5,8 @@ use crate::traits::types::commitment::value::HasCommitmentValueType;
 
 #[derive_component(CommitmentStorageComponent, CommitmentStorage<Chain>)]
 #[async_trait]
-pub trait CanStoreCommitment:
-    HasCommitmentPathType + HasCommitmentValueType + HasErrorType
+pub trait CanStoreCommitment<Tag>:
+    HasCommitmentPathType<Tag> + HasCommitmentValueType<Tag> + HasErrorType
 {
     async fn store_commitment(
         &self,

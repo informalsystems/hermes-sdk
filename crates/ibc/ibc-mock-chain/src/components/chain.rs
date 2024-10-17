@@ -8,7 +8,6 @@ use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGett
 use hermes_chain_type_components::traits::fields::amount::quantity::AmountQuantityGetterComponent;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
-use hermes_chain_type_components::traits::types::commitment_proof::CommitmentProofTypeComponent;
 use hermes_chain_type_components::traits::types::denom::DenomTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
@@ -29,6 +28,7 @@ use hermes_ibc_components::traits::fields::payload::header::PayloadHeaderGetterC
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::commitment::path::CommitmentPathTypeComponent;
+use hermes_ibc_components::traits::types::commitment::proof::CommitmentProofTypeComponent;
 use hermes_ibc_components::traits::types::commitment::value::CommitmentValueTypeComponent;
 use hermes_ibc_components::traits::types::message_header::IbcMessageHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
@@ -38,12 +38,12 @@ use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComp
 use hermes_ibc_components::traits::types::payload::data::PayloadDataTypeComponent;
 use hermes_ibc_components::traits::types::payload::header::PayloadHeaderTypeComponent;
 use hermes_ibc_components::traits::types::payload::payload::PayloadTypeComponent;
-use hermes_ibc_components::types::any_app::AnyApp;
 use hermes_ibc_components::types::message_header::UseIbcMessageHeader;
 use hermes_ibc_components::types::packet::UseIbcPacket;
 use hermes_ibc_components::types::packet_header::UseIbcPacketHeader;
 use hermes_ibc_components::types::payload::UseIbcPayload;
 use hermes_ibc_components::types::payload_header::UseIbcPayloadHeader;
+use hermes_ibc_components::types::tags::apps::any::AnyApp;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::PayloadMintAmountGetterComponent;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::IbcTransferReceiverGetterComponent;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::unescrow_amount::PayloadUnescrowAmountGetterComponent;

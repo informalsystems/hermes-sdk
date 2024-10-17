@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
-use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::types::tags::commitment::send::SendPacket;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -15,7 +16,7 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for IgnoreDoubleReceive<InHandler>
 where
     Chain: CanQueryHasPacketReceived<Counterparty>,
-    Counterparty: HasCommitmentProofType
+    Counterparty: HasCommitmentProofType<SendPacket>
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
         + HasChannelIdType<Chain>

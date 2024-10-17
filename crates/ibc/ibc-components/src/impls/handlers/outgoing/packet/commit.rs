@@ -12,6 +12,7 @@ use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
 use crate::traits::handlers::outgoing::packet::PacketSender;
 use crate::traits::types::packet::header::HasPacketHeaderType;
 use crate::traits::types::payload::payload::HasPayloadType;
+use crate::types::tags::commitment::send::SendPacket;
 
 pub struct CommitSendPacket<InHandler>(pub PhantomData<InHandler>);
 
@@ -25,7 +26,7 @@ where
         + HasPacketNonce<Counterparty>
         + CanBuildSendPacketCommitmentPath<Counterparty>
         + CanBuildSendPacketCommitmentValue<Counterparty>
-        + CanStoreCommitment,
+        + CanStoreCommitment<SendPacket>,
     Counterparty: HasChannelIdType<Chain>,
     InHandler: PacketSender<Chain, Counterparty>,
 {

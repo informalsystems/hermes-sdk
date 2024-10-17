@@ -3,10 +3,11 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 
 use crate::traits::types::commitment::path::HasCommitmentPathType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
+use crate::types::tags::commitment::receive::ReceivePacket;
 
 #[derive_component(ReceivePacketCommitmentPathBuilderComponent, ReceivePacketCommitmentPathBuilder<Chain>)]
 pub trait CanBuildReceivePacketCommitmentPath<Counterparty>:
-    HasCommitmentPathType + HasChannelIdType<Counterparty> + HasErrorType
+    HasCommitmentPathType<ReceivePacket> + HasChannelIdType<Counterparty> + HasErrorType
 where
     Counterparty: HasChannelIdType<Self> + HasPacketNonceType<Self>,
 {

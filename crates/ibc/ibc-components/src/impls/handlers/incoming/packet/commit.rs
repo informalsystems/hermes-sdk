@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::commitment::path::receive_packet::CanBuildReceivePacketCommitmentPath;
@@ -10,17 +9,20 @@ use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::types::tags::commitment::receive::ReceivePacket;
+use crate::types::tags::commitment::send::SendPacket;
 
 pub struct CommitReceivePacket<InHandler>(pub PhantomData<InHandler>);
 
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
     for CommitReceivePacket<InHandler>
 where
-    Chain: CanStoreCommitment
+    Chain: CanStoreCommitment<ReceivePacket>
         + HasChannelIdType<Counterparty>
         + CanBuildReceivePacketCommitmentPath<Counterparty>
         + CanBuildReceivePacketCommitmentValue<Counterparty>,
-    Counterparty: HasCommitmentProofType
+    Counterparty: HasCommitmentProofType<SendPacket>
         + HasPacketHeader<Chain>
         + HasPacketChannelIds<Chain>
         + HasPacketNonce<Chain>,

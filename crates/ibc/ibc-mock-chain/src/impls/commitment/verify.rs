@@ -11,8 +11,8 @@ use crate::types::commitment::proof::MockCommitmentProof;
 use crate::types::commitment::value::MockCommitmentValue;
 use crate::types::tagged::Tagged;
 
-impl<Chain: Async, Counterparty: Async>
-    CommitmentVerifier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
+impl<Chain: Async, Counterparty: Async, Tag>
+    CommitmentVerifier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, Tag>
     for MockChainComponents
 {
     fn verify_commitment(

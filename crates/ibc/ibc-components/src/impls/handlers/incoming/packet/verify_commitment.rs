@@ -14,6 +14,7 @@ use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::client_id::CanQueryClientIdFromChannelId;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
+use crate::types::tags::commitment::send::SendPacket;
 
 pub struct VerifySendPacketCommitmentProof<InHandler>(pub PhantomData<InHandler>);
 
@@ -24,12 +25,12 @@ where
         + CanRaiseError<Counterparty::Error>
         + CanQueryClientIdFromChannelId<Counterparty>,
     Counterparty: HasHeightType
-        + HasCommitmentProofHeight
+        + HasCommitmentProofHeight<SendPacket>
         + HasPacketHeader<Chain>
         + HasPacketChannelIds<Chain>
         + HasPacketNonce<Chain>
         + HasConsensusStateType<Chain>
-        + CanVerifyCommitment<Chain>
+        + CanVerifyCommitment<Chain, SendPacket>
         + CanBuildSendPacketCommitmentPath<Chain>
         + CanBuildSendPacketCommitmentValue<Chain>,
     InHandler: IncomingPacketHandler<Chain, Counterparty>,

@@ -21,8 +21,8 @@ pub enum MockCommitmentPath<Chain, Counterparty> {
 
 pub struct UseMockCommitmentPath;
 
-impl<Chain: Async, Counterparty: Async> ProvideCommitmentPathType<MockChain<Chain, Counterparty>>
-    for UseMockCommitmentPath
+impl<Chain: Async, Counterparty: Async, Tag>
+    ProvideCommitmentPathType<MockChain<Chain, Counterparty>, Tag> for UseMockCommitmentPath
 {
     type CommitmentPath = MockCommitmentPath<Chain, Counterparty>;
 }

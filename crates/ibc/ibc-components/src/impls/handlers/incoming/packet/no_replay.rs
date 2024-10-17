@@ -1,8 +1,9 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
+use crate::types::tags::commitment::send::SendPacket;
 use cgp::prelude::CanRaiseError;
-use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -31,7 +32,7 @@ impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
 where
     Chain: CanQueryHasPacketReceived<Counterparty>
         + for<'a> CanRaiseError<DoublePacketReceive<'a, Chain, Counterparty>>,
-    Counterparty: HasCommitmentProofType
+    Counterparty: HasCommitmentProofType<SendPacket>
         + HasPacketHeader<Chain>
         + HasPacketNonce<Chain>
         + HasChannelIdType<Chain>

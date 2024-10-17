@@ -1,4 +1,3 @@
-pub mod join;
 pub mod path;
 pub mod store;
 pub mod value;
