@@ -6,7 +6,6 @@ use hermes_ibc_components::types::packet::IbcPacket;
 
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
-use crate::types::commitment::value::MockCommitmentValue;
 
 impl<Chain: Async, Counterparty: Async>
     SendPacketCommitmentValueBuilder<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
@@ -14,8 +13,9 @@ impl<Chain: Async, Counterparty: Async>
 {
     fn build_send_packet_commitment_value(
         packet: &IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>,
-    ) -> Result<MockCommitmentValue<Chain, Counterparty>, String> {
-        Ok(MockCommitmentValue::SendPacket(packet.clone()))
+    ) -> Result<IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>, String>
+    {
+        Ok(packet.clone())
     }
 }
 
@@ -27,7 +27,8 @@ impl<Chain: Async, Counterparty: Async>
 {
     fn build_receive_packet_commitment_value(
         packet: &IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>>,
-    ) -> Result<MockCommitmentValue<Chain, Counterparty>, String> {
-        Ok(MockCommitmentValue::ReceivePacket(packet.clone()))
+    ) -> Result<IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>>, String>
+    {
+        Ok(packet.clone())
     }
 }

@@ -46,6 +46,7 @@ use hermes_ibc_components::types::packet_header::IbcPacketHeader;
 use hermes_ibc_components::types::payload::IbcPayload;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
 use hermes_ibc_components::types::tags::apps::any::AnyApp;
+use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
@@ -67,9 +68,10 @@ use crate::types::amount::MockAmount;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::client_id::MockClientId;
-use crate::types::commitment::path::MockCommitmentPath;
+use crate::types::commitment::path::{
+    MockReceivePacketCommitmentPath, MockSendPacketCommitmentPath,
+};
 use crate::types::commitment::proof::MockCommitmentProof;
-use crate::types::commitment::value::MockCommitmentValue;
 use crate::types::denom::MockDenom;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
@@ -227,8 +229,12 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     > + HasCommitmentProofType<
         SendPacket,
         CommitmentProof = Tagged<ChainA, ChainB, MockCommitmentProof>,
-    > + HasCommitmentPathType<SendPacket, CommitmentPath = MockCommitmentPath<ChainA, ChainB>>
-    + HasCommitmentValueType<SendPacket, CommitmentValue = MockCommitmentValue<ChainA, ChainB>>
+    > + HasCommitmentPathType<SendPacket, CommitmentPath = MockSendPacketCommitmentPath<ChainA, ChainB>>
+    + HasCommitmentPathType<
+        ReceivePacket,
+        CommitmentPath = MockReceivePacketCommitmentPath<ChainA, ChainB>,
+    > + HasCommitmentValueType<SendPacket, CommitmentValue = IbcPacket<MockChainA, MockChainB>>
+    + HasCommitmentValueType<ReceivePacket, CommitmentValue = IbcPacket<MockChainB, MockChainA>>
     + HasConsensusStateType<MockChainB, ConsensusState = Arc<MockChainState<ChainA, ChainB>>>
     + HasPacketHeader<MockChainB>
     + HasPacketChannelIds<MockChainB>

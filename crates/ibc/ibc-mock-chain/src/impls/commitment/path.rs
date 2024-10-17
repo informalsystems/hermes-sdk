@@ -6,7 +6,9 @@ use hermes_ibc_components::traits::commitment::path::send_packet::SendPacketComm
 use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 use crate::types::channel_id::MockChannelId;
-use crate::types::commitment::path::MockCommitmentPath;
+use crate::types::commitment::path::{
+    MockReceivePacketCommitmentPath, MockSendPacketCommitmentPath,
+};
 use crate::types::nonce::MockNonce;
 use crate::types::tagged::Tagged;
 
@@ -20,8 +22,8 @@ impl<Chain: Async, Counterparty: Async>
         src_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
         dst_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
         nonce: &Tagged<Counterparty, Chain, MockNonce>,
-    ) -> Result<MockCommitmentPath<Chain, Counterparty>, String> {
-        Ok(MockCommitmentPath::ReceivePacket {
+    ) -> Result<MockReceivePacketCommitmentPath<Chain, Counterparty>, String> {
+        Ok(MockReceivePacketCommitmentPath {
             src_channel_id: src_channel_id.clone(),
             dst_channel_id: dst_channel_id.clone(),
             nonce: nonce.clone(),
@@ -37,8 +39,8 @@ impl<Chain: Async, Counterparty: Async>
         src_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
         dst_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
         nonce: &Tagged<Chain, Counterparty, MockNonce>,
-    ) -> Result<MockCommitmentPath<Chain, Counterparty>, String> {
-        Ok(MockCommitmentPath::SendPacket {
+    ) -> Result<MockSendPacketCommitmentPath<Chain, Counterparty>, String> {
+        Ok(MockSendPacketCommitmentPath {
             src_channel_id: src_channel_id.clone(),
             dst_channel_id: dst_channel_id.clone(),
             nonce: nonce.clone(),
