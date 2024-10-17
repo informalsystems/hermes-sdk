@@ -44,7 +44,7 @@ where
 
         let src_channel_id = Counterparty::packet_src_channel_id(packet_header);
         let dst_channel_id = Counterparty::packet_dst_channel_id(packet_header);
-        let nonce = Counterparty::packet_nonce(&packet);
+        let nonce = Counterparty::packet_nonce(packet);
 
         let proof_height = Counterparty::commitment_proof_height(send_proof);
 

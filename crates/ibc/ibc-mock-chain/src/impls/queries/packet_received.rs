@@ -27,7 +27,7 @@ impl<Chain: Async, Counterparty: Async>
             .get(&(dst_channel_id.clone(), src_channel_id.clone()));
 
         let received = if let Some(received_packets) = m_received_packets {
-            received_packets.contains_key(&nonce)
+            received_packets.contains_key(nonce)
         } else {
             false
         };

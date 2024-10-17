@@ -36,7 +36,7 @@ impl<Chain: Async, Counterparty: Async>
                     MockChain<Counterparty, Chain>,
                     IbcTransferApp,
                 >>::handle_incoming_payload(
-                    &chain, packet_header, payload_header, payload_data
+                    chain, packet_header, payload_header, payload_data
                 )
                 .await
             }
