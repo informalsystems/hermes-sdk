@@ -28,7 +28,6 @@ use hermes_ibc_components::traits::fields::payload::header::PayloadHeaderGetterC
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::commitment::path::CommitmentPathTypeComponent;
-use hermes_ibc_components::traits::types::commitment::proof::CommitmentProofTypeComponent;
 use hermes_ibc_components::traits::types::commitment::value::CommitmentValueTypeComponent;
 use hermes_ibc_components::traits::types::message_header::IbcMessageHeaderTypeComponent;
 use hermes_ibc_components::traits::types::packet::header::PacketHeaderTypeComponent;
@@ -69,7 +68,6 @@ define_components! {
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
             PacketTimeoutTypeComponent,
-            CommitmentProofTypeComponent,
         ]:
             WithProvider<UseTaggedType<UseDelegatedType<MockIbcChainTypes>>>,
         ErrorTypeComponent:

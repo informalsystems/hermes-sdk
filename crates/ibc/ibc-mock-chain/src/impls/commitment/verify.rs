@@ -13,7 +13,6 @@ use crate::types::commitment::path::{
     MockReceivePacketCommitmentPath, MockSendPacketCommitmentPath,
 };
 use crate::types::commitment::proof::MockCommitmentProof;
-use crate::types::tagged::Tagged;
 
 impl<Chain: Async, Counterparty: Async>
     CommitmentVerifier<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, SendPacket>
@@ -23,7 +22,7 @@ impl<Chain: Async, Counterparty: Async>
         consensus_state: &Arc<MockChainState<Chain, Counterparty>>,
         commitment_path: &MockSendPacketCommitmentPath<Chain, Counterparty>,
         packet: &IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>,
-        _proof: &Tagged<Chain, Counterparty, MockCommitmentProof>,
+        _proof: &MockCommitmentProof<Chain, Counterparty>,
     ) -> Result<(), String> {
         let send_packets = consensus_state
             .sent_packets
@@ -56,7 +55,7 @@ impl<Chain: Async, Counterparty: Async>
         consensus_state: &Arc<MockChainState<Chain, Counterparty>>,
         commitment_path: &MockReceivePacketCommitmentPath<Chain, Counterparty>,
         packet: &IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>>,
-        _proof: &Tagged<Chain, Counterparty, MockCommitmentProof>,
+        _proof: &MockCommitmentProof<Chain, Counterparty>,
     ) -> Result<(), String> {
         let received_packets = consensus_state
             .received_packets

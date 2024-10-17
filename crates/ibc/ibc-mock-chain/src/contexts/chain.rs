@@ -17,6 +17,7 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
+use hermes_ibc_components::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::packet::header::timeout::HasPacketTimeout;
@@ -226,10 +227,8 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
         MockChainB,
         IbcTransferUnescrowApp,
         PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
-    > + HasCommitmentProofType<
-        SendPacket,
-        CommitmentProof = Tagged<ChainA, ChainB, MockCommitmentProof>,
-    > + HasCommitmentPathType<SendPacket, CommitmentPath = MockSendPacketCommitmentPath<ChainA, ChainB>>
+    > + HasCommitmentProofType<SendPacket, CommitmentProof = MockCommitmentProof<ChainA, ChainB>>
+    + HasCommitmentPathType<SendPacket, CommitmentPath = MockSendPacketCommitmentPath<ChainA, ChainB>>
     + HasCommitmentPathType<
         ReceivePacket,
         CommitmentPath = MockReceivePacketCommitmentPath<ChainA, ChainB>,
@@ -245,6 +244,8 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPayloadAppIds<MockChainB>
     + HasPayloadData<MockChainB, AnyApp>
     + HasIbcMessageAppIds<MockChainB>
+    + HasCommitmentProofHeight<SendPacket>
+    + HasCommitmentProofHeight<ReceivePacket>
     + HasAmountDenom
     + HasAmountQuantity
     + CanBuildAmount
