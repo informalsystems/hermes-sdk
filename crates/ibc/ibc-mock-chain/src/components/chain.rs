@@ -36,6 +36,7 @@ use hermes_ibc_components::types::payload::UseIbcPayload;
 use hermes_ibc_components::types::payload_header::UseIbcPayloadHeader;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::PayloadMintAmountGetterComponent;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::IbcTransferReceiverGetterComponent;
+use hermes_ibc_token_transfer_components::traits::fields::payload_data::unescrow_amount::PayloadUnescrowAmountGetterComponent;
 
 use crate::components::handlers::incoming_payload::MockIncomingPayloadHandlers;
 use crate::components::ibc_types::MockIbcChainTypes;
@@ -91,6 +92,7 @@ define_components! {
             IbcMessageAppIdGetterComponent,
             IbcTransferReceiverGetterComponent,
             PayloadMintAmountGetterComponent,
+            PayloadUnescrowAmountGetterComponent,
         ]:
             WithContext,
         ErrorRaiserComponent:

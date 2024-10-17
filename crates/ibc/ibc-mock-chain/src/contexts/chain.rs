@@ -39,6 +39,7 @@ use hermes_ibc_components::types::payload::IbcPayload;
 use hermes_ibc_components::types::payload_header::IbcPayloadHeader;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::HasPayloadMintAmount;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
+use hermes_ibc_token_transfer_components::traits::fields::payload_data::unescrow_amount::HasPayloadUnescrowAmount;
 use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_incoming::CanLookupIncomingMintedToken;
 use hermes_ibc_token_transfer_components::traits::mint_registry::register::CanRegisterMintedToken;
 use hermes_ibc_token_transfer_components::traits::token::create::CanCreateToken;
@@ -229,6 +230,9 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPayloadMintAmount<MockChainB, IbcTransferMintApp>
     + HasIbcTransferReceiver<MockChainB, IbcTransferMintApp>
     + CanHandleIncomingPayload<MockChainB, IbcTransferMintApp>
+    + HasPayloadUnescrowAmount<MockChainB, IbcTransferUnescrowApp>
+    + CanHandleIncomingPayload<MockChainB, IbcTransferUnescrowApp>
+    + CanHandleIncomingPayload<MockChainB, IbcTransferApp>
 {
 }
 
