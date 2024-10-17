@@ -17,6 +17,7 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdTy
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
+use hermes_chain_type_components::traits::types::time::HasTimeType;
 use hermes_ibc_components::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
@@ -202,6 +203,7 @@ pub type MockChainB = MockChain<ChainB, ChainA>;
 
 pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasHeightType<Height = Tagged<ChainA, ChainB, MockHeight>>
+    + HasTimeType<Time = Tagged<ChainA, ChainB, MockHeight>>
     + HasAddressType<Address = Tagged<ChainA, ChainB, MockAddress>>
     + HasDenomType<Denom = MockDenom<ChainA, ChainB>>
     + HasAmountType<Amount = MockAmount<ChainA, ChainB>>

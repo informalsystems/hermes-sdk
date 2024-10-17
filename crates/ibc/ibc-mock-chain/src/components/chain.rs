@@ -13,6 +13,7 @@ use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
 use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent;
+use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_ibc_components::components::chain::IncomingPacketHandlerComponent;
 use hermes_ibc_components::impls::handlers::incoming::packet::commit::CommitReceivePacket;
 use hermes_ibc_components::impls::handlers::incoming::packet::no_replay::DisallowDoubleReceive;
@@ -64,6 +65,7 @@ define_components! {
     MockChainComponents {
         [
             HeightTypeComponent,
+            TimeTypeComponent,
             AddressTypeComponent,
             AppIdTypeComponent,
             ClientIdTypeComponent,

@@ -41,7 +41,7 @@ where
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
     ) -> Result<(), Chain::Error> {
-        let current_time = &chain.get_current_time();
+        let current_time = &chain.get_current_time().await;
 
         let packet_header = Counterparty::packet_header(packet);
         let packet_timeout = Counterparty::packet_timeout(packet_header);

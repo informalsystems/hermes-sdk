@@ -3,6 +3,7 @@ use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
+use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::packet::nonce::PacketNonceTypeComponent;
 use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComponent;
@@ -16,6 +17,7 @@ use crate::types::nonce::MockNonce;
 
 define_components! {
     MockIbcChainTypes {
+        TimeTypeComponent: MockHeight,
         HeightTypeComponent: MockHeight,
         AddressTypeComponent: MockAddress,
         AppIdTypeComponent: MockAppId,
