@@ -1,8 +1,4 @@
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub enum MockNonce {
-    NonceA,
-    NonceB,
-    NonceC,
-    NonceD,
-    NonceE,
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct MockNonce {
+    pub value: u8,
 }

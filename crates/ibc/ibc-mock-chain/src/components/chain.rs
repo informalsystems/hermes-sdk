@@ -17,6 +17,8 @@ use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent
 use hermes_chain_type_components::traits::types::time::TimeTypeComponent;
 use hermes_ibc_components::components::chain::IncomingPacketHandlerComponent;
 use hermes_ibc_components::impls::handlers::incoming::packet::full::FullIncomingPacketHandler;
+use hermes_ibc_components::impls::handlers::outgoing::packet::build::AllocateNonceAndBuildPacket;
+use hermes_ibc_components::impls::handlers::outgoing::packet::commit::CommitSendPacket;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::timeout::PacketTimeoutGetterComponent;
@@ -27,6 +29,7 @@ use hermes_ibc_components::traits::fields::payload::app_id::PayloadAppIdGetterCo
 use hermes_ibc_components::traits::fields::payload::data::PayloadDataGetterComponent;
 use hermes_ibc_components::traits::fields::payload::header::PayloadHeaderGetterComponent;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
+use hermes_ibc_components::traits::handlers::outgoing::packet::PacketSenderComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::commitment::path::CommitmentPathTypeComponent;
 use hermes_ibc_components::traits::types::commitment::value::CommitmentValueTypeComponent;
@@ -122,5 +125,8 @@ define_components! {
             UseDelegate<MockIncomingPayloadHandlers>,
         IncomingPacketHandlerComponent:
             FullIncomingPacketHandler<AnyApp>,
+        PacketSenderComponent:
+            AllocateNonceAndBuildPacket,
+            // CommitSendPacket<AllocateNonceAndBuildPacket>,
     }
 }

@@ -3,6 +3,8 @@ use alloc::collections::btree_map::BTreeMap;
 use alloc::string::String;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
+use hermes_ibc_components::traits::handlers::outgoing::packet::CanSendPacket;
+use hermes_ibc_components::traits::nonce::CanAllocatePacketNonce;
 
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -104,6 +106,13 @@ pub struct MockChainState<Chain: Async, Counterparty: Async> {
         Tagged<Chain, Counterparty, MockClientId>,
         BTreeMap<Tagged<Counterparty, Chain, MockHeight>, Arc<MockChainState<Counterparty, Chain>>>,
     >,
+    pub next_nonce: BTreeMap<
+        (
+            Tagged<Chain, Counterparty, MockChannelId>,
+            Tagged<Counterparty, Chain, MockChannelId>,
+        ),
+        Tagged<Chain, Counterparty, MockNonce>,
+    >,
     pub received_packets: BTreeMap<
         (
             Tagged<Chain, Counterparty, MockChannelId>,
@@ -176,6 +185,7 @@ impl<Chain: Async, Counterparty: Async> Clone for MockChainState<Chain, Counterp
             current_height: self.current_height.clone(),
             channel_clients: self.channel_clients.clone(),
             consensus_states: self.consensus_states.clone(),
+            next_nonce: self.next_nonce.clone(),
             received_packets: self.received_packets.clone(),
             sent_packets: self.sent_packets.clone(),
             escrow_balances: self.escrow_balances.clone(),
@@ -190,6 +200,7 @@ impl<Chain: Async, Counterparty: Async> Default for MockChainState<Chain, Counte
             current_height: Default::default(),
             channel_clients: Default::default(),
             consensus_states: Default::default(),
+            next_nonce: Default::default(),
             received_packets: Default::default(),
             sent_packets: Default::default(),
             escrow_balances: Default::default(),
@@ -267,6 +278,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + CanHandleIncomingPacket<MockChainB>
     + CanQueryHasPacketReceived<MockChainB>
     + CanQueryConsensusState<MockChainB>
+    + CanAllocatePacketNonce<MockChainB> // + CanSendPacket<MockChainB>
 {
 }
 
