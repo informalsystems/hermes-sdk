@@ -23,14 +23,9 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
         let mut lock = chain.pending_state.lock().await;
         let state = lock.mock_chain_state_mut();
 
-        let denom_balance = state
-            .balances
-            .entry(amount.denom.clone())
-            .or_insert_with(Default::default);
+        let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 
-        let target_balance = denom_balance
-            .entry(target.clone())
-            .or_insert_with(Default::default);
+        let target_balance = denom_balance.entry(target.clone()).or_default();
 
         target_balance.value = target_balance
             .value
@@ -53,23 +48,18 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
         let mut lock = chain.pending_state.lock().await;
         let state = lock.mock_chain_state_mut();
 
-        let denom_balance = state
-            .balances
-            .entry(amount.denom.clone())
-            .or_insert_with(Default::default);
+        let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 
         let source_balance = denom_balance
             .entry(MockAddress::TransferApp.into())
-            .or_insert_with(Default::default);
+            .or_default();
 
         source_balance.value = source_balance
             .value
             .checked_sub(amount.quantity.value)
             .ok_or_else(|| "transfer app has insufficient fund to unescrow".to_owned())?;
 
-        let target_balance = denom_balance
-            .entry(target.clone())
-            .or_insert_with(Default::default);
+        let target_balance = denom_balance.entry(target.clone()).or_default();
 
         target_balance.value = target_balance
             .value
@@ -92,14 +82,9 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
         let mut lock = chain.pending_state.lock().await;
         let state = lock.mock_chain_state_mut();
 
-        let denom_balance = state
-            .balances
-            .entry(amount.denom.clone())
-            .or_insert_with(Default::default);
+        let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 
-        let source_balance = denom_balance
-            .entry(target.clone())
-            .or_insert_with(Default::default);
+        let source_balance = denom_balance.entry(target.clone()).or_default();
 
         source_balance.value = source_balance
             .value
@@ -108,7 +93,7 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
 
         let target_balance = denom_balance
             .entry(MockAddress::TransferApp.into())
-            .or_insert_with(Default::default);
+            .or_default();
 
         target_balance.value = target_balance
             .value
@@ -131,14 +116,9 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
         let mut lock = chain.pending_state.lock().await;
         let state = lock.mock_chain_state_mut();
 
-        let denom_balance = state
-            .balances
-            .entry(amount.denom.clone())
-            .or_insert_with(Default::default);
+        let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 
-        let target_balance = denom_balance
-            .entry(target.clone())
-            .or_insert_with(Default::default);
+        let target_balance = denom_balance.entry(target.clone()).or_default();
 
         target_balance.value = target_balance
             .value

@@ -35,7 +35,7 @@ impl<Chain: Async, Counterparty: Async>
                 src_app_id.clone(),
                 amount.denom.clone(),
             ))
-            .or_insert_with(Default::default);
+            .or_default();
 
         quantity.value = quantity
             .value
@@ -70,7 +70,7 @@ impl<Chain: Async, Counterparty: Async>
                 dst_app_id.clone(),
                 amount.denom.clone(),
             ))
-            .or_insert_with(Default::default);
+            .or_default();
 
         quantity.value = quantity
             .value
