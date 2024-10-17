@@ -233,6 +233,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasPayloadUnescrowAmount<MockChainB, IbcTransferUnescrowApp>
     + CanHandleIncomingPayload<MockChainB, IbcTransferUnescrowApp>
     + CanHandleIncomingPayload<MockChainB, IbcTransferApp>
+    + CanHandleIncomingPayload<MockChainB, AnyApp>
 {
 }
 

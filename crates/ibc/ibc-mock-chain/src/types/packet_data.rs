@@ -10,8 +10,8 @@ pub enum MockAnyPayloadData<A: Async, B: Async> {
 
 pub struct UseMockAnyPayloadData;
 
-impl<A: Async, B: Async, App> ProvidePayloadDataType<MockChain<A, B>, MockChain<B, A>, App>
-    for UseMockAnyPayloadData
+impl<A: Async, B: Async, Counterparty, App>
+    ProvidePayloadDataType<MockChain<A, B>, Counterparty, App> for UseMockAnyPayloadData
 {
     type PayloadData = MockAnyPayloadData<A, B>;
 }
