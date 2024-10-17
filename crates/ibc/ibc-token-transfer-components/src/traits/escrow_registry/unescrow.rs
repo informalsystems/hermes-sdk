@@ -1,10 +1,17 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
-use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
-use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
+/**
+   A token transfer module may escrow tokens on behalf of multiple
+   channel/app pairs. The escrow registry is used to track the
+   amount escrowed for each channel/app pair.
+
+   When `register_unescrow_token` is called, the registry should
+   first check whether the given channel/app pair has sufficient
+   amount escrowed. If so, it would decrement the amount escrowed.
+*/
 #[derive_component(UnescrowTokenRegistrarComponent, UnescrowTokenRegistrar<Chain>)]
 #[async_trait]
 pub trait CanRegisterUnescrowToken<Counterparty>:

@@ -10,7 +10,7 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
 use crate::traits::builders::mint::CanBuildOutgoingMintPayload;
 use crate::traits::builders::unescrow::CanBuildOutgoingUnescrowPayload;
-use crate::traits::escrow_registry::update::CanRegisterEscrowToken;
+use crate::traits::escrow_registry::escrow::CanRegisterEscrowToken;
 use crate::traits::fields::message::amount::HasMessageSendTransferAmount;
 use crate::traits::mint_registry::lookup_outgoing::CanLookupOutgoingBurnToken;
 use crate::traits::token::transfer::{Burn, CanTransferToken, Escrow};
