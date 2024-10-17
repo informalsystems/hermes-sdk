@@ -8,7 +8,7 @@ pub struct Increase;
 
 pub struct Decrease;
 
-#[derive_component(EscrowedTokenUpdateComponent, EscrowedTokenLookuper<Chain>)]
+#[derive_component(EscrowedTokenUpdateComponent, EscrowedTokenUpdater<Chain>)]
 #[async_trait]
 pub trait CanUpdateEscrowedToken<Counterparty, Mode: Async>:
     HasAmountType

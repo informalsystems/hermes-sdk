@@ -1,0 +1,66 @@
+use alloc::borrow::ToOwned;
+use alloc::string::String;
+use cgp::core::Async;
+use hermes_ibc_token_transfer_components::traits::escrow_registry::lookup::UnescrowTokenRegistrar;
+use hermes_ibc_token_transfer_components::traits::escrow_registry::update::{
+    Decrease, EscrowedTokenUpdater,
+};
+
+use crate::components::chain::MockChainComponents;
+use crate::contexts::chain::MockChain;
+use crate::types::amount::MockAmount;
+use crate::types::app_id::MockAppId;
+use crate::types::channel_id::MockChannelId;
+use crate::types::tagged::Tagged;
+
+impl<Chain: Async, Counterparty: Async>
+    UnescrowTokenRegistrar<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
+    for MockChainComponents
+{
+    async fn register_unescrow_token(
+        chain: &MockChain<Chain, Counterparty>,
+        src_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
+        dst_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
+        src_app_id: &Tagged<Counterparty, Chain, MockAppId>,
+        dst_app_id: &Tagged<Chain, Counterparty, MockAppId>,
+        amount: &MockAmount<Chain, Counterparty>,
+    ) -> Result<(), String> {
+        let mut lock = chain.pending_state.lock().await;
+        let state = lock.mock_chain_state_mut();
+
+        let quantity = state
+            .escrow_balances
+            .entry((
+                dst_channel_id.clone(),
+                src_channel_id.clone(),
+                dst_app_id.clone(),
+                src_app_id.clone(),
+                amount.denom.clone(),
+            ))
+            .or_insert_with(Default::default);
+
+        quantity.value = quantity
+            .value
+            .checked_sub(amount.quantity.value)
+            .ok_or_else(|| "unescrow amount exceeded".to_owned())?;
+
+        Ok(())
+    }
+}
+
+impl<Chain: Async, Counterparty: Async>
+    EscrowedTokenUpdater<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, Decrease>
+    for MockChainComponents
+{
+    async fn update_escrowed_token(
+        chain: &MockChain<Chain, Counterparty>,
+        mode: Decrease,
+        local_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
+        counterparty_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
+        local_app_id: &Tagged<Chain, Counterparty, MockAppId>,
+        counterparty_app_id: &Tagged<Counterparty, Chain, MockAppId>,
+        amount: &MockAmount<Chain, Counterparty>,
+    ) -> Result<(), String> {
+        todo!()
+    }
+}

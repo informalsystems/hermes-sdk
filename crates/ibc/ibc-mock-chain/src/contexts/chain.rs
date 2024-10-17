@@ -108,6 +108,16 @@ pub struct MockChainState<Chain: Async, Counterparty: Async> {
             IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>,
         >,
     >,
+    pub escrow_balances: BTreeMap<
+        (
+            Tagged<Chain, Counterparty, MockChannelId>,
+            Tagged<Counterparty, Chain, MockChannelId>,
+            Tagged<Chain, Counterparty, MockAppId>,
+            Tagged<Counterparty, Chain, MockAppId>,
+            MockDenom<Chain, Counterparty>,
+        ),
+        MockQuantity,
+    >,
     pub balances: BTreeMap<
         MockDenom<Chain, Counterparty>,
         BTreeMap<Tagged<Chain, Counterparty, MockAddress>, MockQuantity>,
@@ -152,6 +162,7 @@ impl<Chain: Async, Counterparty: Async> Clone for MockChainState<Chain, Counterp
             consensus_states: self.consensus_states.clone(),
             received_packets: self.received_packets.clone(),
             sent_packets: self.sent_packets.clone(),
+            escrow_balances: self.escrow_balances.clone(),
             balances: self.balances.clone(),
         }
     }
@@ -165,6 +176,7 @@ impl<Chain: Async, Counterparty: Async> Default for MockChainState<Chain, Counte
             consensus_states: Default::default(),
             received_packets: Default::default(),
             sent_packets: Default::default(),
+            escrow_balances: Default::default(),
             balances: Default::default(),
         }
     }

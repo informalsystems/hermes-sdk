@@ -11,7 +11,7 @@ use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadH
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 
-use crate::traits::escrow_registry::lookup::CanLookupEscrowedToken;
+use crate::traits::escrow_registry::lookup::CanRegisterUnescrowToken;
 use crate::traits::escrow_registry::update::{CanUpdateEscrowedToken, Decrease};
 use crate::traits::fields::payload_data::receiver::HasIbcTransferReceiver;
 use crate::traits::fields::payload_data::unescrow_amount::HasPayloadUnescrowAmount;
@@ -37,7 +37,7 @@ where
     Chain: HasAmountDenom
         + HasAmountQuantity
         + CanTransferToken<Unescrow>
-        + CanLookupEscrowedToken<Counterparty>
+        + CanRegisterUnescrowToken<Counterparty>
         + CanUpdateEscrowedToken<Counterparty, Decrease>
         + for<'a> CanRaiseError<UnescrowAmountExceeded<'a, Chain, Counterparty>>,
     Counterparty: HasAmountDenom
@@ -64,42 +64,17 @@ where
         let receiver = Counterparty::ibc_transfer_receiver(payload_data);
         let amount = Counterparty::payload_unescrow_amount(payload_data);
 
-        let denom = Chain::amount_denom(amount);
-        let quantity = Chain::amount_quantity(amount);
-
-        let total_escrowed_quantity = chain
-            .lookup_escrowed_token(
-                src_channel_id,
-                dst_channel_id,
-                src_app_id,
-                dst_app_id,
-                denom,
-            )
-            .await?
-            .unwrap_or_default();
-
-        if quantity > &total_escrowed_quantity {
-            return Err(Chain::raise_error(UnescrowAmountExceeded {
-                amount,
-                src_channel_id,
-                dst_channel_id,
-                src_app_id,
-                dst_app_id,
-            }));
-        }
-
-        chain.transfer_token(Unescrow, receiver, amount).await?;
-
         chain
-            .update_escrowed_token(
-                Decrease,
-                dst_channel_id,
+            .register_unescrow_token(
                 src_channel_id,
-                dst_app_id,
+                dst_channel_id,
                 src_app_id,
+                dst_app_id,
                 amount,
             )
             .await?;
+
+        chain.transfer_token(Unescrow, receiver, amount).await?;
 
         Ok(())
     }
