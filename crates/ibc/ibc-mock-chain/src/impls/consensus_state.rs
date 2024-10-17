@@ -11,11 +11,10 @@ use crate::types::client_id::MockClientId;
 use crate::types::height::MockHeight;
 use crate::types::tagged::Tagged;
 
-impl<Chain: Async, Counterparty: Async>
-    ProvideConsensusStateType<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>
+impl<A: Async, B: Async, Counterparty> ProvideConsensusStateType<MockChain<A, B>, Counterparty>
     for MockChainComponents
 {
-    type ConsensusState = Arc<MockChainState<Chain, Counterparty>>;
+    type ConsensusState = Arc<MockChainState<A, B>>;
 }
 
 impl<Chain: Async, Counterparty: Async>

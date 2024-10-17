@@ -29,6 +29,8 @@ use hermes_ibc_components::traits::fields::payload::data::HasPayloadData;
 use hermes_ibc_components::traits::fields::payload::header::HasPayloadHeader;
 use hermes_ibc_components::traits::handlers::incoming::packet::CanHandleIncomingPacket;
 use hermes_ibc_components::traits::handlers::incoming::payload::CanHandleIncomingPayload;
+use hermes_ibc_components::traits::queries::consensus_state::CanQueryConsensusState;
+use hermes_ibc_components::traits::queries::recv_packet_commitment::CanQueryHasPacketReceived;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::commitment::path::HasCommitmentPathType;
 use hermes_ibc_components::traits::types::commitment::proof::HasCommitmentProofType;
@@ -261,6 +263,8 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + CanHandleIncomingPayload<MockChainB, IbcTransferApp>
     + CanHandleIncomingPayload<MockChainB, AnyApp>
     + CanHandleIncomingPacket<MockChainB>
+    + CanQueryHasPacketReceived<MockChainB>
+    + CanQueryConsensusState<MockChainB>
 {
 }
 

@@ -1,4 +1,4 @@
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MockNonce {
     NonceA,
     NonceB,
