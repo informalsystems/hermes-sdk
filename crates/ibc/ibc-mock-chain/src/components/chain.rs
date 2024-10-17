@@ -12,6 +12,7 @@ use hermes_chain_type_components::traits::types::commitment_proof::CommitmentPro
 use hermes_chain_type_components::traits::types::denom::DenomTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
+use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
 use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent;
 use hermes_ibc_components::components::chain::IncomingPacketHandlerComponent;
 use hermes_ibc_components::impls::handlers::incoming::packet::payloads::HandleIncomingPacketPayloads;
@@ -63,6 +64,7 @@ define_components! {
             HeightTypeComponent,
             AddressTypeComponent,
             AppIdTypeComponent,
+            ClientIdTypeComponent,
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
             PacketTimeoutTypeComponent,

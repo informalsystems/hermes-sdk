@@ -1,3 +1,4 @@
+use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -80,6 +81,7 @@ where
         + HasConsensusStateFields<Chain>,
     App::Logger: CanLog<LevelInfo>,
     Args: Async,
+    Chain::ClientId: Display,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
         let chain_id = app.parse_arg(args, PhantomData::<symbol!("chain_id")>)?;
@@ -156,6 +158,7 @@ where
         + HasClientStateFields<Chain>
         + HasConsensusStateType<Chain>
         + HasConsensusStateFields<Chain>,
+    Chain::ClientId: Display,
 {
     async fn query_client_status(
         &self,

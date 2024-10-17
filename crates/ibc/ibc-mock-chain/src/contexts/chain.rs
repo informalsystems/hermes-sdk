@@ -15,6 +15,7 @@ use hermes_chain_type_components::traits::types::commitment_proof::HasCommitment
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::HasConsensusStateType;
 use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
@@ -205,6 +206,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasQuantityType<Quantity = MockQuantity>
     + HasCommitmentProofType<CommitmentProof = Tagged<ChainA, ChainB, MockCommitmentProof>>
     + HasAppIdType<MockChainB, AppId = Tagged<ChainA, ChainB, MockAppId>>
+    + HasClientIdType<MockChainB, ClientId = Tagged<ChainA, ChainB, MockClientId>>
     + HasChannelIdType<MockChainB, ChannelId = Tagged<ChainA, ChainB, MockChannelId>>
     + HasPacketTimeoutType<MockChainB, PacketTimeout = Tagged<ChainA, ChainB, MockHeight>>
     + HasPacketNonceType<MockChainB, PacketNonce = Tagged<ChainA, ChainB, MockNonce>>
