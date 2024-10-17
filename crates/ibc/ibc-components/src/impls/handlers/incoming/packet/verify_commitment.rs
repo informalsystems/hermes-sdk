@@ -10,6 +10,7 @@ use crate::traits::commitment::verify::value::CanVerifyValueCommitment;
 use crate::traits::fields::commitment::proof_height::HasCommitmentProofHeight;
 use crate::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
+use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::client_id::CanQueryClientIdFromChannelId;
 use crate::traits::queries::consensus_state::CanQueryConsensusState;
@@ -26,6 +27,7 @@ where
         + HasCommitmentProofHeight
         + HasPacketHeader<Chain>
         + HasPacketChannelIds<Chain>
+        + HasPacketNonce<Chain>
         + HasConsensusStateType<Chain>
         + CanVerifyValueCommitment<Chain>
         + CanBuildSendPacketCommitmentPath<Chain>
@@ -37,18 +39,25 @@ where
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
     ) -> Result<(), Chain::Error> {
-        let header = Counterparty::packet_header(packet);
-        let channel_id = Counterparty::packet_dst_channel_id(header);
+        let packet_header = Counterparty::packet_header(packet);
+
+        let src_channel_id = Counterparty::packet_src_channel_id(packet_header);
+        let dst_channel_id = Counterparty::packet_dst_channel_id(packet_header);
+        let nonce = Counterparty::packet_nonce(&packet);
+
         let proof_height = Counterparty::commitment_proof_height(send_proof);
 
-        let client_id = chain.query_client_id_from_channel_id(channel_id).await?;
+        let client_id = chain
+            .query_client_id_from_channel_id(dst_channel_id)
+            .await?;
 
         let consensus_state = chain
             .query_consensus_state(&client_id, proof_height)
             .await?;
 
         let commitment_path =
-            Counterparty::build_send_packet_commitment_path(header).map_err(Chain::raise_error)?;
+            Counterparty::build_send_packet_commitment_path(src_channel_id, dst_channel_id, nonce)
+                .map_err(Chain::raise_error)?;
 
         let commitment_value =
             Counterparty::build_send_packet_commitment_value(packet).map_err(Chain::raise_error)?;

@@ -1,14 +1,22 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
 use crate::traits::types::commitment::path::HasCommitmentPathType;
-use crate::traits::types::packet::header::HasPacketHeaderType;
+use crate::traits::types::packet::nonce::HasPacketNonceType;
 
 #[derive_component(SendPacketCommitmentPathBuilderComponent, SendPacketCommitmentPathBuilder<Chain>)]
 pub trait CanBuildSendPacketCommitmentPath<Counterparty>:
-    HasPacketHeaderType<Counterparty> + HasCommitmentPathType + HasErrorType
+    HasChannelIdType<Counterparty>
+    + HasPacketNonceType<Counterparty>
+    + HasCommitmentPathType
+    + HasErrorType
+where
+    Counterparty: HasChannelIdType<Self>,
 {
     // Note: this may be called by the counterparty chain, thus the lack of access to &self.
     fn build_send_packet_commitment_path(
-        packet_header: &Self::PacketHeader,
+        src_channel_id: &Self::ChannelId,
+        dst_channel_id: &Counterparty::ChannelId,
+        nonce: &Self::PacketNonce,
     ) -> Result<Self::CommitmentPath, Self::Error>;
 }

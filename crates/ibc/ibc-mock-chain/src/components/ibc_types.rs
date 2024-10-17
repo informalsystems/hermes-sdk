@@ -10,7 +10,7 @@ use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComp
 use crate::types::address::MockAddress;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
-use crate::types::commitment_proof::MockCommitmentProof;
+use crate::types::commitment::proof::MockCommitmentProof;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
 
