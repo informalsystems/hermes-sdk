@@ -15,6 +15,7 @@ use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeC
 use hermes_chain_type_components::traits::types::ibc::client_id::ClientIdTypeComponent;
 use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent;
 use hermes_ibc_components::components::chain::IncomingPacketHandlerComponent;
+use hermes_ibc_components::impls::handlers::incoming::packet::commit::CommitReceivePacket;
 use hermes_ibc_components::impls::handlers::incoming::packet::payloads::HandleIncomingPacketPayloads;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
@@ -120,6 +121,6 @@ define_components! {
         IncomingPayloadHandlerComponent:
             UseDelegate<MockIncomingPayloadHandlers>,
         IncomingPacketHandlerComponent:
-            HandleIncomingPacketPayloads<AnyApp>,
+            CommitReceivePacket<HandleIncomingPacketPayloads<AnyApp>>,
     }
 }

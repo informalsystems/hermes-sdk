@@ -4,9 +4,9 @@ use core::marker::PhantomData;
 use cgp::prelude::*;
 
 // use crate::impls::handlers::incoming::packet::error_ack::WrapHandlerErrorAsAck;
+use crate::impls::handlers::incoming::packet::commit::CommitReceivePacket;
 use crate::impls::handlers::incoming::packet::no_replay::DisallowDoubleReceive;
 use crate::impls::handlers::incoming::packet::payloads::HandleIncomingPacketPayloads;
-use crate::impls::handlers::incoming::packet::store_receive::StoreReceivePacket;
 use crate::impls::handlers::incoming::packet::timeout::DisallowTimedOutIncomingPacket;
 use crate::impls::handlers::incoming::packet::verify_commitment::VerifySendPacketCommitmentProof;
 pub use crate::traits::handlers::incoming::packet::IncomingPacketHandlerComponent;
@@ -20,7 +20,7 @@ delegate_components! {
             VerifySendPacketCommitmentProof<
                 DisallowDoubleReceive<
                     DisallowTimedOutIncomingPacket<
-                        StoreReceivePacket<
+                        CommitReceivePacket<
                             HandleIncomingPacketPayloads<App>
                         >
                     >

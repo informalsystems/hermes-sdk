@@ -11,10 +11,10 @@ use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 
-pub struct StoreReceivePacket<InHandler>(pub PhantomData<InHandler>);
+pub struct CommitReceivePacket<InHandler>(pub PhantomData<InHandler>);
 
 impl<Chain, Counterparty, InHandler> IncomingPacketHandler<Chain, Counterparty>
-    for StoreReceivePacket<InHandler>
+    for CommitReceivePacket<InHandler>
 where
     Chain: CanStoreCommitment
         + HasChannelIdType<Counterparty>
