@@ -11,6 +11,7 @@ use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 use hermes_chain_type_components::traits::types::amount::HasAmountType;
+use hermes_chain_type_components::traits::types::commitment_proof::HasCommitmentProofType;
 use hermes_chain_type_components::traits::types::denom::HasDenomType;
 use hermes_chain_type_components::traits::types::height::HasHeightType;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
@@ -18,9 +19,13 @@ use hermes_chain_type_components::traits::types::quantity::HasQuantityType;
 use hermes_ibc_components::traits::fields::message::app_id::HasIbcMessageAppIds;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacketChannelIds;
 use hermes_ibc_components::traits::fields::packet::header::timeout::HasPacketTimeout;
+use hermes_ibc_components::traits::fields::packet::packet::header::HasPacketHeader;
 use hermes_ibc_components::traits::fields::packet::packet::nonce::HasPacketNonce;
 use hermes_ibc_components::traits::fields::packet::packet::payloads::HasPacketPayloads;
 use hermes_ibc_components::traits::fields::payload::app_id::HasPayloadAppIds;
+use hermes_ibc_components::traits::fields::payload::data::HasPayloadData;
+use hermes_ibc_components::traits::fields::payload::header::HasPayloadHeader;
+use hermes_ibc_components::traits::handlers::incoming::packet::CanHandleIncomingPacket;
 use hermes_ibc_components::traits::handlers::incoming::payload::CanHandleIncomingPayload;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderType;
@@ -57,6 +62,7 @@ use crate::types::amount::MockAmount;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
 use crate::types::client_id::MockClientId;
+use crate::types::commitment_proof::MockCommitmentProof;
 use crate::types::denom::MockDenom;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
@@ -192,6 +198,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + HasDenomType<Denom = MockDenom<ChainA, ChainB>>
     + HasAmountType<Amount = MockAmount<ChainA, ChainB>>
     + HasQuantityType<Quantity = MockQuantity>
+    + HasCommitmentProofType<CommitmentProof = Tagged<ChainA, ChainB, MockCommitmentProof>>
     + HasAppIdType<MockChainB, AppId = Tagged<ChainA, ChainB, MockAppId>>
     + HasChannelIdType<MockChainB, ChannelId = Tagged<ChainA, ChainB, MockChannelId>>
     + HasPacketTimeoutType<MockChainB, PacketTimeout = Tagged<ChainA, ChainB, MockHeight>>
@@ -214,11 +221,14 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
         MockChainB,
         IbcTransferUnescrowApp,
         PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
-    > + HasPacketChannelIds<MockChainB>
+    > + HasPacketHeader<MockChainB>
+    + HasPacketChannelIds<MockChainB>
     + HasPacketPayloads<MockChainB>
     + HasPacketNonce<MockChainB>
     + HasPacketTimeout<MockChainB>
+    + HasPayloadHeader<MockChainB>
     + HasPayloadAppIds<MockChainB>
+    + HasPayloadData<MockChainB, AnyApp>
     + HasIbcMessageAppIds<MockChainB>
     + HasAmountDenom
     + HasAmountQuantity
@@ -234,6 +244,7 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + CanHandleIncomingPayload<MockChainB, IbcTransferUnescrowApp>
     + CanHandleIncomingPayload<MockChainB, IbcTransferApp>
     + CanHandleIncomingPayload<MockChainB, AnyApp>
+    + CanHandleIncomingPacket<MockChainB>
 {
 }
 

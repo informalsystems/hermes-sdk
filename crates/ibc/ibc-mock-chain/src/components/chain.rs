@@ -8,16 +8,22 @@ use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGett
 use hermes_chain_type_components::traits::fields::amount::quantity::AmountQuantityGetterComponent;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
 use hermes_chain_type_components::traits::types::amount::AmountTypeComponent;
+use hermes_chain_type_components::traits::types::commitment_proof::CommitmentProofTypeComponent;
 use hermes_chain_type_components::traits::types::denom::DenomTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent;
+use hermes_ibc_components::components::chain::IncomingPacketHandlerComponent;
+use hermes_ibc_components::impls::handlers::incoming::packet::payloads::HandleIncomingPacketPayloads;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::timeout::PacketTimeoutGetterComponent;
+use hermes_ibc_components::traits::fields::packet::packet::header::PacketHeaderGetterComponent;
 use hermes_ibc_components::traits::fields::packet::packet::nonce::PacketNonceGetterComponent;
 use hermes_ibc_components::traits::fields::packet::packet::payloads::PacketPayloadsGetterComponent;
 use hermes_ibc_components::traits::fields::payload::app_id::PayloadAppIdGetterComponent;
+use hermes_ibc_components::traits::fields::payload::data::PayloadDataGetterComponent;
+use hermes_ibc_components::traits::fields::payload::header::PayloadHeaderGetterComponent;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::message_header::IbcMessageHeaderTypeComponent;
@@ -56,6 +62,7 @@ define_components! {
             ChannelIdTypeComponent,
             PacketNonceTypeComponent,
             PacketTimeoutTypeComponent,
+            CommitmentProofTypeComponent,
         ]:
             WithProvider<UseTaggedType<UseDelegatedType<MockIbcChainTypes>>>,
         ErrorTypeComponent:
@@ -84,11 +91,14 @@ define_components! {
         PayloadDataTypeComponent:
             UseDelegate<MockPayloadDataTypes>,
         [
+            PacketHeaderGetterComponent,
             PacketChannelIdGetterComponent,
             PacketNonceGetterComponent,
             PacketTimeoutGetterComponent,
             PacketPayloadsGetterComponent,
+            PayloadHeaderGetterComponent,
             PayloadAppIdGetterComponent,
+            PayloadDataGetterComponent,
             IbcMessageAppIdGetterComponent,
             IbcTransferReceiverGetterComponent,
             PayloadMintAmountGetterComponent,
@@ -99,5 +109,7 @@ define_components! {
             RaiseDebugString,
         IncomingPayloadHandlerComponent:
             UseDelegate<MockIncomingPayloadHandlers>,
+        IncomingPacketHandlerComponent:
+            HandleIncomingPacketPayloads<AnyApp>,
     }
 }

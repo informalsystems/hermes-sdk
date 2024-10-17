@@ -1,5 +1,6 @@
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::address::AddressTypeComponent;
+use hermes_chain_type_components::traits::types::commitment_proof::CommitmentProofTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::ibc::channel_id::ChannelIdTypeComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
@@ -9,6 +10,7 @@ use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComp
 use crate::types::address::MockAddress;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
+use crate::types::commitment_proof::MockCommitmentProof;
 use crate::types::height::MockHeight;
 use crate::types::nonce::MockNonce;
 
@@ -20,5 +22,6 @@ define_components! {
         ChannelIdTypeComponent: MockChannelId,
         PacketNonceTypeComponent: MockNonce,
         PacketTimeoutTypeComponent: MockHeight,
+        CommitmentProofTypeComponent: MockCommitmentProof,
     }
 }
