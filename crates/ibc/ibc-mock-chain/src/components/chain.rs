@@ -16,6 +16,7 @@ use hermes_chain_type_components::traits::types::quantity::QuantityTypeComponent
 use hermes_ibc_components::components::chain::IncomingPacketHandlerComponent;
 use hermes_ibc_components::impls::handlers::incoming::packet::commit::CommitReceivePacket;
 use hermes_ibc_components::impls::handlers::incoming::packet::payloads::HandleIncomingPacketPayloads;
+use hermes_ibc_components::impls::handlers::incoming::packet::verify_commitment::VerifySendPacketCommitmentProof;
 use hermes_ibc_components::traits::fields::message::app_id::IbcMessageAppIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::channel_id::PacketChannelIdGetterComponent;
 use hermes_ibc_components::traits::fields::packet::header::timeout::PacketTimeoutGetterComponent;
@@ -119,6 +120,10 @@ define_components! {
         IncomingPayloadHandlerComponent:
             UseDelegate<MockIncomingPayloadHandlers>,
         IncomingPacketHandlerComponent:
-            CommitReceivePacket<HandleIncomingPacketPayloads<AnyApp>>,
+            VerifySendPacketCommitmentProof<
+                CommitReceivePacket<
+                    HandleIncomingPacketPayloads<AnyApp>
+                >
+            >,
     }
 }
