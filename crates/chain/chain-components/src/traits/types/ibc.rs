@@ -5,16 +5,15 @@
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-
-use crate::traits::types::chain::HasChainTypes;
-use crate::traits::types::height::HasHeightType;
-use crate::traits::types::message::HasMessageType;
-
 pub use hermes_chain_type_components::traits::types::ibc::channel_id::*;
 pub use hermes_chain_type_components::traits::types::ibc::client_id::*;
 pub use hermes_chain_type_components::traits::types::ibc::connection_id::*;
 pub use hermes_chain_type_components::traits::types::ibc::port_id::*;
 pub use hermes_chain_type_components::traits::types::ibc::sequence::*;
+
+use crate::traits::types::chain::HasChainTypes;
+use crate::traits::types::height::HasHeightType;
+use crate::traits::types::message::HasMessageType;
 
 /**
    The abstract types for a chain context when it is used for IBC

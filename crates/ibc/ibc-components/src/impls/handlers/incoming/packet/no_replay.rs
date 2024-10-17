@@ -1,8 +1,6 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
-use crate::types::tags::commitment::send::SendPacket;
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::types::ibc::channel_id::HasChannelIdType;
 
@@ -11,8 +9,10 @@ use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::packet::packet::nonce::HasPacketNonce;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::recv_packet_commitment::CanQueryHasPacketReceived;
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::nonce::HasPacketNonceType;
 use crate::traits::types::packet::packet::HasPacketType;
+use crate::types::tags::commitment::send::SendPacket;
 
 pub struct DisallowDoubleReceive<InHandler>(pub PhantomData<InHandler>);
 

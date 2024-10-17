@@ -1,7 +1,5 @@
 use core::marker::PhantomData;
 
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
-use crate::types::tags::commitment::send::SendPacket;
 use cgp::prelude::HasErrorType;
 
 use crate::traits::fields::packet::packet::header::HasPacketHeader;
@@ -10,7 +8,9 @@ use crate::traits::fields::payload::data::HasPayloadData;
 use crate::traits::fields::payload::header::HasPayloadHeader;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::handlers::incoming::payload::CanHandleIncomingPayload;
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::packet::HasPacketType;
+use crate::types::tags::commitment::send::SendPacket;
 
 pub struct HandleIncomingPacketPayloads<App>(pub PhantomData<App>);
 

@@ -1,7 +1,7 @@
+use alloc::boxed::Box;
 use core::cmp::Ordering;
 use core::fmt::{Debug, Display};
 
-use alloc::boxed::Box;
 use cgp::core::Async;
 use hermes_chain_type_components::traits::types::denom::ProvideDenomType;
 

@@ -1,9 +1,9 @@
-use core::marker::PhantomData;
-
 use alloc::boxed::Box;
 use alloc::collections::btree_map::BTreeMap;
 use alloc::string::String;
 use alloc::sync::Arc;
+use core::marker::PhantomData;
+
 use cgp::prelude::*;
 use futures::lock::Mutex;
 use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;

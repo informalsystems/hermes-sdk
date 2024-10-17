@@ -1,6 +1,5 @@
-use core::marker::PhantomData;
-
 use alloc::vec::Vec;
+use core::marker::PhantomData;
 
 use crate::traits::fields::caller::HasCaller;
 use crate::traits::fields::payload::header::HasPayloadHeader;

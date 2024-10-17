@@ -1,6 +1,7 @@
 use alloc::borrow::ToOwned;
 use alloc::string::String;
 use alloc::sync::Arc;
+
 use cgp::core::Async;
 use hermes_chain_type_components::traits::types::ibc::consensus_state::ProvideConsensusStateType;
 use hermes_ibc_components::traits::queries::consensus_state::ConsensusStateQuerier;

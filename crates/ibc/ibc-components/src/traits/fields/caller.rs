@@ -1,5 +1,4 @@
 use cgp::prelude::*;
-
 use hermes_chain_type_components::traits::types::address::HasAddressType;
 
 /**

@@ -1,5 +1,3 @@
-use crate::traits::types::commitment::proof::HasCommitmentProofType;
-use crate::types::tags::commitment::send::SendPacket;
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
@@ -11,8 +9,10 @@ use crate::traits::fields::packet::packet::header::HasPacketHeader;
 use crate::traits::fields::timeout::CanCompareTimeoutTime;
 use crate::traits::handlers::incoming::packet::IncomingPacketHandler;
 use crate::traits::queries::time::CanQueryCurrentTime;
+use crate::traits::types::commitment::proof::HasCommitmentProofType;
 use crate::traits::types::packet::packet::HasPacketType;
 use crate::traits::types::packet::timeout::HasPacketTimeoutType;
+use crate::types::tags::commitment::send::SendPacket;
 
 pub struct DisallowTimedOutIncomingPacket<InHandler>(pub PhantomData<InHandler>);
 

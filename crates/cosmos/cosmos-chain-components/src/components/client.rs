@@ -128,9 +128,8 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::timestamp::TimeMeasurerComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::{
-    TimeTypeComponent, TimeoutTypeComponent,
+    TimeMeasurerComponent, TimeTypeComponent, TimeoutTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
