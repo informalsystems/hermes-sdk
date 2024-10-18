@@ -8,8 +8,8 @@ use hermes_ibc_components::traits::fields::packet::header::channel_id::HasPacket
 use hermes_ibc_components::traits::handlers::outgoing::message::IbcMessageHandler;
 use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 
-use crate::traits::builders::mint::CanBuildOutgoingMintPayload;
-use crate::traits::builders::unescrow::CanBuildOutgoingUnescrowPayload;
+use crate::traits::builders::mint::CanBuildMintPayload;
+use crate::traits::builders::unescrow::CanBuildUnescrowPayload;
 use crate::traits::escrow_registry::escrow::CanRegisterEscrowToken;
 use crate::traits::fields::message::amount::HasMessageTransferAmount;
 use crate::traits::mint_registry::lookup_outgoing::CanLookupOutgoingBurnToken;
@@ -29,8 +29,8 @@ where
         + CanTransferToken<Burn>
         + CanTransferToken<Escrow>
         + CanRegisterEscrowToken<Counterparty>
-        + CanBuildOutgoingMintPayload<Counterparty, App>
-        + CanBuildOutgoingUnescrowPayload<Counterparty, App>,
+        + CanBuildMintPayload<Counterparty, App>
+        + CanBuildUnescrowPayload<Counterparty, App>,
     Counterparty: HasChannelIdType<Chain> + HasAppIdType<Chain> + CanBuildAmount,
     Chain::Quantity: Clone + Into<Counterparty::Quantity>,
 {

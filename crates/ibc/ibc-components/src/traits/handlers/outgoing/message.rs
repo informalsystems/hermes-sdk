@@ -1,4 +1,4 @@
-use cgp::core::component::UseContext;
+use cgp::core::component::{UseContext, UseDelegate};
 use cgp::prelude::*;
 
 use crate::traits::types::message::HasIbcMessageType;
@@ -37,6 +37,29 @@ where
     ) -> Result<(Chain::PayloadHeader, Chain::PayloadData), Chain::Error> {
         chain
             .handle_ibc_message(packet_header, message_header, message)
+            .await
+    }
+}
+
+impl<Chain, Counterparty, App, Components> IbcMessageHandler<Chain, Counterparty, App>
+    for UseDelegate<Components>
+where
+    Chain: HasErrorType
+        + HasPacketHeaderType<Counterparty>
+        + HasIbcMessageHeaderType<Counterparty>
+        + HasIbcMessageType<Counterparty, App>
+        + HasPayloadHeaderType<Counterparty>
+        + HasPayloadDataType<Counterparty, App>,
+    Components: DelegateComponent<App>,
+    Components::Delegate: IbcMessageHandler<Chain, Counterparty, App>,
+{
+    async fn handle_ibc_message(
+        chain: &Chain,
+        packet_header: &Chain::PacketHeader,
+        message_header: &Chain::IbcMessageHeader,
+        message: &Chain::IbcMessage,
+    ) -> Result<(Chain::PayloadHeader, Chain::PayloadData), Chain::Error> {
+        Components::Delegate::handle_ibc_message(chain, packet_header, message_header, message)
             .await
     }
 }

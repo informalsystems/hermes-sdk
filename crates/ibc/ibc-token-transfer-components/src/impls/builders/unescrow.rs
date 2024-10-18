@@ -8,13 +8,13 @@ use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderTyp
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
-use crate::traits::builders::unescrow::OutgoingUnescrowPayloadBuilder;
+use crate::traits::builders::unescrow::UnescrowPayloadBuilder;
 use crate::traits::fields::message::receiver::HasMessageTransferReceiver;
 use crate::types::packet_data::unescrow::IbcTransferUnescrowPayloadData;
 
 pub struct BuildUnescrowPayload;
 
-impl<Chain, Counterparty, App> OutgoingUnescrowPayloadBuilder<Chain, Counterparty, App>
+impl<Chain, Counterparty, App> UnescrowPayloadBuilder<Chain, Counterparty, App>
     for BuildUnescrowPayload
 where
     Chain: HasPayloadHeaderType<Counterparty>

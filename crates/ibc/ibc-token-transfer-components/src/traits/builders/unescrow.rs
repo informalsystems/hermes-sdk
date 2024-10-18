@@ -5,8 +5,8 @@ use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderTyp
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
-#[derive_component(OutgoingUnescrowPayloadBuilderComponent, OutgoingUnescrowPayloadBuilder<Chain>)]
-pub trait CanBuildOutgoingUnescrowPayload<Counterparty, App>:
+#[derive_component(UnescrowPayloadBuilderComponent, UnescrowPayloadBuilder<Chain>)]
+pub trait CanBuildUnescrowPayload<Counterparty, App>:
     HasPayloadHeaderType<Counterparty>
     + HasPayloadDataType<Counterparty, App>
     + HasIbcMessageHeaderType<Counterparty>

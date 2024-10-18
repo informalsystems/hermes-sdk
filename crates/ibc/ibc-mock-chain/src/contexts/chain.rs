@@ -6,6 +6,8 @@ use core::marker::PhantomData;
 use hermes_ibc_components::traits::builders::packet::CanBuildPacket;
 use hermes_ibc_components::traits::handlers::outgoing::packet::CanSendPacket;
 use hermes_ibc_components::traits::nonce::CanAllocatePacketNonce;
+use hermes_ibc_components::traits::types::message::HasIbcMessageType;
+use hermes_ibc_token_transfer_components::types::message::IbcTransferMessage;
 
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -243,6 +245,10 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
         MockChainB,
         IbcTransferUnescrowApp,
         PayloadData = IbcTransferUnescrowPayloadData<MockChainA, MockChainB>,
+    > + HasIbcMessageType<
+        MockChainB,
+        IbcTransferApp,
+        IbcMessage = IbcTransferMessage<MockChainA, MockChainB>,
     > + HasCommitmentProofType<SendPacket, CommitmentProof = MockCommitmentProof<ChainA, ChainB>>
     + HasCommitmentPathType<SendPacket, CommitmentPath = MockSendPacketCommitmentPath<ChainA, ChainB>>
     + HasCommitmentPathType<

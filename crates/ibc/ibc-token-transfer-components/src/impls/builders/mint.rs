@@ -6,14 +6,13 @@ use hermes_ibc_components::traits::types::message_header::HasIbcMessageHeaderTyp
 use hermes_ibc_components::traits::types::payload::data::HasPayloadDataType;
 use hermes_ibc_components::traits::types::payload::header::HasPayloadHeaderType;
 
-use crate::traits::builders::mint::OutgoingMintPayloadBuilder;
+use crate::traits::builders::mint::MintPayloadBuilder;
 use crate::traits::fields::message::receiver::HasMessageTransferReceiver;
 use crate::types::packet_data::mint::IbcTransferMintPayloadData;
 
 pub struct BuildMintPayload;
 
-impl<Chain, Counterparty, App> OutgoingMintPayloadBuilder<Chain, Counterparty, App>
-    for BuildMintPayload
+impl<Chain, Counterparty, App> MintPayloadBuilder<Chain, Counterparty, App> for BuildMintPayload
 where
     Chain: HasPayloadHeaderType<Counterparty>
         + HasPayloadDataType<Counterparty, App>
