@@ -6,6 +6,7 @@ use hermes_chain_type_components::traits::fields::amount::denom::AmountDenomGett
 use hermes_chain_type_components::traits::fields::amount::quantity::AmountQuantityGetter;
 use hermes_chain_type_components::traits::types::amount::ProvideAmountType;
 
+use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 use crate::types::denom::MockDenom;
 use crate::types::quantity::MockQuantity;
@@ -15,16 +16,14 @@ pub struct MockAmount<Chain, Counterparty> {
     pub denom: MockDenom<Chain, Counterparty>,
 }
 
-pub struct UseMockAmountType;
-
 impl<Chain: Async, Counterparty: Async> ProvideAmountType<MockChain<Chain, Counterparty>>
-    for UseMockAmountType
+    for MockChainComponents
 {
     type Amount = MockAmount<Chain, Counterparty>;
 }
 
 impl<Chain: Async, Counterparty: Async> AmountDenomGetter<MockChain<Chain, Counterparty>>
-    for UseMockAmountType
+    for MockChainComponents
 {
     fn amount_denom(amount: &MockAmount<Chain, Counterparty>) -> &MockDenom<Chain, Counterparty> {
         &amount.denom
@@ -32,7 +31,7 @@ impl<Chain: Async, Counterparty: Async> AmountDenomGetter<MockChain<Chain, Count
 }
 
 impl<Chain: Async, Counterparty: Async> AmountQuantityGetter<MockChain<Chain, Counterparty>>
-    for UseMockAmountType
+    for MockChainComponents
 {
     fn amount_quantity(amount: &MockAmount<Chain, Counterparty>) -> &MockQuantity {
         &amount.quantity
@@ -40,7 +39,7 @@ impl<Chain: Async, Counterparty: Async> AmountQuantityGetter<MockChain<Chain, Co
 }
 
 impl<Chain: Async, Counterparty: Async> AmountBuilder<MockChain<Chain, Counterparty>>
-    for UseMockAmountType
+    for MockChainComponents
 {
     fn build_amount(
         denom: &MockDenom<Chain, Counterparty>,

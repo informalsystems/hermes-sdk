@@ -5,6 +5,7 @@ use core::fmt::{Debug, Display};
 use cgp::core::Async;
 use hermes_chain_type_components::traits::types::denom::ProvideDenomType;
 
+use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 use crate::types::app_id::MockAppId;
 use crate::types::channel_id::MockChannelId;
@@ -30,10 +31,8 @@ pub struct MockIbcDenom<Chain, Counterparty> {
     pub src_denom: Box<MockDenom<Counterparty, Chain>>,
 }
 
-pub struct UseMockDenomType;
-
 impl<Chain: Async, Counterparty: Async> ProvideDenomType<MockChain<Chain, Counterparty>>
-    for UseMockDenomType
+    for MockChainComponents
 {
     type Denom = MockDenom<Chain, Counterparty>;
 }

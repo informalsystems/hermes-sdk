@@ -4,13 +4,11 @@ use hermes_ibc_components::types::packet::IbcPacket;
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
 
+use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 
-pub struct UseMockCommitmentValue;
-
 impl<Chain: Async, Counterparty: Async>
-    ProvideCommitmentValueType<MockChain<Chain, Counterparty>, SendPacket>
-    for UseMockCommitmentValue
+    ProvideCommitmentValueType<MockChain<Chain, Counterparty>, SendPacket> for MockChainComponents
 {
     type CommitmentValue =
         IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>;
@@ -18,7 +16,7 @@ impl<Chain: Async, Counterparty: Async>
 
 impl<Chain: Async, Counterparty: Async>
     ProvideCommitmentValueType<MockChain<Chain, Counterparty>, ReceivePacket>
-    for UseMockCommitmentValue
+    for MockChainComponents
 {
     type CommitmentValue =
         IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>>;

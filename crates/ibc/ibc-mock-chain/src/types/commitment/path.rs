@@ -3,6 +3,7 @@ use hermes_ibc_components::traits::types::commitment::path::ProvideCommitmentPat
 use hermes_ibc_components::types::tags::commitment::receive::ReceivePacket;
 use hermes_ibc_components::types::tags::commitment::send::SendPacket;
 
+use crate::components::chain::MockChainComponents;
 use crate::contexts::chain::MockChain;
 use crate::types::channel_id::MockChannelId;
 use crate::types::nonce::MockNonce;
@@ -20,18 +21,15 @@ pub struct MockReceivePacketCommitmentPath<Chain, Counterparty> {
     pub nonce: Tagged<Counterparty, Chain, MockNonce>,
 }
 
-pub struct UseMockCommitmentPath;
-
 impl<Chain: Async, Counterparty: Async>
-    ProvideCommitmentPathType<MockChain<Chain, Counterparty>, SendPacket>
-    for UseMockCommitmentPath
+    ProvideCommitmentPathType<MockChain<Chain, Counterparty>, SendPacket> for MockChainComponents
 {
     type CommitmentPath = MockSendPacketCommitmentPath<Chain, Counterparty>;
 }
 
 impl<Chain: Async, Counterparty: Async>
     ProvideCommitmentPathType<MockChain<Chain, Counterparty>, ReceivePacket>
-    for UseMockCommitmentPath
+    for MockChainComponents
 {
     type CommitmentPath = MockReceivePacketCommitmentPath<Chain, Counterparty>;
 }
