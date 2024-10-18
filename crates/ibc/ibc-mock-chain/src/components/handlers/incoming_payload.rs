@@ -5,11 +5,11 @@ use hermes_ibc_token_transfer_components::types::tags::{
     IbcTransferApp, IbcTransferMintApp, IbcTransferUnescrowApp,
 };
 
-use crate::impls::handlers::incoming::HandleIncomingAnyPayloadData;
+use crate::impls::handlers::incoming::HandleMockAnyPayloadData;
 
 define_components! {
-    MockIncomingPayloadHandlers {
-        AnyApp: HandleIncomingAnyPayloadData,
+    MockPayloadHandlers {
+        AnyApp: HandleMockAnyPayloadData,
         [
             IbcTransferApp,
             IbcTransferMintApp,

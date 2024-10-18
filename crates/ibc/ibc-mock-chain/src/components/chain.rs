@@ -24,6 +24,7 @@ use hermes_ibc_components::traits::fields::payload::app_id::PayloadAppIdGetterCo
 use hermes_ibc_components::traits::fields::payload::data::PayloadDataGetterComponent;
 use hermes_ibc_components::traits::fields::payload::header::PayloadHeaderGetterComponent;
 use hermes_ibc_components::traits::handlers::incoming::payload::IncomingPayloadHandlerComponent;
+use hermes_ibc_components::traits::handlers::outgoing::message::IbcMessageHandlerComponent;
 use hermes_ibc_components::traits::handlers::outgoing::packet::PacketSenderComponent;
 use hermes_ibc_components::traits::types::app_id::AppIdTypeComponent;
 use hermes_ibc_components::traits::types::message::IbcMessageTypeComponent;
@@ -39,7 +40,8 @@ use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amo
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::IbcTransferReceiverGetterComponent;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::unescrow_amount::PayloadUnescrowAmountGetterComponent;
 
-use crate::components::handlers::incoming_payload::MockIncomingPayloadHandlers;
+use crate::components::handlers::incoming_payload::MockPayloadHandlers;
+use crate::components::handlers::outgoing_message::MockIbcMessageHandlers;
 use crate::components::ibc_message::MockIbcMessageTypes;
 use crate::components::ibc_types::MockIbcChainTypes;
 use crate::components::payload_data::MockPayloadDataTypes;
@@ -97,6 +99,8 @@ define_components! {
         ErrorRaiserComponent:
             RaiseDebugString,
         IncomingPayloadHandlerComponent:
-            UseDelegate<MockIncomingPayloadHandlers>,
+            UseDelegate<MockPayloadHandlers>,
+        IbcMessageHandlerComponent:
+            UseDelegate<MockIbcMessageHandlers>,
     }
 }

@@ -12,11 +12,11 @@ use hermes_ibc_token_transfer_components::types::tags::IbcTransferApp;
 use crate::contexts::chain::MockChain;
 use crate::types::packet_data::MockAnyPayloadData;
 
-pub struct HandleIncomingAnyPayloadData;
+pub struct HandleMockAnyPayloadData;
 
 impl<Chain: Async, Counterparty: Async>
     IncomingPayloadHandler<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>, AnyApp>
-    for HandleIncomingAnyPayloadData
+    for HandleMockAnyPayloadData
 {
     async fn handle_incoming_payload(
         chain: &MockChain<Chain, Counterparty>,

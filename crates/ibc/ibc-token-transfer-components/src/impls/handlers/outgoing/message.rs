@@ -15,9 +15,10 @@ use crate::traits::fields::message::amount::HasMessageTransferAmount;
 use crate::traits::mint_registry::lookup_outgoing::CanLookupOutgoingBurnToken;
 use crate::traits::token::transfer::{Burn, CanTransferToken, Escrow};
 
-pub struct SendIbcTransfer;
+pub struct HandleOutgoingIbcTransfer;
 
-impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App> for SendIbcTransfer
+impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App>
+    for HandleOutgoingIbcTransfer
 where
     Chain: HasPacketChannelIds<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
