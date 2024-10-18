@@ -2,6 +2,7 @@ use cgp::prelude::*;
 
 use crate::traits::types::app_id::HasAppIdType;
 use crate::traits::types::payload::header::ProvidePayloadHeaderType;
+use crate::types::message_header::IbcMessageHeader;
 
 #[derive(HasField)]
 pub struct IbcPayloadHeader<Chain, Counterparty>
@@ -51,4 +52,18 @@ where
     Chain: HasAppIdType<Counterparty, AppId: Eq>,
     Counterparty: HasAppIdType<Chain, AppId: Eq>,
 {
+}
+
+impl<Chain, Counterparty> From<IbcMessageHeader<Chain, Counterparty>>
+    for IbcPayloadHeader<Chain, Counterparty>
+where
+    Chain: HasAppIdType<Counterparty>,
+    Counterparty: HasAppIdType<Chain>,
+{
+    fn from(header: IbcMessageHeader<Chain, Counterparty>) -> Self {
+        Self {
+            src_app_id: header.src_app_id,
+            dst_app_id: header.dst_app_id,
+        }
+    }
 }

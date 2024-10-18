@@ -11,7 +11,7 @@ use hermes_ibc_components::traits::types::app_id::HasAppIdType;
 use crate::traits::builders::mint::CanBuildOutgoingMintPayload;
 use crate::traits::builders::unescrow::CanBuildOutgoingUnescrowPayload;
 use crate::traits::escrow_registry::escrow::CanRegisterEscrowToken;
-use crate::traits::fields::message::amount::HasMessageSendTransferAmount;
+use crate::traits::fields::message::amount::HasMessageTransferAmount;
 use crate::traits::mint_registry::lookup_outgoing::CanLookupOutgoingBurnToken;
 use crate::traits::token::transfer::{Burn, CanTransferToken, Escrow};
 
@@ -21,7 +21,7 @@ impl<Chain, Counterparty, App> IbcMessageHandler<Chain, Counterparty, App> for S
 where
     Chain: HasPacketChannelIds<Counterparty>
         + HasIbcMessageAppIds<Counterparty>
-        + HasMessageSendTransferAmount<Counterparty, App>
+        + HasMessageTransferAmount<Counterparty, App>
         + HasCaller
         + HasAmountDenom
         + HasAmountQuantity
@@ -46,7 +46,7 @@ where
         let src_app_id = Chain::ibc_message_src_app_id(message_header);
         let dst_app_id = Chain::ibc_message_dst_app_id(message_header);
 
-        let src_amount = Chain::message_send_transfer_amount(message);
+        let src_amount = Chain::message_transfer_amount(message);
         let src_denom = Chain::amount_denom(src_amount);
 
         let sender = chain.caller();
@@ -81,7 +81,7 @@ where
 
             chain.transfer_token(Escrow, sender, src_amount).await?;
 
-            chain.build_outgoing_mint_payload(message_header, message)
+            chain.build_outgoing_mint_payload(message_header, message, src_amount)
         }
     }
 }

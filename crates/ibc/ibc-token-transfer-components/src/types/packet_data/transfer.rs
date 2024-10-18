@@ -58,3 +58,25 @@ where
     Counterparty: HasAmountType<Amount: Eq> + HasAddressType<Address: Eq>,
 {
 }
+
+impl<Chain, Counterparty> From<IbcTransferMintPayloadData<Chain, Counterparty>>
+    for IbcTransferPayloadData<Chain, Counterparty>
+where
+    Chain: HasAmountType,
+    Counterparty: HasAmountType + HasAddressType,
+{
+    fn from(value: IbcTransferMintPayloadData<Chain, Counterparty>) -> Self {
+        Self::Mint(value)
+    }
+}
+
+impl<Chain, Counterparty> From<IbcTransferUnescrowPayloadData<Chain, Counterparty>>
+    for IbcTransferPayloadData<Chain, Counterparty>
+where
+    Chain: HasAmountType,
+    Counterparty: HasAmountType + HasAddressType,
+{
+    fn from(value: IbcTransferUnescrowPayloadData<Chain, Counterparty>) -> Self {
+        Self::Unescrow(value)
+    }
+}
