@@ -90,6 +90,8 @@ use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
 pub struct MockChain<Chain: Async, Counterparty: Async> {
+    pub current_caller: Mutex<MockAddress>,
+
     /// The current state of the mock chain is a mutable pointer to an immutable chain state
     pub current_state: Box<Mutex<Arc<dyn HasMockChainState<Chain, Counterparty>>>>,
 

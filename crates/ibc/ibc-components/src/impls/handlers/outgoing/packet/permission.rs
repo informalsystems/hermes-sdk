@@ -21,7 +21,7 @@ where
     InHandler: PacketSender<Chain, Counterparty>,
 {
     async fn send_packet(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Chain::PacketHeader,
         payloads: Vec<Chain::Payload>,
     ) -> Result<Chain::Packet, Chain::Error> {

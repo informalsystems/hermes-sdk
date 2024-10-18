@@ -15,7 +15,7 @@ pub trait CanSendPacket<Counterparty>:
     + HasErrorType
 {
     async fn send_packet(
-        &self,
+        &mut self,
         packet_header: &Self::PacketHeader,
         payloads: Vec<Self::Payload>,
     ) -> Result<Self::Packet, Self::Error>;

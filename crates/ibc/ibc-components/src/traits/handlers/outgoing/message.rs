@@ -18,7 +18,7 @@ pub trait CanHandleIbcMessage<Counterparty, App>:
     + HasPayloadDataType<Counterparty, App>
 {
     async fn handle_ibc_message(
-        &self,
+        &mut self,
         packet_header: &Self::PacketHeader,
         message_header: &Self::IbcMessageHeader,
         message: &Self::IbcMessage,
@@ -30,7 +30,7 @@ where
     Chain: CanHandleIbcMessage<Counterparty, App>,
 {
     async fn handle_ibc_message(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Chain::PacketHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,
@@ -54,7 +54,7 @@ where
     Components::Delegate: IbcMessageHandler<Chain, Counterparty, App>,
 {
     async fn handle_ibc_message(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Chain::PacketHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,

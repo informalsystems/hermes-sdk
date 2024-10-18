@@ -27,7 +27,7 @@ where
     InHandler: IbcMessageHandler<Chain, Counterparty, App>,
 {
     async fn handle_ibc_transaction(
-        chain: &Chain,
+        chain: &mut Chain,
         transaction: &Chain::IbcTransaction,
     ) -> Result<Chain::Packet, Chain::Error> {
         let packet_header = Chain::ibc_transcation_header(transaction);

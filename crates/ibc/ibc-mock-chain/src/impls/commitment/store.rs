@@ -17,7 +17,7 @@ impl<Chain: Async, Counterparty: Async>
     CommitmentStorage<MockChain<Chain, Counterparty>, SendPacket> for MockChainComponents
 {
     async fn store_commitment(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         commitment_path: &MockSendPacketCommitmentPath<Chain, Counterparty>,
         packet: &IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>,
     ) -> Result<(), String> {
@@ -46,7 +46,7 @@ impl<Chain: Async, Counterparty: Async>
     CommitmentStorage<MockChain<Chain, Counterparty>, ReceivePacket> for MockChainComponents
 {
     async fn store_commitment(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         commitment_path: &MockReceivePacketCommitmentPath<Chain, Counterparty>,
         packet: &IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>>,
     ) -> Result<(), String> {

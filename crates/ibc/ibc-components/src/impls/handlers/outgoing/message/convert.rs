@@ -38,17 +38,18 @@ where
         + HasEncoding<App>
         + CanRaiseError<ErrorOf<Chain::Encoding>>,
     InHandler: IbcMessageHandler<Chain, Counterparty, InApp>,
-    Chain::Encoding: CanConvert<AnyMessage, Message> + CanConvert<PayloadData, AnyPayloadData>,
+    Chain::Encoding:
+        CanConvert<AnyMessage, Message> + CanConvert<PayloadData, AnyPayloadData> + Clone,
     Message: Async,
     AnyMessage: Async,
 {
     async fn handle_ibc_message(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Chain::PacketHeader,
         message_header: &Chain::IbcMessageHeader,
         any_message: &AnyMessage,
     ) -> Result<(Chain::PayloadHeader, AnyPayloadData), Chain::Error> {
-        let encoding = chain.encoding();
+        let encoding = chain.encoding().clone();
 
         let message = encoding.convert(any_message).map_err(Chain::raise_error)?;
 

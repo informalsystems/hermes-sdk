@@ -26,7 +26,7 @@ where
         + HasPayloadData<Chain, App>,
 {
     async fn handle_incoming_packet(
-        chain: &Chain,
+        chain: &mut Chain,
         packet: &Counterparty::Packet,
         _send_proof: &Counterparty::CommitmentProof,
     ) -> Result<(), Chain::Error> {

@@ -28,7 +28,7 @@ where
     AnyPacketData: Async,
 {
     async fn handle_incoming_payload(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Counterparty::PacketHeader,
         payload_header: &Counterparty::PayloadHeader,
         raw_packet_data: &AnyPacketData,

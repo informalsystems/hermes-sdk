@@ -24,7 +24,7 @@ where
     InHandler: IncomingPacketHandler<Chain, Counterparty>,
 {
     async fn handle_incoming_packet(
-        chain: &Chain,
+        chain: &mut Chain,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
     ) -> Result<(), Chain::Error> {

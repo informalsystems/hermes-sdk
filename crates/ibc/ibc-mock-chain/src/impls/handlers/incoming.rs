@@ -19,7 +19,7 @@ impl<Chain: Async, Counterparty: Async>
     for HandleMockAnyPayloadData
 {
     async fn handle_incoming_payload(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         packet_header: &IbcPacketHeader<
             MockChain<Counterparty, Chain>,
             MockChain<Chain, Counterparty>,

@@ -36,7 +36,7 @@ where
     Chain::Quantity: Clone + Into<Counterparty::Quantity>,
 {
     async fn handle_ibc_message(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Chain::PacketHeader,
         message_header: &Chain::IbcMessageHeader,
         message: &Chain::IbcMessage,

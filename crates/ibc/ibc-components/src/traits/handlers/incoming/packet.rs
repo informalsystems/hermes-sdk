@@ -11,7 +11,7 @@ where
     Counterparty: HasCommitmentProofType<SendPacket> + HasPacketType<Self>,
 {
     async fn handle_incoming_packet(
-        &self,
+        &mut self,
         packet: &Counterparty::Packet,
         send_proof: &Counterparty::CommitmentProof,
     ) -> Result<(), Self::Error>;

@@ -9,7 +9,7 @@ pub trait CanHandleIbcTransaction<Counterparty>:
     HasErrorType + HasIbcTransactionType<Counterparty> + HasPacketType<Counterparty>
 {
     async fn handle_ibc_transaction(
-        &self,
+        &mut self,
         transaction: &Self::IbcTransaction,
     ) -> Result<Self::Packet, Self::Error>;
 }

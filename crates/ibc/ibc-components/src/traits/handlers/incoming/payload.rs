@@ -13,7 +13,7 @@ where
         HasPacketHeaderType<Self> + HasPayloadHeaderType<Self> + HasPayloadDataType<Self, App>,
 {
     async fn handle_incoming_payload(
-        &self,
+        &mut self,
         packet_header: &Counterparty::PacketHeader,
         payload_header: &Counterparty::PayloadHeader,
         payload_data: &Counterparty::PayloadData,
@@ -30,7 +30,7 @@ where
     Components::Delegate: IncomingPayloadHandler<Chain, Counterparty, App>,
 {
     async fn handle_incoming_payload(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Counterparty::PacketHeader,
         payload_header: &Counterparty::PayloadHeader,
         payload_data: &Counterparty::PayloadData,
@@ -52,7 +52,7 @@ where
         HasPacketHeaderType<Chain> + HasPayloadHeaderType<Chain> + HasPayloadDataType<Chain, App>,
 {
     async fn handle_incoming_payload(
-        chain: &Chain,
+        chain: &mut Chain,
         packet_header: &Counterparty::PacketHeader,
         payload_header: &Counterparty::PayloadHeader,
         payload_data: &Counterparty::PayloadData,
