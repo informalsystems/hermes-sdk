@@ -17,7 +17,7 @@ impl<Chain, Counterparty, App, Provider> MessageTransferAmountGetter<Chain, Coun
     for WithProvider<Provider>
 where
     Chain: HasAmountType + HasIbcMessageType<Counterparty, App>,
-    Provider: FieldGetter<Chain::IbcMessage, symbol!("transfer_amount"), Field = Chain::Amount>,
+    Provider: FieldGetter<Chain::IbcMessage, symbol!("amount"), Field = Chain::Amount>,
 {
     fn message_transfer_amount(message: &Chain::IbcMessage) -> &Chain::Amount {
         Provider::get_field(message, PhantomData)

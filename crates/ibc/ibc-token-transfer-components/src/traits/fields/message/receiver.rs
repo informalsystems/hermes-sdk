@@ -20,8 +20,7 @@ impl<Chain, Counterparty, App, Provider> MessageTransferAddressGetter<Chain, Cou
 where
     Chain: HasIbcMessageType<Counterparty, App>,
     Counterparty: HasAddressType,
-    Provider:
-        FieldGetter<Chain::IbcMessage, symbol!("transfer_amount"), Field = Counterparty::Address>,
+    Provider: FieldGetter<Chain::IbcMessage, symbol!("receiver"), Field = Counterparty::Address>,
 {
     fn message_transfer_receiver(message: &Chain::IbcMessage) -> &Counterparty::Address {
         Provider::get_field(message, PhantomData)

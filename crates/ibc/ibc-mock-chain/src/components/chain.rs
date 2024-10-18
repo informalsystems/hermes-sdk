@@ -1,6 +1,6 @@
 use alloc::string::String;
 
-use cgp::core::component::{UseDelegate, WithContext, WithProvider};
+use cgp::core::component::{UseDelegate, WithProvider};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::{UseDelegatedType, WithType};
 use cgp::prelude::*;
@@ -36,6 +36,11 @@ use hermes_ibc_components::traits::types::packet::timeout::PacketTimeoutTypeComp
 use hermes_ibc_components::traits::types::payload::data::PayloadDataTypeComponent;
 use hermes_ibc_components::traits::types::payload::header::PayloadHeaderTypeComponent;
 use hermes_ibc_components::traits::types::payload::payload::PayloadTypeComponent;
+use hermes_ibc_token_transfer_components::components::chain::IbcTokenTransferChainComponents;
+use hermes_ibc_token_transfer_components::traits::builders::mint::MintPayloadBuilderComponent;
+use hermes_ibc_token_transfer_components::traits::builders::unescrow::UnescrowPayloadBuilderComponent;
+use hermes_ibc_token_transfer_components::traits::fields::message::amount::MessageTransferAmountGetterComponent;
+use hermes_ibc_token_transfer_components::traits::fields::message::receiver::MessageTransferAddressGetterComponent;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::mint_amount::PayloadMintAmountGetterComponent;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::receiver::IbcTransferReceiverGetterComponent;
 use hermes_ibc_token_transfer_components::traits::fields::payload_data::unescrow_amount::PayloadUnescrowAmountGetterComponent;
@@ -94,8 +99,12 @@ define_components! {
             IbcTransferReceiverGetterComponent,
             PayloadMintAmountGetterComponent,
             PayloadUnescrowAmountGetterComponent,
+            MintPayloadBuilderComponent,
+            UnescrowPayloadBuilderComponent,
+            MessageTransferAddressGetterComponent,
+            MessageTransferAmountGetterComponent,
         ]:
-            WithContext,
+            IbcTokenTransferChainComponents,
         ErrorRaiserComponent:
             RaiseDebugString,
         IncomingPayloadHandlerComponent:

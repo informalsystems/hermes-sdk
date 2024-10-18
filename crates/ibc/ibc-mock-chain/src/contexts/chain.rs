@@ -4,9 +4,15 @@ use alloc::string::String;
 use alloc::sync::Arc;
 use core::marker::PhantomData;
 use hermes_ibc_components::traits::builders::packet::CanBuildPacket;
+use hermes_ibc_components::traits::handlers::outgoing::message::CanHandleIbcMessage;
 use hermes_ibc_components::traits::handlers::outgoing::packet::CanSendPacket;
 use hermes_ibc_components::traits::nonce::CanAllocatePacketNonce;
 use hermes_ibc_components::traits::types::message::HasIbcMessageType;
+use hermes_ibc_token_transfer_components::traits::builders::mint::CanBuildMintPayload;
+use hermes_ibc_token_transfer_components::traits::builders::unescrow::CanBuildUnescrowPayload;
+use hermes_ibc_token_transfer_components::traits::escrow_registry::escrow::CanRegisterEscrowToken;
+use hermes_ibc_token_transfer_components::traits::fields::message::amount::HasMessageTransferAmount;
+use hermes_ibc_token_transfer_components::traits::fields::message::receiver::HasMessageTransferReceiver;
 use hermes_ibc_token_transfer_components::types::message::IbcTransferMessage;
 
 use cgp::prelude::*;
@@ -62,7 +68,9 @@ use hermes_ibc_token_transfer_components::traits::fields::payload_data::unescrow
 use hermes_ibc_token_transfer_components::traits::mint_registry::lookup_incoming::CanLookupIncomingMintedToken;
 use hermes_ibc_token_transfer_components::traits::mint_registry::register::CanRegisterMintedToken;
 use hermes_ibc_token_transfer_components::traits::token::create::CanCreateToken;
-use hermes_ibc_token_transfer_components::traits::token::transfer::{CanTransferToken, Mint};
+use hermes_ibc_token_transfer_components::traits::token::transfer::{
+    Burn, CanTransferToken, Mint, Unescrow,
+};
 use hermes_ibc_token_transfer_components::types::packet_data::mint::IbcTransferMintPayloadData;
 use hermes_ibc_token_transfer_components::types::packet_data::transfer::IbcTransferPayloadData;
 use hermes_ibc_token_transfer_components::types::packet_data::unescrow::IbcTransferUnescrowPayloadData;
@@ -277,11 +285,14 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + CanBuildAmount
     + CanCreateToken<MockChainB>
     + CanTransferToken<Mint>
+    + CanTransferToken<Burn>
+    + CanTransferToken<Unescrow>
+    + CanTransferToken<Burn>
     + CanLookupIncomingMintedToken<MockChainB>
     + CanRegisterMintedToken<MockChainB>
+    + CanRegisterEscrowToken<MockChainB>
     + HasPayloadMintAmount<MockChainB, IbcTransferMintApp>
     + HasIbcTransferReceiver<MockChainB, IbcTransferMintApp>
-    + CanHandleIncomingPayload<MockChainB, IbcTransferMintApp>
     + HasPayloadUnescrowAmount<MockChainB, IbcTransferUnescrowApp>
     + CanHandleIncomingPayload<MockChainB, IbcTransferUnescrowApp>
     + CanHandleIncomingPayload<MockChainB, IbcTransferApp>
@@ -290,8 +301,14 @@ pub trait CanUseMockChain: HasErrorType<Error = String>
     + CanQueryHasPacketReceived<MockChainB>
     + CanQueryConsensusState<MockChainB>
     + CanAllocatePacketNonce<MockChainB>
+    + HasMessageTransferReceiver<MockChainB, IbcTransferApp>
+    + HasMessageTransferAmount<MockChainB, IbcTransferApp>
     + CanBuildPacket<MockChainB>
+    + CanBuildMintPayload<MockChainB, IbcTransferApp>
+    + CanBuildUnescrowPayload<MockChainB, IbcTransferApp>
     + CanSendPacket<MockChainB>
+    + CanHandleIncomingPayload<MockChainB, IbcTransferMintApp>
+    + CanHandleIbcMessage<MockChainB, IbcTransferApp>
 {
 }
 
