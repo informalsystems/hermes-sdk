@@ -92,11 +92,11 @@ use crate::types::tags::{ChainA, ChainB};
 pub struct MockChain<Chain: Async, Counterparty: Async> {
     pub current_caller: Mutex<MockAddress>,
 
-    /// The current state of the mock chain is a mutable pointer to an immutable chain state
-    pub current_state: Box<Mutex<Arc<dyn HasMockChainState<Chain, Counterparty>>>>,
+    /// The current state of the mock chain is a shared pointer to an immutable chain state
+    pub current_state: Arc<dyn HasMockChainState<Chain, Counterparty>>,
 
     /// The pending state of the mock chain is a mutable pointer to the chain state
-    pub pending_state: Box<Mutex<dyn HasMockChainState<Chain, Counterparty>>>,
+    pub pending_state: Box<dyn HasMockChainState<Chain, Counterparty>>,
 
     pub phantom: PhantomData<(Chain, Counterparty)>,
 }

@@ -63,7 +63,7 @@ where
             .await?;
 
         if let Some(dst_denom) = m_dst_denom {
-            chain.transfer_token(Burn, sender, src_amount).await?;
+            chain.transfer_token(Burn, &sender, src_amount).await?;
 
             let src_quantity = Chain::amount_quantity(src_amount);
             let dst_amount = Counterparty::build_amount(&dst_denom, &src_quantity.clone().into());
@@ -80,7 +80,7 @@ where
                 )
                 .await?;
 
-            chain.transfer_token(Escrow, sender, src_amount).await?;
+            chain.transfer_token(Escrow, &sender, src_amount).await?;
 
             chain.build_outgoing_mint_payload(message_header, message, src_amount)
         }

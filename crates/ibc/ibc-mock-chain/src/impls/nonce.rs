@@ -13,12 +13,11 @@ impl<Chain: Async, Counterparty: Async>
     for MockChainComponents
 {
     async fn allocate_packet_nonce(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         src_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
         dst_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
     ) -> Result<Tagged<Chain, Counterparty, MockNonce>, String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let next_nonce = state
             .next_nonce

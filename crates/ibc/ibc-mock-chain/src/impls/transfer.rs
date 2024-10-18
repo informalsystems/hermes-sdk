@@ -16,13 +16,12 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
     for MockChainComponents
 {
     async fn transfer_token(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         _mode: Mint,
         target: &Tagged<Chain, Counterparty, MockAddress>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 
@@ -41,13 +40,12 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
     for MockChainComponents
 {
     async fn transfer_token(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         _mode: Unescrow,
         target: &Tagged<Chain, Counterparty, MockAddress>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 
@@ -75,13 +73,12 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
     for MockChainComponents
 {
     async fn transfer_token(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         _mode: Escrow,
         target: &Tagged<Chain, Counterparty, MockAddress>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 
@@ -109,13 +106,12 @@ impl<Chain: Async, Counterparty: Async> TokenTransferer<MockChain<Chain, Counter
     for MockChainComponents
 {
     async fn transfer_token(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         _mode: Burn,
         target: &Tagged<Chain, Counterparty, MockAddress>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let denom_balance = state.balances.entry(amount.denom.clone()).or_default();
 

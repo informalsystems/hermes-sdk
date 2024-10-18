@@ -21,8 +21,7 @@ impl<Chain: Async, Counterparty: Async>
         commitment_path: &MockSendPacketCommitmentPath<Chain, Counterparty>,
         packet: &IbcPacket<MockChain<Chain, Counterparty>, MockChain<Counterparty, Chain>>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let sent_packets = state
             .sent_packets
@@ -50,8 +49,7 @@ impl<Chain: Async, Counterparty: Async>
         commitment_path: &MockReceivePacketCommitmentPath<Chain, Counterparty>,
         packet: &IbcPacket<MockChain<Counterparty, Chain>, MockChain<Chain, Counterparty>>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let received_packets = state
             .received_packets

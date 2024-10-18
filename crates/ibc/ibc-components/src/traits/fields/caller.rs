@@ -14,5 +14,5 @@ use hermes_chain_type_components::traits::types::address::HasAddressType;
 */
 #[derive_component(CallerGetterComponent, CallerGetter<Chain>)]
 pub trait HasCaller: HasAddressType {
-    fn caller(&self) -> &Self::Address;
+    fn caller(&self) -> Self::Address;
 }

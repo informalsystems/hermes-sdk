@@ -31,7 +31,7 @@ where
             let payload_header = Chain::payload_header(payload);
 
             chain
-                .check_send_payload_permission(sender, payload_header)
+                .check_send_payload_permission(&sender, payload_header)
                 .await?;
         }
 

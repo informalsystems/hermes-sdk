@@ -17,15 +17,14 @@ impl<Chain: Async, Counterparty: Async>
     for MockChainComponents
 {
     async fn register_unescrow_token(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         src_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
         dst_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
         src_app_id: &Tagged<Counterparty, Chain, MockAppId>,
         dst_app_id: &Tagged<Chain, Counterparty, MockAppId>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let quantity = state
             .escrow_balances
@@ -52,15 +51,14 @@ impl<Chain: Async, Counterparty: Async>
     for MockChainComponents
 {
     async fn register_escrowed_token(
-        chain: &MockChain<Chain, Counterparty>,
+        chain: &mut MockChain<Chain, Counterparty>,
         src_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
         dst_channel_id: &Tagged<Counterparty, Chain, MockChannelId>,
         src_app_id: &Tagged<Chain, Counterparty, MockAppId>,
         dst_app_id: &Tagged<Counterparty, Chain, MockAppId>,
         amount: &MockAmount<Chain, Counterparty>,
     ) -> Result<(), String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state_mut();
 
         let quantity = state
             .escrow_balances

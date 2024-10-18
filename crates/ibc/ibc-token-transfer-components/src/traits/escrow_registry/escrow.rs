@@ -25,7 +25,7 @@ where
     Counterparty: HasChannelIdType<Self> + HasAppIdType<Self>,
 {
     async fn register_escrowed_token(
-        &self,
+        &mut self,
         src_channel_id: &Self::ChannelId,
         dst_channel_id: &Counterparty::ChannelId,
         src_app_id: &Self::AppId,

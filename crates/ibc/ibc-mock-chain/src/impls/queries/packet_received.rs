@@ -19,8 +19,7 @@ impl<Chain: Async, Counterparty: Async>
         dst_channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
         nonce: &Tagged<Counterparty, Chain, MockNonce>,
     ) -> Result<bool, String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state();
 
         let m_received_packets = state
             .received_packets

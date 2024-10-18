@@ -18,8 +18,7 @@ impl<Chain: Async, Counterparty: Async>
         chain: &MockChain<Chain, Counterparty>,
         channel_id: &Tagged<Chain, Counterparty, MockChannelId>,
     ) -> Result<Tagged<Chain, Counterparty, MockClientId>, String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state();
 
         let client_id = state
             .channel_clients

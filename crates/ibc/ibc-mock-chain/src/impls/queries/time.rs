@@ -13,8 +13,7 @@ impl<Chain: Async, Counterparty: Async> CurrentTimeQuerier<MockChain<Chain, Coun
     async fn get_current_time(
         chain: &MockChain<Chain, Counterparty>,
     ) -> Tagged<Chain, Counterparty, MockHeight> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state();
 
         state.current_height.clone()
     }

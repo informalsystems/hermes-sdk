@@ -11,7 +11,7 @@ where
     Counterparty: HasChannelIdType<Self>,
 {
     async fn allocate_packet_nonce(
-        &self,
+        &mut self,
         src_channel_id: &Self::ChannelId,
         dst_channel_id: &Counterparty::ChannelId,
     ) -> Result<Self::PacketNonce, Self::Error>;

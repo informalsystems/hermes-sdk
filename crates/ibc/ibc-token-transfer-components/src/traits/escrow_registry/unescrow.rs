@@ -20,7 +20,7 @@ where
     Counterparty: HasChannelIdType<Self> + HasAppIdType<Self>,
 {
     async fn register_unescrow_token(
-        &self,
+        &mut self,
         src_channel_id: &Counterparty::ChannelId,
         dst_channel_id: &Self::ChannelId,
         src_app_id: &Counterparty::AppId,

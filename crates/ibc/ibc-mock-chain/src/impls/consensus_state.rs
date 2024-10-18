@@ -27,8 +27,7 @@ impl<Chain: Async, Counterparty: Async>
         client_id: &Tagged<Chain, Counterparty, MockClientId>,
         height: &Tagged<Counterparty, Chain, MockHeight>,
     ) -> Result<Arc<MockChainState<Counterparty, Chain>>, String> {
-        let mut lock = chain.pending_state.lock().await;
-        let state = lock.mock_chain_state_mut();
+        let state = chain.pending_state.mock_chain_state();
 
         let consensus_states = state
             .consensus_states
