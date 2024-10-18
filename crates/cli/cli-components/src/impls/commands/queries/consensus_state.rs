@@ -1,3 +1,4 @@
+use core::fmt::Display;
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -70,6 +71,7 @@ where
         + CanQueryConsensusStateHeights<Counterparty>,
     Counterparty: HasHeightType + HasConsensusStateType<Chain>,
     Args: Async,
+    Chain::ClientId: Display,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
         let chain_id = app.parse_arg(args, PhantomData::<symbol!("chain_id")>)?;

@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 use cgp::prelude::HasErrorType;
 use hermes_relayer_components::chain::traits::queries::packet_acknowledgement::PacketAcknowledgementQuerier;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -18,6 +20,7 @@ where
         + CanQueryAbci
         + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain>,
+    Chain::ChannelId: Display,
 {
     async fn query_packet_acknowledgement(
         chain: &Chain,

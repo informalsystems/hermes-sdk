@@ -1,8 +1,7 @@
 use cgp::prelude::*;
+pub use hermes_chain_type_components::traits::types::commitment_proof::*;
 
 use crate::traits::types::height::HasHeightType;
-
-pub use hermes_chain_type_components::traits::types::commitment_proof::*;
 
 #[derive_component(CommitmentProofHeightGetterComponent, CommitmentProofHeightGetter<Chain>)]
 pub trait HasCommitmentProofHeight: HasCommitmentProofType + HasHeightType {

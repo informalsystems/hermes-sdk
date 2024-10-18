@@ -1,4 +1,4 @@
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::types::channel::{
@@ -70,7 +70,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ChannelOpenInitMessageBuilder<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasInitChannelOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasIbcChainTypes<Chain>,
@@ -94,7 +94,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ChannelOpenTryMessageBuilder<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasChannelOpenTryPayloadType<Chain> + HasIbcChainTypes<Chain>,
@@ -120,7 +120,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ChannelOpenAckMessageBuilder<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasChannelOpenAckPayloadType<Chain> + HasIbcChainTypes<Chain>,
@@ -146,7 +146,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate>
-    ChannelOpenConfirmMessageBuilder<Chain, Counterparty> for DelegateTo<Components>
+    ChannelOpenConfirmMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasChannelOpenConfirmPayloadType<Chain> + HasIbcChainTypes<Chain>,

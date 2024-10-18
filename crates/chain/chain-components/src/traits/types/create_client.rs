@@ -1,4 +1,4 @@
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::types::ibc::HasIbcChainTypes;
@@ -34,7 +34,7 @@ pub trait HasCreateClientEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
 }
 
 impl<Chain, Counterparty, Components, Delegate>
-    ProvideCreateClientMessageOptionsType<Chain, Counterparty> for DelegateTo<Components>
+    ProvideCreateClientMessageOptionsType<Chain, Counterparty> for UseDelegate<Components>
 where
     Chain: Async,
     Delegate: ProvideCreateClientMessageOptionsType<Chain, Counterparty>,

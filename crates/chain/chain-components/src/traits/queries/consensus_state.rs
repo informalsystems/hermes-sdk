@@ -1,4 +1,4 @@
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use super::chain_status::CanQueryChainStatus;
@@ -102,7 +102,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateQuerier<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasConsensusStateType<Chain> + HasHeightType,
@@ -120,7 +120,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateWithProofsQuerier<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType,
     Counterparty: HasConsensusStateType<Chain> + HasHeightType,

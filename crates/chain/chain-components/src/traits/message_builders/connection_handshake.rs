@@ -1,4 +1,4 @@
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::types::connection::{
@@ -70,7 +70,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate>
-    ConnectionOpenInitMessageBuilder<Chain, Counterparty> for DelegateTo<Components>
+    ConnectionOpenInitMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where
     Chain:
         HasInitConnectionOptionsType<Counterparty> + HasIbcChainTypes<Counterparty> + HasErrorType,
@@ -97,7 +97,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenTryMessageBuilder<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasConnectionOpenTryPayloadType<Chain> + HasIbcChainTypes<Chain>,
@@ -123,7 +123,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> ConnectionOpenAckMessageBuilder<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasConnectionOpenAckPayloadType<Chain> + HasIbcChainTypes<Chain>,
@@ -147,7 +147,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate>
-    ConnectionOpenConfirmMessageBuilder<Chain, Counterparty> for DelegateTo<Components>
+    ConnectionOpenConfirmMessageBuilder<Chain, Counterparty> for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasConnectionOpenConfirmPayloadType<Chain> + HasIbcChainTypes<Chain>,
