@@ -10,7 +10,6 @@ use hermes_ibc_components::traits::types::message::HasIbcMessageType;
 use hermes_ibc_token_transfer_components::types::message::IbcTransferMessage;
 
 use cgp::prelude::*;
-use futures::lock::Mutex;
 use hermes_chain_type_components::traits::builders::amount::CanBuildAmount;
 use hermes_chain_type_components::traits::fields::amount::denom::HasAmountDenom;
 use hermes_chain_type_components::traits::fields::amount::quantity::HasAmountQuantity;
@@ -90,7 +89,10 @@ use crate::types::tagged::Tagged;
 use crate::types::tags::{ChainA, ChainB};
 
 pub struct MockChain<Chain: Async, Counterparty: Async> {
-    pub current_caller: Mutex<MockAddress>,
+    /// The current caller of the mock chain methods.
+    /// We assume that this is only callable by the mock kernel,
+    /// which emulates transaction handling or calling from another contract.
+    pub current_caller: Tagged<Chain, Counterparty, MockAddress>,
 
     /// The current state of the mock chain is a shared pointer to an immutable chain state
     pub current_state: Arc<dyn HasMockChainState<Chain, Counterparty>>,

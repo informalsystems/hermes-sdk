@@ -1,3 +1,4 @@
+pub mod caller;
 pub mod commitment;
 pub mod consensus_state;
 pub mod error;
