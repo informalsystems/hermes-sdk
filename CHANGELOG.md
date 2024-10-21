@@ -2,6 +2,10 @@
 
 ## v0.2.0 (pre-release)
 
+- Minor encoding refactoring - [#453](https://github.com/informalsystems/hermes-sdk/pull/453)
+  - Replace `DelegateEncoding` with `UseDelegate` from `cgp`.
+  - Remove `DecodeViaWasmClientState`.
+
 -  Implement abstract and mock IBC v2 components - [#445](https://github.com/informalsystems/hermes-sdk/pull/445)
   - Rename `DelegateTo` to `UseDelegate`.
   - Move the following chain trait types to `hermes-chain-type-components`: `HasAddressType`, `HasAmountType`,
