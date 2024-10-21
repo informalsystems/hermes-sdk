@@ -1,5 +1,5 @@
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::impls::types::encoded::ProvideEncodedBytes;
 use hermes_encoding_components::impls::types::schema::ProvideStringSchema;
 pub use hermes_encoding_components::traits::decode::DecoderComponent;
@@ -33,13 +33,13 @@ define_components! {
             EncoderComponent,
             DecoderComponent,
         ]:
-            DelegateEncoding<ProtobufEncoderComponents>,
+            UseDelegate<ProtobufEncoderComponents>,
         [
             MutEncoderComponent,
             MutDecoderComponent,
             EncodedLengthGetterComponent,
         ]:
-            DelegateEncoding<ProtobufEncodeMutComponents>,
+            UseDelegate<ProtobufEncodeMutComponents>,
     }
 }
 

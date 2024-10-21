@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp::core::component::UseDelegate;
 use cgp::prelude::{DelegateComponent, HasErrorType};
 
 use crate::traits::convert::Converter;
@@ -13,10 +14,8 @@ use crate::traits::types::encode_buffer::HasEncodeBufferType;
 use crate::traits::types::encoded::HasEncodedType;
 use crate::traits::types::schema::HasSchemaType;
 
-pub struct DelegateEncoding<Delegate>(pub PhantomData<Delegate>);
-
 impl<Encoding, Strategy, Value, Components, Delegate> Encoder<Encoding, Strategy, Value>
-    for DelegateEncoding<Components>
+    for UseDelegate<Components>
 where
     Encoding: HasEncodedType + HasErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
@@ -28,7 +27,7 @@ where
 }
 
 impl<Encoding, Strategy, Value, Components, Delegate> Decoder<Encoding, Strategy, Value>
-    for DelegateEncoding<Components>
+    for UseDelegate<Components>
 where
     Encoding: HasEncodedType + HasErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
@@ -40,7 +39,7 @@ where
 }
 
 impl<Encoding, From, To, Components, Delegate> Converter<Encoding, From, To>
-    for DelegateEncoding<Components>
+    for UseDelegate<Components>
 where
     Encoding: HasErrorType,
     Components: DelegateComponent<(From, To), Delegate = Delegate>,
@@ -52,7 +51,7 @@ where
 }
 
 impl<Encoding, Value, Components, Delegate> SchemaGetter<Encoding, Value>
-    for DelegateEncoding<Components>
+    for UseDelegate<Components>
 where
     Encoding: HasSchemaType,
     Components: DelegateComponent<Value, Delegate = Delegate>,
@@ -64,7 +63,7 @@ where
 }
 
 impl<Encoding, Strategy, Value, Components, Delegate> MutEncoder<Encoding, Strategy, Value>
-    for DelegateEncoding<Components>
+    for UseDelegate<Components>
 where
     Encoding: HasEncodeBufferType + HasErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,
@@ -80,7 +79,7 @@ where
 }
 
 impl<Encoding, Strategy, Value, Components, Delegate> MutDecoder<Encoding, Strategy, Value>
-    for DelegateEncoding<Components>
+    for UseDelegate<Components>
 where
     Encoding: HasDecodeBufferType + HasErrorType,
     Components: DelegateComponent<(Strategy, Value), Delegate = Delegate>,

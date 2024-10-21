@@ -1,5 +1,5 @@
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::impls::types::encoded::ProvideEncodedBytes;
 use hermes_encoding_components::impls::types::schema::ProvideStringSchema;
 pub use hermes_encoding_components::traits::convert::ConverterComponent;
@@ -20,12 +20,12 @@ define_components! {
         SchemaTypeComponent:
             ProvideStringSchema,
         ConverterComponent:
-            DelegateEncoding<SolomachineConverterComponents>,
+            UseDelegate<SolomachineConverterComponents>,
         [
             EncoderComponent,
             DecoderComponent,
         ]:
-            DelegateEncoding<SolomachineEncoderComponents>,
+            UseDelegate<SolomachineEncoderComponents>,
         SchemaGetterComponent:
             SolomachineTypeUrlSchemas,
     }
