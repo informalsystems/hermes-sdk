@@ -2,6 +2,11 @@
 
 ## v0.2.0 (pre-release)
 
+-  Implement abstract and mock IBC v2 components - [#445](https://github.com/informalsystems/hermes-sdk/pull/445)
+  - Rename `DelegateTo` to `UseDelegate`.
+  - Move the following chain trait types to `hermes-chain-type-components`: `HasAddressType`, `HasAmountType`,
+    `HasDenomType`, `HasCommitmentPrefixType`.
+
 -  CGP Refactoring [#440](https://github.com/informalsystems/hermes-sdk/pull/440)
     - Update `cgp` version to include the addition of `cgp-type`. [cgp#23](https://github.com/contextgeneric/cgp/pull/23)
     - Use `DelegateTo` from `cgp-component` instead of custom constructs to implement delegated chain implementations.

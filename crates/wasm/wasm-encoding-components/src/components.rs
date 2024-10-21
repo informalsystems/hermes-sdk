@@ -1,6 +1,5 @@
 use cgp::core::component::UseContext;
 use cgp::prelude::*;
-
 use hermes_cosmos_encoding_components::components::CosmosEncodingComponents;
 pub use hermes_cosmos_encoding_components::components::{
     DecodeBufferTypeComponent, EncodeBufferTypeComponent,

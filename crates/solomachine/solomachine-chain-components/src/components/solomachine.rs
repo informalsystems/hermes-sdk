@@ -1,6 +1,4 @@
 use cgp::prelude::*;
-pub use hermes_cosmos_chain_components::components::client::OutgoingPacketFieldsReaderComponent;
-pub use hermes_cosmos_chain_components::components::client::OutgoingPacketTypeComponent;
 pub use hermes_cosmos_chain_components::components::client::{
     AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelIdTypeComponent,
     ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
@@ -11,7 +9,8 @@ pub use hermes_cosmos_chain_components::components::client::{
     ConsensusStateTypeComponent, CreateClientEventComponent,
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
-    InitConnectionOptionsTypeComponent, PortIdTypeComponent, ReceivePacketPayloadTypeComponent,
+    InitConnectionOptionsTypeComponent, OutgoingPacketFieldsReaderComponent,
+    OutgoingPacketTypeComponent, PortIdTypeComponent, ReceivePacketPayloadTypeComponent,
     SequenceTypeComponent, TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
     UpdateClientPayloadTypeComponent,
 };

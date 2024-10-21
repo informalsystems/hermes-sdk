@@ -1,4 +1,4 @@
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
@@ -128,9 +128,8 @@ pub use hermes_relayer_components::chain::traits::types::proof::{
     CommitmentProofTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
-pub use hermes_relayer_components::chain::traits::types::timestamp::TimeMeasurerComponent;
 pub use hermes_relayer_components::chain::traits::types::timestamp::{
-    TimeTypeComponent, TimeoutTypeComponent,
+    TimeMeasurerComponent, TimeTypeComponent, TimeoutTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
@@ -375,6 +374,6 @@ define_components! {
             ChannelOpenAckMessageBuilderComponent,
             ChannelOpenConfirmMessageBuilderComponent,
         ]:
-            DelegateTo<DelegateCosmosChainComponents>,
+            UseDelegate<DelegateCosmosChainComponents>,
     }
 }

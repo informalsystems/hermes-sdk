@@ -20,14 +20,14 @@ pub trait HasHeightType: Async {
        `u8` or `u128` as the `Height` type during testing, and use the
        more complex Cosmos height type during production.
     */
-    type Height: Ord + Display + Async + Clone;
+    type Height: Ord + Display + Clone + Async;
 }
 
 impl<Chain, Provider, Height> ProvideHeightType<Chain> for WithProvider<Provider>
 where
     Chain: Async,
     Provider: ProvideType<Chain, HeightTypeComponent, Type = Height>,
-    Height: Ord + Display + Async + Clone,
+    Height: Ord + Display + Clone + Async,
 {
     type Height = Height;
 }

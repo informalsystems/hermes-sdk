@@ -1,16 +1,10 @@
 use alloc::string::FromUtf8Error;
-use cgp::core::component::DelegateTo;
 use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
-use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
-    InvalidWireType, UnsupportedWireType,
-};
-use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
-use ibc::core::host::types::error::DecodingError;
-use ibc::primitives::TimestampError;
 
+use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::Report;
@@ -28,6 +22,10 @@ use hermes_error::impls::ProvideHermesError;
 use hermes_error::traits::wrap::WrapError;
 use hermes_error::types::Error;
 use hermes_protobuf_encoding_components::impls::any::TypeUrlMismatchError;
+use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
+    InvalidWireType, UnsupportedWireType,
+};
+use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionNotFoundError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
@@ -53,6 +51,8 @@ use hermes_test_components::chain::traits::types::amount::HasAmountType;
 use hermes_wasm_test_components::impls::chain::upload_client_code::ProposalIdNotFound;
 use ibc::core::client::types::error::ClientError;
 use ibc::core::commitment_types::error::CommitmentError;
+use ibc::core::host::types::error::DecodingError;
+use ibc::primitives::TimestampError;
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer::keyring::errors::Error as KeyringError;
 use ibc_relayer::supervisor::Error as SupervisorError;
@@ -103,7 +103,7 @@ delegate_components! {
             RetryableErrorComponent,
         ]: ProvideHermesError,
         ErrorRaiserComponent:
-            DelegateTo<CosmosErrorHandlers>,
+            UseDelegate<CosmosErrorHandlers>,
     }
 }
 

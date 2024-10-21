@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use cgp::core::component::DelegateTo;
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 use crate::traits::types::ibc::HasIbcChainTypes;
@@ -21,7 +21,7 @@ where
 }
 
 impl<Chain, Counterparty, Components, Delegate> UpdateClientMessageBuilder<Chain, Counterparty>
-    for DelegateTo<Components>
+    for UseDelegate<Components>
 where
     Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
     Counterparty: HasUpdateClientPayloadType<Chain>,
