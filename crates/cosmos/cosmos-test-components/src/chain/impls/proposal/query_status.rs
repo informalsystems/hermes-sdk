@@ -1,16 +1,24 @@
+use core::fmt::Debug;
+
 use cgp::core::error::CanRaiseError;
 use hermes_cosmos_chain_components::traits::grpc_address::HasGrpcAddress;
 use hermes_test_components::chain::traits::proposal::query_status::ProposalStatusQuerier;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
 use hermes_test_components::chain::traits::proposal::types::proposal_status::HasProposalStatusType;
 use ibc_proto::cosmos::gov::v1::query_client::QueryClient;
-use ibc_proto::cosmos::gov::v1::QueryProposalRequest;
+use ibc_proto::cosmos::gov::v1::{Proposal, QueryProposalRequest};
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
 use crate::chain::types::proposal_status::ProposalStatus;
 
 pub struct QueryProposalStatusWithGrpc;
+
+pub struct ProposalFailed<'a, Chain>
+{
+    pub chain: &'a Chain,
+    pub proposal: &'a Proposal,
+}
 
 impl<Chain> ProposalStatusQuerier<Chain> for QueryProposalStatusWithGrpc
 where
@@ -19,7 +27,9 @@ where
         + HasGrpcAddress
         + CanRaiseError<Status>
         + CanRaiseError<TransportError>
-        + CanRaiseError<String>,
+        + CanRaiseError<String>
+        + for<'a> CanRaiseError<ProposalFailed<'a, Chain>>
+        ,
 {
     async fn query_proposal_status(
         chain: &Chain,
@@ -50,7 +60,9 @@ where
             2 => ProposalStatus::VotingPeriod,
             3 => ProposalStatus::Passed,
             4 => ProposalStatus::Rejected,
-            5 => ProposalStatus::Failed,
+            5 => {
+                return Err(Chain::raise_error(ProposalFailed { chain, proposal: &proposal }))
+            }
             _ => {
                 return Err(Chain::raise_error(format!(
                     "unknown proposal status for proposal: {:?}",
@@ -60,5 +72,12 @@ where
         };
 
         Ok(proposal_status)
+    }
+}
+
+impl<'a, Chain> Debug for ProposalFailed<'a, Chain>
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "proposal failed: {:?}", self.proposal)
     }
 }

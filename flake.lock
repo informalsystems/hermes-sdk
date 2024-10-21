@@ -287,11 +287,11 @@
     "cosmwasm-ibc-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1723654014,
-        "narHash": "sha256-r+xUHyiL7wsf2G6HWJ6vihNGlgjt1UlU8Bnc1bhdtSQ=",
+        "lastModified": 1729198400,
+        "narHash": "sha256-/5gMBaruutccPvmFuXNTl+8Bi/BzBcC9jnNL42IHDbw=",
         "owner": "informalsystems",
         "repo": "cosmwasm-ibc",
-        "rev": "d96b68fa4c98d758c49b474aad847c85585672a0",
+        "rev": "a376f5df23a6b1a0ef2fe3f65f5be1697972f1da",
         "type": "github"
       },
       "original": {

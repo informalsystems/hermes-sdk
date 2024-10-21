@@ -4,5 +4,4 @@ pub enum ProposalStatus {
     VotingPeriod,
     Passed,
     Rejected,
-    Failed,
 }
