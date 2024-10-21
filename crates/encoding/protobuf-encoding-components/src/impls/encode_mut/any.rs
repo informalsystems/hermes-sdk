@@ -1,12 +1,12 @@
 use core::marker::PhantomData;
 
+use cgp::core::field::FieldGetter;
 use cgp::prelude::*;
 use hermes_encoding_components::impls::encode_mut::combine::CombineEncoders;
 use hermes_encoding_components::impls::encode_mut::field::EncodeFieldWithGetter;
 use hermes_encoding_components::impls::encode_mut::from::DecodeFrom;
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
 use hermes_encoding_components::traits::encode_mut::MutEncoderComponent;
-use hermes_encoding_components::traits::field::FieldGetter;
 use hermes_encoding_components::traits::transform::Transformer;
 use hermes_encoding_components::HList;
 use prost_types::Any;

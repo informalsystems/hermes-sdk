@@ -52,7 +52,7 @@ where
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         writeln!(
             f,
-            "channel not found with channel id {}, port id {}, height {}",
+            "channel not found with channel id {:?}, port id {}, height {}",
             self.channel_id, self.port_id, self.height,
         )?;
 

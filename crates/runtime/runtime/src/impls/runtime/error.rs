@@ -6,7 +6,9 @@ use std::process::ExitStatus;
 use cgp::core::error::{ErrorRaiser, ProvideErrorType};
 use hermes_async_runtime_components::channel::types::ChannelClosedError;
 use hermes_tokio_runtime_components::impls::os::child_process::PrematureChildProcessExitError;
-use hermes_tokio_runtime_components::impls::os::exec_command::ExecCommandFailure;
+use hermes_tokio_runtime_components::impls::os::exec_command::{
+    CommandNotFound, ExecCommandFailure,
+};
 
 use crate::impls::runtime::components::HermesRuntimeComponents;
 use crate::types::error::TokioRuntimeError;
@@ -58,5 +60,11 @@ impl ErrorRaiser<HermesRuntime, ExecCommandFailure> for HermesRuntimeComponents 
             stdout: e.stdout,
             stderr: e.stderr,
         }
+    }
+}
+
+impl ErrorRaiser<HermesRuntime, CommandNotFound> for HermesRuntimeComponents {
+    fn raise_error(e: CommandNotFound) -> TokioRuntimeError {
+        TokioRuntimeError::CommandNotFound { command: e.command }
     }
 }

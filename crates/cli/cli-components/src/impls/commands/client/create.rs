@@ -1,4 +1,4 @@
-use core::fmt::Debug;
+use core::fmt::{Debug, Display};
 use core::marker::PhantomData;
 
 use cgp::prelude::*;
@@ -52,6 +52,7 @@ where
     Chain::CreateClientMessageOptions: Debug,
     Counterparty::CreateClientPayloadOptions: Debug,
     App::Logger: CanLog<LevelInfo>,
+    Chain::ClientId: Display,
 {
     async fn run_command(app: &App, args: &Args) -> Result<App::Output, App::Error> {
         let target_chain_id = app.parse_arg(args, PhantomData::<symbol!("target_chain_id")>)?;
