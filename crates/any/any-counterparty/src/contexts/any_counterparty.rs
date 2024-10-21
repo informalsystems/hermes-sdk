@@ -1,3 +1,4 @@
+use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use cgp_error_eyre::{ProvideEyreError, RaiseDebugError};
@@ -14,7 +15,6 @@ use hermes_cosmos_chain_components::encoding::components::{
 use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
 use hermes_cosmos_chain_components::types::tendermint::TendermintClientState;
 use hermes_encoding_components::impls::default_encoding::GetDefaultEncoding;
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
 use hermes_encoding_components::traits::convert::{CanConvert, ConverterComponent};
 use hermes_encoding_components::traits::decode::{CanDecode, DecoderComponent};
 use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
@@ -137,7 +137,7 @@ delegate_components! {
             EncoderComponent,
             DecoderComponent,
         ]:
-            DelegateEncoding<AnyClientEncoderComponents>,
+            UseDelegate<AnyClientEncoderComponents>,
         [
             EncodedTypeComponent,
             SchemaTypeComponent,
@@ -150,7 +150,7 @@ delegate_components! {
         ]:
             CosmosClientEncodingComponents,
         ConverterComponent:
-            DelegateEncoding<AnyClientConverterComponents>,
+            UseDelegate<AnyClientConverterComponents>,
     }
 }
 

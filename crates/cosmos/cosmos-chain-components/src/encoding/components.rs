@@ -1,6 +1,6 @@
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 use hermes_cosmos_encoding_components::components::CosmosEncodingComponents;
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
 pub use hermes_encoding_components::traits::convert::ConverterComponent;
 pub use hermes_encoding_components::traits::decode::DecoderComponent;
 pub use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
@@ -27,12 +27,12 @@ define_components! {
         ]:
             CosmosEncodingComponents,
         ConverterComponent:
-            DelegateEncoding<CosmosConverterComponents>,
+            UseDelegate<CosmosConverterComponents>,
         [
             EncoderComponent,
             DecoderComponent,
         ]:
-            DelegateEncoding<CosmosEncoderComponents>,
+            UseDelegate<CosmosEncoderComponents>,
         [
             MutEncoderComponent,
             MutDecoderComponent,

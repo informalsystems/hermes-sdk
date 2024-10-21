@@ -1,8 +1,8 @@
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 pub use hermes_cosmos_chain_components::encoding::components::{
     DecodeBufferTypeComponent, EncodeBufferTypeComponent,
 };
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
 pub use hermes_encoding_components::traits::convert::ConverterComponent;
 pub use hermes_encoding_components::traits::decode::DecoderComponent;
 pub use hermes_encoding_components::traits::decode_mut::MutDecoderComponent;
@@ -29,21 +29,21 @@ define_components! {
         ]:
             WasmEncodingComponents,
         ConverterComponent:
-            DelegateEncoding<WasmCosmosConverterComponents>,
+            UseDelegate<WasmCosmosConverterComponents>,
         [
             EncoderComponent,
             DecoderComponent,
         ]:
-            DelegateEncoding<WasmCosmosEncoderComponents>,
+            UseDelegate<WasmCosmosEncoderComponents>,
         [
             MutEncoderComponent,
             MutDecoderComponent,
             EncodedLengthGetterComponent,
         ]:
-            DelegateEncoding<WasmCosmosEncodeMutComponents>,
+            UseDelegate<WasmCosmosEncodeMutComponents>,
         [
             SchemaGetterComponent
         ]:
-            DelegateEncoding<WasmCosmosTypeUrlSchemas>,
+            UseDelegate<WasmCosmosTypeUrlSchemas>,
     }
 }

@@ -1,5 +1,5 @@
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
 
 #[derive_component(EncodedLengthGetterComponent, EncodedLengthGetter<Encoding>)]
 pub trait HasEncodedLength<Strategy, Value> {
@@ -7,7 +7,7 @@ pub trait HasEncodedLength<Strategy, Value> {
 }
 
 impl<Encoding, Strategy, Value, Components> EncodedLengthGetter<Encoding, Strategy, Value>
-    for DelegateEncoding<Components>
+    for UseDelegate<Components>
 where
     Components: DelegateComponent<(Strategy, Value)>,
     Components::Delegate: EncodedLengthGetter<Encoding, Strategy, Value>,

@@ -1,5 +1,5 @@
+use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-use hermes_encoding_components::impls::delegate::DelegateEncoding;
 pub use hermes_protobuf_encoding_components::components::{
     DecodeBufferTypeComponent, DecoderComponent, EncodeBufferTypeComponent,
     EncodedLengthGetterComponent, EncodedTypeComponent, EncoderComponent, MutDecoderComponent,
@@ -28,13 +28,13 @@ define_components! {
             EncoderComponent,
             DecoderComponent,
         ]:
-            DelegateEncoding<CosmosEncoderComponents>,
+            UseDelegate<CosmosEncoderComponents>,
         [
             MutEncoderComponent,
             MutDecoderComponent,
             EncodedLengthGetterComponent,
         ]:
-            DelegateEncoding<CosmosEncodeMutComponents>,
+            UseDelegate<CosmosEncodeMutComponents>,
     }
 }
 
