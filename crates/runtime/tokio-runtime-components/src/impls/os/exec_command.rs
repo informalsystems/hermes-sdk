@@ -1,7 +1,7 @@
 use core::str;
 use core::str::Utf8Error;
 use std::ffi::OsStr;
-use std::io::Error as IoError;
+use std::io::{Error as IoError, ErrorKind};
 
 use cgp::prelude::*;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
@@ -17,11 +17,16 @@ pub struct ExecCommandFailure {
     pub stderr: String,
 }
 
+pub struct CommandNotFound {
+    pub command: String,
+}
+
 impl<Runtime> CommandWithEnvsExecutor<Runtime> for TokioExecCommand
 where
     Runtime: HasFilePathType
         + CanRaiseError<IoError>
         + CanRaiseError<Utf8Error>
+        + CanRaiseError<CommandNotFound>
         + CanRaiseError<ExecCommandFailure>,
     Runtime::FilePath: AsRef<OsStr>,
 {
@@ -37,7 +42,15 @@ where
             .kill_on_drop(true)
             .output()
             .await
-            .map_err(Runtime::raise_error)?;
+            .map_err(|e| {
+                if e.kind() == ErrorKind::NotFound {
+                    Runtime::raise_error(CommandNotFound {
+                        command: Runtime::file_path_to_string(command_path),
+                    })
+                } else {
+                    Runtime::raise_error(e)
+                }
+            })?;
 
         let stdout = str::from_utf8(&output.stdout).map_err(Runtime::raise_error)?;
 
