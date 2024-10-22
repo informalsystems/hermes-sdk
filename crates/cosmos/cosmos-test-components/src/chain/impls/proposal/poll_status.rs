@@ -27,8 +27,6 @@ where
         for _ in 0..40 {
             let status_result = chain.query_proposal_status(proposal_id).await;
 
-            println!("status_result: {:?}", status_result);
-
             match status_result {
                 Ok(status) => {
                     for allowed_status in allowed_statuses {

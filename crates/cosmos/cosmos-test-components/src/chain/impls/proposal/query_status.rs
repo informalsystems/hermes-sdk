@@ -78,6 +78,19 @@ where
 
 impl<'a, Chain> Debug for ProposalFailed<'a, Chain> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "proposal failed: {:?}", self.proposal)
+        f.debug_struct("ProposalFailed")
+            .field("id", &self.proposal.id)
+            .field("status", &self.proposal.status)
+            .field("final_tally_result", &self.proposal.final_tally_result)
+            .field("submit_time", &self.proposal.submit_time)
+            .field("deposit_end_time", &self.proposal.deposit_end_time)
+            .field("total_deposit", &self.proposal.total_deposit)
+            .field("voting_start_time", &self.proposal.voting_start_time)
+            .field("voting_end_time", &self.proposal.voting_end_time)
+            .field("metadata", &self.proposal.metadata)
+            .field("title", &self.proposal.title)
+            .field("summary", &self.proposal.summary)
+            .field("proposer", &self.proposal.proposer)
+            .finish()
     }
 }
