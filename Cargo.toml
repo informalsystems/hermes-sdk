@@ -104,7 +104,7 @@ toml                            = { version = "0.8.15" }
 futures                         = { version = "0.3.30", default-features = false }
 futures-core                    = { version = "0.3.30", default-features = false }
 futures-util                    = { version = "0.3.30", default-features = false }
-futures-channel                 = { version = "0.3.30", default-features = false }
+futures-channel                 = { version = "0.3.31", default-features = false }
 eyre                            = { version = "0.6.12" }
 itertools                       = { version = "0.13" }
 http                            = { version = "1.0.0" }
