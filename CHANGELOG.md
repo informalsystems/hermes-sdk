@@ -2,6 +2,11 @@
 
 ## v0.2.0 (pre-release)
 
+- Improve error messages when submitting Wasm client proposals - [#458](https://github.com/informalsystems/hermes-sdk/pull/458)
+  - Refactor `poll_proposal_status` to accept a list of wanted status.
+  - Make Cosmos implementation of `query_proposal_status` return error if the proposal failed.
+  - Introduce `ProposalFailed` error type that needs to be handled by `ErrorRaiser` implementation.
+
 - Minor encoding refactoring - [#453](https://github.com/informalsystems/hermes-sdk/pull/453)
   - Replace `DelegateEncoding` with `UseDelegate` from `cgp`.
   - Remove `DecodeViaWasmClientState`.

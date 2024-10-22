@@ -3,6 +3,7 @@ use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
+use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
 
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -171,6 +172,8 @@ delegate_components! {
                 MissingCreateClientEventError<'a, Chain, Counterparty>,
             <'a, Chain: HasIbcChainTypes<Counterparty>, Counterparty>
                 ConnectionNotFoundError<'a, Chain, Counterparty>,
+            <'a, Chain>
+                ProposalFailed<'a, Chain>,
             <'a, Relay>
                 MissingConnectionInitEventError<'a, Relay>,
             <'a, Relay: HasRelayChains>
