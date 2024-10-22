@@ -21,8 +21,7 @@ where
         chain: &Chain,
         proposal_id: &Chain::ProposalId,
         allowed_statuses: &[Chain::ProposalStatus],
-    ) -> Result<Chain::ProposalStatus, Chain::Error>
-    {
+    ) -> Result<Chain::ProposalStatus, Chain::Error> {
         let runtime = chain.runtime();
 
         for _ in 0..40 {
@@ -34,7 +33,7 @@ where
                 Ok(status) => {
                     for allowed_status in allowed_statuses {
                         if allowed_status == &status {
-                            return Ok(status)
+                            return Ok(status);
                         } else {
                             runtime.sleep(Duration::from_millis(500)).await;
                         }
@@ -44,7 +43,7 @@ where
                     if Chain::is_retryable_error(&e) {
                         runtime.sleep(Duration::from_millis(500)).await;
                     } else {
-                        return Err(e)
+                        return Err(e);
                     }
                 }
             }
@@ -52,8 +51,7 @@ where
 
         Err(Chain::raise_error(format!(
             "Governance proposal {} was not in expected status {:?}",
-            proposal_id,
-            allowed_statuses,
+            proposal_id, allowed_statuses,
         )))
     }
 }

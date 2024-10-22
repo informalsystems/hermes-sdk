@@ -102,7 +102,10 @@ where
         bootstrap.runtime().sleep(Duration::from_secs(3)).await;
 
         let status = chain
-            .poll_proposal_status(&proposal_id, &[ProposalStatus::DepositPeriod, ProposalStatus::VotingPeriod])
+            .poll_proposal_status(
+                &proposal_id,
+                &[ProposalStatus::DepositPeriod, ProposalStatus::VotingPeriod],
+            )
             .await
             .map_err(Bootstrap::raise_error)?;
 

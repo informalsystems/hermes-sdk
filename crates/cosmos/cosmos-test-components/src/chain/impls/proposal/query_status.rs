@@ -14,8 +14,7 @@ use crate::chain::types::proposal_status::ProposalStatus;
 
 pub struct QueryProposalStatusWithGrpc;
 
-pub struct ProposalFailed<'a, Chain>
-{
+pub struct ProposalFailed<'a, Chain> {
     pub chain: &'a Chain,
     pub proposal: &'a Proposal,
 }
@@ -28,8 +27,7 @@ where
         + CanRaiseError<Status>
         + CanRaiseError<TransportError>
         + CanRaiseError<String>
-        + for<'a> CanRaiseError<ProposalFailed<'a, Chain>>
-        ,
+        + for<'a> CanRaiseError<ProposalFailed<'a, Chain>>,
 {
     async fn query_proposal_status(
         chain: &Chain,
@@ -61,7 +59,10 @@ where
             3 => ProposalStatus::Passed,
             4 => ProposalStatus::Rejected,
             5 => {
-                return Err(Chain::raise_error(ProposalFailed { chain, proposal: &proposal }))
+                return Err(Chain::raise_error(ProposalFailed {
+                    chain,
+                    proposal: &proposal,
+                }))
             }
             _ => {
                 return Err(Chain::raise_error(format!(
@@ -75,8 +76,7 @@ where
     }
 }
 
-impl<'a, Chain> Debug for ProposalFailed<'a, Chain>
-{
+impl<'a, Chain> Debug for ProposalFailed<'a, Chain> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "proposal failed: {:?}", self.proposal)
     }

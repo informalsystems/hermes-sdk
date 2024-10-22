@@ -1,9 +1,9 @@
 use alloc::string::FromUtf8Error;
-use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
 use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
+use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
 
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
