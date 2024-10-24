@@ -1,16 +1,16 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use super::chain_status::CanQueryChainStatus;
 use crate::traits::types::consensus_state::{HasConsensusStateType, HasRawConsensusStateType};
 use crate::traits::types::height::HasHeightType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::proof::HasCommitmentProofType;
 
 #[derive_component(ConsensusStateQuerierComponent, ConsensusStateQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryConsensusState<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
 where
     Counterparty: HasConsensusStateType<Self> + HasHeightType,
 {
@@ -25,7 +25,7 @@ where
 #[derive_component(ConsensusStateWithProofsQuerierComponent, ConsensusStateWithProofsQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryConsensusStateWithProofs<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType
 where
     Counterparty: HasConsensusStateType<Self> + HasHeightType,
 {
@@ -40,7 +40,7 @@ where
 #[derive_component(RawConsensusStateQuerierComponent, RawConsensusStateQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryRawConsensusState<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasRawConsensusStateType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasRawConsensusStateType + HasErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -55,7 +55,11 @@ where
 #[derive_component(RawConsensusStateWithProofsQuerierComponent, RawConsensusStateWithProofsQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryRawConsensusStateWithProofs<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasRawConsensusStateType + HasCommitmentProofType + HasErrorType
+    HasClientIdType<Counterparty>
+    + HasHeightType
+    + HasRawConsensusStateType
+    + HasCommitmentProofType
+    + HasErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -69,7 +73,7 @@ where
 
 #[async_trait]
 pub trait CanQueryConsensusStateWithLatestHeight<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasErrorType
 where
     Counterparty: HasConsensusStateType<Self> + HasHeightType,
 {
@@ -104,7 +108,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasHeightType + HasErrorType,
     Counterparty: HasConsensusStateType<Chain> + HasHeightType,
     Delegate: ConsensusStateQuerier<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
@@ -122,7 +126,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateWithProofsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType,
     Counterparty: HasConsensusStateType<Chain> + HasHeightType,
     Delegate: ConsensusStateWithProofsQuerier<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

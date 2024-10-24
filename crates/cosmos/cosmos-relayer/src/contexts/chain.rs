@@ -1,5 +1,6 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -390,6 +391,8 @@ pub trait CanUseCosmosChain:
     + CanQueryProposalStatus
     + CanBuildDepositProposalMessage
     + CanBuildVoteProposalMessage
+where
+    CosmosChain: HasClientStateType<Self> + HasConsensusStateType<Self>,
 {
 }
 

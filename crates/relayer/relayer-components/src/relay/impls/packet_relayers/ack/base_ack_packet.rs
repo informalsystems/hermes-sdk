@@ -1,3 +1,4 @@
+use hermes_chain_components::traits::types::event::HasEventType;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
@@ -19,7 +20,8 @@ impl<Relay, SrcChain, DstChain> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanRaiseRelayChainErrors,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
-    SrcChain: CanQueryClientStateWithLatestHeight<DstChain>
+    SrcChain: HasEventType
+        + CanQueryClientStateWithLatestHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + HasOutgoingPacketType<DstChain>,
     DstChain: HasClientStateType<SrcChain>
