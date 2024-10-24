@@ -635,6 +635,8 @@ pub trait CanUseWasmCosmosChain:
     + CanUploadWasmClientCode
 where
     CosmosChain: HasClientStateType<Self, ClientState = TendermintClientState>
+        + HasConsensusStateType<Self, ConsensusState = TendermintConsensusState>,
+    WasmCosmosChain: HasConsensusStateType<Self>
 {
 }
 
@@ -664,6 +666,8 @@ pub trait CanUseCosmosChainWithWasmCosmosChain:
     + CanBuildTimeoutUnorderedPacketMessage<WasmCosmosChain>
     + HasInitConnectionOptionsType<WasmCosmosChain>
     + CanBuildCreateClientMessage<WasmCosmosChain>
+where
+    WasmCosmosChain: HasConsensusStateType<Self>,
 {
 }
 

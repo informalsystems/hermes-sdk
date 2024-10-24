@@ -165,9 +165,7 @@ use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequenc
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::ProvideAnyRawClientState;
-use crate::impls::types::consensus_state::{
-    ProvideAnyRawConsensusState, ProvideTendermintConsensusState,
-};
+use crate::impls::types::consensus_state::ProvideAnyRawConsensusState;
 use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 pub use crate::traits::abci_query::AbciQuerierComponent;
@@ -235,11 +233,6 @@ define_components! {
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
             ProvideAnyRawConsensusState,
-        [
-            ConsensusStateTypeComponent,
-            ConsensusStateFieldComponent,
-        ]:
-            ProvideTendermintConsensusState,
         OutgoingPacketFieldsReaderComponent:
             CosmosPacketFieldReader,
         ConsensusStateHeightQuerierComponent:
@@ -346,6 +339,9 @@ define_components! {
         [
             ClientStateTypeComponent,
             ClientStateFieldsGetterComponent,
+
+            ConsensusStateTypeComponent,
+            ConsensusStateFieldComponent,
 
             ConsensusStateHeightsQuerierComponent,
             CounterpartyMessageHeightGetterComponent,
