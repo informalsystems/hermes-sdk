@@ -1,4 +1,5 @@
-use cgp::core::component::UseDelegate;
+use cgp::core::component::{UseDelegate, WithProvider};
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(ConsensusStateTypeComponent, ProvideConsensusStateType<Chain>)]
@@ -17,4 +18,14 @@ where
     Delegate: ProvideConsensusStateType<Chain, Counterparty>,
 {
     type ConsensusState = Delegate::ConsensusState;
+}
+
+impl<Chain, Counterparty, Provider, ConsensusState> ProvideConsensusStateType<Chain, Counterparty>
+    for WithProvider<Provider>
+where
+    Chain: Async,
+    Provider: ProvideType<Chain, ConsensusStateTypeComponent, Type = ConsensusState>,
+    ConsensusState: Async,
+{
+    type ConsensusState = ConsensusState;
 }
