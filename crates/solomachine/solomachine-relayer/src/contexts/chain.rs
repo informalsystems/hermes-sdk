@@ -288,6 +288,8 @@ pub trait CanUseSolomachine:
     + CanBuildConnectionOpenAckMessage<CosmosChain>
     + CanBuildConnectionOpenConfirmMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
+where
+    CosmosChain: HasClientStateType<Self>,
 {
 }
 

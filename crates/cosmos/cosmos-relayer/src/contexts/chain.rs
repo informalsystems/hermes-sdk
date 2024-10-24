@@ -390,6 +390,8 @@ pub trait CanUseCosmosChain:
     + CanQueryProposalStatus
     + CanBuildDepositProposalMessage
     + CanBuildVoteProposalMessage
+where
+    CosmosChain: HasClientStateType<Self>,
 {
 }
 

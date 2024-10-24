@@ -1,5 +1,9 @@
 use cgp::prelude::*;
+use hermes_cosmos_chain_components::components::client::{
+    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+};
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
+use hermes_cosmos_chain_components::impls::types::client_state::ProvideTendermintClientState;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
     ChannelOpenInitMessageBuilderComponent, ChannelOpenTryMessageBuilderComponent,
@@ -27,6 +31,11 @@ use crate::types::create_client::ProvidCreateWasmTendermintMessageOptionsType;
 
 define_components! {
     CosmosToWasmCosmosComponents {
+        [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+        ]:
+            ProvideTendermintClientState,
         CreateClientMessageBuilderComponent:
             BuildCreateWasmTendermintClientMessage,
         CreateClientMessageOptionsTypeComponent:

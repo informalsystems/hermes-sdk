@@ -21,7 +21,9 @@ use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
-use hermes_cosmos_chain_components::types::tendermint::TendermintConsensusState;
+use hermes_cosmos_chain_components::types::tendermint::{
+    TendermintClientState, TendermintConsensusState,
+};
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_relayer::impls::error::HandleCosmosError;
 use hermes_cosmos_relayer::types::telemetry::CosmosTelemetry;
@@ -631,6 +633,8 @@ pub trait CanUseWasmCosmosChain:
         >
     + HasDefaultEncoding<AsBytes, Encoding = WasmCosmosEncoding>
     + CanUploadWasmClientCode
+where
+    CosmosChain: HasClientStateType<Self, ClientState = TendermintClientState>
 {
 }
 

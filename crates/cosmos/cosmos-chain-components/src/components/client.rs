@@ -164,7 +164,7 @@ use crate::impls::queries::unreceived_acks::QueryUnreceivedCosmosAcksSequences;
 use crate::impls::queries::unreceived_packet::QueryUnreceivedCosmosPacketSequences;
 use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
-use crate::impls::types::client_state::{ProvideAnyRawClientState, ProvideTendermintClientState};
+use crate::impls::types::client_state::ProvideAnyRawClientState;
 use crate::impls::types::consensus_state::{
     ProvideAnyRawConsensusState, ProvideTendermintConsensusState,
 };
@@ -231,11 +231,6 @@ define_components! {
             TimeoutUnorderedPacketPayloadTypeComponent,
         ]:
             ProvideCosmosPayloadTypes,
-        [
-            ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
-        ]:
-            ProvideTendermintClientState,
         RawClientStateTypeComponent:
             ProvideAnyRawClientState,
         RawConsensusStateTypeComponent:
@@ -349,6 +344,9 @@ define_components! {
             QueryCosmosChannelEndFromAbci,
 
         [
+            ClientStateTypeComponent,
+            ClientStateFieldsGetterComponent,
+
             ConsensusStateHeightsQuerierComponent,
             CounterpartyMessageHeightGetterComponent,
 
