@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
@@ -16,6 +18,7 @@ where
 {
     async fn query_consensus_state(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Self::Height,
@@ -31,6 +34,7 @@ where
 {
     async fn query_consensus_state_with_proofs(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Self::Height,
@@ -79,6 +83,7 @@ where
 {
     async fn query_consensus_state_with_latest_height(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         consensus_height: &Counterparty::Height,
     ) -> Result<Counterparty::ConsensusState, Self::Error>;
@@ -91,12 +96,14 @@ where
 {
     async fn query_consensus_state_with_latest_height(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
     ) -> Result<Counterparty::ConsensusState, Chain::Error> {
         let status = self.query_chain_status().await?;
 
         self.query_consensus_state(
+            tag,
             client_id,
             consensus_height,
             Chain::chain_status_height(&status),
@@ -115,11 +122,12 @@ where
 {
     async fn query_consensus_state(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Chain::Height,
     ) -> Result<Counterparty::ConsensusState, Chain::Error> {
-        Delegate::query_consensus_state(chain, client_id, consensus_height, query_height).await
+        Delegate::query_consensus_state(chain, tag, client_id, consensus_height, query_height).await
     }
 }
 
@@ -133,12 +141,14 @@ where
 {
     async fn query_consensus_state_with_proofs(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Chain::Height,
     ) -> Result<(Counterparty::ConsensusState, Chain::CommitmentProof), Chain::Error> {
         Delegate::query_consensus_state_with_proofs(
             chain,
+            tag,
             client_id,
             consensus_height,
             query_height,

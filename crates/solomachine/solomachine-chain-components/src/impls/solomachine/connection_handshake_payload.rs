@@ -133,7 +133,7 @@ where
         );
 
         let cosmos_consensus_state = chain
-            .query_consensus_state(client_id, height, height)
+            .query_consensus_state(PhantomData, client_id, height, height)
             .await?;
 
         let consensus_state_proof = consensus_state_proof_data(
@@ -236,7 +236,7 @@ where
             );
 
         let cosmos_consensus_state = chain
-            .query_consensus_state(client_id, height, height)
+            .query_consensus_state(PhantomData, client_id, height, height)
             .await?;
 
         let consensus_state_proof = consensus_state_proof_data(

@@ -275,6 +275,7 @@ impl CounterpartyMessageHeightGetter<MockChainContext, MockChainContext> for Moc
 impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_consensus_state(
         chain: &MockChainContext,
+        _tag: PhantomData<MockChainContext>,
         client_id: &ClientId,
         consensus_height: &MockHeight,
         _query_height: &MockHeight,

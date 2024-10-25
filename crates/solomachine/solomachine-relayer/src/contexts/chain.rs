@@ -179,6 +179,7 @@ where
 {
     async fn query_consensus_state(
         chain: &MockSolomachine,
+        _tag: PhantomData<Counterparty>,
         client_id: &ClientId,
         _consensus_height: &Height,
         _query_height: &Height,

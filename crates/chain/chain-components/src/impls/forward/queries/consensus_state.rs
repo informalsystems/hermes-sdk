@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::CanRaiseError;
 use cgp::core::inner::HasInner;
 
@@ -25,13 +27,14 @@ where
 {
     async fn query_consensus_state(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Chain::Height,
     ) -> Result<ConsensusState, Chain::Error> {
         let consensus_state = chain
             .inner()
-            .query_consensus_state(client_id, consensus_height, query_height)
+            .query_consensus_state(tag, client_id, consensus_height, query_height)
             .await
             .map_err(Chain::raise_error)?;
 
@@ -58,13 +61,14 @@ where
 {
     async fn query_consensus_state_with_proofs(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Chain::Height,
     ) -> Result<(ConsensusState, CommitmentProof), Chain::Error> {
         let result = chain
             .inner()
-            .query_consensus_state_with_proofs(client_id, consensus_height, query_height)
+            .query_consensus_state_with_proofs(tag, client_id, consensus_height, query_height)
             .await
             .map_err(Chain::raise_error)?;
 

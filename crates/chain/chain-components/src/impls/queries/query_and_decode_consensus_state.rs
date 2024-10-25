@@ -26,6 +26,7 @@ where
 {
     async fn query_consensus_state(
         chain: &Chain,
+        _tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Chain::Height,

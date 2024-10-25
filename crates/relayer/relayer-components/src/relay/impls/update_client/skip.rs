@@ -43,7 +43,7 @@ where
         let target_client_id = Target::target_client_id(relay);
 
         let consensus_state = target_chain
-            .query_consensus_state_with_latest_height(target_client_id, target_height)
+            .query_consensus_state_with_latest_height(PhantomData, target_client_id, target_height)
             .await;
 
         match consensus_state {
