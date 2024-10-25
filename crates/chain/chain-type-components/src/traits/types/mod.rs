@@ -8,6 +8,7 @@ pub mod event;
 pub mod height;
 pub mod ibc;
 pub mod message;
+pub mod message_response;
 pub mod quantity;
 pub mod time;
 pub mod timeout;
