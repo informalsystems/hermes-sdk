@@ -1,7 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
-use hermes_chain_components::traits::types::message::HasMessageType;
 
+use hermes_chain_components::traits::types::message::HasMessageType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 

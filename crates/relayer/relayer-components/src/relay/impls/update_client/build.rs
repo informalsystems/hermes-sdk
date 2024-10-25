@@ -1,6 +1,5 @@
-use core::marker::PhantomData;
-
 use alloc::vec::Vec;
+use core::marker::PhantomData;
 
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
 use crate::chain::traits::payload_builders::update_client::CanBuildUpdateClientPayload;

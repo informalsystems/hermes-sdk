@@ -1,6 +1,5 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
-use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -54,6 +53,7 @@ use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;

@@ -1,6 +1,5 @@
-use core::marker::PhantomData;
-
 use alloc::vec::Vec;
+use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
