@@ -85,7 +85,7 @@ where
             let event_type = event.kind.parse().ok()?;
 
             if let IbcEventType::OpenInitConnection = event_type {
-                let open_ack_event = connection_open_ack_try_from_abci_event(&event).ok()?;
+                let open_ack_event = connection_open_ack_try_from_abci_event(event).ok()?;
 
                 let connection_id = open_ack_event.connection_id()?.clone();
 
@@ -117,7 +117,7 @@ where
             let event_type = event.kind.parse().ok()?;
 
             if let IbcEventType::OpenTryConnection = event_type {
-                let open_try_event = connection_open_try_try_from_abci_event(&event).ok()?;
+                let open_try_event = connection_open_try_try_from_abci_event(event).ok()?;
 
                 let connection_id = open_try_event.connection_id()?.clone();
 
@@ -149,7 +149,7 @@ where
             let event_type = event.kind.parse().ok()?;
 
             if let IbcEventType::OpenInitChannel = event_type {
-                let open_init_event = channel_open_init_try_from_abci_event(&event).ok()?;
+                let open_init_event = channel_open_init_try_from_abci_event(event).ok()?;
 
                 let channel_id = open_init_event.channel_id()?.clone();
 
@@ -179,7 +179,7 @@ where
             let event_type = event.kind.parse().ok()?;
 
             if let IbcEventType::OpenTryChannel = event_type {
-                let open_try_event = channel_open_try_try_from_abci_event(&event).ok()?;
+                let open_try_event = channel_open_try_try_from_abci_event(event).ok()?;
 
                 let channel_id = open_try_event.channel_id()?.clone();
 

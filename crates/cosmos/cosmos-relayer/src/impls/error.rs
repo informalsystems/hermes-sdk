@@ -3,7 +3,6 @@ use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
-use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
 
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -30,6 +29,7 @@ use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionNotFoundError;
+use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;

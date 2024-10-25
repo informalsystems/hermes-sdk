@@ -9,13 +9,11 @@ pub use hermes_cosmos_chain_components::components::client::{
     ConsensusStateTypeComponent, CreateClientEventComponent,
     CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
     CreateClientPayloadTypeComponent, InitChannelOptionsTypeComponent,
-    InitConnectionOptionsTypeComponent, OutgoingPacketFieldsReaderComponent,
-    OutgoingPacketTypeComponent, PortIdTypeComponent, ReceivePacketPayloadTypeComponent,
-    SequenceTypeComponent, TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
+    InitConnectionOptionsTypeComponent, MessageResponseEventsGetterComponent,
+    MessageResponseTypeComponent, OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent,
+    PortIdTypeComponent, ReceivePacketPayloadTypeComponent, SequenceTypeComponent,
+    TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
     UpdateClientPayloadTypeComponent,
-};
-pub use hermes_cosmos_chain_components::components::client::{
-    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
 };
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
