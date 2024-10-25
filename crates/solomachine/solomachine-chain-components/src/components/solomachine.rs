@@ -14,6 +14,9 @@ pub use hermes_cosmos_chain_components::components::client::{
     SequenceTypeComponent, TimeTypeComponent, TimeoutUnorderedPacketPayloadTypeComponent,
     UpdateClientPayloadTypeComponent,
 };
+pub use hermes_cosmos_chain_components::components::client::{
+    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
+};
 pub use hermes_cosmos_chain_components::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
 pub use hermes_cosmos_chain_components::impls::packet::packet_fields::CosmosPacketFieldReader;
 pub use hermes_cosmos_chain_components::impls::types::chain::ProvideCosmosChainTypes;
@@ -86,6 +89,8 @@ define_components! {
             ProvideCosmosChainTypes,
         [
             MessageTypeComponent,
+            MessageResponseTypeComponent,
+            MessageResponseEventsGetterComponent,
             EventTypeComponent,
             ChannelEndTypeComponent,
             CommitmentPrefixTypeComponent,

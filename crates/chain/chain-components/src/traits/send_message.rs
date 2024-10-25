@@ -7,7 +7,6 @@ use alloc::vec::Vec;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
-use crate::traits::types::event::HasEventType;
 use crate::traits::types::message::HasMessageType;
 
 /**

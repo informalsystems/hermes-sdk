@@ -1,5 +1,4 @@
 use core::fmt::Debug;
-use core::iter::Iterator;
 use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseError;

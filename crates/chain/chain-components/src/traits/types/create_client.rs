@@ -3,8 +3,6 @@ use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
-use crate::traits::types::ibc::HasIbcChainTypes;
-
 #[derive_component(CreateClientPayloadOptionsTypeComponent, ProvideCreateClientPayloadOptionsType<Chain>)]
 pub trait HasCreateClientPayloadOptionsType<Counterparty>: Async {
     type CreateClientPayloadOptions: Async;

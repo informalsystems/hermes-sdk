@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 
-use hermes_chain_components::traits::types::event::HasEventType;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 

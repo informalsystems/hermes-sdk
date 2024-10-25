@@ -1,6 +1,5 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::{ErrorRaiser, HasErrorType};
-use cgp::prelude::CanRaiseError;
 use hermes_chain_components::traits::send_message::EmptyMessageResponse;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_logging_components::traits::has_logger::HasLogger;

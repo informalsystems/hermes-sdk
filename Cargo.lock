@@ -1903,6 +1903,7 @@ dependencies = [
  "cgp",
  "eyre",
  "flex-error",
+ "hermes-chain-type-components",
  "hermes-cosmos-chain-components",
  "hermes-logging-components",
  "hermes-relayer-components",
@@ -1973,6 +1974,7 @@ dependencies = [
  "crypto-hash",
  "eyre",
  "futures",
+ "hermes-chain-type-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-relayer",
  "hermes-encoding-components",
@@ -2107,6 +2109,7 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "cgp-error-eyre",
+ "hermes-chain-type-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-relayer-components",

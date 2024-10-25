@@ -3,6 +3,7 @@ use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
+use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
 
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -160,6 +161,7 @@ delegate_components! {
             Status,
             MissingSendPacketEventError,
             ProposalIdNotFound,
+            EmptyMessageResponse,
             <'a, Chain: HasAddressType + HasAmountType>
                 EventualAmountTimeoutError<'a, Chain>,
             <'a, Chain>

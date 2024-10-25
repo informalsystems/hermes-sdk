@@ -13,6 +13,10 @@ use core::marker::PhantomData;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
+use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
+use hermes_cosmos_chain_components::components::client::{
+    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
+};
 use hermes_relayer_components::chain::traits::message_builders::ack_packet::AckPacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::receive_packet::ReceivePacketMessageBuilder;
 use hermes_relayer_components::chain::traits::message_builders::timeout_unordered_packet::TimeoutUnorderedPacketMessageBuilder;
@@ -85,6 +89,11 @@ delegate_components! {
             RuntimeGetterComponent,
         ]:
             ProvideDefaultRuntimeField,
+        [
+            MessageResponseTypeComponent,
+            MessageResponseEventsGetterComponent,
+        ]:
+            UseEventsMessageResponse,
     }
 }
 

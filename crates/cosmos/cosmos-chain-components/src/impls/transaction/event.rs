@@ -1,21 +1,21 @@
 use alloc::sync::Arc;
 
 use cgp::core::error::HasErrorType;
-use hermes_relayer_components::chain::traits::types::event::HasEventType;
-use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParser;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_relayer_components::transaction::traits::parse_events::TxMessageResponseParser;
 use hermes_relayer_components::transaction::traits::types::tx_response::HasTxResponseType;
 use tendermint::abci::Event as AbciEvent;
 use tendermint_rpc::endpoint::tx::Response as TxResponse;
 
 pub struct ParseCosmosTxResponseAsEvents;
 
-impl<Chain> TxResponseAsEventsParser<Chain> for ParseCosmosTxResponseAsEvents
+impl<Chain> TxMessageResponseParser<Chain> for ParseCosmosTxResponseAsEvents
 where
     Chain: HasTxResponseType<TxResponse = TxResponse>
-        + HasEventType<Event = Arc<AbciEvent>>
+        + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>
         + HasErrorType,
 {
-    fn parse_tx_response_as_events(
+    fn parse_tx_message_response(
         response: TxResponse,
     ) -> Result<Vec<Vec<Arc<AbciEvent>>>, Chain::Error> {
         let events = split_events_by_messages(response.tx_result.events);
