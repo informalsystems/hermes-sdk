@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::{CanRaiseError, HasErrorType};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
@@ -117,7 +119,9 @@ where
             connection,
         );
 
-        let cosmos_client_state = chain.query_client_state(client_id, height).await?;
+        let cosmos_client_state = chain
+            .query_client_state(PhantomData, client_id, height)
+            .await?;
 
         let client_state_proof = client_state_proof_data(
             public_key,
@@ -208,7 +212,9 @@ where
 
         let commitment_prefix = chain.ibc_commitment_prefix();
 
-        let cosmos_client_state = chain.query_client_state(client_id, height).await?;
+        let cosmos_client_state = chain
+            .query_client_state(PhantomData, client_id, height)
+            .await?;
 
         let client_state_proof = client_state_proof_data(
             public_key,
@@ -284,7 +290,9 @@ where
         let public_key = chain.public_key();
         let secret_key = chain.secret_key();
         let commitment_prefix = chain.ibc_commitment_prefix();
-        let _cosmos_client_state = chain.query_client_state(client_id, height).await?;
+        let _cosmos_client_state = chain
+            .query_client_state(PhantomData, client_id, height)
+            .await?;
 
         let connection = chain.query_connection_end(connection_id, height).await?;
 

@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::vec::Vec;
 
 use crate::chain::traits::message_builders::update_client::CanBuildUpdateClientMessage;
@@ -33,7 +35,7 @@ where
         let counterparty_chain = Target::counterparty_chain(relay);
 
         let client_state = target_chain
-            .query_client_state_with_latest_height(target_client_id)
+            .query_client_state_with_latest_height(PhantomData, target_client_id)
             .await
             .map_err(Target::target_chain_error)?;
 

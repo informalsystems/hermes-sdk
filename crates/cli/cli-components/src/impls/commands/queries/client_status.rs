@@ -165,7 +165,7 @@ where
         client_id: &Self::ClientId,
     ) -> Result<ClientStatus, Self::Error> {
         let client_state = self
-            .query_client_state_with_latest_height(client_id)
+            .query_client_state_with_latest_height(PhantomData, client_id)
             .await
             .map_err(|e| {
                 Chain::wrap_error(

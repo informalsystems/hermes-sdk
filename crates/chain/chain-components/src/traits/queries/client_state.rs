@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::vec::Vec;
 
 use cgp::core::component::UseDelegate;
@@ -19,6 +21,7 @@ where
 {
     async fn query_client_state(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         height: &Self::Height,
     ) -> Result<Counterparty::ClientState, Self::Error>;
@@ -33,6 +36,7 @@ where
 {
     async fn query_client_state_with_proofs(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         height: &Self::Height,
     ) -> Result<(Counterparty::ClientState, Self::CommitmentProof), Self::Error>;
@@ -98,6 +102,7 @@ where
 {
     async fn query_client_state_with_latest_height(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
     ) -> Result<Counterparty::ClientState, Self::Error>;
 }
@@ -109,11 +114,12 @@ where
 {
     async fn query_client_state_with_latest_height(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
     ) -> Result<Counterparty::ClientState, Chain::Error> {
         let status = self.query_chain_status().await?;
 
-        self.query_client_state(client_id, Chain::chain_status_height(&status))
+        self.query_client_state(tag, client_id, Chain::chain_status_height(&status))
             .await
     }
 }
@@ -154,10 +160,11 @@ where
 {
     async fn query_client_state(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<Counterparty::ClientState, Chain::Error> {
-        Delegate::query_client_state(chain, client_id, height).await
+        Delegate::query_client_state(chain, tag, client_id, height).await
     }
 }
 
@@ -171,10 +178,11 @@ where
 {
     async fn query_client_state_with_proofs(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<(Counterparty::ClientState, Chain::CommitmentProof), Chain::Error> {
-        Delegate::query_client_state_with_proofs(chain, client_id, height).await
+        Delegate::query_client_state_with_proofs(chain, tag, client_id, height).await
     }
 }
 

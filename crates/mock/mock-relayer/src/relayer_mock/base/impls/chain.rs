@@ -8,6 +8,8 @@
 //!   have been sent, received, acknowledged, and timed out.
 //! * The ChainStatus is a ConsensusState with a Height and a Timestamp.
 
+use core::marker::PhantomData;
+
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
@@ -286,6 +288,7 @@ impl ConsensusStateQuerier<MockChainContext, MockChainContext> for MockChainComp
 impl ClientStateQuerier<MockChainContext, MockChainContext> for MockChainComponents {
     async fn query_client_state(
         _chain: &MockChainContext,
+        _phantom: PhantomData<MockChainContext>,
         _client_id: &ClientId,
         _height: &MockHeight,
     ) -> Result<(), Error> {

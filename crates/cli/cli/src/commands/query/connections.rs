@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::{json, Output};
@@ -70,12 +72,9 @@ impl CommandRunner<HermesApp> for QueryConnections {
             for connection in all_connections {
                 let client_id = connection.end().client_id().to_owned();
 
-                let client_state = <CosmosChain as CanQueryClientStateWithLatestHeight<
-                    CosmosChain,
-                >>::query_client_state_with_latest_height(
-                    &chain, &client_id
-                )
-                .await;
+                let client_state = chain
+                    .query_client_state_with_latest_height(PhantomData::<CosmosChain>, &client_id)
+                    .await;
 
                 let include = match client_state {
                     Ok(client_state) => {

@@ -1,3 +1,4 @@
+use core::marker::PhantomData;
 use std::collections::HashMap;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
@@ -156,6 +157,7 @@ where
 {
     async fn query_client_state(
         chain: &MockSolomachine,
+        _tag: PhantomData<Counterparty>,
         client_id: &ClientId,
         _height: &Height,
     ) -> Result<TendermintClientState, Error> {

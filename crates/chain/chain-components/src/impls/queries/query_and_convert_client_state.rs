@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use alloc::vec::Vec;
 
 use cgp::core::error::CanRaiseError;
@@ -23,6 +25,7 @@ where
 {
     async fn query_client_state(
         chain: &Chain,
+        _tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<Counterparty::ClientState, Chain::Error> {
@@ -45,6 +48,7 @@ where
 {
     async fn query_client_state_with_proofs(
         chain: &Chain,
+        _tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<(Counterparty::ClientState, Chain::CommitmentProof), Chain::Error> {

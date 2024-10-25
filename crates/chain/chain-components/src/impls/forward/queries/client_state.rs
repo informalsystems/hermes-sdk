@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::CanRaiseError;
 use cgp::core::inner::HasInner;
 
@@ -22,12 +24,13 @@ where
 {
     async fn query_client_state(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<ClientState, Chain::Error> {
         let client_state = chain
             .inner()
-            .query_client_state(client_id, height)
+            .query_client_state(tag, client_id, height)
             .await
             .map_err(Chain::raise_error)?;
 
@@ -53,12 +56,13 @@ where
 {
     async fn query_client_state_with_proofs(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<(ClientState, CommitmentProof), Chain::Error> {
         let result = chain
             .inner()
-            .query_client_state_with_proofs(client_id, height)
+            .query_client_state_with_proofs(tag, client_id, height)
             .await
             .map_err(Chain::raise_error)?;
 

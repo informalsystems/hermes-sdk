@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
 use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
@@ -27,7 +29,7 @@ where
     ) -> Result<Option<AckEvent>, Relay::Error> {
         let src_client_state = relay
             .dst_chain()
-            .query_client_state_with_latest_height(relay.dst_client_id())
+            .query_client_state_with_latest_height(PhantomData, relay.dst_client_id())
             .await
             .map_err(Relay::raise_error)?;
 

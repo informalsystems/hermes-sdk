@@ -10,7 +10,6 @@ impl<Chain, Counterparty> ProvideCreateClientPayloadOptionsType<Chain, Counterpa
     for ProvideCosmosCreateClientSettings
 where
     Chain: Async,
-    Counterparty: Async,
 {
     type CreateClientPayloadOptions = Settings;
 }
