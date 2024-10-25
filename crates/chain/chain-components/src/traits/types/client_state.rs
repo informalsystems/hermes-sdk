@@ -11,7 +11,7 @@ pub trait HasRawClientStateType: Async {
     type RawClientState: Async;
 }
 
-#[derive_component(ClientStateFieldsGetterComponent, ClientStateFieldsGetter<Chain>)]
+#[derive_component(ClientStateFieldsComponent, ClientStateFieldsGetter<Chain>)]
 pub trait HasClientStateFields<Counterparty>:
     HasHeightType + HasClientStateType<Counterparty>
 {

@@ -80,7 +80,7 @@ pub use hermes_relayer_components::chain::traits::types::channel::{
     InitChannelOptionsTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
+    ClientStateFieldsComponent, ClientStateTypeComponent, RawClientStateTypeComponent,
 };
 pub use hermes_relayer_components::chain::traits::types::connection::{
     ConnectionEndTypeComponent, ConnectionOpenAckPayloadTypeComponent,
@@ -338,7 +338,7 @@ define_components! {
 
         [
             ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
+            ClientStateFieldsComponent,
 
             ConsensusStateTypeComponent,
             ConsensusStateFieldComponent,

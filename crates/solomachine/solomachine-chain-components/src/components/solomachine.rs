@@ -2,7 +2,7 @@ use cgp::prelude::*;
 pub use hermes_cosmos_chain_components::components::client::{
     AckPacketPayloadTypeComponent, ChannelEndTypeComponent, ChannelIdTypeComponent,
     ChannelOpenAckPayloadTypeComponent, ChannelOpenConfirmPayloadTypeComponent,
-    ChannelOpenTryPayloadTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
+    ChannelOpenTryPayloadTypeComponent, ClientIdTypeComponent, ClientStateFieldsComponent,
     ClientStateTypeComponent, ConnectionIdTypeComponent, ConnectionOpenAckPayloadTypeComponent,
     ConnectionOpenConfirmPayloadTypeComponent, ConnectionOpenInitEventComponent,
     ConnectionOpenInitPayloadTypeComponent, ConnectionOpenTryPayloadTypeComponent,
@@ -111,7 +111,7 @@ define_components! {
             ProvideSolomachineChainTypes,
         [
             ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
+            ClientStateFieldsComponent,
         ]:
             ProvideSolomachineClientState,
         ConsensusStateTypeComponent:

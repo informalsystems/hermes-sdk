@@ -7,7 +7,7 @@ use futures::lock::Mutex;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_async_runtime_components::subscription::traits::subscription::Subscription;
 use hermes_cosmos_chain_components::components::client::{
-    ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsGetterComponent,
+    ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsComponent,
     ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
     OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
     SequenceTypeComponent, TimeTypeComponent,
@@ -437,7 +437,7 @@ delegate_components! {
             CosmosClientComponents,
         [
             ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
+            ClientStateFieldsComponent,
         ]:
             ProvideWrappedTendermintClientState,
     }

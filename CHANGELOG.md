@@ -2,6 +2,15 @@
 
 ## v0.2.0 (pre-release)
 
+- Delegate `ClientState` and `ConsensusState` types based on counterparty - [#459](https://github.com/informalsystems/hermes-sdk/pull/459)
+  - Implement `UseDelegate` for `HasClientStateType`, `HasConsensusStateType`, `HasClientStateFields`, and `HasConsensusStateFields`.
+  - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
+    `ClientStateTypeComponent`, `ConsensusStateTypeComponent`, `ClientStateFieldsComponent`, `ConsensusStateFieldComponent`.
+    - To use CosmosChain with a concrete counterparty, the respective components need to be implemented in
+      `<DelegateCosmosChainComponents as DelegateComponent<Counterparty>>::Delegate`.
+  - Add `PhantomData` tag parameters to `query_client_state` and `query_consensus_state` to help in type inference when used
+    with concrete contexts.
+
 - Improve error messages when submitting Wasm client proposals - [#458](https://github.com/informalsystems/hermes-sdk/pull/458)
   - Refactor `poll_proposal_status` to accept a list of wanted status.
   - Make Cosmos implementation of `query_proposal_status` return error if the proposal failed.

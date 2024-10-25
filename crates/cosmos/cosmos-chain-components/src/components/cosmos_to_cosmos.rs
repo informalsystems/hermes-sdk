@@ -20,7 +20,7 @@ use hermes_relayer_components::chain::traits::queries::consensus_state::{
 };
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::ConsensusStateHeightsQuerierComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldComponent, ConsensusStateTypeComponent,
@@ -42,7 +42,7 @@ define_components! {
     CosmosToCosmosComponents {
         [
             ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
+            ClientStateFieldsComponent,
         ]:
             ProvideTendermintClientState,
         [

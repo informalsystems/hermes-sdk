@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::client::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsComponent, ClientStateTypeComponent,
 };
 use hermes_cosmos_chain_components::impls::types::client_state::ProvideTendermintClientState;
 use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
@@ -25,7 +25,7 @@ define_components! {
     SolomachineCosmosComponents {
         [
             ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
+            ClientStateFieldsComponent,
         ]:
             ProvideTendermintClientState,
         [

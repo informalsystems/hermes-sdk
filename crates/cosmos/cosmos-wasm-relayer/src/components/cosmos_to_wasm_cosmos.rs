@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::client::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent, ConsensusStateFieldComponent,
+    ClientStateFieldsComponent, ClientStateTypeComponent, ConsensusStateFieldComponent,
     ConsensusStateTypeComponent,
 };
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
@@ -39,7 +39,7 @@ define_components! {
             BuildUpdateWasmTendermintClientMessage,
         [
             ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
+            ClientStateFieldsComponent,
             ConsensusStateTypeComponent,
             ConsensusStateFieldComponent,
             ClientStateQuerierComponent,
