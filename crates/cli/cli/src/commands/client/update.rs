@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use hermes_cli_components::traits::build::CanLoadBuilder;
 use hermes_cli_framework::command::CommandRunner;
 use hermes_cli_framework::output::Output;
@@ -51,9 +53,8 @@ impl CommandRunner<HermesApp> for ClientUpdate {
 
         let host_chain = builder.build_chain(&self.host_chain_id).await?;
 
-        let client_state =
-            <CosmosChain as CanQueryClientStateWithLatestHeight<CosmosChain>>::
-            query_client_state_with_latest_height(&host_chain, &self.client_id)
+        let client_state = host_chain
+            .query_client_state_with_latest_height(PhantomData::<CosmosChain>, &self.client_id)
             .await?;
 
         let reference_chain_id = client_state.chain_id;

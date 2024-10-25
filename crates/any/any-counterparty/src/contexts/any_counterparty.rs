@@ -37,7 +37,7 @@ use hermes_relayer_components::chain::traits::queries::client_state::{
 };
 use hermes_relayer_components::chain::traits::types::chain_id::ChainIdTypeComponent;
 use hermes_relayer_components::chain::traits::types::client_state::{
-    ClientStateFieldsGetterComponent, ClientStateTypeComponent,
+    ClientStateFieldsComponent, ClientStateTypeComponent,
 };
 use hermes_relayer_components::chain::traits::types::height::HeightTypeComponent;
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
@@ -76,7 +76,7 @@ delegate_components! {
             ProvideCosmosChainTypes,
         [
             ClientStateTypeComponent,
-            ClientStateFieldsGetterComponent,
+            ClientStateFieldsComponent,
         ]:
             ProvideAnyClientState,
         [

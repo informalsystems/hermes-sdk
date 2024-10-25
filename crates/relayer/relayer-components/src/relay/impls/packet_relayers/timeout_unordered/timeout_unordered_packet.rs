@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use crate::chain::traits::message_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketMessage;
 use crate::chain::traits::payload_builders::timeout_unordered_packet::CanBuildTimeoutUnorderedPacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
@@ -27,7 +29,7 @@ where
     ) -> Result<(), Relay::Error> {
         let dst_client_state = relay
             .src_chain()
-            .query_client_state_with_latest_height(relay.src_client_id())
+            .query_client_state_with_latest_height(PhantomData, relay.src_client_id())
             .await
             .map_err(Relay::raise_error)?;
 

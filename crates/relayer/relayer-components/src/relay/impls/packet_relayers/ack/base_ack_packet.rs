@@ -1,3 +1,6 @@
+use core::marker::PhantomData;
+
+use hermes_chain_components::traits::types::event::HasEventType;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
@@ -19,7 +22,8 @@ impl<Relay, SrcChain, DstChain> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanRaiseRelayChainErrors,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
-    SrcChain: CanQueryClientStateWithLatestHeight<DstChain>
+    SrcChain: HasEventType
+        + CanQueryClientStateWithLatestHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + HasOutgoingPacketType<DstChain>,
     DstChain: HasClientStateType<SrcChain>
@@ -34,7 +38,7 @@ where
     ) -> Result<(), Relay::Error> {
         let src_client_state = relay
             .src_chain()
-            .query_client_state_with_latest_height(relay.src_client_id())
+            .query_client_state_with_latest_height(PhantomData, relay.src_client_id())
             .await
             .map_err(Relay::raise_error)?;
 

@@ -109,7 +109,7 @@ where
         };
 
         let consensus_state = chain
-            .query_consensus_state(&client_id, &consensus_height, &query_height)
+            .query_consensus_state(PhantomData, &client_id, &consensus_height, &query_height)
             .await
             .map_err(App::raise_error)?;
 

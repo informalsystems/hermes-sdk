@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::HasErrorType;
 
 use crate::traits::commitment_prefix::HasIbcCommitmentPrefix;
@@ -73,13 +75,18 @@ where
             .await?;
 
         let (client_state, client_state_proofs) = chain
-            .query_client_state_with_proofs(client_id, height)
+            .query_client_state_with_proofs(PhantomData, client_id, height)
             .await?;
 
         let consensus_state_height = Counterparty::client_state_latest_height(&client_state);
 
         let (_, consensus_state_proofs) = chain
-            .query_consensus_state_with_proofs(client_id, &consensus_state_height, height)
+            .query_consensus_state_with_proofs(
+                PhantomData,
+                client_id,
+                &consensus_state_height,
+                height,
+            )
             .await?;
 
         // TODO: validate client and connection states
@@ -130,13 +137,18 @@ where
             .await?;
 
         let (client_state, client_state_proofs) = chain
-            .query_client_state_with_proofs(client_id, height)
+            .query_client_state_with_proofs(PhantomData, client_id, height)
             .await?;
 
         let consensus_state_height = Counterparty::client_state_latest_height(&client_state);
 
         let (_, consensus_state_proofs) = chain
-            .query_consensus_state_with_proofs(client_id, &consensus_state_height, height)
+            .query_consensus_state_with_proofs(
+                PhantomData,
+                client_id,
+                &consensus_state_height,
+                height,
+            )
             .await?;
 
         // TODO: validate client and connection states

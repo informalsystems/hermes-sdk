@@ -3,7 +3,6 @@ use core::array::TryFromSliceError;
 use core::convert::Infallible;
 use core::num::{ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
-use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
 
 use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiser, ErrorRaiserComponent, ErrorTypeComponent};
@@ -13,6 +12,7 @@ use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateTy
 use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
+use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::handlers::display::DisplayError;
 use hermes_error::handlers::identity::ReturnError;

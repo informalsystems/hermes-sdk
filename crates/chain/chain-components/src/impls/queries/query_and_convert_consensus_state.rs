@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use cgp::core::error::CanRaiseError;
 use cgp::core::Async;
 use hermes_encoding_components::traits::convert::CanConvert;
@@ -24,6 +26,7 @@ where
 {
     async fn query_consensus_state(
         chain: &Chain,
+        _tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Chain::Height,
@@ -51,6 +54,7 @@ where
 {
     async fn query_consensus_state_with_proofs(
         chain: &Chain,
+        _tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         consensus_height: &Counterparty::Height,
         query_height: &Chain::Height,

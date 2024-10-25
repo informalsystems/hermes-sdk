@@ -1,4 +1,8 @@
 use cgp::prelude::*;
+use hermes_cosmos_chain_components::components::client::{
+    ClientStateFieldsComponent, ClientStateTypeComponent, ConsensusStateFieldComponent,
+    ConsensusStateTypeComponent,
+};
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
     ChannelOpenAckMessageBuilderComponent, ChannelOpenConfirmMessageBuilderComponent,
@@ -34,6 +38,10 @@ define_components! {
         UpdateClientMessageBuilderComponent:
             BuildUpdateWasmTendermintClientMessage,
         [
+            ClientStateTypeComponent,
+            ClientStateFieldsComponent,
+            ConsensusStateTypeComponent,
+            ConsensusStateFieldComponent,
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,

@@ -1,5 +1,6 @@
 use core::fmt::Debug;
 use core::iter::Iterator;
+use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseError;
 
@@ -49,7 +50,7 @@ where
         let dst_client_id = relay.dst_client_id();
 
         let dst_client_state = src_chain
-            .query_client_state_with_latest_height(src_client_id)
+            .query_client_state_with_latest_height(PhantomData, src_client_id)
             .await
             .map_err(Relay::raise_error)?;
 

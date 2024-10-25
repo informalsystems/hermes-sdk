@@ -1,6 +1,7 @@
 use alloc::vec::Vec;
 use core::marker::PhantomData;
 
+use hermes_chain_components::traits::types::message::HasMessageType;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 
@@ -30,7 +31,7 @@ where
     Target: ChainTarget<Relay, TargetChain = TargetChain, CounterpartyChain = CounterpartyChain>,
     InUpdateClient: TargetUpdateClientMessageBuilder<Relay, Target>,
     CounterpartyChain: HasConsensusStateType<TargetChain> + HasHeightType,
-    TargetChain: CanQueryConsensusStateWithLatestHeight<CounterpartyChain>,
+    TargetChain: CanQueryConsensusStateWithLatestHeight<CounterpartyChain> + HasMessageType,
     Relay::Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, Target>>,
 {
     async fn build_target_update_client_messages(
@@ -42,7 +43,7 @@ where
         let target_client_id = Target::target_client_id(relay);
 
         let consensus_state = target_chain
-            .query_consensus_state_with_latest_height(target_client_id, target_height)
+            .query_consensus_state_with_latest_height(PhantomData, target_client_id, target_height)
             .await;
 
         match consensus_state {

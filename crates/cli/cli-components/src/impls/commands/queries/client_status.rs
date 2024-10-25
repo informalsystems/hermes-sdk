@@ -165,7 +165,7 @@ where
         client_id: &Self::ClientId,
     ) -> Result<ClientStatus, Self::Error> {
         let client_state = self
-            .query_client_state_with_latest_height(client_id)
+            .query_client_state_with_latest_height(PhantomData, client_id)
             .await
             .map_err(|e| {
                 Chain::wrap_error(
@@ -181,7 +181,7 @@ where
         let client_latest_height = Counterparty::client_state_latest_height(&client_state);
 
         let latest_consensus_state = self
-            .query_consensus_state_with_latest_height(client_id, &client_latest_height)
+            .query_consensus_state_with_latest_height(PhantomData, client_id, &client_latest_height)
             .await
             .map_err(|e| {
                 Chain::wrap_error(

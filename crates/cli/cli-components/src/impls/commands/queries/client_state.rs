@@ -86,7 +86,7 @@ where
         };
 
         let client_state = chain
-            .query_client_state(&client_id, &query_height)
+            .query_client_state(PhantomData, &client_id, &query_height)
             .await
             .map_err(App::raise_error)?;
 

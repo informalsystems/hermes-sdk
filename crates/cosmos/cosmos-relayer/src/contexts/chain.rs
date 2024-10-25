@@ -53,6 +53,7 @@ use hermes_relayer_components::chain::traits::types::channel::HasChannelEndType;
 use hermes_relayer_components::chain::traits::types::client_state::{
     HasClientStateType, HasRawClientStateType,
 };
+use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::proof::HasCommitmentProofType;
 use hermes_relayer_components::error::traits::retry::RetryableErrorComponent;
 use hermes_relayer_components::transaction::impls::estimate_fees_and_send_tx::LogSendMessagesWithSignerAndNonce;
@@ -390,6 +391,8 @@ pub trait CanUseCosmosChain:
     + CanQueryProposalStatus
     + CanBuildDepositProposalMessage
     + CanBuildVoteProposalMessage
+where
+    CosmosChain: HasClientStateType<Self> + HasConsensusStateType<Self>,
 {
 }
 

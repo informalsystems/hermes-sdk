@@ -1,7 +1,10 @@
 use alloc::vec::Vec;
+use core::marker::PhantomData;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::height::HasHeightType;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use crate::traits::queries::chain_status::CanQueryChainStatus;
 use crate::traits::types::client_state::{HasClientStateType, HasRawClientStateType};
@@ -10,12 +13,14 @@ use crate::traits::types::proof::HasCommitmentProofType;
 
 #[derive_component(ClientStateQuerierComponent, ClientStateQuerier<Chain>)]
 #[async_trait]
-pub trait CanQueryClientState<Counterparty>: HasIbcChainTypes<Counterparty> + HasErrorType
+pub trait CanQueryClientState<Counterparty>:
+    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
     async fn query_client_state(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         height: &Self::Height,
     ) -> Result<Counterparty::ClientState, Self::Error>;
@@ -24,12 +29,13 @@ where
 #[derive_component(ClientStateWithProofsQuerierComponent, ClientStateWithProofsQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryClientStateWithProofs<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasCommitmentProofType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasCommitmentProofType + HasErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
     async fn query_client_state_with_proofs(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
         height: &Self::Height,
     ) -> Result<(Counterparty::ClientState, Self::CommitmentProof), Self::Error>;
@@ -38,7 +44,7 @@ where
 #[derive_component(RawClientStateQuerierComponent, RawClientStateQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryRawClientState<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasRawClientStateType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasErrorType
 {
     async fn query_raw_client_state(
         &self,
@@ -50,7 +56,11 @@ pub trait CanQueryRawClientState<Counterparty>:
 #[derive_component(RawClientStateWithProofsQuerierComponent, RawClientStateWithProofsQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryRawClientStateWithProofs<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasRawClientStateType + HasCommitmentProofType + HasErrorType
+    HasClientIdType<Counterparty>
+    + HasHeightType
+    + HasRawClientStateType
+    + HasCommitmentProofType
+    + HasErrorType
 {
     async fn query_raw_client_state_with_proofs(
         &self,
@@ -62,7 +72,7 @@ pub trait CanQueryRawClientStateWithProofs<Counterparty>:
 #[derive_component(AllClientStatesQuerierComponent, AllClientStatesQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryAllClientStates<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
@@ -75,7 +85,7 @@ where
 #[derive_component(AllRawClientStatesQuerierComponent, AllRawClientStatesQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryAllRawClientStates<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasRawClientStateType + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasRawClientStateType + HasErrorType
 {
     async fn query_all_raw_client_states(
         &self,
@@ -85,12 +95,13 @@ pub trait CanQueryAllRawClientStates<Counterparty>:
 
 #[async_trait]
 pub trait CanQueryClientStateWithLatestHeight<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
     async fn query_client_state_with_latest_height(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Self::ClientId,
     ) -> Result<Counterparty::ClientState, Self::Error>;
 }
@@ -102,18 +113,19 @@ where
 {
     async fn query_client_state_with_latest_height(
         &self,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
     ) -> Result<Counterparty::ClientState, Chain::Error> {
         let status = self.query_chain_status().await?;
 
-        self.query_client_state(client_id, Chain::chain_status_height(&status))
+        self.query_client_state(tag, client_id, Chain::chain_status_height(&status))
             .await
     }
 }
 
 #[async_trait]
 pub trait CanQueryAllClientStatesWithLatestHeight<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasHeightType + HasErrorType
 where
     Counterparty: HasClientStateType<Self>,
 {
@@ -147,10 +159,11 @@ where
 {
     async fn query_client_state(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<Counterparty::ClientState, Chain::Error> {
-        Delegate::query_client_state(chain, client_id, height).await
+        Delegate::query_client_state(chain, tag, client_id, height).await
     }
 }
 
@@ -164,10 +177,11 @@ where
 {
     async fn query_client_state_with_proofs(
         chain: &Chain,
+        tag: PhantomData<Counterparty>,
         client_id: &Chain::ClientId,
         height: &Chain::Height,
     ) -> Result<(Counterparty::ClientState, Chain::CommitmentProof), Chain::Error> {
-        Delegate::query_client_state_with_proofs(chain, client_id, height).await
+        Delegate::query_client_state_with_proofs(chain, tag, client_id, height).await
     }
 }
 

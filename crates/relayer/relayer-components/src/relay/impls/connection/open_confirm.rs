@@ -1,3 +1,5 @@
+use core::marker::PhantomData;
+
 use crate::chain::traits::message_builders::connection_handshake::CanBuildConnectionOpenConfirmMessage;
 use crate::chain::traits::payload_builders::connection_handshake::CanBuildConnectionOpenConfirmPayload;
 use crate::chain::traits::queries::chain_status::CanQueryChainHeight;
@@ -48,7 +50,7 @@ where
             .map_err(Relay::raise_error)?;
 
         let src_client_state = dst_chain
-            .query_client_state_with_latest_height(relay.dst_client_id())
+            .query_client_state_with_latest_height(PhantomData, relay.dst_client_id())
             .await
             .map_err(Relay::raise_error)?;
 
