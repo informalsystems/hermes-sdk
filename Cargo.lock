@@ -1709,6 +1709,7 @@ dependencies = [
  "futures",
  "hermes-any-counterparty",
  "hermes-async-runtime-components",
+ "hermes-chain-type-components",
  "hermes-cosmos-chain-components",
  "hermes-cosmos-test-components",
  "hermes-encoding-components",

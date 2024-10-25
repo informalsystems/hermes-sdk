@@ -9,6 +9,7 @@ use hermes_async_runtime_components::subscription::traits::subscription::Subscri
 use hermes_cosmos_chain_components::components::client::{
     ChannelIdTypeComponent, ClientIdTypeComponent, ClientStateFieldsComponent,
     ClientStateTypeComponent, ConnectionIdTypeComponent, CosmosClientComponents,
+    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
     OutgoingPacketFieldsReaderComponent, OutgoingPacketTypeComponent, PortIdTypeComponent,
     SequenceTypeComponent, TimeTypeComponent,
 };
@@ -306,6 +307,8 @@ delegate_components! {
             TimeoutTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
+            MessageResponseTypeComponent,
+            MessageResponseEventsGetterComponent,
             MessageSizeEstimatorComponent,
             EventTypeComponent,
             RawClientStateTypeComponent,

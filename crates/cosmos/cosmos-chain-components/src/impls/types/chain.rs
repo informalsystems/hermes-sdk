@@ -1,5 +1,8 @@
 use alloc::sync::Arc;
 use core::time::Duration;
+use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
+use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
+use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 
 use cgp::core::error::CanRaiseError;
 use cgp::core::types::impls::WithType;
@@ -68,6 +71,11 @@ delegate_components! {
             WithType<CosmosMessage>,
         EventTypeComponent:
             WithType<Arc<AbciEvent>>,
+        [
+            MessageResponseTypeComponent,
+            MessageResponseEventsGetterComponent,
+        ]:
+            UseEventsMessageResponse,
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
         [

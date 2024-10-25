@@ -1,5 +1,7 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -362,6 +364,7 @@ pub trait CanUseCosmosChain:
     HasClientStateType<CosmosChain, ClientState = TendermintClientState>
     + HasChannelEndType<CosmosChain, ChannelEnd = ChannelEnd>
     + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
+    + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>
     + CanQueryBalance
     + CanIbcTransferToken<CosmosChain>
     + CanBuildIbcTokenTransferMessage<CosmosChain>
@@ -391,6 +394,7 @@ pub trait CanUseCosmosChain:
     + CanQueryProposalStatus
     + CanBuildDepositProposalMessage
     + CanBuildVoteProposalMessage
+    + HasMessageResponseEvents
 where
     CosmosChain: HasClientStateType<Self> + HasConsensusStateType<Self>,
 {
