@@ -1,5 +1,8 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::{ErrorRaiser, HasErrorType};
+use cgp::prelude::CanRaiseError;
+use hermes_chain_components::traits::send_message::EmptyMessageResponse;
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -51,6 +54,7 @@ where
         + HasRuntime
         + HasChainId
         + CanSendMessages
+        + HasMessageResponseEvents
         + CanQueryChainStatus
         + HasClientStateFields<DstChain>
         + HasConsensusStateType<DstChain>
@@ -68,6 +72,7 @@ where
         + HasRuntime
         + HasChainId
         + CanSendMessages
+        + HasMessageResponseEvents
         + CanQueryChainStatus
         + HasClientStateFields<SrcChain>
         + HasConsensusStateType<SrcChain>
@@ -97,6 +102,7 @@ where
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, DestinationTarget>>,
     Components: DelegatesToDefaultRelayComponents
         + PacketFilter<Relay>
+        + ErrorRaiser<Relay, EmptyMessageResponse>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
 {

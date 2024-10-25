@@ -69,14 +69,12 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        let events = src_chain
+        let response = src_chain
             .send_message(src_message)
             .await
             .map_err(Relay::raise_error)?;
 
-        let open_init_event = events
-            .into_iter()
-            .find_map(|event| SrcChain::try_extract_connection_open_init_event(event))
+        let open_init_event = SrcChain::try_extract_connection_open_init_event(&response)
             .ok_or_else(|| Relay::raise_error(MissingConnectionInitEventError { relay }))?;
 
         let src_connection_id =

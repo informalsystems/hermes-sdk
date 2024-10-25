@@ -1,6 +1,6 @@
 use alloc::vec::Vec;
 
-use hermes_relayer_components::chain::traits::types::event::HasEventType;
+use hermes_chain_type_components::traits::types::message_response::MessageResponseOf;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use hermes_runtime_components::traits::channel::HasChannelTypes;
 use hermes_runtime_components::traits::channel_once::HasChannelOnceTypes;
@@ -16,7 +16,7 @@ pub type SenderOnce<Chain, Payload> =
 pub type ReceiverOnce<Chain, Payload> =
     <RuntimeOf<Chain> as HasChannelOnceTypes>::ReceiverOnce<Payload>;
 
-pub type EventResult<Chain, Error> = Result<Vec<Vec<<Chain as HasEventType>::Event>>, Error>;
+pub type EventResult<Chain, Error> = Result<Vec<MessageResponseOf<Chain>>, Error>;
 
 pub type EventResultSender<Chain, Error> = SenderOnce<Chain, EventResult<Chain, Error>>;
 

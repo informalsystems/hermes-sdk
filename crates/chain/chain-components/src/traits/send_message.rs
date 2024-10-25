@@ -5,6 +5,7 @@ use alloc::vec;
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 use crate::traits::types::event::HasEventType;
 use crate::traits::types::message::HasMessageType;
@@ -43,16 +44,16 @@ use crate::traits::types::message::HasMessageType;
 */
 #[derive_component(MessageSenderComponent, MessageSender<Chain>)]
 #[async_trait]
-pub trait CanSendMessages: HasMessageType + HasEventType + HasErrorType {
+pub trait CanSendMessages: HasMessageType + HasMessageResponseType + HasErrorType {
     /**
         Given a list of [messages](HasMessageType::Message), submit the messages
         atomically to the chain.
 
-        On success, the method returns a _nested_ list of
-        [events](HasEventType::Event). The length of the outer list must match
-        the length of the input message list. Each list of events in the
-        outer list corresponds to the events emitted from processing the message
-        at the same position in the input message list.
+        On success, the method returns a list of
+        [message responses](HasMessageResponseType::MessageResponse).
+        The length of the list must match the length of the input message list.
+        Each message response may contain to the events emitted from processing
+        the message at the same position in the input message list.
 
         On failure, the method returns an
         [error](cgp_core::error::HasErrorType::Error).
@@ -63,59 +64,35 @@ pub trait CanSendMessages: HasMessageType + HasEventType + HasErrorType {
     async fn send_messages(
         &self,
         messages: Vec<Self::Message>,
-    ) -> Result<Vec<Vec<Self::Event>>, Self::Error>;
-}
-
-pub trait InjectMismatchIbcEventsCountError: HasErrorType {
-    fn mismatch_ibc_events_count_error(expected: usize, actual: usize) -> Self::Error;
+    ) -> Result<Vec<Self::MessageResponse>, Self::Error>;
 }
 
 #[async_trait]
-pub trait CanSendFixSizedMessages: HasMessageType + HasEventType + HasErrorType {
-    async fn send_messages_fixed<const COUNT: usize>(
+pub trait CanSendSingleMessage: HasMessageType + HasMessageResponseType + HasErrorType {
+    async fn send_message(
         &self,
-        messages: [Self::Message; COUNT],
-    ) -> Result<[Vec<Self::Event>; COUNT], Self::Error>;
+        message: Self::Message,
+    ) -> Result<Self::MessageResponse, Self::Error>;
 }
 
-#[async_trait]
-pub trait CanSendSingleMessage: HasMessageType + HasEventType + HasErrorType {
-    async fn send_message(&self, message: Self::Message) -> Result<Vec<Self::Event>, Self::Error>;
-}
-
-impl<Chain> CanSendFixSizedMessages for Chain
-where
-    Chain: CanSendMessages + InjectMismatchIbcEventsCountError,
-{
-    async fn send_messages_fixed<const COUNT: usize>(
-        &self,
-        messages: [Chain::Message; COUNT],
-    ) -> Result<[Vec<Chain::Event>; COUNT], Self::Error> {
-        let events_vec = self.send_messages(messages.into()).await?;
-
-        let events = events_vec
-            .try_into()
-            .map_err(|e: Vec<_>| Chain::mismatch_ibc_events_count_error(COUNT, e.len()))?;
-
-        Ok(events)
-    }
-}
+#[derive(Debug)]
+pub struct EmptyMessageResponse;
 
 impl<Chain> CanSendSingleMessage for Chain
 where
-    Chain: CanSendMessages,
+    Chain: CanSendMessages + CanRaiseError<EmptyMessageResponse>,
 {
     async fn send_message(
         &self,
         message: Chain::Message,
-    ) -> Result<Vec<Chain::Event>, Chain::Error> {
-        let events = self
-            .send_messages(vec![message])
-            .await?
-            .into_iter()
-            .flatten()
-            .collect();
+    ) -> Result<Chain::MessageResponse, Chain::Error> {
+        let responses = self.send_messages(vec![message]).await?;
 
-        Ok(events)
+        let response = responses
+            .into_iter()
+            .next()
+            .ok_or_else(|| Chain::raise_error(EmptyMessageResponse))?;
+
+        Ok(response)
     }
 }

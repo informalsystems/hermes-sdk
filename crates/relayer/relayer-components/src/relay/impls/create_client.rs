@@ -1,6 +1,7 @@
 use core::fmt::Debug;
 
 use cgp::core::error::CanRaiseError;
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 
 use crate::chain::traits::message_builders::create_client::CanBuildCreateClientMessage;
 use crate::chain::traits::payload_builders::create_client::CanBuildCreateClientPayload;
@@ -53,7 +54,8 @@ where
     TargetChain: CanSendSingleMessage
         + HasChainId
         + CanBuildCreateClientMessage<CounterpartyChain>
-        + HasCreateClientEvent<CounterpartyChain>,
+        + HasCreateClientEvent<CounterpartyChain>
+        + HasMessageResponseEvents,
     CounterpartyChain: HasChainId
         + CanBuildCreateClientPayload<TargetChain>
         + HasCreateClientPayloadType<TargetChain>,
@@ -76,14 +78,12 @@ where
             .await
             .map_err(Target::target_chain_error)?;
 
-        let events = target_chain
+        let response = target_chain
             .send_message(message)
             .await
             .map_err(Target::target_chain_error)?;
 
-        let create_client_event = events
-            .into_iter()
-            .find_map(|event| TargetChain::try_extract_create_client_event(event))
+        let create_client_event = TargetChain::try_extract_create_client_event(&response)
             .ok_or_else(|| {
                 Relay::raise_error(MissingCreateClientEventError {
                     target_chain_id: target_chain.chain_id(),

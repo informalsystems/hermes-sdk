@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::sleep::CanSleep;
@@ -27,7 +28,7 @@ use crate::transaction::traits::nonce::allocate_nonce::{
 use crate::transaction::traits::nonce::nonce_guard::HasNonceGuard;
 use crate::transaction::traits::nonce::nonce_mutex::HasMutexForNonceAllocation;
 use crate::transaction::traits::nonce::query_nonce::{CanQueryNonce, NonceQuerier};
-use crate::transaction::traits::parse_events::CanParseTxResponseAsEvents;
+use crate::transaction::traits::parse_events::CanParseTxMessageResponse;
 use crate::transaction::traits::poll_tx_response::{CanPollTxResponse, TxResponsePollerComponent};
 use crate::transaction::traits::query_tx_response::{CanQueryTxResponse, TxResponseQuerier};
 use crate::transaction::traits::send_messages_with_signer::{
@@ -82,6 +83,7 @@ where
         + HasSignerType
         + HasTransactionHashType
         + HasTxResponseType
+        + HasMessageResponseEvents
         + HasDefaultSigner
         + HasNonceGuard
         + HasChainId
@@ -90,7 +92,7 @@ where
         + HasPollTimeout
         + HasRetryableError
         + HasLogger<Logger = Logger>
-        + CanParseTxResponseAsEvents
+        + CanParseTxMessageResponse
         + for<'a> CanRaiseError<TxNoResponseError<'a, Chain>>
         + HasComponents<Components = Components>,
     Chain::Runtime: HasTime + CanSleep,

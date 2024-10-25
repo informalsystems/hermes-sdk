@@ -1928,6 +1928,7 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "hermes-chain-components",
+ "hermes-chain-type-components",
  "hermes-encoding-components",
  "hermes-logging-components",
  "hermes-runtime-components",

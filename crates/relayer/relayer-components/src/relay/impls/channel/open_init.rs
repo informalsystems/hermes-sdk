@@ -48,14 +48,12 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        let events = src_chain
+        let response = src_chain
             .send_message(src_message)
             .await
             .map_err(Relay::raise_error)?;
 
-        let open_init_event = events
-            .into_iter()
-            .find_map(|event| SrcChain::try_extract_channel_open_init_event(event))
+        let open_init_event = SrcChain::try_extract_channel_open_init_event(&response)
             .ok_or_else(|| Relay::raise_error(MissingChannelInitEventError { relay }))?;
 
         let src_channel_id = SrcChain::channel_open_init_event_channel_id(&open_init_event);

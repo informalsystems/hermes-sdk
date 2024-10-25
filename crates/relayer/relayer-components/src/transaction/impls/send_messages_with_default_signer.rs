@@ -13,7 +13,7 @@ where
     async fn send_messages(
         chain: &Chain,
         messages: Vec<Chain::Message>,
-    ) -> Result<Vec<Vec<Chain::Event>>, Chain::Error> {
+    ) -> Result<Vec<Chain::MessageResponse>, Chain::Error> {
         let signer = chain.get_default_signer();
         chain.send_messages_with_signer(signer, &messages).await
     }

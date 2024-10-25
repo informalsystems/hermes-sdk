@@ -2,6 +2,8 @@
    Trait definition for [`HasChainTypes`].
 */
 
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+
 use crate::traits::types::chain_id::HasChainIdType;
 use crate::traits::types::event::HasEventType;
 use crate::traits::types::height::HasHeightType;
@@ -37,13 +39,20 @@ use crate::traits::types::timestamp::{HasTimeType, HasTimeoutType};
     about the transaction context.
 */
 pub trait HasChainTypes:
-    HasHeightType + HasMessageType + HasEventType + HasChainIdType + HasTimeType + HasTimeoutType
+    HasHeightType
+    + HasMessageType
+    + HasMessageResponseType
+    + HasEventType
+    + HasChainIdType
+    + HasTimeType
+    + HasTimeoutType
 {
 }
 
 impl<Chain> HasChainTypes for Chain where
     Chain: HasHeightType
         + HasMessageType
+        + HasMessageResponseType
         + HasEventType
         + HasChainIdType
         + HasTimeType

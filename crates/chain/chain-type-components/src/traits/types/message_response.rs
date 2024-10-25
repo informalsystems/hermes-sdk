@@ -4,3 +4,5 @@ use cgp::prelude::*;
 pub trait HasMessageResponseType: Async {
     type MessageResponse: Async;
 }
+
+pub type MessageResponseOf<Chain> = <Chain as HasMessageResponseType>::MessageResponse;
