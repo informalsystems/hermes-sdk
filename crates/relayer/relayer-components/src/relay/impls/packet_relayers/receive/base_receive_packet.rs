@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
+
 use crate::chain::traits::message_builders::receive_packet::CanBuildReceivePacketMessage;
 use crate::chain::traits::payload_builders::receive_packet::CanBuildReceivePacketPayload;
 use crate::chain::traits::queries::client_state::CanQueryClientStateWithLatestHeight;
@@ -20,6 +22,7 @@ where
     Relay::SrcChain: CanBuildReceivePacketPayload<Relay::DstChain>,
     Relay::DstChain: CanQueryClientStateWithLatestHeight<Relay::SrcChain>
         + CanBuildReceivePacketMessage<Relay::SrcChain>
+        + HasMessageResponseEvents
         + HasWriteAckEvent<Relay::SrcChain, WriteAckEvent = AckEvent>,
 {
     async fn relay_receive_packet(
@@ -45,9 +48,9 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        let events = relay.send_message(DestinationTarget, message).await?;
+        let response = relay.send_message(DestinationTarget, message).await?;
 
-        let ack_event = events
+        let ack_event = Relay::DstChain::message_response_events(&response)
             .iter()
             .find_map(Relay::DstChain::try_extract_write_ack_event);
 

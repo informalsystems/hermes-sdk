@@ -31,7 +31,7 @@ where
         context: &Relay,
         _target: Target,
         messages: Vec<TargetChain::Message>,
-    ) -> Result<Vec<Vec<TargetChain::Event>>, Relay::Error> {
+    ) -> Result<Vec<TargetChain::MessageResponse>, Relay::Error> {
         let (result_sender, result_receiver) = Runtime::new_channel_once();
 
         let message_sender = context.get_batch_sender();

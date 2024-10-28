@@ -16,6 +16,7 @@ cgp                                     = { workspace = true }
 cgp-error-eyre                          = { workspace = true }
 ibc-relayer-types                       = { workspace = true }
 hermes-cosmos-chain-components          = { workspace = true }
+hermes-chain-type-components          = { workspace = true }
 hermes-cosmos-test-components           = { workspace = true }
 hermes-relayer-components               = { workspace = true }
 hermes-test-components                  = { workspace = true }

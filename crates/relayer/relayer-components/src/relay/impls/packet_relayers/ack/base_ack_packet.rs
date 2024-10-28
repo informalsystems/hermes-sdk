@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
-use hermes_chain_components::traits::types::event::HasEventType;
 use hermes_chain_components::traits::types::packet::HasOutgoingPacketType;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 use crate::chain::traits::message_builders::ack_packet::CanBuildAckPacketMessage;
 use crate::chain::traits::payload_builders::ack_packet::CanBuildAckPacketPayload;
@@ -22,7 +22,7 @@ impl<Relay, SrcChain, DstChain> AckPacketRelayer<Relay> for BaseAckPacketRelayer
 where
     Relay: HasRelayChains<SrcChain = SrcChain, DstChain = DstChain> + CanRaiseRelayChainErrors,
     Relay: CanSendSingleIbcMessage<MainSink, SourceTarget>,
-    SrcChain: HasEventType
+    SrcChain: HasMessageResponseType
         + CanQueryClientStateWithLatestHeight<DstChain>
         + CanBuildAckPacketMessage<DstChain>
         + HasOutgoingPacketType<DstChain>,

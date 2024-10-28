@@ -7,7 +7,7 @@ pub use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEs
 pub use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
 pub use hermes_relayer_components::transaction::traits::nonce::nonce_guard::NonceGuardComponent;
 pub use hermes_relayer_components::transaction::traits::nonce::query_nonce::NonceQuerierComponent;
-pub use hermes_relayer_components::transaction::traits::parse_events::TxResponseAsEventsParserComponent;
+pub use hermes_relayer_components::transaction::traits::parse_events::TxMessageResponseParserComponent;
 pub use hermes_relayer_components::transaction::traits::poll_tx_response::TxResponsePollerComponent;
 pub use hermes_relayer_components::transaction::traits::query_tx_response::TxResponseQuerierComponent;
 pub use hermes_relayer_components::transaction::traits::send_messages_with_signer::MessagesWithSignerSenderComponent;
@@ -51,7 +51,7 @@ define_components! {
             DefaultTxComponents,
         PollTimeoutGetterComponent:
             DefaultPollTimeout,
-        TxResponseAsEventsParserComponent:
+        TxMessageResponseParserComponent:
             ParseCosmosTxResponseAsEvents,
         TxResponseQuerierComponent:
             QueryCosmosTxResponse,

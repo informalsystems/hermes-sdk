@@ -2,6 +2,19 @@
 
 ## v0.2.0 (pre-release)
 
+- Make message senders return new `MessageResponse` type instead of `Vec<Chain::Event>` - [#460](https://github.com/informalsystems/hermes-sdk/pull/460)
+  - Introduce `HasMessageResponseType` trait with `Chain::MessageResponse` abstract type,
+    to represent the response returned from the blockchain after processing a `Chain::Message`.
+  - Introduce `HasMessageResponseEvents` trait for extracting `Vec<Chain::Event>` from `Chain::MessageResponse`.
+  - Provide `UseEventsMessageResponse` to implement `Chain::MessageResponse` as `Vec<Chain::Event>`
+    to follow the original behavior.
+  - Change the method `CanSendMessages::send_messages` to return `Vec<Chain::MessageResponse>` instead of
+    `Vec<Vec<Chain::Event>>`.
+  - Change `CanParseTxResponseAsEvents` to `CanParseTxMessageResponse`, to extract message responses from a transaction.
+  - Change the following event extractors to extract from `Chain::MessageResponse` instead of `Chain::Event`:
+    `try_extract_create_client_event`, `try_extract_channel_open_init_event`, `try_extract_channel_open_try_event`,
+    `try_extract_connection_open_init_event`, `try_extract_connection_open_try_event`.
+
 - Delegate `ClientState` and `ConsensusState` types based on counterparty - [#459](https://github.com/informalsystems/hermes-sdk/pull/459)
   - Implement `UseDelegate` for `HasClientStateType`, `HasConsensusStateType`, `HasClientStateFields`, and `HasConsensusStateFields`.
   - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:

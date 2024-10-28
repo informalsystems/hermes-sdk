@@ -1,6 +1,8 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 pub use hermes_chain_type_components::traits::fields::height::HeightIncrementerComponent;
+pub use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
+pub use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 use hermes_relayer_components::chain::impls::payload_builders::channel::BuildChannelHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::connection::BuildConnectionHandshakePayload;
 use hermes_relayer_components::chain::impls::payload_builders::packet::BuildPacketPayloads;
@@ -182,6 +184,8 @@ define_components! {
             TimeoutTypeComponent,
             ChainIdTypeComponent,
             MessageTypeComponent,
+            MessageResponseTypeComponent,
+            MessageResponseEventsGetterComponent,
             MessageSizeEstimatorComponent,
             EventTypeComponent,
             ClientIdTypeComponent,

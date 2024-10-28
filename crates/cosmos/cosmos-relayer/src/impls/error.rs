@@ -29,6 +29,7 @@ use hermes_protobuf_encoding_components::impls::encode_mut::chunk::{
 use hermes_protobuf_encoding_components::impls::encode_mut::proto_field::decode_required::RequiredFieldTagNotFound;
 use hermes_relayer_components::chain::impls::queries::consensus_state_height::NoConsensusStateAtLessThanHeight;
 use hermes_relayer_components::chain::traits::queries::connection_end::ConnectionNotFoundError;
+use hermes_relayer_components::chain::traits::send_message::EmptyMessageResponse;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
@@ -160,6 +161,7 @@ delegate_components! {
             Status,
             MissingSendPacketEventError,
             ProposalIdNotFound,
+            EmptyMessageResponse,
             <'a, Chain: HasAddressType + HasAmountType>
                 EventualAmountTimeoutError<'a, Chain>,
             <'a, Chain>

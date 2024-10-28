@@ -1,7 +1,7 @@
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
-
-use crate::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 #[derive_component(CreateClientPayloadOptionsTypeComponent, ProvideCreateClientPayloadOptionsType<Chain>)]
 pub trait HasCreateClientPayloadOptionsType<Counterparty>: Async {
@@ -25,10 +25,14 @@ pub trait HasCreateClientPayloadType<Counterparty>: Async {
 }
 
 #[derive_component(CreateClientEventComponent, ProvideCreateClientEvent<Chain>)]
-pub trait HasCreateClientEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
+pub trait HasCreateClientEvent<Counterparty>:
+    HasMessageResponseType + HasClientIdType<Counterparty>
+{
     type CreateClientEvent: Async;
 
-    fn try_extract_create_client_event(event: Self::Event) -> Option<Self::CreateClientEvent>;
+    fn try_extract_create_client_event(
+        response: &Self::MessageResponse,
+    ) -> Option<Self::CreateClientEvent>;
 
     fn create_client_event_client_id(event: &Self::CreateClientEvent) -> &Self::ClientId;
 }

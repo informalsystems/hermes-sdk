@@ -4,10 +4,13 @@ use core::time::Duration;
 use cgp::core::error::CanRaiseError;
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
+use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
 use hermes_chain_type_components::traits::fields::height::HeightIncrementer;
+use hermes_chain_type_components::traits::fields::message_response_events::MessageResponseEventsGetterComponent;
 use hermes_chain_type_components::traits::types::event::EventTypeComponent;
 use hermes_chain_type_components::traits::types::height::HeightTypeComponent;
 use hermes_chain_type_components::traits::types::message::MessageTypeComponent;
+use hermes_chain_type_components::traits::types::message_response::MessageResponseTypeComponent;
 use hermes_relayer_components::chain::impls::types::ack::ProvideBytesAcknowlegement;
 use hermes_relayer_components::chain::impls::types::commitment::ProvideBytesPacketCommitment;
 use hermes_relayer_components::chain::impls::types::commitment_prefix::ProvideCommitmentPrefixBytes;
@@ -68,6 +71,11 @@ delegate_components! {
             WithType<CosmosMessage>,
         EventTypeComponent:
             WithType<Arc<AbciEvent>>,
+        [
+            MessageResponseTypeComponent,
+            MessageResponseEventsGetterComponent,
+        ]:
+            UseEventsMessageResponse,
         CommitmentPrefixTypeComponent:
             ProvideCommitmentPrefixBytes,
         [

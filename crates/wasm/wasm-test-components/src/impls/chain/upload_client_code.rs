@@ -2,6 +2,7 @@ use core::str::{from_utf8, FromStr, Utf8Error};
 use std::num::ParseIntError;
 
 use cgp::core::error::CanRaiseError;
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_cosmos_chain_components::types::event::AbciEvent;
 use hermes_relayer_components::chain::traits::send_message::CanSendSingleMessage;
 use hermes_test_components::chain::traits::proposal::types::proposal_id::HasProposalIdType;
@@ -18,6 +19,7 @@ impl<Chain> WasmClientCodeUploader<Chain> for SendStoreCodeProposalMessage
 where
     Chain: CanBuildStoreCodeMessage
         + CanSendSingleMessage
+        + HasMessageResponseEvents
         + HasProposalIdType<ProposalId = u64>
         + CanRaiseError<Utf8Error>
         + CanRaiseError<ParseIntError>
@@ -40,9 +42,9 @@ where
             deposit_amount,
         );
 
-        let events = chain.send_message(message).await?;
+        let response = chain.send_message(message).await?;
 
-        for event in events {
+        for event in Chain::message_response_events(&response) {
             if event.as_ref().kind == "submit_proposal" {
                 for attribute in event.as_ref().attributes.iter() {
                     if attribute.key_bytes() == "proposal_id".as_bytes() {

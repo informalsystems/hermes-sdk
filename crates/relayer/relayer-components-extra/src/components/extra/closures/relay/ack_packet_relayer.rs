@@ -11,7 +11,9 @@ use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryCha
 use hermes_relayer_components::chain::traits::queries::client_state::CanQueryClientState;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeight;
-use hermes_relayer_components::chain::traits::send_message::CanSendMessages;
+use hermes_relayer_components::chain::traits::send_message::{
+    CanSendMessages, EmptyMessageResponse,
+};
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
 use hermes_relayer_components::chain::traits::types::client_state::HasClientStateFields;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
@@ -82,6 +84,7 @@ where
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
     Components: DelegatesToExtraRelayComponents
+        + ErrorRaiser<Relay, EmptyMessageResponse>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
 {

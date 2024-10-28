@@ -1,7 +1,9 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::{ErrorRaiser, HasErrorType};
+use hermes_chain_components::traits::send_message::EmptyMessageResponse;
 use hermes_chain_components::traits::types::ibc::HasIbcChainTypes;
 use hermes_chain_components::traits::types::timestamp::HasTimeoutType;
+use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -41,6 +43,7 @@ where
     SrcChain: HasErrorType
         + HasChainId
         + CanSendMessages
+        + HasMessageResponseEvents
         + CanQueryChainStatus
         + CanReadOutgoingPacketFields<DstChain>
         + HasConsensusStateType<DstChain>
@@ -69,6 +72,7 @@ where
     Logger: for<'a> CanLog<LogSkipBuildUpdateClientMessage<'a, Relay, SourceTarget>>
         + for<'a> CanLog<LogWaitUpdateClientHeightStatus<'a, Relay, SourceTarget>>,
     Components: DelegatesToDefaultRelayComponents
+        + ErrorRaiser<Relay, EmptyMessageResponse>
         + ErrorRaiser<Relay, SrcChain::Error>
         + ErrorRaiser<Relay, DstChain::Error>,
 {

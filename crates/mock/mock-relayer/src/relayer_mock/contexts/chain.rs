@@ -437,6 +437,7 @@ impl MockChainContext {
                 }
                 MockMessage::TimeoutPacket(height, packet) => {
                     current_state = self.timeout_packet(height, packet, current_state)?;
+                    res.push(vec![]);
                 }
             }
         }

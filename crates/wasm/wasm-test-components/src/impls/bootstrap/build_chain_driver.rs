@@ -1,5 +1,4 @@
 use alloc::collections::BTreeMap;
-use core::fmt::Debug;
 use core::marker::PhantomData;
 use core::time::Duration;
 
@@ -61,7 +60,6 @@ where
     ChainDriver:
         HasChain<Chain = Chain> + HasWalletAt<ValidatorWallet, 0> + HasDenomAt<StakingDenom, 0>,
     InBuilder: ChainDriverBuilder<Bootstrap>,
-    Chain::Event: Debug,
 {
     async fn build_chain_driver(
         bootstrap: &Bootstrap,

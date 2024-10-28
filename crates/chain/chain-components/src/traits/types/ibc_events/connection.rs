@@ -1,13 +1,15 @@
 use cgp::prelude::*;
-
-use crate::traits::types::ibc::HasIbcChainTypes;
+use hermes_chain_type_components::traits::types::ibc::connection_id::HasConnectionIdType;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 
 #[derive_component(ConnectionOpenTryEventComponent, ProvideConnectionOpenTryEvent<Chain>)]
-pub trait HasConnectionOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
+pub trait HasConnectionOpenTryEvent<Counterparty>:
+    HasMessageResponseType + HasConnectionIdType<Counterparty>
+{
     type ConnectionOpenTryEvent: Async;
 
     fn try_extract_connection_open_try_event(
-        event: Self::Event,
+        response: &Self::MessageResponse,
     ) -> Option<Self::ConnectionOpenTryEvent>;
 
     fn connection_open_try_event_connection_id(
@@ -16,11 +18,13 @@ pub trait HasConnectionOpenTryEvent<Counterparty>: HasIbcChainTypes<Counterparty
 }
 
 #[derive_component(ConnectionOpenInitEventComponent, ProvideConnectionOpenInitEvent<Chain>)]
-pub trait HasConnectionOpenInitEvent<Counterparty>: HasIbcChainTypes<Counterparty> {
+pub trait HasConnectionOpenInitEvent<Counterparty>:
+    HasMessageResponseType + HasConnectionIdType<Counterparty>
+{
     type ConnectionOpenInitEvent: Async;
 
     fn try_extract_connection_open_init_event(
-        event: Self::Event,
+        response: &Self::MessageResponse,
     ) -> Option<Self::ConnectionOpenInitEvent>;
 
     fn connection_open_init_event_connection_id(

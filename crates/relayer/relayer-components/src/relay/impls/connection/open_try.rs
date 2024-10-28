@@ -1,5 +1,4 @@
 use core::fmt::Debug;
-use core::iter::Iterator;
 use core::marker::PhantomData;
 
 use cgp::core::error::CanRaiseError;
@@ -90,13 +89,11 @@ where
             .await
             .map_err(Relay::raise_error)?;
 
-        let events = relay
+        let response = relay
             .send_message(DestinationTarget, open_try_message)
             .await?;
 
-        let open_try_event = events
-            .into_iter()
-            .find_map(|event| DstChain::try_extract_connection_open_try_event(event))
+        let open_try_event = DstChain::try_extract_connection_open_try_event(&response)
             .ok_or_else(|| {
                 Relay::raise_error(MissingConnectionTryEventError {
                     relay,

@@ -22,7 +22,7 @@ where
         relay: &Relay,
         target: Target,
         messages: Vec<TargetChain::Message>,
-    ) -> Result<Vec<Vec<TargetChain::Event>>, Relay::Error> {
+    ) -> Result<Vec<TargetChain::MessageResponse>, Relay::Error> {
         let update_heights: BTreeSet<CounterpartyChain::Height> = messages
             .iter()
             .flat_map(|message| {

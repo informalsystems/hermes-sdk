@@ -1,8 +1,8 @@
 use core::str::FromStr;
 
 use cgp::core::error::HasErrorType;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
 use hermes_relayer_components::chain::traits::send_message::MessageSender;
-use hermes_relayer_components::chain::traits::types::event::HasEventType;
 use hermes_relayer_components::chain::traits::types::message::HasMessageType;
 use ibc::core::connection::types::version::Version;
 use ibc::core::connection::types::{ConnectionEnd, Counterparty, State as ConnectionState};
@@ -22,7 +22,7 @@ impl<Chain> MessageSender<Chain> for ProcessSolomachineMessages
 where
     Chain: Solomachine
         + HasMessageType<Message = SolomachineMessage>
-        + HasEventType<Event = SolomachineEvent>
+        + HasMessageResponseType<MessageResponse = Vec<SolomachineEvent>>
         + HasErrorType,
 {
     async fn send_messages(

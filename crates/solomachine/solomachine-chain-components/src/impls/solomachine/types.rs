@@ -1,4 +1,9 @@
-use cgp::core::Async;
+use cgp::prelude::*;
+use hermes_chain_type_components::impls::types::message_response::UseEventsMessageResponse;
+use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
+use hermes_cosmos_chain_components::components::client::{
+    MessageResponseEventsGetterComponent, MessageResponseTypeComponent,
+};
 use hermes_relayer_components::chain::traits::commitment_prefix::ProvideCommitmentPrefixType;
 use hermes_relayer_components::chain::traits::types::channel::{
     ProvideChannelEndType, ProvideChannelOpenAckPayloadType, ProvideChannelOpenConfirmPayloadType,
@@ -13,8 +18,8 @@ use hermes_relayer_components::chain::traits::types::create_client::{
     ProvideCreateClientEvent, ProvideCreateClientMessageOptionsType,
     ProvideCreateClientPayloadOptionsType, ProvideCreateClientPayloadType,
 };
-use hermes_relayer_components::chain::traits::types::event::{HasEventType, ProvideEventType};
-use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
+use hermes_relayer_components::chain::traits::types::event::ProvideEventType;
+use hermes_relayer_components::chain::traits::types::ibc::{HasClientIdType, HasConnectionIdType};
 use hermes_relayer_components::chain::traits::types::ibc_events::connection::ProvideConnectionOpenInitEvent;
 use hermes_relayer_components::chain::traits::types::message::ProvideMessageType;
 use hermes_relayer_components::chain::traits::types::packets::ack::ProvideAckPacketPayloadType;
@@ -45,6 +50,16 @@ use crate::types::payloads::packet::{
 };
 
 pub struct ProvideSolomachineChainTypes;
+
+delegate_components! {
+    ProvideSolomachineChainTypes {
+        [
+            MessageResponseTypeComponent,
+            MessageResponseEventsGetterComponent,
+        ]:
+            UseEventsMessageResponse,
+    }
+}
 
 impl<Chain> ProvideMessageType<Chain> for ProvideSolomachineChainTypes
 where
@@ -206,18 +221,18 @@ where
 impl<Chain, Counterparty> ProvideCreateClientEvent<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
-    Chain: HasEventType<Event = SolomachineEvent>
-        + HasIbcChainTypes<Counterparty, ClientId = ClientId>,
+    Chain: HasMessageResponseType<MessageResponse = Vec<SolomachineEvent>>
+        + HasClientIdType<Counterparty, ClientId = ClientId>,
 {
     type CreateClientEvent = SolomachineCreateClientEvent;
 
     fn try_extract_create_client_event(
-        event: SolomachineEvent,
+        events: &Vec<SolomachineEvent>,
     ) -> Option<SolomachineCreateClientEvent> {
-        match event {
-            SolomachineEvent::CreateClient(e) => Some(e),
+        events.iter().find_map(|event| match event {
+            SolomachineEvent::CreateClient(e) => Some(e.clone()),
             _ => None,
-        }
+        })
     }
 
     fn create_client_event_client_id(event: &SolomachineCreateClientEvent) -> &ClientId {
@@ -228,18 +243,18 @@ where
 impl<Chain, Counterparty> ProvideConnectionOpenInitEvent<Chain, Counterparty>
     for ProvideSolomachineChainTypes
 where
-    Chain: HasEventType<Event = SolomachineEvent>
-        + HasIbcChainTypes<Counterparty, ConnectionId = ConnectionId>,
+    Chain: HasMessageResponseType<MessageResponse = Vec<SolomachineEvent>>
+        + HasConnectionIdType<Counterparty, ConnectionId = ConnectionId>,
 {
     type ConnectionOpenInitEvent = SolomachineConnectionInitEvent;
 
     fn try_extract_connection_open_init_event(
-        event: SolomachineEvent,
+        events: &Vec<SolomachineEvent>,
     ) -> Option<SolomachineConnectionInitEvent> {
-        match event {
-            SolomachineEvent::ConnectionInit(e) => Some(e),
+        events.iter().find_map(|event| match event {
+            SolomachineEvent::ConnectionInit(e) => Some(e.clone()),
             _ => None,
-        }
+        })
     }
 
     fn connection_open_init_event_connection_id(
