@@ -42,4 +42,4 @@ tracing         = { workspace = true }
 secp256k1       = { version = "0.27.0", features = ["rand", "bitcoin_hashes"] }
 sha2            = "0.10.7"
 crypto-hash     = "0.3.4"
-bytes           = { version = "1.7.2" }
+bytes           = { version = "1.8.0" }

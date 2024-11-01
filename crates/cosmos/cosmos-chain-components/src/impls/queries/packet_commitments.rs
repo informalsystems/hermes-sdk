@@ -38,6 +38,7 @@ where
             port_id: port_id.clone(),
             channel_id: channel_id.clone(),
             pagination: Paginate::All,
+            query_height: ibc_relayer::chain::requests::QueryHeight::Latest,
         };
 
         let request = Request::new(raw_request.into());
