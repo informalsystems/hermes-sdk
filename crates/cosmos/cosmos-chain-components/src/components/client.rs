@@ -137,8 +137,6 @@ pub use hermes_relayer_components::chain::traits::types::update_client::UpdateCl
 
 use crate::components::delegate::DelegateCosmosChainComponents;
 use crate::impls::channel::init_channel_options::ProvideCosmosInitChannelOptionsType;
-use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
-use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::impls::connection::init_connection_options::ProvideCosmosInitConnectionOptionsType;
 use crate::impls::events::ProvideCosmosEvents;
 use crate::impls::packet::packet_fields::CosmosPacketFieldReader;
@@ -168,7 +166,6 @@ use crate::impls::queries::write_ack_event::QueryWriteAckEventFromChainHandle;
 use crate::impls::types::chain::ProvideCosmosChainTypes;
 use crate::impls::types::client_state::ProvideAnyRawClientState;
 use crate::impls::types::consensus_state::ProvideAnyRawConsensusState;
-use crate::impls::types::create_client_options::ProvideCosmosCreateClientSettings;
 use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 pub use crate::traits::abci_query::AbciQuerierComponent;
 
@@ -252,12 +249,6 @@ define_components! {
             RawConsensusStateWithProofsQuerierComponent,
         ]:
             QueryCosmosConsensusStateFromAbci,
-        CreateClientPayloadOptionsTypeComponent:
-            ProvideCosmosCreateClientSettings,
-        CreateClientPayloadBuilderComponent:
-            BuildCreateClientPayloadWithChainHandle,
-        UpdateClientPayloadBuilderComponent:
-            BuildUpdateClientPayloadWithChainHandle,
         CounterpartyChainIdQuerierComponent:
             QueryChainIdWithChainHandle,
 
@@ -347,6 +338,7 @@ define_components! {
 
             CreateClientPayloadTypeComponent,
             UpdateClientPayloadTypeComponent,
+            CreateClientPayloadOptionsTypeComponent,
 
             ConsensusStateHeightsQuerierComponent,
             CounterpartyMessageHeightGetterComponent,
@@ -355,6 +347,9 @@ define_components! {
 
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,
+
+            CreateClientPayloadBuilderComponent,
+            UpdateClientPayloadBuilderComponent,
 
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
