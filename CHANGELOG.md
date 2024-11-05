@@ -2,6 +2,14 @@
 
 ## v0.2.0 (pre-release)
 
+-  Delegate all create and update client types and methods based on counterparty - [#468](https://github.com/informalsystems/hermes-sdk/pull/468)
+  - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
+  `CreateClientPayloadTypeComponent`, `UpdateClientPayloadTypeComponent`,
+  `CreateClientPayloadOptionsTypeComponent`, `CreateClientPayloadBuilderComponent`,
+  `UpdateClientPayloadBuilderComponent`.
+    - To use CosmosChain with a concrete counterparty, the respective components need to be implemented in
+      `<DelegateCosmosChainComponents as DelegateComponent<Counterparty>>::Delegate`.
+
 - Make message senders return new `MessageResponse` type instead of `Vec<Chain::Event>` - [#460](https://github.com/informalsystems/hermes-sdk/pull/460)
   - Introduce `HasMessageResponseType` trait with `Chain::MessageResponse` abstract type,
     to represent the response returned from the blockchain after processing a `Chain::Message`.

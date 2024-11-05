@@ -1,10 +1,10 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::client::{
-    ClientStateFieldsComponent, ClientStateTypeComponent,
+    ClientStateFieldsComponent, ClientStateTypeComponent, CreateClientPayloadBuilderComponent,
+    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
 };
-use hermes_cosmos_chain_components::impls::types::client_state::ProvideTendermintClientState;
-use hermes_relayer_components::chain::impls::queries::query_and_convert_client_state::QueryAndConvertRawClientState;
-use hermes_relayer_components::chain::impls::queries::query_and_convert_consensus_state::QueryAndConvertRawConsensusState;
+use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_relayer_components::chain::traits::message_builders::connection_handshake::{
     ConnectionOpenAckMessageBuilderComponent, ConnectionOpenConfirmMessageBuilderComponent,
     ConnectionOpenInitMessageBuilderComponent, ConnectionOpenTryMessageBuilderComponent,
@@ -26,18 +26,17 @@ define_components! {
         [
             ClientStateTypeComponent,
             ClientStateFieldsComponent,
-        ]:
-            ProvideTendermintClientState,
-        [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
-        ]:
-            QueryAndConvertRawClientState,
-        [
             ConsensusStateQuerierComponent,
             ConsensusStateWithProofsQuerierComponent,
+            CreateClientPayloadTypeComponent,
+            UpdateClientPayloadTypeComponent,
+            CreateClientPayloadOptionsTypeComponent,
+            CreateClientPayloadBuilderComponent,
+            UpdateClientPayloadBuilderComponent,
         ]:
-            QueryAndConvertRawConsensusState,
+            CosmosToCosmosComponents,
         [
             CreateClientMessageBuilderComponent,
             CreateClientMessageOptionsTypeComponent,

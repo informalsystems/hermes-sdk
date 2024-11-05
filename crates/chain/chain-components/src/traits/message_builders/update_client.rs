@@ -2,14 +2,15 @@ use alloc::vec::Vec;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
+use hermes_chain_type_components::traits::types::message::HasMessageType;
 
-use crate::traits::types::ibc::HasIbcChainTypes;
 use crate::traits::types::update_client::HasUpdateClientPayloadType;
 
 #[derive_component(UpdateClientMessageBuilderComponent, UpdateClientMessageBuilder<Chain>)]
 #[async_trait]
 pub trait CanBuildUpdateClientMessage<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasMessageType + HasErrorType
 where
     Counterparty: HasUpdateClientPayloadType<Self>,
 {
@@ -23,7 +24,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> UpdateClientMessageBuilder<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasMessageType + HasErrorType,
     Counterparty: HasUpdateClientPayloadType<Chain>,
     Delegate: UpdateClientMessageBuilder<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

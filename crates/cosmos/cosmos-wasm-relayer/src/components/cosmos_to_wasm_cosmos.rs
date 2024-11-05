@@ -1,7 +1,9 @@
 use cgp::prelude::*;
 use hermes_cosmos_chain_components::components::client::{
     ClientStateFieldsComponent, ClientStateTypeComponent, ConsensusStateFieldComponent,
-    ConsensusStateTypeComponent,
+    ConsensusStateTypeComponent, CreateClientPayloadBuilderComponent,
+    CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
+    UpdateClientPayloadBuilderComponent, UpdateClientPayloadTypeComponent,
 };
 use hermes_cosmos_chain_components::components::cosmos_to_cosmos::CosmosToCosmosComponents;
 use hermes_relayer_components::chain::traits::message_builders::channel_handshake::{
@@ -42,9 +44,14 @@ define_components! {
             ClientStateFieldsComponent,
             ConsensusStateTypeComponent,
             ConsensusStateFieldComponent,
+            CreateClientPayloadTypeComponent,
+            UpdateClientPayloadTypeComponent,
+            CreateClientPayloadOptionsTypeComponent,
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
             AllClientStatesQuerierComponent,
+            CreateClientPayloadBuilderComponent,
+            UpdateClientPayloadBuilderComponent,
             ConsensusStateQuerierComponent,
             ConsensusStateWithProofsQuerierComponent,
             ConnectionOpenInitMessageBuilderComponent,

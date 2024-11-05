@@ -1,4 +1,5 @@
-use cgp::core::component::UseDelegate;
+use cgp::core::component::{UseDelegate, WithProvider};
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 use hermes_chain_type_components::traits::types::message_response::HasMessageResponseType;
@@ -45,4 +46,56 @@ where
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,
 {
     type CreateClientMessageOptions = Delegate::CreateClientMessageOptions;
+}
+
+impl<Chain, Counterparty, Components, Delegate>
+    ProvideCreateClientPayloadOptionsType<Chain, Counterparty> for UseDelegate<Components>
+where
+    Chain: Async,
+    Delegate: ProvideCreateClientPayloadOptionsType<Chain, Counterparty>,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+{
+    type CreateClientPayloadOptions = Delegate::CreateClientPayloadOptions;
+}
+
+impl<Chain, Counterparty, Components, Delegate> ProvideCreateClientPayloadType<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: Async,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+    Delegate: ProvideCreateClientPayloadType<Chain, Counterparty>,
+{
+    type CreateClientPayload = Delegate::CreateClientPayload;
+}
+
+impl<Chain, Counterparty, Provider, CreateClientMessageOptions>
+    ProvideCreateClientMessageOptionsType<Chain, Counterparty> for WithProvider<Provider>
+where
+    Chain: Async,
+    CreateClientMessageOptions: Async,
+    Provider:
+        ProvideType<Chain, CreateClientPayloadTypeComponent, Type = CreateClientMessageOptions>,
+{
+    type CreateClientMessageOptions = CreateClientMessageOptions;
+}
+
+impl<Chain, Counterparty, Provider, CreateClientPayloadOptions>
+    ProvideCreateClientPayloadOptionsType<Chain, Counterparty> for WithProvider<Provider>
+where
+    Chain: Async,
+    CreateClientPayloadOptions: Async,
+    Provider:
+        ProvideType<Chain, CreateClientPayloadTypeComponent, Type = CreateClientPayloadOptions>,
+{
+    type CreateClientPayloadOptions = CreateClientPayloadOptions;
+}
+
+impl<Chain, Counterparty, Provider, CreateClientPayload>
+    ProvideCreateClientPayloadType<Chain, Counterparty> for WithProvider<Provider>
+where
+    Chain: Async,
+    CreateClientPayload: Async,
+    Provider: ProvideType<Chain, CreateClientPayloadTypeComponent, Type = CreateClientPayload>,
+{
+    type CreateClientPayload = CreateClientPayload;
 }

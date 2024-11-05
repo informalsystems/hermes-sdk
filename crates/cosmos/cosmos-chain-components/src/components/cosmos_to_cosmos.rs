@@ -11,6 +11,8 @@ use hermes_relayer_components::chain::traits::message_builders::connection_hands
 };
 use hermes_relayer_components::chain::traits::message_builders::create_client::CreateClientMessageBuilderComponent;
 use hermes_relayer_components::chain::traits::message_builders::update_client::UpdateClientMessageBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::create_client::CreateClientPayloadBuilderComponent;
+use hermes_relayer_components::chain::traits::payload_builders::update_client::UpdateClientPayloadBuilderComponent;
 use hermes_relayer_components::chain::traits::queries::client_state::{
     AllClientStatesQuerierComponent, ClientStateQuerierComponent,
     ClientStateWithProofsQuerierComponent,
@@ -25,18 +27,27 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldComponent, ConsensusStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientMessageOptionsTypeComponent, CreateClientPayloadOptionsTypeComponent,
+    CreateClientPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
+use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::client::create_client_message::BuildAnyCreateClientMessage;
+use crate::impls::client::create_client_payload::BuildCreateClientPayloadWithChainHandle;
 use crate::impls::client::update_client_message::BuildCosmosUpdateClientMessage;
+use crate::impls::client::update_client_payload::BuildUpdateClientPayloadWithChainHandle;
 use crate::impls::connection::connection_handshake_message::BuildCosmosConnectionHandshakeMessage;
 use crate::impls::message_height::GetCosmosCounterpartyMessageHeight;
 use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFromGrpc;
 use crate::impls::types::client_state::ProvideTendermintClientState;
 use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
-use crate::impls::types::create_client_options::ProvideNoCreateClientMessageOptionsType;
+use crate::impls::types::create_client_options::{
+    ProvideCosmosCreateClientSettings, ProvideNoCreateClientMessageOptionsType,
+};
+use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 
 define_components! {
     CosmosToCosmosComponents {
@@ -50,6 +61,13 @@ define_components! {
             ConsensusStateFieldComponent,
         ]:
             ProvideTendermintConsensusState,
+        [
+            CreateClientPayloadTypeComponent,
+            UpdateClientPayloadTypeComponent,
+        ]:
+            ProvideCosmosPayloadTypes,
+        CreateClientPayloadOptionsTypeComponent:
+            ProvideCosmosCreateClientSettings,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,
@@ -67,6 +85,10 @@ define_components! {
             BuildAnyCreateClientMessage,
         UpdateClientMessageBuilderComponent:
             BuildCosmosUpdateClientMessage,
+        CreateClientPayloadBuilderComponent:
+            BuildCreateClientPayloadWithChainHandle,
+        UpdateClientPayloadBuilderComponent:
+            BuildUpdateClientPayloadWithChainHandle,
         [
             ConnectionOpenInitMessageBuilderComponent,
             ConnectionOpenTryMessageBuilderComponent,
