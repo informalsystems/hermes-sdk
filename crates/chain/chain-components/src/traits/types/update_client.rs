@@ -1,4 +1,5 @@
-use cgp::core::component::UseDelegate;
+use cgp::core::component::{UseDelegate, WithProvider};
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(UpdateClientPayloadTypeComponent, ProvideUpdateClientPayloadType<Chain>)]
@@ -14,4 +15,14 @@ where
     Delegate: ProvideUpdateClientPayloadType<Chain, Counterparty>,
 {
     type UpdateClientPayload = Delegate::UpdateClientPayload;
+}
+
+impl<Chain, Counterparty, Provider, UpdateClientPayload>
+    ProvideUpdateClientPayloadType<Chain, Counterparty> for WithProvider<Provider>
+where
+    Chain: Async,
+    UpdateClientPayload: Async,
+    Provider: ProvideType<Chain, UpdateClientPayloadTypeComponent, Type = UpdateClientPayload>,
+{
+    type UpdateClientPayload = UpdateClientPayload;
 }
