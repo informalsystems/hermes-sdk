@@ -25,8 +25,11 @@ use hermes_relayer_components::chain::traits::types::client_state::{
 use hermes_relayer_components::chain::traits::types::consensus_state::{
     ConsensusStateFieldComponent, ConsensusStateTypeComponent,
 };
-use hermes_relayer_components::chain::traits::types::create_client::CreateClientMessageOptionsTypeComponent;
+use hermes_relayer_components::chain::traits::types::create_client::{
+    CreateClientMessageOptionsTypeComponent, CreateClientPayloadTypeComponent,
+};
 use hermes_relayer_components::chain::traits::types::ibc::CounterpartyMessageHeightGetterComponent;
+use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
 
 use crate::impls::channel::channel_handshake_message::BuildCosmosChannelHandshakeMessage;
 use crate::impls::client::create_client_message::BuildAnyCreateClientMessage;
@@ -37,6 +40,7 @@ use crate::impls::queries::consensus_state_height::QueryConsensusStateHeightsFro
 use crate::impls::types::client_state::ProvideTendermintClientState;
 use crate::impls::types::consensus_state::ProvideTendermintConsensusState;
 use crate::impls::types::create_client_options::ProvideNoCreateClientMessageOptionsType;
+use crate::impls::types::payload::ProvideCosmosPayloadTypes;
 
 define_components! {
     CosmosToCosmosComponents {
@@ -50,6 +54,11 @@ define_components! {
             ConsensusStateFieldComponent,
         ]:
             ProvideTendermintConsensusState,
+        [
+            CreateClientPayloadTypeComponent,
+            UpdateClientPayloadTypeComponent,
+        ]:
+            ProvideCosmosPayloadTypes,
         [
             ClientStateQuerierComponent,
             ClientStateWithProofsQuerierComponent,

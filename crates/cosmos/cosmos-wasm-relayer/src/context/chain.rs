@@ -22,6 +22,9 @@ use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
+use hermes_cosmos_chain_components::types::payloads::client::{
+    CosmosCreateClientPayload, CosmosUpdateClientPayload,
+};
 use hermes_cosmos_chain_components::types::tendermint::{
     TendermintClientState, TendermintConsensusState,
 };
@@ -166,7 +169,7 @@ use hermes_relayer_components::chain::traits::types::consensus_state::{
 use hermes_relayer_components::chain::traits::types::create_client::{
     CreateClientEventComponent, CreateClientMessageOptionsTypeComponent,
     CreateClientPayloadOptionsTypeComponent, CreateClientPayloadTypeComponent,
-    HasCreateClientMessageOptionsType,
+    HasCreateClientMessageOptionsType, HasCreateClientPayloadType,
 };
 use hermes_relayer_components::chain::traits::types::event::EventTypeComponent;
 use hermes_relayer_components::chain::traits::types::height::{
@@ -200,7 +203,9 @@ use hermes_relayer_components::chain::traits::types::proof::{
 };
 use hermes_relayer_components::chain::traits::types::status::ChainStatusTypeComponent;
 use hermes_relayer_components::chain::traits::types::timestamp::TimeoutTypeComponent;
-use hermes_relayer_components::chain::traits::types::update_client::UpdateClientPayloadTypeComponent;
+use hermes_relayer_components::chain::traits::types::update_client::{
+    HasUpdateClientPayloadType, UpdateClientPayloadTypeComponent,
+};
 use hermes_relayer_components::error::traits::retry::{HasRetryableError, RetryableErrorComponent};
 use hermes_relayer_components::transaction::impls::poll_tx_response::HasPollTimeout;
 use hermes_relayer_components::transaction::traits::default_signer::DefaultSignerGetter;
@@ -575,6 +580,8 @@ impl HasEventSubscription for WasmCosmosChain {
 pub trait CanUseWasmCosmosChain:
     HasClientStateType<WasmCosmosChain, ClientState = WasmTendermintClientState>
     + HasConsensusStateType<WasmCosmosChain, ConsensusState = TendermintConsensusState>
+    + HasCreateClientPayloadType<WasmCosmosChain, CreateClientPayload = CosmosCreateClientPayload>
+    + HasUpdateClientPayloadType<WasmCosmosChain, UpdateClientPayload = CosmosUpdateClientPayload>
     + CanQueryBalance
     // + CanIbcTransferToken<WasmCosmosChain>
     // + CanBuildIbcTokenTransferMessage<WasmCosmosChain>
@@ -638,8 +645,13 @@ pub trait CanUseWasmCosmosChain:
     + CanUploadWasmClientCode
 where
     CosmosChain: HasClientStateType<Self, ClientState = TendermintClientState>
-        + HasConsensusStateType<Self, ConsensusState = TendermintConsensusState>,
+        + HasConsensusStateType<Self, ConsensusState = TendermintConsensusState>
+        + HasUpdateClientPayloadType<Self>
+        + HasCreateClientPayloadType<Self>
+        ,
     WasmCosmosChain: HasConsensusStateType<Self>
+        + HasUpdateClientPayloadType<Self>
+        + HasCreateClientPayloadType<Self>
 {
 }
 
@@ -670,7 +682,9 @@ pub trait CanUseCosmosChainWithWasmCosmosChain:
     + HasInitConnectionOptionsType<WasmCosmosChain>
     + CanBuildCreateClientMessage<WasmCosmosChain>
 where
-    WasmCosmosChain: HasConsensusStateType<Self>,
+    WasmCosmosChain: HasConsensusStateType<Self>
+        + HasCreateClientPayloadType<Self>
+        + HasUpdateClientPayloadType<Self>,
 {
 }
 

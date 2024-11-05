@@ -46,3 +46,13 @@ where
 {
     type CreateClientMessageOptions = Delegate::CreateClientMessageOptions;
 }
+
+impl<Chain, Counterparty, Components, Delegate> ProvideCreateClientPayloadType<Chain, Counterparty>
+    for UseDelegate<Components>
+where
+    Chain: Async,
+    Components: DelegateComponent<Counterparty, Delegate = Delegate>,
+    Delegate: ProvideCreateClientPayloadType<Chain, Counterparty>,
+{
+    type CreateClientPayload = Delegate::CreateClientPayload;
+}

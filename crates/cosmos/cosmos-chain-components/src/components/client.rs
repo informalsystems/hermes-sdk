@@ -219,8 +219,6 @@ define_components! {
         ]:
             ProvideCosmosEvents,
         [
-            CreateClientPayloadTypeComponent,
-            UpdateClientPayloadTypeComponent,
             ConnectionOpenInitPayloadTypeComponent,
             ConnectionOpenTryPayloadTypeComponent,
             ConnectionOpenAckPayloadTypeComponent,
@@ -346,6 +344,9 @@ define_components! {
 
             ConsensusStateTypeComponent,
             ConsensusStateFieldComponent,
+
+            CreateClientPayloadTypeComponent,
+            UpdateClientPayloadTypeComponent,
 
             ConsensusStateHeightsQuerierComponent,
             CounterpartyMessageHeightGetterComponent,

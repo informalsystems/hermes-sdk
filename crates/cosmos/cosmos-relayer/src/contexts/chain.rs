@@ -1,5 +1,8 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use hermes_cosmos_chain_components::types::payloads::client::CosmosUpdateClientPayload;
+use hermes_relayer_components::chain::traits::types::create_client::HasCreateClientPayloadType;
+use hermes_relayer_components::chain::traits::types::update_client::HasUpdateClientPayloadType;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
@@ -368,6 +371,7 @@ pub trait CanUseCosmosChain:
     + HasCommitmentProofType<CommitmentProof = CosmosCommitmentProof>
     + HasMessageResponseType<MessageResponse = Vec<Arc<AbciEvent>>>
     + HasEventType<Event = Arc<AbciEvent>>
+    + HasUpdateClientPayloadType<CosmosChain, UpdateClientPayload = CosmosUpdateClientPayload>
     + CanQueryBalance
     + CanIbcTransferToken<CosmosChain>
     + CanBuildIbcTokenTransferMessage<CosmosChain>
@@ -400,7 +404,10 @@ pub trait CanUseCosmosChain:
     + HasMessageResponseEvents
     + HasSendPacketEvent<CosmosChain>
 where
-    CosmosChain: HasClientStateType<Self> + HasConsensusStateType<Self>,
+    CosmosChain: HasClientStateType<Self>
+        + HasConsensusStateType<Self>
+        + HasCreateClientPayloadType<Self>
+        + HasUpdateClientPayloadType<Self>,
 {
 }
 
