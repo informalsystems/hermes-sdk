@@ -2,14 +2,14 @@ use alloc::vec::Vec;
 
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use crate::traits::types::height::HasHeightType;
-use crate::traits::types::ibc::HasIbcChainTypes;
 
 #[derive_component(ConsensusStateHeightQuerierComponent, ConsensusStateHeightQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryConsensusStateHeight<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -31,7 +31,7 @@ where
 #[derive_component(ConsensusStateHeightsQuerierComponent, ConsensusStateHeightsQuerier<Chain>)]
 #[async_trait]
 pub trait CanQueryConsensusStateHeights<Counterparty>:
-    HasIbcChainTypes<Counterparty> + HasErrorType
+    HasClientIdType<Counterparty> + HasErrorType
 where
     Counterparty: HasHeightType,
 {
@@ -44,7 +44,7 @@ where
 impl<Chain, Counterparty, Components, Delegate> ConsensusStateHeightsQuerier<Chain, Counterparty>
     for UseDelegate<Components>
 where
-    Chain: HasIbcChainTypes<Counterparty> + HasErrorType,
+    Chain: HasClientIdType<Counterparty> + HasErrorType,
     Counterparty: HasHeightType,
     Delegate: ConsensusStateHeightsQuerier<Chain, Counterparty>,
     Components: DelegateComponent<Counterparty, Delegate = Delegate>,

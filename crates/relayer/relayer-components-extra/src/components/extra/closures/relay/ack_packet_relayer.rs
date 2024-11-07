@@ -57,6 +57,7 @@ where
         + HasChainId
         + CanSendMessages
         + CanQueryChainStatus
+        + HasIbcChainTypes<DstChain>
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>
         + CanReadOutgoingPacketFields<DstChain>

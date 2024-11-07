@@ -1,6 +1,7 @@
 use core::fmt::Debug;
 
 use cgp::core::error::CanRaiseError;
+use hermes_chain_type_components::traits::types::ibc::client_id::HasClientIdType;
 
 use crate::traits::queries::consensus_state_height::{
     CanQueryConsensusStateHeights, ConsensusStateHeightQuerier,
@@ -12,7 +13,7 @@ pub struct QueryConsensusStateHeightsAndFindHeightBefore;
 
 pub struct NoConsensusStateAtLessThanHeight<'a, Chain, Counterparty>
 where
-    Chain: HasIbcChainTypes<Counterparty>,
+    Chain: HasClientIdType<Counterparty>,
     Counterparty: HasHeightType,
 {
     pub chain: &'a Chain,

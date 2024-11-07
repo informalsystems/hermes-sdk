@@ -6,6 +6,7 @@ use hermes_relayer_components::build::traits::builders::chain_builder::CanBuildC
 use hermes_relayer_components::chain::traits::queries::chain_status::CanQueryChainHeight;
 use hermes_relayer_components::chain::traits::queries::consensus_state::CanQueryConsensusState;
 use hermes_relayer_components::chain::traits::queries::consensus_state_height::CanQueryConsensusStateHeights;
+use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_relayer_components::chain::traits::types::consensus_state::HasConsensusStateType;
 use hermes_relayer_components::chain::traits::types::height::HasHeightType;
 use hermes_relayer_components::multi::traits::chain_at::HasChainTypeAt;
@@ -67,6 +68,7 @@ where
         + CanRaiseError<String>,
     Build: CanBuildChain<0, Chain = Chain> + HasChainTypeAt<1, Chain = Counterparty>,
     Chain: CanQueryChainHeight
+        + HasChainIdType
         + CanQueryConsensusState<Counterparty>
         + CanQueryConsensusStateHeights<Counterparty>,
     Counterparty: HasHeightType + HasConsensusStateType<Chain>,
