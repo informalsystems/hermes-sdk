@@ -2,6 +2,7 @@ use cgp::core::component::HasComponents;
 use cgp::core::error::{CanRaiseError, ErrorOf, ErrorRaiser};
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
+use hermes_relayer_components::chain::traits::types::ibc::HasIbcChainTypes;
 use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketType;
 use hermes_relayer_components::relay::impls::update_client::skip::LogSkipBuildUpdateClientMessage;
 use hermes_relayer_components::relay::impls::update_client::wait::LogWaitUpdateClientHeightStatus;
@@ -34,10 +35,12 @@ where
         + HasMessageBatchSender<SourceTarget>
         + HasMessageBatchSender<DestinationTarget>
         + HasComponents<Components = Components>,
-    SrcChain: HasOutgoingPacketType<DstChain>
+    SrcChain: HasIbcChainTypes<DstChain>
+        + HasOutgoingPacketType<DstChain>
         + UseExtraChainComponentsForIbcMessageSender<DstChain>
         + CanRaiseError<ErrorOf<SrcChain::Runtime>>,
-    DstChain: UseExtraChainComponentsForIbcMessageSender<SrcChain>
+    DstChain: HasIbcChainTypes<SrcChain>
+        + UseExtraChainComponentsForIbcMessageSender<SrcChain>
         + CanRaiseError<ErrorOf<DstChain::Runtime>>,
     SrcChain::Height: Clone,
     DstChain::Height: Clone,

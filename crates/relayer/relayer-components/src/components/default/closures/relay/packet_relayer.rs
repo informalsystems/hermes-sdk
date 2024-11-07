@@ -1,6 +1,7 @@
 use cgp::core::component::HasComponents;
 use cgp::core::error::{ErrorRaiser, HasErrorType};
 use hermes_chain_components::traits::send_message::EmptyMessageResponse;
+use hermes_chain_components::traits::types::ibc::HasIbcChainTypes;
 use hermes_chain_type_components::traits::fields::message_response_events::HasMessageResponseEvents;
 use hermes_logging_components::traits::has_logger::HasLogger;
 use hermes_logging_components::traits::logger::CanLog;
@@ -55,6 +56,7 @@ where
         + CanSendMessages
         + HasMessageResponseEvents
         + CanQueryChainStatus
+        + HasIbcChainTypes<DstChain>
         + HasClientStateFields<DstChain>
         + HasConsensusStateType<DstChain>
         + HasCounterpartyMessageHeight<DstChain>

@@ -41,7 +41,8 @@ where
 impl<Chain, Counterparty, Components> UseExtraChainComponentsForChannelHandshake<Counterparty>
     for Chain
 where
-    Chain: HasChannelOpenInitEvent<Counterparty>
+    Chain: HasIbcChainTypes<Counterparty>
+        + HasChannelOpenInitEvent<Counterparty>
         + HasChannelOpenTryEvent<Counterparty>
         + HasInitChannelOptionsType<Counterparty>
         + HasChannelOpenTryPayloadType<Counterparty>
