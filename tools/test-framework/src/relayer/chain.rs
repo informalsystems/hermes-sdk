@@ -40,6 +40,7 @@ use ibc_relayer::error::Error;
 use ibc_relayer::event::IbcEventWithHeight;
 use ibc_relayer::keyring::AnySigningKeyPair;
 use ibc_relayer::misbehaviour::MisbehaviourEvidence;
+use ibc_relayer_types::applications::ics28_ccv::msgs::{ConsumerChain, ConsumerId};
 use ibc_relayer_types::applications::ics31_icq::response::CrossChainQueryResponse;
 use ibc_relayer_types::core::ics02_client::events::UpdateClient;
 use ibc_relayer_types::core::ics02_client::header::AnyHeader;
@@ -428,7 +429,7 @@ where
         self.value().query_incentivized_packet(request)
     }
 
-    fn query_consumer_chains(&self) -> Result<Vec<(ChainId, ClientId)>, Error> {
+    fn query_consumer_chains(&self) -> Result<Vec<ConsumerChain>, Error> {
         self.value().query_consumer_chains()
     }
 
@@ -453,5 +454,9 @@ where
     ) -> Result<(ErrorReceipt, Option<MerkleProof>), Error> {
         self.value()
             .query_upgrade_error(request, height, include_proof)
+    }
+
+    fn query_ccv_consumer_id(&self, client_id: &ClientId) -> Result<ConsumerId, Error> {
+        self.value().query_ccv_consumer_id(client_id)
     }
 }
