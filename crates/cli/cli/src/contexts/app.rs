@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use std::path::PathBuf;
 
-use cgp::core::component::UseDelegate;
+use cgp::core::component::{UseContext, UseDelegate};
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
@@ -165,7 +165,7 @@ delegate_components! {
         CreateClientArgs: RunCreateClientCommand,
 
         BootstrapSubCommand: RunBootstrapSubCommand,
-        BootstrapChainArgs: RunBootstrapChainCommand,
+        BootstrapChainArgs: RunBootstrapChainCommand<UseContext>,
     }
 }
 
