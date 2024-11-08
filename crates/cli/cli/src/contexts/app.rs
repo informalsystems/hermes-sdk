@@ -2,6 +2,7 @@ use core::fmt::Debug;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
+use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
 use hermes_any_counterparty::contexts::any_counterparty::AnyCounterparty;
 use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainCommand;
@@ -28,19 +29,19 @@ use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
 use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
-use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, ProvideBootstrapType};
+use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, BootstrapTypeComponent};
 use hermes_cli_components::traits::build::{
-    BuilderLoaderComponent, CanLoadBuilder, ProvideBuilderType,
+    BuilderLoaderComponent, BuilderTypeComponent, CanLoadBuilder,
 };
 use hermes_cli_components::traits::command::{CanRunCommand, CommandRunnerComponent};
 use hermes_cli_components::traits::config::config_path::ConfigPathGetterComponent;
 use hermes_cli_components::traits::config::load_config::{CanLoadConfig, ConfigLoaderComponent};
 use hermes_cli_components::traits::config::write_config::{CanWriteConfig, ConfigWriterComponent};
 use hermes_cli_components::traits::output::{
-    CanProduceOutput, HasOutputType, OutputProducer, ProvideOutputType,
+    CanProduceOutput, HasOutputType, OutputProducer, OutputTypeComponent,
 };
 use hermes_cli_components::traits::parse::ArgParserComponent;
-use hermes_cli_components::traits::types::config::ProvideConfigType;
+use hermes_cli_components::traits::types::config::ConfigTypeComponent;
 use hermes_cli_framework::output::Output;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
@@ -104,6 +105,14 @@ delegate_components! {
             GlobalLoggerGetterComponent,
         ]:
             ProvideHermesLogger,
+        ConfigTypeComponent:
+            WithType<Config>,
+        BootstrapTypeComponent:
+            WithType<CosmosBootstrap>,
+        BuilderTypeComponent:
+            WithType<CosmosBuilder>,
+        OutputTypeComponent:
+            WithType<Output>,
         ConfigPathGetterComponent:
             GetDefaultConfigField,
         ConfigLoaderComponent:
@@ -161,39 +170,11 @@ delegate_components! {
     }
 }
 
-impl<App> ProvideBuilderType<App> for HermesAppComponents
-where
-    App: Async,
-{
-    type Builder = CosmosBuilder;
-}
-
 impl<App> ProvideAnyCounterparty<App> for HermesAppComponents
 where
     App: Async,
 {
     type AnyCounterparty = AnyCounterparty;
-}
-
-impl<App> ProvideConfigType<App> for HermesAppComponents
-where
-    App: Async,
-{
-    type Config = Config;
-}
-
-impl<App> ProvideOutputType<App> for HermesAppComponents
-where
-    App: Async,
-{
-    type Output = Output;
-}
-
-impl<App> ProvideBootstrapType<App> for HermesAppComponents
-where
-    App: Async,
-{
-    type Bootstrap = CosmosBootstrap;
 }
 
 impl<App, Value> OutputProducer<App, Value> for HermesAppComponents

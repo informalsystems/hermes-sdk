@@ -4,7 +4,6 @@ use crate::commands::bootstrap::chain::BootstrapChainArgs;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum BootstrapSubCommand {
-    /// Query the state of a client
     Chain(BootstrapChainArgs),
 }
 
