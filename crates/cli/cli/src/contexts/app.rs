@@ -1,6 +1,7 @@
 use core::fmt::Debug;
 use std::path::PathBuf;
 
+use cgp::core::component::UseDelegate;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::core::types::impls::WithType;
 use cgp::prelude::*;
@@ -9,7 +10,6 @@ use hermes_cli_components::impls::commands::bootstrap::chain::RunBootstrapChainC
 use hermes_cli_components::impls::commands::client::create::{
     CreateClientOptionsParser, RunCreateClientCommand,
 };
-use hermes_cli_components::impls::commands::delegate::DelegateCommandRunner;
 use hermes_cli_components::impls::commands::queries::client::{
     QueryClientSubCommand, RunQueryClientSubCommand,
 };
@@ -26,7 +26,6 @@ use hermes_cli_components::impls::commands::start::{RunStartRelayerCommand, Star
 use hermes_cli_components::impls::config::get_config_path::GetDefaultConfigField;
 use hermes_cli_components::impls::config::load_toml_config::LoadTomlConfig;
 use hermes_cli_components::impls::config::save_toml_config::WriteTomlConfig;
-use hermes_cli_components::impls::parse::delegate::DelegateArgParsers;
 use hermes_cli_components::impls::parse::string::{ParseFromOptionalString, ParseFromString};
 use hermes_cli_components::traits::any_counterparty::ProvideAnyCounterparty;
 use hermes_cli_components::traits::bootstrap::{BootstrapLoaderComponent, BootstrapTypeComponent};
@@ -124,9 +123,9 @@ delegate_components! {
         BootstrapLoaderComponent:
             LoadCosmosBootstrap,
         ArgParserComponent:
-            DelegateArgParsers<HermesParserComponents>,
+            UseDelegate<HermesParserComponents>,
         CommandRunnerComponent:
-            DelegateCommandRunner<HermesCommandRunnerComponents>,
+            UseDelegate<HermesCommandRunnerComponents>,
     }
 }
 
