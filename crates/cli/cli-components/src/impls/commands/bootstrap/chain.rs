@@ -54,18 +54,16 @@ where
         let mut config = app.load_config().await?;
         let bootstrap = app.load_bootstrap(args).await?;
 
-        let chain_driver = bootstrap
+        let mut chain_driver = bootstrap
             .bootstrap_chain(chain_id)
             .await
             .map_err(App::raise_error)?;
-
-        let chain = chain_driver.chain();
 
         logger
             .log(
                 &format!(
                     "Bootstrapped a new chain with chain ID: {}",
-                    chain.chain_id()
+                    chain_driver.chain().chain_id()
                 ),
                 &LevelInfo,
             )
@@ -87,10 +85,10 @@ where
             )
             .await;
 
-        let m_chain_process = chain_driver.take_chain_process().await;
+        let m_chain_process = chain_driver.take_chain_process();
 
         if let Some(chain_process) = m_chain_process {
-            logger.log(&format!("running chain {} running in the background. Press Ctrl+C to stop then chain...", chain.chain_id()), &LevelInfo).await;
+            logger.log(&format!("running chain {} running in the background. Press Ctrl+C to stop then chain...", chain_driver.chain().chain_id()), &LevelInfo).await;
 
             Runtime::wait_child_process(chain_process)
                 .await

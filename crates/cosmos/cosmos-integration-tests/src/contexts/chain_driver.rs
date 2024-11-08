@@ -1,5 +1,4 @@
 use alloc::collections::BTreeMap;
-use alloc::sync::Arc;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -36,7 +35,6 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
 use ibc_relayer::config::{ChainConfig, Config};
 use tokio::process::Child;
-use tokio::sync::Mutex;
 use toml::{to_string_pretty, Value};
 
 /**
@@ -45,7 +43,7 @@ use toml::{to_string_pretty, Value};
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
     pub chain_command_path: PathBuf,
-    pub chain_process: Arc<Mutex<Option<Child>>>,
+    pub chain_process: Option<Child>,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
     pub validator_wallet: CosmosTestWallet,
@@ -175,8 +173,8 @@ impl ChainCommandPathGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 }
 
 impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
-    async fn take_chain_process(chain_driver: &CosmosChainDriver) -> Option<Child> {
-        chain_driver.chain_process.lock().await.take()
+    fn take_chain_process(chain_driver: &mut CosmosChainDriver) -> Option<Child> {
+        chain_driver.chain_process.take()
     }
 }
 
