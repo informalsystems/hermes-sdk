@@ -19,14 +19,14 @@ fn test_cosmos_legacy_bootstrap() -> Result<(), Error> {
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(LegacyCosmosBootstrap {
         runtime: runtime.clone(),
-        builder,
+        cosmos_builder: builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
         chain_command_path: gaia_bin.into(),
         account_prefix: "cosmos".into(),
         compat_mode: None,
-        staking_denom: "stake".into(),
-        transfer_denom: "coin".into(),
+        staking_denom_prefix: "stake".into(),
+        transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     });
