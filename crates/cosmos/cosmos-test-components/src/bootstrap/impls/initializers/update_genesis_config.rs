@@ -47,8 +47,6 @@ where
         let mut config_json: Value =
             serde_json::from_str(&config_string).map_err(Bootstrap::raise_error)?;
 
-        disable_fee_market(&mut config_json).map_err(Bootstrap::raise_error)?;
-
         bootstrap.modify_genesis_config(&mut config_json)?;
 
         let modified_config_string =

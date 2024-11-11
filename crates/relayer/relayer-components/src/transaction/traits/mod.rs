@@ -1,3 +1,4 @@
+pub mod convert_gas_to_fee;
 pub mod default_signer;
 pub mod encode_tx;
 pub mod estimate_tx_fee;

@@ -1,11 +1,11 @@
 use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
+use hermes_relayer_components::transaction::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimator;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
 use ibc_proto::cosmos::tx::v1beta1::service_client::ServiceClient;
 use ibc_proto::cosmos::tx::v1beta1::{Fee, SimulateRequest, SimulateResponse, Tx};
-use ibc_relayer::chain::cosmos::gas::gas_amount_to_fee;
 use ibc_relayer::chain::cosmos::types::tx::SignedTx;
 use ibc_relayer::config::default::max_grpc_decoding_size;
 use ibc_relayer::error::Error as RelayerError;
@@ -31,6 +31,7 @@ where
         + HasChainId<ChainId = ChainId>
         + CanRaiseError<TransportError>
         + CanRaiseError<Status>
+        + CanConvertGasToFee
         + CanRaiseError<&'static str>,
 {
     async fn estimate_tx_fee(chain: &Chain, tx: &SignedTx) -> Result<Fee, Chain::Error> {
@@ -62,13 +63,7 @@ where
             .gas_info
             .ok_or_else(|| Chain::raise_error("missing simulate gas info"))?;
 
-        let fee = gas_amount_to_fee(
-            chain.gas_config(),
-            gas_info.gas_used,
-            chain.chain_id(),
-            chain.rpc_address(),
-        )
-        .await;
+        let fee = chain.gas_amount_to_fee(gas_info.gas_used).await?;
 
         Ok(fee)
     }

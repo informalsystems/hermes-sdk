@@ -61,7 +61,7 @@ where
             default_gas: None,
             max_gas: Some(900000000),
             gas_adjustment: None,
-            gas_multiplier: Some(GasMultiplier::unsafe_new(1.2)),
+            gas_multiplier: Some(GasMultiplier::unsafe_new(1.3)),
             dynamic_gas_price: DynamicGasPrice::default(),
             fee_granter: None,
             max_msg_num: Default::default(),
