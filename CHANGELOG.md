@@ -2,6 +2,12 @@
 
 ## v0.2.0 (pre-release)
 
+- CLI Components Improvements - [#472](https://github.com/informalsystems/hermes-sdk/pull/472)
+  - Implement `WithProvider` for CLI type traits.
+  - Implement `UseDelegate` for `ArgParser` and `CommandRunner`.
+  - Make `take_chain_process` work with `&mut ChainDriver`
+  - Pass `ConfigUpdater` to `RunBootstrapChainCommand` for non-owned implementation.
+
 -  Delegate all create and update client types and methods based on counterparty - [#468](https://github.com/informalsystems/hermes-sdk/pull/468)
   - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
   `CreateClientPayloadTypeComponent`, `UpdateClientPayloadTypeComponent`,
