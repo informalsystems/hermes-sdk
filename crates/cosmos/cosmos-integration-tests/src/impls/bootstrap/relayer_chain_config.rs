@@ -37,6 +37,7 @@ where
     fn build_relayer_chain_config(
         bootstrap: &Bootstrap,
         chain_node_config: &CosmosChainNodeConfig,
+        chain_genesis_config: &CosmosGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
         let relayer_chain_config = CosmosSdkConfig {
@@ -77,7 +78,7 @@ where
             client_refresh_rate: config::default::client_refresh_rate(),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(1.0, bootstrap.gas_denom().into()),
+            gas_price: config::GasPrice::new(1.0, chain_genesis_config.staking_denom.to_string()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),
