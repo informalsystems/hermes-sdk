@@ -47,13 +47,13 @@ where
 
         let bootstrap = CosmosBootstrap {
             runtime: runtime.clone(),
-            builder: Arc::new(builder),
+            cosmos_builder: Arc::new(builder),
             should_randomize_identifiers: false,
             chain_store_dir: args.chain_store_dir.clone().into(),
             chain_command_path: args.chain_command_path.clone().into(),
             account_prefix: args.account_prefix.clone(),
-            staking_denom: args.staking_denom.clone(),
-            transfer_denom: args.transfer_denom.clone(),
+            staking_denom_prefix: args.staking_denom.clone(),
+            transfer_denom_prefix: args.transfer_denom.clone(),
             genesis_config_modifier: Box::new(|_| Ok(())),
             comet_config_modifier: Box::new(|_| Ok(())),
         };

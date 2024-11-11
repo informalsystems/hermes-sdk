@@ -1,4 +1,5 @@
 use alloc::sync::Arc;
+use cgp::core::component::UseContext;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -7,13 +8,11 @@ use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
 use hermes_cosmos_test_components::bootstrap::impls::generator::wallet_config::GenerateStandardWalletConfig;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
-use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
-use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
-    DenomForStaking, DenomForTransfer, DenomPrefixGetter,
-};
-use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
+use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
@@ -26,15 +25,14 @@ use hermes_runtime_components::traits::runtime::{
 };
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
-use ibc_relayer::config::compat_mode::CompatMode;
 
 use crate::impls::bootstrap::build_cosmos_chain::BuildCosmosChainWithNodeConfig;
 use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
 use crate::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
-use crate::traits::bootstrap::compat_mode::CompatModeGetter;
-use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
+use crate::traits::bootstrap::compat_mode::{CompatModeGetterComponent, UseCompatMode37};
+use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 
 /**
@@ -44,13 +42,13 @@ use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderCom
 #[derive(HasField)]
 pub struct CosmosBootstrap {
     pub runtime: HermesRuntime,
-    pub builder: Arc<CosmosBuilder>,
+    pub cosmos_builder: Arc<CosmosBuilder>,
     pub should_randomize_identifiers: bool,
     pub chain_store_dir: PathBuf,
     pub chain_command_path: PathBuf,
     pub account_prefix: String,
-    pub staking_denom: String,
-    pub transfer_denom: String,
+    pub staking_denom_prefix: String,
+    pub transfer_denom_prefix: String,
     pub genesis_config_modifier:
         Box<dyn Fn(&mut serde_json::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub comet_config_modifier:
@@ -88,30 +86,22 @@ delegate_components! {
             ChainDriverTypeComponent,
         ]:
             ProvideCosmosBootstrapChainTypes,
+        [
+            ChainStoreDirGetterComponent,
+            ChainCommandPathGetterComponent,
+            AccountPrefixGetterComponent,
+            DenomPrefixGetterComponent,
+            RandomIdFlagGetterComponent,
+            CosmosBuilderGetterComponent,
+        ]:
+            UseContext,
+        CompatModeGetterComponent: UseCompatMode37,
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
             BuildCosmosChainDriver,
-    }
-}
-
-impl ChainStoreDirGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn chain_store_dir(bootstrap: &CosmosBootstrap) -> &PathBuf {
-        &bootstrap.chain_store_dir
-    }
-}
-
-impl ChainCommandPathGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn chain_command_path(bootstrap: &CosmosBootstrap) -> &PathBuf {
-        &bootstrap.chain_command_path
-    }
-}
-
-impl RandomIdFlagGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn should_randomize_identifiers(bootstrap: &CosmosBootstrap) -> bool {
-        bootstrap.should_randomize_identifiers
     }
 }
 
@@ -130,37 +120,5 @@ impl CometConfigModifier<CosmosBootstrap> for CosmosBootstrapComponents {
         comet_config: &mut toml::Value,
     ) -> Result<(), Error> {
         (bootstrap.comet_config_modifier)(comet_config)
-    }
-}
-
-impl DenomPrefixGetter<CosmosBootstrap, DenomForStaking> for CosmosBootstrapComponents {
-    fn denom_prefix(bootstrap: &CosmosBootstrap, _label: DenomForStaking) -> &str {
-        &bootstrap.staking_denom
-    }
-}
-
-impl DenomPrefixGetter<CosmosBootstrap, DenomForTransfer> for CosmosBootstrapComponents {
-    fn denom_prefix(bootstrap: &CosmosBootstrap, _label: DenomForTransfer) -> &str {
-        &bootstrap.transfer_denom
-    }
-}
-
-impl AccountPrefixGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn account_prefix(bootstrap: &CosmosBootstrap) -> &str {
-        &bootstrap.account_prefix
-    }
-}
-
-impl CompatModeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn compat_mode(_bootstrap: &CosmosBootstrap) -> Option<&CompatMode> {
-        const COMPAT_MODE: CompatMode = CompatMode::V0_37;
-
-        Some(&COMPAT_MODE)
-    }
-}
-
-impl CosmosBuilderGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn cosmos_builder(bootstrap: &CosmosBootstrap) -> &CosmosBuilder {
-        &bootstrap.builder
     }
 }
