@@ -8,6 +8,17 @@ pub trait HasRandomIdFlag: Async {
     fn should_randomize_identifiers(&self) -> bool;
 }
 
+pub struct ReturnRandomIdFlag<const FLAG: bool>;
+
+impl<Bootstrap, const FLAG: bool> RandomIdFlagGetter<Bootstrap> for ReturnRandomIdFlag<FLAG>
+where
+    Bootstrap: Async,
+{
+    fn should_randomize_identifiers(_bootstrap: &Bootstrap) -> bool {
+        FLAG
+    }
+}
+
 impl<Bootstrap> RandomIdFlagGetter<Bootstrap> for UseContext
 where
     Bootstrap: Async + HasField<symbol!("should_randomize_identifiers"), Field = bool>,

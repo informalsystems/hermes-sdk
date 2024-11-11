@@ -1,4 +1,7 @@
 use alloc::sync::Arc;
+use cgp::core::component::UseContext;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
 use std::path::PathBuf;
 use std::sync::OnceLock;
 
@@ -23,29 +26,32 @@ use hermes_cosmos_integration_tests::impls::bootstrap::build_cosmos_chain_driver
 use hermes_cosmos_integration_tests::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
 use hermes_cosmos_integration_tests::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use hermes_cosmos_integration_tests::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
-use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::CompatModeGetter;
-use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
+use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
+    CompatModeGetterComponent, UseCompatMode34,
+};
+use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
 use hermes_cosmos_test_components::bootstrap::traits::chain::build_chain_driver::ChainDriverBuilderComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::AccountPrefixGetter;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
-use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, DenomPrefixGetter,
 };
-use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
+use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::{
+    RandomIdFlagGetterComponent, ReturnRandomIdFlag,
+};
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use hermes_test_components::chain_driver::traits::types::chain::ChainTypeComponent;
 use hermes_test_components::driver::traits::types::chain_driver::ChainDriverTypeComponent;
-use ibc_relayer::config::compat_mode::CompatMode;
 use tokio::process::Child;
 
 use crate::contexts::bridge_driver::CelestiaBridgeDriver;
@@ -53,7 +59,7 @@ use crate::contexts::bridge_driver::CelestiaBridgeDriver;
 #[derive(HasField)]
 pub struct CelestiaBootstrap {
     pub runtime: HermesRuntime,
-    pub builder: Arc<CosmosBuilder>,
+    pub cosmos_builder: Arc<CosmosBuilder>,
     pub chain_store_dir: PathBuf,
     pub bridge_store_dir: PathBuf,
 }
@@ -99,6 +105,19 @@ delegate_components! {
             ChainDriverTypeComponent,
         ]:
             ProvideCosmosBootstrapChainTypes,
+        [
+            ChainStoreDirGetterComponent,
+            CosmosBuilderGetterComponent,
+        ]:
+            UseContext,
+        RandomIdFlagGetterComponent:
+            ReturnRandomIdFlag<false>,
+        CompatModeGetterComponent:
+            UseCompatMode34,
+        CosmosGenesisConfigModifierComponent:
+            NoModifyGenesisConfig,
+        CometConfigModifierComponent:
+            NoModifyCometConfig,
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:
@@ -133,41 +152,11 @@ impl BridgeDriverBuilder<CelestiaBootstrap> for CelestiaBootstrapComponents {
     }
 }
 
-impl ChainStoreDirGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn chain_store_dir(bootstrap: &CelestiaBootstrap) -> &PathBuf {
-        &bootstrap.chain_store_dir
-    }
-}
-
 impl ChainCommandPathGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn chain_command_path(_bootstrap: &CelestiaBootstrap) -> &PathBuf {
         static CELESTIA_COMMAND_PATH: OnceLock<PathBuf> = OnceLock::new();
 
         CELESTIA_COMMAND_PATH.get_or_init(|| "celestia-appd".into())
-    }
-}
-
-impl RandomIdFlagGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn should_randomize_identifiers(_bootstrap: &CelestiaBootstrap) -> bool {
-        false
-    }
-}
-
-impl CosmosGenesisConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn modify_genesis_config(
-        _bootstrap: &CelestiaBootstrap,
-        _config: &mut serde_json::Value,
-    ) -> Result<(), Error> {
-        Ok(())
-    }
-}
-
-impl CometConfigModifier<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn modify_comet_config(
-        _bootstrap: &CelestiaBootstrap,
-        _comet_config: &mut toml::Value,
-    ) -> Result<(), Error> {
-        Ok(())
     }
 }
 
@@ -186,19 +175,5 @@ impl DenomPrefixGetter<CelestiaBootstrap, DenomForTransfer> for CelestiaBootstra
 impl AccountPrefixGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
     fn account_prefix(_bootstrap: &CelestiaBootstrap) -> &str {
         "celestia"
-    }
-}
-
-impl CompatModeGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn compat_mode(_bootstrap: &CelestiaBootstrap) -> Option<&CompatMode> {
-        const COMPAT_MODE: CompatMode = CompatMode::V0_34;
-
-        Some(&COMPAT_MODE)
-    }
-}
-
-impl CosmosBuilderGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn cosmos_builder(bootstrap: &CelestiaBootstrap) -> &CosmosBuilder {
-        &bootstrap.builder
     }
 }
