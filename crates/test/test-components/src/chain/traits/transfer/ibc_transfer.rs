@@ -4,6 +4,7 @@ use hermes_relayer_components::chain::traits::types::packet::HasOutgoingPacketTy
 
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
+use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::HasWalletType;
 
 #[derive_component(TokenIbcTransferrerComponent, TokenIbcTransferrer<Chain>)]
@@ -14,6 +15,7 @@ pub trait CanIbcTransferToken<Counterparty>:
     + HasAmountType
     + HasIbcChainTypes<Counterparty>
     + HasOutgoingPacketType<Counterparty>
+    + HasMemoType
 where
     Counterparty: HasAddressType,
 {
@@ -24,5 +26,6 @@ where
         sender_wallet: &Self::Wallet,
         recipient_address: &Counterparty::Address,
         amount: &Self::Amount,
+        memo: &Self::Memo,
     ) -> Result<Self::OutgoingPacket, Self::Error>;
 }

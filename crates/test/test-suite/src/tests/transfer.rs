@@ -13,6 +13,7 @@ use hermes_test_components::chain::traits::queries::balance::CanQueryBalance;
 use hermes_test_components::chain::traits::transfer::amount::CanConvertIbcTransferredAmount;
 use hermes_test_components::chain::traits::transfer::ibc_transfer::CanIbcTransferToken;
 use hermes_test_components::chain::traits::types::amount::HasAmountMethods;
+use hermes_test_components::chain::traits::types::memo::HasDefaultMemo;
 use hermes_test_components::chain_driver::traits::fields::amount::CanGenerateRandomAmount;
 use hermes_test_components::chain_driver::traits::fields::denom_at::{HasDenomAt, TransferDenom};
 use hermes_test_components::chain_driver::traits::fields::wallet::{HasWalletAt, UserWallet};
@@ -51,7 +52,8 @@ where
         + HasAmountMethods
         + CanConvertIbcTransferredAmount<ChainB>
         + CanIbcTransferToken<ChainB>
-        + CanAssertEventualAmount,
+        + CanAssertEventualAmount
+        + HasDefaultMemo,
     ChainB: HasIbcChainTypes<ChainA>
         + HasChainId
         + HasOutgoingPacketType<ChainA>
@@ -59,7 +61,8 @@ where
         + CanQueryBalance
         + CanIbcTransferToken<ChainA>
         + CanConvertIbcTransferredAmount<ChainA>
-        + CanAssertEventualAmount,
+        + CanAssertEventualAmount
+        + HasDefaultMemo,
     Logger: CanLogMessage,
     Driver::Error: From<RelayDriver::Error> + From<ChainA::Error> + From<ChainB::Error>,
 {
@@ -118,6 +121,7 @@ where
                 wallet_a1,
                 address_b,
                 &a_to_b_amount,
+                &chain_a.default_memo(),
             )
             .await?;
 
@@ -160,6 +164,7 @@ where
                 wallet_b,
                 address_a2,
                 &b_to_a_amount,
+                &chain_b.default_memo(),
             )
             .await?;
 
