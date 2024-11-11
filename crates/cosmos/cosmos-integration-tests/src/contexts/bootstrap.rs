@@ -14,8 +14,8 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::C
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
@@ -93,6 +93,8 @@ delegate_components! {
             DenomPrefixGetterComponent,
             RandomIdFlagGetterComponent,
             CosmosBuilderGetterComponent,
+            CometConfigModifierComponent,
+            CosmosGenesisConfigModifierComponent,
         ]:
             UseContext,
         CompatModeGetterComponent: UseCompatMode37,
@@ -102,23 +104,5 @@ delegate_components! {
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
             BuildCosmosChainDriver,
-    }
-}
-
-impl CosmosGenesisConfigModifier<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn modify_genesis_config(
-        bootstrap: &CosmosBootstrap,
-        config: &mut serde_json::Value,
-    ) -> Result<(), Error> {
-        (bootstrap.genesis_config_modifier)(config)
-    }
-}
-
-impl CometConfigModifier<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn modify_comet_config(
-        bootstrap: &CosmosBootstrap,
-        comet_config: &mut toml::Value,
-    ) -> Result<(), Error> {
-        (bootstrap.comet_config_modifier)(comet_config)
     }
 }

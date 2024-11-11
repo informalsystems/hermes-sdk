@@ -14,8 +14,8 @@ use hermes_cosmos_test_components::bootstrap::traits::fields::chain_store_dir::C
 use hermes_cosmos_test_components::bootstrap::traits::fields::denom::DenomPrefixGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::fields::random_id::RandomIdFlagGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::generator::generate_wallet_config::WalletConfigGeneratorComponent;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
-use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifierComponent;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifierComponent;
 use hermes_error::handlers::debug::DebugError;
 use hermes_error::impls::ProvideHermesError;
 use hermes_error::types::Error;
@@ -32,7 +32,7 @@ use crate::impls::bootstrap::build_cosmos_chain_driver::BuildCosmosChainDriver;
 use crate::impls::bootstrap::relayer_chain_config::BuildRelayerChainConfig;
 use crate::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
-use crate::traits::bootstrap::compat_mode::CompatModeGetter;
+use crate::traits::bootstrap::compat_mode::CompatModeGetterComponent;
 use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
 use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 
@@ -94,7 +94,10 @@ delegate_components! {
             AccountPrefixGetterComponent,
             DenomPrefixGetterComponent,
             RandomIdFlagGetterComponent,
+            CompatModeGetterComponent,
             CosmosBuilderGetterComponent,
+            CometConfigModifierComponent,
+            CosmosGenesisConfigModifierComponent,
         ]:
             UseContext,
         RelayerChainConfigBuilderComponent:
@@ -103,29 +106,5 @@ delegate_components! {
             BuildCosmosChainWithNodeConfig,
         ChainDriverBuilderComponent:
             BuildCosmosChainDriver,
-    }
-}
-
-impl CosmosGenesisConfigModifier<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
-    fn modify_genesis_config(
-        bootstrap: &LegacyCosmosBootstrap,
-        config: &mut serde_json::Value,
-    ) -> Result<(), Error> {
-        (bootstrap.genesis_config_modifier)(config)
-    }
-}
-
-impl CometConfigModifier<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
-    fn modify_comet_config(
-        bootstrap: &LegacyCosmosBootstrap,
-        comet_config: &mut toml::Value,
-    ) -> Result<(), Error> {
-        (bootstrap.comet_config_modifier)(comet_config)
-    }
-}
-
-impl CompatModeGetter<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
-    fn compat_mode(bootstrap: &LegacyCosmosBootstrap) -> Option<&CompatMode> {
-        bootstrap.compat_mode.as_ref()
     }
 }
