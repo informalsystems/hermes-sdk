@@ -4,7 +4,9 @@ use core::time::Duration;
 use cgp::core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
+use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -27,6 +29,7 @@ where
         + HasCompatMode
         + HasGasDenom
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
+        + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainType<Chain = Chain>
         + CanRaiseError<TendermintRpcError>,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
