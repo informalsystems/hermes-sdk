@@ -13,7 +13,6 @@ use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::{
     CompatModeGetterComponent, UseCompatMode37,
 };
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetterComponent;
-use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk::*;
@@ -114,11 +113,5 @@ delegate_components! {
             ModifyWasmGenesisConfig<NoModifyGenesisConfig>,
         CometConfigModifierComponent:
             ModifyWasmNodeConfig<NoModifyCometConfig>,
-    }
-}
-
-impl GasDenomGetter<CosmosWithWasmClientBootstrap> for CosmosWithWasmClientBootstrapComponents {
-    fn gas_denom(bootstrap: &CosmosWithWasmClientBootstrap) -> &str {
-        &bootstrap.staking_denom_prefix
     }
 }

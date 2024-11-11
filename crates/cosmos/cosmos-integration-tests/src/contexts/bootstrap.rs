@@ -35,7 +35,6 @@ use crate::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use crate::traits::bootstrap::compat_mode::CompatModeGetter;
 use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
-use crate::traits::bootstrap::gas_denom::GasDenomGetter;
 use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 
 /**
@@ -157,12 +156,6 @@ impl CompatModeGetter<CosmosBootstrap> for CosmosBootstrapComponents {
         const COMPAT_MODE: CompatMode = CompatMode::V0_37;
 
         Some(&COMPAT_MODE)
-    }
-}
-
-impl GasDenomGetter<CosmosBootstrap> for CosmosBootstrapComponents {
-    fn gas_denom(bootstrap: &CosmosBootstrap) -> &str {
-        &bootstrap.staking_denom
     }
 }
 

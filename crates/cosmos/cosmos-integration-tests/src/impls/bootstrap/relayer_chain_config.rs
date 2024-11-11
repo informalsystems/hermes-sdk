@@ -18,7 +18,6 @@ use ibc_relayer::keyring::Store;
 use tendermint_rpc::{Error as TendermintRpcError, Url, WebSocketClientUrl};
 
 use crate::traits::bootstrap::compat_mode::HasCompatMode;
-use crate::traits::bootstrap::gas_denom::HasGasDenom;
 use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilder;
 
 pub struct BuildRelayerChainConfig;
@@ -27,7 +26,6 @@ impl<Bootstrap, Chain> RelayerChainConfigBuilder<Bootstrap> for BuildRelayerChai
 where
     Bootstrap: HasAccountPrefix
         + HasCompatMode
-        + HasGasDenom
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainType<Chain = Chain>

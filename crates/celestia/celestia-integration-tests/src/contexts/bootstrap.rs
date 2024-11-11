@@ -25,7 +25,6 @@ use hermes_cosmos_integration_tests::impls::bootstrap::types::ProvideCosmosBoots
 use hermes_cosmos_integration_tests::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use hermes_cosmos_integration_tests::traits::bootstrap::compat_mode::CompatModeGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
-use hermes_cosmos_integration_tests::traits::bootstrap::gas_denom::GasDenomGetter;
 use hermes_cosmos_integration_tests::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::bootstrap::components::cosmos_sdk_legacy::*;
@@ -195,12 +194,6 @@ impl CompatModeGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
         const COMPAT_MODE: CompatMode = CompatMode::V0_34;
 
         Some(&COMPAT_MODE)
-    }
-}
-
-impl GasDenomGetter<CelestiaBootstrap> for CelestiaBootstrapComponents {
-    fn gas_denom(_bootstrap: &CelestiaBootstrap) -> &str {
-        "utia"
     }
 }
 

@@ -35,7 +35,6 @@ use crate::impls::bootstrap::types::ProvideCosmosBootstrapChainTypes;
 use crate::traits::bootstrap::build_chain::ChainBuilderWithNodeConfigComponent;
 use crate::traits::bootstrap::compat_mode::CompatModeGetter;
 use crate::traits::bootstrap::cosmos_builder::CosmosBuilderGetter;
-use crate::traits::bootstrap::gas_denom::GasDenomGetter;
 use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilderComponent;
 
 /**
@@ -158,12 +157,6 @@ impl AccountPrefixGetter<LegacyCosmosBootstrap> for LegacyCosmosBootstrapCompone
 impl CompatModeGetter<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
     fn compat_mode(bootstrap: &LegacyCosmosBootstrap) -> Option<&CompatMode> {
         bootstrap.compat_mode.as_ref()
-    }
-}
-
-impl GasDenomGetter<LegacyCosmosBootstrap> for LegacyCosmosBootstrapComponents {
-    fn gas_denom(bootstrap: &LegacyCosmosBootstrap) -> &str {
-        &bootstrap.staking_denom
     }
 }
 
