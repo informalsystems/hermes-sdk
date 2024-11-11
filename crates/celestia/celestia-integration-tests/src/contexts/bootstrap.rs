@@ -1,7 +1,9 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
 use std::path::PathBuf;
 use std::sync::OnceLock;
 
@@ -118,6 +120,8 @@ delegate_components! {
             NoModifyGenesisConfig,
         CometConfigModifierComponent:
             NoModifyCometConfig,
+        CosmosSdkConfigModifierComponent:
+            NoModifyCosmosSdkConfig,
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:

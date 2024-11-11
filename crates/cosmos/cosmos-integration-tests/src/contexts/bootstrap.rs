@@ -1,5 +1,7 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
+use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
+use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -97,7 +99,10 @@ delegate_components! {
             CosmosGenesisConfigModifierComponent,
         ]:
             UseContext,
-        CompatModeGetterComponent: UseCompatMode37,
+        CompatModeGetterComponent:
+            UseCompatMode37,
+        CosmosSdkConfigModifierComponent:
+            NoModifyCosmosSdkConfig,
         RelayerChainConfigBuilderComponent:
             BuildRelayerChainConfig,
         ChainBuilderWithNodeConfigComponent:

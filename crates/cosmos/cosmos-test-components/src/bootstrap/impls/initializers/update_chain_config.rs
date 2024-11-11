@@ -14,6 +14,7 @@ use toml::Value;
 
 use crate::bootstrap::traits::initializers::init_chain_config::ChainNodeConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CanModifyCometConfig;
+use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CanModifyCosmosSdkConfig;
 use crate::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use crate::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -30,6 +31,7 @@ where
         + HasChainNodeConfigType
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + CanModifyCometConfig
+        + CanModifyCosmosSdkConfig
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<&'static str>
         + CanRaiseError<toml::de::Error>
@@ -139,6 +141,8 @@ where
             set_grpc_port(&mut sdk_config, grpc_port).map_err(Bootstrap::raise_error)?;
             disable_grpc_web(&mut sdk_config).map_err(Bootstrap::raise_error)?;
             disable_api(&mut sdk_config).map_err(Bootstrap::raise_error)?;
+
+            bootstrap.modify_cosmos_sdk_config(&mut sdk_config)?;
 
             let sdk_config_string =
                 toml::to_string_pretty(&sdk_config).map_err(Bootstrap::raise_error)?;

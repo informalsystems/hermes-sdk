@@ -63,6 +63,7 @@ pub use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDi
 pub use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializerComponent;
 pub use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
+use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 pub use crate::bootstrap::traits::types::chain_node_config::{
     ChainNodeConfigTypeComponent, ProvideChainNodeConfigType,
@@ -129,6 +130,7 @@ where
         + RandomIdFlagGetter<Bootstrap>
         + CosmosGenesisConfigModifier<Bootstrap>
         + CometConfigModifier<Bootstrap>
+        + CosmosSdkConfigModifier<Bootstrap>
         + WalletConfigGenerator<Bootstrap>
         + ChainDriverBuilder<Bootstrap>
         + ProvideWalletConfigType<Bootstrap>
