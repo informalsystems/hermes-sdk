@@ -184,7 +184,7 @@ impl ProvideBuilderAt<LegacyCosmosBinaryChannelSetup, 0, 1>
     for LegacyCosmosBinaryChannelSetupComponents
 {
     fn builder(setup: &LegacyCosmosBinaryChannelSetup) -> &CosmosBuilder {
-        &setup.bootstrap_a.builder
+        &setup.bootstrap_a.cosmos_builder
     }
 }
 
@@ -192,7 +192,7 @@ impl ProvideBuilderAt<LegacyCosmosBinaryChannelSetup, 1, 0>
     for LegacyCosmosBinaryChannelSetupComponents
 {
     fn builder(setup: &LegacyCosmosBinaryChannelSetup) -> &CosmosBuilder {
-        &setup.bootstrap_b.builder
+        &setup.bootstrap_b.cosmos_builder
     }
 }
 
