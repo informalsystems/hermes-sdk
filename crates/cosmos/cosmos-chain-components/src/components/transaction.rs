@@ -20,7 +20,7 @@ pub use hermes_relayer_components::transaction::traits::types::transaction::Tran
 pub use hermes_relayer_components::transaction::traits::types::tx_hash::TransactionHashTypeComponent;
 pub use hermes_relayer_components::transaction::traits::types::tx_response::TxResponseTypeComponent;
 
-use crate::impls::transaction::convert_gas_to_fee::DynamicConvertCosmosGasToFee;
+pub use crate::impls::transaction::convert_gas_to_fee::DynamicConvertCosmosGasToFee;
 pub use crate::impls::transaction::convert_gas_to_fee::StaticConvertCosmosGasToFee;
 use crate::impls::transaction::encode_tx::EncodeCosmosTx;
 use crate::impls::transaction::estimate_fee::EstimateCosmosTxFee;
@@ -63,7 +63,7 @@ define_components! {
         TxFeeEstimatorComponent:
             EstimateCosmosTxFee,
         GasToFeeConverterComponent:
-            DynamicConvertCosmosGasToFee,
+            DynamicConvertCosmosGasToFee<StaticConvertCosmosGasToFee>,
         TxSubmitterComponent:
             BroadcastCosmosTx,
         NonceQuerierComponent:

@@ -1,4 +1,5 @@
 use core::cmp::min;
+use core::marker::PhantomData;
 
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
@@ -48,24 +49,28 @@ where
     }
 }
 
-pub struct DynamicConvertCosmosGasToFee;
+pub struct DynamicConvertCosmosGasToFee<InConverter>(pub PhantomData<InConverter>);
 
-impl<Chain> GasToFeeConverter<Chain> for DynamicConvertCosmosGasToFee
+impl<InConverter, Chain> GasToFeeConverter<Chain> for DynamicConvertCosmosGasToFee<InConverter>
 where
     Chain: HasFeeType<Fee = Fee>
         + HasChainId<ChainId = ChainId>
         + HasRpcClient
         + HasGasConfig
         + CanRaiseError<&'static str>,
+    InConverter: GasToFeeConverter<Chain>,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
+        if !chain.gas_config().dynamic_gas_price.enabled {
+            return InConverter::gas_amount_to_fee(chain, gas_used).await;
+        }
         let adjusted_gas_limit = adjust_estimated_gas(
             chain.gas_config().gas_multiplier,
             chain.gas_config().max_gas,
             gas_used,
         );
 
-        let dynamic_gas_price = query_eip_base_fee(
+        let mut dynamic_gas_price = query_eip_base_fee(
             chain.rpc_address(),
             &chain.gas_config().gas_price.denom,
             chain.chain_id(),
@@ -75,10 +80,8 @@ where
         .map(|new_price| GasPrice {
             price: new_price,
             denom: chain.gas_config().gas_price.denom.clone(),
-        });
-
-        let mut dynamic_gas_price =
-            dynamic_gas_price.unwrap_or(chain.gas_config().gas_price.clone());
+        })
+        .unwrap_or(chain.gas_config().gas_price.clone());
 
         dynamic_gas_price = if dynamic_gas_price.price > chain.gas_config().dynamic_gas_price.max {
             GasPrice::new(
