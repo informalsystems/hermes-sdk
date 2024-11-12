@@ -1,5 +1,4 @@
 use alloc::collections::BTreeMap;
-use alloc::sync::Arc;
 use std::path::PathBuf;
 
 use cgp::core::error::CanRaiseError;
@@ -20,7 +19,6 @@ use hermes_runtime_components::traits::runtime::HasRuntimeType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use hermes_test_components::driver::traits::types::chain_driver::HasChainDriverType;
 use tokio::process::Child;
-use tokio::sync::Mutex;
 
 use crate::contexts::chain_driver::CosmosChainDriver;
 use crate::traits::bootstrap::build_chain::CanBuildChainWithNodeConfig;
@@ -85,7 +83,7 @@ where
             .clone();
 
         let chain = bootstrap
-            .build_chain_with_node_config(&chain_node_config, &relayer_wallet)
+            .build_chain_with_node_config(&chain_node_config, &genesis_config, &relayer_wallet)
             .await?;
 
         let chain_command_path = bootstrap.chain_command_path().clone();
@@ -95,7 +93,7 @@ where
             chain_command_path,
             chain_node_config,
             genesis_config,
-            chain_process: Arc::new(Mutex::new(Some(chain_process))),
+            chain_process: Some(chain_process),
             validator_wallet,
             relayer_wallet,
             user_wallet_a,

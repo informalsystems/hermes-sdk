@@ -12,7 +12,7 @@ use hermes_runtime_components::traits::os::child_process::CanWaitChildProcess;
 use hermes_runtime_components::traits::runtime::HasRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use hermes_test_components::chain_driver::traits::chain_process::CanTakeChainProcess;
-use hermes_test_components::chain_driver::traits::config::CanUpdateConfig;
+use hermes_test_components::chain_driver::traits::config::ConfigUpdater;
 use hermes_test_components::chain_driver::traits::types::chain::HasChain;
 
 use crate::traits::bootstrap::CanLoadBootstrap;
@@ -22,10 +22,10 @@ use crate::traits::config::load_config::CanLoadConfig;
 use crate::traits::config::write_config::CanWriteConfig;
 use crate::traits::output::CanProduceOutput;
 
-pub struct RunBootstrapChainCommand;
+pub struct RunBootstrapChainCommand<UpdateConfig>(pub PhantomData<UpdateConfig>);
 
-impl<App, Args, Bootstrap, ChainDriver, Chain, Runtime> CommandRunner<App, Args>
-    for RunBootstrapChainCommand
+impl<App, Args, Bootstrap, ChainDriver, Chain, Runtime, UpdateConfig> CommandRunner<App, Args>
+    for RunBootstrapChainCommand<UpdateConfig>
 where
     App: HasLogger
         + CanProduceOutput<()>
@@ -41,7 +41,8 @@ where
     ChainDriver: HasChain<Chain = Chain>
         + HasRuntime<Runtime = Runtime>
         + CanTakeChainProcess
-        + CanUpdateConfig<App::Config>,
+        + HasErrorType,
+    UpdateConfig: ConfigUpdater<ChainDriver, App::Config>,
     Chain: HasChainId,
     Runtime: CanWaitChildProcess + HasFilePathType<FilePath = PathBuf>,
     Args: Async + HasField<symbol!("chain_id"), Field = String>,
@@ -54,26 +55,23 @@ where
         let mut config = app.load_config().await?;
         let bootstrap = app.load_bootstrap(args).await?;
 
-        let chain_driver = bootstrap
+        let mut chain_driver = bootstrap
             .bootstrap_chain(chain_id)
             .await
             .map_err(App::raise_error)?;
-
-        let chain = chain_driver.chain();
 
         logger
             .log(
                 &format!(
                     "Bootstrapped a new chain with chain ID: {}",
-                    chain.chain_id()
+                    chain_driver.chain().chain_id()
                 ),
                 &LevelInfo,
             )
             .await;
 
-        let chain_config = chain_driver
-            .update_config(&mut config)
-            .map_err(App::raise_error)?;
+        let chain_config =
+            UpdateConfig::update_config(&chain_driver, &mut config).map_err(App::raise_error)?;
 
         app.write_config(&config).await?;
 
@@ -87,10 +85,10 @@ where
             )
             .await;
 
-        let m_chain_process = chain_driver.take_chain_process().await;
+        let m_chain_process = chain_driver.take_chain_process();
 
         if let Some(chain_process) = m_chain_process {
-            logger.log(&format!("running chain {} running in the background. Press Ctrl+C to stop then chain...", chain.chain_id()), &LevelInfo).await;
+            logger.log(&format!("running chain {} running in the background. Press Ctrl+C to stop then chain...", chain_driver.chain().chain_id()), &LevelInfo).await;
 
             Runtime::wait_child_process(chain_process)
                 .await

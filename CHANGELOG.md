@@ -2,6 +2,18 @@
 
 ## v0.2.0 (pre-release)
 
+-  Bootstrap components improvements - [#473](https://github.com/informalsystems/hermes-sdk/pull/473)
+  - Introduce `CosmosSdkConfigModifier` trait, which Cosmos bootstrap contexts now required to implement.
+  - Implement `UseContext` for various accessor traits for the bootstrap context.
+  - Pass `Bootstrap::ChainGenesisConfig` to `build_chain_with_node_config` and `build_relayer_chain_config`.
+  - Rename fields in Cosmos bootstrap contexts.
+
+- CLI Components Improvements - [#472](https://github.com/informalsystems/hermes-sdk/pull/472)
+  - Implement `WithProvider` for CLI type traits.
+  - Implement `UseDelegate` for `ArgParser` and `CommandRunner`.
+  - Make `take_chain_process` work with `&mut ChainDriver`
+  - Pass `ConfigUpdater` to `RunBootstrapChainCommand` for non-owned implementation.
+
 -  Delegate all create and update client types and methods based on counterparty - [#468](https://github.com/informalsystems/hermes-sdk/pull/468)
   - In `CosmosChainClientComponents`, delegate the following components to `UseDelegate<DelegateCosmosChainComponents>`:
   `CreateClientPayloadTypeComponent`, `UpdateClientPayloadTypeComponent`,

@@ -1,3 +1,5 @@
+use cgp::core::component::WithProvider;
+use cgp::core::types::traits::ProvideType;
 use cgp::prelude::*;
 
 #[derive_component(BuilderTypeComponent, ProvideBuilderType<App>)]
@@ -11,4 +13,13 @@ pub type BuilderOf<Context> = <Context as HasBuilderType>::Builder;
 #[async_trait]
 pub trait CanLoadBuilder: HasBuilderType + HasErrorType {
     async fn load_builder(&self) -> Result<Self::Builder, Self::Error>;
+}
+
+impl<App, Provider, Builder> ProvideBuilderType<App> for WithProvider<Provider>
+where
+    App: Async,
+    Builder: Async,
+    Provider: ProvideType<BuilderTypeComponent, App, Type = Builder>,
+{
+    type Builder = Builder;
 }

@@ -161,13 +161,13 @@ impl ProvideBootstrapAt<CosmosBinaryChannelSetup, 1> for CosmosBinaryChannelSetu
 
 impl ProvideBuilderAt<CosmosBinaryChannelSetup, 0, 1> for CosmosBinaryChannelSetupComponents {
     fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
-        &setup.bootstrap_a.builder
+        &setup.bootstrap_a.cosmos_builder
     }
 }
 
 impl ProvideBuilderAt<CosmosBinaryChannelSetup, 1, 0> for CosmosBinaryChannelSetupComponents {
     fn builder(setup: &CosmosBinaryChannelSetup) -> &CosmosBuilder {
-        &setup.bootstrap_b.builder
+        &setup.bootstrap_b.cosmos_builder
     }
 }
 

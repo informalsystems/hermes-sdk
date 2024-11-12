@@ -27,7 +27,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
 
     let celestia_bootstrap = CelestiaBootstrap {
         runtime: runtime.clone(),
-        builder: builder.clone(),
+        cosmos_builder: builder.clone(),
         chain_store_dir: store_dir.join("chains"),
         bridge_store_dir: store_dir.join("bridges"),
     };
