@@ -23,13 +23,13 @@ fn cosmos_integration_tests() -> Result<(), Error> {
     // TODO: load parameters from environment variables
     let bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
-        builder,
+        cosmos_builder: builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data".into(),
         chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
-        staking_denom: "stake".into(),
-        transfer_denom: "coin".into(),
+        staking_denom_prefix: "stake".into(),
+        transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     });

@@ -26,26 +26,26 @@ fn celestia_integration_tests() -> Result<(), Error> {
 
     let celestia_bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
-        builder: builder.clone(),
+        cosmos_builder: builder.clone(),
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data/chains".into(),
         chain_command_path: "celestia-appd".into(),
         account_prefix: "celestia".into(),
-        staking_denom: "utia".into(),
-        transfer_denom: "coin".into(),
+        staking_denom_prefix: "utia".into(),
+        transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     });
 
     let cosmos_bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
-        builder,
+        cosmos_builder: builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data/chains".into(),
         chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
-        staking_denom: "stake".into(),
-        transfer_denom: "coin".into(),
+        staking_denom_prefix: "stake".into(),
+        transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
     });

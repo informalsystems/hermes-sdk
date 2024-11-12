@@ -1,3 +1,6 @@
+use core::marker::PhantomData;
+
+use cgp::core::component::UseContext;
 use cgp::prelude::*;
 use toml::Value;
 
@@ -5,4 +8,17 @@ use toml::Value;
 #[async_trait]
 pub trait CanModifyCometConfig: HasErrorType {
     fn modify_comet_config(&self, comet_config: &mut Value) -> Result<(), Self::Error>;
+}
+
+impl<Bootstrap, Modifier> CometConfigModifier<Bootstrap> for UseContext
+where
+    Bootstrap: HasErrorType + HasField<symbol!("comet_config_modifier"), Field = Modifier>,
+    Modifier: Fn(&mut Value) -> Result<(), Bootstrap::Error> + Send + Sync + 'static,
+{
+    fn modify_comet_config(
+        bootstrap: &Bootstrap,
+        comet_config: &mut Value,
+    ) -> Result<(), Bootstrap::Error> {
+        bootstrap.get_field(PhantomData)(comet_config)
+    }
 }

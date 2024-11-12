@@ -28,10 +28,14 @@ where
     async fn build_chain_with_node_config(
         bootstrap: &Bootstrap,
         chain_node_config: &Bootstrap::ChainNodeConfig,
+        chain_genesis_config: &Bootstrap::ChainGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosChain, Bootstrap::Error> {
-        let relayer_chain_config =
-            bootstrap.build_relayer_chain_config(chain_node_config, relayer_wallet)?;
+        let relayer_chain_config = bootstrap.build_relayer_chain_config(
+            chain_node_config,
+            chain_genesis_config,
+            relayer_wallet,
+        )?;
 
         // TODO: Have a more reliable way to wait for the bootstrapped full node to
         // start up. If we don't wait, the building of the chain would fail during

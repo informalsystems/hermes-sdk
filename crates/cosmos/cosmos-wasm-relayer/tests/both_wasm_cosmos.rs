@@ -53,13 +53,13 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
 
         let bootstrap = Arc::new(CosmosWithWasmClientBootstrap {
             runtime: runtime.clone(),
-            builder: builder.clone(),
+            cosmos_builder: builder.clone(),
             should_randomize_identifiers: true,
             chain_store_dir: store_dir.join("chains"),
             chain_command_path: "simd".into(),
             account_prefix: "cosmos".into(),
-            staking_denom: "stake".into(),
-            transfer_denom: "coin".into(),
+            staking_denom_prefix: "stake".into(),
+            transfer_denom_prefix: "coin".into(),
             wasm_client_byte_code,
             governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
         });

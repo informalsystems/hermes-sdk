@@ -4,7 +4,9 @@ use core::time::Duration;
 use cgp::core::error::CanRaiseError;
 use hermes_cosmos_test_components::bootstrap::traits::fields::account_prefix::HasAccountPrefix;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
+use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
+use hermes_cosmos_test_components::bootstrap::types::genesis_config::CosmosGenesisConfig;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
@@ -16,7 +18,6 @@ use ibc_relayer::keyring::Store;
 use tendermint_rpc::{Error as TendermintRpcError, Url, WebSocketClientUrl};
 
 use crate::traits::bootstrap::compat_mode::HasCompatMode;
-use crate::traits::bootstrap::gas_denom::HasGasDenom;
 use crate::traits::bootstrap::relayer_chain_config::RelayerChainConfigBuilder;
 
 pub struct BuildRelayerChainConfig;
@@ -25,8 +26,8 @@ impl<Bootstrap, Chain> RelayerChainConfigBuilder<Bootstrap> for BuildRelayerChai
 where
     Bootstrap: HasAccountPrefix
         + HasCompatMode
-        + HasGasDenom
         + HasChainNodeConfigType<ChainNodeConfig = CosmosChainNodeConfig>
+        + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
         + HasChainType<Chain = Chain>
         + CanRaiseError<TendermintRpcError>,
     Chain: HasWalletType<Wallet = CosmosTestWallet>,
@@ -34,6 +35,7 @@ where
     fn build_relayer_chain_config(
         bootstrap: &Bootstrap,
         chain_node_config: &CosmosChainNodeConfig,
+        chain_genesis_config: &CosmosGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
         let relayer_chain_config = CosmosSdkConfig {
@@ -74,7 +76,7 @@ where
             client_refresh_rate: config::default::client_refresh_rate(),
             ccv_consumer_chain: false,
             trust_threshold: Default::default(),
-            gas_price: config::GasPrice::new(1.0, bootstrap.gas_denom().into()),
+            gas_price: config::GasPrice::new(1.0, chain_genesis_config.staking_denom.to_string()),
             packet_filter: Default::default(),
             address_type: AddressType::Cosmos,
             memo_prefix: Default::default(),
