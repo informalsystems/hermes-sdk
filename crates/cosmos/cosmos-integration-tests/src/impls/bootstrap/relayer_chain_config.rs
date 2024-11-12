@@ -36,6 +36,11 @@ where
         chain_node_config: &CosmosChainNodeConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
+        let dynamic_gas_price = if std::env::var("ENABLE_DYNAMIC_GAS").is_ok() {
+            DynamicGasPrice::unsafe_new(true, 1.3, 1.6)
+        } else {
+            DynamicGasPrice::default()
+        };
         let relayer_chain_config = CosmosSdkConfig {
             id: chain_node_config.chain_id.clone(),
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
@@ -62,7 +67,7 @@ where
             max_gas: Some(900000000),
             gas_adjustment: None,
             gas_multiplier: Some(GasMultiplier::unsafe_new(1.3)),
-            dynamic_gas_price: DynamicGasPrice::default(),
+            dynamic_gas_price,
             fee_granter: None,
             max_msg_num: Default::default(),
             max_tx_size: Default::default(),
