@@ -1,6 +1,5 @@
 use cgp::core::error::CanRaiseError;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainId;
-use hermes_relayer_components::transaction::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimator;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use hermes_relayer_components::transaction::traits::types::transaction::HasTransactionType;
@@ -15,6 +14,7 @@ use tonic::codegen::http::Uri;
 use tonic::transport::Error as TransportError;
 use tonic::Status;
 
+use crate::traits::convert_gas_to_fee::CanConvertGasToFee;
 use crate::traits::gas_config::HasGasConfig;
 use crate::traits::grpc_address::HasGrpcAddress;
 use crate::traits::rpc_client::HasRpcClient;

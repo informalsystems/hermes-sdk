@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::transaction::traits::types::fee::HasFeeType;
+use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 
 #[derive_component(GasToFeeConverterComponent, GasToFeeConverter<TxContext>)]
 #[async_trait]

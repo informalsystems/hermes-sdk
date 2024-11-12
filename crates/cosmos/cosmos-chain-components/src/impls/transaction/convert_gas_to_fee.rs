@@ -1,13 +1,12 @@
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
-use hermes_relayer_components::transaction::traits::{
-    convert_gas_to_fee::GasToFeeConverter, types::fee::HasFeeType,
-};
+use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::gas::gas_amount_to_fee;
 use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
+use crate::traits::convert_gas_to_fee::GasToFeeConverter;
 use crate::traits::gas_config::HasGasConfig;
 use crate::traits::rpc_client::HasRpcClient;
 

@@ -2,7 +2,6 @@ use cgp::prelude::*;
 pub use hermes_relayer_components::chain::traits::send_message::MessageSenderComponent;
 pub use hermes_relayer_components::components::default::transaction::DefaultTxComponents;
 pub use hermes_relayer_components::transaction::impls::poll_tx_response::PollTimeoutGetterComponent;
-pub use hermes_relayer_components::transaction::traits::convert_gas_to_fee::GasToFeeConverterComponent;
 pub use hermes_relayer_components::transaction::traits::encode_tx::TxEncoderComponent;
 pub use hermes_relayer_components::transaction::traits::estimate_tx_fee::TxFeeEstimatorComponent;
 pub use hermes_relayer_components::transaction::traits::nonce::allocate_nonce::NonceAllocatorComponent;
@@ -31,6 +30,7 @@ use crate::impls::transaction::query_nonce::QueryCosmosAccount;
 use crate::impls::transaction::query_tx_response::QueryCosmosTxResponse;
 use crate::impls::transaction::submit_tx::BroadcastCosmosTx;
 use crate::impls::types::transaction::ProvideCosmosTransactionTypes;
+pub use crate::traits::convert_gas_to_fee::GasToFeeConverterComponent;
 
 define_components! {
     CosmosTxComponents {
