@@ -1,7 +1,9 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
+use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
+use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -60,6 +62,7 @@ pub struct CosmosWithWasmClientBootstrap {
     pub transfer_denom_prefix: String,
     pub wasm_client_byte_code: Vec<u8>,
     pub governance_proposal_authority: String,
+    pub dynamic_gas: DynamicGasPrice,
 }
 
 impl CanUseCosmosSdkChainBootstrapper for CosmosWithWasmClientBootstrap {}
@@ -98,6 +101,7 @@ delegate_components! {
             ChainCommandPathGetterComponent,
             AccountPrefixGetterComponent,
             DenomPrefixGetterComponent,
+            DynamicGasGetterComponent,
             RandomIdFlagGetterComponent,
             WasmClientByteCodeGetterComponent,
             GovernanceProposalAuthorityGetterComponent,

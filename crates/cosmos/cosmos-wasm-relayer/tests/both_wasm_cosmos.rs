@@ -17,12 +17,17 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use ibc_relayer::chain::cosmos::client::Settings;
+use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use ibc_relayer::config::types::TrustThreshold;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 
 #[test]
 fn test_both_wasm_cosmos() -> Result<(), Error> {
+    let dynamic_gas_fee_enabled = std::env::var("ENABLE_DYNAMIC_GAS")
+        .map(|v| &v == "true")
+        .unwrap_or(false);
+
     let _ = stable_eyre::install();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
@@ -62,6 +67,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             transfer_denom_prefix: "coin".into(),
             wasm_client_byte_code,
             governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
+            dynamic_gas: DynamicGasPrice::unsafe_new(dynamic_gas_fee_enabled, 1.3, 1.6),
         });
 
         let chain_driver_a = bootstrap.bootstrap_chain("chain-a").await?;

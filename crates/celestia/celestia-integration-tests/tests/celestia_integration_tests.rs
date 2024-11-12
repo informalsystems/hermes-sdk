@@ -11,6 +11,7 @@ use hermes_error::types::Error;
 use hermes_ibc_test_suite::tests::transfer::TestIbcTransfer;
 use hermes_test_components::setup::traits::run_test::CanRunTest;
 use ibc_relayer::chain::cosmos::client::Settings;
+use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use ibc_relayer_types::core::ics02_client::trust_threshold::TrustThreshold;
 use ibc_relayer_types::core::ics24_host::identifier::PortId;
 
@@ -20,6 +21,10 @@ use ibc_relayer_types::core::ics24_host::identifier::PortId;
 #[test]
 #[ignore]
 fn celestia_integration_tests() -> Result<(), Error> {
+    let dynamic_gas_fee_enabled = std::env::var("ENABLE_DYNAMIC_GAS")
+        .map(|v| &v == "true")
+        .unwrap_or(false);
+
     let runtime = init_test_runtime();
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
@@ -35,6 +40,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
+        dynamic_gas: DynamicGasPrice::unsafe_new(dynamic_gas_fee_enabled, 1.3, 1.6),
     });
 
     let cosmos_bootstrap = Arc::new(CosmosBootstrap {
@@ -48,6 +54,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
+        dynamic_gas: DynamicGasPrice::unsafe_new(dynamic_gas_fee_enabled, 1.3, 1.6),
     });
 
     let create_client_settings = Settings {

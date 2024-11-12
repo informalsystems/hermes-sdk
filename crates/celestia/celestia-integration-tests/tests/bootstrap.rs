@@ -9,10 +9,15 @@ use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBoo
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
+use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use tokio::runtime::Builder;
 
 #[test]
 fn test_celestia_bootstrap() -> Result<(), Error> {
+    let dynamic_gas_fee_enabled = std::env::var("ENABLE_DYNAMIC_GAS")
+        .map(|v| &v == "true")
+        .unwrap_or(false);
+
     let _ = stable_eyre::install();
 
     let tokio_runtime = Arc::new(Builder::new_multi_thread().enable_all().build()?);
@@ -30,6 +35,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
         cosmos_builder: builder.clone(),
         chain_store_dir: store_dir.join("chains"),
         bridge_store_dir: store_dir.join("bridges"),
+        dynamic_gas: DynamicGasPrice::unsafe_new(dynamic_gas_fee_enabled, 1.3, 1.6),
     };
 
     tokio_runtime.block_on(async move {
