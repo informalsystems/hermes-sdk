@@ -7,7 +7,7 @@ use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::eip_base_fee::query_eip_base_fee;
 use ibc_relayer::chain::cosmos::gas::{mul_ceil, mul_floor};
-use ibc_relayer::config::GasPrice;
+use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::traits::convert_gas_to_fee::GasToFeeConverter;
@@ -56,6 +56,7 @@ where
         + HasChainId<ChainId = ChainId>
         + HasRpcClient
         + HasGasConfig
+        + CanRaiseError<RelayerError>
         + CanRaiseError<&'static str>,
     StaticConvertCosmosGasToFee: GasToFeeConverter<Chain>,
 {
@@ -69,30 +70,24 @@ where
             gas_used,
         );
 
-        let mut dynamic_gas_price = query_eip_base_fee(
+        let base_fee = query_eip_base_fee(
             chain.rpc_address(),
             &chain.gas_config().gas_price.denom,
             chain.chain_id(),
         )
         .await
-        .map(|base_fee| base_fee * chain.gas_config().dynamic_gas_price.multiplier)
-        .map(|new_price| GasPrice {
-            price: new_price,
-            denom: chain.gas_config().gas_price.denom.clone(),
-        })
-        .unwrap_or(chain.gas_config().gas_price.clone());
+        .map_err(Chain::raise_error)?;
 
-        dynamic_gas_price = if dynamic_gas_price.price > chain.gas_config().dynamic_gas_price.max {
-            GasPrice::new(
-                chain.gas_config().dynamic_gas_price.max,
-                dynamic_gas_price.denom,
-            )
+        let raw_price = base_fee * chain.gas_config().dynamic_gas_price.multiplier;
+
+        let bounded_price = if raw_price > chain.gas_config().dynamic_gas_price.max {
+            chain.gas_config().dynamic_gas_price.max
         } else {
-            dynamic_gas_price
+            raw_price
         };
 
         // The fee in coins based on gas amount
-        let fee_amount = mul_ceil(adjusted_gas_limit, dynamic_gas_price.price);
+        let fee_amount = mul_ceil(adjusted_gas_limit, bounded_price);
 
         let amount = Coin {
             denom: chain.gas_config().gas_price.denom.to_string(),
