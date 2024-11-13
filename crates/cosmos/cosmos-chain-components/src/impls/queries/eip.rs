@@ -119,6 +119,8 @@ impl fmt::Display for Decimal {
     }
 }
 
+/// Query EIP-1559 base fee using Osmosis endpoint and decode it using
+/// Cosmos SDK proto `DecProto`
 pub struct OsmosisQueryEip;
 
 impl<Chain> EipQuerier<Chain> for OsmosisQueryEip
@@ -159,6 +161,8 @@ where
     }
 }
 
+/// Query EIP-1559 base fee using Skip's feemarket endpoint and decode it using
+/// `GasPriceResponse`
 pub struct SkipQueryEip;
 
 impl<Chain> EipQuerier<Chain> for SkipQueryEip

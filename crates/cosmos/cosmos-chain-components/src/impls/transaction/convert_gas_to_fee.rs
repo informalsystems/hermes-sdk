@@ -1,5 +1,4 @@
 use core::cmp::min;
-use core::marker::PhantomData;
 
 use cgp::prelude::CanRaiseError;
 use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
@@ -49,20 +48,20 @@ where
     }
 }
 
-pub struct DynamicConvertCosmosGasToFee<InConverter>(pub PhantomData<InConverter>);
+pub struct DynamicConvertCosmosGasToFee;
 
-impl<InConverter, Chain> GasToFeeConverter<Chain> for DynamicConvertCosmosGasToFee<InConverter>
+impl<Chain> GasToFeeConverter<Chain> for DynamicConvertCosmosGasToFee
 where
     Chain: HasFeeType<Fee = Fee>
         + HasChainId<ChainId = ChainId>
         + HasRpcClient
         + HasGasConfig
         + CanRaiseError<&'static str>,
-    InConverter: GasToFeeConverter<Chain>,
+    StaticConvertCosmosGasToFee: GasToFeeConverter<Chain>,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
         if !chain.gas_config().dynamic_gas_price.enabled {
-            return InConverter::gas_amount_to_fee(chain, gas_used).await;
+            return StaticConvertCosmosGasToFee::gas_amount_to_fee(chain, gas_used).await;
         }
         let adjusted_gas_limit = adjust_estimated_gas(
             chain.gas_config().gas_multiplier,

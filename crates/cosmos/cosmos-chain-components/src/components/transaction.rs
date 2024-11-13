@@ -63,7 +63,7 @@ define_components! {
         TxFeeEstimatorComponent:
             EstimateCosmosTxFee,
         GasToFeeConverterComponent:
-            DynamicConvertCosmosGasToFee<StaticConvertCosmosGasToFee>,
+            DynamicConvertCosmosGasToFee,
         TxSubmitterComponent:
             BroadcastCosmosTx,
         NonceQuerierComponent:
