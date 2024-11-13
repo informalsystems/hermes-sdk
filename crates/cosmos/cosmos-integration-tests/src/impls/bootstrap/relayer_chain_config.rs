@@ -12,6 +12,7 @@ use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
 use hermes_test_components::chain::traits::types::wallet::HasWalletType;
 use hermes_test_components::chain_driver::traits::types::chain::HasChainType;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
+use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use ibc_relayer::config::gas_multiplier::GasMultiplier;
 use ibc_relayer::config::{self, AddressType};
 use ibc_relayer::keyring::Store;
@@ -39,6 +40,11 @@ where
         chain_genesis_config: &CosmosGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
+        let dynamic_gas_price = if let Some(dynamic_gas_config) = bootstrap.dynamic_gas() {
+            DynamicGasPrice::unsafe_new(true, dynamic_gas_config.multiplier, dynamic_gas_config.max)
+        } else {
+            DynamicGasPrice::default()
+        };
         let relayer_chain_config = CosmosSdkConfig {
             id: chain_node_config.chain_id.clone(),
             rpc_addr: Url::from_str(&format!("http://localhost:{}", chain_node_config.rpc_port))
@@ -65,7 +71,7 @@ where
             max_gas: Some(900000000),
             gas_adjustment: None,
             gas_multiplier: Some(GasMultiplier::unsafe_new(1.3)),
-            dynamic_gas_price: *bootstrap.dynamic_gas(),
+            dynamic_gas_price,
             fee_granter: None,
             max_msg_num: Default::default(),
             max_tx_size: Default::default(),

@@ -7,6 +7,7 @@ use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
 use hermes_cosmos_wasm_relayer::context::cosmos_bootstrap::CosmosWithWasmClientBootstrap;
 use hermes_cosmos_wasm_relayer::context::wasm_cosmos_relay::WasmCosmosRelay;
@@ -17,16 +18,19 @@ use hermes_relayer_components::relay::traits::target::{DestinationTarget, Source
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 use ibc_relayer::chain::cosmos::client::Settings;
-use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 use ibc_relayer::config::types::TrustThreshold;
 use sha2::{Digest, Sha256};
 use tokio::runtime::Builder;
 
 #[test]
 fn test_both_wasm_cosmos() -> Result<(), Error> {
-    let dynamic_gas_fee_enabled = std::env::var("ENABLE_DYNAMIC_GAS")
-        .map(|v| &v == "true")
-        .unwrap_or(false);
+    let maybe_dynamic_gas_fee_config = std::env::var("DYNAMIC_GAS_MULTIPLIER")
+        .ok()
+        .and_then(|dynamic_gas_multiplier| dynamic_gas_multiplier.parse::<f64>().ok())
+        .map(|f64_dynamic_gas_multiplier| DynamicGasConfig {
+            multiplier: f64_dynamic_gas_multiplier,
+            max: 2.0,
+        });
 
     let _ = stable_eyre::install();
 
@@ -67,7 +71,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             transfer_denom_prefix: "coin".into(),
             wasm_client_byte_code,
             governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
-            dynamic_gas: DynamicGasPrice::unsafe_new(dynamic_gas_fee_enabled, 1.3, 1.6),
+            dynamic_gas: maybe_dynamic_gas_fee_config,
         });
 
         let chain_driver_a = bootstrap.bootstrap_chain("chain-a").await?;

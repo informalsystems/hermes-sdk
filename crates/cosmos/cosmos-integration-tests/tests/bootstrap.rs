@@ -3,15 +3,19 @@ use std::sync::Arc;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use hermes_error::types::Error;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
-use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 
 #[test]
 fn test_cosmos_bootstrap() -> Result<(), Error> {
-    let dynamic_gas_fee_enabled = std::env::var("ENABLE_DYNAMIC_GAS")
-        .map(|v| &v == "true")
-        .unwrap_or(false);
+    let maybe_dynamic_gas_fee_config = std::env::var("DYNAMIC_GAS_MULTIPLIER")
+        .ok()
+        .and_then(|dynamic_gas_multiplier| dynamic_gas_multiplier.parse::<f64>().ok())
+        .map(|f64_dynamic_gas_multiplier| DynamicGasConfig {
+            multiplier: f64_dynamic_gas_multiplier,
+            max: 2.0,
+        });
 
     let runtime = init_test_runtime();
 
@@ -29,7 +33,7 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: DynamicGasPrice::unsafe_new(dynamic_gas_fee_enabled, 1.3, 1.6),
+        dynamic_gas: maybe_dynamic_gas_fee_config,
     });
 
     runtime.runtime.clone().block_on(async move {

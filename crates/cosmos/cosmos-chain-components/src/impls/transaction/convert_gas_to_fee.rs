@@ -62,6 +62,7 @@ where
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
         let gas_config = chain.gas_config();
+        let max_dynamic_gas_price = gas_config.dynamic_gas_price.max;
         if !gas_config.dynamic_gas_price.enabled {
             return StaticConvertCosmosGasToFee::gas_amount_to_fee(chain, gas_used).await;
         }
@@ -79,8 +80,8 @@ where
 
         let raw_price = base_fee * gas_config.dynamic_gas_price.multiplier;
 
-        let bounded_price = if raw_price > gas_config.dynamic_gas_price.max {
-            gas_config.dynamic_gas_price.max
+        let bounded_price = if raw_price > max_dynamic_gas_price {
+            max_dynamic_gas_price
         } else {
             raw_price
         };

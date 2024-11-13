@@ -4,10 +4,10 @@ use cgp::prelude::*;
 use hermes_cli_components::traits::bootstrap::{BootstrapLoader, HasBootstrapType};
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
+use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::HasRuntime;
-use ibc_relayer::config::dynamic_gas::DynamicGasPrice;
 
 #[derive(Debug, clap::Parser, HasField)]
 pub struct BootstrapChainArgs {
@@ -42,9 +42,13 @@ where
         app: &App,
         args: &BootstrapChainArgs,
     ) -> Result<App::Bootstrap, App::Error> {
-        let dynamic_gas_fee_enabled = std::env::var("ENABLE_DYNAMIC_GAS")
-            .map(|v| &v == "true")
-            .unwrap_or(false);
+        let maybe_dynamic_gas_fee_config = std::env::var("DYNAMIC_GAS_MULTIPLIER")
+            .ok()
+            .and_then(|dynamic_gas_multiplier| dynamic_gas_multiplier.parse::<f64>().ok())
+            .map(|f64_dynamic_gas_multiplier| DynamicGasConfig {
+                multiplier: f64_dynamic_gas_multiplier,
+                max: 2.0,
+            });
 
         let runtime = app.runtime();
 
@@ -61,7 +65,7 @@ where
             transfer_denom_prefix: args.transfer_denom.clone(),
             genesis_config_modifier: Box::new(|_| Ok(())),
             comet_config_modifier: Box::new(|_| Ok(())),
-            dynamic_gas: DynamicGasPrice::unsafe_new(dynamic_gas_fee_enabled, 1.3, 1.6),
+            dynamic_gas: maybe_dynamic_gas_fee_config,
         };
 
         Ok(bootstrap)
