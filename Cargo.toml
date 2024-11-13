@@ -96,6 +96,7 @@ reqwest                         = { version = "0.12.9", features = ["json"] }
 serde                           = { version = "1.0.210" }
 serde_derive                    = { version = "1.0" }
 serde_json                      = { version = "1.0" }
+subtle-encoding                 = { version = "0.5.1" }
 tokio                           = { version = "1.40" }
 tracing                         = { version = "0.1.40" }
 tracing-subscriber              = { version = "0.3.18" }

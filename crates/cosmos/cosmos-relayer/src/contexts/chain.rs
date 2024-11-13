@@ -1,5 +1,7 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
+use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
+use hermes_cosmos_chain_components::traits::eip_query::CanQueryEipBaseFee;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
@@ -381,6 +383,8 @@ pub trait CanUseCosmosChain:
     + HasCreateClientPayloadOptionsType<CosmosChain, CreateClientPayloadOptions = Settings>
     + CanQueryBalance
     + CanIbcTransferToken<CosmosChain>
+    + CanConvertGasToFee
+    + CanQueryEipBaseFee
     + CanBuildIbcTokenTransferMessage<CosmosChain>
     + CanQueryClientState<CosmosChain>
     + CanQueryClientStateWithProofs<CosmosChain>

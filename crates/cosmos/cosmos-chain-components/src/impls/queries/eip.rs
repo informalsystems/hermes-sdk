@@ -3,6 +3,7 @@ use core::fmt;
 use core::ops::Div;
 use core::str::FromStr;
 use prost::DecodeError;
+use reqwest::Response;
 use serde::Deserialize;
 use subtle_encoding::base64;
 
@@ -10,6 +11,11 @@ use ibc_proto::cosmos::base::v1beta1::{DecCoin, DecProto};
 
 use crate::traits::eip_query::EipQuerier;
 use crate::traits::rpc_client::HasRpcClient;
+
+#[derive(Debug)]
+pub struct EipQueryError {
+    pub response: Response,
+}
 
 #[derive(Deserialize)]
 struct EipBaseFeeHTTPResult {
@@ -131,10 +137,7 @@ where
         + CanRaiseError<DecodeError>
         + CanRaiseError<core::num::ParseIntError>
         + CanRaiseError<core::num::ParseFloatError>
-        + CanRaiseError<&'static str>
-        + Send
-        + Sync
-        + 'static,
+        + CanRaiseError<EipQueryError>,
 {
     async fn query_eip_base_fee(chain: &Chain, path: &str) -> Result<f64, Chain::Error> {
         let url = format!("{}{path}", chain.rpc_address());
@@ -142,7 +145,7 @@ where
         let response = reqwest::get(&url).await.map_err(Chain::raise_error)?;
 
         if !response.status().is_success() {
-            return Err(Chain::raise_error("EIP query failed"));
+            return Err(Chain::raise_error(EipQueryError { response }));
         }
 
         let result: EipBaseFeeHTTPResult = response.json().await.map_err(Chain::raise_error)?;
@@ -173,10 +176,7 @@ where
         + CanRaiseError<DecodeError>
         + CanRaiseError<core::num::ParseIntError>
         + CanRaiseError<core::num::ParseFloatError>
-        + CanRaiseError<&'static str>
-        + Send
-        + Sync
-        + 'static,
+        + CanRaiseError<EipQueryError>,
 {
     async fn query_eip_base_fee(chain: &Chain, path: &str) -> Result<f64, Chain::Error> {
         let url = format!("{}{path}", chain.rpc_address());
@@ -184,7 +184,7 @@ where
         let response = reqwest::get(&url).await.map_err(Chain::raise_error)?;
 
         if !response.status().is_success() {
-            return Err(Chain::raise_error("EIP query failed"));
+            return Err(Chain::raise_error(EipQueryError { response }));
         }
 
         let result: EipBaseFeeHTTPResult = response.json().await.map_err(Chain::raise_error)?;

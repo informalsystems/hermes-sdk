@@ -17,6 +17,7 @@ use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainCom
 use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
+use hermes_cosmos_chain_components::traits::eip_query::EipQuerierComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;

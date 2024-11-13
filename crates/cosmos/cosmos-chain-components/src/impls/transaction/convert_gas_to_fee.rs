@@ -5,12 +5,12 @@ use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
-use ibc_relayer::chain::cosmos::eip_base_fee::query_eip_base_fee;
 use ibc_relayer::chain::cosmos::gas::{mul_ceil, mul_floor};
 use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::traits::convert_gas_to_fee::GasToFeeConverter;
+use crate::traits::eip_query::CanQueryEipBaseFee;
 use crate::traits::gas_config::HasGasConfig;
 use crate::traits::rpc_client::HasRpcClient;
 
@@ -25,17 +25,15 @@ where
         + CanRaiseError<&'static str>,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
-        let adjusted_gas_limit = adjust_estimated_gas(
-            chain.gas_config().gas_multiplier,
-            chain.gas_config().max_gas,
-            gas_used,
-        );
+        let gas_config = chain.gas_config();
+        let adjusted_gas_limit =
+            adjust_estimated_gas(gas_config.gas_multiplier, gas_config.max_gas, gas_used);
 
         // The fee in coins based on gas amount
-        let fee_amount = mul_ceil(adjusted_gas_limit, chain.gas_config().gas_price.price);
+        let fee_amount = mul_ceil(adjusted_gas_limit, gas_config.gas_price.price);
 
         let amount = Coin {
-            denom: chain.gas_config().gas_price.denom.to_string(),
+            denom: gas_config.gas_price.denom.to_string(),
             amount: fee_amount.to_string(),
         };
 
@@ -43,7 +41,7 @@ where
             amount: vec![amount],
             gas_limit: adjusted_gas_limit,
             payer: "".to_string(),
-            granter: chain.gas_config().fee_granter.clone(),
+            granter: gas_config.fee_granter.clone(),
         })
     }
 }
@@ -56,32 +54,33 @@ where
         + HasChainId<ChainId = ChainId>
         + HasRpcClient
         + HasGasConfig
+        + CanQueryEipBaseFee
         + CanRaiseError<RelayerError>
+        + CanRaiseError<<Chain as cgp::prelude::HasErrorType>::Error>
         + CanRaiseError<&'static str>,
     StaticConvertCosmosGasToFee: GasToFeeConverter<Chain>,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
-        if !chain.gas_config().dynamic_gas_price.enabled {
+        let gas_config = chain.gas_config();
+        if !gas_config.dynamic_gas_price.enabled {
             return StaticConvertCosmosGasToFee::gas_amount_to_fee(chain, gas_used).await;
         }
-        let adjusted_gas_limit = adjust_estimated_gas(
-            chain.gas_config().gas_multiplier,
-            chain.gas_config().max_gas,
-            gas_used,
-        );
+        let adjusted_gas_limit =
+            adjust_estimated_gas(gas_config.gas_multiplier, gas_config.max_gas, gas_used);
 
-        let base_fee = query_eip_base_fee(
-            chain.rpc_address(),
-            &chain.gas_config().gas_price.denom,
-            chain.chain_id(),
-        )
-        .await
-        .map_err(Chain::raise_error)?;
+        // TODO: do not hardcode path to be compatible with both Skip and Osmosis endpoints
+        let base_fee = chain
+            .query_eip_base_fee(&format!(
+                "abci_query?path=\"/feemarket.feemarket.v1.Query/GasPrices\"&denom={}",
+                gas_config.gas_price.denom
+            ))
+            .await
+            .map_err(Chain::raise_error)?;
 
-        let raw_price = base_fee * chain.gas_config().dynamic_gas_price.multiplier;
+        let raw_price = base_fee * gas_config.dynamic_gas_price.multiplier;
 
-        let bounded_price = if raw_price > chain.gas_config().dynamic_gas_price.max {
-            chain.gas_config().dynamic_gas_price.max
+        let bounded_price = if raw_price > gas_config.dynamic_gas_price.max {
+            gas_config.dynamic_gas_price.max
         } else {
             raw_price
         };
@@ -90,7 +89,7 @@ where
         let fee_amount = mul_ceil(adjusted_gas_limit, bounded_price);
 
         let amount = Coin {
-            denom: chain.gas_config().gas_price.denom.to_string(),
+            denom: gas_config.gas_price.denom.to_string(),
             amount: fee_amount.to_string(),
         };
 
@@ -98,7 +97,7 @@ where
             amount: vec![amount],
             gas_limit: adjusted_gas_limit,
             payer: "".to_string(),
-            granter: chain.gas_config().fee_granter.clone(),
+            granter: gas_config.fee_granter.clone(),
         })
     }
 }
