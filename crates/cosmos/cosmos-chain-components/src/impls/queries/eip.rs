@@ -139,8 +139,11 @@ where
         + CanRaiseError<core::num::ParseFloatError>
         + CanRaiseError<EipQueryError>,
 {
-    async fn query_eip_base_fee(chain: &Chain, path: &str) -> Result<f64, Chain::Error> {
-        let url = format!("{}{path}", chain.rpc_address());
+    async fn query_eip_base_fee(chain: &Chain, _denom: &str) -> Result<f64, Chain::Error> {
+        let url = format!(
+            "{}abci_query?path=\"/osmosis.txfees.v1beta1.Query/GetEipBaseFee\"",
+            chain.rpc_address()
+        );
 
         let response = reqwest::get(&url).await.map_err(Chain::raise_error)?;
 
@@ -178,8 +181,11 @@ where
         + CanRaiseError<core::num::ParseFloatError>
         + CanRaiseError<EipQueryError>,
 {
-    async fn query_eip_base_fee(chain: &Chain, path: &str) -> Result<f64, Chain::Error> {
-        let url = format!("{}{path}", chain.rpc_address());
+    async fn query_eip_base_fee(chain: &Chain, denom: &str) -> Result<f64, Chain::Error> {
+        let url = format!(
+            "{}abci_query?path=\"/feemarket.feemarket.v1.Query/GasPrices\"&denom={denom}",
+            chain.rpc_address()
+        );
 
         let response = reqwest::get(&url).await.map_err(Chain::raise_error)?;
 

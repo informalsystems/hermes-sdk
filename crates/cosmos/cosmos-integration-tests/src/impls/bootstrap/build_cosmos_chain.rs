@@ -37,8 +37,6 @@ where
             relayer_wallet,
         )?;
 
-        tracing::info!("Relayer config: {:?}", relayer_chain_config);
-
         // TODO: Have a more reliable way to wait for the bootstrapped full node to
         // start up. If we don't wait, the building of the chain would fail during
         // the spawning of `ChainHandle`, as the v1 relayer tries to perform health

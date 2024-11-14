@@ -6,6 +6,7 @@ use hermes_runtime_components::traits::runtime::HasRuntime;
 use serde_json::{Error as JsonError, Value};
 
 use crate::bootstrap::traits::fields::denom::{DenomForStaking, DenomForTransfer, HasDenomPrefix};
+use crate::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializer;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CanModifyCosmosGenesisConfig;
 use crate::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
@@ -24,6 +25,7 @@ where
         + HasDenomPrefix<DenomForTransfer>
         + CanRaiseError<Runtime::Error>
         + CanRaiseError<JsonError>
+        + HasDynamicGas
         + CanRaiseError<&'static str>,
     Runtime: HasFilePathType + CanReadFileAsString + CanWriteStringToFile,
     Bootstrap::ChainGenesisConfig: From<CosmosGenesisConfig>,
@@ -48,6 +50,11 @@ where
             serde_json::from_str(&config_string).map_err(Bootstrap::raise_error)?;
 
         bootstrap.modify_genesis_config(&mut config_json)?;
+
+        // If dynamic gas pricing is not enabled in the relayer, disable it on the chain
+        if bootstrap.dynamic_gas().is_none() {
+            disable_fee_market(&mut config_json).map_err(Bootstrap::raise_error)?;
+        }
 
         let modified_config_string =
             serde_json::to_string_pretty(&config_json).map_err(Bootstrap::raise_error)?;

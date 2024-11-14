@@ -69,12 +69,8 @@ where
         let adjusted_gas_limit =
             adjust_estimated_gas(gas_config.gas_multiplier, gas_config.max_gas, gas_used);
 
-        // TODO: do not hardcode path to be compatible with both Skip and Osmosis endpoints
         let base_fee = chain
-            .query_eip_base_fee(&format!(
-                "abci_query?path=\"/feemarket.feemarket.v1.Query/GasPrices\"&denom={}",
-                gas_config.gas_price.denom
-            ))
+            .query_eip_base_fee(gas_config.gas_price.denom.as_str())
             .await
             .map_err(Chain::raise_error)?;
 
