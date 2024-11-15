@@ -6,6 +6,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_wasm_relayer::context::chain::WasmCosmosChain;
@@ -72,6 +73,7 @@ fn test_both_wasm_cosmos() -> Result<(), Error> {
             wasm_client_byte_code,
             governance_proposal_authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn".into(), // TODO: don't hard code this
             dynamic_gas: maybe_dynamic_gas_fee_config,
+            eip_query_type: EipQueryType::FeeMarket,
         });
 
         let chain_driver_a = bootstrap.bootstrap_chain("chain-a").await?;

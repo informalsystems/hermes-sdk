@@ -3,6 +3,7 @@
 use core::time::Duration;
 use std::sync::Arc;
 
+use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
@@ -45,6 +46,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
         dynamic_gas: maybe_dynamic_gas_fee_config,
+        eip_query_type: EipQueryType::FeeMarket,
     });
 
     let cosmos_bootstrap = Arc::new(CosmosBootstrap {
@@ -59,6 +61,7 @@ fn celestia_integration_tests() -> Result<(), Error> {
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
         dynamic_gas: maybe_dynamic_gas_fee_config,
+        eip_query_type: EipQueryType::FeeMarket,
     });
 
     let create_client_settings = Settings {

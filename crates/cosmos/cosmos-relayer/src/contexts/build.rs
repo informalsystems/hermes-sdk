@@ -1,5 +1,6 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
+use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use std::collections::HashMap;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -54,6 +55,7 @@ pub struct CosmosBuilder {
     pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
     pub batch_senders:
         Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>>>,
+    pub eip_query_type: EipQueryType,
 }
 
 pub struct CosmosBuildComponents;
@@ -122,6 +124,7 @@ impl CosmosBuilder {
             Default::default(),
             Default::default(),
             Default::default(),
+            Default::default(),
         )
     }
 
@@ -132,6 +135,7 @@ impl CosmosBuilder {
         packet_filter: PacketFilter,
         batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
+        eip_query_type: EipQueryType,
     ) -> Self {
         let config_map = HashMap::from_iter(
             chain_configs
@@ -149,6 +153,7 @@ impl CosmosBuilder {
             chain_cache: Default::default(),
             relay_cache: Default::default(),
             batch_senders: Default::default(),
+            eip_query_type,
         }
     }
 
@@ -159,14 +164,19 @@ impl CosmosBuilder {
             .cloned()
             .ok_or_else(|| SpawnError::missing_chain_config(chain_id.clone()))?;
 
-        self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
-            .await
+        self.build_chain_with_config(
+            chain_config,
+            self.key_map.get(chain_id),
+            self.eip_query_type.clone(),
+        )
+        .await
     }
 
     pub async fn build_chain_with_config(
         &self,
         chain_config: CosmosSdkConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
+        eip_query_type: EipQueryType,
     ) -> Result<CosmosChain, Error> {
         let runtime = self.runtime.runtime.clone();
         let chain_id = chain_config.id.clone();
@@ -208,6 +218,7 @@ impl CosmosBuilder {
             event_source_mode,
             self.runtime.clone(),
             self.telemetry.clone(),
+            eip_query_type,
         );
 
         Ok(context)

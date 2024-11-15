@@ -6,6 +6,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use eyre::Error;
 use hermes_celestia_integration_tests::contexts::bootstrap::CelestiaBootstrap;
 use hermes_celestia_test_components::bootstrap::traits::bootstrap_bridge::CanBootstrapBridge;
+use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use hermes_runtime::types::runtime::HermesRuntime;
@@ -40,6 +41,7 @@ fn test_celestia_bootstrap() -> Result<(), Error> {
         chain_store_dir: store_dir.join("chains"),
         bridge_store_dir: store_dir.join("bridges"),
         dynamic_gas: maybe_dynamic_gas_fee_config,
+        eip_query_type: EipQueryType::FeeMarket,
     };
 
     tokio_runtime.block_on(async move {

@@ -1,6 +1,7 @@
 use core::ops::Deref;
 use std::sync::Arc;
 
+use cgp::core::component::UseContext;
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use futures::lock::Mutex;
@@ -17,7 +18,8 @@ use hermes_cosmos_chain_components::components::delegate::DelegateCosmosChainCom
 use hermes_cosmos_chain_components::components::transaction::*;
 use hermes_cosmos_chain_components::traits::abci_query::{AbciQuerierComponent, CanQueryAbci};
 use hermes_cosmos_chain_components::traits::chain_handle::HasBlockingChainHandle;
-use hermes_cosmos_chain_components::traits::eip_query::EipQuerierComponent;
+use hermes_cosmos_chain_components::traits::eip::eip_query::EipQuerierComponent;
+use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryTypeGetterComponent;
 use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
@@ -294,6 +296,8 @@ delegate_components! {
             WasmClientCodeUploaderComponent,
         ]:
             WasmChainComponents,
+        EipQueryTypeGetterComponent:
+            UseContext,
     }
 }
 

@@ -11,7 +11,7 @@ use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
 use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
-use hermes_cosmos_chain_components::impls::queries::eip::EipQueryError;
+use hermes_cosmos_chain_components::impls::queries::eip::dispatch::EipQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
 use hermes_error::handlers::debug::DebugError;

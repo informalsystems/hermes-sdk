@@ -1,7 +1,11 @@
 use alloc::sync::Arc;
+use cgp::core::component::UseContext;
 use core::ops::Deref;
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
-use hermes_cosmos_chain_components::traits::eip_query::CanQueryEipBaseFee;
+use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
+use hermes_cosmos_chain_components::traits::eip::eip_type::{
+    EipQueryType, EipQueryTypeGetterComponent,
+};
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
@@ -138,6 +142,7 @@ pub struct BaseCosmosChain {
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
     pub nonce_mutex: Mutex<()>,
+    pub eip_query_type: EipQueryType,
 }
 
 impl Deref for CosmosChain {
@@ -184,6 +189,8 @@ delegate_components! {
             WasmClientCodeUploaderComponent,
         ]:
             WasmChainComponents,
+        EipQueryTypeGetterComponent:
+            UseContext,
     }
 }
 
@@ -277,6 +284,7 @@ impl CosmosChain {
         event_source_mode: EventSourceMode,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
+        eip_query_type: EipQueryType,
     ) -> Self {
         let chain_version = tx_config.chain_id.version();
 
@@ -310,6 +318,7 @@ impl CosmosChain {
                 rpc_client,
                 key_entry,
                 nonce_mutex: Mutex::new(()),
+                eip_query_type,
             }),
         };
 

@@ -2,6 +2,7 @@ use alloc::sync::Arc;
 
 use cgp::prelude::*;
 use hermes_cli_components::traits::bootstrap::{BootstrapLoader, HasBootstrapType};
+use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
 use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
@@ -66,6 +67,7 @@ where
             genesis_config_modifier: Box::new(|_| Ok(())),
             comet_config_modifier: Box::new(|_| Ok(())),
             dynamic_gas: maybe_dynamic_gas_fee_config,
+            eip_query_type: EipQueryType::FeeMarket,
         };
 
         Ok(bootstrap)

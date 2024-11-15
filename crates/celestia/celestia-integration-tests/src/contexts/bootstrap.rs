@@ -1,5 +1,8 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
+use hermes_cosmos_chain_components::traits::eip::eip_type::{
+    EipQueryType, EipQueryTypeGetterComponent,
+};
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_comet_config::NoModifyCometConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_genesis_config::NoModifyGenesisConfig;
@@ -67,6 +70,7 @@ pub struct CelestiaBootstrap {
     pub chain_store_dir: PathBuf,
     pub bridge_store_dir: PathBuf,
     pub dynamic_gas: Option<DynamicGasConfig>,
+    pub eip_query_type: EipQueryType,
 }
 
 impl CanUseLegacyCosmosSdkChainBootstrapper for CelestiaBootstrap {}
@@ -114,6 +118,7 @@ delegate_components! {
             ChainStoreDirGetterComponent,
             CosmosBuilderGetterComponent,
             DynamicGasGetterComponent,
+            EipQueryTypeGetterComponent,
         ]:
             UseContext,
         RandomIdFlagGetterComponent:

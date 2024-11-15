@@ -1,4 +1,5 @@
 use cgp::prelude::*;
+use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::bootstrap::traits::types::genesis_config::HasChainGenesisConfigType;
 use hermes_test_components::chain::traits::types::wallet::{HasWalletType, WalletOf};
@@ -16,5 +17,6 @@ where
         chain_node_config: &Self::ChainNodeConfig,
         chain_genesis_config: &Self::ChainGenesisConfig,
         relayer_wallet: &WalletOf<Self::Chain>,
+        eip_query_type: EipQueryType,
     ) -> Result<Self::Chain, Self::Error>;
 }

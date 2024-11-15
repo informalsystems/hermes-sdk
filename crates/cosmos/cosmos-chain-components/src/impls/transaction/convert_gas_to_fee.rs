@@ -10,7 +10,7 @@ use ibc_relayer::error::Error as RelayerError;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::traits::convert_gas_to_fee::GasToFeeConverter;
-use crate::traits::eip_query::CanQueryEipBaseFee;
+use crate::traits::eip::eip_query::CanQueryEipBaseFee;
 use crate::traits::gas_config::HasGasConfig;
 use crate::traits::rpc_client::HasRpcClient;
 

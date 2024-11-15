@@ -1,5 +1,8 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
+use hermes_cosmos_chain_components::traits::eip::eip_type::{
+    EipQueryType, EipQueryTypeGetterComponent,
+};
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
@@ -60,6 +63,7 @@ pub struct LegacyCosmosBootstrap {
     pub comet_config_modifier:
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub dynamic_gas: Option<DynamicGasConfig>,
+    pub eip_query_type: EipQueryType,
 }
 
 impl CanUseLegacyCosmosSdkChainBootstrapper for LegacyCosmosBootstrap {}
@@ -98,6 +102,7 @@ delegate_components! {
             ChainCommandPathGetterComponent,
             AccountPrefixGetterComponent,
             DynamicGasGetterComponent,
+            EipQueryTypeGetterComponent,
             DenomPrefixGetterComponent,
             RandomIdFlagGetterComponent,
             CompatModeGetterComponent,

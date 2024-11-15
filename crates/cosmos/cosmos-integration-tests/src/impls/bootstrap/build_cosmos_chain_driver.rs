@@ -83,7 +83,12 @@ where
             .clone();
 
         let chain = bootstrap
-            .build_chain_with_node_config(&chain_node_config, &genesis_config, &relayer_wallet)
+            .build_chain_with_node_config(
+                &chain_node_config,
+                &genesis_config,
+                &relayer_wallet,
+                chain_node_config.eip_query_type.clone(),
+            )
             .await?;
 
         let chain_command_path = bootstrap.chain_command_path().clone();
