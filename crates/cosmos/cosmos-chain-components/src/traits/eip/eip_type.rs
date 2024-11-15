@@ -4,8 +4,8 @@ use core::marker::PhantomData;
 
 #[derive(Clone, Default)]
 pub enum EipQueryType {
-    FeeMarket,
     #[default]
+    FeeMarket,
     Osmosis,
 }
 
