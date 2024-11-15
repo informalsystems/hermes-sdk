@@ -1,17 +1,12 @@
 use cgp::core::error::CanRaiseError;
 use prost::DecodeError;
-use reqwest::Response;
 
 use crate::impls::queries::eip::feemarket::QueryEipFromFeeMarket;
 use crate::impls::queries::eip::osmosis::OsmosisQueryEip;
+use crate::impls::queries::eip::types::EipQueryError;
 use crate::traits::eip::eip_query::EipQuerier;
 use crate::traits::eip::eip_type::{EipQueryType, HasEipQueryType};
 use crate::traits::rpc_client::HasRpcClient;
-
-#[derive(Debug)]
-pub struct EipQueryError {
-    pub response: Response,
-}
 
 pub struct DispatchQueryEip;
 
