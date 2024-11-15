@@ -4,7 +4,9 @@ use hermes_cosmos_chain_components::traits::eip::eip_type::{
     EipQueryType, EipQueryTypeGetterComponent,
 };
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
-use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::{DynamicGasGetterComponent, ReturnNoDynamicGas};
+use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::{
+    DynamicGasGetterComponent, ReturnNoDynamicGas,
+};
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
 use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use std::path::PathBuf;

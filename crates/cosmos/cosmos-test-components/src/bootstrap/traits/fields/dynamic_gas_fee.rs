@@ -25,7 +25,7 @@ impl<Bootstrap> DynamicGasGetter<Bootstrap> for ReturnNoDynamicGas
 where
     Bootstrap: Async,
 {
-    fn dynamic_gas(_bootstrap: &Bootstrap) ->  &Option<DynamicGasConfig> {
+    fn dynamic_gas(_bootstrap: &Bootstrap) -> &Option<DynamicGasConfig> {
         &None
     }
 }
