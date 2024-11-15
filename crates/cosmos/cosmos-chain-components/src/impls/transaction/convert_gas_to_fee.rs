@@ -56,7 +56,6 @@ where
         + HasGasConfig
         + CanQueryEipBaseFee
         + CanRaiseError<RelayerError>
-        + CanRaiseError<<Chain as cgp::prelude::HasErrorType>::Error>
         + CanRaiseError<&'static str>,
     StaticConvertCosmosGasToFee: GasToFeeConverter<Chain>,
 {
@@ -71,8 +70,7 @@ where
 
         let base_fee = chain
             .query_eip_base_fee(gas_config.gas_price.denom.as_str())
-            .await
-            .map_err(Chain::raise_error)?;
+            .await?;
 
         let raw_price = base_fee * gas_config.dynamic_gas_price.multiplier;
 
