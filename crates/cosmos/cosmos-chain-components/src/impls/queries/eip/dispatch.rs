@@ -1,11 +1,9 @@
-use cgp::core::error::CanRaiseError;
-use prost::DecodeError;
+use cgp::core::Async;
+use cgp::prelude::HasErrorType;
 
 use crate::impls::queries::eip::feemarket::QueryEipFromFeeMarket;
 use crate::impls::queries::eip::osmosis::OsmosisQueryEip;
-use crate::impls::queries::eip::types::EipQueryError;
 use crate::traits::eip::eip_query::EipQuerier;
-use crate::traits::rpc_client::HasRpcClient;
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use crate::types::config::gas::eip_type::EipQueryType;
 
@@ -13,13 +11,9 @@ pub struct DispatchQueryEip;
 
 impl<Chain> EipQuerier<Chain> for DispatchQueryEip
 where
-    Chain: HasRpcClient
-        + CanRaiseError<reqwest::Error>
-        + CanRaiseError<subtle_encoding::Error>
-        + CanRaiseError<DecodeError>
-        + CanRaiseError<core::num::ParseIntError>
-        + CanRaiseError<core::num::ParseFloatError>
-        + CanRaiseError<EipQueryError>,
+    QueryEipFromFeeMarket: EipQuerier<Chain>,
+    OsmosisQueryEip: EipQuerier<Chain>,
+    Chain: HasErrorType + Async,
 {
     async fn query_eip_base_fee(
         chain: &Chain,
