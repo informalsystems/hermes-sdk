@@ -1,4 +1,4 @@
-use crate::types::gas::eip_type::EipQueryType;
+use crate::types::config::gas::eip_type::EipQueryType;
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct DynamicGasConfig {

@@ -22,7 +22,7 @@ use hermes_cosmos_chain_components::traits::gas_config::GasConfigGetter;
 use hermes_cosmos_chain_components::traits::grpc_address::GrpcAddressGetter;
 use hermes_cosmos_chain_components::traits::rpc_client::RpcClientGetter;
 use hermes_cosmos_chain_components::traits::tx_extension_options::TxExtensionOptionsGetter;
-use hermes_cosmos_chain_components::types::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::nonce_guard::NonceGuard;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
@@ -482,7 +482,7 @@ impl TxExtensionOptionsGetter<WasmCosmosChain> for WasmCosmosChainComponents {
 
 impl GasConfigGetter<WasmCosmosChain> for WasmCosmosChainComponents {
     fn gas_config(chain: &WasmCosmosChain) -> &GasConfig {
-        &chain.gas_config
+        &chain.tx_config.gas_config
     }
 }
 

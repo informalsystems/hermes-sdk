@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use hermes_cosmos_chain_components::types::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;

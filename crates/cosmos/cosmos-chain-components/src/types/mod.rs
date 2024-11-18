@@ -1,9 +1,9 @@
 pub mod channel;
 pub mod commitment_proof;
+pub mod config;
 pub mod connection;
 pub mod event;
 pub mod events;
-pub mod gas;
 pub mod messages;
 pub mod nonce_guard;
 pub mod payloads;

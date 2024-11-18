@@ -6,8 +6,8 @@ use crate::impls::queries::eip::osmosis::OsmosisQueryEip;
 use crate::impls::queries::eip::types::EipQueryError;
 use crate::traits::eip::eip_query::EipQuerier;
 use crate::traits::rpc_client::HasRpcClient;
-use crate::types::gas::dynamic_gas_config::DynamicGasConfig;
-use crate::types::gas::eip_type::EipQueryType;
+use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use crate::types::config::gas::eip_type::EipQueryType;
 
 pub struct DispatchQueryEip;
 

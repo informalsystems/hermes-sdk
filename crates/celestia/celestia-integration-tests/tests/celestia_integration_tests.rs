@@ -3,7 +3,7 @@
 use core::time::Duration;
 use std::sync::Arc;
 
-use hermes_cosmos_chain_components::types::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;

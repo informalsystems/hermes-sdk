@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::types::gas::dynamic_gas_config::DynamicGasConfig;
+use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 
 #[derive_component(EipQuerierComponent, EipQuerier<Chain>)]
 #[async_trait]

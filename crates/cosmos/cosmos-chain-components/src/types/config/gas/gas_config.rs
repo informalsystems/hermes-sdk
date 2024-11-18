@@ -5,8 +5,8 @@ use ibc_relayer::chain::cosmos::types::gas::{
 use ibc_relayer::chain::cosmos::{config::CosmosSdkConfig, gas::calculate_fee};
 use ibc_relayer::config::GasPrice;
 
-use crate::types::gas::dynamic_gas_config::DynamicGasConfig;
-use crate::types::gas::eip_type::EipQueryType;
+use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
+use crate::types::config::gas::eip_type::EipQueryType;
 
 pub struct GasConfig {
     pub default_gas: u64,
@@ -20,7 +20,7 @@ pub struct GasConfig {
 
 impl<'a> From<&'a CosmosSdkConfig> for GasConfig {
     fn from(config: &'a CosmosSdkConfig) -> Self {
-        let eip_query_type = if config.id.as_str().contains("osmos") {
+        let eip_query_type = if config.id.as_str().starts_with("osmo") {
             EipQueryType::Osmosis
         } else {
             EipQueryType::FeeMarket

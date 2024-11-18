@@ -1,6 +1,6 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
-use hermes_cosmos_chain_components::types::gas::dynamic_gas_config::DynamicGasConfig;
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;

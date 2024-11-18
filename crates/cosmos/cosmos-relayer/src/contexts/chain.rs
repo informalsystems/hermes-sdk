@@ -2,7 +2,8 @@ use alloc::sync::Arc;
 use core::ops::Deref;
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
-use hermes_cosmos_chain_components::types::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::config::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
@@ -102,7 +103,6 @@ use ibc::core::channel::types::channel::ChannelEnd;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::account::Account;
-use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
@@ -134,7 +134,6 @@ pub struct BaseCosmosChain {
     pub telemetry: CosmosTelemetry,
     pub subscription: Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>,
     pub tx_config: TxConfig,
-    pub gas_config: GasConfig,
     pub ibc_commitment_prefix: Vec<u8>,
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
@@ -226,7 +225,7 @@ impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainContextComponents {
 
 impl GasConfigGetter<CosmosChain> for CosmosChainContextComponents {
     fn gas_config(chain: &CosmosChain) -> &GasConfig {
-        &chain.gas_config
+        &chain.tx_config.gas_config
     }
 }
 
@@ -272,7 +271,6 @@ impl CosmosChain {
         handle: BaseChainHandle,
         chain_config: CosmosSdkConfig,
         tx_config: TxConfig,
-        gas_config: GasConfig,
         rpc_client: HttpClient,
         compat_mode: CompatMode,
         key_entry: Secp256k1KeyPair,
@@ -308,7 +306,6 @@ impl CosmosChain {
                 telemetry,
                 subscription,
                 tx_config,
-                gas_config,
                 ibc_commitment_prefix,
                 rpc_client,
                 key_entry,

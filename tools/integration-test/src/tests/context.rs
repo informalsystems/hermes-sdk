@@ -47,7 +47,6 @@ where
         packet_filter,
         Default::default(),
         key_map,
-        Default::default(),
     );
 
     Ok(builder)

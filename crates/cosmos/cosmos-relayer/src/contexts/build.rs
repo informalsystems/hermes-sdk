@@ -6,8 +6,7 @@ use eyre::eyre;
 use futures::lock::Mutex;
 use std::collections::HashMap;
 
-use hermes_cosmos_chain_components::types::gas::eip_type::EipQueryType;
-use hermes_cosmos_chain_components::types::gas::gas_config::GasConfig;
+use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
@@ -26,7 +25,6 @@ use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
-use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::ChainConfig;
@@ -56,7 +54,6 @@ pub struct CosmosBuilder {
     pub relay_cache: Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosRelay>>>,
     pub batch_senders:
         Arc<Mutex<BTreeMap<(ChainId, ChainId, ClientId, ClientId), CosmosBatchSender>>>,
-    pub eip_query_type: EipQueryType,
 }
 
 pub struct CosmosBuildComponents;
@@ -125,7 +122,6 @@ impl CosmosBuilder {
             Default::default(),
             Default::default(),
             Default::default(),
-            Default::default(),
         )
     }
 
@@ -136,7 +132,6 @@ impl CosmosBuilder {
         packet_filter: PacketFilter,
         batch_config: BatchConfig,
         key_map: HashMap<ChainId, Secp256k1KeyPair>,
-        eip_query_type: EipQueryType,
     ) -> Self {
         let config_map = HashMap::from_iter(
             chain_configs
@@ -154,7 +149,6 @@ impl CosmosBuilder {
             chain_cache: Default::default(),
             relay_cache: Default::default(),
             batch_senders: Default::default(),
-            eip_query_type,
         }
     }
 
@@ -192,8 +186,6 @@ impl CosmosBuilder {
 
         let tx_config = TxConfig::try_from(&chain_config)?;
 
-        let gas_config = GasConfig::from(&chain_config);
-
         let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
@@ -210,7 +202,6 @@ impl CosmosBuilder {
             handle,
             chain_config,
             tx_config,
-            gas_config,
             rpc_client,
             compat_mode,
             key,
