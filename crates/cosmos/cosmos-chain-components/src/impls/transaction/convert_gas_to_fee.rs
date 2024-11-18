@@ -1,28 +1,22 @@
 use core::cmp::min;
 
-use cgp::prelude::CanRaiseError;
-use hermes_chain_type_components::traits::fields::chain_id::HasChainId;
+use cgp::prelude::HasErrorType;
 use hermes_relayer_components::transaction::traits::types::fee::HasFeeType;
 use ibc_proto::cosmos::base::v1beta1::Coin;
 use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::gas::{mul_ceil, mul_floor};
-use ibc_relayer::error::Error as RelayerError;
-use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 
 use crate::traits::convert_gas_to_fee::GasToFeeConverter;
 use crate::traits::eip::eip_query::CanQueryEipBaseFee;
 use crate::traits::gas_config::HasGasConfig;
-use crate::traits::rpc_client::HasRpcClient;
 
 pub struct StaticConvertCosmosGasToFee;
 
 impl<Chain> GasToFeeConverter<Chain> for StaticConvertCosmosGasToFee
 where
     Chain: HasFeeType<Fee = Fee>
-        + HasChainId<ChainId = ChainId>
-        + HasRpcClient
         + HasGasConfig
-        + CanRaiseError<&'static str>,
+        + HasErrorType,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
         let gas_config = chain.gas_config();
@@ -51,12 +45,8 @@ pub struct DynamicConvertCosmosGasToFee;
 impl<Chain> GasToFeeConverter<Chain> for DynamicConvertCosmosGasToFee
 where
     Chain: HasFeeType<Fee = Fee>
-        + HasChainId<ChainId = ChainId>
-        + HasRpcClient
         + HasGasConfig
-        + CanQueryEipBaseFee
-        + CanRaiseError<RelayerError>
-        + CanRaiseError<&'static str>,
+        + CanQueryEipBaseFee,
     StaticConvertCosmosGasToFee: GasToFeeConverter<Chain>,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
