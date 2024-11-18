@@ -3,7 +3,6 @@ use std::path::PathBuf;
 
 use cgp::core::error::CanRaiseError;
 use cgp::prelude::*;
-use hermes_cosmos_chain_components::traits::eip::eip_type::HasEipQueryType;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::create_dir::CanCreateDir;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
@@ -114,7 +113,6 @@ where
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
         + CanRaiseError<toml::de::Error>
-        + HasEipQueryType
         + HasDynamicGas,
     Components: DelegatesToLegacyCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>

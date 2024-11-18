@@ -2,7 +2,6 @@ use core::time::Duration;
 use std::path::PathBuf;
 
 use cgp::core::error::CanRaiseError;
-use hermes_cosmos_chain_components::traits::eip::eip_type::HasEipQueryType;
 use hermes_relayer_components::chain::traits::types::chain_id::HasChainIdType;
 use hermes_runtime_components::traits::fs::file_path::HasFilePathType;
 use hermes_runtime_components::traits::fs::read_file::CanReadFileAsString;
@@ -31,7 +30,6 @@ where
         + HasChainType<Chain = Chain>
         + HasChainNodeConfigType
         + HasChainGenesisConfigType<ChainGenesisConfig = CosmosGenesisConfig>
-        + HasEipQueryType
         + CanModifyCometConfig
         + CanModifyCosmosSdkConfig
         + CanRaiseError<Runtime::Error>
@@ -166,7 +164,6 @@ where
             grpc_port,
             comet_config,
             sdk_config,
-            eip_query_type: bootstrap.eip_query_type().clone(),
         };
 
         Ok(chain_config.into())

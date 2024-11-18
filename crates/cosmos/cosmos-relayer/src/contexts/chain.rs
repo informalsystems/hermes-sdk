@@ -1,11 +1,8 @@
 use alloc::sync::Arc;
-use cgp::core::component::UseContext;
 use core::ops::Deref;
 use hermes_cosmos_chain_components::traits::convert_gas_to_fee::CanConvertGasToFee;
 use hermes_cosmos_chain_components::traits::eip::eip_query::CanQueryEipBaseFee;
-use hermes_cosmos_chain_components::traits::eip::eip_type::{
-    EipQueryType, EipQueryTypeGetterComponent,
-};
+use hermes_cosmos_chain_components::types::gas::gas_config::GasConfig;
 use hermes_cosmos_chain_components::types::payloads::client::{
     CosmosCreateClientPayload, CosmosUpdateClientPayload,
 };
@@ -106,7 +103,6 @@ use ibc_proto::cosmos::tx::v1beta1::Fee;
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
 use ibc_relayer::chain::cosmos::types::account::Account;
 use ibc_relayer::chain::cosmos::types::config::TxConfig;
-use ibc_relayer::chain::cosmos::types::gas::GasConfig;
 use ibc_relayer::chain::handle::BaseChainHandle;
 use ibc_relayer::config::EventSourceMode;
 use ibc_relayer::event::source::queries::all as all_queries;
@@ -138,11 +134,11 @@ pub struct BaseCosmosChain {
     pub telemetry: CosmosTelemetry,
     pub subscription: Arc<dyn Subscription<Item = (Height, Arc<AbciEvent>)>>,
     pub tx_config: TxConfig,
+    pub gas_config: GasConfig,
     pub ibc_commitment_prefix: Vec<u8>,
     pub rpc_client: HttpClient,
     pub key_entry: Secp256k1KeyPair,
     pub nonce_mutex: Mutex<()>,
-    pub eip_query_type: EipQueryType,
 }
 
 impl Deref for CosmosChain {
@@ -189,8 +185,6 @@ delegate_components! {
             WasmClientCodeUploaderComponent,
         ]:
             WasmChainComponents,
-        EipQueryTypeGetterComponent:
-            UseContext,
     }
 }
 
@@ -232,7 +226,7 @@ impl TxExtensionOptionsGetter<CosmosChain> for CosmosChainContextComponents {
 
 impl GasConfigGetter<CosmosChain> for CosmosChainContextComponents {
     fn gas_config(chain: &CosmosChain) -> &GasConfig {
-        &chain.tx_config.gas_config
+        &chain.gas_config
     }
 }
 
@@ -278,13 +272,13 @@ impl CosmosChain {
         handle: BaseChainHandle,
         chain_config: CosmosSdkConfig,
         tx_config: TxConfig,
+        gas_config: GasConfig,
         rpc_client: HttpClient,
         compat_mode: CompatMode,
         key_entry: Secp256k1KeyPair,
         event_source_mode: EventSourceMode,
         runtime: HermesRuntime,
         telemetry: CosmosTelemetry,
-        eip_query_type: EipQueryType,
     ) -> Self {
         let chain_version = tx_config.chain_id.version();
 
@@ -314,11 +308,11 @@ impl CosmosChain {
                 telemetry,
                 subscription,
                 tx_config,
+                gas_config,
                 ibc_commitment_prefix,
                 rpc_client,
                 key_entry,
                 nonce_mutex: Mutex::new(()),
-                eip_query_type,
             }),
         };
 

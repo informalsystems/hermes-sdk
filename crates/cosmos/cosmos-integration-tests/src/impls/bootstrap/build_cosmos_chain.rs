@@ -1,7 +1,6 @@
 use core::time::Duration;
 
 use cgp::core::error::CanRaiseError;
-use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::types::chain_node_config::HasChainNodeConfigType;
 use hermes_cosmos_test_components::chain::types::wallet::CosmosTestWallet;
@@ -31,7 +30,6 @@ where
         chain_node_config: &Bootstrap::ChainNodeConfig,
         chain_genesis_config: &Bootstrap::ChainGenesisConfig,
         relayer_wallet: &CosmosTestWallet,
-        eip_query_type: EipQueryType,
     ) -> Result<CosmosChain, Bootstrap::Error> {
         let relayer_chain_config = bootstrap.build_relayer_chain_config(
             chain_node_config,
@@ -50,7 +48,6 @@ where
             .build_chain_with_config(
                 relayer_chain_config.clone(),
                 Some(&relayer_wallet.keypair.clone()),
-                eip_query_type,
             )
             .await
             .map_err(Bootstrap::raise_error)?;

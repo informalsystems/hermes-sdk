@@ -1,12 +1,13 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
-use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
-use std::collections::HashMap;
-
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
+use std::collections::HashMap;
+
+use hermes_cosmos_chain_components::types::gas::eip_type::EipQueryType;
+use hermes_cosmos_chain_components::types::gas::gas_config::GasConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
@@ -164,19 +165,14 @@ impl CosmosBuilder {
             .cloned()
             .ok_or_else(|| SpawnError::missing_chain_config(chain_id.clone()))?;
 
-        self.build_chain_with_config(
-            chain_config,
-            self.key_map.get(chain_id),
-            self.eip_query_type.clone(),
-        )
-        .await
+        self.build_chain_with_config(chain_config, self.key_map.get(chain_id))
+            .await
     }
 
     pub async fn build_chain_with_config(
         &self,
         chain_config: CosmosSdkConfig,
         m_keypair: Option<&Secp256k1KeyPair>,
-        eip_query_type: EipQueryType,
     ) -> Result<CosmosChain, Error> {
         let runtime = self.runtime.runtime.clone();
         let chain_id = chain_config.id.clone();
@@ -196,6 +192,8 @@ impl CosmosBuilder {
 
         let tx_config = TxConfig::try_from(&chain_config)?;
 
+        let gas_config = GasConfig::from(&chain_config);
+
         let mut rpc_client = HttpClient::new(tx_config.rpc_address.clone())?;
 
         let compat_mode = if let Some(compat_mode) = &chain_config.compat_mode {
@@ -212,13 +210,13 @@ impl CosmosBuilder {
             handle,
             chain_config,
             tx_config,
+            gas_config,
             rpc_client,
             compat_mode,
             key,
             event_source_mode,
             self.runtime.clone(),
             self.telemetry.clone(),
-            eip_query_type,
         );
 
         Ok(context)

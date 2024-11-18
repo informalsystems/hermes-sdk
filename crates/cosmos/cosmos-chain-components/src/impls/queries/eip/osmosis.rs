@@ -11,6 +11,7 @@ use crate::impls::queries::eip::types::EipQueryError;
 use crate::impls::queries::eip::types::Uint128;
 use crate::traits::eip::eip_query::EipQuerier;
 use crate::traits::rpc_client::HasRpcClient;
+use crate::types::gas::dynamic_gas_config::DynamicGasConfig;
 
 /// Query EIP-1559 base fee using Osmosis endpoint and decode it using
 /// Cosmos SDK proto `DecProto`
@@ -26,7 +27,10 @@ where
         + CanRaiseError<core::num::ParseFloatError>
         + CanRaiseError<EipQueryError>,
 {
-    async fn query_eip_base_fee(chain: &Chain, _denom: &str) -> Result<f64, Chain::Error> {
+    async fn query_eip_base_fee(
+        chain: &Chain,
+        _dynamic_gas_config: &DynamicGasConfig,
+    ) -> Result<f64, Chain::Error> {
         let url = format!(
             "{}abci_query?path=\"/osmosis.txfees.v1beta1.Query/GetEipBaseFee\"",
             chain.rpc_address()

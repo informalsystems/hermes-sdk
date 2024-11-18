@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 
-use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
 use ibc_relayer_types::core::ics24_host::identifier::ChainId;
 use toml::Value;
 
@@ -14,5 +13,4 @@ pub struct CosmosChainNodeConfig {
     pub grpc_port: u16,
     pub comet_config: Value,
     pub sdk_config: Value,
-    pub eip_query_type: EipQueryType,
 }

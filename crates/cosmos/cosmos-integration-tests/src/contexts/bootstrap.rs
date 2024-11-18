@@ -1,12 +1,9 @@
 use alloc::sync::Arc;
 use cgp::core::component::UseContext;
-use hermes_cosmos_chain_components::traits::eip::eip_type::{
-    EipQueryType, EipQueryTypeGetterComponent,
-};
+use hermes_cosmos_chain_components::types::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_test_components::bootstrap::impls::modifiers::no_modify_cosmos_sdk_config::NoModifyCosmosSdkConfig;
 use hermes_cosmos_test_components::bootstrap::traits::fields::dynamic_gas_fee::DynamicGasGetterComponent;
 use hermes_cosmos_test_components::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifierComponent;
-use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
@@ -61,7 +58,6 @@ pub struct CosmosBootstrap {
     pub comet_config_modifier:
         Box<dyn Fn(&mut toml::Value) -> Result<(), Error> + Send + Sync + 'static>,
     pub dynamic_gas: Option<DynamicGasConfig>,
-    pub eip_query_type: EipQueryType,
 }
 
 impl CanUseCosmosSdkChainBootstrapper for CosmosBootstrap {}
@@ -101,7 +97,6 @@ delegate_components! {
             AccountPrefixGetterComponent,
             DenomPrefixGetterComponent,
             DynamicGasGetterComponent,
-            EipQueryTypeGetterComponent,
             RandomIdFlagGetterComponent,
             CosmosBuilderGetterComponent,
             CometConfigModifierComponent,

@@ -2,10 +2,9 @@ use alloc::sync::Arc;
 
 use cgp::prelude::*;
 use hermes_cli_components::traits::bootstrap::{BootstrapLoader, HasBootstrapType};
-use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
+use hermes_cosmos_chain_components::types::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use hermes_error::types::HermesError;
 use hermes_runtime::types::runtime::HermesRuntime;
 use hermes_runtime_components::traits::runtime::HasRuntime;
@@ -43,14 +42,6 @@ where
         app: &App,
         args: &BootstrapChainArgs,
     ) -> Result<App::Bootstrap, App::Error> {
-        let maybe_dynamic_gas_fee_config = std::env::var("DYNAMIC_GAS_MULTIPLIER")
-            .ok()
-            .and_then(|dynamic_gas_multiplier| dynamic_gas_multiplier.parse::<f64>().ok())
-            .map(|f64_dynamic_gas_multiplier| DynamicGasConfig {
-                multiplier: f64_dynamic_gas_multiplier,
-                max: 2.0,
-            });
-
         let runtime = app.runtime();
 
         let builder = CosmosBuilder::new_with_default(runtime.clone());
@@ -66,8 +57,7 @@ where
             transfer_denom_prefix: args.transfer_denom.clone(),
             genesis_config_modifier: Box::new(|_| Ok(())),
             comet_config_modifier: Box::new(|_| Ok(())),
-            dynamic_gas: maybe_dynamic_gas_fee_config,
-            eip_query_type: EipQueryType::FeeMarket,
+            dynamic_gas: Some(DynamicGasConfig::default()),
         };
 
         Ok(bootstrap)

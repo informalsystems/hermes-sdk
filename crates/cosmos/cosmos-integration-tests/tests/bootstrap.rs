@@ -1,23 +1,14 @@
 use std::sync::Arc;
 
-use hermes_cosmos_chain_components::traits::eip::eip_type::EipQueryType;
+use hermes_cosmos_chain_components::types::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
 use hermes_cosmos_relayer::contexts::build::CosmosBuilder;
-use hermes_cosmos_test_components::types::dynamic_gas_config::DynamicGasConfig;
 use hermes_error::types::Error;
 use hermes_test_components::bootstrap::traits::chain::CanBootstrapChain;
 
 #[test]
 fn test_cosmos_bootstrap() -> Result<(), Error> {
-    let maybe_dynamic_gas_fee_config = std::env::var("DYNAMIC_GAS_MULTIPLIER")
-        .ok()
-        .and_then(|dynamic_gas_multiplier| dynamic_gas_multiplier.parse::<f64>().ok())
-        .map(|f64_dynamic_gas_multiplier| DynamicGasConfig {
-            multiplier: f64_dynamic_gas_multiplier,
-            max: 2.0,
-        });
-
     let runtime = init_test_runtime();
 
     let builder = Arc::new(CosmosBuilder::new_with_default(runtime.clone()));
@@ -34,8 +25,7 @@ fn test_cosmos_bootstrap() -> Result<(), Error> {
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: maybe_dynamic_gas_fee_config,
-        eip_query_type: EipQueryType::FeeMarket,
+        dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
     runtime.runtime.clone().block_on(async move {
