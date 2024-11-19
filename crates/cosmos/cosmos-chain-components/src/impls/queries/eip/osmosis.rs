@@ -5,10 +5,8 @@ use subtle_encoding::base64;
 
 use ibc_proto::cosmos::base::v1beta1::DecProto;
 
-use crate::impls::queries::eip::types::Decimal;
 use crate::impls::queries::eip::types::EipBaseFeeHTTPResult;
 use crate::impls::queries::eip::types::EipQueryError;
-use crate::impls::queries::eip::types::Uint128;
 use crate::traits::eip::eip_query::EipQuerier;
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
@@ -49,10 +47,8 @@ where
         let dec_proto: DecProto =
             prost::Message::decode(decoded.as_ref()).map_err(Chain::raise_error)?;
 
-        let base_fee_uint128 = Uint128::from_str(&dec_proto.dec).map_err(Chain::raise_error)?;
-
-        let dec = Decimal::new(base_fee_uint128);
-        let amount = f64::from_str(dec.to_string().as_str()).map_err(Chain::raise_error)?;
+        let raw_amount = f64::from_str(&dec_proto.dec).map_err(Chain::raise_error)?;
+        let amount = raw_amount / 1000000000000000000.0;
 
         Ok(amount)
     }

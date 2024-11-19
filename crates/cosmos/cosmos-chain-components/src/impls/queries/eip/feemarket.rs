@@ -3,11 +3,9 @@ use core::str::FromStr;
 use prost::DecodeError;
 use subtle_encoding::base64;
 
-use crate::impls::queries::eip::types::Decimal;
 use crate::impls::queries::eip::types::EipBaseFeeHTTPResult;
 use crate::impls::queries::eip::types::EipQueryError;
 use crate::impls::queries::eip::types::GasPriceResponse;
-use crate::impls::queries::eip::types::Uint128;
 use crate::traits::eip::eip_query::EipQuerier;
 use crate::traits::rpc_client::HasRpcClient;
 use crate::types::config::gas::dynamic_gas_config::DynamicGasConfig;
@@ -24,6 +22,7 @@ where
         + CanRaiseError<DecodeError>
         + CanRaiseError<core::num::ParseIntError>
         + CanRaiseError<core::num::ParseFloatError>
+        + CanRaiseError<&'static str>
         + CanRaiseError<EipQueryError>,
 {
     async fn query_eip_base_fee(
@@ -48,11 +47,12 @@ where
 
         let gas_price_response: GasPriceResponse =
             prost::Message::decode(decoded.as_ref()).map_err(Chain::raise_error)?;
-        let dec_coin = gas_price_response.price.unwrap().clone();
-        let base_fee_uint128 = Uint128::from_str(&dec_coin.amount).map_err(Chain::raise_error)?;
+        let dec_coin = gas_price_response
+            .price
+            .ok_or_else(|| Chain::raise_error("missing price in GasPriceRespone"))?;
 
-        let dec = Decimal::new(base_fee_uint128);
-        let amount = f64::from_str(dec.to_string().as_str()).map_err(Chain::raise_error)?;
+        let raw_amount = f64::from_str(&dec_coin.amount).map_err(Chain::raise_error)?;
+        let amount = raw_amount / 1000000000000000000.0;
 
         Ok(amount)
     }
