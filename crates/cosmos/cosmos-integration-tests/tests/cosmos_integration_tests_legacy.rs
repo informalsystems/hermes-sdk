@@ -3,7 +3,6 @@
 use core::time::Duration;
 use std::sync::Arc;
 
-use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup_legacy::LegacyCosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap_legacy::LegacyCosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
@@ -38,7 +37,6 @@ fn cosmos_integration_tests() -> Result<(), Error> {
         transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
-        dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
     let create_client_settings = Settings {
