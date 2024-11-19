@@ -32,8 +32,8 @@ where
     ) -> Result<f64, Chain::Error> {
         let url = format!(
             "{}abci_query?path=\"/feemarket.feemarket.v1.Query/GasPrices\"&denom={}",
+            chain.rpc_address(),
             dynamic_gas_config.denom,
-            chain.rpc_address()
         );
 
         let response = reqwest::get(&url).await.map_err(Chain::raise_error)?;

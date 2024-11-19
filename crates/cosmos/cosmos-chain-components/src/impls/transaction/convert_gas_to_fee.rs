@@ -14,9 +14,7 @@ pub struct StaticConvertCosmosGasToFee;
 
 impl<Chain> GasToFeeConverter<Chain> for StaticConvertCosmosGasToFee
 where
-    Chain: HasFeeType<Fee = Fee>
-        + HasGasConfig
-        + HasErrorType,
+    Chain: HasFeeType<Fee = Fee> + HasGasConfig + HasErrorType,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
         let gas_config = chain.gas_config();
@@ -44,9 +42,7 @@ pub struct DynamicConvertCosmosGasToFee;
 
 impl<Chain> GasToFeeConverter<Chain> for DynamicConvertCosmosGasToFee
 where
-    Chain: HasFeeType<Fee = Fee>
-        + HasGasConfig
-        + CanQueryEipBaseFee,
+    Chain: HasFeeType<Fee = Fee> + HasGasConfig + CanQueryEipBaseFee,
     StaticConvertCosmosGasToFee: GasToFeeConverter<Chain>,
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
