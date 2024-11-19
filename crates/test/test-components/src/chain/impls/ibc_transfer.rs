@@ -10,7 +10,7 @@ use crate::chain::traits::transfer::ibc_transfer::TokenIbcTransferrer;
 use crate::chain::traits::transfer::timeout::CanCalculateIbcTransferTimeout;
 use crate::chain::traits::types::address::HasAddressType;
 use crate::chain::traits::types::amount::HasAmountType;
-use crate::chain::traits::types::memo::HasDefaultMemo;
+use crate::chain::traits::types::memo::HasMemoType;
 use crate::chain::traits::types::wallet::{HasWalletSigner, HasWalletType};
 
 pub struct SendIbcTransferMessage;
@@ -22,7 +22,7 @@ impl<Chain, Counterparty> TokenIbcTransferrer<Chain, Counterparty> for SendIbcTr
 where
     Chain: HasWalletType
         + HasAmountType
-        + HasDefaultMemo
+        + HasMemoType
         + HasWalletSigner
         + CanQueryChainStatus
         + CanCalculateIbcTransferTimeout
@@ -41,6 +41,7 @@ where
         sender_wallet: &Chain::Wallet,
         recipient_address: &Counterparty::Address,
         amount: &Chain::Amount,
+        memo: &Chain::Memo,
     ) -> Result<Chain::OutgoingPacket, Chain::Error> {
         let chain_status = chain.query_chain_status().await?;
 
@@ -52,15 +53,13 @@ where
 
         let timeout_time = chain.ibc_transfer_timeout_time(current_time);
 
-        let memo = chain.default_memo();
-
         let message = chain
             .build_ibc_token_transfer_message(
                 channel_id,
                 port_id,
                 recipient_address,
                 amount,
-                &memo,
+                memo,
                 timeout_height.as_ref(),
                 timeout_time.as_ref(),
             )

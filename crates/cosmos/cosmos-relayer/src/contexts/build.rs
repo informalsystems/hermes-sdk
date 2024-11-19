@@ -1,11 +1,12 @@
 use alloc::collections::BTreeMap;
 use alloc::sync::Arc;
-use std::collections::HashMap;
-
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
 use eyre::eyre;
 use futures::lock::Mutex;
+use std::collections::HashMap;
+
+use hermes_cosmos_chain_components::types::config::tx_config::TxConfig;
 use hermes_error::types::Error;
 use hermes_relayer_components::build::traits::builders::birelay_from_relay_builder::BiRelayFromRelayBuilder;
 use hermes_relayer_components::build::traits::builders::chain_builder::ChainBuilder;
@@ -24,7 +25,6 @@ use hermes_runtime_components::traits::runtime::{
     ProvideDefaultRuntimeField, RuntimeGetterComponent, RuntimeTypeComponent,
 };
 use ibc_relayer::chain::cosmos::config::CosmosSdkConfig;
-use ibc_relayer::chain::cosmos::types::config::TxConfig;
 use ibc_relayer::chain::handle::{BaseChainHandle, ChainHandle};
 use ibc_relayer::config::filter::PacketFilter;
 use ibc_relayer::config::ChainConfig;

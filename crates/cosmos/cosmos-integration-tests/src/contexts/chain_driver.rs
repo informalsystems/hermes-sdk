@@ -1,10 +1,8 @@
 use alloc::collections::BTreeMap;
-use alloc::sync::Arc;
 use std::path::PathBuf;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeComponent};
 use cgp::prelude::*;
-use eyre::eyre;
 use hermes_cosmos_relayer::contexts::chain::CosmosChain;
 use hermes_cosmos_test_components::bootstrap::traits::fields::chain_command_path::ChainCommandPathGetter;
 use hermes_cosmos_test_components::bootstrap::types::chain_node_config::CosmosChainNodeConfig;
@@ -36,8 +34,7 @@ use hermes_test_components::chain_driver::traits::fields::wallet::{
 use hermes_test_components::chain_driver::traits::types::chain::{ChainGetter, ProvideChainType};
 use ibc_relayer::config::{ChainConfig, Config};
 use tokio::process::Child;
-use tokio::sync::Mutex;
-use toml::{to_string_pretty, Value};
+use toml::to_string_pretty;
 
 /**
    A chain driver for adding test functionalities to a Cosmos chain.
@@ -45,7 +42,7 @@ use toml::{to_string_pretty, Value};
 pub struct CosmosChainDriver {
     pub chain: CosmosChain,
     pub chain_command_path: PathBuf,
-    pub chain_process: Arc<Mutex<Option<Child>>>,
+    pub chain_process: Option<Child>,
     pub chain_node_config: CosmosChainNodeConfig,
     pub genesis_config: CosmosGenesisConfig,
     pub validator_wallet: CosmosTestWallet,
@@ -175,33 +172,8 @@ impl ChainCommandPathGetter<CosmosChainDriver> for CosmosChainDriverComponents {
 }
 
 impl ChainProcessTaker<CosmosChainDriver> for CosmosChainDriverComponents {
-    async fn take_chain_process(chain_driver: &CosmosChainDriver) -> Option<Child> {
-        chain_driver.chain_process.lock().await.take()
-    }
-}
-
-impl ConfigUpdater<CosmosChainDriver, Value> for CosmosChainDriverComponents {
-    fn update_config(
-        chain_driver: &CosmosChainDriver,
-        config: &mut Value,
-    ) -> Result<String, Error> {
-        let chain_config = Value::try_from(&chain_driver.chain.chain_config)?;
-        let chain_config_str = to_string_pretty(&chain_config)?;
-
-        if let Some(chains_config) = config.get_mut("chains") {
-            let chains_config = chains_config
-                .as_array_mut()
-                .ok_or_else(|| eyre!("expect chain entries as array"))?;
-
-            chains_config.push(chain_config);
-        } else {
-            config
-                .as_table_mut()
-                .ok_or(eyre!("expect object"))?
-                .insert("chains".into(), vec![chain_config].into());
-        };
-
-        Ok(chain_config_str)
+    fn take_chain_process(chain_driver: &mut CosmosChainDriver) -> Option<Child> {
+        chain_driver.chain_process.take()
     }
 }
 

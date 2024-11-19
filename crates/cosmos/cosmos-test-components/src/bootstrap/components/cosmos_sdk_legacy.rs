@@ -39,6 +39,7 @@ use crate::bootstrap::traits::fields::chain_store_dir::ChainStoreDirGetter;
 pub use crate::bootstrap::traits::fields::denom::{
     DenomForStaking, DenomForTransfer, DenomPrefixGetter, GenesisDenomGetterComponent,
 };
+use crate::bootstrap::traits::fields::dynamic_gas_fee::HasDynamicGas;
 pub use crate::bootstrap::traits::fields::hd_path::WalletHdPathComponent;
 use crate::bootstrap::traits::fields::random_id::RandomIdFlagGetter;
 pub use crate::bootstrap::traits::generator::generate_chain_id::ChainIdGeneratorComponent;
@@ -53,6 +54,7 @@ pub use crate::bootstrap::traits::initializers::init_chain_home_dir::ChainHomeDi
 pub use crate::bootstrap::traits::initializers::init_genesis_config::ChainGenesisConfigInitializerComponent;
 pub use crate::bootstrap::traits::initializers::init_wallet::WalletInitializerComponent;
 use crate::bootstrap::traits::modifiers::modify_comet_config::CometConfigModifier;
+use crate::bootstrap::traits::modifiers::modify_cosmos_sdk_config::CosmosSdkConfigModifier;
 use crate::bootstrap::traits::modifiers::modify_genesis_config::CosmosGenesisConfigModifier;
 pub use crate::bootstrap::traits::types::chain_node_config::{
     ChainNodeConfigTypeComponent, ProvideChainNodeConfigType,
@@ -110,7 +112,8 @@ where
         + CanRaiseError<KeyringError>
         + CanRaiseError<serde_json::Error>
         + CanRaiseError<toml::ser::Error>
-        + CanRaiseError<toml::de::Error>,
+        + CanRaiseError<toml::de::Error>
+        + HasDynamicGas,
     Components: DelegatesToLegacyCosmosSdkBootstrapComponents
         + ProvideChainType<Bootstrap, Chain = Chain>
         + ProvideChainDriverType<Bootstrap, ChainDriver = ChainDriver>
@@ -121,6 +124,7 @@ where
         + RandomIdFlagGetter<Bootstrap>
         + CosmosGenesisConfigModifier<Bootstrap>
         + CometConfigModifier<Bootstrap>
+        + CosmosSdkConfigModifier<Bootstrap>
         + WalletConfigGenerator<Bootstrap>
         + ChainDriverBuilder<Bootstrap>
         + ProvideWalletConfigType<Bootstrap>

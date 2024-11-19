@@ -1,5 +1,6 @@
 pub mod channel;
 pub mod commitment_proof;
+pub mod config;
 pub mod connection;
 pub mod event;
 pub mod events;

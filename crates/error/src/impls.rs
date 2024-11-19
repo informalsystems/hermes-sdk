@@ -1,16 +1,16 @@
-use cgp::core::error::{HasErrorType, ProvideErrorType};
-use cgp::core::Async;
+use cgp::core::error::{ErrorTypeComponent, HasErrorType};
+use cgp::core::types::impls::WithType;
+use cgp::prelude::*;
 use hermes_relayer_components::error::traits::retry::ProvideRetryableError;
 
 use crate::types::Error;
 
 pub struct ProvideHermesError;
 
-impl<Context> ProvideErrorType<Context> for ProvideHermesError
-where
-    Context: Async,
-{
-    type Error = Error;
+delegate_components! {
+    ProvideHermesError {
+        ErrorTypeComponent: WithType<Error>
+    }
 }
 
 impl<Context> ProvideRetryableError<Context> for ProvideHermesError

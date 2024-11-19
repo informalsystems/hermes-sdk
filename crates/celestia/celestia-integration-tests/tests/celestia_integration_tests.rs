@@ -3,6 +3,7 @@
 use core::time::Duration;
 use std::sync::Arc;
 
+use hermes_cosmos_chain_components::types::config::gas::dynamic_gas_config::DynamicGasConfig;
 use hermes_cosmos_integration_tests::contexts::binary_channel::setup::CosmosBinaryChannelSetup;
 use hermes_cosmos_integration_tests::contexts::bootstrap::CosmosBootstrap;
 use hermes_cosmos_integration_tests::init::init_test_runtime;
@@ -26,28 +27,30 @@ fn celestia_integration_tests() -> Result<(), Error> {
 
     let celestia_bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
-        builder: builder.clone(),
+        cosmos_builder: builder.clone(),
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data/chains".into(),
         chain_command_path: "celestia-appd".into(),
         account_prefix: "celestia".into(),
-        staking_denom: "utia".into(),
-        transfer_denom: "coin".into(),
+        staking_denom_prefix: "utia".into(),
+        transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
+        dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
     let cosmos_bootstrap = Arc::new(CosmosBootstrap {
         runtime: runtime.clone(),
-        builder,
+        cosmos_builder: builder,
         should_randomize_identifiers: true,
         chain_store_dir: "./test-data/chains".into(),
         chain_command_path: "gaiad".into(),
         account_prefix: "cosmos".into(),
-        staking_denom: "stake".into(),
-        transfer_denom: "coin".into(),
+        staking_denom_prefix: "stake".into(),
+        transfer_denom_prefix: "coin".into(),
         genesis_config_modifier: Box::new(|_| Ok(())),
         comet_config_modifier: Box::new(|_| Ok(())),
+        dynamic_gas: Some(DynamicGasConfig::default()),
     });
 
     let create_client_settings = Settings {

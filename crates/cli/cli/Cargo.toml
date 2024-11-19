@@ -30,6 +30,7 @@ hermes-relayer-components       = { workspace = true }
 hermes-cosmos-relayer           = { workspace = true }
 hermes-cosmos-integration-tests = { workspace = true }
 hermes-cosmos-chain-components  = { workspace = true }
+hermes-cosmos-test-components   = { workspace = true }
 
 ibc                             = { workspace = true }
 ibc-relayer                     = { workspace = true }

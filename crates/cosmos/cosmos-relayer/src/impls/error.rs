@@ -1,7 +1,7 @@
 use alloc::string::FromUtf8Error;
 use core::array::TryFromSliceError;
 use core::convert::Infallible;
-use core::num::{ParseIntError, TryFromIntError};
+use core::num::{ParseFloatError, ParseIntError, TryFromIntError};
 use core::str::Utf8Error;
 
 use cgp::core::component::UseDelegate;
@@ -11,6 +11,7 @@ use eyre::Report;
 use hermes_any_counterparty::impls::encoding::client_state::UnknownClientStateType;
 use hermes_any_counterparty::impls::encoding::consensus_state::UnknownConsensusStateType;
 use hermes_cosmos_chain_components::impls::queries::abci::AbciQueryError;
+use hermes_cosmos_chain_components::impls::queries::eip::types::EipQueryError;
 use hermes_cosmos_chain_components::impls::transaction::submit_tx::BroadcastTxError;
 use hermes_cosmos_test_components::chain::impls::proposal::query_status::ProposalFailed;
 use hermes_error::handlers::debug::DebugError;
@@ -131,6 +132,7 @@ delegate_components! {
             Ics24ValidationError,
             DecodingError,
             ParseIntError,
+            ParseFloatError,
             FromUtf8Error,
             EncodeError,
             DecodeError,
@@ -141,6 +143,8 @@ delegate_components! {
             Utf8Error,
             TryFromIntError,
             TryFromSliceError,
+            subtle_encoding::Error,
+            reqwest::Error,
 
             // TODO: make it retryable?
             TransportError,
@@ -158,6 +162,7 @@ delegate_components! {
             UnknownClientStateType,
             UnknownConsensusStateType,
             AbciQueryError,
+            EipQueryError,
             Status,
             MissingSendPacketEventError,
             ProposalIdNotFound,
