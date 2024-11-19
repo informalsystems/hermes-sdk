@@ -93,7 +93,7 @@ oneline-eyre                    = { version = "0.1.0" }
 prost                           = { version = "0.13.3" }
 prost-types                     = { version = "0.13.3" }
 reqwest                         = { version = "0.12.9", features = ["json"] }
-serde                           = { version = "1.0.210" }
+serde                           = { version = "1.0.215" }
 serde_derive                    = { version = "1.0" }
 serde_json                      = { version = "1.0" }
 subtle-encoding                 = { version = "0.5.1" }
