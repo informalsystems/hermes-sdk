@@ -15,7 +15,7 @@ pub struct GasConfig {
     pub gas_price: GasPrice,
     pub max_fee: Fee,
     pub fee_granter: String,
-    pub dynamic_gas_config: DynamicGasConfig,
+    pub dynamic_gas_config: Option<DynamicGasConfig>,
 }
 
 impl<'a> From<&'a CosmosSdkConfig> for GasConfig {
@@ -25,12 +25,15 @@ impl<'a> From<&'a CosmosSdkConfig> for GasConfig {
         } else {
             EipQueryType::FeeMarket
         };
-        let dynamic_gas_config = DynamicGasConfig {
-            enabled: config.dynamic_gas_price.enabled,
-            multiplier: config.dynamic_gas_price.multiplier,
-            max: config.dynamic_gas_price.max,
-            denom: config.gas_price.denom.clone(),
-            eip_query_type,
+        let dynamic_gas_config = if config.dynamic_gas_price.enabled {
+            Some(DynamicGasConfig {
+                multiplier: config.dynamic_gas_price.multiplier,
+                max: config.dynamic_gas_price.max,
+                denom: config.gas_price.denom.clone(),
+                eip_query_type,
+            })
+        } else {
+            None
         };
         Self {
             default_gas: default_gas_from_config(config),

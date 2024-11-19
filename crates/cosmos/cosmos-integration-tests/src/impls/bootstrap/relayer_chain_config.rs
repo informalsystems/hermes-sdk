@@ -41,11 +41,7 @@ where
         relayer_wallet: &CosmosTestWallet,
     ) -> Result<CosmosSdkConfig, Bootstrap::Error> {
         let dynamic_gas_price = if let Some(dynamic_gas_config) = bootstrap.dynamic_gas() {
-            DynamicGasPrice::unsafe_new(
-                dynamic_gas_config.enabled,
-                dynamic_gas_config.multiplier,
-                dynamic_gas_config.max,
-            )
+            DynamicGasPrice::unsafe_new(true, dynamic_gas_config.multiplier, dynamic_gas_config.max)
         } else {
             DynamicGasPrice::default()
         };

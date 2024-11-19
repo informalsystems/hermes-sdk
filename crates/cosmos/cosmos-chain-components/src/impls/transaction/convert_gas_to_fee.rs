@@ -47,39 +47,38 @@ where
 {
     async fn gas_amount_to_fee(chain: &Chain, gas_used: u64) -> Result<Chain::Fee, Chain::Error> {
         let gas_config = chain.gas_config();
-        let max_dynamic_gas_price = gas_config.dynamic_gas_config.max;
-        if !gas_config.dynamic_gas_config.enabled {
-            return StaticConvertCosmosGasToFee::gas_amount_to_fee(chain, gas_used).await;
-        }
-        let adjusted_gas_limit =
-            adjust_estimated_gas(gas_config.gas_multiplier, gas_config.max_gas, gas_used);
+        if let Some(dynamic_gas_config) = gas_config.dynamic_gas_config.clone() {
+            let max_dynamic_gas_price = dynamic_gas_config.max;
+            let adjusted_gas_limit =
+                adjust_estimated_gas(gas_config.gas_multiplier, gas_config.max_gas, gas_used);
 
-        let base_fee = chain
-            .query_eip_base_fee(&gas_config.dynamic_gas_config)
-            .await?;
+            let base_fee = chain.query_eip_base_fee(&dynamic_gas_config).await?;
 
-        let raw_price = base_fee * gas_config.dynamic_gas_config.multiplier;
+            let raw_price = base_fee * dynamic_gas_config.multiplier;
 
-        let bounded_price = if raw_price > max_dynamic_gas_price {
-            max_dynamic_gas_price
+            let bounded_price = if raw_price > max_dynamic_gas_price {
+                max_dynamic_gas_price
+            } else {
+                raw_price
+            };
+
+            // The fee in coins based on gas amount
+            let fee_amount = mul_ceil(adjusted_gas_limit, bounded_price);
+
+            let amount = Coin {
+                denom: gas_config.gas_price.denom.to_string(),
+                amount: fee_amount.to_string(),
+            };
+
+            Ok(Fee {
+                amount: vec![amount],
+                gas_limit: adjusted_gas_limit,
+                payer: "".to_string(),
+                granter: gas_config.fee_granter.clone(),
+            })
         } else {
-            raw_price
-        };
-
-        // The fee in coins based on gas amount
-        let fee_amount = mul_ceil(adjusted_gas_limit, bounded_price);
-
-        let amount = Coin {
-            denom: gas_config.gas_price.denom.to_string(),
-            amount: fee_amount.to_string(),
-        };
-
-        Ok(Fee {
-            amount: vec![amount],
-            gas_limit: adjusted_gas_limit,
-            payer: "".to_string(),
-            granter: gas_config.fee_granter.clone(),
-        })
+            StaticConvertCosmosGasToFee::gas_amount_to_fee(chain, gas_used).await
+        }
     }
 }
 
